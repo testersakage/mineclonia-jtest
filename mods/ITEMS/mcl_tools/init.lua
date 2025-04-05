@@ -1,6 +1,6 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
+local S = core.get_translator(modname)
 
 mcl_tools = {}
 mcl_tools.sets = {}
@@ -74,27 +74,27 @@ local function on_tool_place(itemstack, placer, pointed_thing, tool)
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 	if rc ~= nil then return rc end
 
-	if minetest.is_protected(pointed_thing.under, placer:get_player_name()) then
-		minetest.record_protection_violation(pointed_thing.under, placer:get_player_name())
+	if core.is_protected(pointed_thing.under, placer:get_player_name()) then
+		core.record_protection_violation(pointed_thing.under, placer:get_player_name())
 		return itemstack
 	end
 
-	local node = minetest.get_node(pointed_thing.under)
-	local ndef = minetest.registered_nodes[node.name]
+	local node = core.get_node(pointed_thing.under)
+	local ndef = core.registered_nodes[node.name]
 	if not ndef then
 		return
 	end
 
 	if itemstack and type(ndef["_on_"..tool.."_place"]) == "function" then
 		local itemstack, no_wear = ndef["_on_"..tool.."_place"](itemstack, placer, pointed_thing)
-		if minetest.is_creative_enabled(placer:get_player_name()) or no_wear or not itemstack then
+		if core.is_creative_enabled(placer:get_player_name()) or no_wear or not itemstack then
 			return itemstack
 		end
 
 		-- Add wear using the usages of the tool defined in
 		-- _mcl_diggroups. This assumes the tool only has one diggroups
 		-- (which is the case in Mineclone).
-		local tdef = minetest.registered_tools[itemstack:get_name()]
+		local tdef = core.registered_tools[itemstack:get_name()]
 		if tdef and tdef._mcl_diggroups then
 			for group, _ in pairs(tdef._mcl_diggroups) do
 				itemstack:add_wear(mcl_autogroup.get_wear(itemstack:get_name(), group))
@@ -157,7 +157,7 @@ local function get_punch_uses(toolname, materialdefs)
 end
 
 local function register_tool(setname, materialdefs, toolname, tooldefs, overrides)
-	local mod = minetest.get_current_modname()
+	local mod = core.get_current_modname()
 	local itemstring = mod..":"..toolname.."_"..setname
 	local commondefs = mcl_tools.commondefs[toolname]
 	local tcs = table.copy(tooldefs.tool_capabilities or {})
@@ -183,13 +183,13 @@ local function register_tool(setname, materialdefs, toolname, tooldefs, override
 			or "placeable_on_actionable",
 	}, tooldefs, overrides)
 
-	minetest.register_tool(itemstring, tooldefs)
+	core.register_tool(itemstring, tooldefs)
 
 	if materialdefs.craftable then
 		for _, shapes in ipairs(mcl_tools.commondefs[toolname].craft_shapes) do
 			local recipe = replace_material_tag(shapes, materialdefs.material)
 
-			minetest.register_craft({
+			core.register_craft({
 				output = itemstring,
 				recipe = recipe
 			})
@@ -205,7 +205,7 @@ end
 function mcl_tools.add_to_sets(toolname, commondefs, tools, overrides)
 	if mcl_tools.commondefs[toolname] then
 		local msg = "[mcl_tools] mod '%s' trying to register tool '%s' a second time"
-		minetest.log("error", msg:format(minetest.get_current_modname(), toolname))
+		core.log("error", msg:format(core.get_current_modname(), toolname))
 		return
 	end
 
@@ -218,7 +218,7 @@ function mcl_tools.add_to_sets(toolname, commondefs, tools, overrides)
 			register_tool(setname, materialdefs, toolname, tooldefs, overrides)
 		else
 			local msg = "[mcl_tools] mod '%s' trying to register tool '%s' for undefined set '%s'; dependency missing?"
-			minetest.log("warning", msg:format(minetest.get_current_modname(), toolname, setname))
+			core.log("warning", msg:format(core.get_current_modname(), toolname, setname))
 		end
 	end
 end
@@ -231,7 +231,7 @@ end
 function mcl_tools.register_set(setname, materialdefs, tools, overrides)
 	if mcl_tools.sets[setname] then
 		local msg = "[mcl_tools] mod '%s' trying to register set '%s' a second time"
-		minetest.log("error", msg:format(minetest.get_current_modname(), setname))
+		core.log("error", msg:format(core.get_current_modname(), setname))
 		return
 	end
 
@@ -247,13 +247,13 @@ function mcl_tools.register_set(setname, materialdefs, tools, overrides)
 			else
 				msg = msg .. "; dependency missing?"
 			end
-			minetest.log("warning", msg:format(minetest.get_current_modname(), tool, setname))
+			core.log("warning", msg:format(core.get_current_modname(), tool, setname))
 		end
 	end
 end
 
 --Shears
-minetest.register_tool("mcl_tools:shears", {
+core.register_tool("mcl_tools:shears", {
 	description = S("Shears"),
 	_doc_items_longdesc = shears_longdesc,
 	_doc_items_usagehelp = shears_use,
@@ -285,7 +285,7 @@ minetest.register_tool("mcl_tools:shears", {
 	_mcl_uses = 238
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_tools:shears",
 	recipe = {
 		{ "mcl_core:iron_ingot", "" },
@@ -293,7 +293,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_tools:shears",
 	recipe = {
 		{ "", "mcl_core:iron_ingot" },

@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local boxes = { -8/16, -8/16, -8/16,  8/16, -2/16, 8/16 }
 local toggle_inverted = {
@@ -8,8 +8,8 @@ local toggle_inverted = {
 
 local function update_detector(pos)
 	mcl_redstone.swap_node(pos, {
-		name = minetest.get_node(pos).name,
-		param2 = minetest.get_natural_light(pos),
+		name = core.get_node(pos).name,
+		param2 = core.get_natural_light(pos),
 	})
 end
 
@@ -33,8 +33,8 @@ local commdef = {
 	end,
 	on_rightclick = function(pos, node, clicker, pointed_thing)
 		local protname = clicker:get_player_name()
-		if minetest.is_protected(pos, protname) then
-			minetest.record_protection_violation(pos, protname)
+		if core.is_protected(pos, protname) then
+			core.record_protection_violation(pos, protname)
 			return
 		end
 		mcl_redstone.swap_node(pos, {name = toggle_inverted[node.name], param2 = node.param2})
@@ -48,7 +48,7 @@ local commdef = {
 	},
 }
 
-minetest.register_node("mcl_daylight_detector:daylight_detector", table.merge(commdef, {
+core.register_node("mcl_daylight_detector:daylight_detector", table.merge(commdef, {
 	tiles = { "jeija_solar_panel.png","jeija_solar_panel.png","jeija_solar_panel_side.png",
 		"jeija_solar_panel_side.png","jeija_solar_panel_side.png","jeija_solar_panel_side.png", },
 	wield_image = "jeija_solar_panel.png",
@@ -65,7 +65,7 @@ minetest.register_node("mcl_daylight_detector:daylight_detector", table.merge(co
 }))
 
 
-minetest.register_node("mcl_daylight_detector:daylight_detector_inverted", table.merge(commdef, {
+core.register_node("mcl_daylight_detector:daylight_detector_inverted", table.merge(commdef, {
 	tiles = { "jeija_solar_panel_inverted.png","jeija_solar_panel_inverted.png","jeija_solar_panel_side.png",
 	"jeija_solar_panel_side.png","jeija_solar_panel_side.png","jeija_solar_panel_side.png", },
 	wield_image = "jeija_solar_panel_inverted.png",
@@ -81,7 +81,7 @@ minetest.register_node("mcl_daylight_detector:daylight_detector_inverted", table
 }))
 
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_daylight_detector:daylight_detector",
 	recipe = {
 		{"mcl_core:glass", "mcl_core:glass", "mcl_core:glass"},
@@ -90,7 +90,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_abm({
+core.register_abm({
 	label = "Update daylight detectors",
 	nodenames = {"group:daylight_detector"},
 	interval = 1,
@@ -100,13 +100,13 @@ minetest.register_abm({
 	end,
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "fuel",
 	recipe = "mcl_daylight_detector:daylight_detector",
 	burntime = 15
 })
 
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_daylight_detector:daylight_detector", "nodes", "mcl_daylight_detector:solar_panel_on")
 	doc.add_entry_alias("nodes", "mcl_daylight_detector:daylight_detector", "nodes", "mcl_daylight_detector:solar_panel_inverted_off")
 	doc.add_entry_alias("nodes", "mcl_daylight_detector:daylight_detector", "nodes", "mcl_daylight_detector:solar_panel_inverted_on")

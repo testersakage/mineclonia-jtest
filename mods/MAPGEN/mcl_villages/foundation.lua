@@ -17,7 +17,7 @@ function mcl_villages.ground(pos, pr) -- role model: Wendelsteinkircherl, Branne
 		if cnt>pr:next(2,4) then
 			mat = "mcl_core:stone"
 		end
-		minetest.swap_node(p2, {name=mat})
+		core.swap_node(p2, {name=mat})
 		p2.y = p2.y-1
 	end
 end

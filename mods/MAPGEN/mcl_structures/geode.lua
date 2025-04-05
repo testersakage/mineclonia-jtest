@@ -9,22 +9,22 @@ local adjacents = {
 
 local function set_node_no_bedrock(pos, node)
 	if not pos then return end
-	local n = minetest.get_node(pos)
+	local n = core.get_node(pos)
 	if n.name == "mcl_core:bedrock" then return end
-	return minetest.swap_node(pos,node)
+	return core.swap_node(pos,node)
 end
 
 local function makegeode(pos, _, pr)
 	local size = pr:next(5,7)
 	local p1 = vector.offset(pos,-size,-size,-size)
 	local p2 = vector.offset(pos,size,size,size)
-	minetest.emerge_area(p1, p2, function(_, _, calls_remaining)
+	core.emerge_area(p1, p2, function(_, _, calls_remaining)
 		if calls_remaining ~= 0 then return end
 		local calcite = {}
-		local nn = minetest.find_nodes_in_area(p1,p2,{"group:material_stone","group:dirt","mcl_core:gravel"})
+		local nn = core.find_nodes_in_area(p1,p2,{"group:material_stone","group:dirt","mcl_core:gravel"})
 
 		if not nn or #nn < 2 then
-			minetest.log("action", "Not enough valid space to generate geode at pos: " .. minetest.pos_to_string(pos))
+			core.log("action", "Not enough valid space to generate geode at pos: " .. core.pos_to_string(pos))
 			return
 		end
 
@@ -36,13 +36,13 @@ local function makegeode(pos, _, pr)
 			set_node_no_bedrock(nn[i],{name="mcl_amethyst:amethyst_block"})
 		end
 
-		for _, v in pairs(minetest.find_nodes_in_area(p1,p2,{"mcl_amethyst:amethyst_block"})) do
+		for _, v in pairs(core.find_nodes_in_area(p1,p2,{"mcl_amethyst:amethyst_block"})) do
 			local all_amethyst = true
 			for _, vv in pairs(adjacents) do
 				local pp = vector.add(v,vv)
-				local an = minetest.get_node(pp)
+				local an = core.get_node(pp)
 				if an.name ~= "mcl_amethyst:amethyst_block" then
-					if minetest.get_item_group(an.name,"material_stone") > 0 then
+					if core.get_item_group(an.name,"material_stone") > 0 then
 						set_node_no_bedrock(pp,{name="mcl_amethyst:calcite"})
 						table.insert(calcite,pp)
 						if pr:next(1,5) == 1 then
@@ -58,12 +58,12 @@ local function makegeode(pos, _, pr)
 		end
 
 		for _,v in pairs(calcite) do
-			for _,vv in pairs(minetest.find_nodes_in_area(vector.offset(v,-1,-1,-1),vector.offset(v,1,1,1),{"group:material_stone"})) do
+			for _,vv in pairs(core.find_nodes_in_area(vector.offset(v,-1,-1,-1),vector.offset(v,1,1,1),{"group:material_stone"})) do
 				set_node_no_bedrock(vv,{name="mcl_blackstone:basalt_smooth"})
 			end
 		end
 
-		for _, v in pairs(minetest.find_nodes_in_area_under_air(p1,p2,{"mcl_amethyst:amethyst_block","mcl_amethyst:budding_amethyst_block"})) do
+		for _, v in pairs(core.find_nodes_in_area_under_air(p1,p2,{"mcl_amethyst:amethyst_block","mcl_amethyst:budding_amethyst_block"})) do
 			local r = pr:next(1,50)
 			if r < 10 then
 				set_node_no_bedrock(vector.offset(v,0,1,0),{name="mcl_amethyst:amethyst_cluster",param2=1})

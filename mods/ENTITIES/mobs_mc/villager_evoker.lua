@@ -3,10 +3,10 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local illager = mobs_mc.illager
-local mob_griefing = minetest.settings:get_bool ("mobs_griefing", true)
+local mob_griefing = core.settings:get_bool ("mobs_griefing", true)
 local is_valid = mcl_util.is_valid_objectref
 
 --###################
@@ -105,7 +105,7 @@ function evoker:add_particlespawner (min_pos, max_pos)
 	local yaw = self:get_yaw ()
 	local min_pos = vector.rotate_around_axis (min_pos, Y_AXIS, yaw)
 	local max_pos = vector.rotate_around_axis (max_pos, Y_AXIS, yaw)
-	minetest.add_particlespawner ({
+	core.add_particlespawner ({
 		amount = 15,
 		time = 0.2,
 		texture = self._cast_particle,
@@ -301,14 +301,14 @@ function evoker:tick_combat_spells (dtime)
 end
 
 local function is_walkable (nodepos)
-	local node = minetest.get_node (nodepos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (nodepos)
+	local def = core.registered_nodes[node.name]
 	return def and def.walkable
 end
 
 local function cbox_max_y (nodepos)
 	local max_y = nil
-	local boxes = minetest.get_node_boxes ("collision_box", nodepos)
+	local boxes = core.get_node_boxes ("collision_box", nodepos)
 	for _, box in ipairs (boxes) do
 		max_y = math.max (max_y or 0, box[2], box[5])
 	end
@@ -337,7 +337,7 @@ function evoker:spawn_fang (x, z, miny, maxy, fangno, yaw)
 	if valid_nodepos then
 		local delay = (fangno - 1) / 20.0
 		v.y = nodepos.y
-		local fang = minetest.add_entity (v, "mobs_mc:evoker_fangs")
+		local fang = core.add_entity (v, "mobs_mc:evoker_fangs")
 
 		if fang then
 			local entity = fang:get_luaentity ()
@@ -399,7 +399,7 @@ function evoker:cast_fangs (self, self_pos)
 end
 
 function evoker:wololo_find_sheep (self_pos)
-	for object in minetest.objects_inside_radius (self_pos, 16) do
+	for object in core.objects_inside_radius (self_pos, 16) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "mobs_mc:sheep"
 			and not entity.gotten
@@ -424,7 +424,7 @@ local evoker_vex_spell = define_spell ({
 		else
 			local n_vexes = 0
 
-			for object in minetest.objects_inside_radius (self_pos, 16) do
+			for object in core.objects_inside_radius (self_pos, 16) do
 				local entity = object:get_luaentity ()
 				if entity and entity.name == "mobs_mc:vex" then
 					n_vexes = n_vexes + 1
@@ -446,7 +446,7 @@ local evoker_vex_spell = define_spell ({
 				y = nodepos.y + pr:next (-2, 2) - 0.5,
 				z = nodepos.z + pr:next (-2, 2),
 			}
-			local obj = minetest.add_entity (pos, "mobs_mc:vex")
+			local obj = core.add_entity (pos, "mobs_mc:vex")
 			if obj then
 				local entity = obj:get_luaentity ()
 				entity._summoned_by = self.object
@@ -566,7 +566,7 @@ end
 
 recently_damaged = {}
 
-minetest.register_globalstep (function (dtime)
+core.register_globalstep (function (dtime)
 	for key, value in pairs (recently_damaged) do
 		local t = recently_damaged[key] - dtime
 		if t <= 0 then
@@ -590,7 +590,7 @@ function evoker_fangs:deal_fang_damage ()
 		0.45 + self_pos.z,
 	}
 
-	for object in minetest.objects_in_area (aa, bb) do
+	for object in core.objects_in_area (aa, bb) do
 		if not recently_damaged[object] then
 			local entity = object:get_luaentity ()
 			if object:is_player ()
@@ -618,7 +618,7 @@ function evoker_fangs:deal_fang_damage ()
 		end
 	end
 
-	minetest.add_particlespawner ({
+	core.add_particlespawner ({
 		time = 0.1,
 		amount = 12,
 		attached = self.object,
@@ -681,4 +681,4 @@ function evoker_fangs:on_step (dtime)
 	end
 end
 
-minetest.register_entity ("mobs_mc:evoker_fangs", evoker_fangs)
+core.register_entity ("mobs_mc:evoker_fangs", evoker_fangs)

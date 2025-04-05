@@ -1,6 +1,6 @@
 local mob_class = mcl_mobs.mob_class
 local floor = math.floor
-local luajit_present = minetest.global_exists ("jit")
+local luajit_present = core.global_exists ("jit")
 local is_valid = mcl_util.is_valid_objectref
 
 local function shift_up (self, node, idx)
@@ -234,19 +234,19 @@ function mob_class:gwp_start_1 (context)
 	else
 		pos = self:gwp_align_start_pos (pos)
 	end
-	local node = minetest.get_node (pos)
-	local ground = minetest.get_node (vector.offset (pos, 0, -1, 0))
+	local node = core.get_node (pos)
+	local ground = core.get_node (vector.offset (pos, 0, -1, 0))
 
 	-- If standing in water...
 	if is_water_source (node.name) then
 		if self.floats == 1
 			and is_water_source (ground.name) then
-			local nextnode = minetest.get_node (pos)
+			local nextnode = core.get_node (pos)
 			-- Find the first water source beneath a
 			-- non-source block.
 			while is_water_source (nextnode.name) do
 				pos.y = pos.y + 1
-				nextnode = minetest.get_node (pos)
+				nextnode = core.get_node (pos)
 			end
 			pos.y = pos.y - 1
 			return pos, false
@@ -551,7 +551,7 @@ function mob_class:gwp_safe_fall_distance ()
 	return BASE_FALL_DISTANCE + bonus
 end
 
-local get_us_time = minetest.get_us_time
+local get_us_time = core.get_us_time
 
 function mob_class:gwp_cycle (context, timeout)
 	local time = get_us_time ()
@@ -730,7 +730,7 @@ local get_node_raw = mcl_mobs.get_node_raw
 
 local function gwp_nodevalue_to_name (nodevalue)
 	if get_node_raw then
-		return minetest.get_name_from_content_id (nodevalue)
+		return core.get_name_from_content_id (nodevalue)
 	else
 		return nodevalue
 	end
@@ -738,7 +738,7 @@ end
 
 local function gwp_name_to_nodevalue (name)
 	if get_node_raw then
-		return minetest.get_content_id (name)
+		return core.get_content_id (name)
 	else
 		return name
 	end
@@ -761,7 +761,7 @@ local function gwp_get_node (pos)
 		cache = get_node_raw (x, y, z)
 		map[hash] = cache
 	else
-		cache = minetest.get_node (pos).name
+		cache = core.get_node (pos).name
 		map[hash] = cache
 	end
 	return cache
@@ -783,7 +783,7 @@ local function ground_height (context, node)
 	if fixed then
 		return fixed + below.y
 	else
-		local boxes = minetest.get_node_boxes ("collision_box", below)
+		local boxes = core.get_node_boxes ("collision_box", below)
 		local y = 0
 
 		for _, box in ipairs (boxes) do
@@ -1115,8 +1115,8 @@ end
 -- DOOR_IRON_CLOSED and DOOR_WOOD_CLOSED must still be processed
 -- specially to establish whether doors are open.
 
-minetest.register_on_mods_loaded (function ()
-	for name, def in pairs (minetest.registered_nodes) do
+core.register_on_mods_loaded (function ()
+	for name, def in pairs (core.registered_nodes) do
 		local value = "OPEN"
 		local key = gwp_name_to_nodevalue (name)
 
@@ -1242,7 +1242,7 @@ function mob_class:gwp_classify_node (context, pos)
 	local hash = hashpos (context, pos.x, pos.y, pos.z)
 	local cache = context.class_cache[hash]
 
-	-- This is very expensive, as minetest.get_node conses too
+	-- This is very expensive, as core.get_node conses too
 	-- much.
 	if cache then
 		-- if record_pathfinding_stats then
@@ -1673,11 +1673,11 @@ local function create_path_particles (path, playername, delay, additive)
 			local c = floor (((#path-s)/#path)*255)
 			t = string.format("testpathfinder_waypoint.png^[multiply:#%02x%02x00", 0xFF-c, c)
 		end
-		minetest.add_particle({
+		core.add_particle({
 				pos = path[s],
 				expirationtime = delay + additive * s,
 				playername = playername,
-				glow = minetest.LIGHT_MAX,
+				glow = core.LIGHT_MAX,
 				texture = t,
 				size = 3,
 		})
@@ -1686,7 +1686,7 @@ end
 
 local function cancel_test (mob, complete, sneaking)
 	if complete then
-		local player = minetest.get_player_by_name (complete)
+		local player = core.get_player_by_name (complete)
 		if not player then
 			mob.pathfinding_context = nil
 			mob.on_step = mob._old_onstep
@@ -1694,7 +1694,7 @@ local function cancel_test (mob, complete, sneaking)
 		end
 		local msg = "Pathfinding completed in "
 			.. (string.format ("%.2f", 1000 * mob.pathfinding_duration)) .. " ms"
-		minetest.chat_send_player (complete, msg)
+		core.chat_send_player (complete, msg)
 
 		local path = mob:gwp_reconstruct (mob.pathfinding_context)
 		create_path_particles (path, complete, 5, 0.2)
@@ -1715,7 +1715,7 @@ function mcl_mobs.maybe_test_pathfinding (mob, clicker)
 	local name = clicker:get_player_name ()
 	if mcl_mobs.players_selecting_mob[name] then
 		mcl_mobs.players_selecting_mob[name] = mob.object
-		minetest.chat_send_player (name, "Mob selected")
+		core.chat_send_player (name, "Mob selected")
 		mob.stupefied = true
 		mob.waypoints = nil
 	end
@@ -1725,7 +1725,7 @@ local cdef = {
 	privs = { server = true, },
 	params = "[ cancel | start | choose | classify ]",
 	func = function (playername, param)
-		local player = minetest.get_player_by_name (playername)
+		local player = core.get_player_by_name (playername)
 		local mobs = mcl_mobs.mobs_being_tested
 
 		if param == "cancel" then
@@ -1736,19 +1736,19 @@ local cdef = {
 			if mcl_mobs.players_selecting_mob[playername] then
 				mcl_mobs.players_selecting_mob[playername] = nil
 			end
-			minetest.chat_send_player (playername, "Canceled")
+			core.chat_send_player (playername, "Canceled")
 		elseif param == "choose" then
 			if mobs[playername] then
 				cancel_test (mobs[playername])
 				mobs[playername] = nil
 			end
-			minetest.chat_send_player (playername, blurb)
+			core.chat_send_player (playername, blurb)
 			mcl_mobs.players_selecting_mob[playername] = true
 		elseif param == "start" then
 			local mob = mcl_mobs.players_selecting_mob[playername]
 			if mob == true or not mob or not is_valid (mob) then
 				local blurb = "You must select a valid mob"
-				minetest.chat_send_player (playername, blurb)
+				core.chat_send_player (playername, blurb)
 				return
 			end
 			local position = player:get_pos ()
@@ -1760,7 +1760,7 @@ local cdef = {
 				.. start.x .. ", " .. start.y .. ", " .. start.z .. " "
 				.. "to player, at " .. position.x .. ", "
 				.. position.y .. ", " .. position.z .. "..."
-			minetest.chat_send_player (playername, msg)
+			core.chat_send_player (playername, msg)
 
 			local entity = mob:get_luaentity ()
 			entity.pathfinding_context = entity:gwp_initialize ({position})
@@ -1786,7 +1786,7 @@ local cdef = {
 			local mob = mcl_mobs.players_selecting_mob[playername]
 			if mob == true or not mob or not is_valid (mob) then
 				local blurb = "You must select a valid mob"
-				minetest.chat_send_player (playername, blurb)
+				core.chat_send_player (playername, blurb)
 				return
 			end
 			local entity = mob:get_luaentity ()
@@ -1794,25 +1794,25 @@ local cdef = {
 			local pos = vector.apply (player:get_pos (), round_trunc)
 			local context = entity:gwp_initialize ({pos})
 			if not context then
-				minetest.chat_send_player (playername, "Cannot pathfind!")
+				core.chat_send_player (playername, "Cannot pathfind!")
 				return
 			end
 			local class1 = entity:gwp_classify_node (context, pos)
 			local class2 = entity:gwp_classify_node (context, pos)
-			minetest.chat_send_player (playername,
+			core.chat_send_player (playername,
 						   string.format ("Position (%d, %d, %d): %s",
 								  pos.x, pos.y, pos.z, class1)
 						   .. "\nIntrinsic: " .. class2 .. "\n")
 
 			local width = context.mob_width
 			local height = context.mob_height
-			minetest.chat_send_player (playername, "WIDTH (& LENGTH), HEIGHT: "
+			core.chat_send_player (playername, "WIDTH (& LENGTH), HEIGHT: "
 						   .. width .. " " .. height)
 		end
 	end
 }
 
-minetest.register_on_leaveplayer (function (object, timed_out)
+core.register_on_leaveplayer (function (object, timed_out)
 		local playername = object:get_player_name ()
 		local mobs = mcl_mobs.mobs_being_tested
 		if mobs[playername] then
@@ -1820,7 +1820,7 @@ minetest.register_on_leaveplayer (function (object, timed_out)
 			mobs[playername] = nil
 		end
 end)
-minetest.register_chatcommand ("mobpathfind", cdef)
+core.register_chatcommand ("mobpathfind", cdef)
 
 local function print_node_classification (itemstack, user, pointed_thing)
 	if not (user and user:is_player ()) then
@@ -1830,7 +1830,7 @@ local function print_node_classification (itemstack, user, pointed_thing)
 	if pointed_thing.type == "node" then
 		local mob = mcl_mobs.players_selecting_mob[playername]
 		if not mob or mob == true then
-			minetest.chat_send_player (playername,
+			core.chat_send_player (playername,
 						   "Run `/mobpathfind choose' to select a mob to"
 						   .. " impersonate before using this tool.")
 			return
@@ -1842,14 +1842,14 @@ local function print_node_classification (itemstack, user, pointed_thing)
 		-- Target position is immaterial here.
 		local context = entity:gwp_initialize ({user:get_pos ()})
 		if not context then
-			minetest.chat_send_player (playername, "Cannot pathfind!")
+			core.chat_send_player (playername, "Cannot pathfind!")
 			return
 		end
 		local class1 = entity:gwp_classify_node (context, pointed_thing.under)
 		local class2 = entity:gwp_classify_node (context, pointed_thing.above)
 		local class3 = gwp_basic_classify (pointed_thing.under)
 		local class4 = gwp_basic_classify (pointed_thing.above)
-		minetest.chat_send_player (playername,
+		core.chat_send_player (playername,
 					   "ABOVE: " .. class2 .. " "
 					   .. ground_height (context, pointed_thing.above)
 					   .. "\nUNDER: " .. class1
@@ -1860,14 +1860,14 @@ local function print_node_classification (itemstack, user, pointed_thing)
 
 		local width = context.mob_width
 		local height = context.mob_height
-		minetest.chat_send_player (playername, "WIDTH (& LENGTH), HEIGHT: "
+		core.chat_send_player (playername, "WIDTH (& LENGTH), HEIGHT: "
 					   .. width .. " " .. height)
 	elseif pointed_thing.type == "object" then
 		local mob = pointed_thing.ref
 		local entity = mob:get_luaentity ()
 		if entity and entity.is_mob then
 			mcl_mobs.players_selecting_mob[playername] = mob
-			minetest.chat_send_player (playername, "Mob selected")
+			core.chat_send_player (playername, "Mob selected")
 			entity.stupefied = true
 			entity.waypoints = nil
 		end
@@ -1882,7 +1882,7 @@ local function print_node_neighbors (itemstack, user, pointed_thing)
 	if pointed_thing.type == "node" then
 		local mob = mcl_mobs.players_selecting_mob[playername]
 		if not mob or mob == true then
-			minetest.chat_send_player (playername,
+			core.chat_send_player (playername,
 						   "Run `/mobpathfind choose' to select a mob to"
 						   .. " impersonate before using this tool.")
 			return
@@ -1898,7 +1898,7 @@ local function print_node_neighbors (itemstack, user, pointed_thing)
 		local edges_above = entity:gwp_edges (context, pointed_thing.above)
 		edges_above = table.copy (edges_above)
 
-		if minetest.global_exists ("dbg") then
+		if core.global_exists ("dbg") then
 			dbg.pp (edges_under)
 			dbg.pp (edges_above)
 		end
@@ -1913,7 +1913,7 @@ local function pathfind_selected_mob (itemstack, user, pointed_thing)
 	local playername = user:get_player_name ()
 	local mob = mcl_mobs.players_selecting_mob[playername]
 	if not mob or mob == true then
-		minetest.chat_send_player (playername,
+		core.chat_send_player (playername,
 					   "Run `/mobpathfind choose' to select a mob to"
 					   .. " impersonate before using this tool.")
 		return
@@ -1931,7 +1931,7 @@ local function pathfind_selected_mob (itemstack, user, pointed_thing)
 		.. start.x .. ", " .. start.y .. ", " .. start.z .. " "
 		.. "to node, at " .. position.x .. ", "
 		.. position.y .. ", " .. position.z .. "..."
-	minetest.chat_send_player (playername, msg)
+	core.chat_send_player (playername, msg)
 
 	local entity = mob:get_luaentity ()
 	entity.pathfinding_context = entity:gwp_initialize ({position})
@@ -1956,7 +1956,7 @@ local function pathfind_selected_mob (itemstack, user, pointed_thing)
 	end
 end
 
-minetest.register_tool ("mcl_mobs:pathfinder_stick", {
+core.register_tool ("mcl_mobs:pathfinder_stick", {
 	description = "Classify blocks",
 	inventory_image = "default_stick.png",
 	groups = { testtool = 1, disable_repair = 1,
@@ -1965,7 +1965,7 @@ minetest.register_tool ("mcl_mobs:pathfinder_stick", {
 	on_place = pathfind_selected_mob,
 })
 
-minetest.register_tool ("mcl_mobs:pathfinder_liquid_stick", {
+core.register_tool ("mcl_mobs:pathfinder_liquid_stick", {
 	description = "Classify liquids",
 	inventory_image = "default_stick.png",
 	groups = { testtool = 1, disable_repair = 1,
@@ -1975,7 +1975,7 @@ minetest.register_tool ("mcl_mobs:pathfinder_liquid_stick", {
 	on_place = pathfind_selected_mob,
 })
 
-minetest.register_tool ("mcl_mobs:pathfinder_edge_stick", {
+core.register_tool ("mcl_mobs:pathfinder_edge_stick", {
 	description = "Print neighbors of blocks",
 	inventory_image = "default_stick.png",
 	groups = { testtool = 1, disable_repair = 1,
@@ -1986,7 +1986,7 @@ minetest.register_tool ("mcl_mobs:pathfinder_edge_stick", {
 
 mcl_mobs.last_dbg_entity = nil
 
-minetest.register_tool ("mcl_mobs:pathfinder_dump_stick", {
+core.register_tool ("mcl_mobs:pathfinder_dump_stick", {
 	description = "Dump object luaentities",
 	inventory_image = "default_stick.png",
 	groups = { testtool = 1, disable_repair = 1,
@@ -1995,7 +1995,7 @@ minetest.register_tool ("mcl_mobs:pathfinder_dump_stick", {
 		if not (user and user:is_player ()) or pointed_thing.type ~= "object" then
 			return
 		end
-		if minetest.global_exists ("dbg") then
+		if core.global_exists ("dbg") then
 			dbg.pp (pointed_thing.ref:get_luaentity ())
 		end
 		mcl_mobs.last_dbg_entity = pointed_thing.ref:get_luaentity ()
@@ -2011,10 +2011,10 @@ local pathfinding_quota = PATHFIND_PER_STEP
 local mobs_this_step = 0
 -- local pathfinding_history = {  }
 
-minetest.register_globalstep (function (dtime)
+core.register_globalstep (function (dtime)
 		nodes_this_step = {}
 		if pathfinding_quota <= 0.0 then
-			minetest.log ("warning", "Global pathfinding quota exceeded...")
+			core.log ("warning", "Global pathfinding quota exceeded...")
 		end
 		-- if record_pathfinding_stats then
 		-- 	if #pathfinding_history >= 20 then
@@ -2025,7 +2025,7 @@ minetest.register_globalstep (function (dtime)
 		-- 				max = item
 		-- 			end
 		-- 		end
-		-- 		minetest.log ("action", "During the previous 20 steps, an average"
+		-- 		core.log ("action", "During the previous 20 steps, an average"
 		-- 			      .. " of " .. string.format ("%.2f", total / 20 * 1000)
 		-- 			      .. " ms, and a maximum of "
 		-- 			      .. string.format ("%.2f", max * 1000)
@@ -2037,7 +2037,7 @@ minetest.register_globalstep (function (dtime)
 		-- 		for nodetype, n in pairs (bc_stats) do
 		-- 			total = total + n
 		-- 		end
-		-- 		minetest.log ("action", "In the process, " .. total .. " nodes were examined,"
+		-- 		core.log ("action", "In the process, " .. total .. " nodes were examined,"
 		-- 			      .. " distributed between: ")
 		-- 		local t = {}
 		-- 		for nodetype, n in pairs (bc_stats) do
@@ -2045,11 +2045,11 @@ minetest.register_globalstep (function (dtime)
 		-- 		end
 		-- 		table.sort (t, function (a, b) return a[1] < b[1] end)
 		-- 		for _, item in ipairs (t) do
-		-- 			minetest.log ("action", string.format ("   %s: %d nodes (%.2f %%)",
+		-- 			core.log ("action", string.format ("   %s: %d nodes (%.2f %%)",
 		-- 							       item[2], item[1],
 		-- 							       item[1] / total * 100))
 		-- 		end
-		-- 		minetest.log ("action", string.format ("%.2f%% of classification attempts registered cache hits", (gwp_cc_hits / (gwp_cc_hits + gwp_cc_misses)) * 100))
+		-- 		core.log ("action", string.format ("%.2f%% of classification attempts registered cache hits", (gwp_cc_hits / (gwp_cc_hits + gwp_cc_misses)) * 100))
 		-- 		gwp_cc_hits = 0
 		-- 		gwp_cc_misses = 0
 		-- 		bc_stats = {}
@@ -2071,7 +2071,7 @@ local function waterbound_gwp_basic_classify (pos)
 		return "IGNORE"
 	end
 	local name = gwp_nodevalue_to_name (nodevalue)
-	local def = minetest.registered_nodes[name]
+	local def = core.registered_nodes[name]
 	if not def or not def.groups.water or def.groups.water <= 0 then
 		value = "BLOCKED"
 	end
@@ -2338,7 +2338,7 @@ end
 
 local function amphibious_gwp_start (self, context, node)
 	if not self.standing_in
-		or minetest.get_item_group (self.standing_in, "water") == 0 then
+		or core.get_item_group (self.standing_in, "water") == 0 then
 		return mob_class.gwp_start (self, context, node)
 	else
 		return waterbound_gwp_start (self, context, node)
@@ -2776,7 +2776,7 @@ local function airborne_gwp_classify_node (self, context, pos)
 	local hash = hashpos (context, pos.x, pos.y, pos.z)
 	local cache = context.class_cache[hash]
 
-	-- This is very expensive, as minetest.get_node conses too
+	-- This is very expensive, as core.get_node conses too
 	-- much.
 	if cache then
 		-- if record_pathfinding_stats then
@@ -3034,7 +3034,7 @@ local function door_has_other_users (self, door)
 	-- Locate users of this door besides `self' who are within two
 	-- blocks of the said door and are pathfinding through it, or
 	-- are within 0.5 blocks and preparing to close it.
-	for object in minetest.objects_inside_radius (door, 2) do
+	for object in core.objects_inside_radius (door, 2) do
 		local entity
 		entity = object:get_luaentity ()
 		if entity and entity.is_mob and entity ~= self
@@ -3066,10 +3066,10 @@ function mob_class:gwp_close_memorized_doors ()
 		elseif not is_door_in_waypoints (self, door)
 			and vector.distance (self_pos, door) <= 3
 			and not door_has_other_users (self, door) then
-			local node = minetest.get_node (door)
-			if minetest.get_item_group (node.name, "door") ~= 0 then
+			local node = core.get_node (door)
+			if core.get_item_group (node.name, "door") ~= 0 then
 				if mcl_doors.is_open (door) then
-					local def = minetest.registered_nodes[node.name]
+					local def = core.registered_nodes[node.name]
 					def.on_rightclick (door, node, self)
 				end
 			end
@@ -3087,7 +3087,7 @@ function mob_class:gwp_memorize_door (door_wp)
 end
 
 function mob_class:gwp_open_door (door_node, node, dtime)
-	local def = minetest.registered_nodes[node.name]
+	local def = core.registered_nodes[node.name]
 	-- Copy this position, lest it be modified by
 	-- the right click handler.
 	if def.on_rightclick then
@@ -3096,9 +3096,9 @@ function mob_class:gwp_open_door (door_node, node, dtime)
 end
 
 function mob_class:gwp_open_and_memorize_door (door, dtime)
-	local node = minetest.get_node (door)
-	if minetest.get_item_group (node.name, "door") ~= 0
-		and minetest.get_item_group (node.name, "door_iron") == 0 then
+	local node = core.get_node (door)
+	if core.get_item_group (node.name, "door") ~= 0
+		and core.get_item_group (node.name, "door_iron") == 0 then
 		local door_node = mcl_util.get_nodepos (door)
 		if not mcl_doors.is_open (door_node) then
 			self:gwp_open_door (door_node, node, dtime)
@@ -3252,7 +3252,7 @@ local function obstruction_is_water (name, def)
 end
 
 local function standing_in_water (self)
-	return minetest.get_item_group (self.standing_in, "water") ~= 0
+	return core.get_item_group (self.standing_in, "water") ~= 0
 end
 
 local function aquatic_gwp_skip_waypoint (self, self_pos, next_wp, ahead)

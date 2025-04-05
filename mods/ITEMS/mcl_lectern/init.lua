@@ -4,8 +4,8 @@
 -- Adapted for mineclonia and added model with book by pixelzone
 -- lectern GUI code by cora
 
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
 local H = core.hypertext_escape
 
 local function get_formspec(text, title, author)
@@ -73,33 +73,33 @@ local lectern_tpl = {
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
 
-		if minetest.is_protected(pointed_thing.above, placer:get_player_name()) then
-			minetest.record_protection_violation(pointed_thing.above, placer:get_player_name())
+		if core.is_protected(pointed_thing.above, placer:get_player_name()) then
+			core.record_protection_violation(pointed_thing.above, placer:get_player_name())
 			return
 		end
 
-		if minetest.dir_to_wallmounted(vector.subtract(pointed_thing.under,  pointed_thing.above)) == 1 then
-			local _, success = minetest.item_place_node(itemstack, placer, pointed_thing, minetest.dir_to_facedir(vector.direction(placer:get_pos(),pointed_thing.above)))
+		if core.dir_to_wallmounted(vector.subtract(pointed_thing.under,  pointed_thing.above)) == 1 then
+			local _, success = core.item_place_node(itemstack, placer, pointed_thing, core.dir_to_facedir(vector.direction(placer:get_pos(),pointed_thing.above)))
 			if not success then
 				return
 			end
-			minetest.sound_play(mcl_sounds.node_sound_wood_defaults().place, {pos=pointed_thing.above, gain=1}, true)
+			core.sound_play(mcl_sounds.node_sound_wood_defaults().place, {pos=pointed_thing.above, gain=1}, true)
 		end
 		return itemstack
 	end,
 }
 
-minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
+core.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 	on_rightclick = function(pos, node, clicker, itemstack)
 		if itemstack:get_name() == "mcl_books:written_book"
 			or itemstack:get_name() == "mcl_books:writable_book" then
 			local player_name = clicker:get_player_name()
-			if minetest.is_protected(pos, player_name) then
-				minetest.record_protection_violation(pos, player_name)
+			if core.is_protected(pos, player_name) then
+				core.record_protection_violation(pos, player_name)
 				return
 			end
 			local im = itemstack:get_meta()
-			local nm = minetest.get_meta(pos)
+			local nm = core.get_meta(pos)
 			node.name = "mcl_lectern:lectern_with_book"
 			mcl_redstone.swap_node(pos,node)
 			nm:set_string("formspec",get_formspec(im:get_string("text"),im:get_string("title"),im:get_string("author")))
@@ -109,7 +109,7 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 			nm:set_string("pages","15")
 			nm:set_string("page","1")
 			local book_item = ItemStack(itemstack)
-			if not minetest.is_creative_enabled(player_name) then
+			if not core.is_creative_enabled(player_name) then
 				book_item = itemstack:take_item()
 			end
 			book_item:set_count(1)
@@ -124,19 +124,19 @@ minetest.register_node("mcl_lectern:lectern", table.merge(lectern_tpl,{
 	},
 }))
 
-minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl,{
+core.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl,{
 	groups = table.merge(lectern_tpl.groups, {not_in_creative_inventory = 1}),
 	mesh = "mcl_lectern_lectern_with_book.obj",
 	on_receive_fields = function(pos, _, fields, sender)
 		local sender_name = sender:get_player_name()
-		if minetest.is_protected(pos, sender_name) then
-			minetest.record_protection_violation(pos, sender_name)
+		if core.is_protected(pos, sender_name) then
+			core.record_protection_violation(pos, sender_name)
 			return
 		end
 		if fields and fields.take then
 			local inv = sender:get_inventory()
-			local node = minetest.get_node(pos)
-			local nm = minetest.get_meta(pos)
+			local node = core.get_node(pos)
+			local nm = core.get_meta(pos)
 			local is = nm:get_string("book_item")
 			if is and is ~= "" then
 				inv:add_item("main", is)
@@ -147,8 +147,8 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 		elseif fields and fields.ok then
 			-- simulate a page turn
 			-- TODO: actually implement multi page books
-			local node = minetest.get_node(pos)
-			local nm = minetest.get_meta(pos)
+			local node = core.get_node(pos)
+			local nm = core.get_meta(pos)
 			local pages = tonumber(nm:get_string("pages")) or 1
 			local page = tonumber(nm:get_string("page")) or 1
 			page = (page % pages) + 1
@@ -161,7 +161,7 @@ minetest.register_node("mcl_lectern:lectern_with_book", table.merge( lectern_tpl
 	end,
 	after_dig_node = function(pos, _, oldmetadata, _)
 		if oldmetadata and oldmetadata.fields and oldmetadata.fields.book_item then
-			minetest.add_item(pos, ItemStack(oldmetadata.fields.book_item))
+			core.add_item(pos, ItemStack(oldmetadata.fields.book_item))
 		end
 	end,
 	_mcl_redstone = {
@@ -189,10 +189,10 @@ mcl_wip.register_wip_item("mcl_lectern:lectern")
 -- April Fools setup
 local date = os.date("*t")
 if (date.month == 4 and date.day == 1) then
-	minetest.override_item("mcl_lectern:lectern", {waving = 2})
+	core.override_item("mcl_lectern:lectern", {waving = 2})
 end
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_lectern:lectern",
 	recipe = {
 		{"group:wood_slab", "group:wood_slab", "group:wood_slab"},

@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_node("mcl_powder_snow:powder_snow", {
+core.register_node("mcl_powder_snow:powder_snow", {
 	description = S("Powder Snow"),
 	_doc_items_longdesc = S("This is a block of snow thats extra fluffy, this means players can sink in it"),
 	_doc_items_hidden = false,
@@ -15,8 +15,8 @@ minetest.register_node("mcl_powder_snow:powder_snow", {
 	after_destruct = mcl_core.after_snow_destruct,
 	on_rightclick = function(pos, _, clicker, itemstack, pointed_thing)
 		if itemstack:get_name() ==  "mcl_buckets:bucket_empty" then
-			minetest.set_node(pos, {name = "air"})
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
+			core.set_node(pos, {name = "air"})
+			if not core.is_creative_enabled(clicker:get_player_name()) then
 				if itemstack:get_count() == 1 then
 					itemstack = ItemStack("mcl_powder_snow:bucket_powder_snow")
 				else
@@ -24,13 +24,13 @@ minetest.register_node("mcl_powder_snow:powder_snow", {
 					if inv:room_for_item("main", "mcl_powder_snow:bucket_powder_snow") then
 						inv:add_item("main", "mcl_powder_snow:bucket_powder_snow")
 					else
-						minetest.add_item(clicker:get_pos(), "mcl_powder_snow:bucket_powder_snow")
+						core.add_item(clicker:get_pos(), "mcl_powder_snow:bucket_powder_snow")
 					end
 					itemstack:take_item()
 				end
 			end
 		elseif itemstack:get_definition().type == "node" then
-			minetest.item_place_node(itemstack, clicker, pointed_thing)
+			core.item_place_node(itemstack, clicker, pointed_thing)
 		end
 
 		return itemstack
@@ -126,7 +126,7 @@ end
 local function player_has_leather_armor(player)
 	local armor_list = player:get_inventory():get_list("armor")
 	for i = 2, 5 do
-		if minetest.get_item_group(armor_list[i]:get_name(), "armor_leather") == 1 then
+		if core.get_item_group(armor_list[i]:get_name(), "armor_leather") == 1 then
 			return true
 		end
 	end
@@ -138,7 +138,7 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 	local player_meta = player:get_meta()
 	local time_in_snow = tonumber(player_meta:get("time_in_snow"))
 
-	if minetest.get_node(player_pos).name == "mcl_powder_snow:powder_snow" and not player_has_leather_armor(player) then
+	if core.get_node(player_pos).name == "mcl_powder_snow:powder_snow" and not player_has_leather_armor(player) then
 		if not time_in_snow then
 			time_in_snow = 0
 		end
@@ -176,14 +176,14 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 	end
 end)
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local time_in_snow = tonumber(player:get_meta():get("time_in_snow"))
 
 	if not time_in_snow then return end
 
 	if time_in_snow > 5 then
 		show_freezing_hud(player, 3)
-		minetest.after(0, function() hb.change_hudbar(player, "health", nil, nil, "frozen_heart.png") end)
+		core.after(0, function() hb.change_hudbar(player, "health", nil, nil, "frozen_heart.png") end)
 	elseif time_in_snow > 3 then
 		show_freezing_hud(player, 2)
 	elseif time_in_snow > 1 then
@@ -191,11 +191,11 @@ minetest.register_on_joinplayer(function(player)
 	end
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	freezing_players[player] = nil
 end)
 
-minetest.register_on_respawnplayer(function(player)
+core.register_on_respawnplayer(function(player)
 	remove_freezing_hud(player)
 	hb.change_hudbar(player, "health", nil, nil, "hudbars_icon_health.png")
 end)

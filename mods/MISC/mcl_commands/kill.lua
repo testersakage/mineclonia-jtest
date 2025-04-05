@@ -1,10 +1,10 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local function handle_kill_command(suspect, victim)
-	if minetest.settings:get_bool("enable_damage") == false then
+	if core.settings:get_bool("enable_damage") == false then
 		return false, S("Players can't be killed right now, damage has been disabled.")
 	end
-	local victimref = minetest.get_player_by_name(victim)
+	local victimref = core.get_player_by_name(victim)
 	if victimref == nil then
 		return false, S("Player @1 does not exist.", victim)
 	elseif victimref:get_hp() <= 0 then
@@ -19,17 +19,17 @@ local function handle_kill_command(suspect, victim)
 				  { type = "out_of_world", })
 	-- Log
 	if suspect ~= victim then
-		minetest.log("action", string.format("%s killed %s using /kill", suspect, victim))
+		core.log("action", string.format("%s killed %s using /kill", suspect, victim))
 	else
-		minetest.log("action", string.format("%s committed suicide using /kill", victim))
+		core.log("action", string.format("%s committed suicide using /kill", victim))
 	end
 	return true
 end
 
-if minetest.registered_chatcommands["kill"] then
-	minetest.unregister_chatcommand("kill")
+if core.registered_chatcommands["kill"] then
+	core.unregister_chatcommand("kill")
 end
-minetest.register_chatcommand("kill", {
+core.register_chatcommand("kill", {
 	params = S("[<name>]"),
 	description = S("Kill player or yourself"),
 	privs = {server=true},

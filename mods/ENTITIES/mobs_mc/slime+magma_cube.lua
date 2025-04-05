@@ -1,6 +1,6 @@
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 
 local slime_chunk_spawn_max = mcl_worlds.layer_to_y(40)
 
@@ -16,7 +16,7 @@ end
 -- https://minecraft.wiki/w/Slime#Swamps
 
 local function swamp_spawn(pos)
-	local light = (minetest.get_node_light (pos) or minetest.LIGHT_MAX)
+	local light = (core.get_node_light (pos) or core.LIGHT_MAX)
 	if light > math.random(0,7) then return false end
 	if math.abs(4 - mcl_moon.get_moon_phase()) / 4 < math.random() then return false end --moon phase 4 is new moon in mcl_moon
 	if math.random(2) == 2 then return false end
@@ -36,7 +36,7 @@ local spawn_children_on_die = function(child_mob, spawn_distance, eject_speed)
 		if not eject_speed then
 			eject_speed = 1
 		end
-		local mndef = minetest.registered_nodes[minetest.get_node(pos).name]
+		local mndef = core.registered_nodes[core.get_node(pos).name]
 		local mother_stuck = mndef and mndef.walkable
 		local angle = math.random(0, math.pi*2)
 		local spawn_count = math.random(2, 4)
@@ -47,13 +47,13 @@ local spawn_children_on_die = function(child_mob, spawn_distance, eject_speed)
 			-- If child would end up in a wall, use position of the "mother", unless
 			-- the "mother" was stuck as well
 			if not mother_stuck then
-				local cndef = minetest.registered_nodes[minetest.get_node(newpos).name]
+				local cndef = core.registered_nodes[core.get_node(newpos).name]
 				if cndef and cndef.walkable then
 					newpos = pos
 					eject_speed = eject_speed * 0.5
 				end
 			end
-			local mob = minetest.add_entity(newpos, child_mob, minetest.serialize({ persist_in_peaceful = self.persist_in_peaceful }))
+			local mob = core.add_entity(newpos, child_mob, core.serialize({ persist_in_peaceful = self.persist_in_peaceful }))
 			if mob and mob:get_pos() and not mother_stuck then
 				mob:set_velocity(dir * eject_speed)
 			end
@@ -67,7 +67,7 @@ local function slime_check_light(pos, _, artificial_light, sky_light)
 	local maxlight = swamp_light_max
 
 	if pos.y <= slime_chunk_spawn_max and in_slime_chunk(pos) then
-		maxlight = minetest.LIGHT_MAX + 1
+		maxlight = core.LIGHT_MAX + 1
 	end
 
 	return math.max(artificial_light, sky_light) <= maxlight
@@ -105,7 +105,7 @@ end
 
 local function slime_turn (self, dtime, self_pos)
 	if not self.attack then
-		local standing_on = minetest.registered_nodes[self.standing_on]
+		local standing_on = core.registered_nodes[self.standing_on]
 		local remaining = self._next_turn
 		if not remaining or remaining == 0 then
 			remaining = (math.random (60) + 40) / 20
@@ -132,8 +132,8 @@ end
 local function slime_jump_continuously (self)
 	local factor = 1
 	self._in_water = false
-	if minetest.get_item_group (self.standing_in, "water") ~= 0
-		or minetest.get_item_group (self.standing_in, "lava") ~= 0 then
+	if core.get_item_group (self.standing_in, "water") ~= 0
+		or core.get_item_group (self.standing_in, "lava") ~= 0 then
 		factor = 1.2
 		self._in_water = true
 	end
@@ -177,7 +177,7 @@ local function slime_check_particle (self, dtime, moveresult)
 		local radius = (cbox[6] - cbox[3]) * 0.75
 		local self_pos = self.object:get_pos ()
 		local v = 1
-		minetest.add_particlespawner ({
+		core.add_particlespawner ({
 			amount = math.round (radius * 32),
 			minpos = vector.offset (self_pos, -radius, 0, -radius),
 			maxpos = vector.offset (self_pos, radius, 0, radius),
@@ -371,7 +371,7 @@ for slime_name,slime_chance in pairs({
 		dimension = "overworld",
 		biomes = cave_biomes,
 		min_light = 0,
-		max_light = minetest.LIGHT_MAX+1,
+		max_light = core.LIGHT_MAX+1,
 		min_height = cave_min,
 		max_height = cave_max,
 		chance = slime_chance,
@@ -521,7 +521,7 @@ for magma_name,magma_chance in pairs({
 		type_of_spawning = "ground",
 		dimension = "nether",
 		min_light = 0,
-		max_light = minetest.LIGHT_MAX+1,
+		max_light = core.LIGHT_MAX+1,
 		chance = magma_chance,
 		biomes = {"Nether", "BasaltDelta"},
 	})

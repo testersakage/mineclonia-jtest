@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 local cold_oceans = {
 	"RoofedForest_ocean",
@@ -73,13 +73,13 @@ local function place_sus_nodes(pos,def,pr,susnode,replace_nodes)
 	local hl = def.sidelen / 2
 	local p1 = vector.offset(pos,-hl,-hl,-hl)
 	local p2 = vector.offset(pos,hl,hl,hl)
-	if minetest.registered_nodes["mcl_sus_nodes:"..susnode] then
-		local sus_poss = minetest.find_nodes_in_area(vector.offset(p1,0,-3,0), vector.offset(p2,0,-hl+2,0), replace_nodes)
+	if core.registered_nodes["mcl_sus_nodes:"..susnode] then
+		local sus_poss = core.find_nodes_in_area(vector.offset(p1,0,-3,0), vector.offset(p2,0,-hl+2,0), replace_nodes)
 		if #sus_poss > 0 then
 			table.shuffle(sus_poss)
 			for i = 1,pr:next(1,math.min(250,#sus_poss)) do
-				minetest.swap_node(sus_poss[i],{name="mcl_sus_nodes:"..susnode})
-				local meta = minetest.get_meta(sus_poss[i])
+				core.swap_node(sus_poss[i],{name="mcl_sus_nodes:"..susnode})
+				local meta = core.get_meta(sus_poss[i])
 				meta:set_string("structure", def.name)
 			end
 		end

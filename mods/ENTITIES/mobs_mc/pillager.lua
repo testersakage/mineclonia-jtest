@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local posing_humanoid = mcl_mobs.posing_humanoid
 local illager = mobs_mc.illager
@@ -135,7 +135,7 @@ function pillager:drop_custom (looting_level)
 	if not self:_get_active_raid () and self._raidcaptain then
 		local self_pos = self.object:get_pos ()
 		local stack = ItemStack ("mcl_potions:ominous")
-		minetest.add_item (self_pos, stack)
+		core.add_item (self_pos, stack)
 	end
 end
 
@@ -239,7 +239,7 @@ end
 
 function pillager:shoot_arrow (pos, dir)
 	local wielditem = self:get_wielditem ()
-	if minetest.get_item_group (wielditem:get_name (), "crossbow") == 0 then
+	if core.get_item_group (wielditem:get_name (), "crossbow") == 0 then
 		wielditem = nil
 	end
 	mcl_bows.shoot_arrow_crossbow ("mcl_bows:arrow", pos, dir, self:get_yaw (),
@@ -267,23 +267,23 @@ mcl_mobs.register_egg ("mobs_mc:pillager", S("Pillager"), "#532f36", "#959b9b", 
 -- Pillager spawning.
 ------------------------------------------------------------------------
 
-local mobs_spawn = minetest.settings:get_bool ("mobs_spawn", true)
-local mushroom_island = minetest.get_biome_id ("MushroomIsland")
-local mushroom_island_shore = minetest.get_biome_id ("MushroomIslandShore")
+local mobs_spawn = core.settings:get_bool ("mobs_spawn", true)
+local mushroom_island = core.get_biome_id ("MushroomIsland")
+local mushroom_island_shore = core.get_biome_id ("MushroomIslandShore")
 
 local next_spawn_attempt = (12000 + pr:next (0, 1200)) / 20
 
 local function is_clear (nodepos, x, y, z)
 	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = minetest.get_node (nodepos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (nodepos)
+	local def = core.registered_nodes[node.name]
 	return def and not def.walkable and def.liquidtype == "none"
 end
 
 local function is_solid (nodepos, x, y, z)
 	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = minetest.get_node (nodepos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (nodepos)
+	local def = core.registered_nodes[node.name]
 	return def and def.walkable and def.groups.opaque
 end
 
@@ -295,8 +295,8 @@ local function spawn_patrolman (nodepos, as_leader)
 	local solid = is_solid (nodepos, 0, -1, 0)
 	-- Ensure that the block is spawnable and is sufficiently
 	-- dark.
-	local node = minetest.get_node (nodepos)
-	local light = minetest.get_artificial_light (node.param1)
+	local node = core.get_node (nodepos)
+	local light = core.get_artificial_light (node.param1)
 	if clearance and solid and light <= 8 then
 		-- Success.
 		local staticdata = {
@@ -304,9 +304,9 @@ local function spawn_patrolman (nodepos, as_leader)
 			_patrolling = true,
 			_patrol_spawn = true,
 		}
-		local str = minetest.serialize (staticdata)
+		local str = core.serialize (staticdata)
 		local surface = vector.offset (nodepos, 0, -0.5, 0)
-		local object = minetest.add_entity (surface, "mobs_mc:pillager", str)
+		local object = core.add_entity (surface, "mobs_mc:pillager", str)
 		if as_leader and object then
 			local entity = object:get_luaentity ()
 			entity:select_patrol_target (nodepos)
@@ -316,7 +316,7 @@ local function spawn_patrolman (nodepos, as_leader)
 	return false
 end
 
-minetest.register_globalstep (function (dtime)
+core.register_globalstep (function (dtime)
 	if mcl_vars.difficulty == 0 or not mobs_spawn then
 		return
 	end
@@ -324,7 +324,7 @@ minetest.register_globalstep (function (dtime)
 	if next_spawn_attempt <= 0 then
 		next_spawn_attempt = (12000 + pr:next (0, 1200)) / 20
 
-		local days = minetest.get_day_count ()
+		local days = core.get_day_count ()
 		if days < 5 or not mcl_util.is_daytime ()
 			or pr:next (1, 5) ~= 1 then
 			return
@@ -359,7 +359,7 @@ minetest.register_globalstep (function (dtime)
 
 		-- Verify that spawning will not take place in an
 		-- ineligible biome.
-		local biome = minetest.get_biome_data (nodepos)
+		local biome = core.get_biome_data (nodepos)
 		if not biome
 			or biome.biome == mushroom_island
 			or biome.biome == mushroom_island_shore then
@@ -383,7 +383,7 @@ minetest.register_globalstep (function (dtime)
 	end
 end)
 
-minetest.register_chatcommand ("spawn_patrol_now", {
+core.register_chatcommand ("spawn_patrol_now", {
 	privs = { server = true, },
 	func = function (playername, param)
 		next_spawn_attempt = 0

@@ -10,7 +10,7 @@ local function register_tuff_variant(name, defs)
 	}, defs))
 end
 
-minetest.register_node("mcl_deepslate:tuff", {
+core.register_node("mcl_deepslate:tuff", {
 	description = S("Tuff"),
 	_doc_items_longdesc = S("Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."),
 	_doc_items_hidden = false,
@@ -21,7 +21,7 @@ minetest.register_node("mcl_deepslate:tuff", {
 	_mcl_hardness = 1.5,
 })
 
-minetest.register_node("mcl_deepslate:tuff_chiseled", {
+core.register_node("mcl_deepslate:tuff_chiseled", {
     description = S("Chiseled Tuff"),
     _doc_items_longdesc = S("Chiseled tuff is a chiseled variant of tuff."),
     _doc_items_hidden = false,
@@ -33,7 +33,7 @@ minetest.register_node("mcl_deepslate:tuff_chiseled", {
     _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", },
 })
 
-minetest.register_node("mcl_deepslate:tuff_chiseled_bricks", {
+core.register_node("mcl_deepslate:tuff_chiseled_bricks", {
     description = S("Chiseled Tuff Bricks"),
     _doc_items_longdesc = S("Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."),
     _doc_items_hidden = false,
@@ -102,17 +102,17 @@ register_tuff_variant("bricks", {
     },
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_deepslate:tuff_polished 4",
 	recipe = { { "mcl_deepslate:tuff", "mcl_deepslate:tuff" }, { "mcl_deepslate:tuff", "mcl_deepslate:tuff" } }
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_deepslate:tuff_bricks 4",
 	recipe = { { "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_polished" }, { "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_polished" } }
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_deepslate:tuff_chiseled",
 	recipe = {
 		{ "mcl_stairs:slab_tuff_polished" },
@@ -120,7 +120,7 @@ minetest.register_craft({
 	},
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_deepslate:tuff_chiseled_bricks",
 	recipe = {
 		{ "mcl_stairs:slab_tuff_bricks" },

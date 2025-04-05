@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-local mod_doc = minetest.get_modpath("doc")
+local mod_doc = core.get_modpath("doc")
 
 local function sea_pickle_on_place(itemstack, placer, pointed_thing, level)
 	if level == nil then level=1 end
@@ -11,24 +11,24 @@ local function sea_pickle_on_place(itemstack, placer, pointed_thing, level)
 	local player_name = placer:get_player_name()
 	local pos_under = pointed_thing.under
 	local pos_above = pointed_thing.above
-	local node_under = minetest.get_node(pos_under)
-	local node_above = minetest.get_node(pos_above)
+	local node_under = core.get_node(pos_under)
+	local node_above = core.get_node(pos_above)
 
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 	if rc then return rc end
 
-	if minetest.is_protected(pos_under, player_name) or
-			minetest.is_protected(pos_above, player_name) then
-		minetest.log("action", player_name
+	if core.is_protected(pos_under, player_name) or
+			core.is_protected(pos_above, player_name) then
+		core.log("action", player_name
 			.. " tried to place " .. itemstack:get_name()
 			.. " at protected position "
-			.. minetest.pos_to_string(pos_under))
-		minetest.record_protection_violation(pos_under, player_name)
+			.. core.pos_to_string(pos_under))
+		core.record_protection_violation(pos_under, player_name)
 		return itemstack
 	end
 
 	local submerged = false
-	if minetest.get_item_group(node_above.name, "water") ~= 0 then
+	if core.get_item_group(node_above.name, "water") ~= 0 then
 		submerged = true
 	end
 	-- Place
@@ -39,20 +39,20 @@ local function sea_pickle_on_place(itemstack, placer, pointed_thing, level)
 		else
 			node_under.name = "mcl_ocean:sea_pickle_" .. level .. "_off_dead_brain_coral_block"
 		end
-		minetest.set_node(pos_under, node_under)
-	elseif minetest.get_item_group(node_under.name, "sea_pickle") ~= 0 then
+		core.set_node(pos_under, node_under)
+	elseif core.get_item_group(node_under.name, "sea_pickle") ~= 0 then
 		-- Grow by 1 stage
-		local def = minetest.registered_nodes[node_under.name]
+		local def = core.registered_nodes[node_under.name]
 		if def and def._mcl_sea_pickle_next then
 			node_under.name = def._mcl_sea_pickle_next
-			minetest.set_node(pos_under, node_under)
+			core.set_node(pos_under, node_under)
 		else
 			return itemstack
 		end
 	else
 		return itemstack
 	end
-	if not minetest.is_creative_enabled(player_name) then
+	if not core.is_creative_enabled(player_name) then
 		itemstack:take_item()
 	end
 	return itemstack
@@ -63,7 +63,7 @@ end
 local sounds_coral_plant = mcl_sounds.node_sound_leaves_defaults({footstep = mcl_sounds.node_sound_dirt_defaults().footstep})
 local ontop = "dead_brain_coral_block"
 local canonical = "mcl_ocean:sea_pickle_1_"..ontop
-local light_strength = { 6, 9, 12, minetest.LIGHT_MAX }
+local light_strength = { 6, 9, 12, core.LIGHT_MAX }
 
 for s=1,4 do
 	local desc, doc_desc, doc_use, doc_create, tt_help, nici, img, img_off, on_place, cookoutput
@@ -121,12 +121,12 @@ for s=1,4 do
 		if pointed_thing.type ~= "node" then return end
 		if 4 ~= s then
 			node.name = "mcl_ocean:sea_pickle_" .. (s + 1) .. "_" .. ontop
-			minetest.swap_node(pos, node)
+			core.swap_node(pos, node)
 		end
 		spread_sea_pickle(pos, placer)
 	end
 
-	minetest.register_node("mcl_ocean:sea_pickle_"..s.."_"..ontop, {
+	core.register_node("mcl_ocean:sea_pickle_"..s.."_"..ontop, {
 		description = desc,
 		_tt_help = tt_help,
 		_doc_items_create_entry = doc_create,
@@ -161,9 +161,9 @@ for s=1,4 do
 		node_placement_prediction = "",
 		node_dig_prediction = "mcl_ocean:"..ontop,
 		after_dig_node = function(pos)
-			local node = minetest.get_node(pos)
-			if minetest.get_item_group(node.name, "sea_pickle") == 0 then
-				minetest.set_node(pos, {name="mcl_ocean:"..ontop})
+			local node = core.get_node(pos)
+			if core.get_item_group(node.name, "sea_pickle") == 0 then
+				core.set_node(pos, {name="mcl_ocean:"..ontop})
 			end
 		end,
 		on_place = on_place,
@@ -176,7 +176,7 @@ for s=1,4 do
 		_on_bone_meal = on_bone_meal,
 	})
 
-	minetest.register_node("mcl_ocean:sea_pickle_"..s.."_off_"..ontop, {
+	core.register_node("mcl_ocean:sea_pickle_"..s.."_off_"..ontop, {
 		drawtype = "plantlike_rooted",
 		paramtype = "light",
 		paramtype2 = "meshoptions",
@@ -197,9 +197,9 @@ for s=1,4 do
 		node_placement_prediction = "",
 		node_dig_prediction = "mcl_ocean:"..ontop,
 		after_dig_node = function(pos)
-			local node = minetest.get_node(pos)
-			if minetest.get_item_group(node.name, "sea_pickle") == 0 then
-				minetest.set_node(pos, {name="mcl_ocean:"..ontop})
+			local node = core.get_node(pos)
+			if core.get_item_group(node.name, "sea_pickle") == 0 then
+				core.set_node(pos, {name="mcl_ocean:"..ontop})
 			end
 		end,
 		_mcl_sea_pickle_on = "mcl_ocean:sea_pickle_"..s.."_"..ontop,
@@ -219,7 +219,7 @@ for s=1,4 do
 	end
 end
 
-minetest.register_abm({
+core.register_abm({
 	label = "Sea pickle update",
 	nodenames = { "group:sea_pickle" },
 	interval = 17,
@@ -227,22 +227,22 @@ minetest.register_abm({
 	catch_up = false,
 	action = function(pos, node)
 		-- Check if it's lit
-		local state = minetest.get_item_group(node.name, "sea_pickle")
+		local state = core.get_item_group(node.name, "sea_pickle")
 		-- Check for water
-		local checknode = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
-		local def = minetest.registered_nodes[node.name]
-		if minetest.get_item_group(checknode.name, "water") ~= 0 then
+		local checknode = core.get_node({x=pos.x, y=pos.y+1, z=pos.z})
+		local def = core.registered_nodes[node.name]
+		if core.get_item_group(checknode.name, "water") ~= 0 then
 			-- Sea pickle is unlit
 			if state == 2 then
 				node.name = def._mcl_sea_pickle_on
-				minetest.set_node(pos, node)
+				core.set_node(pos, node)
 				return
 			end
 		else
 			-- Sea pickle is lit
 			if state == 1 then
 				node.name = def._mcl_sea_pickle_off
-				minetest.set_node(pos, node)
+				core.set_node(pos, node)
 				return
 			end
 		end

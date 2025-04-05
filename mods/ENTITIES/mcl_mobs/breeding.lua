@@ -6,11 +6,11 @@ local HORNY_AGAIN_TIME = 30*20 -- was 300 or 15*20
 local CHILD_GROW_TIME = 24000
 
 function mob_class:use_shears (new_textures, shears_stack)
-	if minetest.get_item_group(shears_stack:get_name(), "shears") > 0 then
+	if core.get_item_group(shears_stack:get_name(), "shears") > 0 then
 		self.base_texture = new_textures
 		self:set_textures (new_textures)
 		self.gotten = true
-		minetest.sound_play("mcl_tools_shears_cut", { pos = self.object:get_pos() }, true)
+		core.sound_play("mcl_tools_shears_cut", { pos = self.object:get_pos() }, true)
 		local shears_def = shears_stack:get_definition()
 		shears_stack:add_wear(65535 / shears_def._mcl_diggroups.shearsy.uses)
 	end
@@ -84,7 +84,7 @@ function mob_class:feed_tame(clicker, heal, breed, tame, notake, tamechance)
 
 	self:update_tag()
 	if clicker and consume_food then
-		if not minetest.is_creative_enabled(clicker:get_player_name()) and not notake then
+		if not core.is_creative_enabled(clicker:get_player_name()) and not notake then
 			local item = clicker:get_wielded_item()
 			item:take_item()
 			clicker:set_wielded_item(item)
@@ -99,10 +99,10 @@ function mob_class:feed_tame(clicker, heal, breed, tame, notake, tamechance)
 end
 
 function mcl_mobs.spawn_child(pos, mob_type)
-	local staticdata = minetest.serialize ({
+	local staticdata = core.serialize ({
 		child = true,
 	})
-	local child = minetest.add_entity (pos, mob_type, staticdata)
+	local child = core.add_entity (pos, mob_type, staticdata)
 	if not child then
 		return
 	end
@@ -249,7 +249,7 @@ function mob_class:check_breeding (pos)
 			and self.hornytimer
 			and not self.begetting then
 			self.begetting = true
-			minetest.after (5, mob_class.beget_child, self, pos)
+			core.after (5, mob_class.beget_child, self, pos)
 		end
 		self:gopath (matepos, self.breed_bonus)
 		return true
@@ -263,7 +263,7 @@ function mob_class:check_breeding (pos)
 			bz = self.collisionbox[6]
 			local aa = { x = pos.x + ax - 8, y = pos.y + ay - 4, z = pos.z + az - 8 }
 			local bb = { x = pos.x + bx + 8, y = pos.y + by + 4, z = pos.z + bz + 8 }
-			local objects = minetest.get_objects_in_area (aa, bb)
+			local objects = core.get_objects_in_area (aa, bb)
 			for _, object in ipairs (objects) do
 				if self:can_mate (object) then
 					local entity = object:get_luaentity ()
@@ -273,7 +273,7 @@ function mob_class:check_breeding (pos)
 					self.begetting = false
 					self.horny = false
 					-- Prevent duplicate calls to
-					-- minetest.after.
+					-- core.after.
 					entity.begetting = true
 					-- Taken, sorry!
 					entity.horny = false
@@ -322,7 +322,7 @@ function mob_class:follow_herd (pos)
 		bz = self.collisionbox[6]
 		local aa = { x = pos.x + ax - 9, y = pos.y + ay - 5, z = pos.z + az - 9 }
 		local bb = { x = pos.x + bx + 9, y = pos.y + by + 5, z = pos.z + bz + 9 }
-		local objects = minetest.get_objects_in_area (aa, bb)
+		local objects = core.get_objects_in_area (aa, bb)
 		local distmin, selected = 5000
 
 		for _, object in ipairs (objects) do
@@ -374,14 +374,14 @@ function mob_class:toggle_sit(clicker,p)
 	local pp = vector.new(0,1.4,0)
 	if p then pp = vector.offset(pp,0,p,0) end
 	-- Display icon to show current order (sit or roam)
-	minetest.add_particle({
+	core.add_particle({
 		pos = vector.add(pos, pp),
 		velocity = {x=0,y=0.2,z=0},
 		expirationtime = 1,
 		size = 4,
 		texture = particle,
 		playername = self.owner,
-		glow = minetest.LIGHT_MAX,
+		glow = core.LIGHT_MAX,
 	})
 end
 
@@ -392,14 +392,14 @@ end
 
 function mob_class:sit_if_ordered (self_pos, dtime)
 	if self.order == "sit" and self.owner then
-		if minetest.get_item_group (self.standing_in, "water") ~= 0 then
+		if core.get_item_group (self.standing_in, "water") ~= 0 then
 			return false
 		end
 		-- If recently damaged and owner is nearby, don't
 		-- activate either.
 		if self._recent_attacker
 			and self:is_not_owner (self._recent_attacker) then
-			local player = minetest.get_player_by_name (self.owner)
+			local player = core.get_player_by_name (self.owner)
 			if player
 				and vector.distance (self_pos, player:get_pos ()) < 12 then
 				return false
@@ -434,8 +434,8 @@ local function teleport_to_owner (self, owner, owner_pos)
 
 		if self:gwp_classify_for_movement (pos) == "WALKABLE" then
 			pos.y = pos.y - 1
-			local node = minetest.get_node (pos)
-			local def = minetest.registered_nodes [node.name]
+			local node = core.get_node (pos)
+			local def = core.registered_nodes [node.name]
 			if def and (core.get_item_group(node.name, "leaves") == 0 or self.airborne) then
 				pos.y = pos.y + 1
 				self.object:move_to (pos)
@@ -454,7 +454,7 @@ function mob_class:check_travel_to_owner (self_pos, dtime)
 			self.traveling_to_owner = nil
 			return false
 		end
-		local owner = minetest.get_player_by_name (self.owner)
+		local owner = core.get_player_by_name (self.owner)
 		if not owner then
 			self.traveling_to_owner = nil
 			return false
@@ -486,7 +486,7 @@ function mob_class:check_travel_to_owner (self_pos, dtime)
 		end
 		return true
 	else
-		local owner = self.owner and minetest.get_player_by_name (self.owner)
+		local owner = self.owner and core.get_player_by_name (self.owner)
 		if not owner or self.object:get_attach () or self.order == "sit" then
 			return false
 		end

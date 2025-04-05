@@ -56,7 +56,7 @@ for _,v in pairs(rotkeys) do
 end
 
 function mcl_signs.upgrade_sign_meta(pos)
-		local m = minetest.get_meta(pos)
+		local m = core.get_meta(pos)
 		local col = m:get_string("mcl_signs:text_color")
 		local glo = m:get_string("mcl_signs:glowing_sign")
 		if col ~= "" then
@@ -91,7 +91,7 @@ function mcl_signs.upgrade_sign_rot(pos,node)
 		if mcl2standingsigns[node.name] then
 			node.name = mcl2standingsigns[node.name]
 		end
-		local def = minetest.registered_nodes[node.name]
+		local def = core.registered_nodes[node.name]
 		if def and def._mcl_sign_type == "standing" then
 			if node.param2 == 1 or node.param2 == 121 then
 				node.param2 = 180
@@ -102,12 +102,12 @@ function mcl_signs.upgrade_sign_rot(pos,node)
 			end
 		end
 	end
-	minetest.swap_node(pos,node)
+	core.swap_node(pos,node)
 	mcl_signs.upgrade_sign_meta(pos)
 	mcl_signs.update_sign(pos)
 end
 
-minetest.register_lbm({
+core.register_lbm({
 	nodenames = {"group:sign"},
 	name = ":mcl_signs:update_old_signs",
 	label = "Update old signs",
@@ -117,7 +117,7 @@ minetest.register_lbm({
 
 for k,_ in pairs(mcl2rotsigns) do table.insert(mcl_signs.old_rotnames, k) end
 for k,_ in pairs(mcl2standingsigns) do table.insert(mcl_signs.old_rotnames, k) end
-minetest.register_lbm({
+core.register_lbm({
 	nodenames = mcl_signs.old_rotnames,
 	name = ":mcl_signs:update_old_rotated_standing",
 	label = "Update old standing rotated signs",

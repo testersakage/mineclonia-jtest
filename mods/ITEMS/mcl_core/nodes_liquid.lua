@@ -1,13 +1,13 @@
 -- Liquids: Water and lava
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 --local WATER_ALPHA = 179
 local WATER_VISC = 1
 local LAVA_VISC = 7
-local LIGHT_LAVA = minetest.LIGHT_MAX
+local LIGHT_LAVA = core.LIGHT_MAX
 
-minetest.register_node("mcl_core:water_flowing", {
+core.register_node("mcl_core:water_flowing", {
 	description = S("Flowing Water"),
 	_doc_items_create_entry = false,
 	wield_image = "default_water_flowing_animated.png^[verticalframe:64:0",
@@ -50,7 +50,7 @@ minetest.register_node("mcl_core:water_flowing", {
 	_mcl_hardness = -1,
 })
 
-minetest.register_node("mcl_core:water_source", {
+core.register_node("mcl_core:water_source", {
 	description = S("Water Source"),
 	_doc_items_entry_name = S("Water"),
 	_doc_items_longdesc =
@@ -94,10 +94,10 @@ S("• When water is directly below lava, the water turns into stone."),
 	_mcl_blast_resistance = 100,
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
 	_mcl_hardness = -1,
-	after_destruct = minetest.check_for_falling,
+	after_destruct = core.check_for_falling,
 })
 
-minetest.register_node("mcl_core:lava_flowing", {
+core.register_node("mcl_core:lava_flowing", {
 	description = S("Flowing Lava"),
 	_doc_items_create_entry = false,
 	wield_image = "default_lava_flowing_animated.png^[verticalframe:64:0",
@@ -145,14 +145,14 @@ minetest.register_node("mcl_core:lava_flowing", {
 })
 
 local fire_text
-local fire_enabled = minetest.settings:get_bool("enable_fire", true)
+local fire_enabled = core.settings:get_bool("enable_fire", true)
 if fire_enabled then
 	fire_text = S("A lava source sets fire to a couple of air blocks above when they're next to a flammable block.")
 else
 	fire_text = ""
 end
 
-minetest.register_node("mcl_core:lava_source", {
+core.register_node("mcl_core:lava_source", {
 	description = S("Lava Source"),
 	_doc_items_entry_name = "Lava",
 	_doc_items_longdesc =
@@ -197,12 +197,12 @@ S("• When lava is directly above water, the water turns into stone."),
 	_mcl_blast_resistance = 100,
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
 	_mcl_hardness = -1,
-	after_destruct = minetest.check_for_falling,
+	after_destruct = core.check_for_falling,
 })
 
 local function emit_lava_particle(pos)
-	local node = minetest.get_node(pos)
-	if minetest.get_item_group(node.name, "lava_source") == 0 then
+	local node = core.get_node(pos)
+	if core.get_item_group(node.name, "lava_source") == 0 then
 		return
 	end
 	local ppos = vector.add(pos, { x = math.random(-7, 7)/16, y = 0.45, z = math.random(-7, 7)/16})
@@ -210,7 +210,7 @@ local function emit_lava_particle(pos)
 	local vel = { x = math.random(-3, 3)/10, y = math.random(4, 7), z = math.random(-3, 3)/10 }
 	local acc = { x = 0, y = -9.81, z = 0 }
 	-- Lava droplet
-	minetest.add_particle({
+	core.add_particle({
 		pos = ppos,
 		velocity = vel,
 		acceleration = acc,
@@ -223,21 +223,21 @@ local function emit_lava_particle(pos)
 	})
 end
 
-if minetest.settings:get("mcl_node_particles") == "full" then
-	minetest.register_abm({
+if core.settings:get("mcl_node_particles") == "full" then
+	core.register_abm({
 		label = "Lava particles",
 		nodenames = {"group:lava_source"},
 		interval = 8.0,
 		chance = 20,
 		action = function(pos)
 			local apos = {x=pos.x, y=pos.y+1, z=pos.z}
-			local anode = minetest.get_node(apos)
+			local anode = core.get_node(apos)
 			-- Only emit partiles when directly below lava
 			if anode.name ~= "air" then
 				return
 			end
 
-			minetest.after(math.random(0, 800)*0.01, emit_lava_particle, pos)
+			core.after(math.random(0, 800)*0.01, emit_lava_particle, pos)
 		end,
 	})
 end

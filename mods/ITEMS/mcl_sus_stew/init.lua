@@ -1,9 +1,9 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 --                                          ____________________________
 --_________________________________________/    Variables & Functions    \_________
 
-local eat = minetest.item_eat(6, "mcl_core:bowl") --6 hunger points, player receives mcl_core:bowl after eating
+local eat = core.item_eat(6, "mcl_core:bowl") --6 hunger points, player receives mcl_core:bowl after eating
 
 local flower_effect = {
 	[ "mcl_flowers:allium" ] = "fire_resistance",
@@ -89,7 +89,7 @@ local function eat_stew(itemstack, placer, pointed_thing)
 	end
 end
 
-minetest.register_on_craft(function(itemstack, _, old_craft_grid, _)
+core.register_on_craft(function(itemstack, _, old_craft_grid, _)
 	if itemstack:get_name() ~= "mcl_sus_stew:stew" then return end
 	for f,e in pairs(flower_effect) do
 		for _,it in pairs(old_craft_grid) do
@@ -101,7 +101,7 @@ minetest.register_on_craft(function(itemstack, _, old_craft_grid, _)
 	end
 end)
 
-minetest.register_craftitem("mcl_sus_stew:stew",{
+core.register_craftitem("mcl_sus_stew:stew",{
 	description = S("Suspicious Stew"),
 	inventory_image = "sus_stew.png",
 	stack_max = 1,
@@ -114,52 +114,52 @@ minetest.register_craftitem("mcl_sus_stew:stew",{
 mcl_hunger.register_food("mcl_sus_stew:stew",6, "mcl_core:bowl")
 
 --compat with old (mcl5) sus_stew
-minetest.register_alias("mcl_sus_stew:poison_stew", "mcl_sus_stew:stew")
-minetest.register_alias("mcl_sus_stew:hunger_stew", "mcl_sus_stew:stew")
-minetest.register_alias("mcl_sus_stew:jump_boost_stew", "mcl_sus_stew:stew")
-minetest.register_alias("mcl_sus_stew:regneration_stew", "mcl_sus_stew:stew")
-minetest.register_alias("mcl_sus_stew:night_vision_stew", "mcl_sus_stew:stew")
+core.register_alias("mcl_sus_stew:poison_stew", "mcl_sus_stew:stew")
+core.register_alias("mcl_sus_stew:hunger_stew", "mcl_sus_stew:stew")
+core.register_alias("mcl_sus_stew:jump_boost_stew", "mcl_sus_stew:stew")
+core.register_alias("mcl_sus_stew:regneration_stew", "mcl_sus_stew:stew")
+core.register_alias("mcl_sus_stew:night_vision_stew", "mcl_sus_stew:stew")
 
 --										 ______________
 --_________________________________________/	Crafts	\________________________________
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_sus_stew:stew",
 	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:allium"},
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_sus_stew:stew",
 	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:lily_of_the_valley"},
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_sus_stew:stew",
 	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:blue_orchid"},
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_sus_stew:stew",
 	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:dandelion"} ,
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_sus_stew:stew",
 	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:cornflower"},
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_sus_stew:stew",
 	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:oxeye_daisy"},
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_sus_stew:stew",
 	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:poppy"},

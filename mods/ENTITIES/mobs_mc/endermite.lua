@@ -2,7 +2,7 @@
 --################### ENDERMITE
 --###################
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
 local endermite = {

@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mcl_gamemode")
+local S = core.get_translator("mcl_gamemode")
 
 mcl_gamemode = {
 	gamemodes = {
@@ -19,13 +19,13 @@ function mcl_gamemode.register_on_gamemode_change(func)
 	table.insert(mcl_gamemode.registered_on_gamemode_change, func)
 end
 
-local old_is_creative_enabled = minetest.is_creative_enabled
+local old_is_creative_enabled = core.is_creative_enabled
 
-function minetest.is_creative_enabled(name)
+function core.is_creative_enabled(name)
 	if old_is_creative_enabled(name) then return true end
 	if not name then return false end
-	assert(type(name) == "string", "minetest.is_creative_enabled requires a string (the playername) argument. This is likely an error in a non-mineclonia mod.")
-	local p = minetest.get_player_by_name(name)
+	assert(type(name) == "string", "core.is_creative_enabled requires a string (the playername) argument. This is likely an error in a non-mineclonia mod.")
+	local p = core.get_player_by_name(name)
 	if p then
 		return p:get_meta():get_string("gamemode") == "creative"
 	end
@@ -33,7 +33,7 @@ function minetest.is_creative_enabled(name)
 end
 
 function mcl_gamemode.get_gamemode(p)
-	return minetest.is_creative_enabled(p:get_player_name()) and "creative" or "survival"
+	return core.is_creative_enabled(p:get_player_name()) and "creative" or "survival"
 end
 
 function mcl_gamemode.set_gamemode(p, gm)
@@ -46,7 +46,7 @@ function mcl_gamemode.set_gamemode(p, gm)
 	return true
 end
 
-minetest.register_chatcommand("gamemode",{
+core.register_chatcommand("gamemode",{
 	params = S("[<gamemode>] [<player>]"),
 	description = S("Change gamemode (survival/creative/0/1/s/c) for yourself or player"),
 	privs = { server = true },
@@ -54,10 +54,10 @@ minetest.register_chatcommand("gamemode",{
 		local p
 		local args = param:split(" ")
 		if args[2] ~= nil then
-			p = minetest.get_player_by_name(args[2])
+			p = core.get_player_by_name(args[2])
 			n = args[2]
 		else
-			p = minetest.get_player_by_name(n)
+			p = core.get_player_by_name(n)
 		end
 		if not p then
 			return false, S("Player not online")
@@ -68,7 +68,7 @@ minetest.register_chatcommand("gamemode",{
 			return false, S("Failed to set gamemode @1 for player @2", gm, p:get_player_name())
 		end
 
-		if gm == "survival" and minetest.is_creative_enabled() then
+		if gm == "survival" and core.is_creative_enabled() then
 			return true, S("Player @1 is still in creative mode because world is in creative mode", n)
 		end
 

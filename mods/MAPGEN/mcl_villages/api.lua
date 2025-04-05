@@ -8,7 +8,7 @@ mcl_villages.on_villager_placed = {}
 mcl_villages.mandatory_buildings = {}
 mcl_villages.forced_blocks = {}
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local function job_count(schem_lua)
 	local jobsites_nodes = {}
@@ -27,7 +27,7 @@ local function job_count(schem_lua)
 		if not hit then
 			jobsites_nodes[name] = 0
 			for group, _ in pairs(jobsites_groups) do
-				if minetest.get_item_group(name, group) > 0 then
+				if core.get_item_group(name, group) > 0 then
 					jobsites_nodes[name] = 1
 					break
 				end
@@ -40,7 +40,7 @@ local function job_count(schem_lua)
 end
 
 local function load_schema(name, mts)
-	local schem_lua = minetest.serialize_schematic(mts, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
+	local schem_lua = core.serialize_schematic(mts, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
 		.. " return schematic"
 	local schematic = loadstring(schem_lua)()
 	return {
@@ -198,7 +198,7 @@ function mcl_villages.register_crop(crop_def)
 	local crop_type = crop_def.type
 
 	if table.indexof(supported_crop_types, crop_type) == -1 then
-		minetest.log("warning", S("Crop type @1 is not supported", crop_type))
+		core.log("warning", S("Crop type @1 is not supported", crop_type))
 		return
 	end
 

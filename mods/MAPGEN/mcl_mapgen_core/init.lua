@@ -1,6 +1,6 @@
 mcl_mapgen_core = {}
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 local bedrock_in_singlenode = false
 local end_fixes_in_singlenode = true
@@ -8,52 +8,52 @@ local end_fixes_in_singlenode = true
 -- Aliases for map generator outputs
 --
 
-minetest.register_alias("mapgen_air", "air")
-minetest.register_alias("mapgen_stone", "mcl_core:stone")
-minetest.register_alias("mapgen_water_source", "mcl_core:water_source")
-minetest.register_alias("mapgen_lava_source", "air") -- Built-in lava generator is too unpredictable, we generate lava on our own
-minetest.register_alias("mapgen_cobble", "mcl_core:cobble")
+core.register_alias("mapgen_air", "air")
+core.register_alias("mapgen_stone", "mcl_core:stone")
+core.register_alias("mapgen_water_source", "mcl_core:water_source")
+core.register_alias("mapgen_lava_source", "air") -- Built-in lava generator is too unpredictable, we generate lava on our own
+core.register_alias("mapgen_cobble", "mcl_core:cobble")
 
-if minetest.get_modpath("mclx_core") then
-	minetest.register_alias("mapgen_river_water_source", "mclx_core:river_water_source")
+if core.get_modpath("mclx_core") then
+	core.register_alias("mapgen_river_water_source", "mclx_core:river_water_source")
 else
-	minetest.register_alias("mapgen_river_water_source", "mcl_core:water_source")
+	core.register_alias("mapgen_river_water_source", "mcl_core:water_source")
 end
 
 dofile(modpath.."/api.lua")
 dofile(modpath.."/ores.lua")
 
-local mg_name = minetest.get_mapgen_setting("mg_name")
-local enable_mt_dungeons = minetest.settings:get_bool("mcl_enable_mt_dungeons",false)
+local mg_name = core.get_mapgen_setting("mg_name")
+local enable_mt_dungeons = core.settings:get_bool("mcl_enable_mt_dungeons",false)
 
 -- Content IDs
-local c_bedrock = minetest.get_content_id("mcl_core:bedrock")
-local c_void = minetest.get_content_id("mcl_core:void")
-local c_lava = minetest.get_content_id("mcl_core:lava_source")
-local c_nether_lava = minetest.get_content_id("mcl_nether:nether_lava_source")
-local c_water = minetest.get_content_id("mcl_core:water_source")
-local c_realm_barrier = minetest.get_content_id("mcl_core:realm_barrier")
-local c_air = minetest.CONTENT_AIR
+local c_bedrock = core.get_content_id("mcl_core:bedrock")
+local c_void = core.get_content_id("mcl_core:void")
+local c_lava = core.get_content_id("mcl_core:lava_source")
+local c_nether_lava = core.get_content_id("mcl_nether:nether_lava_source")
+local c_water = core.get_content_id("mcl_core:water_source")
+local c_realm_barrier = core.get_content_id("mcl_core:realm_barrier")
+local c_air = core.CONTENT_AIR
 
-local mg_flags = minetest.settings:get_flags("mg_flags")
+local mg_flags = core.settings:get_flags("mg_flags")
 
 if mcl_vars.superflat then
 	-- Enforce superflat-like mapgen: no caves, decor, lakes and hills
 	mg_flags.caves = false
 	mg_flags.decorations = false
-	minetest.set_mapgen_setting("mgflat_spflags", "nolakes,nohills", true)
+	core.set_mapgen_setting("mgflat_spflags", "nolakes,nohills", true)
 end
 
 mg_flags.dungeons = enable_mt_dungeons
 
 for _,mg in pairs({"v7","valleys","carpathian","v5","fractal"}) do
 	if mg_name == mg then
-		minetest.set_mapgen_setting("mg"..mg.."_cavern_threshold", "0.20", true) --large nether caves
-		minetest.set_mapgen_setting("mg"..mg.."_small_cave_num_min", "0", true) -- more large overworld caves
-		minetest.set_mapgen_setting("mg"..mg.."_small_cave_num_max", "12", true)
-		minetest.set_mapgen_setting("mg"..mg.."_large_cave_flooded", "0.1", true)
-		minetest.set_mapgen_setting("mg"..mg.."_large_cave_num_min", "0", true)
-		minetest.set_mapgen_setting("mg"..mg.."_large_cave_num_max", "9", true)
+		core.set_mapgen_setting("mg"..mg.."_cavern_threshold", "0.20", true) --large nether caves
+		core.set_mapgen_setting("mg"..mg.."_small_cave_num_min", "0", true) -- more large overworld caves
+		core.set_mapgen_setting("mg"..mg.."_small_cave_num_max", "12", true)
+		core.set_mapgen_setting("mg"..mg.."_large_cave_flooded", "0.1", true)
+		core.set_mapgen_setting("mg"..mg.."_large_cave_num_min", "0", true)
+		core.set_mapgen_setting("mg"..mg.."_large_cave_num_max", "9", true)
 		mg_flags.caverns = true
 	end
 end
@@ -68,7 +68,7 @@ end
 if string.len(mg_flags_str) > 0 then
 	mg_flags_str = string.sub(mg_flags_str, 1, string.len(mg_flags_str)-1)
 end
-minetest.set_mapgen_setting("mg_flags", mg_flags_str, true)
+core.set_mapgen_setting("mg_flags", mg_flags_str, true)
 
 -- Helper function for converting a MC probability to MT, with
 -- regards to MapBlocks.
@@ -182,7 +182,7 @@ local function world_structure(vm, data, data2, emin, emax, area, minp, maxp, bl
 
 	-- [[ THE NETHER:					mcl_vars.mg_nether_min			       mcl_vars.mg_nether_max							]]
 
-	-- The Air on the Nether roof, https://git.minetest.land/MineClone2/MineClone2/issues/1186
+	-- The Air on the Nether roof, https://git.core.land/MineClone2/MineClone2/issues/1186
 	lvm_used = set_layers(data, area, c_air		 , nil, mcl_vars.mg_nether_max			   +1, mcl_vars.mg_nether_max + 128                 , minp, maxp, lvm_used, pr)
 	-- The Void above the Nether below the End:
 	lvm_used = set_layers(data, area, c_void         , nil, mcl_vars.mg_nether_max + 128               +1, mcl_vars.mg_end_min                        -1, minp, maxp, lvm_used, pr)
@@ -230,24 +230,24 @@ end
 local biome_id_p2 = {}
 local biomecolor_nodes = {}
 
-minetest.register_on_mods_loaded(function()
-	for n, _ in pairs(minetest.registered_nodes) do
-		if minetest.get_item_group(n, "biomecolor") > 0 then
+core.register_on_mods_loaded(function()
+	for n, _ in pairs(core.registered_nodes) do
+		if core.get_item_group(n, "biomecolor") > 0 then
 			table.insert(biomecolor_nodes, n)
 		end
 	end
-	for k, v in pairs(minetest.registered_biomes) do
-		biome_id_p2[minetest.get_biome_id(k)] = v._mcl_palette_index or 0
+	for k, v in pairs(core.registered_biomes) do
+		biome_id_p2[core.get_biome_id(k)] = v._mcl_palette_index or 0
 	end
 end)
 
 local function set_param2_nodes(vm, data, data2, emin, emax, area, minp, maxp, blockseed) ---@diagnostic disable-line: unused-local
 	if emin.y > mcl_vars.mg_overworld_max or emax.y < mcl_vars.mg_overworld_min then return end
-	local biomemap = minetest.get_mapgen_object("biomemap")
+	local biomemap = core.get_mapgen_object("biomemap")
 	if not biomemap then return end
 	local lvm_used = false
 	local aream = VoxelArea:new({MinEdge={x=minp.x, y=0, z=minp.z}, MaxEdge={x=maxp.x, y=0, z=maxp.z}})
-	local nodes = minetest.find_nodes_in_area(minp, maxp, biomecolor_nodes)
+	local nodes = core.find_nodes_in_area(minp, maxp, biomecolor_nodes)
 	for _, n in pairs(nodes) do
 		local p_pos = area:index(n.x, n.y, n.z)
 		local p2 = biome_id_p2[biomemap[aream:index(n.x, 0, n.z)]]
@@ -292,12 +292,12 @@ local function in_cube(tpos, wpos1, wpos2)
 end
 
 mcl_mapgen_core.register_generator("structures",nil, function(minp, maxp, blockseed)
-	local gennotify = minetest.get_mapgen_object("gennotify")
+	local gennotify = core.get_mapgen_object("gennotify")
 	for _,struct in pairs(mcl_structures.registered_structures) do
 		if struct.deco_id then
 			local has = false
 			for _, pos in pairs(gennotify["decoration#"..struct.deco_id] or {}) do
-				local pr = PcgRandom(minetest.hash_node_position(pos) + 42)
+				local pr = PcgRandom(core.hash_node_position(pos) + 42)
 				if struct.chunk_probability == nil or (not has and pr:next(1,struct.chunk_probability) == 1 ) then
 					mcl_structures.place_structure(vector.offset(pos,0,1,0), struct, pr, blockseed)
 					has=true
@@ -305,7 +305,7 @@ mcl_mapgen_core.register_generator("structures",nil, function(minp, maxp, blocks
 			end
 		elseif struct.static_pos then
 			for _, pos in pairs(struct.static_pos) do
-				local pr = PcgRandom(minetest.hash_node_position(pos) + 42)
+				local pr = PcgRandom(core.hash_node_position(pos) + 42)
 				if in_cube(pos, minp, maxp) then
 					mcl_structures.place_structure(pos, struct, pr, blockseed)
 				end

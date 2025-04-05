@@ -1,9 +1,9 @@
-local modpath = minetest.get_modpath(minetest.get_current_modname())
+local modpath = core.get_modpath(core.get_current_modname())
 
 mcl_weather = {}
 
 -- If not located then embeded skycolor mod version will be loaded.
-if minetest.get_modpath("skycolor") == nil then
+if core.get_modpath("skycolor") == nil then
 	dofile(modpath.."/skycolor.lua")
 end
 

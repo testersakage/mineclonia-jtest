@@ -1,10 +1,10 @@
 local mob_class = mcl_mobs.mob_class
 local active_particlespawners = {}
-local enable_blood = minetest.settings:get_bool("mcl_damage_particles", true)
+local enable_blood = core.settings:get_bool("mcl_damage_particles", true)
 local DEFAULT_FALL_SPEED = -9.81*1.5
 local is_valid = mcl_util.is_valid_objectref
 
-local player_transfer_distance = tonumber(minetest.settings:get("player_transfer_distance")) or 128
+local player_transfer_distance = tonumber(core.settings:get("player_transfer_distance")) or 128
 if player_transfer_distance == 0 then player_transfer_distance = math.huge end
 
 -- custom particle effects
@@ -24,7 +24,7 @@ function mcl_mobs.effect(pos, amount, texture, min_size, max_size, radius, gravi
 		ym = -radius
 	end
 
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = amount,
 		time = 0.25,
 		minpos = pos,
@@ -59,7 +59,7 @@ function mcl_mobs.death_effect(pos, yaw, collisionbox, rotate)
 		max = vector.multiply(max, 0.5)
 	end
 
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 50,
 		time = 0.001,
 		minpos = vector.add(pos, min),
@@ -75,7 +75,7 @@ function mcl_mobs.death_effect(pos, yaw, collisionbox, rotate)
 		texture = "mcl_particles_mob_death.png^[colorize:#000000:255",
 	})
 
-	minetest.sound_play("mcl_mobs_mob_poof", {
+	core.sound_play("mcl_mobs_mob_poof", {
 		pos = pos,
 		gain = 1.0,
 		max_hear_distance = 8,
@@ -103,7 +103,7 @@ function mob_class:mob_sound(soundname, is_opinion, fixed_pitch)
 			pitch = pitch,
 		}
 		sound_params.object = self.object
-		minetest.sound_play(sound, sound_params, true)
+		core.sound_play(sound, sound_params, true)
 	end
 end
 
@@ -167,7 +167,7 @@ function mob_class:remove_particlespawners(pn)
 	if not active_particlespawners[pn] then return end
 	if not active_particlespawners[pn][self.object] then return end
 	for _, v in pairs(active_particlespawners[pn][self.object]) do
-		minetest.delete_particlespawner(v)
+		core.delete_particlespawner(v)
 	end
 end
 
@@ -177,13 +177,13 @@ function mob_class:add_particlespawners(pn)
 	for _,ps in pairs(self.particlespawners) do
 		ps.attached = self.object
 		ps.playername = pn
-		table.insert(active_particlespawners[pn][self.object],minetest.add_particlespawner(ps))
+		table.insert(active_particlespawners[pn][self.object],core.add_particlespawner(ps))
 	end
 end
 
 function mob_class:check_particlespawners(dtime)
 	if not self.particlespawners then return end
-	--minetest.log(dump(active_particlespawners))
+	--core.log(dump(active_particlespawners))
 	if self._particle_timer and self._particle_timer >= 1 then
 		self._particle_timer = 0
 		local players = {}
@@ -293,7 +293,7 @@ function mob_class:who_are_you_looking_at()
 
 			local look_at_player = look_at_player_chance == 1
 
-			for obj in minetest.objects_inside_radius(pos, 8) do
+			for obj in core.objects_inside_radius(pos, 8) do
 				if obj:is_player() and vector.distance(pos,obj:get_pos()) < 4
 					and obj ~= self.driver then
 					self._locked_object = obj
@@ -442,12 +442,12 @@ function mob_class:set_animation_speed(custom_speed)
 	self.object:set_animation_frame_speed (scaled_speed * v)
 end
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	local pn = player:get_player_name()
 	if not active_particlespawners[pn] then return end
 	for _,m in pairs(active_particlespawners[pn]) do
 		for _, v in pairs(m) do
-			minetest.delete_particlespawner(v)
+			core.delete_particlespawner(v)
 		end
 	end
 	active_particlespawners[pn] = nil
@@ -460,7 +460,7 @@ end)
 
 local norm_radians = nil
 
-minetest.register_on_mods_loaded (function ()
+core.register_on_mods_loaded (function ()
 		norm_radians = mcl_util.norm_radians
 end)
 

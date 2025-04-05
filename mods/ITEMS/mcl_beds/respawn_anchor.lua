@@ -2,10 +2,10 @@
 
 --Nether ends at y -29077
 --Nether roof at y -28933
-local S = minetest.get_translator(minetest.get_current_modname())
---local mod_doc = minetest.get_modpath("doc") -> maybe add documentation ?
+local S = core.get_translator(core.get_current_modname())
+--local mod_doc = core.get_modpath("doc") -> maybe add documentation ?
 
-local light_level = { [0] = 0, 3, 7, 11, minetest.LIGHT_MAX }
+local light_level = { [0] = 0, 3, 7, 11, core.LIGHT_MAX }
 
 for i=0,4 do
 
@@ -18,7 +18,7 @@ for i=0,4 do
 				mcl_explosions.explode(pos, 5, {drop_chance = 0, fire = true})
 			end
 		elseif string.match(node.name, "mcl_beds:respawn_anchor_charged_") then
-			minetest.chat_send_player(player.get_player_name(player), S("New respawn position set!"))
+			core.chat_send_player(player.get_player_name(player), S("New respawn position set!"))
 			mcl_spawn.set_spawn_pos(player, pos, nil)
 			if i == 4 then
 				awards.unlock(player:get_player_name(), "mcl:notQuiteNineLives")
@@ -30,7 +30,7 @@ for i=0,4 do
 
 
 	if i == 0 then
-		minetest.register_node("mcl_beds:respawn_anchor",{
+		core.register_node("mcl_beds:respawn_anchor",{
 			description=S("Respawn Anchor"),
 			tiles = {
 				"respawn_anchor_top_off.png",
@@ -46,7 +46,7 @@ for i=0,4 do
 			_mcl_baseitem = "mcl_beds:respawn_anchor",
 		})
 	else
-		minetest.register_node("mcl_beds:respawn_anchor_charged_"..i,{
+		core.register_node("mcl_beds:respawn_anchor_charged_"..i,{
 			description=S("Respawn Anchor"),
 			tiles = {
 			{
@@ -73,7 +73,7 @@ for i=0,4 do
  end
 
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_beds:respawn_anchor",
 	recipe = {
 			{"mcl_core:crying_obsidian", "mcl_core:crying_obsidian", "mcl_core:crying_obsidian"},

@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-local mod_target = minetest.get_modpath("mcl_target")
+local mod_target = core.get_modpath("mcl_target")
 
 local function lingering_image(colorstring, opacity)
 	if not opacity then
@@ -57,7 +57,7 @@ local function def_to_effect_list (def, potency, plus)
 end
 
 local function linger_particles(pos, d, texture, color)
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 10 * d^2,
 		time = 1,
 		minpos = {x=pos.x-d, y=pos.y+0.5, z=pos.z-d},
@@ -105,7 +105,7 @@ local function particle_texture (name, def)
 end
 
 local lingering_timer = 0
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	lingering_timer = lingering_timer + dtime
 	if lingering_timer >= 1 then
 		for pos, lists in pairs(lingering_effects_at) do
@@ -126,7 +126,7 @@ minetest.register_globalstep(function(dtime)
 			end
 
 			-- Affect players and mobs
-			for obj in minetest.objects_inside_radius(pos, d) do
+			for obj in core.objects_inside_radius(pos, d) do
 				local entity = obj:get_luaentity()
 				if obj:is_player() or entity and entity.is_mob then
 					if vals.is_water then
@@ -190,8 +190,8 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		local velocity = 12
 		local dir = placer:get_look_dir();
 		local pos = placer:get_pos();
-		minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
-		local obj = minetest.add_entity({x=pos.x+dir.x,y=pos.y+2+dir.y,z=pos.z+dir.z}, id.."_flying")
+		core.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
+		local obj = core.add_entity({x=pos.x+dir.x,y=pos.y+2+dir.y,z=pos.z+dir.z}, id.."_flying")
 		obj:set_velocity({x=dir.x*velocity,y=dir.y*velocity,z=dir.z*velocity})
 		obj:set_acceleration({x=dir.x*-3, y=-9.8, z=dir.z*-3})
 		local ent = obj:get_luaentity()
@@ -199,12 +199,12 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		ent._potency = item:get_meta():get_int("mcl_potions:potion_potent")
 		ent._plus = item:get_meta():get_int("mcl_potions:potion_plus")
 		ent._effect_list = def._effect_list
-		if not minetest.is_creative_enabled(placer:get_player_name()) then
+		if not core.is_creative_enabled(placer:get_player_name()) then
 			item:take_item()
 		end
 		return item
 	end
-	minetest.register_craftitem(id, {
+	core.register_craftitem(id, {
 		description = descr,
 		_tt_help = def._tt,
 		_dynamic_tt = def._dynamic_tt,
@@ -226,8 +226,8 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		_on_dispense = function(item, dispenserpos, _, _, dropdir)
 			local s_pos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 			local pos = {x=s_pos.x+dropdir.x,y=s_pos.y+dropdir.y,z=s_pos.z+dropdir.z}
-			minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
-			local obj = minetest.add_entity(pos, id.."_flying")
+			core.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
+			local obj = core.add_entity(pos, id.."_flying")
 			if obj and obj:get_pos() then
 				local velocity = 22
 				obj:set_velocity({x=dropdir.x*velocity,y=dropdir.y*velocity,z=dropdir.z*velocity})
@@ -243,7 +243,7 @@ function mcl_potions.register_lingering(name, descr, color, def)
 
 	local w = 0.7
 
-	minetest.register_entity(id.."_flying",{
+	core.register_entity(id.."_flying",{
 		initial_properties = {
 			textures = {lingering_image(color)},
 			hp_max = 1,
@@ -264,7 +264,7 @@ function mcl_potions.register_lingering(name, descr, color, def)
 				if val.target and mod_target then
 				mcl_target.hit (val.target, 0.4) --4 redstone ticks
 				end
-				minetest.sound_play("mcl_potions_breaking_glass",
+				core.sound_play("mcl_potions_breaking_glass",
 						{pos = pos, max_hear_distance = 16, gain = 1})
 				local potency = self._potency or 0
 				local plus = self._plus or 0

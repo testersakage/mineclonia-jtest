@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local D = mcl_util.get_dynamic_translator()
-local extra_nodes = minetest.settings:get_bool("mcl_extra_nodes", true)
+local extra_nodes = core.settings:get_bool("mcl_extra_nodes", true)
 
 mcl_stairs.register_stair("lapisblock", {
 	baseitem="mcl_core:lapisblock",
@@ -123,26 +123,26 @@ for name,cdef in pairs(mcl_dyes.colors) do
 		doc.add_entry_alias("nodes", "mcl_stairs:slab_concrete_"..canonical_color, "nodes", "mcl_stairs:slab_concrete_"..name)
 		doc.add_entry_alias("nodes", "mcl_stairs:slab_concrete_"..canonical_color.."_double", "nodes", "mcl_stairs:slab_concrete_"..name.."_double")
 		doc.add_entry_alias("nodes", "mcl_stairs:stair_concrete_"..canonical_color, "nodes", "mcl_stairs:stair_concrete_"..name)
-		minetest.override_item("mcl_stairs:slab_concrete_"..name, { _doc_items_create_entry = false })
-		minetest.override_item("mcl_stairs:slab_concrete_"..name.."_double", { _doc_items_create_entry = false })
-		minetest.override_item("mcl_stairs:stair_concrete_"..name, { _doc_items_create_entry = false })
+		core.override_item("mcl_stairs:slab_concrete_"..name, { _doc_items_create_entry = false })
+		core.override_item("mcl_stairs:slab_concrete_"..name.."_double", { _doc_items_create_entry = false })
+		core.override_item("mcl_stairs:stair_concrete_"..name, { _doc_items_create_entry = false })
 	else
-		minetest.override_item("mcl_stairs:slab_concrete_"..name, { _doc_items_entry_name = S("Concrete Slab") })
-		minetest.override_item("mcl_stairs:slab_concrete_"..name.."_double", { _doc_items_entry_name = S("Double Concrete Slab") })
-		minetest.override_item("mcl_stairs:stair_concrete_"..name, { _doc_items_entry_name = S("Concrete Stairs") })
+		core.override_item("mcl_stairs:slab_concrete_"..name, { _doc_items_entry_name = S("Concrete Slab") })
+		core.override_item("mcl_stairs:slab_concrete_"..name.."_double", { _doc_items_entry_name = S("Double Concrete Slab") })
+		core.override_item("mcl_stairs:stair_concrete_"..name, { _doc_items_entry_name = S("Concrete Stairs") })
 	end
 
 	if not is_canonical then
 		doc.add_entry_alias("nodes", "mcl_stairs:slab_hardened_clay_"..canonical_color, "nodes", "mcl_stairs:slab_hardened_clay_"..name)
 		doc.add_entry_alias("nodes", "mcl_stairs:slab_hardened_clay_"..canonical_color.."_double", "nodes", "mcl_stairs:slab_hardened_clay_"..name.."_double")
 		doc.add_entry_alias("nodes", "mcl_stairs:stair_hardened_clay_"..canonical_color, "nodes", "mcl_stairs:stair_hardened_clay_"..name)
-		minetest.override_item("mcl_stairs:slab_hardened_clay_"..name, { _doc_items_create_entry = false })
-		minetest.override_item("mcl_stairs:slab_hardened_clay_"..name.."_double", { _doc_items_create_entry = false })
-		minetest.override_item("mcl_stairs:stair_hardened_clay_"..name, { _doc_items_create_entry = false })
+		core.override_item("mcl_stairs:slab_hardened_clay_"..name, { _doc_items_create_entry = false })
+		core.override_item("mcl_stairs:slab_hardened_clay_"..name.."_double", { _doc_items_create_entry = false })
+		core.override_item("mcl_stairs:stair_hardened_clay_"..name, { _doc_items_create_entry = false })
 	else
-		minetest.override_item("mcl_stairs:slab_hardened_clay_"..name, { _doc_items_entry_name = S("Terracotta Slab") })
-		minetest.override_item("mcl_stairs:slab_hardened_clay_"..name.."_double", { _doc_items_entry_name = S("Double Terracotta Slab") })
-		minetest.override_item("mcl_stairs:stair_hardened_clay_"..name, { _doc_items_entry_name = S("Terracotta Stairs") })
+		core.override_item("mcl_stairs:slab_hardened_clay_"..name, { _doc_items_entry_name = S("Terracotta Slab") })
+		core.override_item("mcl_stairs:slab_hardened_clay_"..name.."_double", { _doc_items_entry_name = S("Double Terracotta Slab") })
+		core.override_item("mcl_stairs:stair_hardened_clay_"..name, { _doc_items_entry_name = S("Terracotta Stairs") })
 	end
 
 end

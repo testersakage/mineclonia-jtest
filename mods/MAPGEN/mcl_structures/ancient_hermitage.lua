@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 -- Ancient Hermitage - mini ancient city
 
 mcl_structures.register_structure("ancient_hermitage",{

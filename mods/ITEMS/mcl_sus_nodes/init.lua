@@ -1,6 +1,6 @@
 mcl_sus_nodes = {}
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 
 local item_entities = {}
 
@@ -23,10 +23,10 @@ local sus_drops_default = {
 }
 
 function mcl_sus_nodes.get_random_item(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local struct = meta:get_string("structure")
 	local structdef = mcl_structures.registered_structures[struct]
-	local pr = PseudoRandom(minetest.hash_node_position(pos))
+	local pr = PseudoRandom(core.hash_node_position(pos))
 	if struct ~= "" and structdef and structdef.loot and structdef.loot["SUS"] then
 		local lootitems = mcl_loot.get_multi_loot(structdef.loot["SUS"], pr)
 		if #lootitems > 0 then
@@ -39,15 +39,15 @@ end
 
 local function brush_node(_, _, pointed_thing)
 	if pointed_thing and pointed_thing.type == "node" then
-		local pos = minetest.get_pointed_thing_position(pointed_thing)
-		local node = minetest.get_node(pos)
-		if minetest.get_item_group(node.name,"brushable") == 0 then return end
-		local ph = minetest.hash_node_position(vector.round(pos))
+		local pos = core.get_pointed_thing_position(pointed_thing)
+		local node = core.get_node(pos)
+		if core.get_item_group(node.name,"brushable") == 0 then return end
+		local ph = core.hash_node_position(vector.round(pos))
 		local dir = vector.direction(pointed_thing.under,pointed_thing.above)
-		local def = minetest.registered_nodes[node.name]
+		local def = core.registered_nodes[node.name]
 
 		if not item_entities[ph] then
-			local o = minetest.add_entity(pos + (dir * 0.38),"mcl_sus_nodes:item_entity")
+			local o = core.add_entity(pos + (dir * 0.38),"mcl_sus_nodes:item_entity")
 			local l = o:get_luaentity()
 			l._item = mcl_sus_nodes.get_random_item(pos)
 			if not l._item then
@@ -75,14 +75,14 @@ local function brush_node(_, _, pointed_thing)
 			end
 		end
 		if item_entities[ph]._stage >= 4 then
-			minetest.add_item(pos+dir,item_entities[ph]._item)
+			core.add_item(pos+dir,item_entities[ph]._item)
 			item_entities[ph].object:remove()
 			item_entities[ph] = nil
-			minetest.swap_node(pos,{name = def._mcl_sus_nodes_parent})
+			core.swap_node(pos,{name = def._mcl_sus_nodes_parent})
 		elseif item_entities[ph]._stage <= 0 then
-			minetest.swap_node(pos,{name=def._mcl_sus_nodes_main})
+			core.swap_node(pos,{name=def._mcl_sus_nodes_main})
 		else
-			minetest.swap_node(pos,{name=def._mcl_sus_nodes_main.."_"..item_entities[ph]._stage})
+			core.swap_node(pos,{name=def._mcl_sus_nodes_main.."_"..item_entities[ph]._stage})
 		end
 	end
 end
@@ -100,7 +100,7 @@ local function overlay_tiles(orig,overlay)
 end
 
 function mcl_sus_nodes.register_sus_node(name,source,overrides)
-	local sdef = minetest.registered_nodes[source]
+	local sdef = core.registered_nodes[source]
 	assert(sdef, "[mcl_sus_nodes] trying to register "..tostring(name).." but source node "..tostring(source).."doesn't exist")
 	local main_itemstring = "mcl_sus_nodes:"..name
 	table.shuffle(sus_drops_default)
@@ -113,16 +113,16 @@ function mcl_sus_nodes.register_sus_node(name,source,overrides)
 		_mcl_sus_nodes_drops = table.copy(sus_drops_default),
 		_mcl_falling_node_alternative = source,
 	},overrides or {})
-	minetest.register_node(main_itemstring,def)
+	core.register_node(main_itemstring,def)
 	for i=1,3 do
-		minetest.register_node(main_itemstring.."_"..i,table.merge(def,{
+		core.register_node(main_itemstring.."_"..i,table.merge(def,{
 			tiles = overlay_tiles(sdef.tiles,"mcl_sus_nodes_suspicious_overlay_"..i..".png"),
 			groups = table.merge(tpl.groups, { suspicious_stage =i, not_in_creative_inventory = 1 }),
 		}))
 	end
 end
 
-minetest.register_entity("mcl_sus_nodes:item_entity", {
+core.register_entity("mcl_sus_nodes:item_entity", {
 	initial_properties = {
 		physical = false,
 		visual = "wielditem",
@@ -134,7 +134,7 @@ minetest.register_entity("mcl_sus_nodes:item_entity", {
 	on_step = function(self, dtime)
 		self._timer = (self._timer or 1) - dtime
 		if self._timer < 0 then
-			if minetest.get_item_group(minetest.get_node(self._nodepos or vector.zero()).name,"suspicious_node") == 0 or self._stage <= 0 or not self._dir then
+			if core.get_item_group(core.get_node(self._nodepos or vector.zero()).name,"suspicious_node") == 0 or self._stage <= 0 or not self._dir then
 				if self._poshash then item_entities[self._poshash] = nil end
 				self.object:remove()
 				return
@@ -142,11 +142,11 @@ minetest.register_entity("mcl_sus_nodes:item_entity", {
 			if self._hide then
 				self._stage = self._stage - 1
 				self.object:set_pos(self.object:get_pos() - ( vector.new(self._dir) * ( 0.02 * self._stage )))
-				local def = minetest.registered_nodes[minetest.get_node(self._nodepos).name]
+				local def = core.registered_nodes[core.get_node(self._nodepos).name]
 				if self._stage <= 0 then
-					minetest.swap_node(self._nodepos, {name=def._mcl_sus_nodes_main})
+					core.swap_node(self._nodepos, {name=def._mcl_sus_nodes_main})
 				else
-					minetest.swap_node(self._nodepos, {name=def._mcl_sus_nodes_main.."_"..self._stage})
+					core.swap_node(self._nodepos, {name=def._mcl_sus_nodes_main.."_"..self._stage})
 				end
 			end
 			self._timer = 1
@@ -165,7 +165,7 @@ minetest.register_entity("mcl_sus_nodes:item_entity", {
 				d[k] = self[k]
 			end
 		end
-		return minetest.serialize(d)
+		return core.serialize(d)
 	end,
 	on_activate = function(self, staticdata, dtime_s)
 		if dtime_s and dtime_s > 5 then
@@ -175,7 +175,7 @@ minetest.register_entity("mcl_sus_nodes:item_entity", {
 			self._hide_timer = 5 - dtime_s
 		end
 		if type(staticdata) == "userdata" then return end
-		local s = minetest.deserialize(staticdata)
+		local s = core.deserialize(staticdata)
 		if type(s) == "table" then
 			for k,v in pairs(s) do self[k] = v end
 			item_entities[self._poshash] = self
@@ -188,13 +188,13 @@ minetest.register_entity("mcl_sus_nodes:item_entity", {
 				return
 			end
 		else
-			self._poshash = minetest.hash_node_position(self.object:get_pos())
+			self._poshash = core.hash_node_position(self.object:get_pos())
 		end
 		self.object:set_armor_groups({ immortal = 1 })
 	end,
 })
 
-minetest.register_tool("mcl_sus_nodes:brush", {
+core.register_tool("mcl_sus_nodes:brush", {
 	description = S("Brush"),
 	_doc_items_longdesc = S("Brushes are used in archeology to discover hidden items"),
 	_doc_items_usagehelp = S("Use the brush on a suspicious node to uncover its secrets"),
@@ -207,7 +207,7 @@ minetest.register_tool("mcl_sus_nodes:brush", {
 	_mcl_uses = 64
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_sus_nodes:brush",
 	recipe = {
 		{ "mcl_mobitems:feather"},

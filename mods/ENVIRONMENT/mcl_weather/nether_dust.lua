@@ -3,7 +3,7 @@ mcl_weather.nether_dust.particlespawners = {}
 
 local PARTICLES_COUNT_NETHER_DUST = 150
 
-local S = minetest.get_translator("mcl_weather")
+local S = core.get_translator("mcl_weather")
 
 local psdef= {
 	amount = PARTICLES_COUNT_NETHER_DUST,
@@ -33,10 +33,10 @@ mcl_weather.nether_dust.add_particlespawners = function(player)
 	mcl_weather.nether_dust.particlespawners[name]={}
 	psdef.playername = name
 	psdef.attached = player
-	psdef.glow = math.random(0,minetest.LIGHT_MAX)
+	psdef.glow = math.random(0,core.LIGHT_MAX)
 	for i=1,3 do
 		psdef.texture="mcl_particles_nether_dust"..i..".png"
-		mcl_weather.nether_dust.particlespawners[name][i]=minetest.add_particlespawner(psdef)
+		mcl_weather.nether_dust.particlespawners[name][i]=core.add_particlespawner(psdef)
 	end
 end
 
@@ -44,7 +44,7 @@ mcl_weather.nether_dust.delete_particlespawners = function(player)
 	local name=player:get_player_name()
 	if mcl_weather.nether_dust.particlespawners[name] then
 		for i=1,3 do
-			minetest.delete_particlespawner(mcl_weather.nether_dust.particlespawners[name][i])
+			core.delete_particlespawner(mcl_weather.nether_dust.particlespawners[name][i])
 		end
 		mcl_weather.nether_dust.particlespawners[name]=nil
 	end
@@ -59,9 +59,9 @@ local function update_player_particles(player)
 end
 
 mcl_worlds.register_on_dimension_change(update_player_particles)
-minetest.register_on_joinplayer(update_player_particles)
+core.register_on_joinplayer(update_player_particles)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	mcl_weather.nether_dust.delete_particlespawners(player)
 end)
 

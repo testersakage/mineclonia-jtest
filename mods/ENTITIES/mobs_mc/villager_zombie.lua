@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator ("mobs_mc")
+local S = core.get_translator ("mobs_mc")
 local zombie = mobs_mc.zombie
 local mob_class = mcl_mobs.mob_class
 local pr = PcgRandom (os.time () * 1203)
@@ -199,7 +199,7 @@ function zombie_villager:on_rightclick (clicker)
 			end
 
 			local playername = clicker:get_player_name ()
-			if not minetest.is_creative_enabled (playername) then
+			if not core.is_creative_enabled (playername) then
 				wielditem:take_item ()
 				clicker:set_wielded_item (wielditem)
 			end
@@ -247,7 +247,7 @@ function zombie_villager:do_custom (dtime)
 			local self_pos = self.object:get_pos ()
 			local aa = vector.offset (self_pos, -4, -4, -4)
 			local bb = vector.offset (self_pos, 4, 4, 4)
-			local nodes = minetest.find_nodes_in_area (aa, bb, CURE_ACCELERANTS)
+			local nodes = core.find_nodes_in_area (aa, bb, CURE_ACCELERANTS)
 			if #nodes > 0 then
 				for i = 1, math.min (#nodes, 12) do
 					if pr:next (1, 10) < 3 then
@@ -350,7 +350,7 @@ local function zombie_villager_type_from_biome (biomedata)
 		return "plains"
 	end
 
-	local name = minetest.get_biome_name (biomedata.biome)
+	local name = core.get_biome_name (biomedata.biome)
 
 	if name:find ("Mesa")
 		or name:find ("Desert") then
@@ -411,7 +411,7 @@ function zombie_villager:mob_activate (staticdata, dtime)
 	end
 	if not self._previous_incarnation then
 		local self_pos = self.object:get_pos ()
-		local biomedata = minetest.get_biome_data (self_pos)
+		local biomedata = core.get_biome_data (self_pos)
 		local villager_type = zombie_villager_type_from_biome (biomedata)
 		local profession = profession_names[pr:next (1, #profession_names)]
 		self._previous_incarnation = {

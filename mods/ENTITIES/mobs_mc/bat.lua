@@ -1,6 +1,6 @@
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
 local function check_light(_, _, artificial_light, _)
@@ -76,14 +76,14 @@ local bat = {
 ------------------------------------------------------------------------
 
 local function is_opaque_solid (node)
-	local node = minetest.get_node (node)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (node)
+	local def = core.registered_nodes[node.name]
 	return def and def.groups.opaque and def.groups.solid
 end
 
 local function is_walkable (node)
-	local node = minetest.get_node (node)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (node)
+	local def = core.registered_nodes[node.name]
 	return def and def.walkable
 end
 

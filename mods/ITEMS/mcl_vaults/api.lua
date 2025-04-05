@@ -1,10 +1,10 @@
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 local SHOWITEM_INTERVAL = 2
 local EJECTITEM_INTERVAL = 0.5
 local LOOT_KEY = modname .. ":loot"
 local VISITED_KEY = modname .. ":visited_players"
-local RINGBUFFER_SIZE = tonumber(minetest.settings:get("mcl_vaults_looter_list_length")) or 128
+local RINGBUFFER_SIZE = tonumber(core.settings:get("mcl_vaults_looter_list_length")) or 128
 
 local function can_open(pos, player)
 	if not player or not player:is_player() then return false end
@@ -25,8 +25,8 @@ local function get_eligible_player_near(pos, distance)
 end
 
 local function get_vault_def(pos)
-	local node = pos and minetest.get_node(pos)
-	local def = node and minetest.registered_nodes[node.name]
+	local node = pos and core.get_node(pos)
+	local def = node and core.registered_nodes[node.name]
 	return def and def._mcl_vault_name and mcl_vaults.registered_vaults[def._mcl_vault_name], node
 end
 
@@ -37,27 +37,27 @@ local function generate_loot(pos)
 		for _, stack in pairs(mcl_loot.get_multi_loot(def.loot, PcgRandom(os.time()))) do
 			table.insert(loot, stack:to_string())
 		end
-		local meta = minetest.get_meta(pos)
-		meta:set_string(LOOT_KEY, minetest.serialize(loot))
+		local meta = core.get_meta(pos)
+		meta:set_string(LOOT_KEY, core.serialize(loot))
 		meta:mark_as_private(LOOT_KEY)
 	end
 end
 
 local function get_next_loot(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local loot_string = meta:get_string(LOOT_KEY)
-	local loot = minetest.deserialize(loot_string)
+	local loot = core.deserialize(loot_string)
 	if type(loot) ~= "table" then
 		-- loot data missing or invalid -> clean metadata
 		if loot_string ~= "" then
-			minetest.log("warning", "[mcl_vaults]: cleaning invalid loot data at pos " .. minetest.pos_to_string(pos, 0) .. ": " .. dump(loot_string))
+			core.log("warning", "[mcl_vaults]: cleaning invalid loot data at pos " .. core.pos_to_string(pos, 0) .. ": " .. dump(loot_string))
 		end
 		meta:set_string(LOOT_KEY, "")
 		loot = {}
 	end
 	local next_item = table.remove(loot, 1)
 	if #loot > 0 then
-		meta:set_string(LOOT_KEY, minetest.serialize(loot))
+		meta:set_string(LOOT_KEY, core.serialize(loot))
 		meta:mark_as_private(LOOT_KEY)
 	else
 		meta:set_string(LOOT_KEY, "")
@@ -81,7 +81,7 @@ local tpl = {
 	_mcl_blast_resitance = 50,
 }
 
-minetest.register_entity("mcl_vaults:item_entity", {
+core.register_entity("mcl_vaults:item_entity", {
 	initial_properties = {
 		physical = false,
 		visual = "wielditem",
@@ -92,9 +92,9 @@ minetest.register_entity("mcl_vaults:item_entity", {
 	},
 	_deactivate = function(self, node)
 		node.name = self._vault_name
-		minetest.swap_node(self._pos, node)
+		core.swap_node(self._pos, node)
 		self.object:remove()
-		minetest.get_node_timer(self._pos):start(1)
+		core.get_node_timer(self._pos):start(1)
 	end,
 	_display_item = function(self, item_name)
 		self.object:set_properties({
@@ -104,7 +104,7 @@ minetest.register_entity("mcl_vaults:item_entity", {
 	on_step = function(self, dtime)
 		self._timer = (self._timer or 0) - dtime
 		if self._timer < 0 then
-			local node = minetest.get_node(self._pos)
+			local node = core.get_node(self._pos)
 			if node.name == self._vault_on_name then
 				if get_eligible_player_near(self._pos, 5) then
 					-- active vault and eligible player still there -> show next item
@@ -121,7 +121,7 @@ minetest.register_entity("mcl_vaults:item_entity", {
 				self._timer = EJECTITEM_INTERVAL
 				local loot, preview = get_next_loot(self._pos)
 				if loot then
-					minetest.add_item(vector.offset(self._pos, 0, 0.8, 0), loot)
+					core.add_item(vector.offset(self._pos, 0, 0.8, 0), loot)
 					-- TODO: create particles
 				end
 				if preview then
@@ -158,7 +158,7 @@ local function activate_item_entity(pos)
 	local entity
 
 	local count = 0
-	for o in minetest.objects_inside_radius(pos, 0.1) do
+	for o in core.objects_inside_radius(pos, 0.1) do
 		local lua_entity = o:get_luaentity()
 		if lua_entity.name == "mcl_vaults:item_entity" then
 			count = count + 1
@@ -167,13 +167,13 @@ local function activate_item_entity(pos)
 				lua_entity._timer = 0 -- activate
 			else
 				-- remove any superfluous entity
-				minetest.log("warning", "[mcl_vaults] more than one item entity found at " .. minetest.pos_to_string(pos, 0))
+				core.log("warning", "[mcl_vaults] more than one item entity found at " .. core.pos_to_string(pos, 0))
 				o:remove()
 			end
 		end
 	end
 
-	return entity or minetest.add_entity(pos, "mcl_vaults:item_entity")
+	return entity or core.add_entity(pos, "mcl_vaults:item_entity")
 end
 
 -- Activate node at position `pos`.
@@ -182,7 +182,7 @@ function mcl_vaults.activate(pos, player)
 	local def, node = get_vault_def(pos)
 	if def and node.name == "mcl_vaults:"..def.name and can_open(pos, player) then
 		node.name = node.name.."_on"
-		minetest.swap_node(pos, node)
+		core.swap_node(pos, node)
 		activate_item_entity(pos)
 		return true
 	end
@@ -205,10 +205,10 @@ function mcl_vaults.register_vault(name, def)
 
 	local keyitem = def.keyitem or ("mcl_vaults:"..def.key.name)
 	if not def.keyitem then
-		minetest.register_craftitem(keyitem, def.key)
+		core.register_craftitem(keyitem, def.key)
 	end
 
-	minetest.register_node(":mcl_vaults:"..name, table.merge(tpl, {
+	core.register_node(":mcl_vaults:"..name, table.merge(tpl, {
 		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { not_in_creative_inventory = 0 }),
 		on_rightclick = function(pos, _, clicker)
@@ -216,7 +216,7 @@ function mcl_vaults.register_vault(name, def)
 			mcl_vaults.activate(pos, clicker)
 		end,
 		on_construct = function(pos)
-			minetest.get_node_timer(pos):start(1)
+			core.get_node_timer(pos):start(1)
 		end,
 		on_timer = function(pos)
 			local player = get_eligible_player_near(pos, 3)
@@ -224,12 +224,12 @@ function mcl_vaults.register_vault(name, def)
 		end,
 	}, def.node_off))
 
-	minetest.register_node(":mcl_vaults:"..name.."_ejecting", table.merge(tpl, {
+	core.register_node(":mcl_vaults:"..name.."_ejecting", table.merge(tpl, {
 		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { vault = 3 }),
 	}, def.node_ejecting))
 
-	minetest.register_node(":mcl_vaults:"..name.."_on", table.merge(tpl, {
+	core.register_node(":mcl_vaults:"..name.."_on", table.merge(tpl, {
 		_mcl_vault_name = name,
 		groups = table.merge(tpl.groups, { vault = 2 }),
 		on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
@@ -239,8 +239,8 @@ function mcl_vaults.register_vault(name, def)
 			generate_loot(pos, node)
 			if itemstack:get_name() == keyitem and try_open(pos, clicker) then
 				node.name = "mcl_vaults:"..name.."_ejecting"
-				minetest.swap_node(pos, node)
-				if not minetest.is_creative_enabled(clicker:get_player_name()) then
+				core.swap_node(pos, node)
+				if not core.is_creative_enabled(clicker:get_player_name()) then
 					itemstack:take_item()
 				end
 				-- the item entity handles ejecting the loot and
@@ -252,7 +252,7 @@ function mcl_vaults.register_vault(name, def)
 		end
 	}, def.node_on))
 
-	minetest.register_lbm({
+	core.register_lbm({
 		name = "mcl_vaults:" .. name,
 		label = "Activate vault item entity",
 		nodenames = {
@@ -263,7 +263,7 @@ function mcl_vaults.register_vault(name, def)
 		action = activate_item_entity,
 	})
 
-	minetest.register_lbm({
+	core.register_lbm({
 		name = "mcl_vaults:" .. name,
 		label = "Activate vault item entity",
 		nodenames = {
@@ -272,7 +272,7 @@ function mcl_vaults.register_vault(name, def)
 		run_at_every_load = true,
 		action = function(pos)
 			-- don't bother with checking whether it's already running
-			minetest.get_node_timer(pos):start(1)
+			core.get_node_timer(pos):start(1)
 		end,
 	})
 end

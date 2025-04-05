@@ -3,9 +3,9 @@ local registered_generators = {}
 local lvm, nodes, param2 = 0, 0, 0
 local lvm_buffer = {}
 
-local seed = minetest.get_mapgen_setting("seed")
+local seed = core.get_mapgen_setting("seed")
 
-local logging = minetest.settings:get_bool("mcl_logging_mapgen",false)
+local logging = core.settings:get_bool("mcl_logging_mapgen",false)
 
 local function roundN(n, d)
 	if type(n) ~= "number" then return n end
@@ -13,13 +13,13 @@ local function roundN(n, d)
     return math.floor(n * m + 0.5) / m
 end
 
-minetest.register_on_generated(function(minp, maxp, blockseed)
+core.register_on_generated(function(minp, maxp, blockseed)
 	local t1 = os.clock()
 	local p1, p2 = {x=minp.x, y=minp.y, z=minp.z}, {x=maxp.x, y=maxp.y, z=maxp.z}
 	if lvm > 0 then
 		local lvm_used, shadow, deco_used, deco_table, ore_used, ore_table = false, false, false, {}, false, {}
 		local lb2 = {} -- param2
-		local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
+		local vm, emin, emax = core.get_mapgen_object("voxelmanip")
 		local e1, e2 = {x=emin.x, y=emin.y, z=emin.z}, {x=emax.x, y=emax.y, z=emax.z}
 		local data2
 		local data = vm:get_data(lvm_buffer)
@@ -57,14 +57,14 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 				vm:set_param2_data(data2)
 			end
 			if #deco_table > 0 then
-				minetest.generate_decorations(vm,vector.new(minp.x,deco_table.min,minp.z),vector.new(maxp.x,deco_table.max,maxp.z))
+				core.generate_decorations(vm,vector.new(minp.x,deco_table.min,minp.z),vector.new(maxp.x,deco_table.max,maxp.z))
 			elseif deco_used then
-				minetest.generate_decorations(vm)
+				core.generate_decorations(vm)
 			end
 			if #ore_table > 0 then
-				minetest.generate_ores(vm,vector.new(minp.x,ore_table.min,minp.z),vector.new(maxp.x,ore_table.max,maxp.z))
+				core.generate_ores(vm,vector.new(minp.x,ore_table.min,minp.z),vector.new(maxp.x,ore_table.max,maxp.z))
 			elseif ore_used then
-				minetest.generate_ores(vm)
+				core.generate_ores(vm)
 			end
 			vm:calc_lighting(p1, p2, shadow)
 			vm:write_to_map()
@@ -82,12 +82,12 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 
 	mcl_vars.add_chunk(minp)
 	if logging then
-		minetest.log("action", "[mcl_mapgen_core] Generating chunk " .. minetest.pos_to_string(minp) .. " ... " .. minetest.pos_to_string(maxp).."..."..tostring(roundN(((os.clock() - t1)*1000),2)).."ms")
+		core.log("action", "[mcl_mapgen_core] Generating chunk " .. core.pos_to_string(minp) .. " ... " .. core.pos_to_string(maxp).."..."..tostring(roundN(((os.clock() - t1)*1000),2)).."ms")
 	end
 end)
 
-function minetest.register_on_generated(node_function)
-	mcl_mapgen_core.register_generator("mod_"..minetest.get_current_modname().."_"..tostring(#registered_generators+1), nil, node_function)
+function core.register_on_generated(node_function)
+	mcl_mapgen_core.register_generator("mod_"..core.get_current_modname().."_"..tostring(#registered_generators+1), nil, node_function)
 end
 
 function mcl_mapgen_core.register_generator(id, lvm_function, node_function, priority, needs_param2)
@@ -131,5 +131,5 @@ function mcl_mapgen_core.unregister_generator(id)
 end
 
 function mcl_mapgen_core.get_block_seed(pos)
-	return ((seed + minetest.hash_node_position(pos)) * 0x9e3779b1) % 0x100000000
+	return ((seed + core.hash_node_position(pos)) * 0x9e3779b1) % 0x100000000
 end

@@ -30,7 +30,7 @@ local patrolling_mob = {
 function patrolling_mob:promote_to_raidcaptain ()
 	local self_pos = self.object:get_pos ()
 	local entity = "mcl_raids:ominous_banner"
-	local banner = minetest.add_entity (self_pos, entity)
+	local banner = core.add_entity (self_pos, entity)
 	if not banner then
 		return
 	end
@@ -83,7 +83,7 @@ function patrolling_mob:find_allies (self_pos)
 	local allies = {}
 	local aa = vector.offset (self_pos, -16, -16, -16)
 	local bb = vector.offset (self_pos, 16, 16, 16)
-	for object in minetest.objects_in_area (aa, bb) do
+	for object in core.objects_in_area (aa, bb) do
 		if object ~= self.object then
 			local entity = object:get_luaentity ()
 			if entity and entity.is_valid_in_patrol
@@ -127,8 +127,8 @@ function mobs_mc.find_surface_position (node_pos)
 		local lim
 			= math.max (mcl_vars.mg_overworld_min, node_pos.y - 512)
 		while v.y >= lim do
-			local node = minetest.get_node (v)
-			local def = minetest.registered_nodes[node.name]
+			local node = core.get_node (v)
+			local def = core.registered_nodes[node.name]
 			local group_leaves = def and def.groups and def.groups.leaves or 0
 			local group_liquid = def and def.groups and def.groups.liquid or 0
 			if node.name ~= "ignore"
@@ -352,7 +352,7 @@ function raid_mob:lock_target (target)
 end
 
 function raid_mob:notify_nearby_patrolmen (self_pos, target)
-	for object in minetest.objects_inside_radius (self_pos, 8.0) do
+	for object in core.objects_inside_radius (self_pos, 8.0) do
 		local entity = object:get_luaentity ()
 
 		if entity and entity._is_raid_mob then
@@ -436,7 +436,7 @@ function raid_mob:check_recover_banner (self_pos, dtime)
 			return true
 		end
 		if vector.distance (self_pos, banner) < 1.414 then
-			for object in minetest.objects_inside_radius (self_pos, 4) do
+			for object in core.objects_inside_radius (self_pos, 4) do
 				local entity = object:get_luaentity ()
 				if entity then
 					local stack, def, itemname
@@ -454,7 +454,7 @@ function raid_mob:check_recover_banner (self_pos, dtime)
 		if raid and not raid._raidcaptain then
 			local aa = vector.offset (self_pos, -16, -8, -16)
 			local bb = vector.offset (self_pos, 16, 8, 16)
-			for object in minetest.objects_in_area (aa, bb) do
+			for object in core.objects_in_area (aa, bb) do
 				local entity = object:get_luaentity ()
 				if entity and decode_banner_item (entity) then
 					local banner = object:get_pos ()
@@ -471,7 +471,7 @@ end
 function raid_mob:recruit_reinforcements (self_pos, self_raid)
 	local aa = vector.offset (self_pos, -16, -16, -16)
 	local bb = vector.offset (self_pos, -16, -16, -16)
-	for object in minetest.objects_in_area (self_pos, aa, bb) do
+	for object in core.objects_in_area (self_pos, aa, bb) do
 		local entity = object:get_luaentity ()
 		if entity and entity._is_raid_mob then
 			local raid = entity:_get_active_raid ()

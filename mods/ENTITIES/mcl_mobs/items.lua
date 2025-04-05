@@ -79,11 +79,11 @@ function mob_class:armor_better_than (stack, current)
 		return false
 	end
 
-	if minetest.get_item_group (curname, "mcl_armor_points")
-		< minetest.get_item_group (itemname, "mcl_armor_points") then
+	if core.get_item_group (curname, "mcl_armor_points")
+		< core.get_item_group (itemname, "mcl_armor_points") then
 		return true
-	elseif minetest.get_item_group (curname, "mcl_armor_toughness")
-		< minetest.get_item_group (itemname, "mcl_armor_toughness") then
+	elseif core.get_item_group (curname, "mcl_armor_toughness")
+		< core.get_item_group (itemname, "mcl_armor_toughness") then
 		return true
 	else
 		-- TODO: the MC Wiki states that Minecraft also
@@ -95,8 +95,8 @@ function mob_class:armor_better_than (stack, current)
 			return true
 		end
 		-- Prefer enchanted to non-enchanted items.
-		if minetest.get_item_group (curname, "enchanted") == 0
-			and minetest.get_item_group (itemname, "enchanted") ~= 0 then
+		if core.get_item_group (curname, "enchanted") == 0
+			and core.get_item_group (itemname, "enchanted") ~= 0 then
 			return true
 		end
 	end
@@ -113,18 +113,18 @@ function mob_class:wielditem_better_than (stack, current)
 	local itemname = stack:get_name ()
 	local curname = current:get_name ()
 
-	if minetest.get_item_group (itemname, "sword") > 0 then
-		if minetest.get_item_group (curname, "sword") == 0 then
+	if core.get_item_group (itemname, "sword") > 0 then
+		if core.get_item_group (curname, "sword") == 0 then
 			return true
 		end
 	end
 
-	if minetest.get_item_group (itemname, "tool") ~= 0
-		or minetest.get_item_group (itemname, "weapon") ~= 0 then
+	if core.get_item_group (itemname, "tool") ~= 0
+		or core.get_item_group (itemname, "weapon") ~= 0 then
 		cap_new = stack:get_tool_capabilities ()
 		cap_old = current:get_tool_capabilities ()
-		if minetest.get_item_group (curname, "tool") == 0
-			and minetest.get_item_group (curname, "weapon") == 0 then
+		if core.get_item_group (curname, "tool") == 0
+			and core.get_item_group (curname, "weapon") == 0 then
 			return true
 		end
 		if (cap_new.damage_groups.fleshy or 0)
@@ -137,8 +137,8 @@ function mob_class:wielditem_better_than (stack, current)
 			return true
 		end
 		-- Prefer enchanted to non-enchanted items.
-		if minetest.get_item_group (curname, "enchanted") == 0
-			and minetest.get_item_group (itemname, "enchanted") ~= 0 then
+		if core.get_item_group (curname, "enchanted") == 0
+			and core.get_item_group (itemname, "enchanted") ~= 0 then
 			return true
 		end
 	end
@@ -153,7 +153,7 @@ function mob_class:evaluate_new_item (item)
 	local itemname = item:get_name ()
 	if self.wears_armor
 		and def._mcl_armor_element
-		and minetest.get_item_group (itemname, "armor") > 0 then
+		and core.get_item_group (itemname, "armor") > 0 then
 		local slot = def._mcl_armor_element
 		local current = self.armor_list[slot]
 		return self:armor_better_than (item, ItemStack (current))
@@ -167,7 +167,7 @@ end
 function mob_class:try_equip_item (stack, def, itemname)
 	if self.wears_armor
 		and self.wears_armor ~= "no_pickup"
-		and minetest.get_item_group (itemname, "armor") > 0
+		and core.get_item_group (itemname, "armor") > 0
 		and def._mcl_armor_element then
 		-- Potentially drop any existing piece of armor in
 		-- this slot.
@@ -181,7 +181,7 @@ function mob_class:try_equip_item (stack, def, itemname)
 			local random = math.random () - 0.1
 			if math.max (0, random)
 				< self:effective_drop_probability (slot) then
-				minetest.add_item (self_pos, ItemStack (current))
+				core.add_item (self_pos, ItemStack (current))
 			end
 		end
 		self.armor_list[slot] = stack:to_string ()
@@ -250,7 +250,7 @@ function mob_class:check_item_pickup ()
 		or self._inventory_size
 		or self._wears_armor then
 		local self_pos = self.object:get_pos ()
-		for object in minetest.objects_inside_radius (self_pos, 1.95) do
+		for object in core.objects_inside_radius (self_pos, 1.95) do
 			local entity = object:get_luaentity ()
 			if entity
 				and entity.name == "__builtin:item"

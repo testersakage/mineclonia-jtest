@@ -8,7 +8,7 @@ local function register_deepslate_variant(name, defs)
 	}, defs))
 end
 
-minetest.register_node("mcl_deepslate:deepslate", {
+core.register_node("mcl_deepslate:deepslate", {
 	description = S("Deepslate"),
 	_doc_items_longdesc = S("Deepslate is a stone type found deep underground in the Overworld that functions similar to regular stone but is harder than the stone."),
 	_doc_items_hidden = false,
@@ -25,9 +25,9 @@ minetest.register_node("mcl_deepslate:deepslate", {
 })
 
 mcl_monster_eggs.register_infested_block("mcl_deepslate:deepslate", S("Infested Deepslate"))
-minetest.register_alias("mcl_deepslate:infested_deepslate", "mcl_monster_eggs:monster_egg_deepslate")
+core.register_alias("mcl_deepslate:infested_deepslate", "mcl_monster_eggs:monster_egg_deepslate")
 
-minetest.register_node("mcl_deepslate:deepslate_reinforced", {
+core.register_node("mcl_deepslate:deepslate_reinforced", {
 	description = S("Reinforced Deepslate"),
 	_doc_items_longdesc = S("Reinforced deepslate is a very hard block undestructable by even wither explosions. It is unobtainable in survival mode."),
 	_doc_items_hidden = false,
@@ -173,13 +173,13 @@ register_deepslate_variant("chiseled", {
 local deepslate_variants = {"cobbled", "polished", "bricks", "tiles"}
 for i = 1, 3 do
 	local s = "mcl_deepslate:deepslate_"..deepslate_variants[i]
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_deepslate:deepslate_"..deepslate_variants[i+1].." 4",
 		recipe = { { s, s }, { s, s } }
 	})
 end
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_deepslate:deepslate_chiseled",
 	recipe = {
 		{ "mcl_stairs:slab_deepslate_cobbled" },

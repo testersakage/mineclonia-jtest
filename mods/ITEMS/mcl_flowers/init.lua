@@ -1,6 +1,6 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
+local S = core.get_translator(modname)
 
 mcl_flowers = {}
 mcl_flowers.registered_simple_flowers = {}
@@ -10,33 +10,33 @@ mcl_flowers.plant_usage_help = S("It can only be placed on a block on which it w
 
 function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 	if n.name == "mcl_flowers:rose_bush" or n.name == "mcl_flowers:rose_bush_top" then
-		minetest.add_item(pos, "mcl_flowers:rose_bush")
+		core.add_item(pos, "mcl_flowers:rose_bush")
 		return true
 	elseif n.name == "mcl_flowers:peony" or n.name == "mcl_flowers:peony_top" then
-		minetest.add_item(pos, "mcl_flowers:peony")
+		core.add_item(pos, "mcl_flowers:peony")
 		return true
 	elseif n.name == "mcl_flowers:lilac" or n.name == "mcl_flowers:lilac_top" then
-		minetest.add_item(pos, "mcl_flowers:lilac")
+		core.add_item(pos, "mcl_flowers:lilac")
 		return true
 	elseif n.name == "mcl_flowers:sunflower" or n.name == "mcl_flowers:sunflower_top" then
-		minetest.add_item(pos, "mcl_flowers:sunflower")
+		core.add_item(pos, "mcl_flowers:sunflower")
 		return true
 	elseif n.name == "mcl_flowers:tallgrass" then
 		-- Tall Grass: Grow into double tallgrass
 		local toppos = { x=pos.x, y=pos.y+1, z=pos.z }
-		local topnode = minetest.get_node(toppos)
-		if minetest.registered_nodes[topnode.name].buildable_to then
-			minetest.set_node(pos, { name = "mcl_flowers:double_grass", param2 = n.param2 })
-			minetest.set_node(toppos, { name = "mcl_flowers:double_grass_top", param2 = n.param2 })
+		local topnode = core.get_node(toppos)
+		if core.registered_nodes[topnode.name].buildable_to then
+			core.set_node(pos, { name = "mcl_flowers:double_grass", param2 = n.param2 })
+			core.set_node(toppos, { name = "mcl_flowers:double_grass_top", param2 = n.param2 })
 			return true
 		end
 	elseif n.name == "mcl_flowers:fern" then
 		-- Fern: Grow into large fern
 		local toppos = { x=pos.x, y=pos.y+1, z=pos.z }
-		local topnode = minetest.get_node(toppos)
-		if minetest.registered_nodes[topnode.name].buildable_to then
-			minetest.set_node(pos, { name = "mcl_flowers:double_fern", param2 = n.param2 })
-			minetest.set_node(toppos, { name = "mcl_flowers:double_fern_top", param2 = n.param2 })
+		local topnode = core.get_node(toppos)
+		if core.registered_nodes[topnode.name].buildable_to then
+			core.set_node(pos, { name = "mcl_flowers:double_fern", param2 = n.param2 })
+			core.set_node(toppos, { name = "mcl_flowers:double_fern_top", param2 = n.param2 })
 			return true
 		end
 	end
@@ -48,7 +48,7 @@ local spawn_on = { "mcl_core:dirt", "group:grass_block" }
 
 function mcl_flowers.on_bone_meal_simple(_, _, _, pos, n)
 	if n.name ~= "mcl_flowers:wither_rose" then
-		local nn = minetest.find_nodes_in_area_under_air(
+		local nn = core.find_nodes_in_area_under_air(
 			vector.offset(pos, -scan_area, -3, -scan_area),
 			vector.offset(pos, scan_area, 3, scan_area),
 			spawn_on
@@ -58,7 +58,7 @@ function mcl_flowers.on_bone_meal_simple(_, _, _, pos, n)
 		if next(nn) ~= nil then
 			table.shuffle(nn)
 			for i = 1, math.random(1, math.min(14, #nn)) do
-				if minetest.add_node(vector.offset(nn[i], 0, 1, 0), { name = n.name }) then
+				if core.add_node(vector.offset(nn[i], 0, 1, 0), { name = n.name }) then
 					any_placed = true
 				end
 			end
@@ -70,12 +70,12 @@ function mcl_flowers.on_bone_meal_simple(_, _, _, pos, n)
 end
 
 function mcl_flowers.get_palette_color_from_pos(pos)
-	local biome_data = minetest.get_biome_data(pos)
+	local biome_data = core.get_biome_data(pos)
 	local index = 0
 	if biome_data then
 		local biome = biome_data.biome
-		local biome_name = minetest.get_biome_name(biome)
-		local reg_biome = minetest.registered_biomes[biome_name]
+		local biome_name = core.get_biome_name(biome)
+		local reg_biome = core.registered_biomes[biome_name]
 		if reg_biome then
 			index = reg_biome._mcl_palette_index
 		end
@@ -86,10 +86,10 @@ end
 -- on_place function for flowers
 mcl_flowers.on_place_flower = mcl_util.generate_on_place_plant_function(function(pos, _, itemstack)
 	local below = {x=pos.x, y=pos.y-1, z=pos.z}
-	local soil_node = minetest.get_node_or_nil(below)
+	local soil_node = core.get_node_or_nil(below)
 	if not soil_node then return false end
 
-	local has_palette = minetest.registered_nodes[itemstack:get_name()].palette ~= nil
+	local has_palette = core.registered_nodes[itemstack:get_name()].palette ~= nil
 	local colorize
 	if has_palette then
 		colorize = mcl_flowers.get_palette_color_from_pos(pos)
@@ -103,17 +103,17 @@ mcl_flowers.on_place_flower = mcl_util.generate_on_place_plant_function(function
 	* If not flower, also allowed on podzol and coarse dirt
 	* Light level >= 8 at any time or exposed to sunlight at day
 ]]
-	local light_night = minetest.get_node_light(pos, 0.0)
-	local light_day = minetest.get_node_light(pos, 0.5)
+	local light_night = core.get_node_light(pos, 0.0)
+	local light_day = core.get_node_light(pos, 0.5)
 	local light_ok = false
-	if (light_night and light_night >= 8) or (light_day and light_day >= minetest.LIGHT_MAX) then
+	if (light_night and light_night >= 8) or (light_day and light_day >= core.LIGHT_MAX) then
 		light_ok = true
 	end
-	if itemstack:get_name() == "mcl_flowers:wither_rose" and (  minetest.get_item_group(soil_node.name, "grass_block") > 0 or soil_node.name == "mcl_core:dirt" or soil_node.name == "mcl_core:coarse_dirt" or soil_node.name == "mcl_mud:mud" or soil_node.name == "mcl_lush_caves:moss" or soil_node.name == "mcl_nether:netherrack" or minetest.get_item_group(soil_node.name, "soul_block") > 0  ) then
+	if itemstack:get_name() == "mcl_flowers:wither_rose" and (  core.get_item_group(soil_node.name, "grass_block") > 0 or soil_node.name == "mcl_core:dirt" or soil_node.name == "mcl_core:coarse_dirt" or soil_node.name == "mcl_mud:mud" or soil_node.name == "mcl_lush_caves:moss" or soil_node.name == "mcl_nether:netherrack" or core.get_item_group(soil_node.name, "soul_block") > 0  ) then
 		return true,colorize
 	end
-	local is_flower = minetest.get_item_group(itemstack:get_name(), "flower") == 1
-	local ok = (soil_node.name == "mcl_core:dirt" or minetest.get_item_group(soil_node.name, "grass_block") == 1 or soil_node.name == "mcl_lush_caves:moss" or (not is_flower and (soil_node.name == "mcl_core:coarse_dirt" or soil_node.name == "mcl_core:podzol" or soil_node.name == "mcl_core:podzol_snow"))) and light_ok
+	local is_flower = core.get_item_group(itemstack:get_name(), "flower") == 1
+	local ok = (soil_node.name == "mcl_core:dirt" or core.get_item_group(soil_node.name, "grass_block") == 1 or soil_node.name == "mcl_lush_caves:moss" or (not is_flower and (soil_node.name == "mcl_core:coarse_dirt" or soil_node.name == "mcl_core:podzol" or soil_node.name == "mcl_core:podzol_snow"))) and light_ok
 	return ok, colorize
 end)
 
@@ -127,7 +127,7 @@ function mcl_flowers.register_simple_flower(name, def)
 		image=def.image,
 		simple_selection_box=def.simple_selection_box,
 	}
-	minetest.register_node(":"..newname, {
+	core.register_node(":"..newname, {
 		description = def.desc,
 		_doc_items_longdesc = smallflowerlongdesc,
 		_doc_items_usagehelp = mcl_flowers.plant_usage_help,
@@ -170,7 +170,7 @@ end
 function mcl_flowers.register_ground_flower(name, def)
 	local newname = "mcl_flowers:"..name
 
-	minetest.register_craftitem(":"..newname, {
+	core.register_craftitem(":"..newname, {
     description = def.desc,
 		_doc_items_longdesc = def.longdesc,
     inventory_image = def.image,
@@ -190,11 +190,11 @@ function mcl_flowers.register_ground_flower(name, def)
 			if rc then return rc end
 
 			local pos = pointed_thing.under
-			local node = minetest.get_node(pos)
+			local node = core.get_node(pos)
 			local above_pos = {x=pos.x, y=pos.y+1, z=pos.z}
-			local above_node = minetest.get_node(above_pos)
-			local wildflower_group = minetest.get_item_group(node.name, "wildflower")
-			local creative = minetest.is_creative_enabled(placer:get_player_name())
+			local above_node = core.get_node(above_pos)
+			local wildflower_group = core.get_item_group(node.name, "wildflower")
+			local creative = core.is_creative_enabled(placer:get_player_name())
 
 			-- Swap the node in place if it's part of the progression
 			local swap_map = {
@@ -205,7 +205,7 @@ function mcl_flowers.register_ground_flower(name, def)
 
 			if swap_map[node.name] then
 				if not creative then itemstack:take_item(1) end
-				minetest.set_node(pos, {name = swap_map[node.name]})
+				core.set_node(pos, {name = swap_map[node.name]})
 			else
 				local max_cycle = wildflower_group > 0 and wildflower_group < 5
 				-- If not already part of the cycle, place _1 above
@@ -215,7 +215,7 @@ function mcl_flowers.register_ground_flower(name, def)
 						return itemstack
 					else
 						if not creative then itemstack:take_item(1) end
-						minetest.set_node(above_pos, {name = newname.."_1"})
+						core.set_node(above_pos, {name = newname.."_1"})
 					end
 				end
 			end
@@ -225,7 +225,7 @@ function mcl_flowers.register_ground_flower(name, def)
 	})
 
 	for i = 1,4 do
-		minetest.register_node(":"..newname.."_"..i, {
+		core.register_node(":"..newname.."_"..i, {
 			description = def.desc,
 			_doc_items_create_entry = false,
 			drawtype = "mesh",
@@ -285,51 +285,51 @@ local tpl_large_plant_bottom = table.merge(tpl_large_plant_top, {
 		if rc ~= nil then return rc end --check for nil explicitly to determine if on_rightclick existed
 
 		-- Check for a floor and a space of 1×2×1
-		local ptu_node = minetest.get_node(pointed_thing.under)
+		local ptu_node = core.get_node(pointed_thing.under)
 		local bottom
-		if not minetest.registered_nodes[ptu_node.name] then
+		if not core.registered_nodes[ptu_node.name] then
 			return itemstack
 		end
-		if minetest.registered_nodes[ptu_node.name].buildable_to then
+		if core.registered_nodes[ptu_node.name].buildable_to then
 			bottom = pointed_thing.under
 		else
 			bottom = pointed_thing.above
 		end
-		if not minetest.registered_nodes[minetest.get_node(bottom).name] then
+		if not core.registered_nodes[core.get_node(bottom).name] then
 			return itemstack
 		end
 		local top = { x = bottom.x, y = bottom.y + 1, z = bottom.z }
-		local bottom_buildable = minetest.registered_nodes[minetest.get_node(bottom).name].buildable_to
-		local top_buildable = minetest.registered_nodes[minetest.get_node(top).name].buildable_to
-		local floor = minetest.get_node({x=bottom.x, y=bottom.y-1, z=bottom.z})
-		if not minetest.registered_nodes[floor.name] then
+		local bottom_buildable = core.registered_nodes[core.get_node(bottom).name].buildable_to
+		local top_buildable = core.registered_nodes[core.get_node(top).name].buildable_to
+		local floor = core.get_node({x=bottom.x, y=bottom.y-1, z=bottom.z})
+		if not core.registered_nodes[floor.name] then
 			return itemstack
 		end
 
-		local light_night = minetest.get_node_light(bottom, 0.0)
-		local light_day = minetest.get_node_light(bottom, 0.5)
+		local light_night = core.get_node_light(bottom, 0.0)
+		local light_day = core.get_node_light(bottom, 0.5)
 		local light_ok = false
-		if (light_night and light_night >= 8) or (light_day and light_day >= minetest.LIGHT_MAX) then
+		if (light_night and light_night >= 8) or (light_day and light_day >= core.LIGHT_MAX) then
 			light_ok = true
 		end
-		local is_flower = minetest.get_item_group(floor.name, "flower") > 0
+		local is_flower = core.get_item_group(floor.name, "flower") > 0
 
 		-- Placement rules:
 		-- * Allowed on dirt, grass or moss block
 		-- * If not a flower, also allowed on podzol and coarse dirt
 		-- * Only with light level >= 8
 		-- * Only if two enough space
-		if (floor.name == "mcl_core:dirt" or minetest.get_item_group(floor.name, "grass_block") == 1 or floor.name == "mcl_lush_caves:moss" or (not is_flower and (floor.name == "mcl_core:coarse_dirt" or floor.name == "mcl_core:podzol" or floor.name == "mcl_core:podzol_snow"))) and bottom_buildable and top_buildable and light_ok then
+		if (floor.name == "mcl_core:dirt" or core.get_item_group(floor.name, "grass_block") == 1 or floor.name == "mcl_lush_caves:moss" or (not is_flower and (floor.name == "mcl_core:coarse_dirt" or floor.name == "mcl_core:podzol" or floor.name == "mcl_core:podzol_snow"))) and bottom_buildable and top_buildable and light_ok then
 			local param2
-			local def = minetest.registered_nodes[floor.name]
+			local def = core.registered_nodes[floor.name]
 			if def and def.paramtype2 == "color" then
 				param2 = mcl_flowers.get_palette_color_from_pos(bottom)
 			end
 			-- Success! We can now place the flower
-			minetest.sound_play(minetest.registered_nodes[itemstring].sounds.place, {pos = bottom, gain=1}, true)
-			minetest.set_node(bottom, {name=itemstring, param2=param2})
-			minetest.set_node(top, {name=itemstring.."_top", param2=param2})
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
+			core.sound_play(core.registered_nodes[itemstring].sounds.place, {pos = bottom, gain=1}, true)
+			core.set_node(bottom, {name=itemstring, param2=param2})
+			core.set_node(top, {name=itemstring.."_top", param2=param2})
+			if not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 			end
 		end
@@ -339,8 +339,8 @@ local tpl_large_plant_bottom = table.merge(tpl_large_plant_top, {
 		-- Remove top half of flower (if it exists)
 		local bottom = pos
 		local top = { x = bottom.x, y = bottom.y + 1, z = bottom.z }
-		if minetest.get_node(bottom).name ~= oldnode.name and minetest.get_node(top).name == oldnode.name.."_top" then
-			minetest.remove_node(top)
+		if core.get_node(bottom).name ~= oldnode.name and core.get_node(top).name == oldnode.name.."_top" then
+			core.remove_node(top)
 		end
 	end,
 })
@@ -375,7 +375,7 @@ function mcl_flowers.add_large_plant(name, def)
 	local selbox_top_height = def.selbox_top_height or 0.5
 	local inv_img = def.inv_img or def.bottom.inventory_image or (def.tiles_top and def.tiles_top[1]) or (def.top.tiles and def.top.tiles[1])
 	-- Bottom
-	minetest.register_node(":mcl_flowers:"..name, table.merge(tpl_large_plant_bottom,{
+	core.register_node(":mcl_flowers:"..name, table.merge(tpl_large_plant_bottom,{
 		description = def.desc,
 		_doc_items_longdesc = def.longdesc,
 		tiles = def.tiles_bottom,
@@ -390,7 +390,7 @@ function mcl_flowers.add_large_plant(name, def)
 	}, def.bottom or {}))
 
 	-- Top
-	minetest.register_node(":mcl_flowers:"..name.."_top", table.merge(tpl_large_plant_top, {
+	core.register_node(":mcl_flowers:"..name.."_top", table.merge(tpl_large_plant_top, {
 		description = S("@1 (Top Part)", def.desc or def.bottom.description or name),
 		_doc_items_create_entry = false,
 		selection_box = {
@@ -406,8 +406,8 @@ function mcl_flowers.add_large_plant(name, def)
 			-- Remove bottom half of flower (if it exists)
 			local top = pos
 			local bottom = { x = top.x, y = top.y - 1, z = top.z }
-			if minetest.get_node(top).name ~= "mcl_flowers:"..name.."_top" and minetest.get_node(bottom).name == "mcl_flowers:"..name then
-				minetest.remove_node(bottom)
+			if core.get_node(top).name ~= "mcl_flowers:"..name.."_top" and core.get_node(bottom).name == "mcl_flowers:"..name then
+				core.remove_node(bottom)
 			end
 		end,
 	}, def.top))
@@ -419,39 +419,39 @@ function mcl_flowers.add_large_plant(name, def)
 
 end
 
-minetest.register_abm({
+core.register_abm({
 	label = "Pop out flowers",
 	nodenames = {"group:flower"},
 	interval = 12,
 	chance = 2,
 	action = function(pos, node)
 		-- Ignore the upper part of double plants
-		if minetest.get_item_group(node.name, "double_plant") == 2 then
+		if core.get_item_group(node.name, "double_plant") == 2 then
 			return
 		end
-		local below = minetest.get_node_or_nil({x=pos.x, y=pos.y-1, z=pos.z})
+		local below = core.get_node_or_nil({x=pos.x, y=pos.y-1, z=pos.z})
 		if not below then
 			return
 		end
 		-- Pop out flower if not on dirt, grass block or too low brightness
-		if (below.name ~= "mcl_core:dirt" and minetest.get_item_group(below.name, "grass_block") ~= 1 and below.name ~= "mcl_lush_caves:moss") or (minetest.get_node_light(pos, 0.5) < 8) then
-			minetest.dig_node(pos)
+		if (below.name ~= "mcl_core:dirt" and core.get_item_group(below.name, "grass_block") ~= 1 and below.name ~= "mcl_lush_caves:moss") or (core.get_node_light(pos, 0.5) < 8) then
+			core.dig_node(pos)
 			return
 		end
 	end,
 })
 
 -- Legacy support
-minetest.register_alias("mcl_core:tallgrass", "mcl_flowers:tallgrass")
+core.register_alias("mcl_core:tallgrass", "mcl_flowers:tallgrass")
 
 -- mcimport support: re-adds missing double_plant tops in mcimported worlds.
-local mg_name = minetest.get_mapgen_setting("mg_name")
-local mod_mcimport = minetest.get_modpath("mcimport")
+local mg_name = core.get_mapgen_setting("mg_name")
+local mod_mcimport = core.get_modpath("mcimport")
 
 if mod_mcimport and mg_name == "singlenode" then
 	local flowernames = { "peony", "rose_bush", "lilac", "sunflower", "double_fern", "double_grass" }
 
-	minetest.register_lbm({
+	core.register_lbm({
 		label = "Add double plant tops.",
 		name = "mcl_flowers:double_plant_topper",
 		run_at_every_load = true,
@@ -462,7 +462,7 @@ if mod_mcimport and mg_name == "singlenode" then
 				local bottom = pos
 				local top = { x = bottom.x, y = bottom.y + 1, z = bottom.z }
 				if node.name == "mcl_flowers:"..flowername then
-					minetest.set_node(top, {name = "mcl_flowers:"..flowername.."_top"})
+					core.set_node(top, {name = "mcl_flowers:"..flowername.."_top"})
 				end
 			end
 		end,

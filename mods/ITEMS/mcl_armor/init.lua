@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_armor = {
 	longdesc = S("This is a piece of equippable armor which reduces the amount of damage you receive."),
@@ -123,7 +123,7 @@ mcl_armor.trims = {
 	}
 }
 
-local modpath = minetest.get_modpath("mcl_armor")
+local modpath = core.get_modpath("mcl_armor")
 
 dofile(modpath .. "/api.lua")
 dofile(modpath .. "/player.lua")

@@ -1,10 +1,10 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local function register_raw_ore(ore, description, block_desc, longdesc, block_longdesc, blockgroups)
 	local raw_ingot = "mcl_raw_ores:raw_"..ore
 	local texture = "mcl_raw_ores_raw_"..ore
 
-	minetest.register_craftitem(raw_ingot, {
+	core.register_craftitem(raw_ingot, {
 		description = description,
 		_doc_items_longdesc = longdesc,
 		inventory_image = texture..".png",
@@ -13,7 +13,7 @@ local function register_raw_ore(ore, description, block_desc, longdesc, block_lo
 		_mcl_crafting_output = {square3 = {output = raw_ingot.."_block"}}
 	})
 
-	minetest.register_node(raw_ingot.."_block", {
+	core.register_node(raw_ingot.."_block", {
 		description = block_desc,
 		_doc_items_longdesc = block_longdesc,
 		tiles = { texture.."_block.png" },

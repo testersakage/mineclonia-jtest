@@ -20,19 +20,19 @@ mcl_redstone._solid_opaque_tab = {}
 -- This table contains wireflags by node name.
 mcl_redstone._wireflag_tab = {}
 
-minetest.register_on_mods_loaded(function()
-	for name, ndef in pairs(minetest.registered_nodes) do
-		if minetest.get_item_group(name, "opaque") ~= 0
-		 and minetest.get_item_group(name, "solid") ~= 0
-		 and minetest.get_item_group(name, "redstone_not_conductive") ~= 1 then
+core.register_on_mods_loaded(function()
+	for name, ndef in pairs(core.registered_nodes) do
+		if core.get_item_group(name, "opaque") ~= 0
+		 and core.get_item_group(name, "solid") ~= 0
+		 and core.get_item_group(name, "redstone_not_conductive") ~= 1 then
 			mcl_redstone._solid_opaque_tab[name] = 0
-		elseif minetest.get_item_group(name, "redstone_conductive") == 1 then
+		elseif core.get_item_group(name, "redstone_conductive") == 1 then
 			mcl_redstone._solid_opaque_tab[name] = 0
 		end
 	end
 end)
 
-local modpath = minetest.get_modpath(minetest.get_current_modname())
+local modpath = core.get_modpath(core.get_current_modname())
 dofile(modpath.."/logic.lua")
 dofile(modpath.."/eventqueue.lua")
 dofile(modpath.."/wire.lua")

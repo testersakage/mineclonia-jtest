@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 -- Cooldown time and global storing of cooldown
 local cooldown_time = 1
@@ -32,7 +32,7 @@ for i=1,2 do
 end
 -- Chorus flower destruction effects
 function mcl_charges.chorus_flower_effects(pos, radius)
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 10,
 		time = 0.3,
 		minpos = vector.subtract(pos, radius / 2),
@@ -50,7 +50,7 @@ function mcl_charges.chorus_flower_effects(pos, radius)
 end
 -- decorated pot destruction effects
 function mcl_charges.pot_effects(pos, radius)
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 10,
 		time = 0.3,
 		minpos = vector.subtract(pos, radius / 2),
@@ -87,7 +87,7 @@ end
 local RADIUS = 4
 
 function mcl_charges.wind_burst(pos, radius)
-	for obj in minetest.objects_inside_radius(pos, radius) do
+	for obj in core.objects_inside_radius(pos, radius) do
 		local obj_pos = obj:get_pos()
 		local dist = math.max(1, vector.distance(pos, obj_pos))
 
@@ -107,7 +107,7 @@ end
 
 --throwable charge registry
 function mcl_charges.register_charge(name, descr, def)
-	minetest.register_craftitem("mcl_charges:" .. name .. "", {
+	core.register_craftitem("mcl_charges:" .. name .. "", {
 		description = descr,
 		inventory_image = "mcl_charges_" .. name .. ".png",
 
@@ -116,13 +116,13 @@ function mcl_charges.register_charge(name, descr, def)
 			if mcl_charges_cooldown[playername] == nil then
 				mcl_charges_cooldown[playername] = 0
 			end
-			local current_time = minetest.get_gametime()
+			local current_time = core.get_gametime()
 			if current_time - mcl_charges_cooldown[playername] >= cooldown_time then
 				mcl_charges_cooldown[playername] = current_time
 				local velocity = 30
 				local dir = placer:get_look_dir()
 				local playerpos = placer:get_pos()
-				local obj = minetest.add_entity({
+				local obj = core.add_entity({
 					x = playerpos.x + dir.x,
 					y = playerpos.y + 1.3 + dir.y,
 					z = playerpos.z + dir.z
@@ -132,7 +132,7 @@ function mcl_charges.register_charge(name, descr, def)
 				obj:set_velocity(vec)
 				obj:set_acceleration(acc)
 				local ent = obj:get_luaentity() ; ent.posthrow = playerpos
-				if not minetest.is_creative_enabled(placer:get_player_name()) then
+				if not core.is_creative_enabled(placer:get_player_name()) then
 					itemstack:take_item()
 				end
 				return itemstack
@@ -143,13 +143,13 @@ function mcl_charges.register_charge(name, descr, def)
 			if mcl_charges_cooldown[playername] == nil then
 				mcl_charges_cooldown[playername] = 0
 			end
-			local current_time = minetest.get_gametime()
+			local current_time = core.get_gametime()
 			if current_time - mcl_charges_cooldown[playername] >= cooldown_time then
 				mcl_charges_cooldown[playername] = current_time
 				local velocity = 30
 				local dir = placer:get_look_dir()
 				local playerpos = placer:get_pos()
-				local obj = minetest.add_entity({
+				local obj = core.add_entity({
 					x = playerpos.x + dir.x,
 					y = playerpos.y + 2 + dir.y,
 					z = playerpos.z + dir.z
@@ -159,7 +159,7 @@ function mcl_charges.register_charge(name, descr, def)
 				obj:set_velocity(vec)
 				obj:set_acceleration(acc)
 				local ent = obj:get_luaentity() ; ent.posthrow = playerpos
-				if not minetest.is_creative_enabled(placer:get_player_name()) then
+				if not core.is_creative_enabled(placer:get_player_name()) then
 					itemstack:take_item()
 				end
 				return itemstack
@@ -167,7 +167,7 @@ function mcl_charges.register_charge(name, descr, def)
 		end,
 		_on_dispense = function(stack, pos, _, _, dropdir)
 			local shootpos = vector.add(pos, vector.multiply(dropdir, 0.51))
-			local charge = minetest.add_entity(shootpos, "mcl_charges:" .. name .. "_flying")
+			local charge = core.add_entity(shootpos, "mcl_charges:" .. name .. "_flying")
 			if charge and charge:get_pos() then
 				local ent_charge = charge:get_luaentity()
 				ent_charge._shot_from_dispenser = true
@@ -179,7 +179,7 @@ function mcl_charges.register_charge(name, descr, def)
 		end,
 	})
 
-	minetest.register_entity("mcl_charges:" .. name .. "_flying", {
+	core.register_entity("mcl_charges:" .. name .. "_flying", {
 		initial_properties = {
 			visual = "mesh",
 			mesh = name..".obj",
@@ -194,23 +194,23 @@ function mcl_charges.register_charge(name, descr, def)
 		on_activate = def.on_activate,
 		on_step = function(self, _)
 			local pos = self.object:get_pos()
-			local node = minetest.get_node(pos)
+			local node = core.get_node(pos)
 			local n = node.name
 			local dpos = vector.round(vector.new(pos)) -- digital pos
 			if n ~= "air" then
 				def.hit_node(self, pos, node)
 				self.object:remove()
 			end
-			local bdef = minetest.registered_nodes[node.name]
+			local bdef = core.registered_nodes[node.name]
 			if (bdef and bdef._on_wind_charge_hit) then
 				bdef._on_wind_charge_hit(dpos, self)
 			end
 			if self.hit_player or self.hit_mob or self.hit_object then
-				for player in minetest.objects_inside_radius(pos, 0.6) do
+				for player in core.objects_inside_radius(pos, 0.6) do
 					if self.hit_player and player:is_player() then
 						self.hit_player(self, player)
 						def.hit_player_alt(self, pos)
-						minetest.after(0.01, function()
+						core.after(0.01, function()
 							if self.object:get_luaentity() then
 								self.object:remove()
 							end

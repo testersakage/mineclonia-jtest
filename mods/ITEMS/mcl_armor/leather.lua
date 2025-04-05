@@ -1,5 +1,5 @@
-local C = minetest.colorize
-local S = minetest.get_translator(minetest.get_current_modname())
+local C = core.colorize
+local S = core.get_translator(core.get_current_modname())
 
 local base_color = "#794100"
 
@@ -24,20 +24,20 @@ local function calculate_color(first, last)
 end
 
 function mcl_armor.colorize_leather_armor(itemstack, colorstring)
-	if not itemstack or minetest.get_item_group(itemstack:get_name(), "armor_leather") == 0 then
+	if not itemstack or core.get_item_group(itemstack:get_name(), "armor_leather") == 0 then
 		return itemstack
 	end
 	local color = color_string_to_table(colorstring)
-	colorstring = minetest.colorspec_to_colorstring(color)
+	colorstring = core.colorspec_to_colorstring(color)
 	local meta = itemstack:get_meta()
 	local old_color = meta:get_string("mcl_armor:color")
 	if old_color == colorstring then return itemstack
 	elseif old_color ~= "" then
 		color = calculate_color(
-			color_string_to_table(minetest.colorspec_to_colorstring(old_color)),
+			color_string_to_table(core.colorspec_to_colorstring(old_color)),
 			color
 		)
-		colorstring = minetest.colorspec_to_colorstring(color)
+		colorstring = core.colorspec_to_colorstring(color)
 	end
 	meta:set_string("mcl_armor:color", colorstring)
 	meta:set_string("inventory_image",
@@ -79,11 +79,11 @@ mcl_armor.register_set({
 	craft_material = "mcl_mobitems:leather",
 	on_place = function(itemstack, placer, pointed_thing)
 		if mcl_util.check_position_protection(pointed_thing.under, placer) then return itemstack end
-		if minetest.get_item_group(minetest.get_node(pointed_thing.under).name, "cauldron_water") <= 0 then return end
+		if core.get_item_group(core.get_node(pointed_thing.under).name, "cauldron_water") <= 0 then return end
 		if mcl_cauldrons.add_level(pointed_thing.under, -1) then
 			local outcome = mcl_armor.wash_leather_armor(itemstack)
 			if outcome then
-				minetest.sound_play("mcl_potions_bottle_pour", {pos=pointed_thing.under, gain=0.5, max_hear_range=16}, true)
+				core.sound_play("mcl_potions_bottle_pour", {pos=pointed_thing.under, gain=0.5, max_hear_range=16}, true)
 				return outcome
 			end
 		end
@@ -102,9 +102,9 @@ tt.register_priority_snippet(function(_, _, itemstack)
 end)
 
 for _, element in pairs(mcl_armor.elements) do
-	local modname = minetest.get_current_modname()
+	local modname = core.get_current_modname()
 	local itemname = modname .. ":" .. element.name .. "_leather"
-	minetest.register_craft({
+	core.register_craft({
 		type = "shapeless",
 		output = itemname,
 		recipe = {
@@ -113,7 +113,7 @@ for _, element in pairs(mcl_armor.elements) do
 		},
 	})
 	local ench_itemname = itemname .. "_enchanted"
-	minetest.register_craft({
+	core.register_craft({
 		type = "shapeless",
 		output = ench_itemname,
 		recipe = {
@@ -124,7 +124,7 @@ for _, element in pairs(mcl_armor.elements) do
 end
 
 local function colorizing_crafting(itemstack, _, old_craft_grid, _)
-	if minetest.get_item_group(itemstack:get_name(), "armor_leather") == 0 then
+	if core.get_item_group(itemstack:get_name(), "armor_leather") == 0 then
 		return
 	end
 
@@ -133,37 +133,37 @@ local function colorizing_crafting(itemstack, _, old_craft_grid, _)
 	for _, item in pairs(old_craft_grid) do
 		local name = item:get_name()
 		if name ~= "" then
-			if minetest.get_item_group(name, "armor_leather") > 0 then
+			if core.get_item_group(name, "armor_leather") > 0 then
 				if found_la then return end
 				found_la = item
-			elseif minetest.get_item_group(name, "dye") > 0 then
+			elseif core.get_item_group(name, "dye") > 0 then
 				if dye_color then return end
-				dye_color = mcl_dyes.colors[minetest.registered_items[name]._color].rgb
+				dye_color = mcl_dyes.colors[core.registered_items[name]._color].rgb
 			else return end
 		end
 	end
 	return mcl_armor.colorize_leather_armor(found_la, dye_color) or ItemStack()
 end
 
-minetest.register_craft_predict(colorizing_crafting)
-minetest.register_on_craft(colorizing_crafting)
+core.register_craft_predict(colorizing_crafting)
+core.register_on_craft(colorizing_crafting)
 
-minetest.register_chatcommand("color_leather", {
+core.register_chatcommand("color_leather", {
 	params = "<color>",
 	description = S("Colorize a piece of leather armor, or wash it"),
 	privs = { debug = true, },
 	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		if player then
 			local item = player:get_wielded_item()
-			if not item or  minetest.get_item_group(item:get_name(), "armor_leather") == 0 then
+			if not item or  core.get_item_group(item:get_name(), "armor_leather") == 0 then
 				return false, S("Not leather armor.")
 			end
 			if param == "wash" then
 				player:set_wielded_item(mcl_armor.wash_leather_armor(item))
 				return true, S("Washed.")
 			end
-			local colorstring = minetest.colorspec_to_colorstring(param)
+			local colorstring = core.colorspec_to_colorstring(param)
 			if not colorstring then return false, "Invalid color" end
 			player:set_wielded_item(mcl_armor.colorize_leather_armor(item, colorstring))
 			return true, S("Done: @1", colorstring)

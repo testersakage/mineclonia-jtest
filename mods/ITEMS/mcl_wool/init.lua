@@ -1,10 +1,10 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local D = mcl_util.get_dynamic_translator()
-local mod_doc = minetest.get_modpath("doc")
+local mod_doc = core.get_modpath("doc")
 
 -- Backwards compatibility with jordach's 16-color wool mod
-minetest.register_alias("mcl_wool:dark_blue", "wool:blue")
-minetest.register_alias("mcl_wool:gold", "wool:yellow")
+core.register_alias("mcl_wool:dark_blue", "wool:blue")
+core.register_alias("mcl_wool:gold", "wool:yellow")
 
 local messy_textures = { --translator table for the bed texture filenames names not adhering to the common color names of mcl_dyes
 	["light_blue"] = "mcl_wool_light_blue",
@@ -34,7 +34,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		texcolor = messy_textures[color]
 	end
 
-	minetest.register_node("mcl_wool:"..color, {
+	core.register_node("mcl_wool:"..color, {
 		description = D(colordef.readable_name .. " Wool"),
 		_doc_items_create_entry = create_entry,
 		_doc_items_entry_name = name_wool,
@@ -50,7 +50,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_mcl_crafting_output = {line_wide2 = {output = "mcl_wool:"..color.."_carpet 3"}}
 	})
 
-	minetest.register_node("mcl_wool:"..color.."_carpet", {
+	core.register_node("mcl_wool:"..color.."_carpet", {
 		description = D(colordef.readable_name .. " Carpet"),
 		_doc_items_create_entry = create_entry,
 		_doc_items_entry_name = name_carpet,
@@ -81,7 +81,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		doc.add_entry_alias("nodes", "mcl_wool:"..canonical_color.."_carpet", "nodes", "mcl_wool:"..color.."_carpet")
 	end
 
-	minetest.register_craft({
+	core.register_craft({
 		type = "shapeless",
 		output = "mcl_wool:"..color,
 		recipe = { "group:wool", "mcl_dyes:"..color }

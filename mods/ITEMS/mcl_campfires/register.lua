@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- Register Plain Campfire
 mcl_campfires.register_campfire("mcl_campfires:campfire", {
@@ -7,7 +7,7 @@ mcl_campfires.register_campfire("mcl_campfires:campfire", {
 	fire_texture = "mcl_campfires_campfire_fire.png",
 	lit_logs_texture = "mcl_campfires_campfire_log_lit.png",
 	drops = "mcl_core:charcoal_lump 2",
-	lightlevel = minetest.LIGHT_MAX,
+	lightlevel = core.LIGHT_MAX,
 	damage = 1,
 })
 
@@ -26,7 +26,7 @@ mcl_campfires.register_campfire("mcl_campfires:soul_campfire", {
 })
 
 -- Register Campfire Crafting
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_campfires:campfire_lit",
 	recipe = {
 		{ "", "mcl_core:stick", "" },
@@ -35,7 +35,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_campfires:soul_campfire_lit",
 	recipe = {
 		{ "", "mcl_core:stick", "" },

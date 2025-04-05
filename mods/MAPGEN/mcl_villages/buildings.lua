@@ -1,8 +1,8 @@
-local min_jobs = tonumber(minetest.settings:get("mcl_villages_min_jobs")) or 1
-local max_jobs = tonumber(minetest.settings:get("mcl_villages_max_jobs")) or 12
-local placement_priority = minetest.settings:get("mcl_villages_placement_priority") or "jobs"
+local min_jobs = tonumber(core.settings:get("mcl_villages_min_jobs")) or 1
+local max_jobs = tonumber(core.settings:get("mcl_villages_max_jobs")) or 12
+local placement_priority = core.settings:get("mcl_villages_placement_priority") or "jobs"
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -------------------------------------------------------------------------------
 -- initialize settlement_info
@@ -31,14 +31,14 @@ end
 -------------------------------------------------------------------------------
 
 local function spawn_cats(pos)
-	local sp=minetest.find_nodes_in_area_under_air(vector.offset(pos,-20,-20,-20),vector.offset(pos,20,20,20),{"group:opaque"})
+	local sp=core.find_nodes_in_area_under_air(vector.offset(pos,-20,-20,-20),vector.offset(pos,20,20,20),{"group:opaque"})
 	for _ = 1, math.random(5) do
-		minetest.add_entity(vector.offset(sp[math.random(#sp)],0,1,0),"mobs_mc:cat")
+		core.add_entity(vector.offset(sp[math.random(#sp)],0,1,0),"mobs_mc:cat")
 	end
 end
 
 local function init_nodes(p1, p2, _, _, pr)
-	for _, n in pairs(minetest.find_nodes_in_area(p1, p2, { "group:wall" })) do
+	for _, n in pairs(core.find_nodes_in_area(p1, p2, { "group:wall" })) do
 		mcl_walls.update_wall(n)
 	end
 
@@ -52,7 +52,7 @@ local function init_nodes(p1, p2, _, _, pr)
 	})
 
 	-- Support mods with custom job sites
-	local job_sites = minetest.find_nodes_in_area(p1, p2, mobs_mc.jobsites)
+	local job_sites = core.find_nodes_in_area(p1, p2, mobs_mc.jobsites)
 	for _, v in pairs(job_sites) do
 		mcl_structures.init_node_construct(v)
 	end
@@ -157,7 +157,7 @@ local function layout_grid(_, input_settlement_info, settlement_info, _)
 
 	for i = 2, #input_settlement_info do
 		if i > #squares then
-			minetest.log("warning", "Too many buldings for grid layout, remaining buildings will be missing.")
+			core.log("warning", "Too many buldings for grid layout, remaining buildings will be missing.")
 			return settlement_info
 		end
 
@@ -228,7 +228,7 @@ local function layout_grid(_, input_settlement_info, settlement_info, _)
 			end
 
 			if not placed and iter >= 30 then
-				minetest.log("warning", "Could not place " .. cur_schem.name)
+				core.log("warning", "Could not place " .. cur_schem.name)
 				break
 			end
 		end
@@ -326,17 +326,17 @@ local function layout_town(minp, maxp, pr, input_settlement_info, grid)
 
 	-- build settlement around center
 	if not center_surface then
-		minetest.log(
+		core.log(
 			"info",
-			string.format("[mcl_villages] Cannot build village at %s", minetest.pos_to_string(center))
+			string.format("[mcl_villages] Cannot build village at %s", core.pos_to_string(center))
 		)
 		return false
 	else
-		minetest.log(
+		core.log(
 			"info",
 			string.format(
 				"[mcl_villages] Will build a village at position %s with surface material %s",
-				minetest.pos_to_string(center_surface),
+				core.pos_to_string(center_surface),
 				surface_material
 			)
 		)
@@ -463,9 +463,9 @@ function mcl_villages.create_site_plan_new(minp, maxp, pr)
 
 	local output_settlement_info, grid = layout_town(minp, maxp, pr, shuffled_settlement_info, grid), grid
 	if output_settlement_info and #output_settlement_info <= 2 and #output_settlement_info < #shuffled_settlement_info then
-		minetest.log("warning",
+		core.log("warning",
 			string.format("[mcl_villages] Cannot build village at %s - %s, only %d locations",
-			minetest.pos_to_string(minp), minetest.pos_to_string(maxp), #output_settlement_info))
+			core.pos_to_string(minp), core.pos_to_string(maxp), #output_settlement_info))
 		return nil, false
 	end
 	return output_settlement_info, grid
@@ -494,7 +494,7 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 
 		local size = schematic.size
 
-		minetest.place_schematic(
+		core.place_schematic(
 			placement_pos,
 			schematic,
 			"random",
@@ -502,7 +502,7 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 			true,
 			{ place_center_x = true, place_center_y = false, place_center_z = true }
 		)
-		-- TODO: use minetest.after(1) to check for dropped flowers/plants in y=0?
+		-- TODO: use core.after(1) to check for dropped flowers/plants in y=0?
 
 		local x_adj = math.ceil(size.x / 2)
 		local z_adj = math.ceil(size.z / 2)
@@ -519,22 +519,22 @@ function mcl_villages.place_schematics_new(settlement_info, pr, blockseed)
 
 		if  is_belltower then
 			bell_center_pos = pos
-			local center_node = minetest.get_node(pos)
+			local center_node = core.get_node(pos)
 			bell_center_node_type = center_node.name
 		end
 	end
 
-	local biome_data = minetest.get_biome_data(bell_pos)
-	local biome_name = minetest.get_biome_name(biome_data.biome)
+	local biome_data = core.get_biome_data(bell_pos)
+	local biome_name = core.get_biome_name(biome_data.biome)
 
 	mcl_villages.paths_new(blockseed, biome_name)
 
-	minetest.swap_node(bell_center_pos, { name = "mcl_villages:village_block" })
-	local meta = minetest.get_meta(bell_center_pos)
+	core.swap_node(bell_center_pos, { name = "mcl_villages:village_block" })
+	local meta = core.get_meta(bell_center_pos)
 	meta:set_string("blockseed", blockseed)
 	meta:set_string("node_type", bell_center_node_type)
 	meta:set_string("infotext", S("The timer for this @1 has not run yet!", bell_center_node_type))
-	local timer = minetest.get_node_timer(bell_center_pos)
+	local timer = core.get_node_timer(bell_center_pos)
 	timer:start(1.0)
 end
 
@@ -543,7 +543,7 @@ end
 function mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has_jobs, is_belltower, bell_pos)
 
 	if (not bell_pos) or bell_pos == "" then
-		minetest.log(
+		core.log(
 			"info",
 			string.format(
 				"No bell position for village building. blockseed: %s, has_bends: %s, has_jobs: %s, is_belltower: %s",
@@ -559,32 +559,32 @@ function mcl_villages.post_process_building(minp, maxp, blockseed, has_beds, has
 	local bell = vector.offset(bell_pos, 0, 2, 0)
 
 	if is_belltower then
-		local biome_data = minetest.get_biome_data(bell_pos)
-		local biome_name = minetest.get_biome_name(biome_data.biome)
+		local biome_data = core.get_biome_data(bell_pos)
+		local biome_name = core.get_biome_name(biome_data.biome)
 
 		mcl_villages.paths_new(blockseed, biome_name)
 
-		local l = minetest.add_entity(bell, "mobs_mc:iron_golem"):get_luaentity()
+		local l = core.add_entity(bell, "mobs_mc:iron_golem"):get_luaentity()
 		if l then
 			l._home = bell
 		else
-			minetest.log("info", "Could not create a golem!")
+			core.log("info", "Could not create a golem!")
 		end
 
 		spawn_cats(bell)
 	end
 
 	if has_beds then
-		local beds = minetest.find_nodes_in_area(minp, maxp, { "group:bed" })
+		local beds = core.find_nodes_in_area(minp, maxp, { "group:bed" })
 
 		for _, bed in pairs(beds) do
-			local bed_node = minetest.get_node(bed)
-			local bed_group = minetest.get_item_group(bed_node.name, "bed")
+			local bed_node = core.get_node(bed)
+			local bed_group = core.get_item_group(bed_node.name, "bed")
 
 			-- We only spawn at bed bottoms
 			-- 1 is bottom, 2 is top
 			if bed_group == 1 then
-				local v = minetest.add_entity(vector.offset(bed, 0, 0.06, 0), "mobs_mc:villager")
+				local v = core.add_entity(vector.offset(bed, 0, 0.06, 0), "mobs_mc:villager")
 				if v then
 					local l = v:get_luaentity()
 					l:claim_home (bed)
@@ -611,11 +611,11 @@ function mcl_villages.post_process_village(blockseed)
 	local bell_pos = vector.copy(settlement_info[1]["pos"])
 	local bell = vector.offset(bell_pos, 0, 2, 0)
 
-	local l = minetest.add_entity(bell, "mobs_mc:iron_golem"):get_luaentity()
+	local l = core.add_entity(bell, "mobs_mc:iron_golem"):get_luaentity()
 	if l then
 		l._home = bell
 	else
-		minetest.log("info", "Could not create a golem!")
+		core.log("info", "Could not create a golem!")
 	end
 
 	spawn_cats(bell)
@@ -627,7 +627,7 @@ function mcl_villages.post_process_village(blockseed)
 		local minp, maxp = building["minp"], building["maxp"]
 
 		if has_jobs then
-			local jobsites = minetest.find_nodes_in_area(minp, maxp, mobs_mc.jobsites)
+			local jobsites = core.find_nodes_in_area(minp, maxp, mobs_mc.jobsites)
 
 			for _, job_pos in pairs(jobsites) do
 				table.insert(jobs, job_pos)
@@ -635,11 +635,11 @@ function mcl_villages.post_process_village(blockseed)
 		end
 
 		if has_beds then
-			local bld_beds = minetest.find_nodes_in_area(minp, maxp, { "group:bed" })
+			local bld_beds = core.find_nodes_in_area(minp, maxp, { "group:bed" })
 
 			for _, bed_pos in pairs(bld_beds) do
-				local bed_node = minetest.get_node(bed_pos)
-				local bed_group = minetest.get_item_group(bed_node.name, "bed")
+				local bed_node = core.get_node(bed_pos)
+				local bed_group = core.get_item_group(bed_node.name, "bed")
 
 				-- We only spawn at bed bottoms
 				-- 1 is bottom, 2 is top
@@ -652,11 +652,11 @@ function mcl_villages.post_process_village(blockseed)
 
 	if beds then
 		for _, bed_pos in pairs(beds) do
-			local res = minetest.forceload_block(bed_pos, true)
+			local res = core.forceload_block(bed_pos, true)
 			if res then
-				mcl_villages.forced_blocks[minetest.pos_to_string(bed_pos)] = minetest.get_us_time()
+				mcl_villages.forced_blocks[core.pos_to_string(bed_pos)] = core.get_us_time()
 			end
-			local v = minetest.add_entity(vector.offset(bed_pos, 0, 0.06, 0), "mobs_mc:villager")
+			local v = core.add_entity(vector.offset(bed_pos, 0, 0.06, 0), "mobs_mc:villager")
 			if v then
 				local l = v:get_luaentity()
 				l:claim_home (bed_pos)
@@ -671,7 +671,7 @@ function mcl_villages.post_process_village(blockseed)
 					callback(v, blockseed)
 				end
 			else
-				minetest.log("info", "Could not create a villager!")
+				core.log("info", "Could not create a villager!")
 			end
 		end
 	end

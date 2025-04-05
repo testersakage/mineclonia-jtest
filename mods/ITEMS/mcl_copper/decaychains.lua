@@ -80,7 +80,7 @@ function mcl_copper.get_undecayed(nodename, amount)
 end
 
 function mcl_copper.spawn_particles(pos, texture)
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 8,
 		time = 1,
 		minpos = vector.subtract(pos, 1),
@@ -101,19 +101,19 @@ function mcl_copper.spawn_particles(pos, texture)
 end
 
 local function unpreserve(itemstack, _, pointed_thing)
-	local node = minetest.get_node(pointed_thing.under)
+	local node = core.get_node(pointed_thing.under)
 	local unpreserved = node.name:gsub("_preserved","")
-	if minetest.registered_nodes[unpreserved] then
+	if core.registered_nodes[unpreserved] then
 		node.name = unpreserved
-		minetest.swap_node(pointed_thing.under,node)
+		core.swap_node(pointed_thing.under,node)
 	end
 	return itemstack
 end
 
 local function undecay(itemstack, _, pointed_thing)
-	local node = minetest.get_node(pointed_thing.under)
+	local node = core.get_node(pointed_thing.under)
 	node.name = mcl_copper.get_undecayed(node.name)
-	minetest.swap_node(pointed_thing.under,node)
+	core.swap_node(pointed_thing.under,node)
 	mcl_copper.spawn_particles(pointed_thing.under)
 	return itemstack
 end
@@ -152,19 +152,19 @@ local function register_unpreserve(nodename,od,def)
 		nd.drop = nd.drop and (nd.drop.."_preserved")
 		nd._mcl_copper_bulb_switch_to = od._mcl_copper_bulb_switch_to.."_preserved"
 	end
-	if minetest.get_item_group(nodename, "double_slab") > 0 then
+	if core.get_item_group(nodename, "double_slab") > 0 then
 		nd.drop = mcl_stairs.get_base_itemstring(nodename).."_preserved 2"
-	elseif minetest.get_item_group(nodename, "slab_top") > 0 then
+	elseif core.get_item_group(nodename, "slab_top") > 0 then
 		nd.drop = mcl_stairs.get_base_itemstring(nodename).."_preserved"
-	elseif minetest.get_item_group(nodename, "slab") > 0 then
+	elseif core.get_item_group(nodename, "slab") > 0 then
 		nd._mcl_stairs_double_slab = nodename.."_double_preserved"
 	end
-	minetest.register_node(":"..nodename.."_preserved",nd)
+	core.register_node(":"..nodename.."_preserved",nd)
 end
 
 local function register_undecay(nodename,def)
-	local old_os = minetest.registered_items[nodename][def.undecay_callback]
-	minetest.override_item(nodename,{
+	local old_os = core.registered_items[nodename][def.undecay_callback]
+	core.override_item(nodename,{
 		[def.undecay_callback] = function(itemstack, clicker, pointed_thing)
 			if old_os  then itemstack = old_os(itemstack, clicker, pointed_thing) end
 			if pointed_thing then
@@ -177,17 +177,17 @@ end
 
 local function register_preserve(nodename,def,chaindef)
 	local old_op = def.on_place
-	minetest.override_item(nodename,{
+	core.override_item(nodename,{
 		on_place =  function(itemstack, placer, pointed_thing)
-			local node = minetest.get_node(pointed_thing.under)
+			local node = core.get_node(pointed_thing.under)
 			if table.indexof(chaindef.nodes,node.name) == -1 then
 				if old_op then return old_op(itemstack, placer, pointed_thing) end
 			elseif table.indexof(chaindef.nodes,node.name) <= #chaindef.nodes then
 				node.name = node.name.."_preserved"
-				if minetest.registered_nodes[node.name] then
-					minetest.swap_node(pointed_thing.under,node)
+				if core.registered_nodes[node.name] then
+					core.swap_node(pointed_thing.under,node)
 					mcl_copper.spawn_particles(pointed_thing.under, "mcl_copper_anti_oxidation_particle.png^[colorize:#d1d553:125")
-					if not minetest.is_creative_enabled(placer and placer:get_player_name() or "") then
+					if not core.is_creative_enabled(placer and placer:get_player_name() or "") then
 						itemstack:take_item()
 					end
 				end
@@ -221,7 +221,7 @@ function mcl_copper.register_decaychain(name,def)
 	mcl_copper.registered_decaychains[name] = def
 	assert(type(def.nodes) == "table","[mcl_copper] Failed to register decaychain "..tostring(name)..": field nodes is not a table.")
 	for k,v in ipairs(def.nodes) do
-		local od = minetest.registered_nodes[v]
+		local od = core.registered_nodes[v]
 		assert(od,"[mcl_copper] Error registereing decaychain: The node '"..tostring(v).." in the decaychain "..tostring(name).." does not exist.")
 
 		nodename_chains[v] = name
@@ -237,8 +237,8 @@ function mcl_copper.register_decaychain(name,def)
 	end
 end
 
-minetest.register_on_mods_loaded(function()
-	minetest.register_abm({
+core.register_on_mods_loaded(function()
+	core.register_abm({
 		label = "Node Decay",
 		nodenames = decay_nodes,
 		interval = 500,
@@ -246,13 +246,13 @@ minetest.register_on_mods_loaded(function()
 		action = function(pos, node)
 			local dc = mcl_copper.get_decayed(node.name)
 			if not dc then return end
-			minetest.swap_node(pos, {name = dc, param2 = node.param2})
+			core.swap_node(pos, {name = dc, param2 = node.param2})
 		end,
 	})
 	for _,v in pairs(mcl_copper.registered_decaychains) do
 		if v.preserve_group then
-			for it,def in pairs(minetest.registered_items) do
-				if minetest.get_item_group(it,v.preserve_group) > 0 then
+			for it,def in pairs(core.registered_items) do
+				if core.get_item_group(it,v.preserve_group) > 0 then
 					register_preserve(it,def,v)
 				end
 			end

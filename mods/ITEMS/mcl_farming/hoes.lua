@@ -1,12 +1,12 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 function mcl_farming.cultivate_soil(itemstack, placer, pointed_thing)
 	local pos = pointed_thing.under
-	if minetest.get_node(vector.offset(pos, 0, 1, 0)).name == "air" then
-		local node = minetest.get_node(pos)
+	if core.get_node(vector.offset(pos, 0, 1, 0)).name == "air" then
+		local node = core.get_node(pos)
 		node.name = "mcl_farming:soil"
-		minetest.set_node(pos, node)
-		minetest.sound_play("default_dig_crumbly", { pos = pos, gain = 0.5 }, true)
+		core.set_node(pos, node)
+		core.sound_play("default_dig_crumbly", { pos = pos, gain = 0.5 }, true)
 		return itemstack, false
 	end
 
@@ -15,11 +15,11 @@ end
 
 function mcl_farming.cultivate_dirt(itemstack, placer, pointed_thing)
 	local pos = pointed_thing.under
-	if minetest.get_node(vector.offset(pos, 0, 1, 0)).name == "air" then
-		local node = minetest.get_node(pos)
+	if core.get_node(vector.offset(pos, 0, 1, 0)).name == "air" then
+		local node = core.get_node(pos)
 		node.name = "mcl_core:dirt"
-		minetest.set_node(pos, node)
-		minetest.sound_play("default_dig_crumbly", { pos = pos, gain = 0.5 }, true)
+		core.set_node(pos, node)
+		core.sound_play("default_dig_crumbly", { pos = pos, gain = 0.5 }, true)
 		return itemstack, false
 	end
 
@@ -119,14 +119,14 @@ mcl_tools.add_to_sets("hoe", hoe_common_defs, {
 	tool_capabilities = { max_drop_level = 0 },
 })
 
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
 	local place_fun = {mcl_farming.cultivate_dirt, mcl_farming.cultivate_soil}
-	for name, def in pairs(minetest.registered_nodes) do
-		local cultivatable = minetest.get_item_group(name, "cultivatable")
+	for name, def in pairs(core.registered_nodes) do
+		local cultivatable = core.get_item_group(name, "cultivatable")
 		local hoe_place = place_fun[cultivatable]
 		if hoe_place and not def._on_hoe_place then
 			-- no _on_hoe_place on cultivatable block -> set default
-			minetest.override_item(name, { _on_hoe_place = hoe_place })
+			core.override_item(name, { _on_hoe_place = hoe_place })
 		end
 	end
 end)

@@ -1,5 +1,5 @@
-local S = minetest.get_translator("mcl_lanterns")
-local modpath = minetest.get_modpath("mcl_lanterns")
+local S = core.get_translator("mcl_lanterns")
+local modpath = core.get_modpath("mcl_lanterns")
 
 mcl_lanterns = {}
 
@@ -40,7 +40,7 @@ local allowed_non_solid_groups_ceiling = {"anvil", "wall", "glass", "fence", "fe
 
 local function check_placement(node, wdir)
 	local nn = node.name
-	local def = minetest.registered_nodes[nn]
+	local def = core.registered_nodes[nn]
 
 	if not def then
 		return false
@@ -102,7 +102,7 @@ function mcl_lanterns.register_lantern(name, def)
 	groups.attaches_to_top = 1
 	groups.attaches_to_base = 1
 
-	minetest.register_node(itemstring_floor, {
+	core.register_node(itemstring_floor, {
 		description = def.description,
 		_doc_items_longdesc = def.longdesc,
 		drawtype = "mesh",
@@ -148,10 +148,10 @@ function mcl_lanterns.register_lantern(name, def)
 
 			local under = pointed_thing.under
 			local above = pointed_thing.above
-			local node = minetest.get_node(under)
-			local def = minetest.registered_nodes[node.name]
+			local node = core.get_node(under)
+			local def = core.registered_nodes[node.name]
 
-			local wdir = minetest.dir_to_wallmounted(vector.subtract(under, above))
+			local wdir = core.dir_to_wallmounted(vector.subtract(under, above))
 			local fakestack = itemstack
 
 			if type(def.placement_prevented) == "function" then
@@ -175,11 +175,11 @@ function mcl_lanterns.register_lantern(name, def)
 			end
 
 			local success
-			itemstack, success = minetest.item_place_node(fakestack, placer, pointed_thing, wdir)
+			itemstack, success = core.item_place_node(fakestack, placer, pointed_thing, wdir)
 			itemstack:set_name(itemstring_floor)
 
 			if success then
-				minetest.sound_play(sounds.place, {pos = under, gain = 1}, true)
+				core.sound_play(sounds.place, {pos = under, gain = 1}, true)
 			end
 
 			return itemstack
@@ -189,7 +189,7 @@ function mcl_lanterns.register_lantern(name, def)
 		_mcl_blast_resistance = 3.5,
 	})
 
-	minetest.register_node(itemstring_ceiling, {
+	core.register_node(itemstring_ceiling, {
 		description = def.description,
 		_doc_items_create_entry = false,
 		drawtype = "mesh",
@@ -232,7 +232,7 @@ function mcl_lanterns.register_lantern(name, def)
 	})
 end
 
-minetest.register_node("mcl_lanterns:chain", {
+core.register_node("mcl_lanterns:chain", {
 	description = S("Chain"),
 	_doc_items_longdesc = S("Chains are metallic decoration blocks."),
 	inventory_image = "mcl_lanterns_chain_inv.png",
@@ -274,7 +274,7 @@ minetest.register_node("mcl_lanterns:chain", {
 				y = p1.y - placer_pos.y,
 				z = p1.z - placer_pos.z
 			}
-			param2 = minetest.dir_to_facedir(dir)
+			param2 = core.dir_to_facedir(dir)
 		end
 
 		if p0.y - 1 == p1.y then
@@ -289,13 +289,13 @@ minetest.register_node("mcl_lanterns:chain", {
 			param2 = 4
 		end
 
-		return minetest.item_place_node(itemstack, placer, pointed_thing, param2)
+		return core.item_place_node(itemstack, placer, pointed_thing, param2)
 	end,
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_lanterns:chain",
 	recipe = {
 		{"mcl_core:iron_nugget"},

@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_tool("mcl_spyglass:spyglass",{
+core.register_tool("mcl_spyglass:spyglass",{
 	description = S("Spyglass"),
 	_doc_items_longdesc = S("A spyglass is an item that can be used for zooming in on specific locations."),
 	inventory_image = "mcl_spyglass.png",
@@ -10,7 +10,7 @@ minetest.register_tool("mcl_spyglass:spyglass",{
 	touch_interaction = "short_dig_long_place",
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_spyglass:spyglass",
 	recipe = {
 		{"mcl_amethyst:amethyst_shard"},
@@ -79,10 +79,10 @@ controls.register_on_hold(function(player, key)
 	end
 end)
 
-minetest.register_on_dieplayer(function(player)
+core.register_on_dieplayer(function(player)
 	remove_scope(player)
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	spyglass_scope[player] = nil
 end)

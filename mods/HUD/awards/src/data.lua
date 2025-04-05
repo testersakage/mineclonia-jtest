@@ -1,14 +1,14 @@
 
-local storage = minetest.get_mod_storage()
+local storage = core.get_mod_storage()
 local __player_data
 
 -- Table Save Load Functions
 function awards.save()
-	storage:set_string("player_data", minetest.write_json(__player_data))
+	storage:set_string("player_data", core.write_json(__player_data))
 end
 
 local function convert_data()
-	minetest.log("warning", "Importing awards data from previous version")
+	core.log("warning", "Importing awards data from previous version")
 
 	local old_players = __player_data
 	__player_data = {}
@@ -50,7 +50,7 @@ local function convert_data()
 					for modname, items in pairs(data[from]) do
 						for itemname, value in pairs(items) do
 							itemname = modname .. ":" .. itemname
-							local key = minetest.registered_aliases[itemname] or itemname
+							local key = core.registered_aliases[itemname] or itemname
 							ret[key] = value
 							count = count + value
 						end
@@ -68,10 +68,10 @@ local function convert_data()
 end
 
 function awards.load()
-	local old_save_path = minetest.get_worldpath().."/awards.txt"
+	local old_save_path = core.get_worldpath().."/awards.txt"
 	local file = io.open(old_save_path, "r")
 	if file then
-		local table = minetest.deserialize(file:read("*all"))
+		local table = core.deserialize(file:read("*all"))
 		if type(table) == "table" then
 			__player_data = table
 			convert_data()
@@ -79,11 +79,11 @@ function awards.load()
 			__player_data = {}
 		end
 		file:close()
-		os.rename(old_save_path, minetest.get_worldpath().."/awards.bk.txt")
+		os.rename(old_save_path, core.get_worldpath().."/awards.bk.txt")
 		awards.save()
 	else
 		local json = storage:get("player_data")
-		__player_data = json and minetest.parse_json(json) or {}
+		__player_data = json and core.parse_json(json) or {}
 	end
 end
 

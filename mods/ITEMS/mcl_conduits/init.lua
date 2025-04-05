@@ -1,6 +1,6 @@
 mcl_conduits = {}
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 
 local check_interval = 5
 local conduit_nodes = { "mcl_ocean:prismarine",  "mcl_ocean:prismarine_brick", "mcl_ocean:prismarine_dark", "mcl_ocean:sea_lantern" }
@@ -62,12 +62,12 @@ local frame_offsets = {
 local entity_pos_offset = vector.new(0, -1.25, 0)
 
 local function check_conduit(pos)
-	local water = minetest.find_nodes_in_area(vector.offset(pos, -1,-1,-1), vector.offset(pos, 1, 1, 1), {"group:water"})
-	local cname = minetest.get_node(pos).name
+	local water = core.find_nodes_in_area(vector.offset(pos, -1,-1,-1), vector.offset(pos, 1, 1, 1), {"group:water"})
+	local cname = core.get_node(pos).name
 	if #water < 26 or ( cname ~= "mcl_conduits:conduit" and #water < 27 ) then return false end
 	local pn = 0
 	for _, v in pairs(frame_offsets) do
-		if table.indexof(conduit_nodes, minetest.get_node(vector.add(pos, v)).name) ~= -1 then
+		if table.indexof(conduit_nodes, core.get_node(vector.add(pos, v)).name) ~= -1 then
 			pn = pn + 1
 		end
 	end
@@ -76,16 +76,16 @@ local function check_conduit(pos)
 end
 
 function mcl_conduits.player_effect(player)
-    if minetest.get_item_group(mcl_player.players[player].nodes.feet, "water") == 0 then return end
+    if core.get_item_group(mcl_player.players[player].nodes.feet, "water") == 0 then return end
     mcl_potions.give_effect_by_level ("conduit_power", player, 1, 17)
 end
 
 function mcl_conduits.conduit_damage(ent)
-	if minetest.get_item_group(minetest.get_node(ent.object:get_pos()).name, "water") == 0 then return end
+	if core.get_item_group(core.get_node(ent.object:get_pos()).name, "water") == 0 then return end
 	mcl_util.deal_damage(ent.object, 4, {type = "magic"})
 end
 
-minetest.register_entity("mcl_conduits:conduit", {
+core.register_entity("mcl_conduits:conduit", {
 	initial_properties = {
 		physical = true,
 		visual = "mesh",
@@ -96,7 +96,7 @@ minetest.register_entity("mcl_conduits:conduit", {
 		collide_with_objects = false,
 	},
 	on_activate = function(self, staticdata)
-		local d = minetest.deserialize(staticdata)
+		local d = core.deserialize(staticdata)
 		if d then
 			self._pos = d._pos
 		end
@@ -104,7 +104,7 @@ minetest.register_entity("mcl_conduits:conduit", {
 		self.object:set_animation({x = 0, y = 120}, 3)
 	end,
 	get_staticdata = function(self)
-		return minetest.serialize({ _pos = self._pos })
+		return core.serialize({ _pos = self._pos })
 	end,
 	on_step = function(self, dtime)
 		self._timer = (self._timer or check_interval) - dtime
@@ -116,7 +116,7 @@ minetest.register_entity("mcl_conduits:conduit", {
 		end
 		local lvl = check_conduit(self._pos)
 		if not lvl then
-			minetest.set_node(self._pos, {name = "mcl_conduits:conduit"})
+			core.set_node(self._pos, {name = "mcl_conduits:conduit"})
 			self.object:remove()
 			return
 		end
@@ -125,7 +125,7 @@ minetest.register_entity("mcl_conduits:conduit", {
 			mcl_conduits.player_effect(pl)
 		end
 
-		for _, ent in pairs(minetest.luaentities) do
+		for _, ent in pairs(core.luaentities) do
 			if ent.is_mob and ent.type == "monster" and ent.object and ent.object:get_pos() and vector.distance(self._pos, ent.object:get_pos()) < 9 then
 				mcl_conduits.conduit_damage(ent)
 			end
@@ -133,7 +133,7 @@ minetest.register_entity("mcl_conduits:conduit", {
 	end
 })
 local conduit_box = { -0.25, -0.25, -0.25, 0.25, 0.25, 0.25, }
-minetest.register_node("mcl_conduits:conduit", {
+core.register_node("mcl_conduits:conduit", {
 	description = S("Conduit"),
 	_doc_longdesc = S("A conduit provides certain status effects to nearby players much like a beacon but under water"),
 	drawtype = "nodebox",
@@ -144,24 +144,24 @@ minetest.register_node("mcl_conduits:conduit", {
 	collisionbox = conduit_box,
 	selectionbox = conduit_box,
 	groups = { pickaxey = 1, deco_block = 1, rarity = 1 },
-	light_source = minetest.LIGHT_MAX,
+	light_source = core.LIGHT_MAX,
 	tiles = { "mcl_conduit_conduit_node.png", },
 	_mcl_hardness = 3,
 	_mcl_blast_resistance = 3,
 })
 
-minetest.register_abm({
+core.register_abm({
 	label = "Conduit Activation",
 	nodenames = { "mcl_conduits:conduit" },
 	interval = check_interval,
 	chance = 1,
 	action = function(pos, _)
-		for v in minetest.objects_inside_radius(vector.subtract(pos, entity_pos_offset), 0.5) do
+		for v in core.objects_inside_radius(vector.subtract(pos, entity_pos_offset), 0.5) do
 			if v.name == "mcl_conduits:conduit" then return end
 		end
 		if check_conduit(pos) then
-			minetest.remove_node(pos)
-			local o = minetest.add_entity(vector.add(pos, entity_pos_offset) , "mcl_conduits:conduit")
+			core.remove_node(pos)
+			local o = core.add_entity(vector.add(pos, entity_pos_offset) , "mcl_conduits:conduit")
 			if o then
 				local l = o:get_luaentity()
 				l._pos = pos
@@ -170,7 +170,7 @@ minetest.register_abm({
 	end
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_conduits:conduit",
 	recipe = {
 		{"mcl_mobitems:nautilus_shell", "mcl_mobitems:nautilus_shell", "mcl_mobitems:nautilus_shell"},

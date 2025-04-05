@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local boxes = {
 	{
@@ -24,16 +24,16 @@ local boxes = {
 }
 
 local function is_repeater_or_comparator(node)
-	return minetest.get_item_group(node.name, "redstone_repeater") > 0 or
-	       minetest.get_item_group(node.name, "redstone_comparator") > 0
+	return core.get_item_group(node.name, "redstone_repeater") > 0 or
+	       core.get_item_group(node.name, "redstone_comparator") > 0
 end
 
 local function check_locked(pos, node)
-	local front = minetest.fourdir_to_dir(node.param2)
+	local front = core.fourdir_to_dir(node.param2)
 	local right = front:cross(vector.new(0, 1, 0))
 	local left = front:cross(vector.new(0, -1, 0))
-	local right_node = minetest.get_node(pos:add(right))
-	local left_node = minetest.get_node(pos:add(left))
+	local right_node = core.get_node(pos:add(right))
+	local left_node = core.get_node(pos:add(left))
 
 	if is_repeater_or_comparator(right_node) and mcl_redstone.get_power(pos, right) > 0 then
 		return true
@@ -65,16 +65,16 @@ local commdef = {
 	on_rotate = screwdriver.disallow,
 	_mcl_redstone = {
 		connects_to = function(node, dir)
-			local fourdir = minetest.dir_to_fourdir(dir)
+			local fourdir = core.dir_to_fourdir(dir)
 			return node.param2 % 4 == fourdir or (node.param2 + 2) % 4 == fourdir
 		end,
 		update = function(pos, node)
-			local was_locked = minetest.get_item_group(node.name, "redstone_repeater") == 5
-			local on = mcl_redstone.get_power(pos, -minetest.fourdir_to_dir(node.param2)) ~= 0
+			local was_locked = core.get_item_group(node.name, "redstone_repeater") == 5
+			local on = mcl_redstone.get_power(pos, -core.fourdir_to_dir(node.param2)) ~= 0
 			local locked = check_locked(pos, node)
 			local delay = was_locked and
 				math.min(4, math.max(1, math.floor(node.param2 / 4))) or
-				minetest.get_item_group(node.name, "redstone_repeater")
+				core.get_item_group(node.name, "redstone_repeater")
 
 			if delay == 0 then
 				error(node.name)
@@ -124,22 +124,22 @@ for delay = 1, 4 do
 		groups = table.merge(commdef.groups, {redstone_repeater = delay}),
 		on_rightclick = function(pos, node, clicker)
 			local protname = clicker:get_player_name()
-			if minetest.is_protected(pos, protname) then
-				minetest.record_protection_violation(pos, protname)
+			if core.is_protected(pos, protname) then
+				core.record_protection_violation(pos, protname)
 				return
 			end
-			local ndef = minetest.registered_nodes[node.name]
+			local ndef = core.registered_nodes[node.name]
 			local next_setting = delay % 4 + 1
 			local powered = ndef._mcl_redstone and ndef._mcl_redstone.get_power and "on" or "off"
 
-			minetest.set_node(pos, {
+			core.set_node(pos, {
 				name = "mcl_repeaters:repeater_"..powered.."_"..tostring(next_setting),
 				param2 = node.param2
 			})
 		end,
 	})
 
-	minetest.register_node("mcl_repeaters:repeater_off_"..delay, table.merge(normaldef, {
+	core.register_node("mcl_repeaters:repeater_off_"..delay, table.merge(normaldef, {
 		description = delay == 1 and S("Redstone Repeater") or S("Redstone Repeater (Delay @1)", delay),
 		inventory_image = delay == 1 and "mesecons_delayer_item.png" or nil,
 		wield_image = delay == 1 and "mesecons_delayer_item.png" or nil,
@@ -165,7 +165,7 @@ for delay = 1, 4 do
 		groups = table.merge(normaldef.groups, {not_in_creative_inventory = delay ~= 1 and 1 or 0}),
 	}))
 
-	minetest.register_node("mcl_repeaters:repeater_on_"..delay, table.merge(normaldef, {
+	core.register_node("mcl_repeaters:repeater_on_"..delay, table.merge(normaldef, {
 		description = S("Redstone Repeater (Delay @1, Powered)", delay),
 		_doc_items_create_entry = false,
 		tiles = {
@@ -179,7 +179,7 @@ for delay = 1, 4 do
 		groups = table.merge(normaldef.groups, {redstone_repeater_on = 1, not_in_creative_inventory = 1}),
 		_mcl_redstone = table.merge(normaldef._mcl_redstone, {
 			get_power = function(node, dir)
-				local fourdir = minetest.dir_to_fourdir(dir)
+				local fourdir = core.dir_to_fourdir(dir)
 				if not fourdir or dir.y ~= 0 then
 					return 0
 				end
@@ -207,7 +207,7 @@ local lockeddef = table.merge(commdef, {
 	groups = table.merge(commdef.groups, {redstone_repeater = 5, not_in_creative_inventory = 1}),
 })
 
-minetest.register_node("mcl_repeaters:repeater_off_locked", table.merge(lockeddef, {
+core.register_node("mcl_repeaters:repeater_off_locked", table.merge(lockeddef, {
 	description = S("Redstone Repeater (Locked)"),
 	tiles = {
 		"mesecons_delayer_locked_off.png",
@@ -219,7 +219,7 @@ minetest.register_node("mcl_repeaters:repeater_off_locked", table.merge(lockedde
 	},
 }))
 
-minetest.register_node("mcl_repeaters:repeater_on_locked", table.merge(lockeddef, {
+core.register_node("mcl_repeaters:repeater_on_locked", table.merge(lockeddef, {
 	description = S("Redstone Repeater (Locked, Powered)"),
 	tiles = {
 		"mesecons_delayer_locked_on.png",
@@ -232,7 +232,7 @@ minetest.register_node("mcl_repeaters:repeater_on_locked", table.merge(lockeddef
 	groups = table.merge(lockeddef.groups, {redstone_repeater_on = 1}),
 	_mcl_redstone = table.merge(lockeddef._mcl_redstone, {
 		get_power = function(node, dir)
-			local fourdir = minetest.dir_to_fourdir(dir)
+			local fourdir = core.dir_to_fourdir(dir)
 			if not fourdir or dir.y ~= 0 then
 				return 0
 			end
@@ -241,7 +241,7 @@ minetest.register_node("mcl_repeaters:repeater_on_locked", table.merge(lockeddef
 	})
 }))
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_repeaters:repeater_off_1",
 	recipe = {
 		{ "",      "", ""      },

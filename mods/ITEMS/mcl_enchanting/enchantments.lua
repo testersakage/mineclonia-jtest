@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- Taken from https://minecraft.gamepedia.com/Enchanting
 
@@ -95,7 +95,7 @@ mcl_enchanting.enchantments.depth_strider = {
 }
 
 mcl_player.register_globalstep_slow(function(player)
-	if minetest.get_item_group(mcl_player.players[player].nodes.feet, "liquid") ~= 0 and mcl_enchanting.get_enchantment(player:get_inventory():get_stack("armor", 5), "depth_strider") then
+	if core.get_item_group(mcl_player.players[player].nodes.feet, "liquid") ~= 0 and mcl_enchanting.get_enchantment(player:get_inventory():get_stack("armor", 5), "depth_strider") then
 		local boots = player:get_inventory():get_stack("armor", 5)
 		local depth_strider = mcl_enchanting.get_enchantment(boots, "depth_strider")
 
@@ -162,7 +162,7 @@ mcl_enchanting.enchantments.fire_aspect = {
 	anvil_book_factor = 2,
 }
 
-minetest.register_on_punchplayer(function(player, hitter)
+core.register_on_punchplayer(function(player, hitter)
 	local wielditem = hitter and mcl_util.get_wielditem (hitter)
 	if wielditem then
 		local fire_aspect_level = mcl_enchanting.get_enchantment(wielditem, "fire_aspect")
@@ -243,10 +243,10 @@ walkover.register_global(function(pos, _, player)
 	local radius = frost_walker + 2
 	local minp = {x = pos.x - radius, y = pos.y, z = pos.z - radius}
 	local maxp = {x = pos.x + radius, y = pos.y, z = pos.z + radius}
-	local positions = minetest.find_nodes_in_area_under_air(minp, maxp, "mcl_core:water_source")
+	local positions = core.find_nodes_in_area_under_air(minp, maxp, "mcl_core:water_source")
 	for _, p in ipairs(positions) do
 		if vector.distance(pos, p) <= radius then
-			minetest.set_node(p, {name = "mcl_core:frosted_ice_0"})
+			core.set_node(p, {name = "mcl_core:frosted_ice_0"})
 		end
 	end
 end)
@@ -293,7 +293,7 @@ mcl_enchanting.enchantments.infinity = {
 	anvil_book_factor = 4,
 }
 
--- implemented via minetest.calculate_knockback
+-- implemented via core.calculate_knockback
 mcl_enchanting.enchantments.knockback = {
 	name = S("Knockback"),
 	max_level = 2,
@@ -314,7 +314,7 @@ mcl_enchanting.enchantments.knockback = {
 	anvil_book_factor = 1,
 }
 
-function minetest.calculate_knockback(player, hitter, time_from_last_punch, tool_capabilities, dir, distance, damage)
+function core.calculate_knockback(player, hitter, time_from_last_punch, tool_capabilities, dir, distance, damage)
 	-- Core knockback computation is overridden by mcl_player.
 	return 0
 end
@@ -537,7 +537,7 @@ mcl_enchanting.enchantments.power = {
 	anvil_book_factor = 1,
 }
 
--- implemented via minetest.calculate_knockback (together with the Knockback enchantment) and mcl_bows
+-- implemented via core.calculate_knockback (together with the Knockback enchantment) and mcl_bows
 mcl_enchanting.enchantments.punch = {
 	name = S("Punch"),
 	max_level = 2,
@@ -739,7 +739,7 @@ mcl_enchanting.enchantments.unbreaking = {
 	curse = false,
 	on_enchant = function(itemstack, level)
 		local name = itemstack:get_name()
-		if not minetest.registered_tools[name].tool_capabilities then
+		if not core.registered_tools[name].tool_capabilities then
 			return
 		end
 

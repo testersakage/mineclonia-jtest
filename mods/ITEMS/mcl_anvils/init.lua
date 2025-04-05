@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
-local C = minetest.colorize
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
+local C = core.colorize
 
 local MAX_NAME_LENGTH = 35
 local MAX_WEAR = 65535
@@ -17,7 +17,7 @@ local function get_anvil_formspec(set_name, player, cost)
 		set_name = ""
 	end
 	local cost_label = ""
-	if player and not minetest.is_creative_enabled(player:get_player_name()) and cost and cost > 0 then
+	if player and not core.is_creative_enabled(player:get_player_name()) and cost and cost > 0 then
 		local st = S("Enchantment Cost: ").." "..tostring(cost)
 		local c = "label[5.375,4.225;"
 		cost_label = c..F(C(mcl_formspec.label_color, st)).."]"
@@ -192,7 +192,7 @@ local function update_anvil_slots(meta, player)
 				local material_name = material:get_name()
 				if type(repair) == "string" then
 					if string.sub(repair, 1, 6) == "group:" then
-						has_correct_material = minetest.get_item_group(material_name, string.sub(repair, 7)) ~= 0
+						has_correct_material = core.get_item_group(material_name, string.sub(repair, 7)) ~= 0
 					elseif material_name == repair then
 						has_correct_material = true
 					end
@@ -202,7 +202,7 @@ local function update_anvil_slots(meta, player)
 					else
 						for _, r in pairs(repair) do
 							if string.sub(r, 1, 6) == "group:" then
-								if minetest.get_item_group(material_name, string.sub(r, 7)) ~= 0 then
+								if core.get_item_group(material_name, string.sub(r, 7)) ~= 0 then
 									has_correct_material = true
 								end
 
@@ -243,7 +243,7 @@ local function update_anvil_slots(meta, player)
 	-- Rename handling
 	if name_item then
 		-- No renaming allowed with group no_rename=1
-		if minetest.get_item_group(name_item:get_name(), "no_rename") == 1 then
+		if core.get_item_group(name_item:get_name(), "no_rename") == 1 then
 			new_output = ""
 		else
 			if new_name == nil then
@@ -269,7 +269,7 @@ local function update_anvil_slots(meta, player)
 	end
 
 	-- Set the new output slot
-	if minetest.is_creative_enabled(player:get_player_name()) then clear_cost(meta)	end
+	if core.is_creative_enabled(player:get_player_name()) then clear_cost(meta)	end
 
 	local cost = meta:get_int("mcl_anvil:xp_cost")
 	local has_result = not ItemStack(new_output):is_empty()
@@ -291,7 +291,7 @@ end
 local drop_contents = mcl_util.drop_items_from_meta_container({"input"})
 
 local function damage_particles(pos, node)
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 30,
 		time = 0.1,
 		minpos = vector.offset(pos, -0.5, -0.5, -0.5),
@@ -311,7 +311,7 @@ local function damage_particles(pos, node)
 end
 
 local function destroy_particles(pos, node)
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = math.random(20, 30),
 		time = 0.1,
 		minpos = vector.offset(pos, -0.4, -0.4, -0.4),
@@ -334,23 +334,23 @@ end
 -- Destroy anvil when at highest damage level.
 -- Returns true if anvil was destroyed.
 local function damage_anvil(pos)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	if node.name == "mcl_anvils:anvil" then
-		minetest.swap_node(pos, { name = "mcl_anvils:anvil_damage_1", param2 = node.param2 })
+		core.swap_node(pos, { name = "mcl_anvils:anvil_damage_1", param2 = node.param2 })
 		damage_particles(pos, node)
-		minetest.sound_play(mcl_sounds.node_sound_metal_defaults().dig, { pos = pos, max_hear_distance = 16 }, true)
+		core.sound_play(mcl_sounds.node_sound_metal_defaults().dig, { pos = pos, max_hear_distance = 16 }, true)
 		return false
 	elseif node.name == "mcl_anvils:anvil_damage_1" then
-		minetest.swap_node(pos, { name = "mcl_anvils:anvil_damage_2", param2 = node.param2 })
+		core.swap_node(pos, { name = "mcl_anvils:anvil_damage_2", param2 = node.param2 })
 		damage_particles(pos, node)
-		minetest.sound_play(mcl_sounds.node_sound_metal_defaults().dig, { pos = pos, max_hear_distance = 16 }, true)
+		core.sound_play(mcl_sounds.node_sound_metal_defaults().dig, { pos = pos, max_hear_distance = 16 }, true)
 		return false
 	elseif node.name == "mcl_anvils:anvil_damage_2" then
-		drop_contents(pos, node, minetest.get_meta(pos))
-		minetest.sound_play(mcl_sounds.node_sound_metal_defaults().dug, { pos = pos, max_hear_distance = 16 }, true)
-		minetest.remove_node(pos)
+		drop_contents(pos, node, core.get_meta(pos))
+		core.sound_play(mcl_sounds.node_sound_metal_defaults().dug, { pos = pos, max_hear_distance = 16 }, true)
+		core.remove_node(pos)
 		destroy_particles(pos, node)
-		minetest.check_single_for_falling(vector.offset(pos, 0, 1, 0))
+		core.check_single_for_falling(vector.offset(pos, 0, 1, 0))
 		return true
 	end
 end
@@ -401,11 +401,11 @@ local anvildef = {
 	after_dig_node = drop_contents,
 	allow_metadata_inventory_take = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
-		elseif listname == "output" and not minetest.is_creative_enabled(player:get_player_name()) then
-			local meta = minetest.get_meta(pos)
+		elseif listname == "output" and not core.is_creative_enabled(player:get_player_name()) then
+			local meta = core.get_meta(pos)
 			local player_level = mcl_experience.get_level(player)
 			local anvil_costs = meta:get_int("mcl_anvil:xp_cost")
 			if player_level < anvil_costs then
@@ -416,8 +416,8 @@ local anvildef = {
 	end,
 	allow_metadata_inventory_put = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		elseif listname == "output" then
 			return 0
@@ -427,13 +427,13 @@ local anvildef = {
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, _, to_list, to_index, count, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		elseif to_list == "output" then
 			return 0
 		elseif from_list == "output" and to_list == "input" then
-			local meta = minetest.get_meta(pos)
+			local meta = core.get_meta(pos)
 			local inv = meta:get_inventory()
 			if inv:get_stack(to_list, to_index):is_empty() then
 				return count
@@ -445,11 +445,11 @@ local anvildef = {
 		end
 	end,
 	on_metadata_inventory_put = function(pos, _, _, _, player)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		update_anvil_slots(meta, player)
 	end,
 	on_metadata_inventory_move = function(pos, from_list, _, to_list, to_index, count, player)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		if from_list == "output" and to_list == "input" then
 			local inv = meta:get_inventory()
 			for i = 1, inv:get_size("input") do
@@ -464,7 +464,7 @@ local anvildef = {
 
 		if from_list == "output" then
 			local destroyed
-			if not minetest.is_creative_enabled(player:get_player_name()) then
+			if not core.is_creative_enabled(player:get_player_name()) then
 				destroyed = damage_anvil_by_using(pos)
 			end
 			-- Close formspec if anvil was destroyed
@@ -474,12 +474,12 @@ local anvildef = {
 				Also, sice this is on_metadata_inventory_take, we KNOW which formspec has
 				been opened by the player. So this should be safe nonetheless.
 				TODO: Update this line when node formspecs get proper identifiers in Minetest. ]]
-				minetest.close_formspec(player:get_player_name(), "")
+				core.close_formspec(player:get_player_name(), "")
 			end
 		end
 	end,
 	on_metadata_inventory_take = function(pos, listname, _, stack, player)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		if listname == "output" then
 			local inv = meta:get_inventory()
 			local input1 = inv:get_stack("input", 1)
@@ -491,7 +491,7 @@ local anvildef = {
 				return
 			end
 			clear_cost(meta)
-			if not minetest.is_creative_enabled(player:get_player_name()) then
+			if not core.is_creative_enabled(player:get_player_name()) then
 				mcl_experience.set_level(player, player_level - anvil_costs)
 			end
 
@@ -531,20 +531,20 @@ local anvildef = {
 				end
 			end
 			local destroyed
-			if not minetest.is_creative_enabled(player:get_player_name()) then
+			if not core.is_creative_enabled(player:get_player_name()) then
 				destroyed = damage_anvil_by_using(pos)
 			end
 			-- Close formspec if anvil was destroyed
 			if destroyed then
 				-- See above for justification.
-				minetest.close_formspec(player:get_player_name(), "")
+				core.close_formspec(player:get_player_name(), "")
 			end
 		elseif listname == "input" then
 			update_anvil_slots(meta, player)
 		end
 	end,
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:set_size("input", 2)
 		inv:set_size("output", 1)
@@ -553,13 +553,13 @@ local anvildef = {
 	end,
 	on_receive_fields = function(pos, _, fields, sender)
 		local sender_name = sender:get_player_name()
-		if minetest.is_protected(pos, sender_name) then
-			minetest.record_protection_violation(pos, sender_name)
+		if core.is_protected(pos, sender_name) then
+			core.record_protection_violation(pos, sender_name)
 			return
 		end
 
 		if fields.name then
-			local meta = minetest.get_meta(pos)
+			local meta = core.get_meta(pos)
 
 			-- Limit name length
 			local set_name = string.sub(fields.name, 1, MAX_NAME_LENGTH)
@@ -570,11 +570,11 @@ local anvildef = {
 	end,
 }
 
-if minetest.get_modpath("screwdriver") then
+if core.get_modpath("screwdriver") then
 	anvildef.on_rotate = screwdriver.rotate_simple
 end
 
-minetest.register_node("mcl_anvils:anvil", table.merge(anvildef, {
+core.register_node("mcl_anvils:anvil", table.merge(anvildef, {
 	description = S("Anvil"),
 	_doc_items_longdesc =	S("The anvil allows you to repair tools and armor, and to give names to items. It has a limited durability, however. Don't let it fall on your head, it could be quite painful!"),
 	_doc_items_usagehelp = S("To use an anvil, rightclick it. An anvil has 2 input slots (on the left) and one output slot.") .. "\n" ..
@@ -595,16 +595,16 @@ local anvildef1 = table.merge(anvildef, {
 	groups = table.merge(anvildef.groups, {anvil = 2}),
 	tiles = { "mcl_anvils_anvil_top_damaged_1.png^[transformR90", "mcl_anvils_anvil_base.png", "mcl_anvils_anvil_side.png" }
 })
-minetest.register_node("mcl_anvils:anvil_damage_1", anvildef1)
+core.register_node("mcl_anvils:anvil_damage_1", anvildef1)
 
-minetest.register_node("mcl_anvils:anvil_damage_2", table.merge(anvildef1, {
+core.register_node("mcl_anvils:anvil_damage_2", table.merge(anvildef1, {
 	description = S("Very Damaged Anvil"),
 	groups = table.merge(anvildef.groups, {anvil = 3}),
 	tiles = { "mcl_anvils_anvil_top_damaged_2.png^[transformR90", "mcl_anvils_anvil_base.png", "mcl_anvils_anvil_side.png" }
 }))
 
-if minetest.get_modpath("mcl_core") then
-	minetest.register_craft({
+if core.get_modpath("mcl_core") then
+	core.register_craft({
 		output = "mcl_anvils:anvil",
 		recipe = {
 			{ "mcl_core:ironblock", "mcl_core:ironblock", "mcl_core:ironblock" },
@@ -614,19 +614,19 @@ if minetest.get_modpath("mcl_core") then
 	})
 end
 
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_anvils:anvil", "nodes", "mcl_anvils:anvil_damage_1")
 	doc.add_entry_alias("nodes", "mcl_anvils:anvil", "nodes", "mcl_anvils:anvil_damage_2")
 end
 
 -- Legacy
-minetest.register_lbm({
+core.register_lbm({
 	label = "Update anvil formspecs (0.60.0)",
 	name = "mcl_anvils:update_formspec_0_60_0",
 	nodenames = { "group:anvil" },
 	run_at_every_load = false,
 	action = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local set_name = meta:get_string("set_name")
 		meta:set_string("formspec", get_anvil_formspec(set_name))
 	end,

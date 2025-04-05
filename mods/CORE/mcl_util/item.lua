@@ -3,9 +3,9 @@ local fuel_cache = {}
 -- Returns the burntime of an item
 -- Returns false otherwise
 function mcl_util.get_burntime(item)
-	assert(minetest.get_current_modname() == nil, "mcl_util.is_fuel and mcl_util.get_burntime cannot be called when loading mods")
+	assert(core.get_current_modname() == nil, "mcl_util.is_fuel and mcl_util.get_burntime cannot be called when loading mods")
 	if fuel_cache[item] == nil then
-		fuel_cache[item] = minetest.get_craft_result({method = "fuel", width = 1, items = {item}}).time
+		fuel_cache[item] = core.get_craft_result({method = "fuel", width = 1, items = {item}}).time
 	end
 
 	return fuel_cache[item]
@@ -20,8 +20,8 @@ end
 function mcl_util.calculate_durability(itemstack)
 	local name = itemstack:get_name()
 	local unbreaking_level = mcl_enchanting.get_enchantment(itemstack, "unbreaking")
-	local armor_uses = minetest.get_item_group(name, "mcl_armor_uses")
-	local elytra = minetest.get_item_group(name, "elytra")
+	local armor_uses = core.get_item_group(name, "mcl_armor_uses")
+	local elytra = core.get_item_group(name, "elytra")
 
 	local uses
 

@@ -14,7 +14,7 @@ local mesa = {
 }
 
 --Clay
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "blob",
 	ore            = "mcl_core:clay",
 	wherein        = {"mcl_core:sand","mcl_core:stone","mcl_core:gravel"},
@@ -39,7 +39,7 @@ minetest.register_ore({
 local specialstones = { "mcl_core:diorite", "mcl_core:andesite", "mcl_core:granite" }
 for s=1, #specialstones do
 	local node = specialstones[s]
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "blob",
 		ore            = node,
 		wherein        = {"mcl_core:stone"},
@@ -59,7 +59,7 @@ for s=1, #specialstones do
 			flags = "defaults",
 		}
 	})
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "blob",
 		ore            = node,
 		wherein        = {"mcl_core:stone"},
@@ -84,7 +84,7 @@ end
 local stonelike = {"mcl_core:stone", "mcl_core:diorite", "mcl_core:andesite", "mcl_core:granite"}
 
 -- Dirt
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "blob",
 	ore            = "mcl_core:dirt",
 	wherein        = stonelike,
@@ -106,7 +106,7 @@ minetest.register_ore({
 })
 
 -- Gravel
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "blob",
 	ore            = "mcl_core:gravel",
 	wherein        = stonelike,
@@ -127,7 +127,7 @@ minetest.register_ore({
 	}
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "blob",
 	ore            = "mcl_deepslate:deepslate",
 	wherein        = { "mcl_core:stone" },
@@ -148,7 +148,7 @@ minetest.register_ore({
 	}
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "blob",
 	ore            = "mcl_deepslate:tuff",
 	wherein        = { "mcl_core:stone", "mcl_core:diorite", "mcl_core:andesite", "mcl_core:granite", "mcl_deepslate:deepslate" },
@@ -169,7 +169,7 @@ minetest.register_ore({
 	}
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "mcl_deepslate:infested_deepslate",
 	wherein        = "mcl_deepslate:deepslate",
@@ -181,7 +181,7 @@ minetest.register_ore({
 	biomes         = mountains,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "mcl_core:water_source",
 	wherein        = "mcl_deepslate:deepslate",
@@ -192,7 +192,7 @@ minetest.register_ore({
 	y_max          = deepslate_max,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "mcl_core:lava_source",
 	wherein        = "mcl_deepslate:deepslate",
@@ -203,7 +203,7 @@ minetest.register_ore({
 	y_max          = mcl_worlds.layer_to_y(10),
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "mcl_core:lava_source",
 	wherein        = "mcl_deepslate:deepslate",
@@ -214,13 +214,13 @@ minetest.register_ore({
 	y_max          = deepslate_max,
 })
 
-if minetest.settings:get_bool("mcl_generate_ores", true) then
+if core.settings:get_bool("mcl_generate_ores", true) then
 	--
 	-- Ancient debris
 	--
 	local ancient_debris_wherein = {"mcl_nether:netherrack","mcl_blackstone:blackstone","mcl_blackstone:basalt"}
 	-- Common spawn
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_nether:ancient_debris",
 		wherein         = ancient_debris_wherein,
@@ -233,7 +233,7 @@ if minetest.settings:get_bool("mcl_generate_ores", true) then
 	})
 
 	-- Rare spawn (below)
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_nether:ancient_debris",
 		wherein         = ancient_debris_wherein,
@@ -245,7 +245,7 @@ if minetest.settings:get_bool("mcl_generate_ores", true) then
 	})
 
 	-- Rare spawn (above)
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_nether:ancient_debris",
 		wherein         = ancient_debris_wherein,
@@ -259,7 +259,7 @@ if minetest.settings:get_bool("mcl_generate_ores", true) then
 	local stonelike = { "mcl_core:stone", "mcl_core:diorite", "mcl_core:andesite", "mcl_core:granite" }
 
 	local function register_ore_mg(ore, wherein, defs)
-		minetest.register_ore({
+		core.register_ore({
 			ore_type       = "scatter",
 			ore            = ore,
 			wherein        = wherein,
@@ -395,7 +395,7 @@ end
 if not mcl_vars.superflat then
 -- Water and lava springs (single blocks of lava/water source)
 -- Water appears at nearly every height, but not near the bottom
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "mcl_core:water_source",
 	wherein         = {"mcl_core:stone", "mcl_core:andesite", "mcl_core:diorite", "mcl_core:granite", "mcl_core:dirt"},
@@ -407,7 +407,7 @@ minetest.register_ore({
 })
 
 -- Lava springs are rather common at -31 and below
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "mcl_core:lava_source",
 	wherein         = stonelike,
@@ -418,7 +418,7 @@ minetest.register_ore({
 	y_max          = mcl_worlds.layer_to_y(10),
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "mcl_core:lava_source",
 	wherein         = stonelike,
@@ -430,7 +430,7 @@ minetest.register_ore({
 })
 
 -- Lava springs will become gradually rarer with increasing height
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "mcl_core:lava_source",
 	wherein         = stonelike,
@@ -441,7 +441,7 @@ minetest.register_ore({
 	y_max          = mcl_worlds.layer_to_y(47),
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "mcl_core:lava_source",
 	wherein         = stonelike,
@@ -453,7 +453,7 @@ minetest.register_ore({
 })
 
 -- Lava may even appear above surface, but this is very rare
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "mcl_core:lava_source",
 	wherein         = stonelike,

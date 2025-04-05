@@ -2,11 +2,11 @@
 
 mcl_fire = {}
 
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
+local S = core.get_translator(modname)
 
-local has_mcl_portals = minetest.get_modpath("mcl_portals")
+local has_mcl_portals = core.get_modpath("mcl_portals")
 
 local adjacents = {
 	{ x =-1, y = 0, z = 0 },
@@ -28,15 +28,15 @@ shuffle_table(adjacents)
 local function has_flammable(pos)
 	for _,v in pairs(adjacents) do
 		local p=vector.add(pos,v)
-		local n=minetest.get_node_or_nil(p)
-		if n and minetest.get_item_group(n.name, "flammable") ~= 0 then
+		local n=core.get_node_or_nil(p)
+		if n and core.get_item_group(n.name, "flammable") ~= 0 then
 			return p
 		end
 	end
 end
 
 -- When enabled, fire destroys other blocks.
-local fire_enabled = minetest.settings:get_bool("enable_fire", true)
+local fire_enabled = core.settings:get_bool("enable_fire", true)
 
 -- Help texts
 local fire_help, eternal_fire_help
@@ -53,11 +53,11 @@ else
 end
 
 local function spawn_fire(pos, age)
-	minetest.set_node(pos, {name="mcl_fire:fire", param2 = age})
-	minetest.check_single_for_falling({x=pos.x, y=pos.y+1, z=pos.z})
+	core.set_node(pos, {name="mcl_fire:fire", param2 = age})
+	core.check_single_for_falling({x=pos.x, y=pos.y+1, z=pos.z})
 end
 
-minetest.register_node("mcl_fire:fire", {
+core.register_node("mcl_fire:fire", {
 	description = S("Fire"),
 	_doc_items_longdesc = fire_help,
 	drawtype = "firelike",
@@ -74,7 +74,7 @@ minetest.register_node("mcl_fire:fire", {
 	},
 	inventory_image = "fire_basic_flame.png",
 	paramtype = "light",
-	light_source = minetest.LIGHT_MAX,
+	light_source = core.LIGHT_MAX,
 	walkable = false,
 	buildable_to = true,
 	sunlight_propagates = true,
@@ -82,8 +82,8 @@ minetest.register_node("mcl_fire:fire", {
 	groups = {fire = 1, dig_immediate = 3, not_in_creative_inventory = 1, dig_by_piston=1, destroys_items=1, set_on_fire=8, unsticky = 1},
 	floodable = true,
 	on_flood = function(pos, _, newnode)
-		if minetest.get_item_group(newnode.name, "water") ~= 0 then
-			minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+		if core.get_item_group(newnode.name, "water") ~= 0 then
+			core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 		end
 	end,
 	drop = "",
@@ -91,11 +91,11 @@ minetest.register_node("mcl_fire:fire", {
 	-- Turn into eternal fire on special blocks, light Nether portal (if possible), start burning timer
 	on_construct = function(pos)
 		local bpos = {x=pos.x, y=pos.y-1, z=pos.z}
-		local under = minetest.get_node(bpos).name
+		local under = core.get_node(bpos).name
 
 		local dim = mcl_worlds.pos_to_dimension(bpos)
 		if under == "mcl_nether:magma" or under == "mcl_nether:netherrack" or (under == "mcl_core:bedrock" and dim == "end") then
-			minetest.swap_node(pos, {name = "mcl_fire:eternal_fire"})
+			core.swap_node(pos, {name = "mcl_fire:eternal_fire"})
 		end
 
 		if has_mcl_portals then
@@ -106,7 +106,7 @@ minetest.register_node("mcl_fire:fire", {
 	_mcl_blast_resistance = 0,
 })
 
-minetest.register_node("mcl_fire:eternal_fire", {
+core.register_node("mcl_fire:eternal_fire", {
 	description = S("Eternal Fire"),
 	_doc_items_longdesc = eternal_fire_help,
 	drawtype = "firelike",
@@ -123,7 +123,7 @@ minetest.register_node("mcl_fire:eternal_fire", {
 	},
 	inventory_image = "fire_basic_flame.png",
 	paramtype = "light",
-	light_source = minetest.LIGHT_MAX,
+	light_source = core.LIGHT_MAX,
 	walkable = false,
 	buildable_to = true,
 	sunlight_propagates = true,
@@ -131,13 +131,13 @@ minetest.register_node("mcl_fire:eternal_fire", {
 	groups = {fire = 1, dig_immediate = 3, not_in_creative_inventory = 1, dig_by_piston = 1, destroys_items = 1, set_on_fire=8, unsticky = 1},
 	floodable = true,
 	on_flood = function(pos, _, newnode)
-		if minetest.get_item_group(newnode.name, "water") ~= 0 then
-			minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+		if core.get_item_group(newnode.name, "water") ~= 0 then
+			core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 		end
 	end,
 	-- Start burning timer and light Nether portal (if possible)
 	on_construct = function(pos)
-		if has_mcl_portals then --Calling directly minetest.get_modpath consumes 4x more compute time
+		if has_mcl_portals then --Calling directly core.get_modpath consumes 4x more compute time
 			mcl_portals.light_nether_portal(pos)
 		end
 	end,
@@ -167,7 +167,7 @@ function mcl_fire.update_player_sound(player)
 	local ppos = player:get_pos()
 	local areamin = vector.subtract(ppos, radius)
 	local areamax = vector.add(ppos, radius)
-	local fpos, num = minetest.find_nodes_in_area(
+	local fpos, num = core.find_nodes_in_area(
 		areamin,
 		areamax,
 		{"mcl_fire:fire", "mcl_fire:eternal_fire"}
@@ -177,7 +177,7 @@ function mcl_fire.update_player_sound(player)
 		(num["mcl_fire:eternal_fire"] or 0)
 	-- Stop previous sound
 	if handles[player_name] then
-		minetest.sound_fade(handles[player_name], -0.4, 0.0)
+		core.sound_fade(handles[player_name], -0.4, 0.0)
 		handles[player_name] = nil
 	end
 	-- If flames
@@ -212,7 +212,7 @@ function mcl_fire.update_player_sound(player)
 			fposmid = vector.divide(vector.add(fposmin, fposmax), 2)
 		end
 		-- Play sound
-		local handle = minetest.sound_play(
+		local handle = core.sound_play(
 			"fire_fire",
 			{
 				pos = fposmid,
@@ -231,7 +231,7 @@ end
 
 -- Cycle for updating players sounds
 
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	timer = timer + dtime
 	if timer < cycle then
 		return
@@ -245,10 +245,10 @@ end)
 
 -- Stop sound and clear handle on player leave
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	local player_name = player:get_player_name()
 	if handles[player_name] then
-		minetest.sound_stop(handles[player_name])
+		core.sound_stop(handles[player_name])
 		handles[player_name] = nil
 	end
 end)
@@ -257,7 +257,7 @@ end)
 -- https://minecraft.wiki/w/Fire#Spread
 
 local function check_aircube(p1,p2)
-	local nds=minetest.find_nodes_in_area(p1,p2,{"air"})
+	local nds=core.find_nodes_in_area(p1,p2,{"air"})
 	shuffle_table(nds)
 	for _, v in pairs(nds) do
 		if has_flammable(v) then return v end
@@ -279,7 +279,7 @@ end
 
 -- Extinguish all flames quickly with water and such
 
-minetest.register_abm({
+core.register_abm({
 	label = "Extinguish fire",
 	nodenames = {"mcl_fire:fire", "mcl_fire:eternal_fire"},
 	neighbors = {"group:puts_out_fire"},
@@ -287,8 +287,8 @@ minetest.register_abm({
 	chance = 1,
 	catch_up = false,
 	action = function(pos)
-		minetest.remove_node(pos)
-		minetest.sound_play("fire_extinguish_flame",
+		core.remove_node(pos)
+		core.sound_play("fire_extinguish_flame",
 			{pos = pos, max_hear_distance = 16, gain = 0.15}, true)
 	end,
 })
@@ -298,19 +298,19 @@ if not fire_enabled then
 
 	-- Occasionally remove fire if fire disabled
 	-- NOTE: Fire is normally extinguished in timer function
-	minetest.register_abm({
+	core.register_abm({
 		label = "Remove disabled fire",
 		nodenames = {"mcl_fire:fire"},
 		interval = 10,
 		chance = 10,
 		catch_up = false,
-		action = minetest.remove_node,
+		action = core.remove_node,
 	})
 
 else -- Fire enabled
 
 	-- Fire Spread
-	minetest.register_abm({
+	core.register_abm({
 		label = "Ignite flame",
 		nodenames ={"mcl_fire:fire","mcl_fire:eternal_fire"},
 		interval = 7,
@@ -326,7 +326,7 @@ else -- Fire enabled
 	})
 
 	--lava fire spread
-	minetest.register_abm({
+	core.register_abm({
 		label = "Ignite fire by lava",
 		nodenames = {"mcl_core:lava_source","mcl_nether:nether_lava_source"},
 		neighbors = {"group:flammable"},
@@ -341,7 +341,7 @@ else -- Fire enabled
 		end,
 	})
 
-	minetest.register_abm({
+	core.register_abm({
 		label = "Remove fires",
 		nodenames = {"mcl_fire:fire"},
 		interval = 7,
@@ -350,18 +350,18 @@ else -- Fire enabled
 		action = function(pos)
 			local p=has_flammable(pos)
 			if p then
-				local n=minetest.get_node_or_nil(p)
-				if n and minetest.get_item_group(n.name, "flammable") < 1 then
-					minetest.remove_node(pos)
+				local n=core.get_node_or_nil(p)
+				if n and core.get_item_group(n.name, "flammable") < 1 then
+					core.remove_node(pos)
 				end
 			else
-				minetest.remove_node(pos)
+				core.remove_node(pos)
 			end
 		end,
 	})
 
 	-- Remove flammable nodes around basic flame
-	minetest.register_abm({
+	core.register_abm({
 		label = "Remove flammable nodes",
 		nodenames = {"mcl_fire:fire","mcl_fire:eternal_fire"},
 		neighbors = {"group:flammable"},
@@ -374,15 +374,15 @@ else -- Fire enabled
 				return
 			end
 
-			local nn = minetest.get_node(p).name
-			local def = minetest.registered_nodes[nn]
-			local fgroup = minetest.get_item_group(nn, "flammable")
+			local nn = core.get_node(p).name
+			local def = core.registered_nodes[nn]
+			local fgroup = core.get_item_group(nn, "flammable")
 
 			if def and def._on_burn then
 				def._on_burn(p)
 			elseif fgroup ~= -1 then
 				spawn_fire(p)
-				minetest.check_for_falling(p)
+				core.check_for_falling(p)
 			end
 		end
 	})
@@ -400,32 +400,32 @@ function mcl_fire.set_fire(pointed_thing, player, allow_on_fire)
 		pname = player:get_player_name()
 	end
 
-	if minetest.is_protected(pointed_thing.above, pname) then
-		minetest.record_protection_violation(pointed_thing.above, pname)
+	if core.is_protected(pointed_thing.above, pname) then
+		core.record_protection_violation(pointed_thing.above, pname)
 		return
 	end
 
-	local n_pointed = minetest.get_node(pointed_thing.under)
-	if allow_on_fire == false and minetest.get_item_group(n_pointed.name, "fire") ~= 0 then
+	local n_pointed = core.get_node(pointed_thing.under)
+	if allow_on_fire == false and core.get_item_group(n_pointed.name, "fire") ~= 0 then
 		return
 	end
 
-	local n_fire = minetest.get_node(pointed_thing.above)
+	local n_fire = core.get_node(pointed_thing.above)
 	if n_fire.name ~= "air" then
 		return
 	end
 
-	local n_below = minetest.get_node(vector.offset(pointed_thing.above, 0, -1, 0))
-	if minetest.get_item_group(n_below.name, "water") ~= 0 then
+	local n_below = core.get_node(vector.offset(pointed_thing.above, 0, -1, 0))
+	if core.get_item_group(n_below.name, "water") ~= 0 then
 		return
 	end
 
-	minetest.set_node(pointed_thing.above, {name="mcl_fire:fire"})
+	core.set_node(pointed_thing.above, {name="mcl_fire:fire"})
 end
 
-minetest.register_alias("mcl_fire:basic_flame", "mcl_fire:fire")
-minetest.register_alias("fire:basic_flame", "mcl_fire:fire")
-minetest.register_alias("fire:permanent_flame", "mcl_fire:eternal_fire")
+core.register_alias("mcl_fire:basic_flame", "mcl_fire:fire")
+core.register_alias("fire:basic_flame", "mcl_fire:fire")
+core.register_alias("fire:permanent_flame", "mcl_fire:eternal_fire")
 
 dofile(modpath.."/flint_and_steel.lua")
 dofile(modpath.."/fire_charge.lua")

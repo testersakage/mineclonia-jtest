@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local function param2_to_note_color(param2)
 	local r, g, b
@@ -59,13 +59,13 @@ local soundnames_piano = {
 }
 
 local function noteblock_play(pos, param2)
-	local block_above_name = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z}).name
+	local block_above_name = core.get_node({x=pos.x, y=pos.y+1, z=pos.z}).name
 	if block_above_name ~= "air" then
 		-- Don't play sound if no air is above
 		return
 	end
 
-	local block_below_name = minetest.get_node({x=pos.x, y=pos.y-1, z=pos.z}).name
+	local block_below_name = core.get_node({x=pos.x, y=pos.y-1, z=pos.z}).name
 	local pitched = false
 	local soundname, pitch
 	if block_below_name == "mcl_core:goldblock" then
@@ -86,17 +86,17 @@ local function noteblock_play(pos, param2)
 		soundname="mesecons_noteblock_banjo"
 	elseif block_below_name == "mcl_nether:glowstone" then
 		soundname="mesecons_noteblock_piano_digital"
-	elseif minetest.get_item_group(block_below_name, "wool") ~= 0 then
+	elseif core.get_item_group(block_below_name, "wool") ~= 0 then
 		soundname="mesecons_noteblock_guitar"
-	elseif minetest.get_item_group(block_below_name, "pumpkin") ~= 0 then
+	elseif core.get_item_group(block_below_name, "pumpkin") ~= 0 then
 		soundname="mesecons_noteblock_didgeridoo"
-	elseif minetest.get_item_group(block_below_name, "material_glass") ~= 0 then
+	elseif core.get_item_group(block_below_name, "material_glass") ~= 0 then
 		soundname="mesecons_noteblock_hit"
-	elseif minetest.get_item_group(block_below_name, "material_wood") ~= 0 then
+	elseif core.get_item_group(block_below_name, "material_wood") ~= 0 then
 		soundname="mesecons_noteblock_bass_guitar"
-	elseif minetest.get_item_group(block_below_name, "material_sand") ~= 0 then
+	elseif core.get_item_group(block_below_name, "material_sand") ~= 0 then
 		soundname="mesecons_noteblock_snare"
-	elseif minetest.get_item_group(block_below_name, "material_stone") ~= 0 then
+	elseif core.get_item_group(block_below_name, "material_stone") ~= 0 then
 		soundname="mesecons_noteblock_bass_drum"
 	else
 		-- Default: One of 25 piano notes
@@ -113,7 +113,7 @@ local function noteblock_play(pos, param2)
 
 	local note_color = param2_to_note_color(param2)
 
-	minetest.add_particle({
+	core.add_particle({
 		texture = "mcl_particles_note.png^[colorize:"..note_color..":92",
 		pos = { x = pos.x, y = pos.y + 0.35, z = pos.z },
 		velocity = { x = 0, y = 2, z = 0 },
@@ -122,11 +122,11 @@ local function noteblock_play(pos, param2)
 		collisiondetection = false,
 		size = 3,
 	})
-	minetest.sound_play(soundname,
+	core.sound_play(soundname,
 	{pos = pos, gain = 1.0, max_hear_distance = 48, pitch = pitch})
 end
 
-minetest.register_node("mcl_noteblock:noteblock", {
+core.register_node("mcl_noteblock:noteblock", {
 	description = S("Note Block"),
 	_tt_help = S("Plays a musical note when powered by redstone power"),
 	_doc_items_longdesc = S("A note block is a musical block which plays one of many musical notes and different intruments when it is punched or supplied with redstone power."),
@@ -156,13 +156,13 @@ minetest.register_node("mcl_noteblock:noteblock", {
 	place_param2 = 0,
 	on_rightclick = function(pos, node, clicker) -- change sound when rightclicked
 		local protname = clicker:get_player_name()
-		if minetest.is_protected(pos, protname) then
-			minetest.record_protection_violation(pos, protname)
+		if core.is_protected(pos, protname) then
+			core.record_protection_violation(pos, protname)
 			return
 		end
 		node.param2 = 32 * math.floor(node.param2 / 32) + (node.param2 % 32 + 1) % 25
 		noteblock_play(pos, node.param2 % 32)
-		minetest.set_node(pos, node)
+		core.set_node(pos, node)
 	end,
 	on_punch = function(pos, node) -- play current sound when punched
 		noteblock_play(pos, node.param2 % 32)
@@ -190,7 +190,7 @@ minetest.register_node("mcl_noteblock:noteblock", {
 	_mcl_burntime = 15,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_noteblock:noteblock",
 	recipe = {
 		{"group:wood", "group:wood", "group:wood"},
@@ -199,7 +199,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "fuel",
 	recipe = "mcl_noteblock:noteblock",
 	burntime = 15

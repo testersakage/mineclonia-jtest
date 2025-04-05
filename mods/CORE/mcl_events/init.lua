@@ -1,6 +1,6 @@
 mcl_events = {}
 mcl_events.registered_events = {}
-local disabled_events = minetest.settings:get("mcl_disabled_events")
+local disabled_events = core.settings:get("mcl_disabled_events")
 if disabled_events then	disabled_events = disabled_events:split(",")
 else disabled_events = {} end
 local active_events = {}
@@ -117,7 +117,7 @@ function check_events(dtime)
 	end
 end
 
-minetest.register_globalstep(check_events)
+core.register_globalstep(check_events)
 
 mcl_info.register_debug_field("Active Events",{
 	level = 4,
@@ -126,11 +126,11 @@ mcl_info.register_debug_field("Active Events",{
 	end
 })
 
-minetest.register_chatcommand("event_start",{
+core.register_chatcommand("event_start",{
 	privs = {debug = true},
 	description = "Debug command to start events",
 	func = function(pname,param)
-		local p = minetest.get_player_by_name(pname)
+		local p = core.get_player_by_name(pname)
 		local evdef = mcl_events.registered_events[param]
 		if not evdef then return false,"Event "..param.." doesn't exist.'" end
 		start_event({pos=p:get_pos(),player=pname,factor=1},evdef)

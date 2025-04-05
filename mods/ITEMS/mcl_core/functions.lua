@@ -1,7 +1,7 @@
 --
 -- Lava vs water interactions
 --
-minetest.register_abm({
+core.register_abm({
 	label = "Lava cooling",
 	nodenames = {"group:lava"},
 	neighbors = {"group:water"},
@@ -9,31 +9,31 @@ minetest.register_abm({
 	chance = 1,
 	min_y = mcl_vars.mg_end_min,
 	action = function(pos, node)
-		local water = minetest.find_nodes_in_area({x=pos.x-1, y=pos.y-1, z=pos.z-1}, {x=pos.x+1, y=pos.y+1, z=pos.z+1}, "group:water")
+		local water = core.find_nodes_in_area({x=pos.x-1, y=pos.y-1, z=pos.z-1}, {x=pos.x+1, y=pos.y+1, z=pos.z+1}, "group:water")
 
-		local lavatype = minetest.registered_nodes[node.name].liquidtype
+		local lavatype = core.registered_nodes[node.name].liquidtype
 
 		for w=1, #water do
-			--local waternode = minetest.get_node(water[w])
-			--local watertype = minetest.registered_nodes[waternode.name].liquidtype
+			--local waternode = core.get_node(water[w])
+			--local watertype = core.registered_nodes[waternode.name].liquidtype
 			-- Lava on top of water: Water turns into stone
 			if water[w].y < pos.y and water[w].x == pos.x and water[w].z == pos.z then
-				minetest.set_node(water[w], {name="mcl_core:stone"})
-				minetest.sound_play("fire_extinguish_flame", {pos = water[w], gain = 0.2, max_hear_distance = 16}, true)
+				core.set_node(water[w], {name="mcl_core:stone"})
+				core.sound_play("fire_extinguish_flame", {pos = water[w], gain = 0.2, max_hear_distance = 16}, true)
 			-- Flowing lava vs water on same level: Lava turns into cobblestone
 			elseif lavatype == "flowing" and water[w].y == pos.y and (water[w].x == pos.x or water[w].z == pos.z) then
-				minetest.set_node(pos, {name="mcl_core:cobble"})
-				minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.2, max_hear_distance = 16}, true)
+				core.set_node(pos, {name="mcl_core:cobble"})
+				core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.2, max_hear_distance = 16}, true)
 			-- Lava source vs flowing water above or horizontally neighbored: Lava turns into obsidian
 			elseif lavatype == "source" and
 					((water[w].y > pos.y and water[w].x == pos.x and water[w].z == pos.z) or
 					(water[w].y == pos.y and (water[w].x == pos.x or water[w].z == pos.z))) then
-				minetest.set_node(pos, {name="mcl_core:obsidian"})
-				minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.2, max_hear_distance = 16}, true)
+				core.set_node(pos, {name="mcl_core:obsidian"})
+				core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.2, max_hear_distance = 16}, true)
 			-- water above flowing lava: Lava turns into cobblestone
 			elseif lavatype == "flowing" and water[w].y > pos.y and water[w].x == pos.x and water[w].z == pos.z then
-				minetest.set_node(pos, {name="mcl_core:cobble"})
-				minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.2, max_hear_distance = 16}, true)
+				core.set_node(pos, {name="mcl_core:cobble"})
+				core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.2, max_hear_distance = 16}, true)
 			end
 		end
 	end,
@@ -46,17 +46,17 @@ minetest.register_abm({
 -- Functions
 function mcl_core.grow_cactus(pos, _)
 	pos.y = pos.y-1
-	local name = minetest.get_node(pos).name
-	if minetest.get_item_group(name, "sand") ~= 0 then
+	local name = core.get_node(pos).name
+	if core.get_item_group(name, "sand") ~= 0 then
 		pos.y = pos.y+1
 		local height = 0
-		while minetest.get_node(pos).name == "mcl_core:cactus" and height < 4 do
+		while core.get_node(pos).name == "mcl_core:cactus" and height < 4 do
 			height = height+1
 			pos.y = pos.y+1
 		end
 		if height < 3 then
-			if minetest.get_node(pos).name == "air" then
-				minetest.set_node(pos, {name="mcl_core:cactus"})
+			if core.get_node(pos).name == "air" then
+				core.set_node(pos, {name="mcl_core:cactus"})
 			end
 		end
 	end
@@ -64,23 +64,23 @@ end
 
 function mcl_core.grow_reeds(pos, _)
 	pos.y = pos.y-1
-	local name = minetest.get_node(pos).name
-	if minetest.get_item_group(name, "soil_sugarcane") ~= 0 then
-		if minetest.find_node_near(pos, 1, {"group:water"}) == nil and minetest.find_node_near(pos, 1, {"group:frosted_ice"}) == nil then
-			minetest.remove_node(vector.offset(pos,0,1,0))
-			minetest.add_item(vector.offset(pos,0,1,0), "mcl_core:reeds")
-			minetest.check_for_falling(vector.offset(pos,0,2,0))
+	local name = core.get_node(pos).name
+	if core.get_item_group(name, "soil_sugarcane") ~= 0 then
+		if core.find_node_near(pos, 1, {"group:water"}) == nil and core.find_node_near(pos, 1, {"group:frosted_ice"}) == nil then
+			core.remove_node(vector.offset(pos,0,1,0))
+			core.add_item(vector.offset(pos,0,1,0), "mcl_core:reeds")
+			core.check_for_falling(vector.offset(pos,0,2,0))
 			return
 		end
 		pos.y = pos.y+1
 		local height = 0
-		while minetest.get_node(pos).name == "mcl_core:reeds" and height < 3 do
+		while core.get_node(pos).name == "mcl_core:reeds" and height < 3 do
 			height = height+1
 			pos.y = pos.y+1
 		end
 		if height < 3 then
-			if minetest.get_node(pos).name == "air" then
-				minetest.set_node(pos, {name="mcl_core:reeds"})
+			if core.get_node(pos).name == "air" then
+				core.set_node(pos, {name="mcl_core:reeds"})
 			end
 		end
 	end
@@ -89,38 +89,38 @@ end
 -- ABMs and liquid flow.
 
 local function drop_attached_node(p)
-	local nn = minetest.get_node(p).name
+	local nn = core.get_node(p).name
 	if nn == "air" or nn == "ignore" then
 		return
 	end
-	minetest.remove_node(p)
-	for _, item in pairs(minetest.get_node_drops(nn, "")) do
+	core.remove_node(p)
+	for _, item in pairs(core.get_node_drops(nn, "")) do
 		local pos = {
 			x = p.x + math.random()/2 - 0.25,
 			y = p.y + math.random()/2 - 0.25,
 			z = p.z + math.random()/2 - 0.25,
 		}
 		if item ~= "" then
-			minetest.add_item(pos, item)
+			core.add_item(pos, item)
 		end
 	end
 end
 
 function mcl_core.basic_flood (pos, _, new_node)
-	if minetest.get_item_group (new_node.name, "water") > 0 then
+	if core.get_item_group (new_node.name, "water") > 0 then
 		drop_attached_node (pos)
-		minetest.dig_node (pos)
-	elseif minetest.get_item_group (new_node.name, "lava") > 0 then
-		minetest.remove_node (pos)
-		minetest.sound_play ("builtin_item_lava", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
-		minetest.check_for_falling (pos)
+		core.dig_node (pos)
+	elseif core.get_item_group (new_node.name, "lava") > 0 then
+		core.remove_node (pos)
+		core.sound_play ("builtin_item_lava", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+		core.check_for_falling (pos)
 	else
 		return true
 	end
 end
 
 -- Cactus mechanisms
-minetest.register_abm({
+core.register_abm({
 	label = "Cactus growth",
 	nodenames = {"mcl_core:cactus"},
 	neighbors = {"group:sand"},
@@ -131,13 +131,13 @@ minetest.register_abm({
 	end,
 })
 
-minetest.register_abm({
+core.register_abm({
 	label = "Cactus mechanisms",
 	nodenames = {"mcl_core:cactus"},
 	interval = 1,
 	chance = 1,
 	action = function(pos)
-		for object in minetest.objects_inside_radius(pos, 1.1) do
+		for object in core.objects_inside_radius(pos, 1.1) do
 			local entity = object:get_luaentity()
 			local dst = vector.distance(object:get_pos(), pos)
 			if entity and entity.name == "__builtin:item" and dst <= 0.9 then
@@ -148,13 +148,13 @@ minetest.register_abm({
 		end
 		local posses = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }
 		for _, p in pairs(posses) do
-			local ndef = minetest.registered_nodes[minetest.get_node(vector.new(pos.x + p[1], pos.y, pos.z + p[2])).name]
+			local ndef = core.registered_nodes[core.get_node(vector.new(pos.x + p[1], pos.y, pos.z + p[2])).name]
 			if ndef and ndef.walkable then
 				local posy = pos.y
-				while minetest.get_node(vector.new(pos.x, posy, pos.z)).name == "mcl_core:cactus" do
+				while core.get_node(vector.new(pos.x, posy, pos.z)).name == "mcl_core:cactus" do
 					local pos = vector.new(pos.x, posy, pos.z)
-					minetest.remove_node(pos)
-					minetest.add_item(vector.offset(pos, mcl_util.float_random(-0.5, 0.5), 0, mcl_util.float_random(-0.5, 0.5)), "mcl_core:cactus")
+					core.remove_node(pos)
+					core.add_item(vector.offset(pos, mcl_util.float_random(-0.5, 0.5), 0, mcl_util.float_random(-0.5, 0.5)), "mcl_core:cactus")
 					posy = posy + 1
 				end
 				break
@@ -164,7 +164,7 @@ minetest.register_abm({
 })
 
 
-minetest.register_abm({
+core.register_abm({
 	label = "Sugar canes growth",
 	nodenames = {"mcl_core:reeds"},
 	neighbors = {"group:soil_sugarcane"},
@@ -175,15 +175,15 @@ minetest.register_abm({
 	end,
 })
 
-local grass_spread_randomizer = PseudoRandom(minetest.get_mapgen_setting("seed"))
+local grass_spread_randomizer = PseudoRandom(core.get_mapgen_setting("seed"))
 
 function mcl_core.get_grass_palette_index(pos)
-	local biome_data = minetest.get_biome_data(pos)
+	local biome_data = core.get_biome_data(pos)
 	local index = 0
 	if biome_data then
 		local biome = biome_data.biome
-		local biome_name = minetest.get_biome_name(biome)
-		local reg_biome = minetest.registered_biomes[biome_name]
+		local biome_name = core.get_biome_name(biome)
+		local reg_biome = core.registered_biomes[biome_name]
 		if reg_biome then
 			index = reg_biome._mcl_palette_index
 		end
@@ -199,7 +199,7 @@ end
 ------------------------------
 -- Spread grass blocks and mycelium on neighbor dirt
 ------------------------------
-minetest.register_abm({
+core.register_abm({
 	label = "Grass Block and Mycelium spread",
 	nodenames = {"mcl_core:dirt"},
 	neighbors = {"air", "group:grass_block_no_snow", "mcl_core:mycelium"},
@@ -211,16 +211,16 @@ minetest.register_abm({
 			return
 		end
 		local above = {x=pos.x, y=pos.y+1, z=pos.z}
-		local abovenode = minetest.get_node(above)
-		if minetest.get_item_group(abovenode.name, "liquid") ~= 0 or minetest.get_item_group(abovenode.name, "opaque") == 1 then
+		local abovenode = core.get_node(above)
+		if core.get_item_group(abovenode.name, "liquid") ~= 0 or core.get_item_group(abovenode.name, "opaque") == 1 then
 			-- Never grow directly below liquids or opaque blocks
 			return
 		end
-		local light_self = minetest.get_node_light(above)
+		local light_self = core.get_node_light(above)
 		if not light_self then return end
 		--[[ Try to find a spreading dirt-type block (e.g. grass block or mycelium)
 		within a 3×5×3 area, with the source block being on the 2nd-topmost layer. ]]
-		local nodes = minetest.find_nodes_in_area({x=pos.x-1, y=pos.y-1, z=pos.z-1}, {x=pos.x+1, y=pos.y+3, z=pos.z+1}, "group:spreading_dirt_type")
+		local nodes = core.find_nodes_in_area({x=pos.x-1, y=pos.y-1, z=pos.z-1}, {x=pos.x+1, y=pos.y+3, z=pos.z+1}, "group:spreading_dirt_type")
 		local p2
 		-- Nothing found ? Bail out!
 		if #nodes <= 0 then
@@ -231,21 +231,21 @@ minetest.register_abm({
 
 		-- Found it! Now check light levels!
 		local source_above = {x=p2.x, y=p2.y+1, z=p2.z}
-		local light_source = minetest.get_node_light(source_above)
+		local light_source = core.get_node_light(source_above)
 		if not light_source then return end
 
 		if light_self >= 4 and light_source >= 9 then
 			-- All checks passed! Let's spread the grass/mycelium!
-			local n2 = minetest.get_node(p2)
-			if minetest.get_item_group(n2.name, "grass_block") ~= 0 then
+			local n2 = core.get_node(p2)
+			if core.get_item_group(n2.name, "grass_block") ~= 0 then
 				n2 = mcl_core.get_grass_block_type(pos)
 			end
-			minetest.swap_node(pos, n2)
+			core.swap_node(pos, n2)
 
 			-- If this was mycelium, uproot plant above
 			if n2.name == "mcl_core:mycelium" then
 				if core.get_item_group(core.get_node(above).name, "non_mycelium_plant") > 0 then
-					minetest.dig_node(above)
+					core.dig_node(above)
 				end
 			end
 		end
@@ -253,7 +253,7 @@ minetest.register_abm({
 })
 
 -- Grass/mycelium death in darkness
-minetest.register_abm({
+core.register_abm({
 	label = "Grass Block / Mycelium in darkness",
 	nodenames = {"group:spreading_dirt_type"},
 	interval = 8,
@@ -261,27 +261,27 @@ minetest.register_abm({
 	catch_up = false,
 	action = function(pos, _)
 		local above = {x = pos.x, y = pos.y + 1, z = pos.z}
-		local name = minetest.get_node(above).name
+		local name = core.get_node(above).name
 		-- Kill grass/mycelium when below opaque block or liquid
-		if name ~= "ignore" and (minetest.get_item_group(name, "opaque") == 1 or minetest.get_item_group(name, "liquid") ~= 0) then
-			minetest.swap_node(pos, {name = "mcl_core:dirt"})
+		if name ~= "ignore" and (core.get_item_group(name, "opaque") == 1 or core.get_item_group(name, "liquid") ~= 0) then
+			core.swap_node(pos, {name = "mcl_core:dirt"})
 		end
 	end
 })
 
 -- Turn Grass Path and similar nodes to Dirt if a solid node is placed above it
-minetest.register_on_placenode(function(pos, newnode)
-	if minetest.get_item_group(newnode.name, "solid") ~= 0 or
-			minetest.get_item_group(newnode.name, "dirtifier") ~= 0 then
+core.register_on_placenode(function(pos, newnode)
+	if core.get_item_group(newnode.name, "solid") ~= 0 or
+			core.get_item_group(newnode.name, "dirtifier") ~= 0 then
 		local below = {x=pos.x, y=pos.y-1, z=pos.z}
-		local belownode = minetest.get_node(below)
-		if minetest.get_item_group(belownode.name, "dirtifies_below_solid") == 1 then
-			minetest.set_node(below, {name="mcl_core:dirt"})
+		local belownode = core.get_node(below)
+		if core.get_item_group(belownode.name, "dirtifies_below_solid") == 1 then
+			core.set_node(below, {name="mcl_core:dirt"})
 		end
 	end
 end)
 
-minetest.register_abm({
+core.register_abm({
 	label = "Turn Grass Path below solid block into Dirt",
 	nodenames = {"mcl_core:grass_path"},
 	neighbors = {"group:solid"},
@@ -289,25 +289,25 @@ minetest.register_abm({
 	chance = 50,
 	action = function(pos)
 		local above = {x = pos.x, y = pos.y + 1, z = pos.z}
-		local name = minetest.get_node(above).name
-		local nodedef = minetest.registered_nodes[name]
+		local name = core.get_node(above).name
+		local nodedef = core.registered_nodes[name]
 		if name ~= "ignore" and nodedef and (nodedef.groups and nodedef.groups.solid) then
-			minetest.swap_node(pos, {name = "mcl_core:dirt"})
+			core.swap_node(pos, {name = "mcl_core:dirt"})
 		end
 	end,
 })
 
 local SAVANNA_INDEX = 1
-minetest.register_lbm({
+core.register_lbm({
 	label = "Replace legacy dry grass",
 	name = "mcl_core:replace_legacy_dry_grass_0_65_0",
 	nodenames = {"mcl_core:dirt_with_dry_grass", "mcl_core:dirt_with_dry_grass_snow"},
 	action = function(pos, node)
-		local biome_data = minetest.get_biome_data(pos)
+		local biome_data = core.get_biome_data(pos)
 		if biome_data then
 			local biome = biome_data.biome
-			local biome_name = minetest.get_biome_name(biome)
-			local reg_biome = minetest.registered_biomes[biome_name]
+			local biome_name = core.get_biome_name(biome)
+			local reg_biome = core.registered_biomes[biome_name]
 			if reg_biome then
 				if node.name == "mcl_core:dirt_with_dry_grass_snow" then
 					node.name = "mcl_core:dirt_with_grass_snow"
@@ -319,19 +319,19 @@ minetest.register_lbm({
 				if not node.param2 then
 					node.param2 = SAVANNA_INDEX
 				end
-				minetest.set_node(pos, node)
+				core.set_node(pos, node)
 				return
 			end
 		end
 		node.param2 = SAVANNA_INDEX
-		minetest.swap_node(pos, node)
+		core.swap_node(pos, node)
 	end,
 })
 
 ---------------------
 -- Vine generating --
 ---------------------
-minetest.register_abm({
+core.register_abm({
 	label = "Vines growth",
 	nodenames = {"mcl_core:vine"},
 	interval = 47,
@@ -341,26 +341,26 @@ minetest.register_abm({
 		-- Add vines below pos (if empty)
 		local function spread_down(_, target, _, node)
 			if math.random(1, 2) == 1 then
-				if minetest.get_node(target).name == "air" then
-					minetest.add_node(target, {name = "mcl_core:vine", param2 = node.param2})
+				if core.get_node(target).name == "air" then
+					core.add_node(target, {name = "mcl_core:vine", param2 = node.param2})
 				end
 			end
 		end
 
 		-- Add vines above pos if it is backed up
 		local function spread_up(origin, target, _, node)
-			local vines_in_area = minetest.find_nodes_in_area({x=origin.x-4, y=origin.y-1, z=origin.z-4}, {x=origin.x+4, y=origin.y+1, z=origin.z+4}, "mcl_core:vine")
+			local vines_in_area = core.find_nodes_in_area({x=origin.x-4, y=origin.y-1, z=origin.z-4}, {x=origin.x+4, y=origin.y+1, z=origin.z+4}, "mcl_core:vine")
 			-- Less then 4 vines blocks around the ticked vines block (remember the ticked block is counted by above function as well)
 			if #vines_in_area < 5 then
 				if math.random(1, 2) == 1 then
-					if minetest.get_node(target).name == "air" then
-						local backup_dir = minetest.wallmounted_to_dir(node.param2)
+					if core.get_node(target).name == "air" then
+						local backup_dir = core.wallmounted_to_dir(node.param2)
 						local backup = vector.subtract(target, backup_dir)
-						local backupnodename = minetest.get_node(backup).name
+						local backupnodename = core.get_node(backup).name
 
 						-- Check if the block above is supported
 						if mcl_core.supports_vines(backupnodename) then
-							minetest.add_node(target, {name = "mcl_core:vine", param2 = node.param2})
+							core.add_node(target, {name = "mcl_core:vine", param2 = node.param2})
 						end
 					end
 				end
@@ -368,18 +368,18 @@ minetest.register_abm({
 		end
 
 		local function spread_horizontal(origin, target, dir, node)
-			local vines_in_area = minetest.find_nodes_in_area({x=origin.x-4, y=origin.y-1, z=origin.z-4}, {x=origin.x+4, y=origin.y+1, z=origin.z+4}, "mcl_core:vine")
+			local vines_in_area = core.find_nodes_in_area({x=origin.x-4, y=origin.y-1, z=origin.z-4}, {x=origin.x+4, y=origin.y+1, z=origin.z+4}, "mcl_core:vine")
 			-- Less then 4 vines blocks around the ticked vines block (remember the ticked block is counted by above function as well)
 			if #vines_in_area < 5 then
 				-- Spread horizontally
-				local backup_dir = minetest.wallmounted_to_dir(node.param2)
+				local backup_dir = core.wallmounted_to_dir(node.param2)
 				if not vector.equals(backup_dir, dir) then
-					local target_node = minetest.get_node(target)
+					local target_node = core.get_node(target)
 					if target_node.name == "air" then
 						local backup = vector.add(target, backup_dir)
-						local backupnodename = minetest.get_node(backup).name
+						local backupnodename = core.get_node(backup).name
 						if mcl_core.supports_vines(backupnodename) then
-							minetest.add_node(target, {name = "mcl_core:vine", param2 = node.param2})
+							core.add_node(target, {name = "mcl_core:vine", param2 = node.param2})
 						end
 					end
 				end
@@ -405,7 +405,7 @@ minetest.register_abm({
 
 -- Returns true of the node supports vines
 function mcl_core.supports_vines(nodename)
-	local def = minetest.registered_nodes[nodename]
+	local def = core.registered_nodes[nodename]
 	-- Rules: 1) walkable 2) full cube
 	return def and def.walkable and
 			(def.node_box == nil or def.node_box.type == "regular") and
@@ -413,32 +413,32 @@ function mcl_core.supports_vines(nodename)
 end
 
 -- Melt snow
-minetest.register_abm({
+core.register_abm({
 	label = "Top snow and ice melting",
 	nodenames = {"mcl_core:snow", "mcl_core:ice"},
 	interval = 16,
 	chance = 8,
 	action = function(pos, node)
-		if minetest.get_node_light(pos, 0) >= 12 then
+		if core.get_node_light(pos, 0) >= 12 then
 			if node.name == "mcl_core:ice" then
 				mcl_core.melt_ice(pos)
 			else
-				minetest.remove_node(pos)
+				core.remove_node(pos)
 			end
 		end
 	end
 })
 
 -- Freeze water
-minetest.register_abm({
+core.register_abm({
 	label = "Freeze water in cold areas",
 	nodenames = {"mcl_core:water_source", "mclx_core:river_water_source"},
 	interval = 32,
 	chance = 8,
 	action = function(pos, node)
-		if mcl_weather.has_snow(pos) and minetest.get_natural_light(vector.offset(pos,0,1,0), 0.5) == minetest.LIGHT_MAX + 1 and minetest.get_node_light(pos) < 10 then
+		if mcl_weather.has_snow(pos) and core.get_natural_light(vector.offset(pos,0,1,0), 0.5) == core.LIGHT_MAX + 1 and core.get_node_light(pos) < 10 then
 			node.name = "mcl_core:ice"
-			minetest.swap_node(pos, node)
+			core.swap_node(pos, node)
 		end
 	end
 })
@@ -447,12 +447,12 @@ minetest.register_abm({
 function mcl_core.melt_ice(pos)
 	-- Create a water source if ice is destroyed and there was something below it
 	local below = {x=pos.x, y=pos.y-1, z=pos.z}
-	local belownode = minetest.get_node(below)
+	local belownode = core.get_node(below)
 	local dim = mcl_worlds.pos_to_dimension(below)
 	if dim ~= "nether" and belownode.name ~= "air" and belownode.name ~= "ignore" and belownode.name ~= "mcl_core:void" then
-		minetest.set_node(pos, {name="mcl_core:water_source"})
+		core.set_node(pos, {name="mcl_core:water_source"})
 	else
-		minetest.remove_node(pos)
+		core.remove_node(pos)
 	end
 	local neighbors = {
 		{x=-1, y=0, z=0},
@@ -463,7 +463,7 @@ function mcl_core.melt_ice(pos)
 		{x=0, y=0, z=1},
 	}
 	for n=1, #neighbors do
-		minetest.check_single_for_falling(vector.add(pos, neighbors[n]))
+		core.check_single_for_falling(vector.add(pos, neighbors[n]))
 	end
 end
 
@@ -482,7 +482,7 @@ end
 -- The snowable nodes also MUST have _mcl_snowed defined to contain the name
 -- of the snowed node.
 function mcl_core.register_snowed_node(itemstring_snowed, itemstring_clear, tiles, sounds, clear_colorization, desc)
-	local def = table.copy(minetest.registered_nodes[itemstring_clear])
+	local def = table.copy(core.registered_nodes[itemstring_clear])
 	local create_doc_alias
 	if def.description then
 		create_doc_alias = true
@@ -534,9 +534,9 @@ function mcl_core.register_snowed_node(itemstring_snowed, itemstring_clear, tile
 	def._mcl_silk_touch_drop = {itemstring_clear}
 
 	-- Register stuff
-	minetest.register_node(itemstring_snowed, def)
+	core.register_node(itemstring_snowed, def)
 
-	if create_doc_alias and minetest.get_modpath("doc") then
+	if create_doc_alias and core.get_modpath("doc") then
 		doc.add_entry_alias("nodes", itemstring_clear, "nodes", itemstring_snowed)
 	end
 end
@@ -545,9 +545,9 @@ end
 -- This function assumes there is no snow cover node above. This function
 -- MUST NOT be called if there is a snow cover node above pos.
 function mcl_core.clear_snow_dirt(pos, node)
-	local def = minetest.registered_nodes[node.name]
+	local def = core.registered_nodes[node.name]
 	if def and def._mcl_snowless then
-		minetest.swap_node(pos, {name = def._mcl_snowless, param2=node.param2})
+		core.swap_node(pos, {name = def._mcl_snowless, param2=node.param2})
 	end
 end
 
@@ -558,17 +558,17 @@ end
 -- Makes constructed snowable node snowed if placed below a snow cover node.
 function mcl_core.on_snowable_construct(pos)
 	-- Myself
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 
 	-- Above
 	local apos = {x=pos.x, y=pos.y+1, z=pos.z}
-	local anode = minetest.get_node(apos)
+	local anode = core.get_node(apos)
 
 	-- Make snowed if needed
-	if minetest.get_item_group(anode.name, "snow_cover") == 1 then
-		local def = minetest.registered_nodes[node.name]
+	if core.get_item_group(anode.name, "snow_cover") == 1 then
+		local def = core.registered_nodes[node.name]
 		if def and def._mcl_snowed then
-			minetest.swap_node(pos, {name = def._mcl_snowed, param2=node.param2})
+			core.swap_node(pos, {name = def._mcl_snowed, param2=node.param2})
 		end
 	end
 end
@@ -586,22 +586,22 @@ end
 -- Makes snowable node below snowed.
 function mcl_core.on_snow_construct(pos)
 	local npos = {x=pos.x, y=pos.y-1, z=pos.z}
-	local node = minetest.get_node(npos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node(npos)
+	local def = core.registered_nodes[node.name]
 	if def and def._mcl_snowed then
-		minetest.swap_node(npos, {name = def._mcl_snowed, param2=node.param2})
+		core.swap_node(npos, {name = def._mcl_snowed, param2=node.param2})
 	end
 end
 -- after_destruct
 -- Clears snowed dirtlike node below.
 function mcl_core.after_snow_destruct(pos)
-	local nn = minetest.get_node(pos).name
+	local nn = core.get_node(pos).name
 	-- No-op if snow was replaced with snow
-	if minetest.get_item_group(nn, "snow_cover") == 1 then
+	if core.get_item_group(nn, "snow_cover") == 1 then
 		return
 	end
 	local npos = {x=pos.x, y=pos.y-1, z=pos.z}
-	local node = minetest.get_node(npos)
+	local node = core.get_node(npos)
 	mcl_core.clear_snow_dirt(npos, node)
 end
 
@@ -615,24 +615,24 @@ local crobby_particle = {
 	collision_removal = false,
 }
 
-minetest.register_abm({
+core.register_abm({
 	label = "Obsidian cries",
 	nodenames = {"mcl_core:crying_obsidian"},
 	interval = 5,
 	chance = 10,
 	action = function(pos)
 		if core.get_node(vector.offset(pos, 0, -1, 0)).name ~= "air" then return end
-		minetest.after(0.1 + math.random() * 1.4, function()
+		core.after(0.1 + math.random() * 1.4, function()
 			local pt = table.copy(crobby_particle)
 			pt.size = 1.3 + math.random() * 1.2
 			pt.expirationtime = 0.5 + math.random()
 			pt.pos = vector.offset(pos, math.random() - 0.5, -0.51, math.random() - 0.5)
-			minetest.add_particle(pt)
-			minetest.after(pt.expirationtime, function()
+			core.add_particle(pt)
+			core.after(pt.expirationtime, function()
 				pt.acceleration = vector.new(0, -9, 0)
 				pt.collisiondetection = true
 				pt.expirationtime = 1.2 + math.random() * 3.3
-				minetest.add_particle(pt)
+				core.add_particle(pt)
 			end)
 		end)
 	end
@@ -646,15 +646,15 @@ function mcl_core.make_dirtpath(itemstack, placer, pointed_thing)
 
 	local above = table.copy(pointed_thing.under)
 	above.y = above.y + 1
-	if minetest.get_node(above).name == "air" then
-		if not minetest.is_creative_enabled(placer:get_player_name()) then
+	if core.get_node(above).name == "air" then
+		if not core.is_creative_enabled(placer:get_player_name()) then
 			-- Add wear (as if digging a shovely node)
 			local toolname = itemstack:get_name()
 			local wear = mcl_autogroup.get_wear(toolname, "shovely")
 			itemstack:add_wear(wear)
 		end
-		minetest.sound_play({name="default_grass_footstep", gain=1}, {pos = above}, true)
-		minetest.swap_node(pointed_thing.under, {name="mcl_core:grass_path"})
+		core.sound_play({name="default_grass_footstep", gain=1}, {pos = above}, true)
+		core.swap_node(pointed_thing.under, {name="mcl_core:grass_path"})
 	end
 	return itemstack,true
 end
@@ -695,19 +695,19 @@ function mcl_core.bone_meal_grass(_, _, pointed_thing)
 		for j = -7, 7 do
 			for y = 0, 2 do
 				local pos = vector.offset(pointed_thing.under, i, y, j)
-				local n = minetest.get_node(pos)
-				local n2 = minetest.get_node(vector.offset(pos, 0, -1, 0))
+				local n = core.get_node(pos)
+				local n2 = core.get_node(vector.offset(pos, 0, -1, 0))
 
-				if n.name ~= "" and n.name == "air" and (minetest.get_item_group(n2.name, "grass_block_no_snow") == 1) then
+				if n.name ~= "" and n.name == "air" and (core.get_item_group(n2.name, "grass_block_no_snow") == 1) then
 					-- Randomly generate flowers, tall grass or nothing
 					if math.random(1, 100) <= 90 / ((math.abs(i) + math.abs(j)) / 2)then
 						-- 90% tall grass, 10% flower
 						if math.random(1,100) <= 90 then
 							local col = n2.param2
-							minetest.add_node(pos, {name="mcl_flowers:tallgrass", param2=col})
+							core.add_node(pos, {name="mcl_flowers:tallgrass", param2=col})
 						else
 							local flowers_table
-							local biome = minetest.get_biome_name(minetest.get_biome_data(pos).biome)
+							local biome = core.get_biome_name(core.get_biome_data(pos).biome)
 							if biome == "Swampland" or biome == "Swampland_shore" or biome == "Swampland_ocean" or biome == "Swampland_deep_ocean" or biome == "Swampland_underground" then
 								flowers_table = flowers_table_swampland
 							elseif biome == "FlowerForest" or biome == "FlowerForest_beach" or biome == "FlowerForest_ocean" or biome == "FlowerForest_deep_ocean" or biome == "FlowerForest_underground" then
@@ -717,7 +717,7 @@ function mcl_core.bone_meal_grass(_, _, pointed_thing)
 							else
 								flowers_table = flowers_table_simple
 							end
-							minetest.add_node(pos, {name=flowers_table[math.random(1, #flowers_table)]})
+							core.add_node(pos, {name=flowers_table[math.random(1, #flowers_table)]})
 						end
 					end
 				end
@@ -730,10 +730,10 @@ end
 -- Show positions of barriers when player is wielding a barrier
 mcl_player.register_globalstep_slow(function(player)
 	local wi = player:get_wielded_item():get_name()
-	if wi == "mcl_core:barrier" or wi == "mcl_core:realm_barrier" or minetest.get_item_group(wi, "light_block") ~= 0 then
+	if wi == "mcl_core:barrier" or wi == "mcl_core:realm_barrier" or core.get_item_group(wi, "light_block") ~= 0 then
 		local pos = vector.round(player:get_pos())
 		local r = 8
-		local vm = minetest.get_voxel_manip()
+		local vm = core.get_voxel_manip()
 		local emin, emax = vm:read_from_map({x=pos.x-r, y=pos.y-r, z=pos.z-r}, {x=pos.x+r, y=pos.y+r, z=pos.z+r})
 		local area = VoxelArea:new{
 			MinEdge = emin,
@@ -744,8 +744,8 @@ mcl_player.register_globalstep_slow(function(player)
 		for y=pos.y-r, pos.y+r do
 		for z=pos.z-r, pos.z+r do
 			local vi = area:indexp({x=x, y=y, z=z})
-			local nodename = minetest.get_name_from_content_id(data[vi])
-			local light_block_group = minetest.get_item_group(nodename, "light_block")
+			local nodename = core.get_name_from_content_id(data[vi])
+			local light_block_group = core.get_item_group(nodename, "light_block")
 
 			local tex
 			if nodename == "mcl_core:barrier" then
@@ -756,7 +756,7 @@ mcl_player.register_globalstep_slow(function(player)
 				tex = "mcl_core_light_" .. (light_block_group - 1) .. ".png"
 			end
 			if tex then
-				minetest.add_particle({
+				core.add_particle({
 					pos = {x=x, y=y, z=z},
 					expirationtime = 1,
 					size = 8,

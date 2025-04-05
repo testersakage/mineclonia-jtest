@@ -1,7 +1,7 @@
 -- Eye of Ender
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_entity("mcl_end:ender_eye", {
+core.register_entity("mcl_end:ender_eye", {
 	initial_properties = {
 		physical = false,
 		textures = {"mcl_end_ender_eye.png"},
@@ -41,7 +41,7 @@ minetest.register_entity("mcl_end:ender_eye", {
 				local pos = self.object:get_pos()
 				local v = self.object:get_velocity()
 				self.object:remove()
-				local item = minetest.add_item(pos, "mcl_end:ender_eye")
+				local item = core.add_item(pos, "mcl_end:ender_eye")
 				item:set_velocity(v)
 				return
 			end
@@ -59,7 +59,7 @@ minetest.register_entity("mcl_end:ender_eye", {
 			pos.x = pos.x + math.random(-1, 1)*0.5
 			pos.y = pos.y + math.random(-1, 0)*0.5
 			pos.z = pos.z + math.random(-1, 1)*0.5
-			minetest.add_particle({
+			core.add_particle({
 				pos = pos,
 				texture = "mcl_particles_teleport.png",
 				expirationtime = 1,
@@ -81,12 +81,12 @@ local function throw_eye(itemstack, user)
 	origin.y = origin.y + 1.5
 	local strongholds = mcl_structures.registered_structures["end_shrine"].static_pos
 	local dim = mcl_worlds.pos_to_dimension(origin)
-	local is_creative = minetest.is_creative_enabled(user:get_player_name())
+	local is_creative = core.is_creative_enabled(user:get_player_name())
 
 	-- Just drop the eye of ender if there are no strongholds
 	if #strongholds <= 0 or dim ~= "overworld" then
 		if not is_creative then
-			minetest.item_drop(ItemStack("mcl_end:ender_eye"), user, user:get_pos())
+			core.item_drop(ItemStack("mcl_end:ender_eye"), user, user:get_pos())
 			itemstack:take_item()
 		end
 		return itemstack
@@ -114,7 +114,7 @@ local function throw_eye(itemstack, user)
 	end
 
 	-- Throw it!
-	local obj = minetest.add_entity(origin, "mcl_end:ender_eye")
+	local obj = core.add_entity(origin, "mcl_end:ender_eye")
 	if not obj or not obj:get_pos() then return end
 	local dir
 
@@ -141,7 +141,7 @@ local function throw_eye(itemstack, user)
 	return itemstack
 end
 
-minetest.register_craftitem("mcl_end:ender_eye", {
+core.register_craftitem("mcl_end:ender_eye", {
 	description = S("Eye of Ender"),
 	_tt_help = S("Guides the way to the mysterious End dimension"),
 	_doc_items_longdesc = S("This item is used to locate End portal shrines in the Overworld and to activate End portals.") .. "\n" .. S("NOTE: The End dimension is currently incomplete and might change in future versions."),
@@ -152,7 +152,7 @@ minetest.register_craftitem("mcl_end:ender_eye", {
 	on_secondary_use = throw_eye,
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_end:ender_eye",
 	recipe = {"mcl_mobitems:blaze_powder", "mcl_throwing:ender_pearl"},

@@ -12,8 +12,8 @@ under the LGPLv2.1 license.
 
 mcl_explosions = {}
 
-local mod_fire = minetest.get_modpath("mcl_fire")
-local explosions_griefing = minetest.settings:get_bool("mcl_explosions_griefing", true)
+local mod_fire = core.get_modpath("mcl_fire")
+local explosions_griefing = core.settings:get_bool("mcl_explosions_griefing", true)
 
 -- Saved sphere explosion shapes for various radiuses
 local sphere_shapes = {}
@@ -33,10 +33,10 @@ local N_EXPOSURE_RAYS = 16
 -- indestructible
 local INDESTRUCT_BLASTRES = 1000000
 
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
 	-- Store blast resistance values by content ids to improve performance.
-	for name, def in pairs(minetest.registered_nodes) do
-		local id = minetest.get_content_id(name)
+	for name, def in pairs(core.registered_nodes) do
+		local id = core.get_content_id(name)
 		node_blastres[id] = def._mcl_blast_resistance or 0
 		node_on_blast[id] = def.on_blast
 		node_walkable[id] = def.walkable
@@ -55,7 +55,7 @@ local function compute_sphere_rays(radius)
 	local sphere = {}
 
 	local function add_ray(pos)
-		sphere[minetest.hash_node_position(pos)] = pos
+		sphere[core.hash_node_position(pos)] = pos
 	end
 
 	for y = -radius, radius do
@@ -110,7 +110,7 @@ end
 -- pos - The position of the explosion
 -- radius - The radius of the explosion
 local function add_particles(pos, radius)
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 64,
 		time = 0.125,
 		minpos = pos,
@@ -153,7 +153,7 @@ mcl_explosions.add_particles = add_particles
 -- inlined to avoid function calls and unnecessary table creation. This was
 -- measured to give a significant performance increase.
 local function trace_explode(pos, strength, raydirs, radius, info, direct, source)
-	local vm = minetest.get_voxel_manip()
+	local vm = core.get_voxel_manip()
 
 	local emin, emax = vm:read_from_map(vector.subtract(pos, radius),
 		vector.add(pos, radius))
@@ -201,7 +201,7 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 					br = max_blast_resistance
 				end
 
-				local hash = minetest.hash_node_position(npos)
+				local hash = core.hash_node_position(npos)
 
 				rpos_x = rpos_x + STEP_LENGTH * rdir_x
 				rpos_y = rpos_y + STEP_LENGTH * rdir_y
@@ -213,8 +213,8 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 					break
 				end
 
-				if cid ~= minetest.CONTENT_AIR then
-					if not minetest.is_protected(npos, "") or grief_protected then
+				if cid ~= core.CONTENT_AIR then
+					if not core.is_protected(npos, "") or grief_protected then
 						destroy[hash] = idx
 					end
 				end
@@ -226,7 +226,7 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 	local punch_radius = 2 * strength
 
 	-- Trace rays for entity damage
-	for obj in minetest.objects_inside_radius(pos, punch_radius) do
+	for obj in core.objects_inside_radius(pos, punch_radius) do
 		local ent = obj:get_luaentity()
 
 		-- Ignore items to lower lag
@@ -327,50 +327,50 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 		local remove = true
 
 		if do_drop or on_blast then
-			local npos = minetest.get_position_from_hash(hash)
+			local npos = core.get_position_from_hash(hash)
 			if on_blast then
 				on_blast(npos, 1.0, do_drop)
 				remove = false
 			else
-				local name = minetest.get_name_from_content_id(data[idx])
-				local drop = minetest.get_node_drops(name, "")
+				local name = core.get_name_from_content_id(data[idx])
+				local drop = core.get_node_drops(name, "")
 
 				for _, item in ipairs(drop) do
 					if type(item) ~= "string" then
 						item = item:get_name() .. item:get_count()
 					end
-					minetest.add_item(npos, item)
+					core.add_item(npos, item)
 				end
 			end
 		end
 		if remove then
 			if mod_fire and fire and math.random(1, 3) == 1 then
-				table.insert(fires, minetest.get_position_from_hash(hash))
+				table.insert(fires, core.get_position_from_hash(hash))
 			else
-				table.insert(airs, minetest.get_position_from_hash(hash))
+				table.insert(airs, core.get_position_from_hash(hash))
 			end
 		end
 	end
-	-- We use minetest.bulk_set_node instead of LVM because we want to have on_destruct and
+	-- We use core.bulk_set_node instead of LVM because we want to have on_destruct and
 	-- on_construct being called
 	if #airs > 0 then
-		minetest.bulk_set_node(airs, { name = "air" })
+		core.bulk_set_node(airs, { name = "air" })
 	end
 	if #fires > 0 then
-		minetest.bulk_set_node(fires, { name = "mcl_fire:fire" })
+		core.bulk_set_node(fires, { name = "mcl_fire:fire" })
 	end
 	-- Update falling nodes
 	for a = 1, #airs do
 		local p = airs[a]
-		minetest.check_for_falling(vector.offset(p, 0, 1, 0))
+		core.check_for_falling(vector.offset(p, 0, 1, 0))
 	end
 	for f = 1, #fires do
 		local p = fires[f]
-		minetest.check_for_falling(vector.offset(p, 0, 1, 0))
+		core.check_for_falling(vector.offset(p, 0, 1, 0))
 	end
 
 	-- Log explosion
-	minetest.log("action", "Explosion at " .. minetest.pos_to_string(pos) .. " with strength " .. strength .. " and radius " ..
+	core.log("action", "Explosion at " .. core.pos_to_string(pos) .. " with strength " .. strength .. " and radius " ..
 		radius)
 end
 
@@ -420,7 +420,7 @@ function mcl_explosions.explode(pos, strength, info, direct, source)
 	end
 
 	-- Dont do drops in creative mode
-	if minetest.is_creative_enabled("") then
+	if core.is_creative_enabled("") then
 		info.drop_chance = 0
 	end
 
@@ -430,7 +430,7 @@ function mcl_explosions.explode(pos, strength, info, direct, source)
 		add_particles(pos, radius)
 	end
 	if info.sound then
-		minetest.sound_play("tnt_explode", {
+		core.sound_play("tnt_explode", {
 			pos = pos, gain = 1.0,
 			max_hear_distance = strength * 16
 		}, true)

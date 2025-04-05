@@ -1,12 +1,12 @@
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
-local only_peaceful_mobs = minetest.settings:get_bool("only_peaceful_mobs", false)
+local only_peaceful_mobs = core.settings:get_bool("only_peaceful_mobs", false)
 
 -- API for Mobs Redo: MineClone 2 Edition (MRM)
 
 -- Localize
-local S = minetest.get_translator("mcl_mobs")
+local S = core.get_translator("mcl_mobs")
 
 -- Invisibility mod check
 mcl_mobs.invis = {}
@@ -17,7 +17,7 @@ end
 
 function mob_class:safe_remove()
 	self.removed = true
-	minetest.after(0,function(obj)
+	core.after(0,function(obj)
 		if obj and obj:get_pos() then
 			mcl_burning.extinguish(obj)
 			obj:remove()
@@ -36,8 +36,8 @@ function mob_class:replace_with (successor_type, propagate_equipment, mob_static
 			= table.merge (default_staticdata, mob_staticdata)
 	end
 	local self_pos = self.object:get_pos ()
-	local staticdata = minetest.serialize (default_staticdata)
-	local new = minetest.add_entity (self_pos, successor_type, staticdata)
+	local staticdata = core.serialize (default_staticdata)
+	local new = core.add_entity (self_pos, successor_type, staticdata)
 	if not new then
 		return nil
 	end
@@ -210,7 +210,7 @@ Edit the copied state so it's serialized in the state you need to.
 ]]
 function mob_class:get_staticdata()
 	local data = self:get_staticdata_table ()
-	return minetest.serialize (data)
+	return core.serialize (data)
 end
 
 function mob_class:valid_texture(def_textures)
@@ -313,7 +313,7 @@ function mob_class:mob_activate (staticdata, dtime)
 	end
 
 	if staticdata then
-		local tmp = minetest.deserialize(staticdata)
+		local tmp = core.deserialize(staticdata)
 
 		if tmp then
 			for _,stat in pairs(tmp) do
@@ -629,13 +629,13 @@ function mob_class:on_step (dtime, moveresult)
 	end
 end
 
-minetest.register_chatcommand("clearmobs",{
+core.register_chatcommand("clearmobs",{
 	privs = { maphack = true },
 	params = "[<all> | <nametagged> | <tamed>] [<range>]",
 	description=S("Remove all, nametagged or tamed mobs within the specified distance or everywhere. When unspecified remove all mobs except tamed and nametagged ones."),
 	func=function(n,param)
 		local sparam = param:split(" ")
-		local p = minetest.get_player_by_name(n)
+		local p = core.get_player_by_name(n)
 
 		local typ
 		local range
@@ -656,7 +656,7 @@ minetest.register_chatcommand("clearmobs",{
 			end
 		end
 
-		for _, o in pairs(minetest.luaentities) do
+		for _, o in pairs(core.luaentities) do
 			if o.is_mob then
 				if not range or vector.distance(p:get_pos(), o.object:get_pos()) <= range then
 					if typ == "all" or

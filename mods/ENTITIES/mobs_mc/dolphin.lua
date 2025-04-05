@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
@@ -82,7 +82,7 @@ local dolphin = {
 function dolphin:on_rightclick (clicker)
 	local wi = clicker:get_wielded_item()
 	if table.indexof(food_items, wi:get_name()) ~= -1 then
-		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if not core.is_creative_enabled(clicker:get_player_name()) then
 			wi:take_item()
 			clicker:set_wielded_item(wi)
 		end
@@ -97,7 +97,7 @@ end
 
 function dolphin:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
-	if minetest.get_item_group (self.standing_in, "water") == 0
+	if core.get_item_group (self.standing_in, "water") == 0
 		and not mcl_weather.is_exposed_to_rain (self.object:get_pos ()) then
 		self._moisture = self._moisture - dtime
 		if self._moisture <= 0 and self:check_timer ("desiccation", 1.0) then
@@ -146,7 +146,7 @@ local function dolphin_swim_with_boat (self, self_pos, dtime)
 				self.swd_phase = 0
 			else
 				local driver_yaw = boat:get_yaw ()
-				local dir = minetest.yaw_to_dir (driver_yaw)
+				local dir = core.yaw_to_dir (driver_yaw)
 				local target_pos = vector.offset (self_pos, dir.x * 10, 0,
 								  dir.z * 10)
 				self:gopath (target_pos, 1.97)
@@ -155,7 +155,7 @@ local function dolphin_swim_with_boat (self, self_pos, dtime)
 		return true
 	else
 		local driver, boat = nil, nil
-		for object in minetest.objects_inside_radius (self_pos, 5) do
+		for object in core.objects_inside_radius (self_pos, 5) do
 			local entity
 			entity = object:get_luaentity ()
 			if entity and (entity.name == "mcl_boats:boat"
@@ -195,13 +195,13 @@ local CLEARANCE_STEPS = {
 }
 
 local function is_water (nodepos)
-	local node = minetest.get_node (nodepos)
-	return minetest.get_item_group (node.name, "water") ~= 0
+	local node = core.get_node (nodepos)
+	return core.get_item_group (node.name, "water") ~= 0
 end
 
 local function is_air (nodepos)
-	local node = minetest.get_node (nodepos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (nodepos)
+	local def = core.registered_nodes[node.name]
 	return def and not def.walkable and def.liquidtype == "none"
 end
 
@@ -325,7 +325,7 @@ function dolphin:find_treasure (self_pos)
 	-- structures, just the chests.
 	local p1 = vector.offset (self_pos, -64, -16, -64)
 	local p2 = vector.offset (self_pos, 64, math.min (1, self_pos.y+16), 64)
-	local chests = minetest.find_nodes_in_area (p1, p2, {"mcl_chests:chest_small"})
+	local chests = core.find_nodes_in_area (p1, p2, {"mcl_chests:chest_small"})
 	if chests and #chests > 0 then
 		table.sort(chests, function(a, b)
 			return vector.distance (self_pos, a)
@@ -428,7 +428,7 @@ end
 local function dolphin_return_to_water_1 (self_pos)
 	local aa = vector.offset (self_pos, -2, -2, -2)
 	local bb = vector.offset (self_pos, 2, 2, 2)
-	local nodes = minetest.find_nodes_in_area (aa, bb, {
+	local nodes = core.find_nodes_in_area (aa, bb, {
 		"group:water",
 	})
 	table.sort (nodes, function (v1, v2)
@@ -451,7 +451,7 @@ local function dolphin_return_to_water (self, self_pos, dtime)
 	if self.pacing then
 		return false
 	end
-	if minetest.get_item_group (self.standing_in, "water") ~= 0 then
+	if core.get_item_group (self.standing_in, "water") ~= 0 then
 		return false
 	end
 	local node = dolphin_return_to_water_1 (self_pos)
@@ -473,7 +473,7 @@ local function dolphin_breathe_air (self, self_pos, dtime)
 		-- non-walkable blocks that are as good as air?
 		local aa = vector.offset (self_pos, -1, 0, -1)
 		local bb = vector.offset (self_pos, -1, 8, -1)
-		local air_blocks = minetest.find_nodes_in_area (aa, bb, {"air"})
+		local air_blocks = core.find_nodes_in_area (aa, bb, {"air"})
 		table.sort (air_blocks, function (a, b)
 			return manhattan3d (a, self_pos) < manhattan3d (b, self_pos)
 		end)
@@ -487,7 +487,7 @@ local function dolphin_breathe_air (self, self_pos, dtime)
 		-- non-walkable blocks that are as good as air?
 		local aa = vector.offset (self_pos, -1, 0, -1)
 		local bb = vector.offset (self_pos, 1, 8, 1)
-		local air_blocks = minetest.find_nodes_in_area (aa, bb, {"air"})
+		local air_blocks = core.find_nodes_in_area (aa, bb, {"air"})
 		table.sort (air_blocks, function (a, b)
 			return manhattan3d (a, self_pos) < manhattan3d (b, self_pos)
 		end)
@@ -510,7 +510,7 @@ local function dolphin_gwp_basic_classify (pos)
 		return "IGNORE"
 	end
 	local name = gwp_nodevalue_to_name (nodevalue)
-	local def = minetest.registered_nodes[name]
+	local def = core.registered_nodes[name]
 	if not def then
 		value = "BLOCKED"
 	elseif not def.groups.water or def.groups.water == 0 then
@@ -588,7 +588,7 @@ mcl_mobs.spawn_setup ({
 	min_height = mobs_mc.water_level - 16,
 	max_height = mobs_mc.water_level + 1,
 	min_light = 0,
-	max_light = minetest.LIGHT_MAX + 1,
+	max_light = core.LIGHT_MAX + 1,
 	aoc = 7,
 	chance = 70,
 	biomes = {

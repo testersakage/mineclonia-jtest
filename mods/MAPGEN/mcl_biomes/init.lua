@@ -1,12 +1,12 @@
-local mg_seed = minetest.get_mapgen_setting("seed")
+local mg_seed = core.get_mapgen_setting("seed")
 
-local mod_mcl_structures = minetest.get_modpath("mcl_structures")
-local mod_mcl_core = minetest.get_modpath("mcl_core")
-local mod_mcl_mushrooms = minetest.get_modpath("mcl_mushrooms")
-local mod_mcl_crimson = minetest.get_modpath("mcl_crimson")
-local mod_mcl_blackstone = minetest.get_modpath("mcl_blackstone")
-local mod_mcl_mangrove = minetest.get_modpath("mcl_mangrove")
-local mod_cherry_blossom = minetest.get_modpath("mcl_cherry_blossom")
+local mod_mcl_structures = core.get_modpath("mcl_structures")
+local mod_mcl_core = core.get_modpath("mcl_core")
+local mod_mcl_mushrooms = core.get_modpath("mcl_mushrooms")
+local mod_mcl_crimson = core.get_modpath("mcl_crimson")
+local mod_mcl_blackstone = core.get_modpath("mcl_blackstone")
+local mod_mcl_mangrove = core.get_modpath("mcl_mangrove")
+local mod_cherry_blossom = core.get_modpath("mcl_cherry_blossom")
 
 local deco_id_chorus_plant
 
@@ -36,7 +36,7 @@ Based off <https://minecraft.gamepedia.com/Biomes> ]]
 
 local function register_classic_superflat_biome()
 	-- Classic Superflat: bedrock (not part of biome), 2 dirt, 1 grass block
-	minetest.register_biome({
+	core.register_biome({
 		name = "flat",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -140,7 +140,7 @@ local function register_biomes()
 
 
 	-- Ice Plains Spikes (rare)
-	minetest.register_biome({
+	core.register_biome({
 		name = "IcePlainsSpikes",
 		node_top = "mcl_core:snowblock",
 		depth_top = 1,
@@ -160,7 +160,7 @@ local function register_biomes()
 		_mcl_skycolor = "#7FA1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "IcePlainsSpikes_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 2,
@@ -180,7 +180,7 @@ local function register_biomes()
 	})
 
 	-- Cold Taiga
-	minetest.register_biome({
+	core.register_biome({
 		name = "ColdTaiga",
 		node_dust = "mcl_core:snow",
 		node_top = "mcl_core:dirt_with_grass_snow",
@@ -200,7 +200,7 @@ local function register_biomes()
 	})
 
 	-- A cold beach-like biome, implemented as low part of Cold Taiga
-	minetest.register_biome({
+	core.register_biome({
 		name = "ColdTaiga_beach",
 		node_dust = "mcl_core:snow",
 		node_top = "mcl_core:sand",
@@ -221,7 +221,7 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor
 	})
 	-- Water part of the beach. Added to prevent snow being on the ice.
-	minetest.register_biome({
+	core.register_biome({
 		name = "ColdTaiga_beach_water",
 		node_top = "mcl_core:sand",
 		depth_top = 2,
@@ -240,7 +240,7 @@ local function register_biomes()
 		_mcl_skycolor = "#7FA1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "ColdTaiga_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -260,7 +260,7 @@ local function register_biomes()
 	})
 
 	-- Mega Pine Taiga
-	minetest.register_biome({
+	core.register_biome({
 		name = "MegaTaiga",
 		node_top = "mcl_core:podzol",
 		depth_top = 1,
@@ -277,7 +277,7 @@ local function register_biomes()
 		_mcl_skycolor = "#7CA3FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "MegaTaiga_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -296,7 +296,7 @@ local function register_biomes()
 	})
 
 	-- Mega Spruce Taiga
-	minetest.register_biome({
+	core.register_biome({
 		name = "MegaSpruceTaiga",
 		node_top = "mcl_core:podzol",
 		depth_top = 1,
@@ -313,7 +313,7 @@ local function register_biomes()
 		_mcl_skycolor = "#7DA3FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "MegaSpruceTaiga_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -333,7 +333,7 @@ local function register_biomes()
 
 	-- Extreme Hills
 	-- Sparsely populated grasslands with little tallgras and trees.
-	minetest.register_biome({
+	core.register_biome({
 		name = "ExtremeHills",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -350,7 +350,7 @@ local function register_biomes()
 		_mcl_skycolor = "#7DA2FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "ExtremeHills_beach",
 		node_top = "mcl_core:sand",
 		depth_top = 2,
@@ -368,7 +368,7 @@ local function register_biomes()
 		_mcl_skycolor = beach_skycolor,
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "ExtremeHills_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -389,7 +389,7 @@ local function register_biomes()
 
 	-- Extreme Hills M
 	-- Just gravel.
-	minetest.register_biome({
+	core.register_biome({
 		name = "ExtremeHillsM",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -406,7 +406,7 @@ local function register_biomes()
 		_mcl_skycolor = "#7DA2FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "ExtremeHillsM_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -427,7 +427,7 @@ local function register_biomes()
 	-- Extreme Hills+
 	-- This biome is near-identical to Extreme Hills on the surface but has snow-covered mountains with spruce/oak
 	-- forests above a certain height.
-	minetest.register_biome({
+	core.register_biome({
 		name = "ExtremeHills+",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -446,7 +446,7 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor
 	})
 	---- Sub-biome for Extreme Hills+ for those snow forests
-	minetest.register_biome({
+	core.register_biome({
 		name = "ExtremeHills+_snowtop",
 		node_dust = "mcl_core:snow",
 		node_top = "mcl_core:dirt_with_grass_snow",
@@ -465,7 +465,7 @@ local function register_biomes()
 		_mcl_skycolor = "#7DA2FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "ExtremeHills+_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -486,7 +486,7 @@ local function register_biomes()
 	-- Stone beach
 	-- Just stone.
 	-- Not neccessarily a beach at all, only named so according to MC
-	minetest.register_biome({
+	core.register_biome({
 		name = "StoneBeach",
 		node_riverbed = "mcl_core:sand",
 		depth_riverbed = 1,
@@ -500,7 +500,7 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor
 	})
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "StoneBeach_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -518,7 +518,7 @@ local function register_biomes()
 	})
 
 	-- Ice Plains
-	minetest.register_biome({
+	core.register_biome({
 		name = "IcePlains",
 		node_dust = "mcl_core:snow",
 		node_top = "mcl_core:dirt_with_grass_snow",
@@ -539,7 +539,7 @@ local function register_biomes()
 		_mcl_skycolor = "#7FA1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "IcePlains_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -558,7 +558,7 @@ local function register_biomes()
 	})
 
 	-- Plains
-	minetest.register_biome({
+	core.register_biome({
 		name = "Plains",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -575,7 +575,7 @@ local function register_biomes()
 		_mcl_skycolor = "#78A7FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Plains_beach",
 		node_top = "mcl_core:sand",
 		depth_top = 2,
@@ -592,7 +592,7 @@ local function register_biomes()
 		_mcl_skycolor = beach_skycolor,
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Plains_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -610,7 +610,7 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor
 	})
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "CherryGrove",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -629,7 +629,7 @@ local function register_biomes()
 	})
 
 	-- Sunflower Plains
-	minetest.register_biome({
+	core.register_biome({
 		name = "SunflowerPlains",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -646,7 +646,7 @@ local function register_biomes()
 		_mcl_skycolor = "#78A7FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "SunflowerPlains_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -665,7 +665,7 @@ local function register_biomes()
 	})
 
 	-- Taiga
-	minetest.register_biome({
+	core.register_biome({
 		name = "Taiga",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -682,7 +682,7 @@ local function register_biomes()
 		_mcl_skycolor = "#7DA3FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Taiga_beach",
 		node_top = "mcl_core:sand",
 		depth_top = 2,
@@ -699,7 +699,7 @@ local function register_biomes()
 		_mcl_skycolor = beach_skycolor,
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Taiga_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -718,7 +718,7 @@ local function register_biomes()
 	})
 
 	-- Forest
-	minetest.register_biome({
+	core.register_biome({
 		name = "Forest",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -735,7 +735,7 @@ local function register_biomes()
 		_mcl_skycolor = "#79A6FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Forest_beach",
 		node_top = "mcl_core:sand",
 		depth_top = 2,
@@ -752,7 +752,7 @@ local function register_biomes()
 		_mcl_skycolor = beach_skycolor,
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Forest_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -771,7 +771,7 @@ local function register_biomes()
 	})
 
 	-- Flower Forest
-	minetest.register_biome({
+	core.register_biome({
 		name = "FlowerForest",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -788,7 +788,7 @@ local function register_biomes()
 		_mcl_skycolor = "#79A6FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "FlowerForest_beach",
 		node_top = "mcl_core:sand",
 		depth_top = 2,
@@ -805,7 +805,7 @@ local function register_biomes()
 		_mcl_skycolor = beach_skycolor,
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "FlowerForest_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -824,7 +824,7 @@ local function register_biomes()
 	})
 
 	-- Birch Forest
-	minetest.register_biome({
+	core.register_biome({
 		name = "BirchForest",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -841,7 +841,7 @@ local function register_biomes()
 		_mcl_skycolor = "#7AA5FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "BirchForest_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -860,7 +860,7 @@ local function register_biomes()
 	})
 
 	-- Birch Forest M
-	minetest.register_biome({
+	core.register_biome({
 		name = "BirchForestM",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -877,7 +877,7 @@ local function register_biomes()
 		_mcl_skycolor = "#7AA5FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "BirchForestM_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -896,7 +896,7 @@ local function register_biomes()
 	})
 
 	-- Desert
-	minetest.register_biome({
+	core.register_biome({
 		name = "Desert",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -914,7 +914,7 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Desert_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -933,7 +933,7 @@ local function register_biomes()
 	})
 
 	-- Roofed Forest
-	minetest.register_biome({
+	core.register_biome({
 		name = "RoofedForest",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -950,7 +950,7 @@ local function register_biomes()
 		_mcl_skycolor = "#79A6FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "RoofedForest_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -970,7 +970,7 @@ local function register_biomes()
 
 	-- Mesa: Starts with a couple of sand-covered layers (the "sandlevel"),
 	-- followed by terracotta with colorful (but imperfect) strata
-	minetest.register_biome({
+	core.register_biome({
 		name = "Mesa",
 		node_top = "mcl_colorblocks:hardened_clay",
 		depth_top = 1,
@@ -988,7 +988,7 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor
 	})
 	-- Helper biome for the red sand at the bottom of Mesas.
-	minetest.register_biome({
+	core.register_biome({
 		name = "Mesa_sandlevel",
 		node_top = "mcl_core:redsand",
 		depth_top = 1,
@@ -1006,7 +1006,7 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Mesa_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 3,
@@ -1026,7 +1026,7 @@ local function register_biomes()
 	})
 
 	-- Mesa Bryce: Variant of Mesa, but with perfect strata and a much smaller red sand desert
-	minetest.register_biome({
+	core.register_biome({
 		name = "MesaBryce",
 		node_top = "mcl_colorblocks:hardened_clay",
 		depth_top = 1,
@@ -1043,7 +1043,7 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "MesaBryce_sandlevel",
 		node_top = "mcl_core:redsand",
 		depth_top = 1,
@@ -1061,7 +1061,7 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "MesaBryce_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 3,
@@ -1084,7 +1084,7 @@ local function register_biomes()
 
 	-- Mesa Plateau F
 	-- Identical to Mesa below Y=30. At Y=30 and above there is a "dry" oak forest
-	minetest.register_biome({
+	core.register_biome({
 		name = "MesaPlateauF",
 		node_top = "mcl_colorblocks:hardened_clay",
 		depth_top = 1,
@@ -1105,7 +1105,7 @@ local function register_biomes()
 	-- The oak forest plateau of this biome.
 	-- This is a plateau for grass blocks, dry shrubs, tall grass, coarse dirt and oaks.
 	-- Strata don't generate here.
-	minetest.register_biome({
+	core.register_biome({
 		name = "MesaPlateauF_grasstop",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -1123,7 +1123,7 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "MesaPlateauF_sandlevel",
 		node_top = "mcl_core:redsand",
 		depth_top = 2,
@@ -1141,7 +1141,7 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "MesaPlateauF_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 3,
@@ -1164,7 +1164,7 @@ local function register_biomes()
 	-- Dryer and more "chaotic"/"weathered down" variant of MesaPlateauF:
 	-- oak forest is less dense, more coarse dirt, more erratic terrain, vertical blend, more red sand layers,
 	-- red sand as ores, red sandstone at sandlevel
-	minetest.register_biome({
+	core.register_biome({
 		name = "MesaPlateauFM",
 		node_top = "mcl_colorblocks:hardened_clay",
 		depth_top = 1,
@@ -1183,7 +1183,7 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor
 	})
 	-- Grass plateau
-	minetest.register_biome({
+	core.register_biome({
 		name = "MesaPlateauFM_grasstop",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -1201,7 +1201,7 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "MesaPlateauFM_sandlevel",
 		node_top = "mcl_core:redsand",
 		depth_top = 3,
@@ -1221,7 +1221,7 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "MesaPlateauFM_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 3,
@@ -1241,7 +1241,7 @@ local function register_biomes()
 	})
 
 	-- Savanna
-	minetest.register_biome({
+	core.register_biome({
 		name = "Savanna",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -1258,7 +1258,7 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Savanna_beach",
 		node_top = "mcl_core:sand",
 		depth_top = 3,
@@ -1275,7 +1275,7 @@ local function register_biomes()
 		_mcl_skycolor = beach_skycolor,
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Savanna_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -1296,7 +1296,7 @@ local function register_biomes()
 	-- Savanna M
 	-- Changes to Savanna: Coarse Dirt. No sand beach. No oaks.
 	-- Otherwise identical to Savanna
-	minetest.register_biome({
+	core.register_biome({
 		name = "SavannaM",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -1313,7 +1313,7 @@ local function register_biomes()
 		_mcl_skycolor = "#6EB1FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "SavannaM_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -1332,7 +1332,7 @@ local function register_biomes()
 	})
 
 	-- Jungle
-	minetest.register_biome({
+	core.register_biome({
 		name = "Jungle",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -1349,7 +1349,7 @@ local function register_biomes()
 		_mcl_skycolor = "#77A8FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Jungle_shore",
 		node_top = "mcl_core:dirt",
 		depth_top = 1,
@@ -1366,7 +1366,7 @@ local function register_biomes()
 		_mcl_skycolor = "#77A8FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Jungle_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -1387,7 +1387,7 @@ local function register_biomes()
 
 	-- Jungle M
 	-- Like Jungle but with even more dense vegetation
-	minetest.register_biome({
+	core.register_biome({
 		name = "JungleM",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -1404,7 +1404,7 @@ local function register_biomes()
 		_mcl_skycolor = "#77A8FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "JungleM_shore",
 		node_top = "mcl_core:dirt",
 		depth_top = 1,
@@ -1421,7 +1421,7 @@ local function register_biomes()
 		_mcl_skycolor = "#77A8FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "JungleM_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -1441,7 +1441,7 @@ local function register_biomes()
 	})
 
 	-- Bamboo Jungle
-	minetest.register_biome({
+	core.register_biome({
 		name = "BambooJungle",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -1459,7 +1459,7 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor
 	})
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "BambooJungle_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -1478,7 +1478,7 @@ local function register_biomes()
 	})
 
 	-- Jungle Edge
-	minetest.register_biome({
+	core.register_biome({
 		name = "JungleEdge",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -1495,7 +1495,7 @@ local function register_biomes()
 		_mcl_skycolor = "#77A8FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "JungleEdge_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -1517,7 +1517,7 @@ local function register_biomes()
 	-- Almost identical to Jungle Edge. Has deeper dirt. Melons spawn here a lot.
 	-- This biome occours directly between Jungle M and Jungle Edge but also has a small border to Jungle.
 	-- This biome is very small in general.
-	minetest.register_biome({
+	core.register_biome({
 		name = "JungleEdgeM",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -1534,7 +1534,7 @@ local function register_biomes()
 		_mcl_skycolor = "#77A8FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "JungleEdgeM_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -1553,7 +1553,7 @@ local function register_biomes()
 	})
 
 	-- Mangrove swamp
-	minetest.register_biome({
+	core.register_biome({
 		name = "MangroveSwamp",
 		node_top = "mcl_mud:mud",
 		depth_top = 1,
@@ -1571,7 +1571,7 @@ local function register_biomes()
 		_mcl_skycolor = "#78A7FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "MangroveSwamp_shore",
 		node_top = "mcl_mud:mud",
 		depth_top = 1,
@@ -1588,7 +1588,7 @@ local function register_biomes()
 		_mcl_skycolor = "#78A7FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "MangroveSwamp_ocean",
 		node_top = "mcl_core:dirt",
 		depth_top = 1,
@@ -1607,7 +1607,7 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor
 	})
 	-- Swampland
-	minetest.register_biome({
+	core.register_biome({
 		name = "Swampland",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -1625,7 +1625,7 @@ local function register_biomes()
 		_mcl_skycolor = "#78A7FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Swampland_shore",
 		node_top = "mcl_core:dirt",
 		depth_top = 1,
@@ -1642,7 +1642,7 @@ local function register_biomes()
 		_mcl_skycolor = "#78A7FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "Swampland_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -1663,7 +1663,7 @@ local function register_biomes()
 
 	-- Mushroom Island / Mushroom Island Shore (rare)
 	-- Not neccessarily an island at all, only named after Minecraft's biome
-	minetest.register_biome({
+	core.register_biome({
 		name = "MushroomIsland",
 		node_top = "mcl_core:mycelium",
 		depth_top = 1,
@@ -1683,7 +1683,7 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor
 	})
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "MushroomIslandShore",
 		node_top = "mcl_core:mycelium",
 		depth_top = 1,
@@ -1700,7 +1700,7 @@ local function register_biomes()
 		_mcl_skycolor = "#77A8FF",
 		_mcl_fogcolor = overworld_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "MushroomIsland_ocean",
 		node_top = "mcl_core:gravel",
 		depth_top = 1,
@@ -1718,7 +1718,7 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor
 	})
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "DeepDark",
 		node_top = "mcl_sculk:sculk",
 		depth_top = 1,
@@ -1734,7 +1734,7 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 21,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = table.merge(stonelike, {"mcl_deepslate:deepslate"}),
 		sidelen = 16,
@@ -1747,7 +1747,7 @@ local function register_biomes()
 		param2 = 0,
 	})
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "LushCaves",
 		node_top = "mcl_core:dirt_with_grass",
 		depth_top = 1,
@@ -1765,7 +1765,7 @@ local function register_biomes()
 		_mcl_palette_index = 0,
 	})
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "DripstoneCave",
 		depth_top = 1,
 		node_cave_liquid = "mcl_core:water_source",
@@ -1779,7 +1779,7 @@ local function register_biomes()
 		_mcl_palette_index = 0,
 	})
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "LushCaves_ocean",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -1796,7 +1796,7 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "LushCaves_underground",
 		node_top = "mcl_core:sand",
 		depth_top = 1,
@@ -1818,47 +1818,47 @@ local function register_biomes()
 		local biome = overworld_biomes[i]
 
 		-- Deep Ocean
-		minetest.register_biome({
+		core.register_biome({
 			name = biome .. "_deep_ocean",
-			heat_point = minetest.registered_biomes[biome].heat_point,
-			humidity_point = minetest.registered_biomes[biome].humidity_point,
+			heat_point = core.registered_biomes[biome].heat_point,
+			humidity_point = core.registered_biomes[biome].humidity_point,
 			y_min = DEEP_OCEAN_MIN,
 			y_max = DEEP_OCEAN_MAX,
-			node_top = minetest.registered_biomes[biome.."_ocean"].node_top,
+			node_top = core.registered_biomes[biome.."_ocean"].node_top,
 			depth_top = 2,
-			node_filler = minetest.registered_biomes[biome.."_ocean"].node_filler,
+			node_filler = core.registered_biomes[biome.."_ocean"].node_filler,
 			depth_filler = 3,
-			node_riverbed = minetest.registered_biomes[biome.."_ocean"].node_riverbed,
+			node_riverbed = core.registered_biomes[biome.."_ocean"].node_riverbed,
 			depth_riverbed = 2,
 			vertical_blend = 5,
-			_mcl_biome_type = minetest.registered_biomes[biome]._mcl_biome_type,
-			_mcl_palette_index = minetest.registered_biomes[biome]._mcl_palette_index,
+			_mcl_biome_type = core.registered_biomes[biome]._mcl_biome_type,
+			_mcl_palette_index = core.registered_biomes[biome]._mcl_palette_index,
 			_mcl_skycolor = ocean_skycolor,
 			_mcl_fogcolor = overworld_fogcolor
 		})
 
 		-- Underground biomes are used to identify the underground and to prevent nodes from the surface
 		-- (sand, dirt) from leaking into the underground.
-		minetest.register_biome({
+		core.register_biome({
 			name = biome .. "_underground",
-			heat_point = minetest.registered_biomes[biome].heat_point,
-			humidity_point = minetest.registered_biomes[biome].humidity_point,
+			heat_point = core.registered_biomes[biome].heat_point,
+			humidity_point = core.registered_biomes[biome].humidity_point,
 			y_min = mcl_vars.mg_overworld_min_old,
 			y_max = DEEP_OCEAN_MIN - 1,
-			_mcl_biome_type = minetest.registered_biomes[biome]._mcl_biome_type,
-			_mcl_palette_index = minetest.registered_biomes[biome]._mcl_palette_index,
-			_mcl_skycolor = minetest.registered_biomes[biome]._mcl_skycolor,
-			_mcl_fogcolor = minetest.registered_biomes[biome]._mcl_fogcolor,
+			_mcl_biome_type = core.registered_biomes[biome]._mcl_biome_type,
+			_mcl_palette_index = core.registered_biomes[biome]._mcl_palette_index,
+			_mcl_skycolor = core.registered_biomes[biome]._mcl_skycolor,
+			_mcl_fogcolor = core.registered_biomes[biome]._mcl_fogcolor,
 		})
-		minetest.register_biome({
+		core.register_biome({
 			name = biome .. "_deep_underground",
-			heat_point = minetest.registered_biomes[biome].heat_point,
-			humidity_point = minetest.registered_biomes[biome].humidity_point,
+			heat_point = core.registered_biomes[biome].heat_point,
+			humidity_point = core.registered_biomes[biome].humidity_point,
 			node_stone = "mcl_deepslate:deepslate",
 			y_min = mcl_vars.mg_overworld_min,
 			y_max = mcl_vars.mg_overworld_min_old,
-			_mcl_biome_type = minetest.registered_biomes[biome]._mcl_biome_type,
-			_mcl_palette_index = minetest.registered_biomes[biome]._mcl_palette_index,
+			_mcl_biome_type = core.registered_biomes[biome]._mcl_biome_type,
+			_mcl_palette_index = core.registered_biomes[biome]._mcl_palette_index,
 		})
 
 	end
@@ -1870,7 +1870,7 @@ local function register_dimension_biomes()
 
 	--[[ THE NETHER ]]
 	-- the following decoration is a hack to cover exposed bedrock in netherrack - be careful not to put any ceiling decorations in a way that would apply to this (they would get generated regardless of biome)
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_core:bedrock"},
 		sidelen = 16,
@@ -1883,7 +1883,7 @@ local function register_dimension_biomes()
 		flags = "all_ceilings",
 		param2 = 0,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_core:bedrock"},
 		sidelen = 16,
@@ -1898,7 +1898,7 @@ local function register_dimension_biomes()
 	})
 
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "Nether",
 		node_filler = "mcl_nether:netherrack",
 		node_stone = "mcl_nether:netherrack",
@@ -1917,7 +1917,7 @@ local function register_dimension_biomes()
 --		_mcl_fogcolor = "#330808"
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_nether:glowstone","mcl_nether:magma"},
 		sidelen = 16,
@@ -1930,7 +1930,7 @@ local function register_dimension_biomes()
 		param2 = 0,
 	})
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "SoulsandValley",
 		node_filler = "mcl_nether:netherrack",
 		node_stone = "mcl_nether:netherrack",
@@ -1947,7 +1947,7 @@ local function register_dimension_biomes()
 --		_mcl_skycolor = nether_skycolor,
 --		_mcl_fogcolor = "#1B4745"
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_nether:magma"},
 		sidelen = 16,
@@ -1960,7 +1960,7 @@ local function register_dimension_biomes()
 		param2 = 0,
 	})
 
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "blob",
 		ore            = "mcl_nether:soul_sand",
 		wherein        = { "mcl_nether:netherrack", "mcl_blackstone:soul_soil" },
@@ -1981,7 +1981,7 @@ local function register_dimension_biomes()
 			flags = "defaults",
 		}
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "CrimsonForest",
 		node_filler = "mcl_nether:netherrack",
 		node_stone = "mcl_nether:netherrack",
@@ -1998,7 +1998,7 @@ local function register_dimension_biomes()
 --		_mcl_skycolor = nether_skycolor,
 --		_mcl_fogcolor = "#330303"
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_nether:magma","mcl_blackstone:blackstone"},
 		sidelen = 16,
@@ -2010,7 +2010,7 @@ local function register_dimension_biomes()
 		flags = "all_floors",
 		param2 = 0,
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "WarpedForest",
 		node_filler = "mcl_nether:netherrack",
 		node_stone = "mcl_nether:netherrack",
@@ -2027,7 +2027,7 @@ local function register_dimension_biomes()
 --		_mcl_skycolor = nether_skycolor,
 --		_mcl_fogcolor = "#1A051A"
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_nether:magma","mcl_blackstone:blackstone"},
 		sidelen = 16,
@@ -2039,7 +2039,7 @@ local function register_dimension_biomes()
 		flags = "all_floors",
 		param2 = 0,
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "BasaltDelta",
 		node_filler = "mcl_nether:netherrack",
 		node_stone = "mcl_nether:netherrack",
@@ -2057,7 +2057,7 @@ local function register_dimension_biomes()
 --		_mcl_fogcolor = "#685F70"
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_blackstone:nether_gold","mcl_nether:quartz_ore","mcl_core:gravel","mcl_nether:soul_sand","mcl_blackstone:blackstone","mcl_nether:magma"},
 		sidelen = 16,
@@ -2070,7 +2070,7 @@ local function register_dimension_biomes()
 		param2 = 0,
 	})
 
-	minetest.register_ore({
+	core.register_ore({
 	ore_type       = "blob",
 	ore            = "mcl_blackstone:blackstone",
 	wherein        =  {"mcl_nether:netherrack","mcl_nether:glowstone","mcl_core:gravel"},
@@ -2093,7 +2093,7 @@ local function register_dimension_biomes()
 	})
 
 	--[[ THE END ]]
-	minetest.register_biome({
+	core.register_biome({
 		name = "End",
 		node_stone = "air",
 		node_filler = "air",
@@ -2110,7 +2110,7 @@ local function register_dimension_biomes()
 --		_mcl_skycolor = end_skycolor,
 --		_mcl_fogcolor = end_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "EndBarrens",
 		node_stone = "air",
 		node_filler = "air",
@@ -2127,7 +2127,7 @@ local function register_dimension_biomes()
 --		_mcl_skycolor = end_skycolor,
 --		_mcl_fogcolor = end_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "EndMidlands",
 		node_stone = "air",
 		node_filler = "air",
@@ -2144,7 +2144,7 @@ local function register_dimension_biomes()
 --		_mcl_skycolor = end_skycolor,
 --		_mcl_fogcolor = end_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "EndHighlands",
 		node_stone = "air",
 		node_filler = "air",
@@ -2161,7 +2161,7 @@ local function register_dimension_biomes()
 --		_mcl_skycolor = end_skycolor,
 --		_mcl_fogcolor = end_fogcolor
 	})
-	minetest.register_biome({
+	core.register_biome({
 		name = "EndSmallIslands",
 		node_stone = "air",
 		node_filler = "air",
@@ -2179,7 +2179,7 @@ local function register_dimension_biomes()
 --		_mcl_fogcolor = end_fogcolor
 	})
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "EndBorder",
 		node_stone = "air",
 		node_filler = "air",
@@ -2199,7 +2199,7 @@ local function register_dimension_biomes()
 --		_mcl_fogcolor = end_fogcolor
 	})
 
-	minetest.register_biome({
+	core.register_biome({
 		name = "EndIsland",
 		node_stone = "air",
 		node_filler = "air",
@@ -2223,7 +2223,7 @@ end
 local function register_biome_ores()
 
 	-- Rarely replace stone with stone monster eggs.
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_monster_eggs:monster_egg_stone",
 		wherein        = "mcl_core:stone",
@@ -2240,7 +2240,7 @@ local function register_biome_ores()
 	})
 
 	--nether gold
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_blackstone:blackstone_gilded",
 		wherein        = "mcl_blackstone:blackstone",
@@ -2250,7 +2250,7 @@ local function register_biome_ores()
 		y_min          = mcl_vars.mg_nether_min,
 		y_max          = mcl_vars.mg_nether_max,
 	})
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_blackstone:nether_gold",
 		wherein        = "mcl_nether:netherrack",
@@ -2260,7 +2260,7 @@ local function register_biome_ores()
 		y_min          = mcl_vars.mg_nether_min,
 		y_max          = mcl_vars.mg_nether_max,
 	})
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_blackstone:nether_gold",
 		wherein        = "mcl_nether:netherrack",
@@ -2276,7 +2276,7 @@ end
 local function register_biomelike_ores()
 
 	-- Random coarse dirt floor in Mega Taiga and Mesa Plateau F
-	minetest.register_ore({
+	core.register_ore({
 		ore_type	= "sheet",
 		ore		= "mcl_core:coarse_dirt",
 		wherein		= {"mcl_core:podzol", "mcl_core:dirt"},
@@ -2290,7 +2290,7 @@ local function register_biomelike_ores()
 		biomes = { "MegaTaiga" },
 	})
 
-	minetest.register_ore({
+	core.register_ore({
 		ore_type	= "sheet",
 		ore		= "mcl_core:coarse_dirt",
 		wherein		= {"mcl_core:dirt_with_grass", "mcl_core:dirt"},
@@ -2302,7 +2302,7 @@ local function register_biomelike_ores()
 		noise_params = {offset=0, scale=15, spread={x=250, y=250, z=250}, seed=24, octaves=3, persist=0.70},
 		biomes = { "MesaPlateauF_grasstop" },
 	})
-	minetest.register_ore({
+	core.register_ore({
 		ore_type	= "blob",
 		ore		= "mcl_core:coarse_dirt",
 		wherein		= {"mcl_core:dirt_with_grass", "mcl_core:dirt"},
@@ -2323,7 +2323,7 @@ local function register_biomelike_ores()
 		},
 		biomes = { "MesaPlateauF_grasstop" },
 	})
-	minetest.register_ore({
+	core.register_ore({
 		ore_type	= "sheet",
 		ore		= "mcl_core:coarse_dirt",
 		wherein		= {"mcl_core:dirt_with_grass", "mcl_core:dirt"},
@@ -2335,7 +2335,7 @@ local function register_biomelike_ores()
 		noise_params = {offset=1, scale=15, spread={x=250, y=250, z=250}, seed=24, octaves=3, persist=0.80},
 		biomes = { "MesaPlateauFM_grasstop" },
 	})
-	minetest.register_ore({
+	core.register_ore({
 		ore_type	= "blob",
 		ore		= "mcl_core:coarse_dirt",
 		wherein		= {"mcl_core:dirt_with_grass", "mcl_core:dirt"},
@@ -2357,7 +2357,7 @@ local function register_biomelike_ores()
 		biomes = { "MesaPlateauFM_grasstop" },
 	})
 	-- Occasionally dig out portions of MesaPlateauFM
-	minetest.register_ore({
+	core.register_ore({
 		ore_type	= "blob",
 		ore		= "air",
 		wherein		= {"group:hardened_clay", "group:sand","mcl_core:coarse_dirt"},
@@ -2377,7 +2377,7 @@ local function register_biomelike_ores()
 		},
 		biomes = { "MesaPlateauFM", "MesaPlateauFM_grasstop" },
 	})
-	minetest.register_ore({
+	core.register_ore({
 		ore_type	= "blob",
 		ore		= "mcl_core:redsandstone",
 		wherein		= {"mcl_colorblocks:hardened_clay_orange"},
@@ -2398,7 +2398,7 @@ local function register_biomelike_ores()
 		biomes = { "MesaPlateauFM_sandlevel" },
 	})
 	-- More red sand in MesaPlateauFM
-	minetest.register_ore({
+	core.register_ore({
 		ore_type	= "sheet",
 		ore		= "mcl_core:redsand",
 		wherein		= {"group:hardened_clay"},
@@ -2411,7 +2411,7 @@ local function register_biomelike_ores()
 		noise_params = {offset=0, scale=15, spread={x=130, y=130, z=130}, seed=95, octaves=3, persist=0.70},
 		biomes = { "MesaPlateauFM" },
 	})
-	minetest.register_ore({
+	core.register_ore({
 		ore_type	= "blob",
 		ore		= "mcl_core:redsand",
 		wherein		= {"group:hardened_clay"},
@@ -2433,7 +2433,7 @@ local function register_biomelike_ores()
 	})
 
 	-- Small dirt patches in Extreme Hills M
-	minetest.register_ore({
+	core.register_ore({
 		ore_type	= "blob",
 		ore		= "mcl_core:dirt",
 		wherein		= {"mcl_core:gravel"},
@@ -2446,7 +2446,7 @@ local function register_biomelike_ores()
 		noise_params = {offset=0, scale=5, spread={x=250, y=250, z=250}, seed=64, octaves=3, persist=0.60},
 		biomes = { "ExtremeHillsM" },
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		--this decoration "hack" replaces the top layer of the above ore with grass when under air.
 		deco_type = "simple",
 		place_on = {"mcl_core:dirt"},
@@ -2457,7 +2457,7 @@ local function register_biomelike_ores()
 		flags = "force_placement",
 	})
 	-- For a transition from stone to hardened clay in mesa biomes that is not perfectly flat
-	minetest.register_ore({
+	core.register_ore({
 		ore_type = "stratum",
 		ore = "mcl_core:stone",
 		wherein = {"group:hardened_clay"},
@@ -2493,7 +2493,7 @@ local function register_biomelike_ores()
 			perfect_biomes = { "MesaBryce" }
 		end
 		-- Full, perfect stratum
-		minetest.register_ore({
+		core.register_ore({
 			ore_type = "stratum",
 			ore = "mcl_colorblocks:hardened_clay_"..color,
 			-- Only paint uncolored so the biome can choose
@@ -2505,7 +2505,7 @@ local function register_biomelike_ores()
 		})
 		if not is_perfect then
 		-- Slightly eroded stratum, only minor imperfections
-		minetest.register_ore({
+		core.register_ore({
 			ore_type = "stratum",
 			ore = "mcl_colorblocks:hardened_clay_"..color,
 			wherein = {"mcl_colorblocks:hardened_clay"},
@@ -2530,7 +2530,7 @@ local function register_biomelike_ores()
 			},
 		})
 		-- Very eroded stratum, most of the color is gone
-		minetest.register_ore({
+		core.register_ore({
 			ore_type = "stratum",
 			ore = "mcl_colorblocks:hardened_clay_"..color,
 			wherein = {"mcl_colorblocks:hardened_clay"},
@@ -2641,7 +2641,7 @@ local function register_dimension_ores()
 	--[[ NETHER GENERATION ]]
 
 	-- Soul sand
-	minetest.register_ore({
+	core.register_ore({
 		ore_type        = "sheet",
 		ore             = "mcl_nether:soul_sand",
 		wherein         = {"mcl_nether:netherrack"},
@@ -2661,7 +2661,7 @@ local function register_dimension_ores()
 	})
 
 	-- Magma blocks
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "blob",
 		ore            = "mcl_nether:magma",
 		wherein         = {"mcl_nether:netherrack"},
@@ -2681,7 +2681,7 @@ local function register_dimension_ores()
 			flags = "defaults",
 		},
 	})
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "blob",
 		ore            = "mcl_nether:magma",
 		wherein        = {"mcl_nether:netherrack"},
@@ -2703,7 +2703,7 @@ local function register_dimension_ores()
 	})
 
 	-- Glowstone
-	minetest.register_ore({
+	core.register_ore({
 		ore_type        = "blob",
 		ore             = "mcl_nether:glowstone",
 		wherein         = {"mcl_nether:netherrack"},
@@ -2723,7 +2723,7 @@ local function register_dimension_ores()
 	})
 
 	-- Gravel (Nether)
-	minetest.register_ore({
+	core.register_ore({
 		ore_type        = "sheet",
 		ore             = "mcl_core:gravel",
 		wherein         = {"mcl_nether:netherrack"},
@@ -2745,8 +2745,8 @@ local function register_dimension_ores()
 	})
 
 	-- Nether quartz
-	if minetest.settings:get_bool("mcl_generate_ores", true) then
-		minetest.register_ore({
+	if core.settings:get_bool("mcl_generate_ores", true) then
+		core.register_ore({
 			ore_type       = "scatter",
 			ore            = "mcl_nether:quartz_ore",
 			wherein         = {"mcl_nether:netherrack"},
@@ -2756,7 +2756,7 @@ local function register_dimension_ores()
 			y_min = mcl_vars.mg_nether_min,
 			y_max = mcl_vars.mg_nether_max,
 		})
-		minetest.register_ore({
+		core.register_ore({
 			ore_type       = "scatter",
 			ore            = "mcl_nether:quartz_ore",
 			wherein         = {"mcl_nether:netherrack"},
@@ -2769,7 +2769,7 @@ local function register_dimension_ores()
 	end
 
 	-- Lava springs in the Nether
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_nether:nether_lava_source",
 		wherein         = {"mcl_nether:netherrack"},
@@ -2781,7 +2781,7 @@ local function register_dimension_ores()
 	})
 
 	local lava_biomes = {"BasaltDelta","Nether"}
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_nether:nether_lava_source",
 		wherein        = {"mcl_nether:netherrack"},
@@ -2793,7 +2793,7 @@ local function register_dimension_ores()
 		y_max          = mcl_vars.mg_lava_nether_max + 1,
 	})
 
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_nether:nether_lava_source",
 		wherein         = {"mcl_nether:netherrack"},
@@ -2805,7 +2805,7 @@ local function register_dimension_ores()
 		y_max           = mcl_vars.mg_lava_nether_max + 12,
 	})
 
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_nether:nether_lava_source",
 		wherein         = {"mcl_nether:netherrack"},
@@ -2816,7 +2816,7 @@ local function register_dimension_ores()
 		y_min           = mcl_vars.mg_lava_nether_max + 13,
 		y_max           = mcl_vars.mg_lava_nether_max + 48,
 	})
-	minetest.register_ore({
+	core.register_ore({
 		ore_type       = "scatter",
 		ore            = "mcl_nether:nether_lava_source",
 		wherein         = {"mcl_nether:netherrack"},
@@ -2833,7 +2833,7 @@ local function register_dimension_ores()
 	-- Generate fake End
 	-- TODO: Remove the "ores" when there's a better End generator
 
-	minetest.register_ore({
+	core.register_ore({
 		ore_type        = "stratum",
 		ore             = "mcl_end:end_stone",
 		wherein         = {"air"},
@@ -2867,7 +2867,7 @@ local function register_dimension_ores()
 		clust_scarcity = 1,
 	})
 
-	minetest.register_ore({
+	core.register_ore({
 		ore_type        = "stratum",
 		ore             = "mcl_end:end_stone",
 		wherein         = {"air"},
@@ -2895,7 +2895,7 @@ local function register_dimension_ores()
 		clust_scarcity = 1,
 	})
 
-	minetest.register_ore({
+	core.register_ore({
 		ore_type        = "stratum",
 		ore             = "mcl_end:end_stone",
 		wherein         = {"air"},
@@ -2922,7 +2922,7 @@ local function register_dimension_ores()
 		},
 		clust_scarcity = 1,
 	})
-	minetest.register_ore({
+	core.register_ore({
 		ore_type        = "stratum",
 		ore             = "mcl_end:end_stone",
 		wherein         = {"air"},
@@ -2976,8 +2976,8 @@ function mcl_biomes.register_grass_decoration(grasstype, offset, scale, biomes)
 		persist = 0.6
 	}
 	for b=1, #biomes do
-		local param2 = minetest.registered_biomes[biomes[b]]._mcl_palette_index
-		minetest.register_decoration({
+		local param2 = core.registered_biomes[biomes[b]]._mcl_palette_index
+		core.register_decoration({
 			deco_type = "simple",
 			place_on = place_on,
 			sidelen = 16,
@@ -3019,7 +3019,7 @@ function mcl_biomes.register_seagrass_decoration(grasstype, offset, scale, biome
 	}
 
 	for s=1, #surfaces do
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "simple",
 			place_on = { surfaces[s] },
 			sidelen = 16,
@@ -3079,7 +3079,7 @@ local function register_coral_decos(ck)
 			lacunarity = 3.5,
 			flags = "absvalue"
 		}
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:sand","mcl_core:gravel","mcl_mud:mud"},
 		sidelen = 80,
@@ -3091,7 +3091,7 @@ local function register_coral_decos(ck)
 		rotation = "random",
 		flags = "all_floors,force_placement",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:sand","mcl_core:gravel","mcl_mud:mud"},
 		noise_params = noise,
@@ -3104,7 +3104,7 @@ local function register_coral_decos(ck)
 		flags = "all_floors,force_placement",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_ocean:"..c.."_coral_block"},
 		sidelen = 16,
@@ -3117,7 +3117,7 @@ local function register_coral_decos(ck)
 		height = 1,
 		height_max = 1,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_ocean:horn_coral_block"},
 		sidelen = 16,
@@ -3134,7 +3134,7 @@ end
 
 local function register_decorations()
 	--Deep Dark
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_sculk:sculk"},
 		sidelen = 16,
@@ -3148,7 +3148,7 @@ local function register_decorations()
 		register_coral_decos(k)
 	end
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:stone"},
 		sidelen = 1,
@@ -3171,7 +3171,7 @@ local function register_decorations()
 		y_min = mcl_vars.mg_overworld_min,
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_dripstone:dripstone_block"},
 		sidelen = 1,
@@ -3185,7 +3185,7 @@ local function register_decorations()
 	local lushcaves = { "LushCaves", "LushCaves_underground", "LushCaves_ocean", "LushCaves_deep_ocean"}
 	local lushcaves_underground = { "LushCaves_underground", "LushCaves_ocean", "LushCaves_deep_ocean"}
 
-	minetest.register_decoration({
+	core.register_decoration({
 		decoration = "mcl_lush_caves:moss",
 		deco_type = "simple",
 		place_on = table.merge(stonelike, {"mcl_core:stone","mcl_deepslate:deepslate","mcl_deepslate:tuff", "mcl_core:gravel", "mcl_core:bedrock"}),
@@ -3195,7 +3195,7 @@ local function register_decorations()
 		y_min = mcl_vars.mg_overworld_min,
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		decoration = "mcl_flowers:tallgrass",
 		deco_type = "simple",
 		place_on = {"mcl_lush_caves:moss"},
@@ -3205,7 +3205,7 @@ local function register_decorations()
 		y_min = mcl_vars.mg_overworld_min,
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		decoration = "mcl_lush_caves:cave_vines",
 		deco_type = "simple",
 		place_on = {"mcl_lush_caves:moss"},
@@ -3216,7 +3216,7 @@ local function register_decorations()
 		biomes = lushcaves_underground,
 		y_min = mcl_vars.mg_overworld_min,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		decoration = "mcl_lush_caves:cave_vines_lit",
 		deco_type = "simple",
 		place_on = {"mcl_lush_caves:moss"},
@@ -3228,7 +3228,7 @@ local function register_decorations()
 		y_min = mcl_vars.mg_overworld_min,
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 			decoration = "mcl_lush_caves:azalea",
 			deco_type = "simple",
 			place_on = {"mcl_lush_caves:moss"},
@@ -3238,7 +3238,7 @@ local function register_decorations()
 			y_min = mcl_vars.mg_overworld_min,
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 			decoration = "mcl_lush_caves:azalea_flowering",
 			deco_type = "simple",
 			place_on = {"mcl_lush_caves:moss"},
@@ -3248,7 +3248,7 @@ local function register_decorations()
 			y_min = mcl_vars.mg_overworld_min,
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		decoration = "mcl_lush_caves:cave_vines_lit",
 		deco_type = "simple",
 		place_on = {"mcl_lush_caves:cave_vines_lit","mcl_lush_caves:cave_vines"},
@@ -3259,7 +3259,7 @@ local function register_decorations()
 		biomes = lushcaves_underground,
 		y_min = mcl_vars.mg_overworld_min,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		decoration = "mcl_lush_caves:cave_vines",
 		deco_type = "simple",
 		place_on = {"mcl_lush_caves:cave_vines_lit","mcl_lush_caves:cave_vines"},
@@ -3271,7 +3271,7 @@ local function register_decorations()
 		y_min = mcl_vars.mg_overworld_min,
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		place_on = {"mcl_lush_caves:rooted_dirt"},
 		decoration = "mcl_lush_caves:hanging_roots",
 		deco_type = "simple",
@@ -3281,7 +3281,7 @@ local function register_decorations()
 		y_min = mcl_vars.mg_overworld_min,
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		decoration = "mcl_lush_caves:spore_blossom",
 		deco_type = "simple",
 		place_on = {"mcl_lush_caves:moss"},
@@ -3294,7 +3294,7 @@ local function register_decorations()
 		biomes = lushcaves_underground,
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		decoration = "mcl_lush_caves:moss_carpet",
 		deco_type = "simple",
 		place_on = table.merge(stonelike, {"mcl_deepslate:deepslate", "mcl_core:gravel","mcl_lush_caves:moss"}),
@@ -3304,7 +3304,7 @@ local function register_decorations()
 		biomes = lushcaves,
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = "mcl_lush_caves:moss","mcl_core:clay",
 		fill_ratio = 0.5,
@@ -3314,7 +3314,7 @@ local function register_decorations()
 		flags = "all_floors",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:sand","mcl_core:gravel","mcl_mud:mud"},
 		sidelen = 16,
@@ -3338,7 +3338,7 @@ local function register_decorations()
 		place_offset_y = -1,
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_ocean:dead_brain_coral_block"},
 		sidelen = 16,
@@ -3352,7 +3352,7 @@ local function register_decorations()
 		height_max = 1,
 		place_offset_y = -1,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_ocean:dead_brain_coral_block"},
 		sidelen = 16,
@@ -3366,7 +3366,7 @@ local function register_decorations()
 		height_max = 1,
 		place_offset_y = -1,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_ocean:dead_brain_coral_block"},
 		sidelen = 16,
@@ -3380,7 +3380,7 @@ local function register_decorations()
 		height_max = 1,
 		place_offset_y = -1,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_ocean:dead_brain_coral_block"},
 		sidelen = 16,
@@ -3395,7 +3395,7 @@ local function register_decorations()
 		place_offset_y = -1,
 	})
 	--rare CORAl
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:sand","mcl_core:gravel"},
 		fill_ratio = 0.0001,
@@ -3408,7 +3408,7 @@ local function register_decorations()
 		flags = "place_center_x,place_center_z, force_placement",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_core:dirt_with_grass","mcl_core:podzol"},
 		sidelen = 16,
@@ -3429,7 +3429,7 @@ local function register_decorations()
 	})
 
 	-- Large ice spike
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"mcl_core:snowblock", "mcl_core:snow", "group:grass_block_snow"},
 		sidelen = 80,
@@ -3450,7 +3450,7 @@ local function register_decorations()
 	})
 
 	-- Small ice spike
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"mcl_core:snowblock", "mcl_core:snow", "group:grass_block_snow"},
 		sidelen = 80,
@@ -3473,7 +3473,7 @@ local function register_decorations()
 	-- Oak
 	-- Large oaks
 	for i=1, 4 do
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "schematic",
 			place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 			sidelen = 80,
@@ -3493,7 +3493,7 @@ local function register_decorations()
 			rotation = "random",
 		})
 
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "schematic",
 			place_on = {"group:grass_block", "mcl_core:dirt", },
 			sidelen = 80,
@@ -3514,7 +3514,7 @@ local function register_decorations()
 		})
 	end
 	-- Small “classic” oak (many biomes)
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 16,
@@ -3533,7 +3533,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 16,
@@ -3552,7 +3552,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block", "mcl_core:dirt", },
 		sidelen = 16,
@@ -3572,7 +3572,7 @@ local function register_decorations()
 		rotation = "random",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block", "mcl_core:dirt"},
 		sidelen = 16,
@@ -3591,7 +3591,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"mcl_core:dirt_with_grass", "mcl_core:dirt"},
 		sidelen = 16,
@@ -3610,7 +3610,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"mcl_core:dirt_with_grass", "mcl_core:dirt"},
 		sidelen = 16,
@@ -3630,7 +3630,7 @@ local function register_decorations()
 		rotation = "random",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block", "mcl_core:dirt", },
 		sidelen = 16,
@@ -3649,7 +3649,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -3661,7 +3661,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -3674,7 +3674,7 @@ local function register_decorations()
 		rotation = "random",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt", "mcl_mud:mud"},
 		fill_ratio = 0.004,
@@ -3688,7 +3688,7 @@ local function register_decorations()
 		decoration = "mcl_bamboo:bamboo" ,
 	})
 	for i=1,3 do
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "simple",
 			place_on = {"group:grass_block_no_snow", "mcl_core:dirt", "mcl_mud:mud"},
 			fill_ratio = 0.004+(i*0.001),
@@ -3703,7 +3703,7 @@ local function register_decorations()
 		})
 	end
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt", "mcl_mud:mud"},
 		fill_ratio = 0.1,
@@ -3717,7 +3717,7 @@ local function register_decorations()
 		decoration = "mcl_bamboo:bamboo" ,
 	})
 	for i=1,3 do
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "simple",
 			place_on = {"group:grass_block_no_snow", "mcl_core:dirt", "mcl_mud:mud"},
 			fill_ratio = 0.1+(i*0.001),
@@ -3732,7 +3732,7 @@ local function register_decorations()
 		})
 	end
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 16,
@@ -3753,7 +3753,7 @@ local function register_decorations()
 		rotation = "random",
 		spawn_by = "group:flower",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 16,
@@ -3776,7 +3776,7 @@ local function register_decorations()
 	})
 
 	-- Rare balloon oak
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 16,
@@ -3797,7 +3797,7 @@ local function register_decorations()
 	})
 
 	-- Swamp oak
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -3817,7 +3817,7 @@ local function register_decorations()
 		rotation = "random",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		name = "mcl_biomes:mangrove_tree_1",
 		deco_type = "schematic",
 		place_on = {"mcl_mud:mud"},
@@ -3830,7 +3830,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z, force_placement",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		name = "mcl_biomes:mangrove_tree_2",
 		deco_type = "schematic",
 		place_on = {"mcl_mud:mud"},
@@ -3843,7 +3843,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z, force_placement",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		name = "mcl_biomes:mangrove_tree_3",
 		deco_type = "schematic",
 		place_on = {"mcl_mud:mud"},
@@ -3856,7 +3856,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z, force_placement",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		name = "mcl_biomes:mangrove_tree_4",
 		deco_type = "schematic",
 		place_on = {"mcl_mud:mud"},
@@ -3869,7 +3869,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z, force_placement",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		name = "mcl_biomes:mangrove_tree_5",
 		deco_type = "schematic",
 		place_on = {"mcl_mud:mud"},
@@ -3882,7 +3882,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z, force_placement",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"mcl_mud:mud"},
 		sidelen = 80,
@@ -3903,7 +3903,7 @@ local function register_decorations()
 		rotation = "random",
 		spawn_by = "group:flower",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_mud:mud"},
 		sidelen = 80,
@@ -3915,7 +3915,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z, force_placement",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_mangrove:mangrove_roots"},
 		spawn_by = {"group:water"},
@@ -3928,7 +3928,7 @@ local function register_decorations()
 		decoration = "mcl_mangrove:water_logged_roots",
 		flags = "place_center_x, place_center_z, force_placement, all_ceilings",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_mud:mud"},
 		sidelen = 80,
@@ -3938,7 +3938,7 @@ local function register_decorations()
 		decoration = "mcl_mangrove:mangrove_mud_roots",
 		flags = "place_center_x, place_center_z, force_placement",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_mud:mud"},
 		sidelen = 80,
@@ -3947,7 +3947,7 @@ local function register_decorations()
 		decoration = "mcl_core:deadbush",
 		flags = "place_center_x, place_center_z",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_core:water_source"},
 		sidelen = 80,
@@ -3961,7 +3961,7 @@ local function register_decorations()
 
 	-- Huge jungle tree (4 variants)
 	for i=1, 4 do
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "schematic",
 			place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 			sidelen = 80,
@@ -3973,7 +3973,7 @@ local function register_decorations()
 			flags = "place_center_x, place_center_z",
 			rotation = "random",
 		})
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "schematic",
 			place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 			sidelen = 80,
@@ -3988,7 +3988,7 @@ local function register_decorations()
 	end
 
 	-- Common jungle tree
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -4000,7 +4000,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -4012,7 +4012,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -4024,7 +4024,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -4036,7 +4036,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -4048,7 +4048,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -4061,7 +4061,7 @@ local function register_decorations()
 		rotation = "random",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -4078,7 +4078,7 @@ local function register_decorations()
 		if not y then
 			y = 1
 		end
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "schematic",
 			place_on = {"group:grass_block", "mcl_core:dirt", "mcl_core:podzol"},
 			sidelen = 16,
@@ -4132,7 +4132,7 @@ local function register_decorations()
 
 
 	-- Small lollipop spruce
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block", "mcl_core:podzol"},
 		sidelen = 16,
@@ -4152,7 +4152,7 @@ local function register_decorations()
 	})
 
 	-- Matchstick spruce: Very few leaves, tall trunk
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block", "mcl_core:podzol"},
 		sidelen = 80,
@@ -4172,7 +4172,7 @@ local function register_decorations()
 	})
 
 	-- Rare spruce in Ice Plains
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block"},
 		sidelen = 16,
@@ -4193,7 +4193,7 @@ local function register_decorations()
 
 	-- Acacia (many variants)
 	for a=1, 7 do
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "schematic",
 			place_on = {"mcl_core:dirt_with_grass", "mcl_core:dirt", "mcl_core:coarse_dirt"},
 			sidelen = 16,
@@ -4208,7 +4208,7 @@ local function register_decorations()
 	end
 
 	-- Birch
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow"},
 		sidelen = 16,
@@ -4226,7 +4226,7 @@ local function register_decorations()
 		schematic = mod_mcl_core.."/schematics/mcl_core_birch.mts",
 		flags = "place_center_x, place_center_z",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow"},
 		sidelen = 16,
@@ -4245,7 +4245,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 16,
@@ -4263,7 +4263,7 @@ local function register_decorations()
 		schematic = mod_mcl_core.."/schematics/mcl_core_birch.mts",
 		flags = "place_center_x, place_center_z",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 16,
@@ -4286,7 +4286,7 @@ local function register_decorations()
 	})
 
 	-- Dark Oak
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow"},
 		sidelen = 16,
@@ -4308,7 +4308,7 @@ local function register_decorations()
 
 	-- Cherry
 	for i=1,3 do
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "schematic",
 			place_on = {"mcl_core:dirt_with_grass"},
 			sidelen = 80,
@@ -4327,7 +4327,7 @@ local function register_decorations()
 			flags = "place_center_x, place_center_z",
 			rotation = "random",
 		})
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "schematic",
 			place_on = {"mcl_core:dirt_with_grass"},
 			sidelen = 80,
@@ -4357,7 +4357,7 @@ local function register_decorations()
 	local ratio_mushroom_mycelium_giant = ratio_mushroom_mycelium * (1/12)
 
 	-- Huge Brown Mushroom
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = { "group:grass_block_no_snow", "mcl_core:dirt" },
 		sidelen = 80,
@@ -4369,7 +4369,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "0",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = { "group:grass_block_no_snow", "mcl_core:dirt" },
 		sidelen = 80,
@@ -4382,7 +4382,7 @@ local function register_decorations()
 		rotation = "0",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = { "mcl_core:mycelium" },
 		sidelen = 80,
@@ -4394,7 +4394,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "0",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = { "mcl_core:mycelium" },
 		sidelen = 80,
@@ -4408,7 +4408,7 @@ local function register_decorations()
 	})
 
 	-- Huge Red Mushroom
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = { "group:grass_block_no_snow", "mcl_core:dirt" },
 		sidelen = 80,
@@ -4420,7 +4420,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "0",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = { "group:grass_block_no_snow", "mcl_core:dirt" },
 		sidelen = 80,
@@ -4433,7 +4433,7 @@ local function register_decorations()
 		rotation = "0",
 	})
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = { "mcl_core:mycelium" },
 		sidelen = 80,
@@ -4445,7 +4445,7 @@ local function register_decorations()
 		flags = "place_center_x, place_center_z",
 		rotation = "0",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = { "mcl_core:mycelium" },
 		sidelen = 80,
@@ -4459,7 +4459,7 @@ local function register_decorations()
 	})
 
 	--Snow on snowy dirt
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_core:dirt_with_grass_snow"},
 		sidelen = 80,
@@ -4471,7 +4471,7 @@ local function register_decorations()
 	})
 
 	--Mushrooms in caves
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = table.merge(stonelike, {"mcl_deepslate:deepslate"}),
 		sidelen = 80,
@@ -4482,7 +4482,7 @@ local function register_decorations()
 		y_max = mcl_vars.mg_overworld_max,
 		decoration = "mcl_mushrooms:mushroom_red",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = table.merge(stonelike, {"mcl_deepslate:deepslate"}),
 		sidelen = 80,
@@ -4494,7 +4494,7 @@ local function register_decorations()
 	})
 
 	-- Mossy cobblestone boulder (3×3)
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"mcl_core:podzol", "mcl_core:dirt", "mcl_core:coarse_dirt"},
 		sidelen = 80,
@@ -4515,7 +4515,7 @@ local function register_decorations()
 	})
 
 	-- Small mossy cobblestone boulder (2×2)
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"mcl_core:podzol", "mcl_core:dirt", "mcl_core:coarse_dirt"},
 		sidelen = 80,
@@ -4536,7 +4536,7 @@ local function register_decorations()
 	})
 
 	-- Cacti
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:sand"},
 		sidelen = 16,
@@ -4560,7 +4560,7 @@ local function register_decorations()
 	})
 
 	-- Sugar canes
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_core:dirt", "mcl_core:coarse_dirt", "group:grass_block_no_snow", "group:sand", "mcl_core:podzol", "mcl_core:reeds"},
 		sidelen = 16,
@@ -4580,7 +4580,7 @@ local function register_decorations()
 		spawn_by = { "mcl_core:water_source", "group:frosted_ice" },
 		num_spawn_by = 1,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_core:dirt", "mcl_core:coarse_dirt", "group:grass_block_no_snow", "group:sand", "mcl_core:podzol", "mcl_core:reeds"},
 		sidelen = 16,
@@ -4606,8 +4606,8 @@ local function register_decorations()
 	function mcl_biomes.register_doubletall_grass(offset, scale, biomes)
 
 		for b=1, #biomes do
-			local param2 = minetest.registered_biomes[biomes[b]]._mcl_palette_index
-			minetest.register_decoration({
+			local param2 = core.registered_biomes[biomes[b]]._mcl_palette_index
+			core.register_decoration({
 				deco_type = "schematic",
 				schematic = {
 					size = { x=1, y=3, z=1 },
@@ -4643,8 +4643,8 @@ local function register_decorations()
 	-- Large ferns
 	function mcl_biomes.register_double_fern(offset, scale, biomes)
 		for b=1, #biomes do
-			local param2 = minetest.registered_biomes[biomes[b]]._mcl_palette_index
-			minetest.register_decoration({
+			local param2 = core.registered_biomes[biomes[b]]._mcl_palette_index
+			core.register_decoration({
 				deco_type = "schematic",
 				schematic = {
 					size = { x=1, y=3, z=1 },
@@ -4694,7 +4694,7 @@ local function register_decorations()
 				b = { "FlowerForest" }
 			end
 
-			minetest.register_decoration({
+			core.register_decoration({
 				deco_type = "schematic",
 				schematic = {
 					size = {x = 1, y = 3, z = 1},
@@ -4732,7 +4732,7 @@ local function register_decorations()
 
 	-- Jungle bush
 
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -4750,7 +4750,7 @@ local function register_decorations()
 		schematic = mod_mcl_core.."/schematics/mcl_core_jungle_bush_oak_leaves.mts",
 		flags = "place_center_x, place_center_z",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -4768,7 +4768,7 @@ local function register_decorations()
 		schematic = mod_mcl_core.."/schematics/mcl_core_jungle_bush_oak_leaves_2.mts",
 		flags = "place_center_x, place_center_z",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -4786,7 +4786,7 @@ local function register_decorations()
 		schematic = mod_mcl_core.."/schematics/mcl_core_jungle_bush_oak_leaves.mts",
 		flags = "place_center_x, place_center_z",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 		sidelen = 80,
@@ -4821,7 +4821,7 @@ local function register_decorations()
 		local y = 1 - d
 		table.insert(lily_schem, 1, { name = "air", prob = 0 })
 
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "schematic",
 			schematic = {
 				size = { x=1, y=height, z=1 },
@@ -4845,7 +4845,7 @@ local function register_decorations()
 	end
 
 	-- Melon
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:grass_block_no_snow"},
 		sidelen = 16,
@@ -4862,7 +4862,7 @@ local function register_decorations()
 		decoration = "mcl_farming:melon",
 		biomes = { "Jungle" },
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:grass_block_no_snow"},
 		sidelen = 16,
@@ -4879,7 +4879,7 @@ local function register_decorations()
 		decoration = "mcl_farming:melon",
 		biomes = { "JungleM" },
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:grass_block_no_snow"},
 		sidelen = 16,
@@ -4898,7 +4898,7 @@ local function register_decorations()
 	})
 
 	-- Lots of melons in Jungle Edge M
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:grass_block_no_snow"},
 		sidelen = 80,
@@ -4917,7 +4917,7 @@ local function register_decorations()
 	})
 
 	-- Pumpkin
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		decoration = "mcl_farming:pumpkin",
 		param2 = 0,
@@ -4938,7 +4938,7 @@ local function register_decorations()
 
 	-- Pink Petals
 	for i=1,4 do
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "simple",
 			place_on = {"mcl_core:dirt_with_grass"},
 			fill_ratio = 0.03,
@@ -4949,7 +4949,7 @@ local function register_decorations()
 		})
 
 		-- Wildflowers
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "simple",
 			place_on = {"mcl_core:dirt_with_grass"},
 			fill_ratio = 0.003,
@@ -5014,7 +5014,7 @@ local function register_decorations()
 	register_seagrass_decoration("kelp", -0.5, 1, b_kelp)
 
 	-- Place tall grass on snow in Ice Plains and Extreme Hills+
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block"},
 		sidelen = 16,
@@ -5033,11 +5033,11 @@ local function register_decorations()
 			size = { x=1, y=2, z=1 },
 			data = {
 				{ name = "mcl_core:dirt_with_grass", force_place=true, },
-				{ name = "mcl_flowers:tallgrass", param2 = minetest.registered_biomes["IcePlains"]._mcl_palette_index },
+				{ name = "mcl_flowers:tallgrass", param2 = core.registered_biomes["IcePlains"]._mcl_palette_index },
 			},
 		},
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"group:grass_block"},
 		sidelen = 16,
@@ -5056,14 +5056,14 @@ local function register_decorations()
 			size = { x=1, y=2, z=1 },
 			data = {
 				{ name = "mcl_core:dirt_with_grass", force_place=true, },
-				{ name = "mcl_flowers:tallgrass", param2 = minetest.registered_biomes["ExtremeHills+_snowtop"]._mcl_palette_index },
+				{ name = "mcl_flowers:tallgrass", param2 = core.registered_biomes["ExtremeHills+_snowtop"]._mcl_palette_index },
 			},
 		},
 	})
 
 
 	-- Dead bushes
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:sand", "mcl_core:podzol", "mcl_core:dirt", "mcl_core:dirt_with_grass", "mcl_core:coarse_dirt", "group:hardened_clay"},
 		sidelen = 16,
@@ -5081,7 +5081,7 @@ local function register_decorations()
 		decoration = "mcl_core:deadbush",
 		height = 1,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:sand", "mcl_core:dirt", "mcl_core:dirt_with_grass", "mcl_core:coarse_dirt"},
 		sidelen = 16,
@@ -5099,7 +5099,7 @@ local function register_decorations()
 		decoration = "mcl_core:deadbush",
 		height = 1,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:sand"},
 		sidelen = 16,
@@ -5117,7 +5117,7 @@ local function register_decorations()
 		decoration = "mcl_core:deadbush",
 		height = 1,
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"group:hardened_clay"},
 		sidelen = 16,
@@ -5142,7 +5142,7 @@ local function register_decorations()
 	local mseeds = { 7133, 8244 }
 	for m=1, #mushrooms do
 		-- Mushrooms in mushroom biome
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "simple",
 			place_on = {"mcl_core:mycelium"},
 			sidelen = 80,
@@ -5154,7 +5154,7 @@ local function register_decorations()
 			decoration = mushrooms[m],
 		})
 		-- Mushrooms in Taiga
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "simple",
 			place_on = {"mcl_core:podzol"},
 			sidelen = 80,
@@ -5165,7 +5165,7 @@ local function register_decorations()
 			decoration = mushrooms[m],
 		})
 		-- Mushrooms next to trees
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "simple",
 			place_on = {"group:grass_block_no_snow", "mcl_core:dirt", "mcl_core:podzol", "mcl_core:mycelium", "mcl_core:stone", "mcl_core:andesite", "mcl_core:diorite", "mcl_core:granite"},
 			sidelen = 16,
@@ -5185,7 +5185,7 @@ local function register_decorations()
 		})
 
 		-- More mushrooms in Swampland
-		minetest.register_decoration({
+		core.register_decoration({
 			deco_type = "simple",
 			place_on = {"group:grass_block_no_snow", "mcl_core:dirt", "mcl_core:podzol", "mcl_core:mycelium", "mcl_core:stone", "mcl_core:andesite", "mcl_core:diorite", "mcl_core:granite"},
 			sidelen = 16,
@@ -5211,7 +5211,7 @@ local function register_decorations()
 			is_in_flower_forest = true
 		end
 		if biomes then
-			minetest.register_decoration({
+			core.register_decoration({
 				deco_type = "simple",
 				place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 				sidelen = 16,
@@ -5230,7 +5230,7 @@ local function register_decorations()
 			})
 		end
 		if is_in_flower_forest then
-			minetest.register_decoration({
+			core.register_decoration({
 				deco_type = "simple",
 				place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
 				sidelen = 80,
@@ -5276,7 +5276,7 @@ end
 local function register_dimension_decorations()
 	--[[ NETHER ]]
 	--NETHER WASTES (Nether)
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_nether:netherrack","mcl_nether:magma"},
 		sidelen = 16,
@@ -5287,7 +5287,7 @@ local function register_dimension_decorations()
 		flags = "all_floors",
 		decoration = "mcl_fire:eternal_fire",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_nether:netherrack"},
 		sidelen = 16,
@@ -5298,7 +5298,7 @@ local function register_dimension_decorations()
 		flags = "all_floors",
 		decoration = "mcl_mushrooms:mushroom_brown",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_nether:netherrack"},
 		sidelen = 16,
@@ -5311,7 +5311,7 @@ local function register_dimension_decorations()
 	})
 
 	-- WARPED FOREST
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_crimson:warped_nylium"},
 		sidelen = 16,
@@ -5322,7 +5322,7 @@ local function register_dimension_decorations()
 		flags = "all_floors",
 		decoration = "mcl_crimson:warped_fungus",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		name = "mcl_biomes:warped_tree1",
 		place_on = {"mcl_crimson:warped_nylium"},
@@ -5336,7 +5336,7 @@ local function register_dimension_decorations()
 		size = {x = 5, y = 11, z = 5},
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		name = "mcl_biomes:warped_tree2",
 		place_on = {"mcl_crimson:warped_nylium"},
@@ -5350,7 +5350,7 @@ local function register_dimension_decorations()
 		size = {x = 5, y = 6, z = 5},
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		name = "mcl_biomes:warped_tree3",
 		place_on = {"mcl_crimson:warped_nylium"},
@@ -5364,7 +5364,7 @@ local function register_dimension_decorations()
 		size = {x = 5, y = 12, z = 5},
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_crimson:warped_nylium","mcl_crimson:twisting_vines"},
 		sidelen = 16,
@@ -5376,7 +5376,7 @@ local function register_dimension_decorations()
 		height_max = 8,
 		decoration = "mcl_crimson:twisting_vines",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_crimson:warped_nylium"},
 		sidelen = 16,
@@ -5387,7 +5387,7 @@ local function register_dimension_decorations()
 		max_height = 5,
 		decoration = "mcl_crimson:warped_roots",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_crimson:crimson_nylium"},
 		sidelen = 16,
@@ -5398,7 +5398,7 @@ local function register_dimension_decorations()
 		decoration = "mcl_crimson:nether_sprouts",
 	})
 	-- CRIMSON FOREST
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_crimson:crimson_nylium"},
 		sidelen = 16,
@@ -5409,7 +5409,7 @@ local function register_dimension_decorations()
 		flags = "all_floors",
 		decoration = "mcl_crimson:crimson_fungus",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		name = "mcl_biomes:crimson_tree",
 		place_on = {"mcl_crimson:crimson_nylium"},
@@ -5423,7 +5423,7 @@ local function register_dimension_decorations()
 		size = {x = 5, y = 8, z = 5},
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		name = "mcl_biomes:crimson_tree2",
 		place_on = {"mcl_crimson:crimson_nylium"},
@@ -5437,7 +5437,7 @@ local function register_dimension_decorations()
 		size = {x = 5, y = 12, z = 5},
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		name = "mcl_biomes:crimson_tree3",
 		place_on = {"mcl_crimson:crimson_nylium"},
@@ -5451,7 +5451,7 @@ local function register_dimension_decorations()
 		size = {x = 7, y = 13, z = 7},
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_crimson:warped_nylium","mcl_crimson:weeping_vines","mcl_nether:netherrack"},
 		sidelen = 16,
@@ -5464,7 +5464,7 @@ local function register_dimension_decorations()
 		height_max = 8,
 		decoration = "mcl_crimson:weeping_vines",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_crimson:crimson_nylium"},
 		sidelen = 16,
@@ -5477,7 +5477,7 @@ local function register_dimension_decorations()
 	})
 
 	--SOULSAND VALLEY
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		place_on = {"mcl_blackstone:soul_soil","mcl_nether:soul_sand"},
 		sidelen = 16,
@@ -5488,7 +5488,7 @@ local function register_dimension_decorations()
 		max_height = 5,
 		decoration = "mcl_blackstone:soul_fire",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"mcl_blackstone:soul_soil","mcl_nether:soulsand"},
 		sidelen = 16,
@@ -5500,7 +5500,7 @@ local function register_dimension_decorations()
 		size = {x = 5, y = 8, z = 5},
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"mcl_blackstone:soul_soil","mcl_nether:soulsand"},
 		sidelen = 16,
@@ -5512,7 +5512,7 @@ local function register_dimension_decorations()
 		size = {x = 5, y = 8, z = 5},
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"mcl_blackstone:soul_soil","mcl_nether:soulsand"},
 		sidelen = 16,
@@ -5524,7 +5524,7 @@ local function register_dimension_decorations()
 		size = {x = 5, y = 8, z = 5},
 		rotation = "random",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "schematic",
 		place_on = {"mcl_blackstone:soul_soil","mcl_nether:soulsand"},
 		sidelen = 16,
@@ -5537,7 +5537,7 @@ local function register_dimension_decorations()
 		rotation = "random",
 	})
 	--BASALT DELTA
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		decoration = "mcl_blackstone:basalt",
 		place_on = {"mcl_blackstone:basalt","mcl_nether:netherrack","mcl_blackstone:blackstone"},
@@ -5558,7 +5558,7 @@ local function register_dimension_decorations()
 		y_max = mcl_vars.mg_nether_deco_max - 50,
 		flags = "all_floors, all ceilings",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		decoration = "mcl_blackstone:basalt",
 		place_on = {"mcl_blackstone:basalt","mcl_nether:netherrack","mcl_blackstone:blackstone"},
@@ -5579,7 +5579,7 @@ local function register_dimension_decorations()
 		y_max = mcl_vars.mg_nether_deco_max - 15,
 		flags = "all_floors, all ceilings",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		decoration = "mcl_blackstone:basalt",
 		place_on = {"mcl_blackstone:basalt","mcl_nether:netherrack","mcl_blackstone:blackstone"},
@@ -5591,7 +5591,7 @@ local function register_dimension_decorations()
 		y_max = mcl_vars.mg_nether_deco_max - 15,
 		flags = "all_floors, all ceilings",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		decoration = "mcl_nether:magma",
 		place_on = {"mcl_blackstone:basalt","mcl_nether:netherrack","mcl_blackstone:blackstone"},
@@ -5602,7 +5602,7 @@ local function register_dimension_decorations()
 		y_min = mcl_vars.mg_lava_nether_max + 1,
 		flags = "all_floors, all ceilings",
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		deco_type = "simple",
 		decoration = "mcl_nether:nether_lava_source",
 		place_on = {"mcl_blackstone:basalt","mcl_nether:netherrack","mcl_blackstone:blackstone"},
@@ -5620,7 +5620,7 @@ local function register_dimension_decorations()
 	--[[ THE END ]]
 
 	-- Chorus plant
-	minetest.register_decoration({
+	core.register_decoration({
 		name = "mcl_biomes:chorus",
 		deco_type = "simple",
 		place_on = {"mcl_end:end_stone"},
@@ -5641,7 +5641,7 @@ local function register_dimension_decorations()
 		height_max = 8,
 		biomes = { "End", "EndMidlands", "EndHighlands", "EndBarrens", "EndSmallIslands" },
 	})
-	minetest.register_decoration({
+	core.register_decoration({
 		name = "mcl_biomes:chorus_plant",
 		deco_type = "simple",
 		place_on = {"mcl_end:chorus_plant"},
@@ -5663,8 +5663,8 @@ local function register_dimension_decorations()
 		biomes = { "End", "EndMidlands", "EndHighlands", "EndBarrens", "EndSmallIslands" },
 	})
 
-	deco_id_chorus_plant = minetest.get_decoration_id("mcl_biomes:chorus_plant")
-	minetest.set_gen_notify({decoration=true}, { deco_id_chorus_plant })
+	deco_id_chorus_plant = core.get_decoration_id("mcl_biomes:chorus_plant")
+	core.set_gen_notify({decoration=true}, { deco_id_chorus_plant })
 
 	-- TODO: End cities
 
@@ -5683,9 +5683,9 @@ else
 	-- Implementation of Minecraft's Superflat mapgen, classic style:
 	-- * Perfectly flat land, 1 grass biome, no decorations, no caves
 	-- * 4 layers, from top to bottom: grass block, dirt, dirt, bedrock
-	minetest.clear_registered_biomes()
-	minetest.clear_registered_decorations()
-	minetest.clear_registered_schematics()
+	core.clear_registered_biomes()
+	core.clear_registered_decorations()
+	core.clear_registered_schematics()
 	register_classic_superflat_biome()
 end
 
@@ -5695,31 +5695,31 @@ register_dimension_ores()
 register_dimension_decorations()
 
 local deco_ids_trees = {
-	minetest.get_decoration_id("mcl_biomes:mangrove_tree_1"),
-	minetest.get_decoration_id("mcl_biomes:mangrove_tree_2"),
-	minetest.get_decoration_id("mcl_biomes:mangrove_tree_3"),
+	core.get_decoration_id("mcl_biomes:mangrove_tree_1"),
+	core.get_decoration_id("mcl_biomes:mangrove_tree_2"),
+	core.get_decoration_id("mcl_biomes:mangrove_tree_3"),
 }
 for _,f in pairs(deco_ids_trees) do
-	minetest.set_gen_notify({decoration=true}, { f })
+	core.set_gen_notify({decoration=true}, { f })
 end
 
 local function mangrove_roots_gen(gennotify, pr)
 	for _, f in pairs(deco_ids_trees) do
 		for _, pos in ipairs(gennotify["decoration#" .. f] or {}) do
-			local nn = minetest.find_nodes_in_area(vector.offset(pos, -8, -1, -8), vector.offset(pos, 8, 0, 8), {"mcl_mangrove:mangrove_roots"})
+			local nn = core.find_nodes_in_area(vector.offset(pos, -8, -1, -8), vector.offset(pos, 8, 0, 8), {"mcl_mangrove:mangrove_roots"})
 			for _, v in pairs(nn) do
 				local l = pr:next(2, 16)
-				local n = minetest.get_node(vector.offset(v, 0, -1, 0)).name
-				if minetest.get_item_group(n, "water") > 0 then
+				local n = core.get_node(vector.offset(v, 0, -1, 0)).name
+				if core.get_item_group(n, "water") > 0 then
 					local wl = "mcl_mangrove:water_logged_roots"
 					if n:find("river") then
 						wl = "mcl_mangrove:river_water_logged_roots"
 					end
-					mcl_util.bulk_swap_node(minetest.find_nodes_in_area(vector.offset(v, 0, 0, 0), vector.offset(v, 0, -l, 0), {"group:water"}), {name = wl})
+					mcl_util.bulk_swap_node(core.find_nodes_in_area(vector.offset(v, 0, 0, 0), vector.offset(v, 0, -l, 0), {"group:water"}), {name = wl})
 				elseif n == "mcl_mud:mud" then
-					mcl_util.bulk_swap_node(minetest.find_nodes_in_area(vector.offset(v, 0, 0, 0), vector.offset(v, 0, -l, 0), {"mcl_mud:mud"}), {name = "mcl_mangrove:mangrove_mud_roots"})
+					mcl_util.bulk_swap_node(core.find_nodes_in_area(vector.offset(v, 0, 0, 0), vector.offset(v, 0, -l, 0), {"mcl_mud:mud"}), {name = "mcl_mangrove:mangrove_mud_roots"})
 				elseif n == "air" then
-					mcl_util.bulk_swap_node(minetest.find_nodes_in_area(vector.offset(v, 0, 0, 0), vector.offset(v, 0, -l, 0), {"air"}), {name = "mcl_mangrove:mangrove_roots"})
+					mcl_util.bulk_swap_node(core.find_nodes_in_area(vector.offset(v, 0, 0, 0), vector.offset(v, 0, -l, 0), {"air"}), {name = "mcl_mangrove:mangrove_roots"})
 				end
 			end
 		end
@@ -5731,7 +5731,7 @@ local function chorus_gen (gennotify, pr)
 		local x, y, z = pos.x, pos.y, pos.z
 		if x < -10 or x > 10 or z < -10 or z > 10 then
 			local realpos = {x = x, y = y + 1, z = z}
-			local node = minetest.get_node(realpos)
+			local node = core.get_node(realpos)
 			if node and node.name == "mcl_end:chorus_flower" then
 				mcl_end.grow_chorus_plant(realpos, node, pr)
 			end
@@ -5741,14 +5741,14 @@ end
 
 if deco_id_chorus_plant or deco_ids_trees then
 	mcl_mapgen_core.register_generator("chorus_grow", nil, function(minp, maxp, blockseed)
-		local gennotify = minetest.get_mapgen_object("gennotify")
+		local gennotify = core.get_mapgen_object("gennotify")
 		local pr = PseudoRandom(blockseed + 14)
 		if not (maxp.y < mcl_vars.mg_overworld_min or minp.y > mcl_vars.mg_overworld_max) then
-			local biomemap = minetest.get_mapgen_object("biomemap")
+			local biomemap = core.get_mapgen_object("biomemap")
 			-- get_mapgen_object returns nil with lua mapgens
 			if biomemap then
-				local swamp_biome_id = minetest.get_biome_id("MangroveSwamp")
-				local swamp_shore_id = minetest.get_biome_id("MangroveSwamp_shore")
+				local swamp_biome_id = core.get_biome_id("MangroveSwamp")
+				local swamp_shore_id = core.get_biome_id("MangroveSwamp_shore")
 				local is_swamp = table.indexof(biomemap, swamp_biome_id) ~= -1
 				local is_swamp_shore = table.indexof(biomemap, swamp_shore_id) ~= -1
 

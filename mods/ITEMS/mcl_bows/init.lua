@@ -1,10 +1,10 @@
 --Bow
-dofile(minetest.get_modpath("mcl_bows") .. "/arrow.lua")
-dofile(minetest.get_modpath("mcl_bows") .. "/bow.lua")
+dofile(core.get_modpath("mcl_bows") .. "/arrow.lua")
+dofile(core.get_modpath("mcl_bows") .. "/bow.lua")
 
 --Crossbow
-dofile(minetest.get_modpath("mcl_bows") .. "/crossbow.lua")
+dofile(core.get_modpath("mcl_bows") .. "/crossbow.lua")
 
 --Compatiblility with older MineClone worlds
-minetest.register_alias("mcl_throwing:bow", "mcl_bows:bow")
-minetest.register_alias("mcl_throwing:arrow", "mcl_bows:arrow")
+core.register_alias("mcl_throwing:bow", "mcl_bows:bow")
+core.register_alias("mcl_throwing:arrow", "mcl_bows:arrow")

@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
@@ -91,10 +91,10 @@ function strider:on_spawn ()
 	if not self.child then
 		if pr:next (1, 30) == 1 then
 			local self_pos = self.object:get_pos ()
-			local no_jockeys = minetest.serialize ({
+			local no_jockeys = core.serialize ({
 				_no_chicken_jockeys = true,
 			})
-			local rider = minetest.add_entity (self_pos, "mobs_mc:zombified_piglin",
+			local rider = core.add_entity (self_pos, "mobs_mc:zombified_piglin",
 							   no_jockeys)
 			if rider then
 				local entity = rider:get_luaentity ()
@@ -108,10 +108,10 @@ function strider:on_spawn ()
 			end
 		elseif pr:next (1, 10) == 1 then
 			local self_pos = self.object:get_pos ()
-			local child = minetest.serialize ({
+			local child = core.serialize ({
 				child = true,
 			})
-			local rider = minetest.add_entity (self_pos, self.name, child)
+			local rider = core.add_entity (self_pos, self.name, child)
 			if rider then
 				local entity = rider:get_luaentity ()
 				local pos = {
@@ -154,15 +154,15 @@ function strider:detach (driver, pos)
 	if thing and thing.type == "node" then
 		local self_pos = self.object:get_pos ()
 		local node_pos = vector.offset (thing.under, 0, 1, 0)
-		local node = minetest.get_node (node_pos)
-		local def = minetest.registered_nodes[node.name]
-		local node_1 = minetest.get_node (vector.offset (node_pos, 0, 1, 0))
-		local def_1 = minetest.registered_nodes[node_1.name]
+		local node = core.get_node (node_pos)
+		local def = core.registered_nodes[node.name]
+		local node_1 = core.get_node (vector.offset (node_pos, 0, 1, 0))
+		local def_1 = core.registered_nodes[node_1.name]
 
 		if vector.distance (self_pos, node_pos) <= 4
 			and not def.walkable and not def_1.walkable then
 			mob_class.detach (self, driver, vector.zero ())
-			minetest.after (0.1, function ()
+			core.after (0.1, function ()
 				if is_valid (driver) then
 					driver:set_pos (vector.offset (node_pos, 0, -0.5, 0))
 				end
@@ -220,10 +220,10 @@ function strider:on_rightclick (clicker)
 			},
 		}
 		local clicker_name = clicker:get_player_name ()
-		if not minetest.is_creative_enabled (clicker_name) then
+		if not core.is_creative_enabled (clicker_name) then
 			item:take_item ()
 			clicker:set_wielded_item (item)
-			minetest.sound_play ({name = "mcl_armor_equip_leather"},
+			core.sound_play ({name = "mcl_armor_equip_leather"},
 				{gain=0.5, max_hear_distance=8, pos=self.object:get_pos()}, true)
 		end
 	elseif not self.driver
@@ -273,8 +273,8 @@ function strider:ai_step (dtime)
 	local was_aground = self._aground
 	self._aground = false
 
-	if minetest.get_item_group (self.standing_on, "lava") == 0
-		and minetest.get_item_group (self.standing_in, "lava") == 0 then
+	if core.get_item_group (self.standing_on, "lava") == 0
+		and core.get_item_group (self.standing_in, "lava") == 0 then
 		self._aground = true
 	end
 	if self.jockey_vehicle then
@@ -339,7 +339,7 @@ local function strider_go_to_lava (self, self_pos, dtime)
 		local nodepos = mcl_util.get_nodepos (self_pos)
 		local aa = vector.offset (nodepos, -8, -2, -8)
 		local bb = vector.offset (nodepos, 8, 2, 8)
-		local lava = minetest.find_nodes_in_area_under_air (aa, bb, {
+		local lava = core.find_nodes_in_area_under_air (aa, bb, {
 			"group:lava",
 		})
 		if #lava == 0 then
@@ -441,7 +441,7 @@ local spawn_nodes = {
 }
 
 function strider.can_spawn (pos)
-	local l = minetest.find_node_near (pos, 2, spawn_nodes)
+	local l = core.find_node_near (pos, 2, spawn_nodes)
 	return l ~= nil
 end
 

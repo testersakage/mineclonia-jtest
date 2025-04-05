@@ -3,10 +3,10 @@
 ---------------
 
 -- Variables
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- Honeycomb
-minetest.register_craftitem("mcl_honey:honeycomb", {
+core.register_craftitem("mcl_honey:honeycomb", {
 	_dispense_into_walkable = true,
 	_on_dispense = function(stack, _, droppos, dropnode)
 		if not dropnode.name:find("_preserved") then
@@ -28,7 +28,7 @@ minetest.register_craftitem("mcl_honey:honeycomb", {
 	_mcl_crafting_output = {square2 = {output = "mcl_honey:honeycomb_block"}}
 })
 
-minetest.register_node("mcl_honey:honeycomb_block", {
+core.register_node("mcl_honey:honeycomb_block", {
 	description = S("Honeycomb Block"),
 	_doc_items_longdesc = S("Honeycomb Block. Used as a decoration."),
 	tiles = {
@@ -41,14 +41,14 @@ minetest.register_node("mcl_honey:honeycomb_block", {
 })
 
 -- Honey
-minetest.register_craftitem("mcl_honey:honey_bottle", {
+core.register_craftitem("mcl_honey:honey_bottle", {
 	description = S("Honey Bottle"),
 	_doc_items_longdesc = S("Honey Bottle is used to craft honey blocks and to restore hunger points."),
 	_doc_items_usagehelp = S("Drinking will restore 6 hunger points. Can also be used to craft honey blocks."),
 	inventory_image = "mcl_honey_honey_bottle.png",
 	groups = { craftitem = 1, food = 3, eatable = 6, can_eat_when_full=1 },
-	on_place = minetest.item_eat(6, "mcl_potions:glass_bottle"),
-	on_secondary_use = minetest.item_eat(6, "mcl_potions:glass_bottle"),
+	on_place = core.item_eat(6, "mcl_potions:glass_bottle"),
+	on_secondary_use = core.item_eat(6, "mcl_potions:glass_bottle"),
 	_mcl_saturation = 1.2,
 	stack_max = 16,
 	_mcl_crafting_output = {
@@ -70,7 +70,7 @@ minetest.register_craftitem("mcl_honey:honey_bottle", {
 	}
 })
 
-minetest.register_node("mcl_honey:honey_block", {
+core.register_node("mcl_honey:honey_block", {
 	description = S("Honey Block"),
 	_doc_items_longdesc = S("Honey Block. Used as a decoration and in redstone. Is sticky on some sides."),
 	tiles = {"mcl_honey_block_side.png"},
@@ -97,7 +97,7 @@ minetest.register_node("mcl_honey:honey_block", {
 })
 
 -- Crafting
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_honey:honey_bottle 4",
 	recipe = {
 		{ "mcl_potions:glass_bottle", "mcl_potions:glass_bottle", "mcl_honey:honey_block" },

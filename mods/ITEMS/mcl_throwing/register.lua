@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-local mod_target = minetest.get_modpath("mcl_target")
+local mod_target = core.get_modpath("mcl_target")
 
 -- The snowball entity
 local snowball_ENTITY={
@@ -60,13 +60,13 @@ local function check_object_hit(self, pos, dmg)
 		thrower = core.get_player_by_name(thrower)
 	end
 
-	for object in minetest.objects_inside_radius(pos, 1.5) do
+	for object in core.objects_inside_radius(pos, 1.5) do
 		local entity = object:get_luaentity()
 		if not entity or entity.name ~= self.object:get_luaentity().name then
 			local is_player = object:is_player()
 			local is_valid_entity = entity and (entity.is_mob == true or entity._hittable_by_projectile)
 			if (is_player or is_valid_entity) and (thrower ~= object or self.timer > 0.5) then
-				local pl = thrower and thrower.is_player and thrower or type(thrower) == "string" and minetest.get_player_by_name(thrower)
+				local pl = thrower and thrower.is_player and thrower or type(thrower) == "string" and core.get_player_by_name(thrower)
 				if pl then
 					object:punch(pl, 1.0, {
 						full_punch_interval = 1.0,
@@ -82,7 +82,7 @@ end
 
 local function snowball_particles(pos, vel)
 	local vel = vector.normalize(vector.multiply(vel, -1))
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 20,
 		time = 0.001,
 		minpos = pos,
@@ -107,13 +107,13 @@ local function snowball_on_step(self, dtime)
 	self.timer = self.timer + dtime
 	local pos = self.object:get_pos()
 	local vel = self.object:get_velocity()
-	local node = minetest.get_node(pos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node(pos)
+	local def = core.registered_nodes[node.name]
 
 	-- Destroy when hitting a solid node
 	if self._lastpos.x~=nil then
 		if (def and def.walkable) or not def then
-			minetest.sound_play("mcl_throwing_snowball_impact_hard", { pos = pos, max_hear_distance=16, gain=0.7 }, true)
+			core.sound_play("mcl_throwing_snowball_impact_hard", { pos = pos, max_hear_distance=16, gain=0.7 }, true)
 			snowball_particles(self._lastpos, vel)
 			self.object:remove()
 			if mod_target and node.name == "mcl_target:target_off" then
@@ -123,7 +123,7 @@ local function snowball_on_step(self, dtime)
 		end
 	end
 	if check_object_hit(self, pos, {snowball_vulnerable = 3}) then
-		minetest.sound_play("mcl_throwing_snowball_impact_soft", { pos = pos, max_hear_distance=16, gain=0.7 }, true)
+		core.sound_play("mcl_throwing_snowball_impact_soft", { pos = pos, max_hear_distance=16, gain=0.7 }, true)
 		snowball_particles(pos, vel)
 		self.object:remove()
 		return
@@ -135,8 +135,8 @@ end
 local function egg_on_step(self, dtime)
 	self.timer = self.timer + dtime
 	local pos = self.object:get_pos()
-	local node = minetest.get_node(pos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node(pos)
+	local def = core.registered_nodes[node.name]
 
 	-- Destroy when hitting a solid node with chance to spawn chicks
 	if self._lastpos.x then
@@ -162,7 +162,7 @@ local function egg_on_step(self, dtime)
 					end
 				end
 			end
-			minetest.sound_play("mcl_throwing_egg_impact", { pos = self.object:get_pos(), max_hear_distance=10, gain=0.5 }, true)
+			core.sound_play("mcl_throwing_egg_impact", { pos = self.object:get_pos(), max_hear_distance=10, gain=0.5 }, true)
 			self.object:remove()
 			if mod_target and node.name == "mcl_target:target_off" then
 				mcl_target.hit(vector.round(pos), 0.4) --4 redstone ticks
@@ -173,7 +173,7 @@ local function egg_on_step(self, dtime)
 
 	-- Destroy when hitting a mob or player (no chick spawning)
 	if check_object_hit(self, pos, {egg_vulnerable = 0}) then
-		minetest.sound_play("mcl_throwing_egg_impact", { pos = self.object:get_pos(), max_hear_distance=10, gain=0.5 }, true)
+		core.sound_play("mcl_throwing_egg_impact", { pos = self.object:get_pos(), max_hear_distance=10, gain=0.5 }, true)
 		self.object:remove()
 		return
 	end
@@ -187,12 +187,12 @@ local function pearl_tp(player, pos)
 end
 
 local function check_gateway_teleportation (self, pos, lastpos)
-	local raycast = minetest.raycast (lastpos, pos, false, false)
+	local raycast = core.raycast (lastpos, pos, false, false)
 	for hitpoint in raycast do
 		if hitpoint.type == "node" then
-			local node = minetest.get_node (hitpoint.under)
+			local node = core.get_node (hitpoint.under)
 			local player = self._thrower
-				and minetest.get_player_by_name (self._thrower)
+				and core.get_player_by_name (self._thrower)
 			if node.name == "mcl_portals:portal_gateway" then
 				if player then
 					mcl_portals.gateway_teleport (hitpoint.under, player)
@@ -210,9 +210,9 @@ local function pearl_on_step(self, dtime)
 	self.timer = self.timer + dtime
 	local pos = self.object:get_pos()
 	pos.y = math.floor(pos.y)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	local nn = node.name
-	local def = minetest.registered_nodes[node.name]
+	local def = core.registered_nodes[node.name]
 
 	-- Destroy when hitting a solid node
 	if self._lastpos.x~=nil then
@@ -226,8 +226,8 @@ local function pearl_on_step(self, dtime)
 		if node.name == "ignore" then
 			self.object:remove()
 		-- Activate when hitting a solid node or a plant
-		elseif walkable or nn == "mcl_core:vine" or nn == "mcl_core:deadbush" or minetest.get_item_group(nn, "flower") ~= 0 or minetest.get_item_group(nn, "sapling") ~= 0 or minetest.get_item_group(nn, "plant") ~= 0 or minetest.get_item_group(nn, "mushroom") ~= 0 or not def then
-			local player = self._thrower and minetest.get_player_by_name(self._thrower)
+		elseif walkable or nn == "mcl_core:vine" or nn == "mcl_core:deadbush" or core.get_item_group(nn, "flower") ~= 0 or core.get_item_group(nn, "sapling") ~= 0 or core.get_item_group(nn, "plant") ~= 0 or core.get_item_group(nn, "mushroom") ~= 0 or not def then
+			local player = self._thrower and core.get_player_by_name(self._thrower)
 			if player then
 				-- Teleport and hurt player
 
@@ -272,12 +272,12 @@ local function pearl_on_step(self, dtime)
 
 				-- Final teleportation position
 				local telepos = vector.add(pos, dir)
-				local telenode = minetest.get_node(telepos)
+				local telenode = core.get_node(telepos)
 
 				--[[ It may be possible that telepos is walkable due to the algorithm.
 				Especially when the ender pearl is faster horizontally than vertical.
 				This applies final fixing, just to be sure we're not in a walkable node ]]
-				if not minetest.registered_nodes[telenode.name] or minetest.registered_nodes[telenode.name].walkable then
+				if not core.registered_nodes[telenode.name] or core.registered_nodes[telenode.name].walkable then
 					if v.y < 0 then
 						telepos.y = telepos.y + 0.5
 					else
@@ -297,7 +297,7 @@ local function pearl_on_step(self, dtime)
 
 				-- 10% chance to spawn endermite at the player's origin
 				if math.random(10) == 1 then
-					minetest.add_entity(oldpos, "mobs_mc:endermite")
+					core.add_entity(oldpos, "mobs_mc:endermite")
 				end
 
 			end
@@ -315,15 +315,15 @@ snowball_ENTITY.on_step = snowball_on_step
 egg_ENTITY.on_step = egg_on_step
 pearl_ENTITY.on_step = pearl_on_step
 
-minetest.register_entity("mcl_throwing:snowball_entity", snowball_ENTITY)
-minetest.register_entity("mcl_throwing:egg_entity", egg_ENTITY)
-minetest.register_entity("mcl_throwing:ender_pearl_entity", pearl_ENTITY)
+core.register_entity("mcl_throwing:snowball_entity", snowball_ENTITY)
+core.register_entity("mcl_throwing:egg_entity", egg_ENTITY)
+core.register_entity("mcl_throwing:ender_pearl_entity", pearl_ENTITY)
 
 
 local how_to_throw = S("Use the punch key to throw.")
 
 -- Snowball
-minetest.register_craftitem("mcl_throwing:snowball", {
+core.register_craftitem("mcl_throwing:snowball", {
 	description = S("Snowball"),
 	_tt_help = S("Throwable"),
 	_doc_items_longdesc = S("Snowballs can be thrown or launched from a dispenser for fun. Hitting something with a snowball does nothing."),
@@ -338,7 +338,7 @@ minetest.register_craftitem("mcl_throwing:snowball", {
 })
 
 -- Egg
-minetest.register_craftitem("mcl_throwing:egg", {
+core.register_craftitem("mcl_throwing:egg", {
 	description = S("Egg"),
 	_tt_help = S("Throwable").."\n"..S("Chance to hatch chicks when broken"),
 	_doc_items_longdesc = S("Eggs can be thrown or launched from a dispenser and breaks on impact. There is a small chance that 1 or even 4 chicks will pop out of the egg."),
@@ -353,9 +353,9 @@ minetest.register_craftitem("mcl_throwing:egg", {
 })
 
 -- Ender Pearl
-minetest.register_craftitem("mcl_throwing:ender_pearl", {
+core.register_craftitem("mcl_throwing:ender_pearl", {
 	description = S("Ender Pearl"),
-	_tt_help = S("Throwable").."\n"..minetest.colorize(mcl_colors.YELLOW, S("Teleports you on impact for cost of 5 HP")),
+	_tt_help = S("Throwable").."\n"..core.colorize(mcl_colors.YELLOW, S("Teleports you on impact for cost of 5 HP")),
 	_doc_items_longdesc = S("An ender pearl is an item which can be used for teleportation at the cost of health. It can be thrown and teleport the thrower to its impact location when it hits a solid block or a plant. Each teleportation hurts the user by 5 hit points."),
 	_doc_items_usagehelp =  S("Use the place key to throw."),
 	wield_image = "mcl_throwing_ender_pearl.png",

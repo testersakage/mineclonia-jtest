@@ -1,6 +1,6 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
+local S = core.get_translator(modname)
 
 mcl_walls = {}
 
@@ -17,13 +17,13 @@ local directions = {
 }
 
 local function connectable(itemstring)
-	return (minetest.get_item_group(itemstring, "wall") == 1) or (minetest.get_item_group(itemstring, "solid") == 1)
+	return (core.get_item_group(itemstring, "wall") == 1) or (core.get_item_group(itemstring, "solid") == 1)
 end
 
 function mcl_walls.update_wall(pos)
-	local thisnode = minetest.get_node(pos)
+	local thisnode = core.get_node(pos)
 
-	if minetest.get_item_group(thisnode.name, "wall") == 0 then
+	if core.get_item_group(thisnode.name, "wall") == 0 then
 		return
 	end
 
@@ -47,16 +47,16 @@ function mcl_walls.update_wall(pos)
 	-- Neighbouring walkable nodes
 	for i = 1, 4 do
 		local dir = directions[i]
-		local node = minetest.get_node({x = pos.x + dir.x, y = pos.y + dir.y, z = pos.z + dir.z})
+		local node = core.get_node({x = pos.x + dir.x, y = pos.y + dir.y, z = pos.z + dir.z})
 		if connectable(node.name) then
 			sum = sum + 2 ^ (i - 1)
 		end
 	end
 
 	-- Torches or walkable nodes above the wall
-	local upnode = minetest.get_node({x = pos.x, y = pos.y+1, z = pos.z})
+	local upnode = core.get_node({x = pos.x, y = pos.y+1, z = pos.z})
 	if sum == 5 or sum == 10 then
-		if (connectable(upnode.name)) or (minetest.get_item_group(upnode.name, "torch") == 1) then
+		if (connectable(upnode.name)) or (core.get_item_group(upnode.name, "torch") == 1) then
 			sum = sum + 11
 		end
 	end
@@ -65,7 +65,7 @@ function mcl_walls.update_wall(pos)
 		sum = 15
 	end]]
 
-	minetest.add_node(pos, {name = basename..sum})
+	core.add_node(pos, {name = basename..sum})
 end
 
 local function update_wall_global(pos)
@@ -119,8 +119,8 @@ function mcl_walls.register_wall(nodename, description, source, tiles, inventory
 	end
 
 	if (not tiles) and source then
-		if minetest.registered_nodes[source] then
-			tiles = minetest.registered_nodes[source].tiles
+		if core.registered_nodes[source] then
+			tiles = core.registered_nodes[source].tiles
 		end
 	end
 
@@ -151,7 +151,7 @@ function mcl_walls.register_wall(nodename, description, source, tiles, inventory
 		if i == 15 or i == 0 then need_pillar = true end
 		if need_pillar then table.insert(take, pillar) end
 
-		minetest.register_node(nodename.."_"..i, table.merge({
+		core.register_node(nodename.."_"..i, table.merge({
 			collision_box = {
 				type = "fixed",
 				fixed = {-4/16, -0.5, -4/16, 4/16, 1, 4/16}
@@ -176,12 +176,12 @@ function mcl_walls.register_wall(nodename, description, source, tiles, inventory
 		}, overrides or {}))
 
 		-- Add entry alias for the Help
-		if minetest.get_modpath("doc") then
+		if core.get_modpath("doc") then
 			doc.add_entry_alias("nodes", nodename, "nodes", nodename.."_"..i)
 		end
 	end
 
-	minetest.register_node(nodename.."_16", table.merge({
+	core.register_node(nodename.."_16", table.merge({
 		drawtype = "nodebox",
 		collision_box = {
 				type = "fixed",
@@ -205,11 +205,11 @@ function mcl_walls.register_wall(nodename, description, source, tiles, inventory
 		_pathfinding_class = "FENCE",
 	}, overrides or {}))
 	-- Add entry alias for the Help
-	if minetest.get_modpath("doc") then
+	if core.get_modpath("doc") then
 		doc.add_entry_alias("nodes", nodename, "nodes", nodename.."_16")
 	end
 
-	minetest.register_node(nodename.."_21", table.merge({
+	core.register_node(nodename.."_21", table.merge({
 		drawtype = "nodebox",
 		collision_box = {
 				type = "fixed",
@@ -232,12 +232,12 @@ function mcl_walls.register_wall(nodename, description, source, tiles, inventory
 		_pathfinding_class = "FENCE"
 	}, overrides or {}))
 	-- Add entry alias for the Help
-	if minetest.get_modpath("doc") then
+	if core.get_modpath("doc") then
 		doc.add_entry_alias("nodes", nodename, "nodes", nodename.."_21")
 	end
 
 	-- Inventory item
-	minetest.register_node(nodename, table.merge({
+	core.register_node(nodename, table.merge({
 		description = description,
 		_doc_items_longdesc = S("A piece of wall. It cannot be jumped over with a simple jump. When multiple of these are placed to next to each other, they will automatically build a nice wall structure."),
 		paramtype = "light",
@@ -262,7 +262,7 @@ function mcl_walls.register_wall(nodename, description, source, tiles, inventory
 		_mcl_hardness = 2,
 	}, overrides or {}))
 	if source then
-		minetest.register_craft({
+		core.register_craft({
 			output = nodename .. " 6",
 			recipe = {
 				{source, source, source},
@@ -280,5 +280,5 @@ end
 
 dofile(modpath.."/register.lua")
 
-minetest.register_on_placenode(update_wall_global)
-minetest.register_on_dignode(update_wall_global)
+core.register_on_placenode(update_wall_global)
+core.register_on_dignode(update_wall_global)

@@ -1,12 +1,12 @@
 mcl_bone_meal = {}
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 function mcl_bone_meal.add_bone_meal_particle(pos, def)
 	if not def then
 		def = {}
 	end
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = def.amount or 10,
 		time = def.time or 0.1,
 		minpos = def.minpos or vector.subtract(pos, 0.5),
@@ -26,30 +26,30 @@ end
 
 local function bone_meal(itemstack, user, pointed_thing)
 	local pname = user and user:get_player_name()
-	local unode = minetest.get_node(pointed_thing.under)
-	local anode = minetest.get_node(pointed_thing.above)
-	local udef = minetest.registered_nodes[unode.name]
-	local adef = minetest.registered_nodes[anode.name]
+	local unode = core.get_node(pointed_thing.under)
+	local anode = core.get_node(pointed_thing.above)
+	local udef = core.registered_nodes[unode.name]
+	local adef = core.registered_nodes[anode.name]
 	if udef and udef._on_bone_meal then
-		if pname and minetest.is_protected(pointed_thing.under, pname) then
-			minetest.record_protection_violation(pointed_thing.under, pname)
+		if pname and core.is_protected(pointed_thing.under, pname) then
+			core.record_protection_violation(pointed_thing.under, pname)
 			return itemstack
 		end
 		if udef._on_bone_meal(itemstack,user,pointed_thing, pointed_thing.under,unode) ~= false then
 			mcl_bone_meal.add_bone_meal_particle(pointed_thing.under)
 			mcl_bone_meal.add_bone_meal_particle(pointed_thing.above)
-			if not minetest.is_creative_enabled(pname) then
+			if not core.is_creative_enabled(pname) then
 				itemstack:take_item()
 			end
 		end
 	elseif adef and adef._on_bone_meal then
-		if minetest.is_protected(pointed_thing.above, pname) then
-			minetest.record_protection_violation(pointed_thing.above, pname)
+		if core.is_protected(pointed_thing.above, pname) then
+			core.record_protection_violation(pointed_thing.above, pname)
 			return itemstack
 		end
 		if adef._on_bone_meal(itemstack,user,pointed_thing,pointed_thing.above,anode) ~= false then
 			mcl_bone_meal.add_bone_meal_particle(pointed_thing.above)
-			if not minetest.is_creative_enabled(pname) then
+			if not core.is_creative_enabled(pname) then
 				itemstack:take_item()
 			end
 		end
@@ -57,7 +57,7 @@ local function bone_meal(itemstack, user, pointed_thing)
 	return itemstack
 end
 
-minetest.register_craftitem("mcl_bone_meal:bone_meal", {
+core.register_craftitem("mcl_bone_meal:bone_meal", {
 	inventory_image = "mcl_bone_meal_bone_meal.png",
 	description = S("Bone Meal"),
 	_tt_help = S("Speeds up plant growth"),

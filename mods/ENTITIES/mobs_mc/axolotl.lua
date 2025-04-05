@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
@@ -59,7 +59,7 @@ local axolotl = {
 			if clicker:set_wielded_item("mcl_buckets:bucket_axolotl") then
 				local it = clicker:get_wielded_item()
 				local m = it:get_meta()
-				m:set_string("properties",minetest.serialize(self.object:get_properties()))
+				m:set_string("properties",core.serialize(self.object:get_properties()))
 				clicker:set_wielded_item(it)
 				self:safe_remove()
 			end
@@ -142,7 +142,7 @@ end
 local function axolotl_find_water_1 (self_pos)
 	local aa = vector.offset (self_pos, -6, -6, -6)
 	local bb = vector.offset (self_pos, 6, 6, 6)
-	local nodes = minetest.find_nodes_in_area (aa, bb, {
+	local nodes = core.find_nodes_in_area (aa, bb, {
 		"group:water",
 	})
 	table.sort (nodes, function (v1, v2)
@@ -153,7 +153,7 @@ local function axolotl_find_water_1 (self_pos)
 		local node_above = vector.offset (node, 0, 1, 0)
 		-- Initially search for water above air, but settle
 		-- for water in general.
-		if minetest.get_node (node_above).name == "air" then
+		if core.get_node (node_above).name == "air" then
 			return node
 		end
 	end
@@ -173,7 +173,7 @@ local function axolotl_find_water (self, self_pos, dtime)
 	if self.pacing then
 		return false
 	end
-	if minetest.get_item_group (self.standing_in, "water") ~= 0 then
+	if core.get_item_group (self.standing_in, "water") ~= 0 then
 		return false
 	end
 	local node = axolotl_find_water_1 (self_pos)
@@ -193,7 +193,7 @@ function axolotl:receive_damage (mcl_reason, damage)
 		and (math.random (3) - 1 < damage
 			or self.health / self.initial_properties.hp_max < 0.5)
 		and damage < self.health
-		and minetest.get_item_group (self.standing_in, "water")
+		and core.get_item_group (self.standing_in, "water")
 		and mcl_reason and mcl_reason.source
 		and not self._regeneration_time then
 		self._regeneration_time = 10
@@ -277,7 +277,7 @@ axolotl.ai_functions = {
 
 function axolotl.can_spawn (pos)
 	for i = 1, 4 do
-		local block = minetest.get_node (vector.offset (pos, 0, -i, 0))
+		local block = core.get_node (vector.offset (pos, 0, -i, 0))
 		if block.name == "mcl_core:clay" then
 			return true
 		end
@@ -292,7 +292,7 @@ mcl_mobs.spawn_setup ({
 	type_of_spawning = "water",
 	dimension = "overworld",
 	min_light = 0,
-	max_light = minetest.LIGHT_MAX + 1,
+	max_light = core.LIGHT_MAX + 1,
 	aoc = 7,
 	chance = 100,
 	biomes = {

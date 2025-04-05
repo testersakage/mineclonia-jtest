@@ -1,8 +1,8 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
-local C = minetest.colorize
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
+local C = core.colorize
 
-local show_nici = minetest.settings:get_bool("mcl_creative_show_nici_tab", false)
+local show_nici = core.settings:get_bool("mcl_creative_show_nici_tab", false)
 
 -- Prepare player info table
 local players = {}
@@ -33,9 +33,9 @@ end
 
 -- Populate all the item tables. We only do this once.
 -- Note this code must be executed after loading all the other mods in order to work.
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
 
-	for name, def in pairs(minetest.registered_items) do
+	for name, def in pairs(core.registered_items) do
 		if (not def.groups.not_in_creative_inventory or def.groups.not_in_creative_inventory == 0) and def.description and
 			def.description ~= "" then
 			local function is_redstone(def)
@@ -114,7 +114,7 @@ minetest.register_on_mods_loaded(function()
 			end
 
 			table.insert(inventory_lists["all"], name)
-		elseif minetest.get_item_group(name, "not_in_creative_inventory") > 0 then
+		elseif core.get_item_group(name, "not_in_creative_inventory") > 0 then
 			table.insert(inventory_lists["nici"], name)
 		end
 
@@ -138,17 +138,17 @@ local function filter_item(name, description, lang, filter)
 	if not lang then
 		desc = string.lower(description)
 	else
-		desc = string.lower(minetest.get_translated_string(lang, description))
+		desc = string.lower(core.get_translated_string(lang, description))
 	end
 	return string.find(name, filter, nil, true) or string.find(desc, filter, nil, true)
 end
 
 local function set_inv_search(filter, player)
 	local playername = player:get_player_name()
-	local inv = minetest.get_inventory({ type = "detached", name = "creative_" .. playername })
+	local inv = core.get_inventory({ type = "detached", name = "creative_" .. playername })
 	local creative_list = {}
-	local lang = minetest.get_player_information(playername).lang_code
-	for name, def in pairs(minetest.registered_items) do
+	local lang = core.get_player_information(playername).lang_code
+	for name, def in pairs(core.registered_items) do
 		if (not def.groups.not_in_creative_inventory or def.groups.not_in_creative_inventory == 0)
 		and def.description and
 			def.description ~= "" then
@@ -167,7 +167,7 @@ local function set_inv_search(filter, player)
 		if def._get_all_virtual_items then
 			for category, list in pairs(def._get_all_virtual_items()) do
 				for _, virtual_item in pairs(list) do
-					if filter_item (virtual_item, minetest.strip_colors(ItemStack(virtual_item):get_description()), lang, filter) then
+					if filter_item (virtual_item, core.strip_colors(ItemStack(virtual_item):get_description()), lang, filter) then
 						table.insert(creative_list, virtual_item)
 					end
 				end
@@ -183,7 +183,7 @@ end
 
 local function set_inv_page(page, player)
 	local playername = player:get_player_name()
-	local inv = minetest.get_inventory({ type = "detached", name = "creative_" .. playername })
+	local inv = core.get_inventory({ type = "detached", name = "creative_" .. playername })
 	inv:set_size("main", 0)
 	local creative_list = {}
 	if inventory_lists[page] then -- Standard filter
@@ -196,7 +196,7 @@ end
 
 local function init(player)
 	local playername = player:get_player_name()
-	minetest.create_detached_inventory("creative_" .. playername, {
+	core.create_detached_inventory("creative_" .. playername, {
 		allow_move = function()
 			return 0
 		end,
@@ -204,7 +204,7 @@ local function init(player)
 			return 0
 		end,
 		allow_take = function(_, _, _, _, player)
-			if minetest.is_creative_enabled(player:get_player_name()) then
+			if core.is_creative_enabled(player:get_player_name()) then
 				return -1
 			else
 				return 0
@@ -215,9 +215,9 @@ local function init(player)
 end
 
 -- Create the trash field
-local trash = minetest.create_detached_inventory("trash", {
+local trash = core.create_detached_inventory("trash", {
 	allow_put = function(_, _, _, stack, player)
-		if minetest.is_creative_enabled(player:get_player_name()) then
+		if core.is_creative_enabled(player:get_player_name()) then
 			return stack:get_count()
 		else
 			return 0
@@ -366,7 +366,7 @@ local function set_stack_size(player, n)
 	player:get_meta():set_int("mcl_inventory:switch_stack", n)
 end
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	if get_stack_size(player) == 0 then
 		set_stack_size(player, 64)
 	end
@@ -374,10 +374,10 @@ end)
 
 local function is_touch_enabled(playername)
 	-- Minetest < 5.7.0 support
-	if not minetest.get_player_window_information then
+	if not core.get_player_window_information then
 		return false
 	end
-	local window = minetest.get_player_window_information(playername)
+	local window = core.get_player_window_information(playername)
 	-- Always return a boolean (not nil) to avoid false-negatives when
 	-- comparing to a boolean later.
 	return window and window.touch_controls or false
@@ -395,7 +395,7 @@ function mcl_inventory.set_creative_formspec(player)
 
 	if not inv_size then
 		if page == "nix" then
-			local inv = minetest.get_inventory({ type = "detached", name = "creative_" .. playername })
+			local inv = core.get_inventory({ type = "detached", name = "creative_" .. playername })
 			inv_size = inv:get_size("main")
 		elseif page and page ~= "inv" then
 			inv_size = #(inventory_lists[page])
@@ -629,7 +629,7 @@ function mcl_inventory.set_creative_formspec(player)
 		end
 
 		formspec = formspec .. table.concat({
-			"field[5.325,0.15;6.1,0.6;search;;" .. minetest.formspec_escape(filter) .. "]",
+			"field[5.325,0.15;6.1,0.6;search;;" .. core.formspec_escape(filter) .. "]",
 			"field_enter_after_edit[search;true]",
 			"field_close_on_enter[search;false]",
 			"set_focus[search;true]",
@@ -640,10 +640,10 @@ function mcl_inventory.set_creative_formspec(player)
 	mcl_player.set_inventory_formspec (player, formspec, 0)
 end
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	local page = nil
 
-	if not minetest.is_creative_enabled(player:get_player_name()) then
+	if not core.is_creative_enabled(player:get_player_name()) then
 		return
 	end
 	if formname ~= "" or fields.quit == "true" then
@@ -742,7 +742,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 	local inv_size
 	if page == "nix" then
-		local inv = minetest.get_inventory({ type = "detached", name = "creative_" .. name })
+		local inv = core.get_inventory({ type = "detached", name = "creative_" .. name })
 		inv_size = inv:get_size("main")
 	elseif page and page ~= "inv" then
 		inv_size = #(inventory_lists[page])
@@ -771,22 +771,22 @@ end)
 
 
 
-minetest.register_on_placenode(function(_, _, placer, _, itemstack)
-	if placer and minetest.is_creative_enabled(placer:get_player_name()) then
+core.register_on_placenode(function(_, _, placer, _, itemstack)
+	if placer and core.is_creative_enabled(placer:get_player_name()) then
 		-- Place infinite nodes, except for shulker boxes
-		local group = minetest.get_item_group(itemstack:get_name(), "shulker_box")
+		local group = core.get_item_group(itemstack:get_name(), "shulker_box")
 		return group == 0 or group == nil
 	end
 end)
 
-local old_mt_handle_node_drops = minetest.handle_node_drops
+local old_mt_handle_node_drops = core.handle_node_drops
 
 ---@diagnostic disable-next-line: duplicate-set-field
-function minetest.handle_node_drops(pos, drops, digger)
-	if digger and minetest.is_creative_enabled(digger:get_player_name()) then
+function core.handle_node_drops(pos, drops, digger)
+	if digger and core.is_creative_enabled(digger:get_player_name()) then
 		if not digger or not digger:is_player() then
 			for _, item in ipairs(drops) do
-				minetest.add_item(pos, item)
+				core.add_item(pos, item)
 			end
 		else
 			-- If there is a player
@@ -804,7 +804,7 @@ function minetest.handle_node_drops(pos, drops, digger)
 	end
 end
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	-- Initialize variables and inventory
 	local name = player:get_player_name()
 	if not players[name] then
@@ -818,8 +818,8 @@ minetest.register_on_joinplayer(function(player)
 	mcl_inventory.set_creative_formspec(player)
 end)
 
-minetest.register_on_player_inventory_action(function(player, action, _, inventory_info)
-	if minetest.is_creative_enabled(player:get_player_name()) and get_stack_size(player) == 64 and action == "put" and
+core.register_on_player_inventory_action(function(player, action, _, inventory_info)
+	if core.is_creative_enabled(player:get_player_name()) and get_stack_size(player) == 64 and action == "put" and
 		inventory_info.listname == "main" then
 		local stack = inventory_info.stack
 		stack:set_count(stack:get_stack_max())
@@ -833,7 +833,7 @@ end)
 mcl_player.register_globalstep_slow(function(player)
 	local name = player:get_player_name()
 
-	if minetest.is_creative_enabled(name) then
+	if core.is_creative_enabled(name) then
 		local touch_enabled = is_touch_enabled(name)
 		if touch_enabled ~= players[name].last_touch_enabled then
 			mcl_inventory.set_creative_formspec(player)

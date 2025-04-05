@@ -1,6 +1,6 @@
 local mob_class = mcl_mobs.mob_class
-local modname = minetest.get_current_modname ()
-local S = minetest.get_translator (modname)
+local modname = core.get_current_modname ()
+local S = core.get_translator (modname)
 local villager_base = mobs_mc.villager_base
 local is_valid = mcl_util.is_valid_objectref
 
@@ -58,7 +58,7 @@ local function get_random_sapling ()
 	local r = {}
 	for k, _ in pairs(mcl_trees.woods) do
 		local sap = "mcl_trees:sapling_" .. k
-		local def = minetest.registered_nodes[sap]
+		local def = core.registered_nodes[sap]
 		if def and not def._unobtainable then
 			table.insert (r, sap)
 		end
@@ -221,7 +221,7 @@ function wandering_trader:ai_step (dtime)
 			self:use_wielditem ()
 		elseif self._using_wielditem > 1.0 then
 			mcl_potions._reset_effects (self.object)
-			minetest.sound_play ("survival_thirst_drink", {
+			core.sound_play ("survival_thirst_drink", {
 				pos = self.object:get_pos (),
 				max_hear_distance = 6,
 				gain = 1,
@@ -242,7 +242,7 @@ function wandering_trader:ai_step (dtime)
 	if #valid_llamas < 2
 		and self:check_timer ("locate_llamas", 0.5) then
 		local self_pos = self.object:get_pos ()
-		for object in minetest.objects_inside_radius (self_pos, 16) do
+		for object in core.objects_inside_radius (self_pos, 16) do
 			local entity = object:get_luaentity ()
 			if entity and entity.name == "mobs_mc:trader_llama"
 				and entity._trader_id == self._trader_id then
@@ -300,7 +300,7 @@ local function wandering_trader_check_trading (self, self_pos, dtime, moveresult
 						local name = player:get_player_name ()
 						local formname = "mobs_mc:trading_formspec"
 						mobs_mc.return_trading_fields (player)
-						minetest.close_formspec (name, formname)
+						core.close_formspec (name, formname)
 						self._trading_with[player] = nil
 					end
 					dist_min = math.min (d, dist_min)
@@ -379,7 +379,7 @@ local function convert_old_trades (tradestring)
 	if type (tradestring) ~= "string" then
 		return {}
 	end
-	local trades = minetest.deserialize (tradestring)
+	local trades = core.deserialize (tradestring)
 	local new_trades = {}
 	for _, trade in ipairs (trades) do
 		local trade_object = mobs_mc.make_villager_trade ({
@@ -408,19 +408,19 @@ mcl_mobs.register_mob ("mobs_mc:wandering_trader", wandering_trader)
 -- Wandering Trader spawning.
 ------------------------------------------------------------------------
 
-local storage = minetest.get_mod_storage ()
+local storage = core.get_mod_storage ()
 
 local function is_clear (nodepos, x, y, z)
 	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = minetest.get_node (nodepos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (nodepos)
+	local def = core.registered_nodes[node.name]
 	return def and not def.walkable and def.liquidtype == "none"
 end
 
 local function is_solid (nodepos, x, y, z)
 	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = minetest.get_node (nodepos)
-	local def = minetest.registered_nodes[node.name]
+	local node = core.get_node (nodepos)
+	local def = core.registered_nodes[node.name]
 	return def and def.walkable and def.groups.opaque
 end
 
@@ -434,7 +434,7 @@ local function spawn_one_llama (around, entity)
 		if is_clear (surface, 0, 0, 0)
 			and is_clear (surface, 0, 1, 0)
 			and is_solid (surface, 0, -1, 0) then
-			local llama = minetest.add_entity (surface, "mobs_mc:trader_llama")
+			local llama = core.add_entity (surface, "mobs_mc:trader_llama")
 			if llama then
 				local llama = llama:get_luaentity ()
 				llama._trader_id = entity._trader_id
@@ -501,7 +501,7 @@ local function spawn_wandering_trader ()
 			and is_solid (surface, 0, -1, 0) then
 			-- Spawn a trader and attempt to link llamas
 			-- to the same.
-			local trader = minetest.add_entity (surface, "mobs_mc:wandering_trader")
+			local trader = core.add_entity (surface, "mobs_mc:wandering_trader")
 			if not trader then
 				return false
 			end
@@ -522,11 +522,11 @@ end
 
 mobs_mc.spawn_wandering_trader = spawn_wandering_trader
 
-if minetest.settings:get_bool ("mobs_spawn", true) then
+if core.settings:get_bool ("mobs_spawn", true) then
 
 local local_spawn_counter = 60
 
-minetest.register_globalstep (function (dtime)
+core.register_globalstep (function (dtime)
 	local_spawn_counter = local_spawn_counter - dtime
 	if local_spawn_counter < 0 then
 		local_spawn_counter = 60

@@ -1,7 +1,7 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- Fire Charge
-minetest.register_craftitem("mcl_fire:fire_charge", {
+core.register_craftitem("mcl_fire:fire_charge", {
 	description = S("Fire Charge"),
 	_tt_help = S("Dispenser projectile").."\n"..S("Starts fires and ignites blocks"),
 	_doc_items_longdesc = S("Fire charges are primarily projectiles which can be launched from dispensers, they will fly in a straight line and burst into a fire on impact. Alternatively, they can be used to ignite fires directly."),
@@ -16,15 +16,15 @@ minetest.register_craftitem("mcl_fire:fire_charge", {
 
 		-- Check protection
 		local protname = user:get_player_name()
-		if minetest.is_protected(pointed_thing.under, protname) then
-			minetest.record_protection_violation(pointed_thing.under, protname)
+		if core.is_protected(pointed_thing.under, protname) then
+			core.record_protection_violation(pointed_thing.under, protname)
 			return itemstack
 		end
 
 		-- Ignite/light fire
-		local node = minetest.get_node(pointed_thing.under)
+		local node = core.get_node(pointed_thing.under)
 		if pointed_thing.type == "node" then
-			local nodedef = minetest.registered_nodes[node.name]
+			local nodedef = core.registered_nodes[node.name]
 			if nodedef and nodedef._on_ignite then
 				local overwrite = nodedef._on_ignite(user, pointed_thing)
 				if not overwrite then
@@ -33,7 +33,7 @@ minetest.register_craftitem("mcl_fire:fire_charge", {
 			else
 				mcl_fire.set_fire(pointed_thing, user, false)
 			end
-			if not minetest.is_creative_enabled(user:get_player_name()) then
+			if not core.is_creative_enabled(user:get_player_name()) then
 				itemstack:take_item()
 			end
 		end
@@ -42,7 +42,7 @@ minetest.register_craftitem("mcl_fire:fire_charge", {
 	_on_dispense = function(stack, pos, _, _, dropdir)
 		-- Throw fire charge
 		local shootpos = vector.add(pos, vector.multiply(dropdir, 0.51))
-		local fireball = minetest.add_entity(shootpos, "mobs_mc:blaze_fireball")
+		local fireball = core.add_entity(shootpos, "mobs_mc:blaze_fireball")
 		if fireball and fireball:get_pos() then
 			local ent = fireball:get_luaentity()
 			ent._shot_from_dispenser = true
@@ -54,7 +54,7 @@ minetest.register_craftitem("mcl_fire:fire_charge", {
 	end,
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_fire:fire_charge 3",
 	recipe = { "mcl_mobitems:blaze_powder", "group:coal", "mcl_mobitems:gunpowder" },

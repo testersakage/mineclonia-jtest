@@ -47,7 +47,7 @@ end
 
 local slow_gs_timer = 0.5
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	mcl_player.players[player] = table.copy(tpl_playerinfo)
 	mcl_player.players[player].inventory_formspecs = {}
 	mcl_player.players[player].nodes = {}
@@ -57,13 +57,13 @@ minetest.register_on_joinplayer(function(player)
 	end
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	mcl_player.players[player] = nil
 end)
 
 local function node_ok(pos, fallback)
-	local node = minetest.get_node_or_nil(pos)
-	if node and node.name and minetest.registered_nodes[node.name] then
+	local node = core.get_node_or_nil(pos)
+	if node and node.name and core.registered_nodes[node.name] then
 		return node.name
 	end
 	return fallback or "air"
@@ -78,7 +78,7 @@ function mcl_player.register_globalstep_slow(func)
 end
 
 -- Check each player and run callbacks
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	for player in mcl_util.connected_players() do
 		for _, func in pairs(mcl_player.registered_globalsteps) do
 			if mcl_player.players[player] then
@@ -111,10 +111,10 @@ mcl_player.register_globalstep_slow(function(player)
 	-- Is player suffocating inside node? (Only for solid full opaque cube type nodes
 	-- without group disable_suffocation=1)
 	-- if swimming, check the feet node instead, because the head node will be above the player when swimming
-	local ndef = minetest.registered_nodes[mcl_player.players[player].nodes.head]
+	local ndef = core.registered_nodes[mcl_player.players[player].nodes.head]
 	if mcl_player.players[player].is_swimming
 		or mcl_serverplayer.in_singleheight_pose (player) then
-		ndef = minetest.registered_nodes[mcl_player.players[player].nodes.feet]
+		ndef = core.registered_nodes[mcl_player.players[player].nodes.feet]
 	end
 	if (ndef.walkable == nil or ndef.walkable == true)
 	and (ndef.collision_box == nil or ndef.collision_box.type == "regular")
@@ -123,7 +123,7 @@ mcl_player.register_globalstep_slow(function(player)
 	and (ndef.groups.opaque == 1)
 	and (mcl_player.players[player].nodes.head ~= "ignore")
 	-- Check privilege, too
-	and (not minetest.check_player_privs(player:get_player_name(), {noclip = true})) then
+	and (not core.check_player_privs(player:get_player_name(), {noclip = true})) then
 		if player:get_hp() > 0 then
 			mcl_util.deal_damage(player, 1, {type = "in_wall"})
 		end
@@ -137,17 +137,17 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 	end
 	if reason.type == "fall" then
 		local pos = obj:get_pos()
-		local node = minetest.get_node(pos)
+		local node = core.get_node(pos)
 		local velocity = obj:get_velocity() or obj:get_player_velocity() or {x=0,y=-10,z=0}
 		local v_axis_max = math.max(math.abs(velocity.x), math.abs(velocity.y), math.abs(velocity.z))
 		local step = {x = velocity.x / v_axis_max, y = velocity.y / v_axis_max, z = velocity.z / v_axis_max}
 		for _ = 1, math.ceil(v_axis_max/5)+1 do -- trace at least 1/5 of the way per second
 			if not node or node.name == "ignore" then
-				minetest.get_voxel_manip():read_from_map(pos, pos)
-				node = minetest.get_node(pos)
+				core.get_voxel_manip():read_from_map(pos, pos)
+				node = core.get_node(pos)
 			end
 			if node then
-				if minetest.get_item_group(node.name, "water") ~= 0 then
+				if core.get_item_group(node.name, "water") ~= 0 then
 					return 0
 				elseif node.name == "mcl_portals:portal_end" then
 					if mcl_portals and mcl_portals.end_teleport then
@@ -163,7 +163,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 				end
 			end
 			pos = vector.add(pos, step)
-			node = minetest.get_node(pos)
+			node = core.get_node(pos)
 		end
 		return damage - mcl_potions.get_effect_level(obj, "leaping") --damage is reduced by 1 per level of leaping effect
 	end
@@ -203,7 +203,7 @@ function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, da
 	end
 end
 
-minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+core.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	-- This section borrowed from Minetest.
 	if player:get_hp() == 0 then
 		return -- RIP
@@ -230,7 +230,7 @@ end)
 local old_gametime = nil
 local gametime_timeout = 1
 
-minetest.register_globalstep (function (dtime)
+core.register_globalstep (function (dtime)
 		local increment_by
 		gametime_timeout = gametime_timeout + dtime
 		if gametime_timeout < 1 then
@@ -238,7 +238,7 @@ minetest.register_globalstep (function (dtime)
 		end
 		gametime_timeout = 0
 		-- Respect time_speed.
-		local gametime = math.floor (minetest.get_timeofday () * 24000)
+		local gametime = math.floor (core.get_timeofday () * 24000)
 		if not old_gametime then
 			old_gametime = gametime
 			return
@@ -272,7 +272,7 @@ function mcl_player.set_inventory_formspec (player, formspec, priority)
 	end
 end
 
-local modpath = minetest.get_modpath(minetest.get_current_modname())
+local modpath = core.get_modpath(core.get_current_modname())
 dofile(modpath.."/animations.lua")
 dofile(modpath.."/settings.lua")
 dofile(modpath.."/compat.lua")

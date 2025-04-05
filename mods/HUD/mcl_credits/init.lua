@@ -1,10 +1,10 @@
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 
 mcl_credits = {
 	players = {},
 	description = S("A faithful Open Source clone of Minecraft"),
-	people = dofile(minetest.get_modpath(modname) .. "/people.lua"),
+	people = dofile(core.get_modpath(modname) .. "/people.lua"),
 }
 
 local function add_hud_element(def, huds, y)
@@ -106,11 +106,11 @@ function mcl_credits.hide(player)
 	mcl_credits.players[name] = nil
 end
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	mcl_credits.players[player:get_player_name()] = nil
 end)
 
-minetest.register_globalstep(function(_)
+core.register_globalstep(function(_)
 	for _, huds in pairs(mcl_credits.players) do
 		local player = huds.player
 		local control = player:get_player_control()
@@ -148,10 +148,10 @@ minetest.register_globalstep(function(_)
 	end
 end)
 
-minetest.register_chatcommand("endcredits", {
+core.register_chatcommand("endcredits", {
 	description = S("Show the Mineclonia end credits"),
 	func = function(name, _)
-		mcl_credits.show(minetest.get_player_by_name(name))
+		mcl_credits.show(core.get_player_by_name(name))
 
 		return true
 	end,

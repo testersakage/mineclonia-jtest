@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_node("mcl_mud:mud", {
+core.register_node("mcl_mud:mud", {
 	description = S("Mud"),
 	_doc_items_longdesc = S("Mud is a decorative block that generates in mangrove swamps. Mud can also be obtained by using water bottles on dirt or coarse dirt."),
 	_doc_items_hidden = false,
@@ -21,7 +21,7 @@ minetest.register_node("mcl_mud:mud", {
 	},
 })
 
-minetest.register_node("mcl_mud:packed_mud", {
+core.register_node("mcl_mud:packed_mud", {
 	description = S("Packed Mud"),
 	_doc_items_longdesc = S("Packed mud is a decorative block used to craft mud bricks."),
 	_doc_items_hidden = false,
@@ -34,7 +34,7 @@ minetest.register_node("mcl_mud:packed_mud", {
 	_mcl_crafting_output = {square2 = {output = "mcl_mud:mud_bricks 4"}}
 })
 
-minetest.register_node("mcl_mud:mud_bricks", {
+core.register_node("mcl_mud:mud_bricks", {
 	description = S("Mud Bricks"),
 	_doc_items_longdesc = S("Decorative block crafted from packed mud."),
 	_doc_items_hidden = false,
@@ -54,7 +54,7 @@ mcl_stairs.register_stair_and_slab("mud_brick", {
 })
 
 -- packed mud
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_mud:packed_mud",
 	recipe = {

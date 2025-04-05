@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local D = mcl_util.get_dynamic_translator()
-local doc_mod = minetest.get_modpath("doc")
+local doc_mod = core.get_modpath("doc")
 
 local hc_desc = S("Terracotta is a basic building material. It comes in many different colors.")
 local gt_desc = S("Glazed terracotta is a decorative block with a complex pattern. It can be rotated by placing it in different directions.")
@@ -8,7 +8,7 @@ local cp_desc = S("Concrete powder is used for creating concrete, but it can als
 local c_desc = S("Concrete is a decorative block which comes in many different colors. It is notable for having a very strong and clean color.")
 local cp_tt = S("Turns into concrete on water contact")
 
-minetest.register_node("mcl_colorblocks:hardened_clay", {
+core.register_node("mcl_colorblocks:hardened_clay", {
 	description = S("Terracotta"),
 	_doc_items_longdesc = S("Terracotta is a basic building material which comes in many different colors. This particular block is uncolored."),
 	tiles = {"hardened_clay.png"},
@@ -19,7 +19,7 @@ minetest.register_node("mcl_colorblocks:hardened_clay", {
 })
 
 local on_rotate
-if minetest.get_modpath("screwdriver") then
+if core.get_modpath("screwdriver") then
 	on_rotate = screwdriver.rotate_simple
 end
 
@@ -48,7 +48,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 	end
 
 	-- Node Definition
-	minetest.register_node("mcl_colorblocks:hardened_clay_"..color, {
+	core.register_node("mcl_colorblocks:hardened_clay_"..color, {
 		description = sdesc_hc,
 		_doc_items_longdesc = ldesc_hc,
 		_doc_items_create_entry = create_entry,
@@ -61,7 +61,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_mcl_cooking_output = "mcl_colorblocks:glazed_terracotta_"..color
 	})
 
-	minetest.register_node("mcl_colorblocks:concrete_powder_"..color, {
+	core.register_node("mcl_colorblocks:concrete_powder_"..color, {
 		description = sdesc_cp,
 		_tt_help = ltt_cp,
 		_doc_items_longdesc = ldesc_cp,
@@ -73,11 +73,11 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		sounds = mcl_sounds.node_sound_sand_defaults(),
 		on_construct  = function(pos)
 			-- If placed in water, immediately harden this node
-			local nb = minetest.find_node_near(pos,1,{"group:water"})
+			local nb = core.find_node_near(pos,1,{"group:water"})
 			if nb then
-				local def = minetest.registered_nodes[minetest.get_node(pos).name]
+				local def = core.registered_nodes[core.get_node(pos).name]
 				if def and def._mcl_colorblocks_harden_to then
-					minetest.swap_node(pos,{name=def._mcl_colorblocks_harden_to})
+					core.swap_node(pos,{name=def._mcl_colorblocks_harden_to})
 				end
 			end
 		end,
@@ -88,7 +88,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_mcl_hardness = 0.5,
 	})
 
-	minetest.register_node("mcl_colorblocks:concrete_"..color, {
+	core.register_node("mcl_colorblocks:concrete_"..color, {
 		description = sdesc_c,
 		_doc_items_longdesc = ldesc_c,
 		_doc_items_create_entry = create_entry,
@@ -103,7 +103,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 
 	local tex = "mcl_colorblocks_glazed_terracotta_"..color..".png"
 	local texes = { tex, tex, tex.."^[transformR180", tex, tex.."^[transformR270", tex.."^[transformR90" }
-	minetest.register_node("mcl_colorblocks:glazed_terracotta_"..color, {
+	core.register_node("mcl_colorblocks:glazed_terracotta_"..color, {
 		description = sdesc_gt,
 		_doc_items_longdesc = ldesc_gt,
 		_doc_items_create_entry = create_entry,
@@ -126,7 +126,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 	end
 
 	-- Crafting recipes
-	minetest.register_craft({
+	core.register_craft({
 		output = "mcl_colorblocks:hardened_clay_"..color.." 8",
 		recipe = {
 				{"mcl_colorblocks:hardened_clay", "mcl_colorblocks:hardened_clay", "mcl_colorblocks:hardened_clay"},
@@ -134,7 +134,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 				{"mcl_colorblocks:hardened_clay", "mcl_colorblocks:hardened_clay", "mcl_colorblocks:hardened_clay"},
 		},
 	})
-	minetest.register_craft({
+	core.register_craft({
 		type = "shapeless",
 		output = "mcl_colorblocks:concrete_powder_"..color.." 8",
 		recipe = {
@@ -146,27 +146,27 @@ for color,colordef in pairs(mcl_dyes.colors) do
 end
 
 -- When water touches concrete powder, it turns into concrete of the same color
-minetest.register_abm({
+core.register_abm({
 	label = "Concrete powder hardening",
 	interval = 1,
 	chance = 1,
 	nodenames = {"group:concrete_powder"},
 	neighbors = {"group:water"},
 	action = function(pos, node)
-		local harden_to = minetest.registered_nodes[node.name]._mcl_colorblocks_harden_to
+		local harden_to = core.registered_nodes[node.name]._mcl_colorblocks_harden_to
                -- It should be impossible for harden_to to be nil, but a Minetest bug might call
                -- the ABM on the new concrete node, which isn't part of this ABM!
         if harden_to then
             node.name = harden_to
 			--Fix "float" group not lowering concrete into the water by 1.
 			local water_pos = { x = pos.x, y = pos.y-1, z = pos.z }
-			local water_node = minetest.get_node(water_pos)
-			if minetest.get_item_group(water_node.name, "water") == 0 then
-				minetest.set_node(pos, node)
+			local water_node = core.get_node(water_pos)
+			if core.get_item_group(water_node.name, "water") == 0 then
+				core.set_node(pos, node)
 			else
-				minetest.set_node(water_pos,node)
-				minetest.set_node(pos, {name = "air"})
-				minetest.check_for_falling(pos) -- Update C. Powder that stacked above so they fall down after setting air.
+				core.set_node(water_pos,node)
+				core.set_node(pos, {name = "air"})
+				core.check_for_falling(pos) -- Update C. Powder that stacked above so they fall down after setting air.
 			end
         end
 	end,

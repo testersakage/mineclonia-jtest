@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local function on_bone_meal(itemstack,placer,pointed_thing,pos,node)
 	if math.random(1, 100) <= 75 then
@@ -6,7 +6,7 @@ local function on_bone_meal(itemstack,placer,pointed_thing,pos,node)
 	end
 end
 
-minetest.register_craftitem("mcl_farming:beetroot_seeds", {
+core.register_craftitem("mcl_farming:beetroot_seeds", {
 	description = S("Beetroot Seeds"),
 	_tt_help = S("Grows on farmland"),
 	_doc_items_longdesc = S("Grows into a beetroot plant. Chickens like beetroot seeds."),
@@ -20,7 +20,7 @@ minetest.register_craftitem("mcl_farming:beetroot_seeds", {
 	end
 })
 
-minetest.register_node("mcl_farming:beetroot_0", {
+core.register_node("mcl_farming:beetroot_0", {
 	description = S("Premature Beetroot Plant (Stage 1)"),
 	_doc_items_longdesc = S("Beetroot plants are plants which grow on farmland under sunlight in 4 stages. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature."),
 	_doc_items_entry_name = S("Premature Beetroot Plant"),
@@ -47,7 +47,7 @@ minetest.register_node("mcl_farming:beetroot_0", {
 	_mcl_baseitem = "mcl_farming:beetroot_seeds",
 })
 
-minetest.register_node("mcl_farming:beetroot_1", {
+core.register_node("mcl_farming:beetroot_1", {
 	description = S("Premature Beetroot Plant (Stage 2)"),
 	_doc_items_create_entry = false,
 	paramtype = "light",
@@ -73,7 +73,7 @@ minetest.register_node("mcl_farming:beetroot_1", {
 	_mcl_baseitem = "mcl_farming:beetroot_seeds",
 })
 
-minetest.register_node("mcl_farming:beetroot_2", {
+core.register_node("mcl_farming:beetroot_2", {
 	description = S("Premature Beetroot Plant (Stage 3)"),
 	_doc_items_create_entry = false,
 	paramtype = "light",
@@ -99,7 +99,7 @@ minetest.register_node("mcl_farming:beetroot_2", {
 	_mcl_baseitem = "mcl_farming:beetroot_seeds",
 })
 
-minetest.register_node("mcl_farming:beetroot", {
+core.register_node("mcl_farming:beetroot", {
 	description = S("Mature Beetroot Plant"),
 	_doc_items_longdesc = S("A mature beetroot plant is a farming plant which is ready to be harvested for a beetroot and some beetroot seeds. It won't grow any further."),
 	_doc_items_create_entry = true,
@@ -153,32 +153,32 @@ minetest.register_node("mcl_farming:beetroot", {
 	_mcl_baseitem = "mcl_farming:beetroot_seeds",
 })
 
-minetest.register_craftitem("mcl_farming:beetroot_item", {
+core.register_craftitem("mcl_farming:beetroot_item", {
 	description = S("Beetroot"),
 	_doc_items_longdesc = S("Beetroots are both used as food item and a dye ingredient. Pigs like beetroots, too."),
 	_doc_items_usagehelp = S("Hold it in your hand and right-click to eat it. Rightclick an animal to feed it."),
 	inventory_image = "mcl_farming_beetroot.png",
 	wield_image = "mcl_farming_beetroot.png",
-	on_place = minetest.item_eat(1),
-	on_secondary_use = minetest.item_eat(1),
+	on_place = core.item_eat(1),
+	on_secondary_use = core.item_eat(1),
 	groups = {food = 2, eatable = 1, compostability = 65},
 	_mcl_saturation = 1.2,
 	_mcl_crafting_output = {single = {output = "mcl_dyes:red"}}
 })
 
-minetest.register_craftitem("mcl_farming:beetroot_soup", {
+core.register_craftitem("mcl_farming:beetroot_soup", {
 	description = S("Beetroot Soup"),
 	_doc_items_longdesc = S("Beetroot soup is a food item."),
 	stack_max = 1,
 	inventory_image = "mcl_farming_beetroot_soup.png",
 	wield_image = "mcl_farming_beetroot_soup.png",
-	on_place = minetest.item_eat(6, "mcl_core:bowl"),
-	on_secondary_use = minetest.item_eat(6, "mcl_core:bowl"),
+	on_place = core.item_eat(6, "mcl_core:bowl"),
+	on_secondary_use = core.item_eat(6, "mcl_core:bowl"),
 	groups = { food = 3, eatable = 6 },
 	_mcl_saturation = 7.2,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_farming:beetroot_soup",
 	recipe = {
 		{ "mcl_farming:beetroot_item","mcl_farming:beetroot_item","mcl_farming:beetroot_item", },
@@ -189,11 +189,11 @@ minetest.register_craft({
 
 mcl_farming:add_plant("plant_beetroot", "mcl_farming:beetroot", {"mcl_farming:beetroot_0", "mcl_farming:beetroot_1", "mcl_farming:beetroot_2"}, 68, 3)
 
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	for i = 1, 2 do
 		doc.add_entry_alias("nodes", "mcl_farming:beetroot_0", "nodes", "mcl_farming:beetroot_" .. i)
 	end
 end
 
-minetest.register_alias("beetroot_seeds", "mcl_farming:beetroot_seeds")
-minetest.register_alias("beetroot", "mcl_farming:beetroot_item")
+core.register_alias("beetroot_seeds", "mcl_farming:beetroot_seeds")
+core.register_alias("beetroot", "mcl_farming:beetroot_item")

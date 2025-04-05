@@ -1,9 +1,9 @@
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local is_valid = mcl_util.is_valid_objectref
 
-local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
+local mobs_griefing = core.settings:get_bool("mobs_griefing", true)
 local mob_class = mcl_mobs.mob_class
 
 --###################
@@ -74,14 +74,14 @@ local CREEPER_SWELL_TIME = 30/20
 
 function creeper_defs:on_rightclick (clicker)
 	local item = clicker:get_wielded_item()
-	if minetest.get_item_group(item:get_name(), "flint_and_steel") > 0 then
-		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+	if core.get_item_group(item:get_name(), "flint_and_steel") > 0 then
+		if not core.is_creative_enabled(clicker:get_player_name()) then
 			-- Wear tool
 			local wdef = item:get_definition()
 			item:add_wear(1000)
 			-- Tool break sound
 			if item:get_count() == 0 and wdef.sound and wdef.sound.breaks then
-				minetest.sound_play(wdef.sound.breaks, {pos = clicker:get_pos(), gain = 0.5}, true)
+				core.sound_play(wdef.sound.breaks, {pos = clicker:get_pos(), gain = 0.5}, true)
 			end
 			clicker:set_wielded_item(item)
 		end
@@ -136,7 +136,7 @@ end
 local function blast_damage(pos, radius, source)
 	radius = radius * 2
 
-	for obj in minetest.objects_inside_radius(pos, radius) do
+	for obj in core.objects_inside_radius(pos, radius) do
 
 		local obj_pos = obj:get_pos()
 		local dist = vector.distance(pos, obj_pos)
@@ -154,7 +154,7 @@ end
 
 -- no damage to nodes explosion
 function creeper_defs:safe_boom(pos, strength, no_remove)
-	minetest.sound_play(self.sounds and self.sounds.explode or "tnt_explode", {
+	core.sound_play(self.sounds and self.sounds.explode or "tnt_explode", {
 		pos = pos,
 		gain = 1.0,
 		max_hear_distance = self.sounds and self.sounds.distance or 32
@@ -174,7 +174,7 @@ end
 
 -- make explosion with protection and tnt mod check
 function creeper_defs:boom(pos, strength, fire, no_remove)
-	if mobs_griefing and not minetest.is_protected(pos, "") then
+	if mobs_griefing and not core.is_protected(pos, "") then
 		mcl_explosions.explode(pos, strength, { fire = fire }, self.object)
 	else
 		self:safe_boom(pos, strength, no_remove)
@@ -225,7 +225,7 @@ function creeper_defs:on_die (pos, mcl_reason)
 			or mcl_reason.mob_name == "mobs_mc:stray" then
 			local loot = mcl_jukebox.get_random_creeper_loot()
 			if loot then
-				minetest.add_item({x=pos.x, y=pos.y+1, z=pos.z}, loot)
+				core.add_item({x=pos.x, y=pos.y+1, z=pos.z}, loot)
 			end
 		end
 	end

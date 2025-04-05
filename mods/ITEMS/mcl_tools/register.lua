@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mcl_tools")
+local S = core.get_translator("mcl_tools")
 
 --Wood set
 mcl_tools.register_set("wood", {

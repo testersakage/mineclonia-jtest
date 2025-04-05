@@ -1,8 +1,8 @@
-local water_villages = minetest.settings:get_bool("mcl_villages_allow_water_villages", false)
+local water_villages = core.settings:get_bool("mcl_villages_allow_water_villages", false)
 
 -- switch for debugging
 function mcl_villages.debug(message)
-	minetest.log("verbose", "[mcl_villages] "..message)
+	core.log("verbose", "[mcl_villages] "..message)
 end
 
 mcl_villages.surface_mat = {}

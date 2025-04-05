@@ -2,11 +2,11 @@
 function mcl_trees.strip_tree(itemstack, placer, pointed_thing)
 	if pointed_thing.type ~= "node" then return end
 
-	local node = minetest.get_node(pointed_thing.under)
-	local noddef = minetest.registered_nodes[node.name]
+	local node = core.get_node(pointed_thing.under)
+	local noddef = core.registered_nodes[node.name]
 
-	if noddef._mcl_stripped_variant and minetest.registered_nodes[noddef._mcl_stripped_variant] then
-		minetest.swap_node(pointed_thing.under, {name=noddef._mcl_stripped_variant, param2=node.param2})
+	if noddef._mcl_stripped_variant and core.registered_nodes[noddef._mcl_stripped_variant] then
+		core.swap_node(pointed_thing.under, {name=noddef._mcl_stripped_variant, param2=node.param2})
 	end
 	return itemstack
 end
@@ -15,7 +15,7 @@ function mcl_trees.rotate_climbable(pos, node, _, mode)
 	if mode == screwdriver.ROTATE_FACE then
 		local r = screwdriver.rotate.wallmounted(pos, node, mode)
 		node.param2 = r
-		minetest.swap_node(pos, node)
+		core.swap_node(pos, node)
 		return true
 	end
 	return false
@@ -28,7 +28,7 @@ local function node_stops_growth(node)
 		return false
 	end
 
-	local def = minetest.registered_nodes[node.name]
+	local def = core.registered_nodes[node.name]
 	if not def then
 		return true
 	end
@@ -53,7 +53,7 @@ end
 function mcl_trees.check_growth_simple(pos, height)
 	for y = 1, height - 1 do
 		local np = vector.offset(pos, 0, y, 0)
-		if node_stops_growth(minetest.get_node(np)) then
+		if node_stops_growth(core.get_node(np)) then
 			return false
 		end
 	end
@@ -67,7 +67,7 @@ function mcl_trees.check_growth_giant(pos, height)
 		for z = -3, 2 do
 			for y = 0, height - 1 do
 				local np = vector.offset(pos, x, y, z)
-				if node_stops_growth(minetest.get_node(np)) then
+				if node_stops_growth(core.get_node(np)) then
 					return false
 				end
 			end
@@ -79,7 +79,7 @@ end
 local function check_schem_growth(pos, file, giant)
 	if file then
 		local schem = loadstring(
-			minetest.serialize_schematic(file, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
+			core.serialize_schematic(file, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
 				.. " return schematic"
 		)()
 		if schem then
@@ -105,7 +105,7 @@ local diagonals = {
 local function check_2by2_saps(pos, node)
 	local n = node.name
 	-- quick check if at all there are sufficient saplings nearby
-	if #minetest.find_nodes_in_area_under_air({x=pos.x-1, y=pos.y, z=pos.z-1}, {x=pos.x+1, y=pos.y, z=pos.z+1}, n) == 0 then return end
+	if #core.find_nodes_in_area_under_air({x=pos.x-1, y=pos.y, z=pos.z-1}, {x=pos.x+1, y=pos.y, z=pos.z+1}, n) == 0 then return end
 	-- we need to check 4 possible 2x2 squares on the x/z plane each uniquely defined by one of the
 	-- diagonals of the position we're checking:
 	for _,v in pairs(diagonals) do
@@ -113,9 +113,9 @@ local function check_2by2_saps(pos, node)
 		local xp = vector.new(d.x,d.y,d.z-v.z) --go "back" towards our position on the z axis
 		local zp = vector.new(d.x-v.x,d.y,d.z) --go "back" towards our position on the x axis
 
-		local dn = minetest.get_node(d).name
-		local xn = minetest.get_node(xp).name
-		local zn = minetest.get_node(zp).name
+		local dn = core.get_node(d).name
+		local xn = core.get_node(xp).name
+		local zn = core.get_node(zp).name
 		if n == dn and n == xn and n == zn then
 			--if all the 3 acquired positions have the same nodename as the original node it must be a square
 			local ne = pos
@@ -161,10 +161,10 @@ function mcl_trees.grow_tree(pos, node)
 	if can_grow then
 
 		local offset = schem.offset
-		minetest.remove_node(pos)
+		core.remove_node(pos)
 		if tbt then
 			for _, v in pairs(tbt) do
-				minetest.remove_node(v)
+				core.remove_node(v)
 			end
 
 			place_at = ne
@@ -180,7 +180,7 @@ function mcl_trees.grow_tree(pos, node)
 			place_at = vector.subtract(place_at, offset)
 		end
 
-		minetest.place_schematic(
+		core.place_schematic(
 			place_at,
 			schem.file,
 			"random",
@@ -189,7 +189,7 @@ function mcl_trees.grow_tree(pos, node)
 			{ place_center_x = true, place_center_y = false, place_center_z = true }
 		)
 
-		local after_grow = minetest.registered_nodes[node.name]._after_grow
+		local after_grow = core.registered_nodes[node.name]._after_grow
 		if after_grow then
 			after_grow(place_at, schem, is_2by2)
 		end
@@ -202,10 +202,10 @@ function mcl_trees.add_bee_nest(pos)
 	local col = vector.add(pos, nest_dirs[math.random(3)])
 	for i = 2, 8 do
 		local nestpos = vector.offset(col, 0, i -1 , 0)
-		local abovename = minetest.get_node(vector.offset(col, 0, i, 0)).name
-		if minetest.get_node(nestpos).name == "air" and
-				(minetest.get_item_group(abovename, "leaves") > 0 or minetest.get_item_group(abovename, "tree") > 0) then
-			minetest.set_node(nestpos, {name = "mcl_beehives:bee_nest"})
+		local abovename = core.get_node(vector.offset(col, 0, i, 0)).name
+		if core.get_node(nestpos).name == "air" and
+				(core.get_item_group(abovename, "leaves") > 0 or core.get_item_group(abovename, "tree") > 0) then
+			core.set_node(nestpos, {name = "mcl_beehives:bee_nest"})
 			-- TODO: spawn bee mobs in nest
 			return
 		end
@@ -213,7 +213,7 @@ function mcl_trees.add_bee_nest(pos)
 end
 
 function mcl_trees.sapling_add_bee_nest(pos)
-	if #minetest.find_nodes_in_area(vector.offset(pos,-2, 0 ,-2), vector.offset(pos, 2, 0, 2), {"group:flower"}) == 0 then return end
+	if #core.find_nodes_in_area(vector.offset(pos,-2, 0 ,-2), vector.offset(pos, 2, 0, 2), {"group:flower"}) == 0 then return end
 	if math.random(20) == 1 then
 		mcl_trees.add_bee_nest(pos)
 	end

@@ -1,8 +1,8 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-local mod_target = minetest.get_modpath("mcl_target")
+local mod_target = core.get_modpath("mcl_target")
 
-minetest.register_entity("mcl_experience:bottle",{
+core.register_entity("mcl_experience:bottle",{
 	initial_properties = {
 		textures = {"mcl_experience_bottle.png^[colorize:purple:50"},
 		hp_max = 1,
@@ -12,12 +12,12 @@ minetest.register_entity("mcl_experience:bottle",{
 	},
 	on_step = function(self, _)
 		local pos = self.object:get_pos()
-		local node = minetest.get_node(pos)
+		local node = core.get_node(pos)
 		local n = node.name
-		if n ~= "air" and n ~= "mcl_portals:portal" and n ~= "mcl_portals:portal_end" and minetest.get_item_group(n, "liquid") == 0 then
-			minetest.sound_play("mcl_potions_breaking_glass", {pos = pos, max_hear_distance = 16, gain = 1})
+		if n ~= "air" and n ~= "mcl_portals:portal" and n ~= "mcl_portals:portal_end" and core.get_item_group(n, "liquid") == 0 then
+			core.sound_play("mcl_potions_breaking_glass", {pos = pos, max_hear_distance = 16, gain = 1})
 			mcl_experience.throw_xp(pos, math.random(3, 11))
-			minetest.add_particlespawner({
+			core.add_particlespawner({
 				amount = 50,
 				time = 0.1,
 				minpos = vector.add(pos, vector.new(-0.1, 0.5, -0.1)),
@@ -43,8 +43,8 @@ minetest.register_entity("mcl_experience:bottle",{
 })
 
 local function throw_xp_bottle(pos, dir, velocity)
-	minetest.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
-	local obj = minetest.add_entity(pos, "mcl_experience:bottle")
+	core.sound_play("mcl_throwing_throw", {pos = pos, gain = 0.4, max_hear_distance = 16}, true)
+	local obj = core.add_entity(pos, "mcl_experience:bottle")
 	if not obj or not obj:get_pos() then return end
 	obj:set_velocity(vector.multiply(dir, velocity))
 	local acceleration = vector.multiply(dir, -3)
@@ -54,13 +54,13 @@ end
 
 local function on_use(itemstack, placer, _)
 	throw_xp_bottle(vector.add(placer:get_pos(), vector.new(0, 1.5, 0)), placer:get_look_dir(), 10)
-	if not minetest.is_creative_enabled(placer:get_player_name()) then
+	if not core.is_creative_enabled(placer:get_player_name()) then
 		itemstack:take_item()
 	end
 	return itemstack
 end
 
-minetest.register_craftitem("mcl_experience:bottle", {
+core.register_craftitem("mcl_experience:bottle", {
 	description = S("Bottle o' Enchanting"),
 	groups = {rarity = 1},
 	inventory_image = "mcl_experience_bottle.png^[colorize:purple:50",

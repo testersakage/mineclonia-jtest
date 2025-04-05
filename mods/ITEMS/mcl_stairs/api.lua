@@ -1,6 +1,6 @@
 mcl_stairs = {}
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- Core mcl_stairs API
 
@@ -37,7 +37,7 @@ local function is_pointing_above_middle(pointer, pointed_thing)
 	-- also note that it is actually beneficial that the exact position of
 	-- the touch event is not used, allowing touch users to touch any part
 	-- of the node face
-	local fpos = minetest.pointed_thing_to_face_pos(pointer, pointed_thing).y - p1.y
+	local fpos = core.pointed_thing_to_face_pos(pointer, pointed_thing).y - p1.y
 
 	return (fpos > 0.05)
 end
@@ -48,7 +48,7 @@ local function place_slab_normal(itemstack, placer, pointed_thing)
 
 	local place = ItemStack(itemstack)
 	local origname = place:get_name()
-	local origdef = minetest.registered_nodes[origname]
+	local origdef = core.registered_nodes[origname]
 
 	--local placer_pos = placer:get_pos()
 	if
@@ -59,7 +59,7 @@ local function place_slab_normal(itemstack, placer, pointed_thing)
 		place:set_name(origdef._mcl_other_slab_half)
 	end
 
-	local ret = minetest.item_place_node(place, placer, pointed_thing, 0)
+	local ret = core.item_place_node(place, placer, pointed_thing, 0)
 	ret:set_name(origname)
 	return ret
 end
@@ -74,7 +74,7 @@ local function place_stair(itemstack, placer, pointed_thing)
 	if placer then
 		local placer_pos = placer:get_pos()
 		if placer_pos then
-			param2 = minetest.dir_to_facedir(vector.subtract(p1, placer_pos))
+			param2 = core.dir_to_facedir(vector.subtract(p1, placer_pos))
 		end
 
 		if is_pointing_above_middle(placer, pointed_thing) then
@@ -87,7 +87,7 @@ local function place_stair(itemstack, placer, pointed_thing)
 		end
 	end
 
-	return minetest.item_place_node(itemstack, placer, pointed_thing, param2)
+	return core.item_place_node(itemstack, placer, pointed_thing, param2)
 end
 
 local function placement_prevented(params)
@@ -96,13 +96,13 @@ local function placement_prevented(params)
 	end
 
 	local wield_name = params.itemstack:get_name()
-	local ndef = minetest.registered_nodes[wield_name]
+	local ndef = core.registered_nodes[wield_name]
 	local groups = ndef.groups or {}
 
 	local under = params.pointed_thing.under
-	local node = minetest.get_node(under)
+	local node = core.get_node(under)
 	local above = params.pointed_thing.above
-	local wdir = minetest.dir_to_wallmounted({ x = under.x - above.x, y = under.y - above.y, z = under.z - above.z })
+	local wdir = core.dir_to_wallmounted({ x = under.x - above.x, y = under.y - above.y, z = under.z - above.z })
 
 	-- on top of upside down
 	if groups.attaches_to_top and (node.param2 >= 20 and wdir == 1) then
@@ -154,7 +154,7 @@ end
 local function register_stair(subname, stairdef)
 
 	local recipe_item = stairdef.recipeitem
-	local ri_defs = minetest.registered_nodes[recipe_item]
+	local ri_defs = core.registered_nodes[recipe_item]
 
 	if ri_defs then
 		if not stairdef.tiles then
@@ -180,7 +180,7 @@ local function register_stair(subname, stairdef)
 		image_table[i].align_style = "world"
 	end
 
-	minetest.register_node(":mcl_stairs:stair_" .. subname, table.merge({
+	core.register_node(":mcl_stairs:stair_" .. subname, table.merge({
 		description = stairdef.description,
 		_doc_items_longdesc = S("Stairs are useful to reach higher places by walking over them; jumping is not required. Placing stairs in a corner pattern will create corner stairs. Stairs placed on the ceiling or at the upper half of the side of a block will be placed upside down."),
 		drawtype = "nodebox",
@@ -241,7 +241,7 @@ local function register_stair(subname, stairdef)
 					node.param2 = minor
 					node.param2 = node.param2 + 20
 				end
-				minetest.set_node(pos, node)
+				core.set_node(pos, node)
 				return true
 			end
 		end,
@@ -251,7 +251,7 @@ local function register_stair(subname, stairdef)
 	}, stairdef.overrides or {}))
 
 	if recipe_item then
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_stairs:stair_" .. subname .. " 4",
 			recipe = {
 				{recipe_item, "", ""},
@@ -261,7 +261,7 @@ local function register_stair(subname, stairdef)
 		})
 
 		-- Flipped recipe
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_stairs:stair_" .. subname .. " 4",
 			recipe = {
 				{"", "", recipe_item},
@@ -290,7 +290,7 @@ local function register_slab(subname, stairdef)
 	local double_slab = lower_slab.."_double"
 
 	local recipe_item = stairdef.recipeitem
-	local ri_defs = minetest.registered_nodes[recipe_item]
+	local ri_defs = core.registered_nodes[recipe_item]
 
 	if ri_defs then
 		if not stairdef.tiles then
@@ -335,37 +335,37 @@ local function register_slab(subname, stairdef)
 
 			local above = pointed_thing.above
 			local under = pointed_thing.under
-			local anode = minetest.get_node(above)
-			local unode = minetest.get_node(under)
-			local adefs = minetest.registered_nodes[anode.name]
-			local udefs = minetest.registered_nodes[unode.name]
+			local anode = core.get_node(above)
+			local unode = core.get_node(under)
+			local adefs = core.registered_nodes[anode.name]
+			local udefs = core.registered_nodes[unode.name]
 			local wield_item = itemstack:get_name()
-			local def = minetest.registered_nodes[wield_item]
+			local def = core.registered_nodes[wield_item]
 			local player_name = placer:get_player_name()
-			local creative_enabled = minetest.is_creative_enabled(player_name)
+			local creative_enabled = core.is_creative_enabled(player_name)
 
 			-- place slab using under node orientation
 			local dir = vector.subtract(above, under)
 			local p2 = unode.param2
 
-			if minetest.is_protected(under, player_name) and not
-				minetest.check_player_privs(placer, "protection_bypass") then
-					minetest.record_protection_violation(under, player_name)
+			if core.is_protected(under, player_name) and not
+				core.check_player_privs(placer, "protection_bypass") then
+					core.record_protection_violation(under, player_name)
 					return
 			end
 
 			-- combine two slabs if possible
 			-- Requirements: Same slab material, must be placed on top of lower slab, or on bottom of upper slab
 			if (wield_item == unode.name or (udefs and wield_item == udefs._mcl_other_slab_half)) and
-					not ((dir.y >= 0 and minetest.get_item_group(unode.name, "slab_top") == 1) or
-					(dir.y <= 0 and minetest.get_item_group(unode.name, "slab_top") == 0)) then
-				minetest.set_node(under, {name = def._mcl_stairs_double_slab or double_slab, param2 = p2})
+					not ((dir.y >= 0 and core.get_item_group(unode.name, "slab_top") == 1) or
+					(dir.y <= 0 and core.get_item_group(unode.name, "slab_top") == 0)) then
+				core.set_node(under, {name = def._mcl_stairs_double_slab or double_slab, param2 = p2})
 				if not creative_enabled then
 					itemstack:take_item()
 				end
 				return itemstack
 			elseif (wield_item == anode.name or (adefs and wield_item == adefs._mcl_other_slab_half)) then
-				minetest.set_node(above, {name = def._mcl_stairs_double_slab or double_slab, param2 = p2})
+				core.set_node(above, {name = def._mcl_stairs_double_slab or double_slab, param2 = p2})
 				if not creative_enabled then
 					itemstack:take_item()
 				end
@@ -382,14 +382,14 @@ local function register_slab(subname, stairdef)
 			-- Flip slab
 			if mode == screwdriver.ROTATE_AXIS then
 				node.name = upper_slab
-				minetest.set_node(pos, node)
+				core.set_node(pos, node)
 				return true
 			end
 			return false
 		end,
 	}, stairdef.overrides or {})
 
-	minetest.register_node(":"..lower_slab, nodedef)
+	core.register_node(":"..lower_slab, nodedef)
 
 	-- Register the upper slab.
 	-- Using facedir is not an option, as this would rotate the textures as well and would make
@@ -410,7 +410,7 @@ local function register_slab(subname, stairdef)
 		-- Flip slab
 		if mode == screwdriver.ROTATE_AXIS then
 			node.name = lower_slab
-			minetest.set_node(pos, node)
+			core.set_node(pos, node)
 			return true
 		end
 		return false
@@ -423,7 +423,7 @@ local function register_slab(subname, stairdef)
 		type = "fixed",
 		fixed = {-0.5, 0, -0.5, 0.5, 0.5, 0.5},
 	}
-	minetest.register_node(":"..upper_slab, topdef)
+	core.register_node(":"..upper_slab, topdef)
 
 
 	-- Double slab node
@@ -433,7 +433,7 @@ local function register_slab(subname, stairdef)
 	dgroups.slab = nil
 	dgroups.pathfinder_partial = 2
 	dgroups.double_slab = 1
-	minetest.register_node(":"..double_slab, {
+	core.register_node(":"..double_slab, {
 		description = stairdef.double_description,
 		_doc_items_longdesc = S("Double slabs are full blocks which are created by placing two slabs of the same kind on each other."),
 		tiles = stairdef.tiles,
@@ -447,7 +447,7 @@ local function register_slab(subname, stairdef)
 	})
 
 	if recipe_item then
-		minetest.register_craft({
+		core.register_craft({
 			output = lower_slab .. " 6",
 			recipe = {
 				{recipe_item, recipe_item, recipe_item},
@@ -457,7 +457,7 @@ local function register_slab(subname, stairdef)
 	end
 
 	-- Help alias for the upper slab
-	if minetest.get_modpath("doc") then
+	if core.get_modpath("doc") then
 		doc.add_entry_alias("nodes", lower_slab, "nodes", upper_slab)
 	end
 end
@@ -493,7 +493,7 @@ end
 function mcl_stairs.register_stair(subname, ...)
 	if type(select(1, ...)) == "table" then
 		local stairdef = select(1, ...)
-		local ndef = minetest.registered_nodes[stairdef.baseitem]
+		local ndef = core.registered_nodes[stairdef.baseitem]
 
 		register_stair(subname, {
 			recipeitem = stairdef.recipeitem or stairdef.baseitem,
@@ -523,7 +523,7 @@ end
 function mcl_stairs.register_slab(subname, ...)
 	if type(select(1, ...)) == "table" then
 		local stairdef = select(1, ...)
-		local ndef = minetest.registered_nodes[stairdef.baseitem]
+		local ndef = core.registered_nodes[stairdef.baseitem]
 
 		register_slab(subname, {
 			recipeitem = stairdef.recipeitem or stairdef.baseitem,
@@ -584,7 +584,7 @@ end
 
 -- Very simple registration function.
 function mcl_stairs.register_stair_and_slab_simple(subname, sourcenode, desc_stair, desc_slab, desc_double_slab, corner_stair_texture_override)
-	local def = minetest.registered_nodes[sourcenode]
+	local def = core.registered_nodes[sourcenode]
 	local groups = {}
 	-- Only allow a strict set of groups to be added to stairs and slabs for more predictable results
 	local allowed_groups = { "dig_immediate", "handy", "pickaxey", "axey", "shovely", "shearsy", "shearsy_wool", "swordy", "swordy_wool" }

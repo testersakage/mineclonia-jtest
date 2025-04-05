@@ -23,7 +23,7 @@ mcl_player.register_globalstep(function(player, dtime)
 	end
 
 	local fly_pos = player:get_pos()
-	local fly_node = minetest.get_node({x = fly_pos.x, y = fly_pos.y - 0.1, z = fly_pos.z}).name
+	local fly_node = core.get_node({x = fly_pos.x, y = fly_pos.y - 0.1, z = fly_pos.z}).name
 	local player_vel = player:get_velocity()
 	local elytra = mcl_player.players[player].elytra
 
@@ -42,8 +42,8 @@ mcl_player.register_globalstep(function(player, dtime)
 		elytra.speed = 1 - (direction.y/2 + 0.5)
 	end
 
-	local fly_node_walkable = minetest.registered_nodes[fly_node] and minetest.registered_nodes[fly_node].walkable
-	elytra.active = minetest.get_item_group(player:get_inventory():get_stack("armor", 3):get_name(), "elytra") ~= 0
+	local fly_node_walkable = core.registered_nodes[fly_node] and core.registered_nodes[fly_node].walkable
+	elytra.active = core.get_item_group(player:get_inventory():get_stack("armor", 3):get_name(), "elytra") ~= 0
 		and not player:get_attach()
 		and (elytra.active or (is_just_jumped and player_vel.y < -0))
 		and ((not fly_node_walkable) or fly_node == "ignore")
@@ -54,13 +54,13 @@ mcl_player.register_globalstep(function(player, dtime)
 		end
 		mcl_player.player_set_animation(player, "fly")
 		local direction = player:get_look_dir()
-		local turn_amount = anglediff(minetest.dir_to_yaw(direction), minetest.dir_to_yaw(player_vel))
+		local turn_amount = anglediff(core.dir_to_yaw(direction), core.dir_to_yaw(player_vel))
 		local direction_mult = clamp(-(direction.y+0.1), -1, 1)
 		if direction_mult < 0 then direction_mult = direction_mult * elytra_vars.pitch_penalty end
 
 		local speed_mult = elytra.speed
-		local block_below = minetest.get_node(vector.offset(fly_pos, 0, -0.9, 0)).name
-		local reg_node_below = minetest.registered_nodes[block_below]
+		local block_below = core.get_node(vector.offset(fly_pos, 0, -0.9, 0)).name
+		local reg_node_below = core.registered_nodes[block_below]
 		if (reg_node_below and not reg_node_below.walkable) and (player_vel.y ~= 0) then
 			speed_mult = speed_mult + direction_mult * elytra_vars.speedup_mult * dtime
 		end
@@ -76,7 +76,7 @@ mcl_player.register_globalstep(function(player, dtime)
 			if vector.length(player_vel) < 40 then
 				-- player:add_velocity(vector.multiply(player:get_look_dir(), 4))
 				speed_mult = elytra_vars.rocket_speed
-				minetest.add_particle({
+				core.add_particle({
 					pos = fly_pos,
 					velocity = {x = 0, y = 0, z = 0},
 					acceleration = {x = 0, y = 0, z = 0},

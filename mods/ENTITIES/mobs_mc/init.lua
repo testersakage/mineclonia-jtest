@@ -11,10 +11,10 @@ for x=-2, 2 do
 	end
 end
 
-mobs_mc.water_level = tonumber(minetest.settings:get("water_level")) or 0
+mobs_mc.water_level = tonumber(core.settings:get("water_level")) or 0
 
 -- Load mobs in the right order.
-local path = minetest.get_modpath ("mobs_mc")
+local path = core.get_modpath ("mobs_mc")
 local files = {
 	"axolotl.lua",
 	"bat.lua",

@@ -1,5 +1,5 @@
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 --
 -- Advanced usage
@@ -196,7 +196,7 @@ S("You may want to check out these online resources related to Luanti:").."\n\n"
 S("Official homepage of Luanti: <https://luanti.org/>").."\n"..
 S("The main place to find the most recent version of Luanti.").."\n\n"..
 
-S("Community wiki: <https://wiki.minetest.net/>").."\n"..
+S("Community wiki: <https://wiki.core.net/>").."\n"..
 S("A community-based documentation website for Luanti. Anyone with an account can edit it! It also features a documentation of Minetest Game.").."\n\n"..
 
 S("Web forums: <https://forum.luanti.org/>").."\n"..

@@ -1,22 +1,22 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local NS = function(s) return s end
 
 findbiome = {}
 
-local water_level = tonumber(minetest.get_mapgen_setting("water_level"))
+local water_level = tonumber(core.get_mapgen_setting("water_level"))
 
 -- Calculate the playable area of the world
 local playable_limit_min, playable_limit_max
-if minetest.get_mapgen_edges then
+if core.get_mapgen_edges then
 	-- Modern method by just asking Minetest
-	playable_limit_min, playable_limit_max = minetest.get_mapgen_edges()
+	playable_limit_min, playable_limit_max = core.get_mapgen_edges()
 else
 	-- Legacy method for older Minetest versions
 	-- by calculating an estimate ourself
 	-- (it's not perfect but close enough)
 	local BLOCKSIZE = 16
-	local mapgen_limit = tonumber(minetest.get_mapgen_setting("mapgen_limit"))
-	local chunksize = tonumber(minetest.get_mapgen_setting("chunksize"))
+	local mapgen_limit = tonumber(core.get_mapgen_setting("mapgen_limit"))
+	local chunksize = tonumber(core.get_mapgen_setting("chunksize"))
 	local limit_estimate = math.max(mapgen_limit - (chunksize + 1) * BLOCKSIZE, 0)
 	playable_limit_min = vector.new(-limit_estimate, -limit_estimate, -limit_estimate)
 	playable_limit_max = vector.new(limit_estimate, limit_estimate, limit_estimate)
@@ -51,10 +51,10 @@ end
 -- Checks if pos is within the biome's boundaries. If it isn't, places pos inside the boundaries.
 local function adjust_pos_to_biome_limits(pos, biome_id)
 	local bpos = table.copy(pos)
-	local biome_name = minetest.get_biome_name(biome_id)
-	local biome = minetest.registered_biomes[biome_name]
+	local biome_name = core.get_biome_name(biome_id)
+	local biome = core.registered_biomes[biome_name]
 	if not biome then
-		minetest.log("error", "[findbiome] adjust_pos_to_biome_limits non-existing biome!")
+		core.log("error", "[findbiome] adjust_pos_to_biome_limits non-existing biome!")
 		return bpos, true
 	end
 	local axes = {"y", "x", "z"}
@@ -94,14 +94,14 @@ end
 
 -- Find the special default biome
 local function find_default_biome()
-	local all_biomes = minetest.registered_biomes
+	local all_biomes = core.registered_biomes
 	local biome_count = 0
 	for _, _ in pairs(all_biomes) do
 		biome_count = biome_count + 1
 	end
 	-- Trivial case: No biomes registered, default biome is everywhere.
 	if biome_count == 0 then
-		local y = minetest.get_spawn_level(0, 0)
+		local y = core.get_spawn_level(0, 0)
 		if not y then
 			y = 0
 		end
@@ -114,8 +114,8 @@ local function find_default_biome()
 		pos.x = math.random(playable_limit_min.x, playable_limit_max.x)
 		pos.y = math.random(playable_limit_min.y, playable_limit_max.y)
 		pos.z = math.random(playable_limit_min.z, playable_limit_max.z)
-		local biome_data = minetest.get_biome_data(pos)
-		if biome_data and minetest.get_biome_name(biome_data.biome) == "default" then
+		local biome_data = core.get_biome_data(pos)
+		if biome_data and core.get_biome_name(biome_data.biome) == "default" then
 			return pos
 		end
 	end
@@ -169,7 +169,7 @@ function findbiome.find_biome(pos, biomes, res, checks)
 		local attempt = 1
 		while attempt < 3 do
 			for _ = 1, checks do
-				local biome_data = minetest.get_biome_data(pos)
+				local biome_data = core.get_biome_data(pos)
 				-- Sometimes biome_data is nil
 				local biome = biome_data and biome_data.biome
 				for id_ind = 1, #biome_ids do
@@ -178,7 +178,7 @@ function findbiome.find_biome(pos, biomes, res, checks)
 					local spos = table.copy(pos)
 					if biome == biome_id then
 						local good_spawn_height = pos.y <= water_level + 16 and pos.y >= water_level
-						local spawn_y = minetest.get_spawn_level(spos.x, spos.z)
+						local spawn_y = core.get_spawn_level(spos.x, spos.z)
 						if spawn_y then
 							spawn_pos = vector.new(spos.x, spawn_y, spos.z)
 						elseif not good_spawn_height then
@@ -205,7 +205,7 @@ function findbiome.find_biome(pos, biomes, res, checks)
 	-- Table of suitable biomes
 	biome_ids = {}
 	for i=1, #biomes do
-		local id = minetest.get_biome_id(biomes[i])
+		local id = core.get_biome_id(biomes[i])
 		if not id then
 			return nil, false
 		end
@@ -218,7 +218,7 @@ function findbiome.find_biome(pos, biomes, res, checks)
 end
 
 local mods_loaded = false
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
 	mods_loaded = true
 end)
 
@@ -230,7 +230,7 @@ function findbiome.list_biomes()
 		return false, biomes
 	end
 	biomes = {}
-	for k, _ in pairs(minetest.registered_biomes) do
+	for k, _ in pairs(core.registered_biomes) do
 		table.insert(biomes, k)
 		b = b + 1
 	end
@@ -244,7 +244,7 @@ end
 
 -- Register chat commands
 do
-	minetest.register_chatcommand("findbiome", {
+	core.register_chatcommand("findbiome", {
 		description = S("Find and teleport to biome"),
 		params = S("<biome>"),
 		privs = { debug = true, teleport = true },
@@ -252,7 +252,7 @@ do
 			if not mods_loaded then
 				return false
 			end
-			local player = minetest.get_player_by_name(name)
+			local player = core.get_player_by_name(name)
 			if not player then
 				return false, S("No player.")
 			end
@@ -262,12 +262,12 @@ do
 				local biome_pos = find_default_biome()
 				if biome_pos then
 					player:set_pos(biome_pos)
-					return true, S("Biome found at @1.", minetest.pos_to_string(biome_pos))
+					return true, S("Biome found at @1.", core.pos_to_string(biome_pos))
 				else
 					return false, S("No biome found!")
 				end
 			end
-			local id = minetest.get_biome_id(param)
+			local id = core.get_biome_id(param)
 			if id then
 				invalid_biome = false
 			end
@@ -277,14 +277,14 @@ do
 			local biome_pos, success = findbiome.find_biome(pos, {param})
 			if success then
 				player:set_pos(biome_pos)
-				return true, S("Biome found at @1.", minetest.pos_to_string(biome_pos))
+				return true, S("Biome found at @1.", core.pos_to_string(biome_pos))
 			else
 				return false, S("No biome found!")
 			end
 		end,
 	})
 
-	minetest.register_chatcommand("listbiomes", {
+	core.register_chatcommand("listbiomes", {
 		description = S("List all biomes"),
 		params = "",
 		privs = { debug = true },

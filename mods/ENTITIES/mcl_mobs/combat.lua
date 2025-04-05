@@ -24,7 +24,7 @@ end
 local function blast_damage(pos, radius, source)
 	radius = radius * 2
 
-	for obj in minetest.objects_inside_radius(pos, radius) do
+	for obj in core.objects_inside_radius(pos, radius) do
 
 		local obj_pos = obj:get_pos()
 		local dist = vector.distance(pos, obj_pos)
@@ -51,7 +51,7 @@ function mob_class:attack_player_allowed (player)
 end
 
 function mob_class:standing_on_walkable ()
-	local def = minetest.registered_nodes [self.standing_on]
+	local def = core.registered_nodes [self.standing_on]
 	return def and def.walkable
 end
 
@@ -72,7 +72,7 @@ function mob_class:projectile_knockback (factor, dir)
 	end
 	self.frame_speed_multiplier=2.3
 	self.object:set_velocity (knockback)
-	minetest.after(0.2, function()
+	core.after(0.2, function()
 			       if self and self.object then
 				       self.frame_speed_multiplier=1
 			       end
@@ -114,7 +114,7 @@ function mob_class:receive_damage (mcl_reason, damage)
 
 	local name = source_is_player_or_tamed_wolf (mcl_reason)
 	if name then
-		self.last_player_hit_time = minetest.get_gametime ()
+		self.last_player_hit_time = core.get_gametime ()
 		self.last_player_hit_name = name
 	end
 
@@ -173,13 +173,13 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 	-- error checking when mod profiling is enabled
 	if not tool_capabilities then
-		minetest.log("warning", "[mobs] Mod profiling enabled, damage not enabled")
+		core.log("warning", "[mobs] Mod profiling enabled, damage not enabled")
 		return
 	end
 
 	if is_player then
 		-- is mob protected?
-		if self.protected and minetest.is_protected(self.object:get_pos(), hitter_playername) then
+		if self.protected and core.is_protected(self.object:get_pos(), hitter_playername) then
 			return
 		end
 	end
@@ -240,7 +240,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	-- "immortal" group to disable engine damage and wear handling, so we
 	-- need to roll our own.
 	if is_player
-	and minetest.is_creative_enabled(hitter_playername) ~= true
+	and core.is_creative_enabled(hitter_playername) ~= true
 	and tool_capabilities
 	and tool_capabilities.punch_attack_uses
 	and tool_capabilities.punch_attack_uses > 0
@@ -257,12 +257,12 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 				local s = math.random(0, #weapon:get_definition().sounds)
 
-				minetest.sound_play(weapon:get_definition().sounds[s], {
+				core.sound_play(weapon:get_definition().sounds[s], {
 							    object = self.object, --hitter,
 							    max_hear_distance = 8
 										       }, true)
 			else
-				minetest.sound_play("default_punch", {
+				core.sound_play("default_punch", {
 							    object = self.object,
 							    max_hear_distance = 5
 								     }, true)
@@ -307,7 +307,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		elseif self.animation.walk_end then
 			self:set_animation ("walk")
 		end
-		minetest.after(0.2, function()
+		core.after(0.2, function()
 				       if self and self.object then
 					       self.frame_speed_multiplier=1
 				       end
@@ -325,7 +325,7 @@ function mob_class:do_runaway ()
 end
 
 function mob_class:call_group_attack(hitter)
-	for obj in minetest.objects_inside_radius(hitter:get_pos(), self.view_range) do
+	for obj in core.objects_inside_radius(hitter:get_pos(), self.view_range) do
 		local ent = obj:get_luaentity()
 		if ent then
 			-- only alert members of same mob or friends
@@ -675,7 +675,7 @@ function mob_class:discharge_ranged (self_pos, target_pos)
 
 	self:mob_sound ("shoot_attack")
 	-- Shoot arrow
-	if minetest.registered_entities[self.arrow] or self.shoot_arrow then
+	if core.registered_entities[self.arrow] or self.shoot_arrow then
 		if self._projectile_gravity then
 			-- Offset by distance.
 			vec.y = vec.y + 0.12 * vector.length (vec)
@@ -686,12 +686,12 @@ function mob_class:discharge_ranged (self_pos, target_pos)
 		if self.shoot_arrow then
 			self:shoot_arrow (s, vec)
 		else
-			local arrow = minetest.add_entity (s, self.arrow)
+			local arrow = core.add_entity (s, self.arrow)
 			if not arrow then
 				return
 			end
 			self.firing = true
-			minetest.after(1, function(self)
+			core.after(1, function(self)
 					       self.firing = false
 			end, self)
 			local ent = arrow:get_luaentity()
@@ -926,7 +926,7 @@ function mob_class:default_rangecheck (self_pos, object)
 end
 
 function mob_class:targets_for_attack_default (self_pos, esp)
-	return minetest.objects_inside_radius (self_pos, self.view_range)
+	return core.objects_inside_radius (self_pos, self.view_range)
 end
 
 function mob_class:attack_default (self_pos, dtime, esp)
@@ -1042,7 +1042,7 @@ function mob_class:check_attack (self_pos, dtime)
 		elseif attack_type == "melee" then
 			self:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 		else
-			minetest.log ("warning", "unknown attack type " .. self.attack_type)
+			core.log ("warning", "unknown attack type " .. self.attack_type)
 		end
 
 		return true
@@ -1076,7 +1076,7 @@ local wielditem_entity = {
 	end,
 }
 
-minetest.register_entity ("mcl_mobs:wielditem", wielditem_entity)
+core.register_entity ("mcl_mobs:wielditem", wielditem_entity)
 
 function mob_class:wielditem_transform (info, stack)
 	local rot = info.rotation
@@ -1089,11 +1089,11 @@ function mob_class:wielditem_transform (info, stack)
 		rot = info.toollike_rotation
 		pos = info.toollike_position
 	elseif info.bow_position
-		and minetest.get_item_group (name, "bow") > 0 then
+		and core.get_item_group (name, "bow") > 0 then
 		rot = info.bow_rotation
 		pos = info.bow_position
 	elseif info.crossbow_position
-		and minetest.get_item_group (name, "crossbow") > 0 then
+		and core.get_item_group (name, "crossbow") > 0 then
 		rot = info.crossbow_rotation
 		pos = info.crossbow_position
 	elseif info.blocklike_position
@@ -1132,7 +1132,7 @@ function mob_class:display_wielditem (offhand)
 		or not is_valid (self[objectname]) then
 		local self_pos = self.object:get_pos ()
 		self[objectname]
-			= minetest.add_entity (self_pos, "mcl_mobs:wielditem")
+			= core.add_entity (self_pos, "mcl_mobs:wielditem")
 	end
 
 	-- Apply rotation and position according to item type.
@@ -1218,7 +1218,7 @@ end
 
 local wielditem_variants_by_duration = {}
 
-minetest.register_on_mods_loaded (function ()
+core.register_on_mods_loaded (function ()
 	wielditem_variants_by_duration = {
 		["mcl_bows:bow"] = {
 			half_time = mcl_bows.BOW_CHARGE_TIME_HALF,

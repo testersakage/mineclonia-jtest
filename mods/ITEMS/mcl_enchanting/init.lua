@@ -1,6 +1,6 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
+local S = core.get_translator(modname)
 
 mcl_enchanting = {
 	book_offset = vector.new(0, 0.75, 0),
@@ -62,7 +62,7 @@ dofile(modpath .. "/engine.lua")
 dofile(modpath .. "/groupcaps.lua")
 dofile(modpath .. "/enchantments.lua")
 
-minetest.register_chatcommand("enchant", {
+core.register_chatcommand("enchant", {
 	description = S("Enchant an item"),
 	params = S("<player> <enchantment> [<level>]"),
 	privs = {give = true},
@@ -75,7 +75,7 @@ minetest.register_chatcommand("enchant", {
 		if not target_name or not enchantment then
 			return false, S("Usage: /enchant <player> <enchantment> [<level>]")
 		end
-		local target = minetest.get_player_by_name(target_name)
+		local target = core.get_player_by_name(target_name)
 		if not target then
 			return false, S("Player '@1' cannot be found.", target_name)
 		end
@@ -104,7 +104,7 @@ minetest.register_chatcommand("enchant", {
 	end
 })
 
-minetest.register_chatcommand("forceenchant", {
+core.register_chatcommand("forceenchant", {
 	description = S("Forcefully enchant an item"),
 	params = S("<player> <enchantment> [<level>]"),
 	privs = {give = true},
@@ -117,7 +117,7 @@ minetest.register_chatcommand("forceenchant", {
 		if not target_name or not enchantment then
 			return false, S("Usage: /forceenchant <player> <enchantment> [<level>]")
 		end
-		local target = minetest.get_player_by_name(target_name)
+		local target = core.get_player_by_name(target_name)
 		if not target then
 			return false, S("Player '@1' cannot be found.", target_name)
 		end
@@ -138,7 +138,7 @@ minetest.register_chatcommand("forceenchant", {
 	end
 })
 
-minetest.register_craftitem("mcl_enchanting:book_enchanted", {
+core.register_craftitem("mcl_enchanting:book_enchanted", {
 	description = S("Enchanted Book"),
 	inventory_image = "mcl_enchanting_book_enchanted.png" .. mcl_enchanting.overlay,
 	groups = {enchanted = 1, not_in_creative_inventory = 1, enchantability = 1, rarity = 1},
@@ -162,12 +162,12 @@ minetest.register_craftitem("mcl_enchanting:book_enchanted", {
 	end
 })
 
-minetest.register_alias("mcl_books:book_enchanted", "mcl_enchanting:book_enchanted")
+core.register_alias("mcl_books:book_enchanted", "mcl_enchanting:book_enchanted")
 
 local function spawn_book_entity(pos, respawn)
 	if respawn then
 		-- Check if we already have a book
-		for obj in minetest.objects_inside_radius(pos, 1) do
+		for obj in core.objects_inside_radius(pos, 1) do
 			local lua = obj:get_luaentity()
 			if lua and lua.name == "mcl_enchanting:book" then
 				if lua._table_pos and vector.equals(pos, lua._table_pos) then
@@ -176,7 +176,7 @@ local function spawn_book_entity(pos, respawn)
 			end
 		end
 	end
-	local obj = minetest.add_entity(vector.add(pos, mcl_enchanting.book_offset), "mcl_enchanting:book")
+	local obj = core.add_entity(vector.add(pos, mcl_enchanting.book_offset), "mcl_enchanting:book")
 	if obj then
 		local lua = obj:get_luaentity()
 		if lua then
@@ -185,7 +185,7 @@ local function spawn_book_entity(pos, respawn)
 	end
 end
 
-minetest.register_entity("mcl_enchanting:book", {
+core.register_entity("mcl_enchanting:book", {
 	initial_properties = {
 		visual = "mesh",
 		mesh = "mcl_enchanting_book.b3d",
@@ -206,7 +206,7 @@ minetest.register_entity("mcl_enchanting:book", {
 		local old_player_near = self._player_near
 		local player_near = false
 		local player
-		for obj in minetest.objects_inside_radius(vector.subtract(self.object:get_pos(), mcl_enchanting.book_offset), 2.5) do
+		for obj in core.objects_inside_radius(vector.subtract(self.object:get_pos(), mcl_enchanting.book_offset), 2.5) do
 			if obj:is_player() then
 				player_near = true
 				player = obj
@@ -229,11 +229,11 @@ minetest.register_entity("mcl_enchanting:book", {
 })
 
 local rotate
-if minetest.get_modpath("screwdriver") then
+if core.get_modpath("screwdriver") then
 	rotate = screwdriver.rotate_simple
 end
 
-minetest.register_node("mcl_enchanting:table", {
+core.register_node("mcl_enchanting:table", {
 	description = S("Enchanting Table"),
 	_tt_help = S("Spend experience, and lapis to enchant various items."),
 	_doc_items_longdesc = S("Enchanting Tables will let you enchant armors, tools, weapons, and books with various abilities. But, at the cost of some experience, and lapis lazuli."),
@@ -256,9 +256,9 @@ minetest.register_node("mcl_enchanting:table", {
 	on_rotate = rotate,
 	on_rightclick = function(pos, _, clicker)
 		local player_meta = clicker:get_meta()
-		--local table_meta = minetest.get_meta(pos)
+		--local table_meta = core.get_meta(pos)
 		--local num_bookshelves = table_meta:get_int("mcl_enchanting:num_bookshelves")
-		local table_name = minetest.get_meta(pos):get_string("name")
+		local table_name = core.get_meta(pos):get_string("name")
 		if table_name == "" then
 			table_name = S("Enchant")
 		end
@@ -274,24 +274,24 @@ minetest.register_node("mcl_enchanting:table", {
 	end,
 	after_dig_node = function(pos, _, _ , digger)
 		local dname = (digger and digger:get_player_name()) or ""
-		if minetest.is_creative_enabled(dname) then
+		if core.is_creative_enabled(dname) then
 			return
 		end
 		local itemstack = ItemStack("mcl_enchanting:table")
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local itemmeta = itemstack:get_meta()
 		itemmeta:set_string("name", meta:get_string("name"))
 		itemmeta:set_string("description", meta:get_string("description"))
-		minetest.add_item(pos, itemstack)
+		core.add_item(pos, itemstack)
 	end,
 	after_place_node = function(pos, placer, itemstack, pointed_thing) ---@diagnostic disable-line: unused-local
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local itemmeta = itemstack:get_meta()
 		meta:set_string("name", itemmeta:get_string("name"))
 		meta:set_string("description", itemmeta:get_string("description"))
 	end,
 	after_destruct = function(pos)
-		for obj in minetest.objects_inside_radius(pos, 1) do
+		for obj in core.objects_inside_radius(pos, 1) do
 			local lua = obj:get_luaentity()
 			if lua and lua.name == "mcl_enchanting:book" then
 				if lua._table_pos and vector.equals(pos, lua._table_pos) then
@@ -307,7 +307,7 @@ minetest.register_node("mcl_enchanting:table", {
 	light_source = 7,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_enchanting:table",
 	recipe = {
 		{"", "mcl_books:book", ""},
@@ -316,14 +316,14 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_abm({
+core.register_abm({
 	label = "Enchanting table bookshelf particles",
 	interval = 1,
 	chance = 1,
 	nodenames = "mcl_enchanting:table",
 	action = function(pos)
 		local playernames = {}
-		for obj in minetest.objects_inside_radius(pos, 15) do
+		for obj in core.objects_inside_radius(pos, 15) do
 			if obj:is_player() then
 				table.insert(playernames, obj:get_player_name())
 			end
@@ -343,7 +343,7 @@ minetest.register_abm({
 				t = t - 0.1 --slightly decrease time to avoid texture overlappings
 				local tx = "mcl_enchanting_glyph_" .. math.random(18) .. ".png"
 				for _, name in pairs(playernames) do
-					minetest.add_particle({
+					core.add_particle({
 						pos = ap,
 						velocity = v,
 						acceleration = a,
@@ -359,7 +359,7 @@ minetest.register_abm({
 	end
 })
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "(Re-)spawn book entity above enchanting table",
 	name = "mcl_enchanting:spawn_book_entity",
 	nodenames = {"mcl_enchanting:table"},
@@ -370,9 +370,9 @@ minetest.register_lbm({
 })
 
 
-minetest.register_on_mods_loaded(mcl_enchanting.initialize)
-minetest.register_on_joinplayer(mcl_enchanting.initialize_player)
-minetest.register_on_player_receive_fields(mcl_enchanting.handle_formspec_fields)
-minetest.register_allow_player_inventory_action(mcl_enchanting.allow_inventory_action)
-minetest.register_on_player_inventory_action(mcl_enchanting.on_inventory_action)
+core.register_on_mods_loaded(mcl_enchanting.initialize)
+core.register_on_joinplayer(mcl_enchanting.initialize_player)
+core.register_on_player_receive_fields(mcl_enchanting.handle_formspec_fields)
+core.register_allow_player_inventory_action(mcl_enchanting.allow_inventory_action)
+core.register_on_player_inventory_action(mcl_enchanting.on_inventory_action)
 tt.register_priority_snippet(mcl_enchanting.enchantments_snippet)

@@ -7,13 +7,13 @@ local init_items    = {}
 local searches      = {}
 local usages_cache  = {}
 
-local progressive_mode = minetest.settings:get_bool("mcl_craftguide_progressive_mode", true)
-local strict_mode = progressive_mode or minetest.settings:get_bool("mcl_craftguide_strict_mode", true)
-local tooltip_append_itemname = minetest.settings:get_bool("tooltip_append_itemname", false)
+local progressive_mode = core.settings:get_bool("mcl_craftguide_progressive_mode", true)
+local strict_mode = progressive_mode or core.settings:get_bool("mcl_craftguide_strict_mode", true)
+local tooltip_append_itemname = core.settings:get_bool("tooltip_append_itemname", false)
 
-local C = minetest.colorize
-local F = minetest.formspec_escape
-local S = minetest.get_translator("mcl_craftguide")
+local C = core.colorize
+local F = core.formspec_escape
+local S = core.get_translator("mcl_craftguide")
 
 local DEFAULT_SIZE = 10
 local MIN_LIMIT, MAX_LIMIT = 10, 12
@@ -213,7 +213,7 @@ local function get_player_data(name, init)
 			iX      = DEFAULT_SIZE,
 			items   = init_items,
 			items_raw = init_items,
-			lang_code = minetest.get_player_information(name).lang_code or 'en',
+			lang_code = core.get_player_information(name).lang_code or 'en',
 		}
 	end
 
@@ -221,7 +221,7 @@ local function get_player_data(name, init)
 end
 
 local function get_item_recipes(item_name)
-	local recipes = minetest.get_all_craft_recipes(item_name) or {}
+	local recipes = core.get_all_craft_recipes(item_name) or {}
 	if custom_crafts[item_name] then
 		for _, v in pairs(custom_crafts[item_name]) do
 			recipes[#recipes + 1] = v
@@ -250,7 +250,7 @@ local function get_filtered_items(player)
 end
 
 local function get_recipes(item, data, player)
-	item = minetest.registered_aliases[item] or item
+	item = core.registered_aliases[item] or item
 	local recipes = get_item_recipes(item)
 	local usages = usages_cache[item]
 
@@ -268,7 +268,7 @@ local function get_recipes(item, data, player)
 	if data.show_usages then
 		recipes = usages_cache[item] and table.copy(usages_cache[item]) or {}
 
-		local item_groups = minetest.registered_items[item].groups
+		local item_groups = core.registered_items[item].groups
 		local required_groups
 		for cache_group_name, group_cache in pairs(group_cache) do
 			required_groups = extract_groups(cache_group_name)
@@ -298,12 +298,12 @@ local function groups_to_item(groups)
 
 		if group_stereotypes[group] then
 			return group_stereotypes[group]
-		elseif minetest.registered_items[def_gr] then
+		elseif core.registered_items[def_gr] then
 			return def_gr
 		end
 	end
 
-	for name, def in pairs(minetest.registered_items) do
+	for name, def in pairs(core.registered_items) do
 		if item_has_groups(def.groups, groups) then
 			return name
 		end
@@ -323,7 +323,7 @@ local function get_tooltip(item, groups, cooktime, burntime, fs_name)
 			-- Treat the groups “compass” and “clock” as fake groups
 			-- and just print the normal item name without special formatting
 			if groups[1] == "compass" or groups[1] == "clock" then
-				groupstr = minetest.registered_items[item].description
+				groupstr = core.registered_items[item].description
 			elseif g then
 				-- Use the special group name string
 				groupstr = C(gcol, g)
@@ -346,7 +346,7 @@ local function get_tooltip(item, groups, cooktime, burntime, fs_name)
 			tooltip = S("Any item belonging to the groups: @1", table.concat(groupstr, ", "))
 		end
 	else
-		local def = minetest.registered_items[item]
+		local def = core.registered_items[item]
 		tooltip = def and def.description or "<unknown>"
 	end
 
@@ -643,7 +643,7 @@ local function make_formspec(name)
 	end
 
 	if data.recipes and #data.recipes > 0 then
-		fs[#fs + 1] = get_recipe_fs(data, iY, minetest.get_player_by_name(name))
+		fs[#fs + 1] = get_recipe_fs(data, iY, core.get_player_by_name(name))
 	end
 
 	for elem_name, def in pairs(formspec_elements) do
@@ -661,11 +661,11 @@ end
 mcl_craftguide.make_formspec = make_formspec
 
 local function show_fs(_, name)
-	minetest.show_formspec(name, "mcl_craftguide", make_formspec(name))
+	core.show_formspec(name, "mcl_craftguide", make_formspec(name))
 end
 
 mcl_craftguide.add_search_filter("groups", function(item, groups)
-	local itemdef = minetest.registered_items[item]
+	local itemdef = core.registered_items[item]
 
 	for i = 1, #groups do
 		local group = groups[i]
@@ -701,9 +701,9 @@ local function search(data)
 
 	for i = 1, #data.items_raw do
 		local item = data.items_raw[i]
-		local def  = minetest.registered_items[item]
+		local def  = core.registered_items[item]
 		if def then
-			local desc = string.lower(minetest.get_translated_string(data.lang_code, def.description))
+			local desc = string.lower(core.get_translated_string(data.lang_code, def.description))
 			local search_in = item .. desc
 			local to_add
 
@@ -749,7 +749,7 @@ end
 local function get_init_items()
 	local recipes
 	local used_items
-	for item_name, item in pairs(minetest.registered_items) do
+	for item_name, item in pairs(core.registered_items) do
 		recipes = get_item_recipes(item_name)
 
 		if #recipes > 0 and item_name ~= "" then
@@ -759,18 +759,18 @@ local function get_init_items()
 					used_items = {}
 					for _, ingredient in pairs(recipe.items) do
 						_, _, ingredient = string.find(ingredient, "^([^%s]+)") -- handles edge case where the igredient is an item string
-						ingredient = minetest.registered_aliases[ingredient] or ingredient
+						ingredient = core.registered_aliases[ingredient] or ingredient
 						if not used_items[ingredient] then
 							used_items[ingredient] = true
 
 							if string.sub(ingredient, 1, 6) == "group:" then
 								group_cache[ingredient] = group_cache[ingredient] or {}
 								table.insert(group_cache[ingredient], recipe)
-							elseif minetest.registered_items[ingredient] then
+							elseif core.registered_items[ingredient] then
 								usages_cache[ingredient] = usages_cache[ingredient] or {}
 								table.insert(usages_cache[ingredient], recipe)
 							else
-								minetest.log("warning", "[mcl_craftguide] ingredient \"" .. ingredient .. "\" doesn't exist")
+								core.log("warning", "[mcl_craftguide] ingredient \"" .. ingredient .. "\" doesn't exist")
 							end
 						end
 					end
@@ -902,10 +902,10 @@ local function on_receive_fields(player, fields)
 	end
 end
 
-minetest.after(0, get_init_items)
+core.after(0, get_init_items)
 
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "mcl_craftguide" then
 		on_receive_fields(player, fields)
 	elseif fields.__mcl_craftguide then
@@ -915,8 +915,8 @@ end)
 
 if progressive_mode then
 	local function reveal_item(item, progress)
-		item = item and minetest.registered_aliases[item] or item
-		local def = item and minetest.registered_items[item]
+		item = item and core.registered_aliases[item] or item
+		local def = item and core.registered_items[item]
 		if not def or item == "" or progress[item] then return false end
 		progress[item] = 1
 		for group_spec, _ in pairs(group_cache) do
@@ -941,7 +941,7 @@ if progressive_mode then
 
 			if meta:contains("inv_items") then
 				-- compat
-				minetest.log("none", "[mcl_craftguide] converting old progress data for player '" .. name .. "'")
+				core.log("none", "[mcl_craftguide] converting old progress data for player '" .. name .. "'")
 				local data = meta:get_string("inv_items")
 				meta:set_string(PLAYER_PROGRESS_KEY, data)
 				meta:set_string("inv_items", "")
@@ -951,10 +951,10 @@ if progressive_mode then
 			if meta:contains(PLAYER_PROGRESS_KEY) then
 				local data = meta:get_string(PLAYER_PROGRESS_KEY)
 
-				inv_items = minetest.deserialize(data)
+				inv_items = core.deserialize(data)
 
 				if not inv_items or type(inv_items) ~= "table" then
-					minetest.log("error", "[mcl_craftguide] resetting corrupt player progress for player '" .. name .. "'")
+					core.log("error", "[mcl_craftguide] resetting corrupt player progress for player '" .. name .. "'")
 					meta:set_string(PLAYER_PROGRESS_KEY, "")
 					meta:set_string(PLAYER_PROGRESS_KEY .. "_corrupt", data)
 
@@ -996,11 +996,11 @@ if progressive_mode then
 
 		if c > 0 then
 			local meta = player:get_meta()
-			meta:set_string(PLAYER_PROGRESS_KEY, minetest.serialize(inv_items))
+			meta:set_string(PLAYER_PROGRESS_KEY, core.serialize(inv_items))
 		else
 			-- don't write metadata if c == 0, because chances are
 			-- high that initialization was interrupted
-			minetest.log("none", "[mcl_craftguide] not saving empty progress for player '" .. player:get_player_name() .. "'")
+			core.log("none", "[mcl_craftguide] not saving empty progress for player '" .. player:get_player_name() .. "'")
 		end
 	end
 
@@ -1015,7 +1015,7 @@ if progressive_mode then
 
 	local function recipe_unlocked(recipe, progress, show_all)
 		for _, item in pairs(recipe.items) do
-			if not ((minetest.registered_items[item] or group_cache[item]) and (show_all or progress[item])) then
+			if not ((core.registered_items[item] or group_cache[item]) and (show_all or progress[item])) then
 				return
 			end
 		end
@@ -1024,7 +1024,7 @@ if progressive_mode then
 	end
 
 	local function progressive_filter(recipes, player)
-		local show_all = minetest.is_creative_enabled(player:get_player_name())
+		local show_all = core.is_creative_enabled(player:get_player_name())
 		local progress = get_progress(player)
 
 		local filtered, c = {}, 0
@@ -1058,19 +1058,19 @@ if progressive_mode then
 
 	mcl_craftguide.add_recipe_filter("Default progressive filter", progressive_filter)
 
-	minetest.register_on_leaveplayer(function(player)
+	core.register_on_leaveplayer(function(player)
 		save_progress(player)
 		local name = player:get_player_name()
 		player_data[name] = nil
 	end)
 
-	minetest.register_on_shutdown(function()
+	core.register_on_shutdown(function()
 		for player in mcl_util.connected_players() do
 			save_progress(player)
 		end
 	end)
 else
-	minetest.register_on_leaveplayer(function(player)
+	core.register_on_leaveplayer(function(player)
 		local name = player:get_player_name()
 		player_data[name] = nil
 	end)
@@ -1078,7 +1078,7 @@ else
 	if strict_mode then
 		local function recipe_unlocked(recipe)
 			for _, item in pairs(recipe.items) do
-				if not (minetest.registered_items[item] or group_cache[item]) then
+				if not (core.registered_items[item] or group_cache[item]) then
 					return
 				end
 			end
@@ -1104,7 +1104,7 @@ else
 end
 
 function mcl_craftguide.show(name)
-	local player = minetest.get_player_by_name(name)
+	local player = core.get_player_by_name(name)
 	if next(recipe_filters) then
 		local data = get_player_data(name)
 		data.items_raw = get_filtered_items(player)
@@ -1115,7 +1115,7 @@ end
 
 doc.sub.items.register_factoid(nil, "groups", function(_, def)
 	if def._repair_material then
-		local mdef = minetest.registered_items[def._repair_material]
+		local mdef = core.registered_items[def._repair_material]
 		if mdef and mdef.description and mdef.description ~= "" then
 			return S("This item can be repaired at an anvil with: @1.", mdef.description)
 		elseif def._repair_material == "group:wood" then

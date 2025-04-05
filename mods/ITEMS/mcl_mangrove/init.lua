@@ -1,6 +1,6 @@
-local S = minetest.get_translator("mcl_mangrove")
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local S = core.get_translator("mcl_mangrove")
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 mcl_trees.register_wood("mangrove",{
 	readable_name="Mangrove",
@@ -22,7 +22,7 @@ mcl_trees.register_wood("mangrove",{
 		color = "#6a7039",
 		_on_bone_meal = function(_, _, _, pos)
 			local upos = vector.offset(pos, 0,-1,0)
-			return minetest.get_node(upos).name == "air" and minetest.set_node(upos, {name="mcl_mangrove:hanging_propagule_1"})
+			return core.get_node(upos).name == "air" and core.set_node(upos, {name="mcl_mangrove:hanging_propagule_1"})
 		end,
 	},
 	wood = { tiles = {"mcl_mangrove_planks.png"}},
@@ -69,11 +69,11 @@ local propagule_water_nodes = {"mcl_mud:mud","mcl_core:dirt","mcl_core:coarse_di
 local propagule_rooted_nodes = {}
 for _,root in pairs(propagule_water_nodes) do
 	local r = root:split(":")[2]
-	local def = minetest.registered_nodes[root]
+	local def = core.registered_nodes[root]
 	local tx = def.tiles
 	local n = "mcl_mangrove:propagule_"..r
 	table.insert(propagule_rooted_nodes,n)
-	minetest.register_node(n, {
+	core.register_node(n, {
 		drawtype = "plantlike_rooted",
 		paramtype = "light",
 		place_param2 = 1,
@@ -98,7 +98,7 @@ for _,root in pairs(propagule_water_nodes) do
 		node_placement_prediction = "",
 		node_dig_prediction = "",
 		after_dig_node = function(pos)
-			minetest.set_node(pos, {name=root})
+			core.set_node(pos, {name=root})
 		end,
 		_mcl_hardness = 0,
 		_mcl_blast_resistance = 0,
@@ -108,7 +108,7 @@ for _,root in pairs(propagule_water_nodes) do
 
 end
 
-minetest.register_node("mcl_mangrove:mangrove_roots", {
+core.register_node("mcl_mangrove:mangrove_roots", {
 	description = S("Mangrove Roots"),
 	_doc_items_longdesc = S("Mangrove roots are decorative blocks that form as part of mangrove trees."),
 	_doc_items_hidden = false,
@@ -139,19 +139,19 @@ minetest.register_node("mcl_mangrove:mangrove_roots", {
 		if dim == "nether" then return itemstack end
 		local n = itemstack:get_name():gsub("mcl_buckets:bucket_","")
 		n = "mcl_mangrove:"..n.."_logged_roots"
-		if minetest.registered_nodes[n] then
-			if not minetest.is_creative_enabled(placer:get_player_name()) then
+		if core.registered_nodes[n] then
+			if not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 				local inv = placer:get_inventory()
 				inv:add_item("main","mcl_buckets:bucket_empty")
 			end
-			minetest.swap_node(pointed_thing.under,{name=n})
+			core.swap_node(pointed_thing.under,{name=n})
 		end
 		return itemstack
 	end
 })
 
-minetest.register_node("mcl_mangrove:propagule", {
+core.register_node("mcl_mangrove:propagule", {
 	description = S("Mangrove Propagule"),
 	_tt_help = S("Needs soil and light to grow"),
 	_doc_items_longdesc = S("When placed on soil (such as dirt) and exposed to light, an propagule will grow into an mangrove after some time."),
@@ -175,7 +175,7 @@ minetest.register_node("mcl_mangrove:propagule", {
 	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		meta:set_int("stage", 0)
 	end,
 	node_placement_prediction = "",
@@ -186,12 +186,12 @@ minetest.register_node("mcl_mangrove:propagule", {
 	end,
 	on_place = mcl_util.generate_on_place_plant_function(function(place_pos, _,stack)
 		local under = vector.offset(place_pos,0,-1,0)
-		local snn = minetest.get_node_or_nil(under).name
+		local snn = core.get_node_or_nil(under).name
 		if not snn then return false end
 		if table.indexof(propagule_allowed_nodes,snn) ~= -1 then
-			local n = minetest.get_node(place_pos)
-			if minetest.get_item_group(n.name,"water") > 0 and table.indexof(propagule_water_nodes,snn) ~= -1 then
-					minetest.set_node(under,{name="mcl_mangrove:propagule_"..snn:split(":")[2]})
+			local n = core.get_node(place_pos)
+			if core.get_item_group(n.name,"water") > 0 and table.indexof(propagule_water_nodes,snn) ~= -1 then
+					core.set_node(under,{name="mcl_mangrove:propagule_"..snn:split(":")[2]})
 					stack:take_item()
 					return stack
 			end
@@ -200,7 +200,7 @@ minetest.register_node("mcl_mangrove:propagule", {
 	end)
 })
 
-minetest.register_node("mcl_mangrove:hanging_propagule_1", {
+core.register_node("mcl_mangrove:hanging_propagule_1", {
 	description = S("Hanging Propagule"),
 	_tt_help = S("Grows on Mangrove leaves"),
 	_doc_items_longdesc = "",
@@ -276,24 +276,24 @@ local wlroots = {
 	on_construct = function(pos)
 		local dim = mcl_worlds.pos_to_dimension(pos)
 		if dim == "nether" then
-			minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
-			minetest.set_node(pos, {name="mcl_mangrove:mangrove_roots"})
+			core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+			core.set_node(pos, {name="mcl_mangrove:mangrove_roots"})
 		end
 	end,
 	after_dig_node = function(pos)
-		local node = minetest.get_node(pos)
+		local node = core.get_node(pos)
 		local dim = mcl_worlds.pos_to_dimension(pos)
-		if minetest.get_item_group(node.name, "water") == 0 and dim ~= "nether" then
-			minetest.set_node(pos, {name="mcl_core:water_source"})
+		if core.get_item_group(node.name, "water") == 0 and dim ~= "nether" then
+			core.set_node(pos, {name="mcl_core:water_source"})
 		else
-			minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+			core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 		end
 	end,
 	_on_bucket_place_empty = function(itemstack,placer,pointed_thing)
-		local n = minetest.get_node(pointed_thing.under).name:gsub("mcl_mangrove:","")
+		local n = core.get_node(pointed_thing.under).name:gsub("mcl_mangrove:","")
 		n = "mcl_buckets:bucket_"..n:gsub("_logged_roots","")
-		if minetest.registered_items[n] then
-			minetest.swap_node(pointed_thing.under,{name="mcl_mangrove:mangrove_roots"})
+		if core.registered_items[n] then
+			core.swap_node(pointed_thing.under,{name="mcl_mangrove:mangrove_roots"})
 			itemstack:take_item()
 			local inv = placer:get_inventory()
 			inv:add_item("main",ItemStack(n))
@@ -307,20 +307,20 @@ local rwlroots = table.merge(wlroots, {
 		{name="default_river_water_source_animated.png", animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=5.0}}
 	},
 	after_dig_node = function(pos)
-		local node = minetest.get_node(pos)
+		local node = core.get_node(pos)
 		local dim = mcl_worlds.pos_to_dimension(pos)
-		if minetest.get_item_group(node.name, "water") == 0 and dim ~= "nether" then
-			minetest.set_node(pos, {name="mclx_core:river_water_source"})
+		if core.get_item_group(node.name, "water") == 0 and dim ~= "nether" then
+			core.set_node(pos, {name="mclx_core:river_water_source"})
 		else
-			minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+			core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 		end
 	end
 })
 
-minetest.register_node("mcl_mangrove:water_logged_roots", wlroots)
-minetest.register_node("mcl_mangrove:river_water_logged_roots",rwlroots)
+core.register_node("mcl_mangrove:water_logged_roots", wlroots)
+core.register_node("mcl_mangrove:river_water_logged_roots",rwlroots)
 
-minetest.register_node("mcl_mangrove:mangrove_mud_roots", {
+core.register_node("mcl_mangrove:mangrove_mud_roots", {
 	description = S("Muddy Mangrove Roots"),
 	_tt_help = S("crafted with Mud and Mangrove roots"),
 	_doc_items_longdesc = S("Muddy Mangrove Roots is a block from mangrove swamp.It drowns player a bit inside it."),
@@ -335,7 +335,7 @@ minetest.register_node("mcl_mangrove:mangrove_mud_roots", {
 	_mcl_hardness = 0.7,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_mangrove:mangrove_mud_roots",
 	recipe = {
 		{"mcl_mangrove:mangrove_roots", "mcl_mud:mud",},
@@ -349,7 +349,7 @@ local adjacents = {
 	vector.new(0,0,-1),
 }
 
-minetest.register_abm({
+core.register_abm({
 	label = "Waterlog mangrove roots",
 	nodenames = {"mcl_mangrove:mangrove_roots"},
 	neighbors = {"group:water"},
@@ -357,13 +357,13 @@ minetest.register_abm({
 	chance = 5,
 	action = function(pos)
 		for _,v in pairs(adjacents) do
-			local n = minetest.get_node(vector.add(pos,v)).name
-			if minetest.get_item_group(n,"water") > 0 then
+			local n = core.get_node(vector.add(pos,v)).name
+			if core.get_item_group(n,"water") > 0 then
 				if n:find("river") then
-					minetest.swap_node(pos,{name="mcl_mangrove:river_water_logged_roots"})
+					core.swap_node(pos,{name="mcl_mangrove:river_water_logged_roots"})
 					return
 				else
-					minetest.swap_node(pos,{name="mcl_mangrove:water_logged_roots"})
+					core.swap_node(pos,{name="mcl_mangrove:water_logged_roots"})
 					return
 				end
 			end

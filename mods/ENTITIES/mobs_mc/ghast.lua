@@ -3,8 +3,8 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
-local mobs_griefing = minetest.settings:get_bool("mobs_griefing", true)
+local S = core.get_translator("mobs_mc")
+local mobs_griefing = core.settings:get_bool("mobs_griefing", true)
 local mob_class = mcl_mobs.mob_class
 
 --###################
@@ -209,10 +209,10 @@ end
 ------------------------------------------------------------------------
 
 function ghast.can_spawn (pos)
-	if not minetest.get_item_group(minetest.get_node(pos).name,"solid") then return false end
+	if not core.get_item_group(core.get_node(pos).name,"solid") then return false end
 	local p1=vector.offset(pos,-2,1,-2)
 	local p2=vector.offset(pos,2,5,2)
-	local nn = minetest.find_nodes_in_area(p1,p2,{"air"})
+	local nn = core.find_nodes_in_area(p1,p2,{"air"})
 	if #nn< 41 then return false end
 	return true
 end
@@ -245,7 +245,7 @@ mcl_mobs.register_egg ("mobs_mc:ghast", S("Ghast"), "#f9f9f9", "#bcbcbc", 0)
 local function blast_damage(pos, radius, source)
 	radius = radius * 2
 
-	for obj in minetest.objects_inside_radius(pos, radius) do
+	for obj in core.objects_inside_radius(pos, radius) do
 
 		local obj_pos = obj:get_pos()
 		local dist = vector.distance(pos, obj_pos)
@@ -263,7 +263,7 @@ end
 
 -- no damage to nodes explosion
 local function fireball_safe_boom (self, pos, strength, no_remove)
-	minetest.sound_play(self.sounds and self.sounds.explode or "tnt_explode", {
+	core.sound_play(self.sounds and self.sounds.explode or "tnt_explode", {
 		pos = pos,
 		gain = 1.0,
 		max_hear_distance = self.sounds and self.sounds.distance or 32
@@ -282,7 +282,7 @@ end
 
 -- make explosion with protection and tnt mod check
 local function fireball_boom (self, pos, strength, fire, no_remove)
-	if mobs_griefing and not minetest.is_protected(pos, "") then
+	if mobs_griefing and not core.is_protected(pos, "") then
 		mcl_explosions.explode(pos, strength, { fire = fire }, self.object)
 	else
 		fireball_safe_boom(self, pos, strength, no_remove)

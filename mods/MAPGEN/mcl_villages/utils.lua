@@ -33,9 +33,9 @@ function mcl_villages.find_surface(pos, _, quick)
 		surface_node.name == "air"
 		or surface_node.name == "ignore"
 		or surface_node.name == "mcl_core:snow"
-		or (minetest.get_item_group(surface_node.name, "deco_block") > 0)
-		or (minetest.get_item_group(surface_node.name, "plant") > 0)
-		or (minetest.get_item_group(surface_node.name, "tree") > 0)
+		or (core.get_item_group(surface_node.name, "deco_block") > 0)
+		or (core.get_item_group(surface_node.name, "plant") > 0)
+		or (core.get_item_group(surface_node.name, "tree") > 0)
 	then
 		itter = -1 -- look down
 	end
@@ -61,7 +61,7 @@ function mcl_villages.find_surface(pos, _, quick)
 				mcl_villages.debug("find_surface2: wrong layer above " .. surface_node_plus_1.name)
 			end
 		else
-			mcl_villages.debug("find_surface3: wrong surface "..surface_node.name.." at pos "..minetest.pos_to_string(p6))
+			mcl_villages.debug("find_surface3: wrong surface "..surface_node.name.." at pos "..core.pos_to_string(p6))
 		end
 
 		p6.y = p6.y + itter
@@ -95,16 +95,16 @@ end
 -------------------------------------------------------------------------------
 function mcl_villages.fill_chest(pos, pr)
 	-- initialize chest (mts chests don't have meta)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	if meta:get_string("infotext") ~= "Chest" then
 		-- For MineClone2 0.70 or before
-		-- minetest.registered_nodes["mcl_chests:chest"].on_construct(pos)
+		-- core.registered_nodes["mcl_chests:chest"].on_construct(pos)
 		--
 		-- For MineClone2 after commit 09ab1482b5 (the new entity chests)
-		minetest.registered_nodes["mcl_chests:chest_small"].on_construct(pos)
+		core.registered_nodes["mcl_chests:chest_small"].on_construct(pos)
 	end
 	-- fill chest
-	local inv = minetest.get_inventory( {type="node", pos=pos} )
+	local inv = core.get_inventory( {type="node", pos=pos} )
 
 	local function get_treasures(prand)
 		local loottable = {{
@@ -143,16 +143,16 @@ end
 -------------------------------------------------------------------------------
 function mcl_villages.initialize_furnace(pos)
 	-- find chests within radius
-	local furnacepos = minetest.find_node_near(pos,
+	local furnacepos = core.find_node_near(pos,
 		7, --radius
 		{"mcl_furnaces:furnace"})
 	-- initialize furnacepos (mts furnacepos don't have meta)
 	if furnacepos
 	then
-		local meta = minetest.get_meta(furnacepos)
+		local meta = core.get_meta(furnacepos)
 		if meta:get_string("infotext") ~= "furnace"
 		then
-			minetest.registered_nodes["mcl_furnaces:furnace"].on_construct(furnacepos)
+			core.registered_nodes["mcl_furnaces:furnace"].on_construct(furnacepos)
 		end
 	end
 end
@@ -161,16 +161,16 @@ end
 -------------------------------------------------------------------------------
 function mcl_villages.initialize_anvil(pos)
 	-- find chests within radius
-	local anvilpos = minetest.find_node_near(pos,
+	local anvilpos = core.find_node_near(pos,
 		7, --radius
 		{"mcl_anvils:anvil"})
 	-- initialize anvilpos (mts anvilpos don't have meta)
 	if anvilpos
 	then
-		local meta = minetest.get_meta(anvilpos)
+		local meta = core.get_meta(anvilpos)
 		if meta:get_string("infotext") ~= "anvil"
 		then
-			minetest.registered_nodes["mcl_anvils:anvil"].on_construct(anvilpos)
+			core.registered_nodes["mcl_anvils:anvil"].on_construct(anvilpos)
 		end
 	end
 end
@@ -242,8 +242,8 @@ end
 -- Load a schema and replace nodes in it based on biome
 function mcl_villages.substitute_materials(pos, schem_lua, pr)
 	local modified_schem_lua = schem_lua
-	local biome_data = minetest.get_biome_data(pos)
-	local biome_name = minetest.get_biome_name(biome_data.biome)
+	local biome_data = core.get_biome_data(pos)
+	local biome_name = core.get_biome_name(biome_data.biome)
 
 	if mcl_villages.biome_map[biome_name] and mcl_villages.material_substitions[mcl_villages.biome_map[biome_name]] then
 		for _, sub in pairs(mcl_villages.material_substitions[mcl_villages.biome_map[biome_name]]) do
@@ -259,13 +259,13 @@ function mcl_villages.substitute_materials(pos, schem_lua, pr)
 end
 
 local villages = {}
-local mod_storage = minetest.get_mod_storage()
+local mod_storage = core.get_mod_storage()
 
 local function lazy_load_village(name)
 	if not villages[name] then
 		local data = mod_storage:get("mcl_villages." .. name)
 		if data then
-			villages[name] = minetest.deserialize(data)
+			villages[name] = core.deserialize(data)
 		end
 	end
 end
@@ -292,12 +292,12 @@ function mcl_villages.add_village(name, data)
 	lazy_load_village(name)
 
 	if villages[name] then
-		minetest.log("info","Village already exists: " .. name )
+		core.log("info","Village already exists: " .. name )
 		return false
 	end
 
 	local new_village = {name = name, data = data}
-	mod_storage:set_string("mcl_villages." .. name, minetest.serialize(new_village))
+	mod_storage:set_string("mcl_villages." .. name, core.serialize(new_village))
 
 	return true
 end

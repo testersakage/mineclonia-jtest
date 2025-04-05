@@ -1,22 +1,22 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local function on_rotate(pos, node, user, mode)
 	if mode == screwdriver.ROTATE_FACE then
 		if node.param2 == 10 then
 			node.param2 = 13
-			minetest.swap_node(pos, node)
+			core.swap_node(pos, node)
 			return true
 		elseif node.param2 == 13 then
 			node.param2 = 10
-			minetest.swap_node(pos, node)
+			core.swap_node(pos, node)
 			return true
 		elseif node.param2 == 8 then
 			node.param2 = 15
-			minetest.swap_node(pos, node)
+			core.swap_node(pos, node)
 			return true
 		elseif node.param2 == 15 then
 			node.param2 = 8
-			minetest.swap_node(pos, node)
+			core.swap_node(pos, node)
 			return true
 		end
 	end
@@ -59,7 +59,7 @@ local commdef = {
 }
 
 -- LEVER
-minetest.register_node("mcl_lever:lever_off", table.merge(commdef, {
+core.register_node("mcl_lever:lever_off", table.merge(commdef, {
 	inventory_image = "mesecons_walllever_lever_inv.png",
 	wield_image = "mesecons_walllever_lever_inv.png",
 	mesh = "mesecons_walllever_lever_off.obj",
@@ -67,8 +67,8 @@ minetest.register_node("mcl_lever:lever_off", table.merge(commdef, {
 	_doc_items_longdesc = S("A lever is a redstone component which can be flipped on and off. It supplies redstone power to adjacent blocks while it is in the “on” state."),
 	_doc_items_usagehelp = S("Use the lever to flip it on or off."),
 	on_rightclick = function(pos, node)
-		minetest.set_node(pos, {name="mcl_lever:lever_on", param2=node.param2})
-		minetest.sound_play("mesecons_button_push", {pos=pos, max_hear_distance=16}, true)
+		core.set_node(pos, {name="mcl_lever:lever_on", param2=node.param2})
+		core.sound_play("mesecons_button_push", {pos=pos, max_hear_distance=16}, true)
 	end,
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.type ~= "node" or not placer or not placer:is_player() then
@@ -77,8 +77,8 @@ minetest.register_node("mcl_lever:lever_off", table.merge(commdef, {
 		end
 
 		local under = pointed_thing.under
-		local node = minetest.get_node(under)
-		local def = minetest.registered_nodes[node.name]
+		local node = core.get_node(under)
+		local def = core.registered_nodes[node.name]
 		if not def then return end
 		local groups = def.groups
 
@@ -89,8 +89,8 @@ minetest.register_node("mcl_lever:lever_off", table.merge(commdef, {
 		if def.buildable_to then
 			local dir = vector.subtract(pointed_thing.above, pointed_thing.under)
 			local actual = vector.subtract(under, dir)
-			local actualnode = minetest.get_node(actual)
-			def = minetest.registered_nodes[actualnode.name]
+			local actualnode = core.get_node(actual)
+			def = core.registered_nodes[actualnode.name]
 			groups = def.groups
 		end
 
@@ -112,7 +112,7 @@ minetest.register_node("mcl_lever:lever_off", table.merge(commdef, {
 		local above = pointed_thing.above
 		local dir = vector.subtract(under, above)
 		local tau = math.pi*2
-		local wdir = minetest.dir_to_facedir(dir, true)
+		local wdir = core.dir_to_facedir(dir, true)
 		if dir.y ~= 0 then
 			local yaw = placer:get_look_horizontal()
 			if (yaw > tau/8 and yaw < (tau/8)*3) or (yaw < (tau/8)*7 and yaw > (tau/8)*5) then
@@ -131,34 +131,34 @@ minetest.register_node("mcl_lever:lever_off", table.merge(commdef, {
 		end
 
 		local idef = itemstack:get_definition()
-		local itemstack, success = minetest.item_place_node(itemstack, placer, pointed_thing, wdir)
+		local itemstack, success = core.item_place_node(itemstack, placer, pointed_thing, wdir)
 
 		if success then
 			if idef.sounds and idef.sounds.place then
-				minetest.sound_play(idef.sounds.place, {pos=above, gain=1}, true)
+				core.sound_play(idef.sounds.place, {pos=above, gain=1}, true)
 			end
 		end
 		return itemstack
 	end,
 }))
 
-minetest.register_node("mcl_lever:lever_on", table.merge(commdef, {
+core.register_node("mcl_lever:lever_on", table.merge(commdef, {
 	drawtype = "mesh",
 	mesh = "mesecons_walllever_lever_on.obj",
 	groups = table.merge(commdef.groups, {not_in_creative_inventory = 1}),
 	_doc_items_create_entry = false,
 	on_rightclick = function(pos, node)
-		minetest.set_node(pos, {name="mcl_lever:lever_off", param2=node.param2})
-		minetest.sound_play("mesecons_button_push", {pos=pos, max_hear_distance=16, pitch=0.9}, true)
+		core.set_node(pos, {name="mcl_lever:lever_off", param2=node.param2})
+		core.sound_play("mesecons_button_push", {pos=pos, max_hear_distance=16, pitch=0.9}, true)
 	end,
 	_mcl_redstone = table.merge(commdef._mcl_redstone, {
 		get_power = function(node, dir)
-			return 15, minetest.facedir_to_dir(node.param2) == dir
+			return 15, core.facedir_to_dir(node.param2) == dir
 		end,
 	}),
 }))
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_lever:lever_off",
 	recipe = {
 		{"mcl_core:stick"},
@@ -166,6 +166,6 @@ minetest.register_craft({
 	}
 })
 
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_lever:lever_off", "nodes", "mcl_lever:lever_on")
 end

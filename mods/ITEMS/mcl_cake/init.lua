@@ -5,7 +5,7 @@
 
 local CAKE_HUNGER_POINTS = 2
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local cake_texture = {"cake_top.png","cake_bottom.png","cake_inner.png","cake_side.png","cake_side.png","cake_side.png"}
 local slice_1 = { -7/16, -8/16, -7/16, -5/16, 0/16, 7/16}
@@ -17,7 +17,7 @@ local slice_6 = { -7/16, -8/16, -7/16, 5/16, 0/16, 7/16}
 
 local full_cake = { -7/16, -8/16, -7/16, 7/16, 0/16, 7/16}
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_cake:cake",
 	recipe = {
 		{"mcl_mobitems:milk_bucket", "mcl_mobitems:milk_bucket", "mcl_mobitems:milk_bucket"},
@@ -31,7 +31,7 @@ minetest.register_craft({
 	},
 })
 
-minetest.register_node("mcl_cake:cake", {
+core.register_node("mcl_cake:cake", {
 	description = S("Cake"),
 	_tt_help = S("With 7 tasty slices!").."\n"..S("Hunger points: +@1 per slice", CAKE_HUNGER_POINTS),
 	_doc_items_longdesc = S("Cakes can be placed and eaten to restore hunger points. A cake has 7 slices. Each slice restores 2 hunger points and 0.4 saturation points. Cakes will be destroyed when dug or when the block below them is broken."),
@@ -59,14 +59,14 @@ minetest.register_node("mcl_cake:cake", {
 	on_rightclick = function(pos, node, clicker)
 		-- Cake is subject to protection
 		local name = clicker:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return
 		end
 		-- Check if we were allowed to eat
-		if node.name == "mcl_cake:cake" or minetest.is_creative_enabled(clicker:get_player_name()) then
-			minetest.add_node(pos,{type="node",name="mcl_cake:cake_6",param2=0})
-			minetest.do_item_eat(2, ItemStack(), ItemStack("mcl_cake:cake"), clicker, {type="nothing"})
+		if node.name == "mcl_cake:cake" or core.is_creative_enabled(clicker:get_player_name()) then
+			core.add_node(pos,{type="node",name="mcl_cake:cake_6",param2=0})
+			core.do_item_eat(2, ItemStack(), ItemStack("mcl_cake:cake"), clicker, {type="nothing"})
 		end
 	end,
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
@@ -84,34 +84,34 @@ local register_slice = function(level, nodebox, desc)
 	if level > 1 then
 		on_rightclick = function(pos, node, clicker)
 			local name = clicker:get_player_name()
-			if minetest.is_protected(pos, name) then
-				minetest.record_protection_violation(pos, name)
+			if core.is_protected(pos, name) then
+				core.record_protection_violation(pos, name)
 				return
 			end
 			-- Check if we were allowed to eat
-			if node.name == this or minetest.is_creative_enabled(clicker:get_player_name()) then
-				minetest.add_node(pos,{type="node",name=after_eat,param2=0})
-				minetest.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack(this), clicker, {type="nothing"})
+			if node.name == this or core.is_creative_enabled(clicker:get_player_name()) then
+				core.add_node(pos,{type="node",name=after_eat,param2=0})
+				core.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack(this), clicker, {type="nothing"})
 			end
 		end
 	else
 		-- Last slice
 		on_rightclick = function(pos, node, clicker)
 			local name = clicker:get_player_name()
-			if minetest.is_protected(pos, name) then
-				minetest.record_protection_violation(pos, name)
+			if core.is_protected(pos, name) then
+				core.record_protection_violation(pos, name)
 				return
 			end
 			-- Check if we were allowed to eat
-			if node.name == this or minetest.is_creative_enabled(clicker:get_player_name()) then
-				minetest.remove_node(pos)
-				minetest.check_for_falling(pos)
-				minetest.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack("mcl_cake:cake_1"), clicker, {type="nothing"})
+			if node.name == this or core.is_creative_enabled(clicker:get_player_name()) then
+				core.remove_node(pos)
+				core.check_for_falling(pos)
+				core.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack("mcl_cake:cake_1"), clicker, {type="nothing"})
 			end
 		end
 	end
 
-	minetest.register_node(this, {
+	core.register_node(this, {
 		description = desc,
 		_doc_items_create_entry = false,
 		tiles = cake_texture,

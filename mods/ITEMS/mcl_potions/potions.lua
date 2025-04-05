@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_potions.registered_potions = {}
 -- shorthand
@@ -55,9 +55,9 @@ local function generate_on_use(vanish, effects, _, on_use, custom_effect)
 	return function(itemstack, user, pointed_thing)
 		if pointed_thing.type == "node" then
 			if user and not user:get_player_control().sneak then
-				local node = minetest.get_node(pointed_thing.under)
-				if minetest.registered_nodes[node.name] and minetest.registered_nodes[node.name].on_rightclick then
-					return minetest.registered_nodes[node.name].on_rightclick(pointed_thing.under, node, user, itemstack) or itemstack
+				local node = core.get_node(pointed_thing.under)
+				if core.registered_nodes[node.name] and core.registered_nodes[node.name].on_rightclick then
+					return core.registered_nodes[node.name].on_rightclick(pointed_thing.under, node, user, itemstack) or itemstack
 				end
 			end
 		elseif pointed_thing.type == "object" then
@@ -87,7 +87,7 @@ local function generate_on_use(vanish, effects, _, on_use, custom_effect)
 		else
 			replacement = "mcl_potions:glass_bottle"
 		end
-		itemstack = minetest.do_item_eat(0, replacement, itemstack,
+		itemstack = core.do_item_eat(0, replacement, itemstack,
 						 user, pointed_thing)
 		if vanish or itemstack then mcl_potions._use_potion(user) end
 
@@ -155,7 +155,7 @@ end
 -- custom_effect - function(object, level, plus) - called when the potion effects are applied, returns true on success
 -- custom_splash_effect - function(pos, level) - called when the splash potion explodes, returns true on success
 function mcl_potions.register_potion(def)
-	local modname = minetest.get_current_modname()
+	local modname = core.get_current_modname()
 	local name = def.name
 	assert(name ~= nil, "Unable to register potion: name is nil")
 	assert(type(name) == "string", "Unable to register potion: name is not a string")
@@ -234,7 +234,7 @@ function mcl_potions.register_potion(def)
 	local itemname = modname .. ":" .. name
 
 	pdef._get_all_virtual_items = generate_get_all_virtual_items_func(itemname, pdef)
-	minetest.register_craftitem (itemname, pdef)
+	core.register_craftitem (itemname, pdef)
 
 	if def.has_splash or def.has_splash == nil then
 		local splash_desc = S("Splash @1", pdef.description)
@@ -350,7 +350,7 @@ end
 -- ╚═════╝░╚══════╝╚═╝░░░░░╚═╝╚═╝░░╚══╝╚═╝░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
 
 
-minetest.register_craftitem("mcl_potions:dragon_breath", {
+core.register_craftitem("mcl_potions:dragon_breath", {
 	description = S("Dragon's Breath"),
 	_doc_items_longdesc = S("This item is used in brewing and can be combined with splash potions to create lingering potions."),
 	inventory_image = "mcl_potions_dragon_breath.png",
@@ -713,21 +713,21 @@ end
 local compat = "mcl_potions:compat_potion"
 local compat_arrow = "mcl_potions:compat_arrow"
 local compat_def = {
-	description = S("Unknown Potion") .. "\n" .. minetest.colorize("#ff0", S("Right-click to identify")),
+	description = S("Unknown Potion") .. "\n" .. core.colorize("#ff0", S("Right-click to identify")),
 	image = "mcl_potions_potion_overlay.png^[colorize:#00F:127^mcl_potions_potion_bottle.png^mcl_unknown.png",
 	groups = {not_in_creative_inventory = 1},
 	on_secondary_use = replace_legacy_potion,
 	on_place = replace_legacy_potion,
 }
 local compat_arrow_def = {
-	description = S("Unknown Tipped Arrow") .. "\n" .. minetest.colorize("#ff0", S("Right-click to identify")),
+	description = S("Unknown Tipped Arrow") .. "\n" .. core.colorize("#ff0", S("Right-click to identify")),
 	image = "mcl_bows_arrow_inv.png^(mcl_potions_arrow_inv.png^[colorize:#FFF:100)^mcl_unknown.png",
 	groups = {not_in_creative_inventory = 1},
 	on_secondary_use = replace_legacy_potion,
 	on_place = replace_legacy_potion,
 }
-minetest.register_craftitem(compat, table.copy(compat_def))
-minetest.register_craftitem(compat_arrow, table.copy(compat_arrow_def))
+core.register_craftitem(compat, table.copy(compat_def))
+core.register_craftitem(compat_arrow, table.copy(compat_arrow_def))
 
 local old_potions_plus = {
 	"fire_resistance", "water_breathing", "invisibility", "regeneration", "poison",
@@ -739,14 +739,14 @@ local old_potions_2 = {
 }
 
 for _, name in pairs(old_potions_2) do
-	minetest.register_craftitem("mcl_potions:" .. name .. "_2", table.copy(compat_def))
-	minetest.register_craftitem("mcl_potions:" .. name .. "_2_splash", table.copy(compat_def))
-	minetest.register_craftitem("mcl_potions:" .. name .. "_2_lingering", table.copy(compat_def))
-	minetest.register_craftitem("mcl_potions:" .. name .. "_2_arrow", table.copy(compat_arrow_def))
+	core.register_craftitem("mcl_potions:" .. name .. "_2", table.copy(compat_def))
+	core.register_craftitem("mcl_potions:" .. name .. "_2_splash", table.copy(compat_def))
+	core.register_craftitem("mcl_potions:" .. name .. "_2_lingering", table.copy(compat_def))
+	core.register_craftitem("mcl_potions:" .. name .. "_2_arrow", table.copy(compat_arrow_def))
 end
 for _, name in pairs(old_potions_plus) do
-	minetest.register_craftitem("mcl_potions:" .. name .. "_plus", table.copy(compat_def))
-	minetest.register_craftitem("mcl_potions:" .. name .. "_plus_splash", table.copy(compat_def))
-	minetest.register_craftitem("mcl_potions:" .. name .. "_plus_lingering", table.copy(compat_def))
-	minetest.register_craftitem("mcl_potions:" .. name .. "_plus_arrow", table.copy(compat_arrow_def))
+	core.register_craftitem("mcl_potions:" .. name .. "_plus", table.copy(compat_def))
+	core.register_craftitem("mcl_potions:" .. name .. "_plus_splash", table.copy(compat_def))
+	core.register_craftitem("mcl_potions:" .. name .. "_plus_lingering", table.copy(compat_def))
+	core.register_craftitem("mcl_potions:" .. name .. "_plus_arrow", table.copy(compat_arrow_def))
 end

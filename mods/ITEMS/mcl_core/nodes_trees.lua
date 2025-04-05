@@ -1,8 +1,8 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 -- All required translation strings are currently generated in mcl_trees
--- local S = minetest.get_translator(minetest.get_current_modname())
+-- local S = core.get_translator(core.get_current_modname())
 
 mcl_trees.register_wood("oak",{
 	readable_name = "Oak",
@@ -134,10 +134,10 @@ mcl_trees.register_wood("spruce",{
 	sapling = {
 		_after_grow = function(pos, _, is_2by2)
 			if is_2by2 then
-				local nn = minetest.find_nodes_in_area_under_air(vector.offset(pos,-6,-6,-6), vector.offset(pos, 6, 6, 6), {"group:dirt"})
+				local nn = core.find_nodes_in_area_under_air(vector.offset(pos,-6,-6,-6), vector.offset(pos, 6, 6, 6), {"group:dirt"})
 				table.sort(nn, function(a, b) return vector.distance(pos, a) < vector.distance(pos, b) end)
 				for i = 1, math.random(math.min(#nn, 2), #nn) do
-					minetest.set_node(nn[i], {name="mcl_core:podzol"})
+					core.set_node(nn[i], {name="mcl_core:podzol"})
 				end
 			end
 		end

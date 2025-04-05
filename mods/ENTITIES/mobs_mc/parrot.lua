@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
 --###################
@@ -86,7 +86,7 @@ function parrot:on_rightclick (clicker)
 	local name = item:get_name()
 	-- Kill parrot if fed with cookie
 	if item and name == "mcl_farming:cookie" then
-		minetest.sound_play ("mobs_mc_animal_eat_generic", {
+		core.sound_play ("mobs_mc_animal_eat_generic", {
 			object = self.object,
 			max_hear_distance = 16,
 		}, true)
@@ -98,7 +98,7 @@ function parrot:on_rightclick (clicker)
 		mcl_damage.finish_reason (mcl_reason)
 		self:receive_damage (mcl_reason, 65535.0)
 		mcl_potions.give_effect_by_level ("poison", self.object, 900, 10)
-		if not minetest.is_creative_enabled (clicker:get_player_name()) then
+		if not core.is_creative_enabled (clicker:get_player_name()) then
 			item:take_item ()
 			clicker:set_wielded_item (item)
 		end
@@ -145,14 +145,14 @@ local function table_get_rand(tbl)
 end
 
 local function get_random_mob_sound()
-	local t = table.copy(minetest.registered_entities)
+	local t = table.copy(core.registered_entities)
 	table.shuffle(t)
 	for _,e in pairs(t) do
 		if e.is_mob and e.sounds and #e.sounds > 0 then
 			return table_get_rand(e.sounds)
 		end
 	end
-	return minetest.registered_entities["mobs_mc:parrot"].sounds.random
+	return core.registered_entities["mobs_mc:parrot"].sounds.random
 end
 
 local function imitate_mob_sound(self,mob)
@@ -160,7 +160,7 @@ local function imitate_mob_sound(self,mob)
 	if not snd or mob.name == "mobs_mc:parrot" or math.random(20) == 1 then
 		snd = get_random_mob_sound()
 	end
-	return minetest.sound_play(snd, {
+	return core.sound_play(snd, {
 		pos = self.object:get_pos(),
 		gain = 1.0,
 		pitch = 2.5,
@@ -171,7 +171,7 @@ end
 local function check_mobimitate(self,dtime)
 	if not self:check_timer("mobimitate", 30) then return end
 
-	for o in minetest.objects_inside_radius(self.object:get_pos(), 20) do
+	for o in core.objects_inside_radius(self.object:get_pos(), 20) do
 		local l = o:get_luaentity()
 		if l and l.is_mob and l.name ~= "mobs_mc:parrot" then
 			imitate_mob_sound(self,l)
@@ -227,10 +227,10 @@ function parrot:check_perch (self_pos, dtime)
 			self.object:set_detach ()
 			return false
 		end
-		local n1 = minetest.get_node (vector.offset (self_pos, 0, -0.6, 0)).name
-		local n2 = minetest.get_node (vector.offset (self_pos, 0, 0, 0)).name
-		if n1 == "air" or minetest.get_item_group (n2,"water") > 0
-			or minetest.get_item_group (n2,"lava") > 0 then
+		local n1 = core.get_node (vector.offset (self_pos, 0, -0.6, 0)).name
+		local n2 = core.get_node (vector.offset (self_pos, 0, 0, 0)).name
+		if n1 == "air" or core.get_item_group (n2,"water") > 0
+			or core.get_item_group (n2,"lava") > 0 then
 			self.object:set_detach()
 			self.perching = false
 			self.perch_cooldown = 1.0
@@ -238,7 +238,7 @@ function parrot:check_perch (self_pos, dtime)
 		end
 		return true
 	elseif self.owner and self.perch_cooldown == 0 then
-		local owner = minetest.get_player_by_name (self.owner)
+		local owner = core.get_player_by_name (self.owner)
 		if not owner then
 			return false
 		end
@@ -256,7 +256,7 @@ function parrot:airborne_pacing_target (pos, width, height, groups)
 		local aa = vector.offset (pos, -3, -6, -3)
 		local bb = vector.offset (pos, 3, 6, 3)
 		local nodes
-			= minetest.find_nodes_in_area_under_air (aa, bb, {"group:leaves"})
+			= core.find_nodes_in_area_under_air (aa, bb, {"group:leaves"})
 		if #nodes > 0 then
 			return vector.offset (nodes[math.random (#nodes)], 0, 1, 0)
 		end
@@ -305,7 +305,7 @@ local function parrot_check_dance (self, self_pos, dtime, moveresult)
 	-- Search for playing jukeboxes nearby.
 	for hash, track in pairs (mcl_jukebox.active_tracks) do
 		if track then
-			local node = minetest.get_position_from_hash (hash)
+			local node = core.get_position_from_hash (hash)
 			if vector.distance (self_pos, node) <= 3.0 then
 				is_party_parrot = true
 			end

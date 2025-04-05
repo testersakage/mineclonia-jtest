@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local fourdirs = {
 	[0] = vector.new(0, 0, 1),
@@ -10,14 +10,14 @@ local fourdirs = {
 function mcl_redstone.update_comparators(pos)
 	for _, dir in pairs(fourdirs) do
 		local pos2 = pos:add(dir)
-		local node2 = minetest.get_node(pos2)
+		local node2 = core.get_node(pos2)
 
-		if dir == minetest.fourdir_to_dir(node2.param2) and node2.name:find("mcl_comparators:comparator_") then
+		if dir == core.fourdir_to_dir(node2.param2) and node2.name:find("mcl_comparators:comparator_") then
 			mcl_redstone.update_node(pos2)
 		elseif mcl_redstone._solid_opaque_tab[node2.name] then
 			local pos3 = pos2:add(dir)
-			local node3 = minetest.get_node(pos3)
-			if dir == minetest.fourdir_to_dir(node3.param2) and node3.name:find("mcl_comparators:comparator_") then
+			local node3 = core.get_node(pos3)
+			if dir == core.fourdir_to_dir(node3.param2) and node3.name:find("mcl_comparators:comparator_") then
 				mcl_redstone.update_node(pos3)
 			end
 		end
@@ -29,7 +29,7 @@ local function get_inventory_data(pos, lists)
 		lists = { "main" }
 	end
 
-	local inv = minetest.get_inventory({type="node", pos=pos})
+	local inv = core.get_inventory({type="node", pos=pos})
 
 	if not inv then return 0 end
 
@@ -83,7 +83,7 @@ local function measure_constant(power_level)
 end
 
 local function measure_lectern(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local pages = tonumber(meta:get_string("pages")) or 1
 	local page = tonumber(meta:get_string("page")) or 1
 	local power = 15
@@ -95,7 +95,7 @@ local function measure_lectern(pos)
 end
 
 local function measure_jukebox(pos)
-	local inv = minetest.get_inventory({type="node", pos=pos})
+	local inv = core.get_inventory({type="node", pos=pos})
 	local record = inv and inv:get_stack("main", 1)
 	local def = record and mcl_jukebox.registered_records[record:get_name()]
 	return def and def.comparator_signal or 0
@@ -163,8 +163,8 @@ local measure_tab = {
 -- 2: true, iff node has opaque group set to non zero
 -- 3/4: node and nodedef (to avoid looking them up again later)
 local function is_measurable_or_opaque(pos)
-	local node = minetest.get_node_or_nil(pos)
-	local def = node and minetest.registered_nodes[node.name]
+	local node = core.get_node_or_nil(pos)
+	local def = node and core.registered_nodes[node.name]
 
 	if not def then return nil, false, nil, nil end
 
@@ -267,12 +267,12 @@ for _, mode in pairs{"comp", "sub"} do
 			drop = "mcl_comparators:comparator_off_comp",
 			on_rightclick = function (pos, node, clicker)
 				local protname = clicker:get_player_name()
-				if minetest.is_protected(pos, protname) then
-					minetest.record_protection_violation(pos, protname)
+				if core.is_protected(pos, protname) then
+					core.record_protection_violation(pos, protname)
 					return
 				end
 				local newmode = mode == "comp" and "sub" or "comp"
-				minetest.set_node(pos, {
+				core.set_node(pos, {
 					name = "mcl_comparators:comparator_"..state.."_"..newmode,
 					param2 = node.param2,
 				})
@@ -284,16 +284,16 @@ for _, mode in pairs{"comp", "sub"} do
 					return true
 				end,
 				get_power = function(node, dir)
-					local fourdir = minetest.dir_to_fourdir(dir)
+					local fourdir = core.dir_to_fourdir(dir)
 					if not fourdir or dir.y ~= 0 then
 						return 0
 					end
 					return node.param2 % 4 == fourdir and math.floor(node.param2 / 4) or 0, true
 				end,
 				update = function(pos, node)
-					local back = -minetest.fourdir_to_dir(node.param2)
-					local left = minetest.fourdir_to_dir((node.param2 - 1) % 4)
-					local right = minetest.fourdir_to_dir((node.param2 + 1) % 4)
+					local back = -core.fourdir_to_dir(node.param2)
+					local left = core.fourdir_to_dir((node.param2 - 1) % 4)
+					local right = core.fourdir_to_dir((node.param2 + 1) % 4)
 					-- side input does not accept power from opaque nodes
 					local side_power = math.max(
 						mcl_redstone.get_power(pos, left, "direct"),
@@ -360,11 +360,11 @@ for _, mode in pairs{"comp", "sub"} do
 			doc.add_entry_alias("nodes", "mcl_comparators:comparator_"..state.."_"..mode, "nodes", nodename)
 		end
 
-		minetest.register_node(nodename, nodedef)
+		core.register_node(nodename, nodedef)
 	end
 end
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_comparators:comparator_off_comp",
 	recipe = {
 		{ "",      "mcl_redstone_torch:redstone_torch_on", ""      },
@@ -379,7 +379,7 @@ local function check_for_update(pos, node)
 	end
 	-- double chest support
 	local other_pos
-	local container_type = minetest.get_item_group(node.name, "container")
+	local container_type = core.get_item_group(node.name, "container")
 	if container_type == 5 then
 		other_pos = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
 	elseif container_type == 6 then
@@ -390,11 +390,11 @@ local function check_for_update(pos, node)
 	end
 end
 
-minetest.register_on_dignode(function (pos, node)
+core.register_on_dignode(function (pos, node)
 	check_for_update(pos, node)
 end)
 
-minetest.register_on_placenode(function (pos, newnode, _, oldnode)
+core.register_on_placenode(function (pos, newnode, _, oldnode)
 	if (newnode and measure_tab[newnode.name]) or (oldnode and measure_tab[oldnode.name]) then
 		mcl_redstone.update_comparators(pos)
 	end
@@ -408,11 +408,11 @@ mcl_pistons.register_on_move(function(moved_nodes)
 	end
 end)
 
-minetest.register_on_mods_loaded(function()
-	for name, def in pairs(minetest.registered_nodes) do
-		if minetest.get_item_group(name, "shulker_box") ~= 0 then
+core.register_on_mods_loaded(function()
+	for name, def in pairs(core.registered_nodes) do
+		if core.get_item_group(name, "shulker_box") ~= 0 then
 			measure_tab[name] = measure_inventory
-		elseif minetest.get_item_group(name, "brewing_stand") ~= 0 then
+		elseif core.get_item_group(name, "brewing_stand") ~= 0 then
 			measure_tab[name] = measure_brewing_stand
 		elseif  -- comparator_signal == 0 still marks the node as comparator measurable
 			def.groups and def.groups.comparator_signal then

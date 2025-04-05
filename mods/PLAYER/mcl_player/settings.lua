@@ -1,7 +1,7 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local D = mcl_util.get_dynamic_translator(minetest.get_current_modname())
-local C = minetest.colorize
-local F = minetest.formspec_escape
+local S = core.get_translator(core.get_current_modname())
+local D = mcl_util.get_dynamic_translator(core.get_current_modname())
+local C = core.colorize
+local F = core.formspec_escape
 
 local section_name_color = "#FFFFFF"
 local setting_name_color = "#000000"
@@ -64,13 +64,13 @@ local player_settings = mcl_player.registered_player_settings
 
 function mcl_player.register_player_setting(name, def)
 	if player_settings[name] then
-		minetest.log("error", "[mcl_player] duplicate player setting registration for " .. name .. ": " .. debug.traceback())
+		core.log("error", "[mcl_player] duplicate player setting registration for " .. name .. ": " .. debug.traceback())
 	elseif not def.short_desc then
-		minetest.log("error", "[mcl_player] player setting " .. name .. " has no description:" .. debug.traceback())
+		core.log("error", "[mcl_player] player setting " .. name .. " has no description:" .. debug.traceback())
 	elseif not (def.type and setting_types[def.type]) then
-		minetest.log("error", "[mcl_player] player setting " .. name .. " has invalid type " .. tostring(def.type) .. ":" .. debug.traceback())
+		core.log("error", "[mcl_player] player setting " .. name .. " has invalid type " .. tostring(def.type) .. ":" .. debug.traceback())
 	elseif (def.type == "enum" or def.type == "slider") and not def.options then
-		minetest.log("error", "[mcl_player] enum/slider player setting " .. name .. " has no options:" .. debug.traceback())
+		core.log("error", "[mcl_player] enum/slider player setting " .. name .. " has no options:" .. debug.traceback())
 	else
 		if def.type == "slider" then
 			local options = {}
@@ -337,10 +337,10 @@ function mcl_player.show_player_settings(player)
 	if not player or not player:is_player() then return end
 
 	local formspec = generate_settings_formspec(player)
-	minetest.show_formspec(player:get_player_name(), "mcl_player:settings_formspec", formspec)
+	core.show_formspec(player:get_player_name(), "mcl_player:settings_formspec", formspec)
 end
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 		if fields.__mcl_player_settings then
 			mcl_player.show_player_settings(player)
 			return false
@@ -364,7 +364,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 							refresh_fs = true
 						end
 					elseif def.type == "slider" then
-						local event = minetest.explode_scrollbar_event(value)
+						local event = core.explode_scrollbar_event(value)
 						if event.type == "CHG" then
 							refresh_fs = mcl_player.get_player_setting(player, name) == nil
 							local option = def.options[tonumber(event.value)]
@@ -378,7 +378,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 			if refresh_fs then
 				if fields._settings_scroll and player_fs_info[player] then
-					local event = minetest.explode_scrollbar_event(fields._settings_scroll)
+					local event = core.explode_scrollbar_event(fields._settings_scroll)
 					player_fs_info[player].scroll = event.value
 				end
 				mcl_player.show_player_settings(player)

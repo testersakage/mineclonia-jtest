@@ -72,16 +72,16 @@ local modchannels = {}
 local client_states = {}
 mcl_serverplayer.client_states = client_states
 
-minetest.register_on_joinplayer (function (player)
+core.register_on_joinplayer (function (player)
 	assert (not modchannels[player])
 	local channel = "mcl_player:" .. player:get_player_name ()
-	modchannels[player] = minetest.mod_channel_join (channel)
+	modchannels[player] = core.mod_channel_join (channel)
 	client_states[player] = {
 		handshake_status = "want_hello",
 	}
 end)
 
-minetest.register_on_leaveplayer (function (player)
+core.register_on_leaveplayer (function (player)
 	assert (modchannels[player])
 	modchannels[player]:leave ()
 	modchannels[player] = nil
@@ -135,7 +135,7 @@ local CLIENTBOUND_PLAYER_VITALS = 'AR'
 local MAX_PAYLOAD = 65533
 
 function mcl_serverplayer.send_player_capabilities (player, caps)
-	local caps = minetest.write_json (caps)
+	local caps = core.write_json (caps)
 	assert (#caps <= MAX_PAYLOAD, "oversized ClientboundPlayerCapabilities")
 	modchannels[player]:send_all (table.concat ({
 		CLIENTBOUND_PLAYER_CAPABILITIES,
@@ -150,7 +150,7 @@ function mcl_serverplayer.send_rocket_use (player, duration)
 end
 
 function mcl_serverplayer.send_register_attribute_modifier (player, modifier)
-	local modifier = minetest.write_json (modifier)
+	local modifier = core.write_json (modifier)
 	assert (#modifier <= MAX_PAYLOAD, "oversized ClientboundRegisterAttributeModifier")
 	modchannels[player]:send_all (table.concat ({
 		CLIENTBOUND_REGISTER_ATTRIBUTE_MODIFIER, modifier,
@@ -158,7 +158,7 @@ function mcl_serverplayer.send_register_attribute_modifier (player, modifier)
 end
 
 function mcl_serverplayer.send_remove_attribute_modifier (player, field, id)
-	local modifier = minetest.write_json ({
+	local modifier = core.write_json ({
 		field = field,
 		id = id,
 	})
@@ -170,7 +170,7 @@ function mcl_serverplayer.send_remove_attribute_modifier (player, field, id)
 end
 
 function mcl_serverplayer.send_register_status_effect (player, effect)
-	local effect = minetest.write_json (effect)
+	local effect = core.write_json (effect)
 	assert (#effect <= MAX_PAYLOAD, "oversized ClientboundRegisterStatusEffect")
 	modchannels[player]:send_all (table.concat ({
 		CLIENTBOUND_REGISTER_STATUS_EFFECT,
@@ -306,9 +306,9 @@ local keys_to_copy = {
 	"climbable",
 }
 
-minetest.register_on_mods_loaded (function ()
+core.register_on_mods_loaded (function ()
 	local tbl = {}
-	for name, def in pairs (minetest.registered_nodes) do
+	for name, def in pairs (core.registered_nodes) do
 		local def1 = {}
 		for _, key in pairs (keys_to_copy) do
 			def1[key] = def[key]
@@ -338,7 +338,7 @@ local function process_serverbound_hello (player, state, payload)
 		else
 			serverbound_handshake.item_defs = nil
 		end
-		local payload = minetest.write_json (serverbound_handshake)
+		local payload = core.write_json (serverbound_handshake)
 		if (#payload % MAX_PAYLOAD) == 0 then
 			-- Insert trailing whitespace so that partial
 			-- payloads may always be correctly terminated.
@@ -366,7 +366,7 @@ local function process_serverbound_movement_state (player, state, payload)
 	if state.handshake_status == "want_hello" then
 		error ("ServerboundMovementState received before completion of handshake")
 	end
-	local json = minetest.parse_json (payload)
+	local json = core.parse_json (payload)
 	if not json or type (json) ~= "table" then
 		error ("Invalid ServerboundMovementState payload")
 	end
@@ -412,7 +412,7 @@ local function receive_modchannel_message_1 (player, message)
 		if state.handshake_status == "want_acknowledgment" then
 			local blurb = "Established CSM connection with client "
 				.. player:get_player_name ()
-			minetest.log ("action", blurb)
+			core.log ("action", blurb)
 			state.handshake_status = "complete"
 
 			if state.proto >= 1 then
@@ -438,7 +438,7 @@ local function receive_modchannel_message_1 (player, message)
 		elseif msgtype == SERVERBOUND_PLAYERANIM then
 			mcl_serverplayer.handle_playeranim (player, state, payload)
 		elseif msgtype == SERVERBOUND_DAMAGE then
-			local json = minetest.parse_json (payload)
+			local json = core.parse_json (payload)
 			if not json or type (json) ~= "table" then
 				error ("Invalid movement damage payload")
 			end
@@ -519,7 +519,7 @@ local function receive_modchannel_message_1 (player, message)
 			local vel = vector.new (vx, vy, vz)
 			mcl_serverplayer.handle_move_vehicle (player, state, id, tsc, pos, vel)
 		elseif msgtype == SERVERBOUND_CONFIGURE_VEHICLE then
-			local config = minetest.parse_json (payload)
+			local config = core.parse_json (payload)
 			if not config then
 				error ("Invalid configuration")
 			end
@@ -553,7 +553,7 @@ local function receive_modchannel_message_1 (player, message)
 				       .. "delivered when protocol version >= 1")
 			end
 
-			local payload = minetest.parse_json (payload)
+			local payload = core.parse_json (payload)
 			if type (payload) ~= "table"
 				or type (payload.stack) ~= "string"
 				or type (payload.index) ~= "number" then
@@ -583,7 +583,7 @@ local function receive_modchannel_message_1 (player, message)
 				error ("Attempting to consume non-edible item")
 			end
 		else
-			minetest.log ("warning", table.concat ({
+			core.log ("warning", table.concat ({
 				"Client ", player:get_player_name (), " delivered",
 				" unknown message of type '", msgtype,
 				"'",
@@ -594,21 +594,21 @@ end
 
 local function receive_modchannel_message (channel_name, sender, message)
 	if channel_name == "mcl_player:" .. sender then
-		local player = minetest.get_player_by_name (sender)
+		local player = core.get_player_by_name (sender)
 		if player then
 			local _, err
 				= pcall (receive_modchannel_message_1, player, message)
 			if err then
 				local reason = "Malformed serverbound message: " .. dump (err)
-				minetest.kick_player (sender, reason)
+				core.kick_player (sender, reason)
 			end
 		end
 	end
 end
 
-minetest.register_on_modchannel_message (receive_modchannel_message)
+core.register_on_modchannel_message (receive_modchannel_message)
 
-local modpath = minetest.get_modpath (minetest.get_current_modname ())
+local modpath = core.get_modpath (core.get_current_modname ())
 dofile (modpath .. "/player.lua")
 dofile (modpath .. "/items.lua")
 dofile (modpath .. "/mount.lua")

@@ -38,7 +38,7 @@ mcl_damage = {
 	}
 }
 
-local damage_enabled = minetest.settings:get_bool("enabled_damage",true)
+local damage_enabled = core.settings:get_bool("enabled_damage",true)
 
 function mcl_damage.register_modifier(func, priority)
 	table.insert(mcl_damage.modifiers, {func = func, priority = priority or 0})
@@ -129,10 +129,10 @@ function mcl_damage.from_mt(mt_reason)
 		elseif mt_reason.type == "punch" then
 			mcl_damage.from_punch(mcl_reason, mt_reason.object)
 		elseif mt_reason.type == "node_damage" and mt_reason.node then
-			if minetest.get_item_group(mt_reason.node, "fire") > 0 then
+			if core.get_item_group(mt_reason.node, "fire") > 0 then
 				mcl_reason.type = "in_fire"
 			end
-			if minetest.get_item_group(mt_reason.node, "lava") > 0 then
+			if core.get_item_group(mt_reason.node, "lava") > 0 then
 				mcl_reason.type = "lava"
 			end
 		end
@@ -157,7 +157,7 @@ end
 --- Player damage.
 
 local function emulate_damage_tick (player)
-	minetest.sound_play ("player_damage",
+	core.sound_play ("player_damage",
 			{ to_player = player:get_player_name (), gain = 0.5, },
 			true)
 end
@@ -184,7 +184,7 @@ function mcl_damage.damage_player (player, amount, mcl_reason)
 	-- internal HPs match.
 
 	if math.ceil (mcl_health) ~= engine_hp then
-	  minetest.log ("warning", ("Engine health of player "
+	  core.log ("warning", ("Engine health of player "
 				.. player:get_player_name ()
 				.. " disagrees with MCL health "
 				.. mcl_health ..""))
@@ -215,7 +215,7 @@ function mcl_damage.heal_player (player, amount)
 	local mcl_health = meta:get_float ("mcl_health")
 	local engine_hp = player:get_hp ()
 	if math.ceil (mcl_health) ~= engine_hp then
-	  minetest.log ("warning", ("Engine health of player "
+	  core.log ("warning", ("Engine health of player "
 				.. player:get_player_name ()
 				.. " disagrees with MCL health "
 				.. mcl_health ..""))
@@ -238,7 +238,7 @@ function mcl_damage.get_hp (player)
 	local mcl_health = meta:get_float ("mcl_health")
 	local engine_hp = player:get_hp ()
 	if math.ceil (mcl_health) ~= engine_hp then
-	  minetest.log ("warning", ("Engine health of player "
+	  core.log ("warning", ("Engine health of player "
 				.. player:get_player_name ()
 				.. " disagrees with MCL health "
 				.. mcl_health ..""))
@@ -248,7 +248,7 @@ function mcl_damage.get_hp (player)
 	return mcl_health
 end
 
-minetest.register_on_player_hpchange(function(player, hp_change, mt_reason)
+core.register_on_player_hpchange(function(player, hp_change, mt_reason)
 	if not damage_enabled then return 0 end
 	-- Take engine damage modifications from mcl_damage at face value.
 	if mt_reason.mcl_damage then
@@ -261,7 +261,7 @@ minetest.register_on_player_hpchange(function(player, hp_change, mt_reason)
 	-- attenuated by armor or other protection.
 
 	if mt_reason.type == "node_damage" and mt_reason.node then
-		local nodedef = minetest.registered_nodes[mt_reason.node]
+		local nodedef = core.registered_nodes[mt_reason.node]
 
 		if nodedef.damage_per_second then
 		  hp_change = -nodedef.damage_per_second
@@ -285,7 +285,7 @@ minetest.register_on_player_hpchange(function(player, hp_change, mt_reason)
 	-- engine and internal HPs match.
 
 	if math.ceil (mcl_health) ~= engine_hp then
-		minetest.log ("warning", ("Engine health of player "
+		core.log ("warning", ("Engine health of player "
 					 .. player:get_player_name ()
 					 .. " disagrees with MCL health "
 					 .. mcl_health ..""))
@@ -306,7 +306,7 @@ minetest.register_on_player_hpchange(function(player, hp_change, mt_reason)
 	return difference
 end, true)
 
-minetest.register_on_punchplayer (function (player, hitter, _, _, _, damage)
+core.register_on_punchplayer (function (player, hitter, _, _, _, damage)
 	  -- Inflict the Minetest-computed damage by means of
 	  -- mcl_damage.damage_player.
 	  if damage > 0 then
@@ -317,7 +317,7 @@ minetest.register_on_punchplayer (function (player, hitter, _, _, _, damage)
 	  end
 end)
 
-minetest.register_on_joinplayer (function (player, _)
+core.register_on_joinplayer (function (player, _)
 	  -- Convert the player's engine HP into a floating point internal
 	  -- value if none already exists.
 	  local meta = player:get_meta ()
@@ -327,7 +327,7 @@ minetest.register_on_joinplayer (function (player, _)
 	  end
 end)
 
-minetest.register_on_dieplayer(function(player, mt_reason)
+core.register_on_dieplayer(function(player, mt_reason)
 	  -- Clear the internal HP of players who die.
 	  local meta = player:get_meta ()
 	  meta:set_float ("mcl_health", 0)
@@ -360,6 +360,6 @@ mcl_damage.register_modifier (function (obj, damage, reason)
 	return damage
 end, -1000)
 
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
 	table.sort(mcl_damage.modifiers, function(a, b) return a.priority < b.priority end)
 end)

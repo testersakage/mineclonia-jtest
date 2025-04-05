@@ -1,6 +1,6 @@
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
 local rabbit = {
@@ -128,10 +128,10 @@ end
 
 function rabbit:on_spawn ()
 	local self_pos = self.object:get_pos ()
-	local data = minetest.get_biome_data (self_pos)
+	local data = core.get_biome_data (self_pos)
 	local random = math.random (100)
-	local name = minetest.get_biome_name (data.biome)
-	local definition = minetest.registered_biomes[name]
+	local name = core.get_biome_name (data.biome)
+	local definition = core.registered_biomes[name]
 	local texture
 
 	if definition._mcl_biome_type == "cold"
@@ -266,7 +266,7 @@ end
 -- Rabbit AI.
 ------------------------------------------------------------------------
 
-local mob_griefing = minetest.settings:get_bool ("mobs_griefing", true)
+local mob_griefing = core.settings:get_bool ("mobs_griefing", true)
 
 function rabbit:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
@@ -281,7 +281,7 @@ local function manhattan3d (v1, v2)
 end
 
 local function rabbit_griefable (name)
-	local age = minetest.get_item_group (name, "carrot")
+	local age = core.get_item_group (name, "carrot")
 	return age > 1 and age or nil
 end
 
@@ -301,7 +301,7 @@ local function rabbit_grief_garden (self, self_pos, dtime)
 	end
 	if self._griefing_garden then
 		local target = self._grief_target
-		local node = minetest.get_node (target)
+		local node = core.get_node (target)
 		local age = rabbit_griefable (node.name)
 		if not age then
 			self:cancel_navigation ()
@@ -319,14 +319,14 @@ local function rabbit_grief_garden (self, self_pos, dtime)
 
 			-- Grief this carrot block and wait a random
 			-- period before proceeding to do so again.
-			if minetest.remove_node (target) then
-				minetest.sound_play ("default_grass_footstep", {
+			if core.remove_node (target) then
+				core.sound_play ("default_grass_footstep", {
 					pos = target,
 				}, true)
 
 				local carrot = "mcl_farming:carrot_"
 					.. previous_stage (age)
-				minetest.place_node (target, {
+				core.place_node (target, {
 					name = carrot,
 					param2 = 3,
 				}, self.object)
@@ -360,7 +360,7 @@ local function rabbit_grief_garden (self, self_pos, dtime)
 		local nodepos = mcl_util.get_nodepos (self_pos)
 		local aa = vector.offset (nodepos, -8, 0, -8)
 		local bb = vector.offset (nodepos, 8, 1, 8)
-		local carrots = minetest.find_nodes_in_area (aa, bb, {
+		local carrots = core.find_nodes_in_area (aa, bb, {
 			"group:carrot",
 		})
 		if #carrots == 0 then
@@ -372,7 +372,7 @@ local function rabbit_grief_garden (self, self_pos, dtime)
 		end)
 		for i = 1, #carrots do
 			local carrot = carrots[i]
-			local node = minetest.get_node (carrot)
+			local node = core.get_node (carrot)
 			if rabbit_griefable (node.name) then
 				self._grief_target = carrot
 				self._griefing_garden = 0.0

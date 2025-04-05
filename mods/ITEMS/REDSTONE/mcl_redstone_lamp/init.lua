@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-local light = minetest.LIGHT_MAX
+local light = core.LIGHT_MAX
 
 local commdef = {
 	groups = {handy=1},
@@ -23,20 +23,20 @@ local commdef = {
 	},
 }
 
-minetest.register_node("mcl_redstone_lamp:lamp_off", table.merge(commdef, {
+core.register_node("mcl_redstone_lamp:lamp_off", table.merge(commdef, {
 	tiles = {"jeija_lightstone_gray_off.png"},
 	_tt_help = S("Glows when powered by redstone power"),
 	_doc_items_longdesc = S("Redstone lamps are simple redstone components which glow brightly (light level @1) when they receive redstone power.", light),
 }))
 
-minetest.register_node("mcl_redstone_lamp:lamp_on", table.merge(commdef, {
+core.register_node("mcl_redstone_lamp:lamp_on", table.merge(commdef, {
 	tiles = {"jeija_lightstone_gray_on.png"},
 	groups = table.merge(commdef.groups, {not_in_creative_inventory=1}),
 	drop = "node mcl_redstone_lamp:lamp_off",
 	light_source = light,
 }))
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_redstone_lamp:lamp_off",
 	recipe = {
 		{"","mcl_redstone:redstone",""},
@@ -46,7 +46,7 @@ minetest.register_craft({
 })
 
 -- Add entry alias for the Help
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_redstone_lamp:lamp_off", "nodes", "mcl_redstone_lamp:lamp_on")
 end
 

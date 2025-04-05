@@ -1,9 +1,9 @@
 mcl_vaults = {
 	registered_vaults = {}
 }
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
+local S = core.get_translator(modname)
 
 dofile(modpath.."/api.lua")
 
@@ -16,12 +16,12 @@ end
 
 local function enchant_random_level(stack, list, pr)
 	if type(list) ~= "table" or #list == 0 then
-		minetest.log("error", "[mcl_vaults] error in loot table: no enchantments for " .. stack:get_name() .. debug.traceback())
+		core.log("error", "[mcl_vaults] error in loot table: no enchantments for " .. stack:get_name() .. debug.traceback())
 		return stack
 	end
 	local enchantment = list[pr:next(1, #list)]
 	if not mcl_enchanting.enchantments[enchantment] then
-		minetest.log("error", "[mcl_vaults] error in loot table: enchantment " .. enchantment .. " not found for " .. stack:get_name())
+		core.log("error", "[mcl_vaults] error in loot table: enchantment " .. enchantment .. " not found for " .. stack:get_name())
 		return stack
 	end
 	local level = pr:next(1, mcl_enchanting.enchantments[enchantment].max_level)

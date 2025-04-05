@@ -1,7 +1,7 @@
 -- Tree nodes: Wood, Wooden Planks, Sapling, Leaves, Stripped Wood
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local D = mcl_util.get_dynamic_translator()
-local bark_stairs = minetest.settings:get_bool("mcl_extra_nodes",true)
+local bark_stairs = core.settings:get_bool("mcl_extra_nodes",true)
 
 local wood_groups = {
 	handy = 1, axey = 1, material_wood = 1,
@@ -12,7 +12,7 @@ local wood_sounds = mcl_sounds.node_sound_wood_defaults()
 
 -- Make leaves which do not have a log within 6 nodes orphan.
 local function update_far_away_leaves(pos)
-	local logs = minetest.find_nodes_in_area(pos:subtract(12), pos:add(12), "group:tree")
+	local logs = core.find_nodes_in_area(pos:subtract(12), pos:add(12), "group:tree")
 
 	local function distance(a, b)
 		return math.abs(a.x - b.x) + math.abs(a.y - b.y) + math.abs(a.z - b.z)
@@ -27,13 +27,13 @@ local function update_far_away_leaves(pos)
 		return false
 	end
 
-	local leaves = minetest.find_nodes_in_area(pos:subtract(6), pos:add(6), "group:leaves")
+	local leaves = core.find_nodes_in_area(pos:subtract(6), pos:add(6), "group:leaves")
 	for _, lpos in pairs(leaves) do
 		if not log_in_range(lpos) then
-			local node = minetest.get_node(lpos)
-			local ndef = minetest.registered_nodes[node.name]
+			local node = core.get_node(lpos)
+			local ndef = core.registered_nodes[node.name]
 			if math.floor(node.param2 / 32) ~= 1 and ndef._mcl_leaves then
-				minetest.swap_node(lpos, {
+				core.swap_node(lpos, {
 					name = ndef._mcl_orphan_leaves,
 					param2 = node.param2,
 				})
@@ -55,23 +55,23 @@ local directions = {
 	vector.new(0, 0, -1),
 }
 
-minetest.register_on_mods_loaded(function()
-	for name, ndef in pairs(minetest.registered_nodes) do
-		local cid = minetest.get_content_id(name)
-		tree_tab[cid] = minetest.get_item_group(name, "tree") ~= 0 and true or nil
-		if minetest.get_item_group(name, "leaves") ~= 0 and ndef._mcl_leaves then
+core.register_on_mods_loaded(function()
+	for name, ndef in pairs(core.registered_nodes) do
+		local cid = core.get_content_id(name)
+		tree_tab[cid] = core.get_item_group(name, "tree") ~= 0 and true or nil
+		if core.get_item_group(name, "leaves") ~= 0 and ndef._mcl_leaves then
 			local def = {
-				c_leaves = minetest.get_content_id(ndef._mcl_leaves),
-				c_orphan_leaves = minetest.get_content_id(ndef._mcl_orphan_leaves),
+				c_leaves = core.get_content_id(ndef._mcl_leaves),
+				c_orphan_leaves = core.get_content_id(ndef._mcl_orphan_leaves),
 			}
 			leaves_tab[cid] = def
-			orphan_tab[cid] = minetest.get_item_group(name, "orphan_leaves") ~= 0 and def or nil
+			orphan_tab[cid] = core.get_item_group(name, "orphan_leaves") ~= 0 and def or nil
 		end
 	end
 end)
 
 local function update_leaves(pos, old_distance)
-	local vm = minetest.get_voxel_manip()
+	local vm = core.get_voxel_manip()
 	local emin, emax = vm:read_from_map(pos:offset(-8, -8, -8), pos:offset(8, 8, 8))
 	local a = VoxelArea:new{MinEdge = emin, MaxEdge = emax}
 	local data = vm:get_data()
@@ -147,15 +147,15 @@ end
 
 -- called from leaves after_place_node
 local function set_placed_leaves_p2(pos)
-	local n = minetest.get_node(pos)
+	local n = core.get_node(pos)
 	local palette_index = 0
-	if minetest.get_item_group(n.name, "biomecolor") ~= 0 then
+	if core.get_item_group(n.name, "biomecolor") ~= 0 then
 		palette_index = mcl_util.get_pos_p2(pos)
 	end
 
 	-- 32 represents a log distance of 0 (which means the no decay)
 	n.param2 = 32 + palette_index
-	minetest.swap_node(pos,n)
+	core.swap_node(pos,n)
 end
 
 local tpl_log = {
@@ -226,13 +226,13 @@ local tpl_sapling = {
 	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		meta:set_int("stage", 0)
 	end,
 	on_place = mcl_util.generate_on_place_plant_function(function(pos, _)
-		local node_below = minetest.get_node_or_nil(vector.offset(pos,0,-1,0))
+		local node_below = core.get_node_or_nil(vector.offset(pos,0,-1,0))
 		if not node_below then return false end
-		return minetest.get_item_group(node_below.name, "soil_sapling") > 1
+		return core.get_item_group(node_below.name, "soil_sapling") > 1
 	end),
 	_on_bone_meal = function(itemstack, placer, pointed_thing, pos, node) ---@diagnostic disable-line: unused-local
 		if math.random() > 0.45 then return end --sapling has a 45% chance to grow when bone mealing
@@ -264,12 +264,12 @@ local tpl_trapdoor = {
 }
 
 -- Set log on_construct/after_destruct like this for compatibility with mods.
-minetest.register_on_mods_loaded(function()
-	for name, ndef in pairs(minetest.registered_nodes) do
-		if minetest.get_item_group(name, "tree") ~= 0 then
+core.register_on_mods_loaded(function()
+	for name, ndef in pairs(core.registered_nodes) do
+		if core.get_item_group(name, "tree") ~= 0 then
 			local old_on_cons = ndef.on_construct
 			local old_after_dest = ndef.after_destruct
-			minetest.override_item(name, {
+			core.override_item(name, {
 				on_construct = function(pos)
 					if old_on_cons then
 						old_on_cons(pos)
@@ -372,8 +372,8 @@ end
 
 local function register_leaves(subname, def, sapling, drop_apples, sapling_chances)
 	local d = mcl_trees.generate_leaves_def("mcl_trees:", subname, def, sapling, drop_apples, sapling_chances)
-	minetest.register_node(":" .. d["leaves_id"], d["leaves_def"])
-	minetest.register_node(":" .. d["orphan_leaves_id"], d["orphan_leaves_def"])
+	core.register_node(":" .. d["leaves_id"], d["leaves_def"])
+	core.register_node(":" .. d["orphan_leaves_id"], d["orphan_leaves_def"])
 end
 
 function mcl_trees.register_wood(name, p)
@@ -397,7 +397,7 @@ function mcl_trees.register_wood(name, p)
 			single = {output = "mcl_trees:wood_"..name.." "..wood_amount},
 			square2 = bark_enabled and {output = "mcl_trees:bark_"..name.." 3"} or nil
 		}
-		minetest.register_node(":mcl_trees:".."tree_"..name,def)
+		core.register_node(":mcl_trees:".."tree_"..name,def)
 	end
 
 	if p.wood == nil or type(p.wood) == "table" then
@@ -406,7 +406,7 @@ function mcl_trees.register_wood(name, p)
 			tiles = { modname.."_planks_"..name..".png"},
 		},p.wood or {})
 		def.description = def.description or D(rname .. " Planks")
-		minetest.register_node(":mcl_trees:wood_"..name, def)
+		core.register_node(":mcl_trees:wood_"..name, def)
 	end
 
 	if bark_enabled then
@@ -419,7 +419,7 @@ function mcl_trees.register_wood(name, p)
 
 		}, p.bark or {})
 		def.description = def.description or D(rname .. " Bark")
-		minetest.register_node(":mcl_trees:bark_"..name,def)
+		core.register_node(":mcl_trees:bark_"..name,def)
 	end
 
 	if p.stripped == nil or type(p.stripped) == "table" then
@@ -433,7 +433,7 @@ function mcl_trees.register_wood(name, p)
 			single = {output = "mcl_trees:wood_"..name.." "..wood_amount},
 			square2 = stripped_bark_enabled and {output = "mcl_trees:bark_stripped_"..name.." 3"} or nil
 		}
-		minetest.register_node(":mcl_trees:stripped_"..name, def)
+		core.register_node(":mcl_trees:stripped_"..name, def)
 	end
 
 	if stripped_bark_enabled then
@@ -444,7 +444,7 @@ function mcl_trees.register_wood(name, p)
 		def.description = def.description or D("Stripped " .. rname .. " Bark")
 		def._doc_items_longdesc = def._doc_items_longdesc or D("The stripped wood of an " .. rname .. " tree.")
 		def._mcl_crafting_output = {single = {output = "mcl_trees:wood_"..name.." "..wood_amount}}
-		minetest.register_node(":mcl_trees:bark_stripped_"..name, def)
+		core.register_node(":mcl_trees:bark_stripped_"..name, def)
 	end
 
 	if p.sapling == nil or type(p.sapling) == "table" then
@@ -454,7 +454,7 @@ function mcl_trees.register_wood(name, p)
 			wield_image = modname.."_sapling_"..name..".png",
 		}, p.sapling or {})
 		def.description = def.description or D(rname .. " Sapling")
-		minetest.register_node(":mcl_trees:sapling_"..name, def)
+		core.register_node(":mcl_trees:sapling_"..name, def)
 	end
 
 
@@ -516,7 +516,7 @@ function mcl_trees.register_wood(name, p)
 		}, p.door or {})
 		def.description = def.description or D(rname .. " Door")
 		mcl_doors:register_door("mcl_doors:door_"..name,def)
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_doors:door_"..name.." 3",
 			recipe = {
 				{"mcl_trees:wood_"..name, "mcl_trees:wood_"..name},
@@ -533,7 +533,7 @@ function mcl_trees.register_wood(name, p)
 		}, p.trapdoor or {})
 		def.description = def.description or D(rname .. " Trapdoor")
 		mcl_doors:register_trapdoor("mcl_doors:trapdoor_"..name,def)
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_doors:trapdoor_"..name.." 2",
 			recipe = {
 				{"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,},
@@ -602,7 +602,7 @@ function mcl_trees.register_wood(name, p)
 		}, p.sign or {})
 		def.description = def.description or D(rname .. " Sign")
 		mcl_signs.register_sign(name,p.sign_color,def)
-		minetest.register_craft({
+		core.register_craft({
 			output = "mcl_signs:wall_sign_"..name.." 3",
 			recipe = {
 				{"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,},
@@ -664,8 +664,8 @@ function mcl_trees.register_wood(name, p)
 	end
 end
 
-local modpath = minetest.get_modpath(minetest.get_current_modname())
-minetest.register_on_mods_loaded(function()
+local modpath = core.get_modpath(core.get_current_modname())
+core.register_on_mods_loaded(function()
 	mcl_structures.register_structure("wood_test", {
 	filenames = {
 		modpath.."/schematics/wood_test.mts"
@@ -675,7 +675,7 @@ end)
 
 local function get_stairs_nodes()
 	local r = {}
-	for n, _ in pairs(minetest.registered_nodes) do
+	for n, _ in pairs(core.registered_nodes) do
 		if n:find("_stair") or n:find("_slab") then
 			table.insert(r,n)
 		end
@@ -683,7 +683,7 @@ local function get_stairs_nodes()
 	return r
 end
 
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
 	mcl_structures.register_structure("stairs_test", {
 	place_func = function(pos, _, _)
 		local stairs = get_stairs_nodes()
@@ -692,7 +692,7 @@ minetest.register_on_mods_loaded(function()
 		local y = 1
 		for _, n in pairs(stairs) do
 			if x > s then x=1 y = y + 1 end
-			minetest.set_node(vector.offset(pos,x,y,0),{name=n})
+			core.set_node(vector.offset(pos,x,y,0),{name=n})
 			x = x + 1
 		end
 	end,

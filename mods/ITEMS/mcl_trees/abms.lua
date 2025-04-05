@@ -1,6 +1,6 @@
 -- Leaf Decay
 local function leafdecay_particles(pos, node)
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = math.random(10, 20),
 		time = 0.1,
 		minpos = vector.add(pos, {x=-0.4, y=-0.4, z=-0.4}),
@@ -25,26 +25,26 @@ end
 -- distance of 6 blocks is replaced with a `group:orphan_leaves` node.
 --
 -- The `group:orphan_leaves` nodes are gradually decayed in this ABM.
-minetest.register_abm({
+core.register_abm({
 	label = "Leaf decay",
 	nodenames = {"group:orphan_leaves"},
 	interval = 5,
 	chance = 10,
 		action = function(pos, node)
 		-- Spawn item entities for any of the leaf's drops
-		local itemstacks = minetest.get_node_drops(node.name)
+		local itemstacks = core.get_node_drops(node.name)
 		for _, itemname in pairs(itemstacks) do
 			local p_drop = vector.offset(pos, math.random() - 0.5, math.random() - 0.5, math.random() - 0.5)
-			minetest.add_item(p_drop, itemname)
+			core.add_item(p_drop, itemname)
 		end
 		-- Remove the decayed node
-		minetest.remove_node(pos)
+		core.remove_node(pos)
 		leafdecay_particles(pos, node)
-		minetest.check_for_falling(pos)
+		core.check_for_falling(pos)
 	end
 })
 
-minetest.register_abm({
+core.register_abm({
 	label = "Tree growth",
 	nodenames = {"group:sapling"},
 	neighbors = {"group:soil_sapling","group:soil_propagule"},
@@ -53,26 +53,26 @@ minetest.register_abm({
 	action = function(pos, node)
 		-- instead of checking if there are no non-transparent nodes between the sapling and the sky,
 		-- which would be too laborious in an abm, check if the node would be in full daylight at noon.
-		if minetest.get_node_light(pos) <= 7 and minetest.get_node_light(pos, 0.5) < minetest.LIGHT_MAX then
-			minetest.remove_node(pos)
-			minetest.add_item(pos, node)
+		if core.get_node_light(pos) <= 7 and core.get_node_light(pos, 0.5) < core.LIGHT_MAX then
+			core.remove_node(pos)
+			core.add_item(pos, node)
 		else
 			mcl_trees.grow_tree(pos, node)
 		end
 	end,
 })
 
-minetest.register_lbm({
+core.register_lbm({
 	label = "Set old leaves param2",
 	name = "mcl_trees:leaves_param2_update",
 	nodenames = {"group:leaves"},
 	run_at_every_load = false,
 	action = function(pos, n)
-		if minetest.get_item_group(n.name,"biomecolor") == 0 then return end
+		if core.get_item_group(n.name,"biomecolor") == 0 then return end
 		local p2 = mcl_util.get_pos_p2(pos)
 		if n.param2 ~= p2 then
 			n.param2 = p2
-			minetest.swap_node(pos, n)
+			core.swap_node(pos, n)
 		end
 	end,
 })

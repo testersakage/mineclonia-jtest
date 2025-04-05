@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local mob_class = mcl_mobs.mob_class
 
 --###################
@@ -109,7 +109,7 @@ mcl_mobs.spawn_setup ({
 	min_height = mobs_mc.water_level - 16,
 	max_height = mobs_mc.water_level + 1,
 	min_light = 0,
-	max_light = minetest.LIGHT_MAX + 1,
+	max_light = core.LIGHT_MAX + 1,
 	aoc = 7,
 	chance = 750,
 })

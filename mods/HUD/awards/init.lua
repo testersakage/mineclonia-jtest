@@ -1,7 +1,7 @@
 -- Copyright (c) 2013-18 rubenwardy. MIT.
 
 -- Internationalization support.
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 -- The global award namespace
 awards = {
@@ -13,7 +13,7 @@ awards = {
 }
 
 -- Load files
-local modpath = minetest.get_modpath(minetest.get_current_modname()).."/src"
+local modpath = core.get_modpath(core.get_current_modname()).."/src"
 dofile(modpath.."/data.lua")
 dofile(modpath.."/api_awards.lua")
 dofile(modpath.."/api_triggers.lua")
@@ -22,13 +22,13 @@ dofile(modpath.."/gui.lua")
 dofile(modpath.."/triggers.lua")
 
 awards.load()
-minetest.register_on_shutdown(awards.save)
+core.register_on_shutdown(awards.save)
 
 local function check_save()
 	awards.save()
-	minetest.after(18, check_save)
+	core.after(18, check_save)
 end
-minetest.after(8 * math.random() + 10, check_save)
+core.after(8 * math.random() + 10, check_save)
 
 
 -- Backwards compatibility

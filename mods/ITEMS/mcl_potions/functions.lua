@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local EF = {}
 mcl_potions.registered_effects = {}
@@ -8,7 +8,7 @@ local registered_effects = mcl_potions.registered_effects -- shorthand ref
 local item_speed_effects = {}
 
 local EFFECT_TYPES = 0
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
 	for _,_ in pairs(EF) do
 		EFFECT_TYPES = EFFECT_TYPES + 1
 	end
@@ -123,7 +123,7 @@ end
 -- -- --   - values of factor lower than 0 will have a negative effect regardless
 -- -- --   - open an issue on our tracker if you have a usage that isn't supported by this API
 function mcl_potions.register_effect(def)
-	local modname = minetest.get_current_modname()
+	local modname = core.get_current_modname()
 	local name = def.name
 	assert(name ~= nil, "Unable to register effect: name is nil")
 	assert(type(name) == "string", "Unable to register effect: name is not a string")
@@ -370,10 +370,10 @@ mcl_potions.register_effect({
 		return S("swimming gracefully")
 	end,
 	on_hit_timer = function(object)
-		local node = minetest.get_node_or_nil(object:get_pos())
+		local node = core.get_node_or_nil(object:get_pos())
 		-- TODO: apply this only to swimming for mobs.
-		if node and minetest.registered_nodes[node.name]
-			and minetest.get_item_group(node.name, "liquid") ~= 0 then
+		if node and core.registered_nodes[node.name]
+			and core.get_item_group(node.name, "liquid") ~= 0 then
 			add_physics_factor (object, "speed", "movement_speed",
 					"mcl_potions:dolphin", 1.6)
 		else
@@ -759,12 +759,12 @@ mcl_potions.register_effect({
 	on_start = function(object, factor)
 		if object:is_player () then
 		-- TODO can mob "physics" overrides also affect hp?
-		object:set_properties({hp_max = minetest.PLAYER_MAX_HP_DEFAULT+factor})
+		object:set_properties({hp_max = core.PLAYER_MAX_HP_DEFAULT+factor})
 		end
 	end,
 	on_end = function(object)
 		if object:is_player () then
-		object:set_properties({hp_max = minetest.PLAYER_MAX_HP_DEFAULT})
+		object:set_properties({hp_max = core.PLAYER_MAX_HP_DEFAULT})
 		end
 	end,
 	particle_color = "#F87D23",
@@ -794,7 +794,7 @@ mcl_potions.register_effect({
 		end
 	end,
 	on_load = function(object, factor)
-		minetest.after(0, function() hb.change_hudbar(object, "absorption", nil, (math.floor(factor/20-0.05)+1)*20) end)
+		core.after(0, function() hb.change_hudbar(object, "absorption", nil, (math.floor(factor/20-0.05)+1)*20) end)
 	end,
 	on_step = function(_, object)
 		hb.change_hudbar(object, "absorption", EF.absorption[object].absorb)
@@ -1145,10 +1145,10 @@ mcl_potions.register_effect({
 	end,
 	on_step = function(_, object)
 		if not object:is_player() then return end
-		local node = minetest.get_node_or_nil(object:get_pos())
-		if node and minetest.registered_nodes[node.name]
-			and minetest.get_item_group(node.name, "liquid") ~= 0
-			and minetest.get_item_group(node.name, "water") ~= 0 then
+		local node = core.get_node_or_nil(object:get_pos())
+		if node and core.registered_nodes[node.name]
+			and core.get_item_group(node.name, "liquid") ~= 0
+			and core.get_item_group(node.name, "water") ~= 0 then
 				EF.conduit_power[object].blocked = nil
 				if object:get_breath() then
 					hb.hide_hudbar(object, "breath")
@@ -1327,10 +1327,10 @@ function mcl_potions.update_haste_and_fatigue(player)
 	end
 	haste_fatigue_hand_update(player)
 end
-minetest.register_on_punchnode(function(_, _, puncher)
+core.register_on_punchnode(function(_, _, puncher)
 	mcl_potions.update_haste_and_fatigue(puncher)
 end)
-minetest.register_on_punchplayer(function(_, hitter)
+core.register_on_punchplayer(function(_, hitter)
 	if not hitter:is_player() then return end -- TODO implement haste and fatigue support for mobs?
 	mcl_potions.update_haste_and_fatigue(hitter)
 end)
@@ -1423,7 +1423,7 @@ local function potions_set_hudbar(player)
 	hb.change_hudbar(player, "health", nil, nil, "hudbars_icon_health.png", nil, "hudbars_bar_health.png")
 end
 
-local enable_damage = minetest.settings:get_bool("enable_damage")
+local enable_damage = core.settings:get_bool("enable_damage")
 
 local icon_ids = {}
 
@@ -1543,7 +1543,7 @@ end
 
 local function add_spawner(obj, color)
 	local d = 0.2
-	return minetest.add_particlespawner({
+	return core.add_particlespawner({
 		amount = 10.0,
 		time = 0,
 		attached = obj,
@@ -1563,7 +1563,7 @@ local function add_spawner(obj, color)
 	})
 end
 
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	for name, effect in pairs(registered_effects) do
 		for object, vals in pairs(EF[name]) do
 		if vals.dur ~= math.huge then EF[name][object].timer = vals.timer + dtime end
@@ -1587,7 +1587,7 @@ minetest.register_globalstep(function(dtime)
 
 		if not object or not EF[name][object] or EF[name][object].timer >= vals.dur or not object:get_pos() then
 			if vals.spawner then
-			minetest.delete_particlespawner (vals.spawner)
+			core.delete_particlespawner (vals.spawner)
 			end
 			if effect.on_end then effect.on_end(object) end
 			EF[name][object] = nil
@@ -1684,7 +1684,7 @@ function mcl_potions._reset_effects(object, set_hud)
 			effect.on_end (object)
 		end
 		if val and val.spawner then
-		minetest.delete_particlespawner (val.spawner)
+		core.delete_particlespawner (val.spawner)
 		end
 		if effect.after_end then table.insert(removed_effects, effect.after_end) end
 		mcl_serverplayer.remove_status_effect (object, name)
@@ -1722,7 +1722,7 @@ function mcl_potions._save_player_effects(player)
 			effect.on_save_effect(player)
 		end
 		end
-		meta:set_string("mcl_potions:_EF_"..name, minetest.serialize(EF[name][player]))
+		meta:set_string("mcl_potions:_EF_"..name, core.serialize(EF[name][player]))
 	end
 end
 
@@ -1733,18 +1733,18 @@ function mcl_potions._load_player_effects(player)
 	local meta = player:get_meta()
 
 	-- handle legacy meta strings
-	local legacy_invisible = minetest.deserialize(meta:get_string("_is_invisible"))
-	local legacy_poisoned = minetest.deserialize(meta:get_string("_is_poisoned"))
-	local legacy_regenerating = minetest.deserialize(meta:get_string("_is_regenerating"))
-	local legacy_strong = minetest.deserialize(meta:get_string("_is_strong"))
-	local legacy_weak = minetest.deserialize(meta:get_string("_is_weak"))
-	local legacy_water_breathing = minetest.deserialize(meta:get_string("_is_water_breathing"))
-	local legacy_leaping = minetest.deserialize(meta:get_string("_is_leaping"))
-	local legacy_swift = minetest.deserialize(meta:get_string("_is_swift"))
-	local legacy_night_vision = minetest.deserialize(meta:get_string("_is_cat"))
-	local legacy_fireproof = minetest.deserialize(meta:get_string("_is_fire_proof"))
-	local legacy_bad_omen = minetest.deserialize(meta:get_string("_has_bad_omen"))
-	local legacy_withering = minetest.deserialize(meta:get_string("_is_withering"))
+	local legacy_invisible = core.deserialize(meta:get_string("_is_invisible"))
+	local legacy_poisoned = core.deserialize(meta:get_string("_is_poisoned"))
+	local legacy_regenerating = core.deserialize(meta:get_string("_is_regenerating"))
+	local legacy_strong = core.deserialize(meta:get_string("_is_strong"))
+	local legacy_weak = core.deserialize(meta:get_string("_is_weak"))
+	local legacy_water_breathing = core.deserialize(meta:get_string("_is_water_breathing"))
+	local legacy_leaping = core.deserialize(meta:get_string("_is_leaping"))
+	local legacy_swift = core.deserialize(meta:get_string("_is_swift"))
+	local legacy_night_vision = core.deserialize(meta:get_string("_is_cat"))
+	local legacy_fireproof = core.deserialize(meta:get_string("_is_fire_proof"))
+	local legacy_bad_omen = core.deserialize(meta:get_string("_has_bad_omen"))
+	local legacy_withering = core.deserialize(meta:get_string("_is_withering"))
 	if legacy_invisible then
 		EF.invisibility[player] = legacy_invisible
 		meta:set_string("_is_invisible", "")
@@ -1796,7 +1796,7 @@ function mcl_potions._load_player_effects(player)
 
 	-- new API effects + on_load for loaded legacy effects
 	for name, effect in pairs(registered_effects) do
-		local loaded = minetest.deserialize(meta:get_string("mcl_potions:_EF_"..name))
+		local loaded = core.deserialize(meta:get_string("mcl_potions:_EF_"..name))
 		if loaded then
 			EF[name][player] = loaded
 		end
@@ -1904,7 +1904,7 @@ end
 
 function mcl_potions.clear_effect(object, effectname)
 	if not EF[effectname] then
-		minetest.log("warning", "[mcl_potions] Tried to remove an effect that is not registered: " .. dump(effectname))
+		core.log("warning", "[mcl_potions] Tried to remove an effect that is not registered: " .. dump(effectname))
 		return false
 	end
 	local def = registered_effects[effectname]
@@ -1912,7 +1912,7 @@ function mcl_potions.clear_effect(object, effectname)
 	if effect then
 		if def.on_end then def.on_end(object) end
 		if effect.spawner then
-			minetest.delete_particlespawner (effect.spawner)
+			core.delete_particlespawner (effect.spawner)
 		end
 		EF[effectname][object] = nil
 		if def.after_end then def.after_end(object) end
@@ -1929,18 +1929,18 @@ function mcl_potions.clear_effect(object, effectname)
 	potions_set_hud(object)
 end
 
-minetest.register_on_leaveplayer( function(player)
+core.register_on_leaveplayer( function(player)
 	mcl_potions._save_player_effects(player)
 	mcl_potions._clear_cached_effect_data(player) -- clear the buffer to prevent looking for a player not there
 	icon_ids[player:get_player_name()] = nil
 end)
 
-minetest.register_on_dieplayer( function(player)
+core.register_on_dieplayer( function(player)
 	mcl_potions._reset_effects(player)
 	potions_set_hud(player)
 end)
 
-minetest.register_on_joinplayer( function(player)
+core.register_on_joinplayer( function(player)
 	mcl_potions._reset_effects(player, false) -- make sure there are no weird holdover effects
 	mcl_potions._load_player_effects(player)
 	mcl_potions._reset_haste_fatigue_item_meta(player)
@@ -1948,7 +1948,7 @@ minetest.register_on_joinplayer( function(player)
 	potions_set_hud(player)
 end)
 
-minetest.register_on_shutdown(function()
+core.register_on_shutdown(function()
 	for player in mcl_util.connected_players() do
 		mcl_potions._save_player_effects(player)
 	end
@@ -1975,12 +1975,12 @@ function mcl_potions.detect_hit (obj, pos, moveresult, velocity)
 	for _, item in ipairs (moveresult.collisions) do
 	if item.type == "node" then
 		-- Detect targets.
-		local node = minetest.get_node (item.node_pos)
+		local node = core.get_node (item.node_pos)
 		if node and node.name == "mcl_target:target_off" then
 		val = { target = item.node_pos, }
 		elseif node then
 		-- Next, detect walkable nodes.
-		local def = minetest.registered_nodes[node.name]
+		local def = core.registered_nodes[node.name]
 		if def.walkable then
 			val = val or {}
 		end
@@ -1990,7 +1990,7 @@ function mcl_potions.detect_hit (obj, pos, moveresult, velocity)
 	-- Mobs and objects are currently non-colliding, so supplement the
 	-- move results with a raycast as in mcl_bows.
 	if not val or in_thrower_body then
-	local raycast = minetest.raycast (pos, vector.add (pos, velocity * 0.04),
+	local raycast = core.raycast (pos, vector.add (pos, velocity * 0.04),
 					  true, false)
 	local still_inside = false
 	local thrower = entity._thrower
@@ -1998,7 +1998,7 @@ function mcl_potions.detect_hit (obj, pos, moveresult, velocity)
 	-- If the thrower should be a string, try to look up the
 	-- player by that name.
 	if type (thrower) == "string" then
-		thrower = minetest.get_player_by_name (thrower)
+		thrower = core.get_player_by_name (thrower)
 	end
 
 	for hitpoint in raycast do
@@ -2059,7 +2059,7 @@ end
 
 function mcl_potions._use_potion(obj)
 	local pos = obj:get_pos()
-	minetest.sound_play("mcl_potions_drinking", {pos = pos, max_hear_distance = 6, gain = 1})
+	core.sound_play("mcl_potions_drinking", {pos = pos, max_hear_distance = 6, gain = 1})
 end
 
 
@@ -2290,11 +2290,11 @@ end
 
 function mcl_potions._water_effect(pos, radius)
 	local epos = {x=pos.x, y=pos.y+0.5, z=pos.z}
-	local dnode = minetest.get_node({x=pos.x,y=pos.y-0.5,z=pos.z})
-	if minetest.get_item_group(dnode.name, "fire") ~= 0 or
-	minetest.get_item_group(dnode.name, "lit_campfire") ~= 0 or
-	minetest.get_item_group(dnode.name, "lit_candles") ~= 0 or
-	minetest.get_item_group(dnode.name, "lit_cake") then
+	local dnode = core.get_node({x=pos.x,y=pos.y-0.5,z=pos.z})
+	if core.get_item_group(dnode.name, "fire") ~= 0 or
+	core.get_item_group(dnode.name, "lit_campfire") ~= 0 or
+	core.get_item_group(dnode.name, "lit_candles") ~= 0 or
+	core.get_item_group(dnode.name, "lit_cake") then
 		epos.y = pos.y - 0.5
 	end
 	local exting = false
@@ -2309,46 +2309,46 @@ function mcl_potions._water_effect(pos, radius)
 		}
 		for d=1, #dirs do
 			local tpos = vector.add(epos, dirs[d])
-			local node = minetest.get_node(tpos)
-			local candle_group = minetest.get_item_group(node.name, "lit_candles")
-			if minetest.get_item_group(node.name, "fire") ~= 0 then
-				minetest.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.25, max_hear_distance = 16}, true)
-				minetest.remove_node(tpos)
+			local node = core.get_node(tpos)
+			local candle_group = core.get_item_group(node.name, "lit_candles")
+			if core.get_item_group(node.name, "fire") ~= 0 then
+				core.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.25, max_hear_distance = 16}, true)
+				core.remove_node(tpos)
 				exting = true
-			elseif minetest.get_item_group(node.name, "lit_campfire") ~= 0 then
-				minetest.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.25, max_hear_distance = 16}, true)
-				local def = minetest.registered_nodes[node.name]
-				minetest.set_node(tpos, {name = def._mcl_campfires_smothered_form, param2 = node.param2})
+			elseif core.get_item_group(node.name, "lit_campfire") ~= 0 then
+				core.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.25, max_hear_distance = 16}, true)
+				local def = core.registered_nodes[node.name]
+				core.set_node(tpos, {name = def._mcl_campfires_smothered_form, param2 = node.param2})
 				exting = true
 			elseif candle_group ~= 0 then
-				minetest.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.1, max_hear_distance = 16}, true)
-				minetest.set_node(tpos, {name = "mcl_candles:candle_" .. candle_group, param2 = node.param2})
+				core.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.1, max_hear_distance = 16}, true)
+				core.set_node(tpos, {name = "mcl_candles:candle_" .. candle_group, param2 = node.param2})
 				exting = true
-			elseif minetest.get_item_group(node.name, "lit_cake") ~= 0 then
-				minetest.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.1, max_hear_distance = 16}, true)
-				minetest.set_node(tpos, {name = node.name:gsub("_lit", ""), param2 = node.param2})
+			elseif core.get_item_group(node.name, "lit_cake") ~= 0 then
+				core.sound_play("fire_extinguish_flame", {pos = tpos, gain = 0.1, max_hear_distance = 16}, true)
+				core.set_node(tpos, {name = node.name:gsub("_lit", ""), param2 = node.param2})
 			end
 		end
 	-- Has radius: lingering, extinguish all nodes in area
 	else
-		local nodes = minetest.find_nodes_in_area(
+		local nodes = core.find_nodes_in_area(
 			{x=epos.x-radius,y=epos.y,z=epos.z-radius},
 			{x=epos.x+radius,y=epos.y,z=epos.z+radius},
 			{"group:fire", "group:lit_campfire", "group:lit_candles", "group:lit_cake"})
 		for n=1, #nodes do
-			local node = minetest.get_node(nodes[n])
-			local candle_group = minetest.get_item_group(node.name, "lit_candles")
-			minetest.sound_play("fire_extinguish_flame", {pos = nodes[n], gain = 0.25, max_hear_distance = 16}, true)
-			if minetest.get_item_group(node.name, "fire") ~= 0 then
-				minetest.remove_node(nodes[n])
-			elseif minetest.get_item_group(node.name, "lit_campfire") ~= 0 then
-				local def = minetest.registered_nodes[node.name]
-				minetest.set_node(nodes[n], {name = def._mcl_campfires_smothered_form, param2 = node.param2})
+			local node = core.get_node(nodes[n])
+			local candle_group = core.get_item_group(node.name, "lit_candles")
+			core.sound_play("fire_extinguish_flame", {pos = nodes[n], gain = 0.25, max_hear_distance = 16}, true)
+			if core.get_item_group(node.name, "fire") ~= 0 then
+				core.remove_node(nodes[n])
+			elseif core.get_item_group(node.name, "lit_campfire") ~= 0 then
+				local def = core.registered_nodes[node.name]
+				core.set_node(nodes[n], {name = def._mcl_campfires_smothered_form, param2 = node.param2})
 			elseif candle_group ~= 0 then
-				minetest.sound_play("fire_extinguish_flame", {pos = nodes[n], gain = 0.1, max_hear_distance = 16}, true)
-				minetest.set_node(nodes[n], {name = "mcl_candles:candle_" .. candle_group, param2 = node.param2})
-			elseif minetest.get_item_group(node.name, "lit_cake") then
-				minetest.set_node(nodes[n], {name = node.name:gsub("_lit", ""), param2 = node.param2})
+				core.sound_play("fire_extinguish_flame", {pos = nodes[n], gain = 0.1, max_hear_distance = 16}, true)
+				core.set_node(nodes[n], {name = "mcl_candles:candle_" .. candle_group, param2 = node.param2})
+			elseif core.get_item_group(node.name, "lit_cake") then
+				core.set_node(nodes[n], {name = node.name:gsub("_lit", ""), param2 = node.param2})
 			end
 			exting = true
 		end
@@ -2359,7 +2359,7 @@ function mcl_potions._water_effect(pos, radius)
 	-- Axolotls.
 	local aa = vector.subtract (pos, { x = radius / 2, y = 1, z = radius / 2, })
 	local bb = vector.add (pos, { x = radius / 2, y = 1, z = radius / 2, })
-	for obj in minetest.objects_in_area (aa, bb) do
+	for obj in core.objects_in_area (aa, bb) do
 		local entity = obj:get_luaentity (obj)
 
 		if mcl_burning.is_burning (obj) then

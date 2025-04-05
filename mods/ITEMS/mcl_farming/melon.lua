@@ -1,10 +1,10 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 local function on_bone_meal(itemstack,placer,pointed_thing,pos,node)
 	return mcl_farming.on_bone_meal(itemstack,placer,pointed_thing,pos,node,"plant_melon_stem")
 end
 --_on_bone_meal = on_bone_meal,
 -- Seeds
-minetest.register_craftitem("mcl_farming:melon_seeds", {
+core.register_craftitem("mcl_farming:melon_seeds", {
 	description = S("Melon Seeds"),
 	_tt_help = S("Grows on farmland"),
 	_doc_items_longdesc = S("Grows into a melon stem which in turn grows melons. Chickens like melon seeds."),
@@ -89,7 +89,7 @@ for s=1,7 do
 	end
 	local colorstring = mcl_farming:stem_color(startcolor, endcolor, s, 8)
 	local texture = "([combine:16x16:0,"..((8-s)*2).."=mcl_farming_melon_stem_disconnected.png)^[colorize:"..colorstring..":127"
-	minetest.register_node("mcl_farming:melontige_"..s, {
+	core.register_node("mcl_farming:melontige_"..s, {
 		description = S("Premature Melon Stem (Stage @1)", s),
 		_doc_items_create_entry = doc,
 		_doc_items_entry_name = entry_name,
@@ -134,13 +134,13 @@ mcl_farming:add_plant("plant_melon_stem", "mcl_farming:melontige_unconnect", {"m
 mcl_farming:add_gourd("mcl_farming:melontige_unconnect", "mcl_farming:melontige_linked", "mcl_farming:melontige_unconnect", stem_def, stem_drop, "mcl_farming:melon", melon_base_def, 25, 15, "mcl_farming_melon_stem_connected.png^[colorize:#FFA800:127")
 
 -- Items and crafting
-minetest.register_craftitem("mcl_farming:melon_item", {
+core.register_craftitem("mcl_farming:melon_item", {
 	-- Original name: “Melon”
 	description = S("Melon Slice"),
 	_doc_items_longdesc = S("This is a food item which can be eaten."),
 	inventory_image = "farming_melon.png",
-	on_place = minetest.item_eat(2),
-	on_secondary_use = minetest.item_eat(2),
+	on_place = core.item_eat(2),
+	on_secondary_use = core.item_eat(2),
 	groups = {food = 2, eatable = 2, compostability = 50},
 	_mcl_saturation = 1.2,
 	_mcl_crafting_output = {
@@ -149,7 +149,7 @@ minetest.register_craftitem("mcl_farming:melon_item", {
 	}
 })
 
-if minetest.get_modpath("doc") then
+if core.get_modpath("doc") then
 	for i=2,8 do
 		doc.add_entry_alias("nodes", "mcl_farming:melontige_1", "nodes", "mcl_farming:melontige_"..i)
 	end

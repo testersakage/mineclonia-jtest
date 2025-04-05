@@ -1,5 +1,5 @@
-local S = minetest.get_translator("mcl_inventory")
-local F = minetest.formspec_escape
+local S = core.get_translator("mcl_inventory")
+local F = core.formspec_escape
 
 mcl_inventory.registered_survival_inventory_tabs = {}
 
@@ -33,11 +33,11 @@ end
 
 local player_current_tab = {}
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	player_current_tab[player] = "main"
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	player_current_tab[player] = nil
 end)
 
@@ -95,7 +95,7 @@ local main_page_static = table.concat({
 	"list[current_player;offhand;5.375,4.125;1,1]",
 
 	--Craft grid
-	"label[6.61,0.5;" .. F(minetest.colorize(mcl_formspec.label_color, S("Crafting"))) .. "]",
+	"label[6.61,0.5;" .. F(core.colorize(mcl_formspec.label_color, S("Crafting"))) .. "]",
 
 	mcl_formspec.get_itemslot_bg_v4(6.625, 0.875, 2, 2),
 	"list[current_player;craft;6.625,0.875;2,2]",
@@ -201,7 +201,7 @@ function mcl_inventory.build_survival_formspec(player)
 	return form
 end
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "" and #mcl_inventory.registered_survival_inventory_tabs ~= 1 and
 		player:get_meta():get_string("gamemode") ~= "creative" then
 		for _, d in ipairs(mcl_inventory.registered_survival_inventory_tabs) do
@@ -234,11 +234,11 @@ local function find_empty_inv_slots(inv)
 	return main, hotbar
 end
 
-minetest.register_on_player_inventory_action(function(player, action, inv, info)
+core.register_on_player_inventory_action(function(player, action, inv, info)
 	if action == "move" and info.to_list == "sorter" then
 		local stack = inv:get_stack(info.to_list, info.to_index)
 		local empty_main, empty_hotbar = find_empty_inv_slots(inv)
-		if minetest.get_item_group(stack:get_name(), "armor") > 0 then
+		if core.get_item_group(stack:get_name(), "armor") > 0 then
 			local newstack = mcl_armor.equip(stack, player, true)
 			if newstack and not newstack:is_empty() then
 				if inv:get_stack(info.from_list, info.from_index):is_empty() then
@@ -258,12 +258,12 @@ minetest.register_on_player_inventory_action(function(player, action, inv, info)
 	end
 end)
 
-minetest.register_allow_player_inventory_action(function(_, action, inv, info)
+core.register_allow_player_inventory_action(function(_, action, inv, info)
 	if info.to_list == "sorter" or info.from_list == "sorter" or info.listname == "sorter" then
 		if action == "put" or action == "take" then return 0 end
 		local stack = inv:get_stack(info.from_list, info.from_index)
 		local empty_main, empty_hotbar = find_empty_inv_slots(inv)
-		if minetest.get_item_group(stack:get_name(), "armor") > 0 then
+		if core.get_item_group(stack:get_name(), "armor") > 0 then
 			return 1
 		elseif ( info.from_list == "main" and info.from_index <= 9 and empty_main ) or
 			( info.from_list == "main" and info.from_index > 9 and empty_hotbar ) then

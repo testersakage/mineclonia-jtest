@@ -15,11 +15,11 @@ end
 -- If true, activates achievements from other Minecraft editions (XBox, PS, etc.)
 local non_pc_achievements = false
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 awards.register_on_unlock(function(name, def)
 	if def.reward_xp then
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		mcl_experience.throw_xp(player:get_pos(), def.reward_xp)
 	end
 end)
@@ -480,7 +480,7 @@ awards.register_achievement("mcl:lots_of_trimming", {
 	group = "Adventure",
 	on_unlock = function(name)
 		-- delete json that is no longer needed
-		minetest.get_player_by_name(name):get_meta():set_string("mcl_smithing_table:achievement_trims", "")
+		core.get_player_by_name(name):get_meta():set_string("mcl_smithing_table:achievement_trims", "")
 	end,
 })
 
@@ -553,7 +553,7 @@ if non_pc_achievements then
 end
 
 -- Show achievements formspec when the button was pressed
-minetest.register_on_player_receive_fields(function(player, _, fields)
+core.register_on_player_receive_fields(function(player, _, fields)
 	if fields.__mcl_achievements then
 		local name = player:get_player_name()
 		awards.show_to(name, name, nil, false)

@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_flowers.register_simple_flower("poppy", {
 	desc = S("Poppy"),
@@ -252,9 +252,9 @@ local def_tallgrass = {
 	_mcl_hardness = 0,
 	_on_bone_meal = mcl_flowers.on_bone_meal,
 }
-minetest.register_node("mcl_flowers:tallgrass", def_tallgrass)
+core.register_node("mcl_flowers:tallgrass", def_tallgrass)
 
-minetest.register_node("mcl_flowers:fern", table.merge(def_tallgrass, {
+core.register_node("mcl_flowers:fern", table.merge(def_tallgrass, {
 	description = S("Fern"),
 	longdesc = S("Ferns are small plants which occur naturally in jungles and taigas. They can be harvested for wheat seeds. By using bone meal, a fern can be turned into a large fern which is two blocks high."),
 	tiles = { "mcl_flowers_fern.png" },
@@ -273,7 +273,7 @@ mcl_flowerpots.register_potted_flower("mcl_flowers:fern", {
 	image = "mcl_flowers_fern_inv.png",
 })
 
-minetest.register_node("mcl_flowers:waterlily", {
+core.register_node("mcl_flowers:waterlily", {
 	description = S("Lily Pad"),
 	_doc_items_longdesc = S("A lily pad is a flat plant block which can be walked on. They can be placed on water sources, ice and frosted ice."),
 	drawtype = "nodebox",
@@ -309,32 +309,32 @@ minetest.register_node("mcl_flowers:waterlily", {
 		if rc then return rc end
 
 		local pos = pointed_thing.above
-		local node = minetest.get_node(pointed_thing.under)
+		local node = core.get_node(pointed_thing.under)
 		local nodename = node.name
-		local def = minetest.registered_nodes[nodename]
-		local node_above = minetest.get_node(pointed_thing.above).name
-		local def_above = minetest.registered_nodes[node_above]
+		local def = core.registered_nodes[nodename]
+		local node_above = core.get_node(pointed_thing.above).name
+		local def_above = core.registered_nodes[node_above]
 		local player_name = placer:get_player_name()
 
 		if def then
 			if (pointed_thing.under.x == pointed_thing.above.x and pointed_thing.under.z == pointed_thing.above.z) and
-					((def.liquidtype == "source" and minetest.get_item_group(nodename, "water") > 0) or
+					((def.liquidtype == "source" and core.get_item_group(nodename, "water") > 0) or
 					(nodename == "mcl_core:ice") or
-					(minetest.get_item_group(nodename, "frosted_ice") > 0)) and
-					(def_above.buildable_to and minetest.get_item_group(node_above, "liquid") == 0) then
-				if not minetest.is_protected(pos, player_name) then
-					minetest.set_node(pos, {name = "mcl_flowers:waterlily", param2 = math.random(0, 3)})
+					(core.get_item_group(nodename, "frosted_ice") > 0)) and
+					(def_above.buildable_to and core.get_item_group(node_above, "liquid") == 0) then
+				if not core.is_protected(pos, player_name) then
+					core.set_node(pos, {name = "mcl_flowers:waterlily", param2 = math.random(0, 3)})
 					local idef = itemstack:get_definition()
 
 					if idef.sounds and idef.sounds.place then
-						minetest.sound_play(idef.sounds.place, {pos=pointed_thing.above, gain=1}, true)
+						core.sound_play(idef.sounds.place, {pos=pointed_thing.above, gain=1}, true)
 					end
 
-					if not minetest.is_creative_enabled(player_name) then
+					if not core.is_creative_enabled(player_name) then
 						itemstack:take_item()
 					end
 				else
-					minetest.record_protection_violation(pos, player_name)
+					core.record_protection_violation(pos, player_name)
 				end
 			end
 		end

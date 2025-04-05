@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local PRESSURE_PLATE_INTERVAL = 0.25
 
@@ -14,10 +14,10 @@ local pp_box_on = {
 mcl_pressureplates = {}
 
 local function update_pp(pos)
-	local node = minetest.get_node(pos)
-	local basename = minetest.registered_nodes[node.name]._mcl_pressureplate_basename
-	local activated_by = minetest.registered_nodes[node.name]._mcl_pressureplate_activated_by
-	local weighted = minetest.registered_nodes[node.name]._mcl_pressureplate_weighted
+	local node = core.get_node(pos)
+	local basename = core.registered_nodes[node.name]._mcl_pressureplate_basename
+	local activated_by = core.registered_nodes[node.name]._mcl_pressureplate_activated_by
+	local weighted = core.registered_nodes[node.name]._mcl_pressureplate_weighted
 
 	-- This is a workaround for a strange bug that occurs when the server is started
 	-- For some reason the first time on_timer is called, the pos is wrong
@@ -73,13 +73,13 @@ local function update_pp(pos)
 
 	local function count_obj_touching_plate_pos(pos)
 		local n = 0
-		for obj in minetest.objects_inside_radius(pos, 1) do
+		for obj in core.objects_inside_radius(pos, 1) do
 			if
 				obj_does_activate(obj, activated_by) and
 				obj_touching_plate_pos(obj, pos)
 			then
 				n = n + 1
-				minetest.get_meta(pos):set_string("deact_time", "")
+				core.get_meta(pos):set_string("deact_time", "")
 			end
 		end
 		return n
@@ -88,22 +88,22 @@ local function update_pp(pos)
 	local n_entities = count_obj_touching_plate_pos(pos)
 	if node.name == basename .. "_on" then
 		if n_entities == 0 then
-			local meta = minetest.get_meta(pos)
+			local meta = core.get_meta(pos)
 			local deact_time = meta:get_float("deact_time")
-			local current_time = minetest.get_us_time()
+			local current_time = core.get_us_time()
 			if deact_time == 0 then
 				deact_time = current_time + 1 * 1000 * 1000
 				meta:set_float("deact_time", deact_time)
 			end
 			if deact_time <= current_time then
-				minetest.set_node(pos, { name = basename .. "_off" })
+				core.set_node(pos, { name = basename .. "_off" })
 				meta:set_string("deact_time", "")
 			end
 		end
 	end
 	if n_entities > 0 then
 		local power = math.min(weighted and (n_entities / weighted) or 15, 15)
-		minetest.set_node(pos, { name = basename .. "_on", param2 = power })
+		core.set_node(pos, { name = basename .. "_on", param2 = power })
 	end
 
 	return true
@@ -146,7 +146,7 @@ function mcl_pressureplates.register_pressure_plate(basename, def)
 			update_pp(vector.round(pos))
 		end,
 		on_construct = function(pos)
-			minetest.get_node_timer(pos):start(PRESSURE_PLATE_INTERVAL)
+			core.get_node_timer(pos):start(PRESSURE_PLATE_INTERVAL)
 		end,
 		sounds = def.sounds,
 		is_ground_content = false,
@@ -163,14 +163,14 @@ function mcl_pressureplates.register_pressure_plate(basename, def)
 		},
 	}
 
-	minetest.register_node(":"..basename.."_off", table.merge(commdef, {
+	core.register_node(":"..basename.."_off", table.merge(commdef, {
 		node_box = pp_box_off,
 		selection_box = pp_box_off,
 		groups = groups_off,
 		_doc_items_longdesc = def.longdesc,
 		_tt_help = tt,
 	}))
-	minetest.register_node(":"..basename.."_on", table.merge(commdef, {
+	core.register_node(":"..basename.."_on", table.merge(commdef, {
 		node_box = pp_box_on,
 		selection_box = pp_box_on,
 		groups = groups_on,
@@ -182,12 +182,12 @@ function mcl_pressureplates.register_pressure_plate(basename, def)
 			end,
 		}),
 	}))
-	minetest.register_craft({
+	core.register_craft({
 		output = basename.."_off",
 		recipe = {{def.recipeitem, def.recipeitem}},
 	})
 
-	if minetest.get_modpath("doc") then
+	if core.get_modpath("doc") then
 		doc.add_entry_alias("nodes", basename .. "_off", "nodes", basename .. "_on")
 	end
 end

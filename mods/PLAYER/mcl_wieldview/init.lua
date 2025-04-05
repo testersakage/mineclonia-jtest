@@ -1,4 +1,4 @@
-minetest.register_entity("mcl_wieldview:wieldview", {
+core.register_entity("mcl_wieldview:wieldview", {
 	initial_properties = {
 		hp_max           = 1,
 		visual           = "wielditem",
@@ -34,7 +34,7 @@ local function update_wieldview_entity(player, bone, position, rotation, get_ite
 		local item = get_item(player):get_name()
 
 		if item == luaentity._item then return end
-		if minetest.get_item_group(item, "shield") > 0 then
+		if core.get_item_group(item, "shield") > 0 then
 			luaentity.object:remove ()
 			wieldview_luaentites[bone][player] = nil
 			return
@@ -46,7 +46,7 @@ local function update_wieldview_entity(player, bone, position, rotation, get_ite
 			item = def._mcl_wieldview_item
 		end
 
-		local item_def = minetest.registered_items[item]
+		local item_def = core.registered_items[item]
 		luaentity.object:set_properties({
 			glow = item_def and item_def.light_source or 0,
 			wield_item = item,
@@ -56,9 +56,9 @@ local function update_wieldview_entity(player, bone, position, rotation, get_ite
 		-- If the player is running through an unloaded area,
 		-- the wieldview entity will sometimes get unloaded.
 		-- This code path is also used to initalize the wieldview.
-		-- Creating entites from minetest.register_on_joinplayer
+		-- Creating entites from core.register_on_joinplayer
 		-- is unreliable as of Minetest 5.6
-		local obj_ref = minetest.add_entity(player:get_pos(), "mcl_wieldview:wieldview")
+		local obj_ref = core.add_entity(player:get_pos(), "mcl_wieldview:wieldview")
 		if not obj_ref then return end
 		obj_ref:set_attach(player, bone, position, rotation)
 		obj_ref:set_armor_groups({ immortal = 1 })
@@ -66,10 +66,10 @@ local function update_wieldview_entity(player, bone, position, rotation, get_ite
 	end
 end
 
-minetest.register_on_leaveplayer(remove_wieldview)
+core.register_on_leaveplayer(remove_wieldview)
 
-minetest.register_globalstep(function()
-	local players = minetest.get_connected_players()
+core.register_globalstep(function()
+	local players = core.get_connected_players()
 	for _, player in pairs(players) do
 		update_wieldview_entity(player, "Wield_Item", nil, nil, mcl_serverplayer.get_visual_wielditem)
 		update_wieldview_entity(player, "Arm_Left", vector.new(0, 4.5, 2), vector.new(120, 0, 0), mcl_offhand.get_offhand)

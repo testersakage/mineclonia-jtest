@@ -18,9 +18,9 @@ end
 
 local function makelake(pos,size,liquid,placein,border,pr,noair)
 	local p1, p2 = vector.offset(pos,-size,-1,-size), vector.offset(pos,size,-1,size)
-	minetest.emerge_area(p1, p2, function(_, _, calls_remaining)
+	core.emerge_area(p1, p2, function(_, _, calls_remaining)
 		if calls_remaining ~= 0 then return end
-		local nn = minetest.find_nodes_in_area(p1,p2,placein)
+		local nn = core.find_nodes_in_area(p1,p2,placein)
 		if not nn[1] then return end
 		table.sort(nn,function(a, b)
 		   return vector.distance(pos, a) < vector.distance(pos, b)
@@ -38,12 +38,12 @@ local function makelake(pos,size,liquid,placein,border,pr,noair)
 		for _, v in pairs(lq) do
 			for _, vv in pairs(adjacents) do
 				local pp = vector.add(v,vv)
-				local an = minetest.get_node(pp)
+				local an = core.get_node(pp)
 				if not border then
-					if minetest.get_item_group(an.name,"solid") > 0 then
+					if core.get_item_group(an.name,"solid") > 0 then
 						border = an.name
-					elseif minetest.get_item_group(minetest.get_node(nn[1]).name,"solid") > 0 then
-						border = minetest.get_node_or_nil(nn[1]).name
+					elseif core.get_item_group(core.get_node(nn[1]).name,"solid") > 0 then
+						border = core.get_node_or_nil(nn[1]).name
 					else
 						border = "mcl_core:stone"
 					end
@@ -51,7 +51,7 @@ local function makelake(pos,size,liquid,placein,border,pr,noair)
 				end
 				if not noair and an.name ~= liquid then
 					table.insert(br,pp)
-					local un = minetest.get_node(vector.offset(pp,0,1,0))
+					local un = core.get_node(vector.offset(pp,0,1,0))
 					if un.name ~= liquid then
 						airtower(pp,air,10)
 					end
@@ -68,9 +68,9 @@ end
 local mushrooms = {"mcl_mushrooms:mushroom_brown","mcl_mushrooms:mushroom_red"}
 
 local function get_fallen_tree_schematic(pos,pr)
-	local tree = minetest.find_node_near(pos,15,{"group:tree"})
+	local tree = core.find_node_near(pos,15,{"group:tree"})
 	if not tree then return end
-	tree = minetest.get_node(tree).name
+	tree = core.get_node(tree).name
 	local maxlen = 8
 	local minlen = 2
 	local vprob = 120
@@ -132,11 +132,11 @@ mcl_structures.register_structure("fallen_tree",{
 	sidelen = 18,
 	solid_ground = true,
 	y_max = mcl_vars.mg_overworld_max,
-	y_min = minetest.get_mapgen_setting("water_level"),
+	y_min = core.get_mapgen_setting("water_level"),
 	on_place = function(pos, def)
 		local air_p1 = vector.offset(pos,-def.sidelen/2,1,-def.sidelen/2)
 		local air_p2 = vector.offset(pos,def.sidelen/2,1,def.sidelen/2)
-		local air = minetest.find_nodes_in_area(air_p1,air_p2,{"air"})
+		local air = core.find_nodes_in_area(air_p1,air_p2,{"air"})
 		if #air < ( def.sidelen * def.sidelen ) / 2 then
 			return false
 		end
@@ -145,7 +145,7 @@ mcl_structures.register_structure("fallen_tree",{
 	place_func = function(pos, _, pr)
 		local schem=get_fallen_tree_schematic(pos,pr)
 		if not schem then return end
-		return minetest.place_schematic(pos,schem,"random")
+		return core.place_schematic(pos,schem,"random")
 	end
 })
 
@@ -166,7 +166,7 @@ mcl_structures.register_structure("lavapool",{
 	num_spawn_by = 5,
 	flags = "place_center_x, place_center_z, force_placement",
 	y_max = mcl_vars.mg_overworld_max,
-	y_min = minetest.get_mapgen_setting("water_level"),
+	y_min = core.get_mapgen_setting("water_level"),
 	place_func = function(pos, _, pr)
 		return makelake(pos,5,"mcl_core:lava_source",{"group:material_stone", "group:sand", "group:dirt"},"mcl_core:stone",pr)
 	end
@@ -189,7 +189,7 @@ mcl_structures.register_structure("water_lake",{
 	num_spawn_by = 5,
 	flags = "place_center_x, place_center_z, force_placement",
 	y_max = mcl_vars.mg_overworld_max,
-	y_min = minetest.get_mapgen_setting("water_level"),
+	y_min = core.get_mapgen_setting("water_level"),
 	place_func = function(pos, _, pr)
 		return makelake(pos,5,"mcl_core:water_source",{"group:material_stone", "group:sand", "group:dirt","group:grass_block"},"mcl_core:dirt_with_grass",pr)
 	end
@@ -213,7 +213,7 @@ mcl_structures.register_structure("water_lake_mangrove_swamp",{
 	num_spawn_by = 5,
 	flags = "place_center_x, place_center_z, force_placement",
 	y_max = mcl_vars.mg_overworld_max,
-	y_min = minetest.get_mapgen_setting("water_level"),
+	y_min = core.get_mapgen_setting("water_level"),
 	place_func = function(pos, _, pr)
 		return makelake(pos,3,"mcl_core:water_source",{"group:material_stone", "group:sand", "group:dirt","group:grass_block","mcl_mud:mud"},"mcl_mud:mud",pr,true)
 	end
@@ -238,7 +238,7 @@ mcl_structures.register_structure("basalt_column",{
 	y_min = mcl_vars.mg_lava_nether_max + 1,
 	biomes = { "BasaltDelta" },
 	place_func = function(pos, _, pr)
-		local nn = minetest.find_nodes_in_area(vector.offset(pos,-5,-1,-5),vector.offset(pos,5,-1,5),{"air","mcl_blackstone:basalt","mcl_blackstone:blackstone"})
+		local nn = core.find_nodes_in_area(vector.offset(pos,-5,-1,-5),vector.offset(pos,5,-1,5),{"air","mcl_blackstone:basalt","mcl_blackstone:blackstone"})
 		table.sort(nn,function(a, b)
 		   return vector.distance(vector.new(pos.x,0,pos.z), a) < vector.distance(vector.new(pos.x,0,pos.z), b)
 		end)
@@ -246,7 +246,7 @@ mcl_structures.register_structure("basalt_column",{
 		local basalt = {}
 		local magma = {}
 		for i=1,pr:next(1,#nn) do
-			if minetest.get_node(vector.offset(nn[i],0,-1,0)).name ~= "air" then
+			if core.get_node(vector.offset(nn[i],0,-1,0)).name ~= "air" then
 				local dst=vector.distance(pos,nn[i])
 				local r = pr:next(1,14)-dst
 				for ii=0,r do
@@ -280,7 +280,7 @@ mcl_structures.register_structure("basalt_pillar",{
 	y_min = mcl_vars.mg_lava_nether_max + 1,
 	biomes = { "BasaltDelta" },
 	place_func = function(pos, _, pr)
-		local nn = minetest.find_nodes_in_area(vector.offset(pos,-2,-1,-2),vector.offset(pos,2,-1,2),{"air","mcl_blackstone:basalt","mcl_blackstone:blackstone"})
+		local nn = core.find_nodes_in_area(vector.offset(pos,-2,-1,-2),vector.offset(pos,2,-1,2),{"air","mcl_blackstone:basalt","mcl_blackstone:blackstone"})
 		table.sort(nn,function(a, b)
 		   return vector.distance(vector.new(pos.x,0,pos.z), a) < vector.distance(vector.new(pos.x,0,pos.z), b)
 		end)
@@ -288,7 +288,7 @@ mcl_structures.register_structure("basalt_pillar",{
 		local basalt = {}
 		local magma = {}
 		for i=1,pr:next(1,#nn) do
-			if minetest.get_node(vector.offset(nn[i],0,-1,0)).name ~= "air" then
+			if core.get_node(vector.offset(nn[i],0,-1,0)).name ~= "air" then
 				local dst=vector.distance(pos,nn[i])
 				for ii=0,pr:next(19,35)-dst do
 					if pr:next(1,20) == 1 then
@@ -324,7 +324,7 @@ mcl_structures.register_structure("lavadelta",{
 	y_min = mcl_vars.mg_lava_nether_max + 1,
 	biomes = { "BasaltDelta" },
 	place_func = function(pos, _, pr)
-		local nn = minetest.find_nodes_in_area_under_air(vector.offset(pos,-10,-1,-10),vector.offset(pos,10,-2,10),{"mcl_blackstone:basalt","mcl_blackstone:blackstone","mcl_nether:netherrack"})
+		local nn = core.find_nodes_in_area_under_air(vector.offset(pos,-10,-1,-10),vector.offset(pos,10,-2,10),{"mcl_blackstone:basalt","mcl_blackstone:blackstone","mcl_nether:netherrack"})
 		table.sort(nn,function(a, b)
 		   return vector.distance(vector.new(pos.x,0,pos.z), a) < vector.distance(vector.new(pos.x,0,pos.z), b)
 		end)
@@ -339,7 +339,7 @@ mcl_structures.register_structure("lavadelta",{
 		for _,v in pairs(lava) do
 			for _,vv in pairs(adjacents) do
 				local p = vector.add(v,vv)
-				if minetest.get_node(p).name ~= "mcl_nether:nether_lava_source" then
+				if core.get_node(p).name ~= "mcl_nether:nether_lava_source" then
 					table.insert(basalt,p)
 
 				end
@@ -380,10 +380,10 @@ mcl_structures.register_structure("powder_snow_trap", {
 		for i = 0, width do
 			for j = 0, length do
 				for k = 0, depth do
-					node_name = minetest.get_node(vector.offset(pos, i, k, j)).name
-					if minetest.get_item_group(node_name, "dirt") > 0
-						or minetest.get_item_group(node_name, "snow_cover") > 0
-						or minetest.get_item_group(node_name, "stone") > 0 then
+					node_name = core.get_node(vector.offset(pos, i, k, j)).name
+					if core.get_item_group(node_name, "dirt") > 0
+						or core.get_item_group(node_name, "snow_cover") > 0
+						or core.get_item_group(node_name, "stone") > 0 then
 						table.insert(solid_nodes, vector.offset(pos, i, k, j))
 					end
 				end
@@ -394,7 +394,7 @@ mcl_structures.register_structure("powder_snow_trap", {
 			return false
 		end
 
-		minetest.bulk_set_node(solid_nodes, {name = "mcl_powder_snow:powder_snow"})
+		core.bulk_set_node(solid_nodes, {name = "mcl_powder_snow:powder_snow"})
 		return true
 	end
 })
@@ -407,8 +407,8 @@ local function generate_dripstone(pos, max_length, direction)
 		local r = math.ceil((max_length / 8))
 		-- local r = math.random(2, 4)
 		-- local max_length = r * 5 + math.random(0, 4)
-		local c_to = minetest.get_content_id("mcl_dripstone:dripstone_block")
-		local vm = minetest.get_voxel_manip()
+		local c_to = core.get_content_id("mcl_dripstone:dripstone_block")
+		local vm = core.get_voxel_manip()
 		local start_pos, end_pos
 		local foundation_start_y, foundation_end_y
 		if direction == 1 then
@@ -473,7 +473,7 @@ mcl_structures.register_structure("large_dripstone_stalagtite", {
 	place_func = function(pos)
 		local empty_air_length = 0
 		while true do
-			if minetest.get_node(vector.offset(pos, 0, -empty_air_length, 0)).name ~= "air" then
+			if core.get_node(vector.offset(pos, 0, -empty_air_length, 0)).name ~= "air" then
 				break
 			end
 			empty_air_length = empty_air_length + 1
@@ -498,7 +498,7 @@ mcl_structures.register_structure("large_dripstone_stalagmite", {
 	place_func = function(pos)
 		local empty_air_length = 0
 		while true do
-			if minetest.get_node(vector.offset(pos, 0, empty_air_length, 0)).name ~= "air" then
+			if core.get_node(vector.offset(pos, 0, empty_air_length, 0)).name ~= "air" then
 				break
 			end
 			empty_air_length = empty_air_length + 1
@@ -523,7 +523,7 @@ mcl_structures.register_structure("large_dripstone_column", {
 	place_func = function(pos)
 		local empty_air_length = 0
 		while true do
-			if minetest.get_item_group(minetest.get_node(vector.offset(pos, 0, empty_air_length, 0)).name, "solid") ~= 0 then
+			if core.get_item_group(core.get_node(vector.offset(pos, 0, empty_air_length, 0)).name, "solid") ~= 0 then
 				break
 			elseif empty_air_length > 20 then
 				return false

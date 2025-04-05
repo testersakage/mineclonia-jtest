@@ -1,6 +1,6 @@
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local modpath = core.get_modpath(modname)
 
 mcl_structures = {}
 
@@ -36,13 +36,13 @@ mcl_structures.register_structure("desert_well",{
 		local hl = def.sidelen / 2
 		local p1 = vector.offset(pos,-hl,-hl,-hl)
 		local p2 = vector.offset(pos,hl,hl,hl)
-		if minetest.registered_nodes["mcl_sus_nodes:sand"] then
-			local sus_poss = minetest.find_nodes_in_area(vector.offset(p1,0,-3,0), vector.offset(p2,0,-hl+2,0), {"mcl_core:sand","mcl_core:sandstone","mcl_core:redsand","mcl_core:redsandstone"})
+		if core.registered_nodes["mcl_sus_nodes:sand"] then
+			local sus_poss = core.find_nodes_in_area(vector.offset(p1,0,-3,0), vector.offset(p2,0,-hl+2,0), {"mcl_core:sand","mcl_core:sandstone","mcl_core:redsand","mcl_core:redsandstone"})
 			if #sus_poss > 0 then
 				table.shuffle(sus_poss)
 				for i = 1,pr:next(1,#sus_poss) do
-					minetest.swap_node(sus_poss[i],{name="mcl_sus_nodes:sand"})
-					local meta = minetest.get_meta(sus_poss[i])
+					core.swap_node(sus_poss[i],{name="mcl_sus_nodes:sand"})
+					local meta = core.get_meta(sus_poss[i])
 					meta:set_string("structure","desert_well")
 				end
 			end
@@ -121,17 +121,17 @@ local function dir_to_rotation(dir)
 	return "0"
 end
 
-minetest.register_chatcommand("spawnstruct", {
+core.register_chatcommand("spawnstruct", {
 	params = "dungeon",
 	description = S("Generate a pre-defined structure near your position."),
 	privs = {debug = true},
 	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
+		local player = core.get_player_by_name(name)
 		if not player then return end
 		local pos = player:get_pos()
 		if not pos then return end
 		pos = vector.round(pos)
-		local dir = minetest.yaw_to_dir(player:get_look_horizontal())
+		local dir = core.yaw_to_dir(player:get_look_horizontal())
 		local rot = dir_to_rotation(dir)
 		local pr = PseudoRandom(pos.x+pos.y+pos.z)
 		local errord = false
@@ -151,16 +151,16 @@ minetest.register_chatcommand("spawnstruct", {
 			message = S("Error: Unknown structure type. Please use “/spawnstruct <type>”.")
 			errord = true
 		end
-		minetest.chat_send_player(name, message)
+		core.chat_send_player(name, message)
 		if errord then
-			minetest.chat_send_player(name, S("Use /help spawnstruct to see a list of available types."))
+			core.chat_send_player(name, S("Use /help spawnstruct to see a list of available types."))
 		end
 	end
 })
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
 	local p = ""
 	for n,_ in pairs(mcl_structures.registered_structures) do
 		p = p .. " | "..n
 	end
-	minetest.registered_chatcommands["spawnstruct"].params = minetest.registered_chatcommands["spawnstruct"].params .. p
+	core.registered_chatcommands["spawnstruct"].params = core.registered_chatcommands["spawnstruct"].params .. p
 end)

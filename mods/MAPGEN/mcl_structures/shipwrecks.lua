@@ -1,8 +1,8 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
---local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
+--local S = core.get_translator(modname)
 
-local water_level = minetest.get_mapgen_setting("water_level")
+local water_level = core.get_mapgen_setting("water_level")
 
 --schematics by chmodsayshello
 local schems = {
@@ -123,7 +123,7 @@ local buried_treasure = {
 local function get_treasure_map(cpos)
 	local stack = ItemStack("mcl_books:written_book")
 	local bookmeta = stack:get_meta()
-	bookmeta:set_string("text", "There is a treasure at \n"..minetest.pos_to_string(cpos))
+	bookmeta:set_string("text", "There is a treasure at \n"..core.pos_to_string(cpos))
 	bookmeta:set_string("author", "The Albatross")
 	bookmeta:set_string("title", "Treasure")
 	bookmeta:set_string("description", "Treasure")
@@ -152,19 +152,19 @@ mcl_structures.register_structure("shipwreck",{
 	y_offset = function(pr) return pr:next(-4,-2) end,
 	after_place = function(p, _, pr)
 		local pos = vector.new(p.x, 1, p.z)
-		local sand = minetest.find_nodes_in_area_under_air(vector.offset(pos, -64, -2, -64), vector.offset(pos, 64, 5, 64), {"mcl_core:sand", "mcl_core:gravel", "mcl_core:dirt_with_grass", "mcl_core:mycelium", "mcl_core:podzol"})
-		local chests = minetest.find_nodes_in_area_under_air(vector.offset(pos, -8, -7, -8), vector.offset(pos, 8, 8, 8), {"mcl_chests:chest_small"})
+		local sand = core.find_nodes_in_area_under_air(vector.offset(pos, -64, -2, -64), vector.offset(pos, 64, 5, 64), {"mcl_core:sand", "mcl_core:gravel", "mcl_core:dirt_with_grass", "mcl_core:mycelium", "mcl_core:podzol"})
+		local chests = core.find_nodes_in_area_under_air(vector.offset(pos, -8, -7, -8), vector.offset(pos, 8, 8, 8), {"mcl_chests:chest_small"})
 		if sand and #sand > 0 then
 			table.shuffle(sand)
 			local ppos = sand[pr:next(1,math.min(#sand, 6400))]
 			local depth = pr:next(1,4)
 			local cpos = vector.offset(ppos, 0, -depth, 0)
-			minetest.swap_node(cpos, {name = "mcl_chests:chest_small"})
-			minetest.registered_nodes["mcl_chests:chest_small"].on_construct(cpos)
-			mcl_loot.fill_inventory(minetest.get_meta(cpos):get_inventory(), "main", mcl_loot.get_multi_loot(buried_treasure, pr), pr)
+			core.swap_node(cpos, {name = "mcl_chests:chest_small"})
+			core.registered_nodes["mcl_chests:chest_small"].on_construct(cpos)
+			mcl_loot.fill_inventory(core.get_meta(cpos):get_inventory(), "main", mcl_loot.get_multi_loot(buried_treasure, pr), pr)
 			if chests and #chests > 0 then
 				local cchest = chests[pr:next(1,#chests)]
-				minetest.get_meta(cchest):get_inventory():add_item("main", get_treasure_map(cpos))
+				core.get_meta(cchest):get_inventory():add_item("main", get_treasure_map(cpos))
 			end
 		end
 	end,

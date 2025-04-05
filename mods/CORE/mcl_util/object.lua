@@ -1,5 +1,5 @@
 function mcl_util.get_luaentity_by_id(id)
-	for _, e in pairs(minetest.luaentities) do
+	for _, e in pairs(core.luaentities) do
 		if e._id == id then return e end
 	end
 end
@@ -71,7 +71,7 @@ function mcl_util.detach_object(obj, change_pos, callback)
 		 obj:set_pos(vector.add(obj:get_pos(), change_pos))
 	end
 	if callback then
-		minetest.after(0.1, function(obj)
+		core.after(0.1, function(obj)
 			if not obj or not obj:get_pos() then return end
 			callback(obj)
 		end, obj)

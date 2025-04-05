@@ -1,6 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
-local C = minetest.colorize
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
+local C = core.colorize
 mcl_crafting_table = {}
 
 mcl_crafting_table.formspec = table.concat({
@@ -39,8 +39,8 @@ mcl_crafting_table.formspec = table.concat({
 function mcl_crafting_table.has_crafting_table(player)
 	if not player or not player:get_pos() then return end
 	local wdef = player:get_wielded_item():get_definition()
-	local range = wdef and wdef.range or ItemStack():get_definition().range or tonumber(minetest.settings:get("mcl_hand_range")) or 4.5
-	return minetest.is_creative_enabled(player:get_player_name()) or (minetest.find_node_near(player:get_pos(), range, { "group:crafting_table" }, true) ~= nil)
+	local range = wdef and wdef.range or ItemStack():get_definition().range or tonumber(core.settings:get("mcl_hand_range")) or 4.5
+	return core.is_creative_enabled(player:get_player_name()) or (core.find_node_near(player:get_pos(), range, { "group:crafting_table" }, true) ~= nil)
 end
 
 function mcl_crafting_table.show_crafting_form(player)
@@ -53,10 +53,10 @@ function mcl_crafting_table.show_crafting_form(player)
 		inv:set_size("craft", 9)
 	end
 
-	minetest.show_formspec(player:get_player_name(), "main", mcl_crafting_table.formspec)
+	core.show_formspec(player:get_player_name(), "main", mcl_crafting_table.formspec)
 end
 
-minetest.register_node("mcl_crafting_table:crafting_table", {
+core.register_node("mcl_crafting_table:crafting_table", {
 	description = S("Crafting Table"),
 	_tt_help = S("3×3 crafting grid"),
 	_doc_items_longdesc = S("A crafting table is a block which grants you access to a 3×3 crafting grid which allows you to perform advanced crafts."),
@@ -78,7 +78,7 @@ minetest.register_node("mcl_crafting_table:crafting_table", {
 	_mcl_burntime = 15
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_crafting_table:crafting_table",
 	recipe = {
 		{ "group:wood", "group:wood" },
@@ -86,5 +86,5 @@ minetest.register_craft({
 	},
 })
 
-minetest.register_alias("crafting:workbench", "mcl_crafting_table:crafting_table")
-minetest.register_alias("mcl_inventory:workbench", "mcl_crafting_table:crafting_table")
+core.register_alias("crafting:workbench", "mcl_crafting_table:crafting_table")
+core.register_alias("mcl_inventory:workbench", "mcl_crafting_table:crafting_table")

@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 local spawnon = {"mcl_core:stripped_oak","mcl_stairs:slab_birchwood_top"}
 
@@ -65,7 +65,7 @@ mcl_structures.register_structure("pillager_outpost",{
 		mcl_structures.spawn_mobs("mobs_mc:pillager",spawnon,p1,p2,pr,5)
 		mcl_structures.spawn_mobs("mobs_mc:parrot",{"mcl_pressureplates:pressure_plate_stone_off"},p1,p2,pr,3)
 		mcl_structures.spawn_mobs("mobs_mc:iron_golem",{"mcl_redstone:button_stone_off"},p1,p2,pr,1)
-		for _,n in pairs(minetest.find_nodes_in_area(p1,p2,{"group:wall"})) do
+		for _,n in pairs(core.find_nodes_in_area(p1,p2,{"group:wall"})) do
 			mcl_walls.update_wall(n)
 		end
 	end

@@ -1,14 +1,14 @@
-local S = minetest.get_translator(minetest.get_current_modname())
---local enable_damage = minetest.settings:get_bool("enable_damage")
+local S = core.get_translator(core.get_current_modname())
+--local enable_damage = core.settings:get_bool("enable_damage")
 
 local voidtimer = 0
 local VOID_DAMAGE_FREQ = 0.5
 local VOID_DAMAGE = 4
 
 -- Remove entities that fall too deep into the void
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
 	-- We do this by overwriting on_step of all entities
-	for entitystring, def in pairs(minetest.registered_entities) do
+	for entitystring, def in pairs(core.registered_entities) do
 		local on_step_old = def.on_step
 		if not on_step_old then
 			on_step_old = function() end
@@ -40,16 +40,16 @@ minetest.register_on_mods_loaded(function()
 			end
 		end
 		def.on_step = on_step
-		minetest.register_entity(":"..entitystring, def)
+		core.register_entity(":"..entitystring, def)
 	end
 end)
 
 -- Hurt players or teleport them back to spawn if they are too deep in the void
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	voidtimer = voidtimer + dtime
 	if voidtimer > VOID_DAMAGE_FREQ then
 		voidtimer = 0
-		local enable_damage = minetest.settings:get_bool("enable_damage")
+		local enable_damage = core.settings:get_bool("enable_damage")
 		for player in mcl_util.connected_players() do
 			local pos = player:get_pos()
 			local _, void_deadly = mcl_worlds.is_in_void(pos)
@@ -63,7 +63,7 @@ minetest.register_globalstep(function(dtime)
 					-- If damage is disabled, we can't kill players.
 					-- So we just teleport the player back to spawn.
 					player:respawn()
-					minetest.chat_send_player(player:get_player_name(), S("The void is off-limits to you!"))
+					core.chat_send_player(player:get_player_name(), S("The void is off-limits to you!"))
 				elseif enable_damage and not is_immortal then
 					-- Damage enabled, not immortal: Deal void damage (4 HP / 0.5 seconds)
 					if player:get_hp() > 0 then

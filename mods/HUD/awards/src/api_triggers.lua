@@ -146,7 +146,7 @@ function awards.register_trigger(tname, tdef)
 			n = n or 1
 
 			if tdef.key_is_item and key:sub(1, 6) ~= "group:" then
-				local itemdef = minetest.registered_items[key]
+				local itemdef = core.registered_items[key]
 				if itemdef then
 					for groupname,rating in pairs(itemdef.groups or {}) do
 						if rating ~= 0 and tdef.watched_groups[groupname] then
@@ -204,12 +204,12 @@ function awards.register_trigger(tname, tdef)
 end
 
 function awards.increment_item_counter(data, field, itemname, count)
-	itemname = minetest.registered_aliases[itemname] or itemname
+	itemname = core.registered_aliases[itemname] or itemname
 	data[field][itemname] = (data[field][itemname] or 0) + (count or 1)
 end
 
 function awards.get_item_count(data, field, itemname)
-	itemname = minetest.registered_aliases[itemname] or itemname
+	itemname = core.registered_aliases[itemname] or itemname
 	return data[field][itemname] or 0
 end
 

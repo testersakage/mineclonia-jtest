@@ -86,7 +86,7 @@ local function player_collision (player)
 	-- This function is only concerned with players; mobs
 	-- colliding with players call mcl_player.player_collision
 	-- instead.
-	for object in minetest.objects_inside_radius(pos, width) do
+	for object in core.objects_inside_radius(pos, width) do
 		if object ~= player and object:is_player () then
 			local pos2 = object:get_pos()
 			local r1 = (math.random (300) - 150) / 2400
@@ -164,8 +164,8 @@ end
 local function get_mouse_button(player)
 	local controls = player:get_player_control()
 	local get_wielded_item_name = player:get_wielded_item():get_name()
-	if controls.RMB and minetest.get_item_group(get_wielded_item_name, "bow") == 0 and
-		minetest.get_item_group(get_wielded_item_name, "crossbow") == 0 and
+	if controls.RMB and core.get_item_group(get_wielded_item_name, "bow") == 0 and
+		core.get_item_group(get_wielded_item_name, "crossbow") == 0 and
 		not mcl_shields.wielding_shield(player, 1) and not mcl_shields.wielding_shield(player, 2) or controls.LMB then
 		return true
 	else
@@ -201,9 +201,9 @@ local function update_player_textures(player)
 	player:set_properties({ textures = textures })
 
 	-- Delay calling the callbacks because mods (including mcl_player)
-	-- need to fully initialize player data from minetest.register_on_joinplayer
+	-- need to fully initialize player data from core.register_on_joinplayer
 	-- before callbacks run
-	minetest.after(0.1, function()
+	core.after(0.1, function()
 		if player:is_player() then
 			for _, func in ipairs(mcl_player.registered_on_visual_change) do
 				func(player)
@@ -256,7 +256,7 @@ function mcl_player.get_player_formspec_model(player, x, y, w, h, fsname)
 		textures[1] = "blank.png"
 	end
 	for k,v in pairs(textures) do
-		textures[k] = minetest.formspec_escape(v)
+		textures[k] = core.formspec_escape(v)
 	end
 	return string.format("model[%s,%s;%s,%s;%s;%s;%s;0,180;false;false;%s,%s]", x, y, w, h, fsname, model,
 		table.concat(textures, ","), anim.x, anim.y)
@@ -291,11 +291,11 @@ function mcl_player.position_wielditem (wielded_itemname, wielded_def, player)
 	-- Specific wielditem positions according to item
 	if wielded_def and wielded_def._mcl_toollike_wield then
 		set_bone_pos(player, "Wield_Item", vector.new(0, 4.7, 3.1), vector.new(-90, 225, 90))
-	elseif minetest.get_item_group(wielded_itemname, "bow") > 0 then
+	elseif core.get_item_group(wielded_itemname, "bow") > 0 then
 		set_bone_pos(player, "Wield_Item", vector.new(1, 4, 0), vector.new(90, 130, 115))
-	elseif minetest.get_item_group(wielded_itemname, "crossbow") > 4 then
+	elseif core.get_item_group(wielded_itemname, "crossbow") > 4 then
 		set_bone_pos(player, "Wield_Item", vector.new(0, 5.2, 1.2), vector.new(0, 180, 73))
-	elseif minetest.get_item_group(wielded_itemname, "crossbow") > 0 then
+	elseif core.get_item_group(wielded_itemname, "crossbow") > 0 then
 		set_bone_pos(player, "Wield_Item", vector.new(0, 5.2, 1.2), vector.new(0, 180, 45))
 	elseif wielded_def and wielded_def.inventory_image == "" then
 		set_bone_pos(player,"Wield_Item", vector.new(0, 6, 2), vector.new(180, -45, 0))
@@ -330,7 +330,7 @@ mcl_player.register_globalstep(function(player)
 	local pitch = - math.deg(player:get_look_vertical())
 	local yaw = math.deg(player:get_look_horizontal())
 
-	local player_vel_yaw = math.deg(minetest.dir_to_yaw(player_velocity))
+	local player_vel_yaw = math.deg(core.dir_to_yaw(player_velocity))
 	if player_vel_yaw == 0 then
 		player_vel_yaw = mcl_player.players[player].vel_yaw or yaw
 	end
@@ -363,7 +363,7 @@ mcl_player.register_globalstep(function(player)
 		end
 
 		-- ask if player is swiming
-		local head_in_water = minetest.get_item_group(mcl_player.players[player].nodes.head, "water") ~= 0
+		local head_in_water = core.get_item_group(mcl_player.players[player].nodes.head, "water") ~= 0
 		-- ask if player is sprinting
 		local is_sprinting = mcl_sprint.is_sprinting(name)
 
@@ -381,8 +381,8 @@ mcl_player.register_globalstep(function(player)
 			mcl_util.set_properties(player, player_props_normal)
 			set_bone_pos(player,"Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, 0))
 			set_bone_pos(player,"Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
-			local no_arm_moving = minetest.get_item_group(wielded_itemname, "bow") > 0 or
-				minetest.get_item_group(wielded_itemname, "crossbow") > 0 or
+			local no_arm_moving = core.get_item_group(wielded_itemname, "bow") > 0 or
+				core.get_item_group(wielded_itemname, "crossbow") > 0 or
 				mcl_shields.wielding_shield(player, 1) or
 				mcl_shields.wielding_shield(player, 2)
 			if mcl_player.players[player].sneak ~= control.sneak then
@@ -397,16 +397,16 @@ mcl_player.register_globalstep(function(player)
 					set_swimming(player, "swim_walk", animation_speed_mod)
 				end
 			elseif mcl_player.players[player].is_swimming
-			and minetest.get_item_group(mcl_player.players[player].nodes.head, "solid") == 0
-			and minetest.get_item_group(mcl_player.players[player].nodes.head_top, "solid") == 0 then --not swimming anymore
+			and core.get_item_group(mcl_player.players[player].nodes.head, "solid") == 0
+			and core.get_item_group(mcl_player.players[player].nodes.head_top, "solid") == 0 then --not swimming anymore
 				mcl_player.players[player].is_swimming = false
 				mcl_player.player_set_animation(player, "stand")
 				mcl_util.set_properties(player, player_props_normal)
 				set_bone_pos(player,"Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, 0))
 				set_bone_pos(player,"Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
-			elseif no_arm_moving and control.RMB and control.sneak or minetest.get_item_group(wielded_itemname, "crossbow") > 0 and control.sneak then
+			elseif no_arm_moving and control.RMB and control.sneak or core.get_item_group(wielded_itemname, "crossbow") > 0 and control.sneak then
 				mcl_player.player_set_animation(player, "bow_sneak", animation_speed_mod)
-			elseif no_arm_moving and control.RMB or minetest.get_item_group(wielded_itemname, "crossbow") > 0 then
+			elseif no_arm_moving and control.RMB or core.get_item_group(wielded_itemname, "crossbow") > 0 then
 				mcl_player.player_set_animation(player, "bow_walk", animation_speed_mod)
 			elseif is_sprinting and get_mouse_button(player) and not control.sneak and not head_in_water then
 				mcl_player.player_set_animation(player, "run_walk_mine", animation_speed_mod)
@@ -428,8 +428,8 @@ mcl_player.register_globalstep(function(player)
 				set_swimming(player, "swim_stand")
 			end
 		elseif mcl_player.players[player].is_swimming
-		and minetest.get_item_group(mcl_player.players[player].nodes.head, "solid") == 0
-		and minetest.get_item_group(mcl_player.players[player].nodes.head_top, "solid") == 0 then --not swimming anymore
+		and core.get_item_group(mcl_player.players[player].nodes.head, "solid") == 0
+		and core.get_item_group(mcl_player.players[player].nodes.head_top, "solid") == 0 then --not swimming anymore
 			mcl_player.players[player].is_swimming = false
 			mcl_player.player_set_animation(player, "stand")
 			mcl_util.set_properties(player, player_props_normal)
@@ -462,14 +462,14 @@ mcl_player.register_globalstep(function(player)
 	elseif mcl_shields.is_blocking(player) == 1 then
 		set_bone_pos(player, "Arm_Left_Pitch_Control", nil, vector.new(20, 20, 0))
 	-- controls right and left arms pitch when holing a loaded crossbow
-	elseif minetest.get_item_group(wielded_itemname, "crossbow") == 5 then
+	elseif core.get_item_group(wielded_itemname, "crossbow") == 5 then
 		set_bone_pos(player, "Arm_Right_Pitch_Control", nil, vector.new(pitch + 90, -30, pitch * -1 * .35))
 		set_bone_pos(player, "Arm_Left_Pitch_Control", nil, vector.new(pitch + 90, 43, pitch * .35))
 	-- controls right and left arms pitch when loading a crossbow
-	elseif minetest.get_item_group(wielded_itemname, "crossbow") > 0 then
+	elseif core.get_item_group(wielded_itemname, "crossbow") > 0 then
 		set_bone_pos(player, "Arm_Right_Pitch_Control", nil, vector.new(45, -20, 25))
 		set_bone_pos(player, "Arm_Left_Pitch_Control", nil, vector.new(55, 20, -45))
-	elseif minetest.get_item_group(wielded_itemname, "bow") > 0 and control.RMB then
+	elseif core.get_item_group(wielded_itemname, "bow") > 0 and control.RMB then
 		local right_arm_rot = vector.new(pitch + 90, -30, pitch * -1 * .35)
 		local left_arm_rot = vector.new(pitch + 90, 43, pitch * .35)
 		set_bone_pos(player, "Arm_Right_Pitch_Control", nil, right_arm_rot)
@@ -491,8 +491,8 @@ end)
 
 mcl_player.register_globalstep_slow(function(player)
 	-- Underwater: Spawn bubble particles
-	if not mcl_player.players[player].pspawner_underwater and minetest.get_item_group(mcl_player.players[player].nodes.head, "water") > 0 then
-		mcl_player.players[player].pspawner_underwater = minetest.add_particlespawner({
+	if not mcl_player.players[player].pspawner_underwater and core.get_item_group(mcl_player.players[player].nodes.head, "water") > 0 then
+		mcl_player.players[player].pspawner_underwater = core.add_particlespawner({
 			amount = 4,
 			time = 0,
 			minpos = { x = -0.25, y = 0.3, z = -0.25 },
@@ -508,15 +508,15 @@ mcl_player.register_globalstep_slow(function(player)
 			maxsize = 2.4,
 			texture = "mcl_particles_bubble.png"
 		})
-	elseif mcl_player.players[player].pspawner_underwater and minetest.get_item_group(mcl_player.players[player].nodes.head, "water") == 0 then
-		minetest.delete_particlespawner(mcl_player.players[player].pspawner_underwater)
+	elseif mcl_player.players[player].pspawner_underwater and core.get_item_group(mcl_player.players[player].nodes.head, "water") == 0 then
+		core.delete_particlespawner(mcl_player.players[player].pspawner_underwater)
 		mcl_player.players[player].pspawner_underwater = nil
 	end
 end)
 
-minetest.register_on_respawnplayer(function(player)
+core.register_on_respawnplayer(function(player)
 	local pos = player:get_pos()
-	minetest.add_particlespawner({
+	core.add_particlespawner({
 		amount = 20,
 		time = 0.001,
 		minpos = vector.add(pos, 0),
@@ -532,7 +532,7 @@ minetest.register_on_respawnplayer(function(player)
 		texture = "mcl_particles_mob_death.png^[colorize:#000000:255",
 	})
 
-	minetest.sound_play("mcl_mobs_mob_poof", {
+	core.sound_play("mcl_mobs_mob_poof", {
 		pos = pos,
 		gain = 1.0,
 		max_hear_distance = 8,

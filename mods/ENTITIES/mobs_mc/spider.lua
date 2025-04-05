@@ -3,7 +3,7 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
 --###################
@@ -11,7 +11,7 @@ local mob_class = mcl_mobs.mob_class
 --###################
 
 -- Spider by AspireMint (fishyWET (CC-BY-SA 3.0 license for texture)
-minetest.register_entity("mobs_mc:spider_eyes", {
+core.register_entity("mobs_mc:spider_eyes", {
 	initial_properties = {
 		pointable = false,
 		visual = "mesh",
@@ -189,7 +189,7 @@ function spider:mob_activate (staticdata, dtime)
 	if not mob_class.mob_activate (self, staticdata, dtime) then
 		return false
 	end
-	minetest.add_entity(self.object:get_pos (), "mobs_mc:spider_eyes")
+	core.add_entity(self.object:get_pos (), "mobs_mc:spider_eyes")
 		:set_attach(self.object, "body.head", vector.new(0,-0.98,2), vector.new(90,180,180))
 	return true
 end
@@ -198,7 +198,7 @@ function spider:on_spawn ()
 	-- Spawn as jockeys ridden by skeletons 1% of the time.
 	local self_pos = self.object:get_pos ()
 	if math.random (100) == 1 then
-		local skelly = minetest.add_entity (self_pos,
+		local skelly = core.add_entity (self_pos,
 						"mobs_mc:skeleton")
 		if skelly then
 			local entity = skelly:get_luaentity ()
@@ -221,7 +221,7 @@ end
 local function mc_light_value (self)
 	local brightness, value
 	local pos = self.object:get_pos ()
-	brightness = (minetest.get_node_light (pos) or 0) / 15.0
+	brightness = (core.get_node_light (pos) or 0) / 15.0
 	value = brightness / (4 - 3 * brightness)
 	return value
 end

@@ -1,7 +1,7 @@
-local S = minetest.get_translator("mcl_portals")
+local S = core.get_translator("mcl_portals")
 
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 local portal_search_groups = { "group:building_block", "group:dig_by_water", "group:liquid" }
 
 local TELEPORT_DELAY = 3
@@ -26,9 +26,9 @@ local portals = {
 }
 local portal_count = 0
 for dim, key in pairs(mod_storage_keys) do
-	for _, portal in pairs(minetest.deserialize(mcl_portals.storage:get_string(key)) or {}) do
+	for _, portal in pairs(core.deserialize(mcl_portals.storage:get_string(key)) or {}) do
 		portal = vector.copy(portal)
-		portals[dim][minetest.hash_node_position(portal)] = portal
+		portals[dim][core.hash_node_position(portal)] = portal
 		portal_count = portal_count + 1
 	end
 end
@@ -68,7 +68,7 @@ local function get_portals(dim)
 end
 
 local function update_mod_storage(dim)
-	mcl_portals.storage:set_string(mod_storage_keys[dim], minetest.serialize(get_portals(dim)))
+	mcl_portals.storage:set_string(mod_storage_keys[dim], core.serialize(get_portals(dim)))
 end
 
 local function register_portal(pos)
@@ -76,12 +76,12 @@ local function register_portal(pos)
 	if not portals[dim] then
 		return
 	end
-	local hash = minetest.hash_node_position(pos)
+	local hash = core.hash_node_position(pos)
 	if not portals[dim][hash] then
 		portals[dim][hash] = pos
 		portal_count = portal_count + 1
-		minetest.log("action", "[mcl_portal] Registered portal at " .. tostring(pos))
-		minetest.log("action", "[mcl_portal] There are " .. portal_count .. " registered portals in total")
+		core.log("action", "[mcl_portal] Registered portal at " .. tostring(pos))
+		core.log("action", "[mcl_portal] There are " .. portal_count .. " registered portals in total")
 		update_mod_storage(dim)
 	end
 end
@@ -94,12 +94,12 @@ local function unregister_portal(pos)
 	if not portals[dim] then
 		return
 	end
-	local hash = minetest.hash_node_position(pos)
+	local hash = core.hash_node_position(pos)
 	if portals[dim][hash] then
 		portals[dim][hash] = nil
 		portal_count = portal_count - 1
-		minetest.log("action", "[mcl_portal] Registered portal at " .. tostring(pos))
-		minetest.log("action", "[mcl_portal] There are " .. portal_count .. " registered portals in total")
+		core.log("action", "[mcl_portal] Registered portal at " .. tostring(pos))
+		core.log("action", "[mcl_portal] There are " .. portal_count .. " registered portals in total")
 		update_mod_storage(dim)
 	end
 end
@@ -110,17 +110,17 @@ end
 local function spawn_zombified_piglin(pos)
 	if math.random() < 0.0015 / 68.27 then
 		-- Find Y of lowest portal frame
-		local floor = minetest.find_nodes_in_area(pos, vector.offset(pos, 0,-MAX_PORTAL_NODES,0), {"mcl_core:obsidian"})
+		local floor = core.find_nodes_in_area(pos, vector.offset(pos, 0,-MAX_PORTAL_NODES,0), {"mcl_core:obsidian"})
 		if #floor > 0 then
 			local spawn = floor[#floor]
-			if minetest.get_node(pos).param2 == 3 then
+			if core.get_node(pos).param2 == 3 then
 				spawn = vector.offset(spawn, 1,0.5,0) -- East
 			else
 				spawn = vector.offset(spawn, 0,0.5,-1) -- South
 			end
-			local up = minetest.find_nodes_in_area(spawn, vector.offset(spawn, 0,1.5,0), {"air"})
+			local up = core.find_nodes_in_area(spawn, vector.offset(spawn, 0,1.5,0), {"air"})
 			if #up >= 2 then
-				minetest.add_entity(spawn, "mobs_mc:zombified_piglin", minetest.serialize({ _just_portaled = 60 }))
+				core.add_entity(spawn, "mobs_mc:zombified_piglin", core.serialize({ _just_portaled = 60 }))
 			end
 		end
 	end
@@ -138,8 +138,8 @@ end
 -- Check if node is replacable with a portal node.
 local function replacable_with_portal(name)
 	return name == "air" or
-		minetest.get_item_group(name, "fire") ~= 0 or
-		minetest.get_item_group(name, "dig_by_water") ~= 0
+		core.get_item_group(name, "fire") ~= 0 or
+		core.get_item_group(name, "dig_by_water") ~= 0
 end
 
 -- Gets the position in a portal which players are teleported to.
@@ -150,7 +150,7 @@ local function get_center_portal(nodes)
 	end
 	center = center:divide(#nodes):round()
 
-	while replacable_with_portal(minetest.get_node(center:offset(0, -1, 0)).name) do
+	while replacable_with_portal(core.get_node(center:offset(0, -1, 0)).name) do
 		center = center:offset(0, -1, 0)
 	end
 
@@ -161,7 +161,7 @@ end
 -- positions for the portal nodes.
 local function init_portal_meta(nodes, portal)
 	for _, pos in pairs(nodes) do
-		minetest.get_meta(pos):set_string("portal", minetest.serialize(portal))
+		core.get_meta(pos):set_string("portal", core.serialize(portal))
 	end
 end
 
@@ -182,10 +182,10 @@ local function light_nether_portal(pos, param2)
 	queue:enqueue(pos)
 	while queue:size() > 0 do
 		local pos = queue:dequeue()
-		local hash = minetest.hash_node_position(pos)
+		local hash = core.hash_node_position(pos)
 
 		if not checked[hash] then
-			local name = minetest.get_node(pos).name
+			local name = core.get_node(pos).name
 			if replacable_with_portal(name) then
 				queue:enqueue(pos + orient(vector.new(0, -1, 0), param2))
 				queue:enqueue(pos + orient(vector.new(0, 1, 0), param2))
@@ -205,8 +205,8 @@ local function light_nether_portal(pos, param2)
 	end
 
 	local center = get_center_portal(nodes)
-	if #nodes >= MIN_PORTAL_NODES and replacable_with_portal(minetest.get_node(center:offset(0, 1, 0)).name) then
-		minetest.bulk_set_node(nodes, {
+	if #nodes >= MIN_PORTAL_NODES and replacable_with_portal(core.get_node(center:offset(0, 1, 0)).name) then
+		core.bulk_set_node(nodes, {
 			name = "mcl_portals:portal",
 			param2 = param2,
 		})
@@ -219,22 +219,22 @@ end
 
 -- Get the positions of portal nodes adjacent to position.
 local function get_adjacent_portal_nodes(pos)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	if node.name ~= "mcl_portals:portal" then
 		return {}
 	end
 
 	local param2 = node.param2
-	local checked_tab = { [minetest.hash_node_position(pos)] = true }
+	local checked_tab = { [core.hash_node_position(pos)] = true }
 	local nodes = { pos }
 
 	local function check_remove(pos)
-		local hash = minetest.hash_node_position(pos)
+		local hash = core.hash_node_position(pos)
 		if checked_tab[hash] then
 			return
 		end
 
-		local node = minetest.get_node(pos)
+		local node = core.get_node(pos)
 		if node and node.name == "mcl_portals:portal" and (param2 == nil or node.param2 == param2) then
 			table.insert(nodes, pos)
 			checked_tab[hash] = true
@@ -262,23 +262,23 @@ end
 -- For backwards compatibility, update and register source and destination
 -- portals which have the old 'target_portal' metadata.
 local function update_old_meta(portal)
-	local target_hash = tonumber(minetest.get_meta(portal):get_string("target_portal"))
+	local target_hash = tonumber(core.get_meta(portal):get_string("target_portal"))
 
 	if target_hash then
 		for _, pos in pairs(get_adjacent_portal_nodes(portal)) do
-			minetest.get_meta(pos):set_string("target_portal", "")
+			core.get_meta(pos):set_string("target_portal", "")
 		end
 
 		-- Initialize the destination portal so it will link with the
 		-- current portal.
-		local target_portal = minetest.get_position_from_hash(target_hash)
+		local target_portal = core.get_position_from_hash(target_hash)
 		if mcl_vars.get_node(target_portal).name ~= "mcl_portals:portal" then
 			return
 		end
 
 		local nodes = get_adjacent_portal_nodes(target_portal)
 		for _, target_portal in pairs(nodes) do
-			minetest.get_meta(target_portal):set_string("portal_portal", "")
+			core.get_meta(target_portal):set_string("portal_portal", "")
 		end
 
 		local center = get_center_portal(nodes)
@@ -293,14 +293,14 @@ local function get_portal(pos)
 	if node.name == "mcl_portals:portal" then
 		update_old_meta(pos) -- For backwards compatibility.
 
-		local portal = minetest.deserialize(minetest.get_meta(pos):get_string("portal"))
+		local portal = core.deserialize(core.get_meta(pos):get_string("portal"))
 		if portal then
 			return vector.copy(portal), node
 		else
 			local nodes = get_adjacent_portal_nodes(pos)
 			local center = get_center_portal(nodes)
 			init_portal_meta(nodes, center)
-			return center, minetest.get_node(pos)
+			return center, core.get_node(pos)
 		end
 	end
 end
@@ -321,7 +321,7 @@ local function destroy_portal(pos, _)
 	if get_portal(pos) then
 		unregister_portal(get_portal(pos))
 	end
-	minetest.bulk_set_node(get_adjacent_portal_nodes(pos), { name = "air" })
+	core.bulk_set_node(get_adjacent_portal_nodes(pos), { name = "air" })
 	destroying_portal = false
 end
 
@@ -367,17 +367,17 @@ local function build_portal(pos, param2, bad_spot)
 		end
 	end
 
-	minetest.bulk_set_node(obsidian, { name = "mcl_core:obsidian" })
-	minetest.bulk_set_node(air, { name = "air" })
-	minetest.bulk_set_node(portals, { name = "mcl_portals:portal", param2 = param2 })
+	core.bulk_set_node(obsidian, { name = "mcl_core:obsidian" })
+	core.bulk_set_node(air, { name = "air" })
+	core.bulk_set_node(portals, { name = "mcl_portals:portal", param2 = param2 })
 	init_portal_meta(portals, pos)
 	register_portal(pos)
 
-	minetest.log("action", "[mcl_portal] Destination portal generated at " .. tostring(pos))
+	core.log("action", "[mcl_portal] Destination portal generated at " .. tostring(pos))
 end
 
 local function teleport_finished(obj)
-	minetest.after(TELEPORT_COOLOFF, function(obj)
+	core.after(TELEPORT_COOLOFF, function(obj)
 		portal_cooloff[obj] = nil
 	end, obj)
 end
@@ -394,9 +394,9 @@ local function finalize_teleport(obj, pos, old_param2, new_param2)
 	obj:set_pos(vector.offset(pos,0,-0.5,0))
 
 	if obj:is_player() then
-		minetest.sound_play("mcl_portals_teleport", {pos = pos, gain = 0.5, max_hear_distance = 1}, true)
+		core.sound_play("mcl_portals_teleport", {pos = pos, gain = 0.5, max_hear_distance = 1}, true)
 		mcl_worlds.dimension_change(obj)
-		minetest.log("action", "[mcl_portal] " .. obj:get_player_name() .. " teleported to " .. tostring(pos))
+		core.log("action", "[mcl_portal] " .. obj:get_player_name() .. " teleported to " .. tostring(pos))
 	else
 		local l = obj:get_luaentity()
 		if l and l.is_mob then
@@ -415,21 +415,21 @@ end
 local function can_place_portal(pos, player_name)
 	local pos1 = pos:offset(-8, -8, -8)
 	local pos2 = pos:offset(8, 8, 8)
-	return not minetest.is_area_protected(pos1, pos2, player_name)
+	return not core.is_area_protected(pos1, pos2, player_name)
 end
 
 -- Check if portal with param2 can be placed at position.
 local function suitable_for_portal(pos, param2)
 	local pos1 = pos + orient(vector.new(-1, 0, -1), param2)
 	local pos2 = pos + orient(vector.new(2, 0, 1), param2)
-	local ground_nodes = minetest.find_nodes_in_area(pos1, pos2, portal_search_groups)
+	local ground_nodes = core.find_nodes_in_area(pos1, pos2, portal_search_groups)
 	if #ground_nodes ~= 12 then
 		return false
 	end
 
 	local air_pos1 = pos + orient(vector.new(-1, 1, -1), param2)
 	local air_pos2 = pos + orient(vector.new(2, 4, 1), param2)
-	local air_nodes = minetest.find_nodes_in_area(air_pos1, air_pos2, { "air" })
+	local air_nodes = core.find_nodes_in_area(air_pos1, air_pos2, { "air" })
 	return #air_nodes == 48
 end
 
@@ -473,7 +473,7 @@ local function portal_emerge_area(_, _, calls_remaining, param)
 
 	local function finalize(obj, pos, param2, bad_pos)
 		-- Move portal down one node if on snow cover or grass.
-		if minetest.get_item_group(minetest.get_node(pos).name, "dig_by_water") ~= 0 then
+		if core.get_item_group(core.get_node(pos).name, "dig_by_water") ~= 0 then
 			pos.y = pos.y - 1
 		end
 
@@ -483,10 +483,10 @@ local function portal_emerge_area(_, _, calls_remaining, param)
 	end
 
 	local liquid_pos
-	local nodes = minetest.find_nodes_in_area_under_air(minpos, maxpos, portal_search_groups)
+	local nodes = core.find_nodes_in_area_under_air(minpos, maxpos, portal_search_groups)
 	for _, pos in pairs(nodes) do
 		if suitable_for_portal(pos, param2) and can_place_portal(pos, player_name) and portal_distance(pos, target) < link_distance[dim] then
-			if minetest.get_item_group(minetest.get_node(pos).name, "liquid") <= 0 then
+			if core.get_item_group(core.get_node(pos).name, "liquid") <= 0 then
 				finalize(obj, pos, param2, false)
 				return
 			end
@@ -508,9 +508,9 @@ local function portal_emerge_area(_, _, calls_remaining, param)
 		end
 	end
 
-	minetest.sound_play("mcl_portals_teleport", {pos = obj:get_pos(), gain = 0.5, max_hear_distance = 1}, true)
-	minetest.log("action", "[mcl_portal] Could not generate destination portal for " .. player_name .. " at " .. tostring(portal))
-	minetest.remove_node(portal)
+	core.sound_play("mcl_portals_teleport", {pos = obj:get_pos(), gain = 0.5, max_hear_distance = 1}, true)
+	core.log("action", "[mcl_portal] Could not generate destination portal for " .. player_name .. " at " .. tostring(portal))
+	core.remove_node(portal)
 	teleport_finished(obj)
 end
 
@@ -563,7 +563,7 @@ local function teleport(obj)
 
 	local linked_portal = get_linked_portal(dim, target)
 	if linked_portal then
-		local linked_node = minetest.get_node(linked_portal)
+		local linked_node = core.get_node(linked_portal)
 		finalize_teleport(obj, linked_portal, node.param2, linked_node.param2) ---@diagnostic disable-line: need-check-nil
 	elseif obj:is_player() then -- Generate portal and teleport.
 		local param2 = node.param2 ---@diagnostic disable-line: need-check-nil
@@ -571,7 +571,7 @@ local function teleport(obj)
 		local y_max = search_y_max[dim]
 		local minpos = vector.new(target.x - 16, y_min, target.z - 16)
 		local maxpos = vector.new(target.x + 16, y_max, target.z + 16)
-		minetest.emerge_area(minpos, maxpos, portal_emerge_area, {
+		core.emerge_area(minpos, maxpos, portal_emerge_area, {
 			obj = obj,
 			param2 = param2,
 			minpos = minpos,
@@ -585,19 +585,19 @@ local function teleport(obj)
 end
 
 local function initiate_teleport(obj)
-	local creative = minetest.is_creative_enabled(obj:is_player() and obj:get_player_name() or nil)
+	local creative = core.is_creative_enabled(obj:is_player() and obj:get_player_name() or nil)
 	local l = obj:get_luaentity()
 	if l and l.is_mob and not l._just_portaled then
 		teleport(obj) -- mobs always teleported instantly
 	elseif obj:is_player() then
-		minetest.after(creative and 0 or TELEPORT_DELAY, function()
+		core.after(creative and 0 or TELEPORT_DELAY, function()
 			teleport(obj)
 		end)
 	end
 end
 
 local function teleport_objs_in_portal(pos)
-	for obj in minetest.objects_inside_radius(pos, 1) do
+	for obj in core.objects_inside_radius(pos, 1) do
 		local lua_entity = obj:get_luaentity()
 		if obj:is_player() or lua_entity then
 			initiate_teleport(obj)
@@ -629,9 +629,9 @@ local function emit_portal_particles(pos, node)
 		end
 	end
 	distance = vector.subtract(pos, distance)
-	for obj in minetest.objects_inside_radius(pos, 15) do
+	for obj in core.objects_inside_radius(pos, 15) do
 		if obj:is_player() then
-			minetest.add_particle({
+			core.add_particle({
 				amount = 1,
 				pos = distance,
 				velocity = velocity,
@@ -646,7 +646,7 @@ local function emit_portal_particles(pos, node)
 	end
 end
 
-local longdesc = minetest.registered_nodes["mcl_core:obsidian"]._doc_items_longdesc .. "\n" .. S("Obsidian is also used as the frame of Nether portals.")
+local longdesc = core.registered_nodes["mcl_core:obsidian"]._doc_items_longdesc .. "\n" .. S("Obsidian is also used as the frame of Nether portals.")
 local usagehelp = S("To open a Nether portal, place an upright frame of obsidian with a width of at least 4 blocks and a height of 5 blocks, leaving only air in the center. After placing this frame, light a fire in the obsidian frame. Nether portals only work in the Overworld and the Nether.")
 
 function mcl_portals.light_nether_portal(pos)
@@ -658,14 +658,14 @@ function mcl_portals.light_nether_portal(pos)
 	return false
 end
 
-minetest.override_item("mcl_core:obsidian", {
+core.override_item("mcl_core:obsidian", {
 	_doc_items_longdesc = longdesc,
 	_doc_items_usagehelp = usagehelp,
 	on_destruct = function(pos, _)
 		local function check_remove(pos, param2)
-			local node = minetest.get_node(pos)
+			local node = core.get_node(pos)
 			if node.name == "mcl_portals:portal" and (not param2 or node.param2 % 2 == param2) then
-				minetest.remove_node(pos)
+				core.remove_node(pos)
 			end
 		end
 
@@ -698,12 +698,12 @@ minetest.override_item("mcl_core:obsidian", {
 		end
 
 		if portal_placed then
-			minetest.log("action", "[mcl_portal] Portal activated at " .. tostring(pos))
-			if minetest.get_modpath("doc") then
+			core.log("action", "[mcl_portal] Portal activated at " .. tostring(pos))
+			if core.get_modpath("doc") then
 				doc.mark_entry_as_revealed(user:get_player_name(), "nodes", "mcl_portals:portal")
 
 				local dim = mcl_worlds.pos_to_dimension(pos)
-				if minetest.get_modpath("awards") and dim ~= "nether" and user:is_player() then
+				if core.get_modpath("awards") and dim ~= "nether" and user:is_player() then
 					awards.unlock(user:get_player_name(), "mcl:buildNetherPortal")
 				end
 			end
@@ -715,11 +715,11 @@ minetest.override_item("mcl_core:obsidian", {
 })
 
 local on_rotate
-if minetest.get_modpath("screwdriver") then
+if core.get_modpath("screwdriver") then
 	on_rotate = screwdriver.disallow
 end
 
-minetest.register_node("mcl_portals:portal", {
+core.register_node("mcl_portals:portal", {
 	description = S("Nether Portal"),
 	_doc_items_longdesc = S("A Nether portal teleports creatures and objects to the hot and dangerous Nether dimension (and back!). Enter at your own risk!"),
 	_doc_items_usagehelp = S("Stand in the portal for a moment to activate the teleportation. Entering a Nether portal for the first time will also create a new portal in the other dimension. If a Nether portal has been built in the Nether, it will lead to the Overworld. A Nether portal is destroyed if the any of the obsidian which surrounds it is destroyed, or if it was caught in an explosion."),
@@ -776,7 +776,7 @@ minetest.register_node("mcl_portals:portal", {
 	end,
 })
 
-minetest.register_chatcommand("dumpportals", {
+core.register_chatcommand("dumpportals", {
 	description = S("Dump coordinates of registered portals"),
 	privs = { debug = true },
 	params = "[nether | overworld]",
@@ -788,14 +788,14 @@ minetest.register_chatcommand("dumpportals", {
 
 		local output = ""
 		for _, portal in pairs(portals[dim]) do
-			output = output .. minetest.pos_to_string(portal) .. "\n"
+			output = output .. core.pos_to_string(portal) .. "\n"
 		end
 
 		return true, output
 	end,
 })
 
-minetest.register_abm({
+core.register_abm({
 	label = "Nether portal teleportation and particles",
 	nodenames = { "mcl_portals:portal" },
 	interval = 1,

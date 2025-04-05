@@ -1,5 +1,5 @@
-local S = minetest.get_translator("mobs_mc")
-local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
+local S = core.get_translator("mobs_mc")
+local mobs_griefing = core.settings:get_bool("mobs_griefing") ~= false
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
@@ -106,15 +106,15 @@ local function wither_unstuck (self, xz_exp)
 		local pos2 = vector.offset(pos, col[4] + xz_exp, col[5], col[6] + xz_exp)
 		for z = pos1.z, pos2.z do for y = pos1.y, pos2.y do for x = pos1.x, pos2.x do
 			local npos = vector.new(x,y,z)
-			local name = minetest.get_node(npos).name
+			local name = core.get_node(npos).name
 			if name ~= "air" then
-				local ndef = minetest.registered_nodes[name]
+				local ndef = core.registered_nodes[name]
 				if ndef and ndef._mcl_hardness and ndef._mcl_hardness >= 0 and ( ndef.can_dig == nil or ndef.can_dig(npos) )then
-					minetest.remove_node(npos)
-					local drops = minetest.get_node_drops(name, "")
+					core.remove_node(npos)
+					local drops = core.get_node_drops(name, "")
 					if drops then
 						for _, item in pairs(drops) do
-							minetest.add_item(npos, item)
+							core.add_item(npos, item)
 						end
 					end
 				end
@@ -178,7 +178,7 @@ function wither_def:on_spawn ()
 	self.health = properties.hp_max
 	self.hp_max = properties.hp_max
 
-	minetest.sound_play("mobs_mc_wither_spawn", {gain=1.0})
+	core.sound_play("mobs_mc_wither_spawn", {gain=1.0})
 	self._custom_timer = 0.0
 	self._death_timer = 0.0
 	self._health_old = properties.hp_max
@@ -293,7 +293,7 @@ end
 local function blast_damage(pos, radius, source)
 	radius = radius * 2
 
-	for obj in minetest.objects_inside_radius(pos, radius) do
+	for obj in core.objects_inside_radius(pos, radius) do
 
 		local obj_pos = obj:get_pos()
 		local dist = vector.distance(pos, obj_pos)
@@ -310,7 +310,7 @@ local function blast_damage(pos, radius, source)
 end
 
 function wither_def:safe_boom (pos, strength, no_remove)
-	minetest.sound_play(self.sounds and self.sounds.explode or "tnt_explode", {
+	core.sound_play(self.sounds and self.sounds.explode or "tnt_explode", {
 		pos = pos,
 		gain = 1.0,
 		max_hear_distance = self.sounds and self.sounds.distance or 32
@@ -357,7 +357,7 @@ function wither_def:do_custom (dtime, moveresult)
 		self.object:set_velocity (v)
 
 		if self._spawning <= 0 then
-			if mobs_griefing and not minetest.is_protected(pos, "") then
+			if mobs_griefing and not core.is_protected(pos, "") then
 				mcl_explosions.explode(pos, WITHER_INIT_BOOM, { drop_chance = 1.0 }, self.object)
 			else
 				self:safe_boom (pos, WITHER_INIT_BOOM, true)
@@ -367,7 +367,7 @@ function wither_def:do_custom (dtime, moveresult)
 			self._spw_max = nil
 
 			if self._spawner then
-				local spawner = minetest.get_player_by_name(self._spawner)
+				local spawner = core.get_player_by_name(self._spawner)
 				if spawner then
 					self:do_attack (spawner)
 				end
@@ -382,7 +382,7 @@ function wither_def:do_custom (dtime, moveresult)
 		-- Only heal if there are no players in a 100 block
 		-- radius.
 		local player
-		for object in minetest.objects_inside_radius (self.object:get_pos (), 100) do
+		for object in core.objects_inside_radius (self.object:get_pos (), 100) do
 			if object:is_player () then
 				player = object
 				break
@@ -425,7 +425,7 @@ function wither_def:should_attack (object)
 end
 
 function spawn_one_skeleton (object, aa, bb, self_pos)
-	local nodes = minetest.find_nodes_in_area_under_air (aa, bb, {"group:solid"})
+	local nodes = core.find_nodes_in_area_under_air (aa, bb, {"group:solid"})
 	if #nodes > 0 then
 		for i = 1, 10 do
 			local nodepos = nodes[math.random (#nodes)]
@@ -433,14 +433,14 @@ function spawn_one_skeleton (object, aa, bb, self_pos)
 			-- Verify that there is three blocks worth of
 			-- clearance above this node.
 			local copy = vector.offset (nodepos, 0, 1, 0)
-			local node = minetest.get_node (copy)
-			local def1 = minetest.registered_nodes[node.name]
+			local node = core.get_node (copy)
+			local def1 = core.registered_nodes[node.name]
 			copy.y = copy.y + 1
-			node = minetest.get_node (copy)
-			local def2 = minetest.registered_nodes[node.name]
+			node = core.get_node (copy)
+			local def2 = core.registered_nodes[node.name]
 			copy.y = copy.y + 1
-			node = minetest.get_node (copy)
-			local def3 = minetest.registered_nodes[node.name]
+			node = core.get_node (copy)
+			local def3 = core.registered_nodes[node.name]
 
 			if def1 and not def1.walkable
 				and def2 and not def2.walkable
@@ -737,7 +737,7 @@ function wither_def:run_ai (dtime, moveresult)
 			else
 				local other_head = idx == 1 and 2 or 1
 				local other_name = "_wither_target_" .. other_head
-				for object in minetest.objects_inside_radius (self_pos, 20) do
+				for object in core.objects_inside_radius (self_pos, 20) do
 					if self:should_attack (object)
 						and object ~= self.attack
 						and object ~= self[other_name] then
@@ -797,7 +797,7 @@ function wither_def:run_ai (dtime, moveresult)
 		wither_unstuck (self, 2, 0)
 
 		-- Damage players and mobs within a 3x3 radius.
-		for object in minetest.objects_inside_radius (self_pos, 3) do
+		for object in core.objects_inside_radius (self_pos, 3) do
 			local entity = object:get_luaentity ()
 			if object ~= self.object
 				and (object:is_player () or (entity and entity.is_mob)) then
@@ -844,12 +844,12 @@ local wither_rose_soil = {
 }
 
 local function spawn_wither_rose (obj)
-	local n = minetest.find_node_near(obj:get_pos(),2,wither_rose_soil)
+	local n = core.find_node_near(obj:get_pos(),2,wither_rose_soil)
 	if n then
 		local p = vector.offset(n,0,1,0)
-		if minetest.get_node(p).name == "air" then
-			if not ( mobs_griefing and minetest.place_node(p,{name="mcl_flowers:wither_rose"}) ) then
-				minetest.add_item(p,"mcl_flowers:wither_rose")
+		if core.get_node(p).name == "air" then
+			if not ( mobs_griefing and core.place_node(p,{name="mcl_flowers:wither_rose"}) ) then
+				core.add_item(p,"mcl_flowers:wither_rose")
 			end
 		end
 	end
@@ -890,7 +890,7 @@ local skull_def = {
 		local v = self.object:get_velocity ()
 		v.y = 0
 		local dir = vector.normalize (v)
-		if mobs_griefing and not minetest.is_protected(pos, "") then
+		if mobs_griefing and not core.is_protected(pos, "") then
 			mcl_explosions.explode(pos, 1, self._explosioninfo, self.object)
 		else
 			wither_def.safe_boom (self, pos, 1) --need to call it this way bc self is the "arrow" object here
@@ -919,7 +919,7 @@ local skull_def = {
 		local v = self.object:get_velocity ()
 		v.y = 0
 		local dir = vector.normalize (v)
-		if mobs_griefing and not minetest.is_protected(pos, "") then
+		if mobs_griefing and not core.is_protected(pos, "") then
 			mcl_explosions.explode(pos, 1, self._explosioninfo, self.object)
 		else
 			wither_def.safe_boom (self, pos, 1, true) --need to call it this way bc self is the "arrow" object here
@@ -937,7 +937,7 @@ local skull_def = {
 
 	-- node hit, explode
 	hit_node = function(self, pos)
-		if mobs_griefing and not minetest.is_protected(pos, "") then
+		if mobs_griefing and not core.is_protected(pos, "") then
 			mcl_explosions.explode(pos, 1, self._explosioninfo, self.object)
 		else
 			wither_def.safe_boom (self, pos, 1, true) --need to call it this way bc self is the "arrow" object here

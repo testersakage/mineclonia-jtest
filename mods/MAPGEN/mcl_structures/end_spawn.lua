@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 
 mcl_structures.register_structure("end_spawn_obsidian_platform",{
@@ -27,10 +27,10 @@ mcl_structures.register_structure("end_exit_portal",{
 	after_place = function(pos, _, _, blockseed)
 		local p1 = vector.offset(pos,-16,-16,-16)
 		local p2 = vector.offset(pos,16,21,16)
-		minetest.emerge_area(p1,p2,function(_, _, calls_remaining)
+		core.emerge_area(p1,p2,function(_, _, calls_remaining)
 			if calls_remaining > 0 then return end
-			mcl_util.bulk_swap_node(minetest.find_nodes_in_area(p1,p2,{"mcl_portals:portal_end"}),{name="air"})
-			local obj = minetest.add_entity(vector.offset(pos,3, 11, 3), "mobs_mc:enderdragon")
+			mcl_util.bulk_swap_node(core.find_nodes_in_area(p1,p2,{"mcl_portals:portal_end"}),{name="air"})
+			local obj = core.add_entity(vector.offset(pos,3, 11, 3), "mobs_mc:enderdragon")
 			if obj then
 				local dragon_entity = obj:get_luaentity()
 				dragon_entity._portal_pos = pos
@@ -38,9 +38,9 @@ mcl_structures.register_structure("end_exit_portal",{
 					dragon_entity._initial = true
 				end
 			else
-				minetest.log("error", "[mcl_mapgen_core] ERROR! Ender dragon doesn't want to spawn")
+				core.log("error", "[mcl_mapgen_core] ERROR! Ender dragon doesn't want to spawn")
 			end
-			minetest.fix_light(p1,p2)
+			core.fix_light(p1,p2)
 		end)
 	end
 })
@@ -51,7 +51,7 @@ mcl_structures.register_structure("end_exit_portal_open",{
 	after_place  = function(pos, _, _)
 		local p1 = vector.offset(pos,-16,-16,-16)
 		local p2 = vector.offset(pos,16,16,16)
-		minetest.fix_light(p1,p2)
+		core.fix_light(p1,p2)
 	end
 })
 mcl_structures.register_structure("end_gateway_portal",{
@@ -67,7 +67,7 @@ local function get_tower(p,h,tbl)
 end
 
 local function make_endspike(pos,width,height)
-	local nn = minetest.find_nodes_in_area(vector.offset(pos,-width/2,0,-width/2),vector.offset(pos,width/2,0,width/2),{"air","group:solid"})
+	local nn = core.find_nodes_in_area(vector.offset(pos,-width/2,0,-width/2),vector.offset(pos,width/2,0,width/2),{"air","group:solid"})
 	table.sort(nn,function(a, b)
 		return vector.distance(pos, a) < vector.distance(pos, b)
 	end)
@@ -108,11 +108,11 @@ mcl_structures.register_structure("end_spike",{
 		local h = d * pr:next(4,6)
 		local p1 = vector.offset(pos, -d / 2, 0, -d / 2)
 		local p2 = vector.offset(pos, d / 2, h + d, d / 2)
-		minetest.emerge_area(p1, p2, function(_, _, calls_remaining)
+		core.emerge_area(p1, p2, function(_, _, calls_remaining)
 			if calls_remaining ~= 0 then return end
 			local s = make_endspike(pos,d,h)
-			minetest.swap_node(vector.offset(s,0,1,0),{name="mcl_core:bedrock"})
-			minetest.add_entity(vector.offset(s,0,2,0),"mcl_end:crystal")
+			core.swap_node(vector.offset(s,0,1,0),{name="mcl_core:bedrock"})
+			core.add_entity(vector.offset(s,0,2,0),"mcl_end:crystal")
 			if pr:next(1,3) == 1 then
 				make_cage(vector.offset(s,0,1,0),d)
 			end

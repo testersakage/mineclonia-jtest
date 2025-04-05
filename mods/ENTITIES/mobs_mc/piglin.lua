@@ -1,4 +1,4 @@
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local posing_humanoid = mcl_mobs.posing_humanoid
 local is_valid = mcl_util.is_valid_objectref
@@ -170,7 +170,7 @@ function mobs_mc.player_wears_gold(player)
 	for i=1, 6 do
 		local stack = player:get_inventory():get_stack("armor", i)
 		local item = stack:get_name()
-		if minetest.get_item_group(item, "golden") ~= 0 then
+		if core.get_item_group(item, "golden") ~= 0 then
 			return true
 		end
 	end
@@ -476,7 +476,7 @@ function piglin:set_wielditem (stack, drop_probability)
 	mob_class.set_wielditem (self, stack, drop_probability)
 	local name = stack:get_name ()
 
-	if minetest.get_item_group (name, "crossbow") > 0 then
+	if core.get_item_group (name, "crossbow") > 0 then
 		self:reset_attack_type ("crossbow")
 	else
 		self:reset_attack_type ("melee")
@@ -492,7 +492,7 @@ function mobs_mc.enrage_piglins (player, need_line_of_sight)
 	local aa = vector.offset (pos, -16, -16, -16)
 	local bb = vector.offset (pos, 16, 16, 16)
 
-	for object in minetest.objects_in_area (aa, bb) do
+	for object in core.objects_in_area (aa, bb) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "mobs_mc:piglin" then
 			local object_pos = object:get_pos ()
@@ -509,12 +509,12 @@ local function player_ok(player)
 		and not player.is_fake_player
 end
 
-minetest.register_on_dignode (function (pos, node, player)
+core.register_on_dignode (function (pos, node, player)
 	if not player_ok (player) or not pos or not node then
 		return
 	end
 
-	if minetest.get_item_group (node.name, "piglin_protected") > 0 then
+	if core.get_item_group (node.name, "piglin_protected") > 0 then
 		mobs_mc.enrage_piglins (player, false)
 	end
 end)
@@ -526,15 +526,15 @@ local function piglin_loves_item (itemname)
 		-- or itemname == light_weighted_pressure_plate
 		or itemname == "mcl_core:gold_ingot"
 		or itemname == "mcl_bells:bell"
-		or minetest.get_item_group (itemname, "clock") > 0
+		or core.get_item_group (itemname, "clock") > 0
 		or itemname == "mcl_farming:carrot_item_gold"
 		or itemname == "mcl_potions:speckled_melon"
 		or itemname == "mcl_core:apple_gold"
 		or itemname == "mcl_core:apple_gold_enchanted"
-		or minetest.get_item_group (itemname, "golden") > 0
-		or (minetest.get_item_group (itemname, "tool") > 0
+		or core.get_item_group (itemname, "golden") > 0
+		or (core.get_item_group (itemname, "tool") > 0
 			and itemname:find ("gold"))
-		or (minetest.get_item_group (itemname, "weapon") > 0
+		or (core.get_item_group (itemname, "weapon") > 0
 			and itemname:find ("gold"))
 		or itemname == "mcl_raw_ores:raw_gold"
 		or itemname == "mcl_raw_ores:raw_gold_block"
@@ -549,7 +549,7 @@ function piglin:should_pick_up (stack)
 	local name = stack:get_name ()
 	if self.child and name == "mcl_mobitems:leather" then
 		return false
-	elseif minetest.get_item_group (name, "soul_firelike") > 0 then
+	elseif core.get_item_group (name, "soul_firelike") > 0 then
 		return false
 	elseif self._admire_cooldown > 0 and self.attack then
 		return false
@@ -576,7 +576,7 @@ end
 
 function piglin:shoot_arrow (pos, dir)
 	local wielditem = self:get_wielditem ()
-	if minetest.get_item_group (wielditem:get_name (), "crossbow") == 0 then
+	if core.get_item_group (wielditem:get_name (), "crossbow") == 0 then
 		wielditem = nil
 	end
 	mcl_bows.shoot_arrow_crossbow ("mcl_bows:arrow", pos, dir, self:get_yaw (),
@@ -595,9 +595,9 @@ function piglin:wielditem_better_than (stack, current)
 	local itemname = stack:get_name ()
 	local currentname = current:get_name ()
 	local want_first = piglin_loves_item (itemname)
-		or minetest.get_item_group (itemname, "crossbow") > 0
+		or core.get_item_group (itemname, "crossbow") > 0
 	local want_second = piglin_loves_item (currentname)
-		or minetest.get_item_group (currentname, "crossbow") > 0
+		or core.get_item_group (currentname, "crossbow") > 0
 
 	if want_first and not want_second then
 		return true
@@ -607,8 +607,8 @@ function piglin:wielditem_better_than (stack, current)
 
 	if not self.child
 	-- Nothing should be able to replace crossbows.
-		and minetest.get_item_group (itemname, "crossbow") == 0
-		and minetest.get_item_group (currentname, "crossbow") > 0 then
+		and core.get_item_group (itemname, "crossbow") == 0
+		and core.get_item_group (currentname, "crossbow") > 0 then
 		return false
 	end
 
@@ -623,7 +623,7 @@ local piglin_repellents = {
 function piglin:step_sensors (self_pos)
 	local aa = vector.offset (self_pos, -16, -16, -16)
 	local bb = vector.offset (self_pos, 16, 16, 16)
-	local all = minetest.get_objects_in_area (aa, bb)
+	local all = core.get_objects_in_area (aa, bb)
 	table.sort (all, function (a, b)
 		local vis_a = self:target_visible (self_pos, a) and 1 or 0
 		local vis_b = self:target_visible (self_pos, b) and 1 or 0
@@ -719,7 +719,7 @@ function piglin:step_sensors (self_pos)
 
 	local aa = vector.offset (self_pos, -8, -4, -8)
 	local bb = vector.offset (self_pos, 8, 4, 8)
-	local blocks = minetest.find_nodes_in_area (aa, bb, piglin_repellents)
+	local blocks = core.find_nodes_in_area (aa, bb, piglin_repellents)
 	if #blocks > 0 then
 		table.sort (blocks, function (a, b)
 				    return vector.distance (self_pos, a)
@@ -766,7 +766,7 @@ function piglin:on_rightclick (clicker)
 	if not stack:is_empty () and self:can_accept_offer (name) then
 		local playername = clicker:get_player_name ()
 		local item = stack:take_item ()
-		if not minetest.is_creative_enabled (playername) then
+		if not core.is_creative_enabled (playername) then
 			clicker:set_wielded_item (stack)
 		end
 
@@ -831,7 +831,7 @@ function piglin:dispose_of_wielditem (self_pos, no_bartering)
 			}, pr)
 
 			if loot and #loot >= 1 then
-				local obj = minetest.add_item (pos, loot[1])
+				local obj = core.add_item (pos, loot[1])
 				if obj then
 					self:chuck_at_player (self_pos, obj)
 				end
@@ -842,7 +842,7 @@ function piglin:dispose_of_wielditem (self_pos, no_bartering)
 			if not equipped then
 				local remainder = self:add_to_inventory (wielditem)
 				if not remainder:is_empty () then
-					local obj = minetest.add_item (pos, remainder)
+					local obj = core.add_item (pos, remainder)
 					if obj then
 						self:chuck_randomly (self_pos, obj)
 					end
@@ -858,7 +858,7 @@ function piglin:dispose_of_wielditem (self_pos, no_bartering)
 		if not equipped then
 			local remainder = self:add_to_inventory (wielditem)
 			if not remainder:is_empty () then
-				local obj = minetest.add_item (pos, remainder)
+				local obj = core.add_item (pos, remainder)
 				if obj then
 					self:chuck_randomly (self_pos, obj)
 				end
@@ -897,7 +897,7 @@ function piglin:default_pickup (object, stack, def, itemname)
 			if not remainder:is_empty () then
 				local self_pos = self.object:get_pos ()
 				local pos = vector.offset (self_pos, 0, 1.16, 0)
-				local obj = minetest.add_item (pos, remainder)
+				local obj = core.add_item (pos, remainder)
 				if obj then
 					self:chuck_randomly (self_pos, obj)
 				end
@@ -1483,7 +1483,7 @@ function piglin:check_light (_, _, artificial_light, _)
 end
 
 function piglin.can_spawn (pos)
-	local block = minetest.get_node (vector.offset (pos, 0, -1, 0))
+	local block = core.get_node (vector.offset (pos, 0, -1, 0))
 	return block.name ~= "mcl_nether:nether_wart_block"
 end
 
@@ -1497,10 +1497,10 @@ local old_sword_piglin = {}
 
 function old_sword_piglin:on_activate (staticdata, dtime)
 	local data = staticdata
-		and minetest.deserialize (staticdata)
+		and core.deserialize (staticdata)
 		or {}
 	local self_pos = self.object:get_pos ()
-	minetest.add_entity (self_pos, "mobs_mc:piglin", minetest.serialize ({
+	core.add_entity (self_pos, "mobs_mc:piglin", core.serialize ({
 		_wielditem = "mcl_tools:sword_gold",
 		nametag = data.nametag,
 		_piglin_initialized = true,
@@ -1509,7 +1509,7 @@ function old_sword_piglin:on_activate (staticdata, dtime)
 	self.object:remove ()
 end
 
-minetest.register_entity ("mobs_mc:sword_piglin", old_sword_piglin)
+core.register_entity ("mobs_mc:sword_piglin", old_sword_piglin)
 
 ------------------------------------------------------------------------
 -- Piglin Brute.
@@ -1608,7 +1608,7 @@ function piglin_brute:broadcast_anger (source, is_hoglin)
 	local self_pos = self.object:get_pos ()
 	local aa = vector.offset (self_pos, -16, -16, -16)
 	local bb = vector.offset (self_pos, 16, 16, 16)
-	for object in minetest.objects_in_area (aa, bb) do
+	for object in core.objects_in_area (aa, bb) do
 		if object ~= self.object and object ~= source then
 			local entity = object:get_luaentity ()
 			if entity and (entity.name == "mobs_mc:piglin"
@@ -1832,7 +1832,7 @@ function zombified_piglin:alert_other_piglins ()
 	local self_pos = self.object:get_pos ()
 	local aa = vector.offset (self_pos, -self.view_range, -10, -self.view_range)
 	local bb = vector.offset (self_pos, self.view_range, 10, self.view_range)
-	for object in minetest.objects_in_area (aa, bb) do
+	for object in core.objects_in_area (aa, bb) do
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "mobs_mc:zombified_piglin"
 			and not entity.attack and entity ~= self then
@@ -1880,7 +1880,7 @@ mcl_mobs.spawn_setup({
 	type_of_spawning = "ground",
 	dimension = "nether",
 	min_light = 0,
-	max_light = minetest.LIGHT_MAX+1,
+	max_light = core.LIGHT_MAX+1,
 	min_height = mcl_vars.mg_lava_nether_max,
 	aoc = 3,
 	biomes = {
@@ -1895,7 +1895,7 @@ mcl_mobs.spawn_setup({
 	type_of_spawning = "lava",
 	dimension = "nether",
 	min_light = 0,
-	max_light = minetest.LIGHT_MAX+1,
+	max_light = core.LIGHT_MAX+1,
 	min_height = mcl_vars.mg_lava_nether_max,
 	aoc = 4,
 	biomes = {

@@ -1,5 +1,5 @@
-local S = minetest.get_translator("mcl_skins")
-local C = minetest.colorspec_to_colorstring
+local S = core.get_translator("mcl_skins")
+local C = core.colorspec_to_colorstring
 
 mcl_skins = {
 	simple_skins = {},
@@ -87,16 +87,16 @@ function mcl_skins.save(player)
 	if not skin then return end
 
 	local meta = player:get_meta()
-	meta:set_string("mcl_skins:skin", minetest.serialize(skin))
+	meta:set_string("mcl_skins:skin", core.serialize(skin))
 
 	-- Clear out the old way of storing the simple skin ID
 	meta:set_string("mcl_skins:skin_id", "")
 end
 
-minetest.register_chatcommand("skin", {
+core.register_chatcommand("skin", {
 	description = S("Open skin configuration screen."),
 	privs = {},
-	func = function(name, _) mcl_skins.show_formspec(minetest.get_player_by_name(name)) end
+	func = function(name, _) mcl_skins.show_formspec(core.get_player_by_name(name)) end
 })
 
 function mcl_skins.compile_skin(skin)
@@ -158,10 +158,10 @@ local function skin_is_valid(skin)
 end
 
 -- Load player skin on join
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local skin = player:get_meta():get_string("mcl_skins:skin")
 	if skin then
-		skin = minetest.deserialize(skin)
+		skin = core.deserialize(skin)
 		if skin and not skin_is_valid(skin) then
 			core.log("error", "[mcl_skins] Skin for player "..(player:get_player_name()).." was invalid")
 			skin = nil
@@ -198,7 +198,7 @@ minetest.register_on_joinplayer(function(player)
 	mcl_skins.update_player_skin(player)
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	mcl_skins.player_skins[player] = nil
 	mcl_skins.player_formspecs[player] = nil
 end)
@@ -433,7 +433,7 @@ function mcl_skins.show_formspec(player)
 	end
 
 	local player_name = player:get_player_name()
-	minetest.show_formspec(player_name, "mcl_skins:skins", formspec)
+	core.show_formspec(player_name, "mcl_skins:skins", formspec)
 end
 
 mcl_player.register_player_settings_button({
@@ -443,7 +443,7 @@ mcl_player.register_player_settings_button({
 	priority = 1000,
 })
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	if fields.__mcl_skins then
 		mcl_skins.show_formspec(player)
 		return false
@@ -543,7 +543,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		local color = 0xff000000 + red * 0x10000 + green * 0x100 + blue
 		if color >= 0 and color <= 0xffffffff then
 			-- We delay resedning the form because otherwise it will break dragging scrollbars
-			formspec_data.form_send_job = minetest.after(0.2, function()
+			formspec_data.form_send_job = core.after(0.2, function()
 				if player and player:is_player() then
 					skin[active_tab .. "_color"] = color
 					mcl_skins.update_player_skin(player)
@@ -605,11 +605,11 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 end)
 
 local function init()
-	local f = io.open(minetest.get_modpath("mcl_skins") .. "/list.json")
+	local f = io.open(core.get_modpath("mcl_skins") .. "/list.json")
 	assert(f, "Can't open the file list.json")
 	local data = f:read("*all")
 	assert(data, "Can't read data from list.json")
-	local json, error = minetest.parse_json(data)
+	local json, error = core.parse_json(data)
 	assert(json, error)
 	f:close()
 

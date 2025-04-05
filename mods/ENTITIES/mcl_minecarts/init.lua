@@ -1,10 +1,10 @@
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 
-local has_mcl_wip = minetest.get_modpath("mcl_wip")
+local has_mcl_wip = core.get_modpath("mcl_wip")
 
 mcl_minecarts = {}
-mcl_minecarts.modpath = minetest.get_modpath(modname)
+mcl_minecarts.modpath = core.get_modpath(modname)
 mcl_minecarts.speed_max = 10
 mcl_minecarts.check_float_time = 15
 
@@ -15,7 +15,7 @@ local function detach_driver(self)
 	if not self._driver then
 		return
 	end
-	local player = minetest.get_player_by_name(self._driver)
+	local player = core.get_player_by_name(self._driver)
 	self._driver = nil
 	self._start_pos = nil
 	if player then
@@ -46,7 +46,7 @@ local function activate_tnt_minecart(self, timer)
 		"mcl_minecarts_minecart.png",
 	}})
 	self._blinktimer = tnt.BLINKTIMER
-	minetest.sound_play("tnt_ignite", {pos = self.object:get_pos(), gain = 1.0, max_hear_distance = 15}, true)
+	core.sound_play("tnt_ignite", {pos = self.object:get_pos(), gain = 1.0, max_hear_distance = 15}, true)
 end
 
 local activate_normal_minecart = detach_driver
@@ -59,7 +59,7 @@ local function hopper_take_item(self)
 
 	local above_pos = vector.offset(pos, 0, 0.9, 0)
 
-	for v in minetest.objects_inside_radius(above_pos, 1.25) do
+	for v in core.objects_inside_radius(above_pos, 1.25) do
 		local ent = v:get_luaentity()
 		local taken_items = false
 
@@ -153,7 +153,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 
 	function cart:on_activate(staticdata, _)
 		-- Initialize
-		local data = minetest.deserialize(staticdata)
+		local data = core.deserialize(staticdata)
 		if type(data) == "table" then
 			self._railtype = data._railtype
 			self._passenger = data._passenger
@@ -163,7 +163,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		-- Activate cart if on activator rail
 		if self.on_activate_by_rail then
 			local pos = self.object:get_pos()
-			local node = minetest.get_node(vector.floor(pos))
+			local node = core.get_node(vector.floor(pos))
 			if node.name == "mcl_minecarts:activator_rail_on" then
 				self:on_activate_by_rail()
 			end
@@ -173,8 +173,8 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 	function cart:on_punch(puncher, time_from_last_punch, tool_capabilities, _)
 		local pos = self.object:get_pos()
 		if not self._railtype then
-			local node = minetest.get_node(vector.floor(pos)).name
-			self._railtype = minetest.get_item_group(node, "connect_to_raillike")
+			local node = core.get_node(vector.floor(pos)).name
+			self._railtype = core.get_item_group(node, "connect_to_raillike")
 		end
 
 		if not puncher or not puncher:is_player() then
@@ -197,16 +197,16 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 
 			-- Disable detector rail
 			local rou_pos = vector.round(pos)
-			local node = minetest.get_node(rou_pos)
+			local node = core.get_node(rou_pos)
 			if node.name == "mcl_minecarts:detector_rail_on" then
 				local newnode = {name="mcl_minecarts:detector_rail", param2 = node.param2}
 				mcl_redstone.swap_node(rou_pos, newnode)
 			end
 
 			-- Drop items and remove cart entity
-			if not minetest.is_creative_enabled(puncher:get_player_name()) then
+			if not core.is_creative_enabled(puncher:get_player_name()) then
 				for d=1, #drop do
-					minetest.add_item(self.object:get_pos(), drop[d])
+					core.add_item(self.object:get_pos(), drop[d])
 				end
 				if self._on_destroy_minecart then
 					self:_on_destroy_minecart (puncher)
@@ -253,7 +253,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 
 		local ctrl, player = nil, nil
 		if self._driver then
-			player = minetest.get_player_by_name(self._driver)
+			player = core.get_player_by_name(self._driver)
 			if player then
 				ctrl = player:get_player_control()
 				-- player detach
@@ -275,10 +275,10 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		local pos, rou_pos, node = self.object:get_pos()
 		local r = 0.6
 		for _, node_pos in pairs({{r, 0}, {0, r}, {-r, 0}, {0, -r}}) do
-			if minetest.get_node(vector.offset(pos, node_pos[1], 0, node_pos[2])).name == "mcl_core:cactus" then
+			if core.get_node(vector.offset(pos, node_pos[1], 0, node_pos[2])).name == "mcl_core:cactus" then
 				detach_driver(self)
 				for d = 1, #drop do
-					minetest.add_item(pos, drop[d])
+					core.add_item(pos, drop[d])
 				end
 				self.object:remove()
 				return
@@ -288,7 +288,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		-- Grab mob
 		if math.random(1,20) > 15 and not self._passenger then
 			if self.name == "mcl_minecarts:minecart" then
-				for mob in minetest.objects_inside_radius(self.object:get_pos(), 1.3) do
+				for mob in core.objects_inside_radius(self.object:get_pos(), 1.3) do
 					local entity = mob:get_luaentity()
 					if entity and entity.is_mob then
 						self._passenger = entity
@@ -308,8 +308,8 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 		if self._last_float_check >= mcl_minecarts.check_float_time then
 			pos = self.object:get_pos()
 			rou_pos = vector.round(pos)
-			node = minetest.get_node(rou_pos)
-			local g = minetest.get_item_group(node.name, "connect_to_raillike")
+			node = core.get_node(rou_pos)
+			local g = core.get_item_group(node.name, "connect_to_raillike")
 			if g ~= self._railtype and self._railtype then
 				-- Detach driver
 				if player then
@@ -422,9 +422,9 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			end
 			local rou_old = vector.round(self._old_pos)
 			if not node then
-				node = minetest.get_node(rou_pos)
+				node = core.get_node(rou_pos)
 			end
-			local node_old = minetest.get_node(rou_old)
+			local node_old = core.get_node(rou_old)
 
 			-- Update detector rails
 			if node.name == "mcl_minecarts:detector_rail" then
@@ -514,7 +514,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			-- Slow down or speed up
 			local acc = dir.y * -1.8
 			local friction = 0.4
-			local ndef = minetest.registered_nodes[minetest.get_node(pos).name]
+			local ndef = core.registered_nodes[core.get_node(pos).name]
 			local speed_mod = ndef and ndef._rail_acceleration
 
 			acc = acc - friction
@@ -594,11 +594,11 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 	end
 
 	function cart:get_staticdata()
-		return minetest.serialize({_railtype = self._railtype})
+		return core.serialize({_railtype = self._railtype})
 	end
 
-	minetest.register_entity(entity_id, cart)
-	return minetest.registered_entities[entity_id]
+	core.register_entity(entity_id, cart)
+	return core.registered_entities[entity_id]
 end
 
 -- Place a minecart at pointed_thing
@@ -610,10 +610,10 @@ function mcl_minecarts.place_minecart(itemstack, pointed_thing, placer)
 	local railpos, node
 	if mcl_minecarts:is_rail(pointed_thing.under) then
 		railpos = pointed_thing.under
-		node = minetest.get_node(pointed_thing.under)
+		node = core.get_node(pointed_thing.under)
 	elseif mcl_minecarts:is_rail(pointed_thing.above) then
 		railpos = pointed_thing.above
-		node = minetest.get_node(pointed_thing.above)
+		node = core.get_node(pointed_thing.above)
 	else
 		return
 	end
@@ -625,9 +625,9 @@ function mcl_minecarts.place_minecart(itemstack, pointed_thing, placer)
 	end
 
 	local entity_id = entity_mapping[itemstack:get_name()]
-	local cart = minetest.add_entity(railpos, entity_id)
+	local cart = core.add_entity(railpos, entity_id)
 	if not cart or not cart:get_pos() then return end
-	local railtype = minetest.get_item_group(node.name, "connect_to_raillike")
+	local railtype = core.get_item_group(node.name, "connect_to_raillike")
 	local le = cart:get_luaentity()
 	if le then
 		le._railtype = railtype
@@ -641,13 +641,13 @@ function mcl_minecarts.place_minecart(itemstack, pointed_thing, placer)
 	else
 		cart_dir = mcl_minecarts:get_rail_direction(railpos, {x=1, y=0, z=0}, nil, nil, railtype)
 	end
-	cart:set_yaw(minetest.dir_to_yaw(cart_dir))
+	cart:set_yaw(core.dir_to_yaw(cart_dir))
 
 	local pname = ""
 	if placer then
 		pname = placer:get_player_name()
 	end
-	if not minetest.is_creative_enabled(pname) then
+	if not core.is_creative_enabled(pname) then
 		itemstack:take_item()
 	end
 	return itemstack
@@ -677,14 +677,14 @@ local function register_craftitem(itemstring, entity_id, description, tt_help, l
 		_on_dispense = function(stack, _, droppos, dropnode, _)
 			-- Place minecart as entity on rail. If there's no rail, just drop it.
 			local placed
-			if minetest.get_item_group(dropnode.name, "rail") ~= 0 then
+			if core.get_item_group(dropnode.name, "rail") ~= 0 then
 				-- FIXME: This places minecarts even if the spot is already occupied
 				local pointed_thing = { under = droppos, above = { x=droppos.x, y=droppos.y+1, z=droppos.z } }
 				placed = mcl_minecarts.place_minecart(stack, pointed_thing)
 			end
 			if placed == nil then
 				-- Drop item
-				minetest.add_item(droppos, stack)
+				core.add_item(droppos, stack)
 			end
 		end,
 		groups = groups,
@@ -695,7 +695,7 @@ local function register_craftitem(itemstring, entity_id, description, tt_help, l
 	def._doc_items_usagehelp = usagehelp
 	def.inventory_image = icon
 	def.wield_image = icon
-	minetest.register_craftitem(itemstring, def)
+	core.register_craftitem(itemstring, def)
 end
 
 --[[
@@ -717,7 +717,7 @@ local function register_minecart(itemstring, entity_id, description, tt_help, lo
 	local entity = register_entity(entity_id, mesh, textures, drop, on_rightclick, on_activate_by_rail)
 	tt_help = (tt_help and tt_help .. "\n" or "") .. S("Sneak-click to remove")
 	register_craftitem(itemstring, entity_id, description, tt_help, longdesc, usagehelp, icon, creative)
-	if minetest.get_modpath("doc_identifier") then
+	if core.get_modpath("doc_identifier") then
 		doc.sub.identifier.register_object(entity_id, "craftitems", itemstring)
 	end
 	return entity
@@ -751,8 +751,8 @@ register_minecart(
 			mcl_player.players[clicker].attached = true
 			clicker:set_attach(self.object, "", {x=0, y=-1.75, z=-2}, {x=0, y=0, z=0})
 			clicker:set_eye_offset({x=0, y=-5.5, z=0},{x=0, y=-4, z=0})
-			minetest.after(0.2, function(name)
-				local player = minetest.get_player_by_name(name)
+			core.after(0.2, function(name)
+				local player = core.get_player_by_name(name)
 				if player then
 					mcl_player.player_set_animation(player, "sit" , 30)
 					mcl_title.set(clicker, "actionbar", {text=S("Sneak to dismount"), color="white", stay=60})
@@ -814,10 +814,10 @@ register_minecart(
 			self._fueltime = 0
 		end
 		local held = clicker:get_wielded_item()
-		if minetest.get_item_group(held:get_name(), "coal") == 1 then
+		if core.get_item_group(held:get_name(), "coal") == 1 then
 			self._fueltime = self._fueltime + 180
 
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
+			if not core.is_creative_enabled(clicker:get_player_name()) then
 				held:take_item()
 				local index = clicker:get_wield_index()
 				local inv = clicker:get_inventory()
@@ -907,8 +907,8 @@ register_minecart(
 			return
 		end
 		local held = clicker:get_wielded_item()
-		if minetest.get_item_group(held:get_name(),"flint_and_steel") > 0 then
-			if not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if core.get_item_group(held:get_name(),"flint_and_steel") > 0 then
+			if not core.is_creative_enabled(clicker:get_player_name()) then
 				held:add_wear(65535/65) -- 65 uses
 				local index = clicker:get_wield_index()
 				local inv = clicker:get_inventory()
@@ -919,7 +919,7 @@ register_minecart(
 	end, activate_tnt_minecart)
 
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_minecarts:minecart",
 	recipe = {
 		{"mcl_core:iron_ingot", "", "mcl_core:iron_ingot"},
@@ -927,7 +927,7 @@ minetest.register_craft({
 	},
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_minecarts:tnt_minecart",
 	recipe = {
 		{"mcl_tnt:tnt"},
@@ -935,7 +935,7 @@ minetest.register_craft({
 	},
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_minecarts:furnace_minecart",
 	recipe = {
 		{"mcl_furnaces:furnace"},
@@ -943,7 +943,7 @@ minetest.register_craft({
 	},
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_minecarts:hopper_minecart",
 	recipe = {
 		{"mcl_hoppers:hopper"},
@@ -952,7 +952,7 @@ minetest.register_craft({
 })
 
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_minecarts:chest_minecart",
 	recipe = {
 		{"mcl_chests:chest"},

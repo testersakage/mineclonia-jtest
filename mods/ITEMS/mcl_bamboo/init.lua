@@ -1,14 +1,14 @@
 mcl_bamboo = {}
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
-local S = minetest.get_translator("mcl_bamboo")
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
+local S = core.get_translator("mcl_bamboo")
 
 dofile(modpath .. "/nodes.lua")
 dofile(modpath .. "/recipes.lua")
 
 mcl_util.generate_on_place_plant_function(function(pos)
-	local node_below = minetest.get_node(vector.offset(pos,0,-1,0))
-	return minetest.get_item_group(node_below.name, "soil_bamboo") > 0
+	local node_below = core.get_node(vector.offset(pos,0,-1,0))
+	return core.get_item_group(node_below.name, "soil_bamboo") > 0
 end)
 
 local block_doc = S("A Block made of Bamboo stalks. Can be crafted into Bamboo Planks.")
@@ -73,7 +73,7 @@ mcl_trees.register_wood("bamboo",{
 	},
 })
 
-minetest.register_abm({
+core.register_abm({
 	label = "Bamboo growth",
 	nodenames = {"group:bamboo_tree"},
 	neighbors = {"group:soil_sapling","group:soil_bamboo"},

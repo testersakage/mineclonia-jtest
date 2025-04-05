@@ -1,5 +1,5 @@
-local modname = minetest.get_current_modname()
-local modpath = minetest.get_modpath(modname)
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 
 local spawnon = {"mcl_end:purpur_block"}
 
@@ -8,9 +8,9 @@ local function spawn_shulkers(pos,def,pr)
 	local p2 = vector.offset(pos,def.sidelen/2,def.sidelen,def.sidelen/2)
 	mcl_structures.spawn_mobs("mobs_mc:shulker",spawnon,p1,p2,pr,1)
 
-	local guard = minetest.find_node_near(pos,def.sidelen,{"mcl_itemframes:frame"})
+	local guard = core.find_node_near(pos,def.sidelen,{"mcl_itemframes:frame"})
 	if guard then
-		minetest.add_entity(vector.offset(guard,0,-0.5,0),"mobs_mc:shulker")
+		core.add_entity(vector.offset(guard,0,-0.5,0),"mobs_mc:shulker")
 	end
 end
 
@@ -28,7 +28,7 @@ mcl_structures.register_structure("end_shipwreck",{
 	},
 	construct_nodes = {"mcl_chests:ender_chest_small","mcl_chests:ender_chest","mcl_brewing:stand_000","mcl_chests:violet_shulker_box_small"},
 	after_place = function(pos,def,pr)
-		local fr = minetest.find_node_near(pos,def.sidelen,{"mcl_itemframes:frame"})
+		local fr = core.find_node_near(pos,def.sidelen,{"mcl_itemframes:frame"})
 		if fr then
 			if mcl_itemframes then
 				mcl_itemframes.update_entity(fr)

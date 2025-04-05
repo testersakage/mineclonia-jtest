@@ -1,4 +1,4 @@
--- Based on minetest.rotate_and_place
+-- Based on core.rotate_and_place
 
 --[[
 Attempt to predict the desired orientation of the pillar-like node
@@ -10,7 +10,7 @@ field is false or omitted (else, the itemstack is not changed).
 * `invert_wall`: if `true`, place wall-orientation on the ground and ground-
   orientation on wall
 
-This function is a simplified version of minetest.rotate_and_place.
+This function is a simplified version of core.rotate_and_place.
 The Minetest function is seen as inappropriate because this includes mirror
 images of possible orientations, causing problems with pillar shadings.
 ]]
@@ -26,30 +26,30 @@ function mcl_util.rotate_axis_and_place(itemstack, placer, pointed_thing, infini
 	local is_y = (above.y ~= under.y)
 	local is_z = (above.z ~= under.z)
 
-	local unode = minetest.get_node_or_nil(under)
+	local unode = core.get_node_or_nil(under)
 	if not unode then
 		return
 	end
 
-	local anode = minetest.get_node_or_nil(above)
+	local anode = core.get_node_or_nil(above)
 	if not anode then
 		return
 	end
 	local pos = pointed_thing.above
 	local node = anode
 
-	local undef = minetest.registered_nodes[unode.name]
+	local undef = core.registered_nodes[unode.name]
 	if undef and undef.buildable_to then
 		pos = pointed_thing.under
 		node = unode
 	end
 
-	if minetest.is_protected(pos, placer:get_player_name()) then
-		minetest.record_protection_violation(pos, placer:get_player_name())
+	if core.is_protected(pos, placer:get_player_name()) then
+		core.record_protection_violation(pos, placer:get_player_name())
 		return
 	end
 
-	local ndef = minetest.registered_nodes[node.name]
+	local ndef = core.registered_nodes[node.name]
 	if not ndef or not ndef.buildable_to then
 		return
 	end
@@ -62,7 +62,7 @@ function mcl_util.rotate_axis_and_place(itemstack, placer, pointed_thing, infini
 	elseif is_z then
 		p2 = 6
 	end
-	minetest.set_node(pos, {name = wield_name, param2 = p2})
+	core.set_node(pos, {name = wield_name, param2 = p2})
 
 	if not infinitestacks then
 		itemstack:take_item()
@@ -71,11 +71,11 @@ function mcl_util.rotate_axis_and_place(itemstack, placer, pointed_thing, infini
 end
 
 -- Wrapper of above function for use as `on_place` callback (Recommended).
--- Similar to minetest.rotate_node.
+-- Similar to core.rotate_node.
 function mcl_util.rotate_axis(itemstack, placer, pointed_thing)
 	if placer and placer:is_player() then
 		return mcl_util.rotate_axis_and_place(itemstack, placer, pointed_thing,
-			minetest.is_creative_enabled(placer:get_player_name()),
+			core.is_creative_enabled(placer:get_player_name()),
 			placer:get_player_control().sneak)
 	end
 
@@ -136,7 +136,7 @@ end
 
 -- Returns true if itemstack is a shulker box
 local function is_not_shulker_box(itemstack)
-	local g = minetest.get_item_group(itemstack:get_name(), "shulker_box")
+	local g = core.get_item_group(itemstack:get_name(), "shulker_box")
 	return g == 0 or g == nil
 end
 
@@ -199,11 +199,11 @@ end
 function mcl_util.move_item_container(source_pos, destination_pos, source_list, source_stack_id, destination_list)
 	local dpos = table.copy(destination_pos)
 	local spos = table.copy(source_pos)
-	local snode = minetest.get_node(spos)
-	local dnode = minetest.get_node(dpos)
+	local snode = core.get_node(spos)
+	local dnode = core.get_node(dpos)
 
-	local dctype = minetest.get_item_group(dnode.name, "container")
-	local sctype = minetest.get_item_group(snode.name, "container")
+	local dctype = core.get_item_group(dnode.name, "container")
+	local sctype = core.get_item_group(snode.name, "container")
 
 	-- Container type 7 does not allow any movement
 	if sctype == 7 then
@@ -217,8 +217,8 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 			if not pos then
 				return false
 			end
-			node = minetest.get_node(pos)
-			ctype = minetest.get_item_group(node.name, "container")
+			node = core.get_node(pos)
+			ctype = core.get_item_group(node.name, "container")
 			-- The left segment seems incorrect? We better bail out!
 			if ctype ~= 5 then
 				return false
@@ -231,8 +231,8 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 	dpos, dnode, dctype = normalize_double_container(dpos, dnode, dctype)
 	if not spos or not dpos then return false end
 
-	local smeta = minetest.get_meta(spos)
-	local dmeta = minetest.get_meta(dpos)
+	local smeta = core.get_meta(spos)
+	local dmeta = core.get_meta(dpos)
 
 	local sinv = smeta:get_inventory()
 	local dinv = dmeta:get_inventory()
@@ -271,7 +271,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 		-- Prevent shulker box inception
 		if dctype == 3 then
 			cond = is_not_shulker_box
-		elseif minetest.get_item_group(dnode.name, "hopper") > 0 then
+		elseif core.get_item_group(dnode.name, "hopper") > 0 then
 			cond = is_room_for_item
 		end
 		source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, destination_list, cond)
@@ -279,7 +279,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 			-- Try again if source is a double container
 			if snode and sctype == 5 then
 				spos = mcl_util.get_double_container_neighbor_pos(spos, snode.param2, "left")
-				smeta = minetest.get_meta(spos)
+				smeta = core.get_meta(spos)
 				sinv = smeta:get_inventory()
 
 				source_stack_id = mcl_util.get_eligible_transfer_item_slot(sinv, source_list, dinv, destination_list, cond)
@@ -295,7 +295,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 	-- Abort transfer if shulker box wants to go into shulker box
 	if dctype == 3 then
 		local stack = sinv:get_stack(source_list, source_stack_id)
-		if stack and minetest.get_item_group(stack:get_name(), "shulker_box") == 1 then
+		if stack and core.get_item_group(stack:get_name(), "shulker_box") == 1 then
 			return false
 		end
 	end
@@ -313,7 +313,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 			-- Try transfer to neighbor node if transfer failed and double container
 			if dnode and not ok and dctype == 5 then
 				dpos = mcl_util.get_double_container_neighbor_pos(dpos, dnode.param2, "left")
-				dmeta = minetest.get_meta(dpos)
+				dmeta = core.get_meta(dpos)
 				dinv = dmeta:get_inventory()
 
 				ok = mcl_util.move_item(sinv, source_list, source_stack_id, dinv, destination_list)
@@ -322,7 +322,7 @@ function mcl_util.move_item_container(source_pos, destination_pos, source_list, 
 			-- Update furnace
 			if ok and dctype == 4 then
 				-- Start furnace's timer function, it will sort out whether furnace can burn or not.
-				minetest.get_node_timer(dpos):start(1.0)
+				core.get_node_timer(dpos):start(1.0)
 			end
 
 			return ok
@@ -334,7 +334,7 @@ end
 local function drop_item_stack(pos, stack)
 	if not stack or stack:is_empty() then return end
 	local drop_offset = vector.new(math.random() - 0.5, 0, math.random() - 0.5)
-	minetest.add_item(vector.add(pos, drop_offset), stack)
+	core.add_item(vector.add(pos, drop_offset), stack)
 end
 
 mcl_util.drop_item_stack = drop_item_stack
@@ -356,7 +356,7 @@ function mcl_util.drop_items_from_meta_container(lists)
 				end
 			end
 		else
-			local meta = minetest.get_meta(pos)
+			local meta = core.get_meta(pos)
 			local inv = meta:get_inventory()
 			for _, listname in pairs(lists) do
 				for i = 1, inv:get_size(listname) do
@@ -387,9 +387,9 @@ function mcl_util.generate_on_place_plant_function(condition)
 		if rc ~= nil then return rc end
 
 		local place_pos
-		local node = minetest.get_node(pointed_thing.under)
-		local def_under = minetest.registered_nodes[minetest.get_node(pointed_thing.under).name]
-		local def_above = minetest.registered_nodes[minetest.get_node(pointed_thing.above).name]
+		local node = core.get_node(pointed_thing.under)
+		local def_under = core.registered_nodes[core.get_node(pointed_thing.under).name]
+		local def_above = core.registered_nodes[core.get_node(pointed_thing.above).name]
 		if not def_under or not def_above then
 			return itemstack
 		end
@@ -405,11 +405,11 @@ function mcl_util.generate_on_place_plant_function(condition)
 		local result, param2 = condition(place_pos, node, itemstack)
 		if result == true then
 			local idef = itemstack:get_definition()
-			local new_itemstack, success = minetest.item_place_node(itemstack, placer, pointed_thing, param2)
+			local new_itemstack, success = core.item_place_node(itemstack, placer, pointed_thing, param2)
 
 			if success then
 				if idef.sounds and idef.sounds.place then
-					minetest.sound_play(idef.sounds.place, {pos = pointed_thing.above, gain = 1}, true)
+					core.sound_play(idef.sounds.place, {pos = pointed_thing.above, gain = 1}, true)
 				end
 			end
 			itemstack = new_itemstack
@@ -419,12 +419,12 @@ function mcl_util.generate_on_place_plant_function(condition)
 	end
 end
 
-function minetest.item_place(itemstack, placer, pointed_thing, param2)
+function core.item_place(itemstack, placer, pointed_thing, param2)
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 	if rc ~= nil then return rc, nil end
 
 	if itemstack:get_definition().type == "node" then
-		return minetest.item_place_node(itemstack, placer, pointed_thing, param2)
+		return core.item_place_node(itemstack, placer, pointed_thing, param2)
 	end
 
 	return itemstack, nil
@@ -434,9 +434,9 @@ function mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 	-- Call on_rightclick if the pointed node defines it
 	if pointed_thing and pointed_thing.type == "node" then
 		local pos = pointed_thing.under
-		local node = minetest.get_node(pos)
+		local node = core.get_node(pos)
 		if player and player:is_player() then
-			local nodedef = minetest.registered_nodes[node.name]
+			local nodedef = core.registered_nodes[node.name]
 			local on_rightclick_optional = nodedef and nodedef._mcl_on_rightclick_optional
 			if on_rightclick_optional then
 				local rc = on_rightclick_optional(pos, node, player, itemstack, pointed_thing)
@@ -450,20 +450,20 @@ function mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 	end
 end
 
--- This function is essentially a wrapper around minetest.raycast to get the currently pointed at "pointed_thing"
+-- This function is essentially a wrapper around core.raycast to get the currently pointed at "pointed_thing"
 -- The last "ignore" argument is either a table of nodename to ignore in the raycast or a func(pointed_thing) that
 -- returns true if that position in the ray shall be discounted.
 function mcl_util.get_pointed_thing(player, objects, liquid, ignore)
 	local pos = vector.offset(player:get_pos(), 0, player:get_properties().eye_height, 0)
 	local def = player:get_wielded_item():get_definition()
-	local range = math.ceil(def and def.range or ItemStack():get_definition().range or tonumber(minetest.settings:get("mcl_hand_range")) or 4.5)
+	local range = math.ceil(def and def.range or ItemStack():get_definition().range or tonumber(core.settings:get("mcl_hand_range")) or 4.5)
 	local look_dir = vector.multiply(player:get_look_dir(), range)
 	local pos2 = vector.add(pos, look_dir)
-	local ray = minetest.raycast(pos, pos2, objects, liquid)
+	local ray = core.raycast(pos, pos2, objects, liquid)
 
 	if ignore then
 		for pointed_thing in ray do
-			if (type(ignore) == "table" and table.indexof(ignore, minetest.get_node(pointed_thing.under).name) == -1 ) or
+			if (type(ignore) == "table" and table.indexof(ignore, core.get_node(pointed_thing.under).name) == -1 ) or
 			(type(ignore) == "function" and not ignore(pointed_thing)) then
 				return pointed_thing
 			end
@@ -498,11 +498,11 @@ function mcl_util.bypass_buildable_to(func)
 	end
 
 	local function log(name, ...)
-		return name ~= "" and minetest.log(...)
+		return name ~= "" and core.log(...)
 	end
 
 	local function check_attached_node(p, n, group_rating)
-		local def = minetest.registered_nodes[n.name]
+		local def = core.registered_nodes[n.name]
 		local d = vector.zero()
 		if group_rating == 3 then
 			-- always attach to floor
@@ -521,11 +521,11 @@ function mcl_util.bypass_buildable_to(func)
 				-- to voxelmanip placing a wallmounted node without resetting a
 				-- pre-existing param2 value that is out-of-range for facedir.
 				-- The fallback vector corresponds to param2 = 0.
-				d = minetest.facedir_to_dir(n.param2) or vector.new(0, 0, 1)
+				d = core.facedir_to_dir(n.param2) or vector.new(0, 0, 1)
 			elseif (def.paramtype2 == "4dir" or
 				def.paramtype2 == "color4dir") then
 				-- Similar to facedir handling
-				d = minetest.fourdir_to_dir(n.param2) or vector.new(0, 0, 1)
+				d = core.fourdir_to_dir(n.param2) or vector.new(0, 0, 1)
 			end
 		elseif def.paramtype2 == "wallmounted" or
 			def.paramtype2 == "colorwallmounted" then
@@ -534,13 +534,13 @@ function mcl_util.bypass_buildable_to(func)
 
 			-- The fallback vector here is used for the same reason as
 			-- for facedir nodes.
-			d = minetest.wallmounted_to_dir(n.param2) or vector.new(0, 1, 0)
+			d = core.wallmounted_to_dir(n.param2) or vector.new(0, 1, 0)
 		else
 			d.y = -1
 		end
 		local p2 = vector.add(p, d)
-		local nn = minetest.get_node(p2).name
-		local def2 = minetest.registered_nodes[nn]
+		local nn = core.get_node(p2).name
+		local def2 = core.registered_nodes[nn]
 		if def2 and not def2.walkable then
 			return false
 		end
@@ -557,25 +557,25 @@ function mcl_util.bypass_buildable_to(func)
 		end
 
 		local under = pointed_thing.under
-		local oldnode_under = minetest.get_node_or_nil(under)
+		local oldnode_under = core.get_node_or_nil(under)
 		local above = pointed_thing.above
-		local oldnode_above = minetest.get_node_or_nil(above)
+		local oldnode_above = core.get_node_or_nil(above)
 		local playername = user_name(placer)
 
 		if not oldnode_under or not oldnode_above then
 			log("info", playername .. " tried to place"
-				.. " node in unloaded position " .. minetest.pos_to_string(above))
+				.. " node in unloaded position " .. core.pos_to_string(above))
 			return itemstack
 		end
 
-		local olddef_under = minetest.registered_nodes[oldnode_under.name]
-		olddef_under = olddef_under or minetest.nodedef_default
-		local olddef_above = minetest.registered_nodes[oldnode_above.name]
-		olddef_above = olddef_above or minetest.nodedef_default
+		local olddef_under = core.registered_nodes[oldnode_under.name]
+		olddef_under = olddef_under or core.nodedef_default
+		local olddef_above = core.registered_nodes[oldnode_above.name]
+		olddef_above = olddef_above or core.nodedef_default
 
 		if not olddef_above.buildable_to and not olddef_under.buildable_to then
 			log("info", playername .. " tried to place"
-				.. " node in invalid position " .. minetest.pos_to_string(above)
+				.. " node in invalid position " .. core.pos_to_string(above)
 				.. ", replacing " .. oldnode_above.name)
 			return itemstack
 		end
@@ -597,16 +597,16 @@ function mcl_util.bypass_buildable_to(func)
 		-- MINETEST CODE --
 		-------------------
 
-		if minetest.is_protected(place_to, playername) then
+		if core.is_protected(place_to, playername) then
 			log("action", playername
 				.. " tried to place " .. def.name
 				.. " at protected position "
-				.. minetest.pos_to_string(place_to))
-			minetest.record_protection_violation(place_to, playername)
+				.. core.pos_to_string(place_to))
+			core.record_protection_violation(place_to, playername)
 			return itemstack
 		end
 
-		local oldnode = minetest.get_node(place_to)
+		local oldnode = core.get_node(place_to)
 		local newnode = {name = def.name, param1 = 0, param2 = param2 or 0}
 
 		-- Calculate direction for wall mounted stuff like torches and signs
@@ -615,7 +615,7 @@ function mcl_util.bypass_buildable_to(func)
 		elseif (def.paramtype2 == "wallmounted" or
 			def.paramtype2 == "colorwallmounted") and not param2 then
 			local dir = vector.subtract(under, above)
-			newnode.param2 = minetest.dir_to_wallmounted(dir)
+			newnode.param2 = core.dir_to_wallmounted(dir)
 			-- Calculate the direction for furnaces and chests and stuff
 		elseif (def.paramtype2 == "facedir" or
 			def.paramtype2 == "colorfacedir" or
@@ -624,7 +624,7 @@ function mcl_util.bypass_buildable_to(func)
 			local placer_pos = placer and placer:get_pos()
 			if placer_pos then
 				local dir = vector.subtract(above, placer_pos)
-				newnode.param2 = minetest.dir_to_facedir(dir)
+				newnode.param2 = core.dir_to_facedir(dir)
 				log("info", "facedir: " .. newnode.param2)
 			end
 		end
@@ -653,23 +653,23 @@ function mcl_util.bypass_buildable_to(func)
 		end
 
 		-- Check if the node is attached and if it can be placed there
-		local an = minetest.get_item_group(def.name, "attached_node")
+		local an = core.get_item_group(def.name, "attached_node")
 		if an ~= 0 and
 			not check_attached_node(place_to, newnode, an) then
 			log("action", "attached node " .. def.name ..
-				" cannot be placed at " .. minetest.pos_to_string(place_to))
+				" cannot be placed at " .. core.pos_to_string(place_to))
 			return itemstack
 		end
 
 		log("action", playername .. " places node "
-			.. def.name .. " at " .. minetest.pos_to_string(place_to))
+			.. def.name .. " at " .. core.pos_to_string(place_to))
 
 		-- Add node and update
-		minetest.add_node(place_to, newnode)
+		core.add_node(place_to, newnode)
 
 		-- Play sound if it was done by a player
 		if playername ~= "" and def.sounds and def.sounds.place then
-			minetest.sound_play(def.sounds.place, {
+			core.sound_play(def.sounds.place, {
 				pos = place_to,
 				exclude_player = playername,
 			}, true)
@@ -689,7 +689,7 @@ function mcl_util.bypass_buildable_to(func)
 		end
 
 		-- Run script hook
-		for _, callback in ipairs(minetest.registered_on_placenodes) do
+		for _, callback in ipairs(core.registered_on_placenodes) do
 			-- Deepcopy pos, node and pointed_thing because callback can modify them
 			local place_to_copy = vector.copy(place_to)
 			local newnode_copy = {name = newnode.name, param1 = newnode.param1, param2 = newnode.param2}
@@ -711,8 +711,8 @@ end
 function mcl_util.check_position_protection(position, player)
 	local name = player and player:get_player_name() or ""
 
-	if minetest.is_protected(position, name) then
-		minetest.record_protection_violation(position, name)
+	if core.is_protected(position, name) then
+		core.record_protection_violation(position, name)
 		return true
 	end
 
@@ -725,9 +725,9 @@ function mcl_util.safe_place(pos, node, player, itemstack)
 	if not nnode then return itemstack end
 	if mcl_util.check_position_protection(pos,player) then return itemstack end
 
-	minetest.set_node(pos, nnode)
+	core.set_node(pos, nnode)
 
-	if itemstack and not minetest.is_creative_enabled(name) then
+	if itemstack and not core.is_creative_enabled(name) then
 		itemstack:take_item(1)
 		return itemstack
 	end
@@ -735,14 +735,14 @@ function mcl_util.safe_place(pos, node, player, itemstack)
 end
 
 function mcl_util.get_pos_p2(pos)
-	local biomedef = minetest.registered_biomes[minetest.get_biome_name(minetest.get_biome_data(pos).biome)]
+	local biomedef = core.registered_biomes[core.get_biome_name(core.get_biome_data(pos).biome)]
 	return biomedef and biomedef._mcl_palette_index or 0
 end
 
 function mcl_util.traverse_tower(pos, dir, callback)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	local i = 0
-	while minetest.get_node(pos).name == node.name do
+	while core.get_node(pos).name == node.name do
 		if callback and callback(pos, dir, node) then
 			return pos,i,true
 		end
@@ -754,7 +754,7 @@ end
 
 -- Voxel manip function to replace a node type with another in an area
 function mcl_util.replace_node_vm(pos1, pos2, mat_from, mat_to, is_group)
-	local c_to = minetest.get_content_id(mat_to)
+	local c_to = core.get_content_id(mat_to)
 
 	local group_name
 	local c_from
@@ -762,10 +762,10 @@ function mcl_util.replace_node_vm(pos1, pos2, mat_from, mat_to, is_group)
 	if is_group then
 		group_name = string.match(mat_from, "group:(.+)")
 	else
-		c_from = minetest.get_content_id(mat_from)
+		c_from = core.get_content_id(mat_from)
 	end
 
-	local vm = minetest.get_voxel_manip()
+	local vm = core.get_voxel_manip()
 	local emin, emax = vm:read_from_map(pos1, pos2)
 	local a = VoxelArea:new({
 		MinEdge = emin,
@@ -779,8 +779,8 @@ function mcl_util.replace_node_vm(pos1, pos2, mat_from, mat_to, is_group)
 			for x = pos1.x, pos2.x do
 				local vi = a:index(x, y, z)
 				if is_group then
-					local node_name = minetest.get_name_from_content_id(data[vi])
-					if minetest.get_item_group(node_name, group_name) > 0 then
+					local node_name = core.get_name_from_content_id(data[vi])
+					if core.get_item_group(node_name, group_name) > 0 then
 						data[vi] = c_to
 					end
 				else
@@ -797,19 +797,19 @@ function mcl_util.replace_node_vm(pos1, pos2, mat_from, mat_to, is_group)
 	vm:write_to_map(true)
 end
 
--- TODO: Remove and use minetest.bulk_swap_node directly after abandoning
+-- TODO: Remove and use core.bulk_swap_node directly after abandoning
 -- compatibility with Minetest versions were it is not present.
-mcl_util.bulk_swap_node = minetest.bulk_swap_node or function(positions, node)
+mcl_util.bulk_swap_node = core.bulk_swap_node or function(positions, node)
 	for _, pos in pairs(positions) do
-		minetest.swap_node(pos, node)
+		core.swap_node(pos, node)
 	end
 end
 
 -- Voxel manip function to change nodes if they don't match in an area.
 function mcl_util.bulk_set_node_vm(pos1, pos2, mat_to)
-	local c_to = minetest.get_content_id(mat_to)
+	local c_to = core.get_content_id(mat_to)
 
-	local vm = minetest.get_voxel_manip()
+	local vm = core.get_voxel_manip()
 	local emin, emax = vm:read_from_map(pos1, pos2)
 	local a = VoxelArea:new({
 		MinEdge = emin,
@@ -837,13 +837,13 @@ end
 -- Voxel manip function to change nodes if they don't match in a circle.
 -- Will also set param2 on changed nodes if provided.
 function mcl_util.circle_bulk_set_node_vm(radius, pos, y, mat_to, param2)
-	local c_to = minetest.get_content_id(mat_to)
+	local c_to = core.get_content_id(mat_to)
 
 	-- Using new as y is not relative
 	local pos1 = vector.new(pos.x - radius, y, pos.z - radius)
 	local pos2 = vector.new(pos.x + radius, y, pos.z + radius)
 
-	local vm = minetest.get_voxel_manip()
+	local vm = core.get_voxel_manip()
 	local emin, emax = vm:read_from_map(pos1, pos2)
 	local a = VoxelArea:new({
 		MinEdge = emin,
@@ -880,16 +880,16 @@ function mcl_util.circle_bulk_set_node_vm(radius, pos, y, mat_to, param2)
 	vm:write_to_map(true)
 end
 
-local ground_padding = tonumber(minetest.settings:get("mcl_ground_padding")) or 1
+local ground_padding = tonumber(core.settings:get("mcl_ground_padding")) or 1
 
 -- This function creates a turnip shape under the selected positon.
 -- The biome for the position will be used to select the top and filler layers.
 -- The shape is slightly altered for sandy top layers.
 -- The radius of the top layer is max(fwidth, fdepth) / 2 + ground_padding
 function mcl_util.create_ground_turnip(pos, fwidth, fdepth)
-	local biome_data = minetest.get_biome_data(pos)
-	local biome_name = minetest.get_biome_name(biome_data.biome)
-	local reg_biome = minetest.registered_biomes[biome_name]
+	local biome_data = core.get_biome_data(pos)
+	local biome_name = core.get_biome_name(biome_data.biome)
+	local reg_biome = core.registered_biomes[biome_name]
 
 	local mat = "mcl_core:dirt"
 	local filler = "mcl_core:dirt"
@@ -901,7 +901,7 @@ function mcl_util.create_ground_turnip(pos, fwidth, fdepth)
 		grass_idx = reg_biome._mcl_palette_index or 0
 		if reg_biome.node_filler then
 			filler = reg_biome.node_filler
-			if minetest.get_item_group(filler, "material_sand") > 0 then
+			if core.get_item_group(filler, "material_sand") > 0 then
 				if reg_biome.node_stone then
 					filler = reg_biome.node_stone
 				end
@@ -921,7 +921,7 @@ function mcl_util.create_ground_turnip(pos, fwidth, fdepth)
 	-- usually we add 2 layers, each 2 blocks wider, then fill smaller layers below
 	-- but for sand we add 2 layers 1 wider and then make the first fill layer wider
 	-- otherwsie the sand can collapse and as funny as it is, it is annoying
-	local needs_support = minetest.get_item_group(mat, "material_sand") > 0
+	local needs_support = core.get_item_group(mat, "material_sand") > 0
 
 	if needs_support then
 		radius = radius + 1
@@ -954,14 +954,14 @@ function mcl_util.create_ground_turnip(pos, fwidth, fdepth)
 	end
 end
 
-local old_get_natural_light = minetest.get_natural_light
+local old_get_natural_light = core.get_natural_light
 
-function minetest.get_natural_light(pos,tod)
+function core.get_natural_light(pos,tod)
 	--pcall the elusive get_light "out of bounds error" bug
-	-- TODO: remove this hack when this is fixed in minetest.
+	-- TODO: remove this hack when this is fixed in core.
 	local st,res = xpcall(function() return old_get_natural_light(pos, tod) end, debug.traceback)
 	if st then return res end
-	minetest.log("error","["..tostring(minetest.get_current_modname()).."] minetest.get_natural_light would have crashed: \n https://codeberg.org/mineclonia/mineclonia/issues/17\n".. tostring(res))
+	core.log("error","["..tostring(core.get_current_modname()).."] core.get_natural_light would have crashed: \n https://codeberg.org/mineclonia/mineclonia/issues/17\n".. tostring(res))
 	return 0
 end
 
@@ -979,6 +979,6 @@ function mcl_util.get_2d_block_direction (yaw)
 end
 
 function mcl_util.is_daytime()
-	local time = minetest.get_timeofday()
+	local time = core.get_timeofday()
 	return time <= 0.76 and time >= 0.24
 end

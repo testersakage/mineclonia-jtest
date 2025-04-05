@@ -1,12 +1,12 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_bells = {}
 
 function mcl_bells.ring_once(pos)
-	local alarm_time = minetest.get_gametime ()
+	local alarm_time = core.get_gametime ()
 
-	minetest.sound_play( "mcl_bells_bell_stroke", { pos = pos, gain = 1.5, max_hear_distance = 150,})
-	for o in minetest.objects_inside_radius(pos, 32) do
+	core.sound_play( "mcl_bells_bell_stroke", { pos = pos, gain = 1.5, max_hear_distance = 150,})
+	for o in core.objects_inside_radius(pos, 32) do
 		local entity = o:get_luaentity()
 		if entity and entity.name == "mobs_mc:villager" then
 			entity._last_alarm_gmt = alarm_time
@@ -21,7 +21,7 @@ function mcl_bells.ring_once(pos)
 	end
 end
 
-minetest.register_node("mcl_bells:bell", {
+core.register_node("mcl_bells:bell", {
 	description = S("Bell"),
 	paramtype = "light",
 	inventory_image = "mcl_bells_bell.png",
@@ -55,7 +55,7 @@ minetest.register_node("mcl_bells:bell", {
 				mcl_bells.ring_once(pos)
 			end
 
-			minetest.swap_node(pos, {
+			core.swap_node(pos, {
 				name = node.name,
 				param2 = powered and 1 or 0,
 			})

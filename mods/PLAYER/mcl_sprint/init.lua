@@ -18,7 +18,7 @@ local players = {}
 -- Returns nil if player does not exist.
 function mcl_sprint.is_sprinting(playername)
 	if players[playername] then
-		local player = minetest.get_player_by_name (playername)
+		local player = core.get_player_by_name (playername)
 		return players[playername].sprinting
 			or mcl_serverplayer.sprinting_locally (player)
 	else
@@ -26,7 +26,7 @@ function mcl_sprint.is_sprinting(playername)
 	end
 end
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local playerName = player:get_player_name()
 
 	players[playerName] = {
@@ -36,17 +36,17 @@ minetest.register_on_joinplayer(function(player)
 		lastPos = player:get_pos(),
 		sprintDistance = 0,
 		fov = 1.0,
-		channel = minetest.mod_channel_join("mcl_sprint:" .. playerName),
+		channel = core.mod_channel_join("mcl_sprint:" .. playerName),
 	}
 end)
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	local playerName = player:get_player_name()
 	players[playerName] = nil
 end)
 
 local function setSprinting(playerName, sprinting) --Sets the state of a player (0=stopped/moving, 1=sprinting)
 	if not sprinting and not mcl_sprint.is_sprinting(playerName) then return end
-	local player = minetest.get_player_by_name(playerName)
+	local player = core.get_player_by_name(playerName)
 	players[playerName].sprinting = sprinting
 	if players[playerName] then
 		if sprinting then
@@ -102,10 +102,10 @@ mcl_sprint.get_top_node_tile = get_top_node_tile
 
 function mcl_sprint.spawn_particles (player, self_pos)
 	-- Sprint node particles
-	local playerNode = minetest.get_node (vector.offset (self_pos, 0, -1, 0))
-	local def = minetest.registered_nodes[playerNode.name]
+	local playerNode = core.get_node (vector.offset (self_pos, 0, -1, 0))
+	local def = core.registered_nodes[playerNode.name]
 	if def and def.walkable then
-		minetest.add_particlespawner({
+		core.add_particlespawner({
 			amount = math.random(1, 2),
 			time = 1,
 			minpos = {x=-0.5, y=0.1, z=-0.5},
@@ -127,13 +127,13 @@ function mcl_sprint.spawn_particles (player, self_pos)
 	end
 end
 
-minetest.register_globalstep(function()
+core.register_globalstep(function()
 	--Get the gametime
-	local gameTime = minetest.get_gametime()
+	local gameTime = core.get_gametime()
 
 	--Loop through all connected players
 	for playerName, playerInfo in pairs(players) do
-		local player = minetest.get_player_by_name(playerName)
+		local player = core.get_player_by_name(playerName)
 		if player and not mcl_serverplayer.is_csm_capable (player) then
 			local ctrl = player:get_player_control()
 			--Check if the player should be sprinting

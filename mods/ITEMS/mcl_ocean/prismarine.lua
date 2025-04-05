@@ -1,13 +1,13 @@
 -- Nodes
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
-minetest.register_node("mcl_ocean:sea_lantern", {
+core.register_node("mcl_ocean:sea_lantern", {
 	description = S("Sea Lantern"),
 	_doc_items_longdesc = S("Sea lanterns are decorative light sources which look great underwater but can be placed anywhere."),
 	paramtype2 = "facedir",
 	is_ground_content = false,
-	light_source = minetest.LIGHT_MAX,
+	light_source = core.LIGHT_MAX,
 	drop = {
 		max_items = 1,
 		items = {
@@ -30,7 +30,7 @@ minetest.register_node("mcl_ocean:sea_lantern", {
 	}
 })
 
-minetest.register_node("mcl_ocean:prismarine", {
+core.register_node("mcl_ocean:prismarine", {
 	description = S("Prismarine"),
 	_doc_items_longdesc = S("Prismarine is used as a building block. It slowly changes its color."),
 	is_ground_content = false,
@@ -42,7 +42,7 @@ minetest.register_node("mcl_ocean:prismarine", {
 	_mcl_hardness = 1.5,
 })
 
-minetest.register_node("mcl_ocean:prismarine_brick", {
+core.register_node("mcl_ocean:prismarine_brick", {
 	description = S("Prismarine Bricks"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	is_ground_content = false,
@@ -53,7 +53,7 @@ minetest.register_node("mcl_ocean:prismarine_brick", {
 	_mcl_hardness = 1.5,
 })
 
-minetest.register_node("mcl_ocean:prismarine_dark", {
+core.register_node("mcl_ocean:prismarine_dark", {
 	description = S("Dark Prismarine"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
 	is_ground_content = false,
@@ -85,14 +85,14 @@ mcl_stairs.register_stair_and_slab("prismarine_dark", {
 
 -- Craftitems
 
-minetest.register_craftitem("mcl_ocean:prismarine_crystals", {
+core.register_craftitem("mcl_ocean:prismarine_crystals", {
 	description = S("Prismarine Crystals"),
 	_doc_items_longdesc = doc.sub.items.temp.craftitem,
 	inventory_image = "mcl_ocean_prismarine_crystals.png",
 	groups = { craftitem = 1 },
 })
 
-minetest.register_craftitem("mcl_ocean:prismarine_shard", {
+core.register_craftitem("mcl_ocean:prismarine_shard", {
 	description = S("Prismarine Shard"),
 	_doc_items_longdesc = doc.sub.items.temp.craftitem,
 	inventory_image = "mcl_ocean_prismarine_shard.png",
@@ -104,7 +104,7 @@ minetest.register_craftitem("mcl_ocean:prismarine_shard", {
 })
 
 -- Crafting
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_ocean:sea_lantern",
 	recipe = {
 		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_crystals", "mcl_ocean:prismarine_shard"},
@@ -113,7 +113,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_ocean:prismarine_dark",
 	recipe = {
 		{"mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard", "mcl_ocean:prismarine_shard"},

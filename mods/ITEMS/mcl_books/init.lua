@@ -1,17 +1,17 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
-local C = minetest.colorize
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
+local C = core.colorize
 
 local max_text_length =  12800
 local max_title_length = 64
 
-local bookshelf_inv = minetest.settings:get_bool("mcl_bookshelf_inventories", true)
+local bookshelf_inv = core.settings:get_bool("mcl_bookshelf_inventories", true)
 
 local header = "no_prepend[]" .. mcl_vars.gui_nonbg .. mcl_vars.gui_bg_color ..
 		"style_type[button;border=false;bgimg=mcl_books_button9.png;bgimg_pressed=mcl_books_button9_pressed.png;bgimg_middle=2,2]"
 
 -- Book
-minetest.register_craftitem("mcl_books:book", {
+core.register_craftitem("mcl_books:book", {
 	description = S("Book"),
 	_doc_items_longdesc = S("Books are used to make bookshelves and book and quills."),
 	inventory_image = "default_book.png",
@@ -19,7 +19,7 @@ minetest.register_craftitem("mcl_books:book", {
 	_mcl_enchanting_enchanted_tool = "mcl_enchanting:book_enchanted",
 })
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_books:book",
 	recipe = { "mcl_core:paper", "mcl_core:paper", "mcl_core:paper", "mcl_mobitems:leather", }
@@ -60,7 +60,7 @@ local function write(itemstack, user, pointed_thing)
 		"textarea[0.75,0.1;7.25,9;text;;" .. F(text) .. "]" ..
 		"button[0.75,7.95;3,1;sign;" .. F(S("Sign")) .. "]" ..
 		"button_exit[4.25,7.95;3,1;ok;" .. F(S("Done")) .. "]"
-	minetest.show_formspec(user:get_player_name(), "mcl_books:writable_book", formspec)
+	core.show_formspec(user:get_player_name(), "mcl_books:writable_book", formspec)
 end
 
 local function read(itemstack, user, pointed_thing)
@@ -73,11 +73,11 @@ local function read(itemstack, user, pointed_thing)
 		"background[-0.5,-0.5;9,10;mcl_books_book_bg.png]" ..
 		"textarea[0.75,0.1;7.25,9;;" .. F(text) .. ";]" ..
 		"button_exit[2.25,7.95;3,1;ok;" .. F(S("Done")) .. "]"
-	minetest.show_formspec(user:get_player_name(), "mcl_books:written_book", formspec)
+	core.show_formspec(user:get_player_name(), "mcl_books:written_book", formspec)
 end
 
 -- Book and Quill
-minetest.register_craftitem("mcl_books:writable_book", {
+core.register_craftitem("mcl_books:writable_book", {
 	description = S("Book and Quill"),
 	_tt_help = S("Write down some notes"),
 	_doc_items_longdesc = S("This item can be used to write down some notes."),
@@ -92,7 +92,7 @@ minetest.register_craftitem("mcl_books:writable_book", {
 	on_secondary_use = write,
 })
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	if ((formname == "mcl_books:writable_book") and fields and fields.text) then
 		local stack = player:get_wielded_item()
 		if (stack:get_name() and (stack:get_name() == "mcl_books:writable_book")) then
@@ -123,7 +123,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 					"tooltip[sign;" ..
 					F(S("Note: The book will no longer be editable after signing")) .. "]" ..
 					"button[4.25,7.95;3,1;cancel;" .. F(S("Cancel")) .. "]"
-				minetest.show_formspec(player:get_player_name(), "mcl_books:signing", formspec)
+				core.show_formspec(player:get_player_name(), "mcl_books:signing", formspec)
 			end
 		end
 	elseif ((formname == "mcl_books:signing") and fields and fields.sign and fields.title) then
@@ -149,7 +149,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 			player:set_wielded_item(newbook)
 		else
-			minetest.log("error", "[mcl_books] " .. name .. " failed to sign a book!")
+			core.log("error", "[mcl_books] " .. name .. " failed to sign a book!")
 		end
 	elseif ((formname == "mcl_books:signing") and fields and fields.cancel) then
 		local book = player:get_wielded_item()
@@ -159,14 +159,14 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
-minetest.register_craft({
+core.register_craft({
 	type = "shapeless",
 	output = "mcl_books:writable_book",
 	recipe = { "mcl_books:book", "mcl_mobitems:ink_sac", "mcl_mobitems:feather" },
 })
 
 -- Written Book
-minetest.register_craftitem("mcl_books:written_book", {
+core.register_craftitem("mcl_books:written_book", {
 	description = S("Written Book"),
 	_doc_items_longdesc = S(
 		"Written books contain some text written by someone. They can be read and copied, but not edited."
@@ -190,7 +190,7 @@ for i = 1, 8 do
 	table.insert(rc, "mcl_books:written_book")
 	for _ = 1, i do	table.insert(rc, "mcl_books:writable_book") end
 
-	minetest.register_craft({
+	core.register_craft({
 		type = "shapeless",
 		output = "mcl_books:written_book " .. i,
 		recipe = rc,
@@ -238,9 +238,9 @@ local function craft_copy_book(itemstack, player, old_craft_grid, _)
 	tt.reload_itemstack_description(itemstack)
 	return itemstack, original, index
 end
-minetest.register_craft_predict(craft_copy_book)
+core.register_craft_predict(craft_copy_book)
 
-minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
+core.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
 	local _, original, index = craft_copy_book(itemstack, player, old_craft_grid, craft_inv)
 	if original and index then craft_inv:set_stack("craft", index, original) end
 end)
@@ -249,16 +249,16 @@ end)
 local drop_content = mcl_util.drop_items_from_meta_container("main")
 
 local function on_blast(pos)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	drop_content(pos, node)
-	minetest.remove_node(pos)
+	core.remove_node(pos)
 end
 
 -- Simple protection checking functions
 local function protection_check_move(pos, _, _, _, _, count, player)
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return 0
 	else
 		return count
@@ -267,10 +267,10 @@ end
 
 local function protection_check_put_take(pos, _, _, stack, player)
 	local name = player:get_player_name()
-	if minetest.is_protected(pos, name) then
-		minetest.record_protection_violation(pos, name)
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
 		return 0
-	elseif minetest.get_item_group(stack:get_name(), "book") ~= 0 or stack:get_name() == "mcl_enchanting:book_enchanted" then
+	elseif core.get_item_group(stack:get_name(), "book") ~= 0 or stack:get_name() == "mcl_enchanting:book_enchanted" then
 		return stack:get_count()
 	else
 		return 0
@@ -279,7 +279,7 @@ end
 
 local function bookshelf_gui(pos, _, clicker)
 	if not bookshelf_inv then return end
-	local name = minetest.get_meta(pos):get_string("name")
+	local name = core.get_meta(pos):get_string("name")
 
 	if name == "" then
 		name = S("Bookshelf")
@@ -287,7 +287,7 @@ local function bookshelf_gui(pos, _, clicker)
 
 	local playername = clicker:get_player_name()
 
-	minetest.show_formspec(playername,
+	core.show_formspec(playername,
 		"mcl_books:bookshelf_" .. pos.x .. "_" .. pos.y .. "_" .. pos.z,
 		table.concat({
 			"formspec_version[4]",
@@ -312,12 +312,12 @@ end
 local function close_forms(pos)
 	local formname = "mcl_books:bookshelf_" .. pos.x .. "_" .. pos.y .. "_" .. pos.z
 	for pl in mcl_util.connected_players(pos, 30) do
-			minetest.close_formspec(pl:get_player_name(), formname)
+			core.close_formspec(pl:get_player_name(), formname)
 	end
 end
 
 -- Bookshelf
-minetest.register_node("mcl_books:bookshelf", {
+core.register_node("mcl_books:bookshelf", {
 	description = S("Bookshelf"),
 	_doc_items_longdesc = S("Bookshelves are used for decoration."),
 	tiles = { "mcl_books_bookshelf_top.png", "mcl_books_bookshelf_top.png", "default_bookshelf.png" },
@@ -339,27 +339,27 @@ minetest.register_node("mcl_books:bookshelf", {
 	_mcl_silk_touch_drop = true,
 	_mcl_burntime = 15,
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:set_size("main", 9 * 3)
 	end,
 	after_place_node = function(pos, _, itemstack, _)
-		minetest.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
+		core.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
 	end,
 	allow_metadata_inventory_move = protection_check_move,
 	allow_metadata_inventory_take = protection_check_put_take,
 	allow_metadata_inventory_put = protection_check_put_take,
 	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
-		minetest.log("action", player:get_player_name() ..
-			" moves stuff in bookshelf at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" moves stuff in bookshelf at " .. core.pos_to_string(pos))
 	end,
 	on_metadata_inventory_put = function(pos, _, _, _, player)
-		minetest.log("action", player:get_player_name() ..
-			" moves stuff to bookshelf at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" moves stuff to bookshelf at " .. core.pos_to_string(pos))
 	end,
 	on_metadata_inventory_take = function(pos, _, _, _, player)
-		minetest.log("action", player:get_player_name() ..
-			" takes stuff from bookshelf at " .. minetest.pos_to_string(pos))
+		core.log("action", player:get_player_name() ..
+			" takes stuff from bookshelf at " .. core.pos_to_string(pos))
 	end,
 	after_dig_node = drop_content,
 	on_blast = on_blast,
@@ -367,7 +367,7 @@ minetest.register_node("mcl_books:bookshelf", {
 	on_destruct = close_forms,
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_books:bookshelf",
 	recipe = {
 		{ "group:wood",     "group:wood",     "group:wood" },

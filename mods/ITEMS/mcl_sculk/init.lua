@@ -1,7 +1,7 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 mcl_sculk = {}
 
---local mt_sound_play = minetest.sound_play
+--local mt_sound_play = core.sound_play
 
 local spread_to = {"mcl_core:stone","mcl_core:dirt","mcl_core:sand","mcl_core:dirt_with_grass","group:grass_block","mcl_core:andesite","mcl_core:diorite","mcl_core:granite","mcl_core:mycelium","group:dirt","mcl_end:end_stone","mcl_nether:netherrack","mcl_blackstone:basalt","mcl_nether:soul_sand","mcl_blackstone:soul_soil","mcl_crimson:warped_nylium","mcl_crimson:crimson_nylium","mcl_core:gravel","mcl_deepslate:deepslate","mcl_deepslate:tuff"}
 
@@ -26,14 +26,14 @@ local adjacents = {
 
 --[[
 local function sensor_action(p,tp)
-	local s = minetest.find_node_near(p,SPREAD_RANGE,{"mcl_sculk:shrieker"})
-	local n = minetest.get_node(s)
+	local s = core.find_node_near(p,SPREAD_RANGE,{"mcl_sculk:shrieker"})
+	local n = core.get_node(s)
 	if s and n.param2 ~= 1 then
-		minetest.sound_play("mcl_sculk_shrieker", {pos=s, gain=1.5, max_hear_distance = 16}, true)
+		core.sound_play("mcl_sculk_shrieker", {pos=s, gain=1.5, max_hear_distance = 16}, true)
 		n.param2 = 1
-		minetest.set_node(s,n)
-		minetest.after(SHRIEKER_COOLDOWN,function(s)
-			minetest.set_node(s,{name = "mcl_sculk:shrieker",param2=0})
+		core.set_node(s,n)
+		core.after(SHRIEKER_COOLDOWN,function(s)
+			core.set_node(s,{name = "mcl_sculk:shrieker",param2=0})
 		end,s)
 	end
 	--local p1 = vector.offset(p,-SENSOR_RANGE,-SENSOR_RANGE,-SENSOR_RANGE)
@@ -41,41 +41,41 @@ local function sensor_action(p,tp)
 	--darken_area(p1,p2)
 end
 
-function minetest.sound_play(spec, parameters, ephemeral)
+function core.sound_play(spec, parameters, ephemeral)
 	local rt = old_sound_play(spec, parameters, ephemeral)
 	if parameters.pos then
 		pos = parameters.pos
 	elseif parameters.to_player then
-		pos = minetest.get_player_by_name(parameters.to_player):get_pos()
+		pos = core.get_player_by_name(parameters.to_player):get_pos()
 	end
 	if not pos then return rt end
-	local s = minetest.find_node_near(pos,SPREAD_RANGE,{"mcl_sculk:sensor"})
+	local s = core.find_node_near(pos,SPREAD_RANGE,{"mcl_sculk:sensor"})
 	if s then
-		--minetest.after(SENSOR_DELAY,sensor_action,s,pos)
+		--core.after(SENSOR_DELAY,sensor_action,s,pos)
 	end
 	return rt
 end
 
 walkover.register_global(function(pos, node, player)
-	local s = minetest.find_node_near(pos,SPREAD_RANGE,{"mcl_sculk:sensor"})
+	local s = core.find_node_near(pos,SPREAD_RANGE,{"mcl_sculk:sensor"})
 	if not s then return end
 	local v = player:get_velocity()
 	if v.x == 0 and v.y == 0 and v.z == 0 then return end
 	if player:get_player_control().sneak then return end
-	local def = minetest.registered_nodes[node.name]
+	local def = core.registered_nodes[node.name]
 	if def and def.sounds then
-		minetest.log("walkover "..node.name)
-		minetest.after(SENSOR_DELAY,sensor_action,s,pos)
+		core.log("walkover "..node.name)
+		core.after(SENSOR_DELAY,sensor_action,s,pos)
 	end
 end)
 --]]
 
 local function get_node_xp(pos)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	return meta:get_int("xp")
 end
 local function set_node_xp(pos,xp)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	return meta:set_int("xp",xp)
 end
 
@@ -108,18 +108,18 @@ end
 
 local function has_air(pos)
 	for _,v in pairs(adjacents) do
-		if minetest.get_item_group(minetest.get_node(vector.add(pos,v)).name,"solid") <= 0 then return true end
+		if core.get_item_group(core.get_node(vector.add(pos,v)).name,"solid") <= 0 then return true end
 	end
 end
 
 local function has_nonsculk(pos)
 	for _,v in pairs(adjacents) do
 		local p = vector.add(pos,v)
-		if minetest.get_item_group(minetest.get_node(p).name,"sculk") <= 0 and minetest.get_item_group(minetest.get_node(p).name,"solid") > 0 then return p end
+		if core.get_item_group(core.get_node(p).name,"sculk") <= 0 and core.get_item_group(core.get_node(p).name,"solid") > 0 then return p end
 	end
 end
 local function retrieve_close_spreadable_nodes (p)
-	local nnn = minetest.find_nodes_in_area(vector.offset(p,-SPREAD_RANGE,-SPREAD_RANGE,-SPREAD_RANGE),vector.offset(p,SPREAD_RANGE,SPREAD_RANGE,SPREAD_RANGE),spread_to)
+	local nnn = core.find_nodes_in_area(vector.offset(p,-SPREAD_RANGE,-SPREAD_RANGE,-SPREAD_RANGE),vector.offset(p,SPREAD_RANGE,SPREAD_RANGE,SPREAD_RANGE),spread_to)
 	local nn={}
 	for _,v in pairs(nnn) do
 		if has_air(v) then
@@ -133,7 +133,7 @@ local function retrieve_close_spreadable_nodes (p)
 end
 
 local function spread_sculk (p, xp_amount)
-	local c = minetest.find_node_near(p,SPREAD_RANGE,{"mcl_sculk:catalyst"})
+	local c = core.find_node_near(p,SPREAD_RANGE,{"mcl_sculk:catalyst"})
 	if c then
 		local nn = retrieve_close_spreadable_nodes (p)
 		if nn and #nn > 0 then
@@ -141,12 +141,12 @@ local function spread_sculk (p, xp_amount)
 				--local d = math.random(100)
 				--[[ --enable to generate shriekers and sensors
 				if d <= 1 then
-					minetest.set_node(nn[1],{name = "mcl_sculk:shrieker"})
+					core.set_node(nn[1],{name = "mcl_sculk:shrieker"})
 					set_node_xp(nn[1],math.min(1,self._xp - 10))
 					self.object:remove()
 					return ret
 				elseif d <= 9 then
-					minetest.set_node(nn[1],{name = "mcl_sculk:sensor"})
+					core.set_node(nn[1],{name = "mcl_sculk:sensor"})
 					set_node_xp(nn[1],math.min(1,self._xp - 5))
 					self.object:remove()
 					return ret
@@ -156,13 +156,13 @@ local function spread_sculk (p, xp_amount)
 				local r = math.min(math.random(#nn), xp_amount)
 
 				for i=1,r do
-					minetest.set_node(nn[i],{name = "mcl_sculk:sculk" })
+					core.set_node(nn[i],{name = "mcl_sculk:sculk" })
 					set_node_xp(nn[i],math.floor(xp_amount / r))
 				end
 				for i=1,r do
 					local p = has_nonsculk(nn[i])
 					if p and has_air(p) then
-						minetest.set_node(vector.offset(p,0,1,0),{name = "mcl_sculk:vein", param2 = 1})
+						core.set_node(vector.offset(p,0,1,0),{name = "mcl_sculk:vein", param2 = 1})
 					end
 				end
 				set_node_xp(nn[1],get_node_xp(nn[1]) + xp_amount % r)
@@ -177,11 +177,11 @@ function mcl_sculk.handle_death(pos, xp_amount)
 	return spread_sculk (pos, xp_amount)
 end
 
-minetest.register_on_dieplayer(function(player)
+core.register_on_dieplayer(function(player)
 	mcl_sculk.handle_death(player:get_pos(), 5)
 end)
 
-minetest.register_node("mcl_sculk:sculk", {
+core.register_node("mcl_sculk:sculk", {
 	description = S("Sculk"),
 	tiles = {
 		{ name = "mcl_sculk_sculk.png",
@@ -203,7 +203,7 @@ minetest.register_node("mcl_sculk:sculk", {
 	_mcl_silk_touch_drop = true,
 })
 
-minetest.register_node("mcl_sculk:vein", {
+core.register_node("mcl_sculk:vein", {
 	description = S("Sculk Vein"),
 	_doc_items_longdesc = S("Sculk vein."),
 	drawtype = "signlike",
@@ -232,7 +232,7 @@ minetest.register_node("mcl_sculk:vein", {
 	on_rotate = false,
 })
 
-minetest.register_node("mcl_sculk:catalyst", {
+core.register_node("mcl_sculk:catalyst", {
 	description = S("Sculk Catalyst"),
 	tiles = {
 		"mcl_sculk_catalyst_top.png",
@@ -252,7 +252,7 @@ minetest.register_node("mcl_sculk:catalyst", {
 })
 
 --[[
-minetest.register_node("mcl_sculk:sensor", {
+core.register_node("mcl_sculk:sensor", {
 	description = S("Sculk Sensor"),
 	tiles = {
 		"mcl_sculk_sensor_top.png",
@@ -270,7 +270,7 @@ minetest.register_node("mcl_sculk:sensor", {
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 })
-minetest.register_node("mcl_sculk:shrieker", {
+core.register_node("mcl_sculk:shrieker", {
 	description = S("Sculk Shrieker"),
 	tiles = {
 		"mcl_sculk_shrieker_top.png",

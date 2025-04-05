@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 mcl_compass = {}
 
@@ -17,8 +17,8 @@ local spin_timer = 0
 -- the compass globalstep function.
 local random_frame = math.random(0, compass_frames-1)
 
-local function get_far_node(pos, itemstack) --code from minetest dev wiki: https://dev.minetest.net/minetest.get_node, some edits have been made to add a cooldown for force loads
-	local node = minetest.get_node(pos)
+local function get_far_node(pos, itemstack) --code from minetest dev wiki: https://dev.core.net/core.get_node, some edits have been made to add a cooldown for force loads
+	local node = core.get_node(pos)
 	if node.name == "ignore" then
 		local tstamp = tonumber(itemstack:get_meta():get_string("last_forceload"))
 		if tstamp == nil then --this is only relevant for new lodestone compasses, the ones that have never performes a forceload yet
@@ -27,8 +27,8 @@ local function get_far_node(pos, itemstack) --code from minetest dev wiki: https
 		end
 		if tonumber(os.time(os.date("!*t"))) - tstamp > 180 then ---@diagnostic disable-line: param-type-mismatch
 			itemstack:get_meta():set_string("last_forceload", tostring(os.time(os.date("!*t")))) ---@diagnostic disable-line: param-type-mismatch
-			minetest.get_voxel_manip():read_from_map(pos, pos)
-			node = minetest.get_node(pos)
+			core.get_voxel_manip():read_from_map(pos, pos)
+			node = core.get_node(pos)
 		else
 			node = {name="mcl_compass:lodestone"} --cooldown not over yet, pretend like there is something...
 		end
@@ -65,7 +65,7 @@ local function get_compass_frame(pos, dir, itemstack)
 	if not string.find(itemstack:get_name(), "_lodestone") then -- normal compass
 		-- Compasses only work in the overworld
 		if mcl_worlds.compass_works(pos) then
-			local spawn_pos = minetest.setting_get_pos("static_spawnpoint")
+			local spawn_pos = core.setting_get_pos("static_spawnpoint")
 				or vector.new(0, 0, 0)
 			return get_compass_angle(pos, spawn_pos, dir)
 		else
@@ -73,9 +73,9 @@ local function get_compass_frame(pos, dir, itemstack)
 		end
 	else -- lodestone compass
 		local lpos_str = itemstack:get_meta():get_string("pointsto")
-		local lpos = minetest.string_to_pos(lpos_str)
+		local lpos = core.string_to_pos(lpos_str)
 		if not lpos then
-			minetest.log("warning", "mcl_compass: invalid lodestone position!")
+			core.log("warning", "mcl_compass: invalid lodestone position!")
 			return random_frame
 		end
 		local _, l_dim = mcl_worlds.y_to_layer(lpos.y)
@@ -101,7 +101,7 @@ end
 -- Legacy compatibility function for mods using older api.
 --
 function mcl_compass.get_compass_image(pos, dir)
-	minetest.log("warning", "mcl_compass: deprecated function " ..
+	core.log("warning", "mcl_compass: deprecated function " ..
 		"get_compass_image() called, use get_compass_itemname().")
 	local itemstack = ItemStack(mcl_compass.stereotype)
 	return get_compass_frame(pos, dir, itemstack)
@@ -129,7 +129,7 @@ end
 local function update_recovery_compass(stack, player)
 	local meta = player:get_meta()
 	local posstring =  meta:get_string("mcl_compass:recovery_pos")
-	local targetpos = minetest.string_to_pos(posstring)
+	local targetpos = core.string_to_pos(posstring)
 	if not targetpos then return stack end
 
 	local def = stack:get_definition()
@@ -147,7 +147,7 @@ local function update_recovery_compass(stack, player)
 	return update_compass_img(stack, img)
 end
 
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	spin_timer = spin_timer + dtime
 	if spin_timer >= spin_timer_tick then
 		random_frame = (random_frame + math.random(-1, 1)) % compass_frames
@@ -157,7 +157,7 @@ minetest.register_globalstep(function(dtime)
 	for player in mcl_util.connected_players() do
 		local inv = player:get_inventory()
 		for j, stack in pairs(inv:get_list("main")) do
-			local compass_group = minetest.get_item_group(stack:get_name(), "compass")
+			local compass_group = core.get_item_group(stack:get_name(), "compass")
 			if compass_group > 0 then
 				local def = stack:get_definition()
 				if def._mcl_compass_update then
@@ -231,7 +231,7 @@ mcl_compass.register_compass("recovery_compass", {
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_compass:" .. stereotype_frame,
 	recipe = {
 		{"", "mcl_core:iron_ingot", ""},
@@ -240,7 +240,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_compass:" .. random_frame .. "_recovery",
 	recipe = {
 		{"mcl_sculk:echo_shard","mcl_sculk:echo_shard", "mcl_sculk:echo_shard"},
@@ -249,11 +249,11 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_node("mcl_compass:lodestone",{
+core.register_node("mcl_compass:lodestone",{
 	description=S("Lodestone"),
 	on_rightclick = function(pos, _, _, itemstack)
 		if itemstack:get_name() == "mcl_compass:compass_lodestone" or itemstack:get_name() == "mcl_compass:compass" then
-			itemstack:get_meta():set_string("pointsto", minetest.pos_to_string(pos))
+			itemstack:get_meta():set_string("pointsto", core.pos_to_string(pos))
 			itemstack:set_name("mcl_compass:compass_lodestone")
 		end
 		return itemstack
@@ -272,7 +272,7 @@ minetest.register_node("mcl_compass:lodestone",{
 	sounds = mcl_sounds.node_sound_stone_defaults()
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_compass:lodestone",
 	recipe = {
 		{"mcl_core:stonebrickcarved","mcl_core:stonebrickcarved","mcl_core:stonebrickcarved"},
@@ -282,7 +282,7 @@ minetest.register_craft({
 })
 
 --set recovery meta
-minetest.register_on_dieplayer(function(player)
+core.register_on_dieplayer(function(player)
 	local meta = player:get_meta();
-	meta:set_string("mcl_compass:recovery_pos",minetest.pos_to_string(player:get_pos()))
+	meta:set_string("mcl_compass:recovery_pos",core.pos_to_string(player:get_pos()))
 end)

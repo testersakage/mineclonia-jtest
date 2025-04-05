@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 screwdriver = {}
 
@@ -22,16 +22,16 @@ function screwdriver.rotate_3way(pos, node, _, mode, _)
 		else
 			node.param2 = 0
 		end
-		minetest.swap_node(pos, node)
+		core.swap_node(pos, node)
 		return true
 	elseif mode == screwdriver.ROTATE_FACE then
 		if node.param2 == 6 then
 			node.param2 = 12
-			minetest.swap_node(pos, node)
+			core.swap_node(pos, node)
 			return true
 		else
 			node.param2 = 6
-			minetest.swap_node(pos, node)
+			core.swap_node(pos, node)
 			return true
 		end
 	end
@@ -41,10 +41,10 @@ end
 -- For attached wallmounted nodes: returns true if rotation is valid
 -- simplified version of minetest:builtin/game/falling.lua#L148.
 local function check_attached_node(pos, rotation)
-	local d = minetest.wallmounted_to_dir(rotation)
+	local d = core.wallmounted_to_dir(rotation)
 	local p2 = vector.add(pos, d)
-	local n = minetest.get_node(p2).name
-	local def2 = minetest.registered_nodes[n]
+	local n = core.get_node(p2).name
+	local def2 = core.registered_nodes[n]
 	if def2 and not def2.walkable then
 		return false
 	end
@@ -90,7 +90,7 @@ function screwdriver.rotate.wallmounted(pos, node, mode)
 	local rotation = node.param2 % 8 -- get first 3 bits
 	local other = node.param2 - rotation
 	rotation = wallmounted_tbl[mode][rotation] or 0
-	if minetest.get_item_group(node.name, "attached_node") ~= 0 then
+	if core.get_item_group(node.name, "attached_node") ~= 0 then
 		-- find an acceptable orientation
 		for _ = 1, 5 do
 			if not check_attached_node(pos, rotation) then
@@ -114,13 +114,13 @@ function screwdriver.handler(itemstack, user, pointed_thing, mode, uses)
 	local pos = pointed_thing.under
 	local player_name = user and user:get_player_name() or ""
 
-	if minetest.is_protected(pos, player_name) then
-		minetest.record_protection_violation(pos, player_name)
+	if core.is_protected(pos, player_name) then
+		core.record_protection_violation(pos, player_name)
 		return
 	end
 
-	local node = minetest.get_node(pos)
-	local ndef = minetest.registered_nodes[node.name]
+	local node = core.get_node(pos)
+	local ndef = core.registered_nodes[node.name]
 	if not ndef then
 		return itemstack
 	end
@@ -157,14 +157,14 @@ function screwdriver.handler(itemstack, user, pointed_thing, mode, uses)
 
 	if should_rotate and new_param2 ~= node.param2 then
 		node.param2 = new_param2
-		minetest.swap_node(pos, node)
-		minetest.check_for_falling(pos)
+		core.swap_node(pos, node)
+		core.check_for_falling(pos)
 		if ndef.after_rotate then
 			ndef.after_rotate(vector.new(pos))
 		end
 	end
 
-	if not (minetest.is_creative_enabled(user:get_player_name())) then
+	if not (core.is_creative_enabled(user:get_player_name())) then
 		itemstack:add_wear_by_uses(mcl_util.calculate_durability(itemstack))
 	end
 
@@ -172,7 +172,7 @@ function screwdriver.handler(itemstack, user, pointed_thing, mode, uses)
 end
 
 -- Screwdriver
-minetest.register_tool("screwdriver:screwdriver", {
+core.register_tool("screwdriver:screwdriver", {
 	description = S("Screwdriver"),
 	inventory_image = "screwdriver.png",
 	wield_image = "screwdriver.png^[transformFX",
@@ -190,7 +190,7 @@ minetest.register_tool("screwdriver:screwdriver", {
 
 mcl_wip.register_wip_item("screwdriver:screwdriver")
 
-minetest.register_craft({
+core.register_craft({
 	output = "screwdriver:screwdriver",
 	recipe = {
 		{"mcl_core:iron_ingot"},
@@ -198,7 +198,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_alias("screwdriver:screwdriver1", "screwdriver:screwdriver")
-minetest.register_alias("screwdriver:screwdriver2", "screwdriver:screwdriver")
-minetest.register_alias("screwdriver:screwdriver3", "screwdriver:screwdriver")
-minetest.register_alias("screwdriver:screwdriver4", "screwdriver:screwdriver")
+core.register_alias("screwdriver:screwdriver1", "screwdriver:screwdriver")
+core.register_alias("screwdriver:screwdriver2", "screwdriver:screwdriver")
+core.register_alias("screwdriver:screwdriver3", "screwdriver:screwdriver")
+core.register_alias("screwdriver:screwdriver4", "screwdriver:screwdriver")

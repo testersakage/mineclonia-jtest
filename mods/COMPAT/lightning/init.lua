@@ -4,4 +4,4 @@ lightning = {
 }
 setmetatable(lightning, { __index = mcl_lightning })
 
-minetest.register_alias("lightning:dying_flame", "mcl_fire:fire")
+core.register_alias("lightning:dying_flame", "mcl_fire:fire")

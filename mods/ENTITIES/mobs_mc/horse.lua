@@ -1,8 +1,8 @@
-local S = minetest.get_translator("mobs_mc")
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
-local extended_pet_control = minetest.settings:get_bool("mcl_extended_pet_control",false)
+local extended_pet_control = core.settings:get_bool("mcl_extended_pet_control",false)
 
 local function attach_driver(self, clicker)
 	mcl_title.set(clicker, "actionbar", {
@@ -326,15 +326,15 @@ function horse:extra_textures (cstring)
 	local armor_name = armor:get_name ()
 	local textures = {}
 	if not armor:is_empty ()
-		and minetest.get_item_group (armor_name, "horse_armor") > 0 then
+		and core.get_item_group (armor_name, "horse_armor") > 0 then
 		if cstring then
 			textures[2] = base
 				.. "^("
-				.. minetest.registered_items[armor_name]._horse_overlay_image:gsub(".png$", "_desat.png")
+				.. core.registered_items[armor_name]._horse_overlay_image:gsub(".png$", "_desat.png")
 				.. "^[multiply:" .. cstring .. ")"
 		else
 			textures[2] = base .. "^"
-				.. minetest.registered_items[armor_name]._horse_overlay_image
+				.. core.registered_items[armor_name]._horse_overlay_image
 		end
 	else
 		textures[2] = base
@@ -354,12 +354,12 @@ end
 
 function horse:set_armor_1 (iname, w)
 	local cstring
-	if minetest.get_item_group(iname, "armor_leather") > 0 then
+	if core.get_item_group(iname, "armor_leather") > 0 then
 		local m = w:get_meta()
 		local cs = m:get_string("mcl_armor:color")
 		cstring = cs ~= "" and cs or nil
 	end
-	local armor = minetest.get_item_group(iname, "horse_armor")
+	local armor = core.get_item_group(iname, "horse_armor")
 	self._horse_armor_stack = w:to_string ()
 	self.armor = armor
 	local agroups = self.object:get_armor_groups()
@@ -373,7 +373,7 @@ function horse:set_armor_1 (iname, w)
 	self:set_textures (tex)
 	local def = w:get_definition()
 	if def.sounds and def.sounds._mcl_armor_equip then
-		minetest.sound_play({name = def.sounds._mcl_armor_equip},
+		core.sound_play({name = def.sounds._mcl_armor_equip},
 			{gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
 	end
 end
@@ -384,7 +384,7 @@ function horse:set_armor (clicker)
 	if self._horse_armor_stack == "" then
 		self:set_armor_1 (iname, w)
 		self:update_armor_inv ()
-		if not minetest.is_creative_enabled(clicker:get_player_name()) then
+		if not core.is_creative_enabled(clicker:get_player_name()) then
 			w:take_item()
 			clicker:set_wielded_item(w)
 		end
@@ -396,7 +396,7 @@ function horse:remove_armor (stack)
 	self._horse_armor_stack = ""
 	local def = stack:get_definition ()
 	if def.sounds and def.sounds._mcl_armor_unequip then
-		minetest.sound_play ({name = def.sounds._mcl_armor_unequip},
+		core.sound_play ({name = def.sounds._mcl_armor_unequip},
 			{gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
 	end
 	local tex = self:extra_textures ()
@@ -427,7 +427,7 @@ end
 
 local function armor_allow_put (horse, inv, listname, index, stack, player)
 	if index == ARMOR_SLOT then
-		local armor = minetest.get_item_group (stack:get_name (),
+		local armor = core.get_item_group (stack:get_name (),
 						       "horse_armor")
 		return armor > 1 and 1 or 0
 	elseif index == SADDLE_SLOT then
@@ -510,7 +510,7 @@ function horse:on_deactivate (removal)
 	mob_class.on_deactivate (self, removal)
 
 	if self._armor_inv_name then
-		minetest.remove_detached_inventory (self._armor_inv_name)
+		core.remove_detached_inventory (self._armor_inv_name)
 		self._armor_inv_name = nil
 		self._armor_inv = nil
 	end
@@ -531,9 +531,9 @@ function horse:generate_inventory_formspec ()
 		return "formspec_version[6]"
 	end
 	local objectname = mcl_util.get_object_name (self.object)
-	objectname = minetest.formspec_escape (objectname)
+	objectname = core.formspec_escape (objectname)
 	local armorname = self._armor_inv_name
-	armorname = minetest.formspec_escape ("detached:" .. armorname)
+	armorname = core.formspec_escape ("detached:" .. armorname)
 	local chest_itemslots
 	if self._chest then
 		chest_itemslots = string.format ("list[detached:%s;main;5.375,0.875;5,3;]",
@@ -579,7 +579,7 @@ function horse:post_attach (player)
 		-- present.
 		local name = self.name .. ":" .. horse_inventory_counter
 		horse_inventory_counter = horse_inventory_counter + 1
-		local inventory = minetest.create_detached_inventory (name, {
+		local inventory = core.create_detached_inventory (name, {
 			allow_move = armor_allow_move,
 			allow_put = function (inv, listname, index, stack, player)
 				return armor_allow_put (self, inv, listname, index, stack, player)
@@ -634,7 +634,7 @@ function horse:detach (player)
 	mcl_player.set_inventory_formspec (player, nil, 100)
 	mcl_entity_invs.save_inv (self)
 	if self._armor_inv_name then
-		minetest.remove_detached_inventory (self._armor_inv_name)
+		core.remove_detached_inventory (self._armor_inv_name)
 		self._armor_inv_name = nil
 		self._armor_inv = nil
 	end
@@ -741,7 +741,7 @@ function horse:do_custom (dtime)
 		self._jump_charge = nil
 
 		if self._armor_inv_name then
-			minetest.remove_detached_inventory (self._armor_inv_name)
+			core.remove_detached_inventory (self._armor_inv_name)
 			self._armor_inv_name = nil
 			self._armor_inv = nil
 		end
@@ -767,7 +767,7 @@ function horse:on_rightclick (clicker)
 
 	local item = clicker:get_wielded_item()
 	local iname = item:get_name()
-	local creative = minetest.is_creative_enabled (clicker:get_player_name())
+	local creative = core.is_creative_enabled (clicker:get_player_name())
 
 	if self.child and not self._food_items[iname] then
 		return
@@ -836,7 +836,7 @@ function horse:on_rightclick (clicker)
 			and self:is_saddle_item (item)
 			and self:set_saddle (item, clicker) then
 			return
-		elseif minetest.get_item_group(iname, "horse_armor") > 0
+		elseif core.get_item_group(iname, "horse_armor") > 0
 			and can_equip_horse_armor(self.name)
 			and not self.driver and self:set_armor(clicker) then
 			return
@@ -861,7 +861,7 @@ function horse:set_saddle (stack, clicker)
 		self._saddle = stack:peek_item ():to_string ()
 		if clicker then
 			local name = clicker:get_player_name ()
-			if not minetest.is_creative_enabled (name) then
+			if not core.is_creative_enabled (name) then
 				stack:take_item ()
 				clicker:set_wielded_item (stack)
 			end
@@ -873,7 +873,7 @@ function horse:set_saddle (stack, clicker)
 		local tex = self:extra_textures ()
 		self.base_texture = tex
 		self:set_textures (tex)
-		minetest.sound_play({name = "mcl_armor_equip_leather"},
+		core.sound_play({name = "mcl_armor_equip_leather"},
 			{gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
 		return true
 	end
@@ -887,7 +887,7 @@ function horse:remove_saddle ()
 	local tex = self:extra_textures ()
 	self.base_texture = tex
 	self:set_textures (tex)
-	minetest.sound_play ({name = "mcl_armor_unequip_leather"},
+	core.sound_play ({name = "mcl_armor_unequip_leather"},
 		{gain=0.5, max_hear_distance=12, pos=self.object:get_pos()}, true)
 end
 
@@ -1109,7 +1109,7 @@ local function check_skeleton_trap (self, self_pos, dtime)
 		-- Spawn three horses.
 		local horses = { self.object, }
 		for _ = 1, 3 do
-			local horse = minetest.add_entity (self_pos, self.name)
+			local horse = core.add_entity (self_pos, self.name)
 			if horse then
 				table.insert (horses, horse)
 				local entity = horse:get_luaentity ()
@@ -1121,7 +1121,7 @@ local function check_skeleton_trap (self, self_pos, dtime)
 		local mob_factor = mcl_worlds.get_special_difficulty (self_pos)
 		-- Spawn skeletons for each horse.
 		for _, horse in pairs (horses) do
-			local skelly = minetest.add_entity (self_pos, "mobs_mc:skeleton")
+			local skelly = core.add_entity (self_pos, "mobs_mc:skeleton")
 			if skelly then
 				local entity = skelly:get_luaentity ()
 				entity:jock_to_existing (horse, "", {

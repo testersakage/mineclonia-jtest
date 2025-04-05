@@ -1,8 +1,8 @@
 mcl_grindstone = {}
 
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
-local C = minetest.colorize
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
+local C = core.colorize
 
 local MAX_WEAR = 65535
 
@@ -167,7 +167,7 @@ local node_box = {
 	}
 }
 
-minetest.register_node("mcl_grindstone:grindstone", {
+core.register_node("mcl_grindstone:grindstone", {
 	description = S("Grindstone"),
 	_tt_help = S("Used to disenchant/fix tools"),
 	_doc_items_longdesc = S("Grindstone disenchants tools and armour except for curses, and repairs two items of the same type it is also the weapon smith's work station."),
@@ -197,8 +197,8 @@ minetest.register_node("mcl_grindstone:grindstone", {
 	_configures_formspec = true,
 	allow_metadata_inventory_take = function(pos, _, _, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		else
 			return stack:get_count()
@@ -206,8 +206,8 @@ minetest.register_node("mcl_grindstone:grindstone", {
 	end,
 	allow_metadata_inventory_put = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		elseif listname == "output" then
 			return 0
@@ -217,13 +217,13 @@ minetest.register_node("mcl_grindstone:grindstone", {
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, _, count, player)
 		local name = player:get_player_name()
-		if minetest.is_protected(pos, name) then
-			minetest.record_protection_violation(pos, name)
+		if core.is_protected(pos, name) then
+			core.record_protection_violation(pos, name)
 			return 0
 		elseif to_list == "output" then
 			return 0
 		elseif from_list == "output" and to_list == "input" then
-			local meta = minetest.get_meta(pos)
+			local meta = core.get_meta(pos)
 			local inv = meta:get_inventory()
 			if inv:room_for_item(to_list, inv:get_stack(from_list, from_index)) then
 				return count
@@ -235,11 +235,11 @@ minetest.register_node("mcl_grindstone:grindstone", {
 		end
 	end,
 	on_metadata_inventory_put = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		update_grindstone_slots(meta)
 	end,
 	on_metadata_inventory_move = function(pos, from_list, _, to_list, to_index, count)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		if from_list == "output" and to_list == "input" then
 			local inv = meta:get_inventory()
 			for i = 1, inv:get_size("input") do
@@ -253,7 +253,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 		update_grindstone_slots(meta)
 	end,
 	on_metadata_inventory_take = function(pos, listname, _, stack)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		if listname == "output" then
 			local xp_earnt = 0
 			local inv = meta:get_inventory()
@@ -288,7 +288,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 	end,
 
 	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
 		inv:set_size("input", 2)
 		inv:set_size("output", 1)
@@ -318,7 +318,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 	end,
 	on_rightclick = function(pos, _, player)
 		if player and player:is_player() and not player:get_player_control().sneak then
-			local meta = minetest.get_meta(pos)
+			local meta = core.get_meta(pos)
 			update_grindstone_slots(meta)
 			meta:set_string("formspec", grindstone_formspec)
 		end
@@ -327,7 +327,7 @@ minetest.register_node("mcl_grindstone:grindstone", {
 	_mcl_hardness = 2
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_grindstone:grindstone",
 	recipe = {
 		{ "mcl_core:stick", "mcl_stairs:slab_stone_rough", "mcl_core:stick" },

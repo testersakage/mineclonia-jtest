@@ -1,16 +1,16 @@
 mcl_ocean = {}
 
 -- Prismarine (includes sea lantern)
-dofile(minetest.get_modpath(minetest.get_current_modname()).."/prismarine.lua")
+dofile(core.get_modpath(core.get_current_modname()).."/prismarine.lua")
 
 -- Corals
-dofile(minetest.get_modpath(minetest.get_current_modname()).."/corals.lua")
+dofile(core.get_modpath(core.get_current_modname()).."/corals.lua")
 
 -- Seagrass
-dofile(minetest.get_modpath(minetest.get_current_modname()).."/seagrass.lua")
+dofile(core.get_modpath(core.get_current_modname()).."/seagrass.lua")
 
 -- Kelp
-dofile(minetest.get_modpath(minetest.get_current_modname()).."/kelp.lua")
+dofile(core.get_modpath(core.get_current_modname()).."/kelp.lua")
 
 -- Sea Pickle
-dofile(minetest.get_modpath(minetest.get_current_modname()).."/sea_pickle.lua")
+dofile(core.get_modpath(core.get_current_modname()).."/sea_pickle.lua")
