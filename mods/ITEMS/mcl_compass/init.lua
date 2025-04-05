@@ -17,7 +17,7 @@ local spin_timer = 0
 -- the compass globalstep function.
 local random_frame = math.random(0, compass_frames-1)
 
-local function get_far_node(pos, itemstack) --code from minetest dev wiki: https://dev.core.net/core.get_node, some edits have been made to add a cooldown for force loads
+local function get_far_node(pos, itemstack) --code from minetest dev wiki: https://dev.luanti.org, some edits have been made to add a cooldown for force loads
 	local node = core.get_node(pos)
 	if node.name == "ignore" then
 		local tstamp = tonumber(itemstack:get_meta():get_string("last_forceload"))
