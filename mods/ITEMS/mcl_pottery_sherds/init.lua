@@ -143,6 +143,19 @@ local function get_itemstack_from_node(pos)
 	return it
 end
 
+local function get_drops_from_node(pos)
+	local meta = core.get_meta(pos)
+	local faces = core.deserialize(meta:get_string("pot_faces"))
+	local drops = {}
+	for i = 1, 4 do
+		local face = faces[i]
+		local item = face and"mcl_pottery_sherds:"..face or "mcl_core:brick"
+		table.insert(drops, item)
+	end
+
+	return drops
+end
+
 core.register_node("mcl_pottery_sherds:pot", {
 	description = S("Decorated Pot"),
 	_doc_items_longdesc = S("Pots are decorative blocks."),
@@ -196,8 +209,10 @@ core.register_node("mcl_pottery_sherds:pot", {
 		update_entities(pos,true)
 	end,
 	on_destruct = function(pos)
-		local it = get_itemstack_from_node(pos)
-		core.add_item(pos, it)
+		local drops = get_drops_from_node(pos)
+		for _, drop in pairs(drops) do
+			core.add_item(pos, drop)
+		end
 	end,
 	on_rotate = function(_, _,  _, mode, _)
 		if mode == screwdriver.ROTATE_AXIS then
