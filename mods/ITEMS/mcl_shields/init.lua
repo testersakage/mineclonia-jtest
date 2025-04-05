@@ -537,7 +537,7 @@ local function update_shield_hud(player, blocking, shieldstack)
 	end
 end
 
-mcl_player.register_globalstep(function(player, dtime)
+mcl_player.register_globalstep(function(player)
 	handle_blocking(player)
 
 	local blocking, shieldstack = mcl_shields.is_blocking(player)
