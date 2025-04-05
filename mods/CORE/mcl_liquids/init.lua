@@ -25,6 +25,8 @@ local is_running = true
 
 local MAIN_TICK_DEFAULT = tonumber(core.settings:get('mcl_liquid_tick')) or 0.025
 
+local UPDATE_LIMIT = tonumber(core.settings:get('mcl_liquid_update_max')) or 1000000
+
 -- The main tick speed. Changing that tick affects all liquids
 -- proportionally.
 local main_tick = MAIN_TICK_DEFAULT
@@ -115,6 +117,7 @@ local function register_liquid(def)
 	local update_next_set_A = {}
 	local update_next_set_B = {}
 	local update_next_set = update_next_set_A
+	local update_next_count = 0
 
 	-- A list of nodes that have been changed during a burst.
 	local changed_nodes = {}
@@ -206,9 +209,14 @@ local function register_liquid(def)
 	local function update_next(item)
 		-- This function puts an item into the list that is processed in the next
 		-- iteration.
+		
+
 		local h = core.hash_node_position(item.pos)
 		if update_next_set[h] == nil then
-			update_next_set[h] = item
+			if update_next_count < UPDATE_LIMIT then
+				update_next_set[h] = item
+				update_next_count = update_next_count + 1
+			end
 		end
 	end
 
@@ -896,6 +904,7 @@ local function register_liquid(def)
 
 			if next(update_next_set) ~= nil then
 				local q = update_next_set
+				update_next_count = 0
 
 				-- Reset the containers for reuse
 				if update_next_set == update_next_set_A then
