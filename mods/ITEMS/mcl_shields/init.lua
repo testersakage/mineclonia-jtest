@@ -537,22 +537,19 @@ local function update_shield_hud(player, blocking, shieldstack)
 	end
 end
 
-core.register_globalstep(function()
-	for player in mcl_util.connected_players() do
+mcl_player.register_globalstep(function(player, dtime)
+	handle_blocking(player)
 
-		handle_blocking(player)
+	local blocking, shieldstack = mcl_shields.is_blocking(player)
 
-		local blocking, shieldstack = mcl_shields.is_blocking(player)
+	if blocking then
+		update_shield_hud(player, blocking, shieldstack)
+	elseif shield_hud[player] then --this function takes a long time. only run it when necessary
+		remove_shield_hud(player)
+	end
 
-		if blocking then
-			update_shield_hud(player, blocking, shieldstack)
-		elseif shield_hud[player] then --this function takes a long time. only run it when necessary
-			remove_shield_hud(player)
-		end
-
-		for i = 1, 2 do
-			update_shield_entity(player, blocking, i)
-		end
+	for i = 1, 2 do
+		update_shield_entity(player, blocking, i)
 	end
 end)
 
