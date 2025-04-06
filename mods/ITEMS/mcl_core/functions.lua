@@ -680,8 +680,10 @@ function mcl_core.make_dirtpath(itemstack, placer, pointed_thing)
 			local wear = mcl_autogroup.get_wear(toolname, "shovely")
 			itemstack:add_wear(wear)
 		end
-		core.sound_play({name="default_grass_footstep", gain=1}, {pos = above}, true)
-		core.swap_node(pointed_thing.under, {name="mcl_core:grass_path"})
+		minetest.sound_play({name="default_grass_footstep", gain=1}, {pos = above}, true)
+
+		local pos = pointed_thing.under
+		minetest.swap_node(pos, {name="mcl_core:grass_path", param2=mcl_util.get_pos_random4dir(pos)})
 	end
 	return itemstack,true
 end
