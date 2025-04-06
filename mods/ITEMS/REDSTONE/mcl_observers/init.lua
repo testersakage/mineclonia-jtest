@@ -6,13 +6,13 @@ mcl_observers = {}
 local scheduled_observer_updates = {}
 
 local function is_update_scheduled(pos)
-	return scheduled_observer_updates[minetest.hash_node_position(pos)]
+	return scheduled_observer_updates[core.hash_node_position(pos)]
 end
 local function set_scheduled_update(pos)
-	scheduled_observer_updates[minetest.hash_node_position(pos)] = true
+	scheduled_observer_updates[core.hash_node_position(pos)] = true
 end
 local function clear_scheduled_update(pos)
-	scheduled_observer_updates[minetest.hash_node_position(pos)] = nil
+	scheduled_observer_updates[core.hash_node_position(pos)] = nil
 end
 
 local function get_front_dir(node)
@@ -21,7 +21,7 @@ local function get_front_dir(node)
 	elseif node.name == "mcl_observers:observer_down_off" or node.name == "mcl_observers:observer_down_on" then
 		return {x=0, y=-1, z=0}
 	else
-		return minetest.facedir_to_dir(node.param2)
+		return core.facedir_to_dir(node.param2)
 	end
 end
 
@@ -30,13 +30,13 @@ local function get_front_pos(pos, node)
 end
 
 local function on_scheduled(pos)
-	local node  = minetest.get_node(pos)
-	local is_on = minetest.get_item_group(node.name, "observer") == 2
-	local ndef  = minetest.registered_nodes[node.name]
+	local node  = core.get_node(pos)
+	local is_on = core.get_item_group(node.name, "observer") == 2
+	local ndef  = core.registered_nodes[node.name]
 
 	clear_scheduled_update(pos)
 
-	if minetest.get_item_group(node.name, "observer") == 0 then
+	if core.get_item_group(node.name, "observer") == 0 then
 		return
 	end
 
@@ -57,9 +57,9 @@ end
 
 -- mcl_pistons.push calls this after doing set_node.
 function mcl_observers.observer_activate(pos)
-	local node  = minetest.get_node(pos)
-	local ndef  = minetest.registered_nodes[node.name]
-	local is_on = minetest.get_item_group(node.name, "observer") == 2
+	local node  = core.get_node(pos)
+	local ndef  = core.registered_nodes[node.name]
+	local is_on = core.get_item_group(node.name, "observer") == 2
 
 	if is_on then
 		mcl_redstone.swap_node(pos, {name = ndef._mcl_observer_off, param2 = node.param2})
