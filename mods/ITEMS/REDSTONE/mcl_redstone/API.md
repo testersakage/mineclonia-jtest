@@ -1,6 +1,8 @@
 # API for `mcl_redstone`
 
-This mods adds an API for defining custom redstone components.
+This mods adds an API for defining custom redstone components. Note that the
+API is still subject to minor changes in the future, even though one can expect
+most of it to remain the same.
 
 ## Example
 
