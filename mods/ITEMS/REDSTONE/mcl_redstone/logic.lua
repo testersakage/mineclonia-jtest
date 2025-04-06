@@ -238,8 +238,8 @@ local function propagate_wire(clear_nodes, fill_nodes, updates)
 
 	for hash, node in pairs(nodecache) do
 		if node.dirty then
-			local pos = minetest.get_position_from_hash(hash)
-			minetest.swap_node(pos, node)
+			local pos = core.get_position_from_hash(hash)
+			core.swap_node(pos, node)
 			-- Note: Observers might trigger despite no change in power level if
 			-- wire propagation were to swap a node just to change the upper bits in param2.
 			mcl_redstone._notify_observer_neighbours(pos)
@@ -407,7 +407,7 @@ end
 function mcl_redstone._notify_observer_neighbours(pos)
 	for _, dir in pairs(sixdirs) do
 		local pos2 = pos:add(dir)
-		local node2 = minetest.get_node(pos2)
+		local node2 = core.get_node(pos2)
 
 		if on_observer_change_tab[node2.name] then
 			on_observer_change_tab[node2.name](pos2, node2, pos)
@@ -489,9 +489,9 @@ core.register_on_mods_loaded(function()
 					end)
 				end,
 			})
-		elseif minetest.get_item_group(name, "redstone_wire") == 0 and not ndef._mcl_redstone
+		elseif core.get_item_group(name, "redstone_wire") == 0 and not ndef._mcl_redstone
 		and name ~= "air" then
-			minetest.override_item(name, {
+			core.override_item(name, {
 				on_construct = function(pos)
 					if old_construct then
 						old_construct(pos)
