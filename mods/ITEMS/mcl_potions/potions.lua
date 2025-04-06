@@ -1,4 +1,6 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local D = mcl_util.get_dynamic_translator(modname)
 
 mcl_potions.registered_potions = {}
 -- shorthand
@@ -163,11 +165,11 @@ function mcl_potions.register_potion(def)
 	if def.desc_whole then
 		pdef.description = def.desc_whole
 	elseif def.desc_prefix and def.desc_suffix then
-		pdef.description = S("@1 Potion @2", def.desc_prefix, def.desc_suffix)
+		pdef.description = D(def.desc_prefix .. " Potion " .. def.desc_suffix)
 	elseif def.desc_prefix then
-		pdef.description = S("@1 Potion", def.desc_prefix)
+		pdef.description = D(def.desc_prefix .. " Potion")
 	elseif def.desc_suffix then
-		pdef.description = S("Potion @1", def.desc_suffix)
+		pdef.description = D("Potion " .. def.desc_suffix)
 	else
 		pdef.description = S("Strange Potion")
 	end
@@ -286,11 +288,11 @@ function mcl_potions.register_potion(def)
 	if def.has_arrow then
 		local arr_desc
 		if def.desc_prefix and def.desc_suffix then
-			arr_desc = S("@1 Arrow @2", def.desc_prefix, def.desc_suffix)
+			arr_desc = D(def.desc_prefix .. " Arrow " .. def.desc_suffix)
 		elseif def.desc_prefix then
-			arr_desc = S("@1 Arrow", def.desc_prefix)
+			arr_desc = D(def.desc_prefix .. " Arrow")
 		elseif def.desc_suffix then
-			arr_desc = S("Arrow @1", def.desc_suffix)
+			arr_desc = D("Arrow " .. def.desc_suffix)
 		else
 			arr_desc = S("Strange Tipped Arrow")
 		end
@@ -359,7 +361,7 @@ minetest.register_craftitem("mcl_potions:dragon_breath", {
 
 mcl_potions.register_potion({
 	name = "awkward",
-	desc_prefix = S("Awkward"),
+	desc_prefix = "Awkward",
 	_tt = S("No effect"),
 	_longdesc = S("Has an awkward taste and is used for brewing potions."),
 	color = "#0000FF",
@@ -367,7 +369,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "mundane",
-	desc_prefix = S("Mundane"),
+	desc_prefix = "Mundane",
 	_tt = S("No effect"),
 	_longdesc = S("Has a terrible taste and is not really useful for brewing potions."),
 	color = "#0000FF",
@@ -375,7 +377,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "thick",
-	desc_prefix = S("Thick"),
+	desc_prefix = "Thick",
 	_tt = S("No effect"),
 	_longdesc = S("Has a bitter taste and is not really useful for brewing potions."),
 	color = "#0000FF",
@@ -383,7 +385,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "healing",
-	desc_suffix = S("of Healing"),
+	desc_suffix = "of Healing",
 	_dynamic_tt = function(level)
 		return S("+@1 HP", 4 * level)
 	end,
@@ -398,7 +400,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "harming",
-	desc_suffix = S("of Harming"),
+	desc_suffix = "of Harming",
 	_dynamic_tt = function(level)
 		return S("-@1 HP", 6 * level)
 	end,
@@ -413,7 +415,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "night_vision",
-	desc_suffix = S("of Night Vision"),
+	desc_suffix = "of Night Vision",
 	_tt = nil,
 	_longdesc = S("Increases the perceived brightness of light under a dark sky."),
 	color = "#C2FF66",
@@ -425,7 +427,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "swiftness",
-	desc_suffix = S("of Swiftness"),
+	desc_suffix = "of Swiftness",
 	_tt = nil,
 	_longdesc = S("Increases walking speed."),
 	color = "#33EBFF",
@@ -437,7 +439,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "slowness",
-	desc_suffix = S("of Slowness"),
+	desc_suffix = "of Slowness",
 	_tt = nil,
 	_longdesc = S("Decreases walking speed."),
 	color = "#8BAFE0",
@@ -453,7 +455,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "leaping",
-	desc_suffix = S("of Leaping"),
+	desc_suffix = "of Leaping",
 	_tt = nil,
 	_longdesc = S("Increases jump strength."),
 	color = "#FDFF84",
@@ -465,7 +467,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "withering",
-	desc_suffix = S("of Decay"),
+	desc_suffix = "of Decay",
 	_tt = nil,
 	_longdesc = S("Applies the withering effect which deals damage at a regular interval and can kill."),
 	color = "#736156",
@@ -477,7 +479,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "poison",
-	desc_suffix = S("of Poison"),
+	desc_suffix = "of Poison",
 	_tt = nil,
 	_longdesc = S("Applies the poison effect which deals damage at a regular interval."),
 	color = "#87A363",
@@ -489,7 +491,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "regeneration",
-	desc_suffix = S("of Regeneration"),
+	desc_suffix = "of Regeneration",
 	_tt = nil,
 	_longdesc = S("Regenerates health over time."),
 	color = "#CD5CAB",
@@ -501,7 +503,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "invisibility",
-	desc_suffix = S("of Invisibility"),
+	desc_suffix = "of Invisibility",
 	_tt = nil,
 	_longdesc = S("Grants invisibility."),
 	color = "#F6F6F6",
@@ -513,7 +515,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "water_breathing",
-	desc_suffix = S("of Water Breathing"),
+	desc_suffix = "of Water Breathing",
 	_tt = nil,
 	_longdesc = S("Grants limitless breath underwater."),
 	color = "#98DAC0",
@@ -525,7 +527,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "fire_resistance",
-	desc_suffix = S("of Fire Resistance"),
+	desc_suffix = "of Fire Resistance",
 	_tt = nil,
 	_longdesc = S("Grants immunity to damage from heat sources like fire."),
 	color = "#FF9900",
@@ -537,7 +539,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "strength",
-	desc_suffix = S("of Strength"),
+	desc_suffix = "of Strength",
 	_tt = nil,
 	_longdesc = S("Increases attack power."),
 	color = "#FFC700",
@@ -549,7 +551,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "weakness",
-	desc_suffix = S("of Weakness"),
+	desc_suffix = "of Weakness",
 	_tt = nil,
 	_longdesc = S("Decreases attack power."),
 	color = "#484D48",
@@ -561,7 +563,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "slow_falling",
-	desc_suffix = S("of Slow Falling"),
+	desc_suffix = "of Slow Falling",
 	_tt = nil,
 	_longdesc = S("Instead of falling, you descend gracefully."),
 	color = "#F3CFB9",
@@ -573,7 +575,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "turtle_master",
-	desc_suffix = S("of the Turtle Master"),
+	desc_suffix = "of the Turtle Master",
 	_tt = nil,
 	_longdesc = S("Decreases damage taken at the cost of speed."),
 	color = "#255235",
@@ -593,7 +595,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "luck",
-	desc_suffix = S("of Luck"),
+	desc_suffix = "of Luck",
 	_tt = nil,
 	_longdesc = S("Increases luck."),
 	color = "#59C106",
@@ -605,7 +607,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "bad_luck",
-	desc_suffix = S("of Bad Luck"),
+	desc_suffix = "of Bad Luck",
 	_tt = nil,
 	_longdesc = S("Decreases luck."),
 	color = "#C0A44D",
@@ -617,7 +619,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "ominous",
-	desc_whole = S("Ominous Bottle"),
+	desc_whole = "Ominous Bottle",
 	groups = {brewitem=1, food=3, can_eat_when_full=1,
 	_mcl_potion=1, potion = 1, rarity = 1},
 	_tt = nil,
