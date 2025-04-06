@@ -305,7 +305,7 @@ function mcl_bows.load_crossbow (player, wielditem, usetime)
 end
 
 local function fully_drawn(name)
-	return name == "mcl_bows:crossbow_2" or name == "mcl_bows:crossbow_2_enchanted"
+	return minetest.get_item_group(name, "crossbow") == 4
 end
 
 controls.register_on_release(function(player, key)
