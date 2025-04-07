@@ -246,6 +246,10 @@ mcl_old_spawn_icons (Old spawn icons instead of eggs) bool false
 # is needed to take advantage of this.
 mcl_enable_csm (Enable Support for the mineclonia CSM) bool false
 
+# Set this to true to use an alternative event queue implementation
+# that preserves insertion order for events with the same priority/tick.
+mcl_redstone_ordered_event_queue (Enable ordered event queue) bool false
+
 [Debugging]
 # If enabled mapgen timings will be dumped to log
 mcl_logging_mapgen (Log chunk generation) bool false
