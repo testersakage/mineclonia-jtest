@@ -60,6 +60,10 @@ function mcl_redstone._abort_pending_update(pos)
 	update_event_tab[h] = nil
 end
 
+function mcl_redstone._get_current_tick()
+	return current_tick
+end
+
 local function handle_update_event(event)
 	local h = core.hash_node_position(event.pos)
 	if update_event_tab[h] ~= event then
