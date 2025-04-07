@@ -2,6 +2,9 @@ local S = core.get_translator(core.get_current_modname())
 
 local PISTON_MAXIMUM_PUSH = 12
 
+-- Enable to make block detach from sticky piston when piston is powered with a short pulse
+local EXPERIMENTAL_ONE_TICK_DETACH = false
+
 -- Remove pusher of piston.
 -- To be used when piston was destroyed or dug.
 local function piston_remove_pusher(pos, oldnode)
@@ -87,11 +90,11 @@ local function piston_on(pos, node)
 	end
 end
 
-local function piston_off(pos, node)
+local function piston_off(pos, node, detach)
 	local pistonspec = core.registered_nodes[node.name]._piston_spec
 	core.swap_node(pos, {param2 = node.param2, name = pistonspec.offname})
 	piston_remove_pusher(pos, node)
-	if not pistonspec.sticky then
+	if (not pistonspec.sticky) or (EXPERIMENTAL_ONE_TICK_DETACH and detach) == true then
 		return
 	end
 
@@ -192,6 +195,19 @@ local offdef = {
 		update = function(pos, node)
 			local dir = -core.facedir_to_dir(node.param2)
 			if powered_facing_dir(pos, dir) then
+
+				if EXPERIMENTAL_ONE_TICK_DETACH then
+					local frontnode = core.get_node(vector.add(pos, dir))
+					local frontdef  = core.registered_nodes[frontnode.name]
+					if not frontdef.buildable_to then
+						local meta = core.get_meta(pos)
+						meta:set_int("on_time", mcl_redstone._get_current_tick())
+					else
+						local meta = core.get_meta(pos)
+						meta:set_int("on_time", 0)
+					end
+				end
+
 				mcl_redstone.after(1, function()
 					if core.get_node(pos).name == node.name then
 						piston_on(pos, node)
@@ -216,6 +232,17 @@ local ondef = {
 		update = function(pos, node)
 			local dir = -core.facedir_to_dir(node.param2)
 			if not powered_facing_dir(pos, dir) then
+
+				local detach = false
+				if EXPERIMENTAL_ONE_TICK_DETACH then
+					local meta     = core.get_meta(pos)
+					local on_time  = meta:get_int("on_time")
+					local off_time = mcl_redstone._get_current_tick()
+					if (off_time - on_time) <= 1 then
+						detach = true 
+					end
+				end
+
 				mcl_redstone.after(1, function()
 					if core.get_node(pos).name == node.name then
 						piston_off(pos, node)
