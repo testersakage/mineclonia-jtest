@@ -3,7 +3,7 @@ local S = core.get_translator(core.get_current_modname())
 local PISTON_MAXIMUM_PUSH = 12
 
 -- Enable to make block detach from sticky piston when piston is powered with a short pulse
-local EXPERIMENTAL_ONE_TICK_DETACH = false
+local EXPERIMENTAL_ONE_TICK_DETACH = core.settings:get_bool("mcl_redstone_sticky_pistons_one_tick_detach", false)
 
 -- Remove pusher of piston.
 -- To be used when piston was destroyed or dug.
