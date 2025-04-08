@@ -753,6 +753,20 @@ function mcl_util.traverse_tower(pos, dir, callback)
 	return vector.offset(pos, 0, -dir, 0), i
 end
 
+function mcl_util.traverse_tower_group(pos, dir, group, callback)
+	local node = minetest.get_node(pos)
+	local nodegroup = core.get_item_group(node.name, group)
+	local i = 0
+	while core.get_item_group(core.get_node(pos).name, group) == nodegroup do
+		if callback and callback(pos, dir, node) then
+			return pos,i,true
+		end
+		i = i + 1
+		pos = vector.offset(pos, 0, dir, 0)
+	end
+	return vector.offset(pos, 0, -dir, 0), i
+end
+
 -- Voxel manip function to replace a node type with another in an area
 function mcl_util.replace_node_vm(pos1, pos2, mat_from, mat_to, is_group)
 	local c_to = core.get_content_id(mat_to)
