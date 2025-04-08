@@ -243,7 +243,7 @@ local ondef = {
 
 				mcl_redstone.after(1, function()
 					if core.get_node(pos).name == node.name then
-						piston_off(pos, node)
+						piston_off(pos, node, detach)
 					end
 				end)
 			end
