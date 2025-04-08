@@ -577,7 +577,6 @@ core.register_on_mods_loaded(function()
 						end)
 					else
 						mcl_redstone.after(0, function()
-							update_neighbours(pos, oldnode)
 							mcl_redstone._notify_observer_neighbours(pos)
 						end)
 					end
