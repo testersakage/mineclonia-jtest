@@ -199,11 +199,10 @@ local offdef = {
 				if EXPERIMENTAL_ONE_TICK_DETACH then
 					local frontnode = core.get_node(vector.add(pos, dir))
 					local frontdef  = core.registered_nodes[frontnode.name]
+					local meta      = core.get_meta(pos)
 					if not frontdef.buildable_to then
-						local meta = core.get_meta(pos)
 						meta:set_int("on_time", mcl_redstone._get_current_tick())
 					else
-						local meta = core.get_meta(pos)
 						meta:set_int("on_time", 0)
 					end
 				end
@@ -235,11 +234,10 @@ local ondef = {
 
 				local detach = false
 				if EXPERIMENTAL_ONE_TICK_DETACH then
-					local meta     = core.get_meta(pos)
-					local on_time  = meta:get_int("on_time")
-					local off_time = mcl_redstone._get_current_tick()
-					if (off_time - on_time) <= 1 then
-						detach = true 
+					local meta       = core.get_meta(pos)
+					local delta_time = mcl_redstone._get_current_tick() - meta:get_int("on_time")
+					if delta_time >= 0 and delta_time <= 1 then
+						detach = true
 					end
 				end
 
