@@ -886,7 +886,7 @@ core.register_chatcommand('liquid', {
 	end
 })
 
-core.register_chatcommand('liquid-tick', {
+core.register_chatcommand('liquid_tick', {
 	params = '<seconds> | default | get',
 	description = S('This command sets the time passed between Luanti ticks.')..' '..
 	              S('If this value is larger than the actual tick, liquids become faster than specified.'),
