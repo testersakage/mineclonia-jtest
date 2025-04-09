@@ -258,7 +258,25 @@ if core.settings:get_bool("mcl_generate_ores", true) then
 
 	local stonelike = { "mcl_core:stone", "mcl_core:diorite", "mcl_core:andesite", "mcl_core:granite" }
 
+	local chunksize_b = tonumber(minetest.get_mapgen_setting("chunksize")) or 5
+	local chunkoffset_b = chunksize_b > 1 and math.ceil(chunksize_b / 2) or 0
+	local blocksize = 16
+	local chunksize, chunkoffset = chunksize_b * blocksize, chunkoffset_b * blocksize
+
+	local function find_smallest_slice(y_min, y_max)
+		y_min, y_max = y_min + chunkoffset, y_max + chunkoffset
+		return math.min(y_max - y_min + 1, y_max % chunksize + 1, chunksize - (y_min % chunksize))
+	end
+
 	local function register_ore_mg(ore, wherein, defs)
+		local y_min, y_max = defs[4], defs[5]
+		local min_height = find_smallest_slice(y_min, y_max)
+		local ore_volume = chunksize^2 * min_height
+		local cluster_num = ore_volume / defs[1]
+		local deviation = (cluster_num - math.floor(cluster_num)) / cluster_num
+		if (deviation > 0.1) then
+			core.log("warning", ("%s [%d, %d] will generate %1.0f%% ores less (scarcity %d, height %d)"):format(ore, y_min, y_max, deviation*100, defs[1], min_height))
+		end
 		core.register_ore({
 			ore_type       = "scatter",
 			ore            = ore,
