@@ -18,7 +18,6 @@ end
 -- Variables that are the same for all liquids
 --------------------------------------------------------------------------------
 
-
 -- This is the initial state of the liquid transformation mod.
 -- If set to false, liquids do not flow until they activated.
 local is_running = true
@@ -34,54 +33,39 @@ local main_tick = MAIN_TICK_DEFAULT
 -- A list of registered liquids
 local registered_liquids = {}
 
-
 -- Store the original core functions that need to be overridden.
 local core_set_node = core.set_node
 local core_add_node = core.add_node
 local core_bulk_set_node = core.bulk_set_node
 local core_remove_node = core.remove_node
 
-
 -- This counter is used generate unique names
 local resume_counter = 1
-
-
-
 
 --------------------------------------------------------------------------------
 -- Top level functions
 --------------------------------------------------------------------------------
 
-
 --[[
-
 This function applies the transformation mechanic to liquid nodes.
 
 The `def` is a table consists of the following properties:
-
 - name_source:
   The name of the liquid source node, that already exists.
-
 - name_flowing:
   The name of the liquid flowing node, that already exists.
-
 - liquid_range:
   The range of the liquid. It defaults to 7.
-
 - liquid_renewable:
   if true, the liquid will be renewable. It defaults to false.
-
 - liquid_tick:
-	The time in [seconds] between ticks. Lower values make liquids flow faster.
-	The liquid tick can be be shorter than the Luanti tick. Liquids could
-	therefore transform almost instantly or even instantly when setting this
-	value to 0.0.
-
+    The time in [seconds] between ticks. Lower values make liquids flow faster.
+    The liquid tick can be be shorter than the Luanti tick. Liquids could
+    therefore transform almost instantly or even instantly when setting this
+    value to 0.0.
 --]]
 local function register_liquid(def)
-
 	local wait_count = 0
-
 	local modname = minetest.get_current_modname()
 
 	local NAME_SOURCE = def.name_source
@@ -100,14 +84,11 @@ local function register_liquid(def)
 	assert(TICKS >= 0.0,
 		'The liquid_tick must be in range [0.0 <= x]')
 
-
 	-- This table is a function that calculates then next lower liquid level.
 	local level_tb = {}
 	for i = 0, 9 do
 		level_tb[i+1] = math.round(math.floor(i * (FLOW_DISTANCE+1) / 8) * 8 / (FLOW_DISTANCE+1))
 	end
-
-
 
 	----------------------------------------------------------------------
 	-- Variables for processing a burst of iterations
@@ -123,8 +104,6 @@ local function register_liquid(def)
 	local changed_nodes = {}
 	-- A list of nodes that have been red during the burst (caching)
 	local read_nodes = {}
-
-
 
 	----------------------------------------------------------------------
 	-- Variables for path finding to the nearest slope
@@ -148,8 +127,6 @@ local function register_liquid(def)
 	-- If false the path finding was not successful the whole iteration will be
 	-- void.
 	local pf_ok = true
-
-
 
 	----------------------------------------------------------------------
 	-- Variables for one liquid transformation iteration
@@ -189,7 +166,6 @@ local function register_liquid(def)
 	-- The node for the new liquid when spreading
 	local lt_new_liquid
 
-
 	local function vector_add_to(v, x, y, z)
 		v.x = v.x + x
 		v.y = v.y + y
@@ -204,13 +180,9 @@ local function register_liquid(def)
 		v.z = (hash % 65536) - 32768
 	end
 
-
-
 	local function update_next(item)
 		-- This function puts an item into the list that is processed in the next
 		-- iteration.
-		
-
 		local h = core.hash_node_position(item.pos)
 		if update_next_set[h] == nil then
 			if update_next_count < UPDATE_LIMIT then
@@ -220,11 +192,9 @@ local function register_liquid(def)
 		end
 	end
 
-
 	local function get_liquid_level(node)
 		-- This function returns the level of a liquid node or nil if it isn't a
 		-- liquid node
-
 		if node.name == NAME_SOURCE then
 			return 8
 		elseif node.name == NAME_FLOWING then
@@ -238,15 +208,12 @@ local function register_liquid(def)
 		end 
 	end
 
-
 	local function set_node(pos, node)
 		-- This function puts the new node into a map.
 		-- If there is already a node in that map at the same location, the one
 		-- with the larger level wins. This is important do ensure symmetric flow
 		-- if the underlying structure is symmetric as well. It also prevents weird
 		-- things from happening like half level liquids lingering around.
-
-
 		local h = core.hash_node_position(pos)
 		local other = changed_nodes[h]
 
@@ -264,7 +231,6 @@ local function register_liquid(def)
 
 	local function get_node(pos)
 		-- This function is the just the cached version of the `core.get_node()`
-
 		local h = core.hash_node_position(pos)
 		local node = read_nodes[h]
 
@@ -289,45 +255,36 @@ local function register_liquid(def)
 		end
 	end
 
-
 	local function is_liquid(node)
 		return node.name == NAME_SOURCE or node.name == NAME_FLOWING
 	end
 
-
 	local function make_liquid(level)
 		-- This function creates a new liquid node
-
 		if level == 8 or level == 'down' then
 			return {
 				name = NAME_FLOWING,
 				param2 = 8,
 			}
-
 		elseif level == 'source' then
 			return {
 				name = NAME_SOURCE,
 			}
-
 		elseif level <= 0 then
 			return {
 				name = 'air'
 			}
-
 		else
 			return {
 				name = NAME_FLOWING,
 				param2 = bit.band(level, 0x07),
 			}
-
 		end
 	end
-
 
 	local function is_floodable(n)
 		-- This function tests if the node is floodable in theory. For the final
 		-- decisions, other factors are in play as well.
-
 		if n.name == 'air' or n.name == NAME_SOURCE or n.name == NAME_FLOWING then
 			return true
 		else
@@ -339,29 +296,25 @@ local function register_liquid(def)
 		return false
 	end
 
-
-
 	local pf_step_pos = vector.zero()
-	local function pf_step(hpos, x, y, z, level)
-		-- This function checks if the current position has an obstacle or a
-		-- slope.
-		--
-		-- `hpos`  A hash of the position
-		-- `x`     The shift in the x direction
-		-- `y`     The shift in the y direction
-		-- `z`     The shift in the z direction
-		-- `level` The level at the new position
 
+	-- This function checks if the current position has an obstacle or a
+	-- slope.
+	--
+	-- `hpos`  A hash of the position
+	-- `x`     The shift in the x direction
+	-- `y`     The shift in the y direction
+	-- `z`     The shift in the z direction
+	-- `level` The level at the new position
+	local function pf_step(hpos, x, y, z, level)
 		get_position_from_hash(pf_step_pos, hpos)
-		-- move one horizontal
-		vector_add_to(pf_step_pos, x, y, z)
+		vector_add_to(pf_step_pos, x, y, z) -- move one horizontal
 		local hpos_next = core.hash_node_position(pf_step_pos)
 
 		if pf_pmap[hpos_next] == nil then
 			local n1 = get_node(pf_step_pos)
 
-			-- move one down
-			vector_add_to(pf_step_pos, 0, -1, 0)
+			vector_add_to(pf_step_pos, 0, -1, 0) -- move one down
 			local n2 = get_node(pf_step_pos)
 
 			if not (n1 and n2) then
@@ -370,7 +323,6 @@ local function register_liquid(def)
 			end
 
 			local l1 = get_liquid_level(n1)
-
 			local f1 = is_floodable(n1)
 			local f2 = is_floodable(n2)
 
@@ -386,7 +338,6 @@ local function register_liquid(def)
 
 	local pf_back_trace_pos = vector.zero()
 	local function pf_back_trace(hpos, x, y, z, level)
-
 		get_position_from_hash(pf_back_trace_pos, hpos)
 		vector_add_to(pf_back_trace_pos, x, y, z)
 		local hpos_next = core.hash_node_position(pf_back_trace_pos)
@@ -406,12 +357,10 @@ local function register_liquid(def)
 		return map[hpos]
 	end
 
+	-- This function searches the nearest slopes within a maximum path distance
+	-- of 5 nodes.
+	-- If any node was 'ignore' then this function returns nil.
 	local function path_find(pos, slope_dist)
-		-- This function searches the nearest slopes within a maximum path distance
-		-- of 5 nodes.
-		-- If any node was 'ignore' then this function returns nil.
-
-
 		local orig_level = get_liquid_level(get_node(pos))
 		if orig_level <= 1 then
 			-- If level of the origin is too small we return a dummy map. 
@@ -420,7 +369,6 @@ local function register_liquid(def)
 
 		-- initialize the variables.
 		pf_ok = true
-
 		arr_clear(pf_search_list_A)
 		arr_clear(pf_search_list_B)
 		pf_search_list = pf_search_list_A
@@ -439,16 +387,12 @@ local function register_liquid(def)
 		-- to slope) (the result)
 		-- rmap is intentionally GC collectable, this reference will run wild!
 		local rmap = {}
-
-
 		pf_pmap[h] = orig_level
-
 		local level = orig_level
 
 		for i = 1, 5 do
 			-- Decrease the liquid level.
 			level = level_tb[level]
-
 			if level == 0 then
 				break
 			end
@@ -492,10 +436,7 @@ local function register_liquid(def)
 			else 
 				-- If a slope within range was found we need to remove all levels that
 				-- are not part of the shortest path to those slopes.
-
-
 				while #pf_found > 0 do
-
 					local l = pf_found
 
 					if pf_found == pf_found_A then
@@ -509,7 +450,6 @@ local function register_liquid(def)
 					for i, hpos in ipairs(l) do
 						local level = pf_pmap[hpos]
 						rmap[hpos] = level
-
 
 						-- Search the origin.
 						pf_back_trace(hpos, -1, 0, 0, level)
@@ -545,8 +485,6 @@ local function register_liquid(def)
 		end
 	end
 
-
-
 	local function lt_flood(p, n, l)
 		local cnt_flood = 0
 		local m = rmap_read(lt_map, p)
@@ -559,14 +497,12 @@ local function register_liquid(def)
 					set_node(p, lt_new_liquid)
 
 				elseif n111.name == NAME_SOURCE and l and l == 7 then
-					-- Give it a chance to renew
-					update_next({pos=p, map=lt_map})
+					update_next({pos=p, map=lt_map}) -- Give it a chance to renew
 				end
 			end
 		end
 		return cnt_flood
 	end
-
 
 	local function lt_push_horizontal()
 		-- This function pushes the liquid in all four directions if the
@@ -579,14 +515,9 @@ local function register_liquid(def)
 		cnt_flood = cnt_flood + lt_flood(p110, n110, l110)
 		cnt_flood = cnt_flood + lt_flood(p112, n112, l112)
 		return cnt_flood
-
 	end
 
-
-
-
 	local function flow_iteration(item)
-
 		-- This is the position of the node to be updated
 		p111 = item.pos
 		-- This is the map that shows to where the liquid should spread.
@@ -616,7 +547,6 @@ local function register_liquid(def)
 		if not ( n011 and n211 and n110 and n112 and n101 and n121 ) then 
 			return
 		end
-
 
 		if RENEWABLE then
 			local count_sources = 0
@@ -671,16 +601,13 @@ local function register_liquid(def)
 			end
 		end
 
-
 		-- subtract 1 so that the level reaches from 0 to 8
 		-- This variable tells us what level the current node should have.
 		-- If it is higher we will reduce it and if it is lower we increase it.
 		support_level = level_tb[support_level]
 
-
 		if l111 ~= nil then
 			-- The current node is already a liquid
-
 			if l111 == support_level and not is_sinking then
 				-- The current node is on its terminal level
 				-- This means it is ready to spread.
@@ -707,7 +634,6 @@ local function register_liquid(def)
 						-- The liquid already flows down
 					end
 				elseif lt_new_level and lt_new_level > 0 then
-
 					local is_new_map = false
 					if not lt_map then
 						-- Make a new map if there is none.
@@ -729,7 +655,6 @@ local function register_liquid(def)
 						lt_push_horizontal()
 					end
 				end
-
 			elseif l111 > support_level then
 				-- The liquid level is too high here we need to reduce it.
 
@@ -772,7 +697,6 @@ local function register_liquid(def)
 	core.register_on_placenode(liquid_update)
 	core.register_on_dignode(liquid_update)
 
-
 	local function fix_ndef(ndef_name)
 		local ndef = core.registered_nodes[ndef_name]
 		local groups = table.copy(ndef.groups or {})
@@ -794,12 +718,11 @@ local function register_liquid(def)
 			liquid_move_physics = true
 		end
 
-
 		core.override_item(ndef.name, {
-			drawtype            = drawtype,
-			paramtype           = "light",
-			paramtype2          = "flowingliquid",
-			groups              = groups,
+			drawtype = drawtype,
+			paramtype = "light",
+			paramtype2 = "flowingliquid",
+			groups = groups,
 			liquid_move_physics = liquid_move_physics,
 			on_construct = function(pos)
 				liquid_update(pos)
@@ -817,20 +740,16 @@ local function register_liquid(def)
 
 	end
 
-
 	fix_ndef(NAME_SOURCE)
 	fix_ndef(NAME_FLOWING)
 
-
 	core.register_on_mods_loaded(function()
-
 		-- Luanti activates the builtin liquid transformation based on the
 		-- `liquidtype`. Therefor we need to set it's value to 'none'.
 		-- BUT many mods also read that value to check if this node is a liquid.
 		-- This hack sets the value to the respective liquid type after Luanti red
 		-- its value.
 		-- This way mods see what they need, at least their callbacks do.
-
 		local function set_liquidtype(name, liquidtype)
 			local mt = getmetatable(core.registered_nodes[name])
 			local oldidx = mt.__index
@@ -852,20 +771,13 @@ local function register_liquid(def)
 		'This hack does no longer work ('..NAME_SOURCE..')')
 		assert(core.registered_nodes[NAME_FLOWING].liquidtype == 'flowing',
 		'This hack does no longer work ('..NAME_FLOWING..')')
-
-
 	end)
-
 
 	core.register_lbm({
 		label = "Continue the liquids",
-
 		name = modname..":resume_liquid_"..resume_counter,
-
 		nodenames = {NAME_SOURCE, NAME_FLOWING},
-
 		run_at_every_load = true,
-
 		action = function(pos, node, dtime_s)
 			local n111 = node
 			local n011 = core.get_node(vector.offset(pos, -1, 0, 0))
@@ -890,15 +802,12 @@ local function register_liquid(def)
 
 	resume_counter = resume_counter + 1
 
-
 	local tick_dtime = 0.0
-
 	local function tick()
 		tick_dtime = tick_dtime + main_tick
 
-
-		-- If the TICKS is smaller than Luanti default tick we do multiple steps per
-		-- tick.
+		-- If the TICKS is smaller than Luanti default tick we do
+		-- multiple steps per tick.
 		while tick_dtime >= TICKS do
 			tick_dtime = tick_dtime - TICKS
 
@@ -949,19 +858,14 @@ local function register_liquid(def)
 	}
 end
 
-
---[[
-This function is called once per tick to update all registered liquids.
---]]
+-- This function is called once per tick to update all registered liquids.
 local function liquid_tick()
 	for i, o in ipairs(registered_liquids) do
 		o.tick()
 	end
 end
 
---[[
-This function notifies the registered liquids about a node that has changed.
---]]
+-- This function notifies the registered liquids about a node that has changed.
 local function liquid_update(pos)
 	for i, o in ipairs(registered_liquids) do
 		o.update(pos)
@@ -1026,11 +930,7 @@ core.register_chatcommand('liquid-tick', {
 	end
 })
 
-
-
-
 core.register_on_mods_loaded(function()
-
 	-- `liquids_pointable` does not work anymore. This should solve many
 	-- issues.
 	for name, ndef in pairs(core.registered_items) do
@@ -1054,7 +954,6 @@ core.register_on_mods_loaded(function()
 		end
 	end
 end)
-
 
 -- Override the set_node function so that it calls liquid_update() on every
 -- node change.
@@ -1086,11 +985,7 @@ core.remove_node = function(pos)
 	liquid_update(pos)
 end
 
-
-
 -- Export the liquid API functions
 mcl_liquid = {
 	register_liquid = register_liquid
 }
-
-
