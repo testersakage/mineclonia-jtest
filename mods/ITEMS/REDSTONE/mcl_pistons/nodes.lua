@@ -4,6 +4,7 @@ local PISTON_MAXIMUM_PUSH = 12
 
 -- Enable to make block detach from sticky piston when piston is powered with a short pulse
 local EXPERIMENTAL_ONE_TICK_DETACH = core.settings:get_bool("mcl_redstone_sticky_pistons_one_tick_detach", false)
+local activation_time_tab = {}
 
 -- Remove pusher of piston.
 -- To be used when piston was destroyed or dug.
@@ -179,6 +180,11 @@ local commdef = {
 	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_hardness = 0.5,
+	after_destruct = function(pos, oldnode)
+		if EXPERIMENTAL_ONE_TICK_DETACH then
+			activation_time_tab[core.hash_node_position(pos)] = nil
+		end
+	end,
 }
 
 local normaldef = table.merge(commdef, {
@@ -199,12 +205,9 @@ local offdef = {
 				if EXPERIMENTAL_ONE_TICK_DETACH then
 					local frontnode = core.get_node(vector.add(pos, dir))
 					local frontdef  = core.registered_nodes[frontnode.name]
-					local meta      = core.get_meta(pos)
-					if not frontdef.buildable_to then
-						meta:set_int("on_time", mcl_redstone._get_current_tick())
-					else
-						meta:set_int("on_time", 0)
-					end
+					local h         = core.hash_node_position(pos)
+					-- Only detach if we pushed a block when extending
+					activation_time_tab[h] = not frontdef.buildable_to and mcl_redstone._get_current_tick() or nil
 				end
 
 				mcl_redstone.after(1, function()
@@ -234,9 +237,8 @@ local ondef = {
 
 				local detach = false
 				if EXPERIMENTAL_ONE_TICK_DETACH then
-					local meta       = core.get_meta(pos)
-					local delta_time = mcl_redstone._get_current_tick() - meta:get_int("on_time")
-					if delta_time >= 0 and delta_time <= 1 then
+					local on_time   = activation_time_tab[core.hash_node_position(pos)]
+					if on_time ~= nil and (mcl_redstone._get_current_tick() - on_time) <= 1 then
 						detach = true
 					end
 				end
