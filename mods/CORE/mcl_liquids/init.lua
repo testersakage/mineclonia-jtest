@@ -460,24 +460,6 @@ local function register_liquid(def)
 				end
 			end
 
-			--core.log('--------------------------')
-			--for x = -8,8 do
-			--	line = '| '
-			--	for z = -8,8 do
-			--		local h = core.hash_node_position(pos + vector.new(x, 0, z))
-			--		local level = rmap[h]
-			--		if level then
-			--			line = line..level..' '
-			--		elseif pmap[h] then
-			--			line = line..'. '
-			--		else
-			--			line = line..'	'
-			--		end
-			--	end
-			--	line = line..' |'
-			--	core.log(line)
-			--end
-
 			return rmap
 
 		else
