@@ -1,6 +1,6 @@
 --[[
 This is a liquid transformation mod that aims to work more similar to the
-liquids seen in Minecraft. 
+liquids seen in Minecraft.
 --]]
 
 local S = core.get_translator(core.get_current_modname())
@@ -42,7 +42,7 @@ local core_remove_node = core.remove_node
 -- This counter is used generate unique names
 local resume_counter = 1
 
-local batch_update_cnt = 0 
+local batch_update_cnt = 0
 
 --------------------------------------------------------------------------------
 -- Top level functions
@@ -95,7 +95,7 @@ local function register_liquid(def)
 	----------------------------------------------------------------------
 	-- Variables for processing a burst of iterations
 	----------------------------------------------------------------------
-	
+
 	-- Swappable list of positions to be processed in the next iteration
 	local update_next_set_A = {}
 	local update_next_set_B = {}
@@ -198,12 +198,12 @@ local function register_liquid(def)
 		elseif node.name == NAME_FLOWING then
 			if bit.band(node.param2, 0x08) ~= 0 then
 				return 8
-			else 
+			else
 				return bit.band(node.param2, 0x07)
 			end
 		else
 			return nil
-		end 
+		end
 	end
 
 	local function set_node(pos, node)
@@ -324,7 +324,7 @@ local function register_liquid(def)
 			local f1 = is_floodable(n1)
 			local f2 = is_floodable(n2)
 
-			if f1 and f2 then 
+			if f1 and f2 then
 				pf_found[#pf_found+1] = hpos_next
 				pf_pmap[hpos_next] = level
 			elseif f1 and (l1 or 0) <= level then
@@ -361,7 +361,7 @@ local function register_liquid(def)
 	local function path_find(pos, slope_dist)
 		local orig_level = get_liquid_level(get_node(pos))
 		if orig_level <= 1 then
-			-- If level of the origin is too small we return a dummy map. 
+			-- If level of the origin is too small we return a dummy map.
 			return 'DUMMY'
 		end
 
@@ -421,7 +421,7 @@ local function register_liquid(def)
 			if not pf_ok or #pf_found > 0 then
 				break
 			end
-		end 
+		end
 
 		if pf_ok then
 			if #pf_found == 0 then
@@ -431,7 +431,7 @@ local function register_liquid(def)
 				rmap = pf_pmap
 				-- Let the reference run wild
 				pf_pmap = {}
-			else 
+			else
 				-- If a slope within range was found we need to remove all levels that
 				-- are not part of the shortest path to those slopes.
 				while #pf_found > 0 do
@@ -524,7 +524,7 @@ local function register_liquid(def)
 		n101 = get_node(p101)
 		n121 = get_node(p121)
 
-		if not ( n011 and n211 and n110 and n112 and n101 and n121 ) then 
+		if not ( n011 and n211 and n110 and n112 and n101 and n121 ) then
 			return
 		end
 
@@ -535,7 +535,7 @@ local function register_liquid(def)
 			if n110.name == NAME_SOURCE then count_sources = count_sources + 1 end
 			if n112.name == NAME_SOURCE then count_sources = count_sources + 1 end
 
-			if (n111.name == NAME_FLOWING or n111.name == 'air') and count_sources >= 2 then 
+			if (n111.name == NAME_FLOWING or n111.name == 'air') and count_sources >= 2 then
 				-- Renew liquid
 				update_next({pos=p111})
 				set_node(p111, { name=NAME_SOURCE })
@@ -559,7 +559,7 @@ local function register_liquid(def)
 		-- calculate the liquid level that is supported here.
 		local support_level = 1
 
-		if l121 ~= nil then 
+		if l121 ~= nil then
 			-- node above is a liquid
 			support_level = 9
 		elseif n111.name == NAME_SOURCE then
@@ -766,12 +766,12 @@ local function register_liquid(def)
 			local n112 = core.get_node(vector.offset(pos,  0, 0, 1))
 			local n101 = core.get_node(vector.offset(pos,  0,-1, 0))
 
-			if n101.name ~= NAME_SOURCE or 
-				n111.name ~= NAME_SOURCE or 
-				n011.name ~= NAME_SOURCE or 
-				n211.name ~= NAME_SOURCE or 
-				n110.name ~= NAME_SOURCE or 
-				n112.name ~= NAME_SOURCE then 
+			if n101.name ~= NAME_SOURCE or
+				n111.name ~= NAME_SOURCE or
+				n011.name ~= NAME_SOURCE or
+				n211.name ~= NAME_SOURCE or
+				n110.name ~= NAME_SOURCE or
+				n112.name ~= NAME_SOURCE then
 
 				core.after(5, function()
 					liquid_update(pos)
@@ -870,7 +870,7 @@ local co_liquid_tick_loop = coroutine.create(function()
 		for i, o in ipairs(registered_liquids) do
 			o.tick()
 		end
-		-- We yield here because there is nothing left to do in this global step. 
+		-- We yield here because there is nothing left to do in this global step.
 		coroutine.yield()
 	end
 end)
@@ -932,7 +932,7 @@ core.register_chatcommand('liquid_tick', {
 		elseif param == 'get' then
 			return true, ''..main_tick
 		else
-			new_tick = tonumber(param)
+			local new_tick = tonumber(param)
 			if new_tick == nil then
 				return false
 			elseif new_tick >= 0.0 then
