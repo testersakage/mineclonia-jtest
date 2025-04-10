@@ -67,7 +67,6 @@ The `def` is a table consists of the following properties:
     value to 0.0.
 --]]
 local function register_liquid(def)
-	local wait_count = 0
 	local modname = minetest.get_current_modname()
 
 	local NAME_SOURCE = def.name_source
@@ -251,10 +250,6 @@ local function register_liquid(def)
 		for k, _ in ipairs(tb) do
 			tb[k] = nil
 		end
-	end
-
-	local function is_liquid(node)
-		return node.name == NAME_SOURCE or node.name == NAME_FLOWING
 	end
 
 	local function make_liquid(level)
