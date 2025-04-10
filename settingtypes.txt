@@ -231,18 +231,22 @@ mcl_redstone_time_budget (Redstone time budget) float 0.2
 mcl_redstone_event_max (Maximum queued redstone events) int 65535
 
 
-[Liquid]
-# Enables MT like liquid transformation
+[Experimental Liquids]
+# Enables MT like liquid transformation.
+# Right now this setting changes the behaviour of all liquids with the exception that is river water.
 mcl_liquid_enable (Enable custom liquid transformation) bool false
 
-# Set the default time per Luanti tick. 
-# If this value is the same as the Luanti tick, the specified individual liquid tick is accurate.
-mcl_liquid_tick (Seconds per Luanti tick) float 0.025 0.0 1000.0
+# Set the liquid seconds per Luanti tick.
+# If this value is the same as the Luanti tick, the transformation runs in real time.
+# If this value is set to 1.0, this means that in one Luanti tick 1.0 liquid
+# second passes, hence the liquid transforms much faster than specified.
+mcl_liquid_seconds_per_tick (Liquid seconds per Luanti tick) float 0.025 0.0 1000.0
 
-# The maximum number of updates per tick per liquid type. 
-# If the number of updates exceeds this limit, the update gets dropped, and the
-# liquid stops until the block gets loaded again. 
-mcl_liquid_update_max (Maximal number of updates per liquid type per tick) float 1000000
+# The maximum number of updates per global step.
+# If the number of updates exceeds this limit, the transformation process gets
+# sliced into multiple global steps. If all global steps in a transformation
+# cycle reach that limit the liquid transformation slows down.
+mcl_liquid_update_limit (Maximal number of updates per global step) int 10000
 
 
 [Experimental]
