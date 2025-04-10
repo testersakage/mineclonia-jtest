@@ -42,6 +42,8 @@ local core_remove_node = core.remove_node
 -- This counter is used generate unique names
 local resume_counter = 1
 
+local batch_update_cnt = 0 
+
 --------------------------------------------------------------------------------
 -- Top level functions
 --------------------------------------------------------------------------------
@@ -98,12 +100,11 @@ local function register_liquid(def)
 	local update_next_set_A = {}
 	local update_next_set_B = {}
 	local update_next_set = update_next_set_A
-	local update_next_count = 0
 
 	-- A list of nodes that have been changed during a burst.
 	local changed_nodes = {}
 	-- A list of nodes that have been red during the burst (caching)
-	local read_nodes = {}
+	local read_nodes_cache = {}
 
 	----------------------------------------------------------------------
 	-- Variables for path finding to the nearest slope
@@ -185,10 +186,7 @@ local function register_liquid(def)
 		-- iteration.
 		local h = core.hash_node_position(item.pos)
 		if update_next_set[h] == nil then
-			if update_next_count < UPDATE_LIMIT then
-				update_next_set[h] = item
-				update_next_count = update_next_count + 1
-			end
+			update_next_set[h] = item
 		end
 	end
 
@@ -232,13 +230,13 @@ local function register_liquid(def)
 	local function get_node(pos)
 		-- This function is the just the cached version of the `core.get_node()`
 		local h = core.hash_node_position(pos)
-		local node = read_nodes[h]
+		local node = read_nodes_cache[h]
 
 		if node then
 			return node
 		else
 			node = core.get_node_or_nil(pos)
-			read_nodes[h] = node
+			read_nodes_cache[h] = node
 			return node
 		end
 	end
@@ -785,6 +783,32 @@ local function register_liquid(def)
 	resume_counter = resume_counter + 1
 
 	local tick_dtime = 0.0
+
+	local function write_changed_nodes(changed_nodes)
+		for h, node in pairs(changed_nodes) do
+			local pos = core.get_position_from_hash(h)
+
+			local old = get_node(pos)
+			if old ~= nil then
+
+				local old_ndef = core.registered_nodes[old.name]
+
+				-- Do the final check to see if the node is still floodable.
+				if old.name == 'air' or old.name == NAME_FLOWING or old_ndef.floodable then
+					if old_ndef.on_flood then
+						if not old_ndef.on_flood(pos, old, node) then
+							core_set_node(pos, node)
+						end
+					else
+						core_set_node(pos, node)
+					end
+				end
+			end
+		end
+	end
+
+
+
 	local function tick()
 		tick_dtime = tick_dtime + main_tick
 
@@ -795,7 +819,6 @@ local function register_liquid(def)
 
 			if next(update_next_set) ~= nil then
 				local q = update_next_set
-				update_next_count = 0
 
 				-- Reset the containers for reuse
 				if update_next_set == update_next_set_A then
@@ -806,27 +829,28 @@ local function register_liquid(def)
 					update_next_set = update_next_set_A
 				end
 
-				hmap_clear(read_nodes)
+				hmap_clear(read_nodes_cache)
 				hmap_clear(changed_nodes)
 
 				for _, item in pairs(q) do
 					-- Do the flow magic
 					flow_iteration(item)
-				end
 
-				for h, node in pairs(changed_nodes) do
-					local pos = core.get_position_from_hash(h)
+					-- Continue the transformation in the next global step the
+					-- limit has been reached.
+					batch_update_cnt = batch_update_cnt + 1
+					if batch_update_cnt == UPDATE_LIMIT then
+						coroutine.yield()
+						-- The nodes might have been changed. We need to clear
+						-- the cache
+						hmap_clear(read_nodes_cache)
+						batch_update_cnt = 0
 
-					local old = read_nodes[h]
-					local old_ndef = core.registered_nodes[old.name]
-					if old_ndef.on_flood then
-						if not old_ndef.on_flood(pos, old, node) then
-							core_set_node(pos, node)
-						end
-					else
-						core_set_node(pos, node)
 					end
 				end
+
+				write_changed_nodes(changed_nodes)
+
 			elseif TICKS == 0.0 then
 				tick_dtime = 0.0
 				break
@@ -841,10 +865,18 @@ local function register_liquid(def)
 end
 
 -- This function is called once per tick to update all registered liquids.
-local function liquid_tick()
-	for i, o in ipairs(registered_liquids) do
-		o.tick()
+local co_liquid_tick_loop = coroutine.create(function()
+	while true do
+		for i, o in ipairs(registered_liquids) do
+			o.tick()
+		end
+		-- We yield here because there is nothing left to do in this global step. 
+		coroutine.yield()
 	end
+end)
+
+local function liquid_tick()
+	coroutine.resume(co_liquid_tick_loop)
 end
 
 -- This function notifies the registered liquids about a node that has changed.
@@ -888,8 +920,9 @@ core.register_chatcommand('liquid', {
 
 core.register_chatcommand('liquid_tick', {
 	params = '<seconds> | default | get',
-	description = S('This command sets the time passed between Luanti ticks.')..' '..
-	              S('If this value is larger than the actual tick, liquids become faster than specified.'),
+	description =
+		S('This command sets the time passed between Luanti ticks.')..' '..
+		S('If this value is larger than the actual tick, liquids become faster than specified.'),
 	privs = {liquid=true},
 
 	func = function(name, param)
