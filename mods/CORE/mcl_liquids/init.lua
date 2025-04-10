@@ -22,9 +22,9 @@ end
 -- If set to false, liquids do not flow until they activated.
 local is_running = true
 
-local MAIN_TICK_DEFAULT = tonumber(core.settings:get('mcl_liquid_tick')) or 0.025
+local MAIN_TICK_DEFAULT = tonumber(core.settings:get('mcl_liquid_seconds_per_tick')) or 0.025
 
-local UPDATE_LIMIT = tonumber(core.settings:get('mcl_liquid_update_max')) or 1000000
+local UPDATE_LIMIT = tonumber(core.settings:get('mcl_liquid_update_limit')) or 10000
 
 -- The main tick speed. Changing that tick affects all liquids
 -- proportionally.
