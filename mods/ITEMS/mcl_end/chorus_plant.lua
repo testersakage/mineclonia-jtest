@@ -468,6 +468,11 @@ core.register_abm({
 -- Returns true on success.
 local function random_teleport(player)
 	local pos = player:get_pos()
+	local dim = mcl_worlds.pos_to_dimension(pos)
+
+	if dim == "nether" and pos.y > mcl_vars.mg_nether_max then
+		return
+	end
 	-- 16 attempts to find a suitable position
 	for _ = 1, 16 do
 		-- Teleportation box
@@ -481,6 +486,9 @@ local function random_teleport(player)
 		for t=0, 16 do
 			local tpos = {x=x, y=y-t, z=z}
 			local tnode = core.get_node(tpos)
+			if dim == "nether" and tpos.y == mcl_vars.mg_nether_max then
+				break
+			end
 			if tnode.name == "mcl_core:void" or tnode.name == "ignore" then
 				break
 			end
@@ -530,10 +538,7 @@ local eat_chorus_fruit = function(itemstack, player, pointed_thing)
 	local new_itemstack = core.do_item_eat(4, nil, itemstack, player, pointed_thing)
 	local new_count = new_itemstack:get_count()
 	if count ~= new_count or new_itemstack:get_name() ~= "mcl_end:chorus_fruit" or (core.is_creative_enabled(player:get_player_name()) == true) then
-		local pos = player:get_pos()
-		if mcl_worlds.pos_to_dimension(pos) ~= "nether" or pos.y < mcl_vars.mg_nether_max then
-			random_teleport(player)
-		end
+		random_teleport(player)
 	end
 	return new_itemstack
 end
