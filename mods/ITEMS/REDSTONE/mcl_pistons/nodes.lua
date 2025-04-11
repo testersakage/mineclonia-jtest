@@ -2,8 +2,8 @@ local S = core.get_translator(core.get_current_modname())
 
 local PISTON_MAXIMUM_PUSH = 12
 
--- Enable to make block detach from sticky piston when piston is powered with a short pulse
-local EXPERIMENTAL_ONE_TICK_DETACH = core.settings:get_bool("mcl_redstone_sticky_pistons_one_tick_detach", false)
+-- Detaches block from sticky piston when piston is powered with a short pulse
+local ONE_TICK_DETACH = core.settings:get_bool("mcl_redstone_sticky_pistons_one_tick_detach", true)
 local activation_time_tab = {}
 
 -- Remove pusher of piston.
@@ -95,7 +95,7 @@ local function piston_off(pos, node, detach)
 	local pistonspec = core.registered_nodes[node.name]._piston_spec
 	core.swap_node(pos, {param2 = node.param2, name = pistonspec.offname})
 	piston_remove_pusher(pos, node)
-	if (not pistonspec.sticky) or (EXPERIMENTAL_ONE_TICK_DETACH and detach) == true then
+	if not pistonspec.sticky or detach then
 		return
 	end
 
@@ -181,7 +181,7 @@ local commdef = {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_hardness = 0.5,
 	after_destruct = function(pos, oldnode)
-		if EXPERIMENTAL_ONE_TICK_DETACH then
+		if ONE_TICK_DETACH then
 			activation_time_tab[core.hash_node_position(pos)] = nil
 		end
 	end,
@@ -202,7 +202,7 @@ local offdef = {
 			local dir = -core.facedir_to_dir(node.param2)
 			if powered_facing_dir(pos, dir) then
 
-				if EXPERIMENTAL_ONE_TICK_DETACH then
+				if ONE_TICK_DETACH then
 					local frontnode = core.get_node(vector.add(pos, dir))
 					local frontdef  = core.registered_nodes[frontnode.name]
 					local h         = core.hash_node_position(pos)
@@ -236,8 +236,8 @@ local ondef = {
 			if not powered_facing_dir(pos, dir) then
 
 				local detach = false
-				if EXPERIMENTAL_ONE_TICK_DETACH then
-					local on_time   = activation_time_tab[core.hash_node_position(pos)]
+				if ONE_TICK_DETACH then
+					local on_time = activation_time_tab[core.hash_node_position(pos)]
 					if on_time ~= nil and (mcl_redstone._get_current_tick() - on_time) <= 1 then
 						detach = true
 					end
