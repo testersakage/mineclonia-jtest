@@ -12,11 +12,9 @@ local fish_names = {
 local fishbucket_prefix = "mcl_buckets:bucket_"
 
 local function on_place_fish(itemstack, placer, pointed_thing)
-	if placer then
-		local new_stack = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-		if new_stack then
-			return new_stack
-		end
+	local new_stack = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+	if new_stack then
+		return new_stack
 	end
 
 	if pointed_thing.type ~= "node" then return end
@@ -75,6 +73,7 @@ for techname, fishname in pairs(fish_names) do
 		_on_dispense = function(stack, _, droppos)
 			local fake_pt = {type = "node"}
 			fake_pt.above = droppos
+			fake_pt.under = vector.offset(droppos, 0, -1, 0)
 
 			return on_place_fish(stack, nil, fake_pt)
 		end,
