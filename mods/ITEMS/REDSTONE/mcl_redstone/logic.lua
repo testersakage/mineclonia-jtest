@@ -329,8 +329,8 @@ function mcl_redstone.update_node(pos)
 end
 
 local function notify_observer(pos, node, from_pos)
-	if observer_update_tab[node.name] then
-		observer_update_tab[node.name](pos, node, from_pos)
+	if on_observer_change_tab[node.name] then
+		on_observer_change_tab[node.name](pos, node, from_pos)
 	end
 end
 
