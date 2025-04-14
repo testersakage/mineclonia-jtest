@@ -43,6 +43,7 @@ local function on_place_fish(itemstack, placer, pointed_thing)
 			end
 			if water then
 				if defs and (core.get_item_group(n.name, "solid") ~= 1 and core.get_item_group(n.name, "opaque") ~= 1) then
+					core.dig_node(pos)
 					core.set_node(pos, {name = water})
 				else
 					return
