@@ -16,10 +16,11 @@ function mcl_bamboo.check_structure(pos)
 
 	-- Check growing in size
 	if h > 1 and basegroup < 2 then
-		core.bulk_set_node(nn, {name="mcl_bamboo:bamboo_small"})
-	end
-	if h >= 4 and basegroup < 3 then
-		core.bulk_set_node(nn, {name="mcl_bamboo:bamboo_big"})
+		if math.random() < 0.5 then
+			core.bulk_set_node(nn, {name="mcl_bamboo:bamboo_small"})
+		else
+			core.bulk_set_node(nn, {name="mcl_bamboo:bamboo_big"})
+		end
 	end
 
 	-- Update basegroup after size changes
@@ -29,12 +30,11 @@ function mcl_bamboo.check_structure(pos)
 	-- Check growing in leaf
 	if basegroup == 1 then return end
 	local size = basegroup == 2 and "small" or "big"
-	local leaf_bamboo = "mcl_bamboo:bamboo_"..size.."_leaf"
+	local leaf_bamboo = "mcl_bamboo:bamboo_"..size.."_1"
 	core.bulk_set_node(nn, {name="mcl_bamboo:bamboo_"..size})
 	if h > 3 then
-		local endcap = size == 2 and "" or "_2"
-		core.set_node(top, {name=leaf_bamboo..endcap})
-		core.set_node(vector.offset(top,0,-1,0), {name=leaf_bamboo..endcap})
+		core.set_node(top, {name="mcl_bamboo:bamboo_"..size.."_2"})
+		core.set_node(vector.offset(top,0,-1,0), {name="mcl_bamboo:bamboo_"..size.."_2"})
 		core.set_node(vector.offset(top,0,-2,0), {name=leaf_bamboo})
 	elseif h > 2 then
 		core.set_node(top, {name=leaf_bamboo})
@@ -95,19 +95,14 @@ local bamboo_def = {
 		if bamboo_below then
 			core.set_node(pos, {name=node_below.name})
 			mcl_bamboo.check_structure(pos)
+		else
+			core.set_node(pos, {name="mcl_bamboo:bamboo_shoot"})
 		end
 	end,
 	_on_bone_meal = function(_, _, _, pos)
 		return mcl_bamboo.grow(pos)
 	end,
 }
-
-core.register_node("mcl_bamboo:bamboo", table.merge(bamboo_def, {
-	collision_box = {
-		type = "fixed",
-		fixed = {{0,0,0,0,0,0}}
-	}
-}))
 
 local cbox_small = {
 	type = "fixed",
@@ -122,16 +117,30 @@ local cbox_big = {
 	}
 }
 
+core.register_node("mcl_bamboo:bamboo_shoot", table.merge_deep(bamboo_def, {
+	collision_box = {
+		type = "fixed",
+		fixed = {{0,0,0,0,0,0}}
+	},
+	groups = {not_in_creative_inventory=1},
+}))
 core.register_node("mcl_bamboo:bamboo_small", table.merge_deep(bamboo_def, {
 	mesh = "mcl_bamboo_small.obj",
 	tiles = {"mcl_bamboo_bamboo.png", "blank.png"},
+	groups = {bamboo_tree=2},
+	selection_box = cbox_small,
+	collision_box = cbox_small,
+}))
+core.register_node("mcl_bamboo:bamboo_small_1", table.merge_deep(bamboo_def, {
+	mesh = "mcl_bamboo_small.obj",
+	tiles = {"mcl_bamboo_bamboo.png", "mcl_bamboo_leaf_small.png"},
 	groups = {not_in_creative_inventory=1, bamboo_tree=2},
 	selection_box = cbox_small,
 	collision_box = cbox_small,
 }))
-core.register_node("mcl_bamboo:bamboo_small_leaf", table.merge_deep(bamboo_def, {
+core.register_node("mcl_bamboo:bamboo_small_2", table.merge_deep(bamboo_def, {
 	mesh = "mcl_bamboo_small.obj",
-	tiles = {"mcl_bamboo_bamboo.png", "mcl_bamboo_leaf_small.png"},
+	tiles = {"mcl_bamboo_bamboo.png", "mcl_bamboo_leaf_big.png"},
 	groups = {not_in_creative_inventory=1, bamboo_tree=2},
 	selection_box = cbox_small,
 	collision_box = cbox_small,
@@ -143,20 +152,24 @@ core.register_node("mcl_bamboo:bamboo_big", table.merge_deep(bamboo_def, {
 	selection_box = cbox_big,
 	collision_box = cbox_big,
 }))
-core.register_node("mcl_bamboo:bamboo_big_leaf", table.merge_deep(bamboo_def, {
+core.register_node("mcl_bamboo:bamboo_big_1", table.merge_deep(bamboo_def, {
 	mesh = "mcl_bamboo_big.obj",
 	tiles = {"mcl_bamboo_bamboo.png", "mcl_bamboo_leaf_small.png"},
 	groups = {not_in_creative_inventory=1, bamboo_tree=3},
 	selection_box = cbox_big,
 	collision_box = cbox_big,
 }))
-core.register_node("mcl_bamboo:bamboo_big_leaf_2", table.merge_deep(bamboo_def, {
+core.register_node("mcl_bamboo:bamboo_big_2", table.merge_deep(bamboo_def, {
 	mesh = "mcl_bamboo_big.obj",
 	tiles = {"mcl_bamboo_bamboo.png", "mcl_bamboo_leaf_big.png"},
 	groups = {not_in_creative_inventory=1, bamboo_tree=3},
 	selection_box = cbox_big,
 	collision_box = cbox_big,
 }))
+core.register_alias("mcl_bamboo:bamboo", "mcl_bamboo:bamboo_small")
+core.register_alias("mcl_bamboo:bamboo_1", "mcl_bamboo:bamboo_small")
+core.register_alias("mcl_bamboo:bamboo_2", "mcl_bamboo:bamboo_small")
+core.register_alias("mcl_bamboo:bamboo_3", "mcl_bamboo:bamboo_small")
 
 mcl_flowerpots.register_potted_flower("mcl_bamboo:bamboo", {
 	name = "bamboo",
