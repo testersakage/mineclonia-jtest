@@ -328,6 +328,21 @@ function mcl_redstone.update_node(pos)
 	set_pending_update(pos)
 end
 
+local function notify_observer(pos, node, from_pos)
+	if observer_update_tab[node.name] then
+		observer_update_tab[node.name](pos, node, from_pos)
+	end
+end
+
+-- Update/notify neighbouring observing nodes at pos, aka "shape update".
+function mcl_redstone._notify_observer_neighbours(pos)
+	for _, dir in pairs(sixdirs) do
+		local pos2  = pos:add(dir)
+		local node2 = core.get_node(pos2)
+		notify_observer(pos2, node2, pos)
+	end
+end
+
 -- Update neighbouring wires and components at pos. Oldnode is the previous
 -- node at the position.
 local function update_neighbours(pos, oldnode, newnode)
@@ -404,17 +419,6 @@ function mcl_redstone._update_neighbours(pos, oldnode, newnode)
 	end
 end
 
-function mcl_redstone._notify_observer_neighbours(pos)
-	for _, dir in pairs(sixdirs) do
-		local pos2 = pos:add(dir)
-		local node2 = core.get_node(pos2)
-
-		if on_observer_change_tab[node2.name] then
-			on_observer_change_tab[node2.name](pos2, node2, pos)
-		end
-	end
-end
-
 function mcl_redstone.swap_node(pos, node)
 	local oldnode = core.get_node(pos)
 	if not node then print(debug.traceback("trying to place nil")) end
@@ -422,7 +426,7 @@ function mcl_redstone.swap_node(pos, node)
 	mcl_redstone._update_neighbours(pos, oldnode, node)
 end
 
-local function opaque_update_neighbours(pos, added)
+local function opaque_update_neighbours(pos, update_observers)
 	local fill_nodes = {}
 	local clear_nodes = {}
 
@@ -441,6 +445,10 @@ local function opaque_update_neighbours(pos, added)
 			update_wire(pos2)
 		elseif update_tab[node2.name] then
 			set_pending_update(pos2, node2.name)
+		end
+
+		if update_observers then
+			notify_observer(pos2, node2, pos)
 		end
 	end
 
@@ -474,8 +482,7 @@ core.register_on_mods_loaded(function()
 					end
 					mcl_redstone._update_opaque_connections(pos)
 					mcl_redstone.after(0, function()
-						opaque_update_neighbours(pos)
-						mcl_redstone._notify_observer_neighbours(pos)
+						opaque_update_neighbours(pos, true) -- also notifies observers
 					end)
 				end,
 				after_destruct = function(pos, oldnode)
@@ -484,8 +491,7 @@ core.register_on_mods_loaded(function()
 					end
 					mcl_redstone._update_opaque_connections(pos)
 					mcl_redstone.after(0, function()
-						opaque_update_neighbours(pos)
-						mcl_redstone._notify_observer_neighbours(pos)
+						opaque_update_neighbours(pos, true) -- also notifies observers
 					end)
 				end,
 			})
