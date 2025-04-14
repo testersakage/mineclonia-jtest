@@ -126,15 +126,12 @@ allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 --------------------------------------------------------------------------------
 -- Orientation Helper (similar to dispenser mod)
 --------------------------------------------------------------------------------
-local function orientate(pos, placer, basename)
+local function orientate(pos, placer)
     if not placer then return end
-    local pitch_deg = placer:get_look_vertical() * (180 / math.pi)
     local node = core.get_node(pos)
-    if pitch_deg > 55 then
-        core.swap_node(pos, { name = "mcl_crafter:" .. basename .. "_up", param2 = node.param2 })
-    elseif pitch_deg < -55 then
-        core.swap_node(pos, { name = "mcl_crafter:" .. basename .. "_down", param2 = node.param2 })
-    end
+    local facedir = minetest.dir_to_facedir(placer:get_look_dir())
+    node.param2 = facedir
+    core.swap_node(pos, node)
 end
 
 --------------------------------------------------------------------------------
@@ -275,22 +272,17 @@ local function activate_crafter(pos)
     local inv = meta:get_inventory()
     if check_and_consume_recipe(inv) then
         local output_item = meta:get_string("recipe_output")
-        if output_item == "" then return end
-        local node = core.get_node(pos)
-        local dropdir, droppos
-        if node.name:match("_up$") then
-            dropdir = vector.new(0, 1, 0)
-            droppos = vector.offset(pos, 0, 1, 0)
-        elseif node.name:match("_down$") then
-            dropdir = vector.new(0, -1, 0)
-            droppos = vector.offset(pos, 0, -1, 0)
-        else
-            dropdir = vector.multiply(core.facedir_to_dir(node.param2), -1)
-            droppos = vector.add(pos, dropdir)
+        if output_item == "" then 
+            return 
         end
+        local node = core.get_node(pos)
+        -- Always use the facedir value to determine the drop direction.
+        local dropdir = vector.multiply(core.facedir_to_dir(node.param2), -1)
+        local droppos = vector.add(pos, dropdir)
         -- Add a small random offset:
         local pos_variation = 100
-        droppos = vector.offset(droppos,
+        droppos = vector.offset(
+            droppos,
             math.random(-pos_variation, pos_variation) / 1000,
             math.random(-pos_variation, pos_variation) / 1000,
             math.random(-pos_variation, pos_variation) / 1000
@@ -389,33 +381,14 @@ local crafterdef = table.merge(commdef, {
 --------------------------------------------------------------------------------
 -- Register Crafter Nodes (Standard, Up and Down Variants)
 --------------------------------------------------------------------------------
-core.register_node("mcl_crafter:crafter", crafterdef)
-
-core.register_node("mcl_crafter:crafter_down", table.merge(crafterdef, {
-    description = S("Crafter"),
-    after_place_node = setup_crafter,
-    tiles = {
-        "crafter_top.png", "crafter_front_vertical.png",
-        "crafter_side.png", "crafter_side.png",
-        "crafter_side.png", "crafter_side.png"
-    },
-    groups = table.merge(crafterdef.groups, { not_in_creative_inventory = 1 }),
-    _doc_items_create_entry = false,
-    drop = "mcl_crafter:crafter",
+core.register_node("mcl_crafter:crafter", table.merge(crafterdef, {
+    paramtype2 = "facedir",  -- ensures orientation support
+    after_place_node = function(pos, placer, itemstack, pointed_thing)
+        setup_crafter(pos)
+        orientate(pos, placer)
+    end,
 }))
 
-core.register_node("mcl_crafter:crafter_up", table.merge(crafterdef, {
-    description = S("Crafter"),
-    after_place_node = setup_crafter,
-    tiles = {
-        "crafter_front_vertical.png", "crafter_bottom.png",
-        "crafter_side.png", "crafter_side.png",
-        "crafter_side.png", "crafter_side.png"
-    },
-    groups = table.merge(crafterdef.groups, { not_in_creative_inventory = 1 }),
-    _doc_items_create_entry = false,
-    drop = "mcl_crafter:crafter",
-}))
 
 --------------------------------------------------------------------------------
 -- Crafting Recipe for the Crafter Block
@@ -429,7 +402,4 @@ core.register_craft({
     },
 })
 
--- Documentation aliases (if an in-game doc system is used)
-doc.add_entry_alias("nodes", "mcl_crafter:crafter", "nodes", "mcl_crafter:crafter_down")
-doc.add_entry_alias("nodes", "mcl_crafter:crafter", "nodes", "mcl_crafter:crafter_up")
 
