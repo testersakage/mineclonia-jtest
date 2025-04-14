@@ -520,12 +520,18 @@ core.register_on_mods_loaded(function()
 						old_construct(pos)
 					end
 					update_wire(pos)
+					mcl_redstone.after(0, function()
+						mcl_redstone._notify_observer_neighbours(pos)
+					end)
 				end,
 				after_destruct = function(pos, oldnode)
 					if old_destruct then
 						old_destruct(pos, oldnode)
 					end
 					update_wire(pos, oldnode)
+					mcl_redstone.after(0, function()
+						mcl_redstone._notify_observer_neighbours(pos)
+					end)
 				end,
 			})
 		end
