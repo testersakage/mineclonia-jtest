@@ -4,9 +4,9 @@
 -- the crafter consumes the ingredients and dispenses the crafted item.
 -- Additionally, hoppers can insert only those ingredients that are needed by the current recipe.
 
-local S = minetest.get_translator(minetest.get_current_modname())
-local F = minetest.formspec_escape
-local C = minetest.colorize
+local S = core.get_translator(core.get_current_modname())
+local F = core.formspec_escape
+local C = core.colorize
 
 -- We assume that modules like mcl_formspec, mcl_sounds, mcl_redstone, mcl_util,
 -- and screwdriver already exist in your modpack.
@@ -51,17 +51,17 @@ local commdef = {
     sounds = mcl_sounds and mcl_sounds.node_sound_stone_defaults() or nil,
     groups = { pickaxey = 1, container = 2, material_stone = 1 },
     allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-	    local pos_str = minetest.pos_to_string(pos)
+	    local pos_str = core.pos_to_string(pos)
 	    local source = (player and player:get_player_name()) or "hopper"
 	    
-	    if player and minetest.is_protected(pos, source) then
-		minetest.record_protection_violation(pos, source)
-		minetest.log("action", "[Crafter] " .. source .. " attempted to move " .. count ..
+	    if player and core.is_protected(pos, source) then
+		core.record_protection_violation(pos, source)
+		core.log("action", "[Crafter] " .. source .. " attempted to move " .. count ..
 		    " items from '" .. from_list .. "' (index " .. from_index ..
 		    ") to '" .. to_list .. "' (index " .. to_index .. ") at " .. pos_str .. " - PROTECTED")
 		return 0
 	    else
-		minetest.log("action", "[Crafter] " .. source .. " moves " .. count ..
+		core.log("action", "[Crafter] " .. source .. " moves " .. count ..
 		    " items from '" .. from_list .. "' (index " .. from_index ..
 		    ") to '" .. to_list .. "' (index " .. to_index .. ") at " .. pos_str)
 		return count
@@ -69,36 +69,36 @@ local commdef = {
     end,
 
 allow_metadata_inventory_take = function(pos, listname, index, stack, player)
-	    local pos_str = minetest.pos_to_string(pos)
+	    local pos_str = core.pos_to_string(pos)
 	    local source = (player and player:get_player_name()) or "hopper"
 	    
-	    if player and minetest.is_protected(pos, source) then
-		minetest.record_protection_violation(pos, source)
-		minetest.log("action", "[Crafter] " .. source .. " attempted to take " .. stack:get_count() ..
+	    if player and core.is_protected(pos, source) then
+		core.record_protection_violation(pos, source)
+		core.log("action", "[Crafter] " .. source .. " attempted to take " .. stack:get_count() ..
 		    " items from list '" .. listname .. "' (index " .. index .. ") at " .. pos_str .. " - PROTECTED")
 		return 0
 	    else
-		minetest.log("action", "[Crafter] " .. source .. " takes " .. stack:get_count() ..
+		core.log("action", "[Crafter] " .. source .. " takes " .. stack:get_count() ..
 		    " items from list '" .. listname .. "' (index " .. index .. ") at " .. pos_str)
 		return stack:get_count()
 	    end
     end,
 
     allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-	local pos_str = minetest.pos_to_string(pos)
+	local pos_str = core.pos_to_string(pos)
 	local item_name = stack:get_name()
 	local item_count = stack:get_count()
 	local source = (player and player:get_player_name()) or "hopper"
 
 	-- Log the attempt for both a player and a hopper
-	minetest.log("action", "[Crafter] " .. source ..
+	core.log("action", "[Crafter] " .. source ..
 	" attempted to insert " .. item_name .. " (x" .. item_count ..
 	") into list '" .. listname .. "' at " .. pos_str)
 
 	-- Only perform protection checks if a player is directly involved
 	if player then
-		if minetest.is_protected(pos, source) then
-		    minetest.record_protection_violation(pos, source)
+		if core.is_protected(pos, source) then
+		    core.record_protection_violation(pos, source)
 		    return 0
 		end
 	end
@@ -107,16 +107,16 @@ allow_metadata_inventory_take = function(pos, listname, index, stack, player)
     end,
 
     on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
-        minetest.log("action", player:get_player_name() ..
-            " moves items in crafter at " .. minetest.pos_to_string(pos))
+        core.log("action", player:get_player_name() ..
+            " moves items in crafter at " .. core.pos_to_string(pos))
     end,
     on_metadata_inventory_put = function(pos, listname, index, stack, player)
-        minetest.log("action", player:get_player_name() ..
-            " puts item in crafter at " .. minetest.pos_to_string(pos))
+        core.log("action", player:get_player_name() ..
+            " puts item in crafter at " .. core.pos_to_string(pos))
     end,
     on_metadata_inventory_take = function(pos, _, _, _, player)
-        minetest.log("action", player:get_player_name() ..
-            " takes item from crafter at " .. minetest.pos_to_string(pos))
+        core.log("action", player:get_player_name() ..
+            " takes item from crafter at " .. core.pos_to_string(pos))
     end,
     on_rotate = screwdriver and screwdriver.rotate_simple or nil,
     _mcl_blast_resistance = 3.5,
@@ -129,11 +129,11 @@ allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 local function orientate(pos, placer, basename)
     if not placer then return end
     local pitch_deg = placer:get_look_vertical() * (180 / math.pi)
-    local node = minetest.get_node(pos)
+    local node = core.get_node(pos)
     if pitch_deg > 55 then
-        minetest.swap_node(pos, { name = "mcl_crafter:" .. basename .. "_up", param2 = node.param2 })
+        core.swap_node(pos, { name = "mcl_crafter:" .. basename .. "_up", param2 = node.param2 })
     elseif pitch_deg < -55 then
-        minetest.swap_node(pos, { name = "mcl_crafter:" .. basename .. "_down", param2 = node.param2 })
+        core.swap_node(pos, { name = "mcl_crafter:" .. basename .. "_down", param2 = node.param2 })
     end
 end
 
@@ -141,7 +141,7 @@ end
 -- Setup the Crafter (initialize metadata and inventories)
 --------------------------------------------------------------------------------
 local function setup_crafter(pos)
-    local meta = minetest.get_meta(pos)
+    local meta = core.get_meta(pos)
     meta:set_string("formspec", crafter_formspec)
     local inv = meta:get_inventory()
     inv:set_size("grid", 9)    -- input crafting grid
@@ -160,7 +160,7 @@ end
 -- Otherwise, clear the configuration.
 --------------------------------------------------------------------------------
 local function on_crafter_receive_fields(pos, formname, fields, sender)
-    local meta = minetest.get_meta(pos)
+    local meta = core.get_meta(pos)
     if fields.__mcl_crafter_setrecipe then
         local inv = meta:get_inventory()
         local configured = meta:get_string("configured_recipe")
@@ -181,11 +181,11 @@ local function on_crafter_receive_fields(pos, formname, fields, sender)
                 end
                 meta:set_string("configured_recipe", "true")
                 local craft_req = { method = "normal", width = 3, items = recipe }
-                local result = minetest.get_craft_result(craft_req).item
+                local result = core.get_craft_result(craft_req).item
                 meta:set_string("recipe_output", result and result:to_string() or "")
-                minetest.chat_send_player(sender:get_player_name(), S("Recipe configured: ") .. (result and result:to_string() or "Nothing"))
+                core.chat_send_player(sender:get_player_name(), S("Recipe configured: ") .. (result and result:to_string() or "Nothing"))
             else
-                minetest.chat_send_player(sender:get_player_name(), S("Fill the ingredient grid to configure a recipe"))
+                core.chat_send_player(sender:get_player_name(), S("Fill the ingredient grid to configure a recipe"))
             end
         else
             -- Clear the configuration:
@@ -194,7 +194,7 @@ local function on_crafter_receive_fields(pos, formname, fields, sender)
             end
             meta:set_string("configured_recipe", "")
             meta:set_string("recipe_output", "")
-            minetest.chat_send_player(sender:get_player_name(), S("Recipe configuration cleared."))
+            core.chat_send_player(sender:get_player_name(), S("Recipe configuration cleared."))
         end
         return true
     end
@@ -268,7 +268,7 @@ end
 -- Consumes ingredients if they match the configured recipe.
 --------------------------------------------------------------------------------
 local function activate_crafter(pos)
-    local meta = minetest.get_meta(pos)
+    local meta = core.get_meta(pos)
     if meta:get_string("configured_recipe") == "" then
         return
     end
@@ -276,7 +276,7 @@ local function activate_crafter(pos)
     if check_and_consume_recipe(inv) then
         local output_item = meta:get_string("recipe_output")
         if output_item == "" then return end
-        local node = minetest.get_node(pos)
+        local node = core.get_node(pos)
         local dropdir, droppos
         if node.name:match("_up$") then
             dropdir = vector.new(0, 1, 0)
@@ -285,7 +285,7 @@ local function activate_crafter(pos)
             dropdir = vector.new(0, -1, 0)
             droppos = vector.offset(pos, 0, -1, 0)
         else
-            dropdir = vector.multiply(minetest.facedir_to_dir(node.param2), -1)
+            dropdir = vector.multiply(core.facedir_to_dir(node.param2), -1)
             droppos = vector.add(pos, dropdir)
         end
         -- Add a small random offset:
@@ -295,7 +295,7 @@ local function activate_crafter(pos)
             math.random(-pos_variation, pos_variation) / 1000,
             math.random(-pos_variation, pos_variation) / 1000
         )
-        local item_entity = minetest.add_item(droppos, output_item)
+        local item_entity = core.add_item(droppos, output_item)
         local drop_vel = vector.subtract(droppos, pos)
         local speed = 3
         item_entity:set_velocity(vector.multiply(drop_vel, speed))
@@ -309,13 +309,13 @@ end
 -- the ingredient count in the grid is less than what the recipe demands).
 --------------------------------------------------------------------------------
 function mcl_crafter.on_hopper_in(hopper_pos, crafter_pos)
-    local meta = minetest.get_meta(crafter_pos)
+    local meta = core.get_meta(crafter_pos)
     if meta:get_string("configured_recipe") == "" then
         return false
     end
     local inv = meta:get_inventory()
     -- Get the donor inventory from the hopper:
-    local donor_inv = minetest.get_inventory({ type = "node", pos = hopper_pos })
+    local donor_inv = core.get_inventory({ type = "node", pos = hopper_pos })
     local donor_list = donor_inv:get_list("main")
     local transferred = false
     -- For each slot in the crafter's grid, check if the recipe requires an ingredient:
@@ -389,9 +389,9 @@ local crafterdef = table.merge(commdef, {
 --------------------------------------------------------------------------------
 -- Register Crafter Nodes (Standard, Up and Down Variants)
 --------------------------------------------------------------------------------
-minetest.register_node("mcl_crafter:crafter", crafterdef)
+core.register_node("mcl_crafter:crafter", crafterdef)
 
-minetest.register_node("mcl_crafter:crafter_down", table.merge(crafterdef, {
+core.register_node("mcl_crafter:crafter_down", table.merge(crafterdef, {
     description = S("Crafter"),
     after_place_node = setup_crafter,
     tiles = {
@@ -404,7 +404,7 @@ minetest.register_node("mcl_crafter:crafter_down", table.merge(crafterdef, {
     drop = "mcl_crafter:crafter",
 }))
 
-minetest.register_node("mcl_crafter:crafter_up", table.merge(crafterdef, {
+core.register_node("mcl_crafter:crafter_up", table.merge(crafterdef, {
     description = S("Crafter"),
     after_place_node = setup_crafter,
     tiles = {
@@ -420,7 +420,7 @@ minetest.register_node("mcl_crafter:crafter_up", table.merge(crafterdef, {
 --------------------------------------------------------------------------------
 -- Crafting Recipe for the Crafter Block
 --------------------------------------------------------------------------------
-minetest.register_craft({
+core.register_craft({
     output = "mcl_crafter:crafter",
     recipe = {
         { "mcl_core:iron_ingot", "mcl_core:iron_ingot",               "mcl_core:iron_ingot" },
