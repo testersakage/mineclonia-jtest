@@ -1,6 +1,6 @@
-mcl_redstone.tick_speed = tonumber(minetest.settings:get("mcl_redstone_update_tick")) or 0.1
-local MAX_EVENTS = tonumber(minetest.settings:get("mcl_redstone_max_events")) or 65535
-local TIME_BUDGET = math.max(0.01, mcl_redstone.tick_speed * (tonumber(minetest.settings:get("mcl_redstone_time_budget")) or 0.2))
+mcl_redstone.tick_speed = tonumber(core.settings:get("mcl_redstone_update_tick")) or 0.1
+local MAX_EVENTS = tonumber(core.settings:get("mcl_redstone_max_events")) or 65535
+local TIME_BUDGET = math.max(0.01, mcl_redstone.tick_speed * (tonumber(core.settings:get("mcl_redstone_time_budget")) or 0.2))
 local EXPERIMENTAL_USE_ORDERED_EVENT_QUEUE = core.settings:get_bool("mcl_redstone_ordered_event_queue", false)
 
 mcl_redstone.is_tick_frozen = false

@@ -305,7 +305,7 @@ function mcl_bows.load_crossbow (player, wielditem, usetime)
 end
 
 local function fully_drawn(name)
-	return minetest.get_item_group(name, "crossbow") == 4
+	return core.get_item_group(name, "crossbow") == 4
 end
 
 controls.register_on_release(function(player, key)
@@ -315,12 +315,12 @@ controls.register_on_release(function(player, key)
 	if key~="RMB" and key~="zoom" then return end
 	--local inv = core.get_inventory({type="player", name=player:get_player_name()})
 	local wielditem = player:get_wielded_item()
-	local creative = minetest.is_creative_enabled(player:get_player_name())
+	local creative = core.is_creative_enabled(player:get_player_name())
 	local arrow_stack, arrow_stack_id = get_arrow(player)
 
 	if fully_drawn(wielditem:get_name()) and (creative or arrow_stack) then
 		local arrow_itemstring
-		if minetest.is_creative_enabled(player:get_player_name()) then
+		if core.is_creative_enabled(player:get_player_name()) then
 			if arrow_stack then
 				arrow_itemstring = arrow_stack:to_string()
 			else
