@@ -1,4 +1,3 @@
-
 function mcl_trees.strip_tree(itemstack, placer, pointed_thing)
 	if pointed_thing.type ~= "node" then return end
 
@@ -180,7 +179,32 @@ function mcl_trees.grow_tree(pos, node)
 			place_at = vector.subtract(place_at, offset)
 		end
 
-		core.place_schematic(
+		-- Try to figure out bounding box coordinates, err on side of caution
+		local schem_lua = loadstring(
+			minetest.serialize_schematic(schem.file, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
+				.. " return schematic"
+		)()
+		local x_hsize = math.floor(schem_lua.size.x / 2) + 1
+		local z_hsize = math.floor(schem_lua.size.z / 2) + 1
+		local aa      = vector.new(-x_hsize, 0, -z_hsize)    -- aa is off by one in negative dir when size is even
+		local bb      = vector.new(x_hsize, schem_lua.size.y, z_hsize)
+
+		-- Locate observers
+		local nodes   = core.find_nodes_in_area(vector.add(place_at, aa), vector.add(place_at, bb), "group:observer")
+
+		-- Store observed (air) positions
+		local observed_positions = {}
+		for _, pos in pairs(nodes) do
+			local node          = core.get_node(pos)
+			local observed_pos  = mcl_observers.get_front_pos(pos, node)
+			local observed_node = core.get_node(observed_pos)
+			if observed_node.name == "air" then
+				observed_positions[core.hash_node_position(observed_pos)] = observed_pos
+			end
+		end
+
+		-- Place tree
+		minetest.place_schematic(
 			place_at,
 			schem.file,
 			"random",
@@ -188,6 +212,14 @@ function mcl_trees.grow_tree(pos, node)
 			false,
 			{ place_center_x = true, place_center_y = false, place_center_z = true }
 		)
+
+		-- Notify observers
+		for _, pos in pairs(observed_positions) do
+			local node = core.get_node(pos)
+			if node.name ~= "air" then
+				mcl_redstone._notify_observer_neighbours(pos)
+			end
+		end
 
 		local after_grow = core.registered_nodes[node.name]._after_grow
 		if after_grow then
