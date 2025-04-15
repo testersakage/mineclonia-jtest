@@ -173,12 +173,9 @@ function mcl_weather.rain.clear()
 	end
 end
 
-core.register_globalstep(function()
-	if mcl_weather.state ~= "rain" then
-		return false
-	end
+function mcl_weather.rain.step(_)
 	mcl_weather.rain.make_weather()
-end)
+end
 
 function mcl_weather.rain.make_weather()
 	if mcl_weather.rain.init_done == false then
@@ -198,9 +195,7 @@ function mcl_weather.rain.make_weather()
 			end
 		else
 			if mcl_weather.has_snow(pos) then
-				mcl_weather.rain.remove_sound(player)
-				mcl_weather.snow.add_player(player)
-				mcl_weather.snow.set_sky_box()
+				mcl_weather.snow.make_weather_for_player(player)
 			else
 				mcl_weather.rain.add_player(player)
 				mcl_weather.rain.add_rain_particles(player)
