@@ -440,7 +440,7 @@ core.register_node("mcl_brewing:stand_000", table.merge(tpl_brewing_stand, {
 	groups = {pickaxey = 1, brewitem = 1, container = 1, brewing_stand = 1,
 			pathfinder_partial = 2,},
 }))
-minetest.register_node("mcl_brewing:stand_100", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_100", table.merge(tpl_brewing_stand, {
 	tiles = {
 		"mcl_brewing_stand.png",
 		"mcl_brewing_rack_bottle.png",
@@ -448,7 +448,7 @@ minetest.register_node("mcl_brewing:stand_100", table.merge(tpl_brewing_stand, {
 		"mcl_brewing_rack.png",
 	}
 }))
-minetest.register_node("mcl_brewing:stand_010", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_010", table.merge(tpl_brewing_stand, {
 	tiles = {
 		"mcl_brewing_stand.png",
 		"mcl_brewing_rack.png",
@@ -456,7 +456,7 @@ minetest.register_node("mcl_brewing:stand_010", table.merge(tpl_brewing_stand, {
 		"mcl_brewing_rack.png",
 	}
 }))
-minetest.register_node("mcl_brewing:stand_001", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_001", table.merge(tpl_brewing_stand, {
 	tiles = {
 		"mcl_brewing_stand.png",
 		"mcl_brewing_rack.png",
@@ -464,7 +464,7 @@ minetest.register_node("mcl_brewing:stand_001", table.merge(tpl_brewing_stand, {
 		"mcl_brewing_rack_bottle.png",
 	}
 }))
-minetest.register_node("mcl_brewing:stand_110", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_110", table.merge(tpl_brewing_stand, {
 	tiles = {
 		"mcl_brewing_stand.png",
 		"mcl_brewing_rack_bottle.png",
@@ -472,7 +472,7 @@ minetest.register_node("mcl_brewing:stand_110", table.merge(tpl_brewing_stand, {
 		"mcl_brewing_rack.png",
 	}
 }))
-minetest.register_node("mcl_brewing:stand_101", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_101", table.merge(tpl_brewing_stand, {
 	tiles = {
 		"mcl_brewing_stand.png",
 		"mcl_brewing_rack_bottle.png",
@@ -480,7 +480,7 @@ minetest.register_node("mcl_brewing:stand_101", table.merge(tpl_brewing_stand, {
 		"mcl_brewing_rack_bottle.png",
 	}
 }))
-minetest.register_node("mcl_brewing:stand_011", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_011", table.merge(tpl_brewing_stand, {
 	tiles = {
 		"mcl_brewing_stand.png",
 		"mcl_brewing_rack.png",
@@ -488,7 +488,7 @@ minetest.register_node("mcl_brewing:stand_011", table.merge(tpl_brewing_stand, {
 		"mcl_brewing_rack_bottle.png",
 	}
 }))
-minetest.register_node("mcl_brewing:stand_111", table.merge(tpl_brewing_stand, {
+core.register_node("mcl_brewing:stand_111", table.merge(tpl_brewing_stand, {
 	tiles = {
 		"mcl_brewing_stand.png",
 		"mcl_brewing_rack_bottle.png",
@@ -496,7 +496,7 @@ minetest.register_node("mcl_brewing:stand_111", table.merge(tpl_brewing_stand, {
 		"mcl_brewing_rack_bottle.png",
 	}
 }))
-minetest.register_craft({
+core.register_craft({
 	output = "mcl_brewing:stand_000",
 	recipe = {
 		{ "", "mcl_mobitems:blaze_rod", "" },
