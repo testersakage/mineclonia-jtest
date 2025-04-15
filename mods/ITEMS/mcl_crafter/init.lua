@@ -379,7 +379,7 @@ local crafterdef = table.merge(commdef, {
 })
 
 --------------------------------------------------------------------------------
--- Register Crafter Nodes (Standard, Up and Down Variants)
+-- Register Crafter Node
 --------------------------------------------------------------------------------
 core.register_node("mcl_crafter:crafter", table.merge(crafterdef, {
     paramtype2 = "facedir",  -- ensures orientation support
