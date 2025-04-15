@@ -14,9 +14,7 @@ local commdef = {
 		end,
 		update = function(pos, node)
 			if mcl_redstone.get_power(pos) ~= 0 then
-				mcl_redstone.swap_node(pos, {name = "mcl_redstone_lamp:lamp_on", param2 = 0})
-				-- NOTE: mcl_redstone.swap_node does not (yet) notify observers
-				mcl_redstone._notify_observer_neighbours(pos)
+				return {priority = 1, name = "mcl_redstone_lamp:lamp_on"}
 			else
 				return {delay = 2, name = "mcl_redstone_lamp:lamp_off"}
 			end
