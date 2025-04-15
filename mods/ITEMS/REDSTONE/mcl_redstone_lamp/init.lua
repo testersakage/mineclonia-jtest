@@ -18,15 +18,7 @@ local commdef = {
 				-- NOTE: mcl_redstone.swap_node does not (yet) notify observers
 				mcl_redstone._notify_observer_neighbours(pos)
 			else
-				-- Need to use after to be able to check if still unpowered when the event is due
-				mcl_redstone.after(2, function()
-					if mcl_redstone.get_power(pos) == 0 then
-						if core.get_node(pos).name == "mcl_redstone_lamp:lamp_on" then
-							mcl_redstone.swap_node(pos, {name = "mcl_redstone_lamp:lamp_off", param2 = 0})
-							mcl_redstone._notify_observer_neighbours(pos)
-						end
-					end
-				end)
+				return {delay = 2, name = "mcl_redstone_lamp:lamp_off"}
 			end
 		end,
 	},
