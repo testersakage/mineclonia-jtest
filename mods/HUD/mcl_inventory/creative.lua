@@ -147,6 +147,7 @@ local function set_inv_search(filter, player)
 	local playername = player:get_player_name()
 	local inv = core.get_inventory({ type = "detached", name = "creative_" .. playername })
 	local creative_list = {}
+	filter = filter:gsub("%s+", " ")
 	filter = string.lower(filter)
 	filter = string.trim(filter)
 	local lang = minetest.get_player_information(playername).lang_code
