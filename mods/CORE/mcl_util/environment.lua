@@ -461,15 +461,16 @@ function mcl_util.get_pointed_thing(player, objects, liquid, ignore)
 	local pos2 = vector.add(pos, look_dir)
 	local ray = core.raycast(pos, pos2, objects, liquid)
 
-	if ignore then
-		for pointed_thing in ray do
-			if (type(ignore) == "table" and table.indexof(ignore, core.get_node(pointed_thing.under).name) == -1 ) or
-			(type(ignore) == "function" and not ignore(pointed_thing)) then
+	for pointed_thing in ray do
+		if pointed_thing.ref ~= player then
+			if not ignore or
+				(type(ignore) == "table" and table.indexof(ignore, core.get_node(pointed_thing.under).name) == -1) or
+				(type(ignore) == "function" and not ignore(pointed_thing))
+			then
 				return pointed_thing
 			end
 		end
 	end
-	return ray:next()
 end
 
 ---Return a function to use in `on_place`.
