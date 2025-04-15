@@ -754,7 +754,7 @@ function mcl_util.traverse_tower(pos, dir, callback)
 end
 
 function mcl_util.traverse_tower_group(pos, dir, group, callback)
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	local nodegroup = core.get_item_group(node.name, group)
 	local i = 0
 	while core.get_item_group(core.get_node(pos).name, group) == nodegroup do
