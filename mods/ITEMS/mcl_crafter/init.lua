@@ -129,7 +129,7 @@ allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 local function orientate(pos, placer)
     if not placer then return end
     local node = core.get_node(pos)
-    local facedir = minetest.dir_to_facedir(placer:get_look_dir())
+    local facedir = core.dir_to_facedir(placer:get_look_dir())
     node.param2 = facedir
     core.swap_node(pos, node)
 end
