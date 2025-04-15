@@ -128,18 +128,19 @@ end
 
 -- Wrapper around core.place_schematic in order to update observers
 local function place_tree(place_at, schem)
-	-- Try to figure out bounding box coordinates, err on side of caution
+	-- Work out bounding box coordinates. +1 in all directions.
 	local schem_lua = loadstring(
 		core.serialize_schematic(schem.file, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
 			.. " return schematic"
 	)()
-	local x_hsize = math.floor(schem_lua.size.x / 2) + 1
-	local z_hsize = math.floor(schem_lua.size.z / 2) + 1
-	local aa      = vector.new(-x_hsize, 0, -z_hsize)    -- aa is off by one in negative dir when size is even
-	local bb      = vector.new(x_hsize, schem_lua.size.y, z_hsize)
+	local size = vector.copy(schem_lua.size)
+	local x    = place_at.x - math.floor((size.x - 1) / 2)
+	local z    = place_at.z - math.floor((size.z - 1) / 2)
+	local p1   = vector.new(x - 1, place_at.y - 1, z - 1)   -- Note: ground just below tree might not be needed
+	local p2   = vector.new(x    , place_at.y    , z    ) + size
 
 	-- Locate observers
-	local nodes   = core.find_nodes_in_area(vector.add(place_at, aa), vector.add(place_at, bb), "group:observer")
+	local nodes = core.find_nodes_in_area(p1, p2, "group:observer")
 
 	-- Store observed (air) positions
 	local observed_positions = {}
