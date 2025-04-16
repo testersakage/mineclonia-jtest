@@ -53,7 +53,6 @@ end
 
 local tpl_candle = {
 	_doc_items_longdesc = S("A candle is a block that emits light when lit with a flint and steel. It comes in the sixteen dye colors. Up to four of the same color of candle can be placed in one block space, which affects the amount of light produced."),
-	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
 	_on_dye_place = function(pos, color)
 		local node = core.get_node(pos)

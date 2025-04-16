@@ -165,7 +165,6 @@ core.register_node("mcl_cauldrons:cauldron", {
 	},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_hardness = 2,
-	_mcl_blast_resistance = 2,
 	_on_bucket_place = bucket_place,
 	_on_bottle_place = bottle_place,
 })
@@ -207,7 +206,6 @@ local function register_filled_cauldron(water_level, description, liquid)
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		drop = "mcl_cauldrons:cauldron",
 		_mcl_hardness = 2,
-		_mcl_blast_resistance = 2,
 		_mcl_cauldrons_liquid = liquid or "water",
 		_mcl_baseitem = "mcl_cauldrons:cauldron",
 		_on_bottle_place = bottle_place,

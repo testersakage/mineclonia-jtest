@@ -101,7 +101,6 @@ for _,root in pairs(propagule_water_nodes) do
 			core.set_node(pos, {name=root})
 		end,
 		_mcl_hardness = 0,
-		_mcl_blast_resistance = 0,
 		_mcl_silk_touch_drop = true,
 		_mcl_baseitem = "mcl_mangrove:propagule",
 	})
@@ -331,7 +330,6 @@ core.register_node("mcl_mangrove:mangrove_mud_roots", {
 	},
 	groups = {handy=1, shovely=1, axey=1, soil_fungus=1, building_block=1},
 	sounds = mcl_sounds.node_sound_sand_defaults(),
-	_mcl_blast_resistance = 0.7,
 	_mcl_hardness = 0.7,
 })
 

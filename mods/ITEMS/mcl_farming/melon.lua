@@ -38,7 +38,6 @@ local melon_base_def = {
 		}
 	},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	_mcl_blast_resistance = 1,
 	_mcl_hardness = 1,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = {
@@ -110,7 +109,7 @@ for s=1,7 do
 		},
 		groups = {dig_immediate=3, not_in_creative_inventory=1, plant=1,attached_node=1, dig_by_water=1,destroy_by_lava_flow=1, plant_melon_stem=s},
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
-		_mcl_blast_resistance = 0,
+		_mcl_hardness = 0,
 		_on_bone_meal = on_bone_meal,
 		_mcl_baseitem = "mcl_farming:melon_seeds",
 	})

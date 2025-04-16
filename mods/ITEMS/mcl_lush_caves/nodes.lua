@@ -82,7 +82,6 @@ core.register_node("mcl_lush_caves:moss", {
 	tiles = {"mcl_lush_caves_moss_block.png"},
 	groups = {handy=1, hoey=2, dirt=1, soil=1, soil_bamboo=1, soil_sapling=2, soil_sugarcane=1, soil_fungus=1, enderman_takable=1, building_block=1, grass_block_no_snow=1, compostability=65, dig_by_piston=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
-	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
 	_on_bone_meal = mcl_lush_caves.bone_meal_moss,
 })
@@ -106,7 +105,6 @@ core.register_node("mcl_lush_caves:moss_carpet", {
 		},
 	},
 	_mcl_hardness = 0.1,
-	_mcl_blast_resistance = 0.1,
 })
 core.register_craft({
 	output = "mcl_lush_caves:moss_carpet 3",
@@ -145,8 +143,7 @@ core.register_node("mcl_lush_caves:hanging_roots", {
 	},
 	groups = {handy=1, plant=1, flammable=2, fire_encouragement=30, fire_flammability=60, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, compostability=30, attached_node=4, deco_block=1},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0,
-	_mcl_blast_hardness = 0,
+	_mcl_hardness = 0,
 	drop = "",
 	_mcl_shears_drop = true,
 })
@@ -175,8 +172,7 @@ core.register_node("mcl_lush_caves:cave_vines", {
 	},
 	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, deco_block=1},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0,
-	_mcl_blast_hardness = 0,
+	_mcl_hardness = 0,
 	drop = "",
 	_on_bone_meal = function(_, _, _, pos)
 		core.set_node(pos,{name="mcl_lush_caves:cave_vines_lit"})
@@ -209,8 +205,7 @@ core.register_node("mcl_lush_caves:cave_vines_lit", {
 	},
 	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, deco_block=1},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0,
-	_mcl_blast_hardness = 1,
+	_mcl_hardness = 0,
 	_mcl_shears_drop = true,
 	drop = "mcl_lush_caves:glow_berry",
 	on_rightclick = function(pos)
@@ -226,7 +221,6 @@ core.register_node("mcl_lush_caves:rooted_dirt", {
 	tiles = {"mcl_lush_caves_rooted_dirt.png"},
 	groups = {handy=1, shovely=1, dirt=1, soil_fungus=1, building_block=1, path_creation_possible=1, converts_to_moss=1, cultivatable=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	_on_bone_meal = function(_, _, _, pos, _)
 		local under = vector.offset(pos, 0, -1, 0)
@@ -342,7 +336,6 @@ core.register_node("mcl_lush_caves:spore_blossom", {
 		type = "fixed",
 		fixed = {-0.375, 0.3125, -0.375, 0.375, 0.5, 0.375},
 	},
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	node_placement_prediction = "",
 	on_place = mcl_util.generate_on_place_plant_function(function(place_pos)
@@ -381,7 +374,6 @@ local tpl_azalea = {
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	paramtype = "light",
 	sunlight_propagates = true,
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_mcl_burntime = 5,
 	use_texture_alpha = "clip",

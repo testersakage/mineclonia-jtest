@@ -187,7 +187,6 @@ core.register_node("mcl_bamboo:scaffolding", {
 	node_placement_prediction = "",
 	groups = { handy=1, axey=1, flammable=3, deco_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, falling_node = 1, stack_falling = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_mcl_burntime = 2.5,
 	on_place = function(itemstack, placer, ptd)

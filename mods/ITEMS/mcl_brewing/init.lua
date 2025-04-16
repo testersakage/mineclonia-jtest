@@ -400,8 +400,7 @@ local tpl_brewing_stand = {
 		}
 	},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
-	_mcl_blast_resistance = 1,
-	_mcl_hardness = 1,
+	_mcl_hardness = 0.5,
 	_mcl_baseitem = "mcl_brewing:stand_000",
 	after_dig_node = drop_contents,
 	allow_metadata_inventory_take = allow_take,

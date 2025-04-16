@@ -198,7 +198,6 @@ core.register_node("mcl_end:chorus_flower", {
 	end,
 	after_dig_node = mcl_end.check_detach_chorus_plant,
 	on_blast = mcl_end.check_blast_chorus_plant,
-	_mcl_blast_resistance = 0.4,
 	_mcl_hardness = 0.4,
 })
 

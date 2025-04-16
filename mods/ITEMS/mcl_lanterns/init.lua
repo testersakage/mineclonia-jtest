@@ -186,7 +186,6 @@ function mcl_lanterns.register_lantern(name, def)
 		end,
 		on_rotate = false,
 		_mcl_hardness = 3.5,
-		_mcl_blast_resistance = 3.5,
 	})
 
 	core.register_node(itemstring_ceiling, {
@@ -228,7 +227,6 @@ function mcl_lanterns.register_lantern(name, def)
 		sounds = sounds,
 		on_rotate = false,
 		_mcl_hardness = 3.5,
-		_mcl_blast_resistance = 3.5,
 	})
 end
 

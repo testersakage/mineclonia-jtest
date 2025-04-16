@@ -26,7 +26,6 @@ core.register_node("mcl_copper:stone_with_copper", {
 		}
 	},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
@@ -170,7 +169,6 @@ for n, desc in pairs(n_desc) do
 		tile_front = "mcl_copper_trapdoor"..n..".png",
 		tile_side = "mcl_copper_trapdoor"..n.."_side.png",
 		wield_image = "mcl_copper_trapdoor"..n..".png",
-		_mcl_blast_resistance = 3,
 		_mcl_hardness = 3
 	})
 	mcl_doors:register_door("mcl_copper:door"..n, {
@@ -182,7 +180,6 @@ for n, desc in pairs(n_desc) do
 		sound_open = "doors_steel_door_open",
 		tiles_bottom = { "mcl_copper_door"..n.."_bottom.png^[transformFX", "mcl_copper_door"..n.."_bottom.png" },
 		tiles_top = { "mcl_copper_door"..n.."_top.png^[transformFX", "mcl_copper_door"..n.."_top.png" },
-		_mcl_blast_resistance = 3,
 		_mcl_hardness = 3
 	})
 	mcl_wip.register_wip_item("mcl_copper:door"..n)

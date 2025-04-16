@@ -84,7 +84,6 @@ for color,colordef in pairs(mcl_dyes.colors) do
 
 		-- Specify the node to which this node will convert after getting in contact with water
 		_mcl_colorblocks_harden_to = "mcl_colorblocks:concrete_"..color,
-		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
 	})
 
@@ -97,7 +96,6 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		groups = {handy=1,pickaxey=1, concrete=1,building_block=1, material_stone=1},
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_stone_defaults(),
-		_mcl_blast_resistance = 1.8,
 		_mcl_hardness = 1.8,
 	})
 
@@ -113,7 +111,6 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		paramtype2 = "facedir",
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_stone_defaults(),
-		_mcl_blast_resistance = 1.4,
 		_mcl_hardness = 1.4,
 		on_rotate = on_rotate,
 	})

@@ -11,7 +11,6 @@ core.register_node("mcl_mud:mud", {
 		place = {name="mud_place_dug", gain=1},
 	},
 	groups = {handy=1, shovely=1, enderman_takable=1, grass_block=1, soil_sugarcane=1, soil_bamboo=1, soil_fungus=1, building_block=1, soil_propagule=1, converts_to_moss=1, solid = 1},
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	collision_box = {
 		type = "fixed",

@@ -44,7 +44,6 @@ core.register_node("mcl_core:cactus", {
 		if not node_below then return false end
 		return (node_below.name == "mcl_core:cactus" or core.get_item_group(node_below.name, "sand") == 1)
 	end),
-	_mcl_blast_resistance = 0.4,
 	_mcl_hardness = 0.4,
 	_mcl_cooking_output = "mcl_dyes:green",
 	_pathfinding_class = "DAMAGE_OTHER",
@@ -153,7 +152,6 @@ core.register_node("mcl_core:reeds", {
 			end
 		end
 	end,
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_mcl_crafting_output = {
 		single = {output = "mcl_core:sugar"},

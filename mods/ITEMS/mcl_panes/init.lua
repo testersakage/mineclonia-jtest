@@ -218,7 +218,6 @@ local function pane(description, node, append, color)
 			{node, node, node},
 		},
 		drop = "",
-		_mcl_blast_resistance = 0.3,
 		_mcl_hardness = 0.3,
 		_mcl_silk_touch_drop = true,
 		_color = color,

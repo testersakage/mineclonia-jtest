@@ -101,7 +101,6 @@ function mcl_buttons.register_button(basename, def)
 		on_place = on_button_place,
 		node_placement_prediction = "",
 		sounds = sounds,
-		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
 		_mcl_button_basename = basename,
 		_mcl_burntime = burntime,

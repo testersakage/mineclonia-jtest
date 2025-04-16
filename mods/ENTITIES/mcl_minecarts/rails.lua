@@ -20,7 +20,6 @@ local function register_rail(itemstring, tiles, def_extras, creative)
 		},
 		groups = groups,
 		sounds = mcl_sounds.node_sound_metal_defaults(),
-		_mcl_blast_resistance = 0.7,
 		_mcl_hardness = 0.7,
 		after_destruct = function(pos)
 			-- Scan for minecarts in this pos and force them to execute their "floating" check.

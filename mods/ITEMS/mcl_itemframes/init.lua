@@ -35,7 +35,6 @@ mcl_itemframes.tpl_node = {
 	sounds = mcl_sounds.node_sound_defaults(),
 	node_placement_prediction = "",
 	_mcl_hardness = 0.5,
-	_mcl_blast_resistance = 0.5,
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 	allow_metadata_inventory_move = function() return 0 end,
 	allow_metadata_inventory_put = function() return 0 end,

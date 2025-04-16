@@ -132,7 +132,6 @@ for c=1, #corals do
 			end
 		end,
 		_mcl_hardness = 0,
-		_mcl_blast_resistance = 0,
 		_mcl_silk_touch_drop = true,
 	})
 	core.register_node("mcl_ocean:dead_"..id.."_coral", {
@@ -165,7 +164,6 @@ for c=1, #corals do
 			end
 		end,
 		_mcl_hardness = 0,
-		_mcl_blast_resistance = 0,
 	})
 
 	-- Coral Fan
@@ -200,7 +198,6 @@ for c=1, #corals do
 			end
 		end,
 		_mcl_hardness = 0,
-		_mcl_blast_resistance = 0,
 		_mcl_silk_touch_drop = true,
 	})
 	core.register_node("mcl_ocean:dead_"..id.."_coral_fan", {
@@ -233,7 +230,6 @@ for c=1, #corals do
 			end
 		end,
 		_mcl_hardness = 0,
-		_mcl_blast_resistance = 0,
 		_mcl_silk_touch_drop = true,
 	})
 

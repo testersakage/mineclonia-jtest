@@ -32,7 +32,6 @@ core.register_node("mcl_blackstone:blackstone_gilded", {
 			{items = {"mcl_blackstone:blackstone_gilded"}, rarity = 1},
 		}
 	},
-	_mcl_blast_resistance = 2,
 	_mcl_hardness = 2,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = {
@@ -58,7 +57,6 @@ core.register_node("mcl_blackstone:nether_gold", {
 			{items = {"mcl_core:gold_nugget 2"},rarity = 1},
 		}
 	},
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
@@ -146,7 +144,6 @@ core.register_node("mcl_blackstone:quartz_brick", {
 	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	groups = {cracky = 3, pickaxey=1, material_stone=1, building_block=1},
-	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = {"mcl_nether:quartz_block"},
 })
@@ -155,7 +152,6 @@ core.register_node("mcl_blackstone:soul_soil", {
 	tiles = {"mcl_blackstone_soul_soil.png"},
 	sounds = mcl_sounds.node_sound_sand_defaults(),
 	groups = { cracky=3, handy=1, shovely=1, soul_block=1, soil_fungus=1, building_block=1},
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 })
 core.register_node("mcl_blackstone:soul_fire", {

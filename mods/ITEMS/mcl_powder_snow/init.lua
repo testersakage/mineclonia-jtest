@@ -35,7 +35,6 @@ core.register_node("mcl_powder_snow:powder_snow", {
 
 		return itemstack
 	end,
-	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
 	_mcl_silk_touch_drop = false,
 })

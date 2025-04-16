@@ -175,7 +175,6 @@ local commdef = {
 	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 }
 
@@ -238,7 +237,6 @@ local pusherdef = {
 	node_box = piston_pusher_box,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	groups = {handy=1, pickaxey=1, not_in_creative_inventory = 1, unmovable_by_piston = 1},
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	on_rotate = false,
 	_mcl_redstone = {

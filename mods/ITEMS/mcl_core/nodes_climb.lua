@@ -74,7 +74,6 @@ core.register_node("mcl_core:ladder", {
 		return itemstack
 	end,
 
-	_mcl_blast_resistance = 0.4,
 	_mcl_hardness = 0.4,
 	_mcl_burntime = 15,
 	on_rotate = rotate_climbable,
@@ -144,7 +143,6 @@ core.register_node("mcl_core:vine", {
 
 	-- If dug, also dig a “dependant” vine below it.
 	-- A vine is dependant if it hangs from this node and has no supporting block.
-	_mcl_blast_resistance = 0.2,
 	_mcl_hardness = 0.2,
 	on_rotate = false,
 })

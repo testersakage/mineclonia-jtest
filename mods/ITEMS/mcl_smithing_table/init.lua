@@ -277,7 +277,6 @@ core.register_node("mcl_smithing_table:table", {
 		reset_upgraded_item(pos)
 	end,
 
-	_mcl_blast_resistance = 2.5,
 	_mcl_hardness = 2.5,
 	_mcl_burntime = 15
 })

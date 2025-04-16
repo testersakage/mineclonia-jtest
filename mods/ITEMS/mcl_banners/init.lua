@@ -388,7 +388,6 @@ core.register_node("mcl_banners:standing_banner", {
 		respawn_banner_entity(pos, node)
 	end,
 	_mcl_hardness = 1,
-	_mcl_blast_resistance = 1,
 	_mcl_baseitem = get_banner_stack,
 	on_rotate = function(pos, node, _, mode)
 		if mode == screwdriver.ROTATE_FACE then
@@ -438,7 +437,6 @@ core.register_node("mcl_banners:hanging_banner", {
 	on_destruct = on_destruct_hanging_banner,
 	on_punch = respawn_banner_entity,
 	_mcl_hardness = 1,
-	_mcl_blast_resistance = 1,
 	_mcl_baseitem = get_banner_stack,
 	on_rotate = function(pos, node, _, mode)
 		if mode ~= screwdriver.ROTATE_FACE then return false end
