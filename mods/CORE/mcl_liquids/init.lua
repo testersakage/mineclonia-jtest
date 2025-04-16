@@ -44,6 +44,24 @@ local resume_counter = 1
 
 local batch_update_cnt = 0
 
+local fourdirs = {
+	vector.new(-1, 0, 0),
+	vector.new(1, 0, 0),
+	vector.new(0, 0, -1),
+	vector.new(0, 0, 1),
+}
+
+local flowable_tab = {}
+
+core.register_on_mods_loaded(function()
+	flowable_tab[core.CONTENT_AIR] = true
+	for name, _ in pairs(core.registered_nodes) do
+		if core.get_item_group(name, "dig_by_water") ~= 0 then
+			flowable_tab[core.get_content_id(name)] = true
+		end
+	end
+end)
+
 --------------------------------------------------------------------------------
 -- Top level functions
 --------------------------------------------------------------------------------
@@ -181,6 +199,7 @@ local function register_liquid(def)
 	end
 
 	local function update_next(item)
+
 		-- This function puts an item into the list that is processed in the next
 		-- iteration.
 		local h = core.hash_node_position(item.pos)
@@ -748,29 +767,66 @@ local function register_liquid(def)
 		'This hack does no longer work ('..NAME_FLOWING..')')
 	end)
 
+	local C_FLOWING = core.get_content_id(NAME_FLOWING)
+	local C_SOURCE = core.get_content_id(NAME_SOURCE)
+
+	-- Liquid can flow into a node if it is flowable or the corresponding
+	-- flowing liquid with a lower liquid level.
+	local function can_flow_into(cid, param2, max_level)
+		return flowable_tab[cid] or (cid == C_FLOWING and param2 < max_level)
+	end
+
 	core.register_lbm({
 		label = "Continue the liquids",
-		name = modname..":resume_liquid_"..resume_counter,
+		name = modname..":resume_liquid_source_"..resume_counter,
 		nodenames = {NAME_SOURCE, NAME_FLOWING},
 		run_at_every_load = true,
-		action = function(pos, node, dtime_s)
-			local n111 = node
-			local n011 = core.get_node(vector.offset(pos, -1, 0, 0))
-			local n211 = core.get_node(vector.offset(pos,  1, 0, 0))
-			local n110 = core.get_node(vector.offset(pos,  0, 0,-1))
-			local n112 = core.get_node(vector.offset(pos,  0, 0, 1))
-			local n101 = core.get_node(vector.offset(pos,  0,-1, 0))
+		bulk_action = function(pos_list, dtime_s)
+			-- Load neighbouring mapblocks to avoid ignore nodes
+			local minpos = pos_list[1]:divide(16):floor():multiply(16)
+			local maxpos = minpos:add(15)
+			local vm = core.get_voxel_manip()
+			local emin, emax = vm:read_from_map(minpos:subtract(1), maxpos:add(1))
+			local a = VoxelArea:new{MinEdge = emin, MaxEdge = emax}
+			local data = vm:get_data()
+			local param2_data = vm:get_param2_data()
 
-			if n101.name ~= NAME_SOURCE or
-				n111.name ~= NAME_SOURCE or
-				n011.name ~= NAME_SOURCE or
-				n211.name ~= NAME_SOURCE or
-				n110.name ~= NAME_SOURCE or
-				n112.name ~= NAME_SOURCE then
+			local minx = minpos.x
+			local miny = minpos.y
+			local minz = minpos.z
+			local maxx = maxpos.x
+			local maxy = maxpos.y
+			local maxz = maxpos.z
+			for x = minx, maxx do
+				for y = miny, maxy do
+					for z = minz, maxz do
+						local ind = a:index(x, y, z)
+						local cid = data[ind]
+						if cid == C_SOURCE or cid == C_FLOWING then
+							local max_level = param2_data[ind] - 1
+							local belowind = a:index(x, y - 1, z)
+							local belowcid = data[belowind]
+							local belowp2 = param2_data[belowind]
+							local allow_float_into_air = cid == C_SOURCE
 
-				core.after(5, function()
-					liquid_update(pos)
-				end)
+							local function check_neigh(x2, z2)
+								local neighind = a:index(x2, y, z2)
+								local neighcid = data[neighind]
+								local neighp2 = param2_data[neighind]
+
+								return can_flow_into(neighcid, neighp2, max_level)
+							end
+
+							if can_flow_into(belowcid, belowp2, 8) or
+									check_neigh(x - 1, z - 1) or
+									check_neigh(x - 1, z + 1) or
+									check_neigh(x + 1, z - 1) or
+									check_neigh(x + 1, z + 1) then
+								liquid_update(vector.new(x, y, z))
+							end
+						end
+					end
+				end
 			end
 		 end,
 	})
