@@ -335,7 +335,7 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 
 	local oldr = self._old_head_swivel_vector
 	local oldp = self._old_head_swivel_pos
-	local newr = ZERO_VECTOR
+	local newr, axis_scale = ZERO_VECTOR, self._head_axis_scale
 
 	local locked_object = self._locked_object
 	if locked_object
@@ -402,6 +402,7 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 		end
 	else
 		newr = ZERO_VECTOR
+		axis_scale = nil
 	end
 
 	local newp = self._head_swivel_pos
@@ -417,6 +418,7 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 	self.object:set_bone_override (self.head_swivel, {
 		position = { vec = newp, absolute = true, interpolation = 0.1 },
 		rotation = { vec = newr, absolute = true, interpolation = 0.1 },
+		scale = axis_scale,
 	})
 	self._old_head_swivel_pos = newp
 	self._old_head_swivel_vector = newr
