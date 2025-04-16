@@ -153,7 +153,8 @@ local skeleton_poses = {
 mcl_mobs.define_composite_pose (skeleton_poses, "jockey", {
 	["leg.right"] = {
 		nil,
-		vector.new (-115, 0, -90),
+		vector.new (115, 0, 90),
+		vector.new (1, 1, 1),
 	},
 	["leg.left"] = {
 		nil,
