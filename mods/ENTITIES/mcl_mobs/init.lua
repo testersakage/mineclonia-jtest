@@ -216,6 +216,7 @@ mcl_mobs.mob_class = {
 	_persistent_physics_factors = {},
 	_old_head_swivel_vector = vector.zero (),
 	_old_head_swivel_pos = vector.zero (),
+	_head_axis_scale = nil,
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,

@@ -22,7 +22,15 @@ local axolotl = {
 	head_eye_height = -0.5,
 	horizontal_head_height = 0,
 	curiosity = 10,
-	head_yaw="z",
+	head_yaw = "z",
+	-- This field only exists for compatibility with Luanti <5.10
+	-- clients.  See:
+	-- https://github.com/luanti-org/luanti/issues/15692 &
+	-- company.
+	_head_axis_scale = {
+		vec = vector.new (-1.0, -1.0, 1.0),
+		absolute = true,
+	},
 	armor = 100,
 	rotate = 180,
 	spawn_in_group_min = 1,
