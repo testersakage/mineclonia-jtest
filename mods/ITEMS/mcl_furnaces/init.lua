@@ -524,7 +524,6 @@ mcl_furnaces.tpl_furnace_node = {
 	groups = { pickaxey = 1, container = 4, deco_block = 1, material_stone = 1, furnace = 1, unmovable_by_piston = 1},
 	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 3.5,
 	_mcl_hardness = 3.5,
 
 	after_dig_node = mcl_util.drop_items_from_meta_container({"src","dst","fuel","sorter"}),

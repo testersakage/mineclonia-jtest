@@ -154,7 +154,6 @@ function mcl_pressureplates.register_pressure_plate(basename, def)
 		_mcl_pressureplate_activated_by = def.activated_by or { any = true },
 		_mcl_pressureplate_weighted = def.weighted,
 		_mcl_burntime = def.burntime,
-		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
 		_mcl_redstone = {
 			connects_to = function(node)

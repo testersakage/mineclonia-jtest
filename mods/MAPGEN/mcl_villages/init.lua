@@ -206,7 +206,6 @@ core.register_node("mcl_villages:path_endpoint", {
 		},
 	},
 	_mcl_hardness = 0.1,
-	_mcl_blast_resistance = 0.1,
 })
 
 local schem_path = mcl_villages.modpath .. "/schematics/"
@@ -447,7 +446,6 @@ for _, crop_type in pairs(mcl_villages.get_crop_types()) do
 				},
 			},
 			_mcl_hardness = 0.1,
-			_mcl_blast_resistance = 0.1,
 		})
 	end
 end

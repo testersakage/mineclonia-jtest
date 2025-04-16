@@ -558,7 +558,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				" takes stuff from chest at " .. core.pos_to_string(pos))
 			mcl_redstone.update_comparators(pos)
 		end,
-		_mcl_blast_resistance = 2.5,
 		_mcl_hardness = 2.5,
 
 		on_rightclick = function(pos, node, clicker)
@@ -727,7 +726,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			mcl_redstone.update_comparators(pos)
 			mcl_redstone.update_comparators(other_pos)
 		end,
-		_mcl_blast_resistance = 2.5,
 		_mcl_hardness = 2.5,
 
 		on_rightclick = function(pos, node, clicker)
@@ -901,7 +899,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			mcl_redstone.update_comparators(pos)
 			mcl_redstone.update_comparators(other_pos)
 		end,
-		_mcl_blast_resistance = 2.5,
 		_mcl_hardness = 2.5,
 
 		on_rightclick = function(pos, node, clicker)

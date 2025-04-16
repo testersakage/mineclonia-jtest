@@ -113,7 +113,7 @@ core.register_node("mcl_mushrooms:mushroom_brown", {
 	node_placement_prediction = "",
 	on_place = on_place,
 	_on_bone_meal = on_bone_meal,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 core.register_node("mcl_mushrooms:mushroom_red", {
@@ -141,7 +141,7 @@ core.register_node("mcl_mushrooms:mushroom_red", {
 	node_placement_prediction = "",
 	on_place = on_place,
 	_on_bone_meal = on_bone_meal,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 mcl_flowerpots.register_potted_flower("mcl_mushrooms:mushroom_brown", {

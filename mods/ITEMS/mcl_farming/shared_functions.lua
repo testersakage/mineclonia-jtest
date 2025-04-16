@@ -363,7 +363,7 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 			use_texture_alpha = "clip",
 			groups = { dig_immediate = 3, not_in_creative_inventory = 1, plant = 1, attached_node = 1, dig_by_water = 1, destroy_by_lava_flow = 1, },
 			sounds = mcl_sounds.node_sound_leaves_defaults(),
-			_mcl_blast_resistance = 0,
+			_mcl_hardness = 0,
 		})
 
 		if core.get_modpath("doc") then

@@ -45,7 +45,6 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		sounds = mcl_sounds.node_sound_wool_defaults(),
 		_color = color,
 		_mcl_hardness = 0.8,
-		_mcl_blast_resistance = 0.8,
 		_mcl_burntime = 5,
 		_mcl_crafting_output = {line_wide2 = {output = "mcl_wool:"..color.."_carpet 3"}}
 	})

@@ -147,7 +147,6 @@ core.register_node("mcl_conduits:conduit", {
 	light_source = core.LIGHT_MAX,
 	tiles = { "mcl_conduit_conduit_node.png", },
 	_mcl_hardness = 3,
-	_mcl_blast_resistance = 3,
 })
 
 core.register_abm({

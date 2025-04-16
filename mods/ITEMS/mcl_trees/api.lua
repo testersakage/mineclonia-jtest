@@ -169,7 +169,6 @@ local tpl_log = {
 	on_place = mcl_util.rotate_axis,
 	on_rotate = screwdriver.rotate_3way,
 	_on_axe_place = mcl_trees.strip_tree,
-	_mcl_blast_resistance = 2,
 	_mcl_hardness = 2,
 	_mcl_burntime = 15,
 	_mcl_cooking_output = "mcl_core:charcoal_lump"
@@ -199,7 +198,6 @@ local tpl_leaves = {
 	},
 	_mcl_shears_drop = true,
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0.2,
 	_mcl_hardness = 0.2,
 	_mcl_silk_touch_drop = true,
 }
@@ -239,7 +237,6 @@ local tpl_sapling = {
 		return mcl_trees.grow_tree(pos,node)
 	end,
 	node_placement_prediction = "",
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_mcl_burntime = 5
 }
@@ -249,7 +246,6 @@ local tpl_door = {
 	_doc_items_usagehelp = S("To open or close a wooden door, rightclick it or supply its lower half with a redstone signal."),
 	groups = {handy=1,axey=1, material_wood=1, flammable=-1},
 	_mcl_hardness = 3,
-	_mcl_blast_resistance = 3,
 	_mcl_burntime = 10,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 }
@@ -258,7 +254,6 @@ local tpl_trapdoor = {
 	_doc_items_usagehelp = S("To open or close the trapdoor, rightclick it or send a redstone signal to it."),
 	groups = {handy=1,axey=1, material_wood=1, flammable=-1},
 	_mcl_hardness = 3,
-	_mcl_blast_resistance = 3,
 	_mcl_burntime = 15,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 }

@@ -7,7 +7,6 @@ local commdef = {
 	is_ground_content = false,
 	description = S("Redstone Lamp"),
 	sounds = mcl_sounds.node_sound_glass_defaults(),
-	_mcl_blast_resistance = 0.3,
 	_mcl_hardness = 0.3,
 	_mcl_redstone = {
 		connects_to = function(node, dir)

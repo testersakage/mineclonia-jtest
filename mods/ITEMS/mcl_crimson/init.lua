@@ -271,7 +271,7 @@ core.register_node("mcl_crimson:warped_fungus", {
 			return generate_fungus_tree(pos, "warped")
 		end
 	end,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 mcl_flowerpots.register_potted_flower("mcl_crimson:warped_fungus", {
@@ -340,7 +340,6 @@ local function register_vines(name, def, extra_groups)
 			name,
 			name,
 		},
-		_mcl_blast_resistance = 0.2,
 		_mcl_hardness = 0.2,
 		_on_bone_meal = function(_, _, _, pos)
 			grow_vines(pos, math.random(1, 3), name, nil, max_vines_age)
@@ -391,7 +390,7 @@ core.register_node("mcl_crimson:nether_sprouts", {
 	drop = "",
 	_mcl_shears_drop = true,
 	_mcl_silk_touch_drop = false,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 core.register_node("mcl_crimson:warped_roots", {
@@ -414,7 +413,7 @@ core.register_node("mcl_crimson:warped_roots", {
 	},
 	node_placement_prediction = "",
 	_mcl_silk_touch_drop = false,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 mcl_flowerpots.register_potted_flower("mcl_crimson:warped_roots", {
@@ -463,7 +462,6 @@ core.register_node("mcl_crimson:warped_nylium", {
 	groups = {pickaxey=1, soil_fungus=1, building_block=1, material_stone=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_hardness = 0.4,
-	_mcl_blast_resistance = 0.4,
 	_mcl_silk_touch_drop = true,
 	_on_bone_meal = on_bone_meal,
 })
@@ -496,7 +494,7 @@ core.register_node("mcl_crimson:crimson_fungus", {
 			return generate_fungus_tree(pos, "crimson")
 		end
 	end,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 mcl_flowerpots.register_potted_flower("mcl_crimson:crimson_fungus", {
@@ -525,7 +523,7 @@ core.register_node("mcl_crimson:crimson_roots", {
 	},
 	node_placement_prediction = "",
 	_mcl_silk_touch_drop = false,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 mcl_flowerpots.register_potted_flower("mcl_crimson:crimson_roots", {
@@ -548,7 +546,6 @@ core.register_node("mcl_crimson:crimson_nylium", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	drop = "mcl_nether:netherrack",
 	_mcl_hardness = 0.4,
-	_mcl_blast_resistance = 0.4,
 	_mcl_silk_touch_drop = true,
 	_on_bone_meal = on_bone_meal,
 })

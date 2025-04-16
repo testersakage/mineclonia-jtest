@@ -491,7 +491,6 @@ kelp.surface_deftemplate = {
 	drop = "", -- drops are handled in on_dig
 	--_mcl_falling_node_alternative = is_falling and nodename or nil,
 	_mcl_hardness = 0,
-	_mcl_blast_resistance = 0,
 	_mcl_baseitem = "mcl_ocean:kelp"
 }
 

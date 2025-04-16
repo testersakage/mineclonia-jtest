@@ -255,7 +255,6 @@ local commdef  = {
 		mcl_redstone.update_comparators(pos)
 	end,
 	on_rotate = screwdriver.rotate_simple,
-	_mcl_blast_resistance = 3.5,
 	_mcl_hardness = 3.5,
 	_mcl_redstone = {
 		connects_to = function(node, dir)

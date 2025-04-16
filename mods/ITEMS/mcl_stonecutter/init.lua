@@ -180,7 +180,6 @@ core.register_node("mcl_stonecutter:stonecutter", {
 			{-0.5, -0.5, -0.5, 0.5, 0.0625, 0.5}, -- NodeBox1
 		},
 	},
-	_mcl_blast_resistance = 3.5,
 	_mcl_hardness = 3.5,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	after_dig_node = mcl_util.drop_items_from_meta_container({"input"}),

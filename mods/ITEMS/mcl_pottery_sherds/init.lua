@@ -178,7 +178,6 @@ core.register_node("mcl_pottery_sherds:pot", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	drop = "",
 	_mcl_hardness = 0,
-	_mcl_blast_resistance = 0,
 	_mcl_baseitem = get_itemstack_from_node,
 	_mcl_generate_description = function(stack)
 		if not stack then return nil end

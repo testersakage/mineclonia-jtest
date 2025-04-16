@@ -49,7 +49,6 @@ local commdef = {
 	node_placement_prediction = "",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_rotate = on_rotate,
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	_mcl_redstone = {
 		connects_to = function(node, dir)

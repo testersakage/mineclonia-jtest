@@ -142,7 +142,6 @@ for s=1, #surfaces do
 		_mcl_falling_node_alternative = alt,
 		_mcl_shears_drop = { "mcl_ocean:seagrass" },
 		_mcl_hardness = 0,
-		_mcl_blast_resistance = 0,
 		_mcl_baseitem = "mcl_ocean:seagrass",
 	})
 	if mod_doc and surfaces[s][1] ~= "dirt" then

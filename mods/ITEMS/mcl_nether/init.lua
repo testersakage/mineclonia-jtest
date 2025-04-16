@@ -23,7 +23,6 @@ core.register_node("mcl_nether:glowstone", {
 	paramtype = "light",
 	light_source = core.LIGHT_MAX,
 	sounds = mcl_sounds.node_sound_glass_defaults(),
-	_mcl_blast_resistance = 0.3,
 	_mcl_hardness = 0.3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = {
@@ -42,7 +41,6 @@ core.register_node("mcl_nether:quartz_ore", {
 	groups = {pickaxey=1, building_block=1, material_stone=1, xp=3, blast_furnace_smeltable = 1},
 	drop = "mcl_nether:quartz",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
@@ -109,7 +107,6 @@ core.register_node("mcl_nether:netherrack", {
 	tiles = {"mcl_nether_netherrack.png"},
 	groups = {pickaxey=1, building_block=1, material_stone=1, enderman_takable=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.4,
 	_mcl_hardness = 0.4,
 	_mcl_cooking_output = "mcl_nether:netherbrick",
 
@@ -132,7 +129,6 @@ core.register_node("mcl_nether:magma", {
 	light_source = 3,
 	groups = {pickaxey=1, building_block=1, material_stone=1, fire=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 
 	-- Eternal fire on top
@@ -163,7 +159,6 @@ core.register_node("mcl_nether:soul_sand", {
 		fixed = { -0.5, -0.5, -0.5, 0.5, 0.5 - 2/16, 0.5 },
 	},
 	sounds = mcl_sounds.node_sound_sand_defaults(),
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	-- Mobs only.
 	_mcl_velocity_factor = 0.4,
@@ -234,7 +229,6 @@ core.register_node("mcl_nether:nether_wart_block", {
 			dug={name="default_dirt_footstep", gain=1.5},
 		}
 	),
-	_mcl_blast_resistance = 1,
 	_mcl_hardness = 1,
 })
 
@@ -245,7 +239,6 @@ core.register_node("mcl_nether:quartz_block", {
 	tiles = {"mcl_nether_quartz_block_top.png", "mcl_nether_quartz_block_bottom.png", "mcl_nether_quartz_block_side.png"},
 	groups = {pickaxey=1, quartz_block=1,building_block=1, material_stone=1, stonecuttable=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_cooking_output = "mcl_nether:quartz_smooth",
 	_mcl_crafting_output = {square2 = {output = "mcl_blackstone:quartz_brick 4"}}
@@ -258,7 +251,6 @@ core.register_node("mcl_nether:quartz_chiseled", {
 	tiles = {"mcl_nether_quartz_chiseled_top.png", "mcl_nether_quartz_chiseled_top.png", "mcl_nether_quartz_chiseled_side.png"},
 	groups = {pickaxey=1, quartz_block=1,building_block=1, material_stone=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_nether:quartz_block" },
 })
@@ -273,7 +265,6 @@ core.register_node("mcl_nether:quartz_pillar", {
 	groups = {pickaxey=1, quartz_block=1,building_block=1, material_stone=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_rotate = on_rotate,
-	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_nether:quartz_block" },
 })

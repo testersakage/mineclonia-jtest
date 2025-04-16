@@ -36,7 +36,6 @@ core.register_node("mcl_honey:honeycomb_block", {
 	},
 	is_ground_content = false,
 	groups = { handy = 1, deco_block = 1 },
-	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
 })
 
@@ -89,7 +88,6 @@ core.register_node("mcl_honey:honey_block", {
 	selection_box = {
 		type = "regular",
 	},
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_mcl_pistons_sticky = function(node, node_to, dir)
 		return node_to.name ~= "mcl_core:slimeblock"

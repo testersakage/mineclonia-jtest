@@ -330,7 +330,6 @@ core.register_node("mcl_mobspawners:spawner", {
 
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 
-	_mcl_blast_resistance = 5,
 	_mcl_hardness = 5,
 })
 

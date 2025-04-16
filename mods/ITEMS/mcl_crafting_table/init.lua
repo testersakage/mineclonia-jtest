@@ -73,7 +73,6 @@ core.register_node("mcl_crafting_table:crafting_table", {
 		end
 	end,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	_mcl_blast_resistance = 2.5,
 	_mcl_hardness = 2.5,
 	_mcl_burntime = 15
 })

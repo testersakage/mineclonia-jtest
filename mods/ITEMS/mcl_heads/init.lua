@@ -41,7 +41,6 @@ mcl_heads.deftemplate = {
 	},
 	is_ground_content = false,
 	_mcl_armor_element = "head",
-	_mcl_blast_resistance = 1,
 	_mcl_hardness = 1,
 	on_secondary_use = equip_armor,
 }
