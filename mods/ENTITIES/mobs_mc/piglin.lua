@@ -295,11 +295,13 @@ local piglin_poses = {
 	crossbow_1 = {
 		Arm_Left = {
 			vector.new (0, 0, 0),
-			vector.new (90, -18, 0),
+			vector.new (-90, 18, 0),
+			vector.new (1, 1, 1),
 		},
 		Arm_Right = {
 			vector.new (0, 0, 0),
-			vector.new (90, 18, 0),
+			vector.new (-90, -18, 0),
+			vector.new (1, 1, 1),
 		},
 		Arm_Left_Pitch_Control = {
 			nil,
@@ -313,11 +315,13 @@ local piglin_poses = {
 	crossbow_2 = {
 		Arm_Left = {
 			vector.new (0, 0, 0),
-			vector.new (90, -45, 0),
+			vector.new (-90, 45, 0),
+			vector.new (1, 1, 1),
 		},
 		Arm_Right = {
 			vector.new (0, 0, 0),
-			vector.new (90, 18, 0),
+			vector.new (-90, -18, 0),
+			vector.new (1, 1, 1),
 		},
 		Arm_Left_Pitch_Control = {
 			nil,
@@ -337,6 +341,7 @@ local piglin_poses = {
 		Arm_Left = {
 			vector.new (0, 0, 0),
 			vector.new (60, -25, 0),
+			vector.new (1, 1, 1),
 		},
 		Arm_Left_Pitch_Control = {},
 		Arm_Right_Pitch_Control = {},
@@ -1776,11 +1781,13 @@ local zombified_piglin_poses = {
 	default = {
 		Arm_Left_Pitch_Control = {
 			nil,
-			vector.new (85, 0, 0),
+			vector.new (-95, 0, 0),
+			vector.new (1, 1, 1),
 		},
 		Arm_Right_Pitch_Control = {
 			nil,
-			vector.new (85, 0, 0),
+			vector.new (-95, 0, 0),
+			vector.new (1, 1, 1),
 		},
 		Arm_Left = {
 			nil,
@@ -1794,11 +1801,11 @@ local zombified_piglin_poses = {
 	aggressive = {
 		Arm_Left_Pitch_Control = {
 			nil,
-			vector.new (110, 0, 0),
+			vector.new (-70, 0, 0),
 		},
 		Arm_Right_Pitch_Control = {
 			nil,
-			vector.new (110, 0, 0),
+			vector.new (-70, 0, 0),
 		},
 		Arm_Left = {
 			nil,

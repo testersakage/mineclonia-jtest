@@ -172,7 +172,7 @@ function pillager:get_leftarm_with_pitch ()
 			pitch = math.atan2 (dy, xz_mag)
 		end
 	end
-	return vector.new (math.rad (90) + pitch, math.rad (20), 0)
+	return vector.new (math.rad (-90) + pitch, math.rad (20), 0)
 end
 
 pillager._arm_poses = {
@@ -183,7 +183,8 @@ pillager._arm_poses = {
 		},
 		["arm.left"] = {
 			nil,
-			vector.new (90, 20, 0),
+			vector.new (-90, 20, 0),
+			vector.new (1, 1, 1),
 		},
 	},
 	crossbow_1 = {
@@ -193,7 +194,8 @@ pillager._arm_poses = {
 		},
 		["arm.left"] = {
 			nil,
-			vector.new (70, 40, 0),
+			vector.new (-110, 40, 0),
+			vector.new (1, 1, 1),
 		},
 	},
 	crossbow_2 = {
