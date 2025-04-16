@@ -37,7 +37,7 @@ core.register_on_mods_loaded(function()
 	-- Store blast resistance values by content ids to improve performance.
 	for name, def in pairs(core.registered_nodes) do
 		local id = core.get_content_id(name)
-		node_blastres[id] = def._mcl_blast_resistance or 0
+		node_blastres[id] = def._mcl_blast_resistance or def._mcl_hardness
 		node_on_blast[id] = def.on_blast
 		node_walkable[id] = def.walkable
 	end
