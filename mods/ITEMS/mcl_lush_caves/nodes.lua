@@ -282,9 +282,9 @@ core.register_craftitem("mcl_lush_caves:glow_berry", {
 		local different_vine = core.get_item_group(node.name, "vinelike_node") == 2 and node.name ~= vine
 		if different_vine then return end
 
-		minetest.place_node(pointed_thing.under, {name=vine}, placer)
-		minetest.sound_play(minetest.registered_nodes[vine].sounds.place, {pos=pointed_thing.above, gain=1}, true)
-		if not minetest.is_creative_enabled(placer:get_player_name()) then
+		core.place_node(pointed_thing.under, {name=vine}, placer)
+		core.sound_play(core.registered_nodes[vine].sounds.place, {pos=pointed_thing.above, gain=1}, true)
+		if not core.is_creative_enabled(placer:get_player_name()) then
 			itemstack:take_item(1)
 		end
 		return itemstack

@@ -163,8 +163,8 @@ local function set_inv_search(filter, player)
 	filter = filter:gsub("%s+", " ")
 	filter = string.lower(filter)
 	filter = string.trim(filter)
-	local lang = minetest.get_player_information(playername).lang_code
-	for name, def in pairs(minetest.registered_items) do
+	local lang = core.get_player_information(playername).lang_code
+	for name, def in pairs(core.registered_items) do
 		if (not def.groups.not_in_creative_inventory or def.groups.not_in_creative_inventory == 0)
 		and def.description and
 			def.description ~= "" then

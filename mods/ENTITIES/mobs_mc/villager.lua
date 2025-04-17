@@ -3205,13 +3205,13 @@ end
 function villager:summon_golem (self_pos)
 	local aa = vector.offset (self_pos, -8, -5, -8)
 	local bb = vector.offset (self_pos, 8, 5, 8)
-	local nn = minetest.find_nodes_in_area_under_air (aa, bb, {
+	local nn = core.find_nodes_in_area_under_air (aa, bb, {
 		"group:solid", "group:water"
 	})
 	table.shuffle (nn)
 	for _, n in pairs (nn) do
 		local half = 1/2
-		local air = minetest.find_nodes_in_area(
+		local air = core.find_nodes_in_area(
 			vector.offset(n, -half, 1, -half),
 			vector.offset(n, half, 3, half),
 			{"air"}
@@ -3224,7 +3224,7 @@ function villager:summon_golem (self_pos)
 			if core.get_item_group(core.get_node(n).name, "water") ~= 0 then
 				spawnpos = vector.offset(spawnpos,0,-1,0)
 			end
-			local golem = minetest.add_entity (spawnpos, "mobs_mc:iron_golem")
+			local golem = core.add_entity (spawnpos, "mobs_mc:iron_golem")
 			if golem then
 				return true
 			end
