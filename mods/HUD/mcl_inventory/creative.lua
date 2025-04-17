@@ -7,12 +7,16 @@ local show_nici = core.settings:get_bool("mcl_creative_show_nici_tab", false)
 mcl_player.register_player_setting("mcl_inventory:scroll_on_creative_inventory", {
 	type = "enum",
 	options = {
-		{ name = "auto", description = S("Auto (use scroll bar if client version >= 5.11)") },
-		{ name = "false", description = S("Off (use paging buttons, much better performance on client < 5.11)") },
-		{ name = "true", description = S("On (more MC like experience, may be sluggish on client < 5.11)") },
+		{ name = "auto", description = S("Auto (use scroll bar if client >= 5.11)") },
+		{ name = "false", description = S("Off  (use paging buttons, faster)") },
+		{ name = "true", description = S("On   (more MC like, slower)") },
 	},
 	section = "Inventory",
-	short_desc = S("Enable scroll bar on creative inventory"),
+	short_desc = S("Enable scrollable creative inventory"),
+	long_desc = S([[Very large inventory displays may be slow when scrolling, especially on Luanti versions before 5.11.
+Therefore the creative inventory display can be split into pages with prev/next page buttons.
+Mineclonia defaults to use scrolling unless an older Luanti version is detected.
+This setting allows you to override that heuristic.]]),
 	ui_default = "auto",
 	on_change = mcl_inventory.set_creative_formspec
 })
