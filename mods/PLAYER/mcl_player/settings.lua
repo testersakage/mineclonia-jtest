@@ -154,6 +154,7 @@ end
 local function generate_setting_fragment(player, name, def, fs)
 	local raw_value = mcl_player.get_player_setting(player, name)
 	local value = raw_value == nil and def.ui_default or raw_value
+	local tt_ref = name
 	local b_size = fs.mobile and 0.5 or 0.25
 	local b_size_2 = b_size / 2
 	local padding = fs.mobile and 0.125 or 0
@@ -166,13 +167,6 @@ local function generate_setting_fragment(player, name, def, fs)
 			"tooltip[",
 			"__reset__", name, ";",
 			S("Revert to default"), "]"
-		)
-	end
-	if def.long_desc then
-		fs:add(
-			"tooltip[",
-			name, ";",
-			F(def.long_desc), "]"
 		)
 	end
 	if def.type == "boolean" then
@@ -216,6 +210,8 @@ local function generate_setting_fragment(player, name, def, fs)
 		y = y + 0.85
 	elseif def.type == "slider" then
 		local sb_height = fs.mobile and 0.5 or 0.25
+		-- add tooltip to area to display it not only on the slider itself
+		tt_ref = ("%f,%f;%f,%f"):format(1, y-0.1, 9.3, 0.25 + sb_height)
 		local count = #def.options
 		local selected
 		fs:add(
@@ -248,6 +244,13 @@ local function generate_setting_fragment(player, name, def, fs)
 			"scrollbar[1,", y + 0.175, ";4,", sb_height, ";horizontal;", name, ";", selected, "]"
 		)
 		y = y + 0.6 + sb_height
+	end
+	if def.long_desc then
+		fs:add(
+			"tooltip[",
+			tt_ref, ";",
+			F(def.long_desc), "]"
+		)
 	end
 
 	fs.y = y + padding
