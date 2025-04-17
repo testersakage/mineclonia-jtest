@@ -178,6 +178,10 @@ local function generate_setting_fragment(player, name, def, fs)
 		)
 		y = y + 0.5
 	elseif def.type == "enum" then
+		-- add tooltip to area instead of dropdown to also show it on
+		-- the label and additionally prevent the tooltip obscuring the
+		-- options when using the mouse to select one
+		tt_ref = ("%f,%f;%f,%f"):format(1, y-0.1, 9.3, 0.5)
 		local selected
 		fs:add(
 			"label[1,", y, ";", F(C(setting_name_color, def.short_desc)), "]",
