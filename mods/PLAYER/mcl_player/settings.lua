@@ -188,7 +188,7 @@ local function generate_setting_fragment(player, name, def, fs)
 		local selected
 		fs:add(
 			"label[1,", y, ";", F(C(setting_name_color, def.short_desc)), "]",
-			"dropdown[1,", y + 0.175, ";8,0.3;",
+			"dropdown[1,", y + 0.175, ";9.3,0.3;",
 			name, ";"
 		)
 
