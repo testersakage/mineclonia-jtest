@@ -176,9 +176,8 @@ local function generate_setting_fragment(player, name, def, fs)
 		)
 	end
 	if def.type == "boolean" then
-		local x_off = fs.mobile and 0.5 or 0
 		fs:add(
-			"checkbox[", 1 + x_off, ",", y, ";",
+			"checkbox[", 1, ",", y, ";",
 			name, ";",
 			F(C(setting_name_color, def.short_desc)), ";",
 			value, "]"
