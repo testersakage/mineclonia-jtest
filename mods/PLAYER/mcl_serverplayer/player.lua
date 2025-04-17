@@ -346,14 +346,14 @@ local ONE_HUNDRED_AND_TEN_DEG = math.rad (110)
 
 local RIGHT_ARM_BLOCKING_OVERRIDE = {
 	rotation = {
-		vec = vector.new (20, -20, 0):apply (math.rad),
+		vec = vector.new (-160, -20, 0):apply (math.rad),
 		absolute = true,
 	},
 }
 
 local LEFT_ARM_BLOCKING_OVERRIDE = {
 	rotation = {
-		vec = vector.new (20, 20, 0):apply (math.rad),
+		vec = vector.new (-160, 20, 0):apply (math.rad),
 		absolute = true,
 	},
 }
@@ -368,11 +368,17 @@ end
 
 local norm_radians = mcl_util.norm_radians
 
-local ZERO_OVERRIDE = {
+local IDENTITY_SCALE = {
+	vec = vector.new (1, 1, 1),
+	absolute = true,
+}
+
+local BODY_DEFAULT_OVERRIDE = {
 	rotation = {
-		vec = vector.zero (),
+		vec = vector.new (0, math.pi, 0),
 		absolute = true,
 	},
+	scale = IDENTITY_SCALE,
 }
 
 local DEFAULT_ANIMATION_SPEED = 30
@@ -401,7 +407,7 @@ function mcl_serverplayer.animate_localplayer (state, player)
 				local yaw = attach:get_yaw ()
 				local yrot = -norm_radians (look_dir - norm_radians (yaw))
 				local pitch = -player:get_look_vertical ()
-				player:set_bone_override ("Body_Control", ZERO_OVERRIDE)
+				player:set_bone_override ("Body_Control", BODY_DEFAULT_OVERRIDE)
 				player:set_bone_override ("Head_Control", {
 					rotation = {
 						vec = vector.new (pitch, yrot, 0),
@@ -419,7 +425,7 @@ function mcl_serverplayer.animate_localplayer (state, player)
 			end
 			state.move_yaw = move_yaw
 			local body = look_dir - move_yaw
-			local rot = vector.new (0, body, 0)
+			local rot = vector.new (0, body - math.pi, 0)
 			player:set_bone_override ("Body_Control", {
 				rotation = { vec = rot, absolute = true, },
 			})
@@ -478,12 +484,7 @@ function mcl_serverplayer.animate_localplayer (state, player)
 		state.move_yaw = move_yaw
 	elseif pose == POSE_SLEEPING then
 		player:set_bone_override ("Head_Control", {})
-		player:set_bone_override ("Body_Control", {
-			rotation = {
-				vec = vector.new (0, math.pi, 0),
-				absolute = true,
-			},
-		})
+		player:set_bone_override ("Body_Control", BODY_DEFAULT_OVERRIDE)
 	elseif pose == POSE_DEATH then
 		player:set_bone_override ("Head_Control", {})
 		player:set_bone_override ("Body_Control", {})
