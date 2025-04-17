@@ -185,6 +185,10 @@ local function generate_setting_fragment(player, name, def, fs)
 		local selected
 		fs:add(
 			"label[1,", y, ";", F(C(setting_name_color, def.short_desc)), "]",
+			-- Ugly workaround: override any area tooltips when
+			-- mousing over the dropdown options by a hopefully
+			-- unobtrusive tooltip
+			"tooltip[", name, "; ]",
 			"dropdown[1,", y + 0.175, ";9.3,0.3;",
 			name, ";"
 		)
