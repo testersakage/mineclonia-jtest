@@ -711,9 +711,119 @@ core.register_chatcommand("spawncheck",{
 local SPAWN_DISTANCE = tonumber (minetest.settings:get ("active_block_range")) or 4
 local MOB_CAP_DIVISOR = 289
 local MOB_CAP_RECIPROCAL = 1 / MOB_CAP_DIVISOR
+local OVERWORLD_CEILING_MARGIN = 64
+
+-- Return a range of positions along the vertical axes in which to
+-- spawn mobs around a player at POS in the dimension LEVEL.
+
+local function level_y_range (level, pos)
+	if level == "overworld" then
+		local nodepos = math.floor (pos.y + 0.5)
+		-- Spawn mobs between the bottom of the overworld and
+		-- 300.0.
+		if nodepos < 300 - OVERWORLD_CEILING_MARGIN then
+			return mcl_vars.mg_overworld_min, 300
+		else
+			-- Otherwise spawn between nodepos - 236 and
+			-- nodepos + 64.
+			return nodepos - 300 + OVERWORLD_CEILING_MARGIN,
+				nodepos + OVERWORLD_CEILING_MARGIN
+		end
+	elseif level == "nether" then
+		return mcl_vars.mg_nether_min,
+			mcl_vars.mg_nether_max - 1
+	elseif level == "end" then
+		return mcl_vars.mg_end_min,
+			mcl_vars.mg_end_max_official - 1
+	end
+end
+
+local function merge_range (rangearray, start, fin)
+	local nmax, first_overlap, last_overlap = #rangearray
+	local last_before = 0
+	assert (nmax % 2 == 0)
+
+	-- Locate the index of the final pairs whose start and end
+	-- values precede START and FIN.
+	for i = 1, nmax, 2 do
+		if rangearray[i] < start then
+			last_before = i + 1
+		end
+		if rangearray[i] <= fin and start <= rangearray[i + 1] then
+			if not first_overlap then
+				first_overlap = i
+			end
+			last_overlap = i
+		end
+	end
+
+	if first_overlap then
+		-- Fast case.
+		if rangearray[first_overlap] == start
+			and rangearray[last_overlap + 1] == fin then
+			return
+		end
+
+		-- Consider first_overlap's start and last_overlap's fin.
+		-- Combine them and all in between into a solitary range
+		-- and adjust their bounds to encompass this one.
+
+		if rangearray[first_overlap] > start then
+			rangearray[first_overlap] = start
+		end
+
+		local value = rangearray[last_overlap + 1]
+		-- Index of first element to preserve.
+		local src_begin = last_overlap + 2
+		-- New index after it is moved.
+		local dst_begin = first_overlap + 2
+
+		if src_begin ~= dst_begin then
+			local num_copies = nmax - src_begin + 1
+			for i = 0, num_copies - 1 do
+				rangearray[dst_begin + i]
+					= rangearray[src_begin + i]
+			end
+			-- Clear the remainder of the array
+			-- (i.e. shrink it).
+			for i = dst_begin + num_copies, nmax do
+				rangearray[i] = nil
+			end
+		end
+		rangearray[first_overlap + 1] = math.max (value, fin)
+	else
+		-- No ranges overlap.  Insert START, FIN into their
+		-- proper position.
+		local new_max = nmax + 2
+		for i = 0, nmax - last_before - 1 do
+			rangearray[new_max - i] = rangearray[nmax - i]
+		end
+		rangearray[last_before + 1] = start
+		rangearray[last_before + 2] = fin
+	end
+	return rangearray
+end
+
+local function position_in_chunk (data)
+	local total = 0
+	local ranges = data.y_ranges
+	local psize = #ranges
+	for i = 1, psize, 2 do
+		total = total + (ranges[i + 1] - ranges[i] + 1)
+	end
+	local value = math.random (1, total)
+	for i = 1, psize, 2 do
+		value = value - (ranges[i + 1] - ranges[i] + 1)
+		if value <= 0 then
+			return ranges[i + 1] + value
+		end
+	end
+	-- Shouldn't ever be reached.
+	assert (false)
+end
 
 local function collect_unique_chunks (level)
-	local chunk_seen, chunks, players = {}, {}, {}
+	local chunk_data, chunks, players = {}, {}, {}
 	for player in mcl_util.connected_players () do
 		-- Players outside any dimension should not be
 		-- considered for spawning.
@@ -724,19 +834,27 @@ local function collect_unique_chunks (level)
 		players[player] = pos
 
 		if chunk_dim == level then
+			local start, fin = level_y_range (level, pos)
+
 			for x = chunk_x - SPAWN_DISTANCE, chunk_x + SPAWN_DISTANCE do
 				for z = chunk_z - SPAWN_DISTANCE, chunk_z + SPAWN_DISTANCE do
 					local hash = ((x + 2048) * 4096) + (z + 2048)
-					local data = chunk_seen[hash]
+					local data = chunk_data[hash]
 					if not data then
 						table.insert (chunks, hash)
-						chunk_seen[hash] = true
+						chunk_data[hash] = {
+							y_ranges = {
+								start, fin,
+							},
+						}
+					else
+						merge_range (data.y_ranges, start, fin)
 					end
 				end
 			end
 		end
 	end
-	return chunks, players
+	return chunks, players, chunk_data
 end
 
 minetest.register_chatcommand("mobstats",{
@@ -763,7 +881,6 @@ minetest.register_chatcommand("mobstats",{
 			end
 		else
 			local mob_caps = {}
-			local n_players = #minetest.get_connected_players ()
 			local pos = minetest.get_player_by_name (n):get_pos ()
 			local level = mcl_worlds.pos_to_dimension (pos)
 			local n_chunks = #collect_unique_chunks (level)
@@ -786,7 +903,7 @@ minetest.register_chatcommand("mobstats",{
 				tostring (count_mobs_total ()), "\n"
 			}))
 
-			local mob_counts, total_mobs = count_mobs_all ()
+			local mob_counts, _ = count_mobs_all ()
 			for k, v1 in pairs (mob_counts) do
 				minetest.chat_send_player (n, table.concat ({
 					"  ", k, ": ", tostring (v1),
@@ -1018,31 +1135,15 @@ local function spawn_a_pack (pos, players, category, scratch0)
 end
 
 function mcl_mobs.spawn_cycle (level, spawn_animals)
-	local chunk_seen = {}
-	local chunk_ymin, chunk_ymax
 	local scratch0 = vector.zero ()
 
 	-- Collect a list of chunks to evaluate for purposes of
 	-- spawning.
-
-	if level == "overworld" then
-		chunk_ymin = mcl_vars.mg_overworld_min
-		chunk_ymax = 300
-	elseif level == "nether" then
-		chunk_ymin = mcl_vars.mg_nether_min
-		chunk_ymax = mcl_vars.mg_nether_max - 1
-	elseif level == "end" then
-		chunk_ymin = mcl_vars.mg_end_min
-		chunk_ymax = mcl_vars.mg_end_max_official - 1
-	else
-		return
-	end
-
-	local chunks, players = collect_unique_chunks (level)
+	local chunks, players, chunk_data = collect_unique_chunks (level)
 	local mobs_spawned = {}
 
 	-- Shuffle the list of chunks to be evaluated.
-	table.shuffle (chunks)	
+	table.shuffle (chunks)
 
 	local test_pos = vector.zero ()
 	local n_chunks_orig = #chunks
@@ -1103,7 +1204,7 @@ function mcl_mobs.spawn_cycle (level, spawn_animals)
 						-- Select a random position.
 						test_pos.x = math.random (x * 16, x * 16 + 15)
 						test_pos.z = math.random (z * 16, z * 16 + 15)
-						test_pos.y = math.random (chunk_ymin, chunk_ymax)
+						test_pos.y = position_in_chunk (chunk_data[chunk])
 						spawn_a_pack (test_pos, players, category, scratch0)
 					end
 				end
