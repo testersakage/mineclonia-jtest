@@ -20,7 +20,6 @@ local function register_infested_block(name, description, overrides)
 		drop = "",
 		_mcl_silk_touch_drop = {name},
 		_mcl_hardness = olddef._mcl_hardness / 2,
-		_mcl_blast_resistance = 0.75,
 		after_dig_node = function (pos, _, _, digger)
 			local itemstack = digger:get_wielded_item()
 			local silk_touch = mcl_enchanting.has_enchantment(itemstack, "silk_touch")
@@ -39,6 +38,9 @@ local function register_infested_block(name, description, overrides)
 	})
 	newdef._mcl_stonecutter_recipes = nil
 	local base = name:gsub("^[_%w]*:", "")
+	if newdef._mcl_hardness ~= 0.75 then
+		newdef._mcl_blast_resistance = 0.75
+	end
 	core.register_node(":mcl_monster_eggs:monster_egg_"..base, table.merge(newdef, overrides))
 end
 
