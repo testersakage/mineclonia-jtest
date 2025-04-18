@@ -130,7 +130,7 @@ core.register_node("mcl_end:end_rod", {
 	end,
 
 	sounds = mcl_sounds.node_sound_glass_defaults(),
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 core.register_node("mcl_end:dragon_egg", {

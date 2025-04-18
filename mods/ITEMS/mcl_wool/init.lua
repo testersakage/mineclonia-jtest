@@ -71,7 +71,6 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		},
 		_color = color,
 		_mcl_hardness = 0.1,
-		_mcl_blast_resistance = 0.1,
 		_mcl_burntime = 3.35
 	})
 

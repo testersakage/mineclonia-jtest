@@ -128,7 +128,6 @@ core.register_node("mcl_mangrove:mangrove_roots", {
 	drop = "mcl_mangrove:mangrove_roots",
 	_mcl_shears_drop = true,
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0.7,
 	_mcl_hardness = 0.7,
 	_mcl_burntime = 15,
 	_mcl_silk_touch_drop = true,
@@ -178,7 +177,6 @@ core.register_node("mcl_mangrove:propagule", {
 		meta:set_int("stage", 0)
 	end,
 	node_placement_prediction = "",
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_on_bone_meal = function(_, _, _, pos, node)
 		return mcl_trees.grow_tree(pos, node)
