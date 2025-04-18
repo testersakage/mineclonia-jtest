@@ -712,6 +712,7 @@ local SPAWN_DISTANCE = tonumber (minetest.settings:get ("active_block_range")) o
 local MOB_CAP_DIVISOR = 289
 local MOB_CAP_RECIPROCAL = 1 / MOB_CAP_DIVISOR
 local OVERWORLD_CEILING_MARGIN = 64
+local OVERWORLD_DEFAULT_CEILING = 256
 
 -- Return a range of positions along the vertical axes in which to
 -- spawn mobs around a player at POS in the dimension LEVEL.
@@ -720,13 +721,16 @@ local function level_y_range (level, pos)
 	if level == "overworld" then
 		local nodepos = math.floor (pos.y + 0.5)
 		-- Spawn mobs between the bottom of the overworld and
-		-- 300.0.
-		if nodepos < 300 - OVERWORLD_CEILING_MARGIN then
-			return mcl_vars.mg_overworld_min, 300
+		-- OVERWORLD_DEFAULT_CEILING.
+		if nodepos < OVERWORLD_DEFAULT_CEILING - OVERWORLD_CEILING_MARGIN then
+			return mcl_vars.mg_overworld_min, OVERWORLD_DEFAULT_CEILING
 		else
 			-- Otherwise spawn between nodepos - 236 and
 			-- nodepos + 64.
-			return nodepos - 300 + OVERWORLD_CEILING_MARGIN,
+			return nodepos
+				- OVERWORLD_DEFAULT_CEILING
+				+ OVERWORLD_CEILING_MARGIN
+				+ mcl_vars.mg_overworld_min,
 				nodepos + OVERWORLD_CEILING_MARGIN
 		end
 	elseif level == "nether" then
