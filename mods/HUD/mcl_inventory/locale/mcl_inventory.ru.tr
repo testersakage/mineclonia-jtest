@@ -1,4 +1,8 @@
 # textdomain: mcl_inventory
+Auto (use scroll bar if client version >@= 5.11)=
+Off (use paging buttons, much better performance on client < 5.11)=
+On (more MC like experience, may be sluggish on client < 5.11)=
+Enable scroll bar on creative inventory=
 Building Blocks=Строительные блоки
 Decoration Blocks=Декоративные блоки
 Redstone=Редстоун
@@ -18,8 +22,8 @@ Switch stack size=Изменить размер стака
 Recipe book=Книга рецептов
 Help=Справка
 Advancements=Достижения
-Player settings=
-Return to player inventory=
+Player settings=Настройки игрока
+Return to player inventory=Вернуться в инвентарь игрока
 Crafting table out of range!=Верстак вне достижения!
 Crafting=Создание
 Fill Craft Grid=Заполнить сетку крафта

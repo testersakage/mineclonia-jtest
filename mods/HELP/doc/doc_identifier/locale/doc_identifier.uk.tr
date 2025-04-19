@@ -1,5 +1,5 @@
 # textdomain: doc_identifier
-No help entry for this item could be found.=
+No help entry for this item could be found.=Немає запису, який би міг підійти до цього предмету.
 No help entry for this block could be found.=
 Error: This node, item or object is undefined. This is always an error.=
 This can happen for the following reasons:=
@@ -11,7 +11,7 @@ Its identifier is “@1”.=
 This block cannot be identified because the world has not materialized at this point yet. Try again in a few seconds.=
 No help entry for this object could be found.=
 This is a player.=
-OK=
+OK=Гаразд
 Lookup Tool=
 Show help for pointed thing=
 This useful little helper can be used to quickly learn more about about one's closer environment. It identifies and analyzes blocks, items and other things and it shows extensive information about the thing on which it is used.=

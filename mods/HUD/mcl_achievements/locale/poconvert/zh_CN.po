@@ -138,10 +138,9 @@ msgstr "从熔炉的输出槽中取出铁锭。\n"
 msgid "Delicious Fish"
 msgstr "年年有鱼"
 
-msgid "Take a cooked fish from a furnace.\n"
+msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
-msgstr "从熔炉中煎熟一条鱼。\n"
-"提示：用鱼竿钓鱼，在熔炉里煎熟。"
+msgstr ""
 
 msgid "On A Rail"
 msgstr "在铁轨上"

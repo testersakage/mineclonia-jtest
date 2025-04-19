@@ -64,11 +64,11 @@ msgstr "磨かれたブラックストーンの階段"
 msgid "Polished Blackstone Slab"
 msgstr "磨かれたブラックストーンのハーフブロック"
 
-msgid "Blackstone Brick Stairs"
-msgstr "ブラックストーンレンガの階段"
+msgid "Polished Blackstone Brick Stairs"
+msgstr ""
 
-msgid "Blackstone Brick Slab"
-msgstr "ブラックストーンレンガのハーフブロック"
+msgid "Polished Blackstone Brick Slab"
+msgstr ""
 
 msgid "Soul Torch"
 msgstr "魂の松明"
@@ -78,4 +78,10 @@ msgstr ""
 
 msgid "Blackstone Wall"
 msgstr "ブラックストーンの塀"
+
+msgid "Polished Blackstone Wall"
+msgstr ""
+
+msgid "Polished Blackstone Brick Wall"
+msgstr ""
 

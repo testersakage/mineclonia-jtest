@@ -137,10 +137,9 @@ msgstr "Weź sztabkę żelaza z wyjściowego miejsca pieca.\n"
 msgid "Delicious Fish"
 msgstr "Pyszna ryba"
 
-msgid "Take a cooked fish from a furnace.\n"
+msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
-msgstr "Weź upieczoną rybę z pieca.\n"
-"Podpowiedź: Użyj wędki aby złapać rybę i upiecz ją w piecu."
+msgstr ""
 
 msgid "On A Rail"
 msgstr "Na torach"

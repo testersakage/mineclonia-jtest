@@ -137,10 +137,9 @@ msgstr "從熔爐中取出鐵錠。\n"
 msgid "Delicious Fish"
 msgstr "年年有魚"
 
-msgid "Take a cooked fish from a furnace.\n"
+msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
-msgstr "從熔爐中取出烤魚。\n"
-"提示：用釣竿獲得魚，然後用熔爐烤。"
+msgstr ""
 
 msgid "On A Rail"
 msgstr "東方快車"

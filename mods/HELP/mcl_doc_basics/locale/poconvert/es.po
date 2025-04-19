@@ -3,16 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-29 08:37+0000\n"
-"Last-Translator: \"Miguel P.L\" <miguel_pl@noreply.codeberg.org>\n"
-"Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
-"mcl_doc_basics/es/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Advanced usage"
 msgstr "Uso avanzado"
@@ -336,9 +335,7 @@ msgid "• PvP (enable_pvp): Short for “Player vs Player”. If enabled, playe
 msgstr "• JcJ (enable_pvp): abreviatura de “Jugador contra Jugador”. Si está habilitado, los jugadores pueden causarse daño entre sí"
 
 msgid "For a full list of all available settings, use the “All Settings” dialog in the main menu."
-msgstr ""
-"Para obtener una lista completa de todas los ajustes disponibles, utilice el "
-"cuadro de diálogo “Todos las ajustes” en el menú principal."
+msgstr "Para obtener una lista completa de todas los ajustes disponibles, utilice el cuadro de diálogo “Todos las ajustes” en el menú principal."
 
 msgid "Online help"
 msgstr "Ayuda en línea"
@@ -352,8 +349,8 @@ msgstr "Página oficial de Luanti: <https://luanti.org/>"
 msgid "The main place to find the most recent version of Luanti."
 msgstr "El lugar principal para encontrar la versión más reciente de Luanti."
 
-msgid "Community wiki: <https://wiki.minetest.net/>"
-msgstr "Wiki de la comunidad: <https://wiki.minetest.net/>"
+msgid "Community wiki: <https://wiki.core.net/>"
+msgstr ""
 
 msgid "A community-based documentation website for Luanti. Anyone with an account can edit it! It also features a documentation of Minetest Game."
 msgstr "Un sitio web de documentación comunitaria para Luanti. ¡Cualquiera con una cuenta puede editarlo! También incluye documentación de Minetest Game."
@@ -1407,3 +1404,4 @@ msgstr "Luanti se puede jugar solo o en línea con varios jugadores. El juego en
 
 msgid "MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser."
 msgstr "MineClonia es un juego que se basa en el motor de Luanti y que pretende crear un juego lo más parecido posible a Minecraft. Sin embargo, hay muchos otros juegos para Minetest que se pueden instalar desde el navegador de contenido del menú principal."
+

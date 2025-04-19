@@ -31,6 +31,18 @@ msgstr ""
 msgid "Can hold an item and glows"
 msgstr ""
 
+msgid "Invisible Item Frame"
+msgstr ""
+
+msgid "Can hold an item but is invisible"
+msgstr ""
+
+msgid "Invisible Glow Item Frame"
+msgstr ""
+
+msgid "Can hold an item and glows but is invisible"
+msgstr ""
+
 msgid "Glow and Behold!"
 msgstr "Brilhe e Veja!"
 

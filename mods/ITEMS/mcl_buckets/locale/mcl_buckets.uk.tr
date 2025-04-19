@@ -1,5 +1,5 @@
 # textdomain: mcl_buckets
-Empty Bucket=
+Empty Bucket=Порожнє відро
 A bucket can be used to collect and release liquids.=
 Punch a liquid source to collect it. You can then use the filled bucket to place the liquid somewhere else.=
 Collects liquids=

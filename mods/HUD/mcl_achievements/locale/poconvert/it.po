@@ -138,10 +138,9 @@ msgstr "Prendi un lingotto di ferro dallo scompartimento d'uscita di una fornace
 msgid "Delicious Fish"
 msgstr "Pesce Delizioso"
 
-msgid "Take a cooked fish from a furnace.\n"
+msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
-msgstr "Prendi un pesce cotto da una fornace.\n"
-"Suggerimento: Utilizza una canna da pesca per catturare un pesce e cuocilo in una fornace."
+msgstr ""
 
 msgid "On A Rail"
 msgstr "Su un Binario"

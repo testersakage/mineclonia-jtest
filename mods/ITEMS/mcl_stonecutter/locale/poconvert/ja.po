@@ -16,6 +16,9 @@ msgstr ""
 msgid "Stonecutter"
 msgstr "石切台"
 
+msgid "Fill Craft Grid"
+msgstr ""
+
 msgid "Inventory"
 msgstr "インベントリ"
 

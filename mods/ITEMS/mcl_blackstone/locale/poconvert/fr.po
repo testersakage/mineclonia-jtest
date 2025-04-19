@@ -64,11 +64,11 @@ msgstr "Escalier en pierre noire"
 msgid "Polished Blackstone Slab"
 msgstr "Dalle de pierre noire"
 
-msgid "Blackstone Brick Stairs"
-msgstr "Escalier en roche noire taillée"
+msgid "Polished Blackstone Brick Stairs"
+msgstr ""
 
-msgid "Blackstone Brick Slab"
-msgstr "Dalle de roche noire taillée"
+msgid "Polished Blackstone Brick Slab"
+msgstr ""
 
 msgid "Soul Torch"
 msgstr "Torche des âmes"
@@ -78,4 +78,10 @@ msgstr "Les torches sont des sources de lumière qui peuvent être placées sur 
 
 msgid "Blackstone Wall"
 msgstr "Muret de roche noire"
+
+msgid "Polished Blackstone Wall"
+msgstr ""
+
+msgid "Polished Blackstone Brick Wall"
+msgstr ""
 

@@ -349,8 +349,8 @@ msgstr ""
 msgid "The main place to find the most recent version of Luanti."
 msgstr ""
 
-msgid "Community wiki: <https://wiki.minetest.net/>"
-msgstr "Wiki della comunità: <https://wiki.minetest.net/>"
+msgid "Community wiki: <https://wiki.core.net/>"
+msgstr ""
 
 msgid "A community-based documentation website for Luanti. Anyone with an account can edit it! It also features a documentation of Minetest Game."
 msgstr ""

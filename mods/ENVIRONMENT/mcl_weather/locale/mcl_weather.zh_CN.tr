@@ -1,5 +1,5 @@
 # textdomain: mcl_weather
-Enable dust particles in the nether=
+Enable dust particles in the nether=启用下界尘埃粒子
 Gives ability to control weather=获得控制天气的能力
 Changes the weather to the specified parameter.=将天气变更为指定参数所对应的状态。
 Error: No weather specified.=错误：未指定天气。

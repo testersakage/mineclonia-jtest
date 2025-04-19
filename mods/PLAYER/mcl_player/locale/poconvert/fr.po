@@ -19,6 +19,9 @@ msgstr ""
 msgid "HUD"
 msgstr ""
 
+msgid "Inventory"
+msgstr ""
+
 msgid "Misc"
 msgstr ""
 
