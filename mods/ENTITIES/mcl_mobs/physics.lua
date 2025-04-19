@@ -1136,6 +1136,8 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	local water_vec = self:check_water_flow (self_pos)
 	local velocity_factor = standon._mcl_velocity_factor or 1
 	local liquidtype = self._last_liquidtype
+		or (self.floats_on_lava and self._liquidtype == "lava"
+			and "lava")
 
 	if liquidtype == "water" then
 		local saved_vy = v.y
