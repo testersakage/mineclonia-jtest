@@ -48,10 +48,13 @@ local crafter_formspec = table.concat({
     (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(4.25,2.75,1,1) or ""),
     "list[context;grid_9;4.25,2.75;1,1;]",
     
+    -- An arrow for visual indication:
+    "image[6.125,2;1.5,1;gui_crafting_arrow.png]",
+    
     -- Output preview slot:
     "label[6.125,1.375;" .. F(S("Result")) .. "]",
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(6.125,2,1,1,0.2) or ""),
-    "list[context;output;6.125,2;1,1;]",
+    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(8.125,2,1,1,0.2) or ""),
+    "list[context;output;8.125,2;1,1;]",
     
     -- Player's Main Inventory (moved higher)
     "label[0.375,6.2;" .. F(C((mcl_formspec and mcl_formspec.label_color) or "#FFFFFF", S("Inventory"))) .. "]",
