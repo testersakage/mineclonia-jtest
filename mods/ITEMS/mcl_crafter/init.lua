@@ -10,68 +10,96 @@ local F = core.formspec_escape
 local C = core.colorize
 
 --------------------------------------------------------------------------------
--- Forms Interface (Crafter UI)
--- We define 9 separate 1×1 inventories ("grid_1" ... "grid_9") arranged in a 3×3 layout,
--- plus an output preview slot and the player's inventory, which is now split into a
--- main inventory and a hotbar at the bottom. Each cell uses
--- the mcl_formspec.get_itemslot_bg_v4 texture.
+-- Dynamic Forms Interface (Crafter UI) with Lock/Unlock per grid cell
 --------------------------------------------------------------------------------
+
 mcl_crafter = {}  -- our mod’s namespace
 
-local crafter_formspec = table.concat({
-    "formspec_version[4]",
-    "size[13,12]",
-    "label[2.25,0.375;" .. F(C("#FFFF00", S("Crafter"))) .. "]",
-    "label[2.25,0.5;" .. F(S("Ingredients")) .. "]",
-    
-    -- Row 1 (cells 1-3)
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(2.25,0.75,1,1) or ""),
-    "list[context;grid_1;2.25,0.75;1,1;]",
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(3.25,0.75,1,1) or ""),
-    "list[context;grid_2;3.25,0.75;1,1;]",
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(4.25,0.75,1,1) or ""),
-    "list[context;grid_3;4.25,0.75;1,1;]",
-    
-    -- Row 2 (cells 4-6)
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(2.25,1.75,1,1) or ""),
-    "list[context;grid_4;2.25,1.75;1,1;]",
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(3.25,1.75,1,1) or ""),
-    "list[context;grid_5;3.25,1.75;1,1;]",
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(4.25,1.75,1,1) or ""),
-    "list[context;grid_6;4.25,1.75;1,1;]",
-    
-    -- Row 3 (cells 7-9)
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(2.25,2.75,1,1) or ""),
-    "list[context;grid_7;2.25,2.75;1,1;]",
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(3.25,2.75,1,1) or ""),
-    "list[context;grid_8;3.25,2.75;1,1;]",
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(4.25,2.75,1,1) or ""),
-    "list[context;grid_9;4.25,2.75;1,1;]",
-    
-    -- An arrow for visual indication:
-    "image[6.125,2;1.5,1;gui_crafting_arrow.png]",
-    
-    -- Output preview slot:
-    "label[6.125,1.375;" .. F(S("Result")) .. "]",
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(8.125,2,1,1,0.2) or ""),
-    "list[context;output;8.125,2;1,1;]",
-    
-    -- Player's Main Inventory (moved higher)
-    "label[0.375,6.2;" .. F(C((mcl_formspec and mcl_formspec.label_color) or "#FFFFFF", S("Inventory"))) .. "]",
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(0.375,6.5,9,3) or ""),
-    "list[current_player;main;0.375,6.5;9,3;9]",
-    
-    -- Player's Hotbar at the bottom:
-    (mcl_formspec.get_itemslot_bg_v4 and mcl_formspec.get_itemslot_bg_v4(0.375,10.5,9,1) or ""),
-    "list[current_player;main;0.375,10.5;9,1;]",
-    "listring[context;grid]",
-    "listring[current_player;main]",
-    
-    -- Listrings for smooth inventory navigation:
-    "listring[context;output]",
-    "listring[current_player;main]"
-    --"listring[current_player;hotbar]",
-})
+-- Helper: Build the formspec dynamically based on each grid cell’s lock state.
+local function get_crafter_formspec(pos)
+    local meta = core.get_meta(pos)
+    local fs_parts = {}
+    table.insert(fs_parts, "formspec_version[4]")
+    table.insert(fs_parts, "size[13,12]")
+    table.insert(fs_parts, "label[2.25,0.375;" .. F(C("#FFFF00", S("Crafter"))) .. "]")
+    table.insert(fs_parts, "label[2.25,0.5;" .. F(S("Ingredients")) .. "]")
+
+    -- Coordinates for our 3×3 grid cells.
+    local positions = {
+        {x = 2.25, y = 0.75},
+        {x = 3.25, y = 0.75},
+        {x = 4.25, y = 0.75},
+        {x = 2.25, y = 1.75},
+        {x = 3.25, y = 1.75},
+        {x = 4.25, y = 1.75},
+        {x = 2.25, y = 2.75},
+        {x = 3.25, y = 2.75},
+        {x = 4.25, y = 2.75},
+    }
+    for i = 1, 9 do
+        local p = positions[i]
+        -- Use our normal itemslot background (if defined)
+        local background = ""
+        if mcl_formspec.get_itemslot_bg_v4 then
+            background = mcl_formspec.get_itemslot_bg_v4(p.x, p.y, 1, 1)
+        end
+        table.insert(fs_parts, background)
+        local locked = meta:get_string("locked_" .. i)
+        if locked == "true" then
+            -- Even though a list is added here, its max size is 0 so the cell is inert.
+            table.insert(fs_parts, "list[context;grid_" .. i .. ";" .. p.x .. "," .. p.y .. ";1,1;]")
+            -- Overlay the locked texture.
+            table.insert(fs_parts, "image[" .. p.x .. "," .. p.y .. ";1,1;crafter_slot_locked.png]")
+        else
+            -- Unlocked: normal list element.
+            table.insert(fs_parts, "list[context;grid_" .. i .. ";" .. p.x .. "," .. p.y .. ";1,1;]")
+        end
+        -- Add a small toggle button in the cell if it's empty.
+        local inv = meta:get_inventory()
+        local stack = inv:get_stack("grid_" .. i, 1)
+        if stack:is_empty() then
+            -- Place a button in the lower-right corner.
+            local btn_x = p.x + 0.0
+            local btn_y = p.y + 0.7
+            local btn_label = (locked == "true") and "Unlock" or "Lock"
+            table.insert(fs_parts, "button[" .. btn_x .. "," .. btn_y .. ";0.3,0.3;toggle_lock_" .. i .. ";" .. btn_label .. "]")
+        end
+    end
+
+    -- Arrow and output preview slot:
+    table.insert(fs_parts, "image[6.125,2;1.5,1;gui_crafting_arrow.png]")
+    table.insert(fs_parts, "label[6.125,1.375;" .. F(S("Result")) .. "]")
+    local output_bg = ""
+    if mcl_formspec.get_itemslot_bg_v4 then
+        output_bg = mcl_formspec.get_itemslot_bg_v4(8.125, 2, 1, 1, 0.2)
+    end
+    table.insert(fs_parts, output_bg)
+    table.insert(fs_parts, "list[context;output;8.125,2;1,1;]")
+
+    -- Player's Main Inventory:
+    table.insert(fs_parts, "label[0.375,6.2;" .. F(C((mcl_formspec and mcl_formspec.label_color) or "#FFFFFF", S("Inventory"))) .. "]")
+    local inv_bg = ""
+    if mcl_formspec.get_itemslot_bg_v4 then
+        inv_bg = mcl_formspec.get_itemslot_bg_v4(0.375, 6.5, 9, 3)
+    end
+    table.insert(fs_parts, inv_bg)
+    table.insert(fs_parts, "list[current_player;main;0.375,6.5;9,3;9]")
+
+    -- Player's Hotbar:
+    local hotbar_bg = ""
+    if mcl_formspec.get_itemslot_bg_v4 then
+        hotbar_bg = mcl_formspec.get_itemslot_bg_v4(0.375, 10.5, 9, 1)
+    end
+    table.insert(fs_parts, hotbar_bg)
+    table.insert(fs_parts, "list[current_player;main;0.375,10.5;9,1;]")
+
+    table.insert(fs_parts, "listring[context;grid]")
+    table.insert(fs_parts, "listring[current_player;main]")
+    table.insert(fs_parts, "listring[context;output]")
+    table.insert(fs_parts, "listring[current_player;main]")
+
+    return table.concat(fs_parts)
+end
 
 --------------------------------------------------------------------------------
 -- Common Definition (adapted from dispenser/furnace mods)
@@ -167,15 +195,16 @@ local function update_recipe_output(pos)
 end
 
 --------------------------------------------------------------------------------
--- Setup the Crafter (initialize metadata and inventories)
+-- Setup the Crafter (initialize metadata, inventories, and lock state)
 --------------------------------------------------------------------------------
 local function setup_crafter(pos)
     local meta = core.get_meta(pos)
-    meta:set_string("formspec", crafter_formspec)
+    meta:set_string("formspec", get_crafter_formspec(pos))
     local inv = meta:get_inventory()
     for i = 1, 9 do
         inv:set_size("grid_" .. i, 1)
         meta:set_string("recipe_" .. i, "")  -- no recipe initially
+        meta:set_string("locked_" .. i, "false")  -- initialize as unlocked
     end
     inv:set_size("output", 1)
 end
@@ -189,8 +218,11 @@ local function on_grid_inventory_put(pos, listname, index, stack, player)
     local meta = core.get_meta(pos)
     if string.sub(listname, 1, 5) == "grid_" then
         local cell = string.sub(listname, 6)
-        if meta:get_string("recipe_" .. cell) == "" and not stack:is_empty() then
-            meta:set_string("recipe_" .. cell, stack:to_string())
+        -- Only auto-configure if the cell is unlocked.
+        if meta:get_string("locked_" .. cell) ~= "true" then
+            if meta:get_string("recipe_" .. cell) == "" and not stack:is_empty() then
+                meta:set_string("recipe_" .. cell, stack:to_string())
+            end
         end
         update_recipe_output(pos)
     end
@@ -233,7 +265,7 @@ local function activate_crafter(pos)
         return
     end
     
-    -- Check that in each configured cell, enough items are available.
+    -- Check that in each configured (and unlocked) cell, enough items are available.
     for i = 1, 9 do
         local rec_str = meta:get_string("recipe_" .. i)
         if rec_str and rec_str ~= "" then
@@ -314,17 +346,13 @@ function mcl_crafter.on_hopper_in(hopper_pos, crafter_pos)
     -- For each configured slot that is at the minimum count,
     -- try to move one matching ingredient from the hopper.
     for i, data in pairs(configured_slots) do
-        -- Check if the cell’s count is equal to (or less than) the minimum.
         if data.count <= min_count then
             local recipe_stack = ItemStack(data.rec_str)
-            -- Fetch the donor list from the hopper.
             local donor_list = donor_inv:get_list("main")
             for j, dstack in ipairs(donor_list) do
                 if not dstack:is_empty() and dstack:get_name() == recipe_stack:get_name() then
-                    -- Move one item from the hopper into the corresponding grid cell.
                     mcl_util.move_item_container(hopper_pos, crafter_pos, nil, j, "grid_" .. i)
                     transferred = true
-                    -- Once an item is added for this slot, move on to the next slot.
                     break
                 end
             end
@@ -335,14 +363,43 @@ function mcl_crafter.on_hopper_in(hopper_pos, crafter_pos)
 end
 
 --------------------------------------------------------------------------------
+-- Handle Lock/Unlock Toggle via Forms Fields
+--------------------------------------------------------------------------------
+local function handle_toggle_lock(pos, fields)
+    local meta = core.get_meta(pos)
+    local inv = meta:get_inventory()
+    local updated = false
+    for i = 1, 9 do
+        local field_name = "toggle_lock_" .. i
+        if fields[field_name] then
+            local locked = meta:get_string("locked_" .. i)
+            if locked == "true" then
+                -- Unlock the slot: restore inventory size.
+                meta:set_string("locked_" .. i, "false")
+                inv:set_size("grid_" .. i, 1)
+            else
+                -- Lock the slot: remove ability to insert items and clear any recipe.
+                meta:set_string("locked_" .. i, "true")
+                inv:set_size("grid_" .. i, 0)
+                meta:set_string("recipe_" .. i, "")
+            end
+            updated = true
+        end
+    end
+    if updated then
+        meta:set_string("formspec", get_crafter_formspec(pos))
+    end
+end
+
+--------------------------------------------------------------------------------
 -- Crafter Node Definition (with redstone and hopper callbacks)
 --------------------------------------------------------------------------------
 local crafterdef = table.merge(commdef, {
     groups = table.merge(commdef.groups, { crafter = 1 }),
     description = S("Crafter"),
     _tt_help = S("3×3 crafting machine\nAutomatically sets its recipe when ingredients are placed and then crafts when powered"),
-    _doc_items_longdesc = S("This crafter automatically configures its recipe from the first ingredients placed into its 9 separate grid cells. When every recipe cell contains enough items and redstone power is applied, it consumes the ingredients and dispenses the crafted item."),
-    _doc_items_usagehelp = S("Place ingredients into the grid cells – each cell automatically records its ingredient type and required amount. Supply sufficient items (possibly via hoppers), then power the crafter with redstone to craft and dispense the output."),
+    _doc_items_longdesc = S("This crafter automatically configures its recipe from the first ingredients placed into its 9 separate grid cells. When every recipe cell contains enough items and redstone power is applied, it consumes the ingredients and dispenses the crafted item.\n\nClick the small lock button in an empty grid cell to lock that cell (preventing further item insertion) – the slot will display a locked texture. Click again to unlock it."),
+    _doc_items_usagehelp = S("Place ingredients into the grid cells – each cell automatically records its ingredient type and required amount. If you want to disable a particular grid cell, click its lock button when it is empty; clicking again re-enables that cell. Supply sufficient items (possibly via hoppers), then power the crafter with redstone to craft and dispense the output."),
     tiles = {
         "crafter_top.png", "crafter_bottom.png",
         "crafter_side.png", "crafter_side.png", "crafter_side.png", "crafter_front.png"
@@ -353,7 +410,9 @@ local crafterdef = table.merge(commdef, {
         orientate(pos, placer)
     end,
     on_receive_fields = function(pos, formname, fields, sender)
-        -- No manual button needed; configuration is automatic.
+        -- Process lock toggle buttons:
+        handle_toggle_lock(pos, fields)
+        -- No other manual fields needed.
         return false
     end,
     _mcl_redstone = {
