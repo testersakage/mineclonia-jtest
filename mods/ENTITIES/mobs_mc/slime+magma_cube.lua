@@ -4,11 +4,13 @@ local S = core.get_translator("mobs_mc")
 
 local slime_chunk_spawn_max = mcl_worlds.layer_to_y(40)
 
-local function in_slime_chunk(pos)
-	local pr = PseudoRandom(mcl_mapgen_core.get_block_seed(pos))
-	return pr:next(1,10) == 1
-end
+local mapgen_seed = core.get_mapgen_setting("seed")
 
+local function in_slime_chunk(pos)
+	local encoded_pos = (math.floor(pos.x / 16) + 2048) * 4096 + (math.floor(pos.z / 16) + 2048)
+	encoded_pos = PcgRandom(encoded_pos):next() + mapgen_seed
+	return PcgRandom(encoded_pos):next(1, 10) == 1   -- 1/10th chance that mapblock column is a slime chunk
+end
 
 -- If the light level is equal to or less than a random integer (from 0 to 7)
 -- If the fraction of the moon that is bright is greater than a random number (from 0 to 1)
