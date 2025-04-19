@@ -1,5 +1,5 @@
-local modname = core.get_current_modname()
-local S = core.get_translator(modname)
+local modname = minetest.get_current_modname()
+local S = minetest.get_translator(modname)
 
 return {
 	{S("Creators of Mineclonia"), 0x0A9400, {
@@ -27,6 +27,8 @@ return {
 		"Ælla Chiana Moskopp",
 		"Raylight",
 		"Miguel_PL",
+		"Mikita Wiśniewski",
+		"WillConker",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",
