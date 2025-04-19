@@ -562,8 +562,8 @@ function slime_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cac
 		end
 
 		if spawn_pos.y <= slime_chunk_spawn_max + 0.5
-			and in_slime_chunk (spawn_pos)
-			and math.random (1, 10) == 1 then
+			and math.random (1, 10) == 1
+			and in_slime_chunk (spawn_pos) then
 			return monster_spawner.test_spawn_position (self, spawn_pos,
 								    node_pos, sdata,
 								    node_cache)
