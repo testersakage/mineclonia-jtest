@@ -64,10 +64,10 @@ msgstr ""
 msgid "Polished Blackstone Slab"
 msgstr "Poleret sortstensflise"
 
-msgid "Blackstone Brick Stairs"
+msgid "Polished Blackstone Brick Stairs"
 msgstr ""
 
-msgid "Blackstone Brick Slab"
+msgid "Polished Blackstone Brick Slab"
 msgstr ""
 
 msgid "Soul Torch"
@@ -78,4 +78,10 @@ msgstr ""
 
 msgid "Blackstone Wall"
 msgstr "Sorstensmur"
+
+msgid "Polished Blackstone Wall"
+msgstr ""
+
+msgid "Polished Blackstone Brick Wall"
+msgstr ""
 

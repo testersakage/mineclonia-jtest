@@ -64,11 +64,11 @@ msgstr "Scalini di pietranera levigata"
 msgid "Polished Blackstone Slab"
 msgstr "Lastra di pietranera levigata"
 
-msgid "Blackstone Brick Stairs"
-msgstr "Scalini di mattoni di pietranera"
+msgid "Polished Blackstone Brick Stairs"
+msgstr ""
 
-msgid "Blackstone Brick Slab"
-msgstr "Lastra di mattoni di pietranera"
+msgid "Polished Blackstone Brick Slab"
+msgstr ""
 
 msgid "Soul Torch"
 msgstr "Torcia delle anime"
@@ -78,4 +78,10 @@ msgstr "Le torce sono fonti di luce che possono essere piazzate sul lato o sopra
 
 msgid "Blackstone Wall"
 msgstr "Muretto di pietranera"
+
+msgid "Polished Blackstone Wall"
+msgstr ""
+
+msgid "Polished Blackstone Brick Wall"
+msgstr ""
 

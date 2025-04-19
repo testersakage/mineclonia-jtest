@@ -64,10 +64,10 @@ msgstr "Escadas de negrito polido"
 msgid "Polished Blackstone Slab"
 msgstr "Degrau de negrito polido"
 
-msgid "Blackstone Brick Stairs"
-msgstr "Escadas de tijolos de negrito polido"
+msgid "Polished Blackstone Brick Stairs"
+msgstr ""
 
-msgid "Blackstone Brick Slab"
+msgid "Polished Blackstone Brick Slab"
 msgstr ""
 
 msgid "Soul Torch"
@@ -77,5 +77,11 @@ msgid "Torches are light sources which can be placed at the side or on the top o
 msgstr ""
 
 msgid "Blackstone Wall"
+msgstr ""
+
+msgid "Polished Blackstone Wall"
+msgstr ""
+
+msgid "Polished Blackstone Brick Wall"
 msgstr ""
 

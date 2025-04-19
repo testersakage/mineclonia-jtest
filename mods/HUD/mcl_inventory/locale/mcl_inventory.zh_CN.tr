@@ -1,4 +1,8 @@
 # textdomain: mcl_inventory
+Auto (use scroll bar if client version >@= 5.11)=
+Off (use paging buttons, much better performance on client < 5.11)=
+On (more MC like experience, may be sluggish on client < 5.11)=
+Enable scroll bar on creative inventory=
 Building Blocks=建筑块
 Decoration Blocks=美化块
 Redstone=红石
@@ -18,8 +22,8 @@ Switch stack size=切换堆叠数量
 Recipe book=配方书
 Help=帮助
 Advancements=进度
-Player settings=
-Return to player inventory=
+Player settings=玩家设置
+Return to player inventory=返回玩家背包
 Crafting table out of range!=离工作台太远！
 Crafting=制作
 Fill Craft Grid=填满制作网格

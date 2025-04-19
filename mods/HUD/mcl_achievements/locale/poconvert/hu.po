@@ -138,10 +138,9 @@ msgstr "Vegyél ki egy vasrudat a kemencéből.\n"
 msgid "Delicious Fish"
 msgstr "Ízletes halétel"
 
-msgid "Take a cooked fish from a furnace.\n"
+msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
-msgstr "Vegyél ki sülthalat a kemencéből.\n"
-"Tipp: Fogj egy halat horgászbot segítségével és süsd meg a kemencében."
+msgstr ""
 
 msgid "On A Rail"
 msgstr "Vasúton"

@@ -1,6 +1,6 @@
 # textdomain: doc_items
-This is a decorational block.=
-This block is a building block for creating various buildings.=
+This is a decorational block.=Це декоративний блок.
+This block is a building block for creating various buildings.=Цей блок є будівельним матеріалом для створення різних будівель.
 This item is primarily used for crafting other items.=
 Hold it in your hand, then leftclick to eat it.=
 Hold it in your hand, then leftclick to eat it. But why would you want to do this?=
@@ -128,7 +128,7 @@ Durability: @1 uses=
 Durability: @1=
 Miscellaneous items=
 Item reference of items which are neither blocks, tools or weapons (esp. crafting items)=
-Mobs=
+Mobs=Моби
 Different Mobs=
 Type: @1=
 Spawning light levels (min / max): @1 / @2=

@@ -31,6 +31,18 @@ msgstr "荧光览物框"
 msgid "Can hold an item and glows"
 msgstr "可放置一个物品且会发光"
 
+msgid "Invisible Item Frame"
+msgstr ""
+
+msgid "Can hold an item but is invisible"
+msgstr ""
+
+msgid "Invisible Glow Item Frame"
+msgstr ""
+
+msgid "Can hold an item and glows but is invisible"
+msgstr ""
+
 msgid "Glow and Behold!"
 msgstr "发光吧，瞧一瞧！"
 
