@@ -298,6 +298,21 @@ function mob_class:post_load_staticdata ()
 		self:restore_physics_factors ()
 	end
 
+	-- Remove invalid entries in doors_to_close. See
+	-- https://codeberg.org/mineclonia/mineclonia/issues/3286 for more
+	-- information.
+	if self.doors_to_close then
+		local newtable = {}
+		for _, v in pairs(self.doors_to_close) do
+			if v.x then
+				table.insert(newtable, v)
+			else
+				core.log("error", "Found invalid doors to close in mob, removing to prevent crash")
+			end
+		end
+		self.doors_to_close = newtable
+	end
+
 	-- Erase timers.
 	self._timers = {}
 	if not self.texture_mods then
@@ -314,7 +329,6 @@ function mob_class:mob_activate (staticdata, dtime)
 
 	if staticdata then
 		local tmp = core.deserialize(staticdata)
-
 		if tmp then
 			for _,stat in pairs(tmp) do
 				self[_] = stat
