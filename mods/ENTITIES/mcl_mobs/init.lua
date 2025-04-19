@@ -485,6 +485,7 @@ mcl_mobs.arrow_class = {
 				self.owner_id = tostring (puncher)
 			end
 		end
+		return true
 	end,
 }
 
