@@ -622,7 +622,7 @@ mcl_potions.register_potion({
 	_mcl_potion=1, potion = 1, rarity = 1},
 	_tt = nil,
 	_longdesc = S("Attracts danger."),
-	image = "mcl_potions_ominous_potion.png",
+	inventory_image = "mcl_potions_ominous_potion.png",
 	_effect_list = {
 		bad_omen = {dur = 6000, dur_variable = false,},
 	},
@@ -714,14 +714,14 @@ local compat = "mcl_potions:compat_potion"
 local compat_arrow = "mcl_potions:compat_arrow"
 local compat_def = {
 	description = S("Unknown Potion") .. "\n" .. core.colorize("#ff0", S("Right-click to identify")),
-	image = "mcl_potions_potion_overlay.png^[colorize:#00F:127^mcl_potions_potion_bottle.png^mcl_unknown.png",
+	inventory_image = "mcl_potions_potion_overlay.png^[colorize:#00F:127^mcl_potions_potion_bottle.png^mcl_unknown.png",
 	groups = {not_in_creative_inventory = 1},
 	on_secondary_use = replace_legacy_potion,
 	on_place = replace_legacy_potion,
 }
 local compat_arrow_def = {
 	description = S("Unknown Tipped Arrow") .. "\n" .. core.colorize("#ff0", S("Right-click to identify")),
-	image = "mcl_bows_arrow_inv.png^(mcl_potions_arrow_inv.png^[colorize:#FFF:100)^mcl_unknown.png",
+	inventory_image = "mcl_bows_arrow_inv.png^(mcl_potions_arrow_inv.png^[colorize:#FFF:100)^mcl_unknown.png",
 	groups = {not_in_creative_inventory = 1},
 	on_secondary_use = replace_legacy_potion,
 	on_place = replace_legacy_potion,
