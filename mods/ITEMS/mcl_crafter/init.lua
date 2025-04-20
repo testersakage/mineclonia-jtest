@@ -270,7 +270,7 @@ end
 local function activate_crafter(pos)
     local meta = core.get_meta(pos)
     local inv = meta:get_inventory()
-    
+
     -- Build the recipe from metadata.
     local recipe = {}
     local recipe_configured = false
@@ -286,7 +286,7 @@ local function activate_crafter(pos)
     if not recipe_configured then
         return
     end
-    
+
     -- Check that in each configured (and unlocked) cell, enough items are available.
     for i = 1, 9 do
         local rec_str = meta:get_string("recipe_" .. i)
@@ -298,26 +298,51 @@ local function activate_crafter(pos)
             end
         end
     end
-    
+
     -- Consume the required amounts from each grid cell.
     for i = 1, 9 do
         local rec_str = meta:get_string("recipe_" .. i)
         if rec_str and rec_str ~= "" then
-            local required_stack = ItemStack(rec_str)
             local available_stack = inv:get_stack("grid_" .. i, 1)
             available_stack:take_item(1)
             inv:set_stack("grid_" .. i, 1, available_stack)
         end
     end
-    
-    -- Calculate and dispense the crafted output.
+
+    -- Calculate the crafted output.
     local craft_req = { method = "normal", width = 3, items = recipe }
     local result = core.get_craft_result(craft_req).item
+
     if result and result:get_name() ~= "" then
+        -- Check if there's a hopper node directly below the crafter.
+        local pos_below = { x = pos.x, y = pos.y - 1, z = pos.z }
+        local node_below = core.get_node(pos_below)
+        if node_below and node_below.name == "mcl_hoppers:hopper" then
+            local hopper_inv = core.get_inventory({ type = "node", pos = pos_below })
+            if hopper_inv then
+                -- Attempt to add the crafted item to the hopper's "main" inventory.
+                local leftover = hopper_inv:add_item("main", result:to_string())
+                -- If the entire result was accepted, do not dispense it.
+                if leftover:is_empty() then
+
+                    return
+                else
+                    -- Some parts of the result could not be inserted;
+                    -- update the result to the leftover that needs to be dispensed.
+                    result = leftover
+                end
+            end
+            
+        else
+            --if there is no hopper below the block
+            --core.chat_send_all(S("DEBUG: Crafter: Block below is " .. node_below.name))
+        end
+
+        -- Dispense the result (or the leftover) by dropping it into the world.
         local node = core.get_node(pos)
         local dropdir = vector.multiply(core.facedir_to_dir(node.param2), -1)
         local droppos = vector.add(pos, dropdir)
-        -- Add a small random offset:
+        -- Add a small random offset.
         local pos_variation = 100
         droppos = vector.offset(
             droppos,
