@@ -97,13 +97,13 @@ end)
 -- (very ugly)
 local function get_drops(drop, toolname, param2, paramtype2)
 	local tmp_node_name = "mcl_item_entity:TMP_NODE"
-	core.registered_nodes[tmp_node_name] = {
+	rawset(core.registered_nodes, tmp_node_name, {
 		name = tmp_node_name,
 		drop = drop,
 		paramtype2 = paramtype2
-	}
+	})
 	local drops = core.get_node_drops({name = tmp_node_name, param2 = param2}, toolname)
-	core.registered_nodes[tmp_node_name] = nil
+	rawset(core.registered_nodes, tmp_node_name, nil)
 	return drops
 end
 
