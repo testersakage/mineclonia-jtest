@@ -3182,8 +3182,8 @@ local function register_decorations()
 		y_min = mcl_vars.mg_overworld_min,
 	})
 
-	local lushcaves = { "LushCaves", "LushCaves_underground", "LushCaves_ocean", "LushCaves_deep_ocean"}
-	local lushcaves_underground = { "LushCaves_underground", "LushCaves_ocean", "LushCaves_deep_ocean"}
+	local lushcaves = { "LushCaves", "LushCaves_underground", "LushCaves_ocean"}
+	local lushcaves_underground = { "LushCaves_underground", "LushCaves_ocean"}
 
 	core.register_decoration({
 		decoration = "mcl_lush_caves:moss",
