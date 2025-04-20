@@ -283,7 +283,7 @@ local function activate_crafter(pos)
         if rec_str and rec_str ~= "" then
             local required_stack = ItemStack(rec_str)
             local available_stack = inv:get_stack("grid_" .. i, 1)
-            available_stack:take_item(required_stack:get_count())
+            available_stack:take_item(1)
             inv:set_stack("grid_" .. i, 1, available_stack)
         end
     end
@@ -458,4 +458,5 @@ core.register_craft({
         { "mcl_redstone:redstone", "mcl_dispensers:dropper",           "mcl_redstone:redstone" },
     },
 })
+
 
