@@ -109,6 +109,13 @@ local commdef = {
     sounds = mcl_sounds and mcl_sounds.node_sound_stone_defaults() or nil,
     groups = { pickaxey = 1, container = 2, material_stone = 1 },
     allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+    
+ 	-- Prevent manual removal from the output list.
+	    if from_list == "output" and player then
+
+		return 0
+	    end
+    
         local pos_str = core.pos_to_string(pos)
         local source = (player and player:get_player_name()) or "hopper"
         if player and core.is_protected(pos, source) then
@@ -125,6 +132,13 @@ local commdef = {
         end
     end,
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+    
+    	-- Prevent manual removal from the output list.
+	    if listname == "output" and player then
+
+		return 0
+	    end
+    
         local pos_str = core.pos_to_string(pos)
         local source = (player and player:get_player_name()) or "hopper"
         if player and core.is_protected(pos, source) then
@@ -139,6 +153,13 @@ local commdef = {
         end
     end,
     allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+    
+    	-- Prevent manual placing to the output list.
+	    if listname == "output" and player then
+
+		return 0
+	    end
+    
         local pos_str = core.pos_to_string(pos)
         local item_name = stack:get_name()
         local item_count = stack:get_count()
@@ -230,6 +251,7 @@ end
 
 local function on_grid_inventory_take(pos, listname, index, stack, player)
     local meta = core.get_meta(pos)
+    
     if string.sub(listname, 1, 5) == "grid_" then
         local cell = string.sub(listname, 6)
         local inv = meta:get_inventory()
