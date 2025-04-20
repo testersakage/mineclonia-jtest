@@ -195,7 +195,7 @@ core.register_abm({
 	end
 })
 
-local lushcaves = { "LushCaves", "LushCaves_underground", "LushCaves_ocean", "LushCaves_deep_ocean"}
+local lushcaves = { "LushCaves", "LushCaves_underground", "LushCaves_ocean" }
 
 mcl_structures.register_structure("clay_pool",{
 	place_on = {"group:material_stone","mcl_core:gravel","mcl_lush_caves:moss","mcl_core:clay"},

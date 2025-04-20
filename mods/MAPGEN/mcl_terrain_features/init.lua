@@ -366,7 +366,7 @@ mcl_structures.register_structure("powder_snow_trap", {
 		octaves = 4,
 		persist = 0.67,
 	},
-	biomes = {"IcePlainsSpikes, ColdTaiga, ColdTaiga_beach, IcePlains"},
+	biomes = {"IcePlainsSpikes", "ColdTaiga", "ColdTaiga_beach", "IcePlains"},
 	y_min = 1,
 	y_max = mcl_vars.mg_overworld_max,
 	terrain_feature = true,
