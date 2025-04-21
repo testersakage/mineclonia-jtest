@@ -119,3 +119,14 @@ function mcl_util.return_itemstack_if_alive(player, itemstack)
 	end
 	return itemstack
 end
+
+-- Attribution: https://gist.github.com/jrus/3197011
+local pr = PcgRandom (os.time ())
+
+function mcl_util.generate_uuid ()
+    local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+    return string.gsub (template, '[xy]', function (c)
+        local v = (c == 'x') and pr:next (0, 0xf) or pr:next (8, 0xb)
+        return string.format ('%x', v)
+    end)
+end

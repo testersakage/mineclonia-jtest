@@ -635,7 +635,8 @@ local entity_standing = {
 	end,
 	on_activate = function(self, staticdata)
 		self:_set_banner_node()
-		if core.get_item_group(core.get_node(self._node_pos).name, "banner") <= 0 then
+		if core.get_item_group(core.get_node(self._node_pos).name, "banner") <= 0
+			and self.name ~= "mcl_raids:ominous_banner" then
 			core.log("warning", "[mcl_banners] Orphan banner entity found at "..core.pos_to_string(self.object:get_pos(), 0).." removing it.")
 			self.object:remove()
 			return
