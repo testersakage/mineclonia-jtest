@@ -466,6 +466,10 @@ function mob_class:on_deactivate (removal)
 			self:remove_particlespawners (name)
 		end
 	end
+
+	if self.raidmob then
+		mcl_raids.unload_raidmob (self, removal)
+	end
 end
 
 function mob_class:jockey_death ()

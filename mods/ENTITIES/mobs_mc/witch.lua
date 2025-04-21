@@ -341,6 +341,7 @@ end
 function witch:attack_default (self_pos, dtime, esp)
 	local raid = self:_get_active_raid ()
 	if raid and not self._raider_cooldown
+		and raid.status == "ongoing"
 		and self:check_timer ("raider_target", 5.0) then
 		local nearest, dist = nil, nil
 		-- Locate the nearest illager in need of healing.

@@ -319,6 +319,12 @@ function mob_class:post_load_staticdata ()
 	if not self.texture_mods then
 		self.texture_mods = {}
 	end
+
+	-- Enroll this mob in any active raid to which it might
+	-- belong.
+	if self.raidmob then
+		mcl_raids.load_raidmob (self)
+	end
 end
 
 function mob_class:mob_activate (staticdata, dtime)

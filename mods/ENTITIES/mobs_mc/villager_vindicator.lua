@@ -149,7 +149,23 @@ end
 local pr = PcgRandom (os.time () + 4)
 
 function vindicator:apply_raid_buffs (stage)
-	-- TODO: enchantments.
+	illager.apply_raid_buffs (self, stage)
+
+	local raid = self:_get_active_raid ()
+	if mcl_raids.should_enchant (raid) then
+		local wielditem = self:get_wielditem ()
+		local name = wielditem:get_name ()
+		if name ~= "mcl_tools:axe_iron"
+			and name ~= "mcl_tools:axe_iron_enchanted" then
+			return
+		end
+		if stage > 5 then -- Max number of stages on Normal difficulty.
+			mcl_enchanting.enchant (wielditem, "sharpness", 2)
+		elseif stage > 3 then -- Max number of stages on Easy difficulty.
+			mcl_enchanting.enchant (wielditem, "sharpness", 1)
+		end
+		self:set_wielditem (wielditem)
+	end
 end
 
 function vindicator:on_spawn ()
@@ -177,7 +193,8 @@ local door_penalties = table.merge (mob_class.gwp_penalties, {
 	DOOR_WOOD_CLOSED = 0.0,
 })
 
-function vindicator:ai_step ()
+function vindicator:ai_step (dtime)
+	illager.ai_step (self, dtime)
 	self.can_open_doors = false
 	self.gwp_penalties = mob_class.gwp_penalties
 	local raid = self:_get_active_raid ()
