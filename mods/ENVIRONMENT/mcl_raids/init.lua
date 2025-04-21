@@ -320,7 +320,7 @@ function mcl_raids.report_mob_damage_event (entity, hp, mcl_reason)
 			raid.member_unloaded_time[entity._raid_uuid] = nil
 
 			local source = mcl_reason.source
-			if source:is_player () then
+			if source and source:is_player () then
 				local player = source:get_player_name ()
 				if table.indexof (raid.heroes, player) == -1 then
 					table.insert (raid.heroes, player)
