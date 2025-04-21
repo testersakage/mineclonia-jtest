@@ -5649,9 +5649,8 @@ function villager:visit_bell_for_raid (self_pos, dtime)
 		self._visiting_bell_for_raid = false
 		return false
 	elseif not self._pacing_around_poi
-		and not self._working_at_bell
 		and self._bell
-		and pr:next (1, 6) <= 3
+		and pr:next (1, 6) == 1
 		and self:do_navigate (self_pos, dtime, self._bell,
 			0.75, false, 6.0) then
 		self._visiting_bell_for_raid = true
