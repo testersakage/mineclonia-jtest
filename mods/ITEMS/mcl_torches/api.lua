@@ -73,7 +73,7 @@ local function check_placement_allowed(node, wdir)
 		end
 	end
 
-	return true
+	return false
 end
 
 function mcl_torches.register_torch(def)
