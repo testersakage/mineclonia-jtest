@@ -633,6 +633,7 @@ function raid_mob:check_navigate_village (self_pos, dtime)
 		if not poi then
 			return false
 		end
+		self._time_inactive = 0.0
 		self._navigating_around_poi = false
 		self._navigating_to_poi = poi
 		self:session_navigate (poi, 1.05, 1.0, nil, nil, 1, 1)
