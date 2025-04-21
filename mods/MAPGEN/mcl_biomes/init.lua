@@ -1,3 +1,6 @@
+local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
+
 local mg_seed = core.get_mapgen_setting("seed")
 
 local mod_mcl_structures = core.get_modpath("mcl_structures")
@@ -2091,6 +2094,9 @@ local function register_dimension_biomes()
 		flags = "defaults",
 	}
 	})
+
+	dofile(modpath.."/ores.lua")
+	--needs to be loaded *after* biome definitions
 
 	--[[ THE END ]]
 	core.register_biome({
