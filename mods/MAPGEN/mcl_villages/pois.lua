@@ -587,6 +587,22 @@ function mcl_villages.nearest_poi_in_radius (center, radius, predicate, userdata
 	return nearest, dist and math.sqrt (dist) or nil
 end
 
+function mcl_villages.pois_in_radius (center, radius, predicate, userdata)
+	local aa = vector.offset (center, -radius, -radius, -radius)
+	local bb = vector.offset (center, radius, radius, radius)
+	local list = mcl_villages.get_pois_in_by_nodepos (aa, bb)
+	local distsqr = radius * radius
+	local pois = {}
+	for _, poi in pairs (list) do
+		local this_dist = calc_distsqr (center, poi.min)
+		if this_dist <= distsqr
+			and (not predicate or predicate (poi, userdata)) then
+			table.insert (pois, poi)
+		end
+	end
+	return pois
+end
+
 ------------------------------------------------------------------------
 -- POI creation.
 ------------------------------------------------------------------------
