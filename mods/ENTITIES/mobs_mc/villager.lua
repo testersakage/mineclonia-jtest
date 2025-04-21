@@ -11,6 +11,7 @@ local villager_verbose
 	= core.settings:get_bool ("villager_verbose", false)
 local villager_debug
 	= core.settings:get_bool ("villager_debug", false)
+local scale_chance = mcl_mobs.scale_chance
 
 mobs_mc.jobsites = {}
 
@@ -3061,6 +3062,11 @@ local function sense_nearby_visible_heroes (self, self_pos)
 	return players, persist
 end
 
+local function sense_active_raid (self, self_pos)
+	local persist = 0.75 + pr:next (0, 10) / 20
+	return mcl_raids.find_active_raid (self_pos), persist
+end
+
 function villager:run_sensor (self_pos, name)
 	local result = nil
 	local persist = 0
@@ -3113,6 +3119,8 @@ function villager:run_sensor (self_pos, name)
 		result, persist = sense_nearby_visible_players (self, self_pos)
 	elseif name == "nearby_visible_heroes" then
 		result, persist = sense_nearby_visible_heroes (self, self_pos)
+	elseif name == "active_raid" then
+		result, persist = sense_active_raid (self, self_pos)
 	end
 	self._sensing[name] = {
 		persist, result,
@@ -5588,28 +5596,122 @@ function villager:begin_lovemaking (object, dtime)
 	return false
 end
 
--- TODO: rewrite raids to vary by difficulty and to utilize the
--- village mechanics defined here and by mcl_villages.
-
 function villager:answer_raid (self_pos, dtime)
+	if self:check_timer ("answer_raid", 1.0)
+		and self._special_schedule ~= "PANIC" then
+		local raid = self:run_sensor (self_pos, "active_raid")
+		if raid then
+			local new_schedule
+			if raid.status ~= "ongoing"
+				or mcl_raids.is_wave_active (raid) then
+				new_schedule = "RAID"
+			else
+				new_schedule = "PRE_RAID"
+			end
+			if new_schedule ~= self._special_schedule then
+				self._special_schedule = new_schedule
+				self._interaction_target = nil
+				self._breed_target = nil
+				self:replace_activity (nil)
+			end
+		end
+	end
+end
+
+function villager:reset_raid (self_pos, dtime)
+	if not self:run_sensor (self_pos, "active_raid") then
+		self._special_schedule = nil
+	end
 end
 
 function villager:ring_bell (self_pos, dtime)
+	local chance = scale_chance (95, dtime)
+	if self._bell and pr:next (1, chance) == 1 then
+		local distance
+			= vector.distance (self_pos, self._bell)
+		-- 3.0 in Minecraft...
+		if distance < 6.0 then
+			local node = core.get_node (self._bell)
+			if node.name == "mcl_bells:bell" then
+				mcl_bells.ring_once (self._bell)
+			end
+		end
+	end
 end
 
 function villager:visit_bell_for_raid (self_pos, dtime)
+	if self._visiting_bell_for_raid then
+		local job_site = self._bell
+		if job_site and self:do_navigate (self_pos, dtime, job_site,
+						0.75, true, 6.0) then
+			return true
+		end
+		self._visiting_bell_for_raid = false
+		return false
+	elseif not self._pacing_around_poi
+		and not self._working_at_bell
+		and self._bell
+		and pr:next (1, 6) <= 3
+		and self:do_navigate (self_pos, dtime, self._bell,
+			0.75, false, 6.0) then
+		self._visiting_bell_for_raid = true
+		return "_visiting_bell_for_raid"
+	end
 end
 
-function villager:run_around_village (self_pos, dtime)
+-- Frantically run about in the near vicinity.
+villager.run_around_village
+	= generate_pace_around_village ("_run_around_village", 0.75, 2, 2, true)
+
+-- TODO: launch fireworks after moving into the open.
+
+function villager:raid_was_defeated (self_pos)
+	local raid = self:run_sensor (self_pos, "active_raid")
+	return raid and raid.status == "victory"
 end
 
-function villager:pace_disconsolate (self_pos, dtime)
-end
-
-function villager:pace_triumphant (self_pos, dtime)
-end
+villager.pace_triumphant
+	= generate_pace_around_village ("_pace_triumphant", 0.55, 10, 7, true,
+				        villager.raid_was_defeated)
 
 function villager:locate_cover_fast (self_pos, dtime)
+	if self._moving_to_cover_fast then
+		local hideout = self._moving_to_cover_fast
+		local continue, _, dist
+			= self:do_navigate (self_pos, dtime, hideout, 0.7, true)
+		if continue then
+			return true
+		end
+
+		if dist <= 2.0 then
+			local t = self._time_passed_by_cover + dtime
+			self._time_passed_by_cover = t
+
+			if t >= 15 then
+				self._special_schedule = nil
+				self._moving_to_cover_fast = nil
+				return false
+			end
+		elseif self:check_timer ("hideout_resume", 0.5) then
+			-- Attempt to return to the hideout.
+			self:do_navigate (self_pos, dtime, hideout, 0.7, false)
+		end
+
+		return true
+	else
+		local raid = self:run_sensor (self_pos, "active_raid")
+		if raid and raid.status == "ongoing" then
+			local hideout = self:run_sensor (self_pos, "nearby_hideout")
+			if hideout and self:do_navigate (self_pos, dtime,
+						hideout, 0.7, false) then
+				self._moving_to_cover_fast = hideout
+				self._time_passed_by_cover = 0.0
+				return "_moving_to_cover_fast"
+			end
+		end
+
+		return false
+	end
 end
 
 villager.wander_to_bell
@@ -5783,14 +5885,15 @@ end
 
 local function get_schedule_items_before_raid (self, list)
 	table.insert (list, { 10, self.clear_wielditem, false, })
-	table.insert (list, { 3, self.ring_bell, true, })
+	table.insert (list, { 11, self.ring_bell, false, })
+	table.insert (list, { 99, self.reset_raid, false, })
 	table.insert (list, { 4, self.visit_bell_for_raid, true, })
 	table.insert (list, { 4, self.run_around_village, true, })
 end
 
 local function get_schedule_items_during_raid (self, list)
 	table.insert (list, { 10, self.clear_wielditem, false, })
-	table.insert (list, { 0, self.pace_disconsolate, true, })
+	table.insert (list, { 99, self.reset_raid, false, })
 	table.insert (list, { 0, self.pace_triumphant, true, })
 	table.insert (list, { 2, self.locate_cover_fast, true, })
 end
@@ -6140,6 +6243,11 @@ function villager:init_ai ()
 	self._visiting_job_site = nil
 	self._interacting_with = nil
 	self._visiting_bell = nil
+	self._visiting_bell_for_raid = nil
+	self._moving_to_cover = nil
+	self._moving_to_cover_fast = nil
+	self._pace_triumphant = nil
+	self._run_around_village = nil
 	self._pacing_around_poi = nil
 	self._socializing_at_bell = nil
 	self._avoiding_hostile = nil

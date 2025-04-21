@@ -126,7 +126,22 @@ end
 function pillager:apply_raid_buffs (stage)
 	illager.apply_raid_buffs (self, stage)
 
-	-- TODO: pillager raid buffs.
+	local raid = self:_get_active_raid ()
+	if mcl_raids.should_enchant (raid) then
+		local wielditem = self:get_wielditem ()
+		local name = wielditem:get_name ()
+		if name ~= "mcl_bows:crossbow"
+			and name ~= "mcl_bows:crossbow_enchanted" then
+			return
+		end
+		if stage > 5 then -- Max number of stages on Normal difficulty.
+			mcl_enchanting.enchant (wielditem, "quick_charge", 2)
+		elseif stage > 3 then -- Max number of stages on Easy difficulty.
+			mcl_enchanting.enchant (wielditem, "quick_charge", 1)
+		end
+		mcl_enchanting.enchant (wielditem, "multishot", 1)
+		self:set_wielditem (wielditem)
+	end
 end
 
 function pillager:drop_custom (looting_level)
@@ -249,6 +264,7 @@ function pillager:shoot_arrow (pos, dir)
 	end
 	mcl_bows.shoot_arrow_crossbow ("mcl_bows:arrow", pos, dir, self:get_yaw (),
 				       self.object, 32.0, nil, true, wielditem, false)
+	self._time_inactive = 0.0
 end
 
 ------------------------------------------------------------------------

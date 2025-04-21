@@ -240,6 +240,7 @@ mcl_mobs.mob_class = {
 	_water_current = vector.zero (),
 	_liquidtype = nil,
 	_last_liquidtype = nil,
+	raidmob = false,
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = core.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"

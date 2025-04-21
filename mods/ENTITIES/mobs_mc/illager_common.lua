@@ -44,6 +44,7 @@ function patrolling_mob:promote_to_raidcaptain ()
 	banner:set_attach (self.object, self._banner_bone,
 			   self._banner_position, nil, true)
 	self._raidcaptain = true
+	mcl_raids.promote_to_raidcaptain (self)
 end
 
 function patrolling_mob:on_spawn ()
@@ -284,6 +285,12 @@ local raid_mob = table.merge (patrolling_mob, {
 		return nil
 	end,
 	_visited_pois = {},
+	_raid_wave_number = nil,
+	_attached_to_raid = nil,
+	_raid_uuid = nil,
+	_time_inactive = 0.0,
+	_time_outside_raid = 0.0,
+	_celebrating = false,
 })
 
 function raid_mob:apply_raid_buffs (stage)
@@ -301,6 +308,11 @@ function raid_mob:attack_end ()
 	mob_class.attack_end (self)
 	self._aggressive = nil
 	self._locked_target = nil
+end
+
+local function is_golem (mob)
+	local entity = mob:get_luaentity ()
+	return entity and entity.name == "mobs_mc:iron_golem"
 end
 
 function raid_mob:ai_step (dtime)
@@ -327,6 +339,15 @@ function raid_mob:ai_step (dtime)
 		target = nil
 	end
 	self._locked_target = target
+
+	-- Reset `_time_inactive' if attacking a player or iron golem.
+	local attack = self.attack
+	if attack and (attack:is_player () or is_golem (attack)) then
+		self._time_inactive = 0.0
+	else
+		local t = self._time_inactive
+		self._time_inactive = t + dtime
+	end
 end
 
 function raid_mob:retaliate_against (source)
@@ -398,10 +419,17 @@ local function decode_banner_item (entity)
 	return nil
 end
 
+function raid_mob:wave_has_captain (raid)
+	local wave = self._raid_wave_number
+	local raid = raid or self:get_active_raid ()
+	return raid and wave and raid.waves[wave]
+		and raid.waves[wave].leader
+end
+
 function raid_mob:default_pickup (object, stack, def, itemname)
 	if mcl_raids.is_banner_item (stack) and self._can_serve_as_captain then
 		local raid = self:_get_active_raid ()
-		if raid and not raid._raidcaptain then
+		if raid and not self:wave_has_captain (raid) then
 			local item = stack:take_item ()
 			if stack:is_empty () then
 				object:remove ()
@@ -411,7 +439,6 @@ function raid_mob:default_pickup (object, stack, def, itemname)
 			end
 			if not item:is_empty () then
 				self:promote_to_raidcaptain ()
-				raid._raidcaptain = self.object
 			end
 			return true
 		end
@@ -451,7 +478,8 @@ function raid_mob:check_recover_banner (self_pos, dtime)
 		return false
 	elseif self._can_serve_as_captain then
 		local raid = self:_get_active_raid ()
-		if raid and not raid._raidcaptain then
+		if raid and raid.status == "ongoing"
+			and not self:wave_has_captain (raid) then
 			local aa = vector.offset (self_pos, -16, -8, -16)
 			local bb = vector.offset (self_pos, 16, 8, 16)
 			for object in core.objects_in_area (aa, bb) do
@@ -470,7 +498,7 @@ end
 
 function raid_mob:recruit_reinforcements (self_pos, self_raid)
 	local aa = vector.offset (self_pos, -16, -16, -16)
-	local bb = vector.offset (self_pos, -16, -16, -16)
+	local bb = vector.offset (self_pos, 16, 16, 16)
 	for object in core.objects_in_area (self_pos, aa, bb) do
 		local entity = object:get_luaentity ()
 		if entity and entity._is_raid_mob then
@@ -486,7 +514,7 @@ local NINETY_DEG = math.pi / 2
 
 function raid_mob:check_pathfind_to_raid (self_pos, dtime)
 	local raid = self:_get_active_raid ()
-	if not raid then
+	if not raid or raid.status ~= "ongoing" then
 		self._raid_target_position = nil
 		return false
 	end
@@ -497,7 +525,7 @@ function raid_mob:check_pathfind_to_raid (self_pos, dtime)
 	}
 	local proximity = mcl_villages.get_poi_heat (nodepos)
 	if self._raid_target_position then
-		if proximity >= 4 then
+		if proximity >= 5 then
 			self._raid_target_position = nil
 			return false
 		end
@@ -516,8 +544,8 @@ function raid_mob:check_pathfind_to_raid (self_pos, dtime)
 			self:recruit_reinforcements (self_pos, raid)
 		end
 		return true
-	elseif proximity < 4 then
-		self._raid_target_position = raid.pos
+	elseif proximity < 5 then
+		self._raid_target_position = raid.center
 		return "_raid_target_position"
 	end
 	return false
@@ -598,7 +626,7 @@ function raid_mob:check_navigate_village (self_pos, dtime)
 		return true
 	else
 		local raid = self:_get_active_raid ()
-		if not raid then
+		if not raid or raid.status ~= "ongoing" then
 			return false
 		end
 		local poi = self:get_village_poi (self_pos)
@@ -613,7 +641,40 @@ function raid_mob:check_navigate_village (self_pos, dtime)
 end
 
 function raid_mob:check_celebrate (self_pos, dtime)
-	-- TODO: raid victory or defeat.
+	if self._celebrating then
+		if not self.jockey_vehicle then
+			local chance = mcl_mobs.scale_chance (50, dtime)
+			if pr:next (1, chance) == 1 then
+				self._jump = true
+			end
+			self:cancel_navigation ()
+			self:halt_in_tracks ()
+		end
+		local raid = self:_get_active_raid ()
+		if not raid then
+			self._celebrating = false
+			return false
+		end
+		return true
+	else
+		local raid = self:_get_active_raid ()
+		if raid and raid.status == "loss"
+			and not self._locked_target then
+			self._celebrating = true
+			return "_celebrating"
+		end
+		return false
+	end
+end
+
+function raid_mob:receive_damage (mcl_reason, damage)
+	if mob_class.receive_damage (self, mcl_reason, damage) then
+		if self.raidmob then
+			mcl_raids.report_mob_damage_event (self, self.health, mcl_reason)
+			return true
+		end
+	end
+	return false
 end
 
 mobs_mc.raid_mob = raid_mob
