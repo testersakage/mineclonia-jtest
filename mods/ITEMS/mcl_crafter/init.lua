@@ -21,21 +21,21 @@ local function get_crafter_formspec(pos)
     local fs_parts = {}
     table.insert(fs_parts, "formspec_version[4]")
     table.insert(fs_parts, "size[13,12]")
-    --table.insert(fs_parts, "label[2.25,0.375;" .. F(C("#FFFF00", S("Crafter"))) .. "]")
+    
     table.insert(fs_parts, "label[6.00,0.375;" .. F(C("#000000", S("Crafter"))) .. "]")
-    --table.insert(fs_parts, "label[2.25,0.5;" .. F(S("Ingredients")) .. "]")
+    
 
     -- Coordinates for our 3×3 grid cells.
     local positions = {
         {x = 2.25, y = 0.75},
-        {x = 3.25, y = 0.75},
-        {x = 4.25, y = 0.75},
-        {x = 2.25, y = 1.75},
-        {x = 3.25, y = 1.75},
-        {x = 4.25, y = 1.75},
-        {x = 2.25, y = 2.75},
-        {x = 3.25, y = 2.75},
-        {x = 4.25, y = 2.75},
+        {x = 3.35, y = 0.75},
+        {x = 4.45, y = 0.75},
+        {x = 2.25, y = 1.85},
+        {x = 3.35, y = 1.85},
+        {x = 4.45, y = 1.85},
+        {x = 2.25, y = 2.95},
+        {x = 3.35, y = 2.95},
+        {x = 4.45, y = 2.95},
     }
     for i = 1, 9 do
         local p = positions[i]
@@ -69,7 +69,7 @@ local function get_crafter_formspec(pos)
 
     -- Arrow and output preview slot:
     table.insert(fs_parts, "image[6.125,2;1.5,1;crafter_arrow.png]")
-    --table.insert(fs_parts, "label[6.125,1.375;" .. F(S("Result")) .. "]")
+
     local output_bg = ""
     if mcl_formspec.get_itemslot_bg_v4 then
         output_bg = mcl_formspec.get_itemslot_bg_v4(8.125, 2, 1, 1, 0.2)
