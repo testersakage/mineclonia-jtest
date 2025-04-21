@@ -421,6 +421,10 @@ function mob_class:check_jockey_status ()
 end
 
 function mob_class:on_deactivate (removal)
+	if self.raidmob then
+		mcl_raids.unload_raidmob (self, removal)
+	end
+
 	if self.jockey_vehicle then
 		-- Dismount the jockey if this mob is to be
 		-- permanantly removed, and otherwise, save its
@@ -465,10 +469,6 @@ function mob_class:on_deactivate (removal)
 			local name = player:get_player_name ()
 			self:remove_particlespawners (name)
 		end
-	end
-
-	if self.raidmob then
-		mcl_raids.unload_raidmob (self, removal)
 	end
 end
 
