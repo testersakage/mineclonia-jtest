@@ -458,6 +458,11 @@ local function generate_dripstone(pos, max_length, direction)
 		vm:write_to_map(true)
 end
 
+--turn off jit for the generate_dripstone as it is known to create issues with ARM devices:
+-- https://github.com/luanti-org/luanti/issues/15983
+-- https://codeberg.org/mineclonia/mineclonia/issues/2989
+if core.global_exists("jit") then jit.off(generate_dripstone) end
+
 mcl_structures.register_structure("large_dripstone_stalagtite", {
 	place_on = {"group:stone"},
 	spawn_by = "air",
