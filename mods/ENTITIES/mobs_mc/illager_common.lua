@@ -710,7 +710,11 @@ function raid_mob:apply_debug_nametag ()
 		end
 
 		self.object:set_nametag_attributes ({
-			text = table.concat (info)
+			text = table.concat (info),
+		})
+	else
+		self.object:set_nametag_attributes ({
+			text = nil,
 		})
 	end
 end
