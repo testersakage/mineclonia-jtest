@@ -38,6 +38,7 @@ mobs_mc.overworld_biomes = {
 	"MesaPlateauF",
 	"MesaPlateauFM",
 	"MangroveSwamp",
+	"LushCaves",
 }
 
 local n = #mobs_mc.overworld_biomes
@@ -117,6 +118,7 @@ mobs_mc.monster_biomes = {
 	"MesaPlateauF",
 	"MesaPlateauFM",
 	"MangroveSwamp",
+	"LushCaves",
 }
 
 local n = #mobs_mc.monster_biomes
@@ -127,6 +129,7 @@ for i = 1, n do
 	table.insert (mobs_mc.monster_biomes, biome .. "_deep_ocean")
 	table.insert (mobs_mc.monster_biomes, biome .. "_deep_underground")
 end
+table.insert (mobs_mc.monster_biomes, "DripstoneCave")
 
 -------------------------------------------------------------------------
 -- Default spawners.
