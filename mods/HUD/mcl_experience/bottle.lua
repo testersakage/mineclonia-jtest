@@ -52,7 +52,11 @@ local function throw_xp_bottle(pos, dir, velocity)
 	obj:set_acceleration(acceleration)
 end
 
-local function on_use(itemstack, placer, _)
+local function on_use(itemstack, placer, pointed_thing)
+	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+	if rc ~= nil then
+		return rc
+	end
 	throw_xp_bottle(vector.add(placer:get_pos(), vector.new(0, 1.5, 0)), placer:get_look_dir(), 10)
 	if not core.is_creative_enabled(placer:get_player_name()) then
 		itemstack:take_item()
