@@ -275,6 +275,9 @@ mobs_mc.patrolling_mob = patrolling_mob
 -- Raiders.
 ------------------------------------------------------------------------
 
+local raid_mob_debug
+	= core.settings:get_bool ("raid_mob_debug", false)
+
 local raid_mob = table.merge (patrolling_mob, {
 	_can_join_raid = false,
 	_aggressive = nil,
@@ -347,6 +350,9 @@ function raid_mob:ai_step (dtime)
 	else
 		local t = self._time_inactive
 		self._time_inactive = t + dtime
+	end
+	if raid_mob_debug then
+		self:apply_debug_nametag ()
 	end
 end
 
@@ -676,6 +682,37 @@ function raid_mob:receive_damage (mcl_reason, damage)
 		end
 	end
 	return false
+end
+
+function raid_mob:apply_debug_nametag ()
+	if self._raid_uuid then
+		local info = {}
+		table.insert (info, self.description)
+		table.insert (info, " {" .. self._raid_uuid .. "}\n")
+		if self._attached_to_raid then
+			local raid = self:_get_active_raid ()
+			table.insert (info, "Raid: ")
+			table.insert (info, self._attached_to_raid)
+			if not raid then
+				table.insert (info, " (inactive)\n")
+			else
+				table.insert (info, string.format (" (state: %s)\n",
+								   raid.status))
+			end
+			table.insert (info, "Wave: ")
+			table.insert (info, tostring (self._raid_wave_number))
+			table.insert (info, "\n")
+			table.insert (info, "Active activity: ")
+			table.insert (info, self._active_activity or "NONE")
+			table.insert (info, " ")
+			table.insert (info, tostring (self[self._active_activity]))
+			table.insert (info, "\n")
+		end
+
+		self.object:set_nametag_attributes ({
+			text = table.concat (info)
+		})
+	end
 end
 
 mobs_mc.raid_mob = raid_mob

@@ -2735,6 +2735,14 @@ local function sense_nearby_hideout (self, self_pos)
 	return nearby, persist
 end
 
+local function sense_nearby_raid_hideout (self, self_pos)
+	local nearby
+		= core.find_node_near (self_pos, 24, {"group:bed_bottom"}, true)
+		or self._home
+	local persist = 2.0 + pr:next (0, 40) / 40
+	return nearby, persist
+end
+
 local function sense_free_beds (self, self_pos)
 	local nodes = self:run_sensor (self_pos, "nearby_beds")
 	local sites = {}
@@ -3081,6 +3089,8 @@ function villager:run_sensor (self_pos, name)
 		result, persist = sense_nearby_beds (self, self_pos)
 	elseif name == "nearby_hideout" then
 		result, persist = sense_nearby_hideout (self, self_pos)
+	elseif name == "nearby_raid_hideout" then
+		result, persist = sense_nearby_raid_hideout (self, self_pos)
 	elseif name == "free_beds" then
 		result = sense_free_beds (self, self_pos)
 	elseif name == "nearby_bells" then
@@ -5650,6 +5660,7 @@ function villager:visit_bell_for_raid (self_pos, dtime)
 		return false
 	elseif not self._pacing_around_poi
 		and self._bell
+		and manhattan3d (self, self_pos, self._bell) >= 10
 		and pr:next (1, 6) == 1
 		and self:do_navigate (self_pos, dtime, self._bell,
 			0.75, false, 6.0) then
@@ -5687,7 +5698,6 @@ function villager:locate_cover_fast (self_pos, dtime)
 			self._time_passed_by_cover = t
 
 			if t >= 15 then
-				self._special_schedule = nil
 				self._moving_to_cover_fast = nil
 				return false
 			end
@@ -5886,15 +5896,15 @@ local function get_schedule_items_before_raid (self, list)
 	table.insert (list, { 10, self.clear_wielditem, false, })
 	table.insert (list, { 11, self.ring_bell, false, })
 	table.insert (list, { 99, self.reset_raid, false, })
-	table.insert (list, { 4, self.visit_bell_for_raid, true, })
-	table.insert (list, { 4, self.run_around_village, true, })
+	table.insert (list, { 0, self.visit_bell_for_raid, true, })
+	table.insert (list, { 0, self.run_around_village, true, })
 end
 
 local function get_schedule_items_during_raid (self, list)
 	table.insert (list, { 10, self.clear_wielditem, false, })
 	table.insert (list, { 99, self.reset_raid, false, })
 	table.insert (list, { 0, self.pace_triumphant, true, })
-	table.insert (list, { 2, self.locate_cover_fast, true, })
+	table.insert (list, { 1, self.locate_cover_fast, true, })
 end
 
 local function get_schedule_items_bell_rang (self, list)
