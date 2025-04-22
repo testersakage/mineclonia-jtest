@@ -152,7 +152,7 @@ core.register_chatcommand("dump_banner_layers",{
 ------------------------------------------------------------------------
 
 local mod_storage = core.get_mod_storage ()
-local raid_debug = true
+local raid_debug = core.settings:get_bool ("raid_debug", false)
 mcl_raids.raid_table = {}
 
 core.register_on_shutdown (function ()
