@@ -1269,6 +1269,50 @@ function villager:happy_villager_effect ()
 	core.add_particlespawner (particlespawner)
 end
 
+function villager:terrified_villager_effect ()
+	local cbox = self.collisionbox
+	local particlespawner = {
+		time = 1.5,
+		amount = 12,
+		pos = {
+			min = {
+				x = cbox[1] - 0.1,
+				y = cbox[5] - 0.1,
+				z = cbox[3] - 0.1,
+			},
+			max = {
+				x = cbox[4] + 0.1,
+				y = cbox[5] + 0.1,
+				z = cbox[6] + 0.1,
+			},
+		},
+		exptime = {
+			min = 0.9,
+			max = 1.5,
+		},
+		size = {
+			max = 2.8,
+			min = 1.8,
+		},
+		texpool = {
+			"mobs_mc_wolf_splash_0.png",
+			"mobs_mc_wolf_splash_1.png",
+			"mobs_mc_wolf_splash_2.png",
+			"mobs_mc_wolf_splash_3.png",
+		},
+		vel = {
+			min = vector.new (-1.0, 1.7, -1.0),
+			max = vector.new (1.0, 1.7, 1.0),
+		},
+		acc = {
+			min = vector.new (0, -9.81, 0),
+			max = vector.new (0, -9.81, 0),
+		},
+		attached = self.object,
+	}
+	core.add_particlespawner (particlespawner)
+end
+
 function villager:on_grown ()
 	if self._sleeping_pose then
 		self.collisionbox = {
@@ -6132,6 +6176,14 @@ function villager:ai_step (dtime)
 			t = nil
 		end
 		self._hero_cooldown = t
+	end
+
+	local chance = scale_chance (100, dtime)
+	if pr:next (1, chance) == 1 then
+		local raid = self:run_sensor (self_pos, "active_raid")
+		if raid and raid.status == "ongoing" then
+			self:terrified_villager_effect ()
+		end
 	end
 
 	self._near_map_boundaries = nil
