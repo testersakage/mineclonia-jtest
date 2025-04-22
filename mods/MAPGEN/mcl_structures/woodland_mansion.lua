@@ -65,23 +65,3 @@ mcl_structures.register_structure("woodland_cabin",{
 		}}
 	}
 })
-
-mcl_structures.register_structure_spawn({
-	name = "mobs_mc:vindicator",
-	y_min = mcl_vars.mg_overworld_min,
-	y_max = mcl_vars.mg_overworld_max,
-	chance = 10,
-	interval = 60,
-	limit = 6,
-	spawnon = spawnon,
-})
-
-mcl_structures.register_structure_spawn({
-	name = "mobs_mc:evoker",
-	y_min = mcl_vars.mg_overworld_min,
-	y_max = mcl_vars.mg_overworld_max,
-	chance = 50,
-	interval = 60,
-	limit = 6,
-	spawnon = spawnon,
-})
