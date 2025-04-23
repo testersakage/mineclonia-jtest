@@ -7,7 +7,7 @@ local function splash_image(colorstring, opacity)
 	if not opacity then
 		opacity = 127
 	end
-	return "mcl_potions_potion_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_splash_bottle.png"
+	return "mcl_potions_splash_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_splash_bottle.png"
 end
 
 

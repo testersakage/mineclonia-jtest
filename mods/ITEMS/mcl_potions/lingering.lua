@@ -6,7 +6,7 @@ local function lingering_image(colorstring, opacity)
 	if not opacity then
 		opacity = 127
 	end
-	return "mcl_potions_potion_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_lingering_bottle.png"
+	return "mcl_potions_splash_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_lingering_bottle.png"
 end
 
 local lingering_effects_at = {}
