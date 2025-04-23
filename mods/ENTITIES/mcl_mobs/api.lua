@@ -298,21 +298,6 @@ function mob_class:post_load_staticdata ()
 		self:restore_physics_factors ()
 	end
 
-	-- Remove invalid entries in doors_to_close. See
-	-- https://codeberg.org/mineclonia/mineclonia/issues/3286 for more
-	-- information.
-	if self.doors_to_close then
-		local newtable = {}
-		for _, v in pairs(self.doors_to_close) do
-			if v.x then
-				table.insert(newtable, v)
-			else
-				core.log("error", "Found invalid doors to close in mob, removing to prevent crash")
-			end
-		end
-		self.doors_to_close = newtable
-	end
-
 	-- Erase timers.
 	self._timers = {}
 	if not self.texture_mods then
@@ -483,7 +468,7 @@ local scale_chance = mcl_mobs.scale_chance
 
 local MAX_PHYSICS_DTIME = 0.075
 
-function mob_class:on_step (dtime, moveresult)
+local function on_step(self, dtime, moveresult)
 	local pos = self.object:get_pos ()
 	if not pos or self.removed then
 		self:safe_remove()
@@ -640,6 +625,20 @@ function mob_class:on_step (dtime, moveresult)
 
 	if not self.object:get_luaentity() then
 		return false
+	end
+end
+
+-- Mobs are currently prone to repeatedly crashing servers. As a temporary
+-- solution, we add a pcall around the mob and delete it if it triggered a
+-- crash.
+--
+-- TODO: This is NOT a long term solution
+function mob_class:on_step(dtime, moveresult)
+	local ok, errmsg = pcall(on_step, self, dtime, moveresult)
+	if not ok then
+		minetest.log("error", "Removing mob after crash")
+		minetest.log("error", errmsg)
+		self:safe_remove()
 	end
 end
 
