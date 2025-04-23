@@ -1,0 +1,5 @@
+This directory is home to a number of files from which `shape.lua' in
+CORE/mcl_util was ported.  It serves no purpose otherwise than as a
+reference against which to compare shape.lua when necessary.  It was
+extracted from a Minecraft-like technical demo written by yours truly
+(halon) in 2012 or thereabouts.

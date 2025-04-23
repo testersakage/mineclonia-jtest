@@ -1,7 +1,7 @@
 --- NOTE: if performance should become a consideration it may be
 --- worthwhile to create an FFI wrapper around the C reference
 --- implementation, which is included for reference, as you would
---- expect.
+--- expect, in tools/shapelib/shape.c.
 
 if not mcl_util then
 	mcl_util = {}
