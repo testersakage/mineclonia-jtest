@@ -46,8 +46,11 @@ for i = 1, n do
 	local biome = mobs_mc.overworld_biomes[i]
 	table.insert (mobs_mc.overworld_biomes, biome .. "_underground")
 	table.insert (mobs_mc.overworld_biomes, biome .. "_ocean")
-	table.insert (mobs_mc.overworld_biomes, biome .. "_deep_ocean")
-	table.insert (mobs_mc.overworld_biomes, biome .. "_deep_underground")
+
+	if biome ~= "LushCaves" then
+		table.insert (mobs_mc.overworld_biomes, biome .. "_deep_ocean")
+		table.insert (mobs_mc.overworld_biomes, biome .. "_deep_underground")
+	end
 end
 table.insert (mobs_mc.overworld_biomes, "DripstoneCave")
 
@@ -126,8 +129,10 @@ for i = 1, n do
 	local biome = mobs_mc.monster_biomes[i]
 	table.insert (mobs_mc.monster_biomes, biome .. "_underground")
 	table.insert (mobs_mc.monster_biomes, biome .. "_ocean")
-	table.insert (mobs_mc.monster_biomes, biome .. "_deep_ocean")
-	table.insert (mobs_mc.monster_biomes, biome .. "_deep_underground")
+	if biome ~= "LushCaves" then
+		table.insert (mobs_mc.overworld_biomes, biome .. "_deep_ocean")
+		table.insert (mobs_mc.overworld_biomes, biome .. "_deep_underground")
+	end
 end
 table.insert (mobs_mc.monster_biomes, "DripstoneCave")
 
