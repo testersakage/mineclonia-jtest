@@ -4,11 +4,8 @@ mcl_potions.registered_potions = {}
 -- shorthand
 local registered_potions = mcl_potions.registered_potions
 
-local function potion_image(colorstring, opacity)
-	if not opacity then
-		opacity = 127
-	end
-	return "mcl_potions_potion_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_potion_bottle.png"
+local function potion_image(colorstring)
+	return "mcl_potions_potion_overlay.png^[multiply:"..colorstring.."^mcl_potions_potion_bottle.png"
 end
 
 local how_to_drink = S("Use the “Place” key to drink it.")
@@ -362,7 +359,7 @@ mcl_potions.register_potion({
 	desc_prefix = S("Awkward"),
 	_tt = S("No effect"),
 	_longdesc = S("Has an awkward taste and is used for brewing potions."),
-	color = "#0000FF",
+	color = "#8091ff",
 })
 
 mcl_potions.register_potion({
@@ -370,7 +367,7 @@ mcl_potions.register_potion({
 	desc_prefix = S("Mundane"),
 	_tt = S("No effect"),
 	_longdesc = S("Has a terrible taste and is not really useful for brewing potions."),
-	color = "#0000FF",
+	color = "#8091ff",
 })
 
 mcl_potions.register_potion({
@@ -378,7 +375,7 @@ mcl_potions.register_potion({
 	desc_prefix = S("Thick"),
 	_tt = S("No effect"),
 	_longdesc = S("Has a bitter taste and is not really useful for brewing potions."),
-	color = "#0000FF",
+	color = "#8091ff",
 })
 
 mcl_potions.register_potion({
@@ -388,7 +385,7 @@ mcl_potions.register_potion({
 		return S("+@1 HP", 4 * level)
 	end,
 	_longdesc = S("Instantly heals."),
-	color = "#F82423",
+	color = "#f6493a",
 	uses_level = true,
 	has_arrow = true,
 	custom_effect = function(object, level, _, user)
@@ -403,7 +400,7 @@ mcl_potions.register_potion({
 		return S("-@1 HP", 6 * level)
 	end,
 	_longdesc = S("Instantly deals damage."),
-	color = "#430A09",
+	color = "#a07669",
 	uses_level = true,
 	has_arrow = true,
 	custom_effect = function(object, level, _, user)
@@ -416,7 +413,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Night Vision"),
 	_tt = nil,
 	_longdesc = S("Increases the perceived brightness of light under a dark sky."),
-	color = "#1F1FA1",
+	color = "#c8f356",
 	_effect_list = {
 		night_vision = {},
 	},
@@ -428,7 +425,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Swiftness"),
 	_tt = nil,
 	_longdesc = S("Increases walking speed."),
-	color = "#7CAFC6",
+	color = "#5ae9fe",
 	_effect_list = {
 		swiftness = {},
 	},
@@ -440,7 +437,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Slowness"),
 	_tt = nil,
 	_longdesc = S("Decreases walking speed."),
-	color = "#5A6C81",
+	color = "#8bb3de",
 	_effect_list = {
 		slowness = {dur=mcl_potions.DURATION_INV,
 			-- Slowness IV should last 20 seconds.
@@ -456,7 +453,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Leaping"),
 	_tt = nil,
 	_longdesc = S("Increases jump strength."),
-	color = "#22FF4C",
+	color = "#fafd8e",
 	_effect_list = {
 		leaping = {},
 	},
@@ -468,7 +465,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Decay"),
 	_tt = nil,
 	_longdesc = S("Applies the withering effect which deals damage at a regular interval and can kill."),
-	color = "#292929",
+	color = "#6d5c50",
 	_effect_list = {
 		withering = {dur=mcl_potions.DURATION_POISON},
 	},
@@ -480,7 +477,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Poison"),
 	_tt = nil,
 	_longdesc = S("Applies the poison effect which deals damage at a regular interval."),
-	color = "#4E9331",
+	color = "#86a25b",
 	_effect_list = {
 		poison = {dur=mcl_potions.DURATION_POISON},
 	},
@@ -492,7 +489,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Regeneration"),
 	_tt = nil,
 	_longdesc = S("Regenerates health over time."),
-	color = "#CD5CAB",
+	color = "#cb54ba",
 	_effect_list = {
 		regeneration = {dur=mcl_potions.DURATION_POISON},
 	},
@@ -504,7 +501,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Invisibility"),
 	_tt = nil,
 	_longdesc = S("Grants invisibility."),
-	color = "#7F8392",
+	color = "#f7fdfc",
 	_effect_list = {
 		invisibility = {},
 	},
@@ -516,7 +513,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Water Breathing"),
 	_tt = nil,
 	_longdesc = S("Grants limitless breath underwater."),
-	color = "#2E5299",
+	color = "#98dac1",
 	_effect_list = {
 		water_breathing = {},
 	},
@@ -528,7 +525,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Fire Resistance"),
 	_tt = nil,
 	_longdesc = S("Grants immunity to damage from heat sources like fire."),
-	color = "#E49A3A",
+	color = "#fd970e",
 	_effect_list = {
 		fire_resistance = {},
 	},
@@ -540,7 +537,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Strength"),
 	_tt = nil,
 	_longdesc = S("Increases attack power."),
-	color = "#932423",
+	color = "#f8c800",
 	_effect_list = {
 		strength = {},
 	},
@@ -552,7 +549,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Weakness"),
 	_tt = nil,
 	_longdesc = S("Decreases attack power."),
-	color = "#484D48",
+	color = "#4a4e49",
 	_effect_list = {
 		weakness = {},
 	},
@@ -564,7 +561,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Slow Falling"),
 	_tt = nil,
 	_longdesc = S("Instead of falling, you descend gracefully."),
-	color = "#ACCCFF",
+	color = "#eed1ba",
 	_effect_list = {
 		slow_falling = {},
 	},
@@ -576,7 +573,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of the Turtle Master"),
 	_tt = nil,
 	_longdesc = S("Decreases damage taken at the cost of speed."),
-	color = "#255235",
+	color = "#8473dd",
 	_effect_list = {
 		resistance = {
 			level = 3,
@@ -596,7 +593,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Luck"),
 	_tt = nil,
 	_longdesc = S("Increases luck."),
-	color = "#7BFF42",
+	color = "#59c500",
 	_effect_list = {
 		luck = {},
 	},
@@ -608,7 +605,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Bad Luck"),
 	_tt = nil,
 	_longdesc = S("Decreases luck."),
-	color = "#887343",
+	color = "#a740f9",
 	_effect_list = {
 		bad_luck = {},
 	},
@@ -636,7 +633,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Infestation"),
 	_tt = nil,
 	_longdesc = S("Causes 1-3 silverfish to spawn with a 5% chance when damaged. It not applies to silverfishes."),
-	color = "#8C9B8C",
+	color = "#899b8a",
 	_effect_list = {infested = {}},
 	has_arrow = true
 })
@@ -646,7 +643,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Oozing"),
 	_tt = nil,
 	_longdesc = S("Causes 2 medium slimes to spawn on death. It not applies to slimes."),
-	color = "#99FFA3",
+	color = "#a5fda9",
 	_effect_list = {oozing = {}},
 	has_arrow = true
 })
@@ -656,7 +653,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Weaving"),
 	_tt = nil,
 	_longdesc = S("Causes 2-3 cobwebs to appear on death. Also increases walking speed when crossing cobwebs."),
-	color = "#78695A",
+	color = "#75675a",
 	_effect_list = {weaving = {}},
 	has_arrow = true,
 })
@@ -666,7 +663,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Wind Charging"),
 	_tt = nil,
 	_longdesc = S("Causes A wind burst on death."),
-	color = "#BDC9FF",
+	color = "#bcc8ff",
 	_effect_list = {wind_charged = {}},
 	has_arrow = true,
 })

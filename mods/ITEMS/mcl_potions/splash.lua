@@ -3,11 +3,8 @@ local GRAVITY = tonumber(core.settings:get("movement_gravity"))
 
 local mod_target = core.get_modpath("mcl_target")
 
-local function splash_image(colorstring, opacity)
-	if not opacity then
-		opacity = 127
-	end
-	return "mcl_potions_splash_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_splash_bottle.png"
+local function splash_image(colorstring)
+	return "mcl_potions_splash_overlay.png^[multiply:"..colorstring.."^mcl_potions_splash_bottle.png"
 end
 
 

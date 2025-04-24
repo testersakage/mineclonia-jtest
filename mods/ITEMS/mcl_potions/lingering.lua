@@ -2,11 +2,8 @@ local S = core.get_translator(core.get_current_modname())
 
 local mod_target = core.get_modpath("mcl_target")
 
-local function lingering_image(colorstring, opacity)
-	if not opacity then
-		opacity = 127
-	end
-	return "mcl_potions_splash_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_lingering_bottle.png"
+local function lingering_image(colorstring)
+	return "mcl_potions_splash_overlay.png^[multiply:"..colorstring.."^mcl_potions_lingering_bottle.png"
 end
 
 local lingering_effects_at = {}

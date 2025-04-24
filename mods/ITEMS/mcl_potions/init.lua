@@ -107,11 +107,8 @@ core.register_craft( {
 -- Template function for creating images of filled potions
 -- - colorstring must be a ColorString of form “#RRGGBB”, e.g. “#0000FF” for blue.
 -- - opacity is optional opacity from 0-255 (default: 127)
-local function potion_image(colorstring, opacity)
-	if not opacity then
-		opacity = 127
-	end
-	return "mcl_potions_potion_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_potion_bottle.png"
+local function potion_image(colorstring)
+	return "mcl_potions_potion_overlay.png^[multiply:"..colorstring.."^mcl_potions_potion_bottle.png"
 end
 
 -- function to set node and empty water bottle (used for cauldrons and mud)
@@ -175,8 +172,8 @@ core.register_craftitem("mcl_potions:water", {
 	_doc_items_longdesc = S("Water bottles can be used to fill cauldrons. Drinking water has no effect."),
 	_doc_items_usagehelp = S("Use the “Place” key to drink. Place this item on a cauldron to pour the water into the cauldron."),
 	stack_max = 1,
-	inventory_image = potion_image("#0022FF"),
-	wield_image = potion_image("#0022FF"),
+	inventory_image = potion_image("#8091ff"),
+	wield_image = potion_image("#8091ff"),
 	groups = {brewitem=1, food=3, can_eat_when_full=1, water_bottle=1},
 	on_place = water_bottle_on_place,
 	_on_dispense = dispense_water_bottle,
@@ -193,8 +190,8 @@ core.register_craftitem("mcl_potions:river_water", {
 	_doc_items_usagehelp = S("Use the “Place” key to drink. Place this item on a cauldron to pour the river water into the cauldron."),
 
 	stack_max = 1,
-	inventory_image = potion_image("#0044FF"),
-	wield_image = potion_image("#0044FF"),
+	inventory_image = potion_image("#80a3ff"),
+	wield_image = potion_image("#80a3ff"),
 	groups = {brewitem=1, food=3, can_eat_when_full=1, water_bottle=1},
 	on_place = water_bottle_on_place,
 	_on_dispense = dispense_water_bottle,
