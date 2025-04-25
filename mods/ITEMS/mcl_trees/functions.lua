@@ -1,3 +1,29 @@
+-- Table that holds/caches tree (schematic) dimensions. Indexed by file name.
+local tree_size_cache = {}
+
+-- Returns tree (schematic) size as a vector. Caches result.
+local function get_tree_size(schem_file_name)
+	local size = tree_size_cache[schem_file_name]
+
+	if size == nil then
+		-- Serialize and return schematic as Lua table. Expensive!
+		local schem_lua = loadstring(
+			core.serialize_schematic(schem_file_name, "lua", 
+			{ lua_use_comments = false, lua_num_indent_spaces = 0 })
+				.. " return schematic"
+		)()
+
+		if not schem_lua then
+			return nil
+		end
+
+		size = vector.copy(schem_lua.size)
+		tree_size_cache[schem_file_name] = size
+	end
+
+	return size
+end
+
 function mcl_trees.strip_tree(itemstack, placer, pointed_thing)
 	if pointed_thing.type ~= "node" then return end
 
@@ -77,12 +103,9 @@ end
 
 local function check_schem_growth(pos, file, giant)
 	if file then
-		local schem = loadstring(
-			core.serialize_schematic(file, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
-				.. " return schematic"
-		)()
-		if schem then
-			local h = schem.size.y
+		local size = get_tree_size(file)
+		if size then
+			local h = size.y
 			if giant then
 				return mcl_trees.check_growth_giant(pos, h)
 			else
@@ -129,11 +152,7 @@ end
 -- Wrapper around core.place_schematic in order to update observers
 local function place_tree(place_at, schem)
 	-- Work out bounding box coordinates. +1 in all directions.
-	local schem_lua = loadstring(
-		core.serialize_schematic(schem.file, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
-			.. " return schematic"
-	)()
-	local size = vector.copy(schem_lua.size)
+	local size = get_tree_size(schem.file)
 	local x    = place_at.x - math.floor((size.x - 1) / 2)
 	local z    = place_at.z - math.floor((size.z - 1) / 2)
 	local p1   = vector.new(x - 1, place_at.y - 1, z - 1)   -- Note: ground just below tree might not be needed
