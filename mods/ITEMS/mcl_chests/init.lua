@@ -486,16 +486,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		on_construct = function(pos)
 			local param2 = core.get_node(pos).param2
 			local meta = core.get_meta(pos)
-			--[[ This is a workaround for Minetest issue 5894
-			<https://github.com/minetest/minetest/issues/5894>.
-			Apparently if we don't do this, large chests initially don't work when
-			placed at chunk borders, and some chests randomly don't work after
-			placing. ]]
-			-- FIXME: Remove this workaround when the bug has been fixed.
-			-- BEGIN OF WORKAROUND --
-			meta:set_string("workaround", "ignore_me")
-			meta:set_string("workaround", "") -- Done to keep metadata clean
-			-- END OF WORKAROUND --
 			local inv = meta:get_inventory()
 			inv:set_size("main", 9 * 3)
 			--[[ The "input" list is *another* workaround (hahahaha!) around the fact that Minetest
