@@ -672,6 +672,10 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		allow_metadata_inventory_move = protection_check_move,
 		allow_metadata_inventory_take = protection_check_put_take,
 		allow_metadata_inventory_put = function(pos, listname, _, stack, player)
+			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "left")
+			if core.get_item_group(core.get_node(other_pos).name, "double_chest") == 0 then
+				return 0
+			end
 			local name = player:get_player_name()
 			if core.is_protected(pos, name) then
 				core.record_protection_violation(pos, name)
@@ -679,7 +683,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				-- BEGIN OF LISTRING WORKAROUND
 			elseif listname == "input" then
 				local inv = core.get_inventory({ type = "node", pos = pos })
-				local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "left")
 				local other_inv = core.get_inventory({ type = "node", pos = other_pos })
 				return limit_put(stack, inv, other_inv)
 				--[[if inv:room_for_item("main", stack) then
@@ -847,13 +850,16 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		allow_metadata_inventory_move = protection_check_move,
 		allow_metadata_inventory_take = protection_check_put_take,
 		allow_metadata_inventory_put = function(pos, listname, _, stack, player)
+			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "right")
+			if core.get_item_group(core.get_node(other_pos).name, "double_chest") == 0 then
+				return 0
+			end
 			local name = player:get_player_name()
 			if core.is_protected(pos, name) then
 				core.record_protection_violation(pos, name)
 				return 0
 				-- BEGIN OF LISTRING WORKAROUND
 			elseif listname == "input" then
-				local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "right")
 				local other_inv = core.get_inventory({ type = "node", pos = other_pos })
 				local inv = core.get_inventory({ type = "node", pos = pos })
 				--[[if other_inv:room_for_item("main", stack) then
