@@ -32,6 +32,14 @@ We generally prefer to use textures from pixel perfection when available, but
 they have to be checked beforehand because in some cases they are modified
 Minecraft textures which prevents their use.
 
+The main repo focuses on code changes which means that changing textures that
+already look fine has low priority. Mineclonia has an official texture pack
+called [Pixel ImPerfection](https://codeberg.org/mineclonia/pixel_imperfection)
+which aims to provide textures more similar to Minecraft. Generally we ask
+people who want to contribute textures to do so over there. Sometimes we will
+cherry pick textures from there to the main repo if they are big improvements
+over the current ones. Pixel ImPerfection is maintained by bramaudi.
+
 Mineclonia has a minimum supported Luanti version which is defined in
 game.conf. When making contributions one should avoid relying on engine
 features which are not available in this version. If one sees reason to drop
