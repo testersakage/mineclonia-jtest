@@ -675,17 +675,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				local inv = core.get_inventory({ type = "node", pos = pos })
 				local other_inv = core.get_inventory({ type = "node", pos = other_pos })
 				return limit_put(stack, inv, other_inv)
-				--[[if inv:room_for_item("main", stack) then
-					return -1
-				else
-
-					if other_inv:room_for_item("main", stack) then
-						return -1
-					else
-						return 0
-					end
-				end]]
-				--
 				-- END OF LISTRING WORKAROUND
 			else
 				return stack:get_count()
@@ -852,15 +841,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			elseif listname == "input" then
 				local other_inv = core.get_inventory({ type = "node", pos = other_pos })
 				local inv = core.get_inventory({ type = "node", pos = pos })
-				--[[if other_inv:room_for_item("main", stack) then
-					return -1
-				else
-					if inv:room_for_item("main", stack) then
-						return -1
-					else
-						return 0
-					end
-				end--]]
 				return limit_put(stack, other_inv, inv)
 				-- END OF LISTRING WORKAROUND
 			else
@@ -977,12 +957,6 @@ register_chest("chest",
 		inv = { "default_chest_top.png", "mcl_chests_chest_bottom.png",
 			"mcl_chests_chest_right.png", "mcl_chests_chest_left.png",
 			"mcl_chests_chest_back.png", "default_chest_front.png" },
-		--[[left = {"default_chest_top_big.png", "default_chest_top_big.png",
-		"mcl_chests_chest_right.png", "mcl_chests_chest_left.png",
-		"default_chest_side_big.png^[transformFX", "default_chest_front_big.png"},
-		right = {"default_chest_top_big.png^[transformFX", "default_chest_top_big.png^[transformFX",
-		"mcl_chests_chest_right.png", "mcl_chests_chest_left.png",
-		"default_chest_side_big.png", "default_chest_front_big.png^[transformFX"},]] --
 	},
 	false
 )
@@ -1139,9 +1113,6 @@ core.register_node("mcl_chests:ender_chest_small", {
 	_chest_entity_mesh = "mcl_chests_chest",
 	_chest_entity_animation_type = "chest",
 	use_texture_alpha = "clip",
-	--[[{"mcl_chests_ender_chest_top.png", "mcl_chests_ender_chest_bottom.png",
-		"mcl_chests_ender_chest_right.png", "mcl_chests_ender_chest_left.png",
-		"mcl_chests_ender_chest_back.png", "mcl_chests_ender_chest_front.png"},]]--
 	-- Note: The “container” group is missing here because the ender chest does not
 	-- have an inventory on its own
 	groups = {
