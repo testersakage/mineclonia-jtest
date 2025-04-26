@@ -184,9 +184,11 @@ local function set_inv_search(filter, player)
 
 		if def._get_all_virtual_items then
 			for category, list in pairs(def._get_all_virtual_items()) do
-				for _, virtual_item in pairs(list) do
-					if filter_item (virtual_item, core.strip_colors(ItemStack(virtual_item):get_description()), lang, filter) then
-						table.insert(creative_list, virtual_item)
+				if category ~= "nici" then
+					for _, virtual_item in pairs(list) do
+						if filter_item (virtual_item, core.strip_colors(ItemStack(virtual_item):get_description()), lang, filter) then
+							table.insert(creative_list, virtual_item)
+						end
 					end
 				end
 			end
