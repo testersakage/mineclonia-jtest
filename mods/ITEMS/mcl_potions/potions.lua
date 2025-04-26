@@ -605,7 +605,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Bad Luck"),
 	_tt = nil,
 	_longdesc = S("Decreases luck."),
-	color = "#a740f9",
+	color = "#c9aa56",
 	_effect_list = {
 		bad_luck = {},
 	},
