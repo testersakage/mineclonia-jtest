@@ -29,25 +29,26 @@ local potion_intro = S("Drinking a potion gives you a particular effect or set o
 -- ██║░░░░░╚█████╔╝░░░██║░░░██║╚█████╔╝██║░╚███║██████╔╝
 -- ╚═╝░░░░░░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
 
-local function generate_get_all_virtual_items_func(itemname, pdef)
+local function generate_get_all_virtual_items_func(itemname, pdef, nocreative)
 	return function()
-		local output = {brew = {}}
+		local category = nocreative and "nici" or "brew"
+		local list = {}
 		if pdef.has_potent then
 			local stack = ItemStack(itemname)
 			local potency = pdef._default_potent_level - 1
 			stack:get_meta():set_int("mcl_potions:potion_potent", potency)
 			tt.reload_itemstack_description(stack)
-			table.insert(output.brew, stack:to_string())
+			table.insert(list, stack:to_string())
 		end
 		if pdef.has_plus then
 			local stack = ItemStack(itemname)
 			local extend = pdef._default_extend_level
 			stack:get_meta():set_int("mcl_potions:potion_plus", extend)
 			tt.reload_itemstack_description(stack)
-			table.insert(output.brew, stack:to_string())
+			table.insert(list, stack:to_string())
 		end
 
-		return output
+		return {[category] = list}
 	end
 end
 
@@ -233,7 +234,7 @@ function mcl_potions.register_potion(def)
 	local internal_def = table.copy(pdef)
 	local itemname = modname .. ":" .. name
 
-	pdef._get_all_virtual_items = generate_get_all_virtual_items_func(itemname, pdef)
+	pdef._get_all_virtual_items = generate_get_all_virtual_items_func(itemname, pdef, def.nocreative)
 	core.register_craftitem (itemname, pdef)
 
 	if def.has_splash or def.has_splash == nil then
@@ -253,7 +254,7 @@ function mcl_potions.register_potion(def)
 		sdef.custom_effect = def.custom_effect
 		sdef.on_splash = def.custom_splash_effect
 		sdef.base_potion = itemname
-		sdef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_splash", sdef)
+		sdef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_splash", sdef, def.nocreative)
 		if not def._effect_list then sdef.instant = true end
 		mcl_potions.register_splash(name, splash_desc, color, sdef)
 		internal_def.has_splash = true
@@ -277,7 +278,7 @@ function mcl_potions.register_potion(def)
 		ldef.on_splash = def.custom_splash_effect
 		ldef.while_lingering = def.custom_linger_effect
 		ldef.base_potion = itemname
-		ldef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_lingering", ldef)
+		ldef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_lingering", ldef, def.nocreative)
 		if not def._effect_list then ldef.instant = true end
 		mcl_potions.register_lingering(name, ling_desc, color, ldef)
 		internal_def.has_lingering = true
@@ -306,7 +307,7 @@ function mcl_potions.register_potion(def)
 		adef._default_potent_level = pdef._default_potent_level
 		adef._default_extend_level = pdef._default_extend_level
 		adef.custom_effect = def.custom_effect
-		adef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_arrow", adef)
+		adef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_arrow", adef, def.nocreative)
 		if not def._effect_list then adef.instant = true end
 		mcl_potions.register_arrow(name, arr_desc, color, adef)
 		internal_def.has_arrow = true
@@ -613,6 +614,7 @@ mcl_potions.register_potion({
 		bad_luck = {},
 	},
 	has_arrow = true,
+	nocreative = true,
 })
 
 mcl_potions.register_potion({
