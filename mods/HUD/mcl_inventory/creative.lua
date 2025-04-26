@@ -135,7 +135,9 @@ core.register_on_mods_loaded(function()
 			for category, list in pairs(def._get_all_virtual_items()) do
 				for _, virtual_item in pairs(list) do
 					table.insert(inventory_lists[category], virtual_item)
-					table.insert(inventory_lists["all"], virtual_item)
+					if category ~= "nici" then
+						table.insert(inventory_lists["all"], virtual_item)
+					end
 				end
 			end
 		end
