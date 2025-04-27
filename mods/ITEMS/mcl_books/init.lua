@@ -30,6 +30,9 @@ local function make_description(itemstack)
 	local title = m:get_string("title")
 	local author = m:get_string("author")
 	local generation = m:get_int("generation")
+	if author == "" then
+		return
+	end
 
 	local desc
 	if generation == 0 then
