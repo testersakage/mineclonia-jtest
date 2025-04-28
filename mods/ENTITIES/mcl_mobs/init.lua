@@ -15,7 +15,7 @@ if env and not mcl_mobs.get_node_raw then
 	local get_node = core.get_node
 	local i = 1
 	while true do
-		local name, upvalue = debug.getupvalue (get_node, i)
+		local name, upvalue = env.debug.getupvalue (get_node, i)
 		if not name then
 			break
 		end
