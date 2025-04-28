@@ -72,6 +72,9 @@ local function count_mobs_all()
 	for _,entity in pairs(core.luaentities) do
 		if entity.is_mob then
 			local mob_name = entity.name
+			if entity._reloaded then
+				mob_name = mob_name .. " (reloaded)"
+			end
 			if mobs_found[mob_name] then
 				mobs_found[mob_name] = mobs_found[mob_name] + 1
 			else

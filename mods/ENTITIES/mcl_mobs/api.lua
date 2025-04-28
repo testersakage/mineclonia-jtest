@@ -156,6 +156,7 @@ function mob_class:get_staticdata_table ()
 	tmp._stuck_in = nil
 	tmp._liquidtype = nil
 	tmp._last_liquidtype = nil
+	tmp._reloaded = true
 
 	-- Remove physics factors that are not persistent and revert
 	-- fields that were modified and disapply them.
