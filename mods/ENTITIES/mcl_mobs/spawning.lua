@@ -1120,6 +1120,22 @@ local function spawn_a_pack (pos, players, category, scratch0)
 				if spawned then
 					spawned[n_spawned] = object
 				end
+
+				local entity = object:get_luaentity ()
+				if not entity.persistent
+					and not entity.tamed
+					and not entity._activated
+					and object:is_valid () then
+					-- core.add_entity did not
+					-- result in activation of the
+					-- entity; update mob caps
+					-- manually.
+					local blurb = "[mcl_mobs]: " .. mob_def.name
+						.. "'s spawner failed to increment mob caps; "
+						.."they are being incremented by hand"
+					core.log ("warn", blurb)
+					entity:announce_for_spawning ()
+				end
 			end
 		end
 	end

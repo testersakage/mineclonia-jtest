@@ -480,7 +480,15 @@ function mob_class:mob_activate (staticdata, dtime)
 
 	-- Record this mob's presence for spawning.
 	if not self.persistent or self.tamed then
-		self:announce_for_spawning ()
+		-- Under unknown circumstances, it is possible for a
+		-- mob to be created by spawning routines before it is
+		-- activated and mob caps are updated.  Mob caps are
+		-- adjusted and _activated is set by the mob spawning
+		-- process in these situations, after which it is
+		-- essential to avoid doubly incrementing them.
+		if not self._activated then
+			self:announce_for_spawning ()
+		end
 	end
 	return true
 end
