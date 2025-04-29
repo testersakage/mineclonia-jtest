@@ -984,14 +984,16 @@ function mob_class:check_despawn_on_activation (self_pos)
 					* MOB_CAP_RECIPROCAL)
 			buffer = buffer + MAX_PACK_SIZE
 			if active > buffer then
-				core.log ("action", table.concat ({
-					"[mcl_mobs] ", self.name,
-					" at ", vector.to_string (self_pos),
-					" is despawning as it is more than ",
-					tostring (buffer), " mobs over the",
-					" mob cap for `", category, "' (",
-					tostring (global[category]), ")",
-				}))
+				if logging then
+					core.log ("action", table.concat ({
+						"[mcl_mobs] ", self.name,
+						" at ", vector.to_string (self_pos),
+						" is despawning as it is more than ",
+						tostring (buffer), " mobs over the",
+						" mob cap for `", category, "' (",
+						tostring (global[category]), ")",
+					}))
+				end
 				self.object:remove ()
 				return true
 			end
