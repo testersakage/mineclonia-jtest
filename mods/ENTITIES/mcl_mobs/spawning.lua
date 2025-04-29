@@ -951,7 +951,10 @@ minetest.register_chatcommand("mobstats",{
 local MAX_PACK_SIZE = 8
 
 function mob_class:check_despawn_on_activation (self_pos)
-	if not self:despawn_allowed () then
+	if not self:despawn_allowed ()
+	-- New spawns (e.g. from infested blocks or mob spawners)
+	-- should always be permitted.
+		or not self._reloaded then
 		return false
 	end
 
