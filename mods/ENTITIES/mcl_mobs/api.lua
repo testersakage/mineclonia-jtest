@@ -487,7 +487,9 @@ function mob_class:mob_activate (staticdata, dtime)
 		-- process in these situations, after which it is
 		-- essential to avoid doubly incrementing them.
 		if not self._activated then
-			self:announce_for_spawning ()
+			if self:announce_for_spawning () then
+				return false
+			end
 		end
 	end
 	return true
@@ -522,10 +524,10 @@ function mob_class:on_step (dtime, moveresult)
 		end
 	end
 
-	if self:check_despawn (pos, dtime) then
+	if self:check_despawn (pos, dtime)
+		or self:update_mob_caps () then
 		return true
 	end
-	self:update_mob_caps ()
 
 	-- Objects which are attached and those which are not physical
 	-- don't receive moveresults.  Create a placeholder object to
