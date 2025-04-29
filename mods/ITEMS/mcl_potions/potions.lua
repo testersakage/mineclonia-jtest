@@ -621,7 +621,7 @@ mcl_potions.register_potion({
 	_mcl_potion=1, potion = 1, rarity = 1},
 	_tt = nil,
 	_longdesc = S("Attracts danger."),
-	inventory_image = "mcl_potions_ominous_potion.png",
+	image = "mcl_potions_ominous_potion.png",
 	_effect_list = {
 		bad_omen = {dur = 6000, dur_variable = false,},
 	},
