@@ -864,6 +864,21 @@ local function collect_unique_chunks (level)
 	return chunks, players, chunk_data
 end
 
+-- Map of level to chunk count from which to derive a number of mobs
+-- which, if exceeded by overfulfillment of the mob caps, will induce
+-- reloaded mobs immediately to despawn.
+local spawn_border_chunks = {
+	overworld = 0,
+	nether = 0,
+	["end"] = 0,
+}
+
+local current_mob_caps = {
+	overworld = nil,
+	nether = nil,
+	["end"] = nil,
+}
+
 minetest.register_chatcommand("mobstats",{
 	privs = { debug = true },
 	func = function(n, _)
@@ -890,6 +905,13 @@ minetest.register_chatcommand("mobstats",{
 			local mob_caps = {}
 			local pos = minetest.get_player_by_name (n):get_pos ()
 			local level = mcl_worlds.pos_to_dimension (pos)
+
+			if level == "void" then
+				local blurb = "No spawning data is available in the Void"
+				core.chat_send_player (n, blurb)
+				return
+			end
+
 			local n_chunks = #collect_unique_chunks (level)
 			for category, data in pairs (mcl_mobs.spawn_categories) do
 				local global_max
@@ -906,6 +928,8 @@ minetest.register_chatcommand("mobstats",{
 				"Chunk-derived mob caps (per-level): ",
 				dump (mob_caps), "\n",
 				"Chunk count: ", tostring (n_chunks), "\n",
+				"Mob cap overfulfillment theshold: ",
+				tostring (spawn_border_chunks[level]), "\n",
 				"No. active mobs in total: ",
 				tostring (count_mobs_total ()), "\n"
 			}))
@@ -924,6 +948,58 @@ minetest.register_chatcommand("mobstats",{
 -- Minecraft-like spawning mechanics.
 ------------------------------------------------------------------------
 
+local MAX_PACK_SIZE = 8
+
+function mob_class:check_despawn_on_activation (self_pos)
+	if self.persistent or self.tamed then
+		return false
+	end
+
+	local category = self._spawn_category
+	local caps = mcl_mobs.spawn_categories[category]
+
+	-- Have mob caps been exceeded by a greater number of mobs
+	-- than the previously established number of border blocks
+	-- permit?
+
+	if caps then
+		local level = mcl_worlds.pos_to_dimension (self_pos)
+		if level == "void" then
+			return false
+		end
+
+		-- Mobs loaded before mob caps were first initialized.
+		local global = current_mob_caps[level]
+		if not global then
+			core.log ("warning", self.name .. " was loaded before spawning "
+				  .. "was initialized.")
+			return false
+		end
+
+		local active = mcl_mobs.active_mobs_by_category[category]
+		if active and active > global[category] then
+			local border = spawn_border_chunks[level]
+			local buffer
+				= math.floor ((caps.chunk_mob_cap * border)
+					* MOB_CAP_RECIPROCAL)
+			buffer = buffer + MAX_PACK_SIZE
+			if active > buffer then
+				core.log ("action", table.concat ({
+					"[mcl_mobs] ", self.name,
+					" at ", vector.to_string (self_pos),
+					" is despawning as it is more than ",
+					tostring (buffer), " mobs over the",
+					" mob cap for `", category, "' (",
+					tostring (global[category]), ")",
+				}))
+				self.object:remove ()
+				return true
+			end
+		end
+	end
+	return false
+end
+
 function mob_class:announce_for_spawning ()
 	local category = self._spawn_category
 	local n_active = mcl_mobs.active_mobs_by_category[category]
@@ -932,6 +1008,8 @@ function mob_class:announce_for_spawning ()
 	end
 	mcl_mobs.active_mobs_by_category[category] = n_active + 1
 	self._activated = true
+	local self_pos = self.object:get_pos ()
+	return self:check_despawn_on_activation (self_pos)
 end
 
 function mob_class:remove_for_spawning ()
@@ -951,8 +1029,11 @@ function mob_class:update_mob_caps ()
 	if self._activated and persistent then
 		self:remove_for_spawning ()
 	elseif not self._activated and not persistent then
-		self:announce_for_spawning ()
+		-- Value is whether this process prompted the mob to
+		-- be deleted.
+		return self:announce_for_spawning ()
 	end
+	return false
 end
 
 local active_mobs_by_category = {}
@@ -1120,22 +1201,6 @@ local function spawn_a_pack (pos, players, category, scratch0)
 				if spawned then
 					spawned[n_spawned] = object
 				end
-
-				local entity = object:get_luaentity ()
-				if not entity.persistent
-					and not entity.tamed
-					and not entity._activated
-					and object:is_valid () then
-					-- core.add_entity did not
-					-- result in activation of the
-					-- entity; update mob caps
-					-- manually.
-					local blurb = "[mcl_mobs]: " .. mob_def.name
-						.. "'s spawner failed to increment mob caps; "
-						.."they are being incremented by hand"
-					core.log ("warn", blurb)
-					entity:announce_for_spawning ()
-				end
 			end
 		end
 	end
@@ -1171,6 +1236,11 @@ function mcl_mobs.spawn_cycle (level, spawn_animals)
 	local test_pos = vector.zero ()
 	local n_chunks_orig = #chunks
 
+	-- Calculate the number of chunks bordering this list of
+	-- chunks as if it were a single rectangle.
+	spawn_border_chunks[level]
+		= (math.floor (math.sqrt (n_chunks_orig)) + 1) * 4
+
 	-- Divide the number of chunks to be evaluated by the number
 	-- of eligible categories.
 	local num_categories = NUM_CREATURE_CATEGORIES
@@ -1178,6 +1248,28 @@ function mcl_mobs.spawn_cycle (level, spawn_animals)
 		num_categories = NUM_MONSTER_CATEGORIES
 	end
 	local n_chunks = math.ceil (n_chunks_orig / num_categories)
+
+	-- Calculate mob caps and cache them in current_mob_caps.
+	local caps = current_mob_caps[level]
+	if not caps then
+		caps = {}
+		current_mob_caps[level] = caps
+	end
+
+	for category, data in pairs (spawn_categories) do
+		local mob_cap = data.chunk_mob_cap
+		-- Verify that global mob caps have not been exceeded.
+		local global_max
+			= math.floor ((n_chunks_orig * mob_cap)
+				* MOB_CAP_RECIPROCAL)
+		-- Although the number of chunks loaded by default is
+		-- smaller than in Minecraft, yet this disparity
+		-- renders it almost impossible for certain animals to
+		-- spawn.  A lower bound is placed on their mob caps
+		-- to address this.
+		global_max = math.max (global_max, data.min_chunk_mob_cap)
+		caps[category] = global_max
+	end
 
 	for i = 1, n_chunks do
 		local chunk = chunks[i]
@@ -1206,23 +1298,9 @@ function mcl_mobs.spawn_cycle (level, spawn_animals)
 				local data = spawn_categories[category]
 				if (data.is_animal and spawn_animals)
 					or (not data.is_animal and not spawn_animals) then
-					local mob_cap = data.chunk_mob_cap
+					local global_max = caps[category]
 					-- Verify that global mob caps
 					-- have not been exceeded.
-					local global_max
-						= math.floor ((n_chunks_orig * mob_cap)
-							* MOB_CAP_RECIPROCAL)
-					-- Although the number of
-					-- chunks loaded by default is
-					-- smaller than in Minecraft,
-					-- yet this disparity renders
-					-- it almost impossible for
-					-- certain animals to spawn.
-					-- A lower bound is placed on
-					-- their mob caps to address
-					-- this.
-					global_max = math.max (global_max, data.min_chunk_mob_cap)
-
 					if existing < global_max then
 						-- Select a random position.
 						test_pos.x = math.random (x * 16, x * 16 + 15)
