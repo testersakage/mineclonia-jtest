@@ -101,8 +101,8 @@ function mcl_raids.do_spawn_pos_phase (phaseno, center, attempts)
 
 		-- Is this surface outside of any village or is this
 		-- the final attempt?
-		if attempts == 2
-			or mcl_villages.get_poi_heat (surface) < 4 then
+		if phaseno == 2
+			or mcl_villages.get_poi_heat (surface) <= 4 then
 			-- Is this surface walkable and loaded...
 			local node = core.get_node (surface)
 			local node_above = core.get_node (above)
@@ -113,6 +113,7 @@ function mcl_raids.do_spawn_pos_phase (phaseno, center, attempts)
 				and is_clear (node_above)
 				and is_clear (node)
 				and is_opaque_or_snow (node_below) then
+				print ("SUCCESS: ", xoff, zoff)
 				return surface
 			end
 		end
