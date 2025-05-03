@@ -127,6 +127,7 @@
 * Wbjitscool
 * SmokeyDope
 * pixelzone
+* Miguel P.L
 
 ## Translations
 * Wuzzy
