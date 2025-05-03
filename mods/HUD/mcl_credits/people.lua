@@ -129,6 +129,7 @@ return {
 		"Wbjitscool",
 		"SmokeyDope",
 		"pixelzone",
+		"Miguel P.L",
 	}},
 	{S("Translations"), 0xFF9705, {
 		"Wuzzy",
