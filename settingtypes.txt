@@ -250,6 +250,10 @@ mcl_enable_csm (Enable Support for the mineclonia CSM) bool false
 # that preserves insertion order for events with the same priority/tick.
 mcl_redstone_ordered_event_queue (Enable ordered event queue) bool false
 
+# When set to true, sticky pistons won't pull back the block when retracting
+# less than 2 redstone ticks after extending.
+mcl_redstone_sticky_pistons_one_tick_detach (Sticky pistons detach from block on short pulse) false
+
 [Debugging]
 # If enabled mapgen timings will be dumped to log
 mcl_logging_mapgen (Log chunk generation) bool false
