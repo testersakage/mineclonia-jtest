@@ -180,7 +180,7 @@ function mcl_potions.register_potion(def)
 		pdef._doc_items_usagehelp = how_to_drink
 	end
 	pdef.stack_max = def.stack_max or 1
-	local color = def.color or "#0000FF"
+	local color = def.color or "#FF00FF"
 	pdef.inventory_image = def.image or potion_image(color)
 	pdef.wield_image = pdef.inventory_image
 	pdef.groups = def.groups or {brewitem=1, food=3, can_eat_when_full=1,
