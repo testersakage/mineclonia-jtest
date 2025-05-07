@@ -186,6 +186,7 @@ The following APIs may be subject to change in future. You could already use
 these APIs but there will probably be breaking changes in the future, or the API
 is not as fleshed out as it should be. Use at your own risk!
 
+* `mcl_potions`
 * Panes (like glass panes and iron bars): `ITEMS/xpanes`
 * `_on_ignite` callback: `ITEMS/mcl_fire`
 * Farming: `ITEMS/mcl_farming`
