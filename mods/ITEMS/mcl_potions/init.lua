@@ -201,7 +201,7 @@ core.register_craftitem("mcl_potions:river_water", {
 
 })
 
-mcl_potions.register_splash("water", S("Splash Water Bottle"), "#0022FF", {
+mcl_potions.register_splash("water", S("Splash Water Bottle"), "#8091ff", {
 	tt=S("Extinguishes fire and hurts some mobs"),
 	longdesc=S("A throwable water bottle that will shatter on impact, where it extinguishes nearby fire and hurts mobs that are vulnerable to water."),
 	no_effect=true,
@@ -212,7 +212,7 @@ mcl_potions.register_splash("water", S("Splash Water Bottle"), "#0022FF", {
 	end,
 	effect=1
 })
-mcl_potions.register_lingering("water", S("Lingering Water Bottle"), "#0022FF", {
+mcl_potions.register_lingering("water", S("Lingering Water Bottle"), "#80a3ff", {
 	tt=S("Extinguishes fire and hurts some mobs"),
 	longdesc=S("A throwable water bottle that will shatter on impact, where it creates a cloud of water vapor that lingers on the ground for a while. This cloud extinguishes fire and hurts mobs that are vulnerable to water."),
 	base_potion = "mcl_potions:water",
