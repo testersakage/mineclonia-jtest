@@ -609,7 +609,7 @@ function glow_squid_spawner:test_spawn_position (spawn_pos, node_pos, sdata, nod
 		return false
 	end
 
-	local light = minetest.get_node_light (node_pos)
+	local light = core.get_node_light (node_pos)
 
 	if light == 0 then
 		if default_spawner.test_spawn_position (self, spawn_pos,

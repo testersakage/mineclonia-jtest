@@ -930,9 +930,9 @@ local zombie_spawner = table.merge (mobs_mc.monster_spawner, {
 
 function zombie_spawner:spawn (spawn_pos, idx, sdata, pack_size)
 	if math.random () < 0.05 then
-		return minetest.add_entity (spawn_pos, "mobs_mc:baby_zombie")
+		return core.add_entity (spawn_pos, "mobs_mc:baby_zombie")
 	else
-		return minetest.add_entity (spawn_pos, "mobs_mc:zombie")
+		return core.add_entity (spawn_pos, "mobs_mc:zombie")
 	end
 end
 
@@ -960,9 +960,9 @@ end
 
 function husk_spawner:spawn (spawn_pos, idx, sdata, pack_size)
 	if math.random () < 0.05 then
-		return minetest.add_entity (spawn_pos, "mobs_mc:baby_husk")
+		return core.add_entity (spawn_pos, "mobs_mc:baby_husk")
 	else
-		return minetest.add_entity (spawn_pos, "mobs_mc:husk")
+		return core.add_entity (spawn_pos, "mobs_mc:husk")
 	end
 end
 

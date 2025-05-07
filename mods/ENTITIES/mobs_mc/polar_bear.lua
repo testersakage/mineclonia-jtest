@@ -325,7 +325,7 @@ function polar_bear_spawner:spawn (spawn_pos, idx, sdata, pack_size)
 end
 
 function polar_bear_spawner:test_supporting_node (node)
-	return minetest.get_item_group (node.name, "grass_block") > 0
+	return core.get_item_group (node.name, "grass_block") > 0
 		or node.name == "mcl_core:snow/block"
 end
 

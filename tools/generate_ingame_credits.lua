@@ -19,8 +19,8 @@ local from = io.open("CREDITS.md", "r")
 local to = io.open("mods/HUD/mcl_credits/people.lua", "w")
 
 to:write([[
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 
 ]])
 

@@ -52,9 +52,9 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 		end
 
 		-- Abort if trying to push an unmovable block. The piston itself counts as unmovable.
-		local def = minetest.registered_nodes[nn.name]
-		if minetest.get_item_group(nn.name, "unmovable_by_piston") == 1
-			or (not inv_nodes_movable and minetest.get_item_group(nn.name, "container") ~= 0)
+		local def = core.registered_nodes[nn.name]
+		if core.get_item_group(nn.name, "unmovable_by_piston") == 1
+			or (not inv_nodes_movable and core.get_item_group(nn.name, "container") ~= 0)
 			or not def
 			or vector.equals(piston_pos, np) then
 			return
@@ -87,9 +87,9 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 
 						-- Only insert connected node if it is movable and can stick to current node.
 						-- The piston itself counts as unmovable.
-						if is_connected and minetest.get_item_group(offset_node.name, "unsticky") == 0
-							and minetest.get_item_group(offset_node.name, "unmovable_by_piston") == 0
-							and (inv_nodes_movable or minetest.get_item_group(offset_node.name, "container") == 0)
+						if is_connected and core.get_item_group(offset_node.name, "unsticky") == 0
+							and core.get_item_group(offset_node.name, "unmovable_by_piston") == 0
+							and (inv_nodes_movable or core.get_item_group(offset_node.name, "container") == 0)
 							and not vector.equals(piston_pos, offset_pos) then
 							table.insert(connected, offset_pos)
 						end

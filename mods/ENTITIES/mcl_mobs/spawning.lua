@@ -34,11 +34,11 @@ local mob_cap = {
 }
 
 --do mobs spawn?
-local mobs_spawn = minetest.settings:get_bool("mobs_spawn", true) ~= false
-local mobs_spawn_old = minetest.settings:get_bool("mobs_spawn_old", false) ~= false
-local spawn_protected = minetest.settings:get_bool("mobs_spawn_protected") ~= false
-local logging = minetest.settings:get_bool("mcl_logging_mobs_spawn", false)
-local mgname = minetest.get_mapgen_setting("mgname")
+local mobs_spawn = core.settings:get_bool("mobs_spawn", true) ~= false
+local mobs_spawn_old = core.settings:get_bool("mobs_spawn_old", false) ~= false
+local spawn_protected = core.settings:get_bool("mobs_spawn_protected") ~= false
+local logging = core.settings:get_bool("mcl_logging_mobs_spawn", false)
+local mgname = core.get_mapgen_setting("mgname")
 
 -- count how many mobs are in an area
 local function count_mobs(pos,r,mob_type)
@@ -711,7 +711,7 @@ core.register_chatcommand("spawncheck",{
 	end
 })
 
-local SPAWN_DISTANCE = tonumber (minetest.settings:get ("active_block_range")) or 4
+local SPAWN_DISTANCE = tonumber (core.settings:get ("active_block_range")) or 4
 local MOB_CAP_DIVISOR = 289
 local MOB_CAP_RECIPROCAL = 1 / MOB_CAP_DIVISOR
 local OVERWORLD_CEILING_MARGIN = 64
@@ -879,31 +879,31 @@ local current_mob_caps = {
 	["end"] = nil,
 }
 
-minetest.register_chatcommand("mobstats",{
+core.register_chatcommand("mobstats",{
 	privs = { debug = true },
 	func = function(n, _)
 		if mobs_spawn_old then
-			minetest.chat_send_player(n,dump(dbg_spawn_counts))
-			local pos = minetest.get_player_by_name(n):get_pos()
-			minetest.chat_send_player(n,"mobs within 32 radius of player:"..count_mobs(pos,32))
-			minetest.chat_send_player(n,"total mobs:"..count_mobs_total())
-			minetest.chat_send_player(n,"spawning attempts since server start:"..dbg_spawn_attempts)
-			minetest.chat_send_player(n,"successful spawns since server start:"..dbg_spawn_succ)
+			core.chat_send_player(n,dump(dbg_spawn_counts))
+			local pos = core.get_player_by_name(n):get_pos()
+			core.chat_send_player(n,"mobs within 32 radius of player:"..count_mobs(pos,32))
+			core.chat_send_player(n,"total mobs:"..count_mobs_total())
+			core.chat_send_player(n,"spawning attempts since server start:"..dbg_spawn_attempts)
+			core.chat_send_player(n,"successful spawns since server start:"..dbg_spawn_succ)
 
 
 			local mob_counts, total_mobs = count_mobs_all()
 			if (total_mobs) then
-				minetest.log("action", "Total mobs found: " .. total_mobs)
+				core.log("action", "Total mobs found: " .. total_mobs)
 			end
 			if mob_counts then
 				for k, v1 in pairs(mob_counts) do
-					minetest.log("action", "k: " .. tostring(k))
-					minetest.log("action", "v1: " .. tostring(v1))
+					core.log("action", "k: " .. tostring(k))
+					core.log("action", "v1: " .. tostring(v1))
 				end
 			end
 		else
 			local mob_caps = {}
-			local pos = minetest.get_player_by_name (n):get_pos ()
+			local pos = core.get_player_by_name (n):get_pos ()
 			local level = mcl_worlds.pos_to_dimension (pos)
 
 			if level == "void" then
@@ -921,7 +921,7 @@ minetest.register_chatcommand("mobstats",{
 				mob_caps[category] = global_max
 			end
 
-			minetest.chat_send_player (n, table.concat ({
+			core.chat_send_player (n, table.concat ({
 				"Currently active mobs by category: ",
 				dump (mcl_mobs.active_mobs_by_category),
 				"\n",
@@ -936,7 +936,7 @@ minetest.register_chatcommand("mobstats",{
 
 			local mob_counts, _ = count_mobs_all ()
 			for k, v1 in pairs (mob_counts) do
-				minetest.chat_send_player (n, table.concat ({
+				core.chat_send_player (n, table.concat ({
 					"  ", k, ": ", tostring (v1),
 				}))
 			end
@@ -1214,12 +1214,12 @@ local function spawn_a_pack (pos, players, category, scratch0)
 			local blurb = "[mcl_mobs] Spawned "
 				.. mob_def.name .. " at "
 				.. vector.to_string (spawn_pos)
-			minetest.log ("action", blurb)
+			core.log ("action", blurb)
 		else
 			local blurb = "[mcl_mobs] Spawned pack of "
 				.. n_spawned .. " ".. mob_def.name
 				.. " around " .. vector.to_string (pos)
-			minetest.log ("action", blurb)
+			core.log ("action", blurb)
 		end
 	end
 	if n_spawned > 0 and mob_def.init_group then
@@ -1341,7 +1341,7 @@ mcl_mobs.default_spawner = default_spawner
 -- Convert this table into a map between biome IDs and spawners
 -- once all biomes are registered.
 
-minetest.register_on_mods_loaded (function ()
+core.register_on_mods_loaded (function ()
 	local output = {}
 	local n = #registered_spawners
 	for i = 1, n do
@@ -1377,7 +1377,7 @@ end)
 ------------------------------------------------------------------------
 
 function mob_class:is_up_face_sturdy (pos)
-	local node = minetest.get_node (pos)
+	local node = core.get_node (pos)
 	return mcl_mobs.is_up_face_sturdy (pos, node)
 end
 
@@ -1387,8 +1387,8 @@ local cube = mcl_util.decompose_AABBs ({{
 }})
 local up_face_sturdy = {}
 
-minetest.register_on_mods_loaded (function ()
-	for node, def in pairs (minetest.registered_nodes) do
+core.register_on_mods_loaded (function ()
+	for node, def in pairs (core.registered_nodes) do
 		local node_type = def.paramtype2
 		if not def.walkable
 			or node_type == "flowingliquid" then
@@ -1455,7 +1455,7 @@ function mcl_mobs.is_up_face_sturdy (node, node_data)
 end
 
 function default_spawner:is_valid_spawn_ceiling (name)
-	local def = minetest.registered_nodes[name]
+	local def = core.registered_nodes[name]
 	if name == "ignore"
 		or not def
 		or (def.walkable or def.liquidtype ~= "none")
@@ -1477,7 +1477,7 @@ function default_spawner:get_node (node_cache, y_offset, base)
 	local cache = node_cache[y_offset]
 	if not cache then
 		base.y = base.y + y_offset
-		cache = minetest.get_node (base)
+		cache = core.get_node (base)
 		node_cache[y_offset] = cache
 		base.y = base.y - y_offset
 	end
@@ -1492,10 +1492,10 @@ function default_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 	local spawn_placement = self.spawn_placement
 	if spawn_placement == "misc" then
 		-- Just test that the position is loaded.
-		return minetest.get_node_or_nil (node_pos) ~= nil
+		return core.get_node_or_nil (node_pos) ~= nil
 	elseif spawn_placement == "ground" then
 		local node_below = self:get_node (node_cache, -1, node_pos)
-		if minetest.get_item_group (node_below.name, "opaque") == 0
+		if core.get_item_group (node_below.name, "opaque") == 0
 			or node_below.name == "mcl_core:bedrock" then
 			return false
 		end
@@ -1513,14 +1513,14 @@ function default_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 		return false
 	elseif spawn_placement == "aquatic" then
 		local node = self:get_node (node_cache, 0, node_pos)
-		if minetest.get_item_group (node.name, "water") > 0 then
+		if core.get_item_group (node.name, "water") > 0 then
 			local above = self:get_node (node_cache, 1, node_pos)
-			return minetest.get_item_group (above.name, "opaque") == 0
+			return core.get_item_group (above.name, "opaque") == 0
 		end
 		return false
 	elseif spawn_placement == "lava" then
 		local node = self:get_node (node_cache, 0, node_pos)
-		if minetest.get_item_group (node.name, "lava") > 0 then
+		if core.get_item_group (node.name, "lava") > 0 then
 			return true
 		end
 	end
@@ -1538,11 +1538,11 @@ local function box_intersection (box, other_box)
 end
 
 function default_spawner:test_collision (node, cbox)
-	local node_data = minetest.get_node (node)
+	local node_data = core.get_node (node)
 	if node_data.name == "ignore" then
 		return true
 	end
-	local def = minetest.registered_nodes[node_data.name]
+	local def = core.registered_nodes[node_data.name]
 
 	if def and not def.walkable
 		and ((self.spawn_placement == "aquatic"
@@ -1552,7 +1552,7 @@ function default_spawner:test_collision (node, cbox)
 	end
 
 	local boxes
-		= minetest.get_node_boxes ("collision_box", node, node_data)
+		= core.get_node_boxes ("collision_box", node, node_data)
 	for _, box in pairs (boxes) do
 		box[1] = box[1] + node.x
 		box[2] = box[2] + node.y
@@ -1569,7 +1569,7 @@ function default_spawner:test_collision (node, cbox)
 end
 
 function default_spawner:test_spawn_clearance (spawn_pos, sdata)
-	local mob_def = minetest.registered_entities[self.name]
+	local mob_def = core.registered_entities[self.name]
 	if not mob_def then
 		return false
 	end
@@ -1610,8 +1610,8 @@ function default_spawner:test_spawn_clearance (spawn_pos, sdata)
 end
 
 function default_spawner:spawn (spawn_pos, idx, sdata, pack_size)
-	local staticdata = sdata and minetest.serialize (sdata)
-	return minetest.add_entity (spawn_pos, self.name, staticdata)
+	local staticdata = sdata and core.serialize (sdata)
+	return core.add_entity (spawn_pos, self.name, staticdata)
 end
 
 function default_spawner:prepare_to_spawn (pack_size, center)
@@ -1623,7 +1623,7 @@ if not mobs_spawn_old and mobs_spawn then
 local spawn_timer = 0
 local passive_spawn_timer = 0
 
-minetest.register_globalstep (function (dtime)
+core.register_globalstep (function (dtime)
 	spawn_timer = spawn_timer - dtime
 	passive_spawn_timer = passive_spawn_timer - dtime
 	if spawn_timer <= 0 then
@@ -1655,8 +1655,8 @@ local function evaluate_node_properties (itemstack, user, pointed_thing)
 	end
 	local playername = user:get_player_name ()
 	if pointed_thing.type == "node" then
-		local node = minetest.get_node (pointed_thing.under)
-		minetest.chat_send_player (playername, table.concat ({
+		local node = core.get_node (pointed_thing.under)
+		core.chat_send_player (playername, table.concat ({
 			"Node: ", node.name, "\n",
 			"Up face sturdy: ",
 			tostring (mcl_mobs.is_up_face_sturdy (pointed_thing.under, node)),
@@ -1666,7 +1666,7 @@ local function evaluate_node_properties (itemstack, user, pointed_thing)
 		local zombie_spawner = table.merge (default_spawner, {
 			name = "mobs_mc:zombie",
 		})
-		minetest.chat_send_player (playername, table.concat ({
+		core.chat_send_player (playername, table.concat ({
 			"Zombie clearance tests pass? ",
 			tostring (zombie_spawner:test_spawn_clearance (spawn_pos, {})),
 			"\n",
@@ -1674,7 +1674,7 @@ local function evaluate_node_properties (itemstack, user, pointed_thing)
 	end
 end
 
-minetest.register_tool ("mcl_mobs:spawn_stick", {
+core.register_tool ("mcl_mobs:spawn_stick", {
 	description = "Evaluate node properties",
 	inventory_image = "default_stick.png^[colorize:purple:50",
 	groups = { testtool = 1, disable_repair = 1,
@@ -1682,7 +1682,7 @@ minetest.register_tool ("mcl_mobs:spawn_stick", {
 	on_use = evaluate_node_properties,
 })
 
-minetest.register_chatcommand ("spawn_cycle", {
+core.register_chatcommand ("spawn_cycle", {
 	privs = { server = true, },
 	params = "[ end | overworld | nether ]",
 	func = function (n, param)

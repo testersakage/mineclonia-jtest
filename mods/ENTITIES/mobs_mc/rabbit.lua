@@ -132,10 +132,10 @@ function rabbit:on_spawn ()
 
 	if not texture then
 		local self_pos = self.object:get_pos ()
-		local data = minetest.get_biome_data (self_pos)
+		local data = core.get_biome_data (self_pos)
 		local random = math.random (100)
-		local name = minetest.get_biome_name (data.biome)
-		local definition = minetest.registered_biomes[name]
+		local name = core.get_biome_name (data.biome)
+		local definition = core.registered_biomes[name]
 
 		if definition._mcl_biome_type == "cold"
 			or definition._mcl_biome_type == "snowy" then
@@ -492,7 +492,7 @@ local rabbit_spawner_woody = table.merge (mobs_mc.animal_spawner, {
 })
 
 function rabbit_spawner_woody:test_supporting_node (node)
-	return minetest.get_item_group (node.name, "grass_block") > 0
+	return core.get_item_group (node.name, "grass_block") > 0
 		or node.name == "mcl_core:sand"
 		or node.name == "mcl_core:snowblock"
 end
@@ -500,10 +500,10 @@ end
 function rabbit_spawner_woody:prepare_to_spawn (pack_size, center)
 	-- Select a variant for the entire pack.
 	local texture
-	local data = minetest.get_biome_data (center)
+	local data = core.get_biome_data (center)
 	local random = math.random (100)
-	local name = minetest.get_biome_name (data.biome)
-	local definition = minetest.registered_biomes[name]
+	local name = core.get_biome_name (data.biome)
+	local definition = core.registered_biomes[name]
 
 	if definition._mcl_biome_type == "cold"
 		or definition._mcl_biome_type == "snowy" then

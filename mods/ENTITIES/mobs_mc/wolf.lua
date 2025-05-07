@@ -1005,14 +1005,14 @@ local wolf_spawner_taiga = table.merge (mobs_mc.animal_spawner, {
 })
 
 function wolf_spawner_taiga:test_supporting_node (node)
-	return minetest.get_item_group (node.name, "grass_block") > 0
+	return core.get_item_group (node.name, "grass_block") > 0
 		or node.name == "mcl_core:snow_block"
 		or node.name == "mcl_core:coarse_dirt"
 		or node.name == "mcl_core:podzol"
 end
 
 function wolf_spawner_taiga:prepare_to_spawn (pack_size, center)
-	local biome = minetest.get_biome_data (center)
+	local biome = core.get_biome_data (center)
 	local variant
 		= (biome and variant_by_biome[biome.biome]) or "pale"
 	return {

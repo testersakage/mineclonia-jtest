@@ -550,9 +550,9 @@ local slime_spawner = table.merge (monster_spawner, {
 })
 
 function slime_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
-	local biome = minetest.get_biome_data (node_pos)
+	local biome = core.get_biome_data (node_pos)
 	if biome then
-		local name = minetest.get_biome_name (biome.biome)
+		local name = core.get_biome_name (biome.biome)
 		if name == "Swampland" or name == "MangroveSwamp" then
 			if swamp_spawn (spawn_pos) then
 				return monster_spawner.test_spawn_position (self, spawn_pos,
@@ -585,7 +585,7 @@ function slime_spawner:spawn (spawn_pos, _)
 		slime_type = "mobs_mc:slime_big"
 	end
 
-	return minetest.add_entity (spawn_pos, slime_type)
+	return core.add_entity (spawn_pos, slime_type)
 end
 
 mcl_mobs.register_spawner (slime_spawner)
@@ -623,7 +623,7 @@ function magma_cube_spawner:spawn (spawn_pos, _)
 		slime_type = "mobs_mc:magma_cube_big"
 	end
 
-	return minetest.add_entity (spawn_pos, slime_type)
+	return core.add_entity (spawn_pos, slime_type)
 end
 
 local magma_cube_spawner_basalt_delta = table.merge (magma_cube_spawner, {

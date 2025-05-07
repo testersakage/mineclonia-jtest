@@ -290,7 +290,7 @@ local mooshroom_spawner = table.merge (mobs_mc.animal_spawner, {
 })
 
 function mooshroom_spawner:test_supporting_node (node)
-	return minetest.get_item_group (node.name, "mycelium") > 0
+	return core.get_item_group (node.name, "mycelium") > 0
 end
 
 mcl_mobs.register_spawner (mooshroom_spawner)

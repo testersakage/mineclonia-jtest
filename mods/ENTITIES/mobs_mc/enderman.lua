@@ -537,12 +537,12 @@ local function enderman_ungrief (self, self_pos, dtime)
 		local node_below = vector.offset (place_pos, 0, -1, 0)
 
 		-- Also check to see if protected.
-		if minetest.get_node (place_pos).name == "air"
-			and not minetest.is_protected (place_pos, "")
+		if core.get_node (place_pos).name == "air"
+			and not core.is_protected (place_pos, "")
 		-- and whether the node below is sturdy.
 			and self:is_up_face_sturdy (node_below) then
 			-- ... but only if there's a free space
-			local success = minetest.place_node (place_pos, {name = self._taken_node})
+			local success = core.place_node (place_pos, {name = self._taken_node})
 			if success then
 				local def = core.registered_nodes[self._taken_node]
 				-- Update animation accordingly (removes visible block)

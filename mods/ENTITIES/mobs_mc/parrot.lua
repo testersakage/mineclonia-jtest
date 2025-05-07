@@ -386,9 +386,9 @@ local parrot_spawner = table.merge (mobs_mc.animal_spawner, {
 })
 
 function parrot_spawner:test_supporting_node (node)
-	return  minetest.get_item_group (node.name, "grass_block") > 0
-		or minetest.get_item_group (node.name, "leaves") > 0
-		or minetest.get_item_group (node.name, "tree") > 0
+	return  core.get_item_group (node.name, "grass_block") > 0
+		or core.get_item_group (node.name, "leaves") > 0
+		or core.get_item_group (node.name, "tree") > 0
 end
 
 mcl_mobs.register_spawner (parrot_spawner)

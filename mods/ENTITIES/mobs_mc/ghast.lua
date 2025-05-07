@@ -7,7 +7,7 @@ local S = core.get_translator("mobs_mc")
 local mobs_griefing = core.settings:get_bool("mobs_griefing", true)
 local mob_class = mcl_mobs.mob_class
 local only_peaceful_mobs
-	= minetest.settings:get_bool ("only_peaceful_mobs", false)
+	= core.settings:get_bool ("only_peaceful_mobs", false)
 
 --###################
 --################### GHAST

@@ -1,6 +1,6 @@
 local only_peaceful_mobs
-	= minetest.settings:get_bool ("only_peaceful_mobs", false)
-local S = minetest.get_translator("mobs_mc")
+	= core.settings:get_bool ("only_peaceful_mobs", false)
+local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local posing_humanoid = mcl_mobs.posing_humanoid
 local illager = mobs_mc.illager
@@ -321,7 +321,7 @@ local function spawn_patrolman (nodepos, as_leader)
 	return false
 end
 
-minetest.register_globalstep (function (dtime)
+core.register_globalstep (function (dtime)
 	if mcl_vars.difficulty == 0 or not mobs_spawn or only_peaceful_mobs then
 		return
 	end

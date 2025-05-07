@@ -3,7 +3,7 @@
 -------------------------------------------------------------------------
 
 local only_peaceful_mobs
-	= minetest.settings:get_bool ("only_peaceful_mobs", false)
+	= core.settings:get_bool ("only_peaceful_mobs", false)
 
 mobs_mc.overworld_biomes = {
 	"IcePlains",
@@ -149,11 +149,11 @@ local animal_spawner = {
 }
 
 function animal_spawner:test_supporting_node (node)
-	return minetest.get_item_group (node.name, "grass_block") > 0
+	return core.get_item_group (node.name, "grass_block") > 0
 end
 
 function animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
-	local light = minetest.get_node_light (node_pos)
+	local light = core.get_node_light (node_pos)
 	if not light or light <= 8 then
 		return false
 	end
@@ -185,8 +185,8 @@ function aquatic_animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata,
 
 	local node_below = self:get_node (node_cache, -1, node_pos)
 	local node_above = self:get_node (node_cache, 1, node_pos)
-	if minetest.get_item_group (node_below.name, "water") > 0
-		and minetest.get_item_group (node_above.name, "water") > 0 then
+	if core.get_item_group (node_below.name, "water") > 0
+		and core.get_item_group (node_above.name, "water") > 0 then
 		if default_spawner.test_spawn_position (self, spawn_pos,
 							node_pos, sdata,
 							node_cache) then
@@ -215,7 +215,7 @@ function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 	end
 
 	local node_data = self:get_node (node_cache, 0, node_pos)
-	local light = minetest.get_artificial_light (node_data.param1)
+	local light = core.get_artificial_light (node_data.param1)
 	if not light or light > self.max_artificial_light then
 		return false
 	end
@@ -223,7 +223,7 @@ function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 	if default_spawner.test_spawn_position (self, spawn_pos, node_pos,
 						sdata, node_cache) then
 		-- Natural light tests are expensive...
-		local natural_light = minetest.get_natural_light (node_pos)
+		local natural_light = core.get_natural_light (node_pos)
 		if not natural_light
 			or natural_light > self.max_light
 			or natural_light > math.random (0, 31) then

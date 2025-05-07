@@ -239,7 +239,7 @@ function bat_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache
 
 		if eligible then
 			local node = self:get_node (node_cache, 0, node_pos)
-			local artificial_light = minetest.get_artificial_light (node.param1)
+			local artificial_light = core.get_artificial_light (node.param1)
 			local date = os.date ("*t")
 
 			local maxlight
