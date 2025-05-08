@@ -99,11 +99,13 @@ function awards.unlock(name, award)
 	local desc = awdef.description or ""
 	local background = awdef.hud_background or awdef.background or "awards_bg_default.png"
 	local icon = (awdef.icon or "awards_unknown.png") .. "^[resize:32x32"
-	local sound = awdef.sound
-	if sound == nil then
-		-- Explicit check for nil because sound could be `false` to disable it
-		sound = {name="awards_got_generic", gain=0.25}
-	end
+                -- Sounds
+                local sound
+                if awdef.type == "Challenge" then
+                    sound = {name="awards_challenge_complete"}
+                else
+                    sound = {name="awards_ui_toast_in"}
+                end
 
 	-- Do Notification
 	if sound then
@@ -140,11 +142,11 @@ function awards.unlock(name, award)
 		})
         local hud_announce
         if awdef.secret == true then
-	        hud_announce = core.colorize("#ff0000", S("Hidden Advancement Made!"))
+	        hud_announce = core.colorize("#ff0000", S("Hidden Advancement Unlocked!"))
         elseif awdef.type == "Goal" then
-            hud_announce = core.colorize("#ffff00", S("Goal Completed!"))
+            hud_announce = core.colorize("#ffff00", S("Goal Reached!"))
         elseif awdef.type == "Challenge" then
-            hud_announce = core.colorize("#fc86fc", S("Challenge Completed!"))
+            hud_announce = core.colorize("#fc86fc", S("Challenge Complete!"))
         else
             hud_announce = core.colorize("#ffff00", S("Advancement Made!"))
         end
