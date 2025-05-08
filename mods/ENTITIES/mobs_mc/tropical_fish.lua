@@ -102,40 +102,36 @@ local pattern_colors = {
 }
 
 function tropical_fish:update_textures ()
-	if not self._type then
-		self._type = "a"
-		if math.random(2) == 1 then
-			self.object:set_properties({})
-			self._type="b"
-		end
-		self._base_color = base_colors[math.random(#base_colors)]
-		self._pattern_color = pattern_colors[math.random(#pattern_colors)]
-		self._pattern = table.concat ({
-			"extra_mobs_tropical_fish_pattern_",
-			self._type,
-			"_",
-			math.random(6),
-			".png",
-		})
+	self._type = self._type or (math.random(2) == 1 and "b" or "a")
+	if self._type == "b" then
+		self.object:set_properties({})
 	end
 
-	if not self._default_texture then
-		self._default_mesh = table.concat ({
-			"extra_mobs_tropical_fish_",
-			self._type,
-			".b3d",
-		})
-		self._default_texture = table.concat ({
-			"(extra_mobs_tropical_fish_",
-			self._type,
-			".png^[colorize:",
-			self._base_color,
-			":127)^(",
-			self._pattern,
-			"^[colorize:",
-			self._pattern_color..")",
-		})
-	end
+	self._base_color = self._base_color or base_colors[math.random(#base_colors)]
+	self._pattern_color = self._pattern_color or pattern_colors[math.random(#pattern_colors)]
+	self._pattern = self._pattern or table.concat ({
+		"extra_mobs_tropical_fish_pattern_",
+		self._type,
+		"_",
+		math.random(6),
+		".png",
+	})
+
+	self._default_mesh = self._default_mesh or table.concat ({
+		"extra_mobs_tropical_fish_",
+		self._type,
+		".b3d",
+	})
+	self._default_texture = self._default_texture or table.concat ({
+		"(extra_mobs_tropical_fish_",
+		self._type,
+		".png^[colorize:",
+		self._base_color,
+		":127)^(",
+		self._pattern,
+		"^[colorize:",
+		self._pattern_color..")",
+	})
 
 	self.base_texture = {
 		self._default_texture,
