@@ -222,6 +222,7 @@ core.register_node("mcl_lush_caves:rooted_dirt", {
 	groups = {handy=1, shovely=1, dirt=1, soil_fungus=1, building_block=1, path_creation_possible=1, converts_to_moss=1, cultivatable=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_mcl_hardness = 0.5,
+	_on_bottle_place = mcl_core.bottle_dirt,
 	_on_bone_meal = function(_, _, _, pos, _)
 		local under = vector.offset(pos, 0, -1, 0)
 		if core.get_node(under).name == "air" then
