@@ -32,6 +32,7 @@ mcl_vars.tool_wield_scale = { x = 1.8, y = 1.8, z = 1 }
 -- Mapgen variables
 local mg_name = core.get_mapgen_setting("mg_name")
 local minecraft_height_limit = 320
+local minecraft_new_height_limit = 384
 
 local singlenode = mg_name == "singlenode"
 
@@ -99,7 +100,16 @@ function mcl_vars.get_chunk_number(pos) -- unsigned int
 		 c.x + k_positive
 end
 
-if not mcl_vars.superflat and (not singlenode or normal_vars_in_singlenode) then
+if true then
+	mcl_vars.mg_overworld_min = -128
+	mcl_vars.mg_overworld_max_official = mcl_vars.mg_overworld_min
+		+ minecraft_new_height_limit
+	mcl_vars.mg_bedrock_overworld_min = mcl_vars.mg_overworld_min
+	mcl_vars.mg_bedrock_overworld_max = mcl_vars.mg_bedrock_overworld_min + 4
+	mcl_vars.mg_lava_overworld_max = mcl_vars.mg_overworld_min + 10
+	mcl_vars.mg_lava = true
+	mcl_vars.mg_bedrock_is_rough = true
+elseif not mcl_vars.superflat and (not singlenode or normal_vars_in_singlenode) then
 	-- Normal mode
 	--[[ Realm stacking (h is for height)
 	- Overworld (h>=256)
