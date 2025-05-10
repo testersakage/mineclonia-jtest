@@ -186,12 +186,12 @@ mcl_info.register_debug_field("Node below",{
 mcl_info.register_debug_field("Biome",{
 	level = 3,
 	func = function(_, pos)
-		local biome_data = core.get_biome_data(pos)
-		local biome = biome_data and core.get_biome_name(biome_data.biome) or "No biome"
-		if biome_data then
-			return string.format("%s (%s), Humidity: %.1f, Temperature: %.1f",biome, biome_data.biome, biome_data.humidity, biome_data.heat)
+		local biome = mcl_levelgen.get_biome (pos)
+		if biome then
+			return biome
+		else
+			return "No biome"
 		end
-		return "No biome"
 	end
 })
 
