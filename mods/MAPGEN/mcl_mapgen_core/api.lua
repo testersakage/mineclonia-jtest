@@ -14,6 +14,9 @@ local function roundN(n, d)
 end
 
 core.register_on_generated(function(minp, maxp, blockseed)
+	if core.global_exists ("mcl_levelgen") then
+		return
+	end
 	local t1 = os.clock()
 	local p1, p2 = {x=minp.x, y=minp.y, z=minp.z}, {x=maxp.x, y=maxp.y, z=maxp.z}
 	if lvm > 0 then
