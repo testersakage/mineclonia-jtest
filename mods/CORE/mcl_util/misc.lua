@@ -112,3 +112,10 @@ function mcl_util.calculate_knockback (velocity, factor, resistance, standing, x
 	v.y = standing and (math.min (0.4 * 20, velocity.y / 2.0 + factor * 10)) or velocity.y
 	return v
 end
+
+function mcl_util.return_itemstack_if_alive(player, itemstack)
+	if player:get_hp() <= 0 then
+		return ItemStack()
+	end
+	return itemstack
+end

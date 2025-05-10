@@ -25,7 +25,8 @@ for i=0,4 do
 			end
 		end
 
-		return itemstack
+		return mcl_util.return_itemstack_if_alive(player, itemstack)
+		-- returning the old itemstack here would result in it still being in hand *after* death
 	end
 
 
