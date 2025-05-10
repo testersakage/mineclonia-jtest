@@ -20,6 +20,7 @@ local toblock = mcl_levelgen.toblock
 local toquart = mcl_levelgen.toquart
 
 local terrain_generator = {}
+mcl_levelgen.terrain_generator = terrain_generator
 
 local cid_stone, cid_air
 if core and core.get_content_id then

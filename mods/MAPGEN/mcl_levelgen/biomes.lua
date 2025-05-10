@@ -389,8 +389,14 @@ mcl_levelgen.biome_distance_total = distance_total
 local huge = math.huge
 
 local function rtree_index_closest (coords, tree)
-	local leaf = nil
 	local distance = huge
+
+	-- Optimize the very frequent case where the previous result
+	-- is closer to COORDS than all others.
+	local leaf = tree.last_result
+	if leaf then
+		distance = distance_total (leaf.extents, coords)
+	end
 
 	for _, node in ipairs (tree.children) do
 		--- d must be less than distance if it contains any
@@ -406,6 +412,7 @@ local function rtree_index_closest (coords, tree)
 			end
 		end
 	end
+	tree.last_result = leaf
 	return leaf, distance
 end
 
