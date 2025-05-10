@@ -46,8 +46,8 @@ local honey_harvest = function(pos, node, player, itemstack)
 		node.name = original_block
 		core.swap_node(pos, node)
 	end
-
-	return itemstack
+	return mcl_util.return_itemstack_if_alive(player, itemstack)
+	-- returning the old itemstack here would result in it still being in hand *after* death
 end
 
 -- Dig Function for Beehives
