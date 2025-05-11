@@ -31,13 +31,6 @@ else
 	cid_air = 1
 end
 
-local function state_from_density (density)
-	if density > 0.0 then
-		return cid_stone, 0
-	end
-	return cid_air, 0
-end
-
 ------------------------------------------------------------------------
 -- Caching density functions.
 -- These functions replace their placeholder counterparts in density
@@ -46,15 +39,36 @@ end
 -- transformations.
 ------------------------------------------------------------------------
 
-local density_function = table.copy (mcl_levelgen.density_function)
+local density_function = table.merge (mcl_levelgen.density_function, {
+	saved_min_value = false,
+	saved_max_value = false,
+})
 local make_density_function = mcl_levelgen.make_density_function
 
 function density_function:min_value ()
+	if self.saved_min_value then
+		return self.saved_min_value
+	end
 	return self.input:min_value ()
 end
 
 function density_function:max_value ()
+	if self.saved_max_value then
+		return self.saved_max_value
+	end
 	return self.input:max_value ()
+end
+
+function density_function:petrify ()
+	local func = self.__call
+	if not self.saved_min_value then
+		self.saved_min_value = self.input:min_value ()
+		self.saved_max_value = self.input:max_value ()
+		self.input = self.input:petrify ()
+	end
+	return function (x, y, z, blender)
+		return func (self, x, y, z, blender)
+	end
 end
 
 -- Interpolators.
@@ -68,28 +82,18 @@ local interpolator = table.merge (density_function, {
 	-- the next X-axis row.
 	noises_next = {},
 
-	-- Cached values read from these arrays correspond to the
-	-- current and the next position along each axis.
-	xyz000 = 0.0,
-	xyz001 = 0.0,
-	xyz010 = 0.0,
-	xyz011 = 0.0,
-	xyz100 = 0.0,
-	xyz101 = 0.0,
-	xyz110 = 0.0,
-	xyz111 = 0.0,
-
-	-- Values produced by interpolating all pairs of values along
-	-- the X and Z axes at the current and the next Y-axis column.
-	xz00 = 0.0,
-	xz01 = 0.0,
-	xz10 = 0.0,
-	xz11 = 0.0,
-
-	-- Values produced by interpolating all pairs of values along
-	-- the Z axis at the current X-axis row and Y-axis column.
-	z0 = 0.0,
-	z1 = 0.0,
+	-- Array holding:
+	--   Cached values that correspond to the current and the next
+	--   position along each axis.
+	--
+	--   Values produced by interpolating all pairs of values
+	--   along the X and Z axes at the current and the next Y-axis
+	--   column.
+	--
+	--   Values produced by interpolating all pairs of values
+	--   along the Z axis at the current X-axis row and Y-axis
+	--   column.
+	data = {},
 
 	-- Input function whose value to interpolate.
 	input = nil,
@@ -115,11 +119,12 @@ function interpolator:create_noise_arrays (n_cells_y, n_cells_xz)
 			t3[j], t4[j] = 0.0, 0.0
 		end
 	end
-end
 
-local function provide_position_xz (idx, data)
-	-- X, Y, Z, blender.
-	return data[1], data[3] + idx * data[4], data[2], nil
+	local tdata = {}
+	for i = 1, 8 + 4 + 2 do
+		tdata[i] = 0.0
+	end
+	self.data = tdata
 end
 
 -- Fill this interpolator's `noises_here' or `noises_there' array
@@ -137,9 +142,14 @@ function interpolator:fill_noise_slice (initial, x, z_base, zoff,
 	local array = (initial and self.noises_here or self.noises_next)
 	local dst = array[zoff + 1]
 	local input = self.input
-	local data = { x * cell_width, (z_base + zoff) * cell_width,
-		       y_base * cell_height, cell_height, }
-	input:fill (dst, n_cells_y + 1, provide_position_xz, data)
+	local x = x * cell_width
+	local z = (z_base + zoff) * cell_width
+	local y = y_base * cell_height
+
+	for i = 0, n_cells_y do
+		local val = input (x, y + i * cell_height, z)
+		dst[i + 1] = val
+	end
 end
 
 -- Move values along each position in `noises_here' and `noises_y' at
@@ -149,15 +159,29 @@ end
 
 function interpolator:cache_yz_values (y, z)
 	local here, there = self.noises_here, self.noises_next
+	local herez2 = here[z + 2]
+	local herez1 = here[z + 1]
+	local therez2 = there[z + 2]
+	local therez1 = there[z + 1]
+	local data = self.data
 
-	self.xyz000 = here[z + 1][y + 1]
-	self.xyz001 = here[z + 2][y + 1]
-	self.xyz010 = here[z + 1][y + 2]
-	self.xyz011 = here[z + 2][y + 2]
-	self.xyz100 = there[z + 1][y + 1]
-	self.xyz101 = there[z + 2][y + 1]
-	self.xyz110 = there[z + 1][y + 2]
-	self.xyz111 = there[z + 2][y + 2]
+	local xyz000 = 1
+	local xyz001 = 2
+	local xyz010 = 3
+	local xyz011 = 4
+	local xyz100 = 5
+	local xyz101 = 6
+	local xyz110 = 7
+	local xyz111 = 8
+
+	data[xyz111] = therez2[y + 2]
+	data[xyz110] = therez1[y + 2]
+	data[xyz101] = therez2[y + 1]
+	data[xyz100] = therez1[y + 1]
+	data[xyz011] = herez2[y + 2]
+	data[xyz010] = herez1[y + 2]
+	data[xyz001] = herez2[y + 1]
+	data[xyz000] = herez1[y + 1]
 end
 
 local function lerp1d (u, s1, s2)
@@ -169,23 +193,48 @@ end
 -- cache the products in `self.xz00', `xz10', `xz01', and `xz11'.
 
 function interpolator:y_interpolate (progress)
-	self.xz00 = lerp1d (progress, self.xyz000, self.xyz010)
-	self.xz01 = lerp1d (progress, self.xyz001, self.xyz011)
-	self.xz10 = lerp1d (progress, self.xyz100, self.xyz110)
-	self.xz11 = lerp1d (progress, self.xyz101, self.xyz111)
+	local xyz000 = 1
+	local xyz001 = 2
+	local xyz010 = 3
+	local xyz011 = 4
+	local xyz100 = 5
+	local xyz101 = 6
+	local xyz110 = 7
+	local xyz111 = 8
+	local xz00 = 9
+	local xz01 = 10
+	local xz10 = 11
+	local xz11 = 12
+	local data = self.data
+
+	data[xz11] = lerp1d (progress, data[xyz101], data[xyz111])
+	data[xz10] = lerp1d (progress, data[xyz100], data[xyz110])
+	data[xz01] = lerp1d (progress, data[xyz001], data[xyz011])
+	data[xz00] = lerp1d (progress, data[xyz000], data[xyz010])
 end
 
 -- Likewise, but along the X axis.
 
 function interpolator:x_interpolate (progress)
-	self.z0 = lerp1d (progress, self.xz00, self.xz10)
-	self.z1 = lerp1d (progress, self.xz01, self.xz11)
+	local xz00 = 9
+	local xz01 = 10
+	local xz10 = 11
+	local xz11 = 12
+	local z0 = 13
+	local z1 = 14
+	local data = self.data
+
+	data[z1] = lerp1d (progress, data[xz01], data[xz11])
+	data[z0] = lerp1d (progress, data[xz00], data[xz10])
 end
 
 -- Complete interpolation.
 
 function interpolator:z_interpolate (progress)
-	self.value = lerp1d (progress, self.z0, self.z1)
+	local z0 = 13
+	local z1 = 14
+	local data = self.data
+	self.value = lerp1d (progress, data[z0], data[z1])
 end
 
 function interpolator:__call (x, y, z, blender)
@@ -202,8 +251,8 @@ local flat_cache = table.merge (density_function, {
 	input = nil,
 	nvalues = 0,
 	values = {},
-	chunk_origin_x = nil,
-	chunk_origin_z = nil,
+	chunk_origin_x = false,
+	chunk_origin_z = false,
 })
 
 function flat_cache:create_noise_arrays (width_and_depth_quart)
@@ -221,31 +270,39 @@ function flat_cache:create_noise_arrays (width_and_depth_quart)
 	self.nvalues = #values
 end
 
+function flat_cache:clear_cache ()
+	self.chunk_origin_x = false
+	self.chunk_origin_z = false
+end
+
 function flat_cache:prime_noise_arrays (origin_x, origin_z)
 	local nvalues = self.nvalues
 	local values = self.values
+	local input = self.input
 
 	for x = 1, nvalues do
-		local tem = {}
-		values[x] = tem
+		local tem = values[x]
 		for z = 1, nvalues do
-			tem[z] = self.input:compute (origin_x + toblock (x),
-						     0,
-						     origin_z + toblock (z),
-						     nil)
+			tem[z] = input (origin_x + toblock (x - 1),
+					0,
+					origin_z + toblock (z - 1),
+					nil)
 		end
 	end
 
-	self.chunk_origin_x = origin_x
-	self.chunk_origin_z = origin_z
+	self.chunk_origin_x = toquart (origin_x)
+	self.chunk_origin_z = toquart (origin_z)
 end
 
 function flat_cache:__call (x, y, z, blender)
-	local qx = toquart (x) - self.chunk_origin_x
-	local qz = toquart (z) - self.chunk_origin_z
-	local nvalues = self.nvalues
-	if qx >= 0 and qz >= 0 and qx < nvalues and qz < nvalues then
-		return self.values[qx + 1][qz + 1]
+	local origin_x = self.chunk_origin_x
+	if origin_x then
+		local qx = toquart (x) - origin_x
+		local qz = toquart (z) - self.chunk_origin_z
+		local nvalues = self.nvalues
+		if qx >= 0 and qz >= 0 and qx < nvalues and qz < nvalues then
+			return self.values[qx + 1][qz + 1]
+		end
 	end
 	return self.input (x, y, z, blender)
 end
@@ -349,9 +406,10 @@ end
 
 local function prepare_interpolation (self, origin_x, origin_z, x_cell,
 				      z_cell, y_base, n_cells_xz, n_cells_y)
+	local clock = os.clock ()
 	local cachers = self.flat_caches
 	for _, cacher in pairs (cachers) do
-		cachers:prime_noise_arrays (origin_x, origin_z)
+		cacher:prime_noise_arrays (origin_x, origin_z)
 	end
 
 	fill_interpolators (self, true, x_cell, z_cell, y_base,
@@ -402,6 +460,13 @@ end
 -- 	end
 -- 	return true
 -- end
+
+local function state_from_density (self, x, y, z, density)
+	if density > 0.0 then
+		return cid_stone, 0
+	end
+	return self.aquifer:get_node (x, y, z, density)
+end
 
 function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 	local y_min = self.y_min
@@ -477,7 +542,9 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 							interpolator_update_z (self, progress)
 
 							local density = final_density (x_pos, y_pos, z_pos, nil)
-							local cid, param2 = state_from_density (density)
+							local cid, param2
+								= state_from_density (self, x_pos, y_pos,
+										      z_pos, density)
 							local index = vm_index (x_pos - x_level,
 										y_pos - y_level,
 										z_pos - z_level)
@@ -491,6 +558,12 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 
 		exchange_slices (self)
 		reset_interpolators (self)
+	end
+
+	-- Reset flat caches.
+	local flat_caches = self.flat_caches
+	for _, cache in pairs (flat_caches) do
+		cache:clear_cache ()
 	end
 	return true
 end
@@ -510,6 +583,9 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 	gen.cell_width = cell_width
 	gen.cell_height = cell_height
 
+	-- TODO: aquifer toggle.
+	gen.aquifer = mcl_levelgen.create_default_aquifer (preset)
+
 	-- chunksize is permitted not to be divisible by cell_height
 	-- or cell_width.
 	gen.n_cells_xz = ceil (chunksize / cell_width)
@@ -524,6 +600,8 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 	-- in earnest.
 
 	local density_functions = {}
+	local markers = {}
+
 	gen.interpolators = {}
 	gen.flat_caches = {}
 	gen.caches_to_clear = {}
@@ -535,7 +613,9 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 		end
 
 		if func.is_marker then
-			if func.name == "interpolated" then
+			if markers[func.input] then
+				fn = markers[func.input]
+			elseif func.name == "interpolated" then
 				fn = table.merge (interpolator, {
 					noises_here = {},
 					noises_next = {},
@@ -550,7 +630,7 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 					input = func,
 				})
 				fn = make_density_function (fn)
-				local qsize = toquart (gen.cell_total_width)
+				local qsize = toquart (gen.n_cells_xz * gen.cell_width)
 				fn:create_noise_arrays (qsize)
 				table.insert (gen.flat_caches, fn)
 			elseif func.name == "cache_2d" then
@@ -568,11 +648,12 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 				fn = make_density_function (fn)
 				table.insert (gen.caches_to_clear, fn)
 			end
+			markers[func.input] = fn
 		else
 			fn = func
 		end
 		density_functions[func] = fn
 		return fn
-	end, mcl_levelgen.identity)
+	end, mcl_levelgen.identity):petrify ()
 	return gen
 end

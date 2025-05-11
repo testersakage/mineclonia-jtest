@@ -387,9 +387,24 @@ end
 mcl_levelgen.biome_distance_total = distance_total
 
 local huge = math.huge
+local push = table.insert
+
+local function pop (n, v, pdl)
+	if n == 0 then
+		local v = pdl[#pdl]
+		local n = #v
+		pdl[#pdl] = nil
+		return n - 1, v, v[n]
+	end
+	return n - 1, v, v[n]
+end
+
+local searchpdl, scratch = {}, {}
 
 local function rtree_index_closest (coords, tree)
 	local distance = huge
+	local searchpdl = searchpdl
+	local ref = scratch
 
 	-- Optimize the very frequent case where the previous result
 	-- is closer to COORDS than all others.
@@ -398,17 +413,24 @@ local function rtree_index_closest (coords, tree)
 		distance = distance_total (leaf.extents, coords)
 	end
 
-	for _, node in ipairs (tree.children) do
-		--- d must be less than distance if it contains any
-		--- constitutents of which the same holds true.
-		local d = distance_total (node.extents, coords)
+	local n, v = 0, nil
+	ref[1] = tree
+	push (searchpdl, ref)
+	while #searchpdl > 0 or n > 0 do
+		local tem
+		n, v, tem = pop (n, v, searchpdl)
+		local d = distance_total (tem.extents, coords)
+
 		if d < distance then
-			local nearer = node.value and node
-				or rtree_index_closest (coords, node)
-			local d1 = distance_total (nearer.extents, coords)
-			if d1 < distance then
-				leaf = nearer
-				distance = d1
+			--- d must be less than distance if it
+			--- contains any constitutents of which the
+			--- same holds true.
+			if not tem.value then
+				local children = tem.children
+				push (searchpdl, children)
+			else
+				leaf = tem
+				distance = d
 			end
 		end
 	end

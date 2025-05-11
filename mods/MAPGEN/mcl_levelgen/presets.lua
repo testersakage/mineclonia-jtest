@@ -1582,21 +1582,22 @@ local function initialize_overworld_biomes (preset, large_biomes,
 	preset.ridges = registry.ridges
 
 	local temperature_stripped
-		= preset.temperature:wrap (strip_markers, identity)
+		= preset.temperature:wrap (strip_markers, identity):petrify ()
 	local vegetation_stripped
-		= preset.vegetation:wrap (strip_markers, identity)
+		= preset.vegetation:wrap (strip_markers, identity):petrify ()
 	local continents_stripped
-		= preset.continents:wrap (strip_markers, identity)
+		= preset.continents:wrap (strip_markers, identity):petrify ()
 	local erosion_stripped
-		= preset.erosion:wrap (strip_markers, identity)
+		= preset.erosion:wrap (strip_markers, identity):petrify ()
 	local depth_stripped
-		= preset.depth:wrap (strip_markers, identity)
+		= preset.depth:wrap (strip_markers, identity):petrify ()
 	local ridges_stripped
-		= preset.ridges:wrap (strip_markers, identity)
+		= preset.ridges:wrap (strip_markers, identity):petrify ()
+	local biome_lut = preset.biome_lut
 
 	preset.index_biomes = function (self, qx, qy, qz)
 		local x, y, z = toblock (qx), toblock (qy), toblock (qz)
-		return index_biome_lut (self.biome_lut,
+		return index_biome_lut (biome_lut,
 					temperature_stripped (x, y, z),
 					vegetation_stripped (x, y, z),
 					continents_stripped (x, y, z),
@@ -1732,6 +1733,17 @@ local function initialize_overworld_generation (params, large_biomes, amplified)
 	local tapered = check_overworld_at_extrema (sloped_cheese_or_underground,
 						    amplified)
 	params.final_density = min (post_process (tapered), registry.noodle)
+
+	-- This density function is sampled by aquifers and surface
+	-- systems to ascertain preliminary surface levels.
+	local product_factor = mul (depth, cache_2d (factor))
+	local scaled = mul (const (4.0), quarter_negative (product_factor))
+	-- XXX: huh???  What is the significance of this offset?
+	local scaled_offset = clamp (add (scaled, const (-0.703125)),
+				     -64.0, 64.0)
+	local tapered_initial
+		= check_overworld_at_extrema (scaled_offset, amplified)
+	params.initial_density_without_jaggedness = tapered_initial
 end
 
 -- Overworld preset functions.
@@ -1739,6 +1751,7 @@ end
 local overworld_preset_template = table.merge (level_preset_template, {
 	min_y = -64,
 	height = 384,
+	sea_level = 63,
 	noise_size_horizontal = 1,
 	noise_size_vertical = 2,
 	noise_cell_width = toblock (1),
