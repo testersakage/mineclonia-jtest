@@ -18,6 +18,7 @@ dofile (prefix .. "/biomes.lua")
 dofile (prefix .. "/presets.lua")
 dofile (prefix .. "/terrain.lua")
 dofile (prefix .. "/biomegen.lua")
+dofile (prefix .. "/aquifer.lua")
 
 -- Is this file being loaded into Minetest?
 if core and core.get_current_modname then
