@@ -18,11 +18,14 @@ local gradients = {
 	{1, 1, 0},
 	{0, -1, 1},
 	{-1, 1, 0},
-	{0, -1, -1}
+	{0, -1, -1},
 }
 
+local floor = math.floor
+local band = bit.band
+
 local function dotproduct (vecno, x, y, z)
-	local vec = gradients[vecno % 16 + 1]
+	local vec = gradients[band (vecno, 0xf) + 1]
 	local x0, y0, z0 = vec[1], vec[2], vec[3]
 	return x0 * x + y0 * y + z0 * z
 end
@@ -44,14 +47,11 @@ local function lerp3d (u, v, w, s1, s2, s3, s4, s5, s6, s7, s8)
 		       lerp2d (u, v, s5, s6, s7, s8))
 end
 
-mcl_levelgen.nsamples = 0
-
 function mcl_levelgen.make_octave (rng)
 	local xoff = rng:next_double () * 256.0
 	local yoff = rng:next_double () * 256.0
 	local zoff = rng:next_double () * 256.0
 	-- print ("offsets", xoff, yoff, zoff)
-	local floor = math.floor
 	local permutation = {}
 
 	for i = 1, 256 do
@@ -93,37 +93,34 @@ function mcl_levelgen.make_octave (rng)
 			end
 			fracty_base = floor (m / yscale + 1e-7) * yscale
 		end
-		-- print ("fy_base " .. fracty_base)
 		local fracty = real_fracty - fracty_base
 
 		local x = gridx
 		local y = gridy
 		local z = gridz
-		local x1 = permutation[x % 256 + 1]
-		local x2 = permutation[(x + 1) % 256 + 1]
-		local y1 = permutation[(x1 + y) % 256 + 1]
-		local y2 = permutation[(x1 + y + 1) % 256 + 1]
-		local x2y1 = permutation[(x2 + y) % 256 + 1]
-		local x2y2 = permutation[(x2 + y + 1) % 256 + 1]
-
-		-- print ("coords", x, y, z, x1, x2, y1, y2, x2y1, x2y2)
+		local x1 = permutation[band (x, 0xff) + 1]
+		local x2 = permutation[band ((x + 1), 0xff) + 1]
+		local y1 = permutation[band ((x1 + y), 0xff) + 1]
+		local y2 = permutation[band ((x1 + y + 1), 0xff) + 1]
+		local x2y1 = permutation[band ((x2 + y), 0xff) + 1]
+		local x2y2 = permutation[band ((x2 + y + 1), 0xff) + 1]
 
 		-- 8 corners of the cube.
-		local s1 = dotproduct (permutation[(y1 + z) % 256 + 1],
+		local s1 = dotproduct (permutation[band ((y1 + z), 0xff) + 1],
 				       fractx, fracty, fractz)
-		local s2 = dotproduct (permutation[(x2y1 + z) % 256 + 1],
+		local s2 = dotproduct (permutation[band ((x2y1 + z), 0xff) + 1],
 				       fractx - 1.0, fracty, fractz)
-		local s3 = dotproduct (permutation[(y2 + z) % 256 + 1],
+		local s3 = dotproduct (permutation[band ((y2 + z), 0xff) + 1],
 				       fractx, fracty - 1.0, fractz)
-		local s4 = dotproduct (permutation[(x2y2 + z) % 256 + 1],
+		local s4 = dotproduct (permutation[band ((x2y2 + z), 0xff) + 1],
 				       fractx - 1.0, fracty - 1.0, fractz)
-		local s5 = dotproduct (permutation[(y1 + z + 1) % 256 + 1],
+		local s5 = dotproduct (permutation[band ((y1 + z + 1), 0xff) + 1],
 				       fractx, fracty, fractz - 1.0)
-		local s6 = dotproduct (permutation[(x2y1 + z + 1) % 256 + 1],
+		local s6 = dotproduct (permutation[band ((x2y1 + z + 1), 0xff) + 1],
 				       fractx - 1.0, fracty, fractz - 1.0)
-		local s7 = dotproduct (permutation[(y2 + z + 1) % 256 + 1],
+		local s7 = dotproduct (permutation[band ((y2 + z + 1), 0xff) + 1],
 				       fractx, fracty - 1.0, fractz - 1.0)
-		local s8 = dotproduct (permutation[(x2y2 + z + 1) % 256 + 1],
+		local s8 = dotproduct (permutation[band ((x2y2 + z + 1), 0xff) + 1],
 				       fractx - 1.0, fracty - 1.0, fractz - 1.0)
 		local u = fade (fractx)
 		local v = fade (real_fracty)
@@ -550,10 +547,6 @@ function mcl_levelgen.make_simplex_noise (rng, in_octaves)
 
 	local lacunarity = math.pow (2.0, n_high_octaves)
 	local persistence = 1.0 / (math.pow (2.0, octaves_total) - 1.0)
-	local tbl = {
-		lacunarity = lacunarity,
-		persistence = persistence,
-	}
 	local function get_value (x, y, use_origin)
 		local v = 0.0
 		local lacunarity = lacunarity
@@ -574,6 +567,11 @@ function mcl_levelgen.make_simplex_noise (rng, in_octaves)
 		end
 		return v
 	end
+	local tbl = {
+		lacunarity = lacunarity,
+		persistence = persistence,
+		get_value = get_value,
+	}
 	setmetatable (tbl, {
 		__call = function (_, x, y, use_origin)
 			return get_value (x, y, use_origin)
@@ -638,26 +636,29 @@ function mcl_levelgen.make_normal_noise (rng, first_octave, amplitudes, fork_noi
 	local r = TARGET_DEVIATION / expected_deviation (max - min)
 	local max_value = (left.max_value + right.max_value) * r
 
-	local function sample (x, y, z)
+	local left_func = left.get_value
+	local right_func = right.get_value
+	local function get_value (x, y, z)
 		local xr, yr, zr
 		xr = x * RIGHT_NOISE_SCALE
 		yr = y * RIGHT_NOISE_SCALE
 		zr = z * RIGHT_NOISE_SCALE
-		return (left (x, y, z, 0, 0, false)
-			+ right (xr, yr, zr, 0, 0, false)) * r
+		return (left_func (x, y, z, 0, 0, false)
+			+ right_func (xr, yr, zr, 0, 0, false)) * r
 	end
 
 	local tbl = {
 		first_octave = first_octave,
 		amplitudes = amplitudes,
 		max_value = max_value,
+		get_value = get_value,
 		left = left,
 		right = right,
 		r = r,
 	}
 	local metatable = {
 		__call = function (_, x, y, z)
-			return sample (x, y, z)
+			return get_value (x, y, z)
 		end,
 	}
 	setmetatable (tbl, metatable)

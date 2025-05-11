@@ -7,6 +7,20 @@ local overworld_terrain
 
 local a, b = {}, {}
 
-overworld_terrain:generate (-48, -64, -48, a, b, function (x, y, z)
-	return 0
-end)
+local clock = os.clock ()
+
+local function index (x, y, z)
+	return x * 80 * 80 + y * 80 + z + 1
+end
+
+for i = 1, 20 do
+
+overworld_terrain:generate (-48 + i * 16, -64, -48 + i * 32, a, b, index)
+overworld_terrain:generate (-48 + i * 16, -64, -48 + i * 16, a, b, index)
+overworld_terrain:generate (-48 + i * 32, -64, -48 + i * 16, a, b, index)
+
+print ("Generated " .. i * 3 .. " MapChunks...")
+
+end
+
+print ("Generation completed in: " .. math.floor (os.clock () - clock + 0.5) .. " s")
