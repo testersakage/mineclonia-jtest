@@ -13,11 +13,13 @@ local function index (x, y, z)
 	return x * 80 * 80 + y * 80 + z + 1
 end
 
-for i = 1, 20 do
+print ("Starting to generate terrain...")
 
-overworld_terrain:generate (-48 + i * 16, -64, -48 + i * 32, a, b, index)
-overworld_terrain:generate (-48 + i * 16, -64, -48 + i * 16, a, b, index)
-overworld_terrain:generate (-48 + i * 32, -64, -48 + i * 16, a, b, index)
+for i = 1, 30 do
+
+overworld_terrain:generate (-48 + i * 16, -32, -48 + i * 32, a, b, index)
+overworld_terrain:generate (-48 + i * 16, 0, -48 + i * 16, a, b, index)
+overworld_terrain:generate (-48 + i * 32, 0, -48 + i * 16, a, b, index)
 
 print ("Generated " .. i * 3 .. " MapChunks...")
 
