@@ -88,7 +88,10 @@ end
 
 function density_function:wrap (applicator, noise_visitor)
 	local visited = {}
-	return self:wrap_internal (applicator, noise_visitor, visited)
+	local wrapped = self:wrap_internal (applicator,
+					    noise_visitor,
+					    visited)
+	return wrapped, visited
 end
 
 function density_function:wrap_internal (applicator, noise_visitor, visited)
@@ -243,7 +246,7 @@ local function call_blended_noise (x, y, z, xz_multiplier, y_multiplier,
 		hivalue = hivalue / 512.0
 		local x = lovalue + base_value * (hivalue - lovalue)
 		return x / 128.0
-	end	
+	end
 end
 
 function old_blended_noise:__call (x, y, z, blender)
@@ -1340,7 +1343,7 @@ function shift:petrify ()
 	end
 end
 
-function shift:wrap_internal (applicator, noise_visitor, visitor)
+function shift:wrap_internal (applicator, noise_visitor, visited)
 	if visited[self] then
 		return visited[self]
 	end
@@ -1838,7 +1841,6 @@ if false then
 		= mcl_levelgen.make_normal_noise (rng, continentalness.first_octave,
 						  continentalness.amplitudes, true)
 	local func = mcl_levelgen.make_noise_from_parms (noise, 25.0, 0.0)
-	local func_1 = mcl_levelgen.make_noise_from_parms (noise, 5.0, 0.0)
 	local spline = mcl_levelgen.make_spline (func, {
 		{
 			location = -1.0,
@@ -1915,7 +1917,7 @@ function mcl_levelgen.plot_spline (self)
 		local loc_diff = location_above - location_below
 		local val_diff = value_above - value_below
 		local dev_below = deriv_below * loc_diff - val_diff
-		local dev_above = -deriv_below * loc_diff - val_diff
+		local dev_above = -deriv_above * loc_diff - val_diff
 
 		print (string.format ("eval%d_%d (x) = lerp1d (x, %.6f, %.6f) + x * (1.0 - x) * lerp1d (x, %.6f, %.6f)",
 				      i, i2, value_below, value_above,
