@@ -2,6 +2,7 @@
 -- Aquifer processing.
 ------------------------------------------------------------------------
 
+local ipairs = ipairs
 local cid_air, cid_lava_source
 
 -- local prin = false

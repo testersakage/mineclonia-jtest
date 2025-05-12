@@ -13,6 +13,7 @@
 -- Biome position utilities.
 ------------------------------------------------------------------------
 
+local ipairs = ipairs
 local floor = math.floor
 local arshift = bit.arshift
 local lshift = bit.lshift
