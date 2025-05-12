@@ -217,6 +217,11 @@ local function mulull (a, m)
 	return (hi % (1 + UINT_MAX))
 end
 
+local function detect_luajit ()
+	local fn = loadstring ("return 0x1ull")
+	return fn and type (fn ()) == "cdata"
+end
+
 local function shlull (a, k)
 	local hi, lo = a[2], a[1]
 	if k >= 32 then
@@ -343,6 +348,59 @@ local function mul2ull (a, b)
 	b[2] = hi
 end
 
+if detect_luajit () then
+	local tobit = bit.tobit
+	local rshift = bit.rshift
+
+	function mulull (a, m)
+		local a_lo, a_hi = a[1], a[2]
+
+		-- Long multiplication of two 32 bit operands into a
+		-- 64 bit product.
+		local m1 = m * 1ull
+		local lo = a_lo * m1
+		local hi = a_hi * m1
+		local excess = rshift (hi, 32)
+		local lohi = rshift (lo, 32)
+		local carry
+
+		hi = band (hi, 0xffffffffull)
+		carry = rshift ((UINT_MAX - lohi) - hi, 63)
+		excess = excess + carry
+		hi = band (hi + lohi, 0xffffffffull)
+		a[1] = tonumber (band (lo, 0xffffffffull))
+		a[2] = tonumber (hi)
+		return tonumber (excess)
+	end
+
+	function addull (a, b)
+		local along = a[2] * 0x100000000ull + a[1]
+		local blong = b[2] * 0x100000000ull + b[1]
+		local value = along + blong
+		a[1] = tonumber (band (value, 0xffffffff))
+		a[2] = tonumber (rshift (value, 32))
+	end
+
+	function addkull (a, k)
+		local along = a[2] * 0x100000000ull + a[1]
+		local value = along + k
+		a[1] = tonumber (band (value, 0xffffffff))
+		a[2] = tonumber (rshift (value, 32))
+	end
+
+	-- Avoid expensive normalization by performing unsigned
+	-- arithmetic.
+	function andull (a, b)
+		a[1] = band (a[1], b[1] * 1ull)
+		a[2] = band (a[2], b[2] * 1ull)
+	end
+
+	function xorull (a, b)
+		a[1] = bxor (a[1], b[1] * 1ull)
+		a[2] = bxor (a[2], b[2] * 1ull)
+	end
+end
+
 -- Tests.
 if true then
 	local x = ull (UINT_MAX, UINT_MAX)
@@ -420,7 +478,7 @@ if true then
 	assert (tostringull (x) == "281509961286592")
 
 	local x = ull (1024, 546633999)
-	assert (mulull (x, 0xfffffffff) == 1024)
+	assert (mulull (x, 0xffffffff) == 1024)
 	assert (tostringull (x) == "2347770749993551601")
 
 	local x = ull (1024, 546633999)
