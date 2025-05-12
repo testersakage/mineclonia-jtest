@@ -1,3 +1,5 @@
+local ipairs = ipairs
+
 if not table.copy then
 	local function table_copy(value, preserve_metatables)
 		local seen = {}

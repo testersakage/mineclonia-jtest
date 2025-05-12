@@ -15,7 +15,7 @@ end
 
 print ("Starting to generate terrain...")
 
-for i = 1, 30 do
+for i = 1, 300 do
 
 overworld_terrain:generate (-48 + i * 16, -32, -48 + i * 32, a, b, index)
 overworld_terrain:generate (-48 + i * 16, 0, -48 + i * 16, a, b, index)
