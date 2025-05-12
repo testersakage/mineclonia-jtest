@@ -621,6 +621,10 @@ local FAR_INLAND_CONTINENTALNESS = {
 	0.3, 1.0,
 }
 
+function mcl_levelgen.parameters_adjoin_deep_dark (erosion, depth)
+	return erosion < -0.225 and depth > 0.9
+end
+
 local function construct_biome (textid, temperature, humidity,
 				continentalness, erosion, depth,
 				weirdness, offset)

@@ -156,7 +156,7 @@ local function mulull (a, m)
 	local a2 = rshift (a_lo, 16)
 	local a3 = band (a_hi, USHORT_MAX)
 	local a4 = rshift (a_hi, 16)
-	local p1, p2, p3, p4, p5, p6, p7, p8
+	local p1, p2, p3, p4
 	local mullo = band (m, USHORT_MAX)
 	local mulhi = rshift (m, 16)
 
@@ -188,20 +188,20 @@ local function mulull (a, m)
 	end
 
 	-- Long multiplication of hi word.
-	p5 = a3 * mullo
-	p6 = a3 * mulhi
-	p7 = a4 * mullo
-	p8 = a4 * mulhi
+	p1 = a3 * mullo
+	p2 = a3 * mulhi
+	p3 = a4 * mullo
+	p4 = a4 * mulhi
 
-	local hi = p8
-	a_hi = a_hi + p5
+	local hi = p4
+	a_hi = a_hi + p1
 	if a_hi > UINT_MAX then
 		hi = hi + 1
 		a_hi = a_hi % (1 + UINT_MAX)
 	end
 
-	local hilo = (p6 + p7) % (1 + UINT_MAX)
-	if p6 > UINT_MAX - p7 then
+	local hilo = (p2 + p3) % (1 + UINT_MAX)
+	if p2 > UINT_MAX - p3 then
 		hi = hi + 65536
 	end
 	a_hi = a_hi + (hilo * 65536) % (1 + UINT_MAX) -- lshift (hilo, 16)
@@ -464,6 +464,7 @@ mcl_levelgen.stringtoull = stringtoull
 
 ------------------------------------------------------------------------
 -- Rng-number generator interface.
+-- These wrappers for the built-in RNGs are not supported.
 ------------------------------------------------------------------------
 
 local function djb (str)
@@ -685,8 +686,8 @@ end
 
 function mcl_levelgen.xoroshiro_function (seedlo, seedhi)
 	if zeroull (seedlo) and zeroull (seedhi) then
-		seedlo = ull (0x9e3779b9, 0x7f4a7c15)
-		seedhi = ull (1779033703, 4089235721)
+		seedlo[2], seedlo[1] = 0x9e3779b9, 0x7f4a7c15
+		seedlo[2], seedlo[1] = 1779033703, 4089235721
 	end
 	local lo1, hi1 = { nil, nil, }, { nil, nil, }
 	local bxor = bit.bxor
@@ -723,6 +724,10 @@ function mcl_levelgen.xoroshiro (seedlo, seedhi)
 	local fn = mcl_levelgen.xoroshiro_function (seedlo, seedhi)
 	local r24 = 1 / 0xffffff
 	local r53 = 1 / 0x1fffffffffffff
+	local scratch = { nil, nil, }
+
+	-- It is guaranteed that `next_integer' and `next_within' may
+	-- safely be cached.
 	return {
 		next_long = fn,
 		next_integer = function (self)
@@ -755,7 +760,7 @@ function mcl_levelgen.xoroshiro (seedlo, seedhi)
 			local lo1, hi1 = unpack (fn ())
 			local lo2, hi2 = unpack (fn ())
 
-			return function (pos_or_string)
+			local function factory (pos_or_string)
 				if type (pos_or_string) == "string" then
 					local lo, hi = ull (nil, nil), ull (nil, nil)
 					seed_from_string (lo, hi, pos_or_string)
@@ -778,13 +783,73 @@ function mcl_levelgen.xoroshiro (seedlo, seedhi)
 					return mcl_levelgen.xoroshiro (lo_seed, hi_seed)
 				end
 			end
+
+			local function create_reseedable (_)
+				local lo_seed = ull (hi1, lo1)
+				local hi_seed = ull (hi2, lo2)
+				local tbl, lo_seed, hi_seed
+					= mcl_levelgen.xoroshiro (lo_seed, hi_seed)
+				tbl.reseeding_data = { lo1, hi1, lo2, hi2,
+						       lo_seed, hi_seed, }
+				return tbl
+			end
+			local tbl = {
+				factory = factory,
+				create_reseedable = create_reseedable,
+			}
+			setmetatable (tbl, {
+				__call = function (_, pos_or_string)
+					return factory (pos_or_string)
+				end,
+			})
+			return tbl
 		end,
 		consume = function (self, n)
 			for i = 1, n do
 				fn ()
 			end
 		end,
-	}
+		reseed_positional = function (self, x, y, z)
+			local reseeding_data = self.reseeding_data
+			-- The next two arrays hold the state retained
+			-- by the RNG function as upvalues.
+			local hi_seed = reseeding_data[6]
+			local lo_seed = reseeding_data[5]
+			local hi2 = reseeding_data[4]
+			local lo2 = reseeding_data[3]
+			local hi1 = reseeding_data[2]
+			local lo1 = reseeding_data[1]
+
+			seed_from_position (scratch, x, y, z)
+			hi_seed[1] = lo2
+			hi_seed[2] = hi2
+			lo_seed[1] = lo1
+			lo_seed[2] = hi1
+			xorull (lo_seed, scratch)
+			if zeroull (lo_seed) and zeroull (hi_seed) then
+				seedlo[2], seedlo[1] = 0x9e3779b9, 0x7f4a7c15
+				hi_seed[2], hi_seed[1] = 1779033703, 4089235721
+			end
+		end,
+	}, seedlo, seedhi
+end
+
+if true then
+	local x = mcl_levelgen.xoroshiro (ull (0, 1000),
+					  ull (0, 1000))
+	local factory = x:fork_positional ()
+	local reseedable = factory:create_reseedable ()
+
+	for i = 1, 100 do
+		local x, y, z = x:next_within (1000) - 500,
+			x:next_within (1000) - 500,
+			x:next_within (1000) - 500
+		reseedable:reseed_positional (x, y, z)
+		local factory_value
+			= factory ({x = x, y = y, z = z,}):next_long ()
+		local value = reseedable:next_long ()
+		assert (equalull (value, factory_value))
+	end
 end
 
 if false then
@@ -816,9 +881,10 @@ end
 -- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/util/math/random/LocalRandom.html
 ------------------------------------------------------------------------
 
+local MULTIPLIER = ull (5, 3740067437)
+local SEED_MASK = ull (0xffff, 0xffffffff)
+
 local function jvm_lcg (seed0)
-	local MULTIPLIER = ull (5, 3740067437)
-	local SEED_MASK = ull (0xffff, 0xffffffff)
 	local seed, tmp = ull (seed0[2], seed0[1]), ull (0, 0)
 
 	xorull (seed, MULTIPLIER)
@@ -836,7 +902,7 @@ local function jvm_lcg (seed0)
 		-- https://bugs.mojang.com/browse/MC/issues/MC-239059
 		ashrull (tmp, 48 - nbits)
 		return tmp[1]
-	end
+	end, seed
 end
 
 mcl_levelgen.jvm_lcg = jvm_lcg
@@ -852,12 +918,14 @@ end
 mcl_levelgen.jvm_hash = jvm_hash
 
 function mcl_levelgen.jvm_random (seed)
-	local fn = jvm_lcg (seed)
+	local fn, seed_storage = jvm_lcg (seed)
 	local r24 = 1 / 0xffffff
 	local r53 = 1 / 0x1fffffffffffff
 	local scratch = ull (nil, nil)
 	local scratch1 = ull (nil, nil)
 
+	-- It is guaranteed that `next_integer' and `next_within' may
+	-- safely be cached.
 	return {
 		next_long = function (self)
 			local hi, lo = fn (32), fn (32)
@@ -907,7 +975,7 @@ function mcl_levelgen.jvm_random (seed)
 			local seed = self:next_long ()
 			seed = ull (seed[2], seed[1])
 
-			return function (pos_or_string)
+			local function factory (pos_or_string)
 				if type (pos_or_string) == "string" then
 					local hash = jvm_hash (pos_or_string)
 					local hash = extull (hash)
@@ -922,14 +990,62 @@ function mcl_levelgen.jvm_random (seed)
 					return mcl_levelgen.jvm_random (hash)
 				end
 			end
+
+			local function create_reseedable (_)
+				local rng, seed_storage
+					= mcl_levelgen.jvm_random (seed)
+				rng.reseeding_data = {
+					seed, seed_storage,
+				}
+				return rng
+			end
+
+			local tbl = {
+				factory = factory,
+				create_reseedable = create_reseedable,
+			}
+			setmetatable (tbl, {
+				__call = function (_, pos_or_string)
+					return factory (pos_or_string)
+				end,
+			})
+			return tbl
 		end,
 		consume = function (self, n)
 			for i = 1, n do
 				fn (32)
 			end
 		end,
-	}
+		reseed_positional = function (self, x, y, z)
+			local data = self.reseeding_data
+			local seed, storage = data[1], data[2]
+			seed_from_position (scratch1, x, y, z)
+			storage[1] = seed[1]
+			storage[2] = seed[2]
+			xorull (storage, scratch1)
+			xorull (storage, MULTIPLIER)
+			andull (storage, SEED_MASK)
+		end,
+	}, seed_storage
 end
+
+if true then
+	local x = mcl_levelgen.jvm_random (extull (-44753374))
+	local factory = x:fork_positional ()
+	local reseedable = factory:create_reseedable ()
+
+	for i = 1, 100 do
+		local x, y, z = x:next_within (1000) - 500,
+			x:next_within (1000) - 500,
+			x:next_within (1000) - 500
+		reseedable:reseed_positional (x, y, z)
+		local factory_value
+			= factory ({x = x, y = y, z = z,}):next_long ()
+		local value = reseedable:next_long ()
+		assert (equalull (value, factory_value))
+	end
+end
+
 
 if false then
 	local x = mcl_levelgen.jvm_random (extull (-44753374))

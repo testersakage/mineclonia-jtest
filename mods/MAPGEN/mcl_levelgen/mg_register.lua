@@ -41,6 +41,7 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	end
 	vmanip:set_data (cids)
 	vmanip:set_param2_data (param2s)
+	vmanip:update_liquids ()
 
 	local compressed = mcl_levelgen.encode_biomes (biomes, mt_chunksize,
 						       mt_chunksize)

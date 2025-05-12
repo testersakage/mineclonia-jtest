@@ -124,7 +124,6 @@ end
 if core and core.get_meta then -- Mod environment.
 
 local floor = math.floor
-local fmod = math.fmod
 local deserialize = core.deserialize
 local serialize = core.serialize
 local mod_storage = core.get_mod_storage ()
