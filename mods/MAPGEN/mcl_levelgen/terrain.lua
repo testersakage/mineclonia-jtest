@@ -22,13 +22,13 @@ local toquart = mcl_levelgen.toquart
 local terrain_generator = {}
 mcl_levelgen.terrain_generator = terrain_generator
 
-local cid_stone, cid_air
+local cid_stone, cid_water_source
 if core and core.get_content_id then
 	cid_stone = core.get_content_id ("mcl_core:stone")
-	cid_air = core.CONTENT_AIR
+	cid_water_source = core.get_content_id ("mcl_core:water_source")
 else
 	cid_stone = 0
-	cid_air = 1
+	cid_water_source = 1
 end
 
 ------------------------------------------------------------------------
@@ -406,7 +406,6 @@ end
 
 local function prepare_interpolation (self, origin_x, origin_z, x_cell,
 				      z_cell, y_base, n_cells_xz, n_cells_y)
-	local clock = os.clock ()
 	local cachers = self.flat_caches
 	for _, cacher in pairs (cachers) do
 		cacher:prime_noise_arrays (origin_x, origin_z)
@@ -441,10 +440,6 @@ local mathmin = math.min
 local floor = math.floor
 local ceil = math.ceil
 
-local function clamp (x, a, b)
-	return mathmin (mathmax (x, a), b)
-end
-
 -- function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 -- 	for x = 0, self.chunksize - 1 do
 -- 		for z = 0, self.chunksize - 1 do
@@ -461,11 +456,19 @@ end
 -- 	return true
 -- end
 
-local function state_from_density (self, x, y, z, density)
+local function state_from_density (aquifer, get_node, cid_default_block,
+				   x, y, z, density)
 	if density > 0.0 then
-		return cid_stone, 0
+		return cid_default_block, 0
 	end
-	return self.aquifer:get_node (x, y, z, density)
+	return get_node (aquifer, x, y, z, density)
+end
+
+local function clear_surface_level_cache (self)
+	local cache = self.surface_level_cache
+	for i, _ in pairs (cache) do
+		cache[i] = nil
+	end
 end
 
 function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
@@ -487,7 +490,6 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 	local x_cell = floor (x / cell_width)
 	local z_cell = floor (z / cell_width)
 	local level_height = self.level_height
-	local level_cell_height = ceil (level_height / cell_height)
 	local horiz_cells = ceil (chunksize / cell_width)
 
 	local level_y_max = y_min + level_height - 1
@@ -498,6 +500,11 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 	end
 	local y_bottom = floor (y_bottom_block / cell_height)
 	local y_top = floor (y_top_block / cell_height)
+
+	-- Reseat the aquifer.
+	local aquifer, get_node = self.aquifer, self.aquifer.get_node
+	aquifer:reseat (x, y, z)
+	local cid_default_block = self.cid_default_block
 
 	-- Initialize flat cachers and interpolators.
 	local y_total = y_top - y_bottom + 1
@@ -543,7 +550,9 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 
 							local density = final_density (x_pos, y_pos, z_pos, nil)
 							local cid, param2
-								= state_from_density (self, x_pos, y_pos,
+								= state_from_density (aquifer, get_node,
+										      cid_default_block,
+										      x_pos, y_pos,
 										      z_pos, density)
 							local index = vm_index (x_pos - x_level,
 										y_pos - y_level,
@@ -565,7 +574,45 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 	for _, cache in pairs (flat_caches) do
 		cache:clear_cache ()
 	end
+
+	-- Reset preliminary surface level cache.
+	clear_surface_level_cache (self)
 	return true
+end
+
+local huge = math.huge
+
+local function sample_preliminary_surface_level (dfn, min_y, max_y, x, z, step)
+	for y = max_y, min_y, -step do
+		-- This constant is documented on some of the regional
+		-- Minecraft wiki editions, and from testing it
+		-- appears to be correct.
+		if dfn (x, y, z) > 0.390625 then
+			return y
+		end
+	end
+	return huge
+end
+
+-- X and Z are to be absolute positions.
+
+local lshift = bit.lshift
+local bor = bit.bor
+
+function terrain_generator:get_preliminary_surface_level (x, z)
+	local cache = self.surface_level_cache
+	local hash = bor (lshift (x + 0x8000, 16), z + 0x8000)
+	local val = cache[hash]
+	if val then
+		return val
+	end
+	local dfn = self.initial_density_without_jaggedness
+	local min_y = self.y_min
+	local max_y = min_y + self.level_height
+	local cell_height = self.cell_height
+	val = sample_preliminary_surface_level (dfn, min_y, max_y, x, z, cell_height)
+	cache[hash] = val
+	return val
 end
 
 ------------------------------------------------------------------------
@@ -582,9 +629,6 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 	local cell_height = preset.noise_cell_height
 	gen.cell_width = cell_width
 	gen.cell_height = cell_height
-
-	-- TODO: aquifer toggle.
-	gen.aquifer = mcl_levelgen.create_default_aquifer (preset)
 
 	-- chunksize is permitted not to be divisible by cell_height
 	-- or cell_width.
@@ -606,7 +650,7 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 	gen.flat_caches = {}
 	gen.caches_to_clear = {}
 
-	gen.final_density = preset.final_density:wrap (function (func)
+	local function instantiate_marker_fns (func)
 		local fn = density_functions[func]
 		if fn then
 			return fn
@@ -654,6 +698,41 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 		end
 		density_functions[func] = fn
 		return fn
-	end, mcl_levelgen.identity):petrify ()
+	end
+
+	local final_density, visited
+		= preset.final_density:wrap (instantiate_marker_fns,
+					     mcl_levelgen.identity)
+	gen.final_density = final_density:petrify ()
+
+
+	local function wrapnext (noise)
+		return noise:wrap_internal (instantiate_marker_fns,
+					    mcl_levelgen.identity,
+					    visited):petrify ()
+	end
+	local input = preset.initial_density_without_jaggedness
+	gen.initial_density_without_jaggedness = wrapnext (input)
+	gen.erosion = wrapnext (preset.erosion)
+	gen.depth = wrapnext (preset.depth)
+	gen.floodedness = wrapnext (preset.fluid_level_floodedness_noise)
+	gen.fluid_spread = wrapnext (preset.fluid_level_spread_noise)
+	gen.lava_noise = wrapnext (preset.lava_noise)
+	gen.barrier_noise = wrapnext (preset.barrier_noise)
+	gen.surface_level_cache = {}
+
+	if core then
+		gen.cid_default_fluid = core.get_content_id (preset.default_fluid)
+		gen.cid_default_block = core.get_content_id (preset.default_block)
+	else
+		gen.cid_default_block = cid_stone
+		gen.cid_default_fluid = cid_water_source
+	end
+
+	if preset.aquifers_enabled then
+		gen.aquifer = mcl_levelgen.create_localized_aquifer (preset, gen)
+	else
+		gen.aquifer = mcl_levelgen.create_default_aquifer (preset, gen)
+	end
 	return gen
 end

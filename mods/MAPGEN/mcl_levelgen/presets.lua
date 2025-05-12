@@ -57,7 +57,7 @@ local level_preset_template = {
 	----------------------------------------------------------------
 	-- Standard random number generator factory.
 	----------------------------------------------------------------
-	rng_factory = nil,
+	factory = nil,
 }
 
 -- NormalNoise parameters...
@@ -1756,6 +1756,7 @@ local overworld_preset_template = table.merge (level_preset_template, {
 	noise_size_vertical = 2,
 	noise_cell_width = toblock (1),
 	noise_cell_height = toblock (2),
+	aquifers_enabled = true,
 })
 
 function overworld_preset_template:index_biomes_block (x, y, z)
