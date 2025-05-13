@@ -598,9 +598,12 @@ end
 
 local lshift = bit.lshift
 local bor = bit.bor
+local band = bit.band
 
 function terrain_generator:get_preliminary_surface_level (x, z)
 	local cache = self.surface_level_cache
+	local x = band (x, -4)
+	local z = band (z, -4)
 	local hash = bor (lshift (x + 0x8000, 16), z + 0x8000)
 	local val = cache[hash]
 	if val then
