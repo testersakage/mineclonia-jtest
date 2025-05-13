@@ -40,8 +40,13 @@ end
 
 function aquifer:initialize (preset)
 	self.sea_level = preset.sea_level
-	self.cid_default_fluid = preset.cid_default_fluid
-	self.cid_default_block = preset.cid_default_block
+	if core then
+		self.cid_default_fluid = core.get_content_id (preset.default_fluid)
+		self.cid_default_block = core.get_content_id (preset.default_block)
+	else
+		self.cid_default_block = 1
+		self.cid_default_fluid = 2
+	end
 end
 
 function mcl_levelgen.create_default_aquifer (preset)
@@ -303,9 +308,7 @@ local function compute_fluid_content (x, y, z)
 		local surface = terrain:get_preliminary_surface_level (sx, sz)
 		local surface_pos = surface + 8
 
-		-- if prin then
-		-- 	print (sx, sz, surface)
-		-- end
+		-- print (sx, sz, surface, y_below, y_above)
 
 		-- If the surface is completely beneath the current
 		-- position, return the default sea level.
@@ -522,18 +525,15 @@ local function pick_grid_positions (rx, ry, rz)
 	end
 end
 
+local function depth_at_id (posid)
+	local lx, ly, lz = unhash (posbuf[posid])
+	local gx, gy, gz = floor (lx / 16), floor (ly / 12), floor (lz / 16)
+	local index = gindex (xz_size, y_size, gx, gy, gz)
+	return get_fluid_content (lx + x_origin, ly + y_origin,
+				  lz + z_origin, content_cache, index)
+end
+
 function localized_aquifer.get_node (_, x, y, z, density)
-	local xo = x_origin
-	local yo = y_origin
-	local zo = z_origin
-
-	-- X, Y, Z in block coordinates relative to aquifer origin.
-	local rx = x - xo
-	local ry = y - yo
-	local rz = z - zo
-	local xz_size = xz_size
-	local y_size = y_size
-
 	if y < LAVA_FLOODING_THRESHOLD then
 		return cid_lava_source, 0
 	else
@@ -544,15 +544,10 @@ function localized_aquifer.get_node (_, x, y, z, density)
 		-- Select the three closest positions out of 2x3x2
 		-- random positions selected from around the center of
 		-- this grid coordinate.
-		pick_grid_positions (rx, ry, rz)
+		pick_grid_positions (x - x_origin, y - y_origin, z - z_origin)
 
 		-- Ascertain the fluid content of the nearest position.
-		local cache = content_cache
-		local lx, ly, lz = unhash (posbuf[pos_closest])
-		local gx, gy, gz = floor (lx / 16), floor (ly / 12), floor (lz / 16)
-		local index = gindex (xz_size, y_size, gx, gy, gz)
-		local depth, lava = get_fluid_content (lx + xo, ly + yo, lz + zo,
-						       cache, index)
+		local depth, lava = depth_at_id (dist_closest)
 		local d = closeness (distbuf[dist_closest], distbuf[dist_average])
 
 		-- if x == 26 and y == -4 and z == 31 then
@@ -573,26 +568,10 @@ function localized_aquifer.get_node (_, x, y, z, density)
 			-- position and its nearest neighbors is
 			-- sufficiently great to prompt barrier
 			-- formation.
-			local index
-			do
-				lx, ly, lz = unhash (posbuf[pos_average])
-				local gx, gy, gz = floor (lx / 16), floor (ly / 12), floor (lz / 16)
-				index = gindex (xz_size, y_size, gx, gy, gz)
-			end
-
-			-- if x == 26 and y == -4 and z == 31 then
-			-- 	prin = true
-			-- end
-			local avg_depth, avg_lava
-				= get_fluid_content (lx + xo, ly + yo, lz + zo,
-						     cache, index)
+			local avg_depth, avg_lava = depth_at_id (dist_average)
 			local pressure
 				= get_pressure (x, y, z, depth, lava,
 						avg_depth, avg_lava)
-			-- if x == 26 and y == -4 and z == 31 then
-			-- 	prin = false
-			-- 	print (pressure, depth, avg_depth, lx + xo, ly + yo, lz + zo)
-			-- end
 			if density + pressure * d > 0.0 then
 				-- Generate a barrier.
 				return cid_default_block, 0
@@ -602,15 +581,8 @@ function localized_aquifer.get_node (_, x, y, z, density)
 			-- neighbors.
 			local d0 = closeness (distbuf[dist_closest], distbuf[dist_furthest])
 			local d1 = closeness (distbuf[dist_average], distbuf[dist_furthest])
-			local far_depth, far_lava
 			if d0 > 0.0 or d1 > 0.0 then
-				local lx, ly, lz = unhash (posbuf[pos_furthest])
-				local gx, gy, gz = floor (lx / 16), floor (ly / 12), floor (lz / 16)
-				local index = gindex (xz_size, y_size, gx, gy, gz)
-				far_depth, far_lava
-					= get_fluid_content (lx + xo, ly + yo, lz + zo,
-							     cache, index)
-
+				local far_depth, far_lava = depth_at_id (dist_furthest)
 				if d0 > 0.0 then
 					local pressure = get_pressure (x, y, z, depth, lava,
 								       far_depth, far_lava)
@@ -633,3 +605,12 @@ function localized_aquifer.get_node (_, x, y, z, density)
 		end
 	end
 end
+
+-- if true then
+-- 	local seed = mcl_levelgen.ull (0, 3228473)
+-- 	local level = mcl_levelgen.make_overworld_preset (seed)
+-- 	local terrain = mcl_levelgen.make_terrain_generator (level, 80)
+
+-- 	terrain.aquifer:reseat (-64, -64, -192)
+-- 	print (terrain.aquifer:get_node (-55, 59, -202, 0.0))
+-- end

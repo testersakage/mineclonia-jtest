@@ -479,12 +479,7 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 	assert (z % 16 == 0)
 	assert (y % 16 == 0)
 
-	local x_level, y_level, z_level = x, y, z
-
-	-- local x_max = x_level + chunksize - 1
-	local y_max = y_level + chunksize - 1
-	-- local z_max = z_level + chunksize - 1
-
+	local y_max = y + chunksize - 1
 	local cell_width = self.cell_width
 	local cell_height = self.cell_height
 	local x_cell = floor (x / cell_width)
@@ -492,14 +487,17 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 	local level_height = self.level_height
 	local horiz_cells = ceil (chunksize / cell_width)
 
-	local level_y_max = y_min + level_height - 1
-	local y_bottom_block = mathmax (y, y_min)
-	local y_top_block = mathmin (y_max, level_y_max)
-	if y_top_block - y_bottom_block < 0 then
-		return false
+	local y_bottom, y_top
+	do
+		local level_y_max = y_min + level_height - 1
+		local y_bottom_block = mathmax (y, y_min)
+		local y_top_block = mathmin (y_max, level_y_max)
+		if y_top_block - y_bottom_block < 0 then
+			return false
+		end
+		y_bottom = floor (y_bottom_block / cell_height)
+		y_top = floor (y_top_block / cell_height)
 	end
-	local y_bottom = floor (y_bottom_block / cell_height)
-	local y_top = floor (y_top_block / cell_height)
 
 	-- Reseat the aquifer.
 	local aquifer, get_node = self.aquifer, self.aquifer.get_node
@@ -509,31 +507,26 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 	-- Initialize flat cachers and interpolators.
 	local y_total = y_top - y_bottom + 1
 	local final_density = self.final_density
-	prepare_interpolation (self, x_level, z_level,
-			       x_cell, z_cell,
-			       y_bottom, horiz_cells,
-			       y_total)
+	prepare_interpolation (self, x, z, x_cell, z_cell, y_bottom,
+			       horiz_cells, y_total)
 
-	for x = 0, horiz_cells - 1 do
-		local x_cur = x_cell + x
-		local x_base = x * cell_width + x_level
+	for x1 = 0, horiz_cells - 1 do
+		local x_base = x1 * cell_width + x
 
 		-- This calculates the _next_ slice's values.
-		fill_interpolators (self, false, x_cur + 1, z_cell,
+		fill_interpolators (self, false, x_cell + x1 + 1, z_cell,
 				    y_bottom, horiz_cells, y_total)
-		local ncalls = 0
 
-		for z = 0, horiz_cells - 1 do
-			local z_base = z * cell_width + z_level
+		for z1 = 0, horiz_cells - 1 do
+			local z_base = z1 * cell_width + z
 			for yblock = 0, y_total - 1 do
-				local y = y_top - yblock
-				local y_base = y * cell_height
-				interpolator_update (self, y - y_bottom, z)
+				local y1 = y_top - yblock
+				local y_base = y1 * cell_height
+				interpolator_update (self, y1 - y_bottom, z1)
 
 				-- Begin processing individual blocks
 				-- in this cell.
-				for iy = 1, cell_height do
-					local internal_y = cell_height - iy
+				for internal_y = cell_height - 1, 0, -1 do
 					local progress = internal_y / cell_height
 					local y_pos = y_base + internal_y
 					interpolator_update_y (self, progress)
@@ -554,9 +547,9 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 										      cid_default_block,
 										      x_pos, y_pos,
 										      z_pos, density)
-							local index = vm_index (x_pos - x_level,
-										y_pos - y_level,
-										z_pos - z_level)
+							local index = vm_index (x_pos - x,
+										y_pos - y,
+										z_pos - z)
 							cids[index] = cid
 							param2s[index] = param2
 						end
