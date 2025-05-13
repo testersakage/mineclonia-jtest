@@ -351,6 +351,8 @@ end
 if detect_luajit () then
 	local tobit = bit.tobit
 	local rshift = bit.rshift
+	local arshift = bit.arshift
+	local rol = bit.rol
 
 	function mulull (a, m)
 		local a_lo, a_hi = a[1], a[2]
@@ -398,6 +400,34 @@ if detect_luajit () then
 	function xorull (a, b)
 		a[1] = bxor (a[1], b[1] * 1ull)
 		a[2] = bxor (a[2], b[2] * 1ull)
+	end
+
+	function rotlull (a, k)
+		local along = a[2] * 0x100000000ull + a[1]
+		local value = rol (along, k)
+		a[1] = tonumber (band (value, 0xffffffff))
+		a[2] = tonumber (rshift (value, 32))
+	end
+
+	function shrull (a, k)
+		local along = a[2] * 0x100000000ull + a[1]
+		local value = rshift (along, k)
+		a[1] = tonumber (band (value, 0xffffffff))
+		a[2] = tonumber (rshift (value, 32))
+	end
+
+	function ashrull (a, k)
+		local along = a[2] * 0x100000000ull + a[1]
+		local value = arshift (along, k)
+		a[1] = tonumber (band (value, 0xffffffff))
+		a[2] = tonumber (rshift (value, 32))
+	end
+
+	function shlull (a, k)
+		local along = a[2] * 0x100000000ull + a[1]
+		local value = lshift (along, k)
+		a[1] = tonumber (band (value, 0xffffffff))
+		a[2] = tonumber (rshift (value, 32))
 	end
 end
 
@@ -499,6 +529,16 @@ if true then
 
 	dtoull (x, -6.43123677161575 * 1034383538)
 	assert (tostringull (x) == "18446744067057186171")
+
+	local x = ull (0xffffffff, 0xffffffff)
+	local z = ull (0xffffffff, 0xffffffff)
+	ashrull (x, 32)
+	assert (equalull (x, z))
+
+	local x = ull (0xffffffff, 0xffffffff)
+	local z = ull (0, 0xffffffff)
+	shrull (x, 32)
+	assert (equalull (x, z))
 end
 
 mcl_levelgen.tostringull = tostringull
