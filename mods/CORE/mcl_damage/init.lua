@@ -169,7 +169,6 @@ end
 --- statistic.
 
 function mcl_damage.damage_player (player, amount, mcl_reason)
-  core.after(0, function()
 	if not mcl_reason.flags then
 	  mcl_damage.finish_reason (mcl_reason)
 	end
@@ -205,7 +204,6 @@ function mcl_damage.damage_player (player, amount, mcl_reason)
 	  -- control over the tilt animation, unfortunately.
 	  emulate_damage_tick (player)
 	end
-  end)
 end
 
 function mcl_damage.heal_player (player, amount)
