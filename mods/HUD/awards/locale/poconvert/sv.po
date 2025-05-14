@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-05-13 15:26+0000\n"
+"PO-Revision-Date: 2025-05-15 20:04+0000\n"
 "Last-Translator: zachtyll <zachtyll@noreply.codeberg.org>\n"
 "Language-Team: Swedish <https://translate.codeberg.org/projects/mineclonia/"
 "awards/sv/>\n"
@@ -18,169 +18,171 @@ msgid "@1 has made the advancement @2"
 msgstr "@1 gjorde framsteget @2"
 
 msgid "Hidden Advancement Unlocked: @1"
-msgstr ""
+msgstr "Dolt framsteg upplåst: @1"
 
 msgid "Advancement Unlocked: @1"
-msgstr ""
+msgstr "Framsteg upplåst: @1"
 
 msgid "Hidden Advancement Made!"
-msgstr ""
+msgstr "Dolt framsteg utfört!"
 
 msgid "Goal Completed!"
-msgstr ""
+msgstr "Mål avklarat!"
 
 msgid "Challenge Completed!"
-msgstr ""
+msgstr "Utmaning avklarad!"
 
 msgid "Advancement Made!"
-msgstr ""
+msgstr "Framsteg avklarat!"
 
 msgid "[c|clear|disable|enable]"
-msgstr ""
+msgstr "[c|clear|disable|enable]"
 
 msgid "Show, clear, disable or enable your advancements"
-msgstr ""
+msgstr "Visa, rensa, inaktivera eller aktivera dina framsteg"
 
 msgid "All your advancements and statistics have been cleared. You can now start again."
 msgstr ""
+"Alla dina framsteg och all din statistik har rensats bort. Du kan nu börja "
+"om på nytt."
 
 msgid "You have disabled advancements."
-msgstr ""
+msgstr "Du har inaktiverat framsteg."
 
 msgid "You have enabled advancements."
-msgstr ""
+msgstr "Du har aktiverat framsteg."
 
 msgid "<advancement ID>"
-msgstr ""
+msgstr "<advancement ID>"
 
 msgid "Show details of an advancement"
-msgstr ""
+msgstr "Visa detaljer om ett framsteg"
 
 msgid "Advancement not found."
-msgstr ""
+msgstr "Hittade inte framsteg."
 
 msgid "<name>"
-msgstr ""
+msgstr "<namn>"
 
 msgid "Get the advancement statistics for the given player or yourself"
-msgstr ""
+msgstr "Få statistik över framsteg för den givna spelaren eller dig själv"
 
 msgid "Error: No advancements available."
-msgstr ""
+msgstr "Fel: Inga framsteg tillgängliga."
 
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgid "(Hidden Advancement)"
-msgstr ""
+msgstr "(Dolt framsteg)"
 
 msgid "Unlock this advancement to find out what it is."
-msgstr ""
+msgstr "Lås upp detta framsteg för att ta reda på vad det är."
 
 msgid "@1 (unlocked)"
-msgstr ""
+msgstr "@1 (upplåst)"
 
 msgid "You've disabled advancements. Type /awards enable to reenable."
-msgstr ""
+msgstr "Du har inaktiverat framsteg. Skriv /awards enable för att återaktivera."
 
 msgid "Error: No advancement available."
-msgstr ""
+msgstr "Fel: Inget framsteg tillgängligt."
 
 msgid "You have not unlocked any advancement."
-msgstr ""
+msgstr "Du har inte låst upp något framsteg."
 
 msgid "@1’s advancement:"
-msgstr ""
+msgstr "@1's framsteg:"
 
 msgid "@1/@2 chat messages"
-msgstr ""
+msgstr "@1/@2 chattmeddelanden"
 
 msgid "Send a chat message"
-msgstr ""
+msgstr "Skicka ett chattmeddelande"
 
 msgid "Chat @1 times"
-msgstr ""
+msgstr "Chatta @1 gånger"
 
 msgid "@1/@2 joins"
-msgstr ""
+msgstr "@1/@2 anslutningar"
 
 msgid "Join once"
-msgstr ""
+msgstr "Anslut en gång"
 
 msgid "Join @1 times"
-msgstr ""
+msgstr "Anslut @1 gånger"
 
 msgid "@1/@2 deaths"
-msgstr ""
+msgstr "@1/@2 dödsfall"
 
 msgid "Die once of @1"
-msgstr ""
+msgstr "Dö en gång av @1"
 
 msgid "Die @1 times of @2"
-msgstr ""
+msgstr "Dö @1 gånger av @2"
 
 msgid "Die @1 times."
-msgstr ""
+msgstr "Dö @1 gånger."
 
 msgid "Mine @1 times"
-msgstr ""
+msgstr "Gräv @1 gånger"
 
 msgid "@1/@2 dug"
-msgstr ""
+msgstr "@1/@2 grävda"
 
 msgid "Mine: @1"
-msgstr ""
+msgstr "Gräv: @1"
 
 msgid "Mine: @1×@2"
-msgstr ""
+msgstr "Gräv: @1×@2"
 
 msgid "Mine @1 block."
-msgstr ""
+msgstr "Gräv @1 block."
 
 msgid "Mine @1 blocks."
-msgstr ""
+msgstr "Gräv @1 block."
 
 msgid "@1/@2 placed"
-msgstr ""
+msgstr "@1/@2 placerade"
 
 msgid "Place: @1"
-msgstr ""
+msgstr "Placera: @1"
 
 msgid "Place: @1×@2"
-msgstr ""
+msgstr "Placera: @1×@2"
 
 msgid "Place @1 block."
-msgstr ""
+msgstr "Placera @1 block."
 
 msgid "Place @1 blocks."
-msgstr ""
+msgstr "Placera @1 block."
 
 msgid "@1/@2 crafted"
-msgstr ""
+msgstr "@1/@2 tillverkad"
 
 msgid "Craft: @1"
-msgstr ""
+msgstr "Tillverka: @1"
 
 msgid "Craft: @1×@2"
-msgstr ""
+msgstr "Tillverka: @1×@2"
 
 msgid "Craft @1 item"
-msgstr ""
+msgstr "Tillverka @1 föremål"
 
 msgid "Craft @1 items."
-msgstr ""
+msgstr "Tillverka @1 föremål."
 
 msgid "@1/@2 eaten"
-msgstr ""
+msgstr "@1/@2 uppätna"
 
 msgid "Eat @1"
-msgstr ""
+msgstr "Ät @1"
 
 msgid "Eat @1×@2"
-msgstr ""
+msgstr "Ät @1×@2"
 
 msgid "Eat @1 item"
-msgstr ""
+msgstr "Ät @1 föremål"
 
 msgid "Eat @1 items."
-msgstr ""
+msgstr "Ät @1 föremål."
