@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain findbiome x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-05-13 15:26+0000\n"
+"PO-Revision-Date: 2025-05-15 20:04+0000\n"
 "Last-Translator: zachtyll <zachtyll@noreply.codeberg.org>\n"
 "Language-Team: Swedish <https://translate.codeberg.org/projects/mineclonia/"
 "findbiome/sv/>\n"
@@ -18,25 +18,25 @@ msgid "Wait until all mods have loaded!"
 msgstr "Vänta tills alla mods har laddats!"
 
 msgid "Find and teleport to biome"
-msgstr ""
+msgstr "Hitta ett biom och teleportera dit"
 
 msgid "<biome>"
-msgstr ""
+msgstr "<biom>"
 
 msgid "No player."
-msgstr ""
+msgstr "Ingen spelare."
 
 msgid "Biome found at @1."
-msgstr ""
+msgstr "Biom hittades vid @1."
 
 msgid "No biome found!"
-msgstr ""
+msgstr "Inget biom hittades!"
 
 msgid "Biome does not exist!"
-msgstr ""
+msgstr "Biom existerar inte!"
 
 msgid "List all biomes"
-msgstr ""
+msgstr "Lista alla biom"
 
 msgid "No biomes."
-msgstr ""
+msgstr "Inga biom."
