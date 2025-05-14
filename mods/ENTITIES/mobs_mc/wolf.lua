@@ -1006,7 +1006,7 @@ local wolf_spawner_taiga = table.merge (mobs_mc.animal_spawner, {
 
 function wolf_spawner_taiga:test_supporting_node (node)
 	return core.get_item_group (node.name, "grass_block") > 0
-		or node.name == "mcl_core:snow_block"
+		or node.name == "mcl_core:snowblock"
 		or node.name == "mcl_core:coarse_dirt"
 		or node.name == "mcl_core:podzol"
 end
