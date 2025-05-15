@@ -11,7 +11,7 @@ core.register_tool("mcl_fire:flint_and_steel", {
 	groups = { tool = 2, flint_and_steel = 1, enchantability = -1, offhand_item = 1 },
 	on_place = function(itemstack, user, pointed_thing)
 		-- Use pointed node's on_rightclick function first, if present
-        local new_stack = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)
+		local new_stack = mcl_util.call_on_rightclick(itemstack, user, pointed_thing)
 		if new_stack then
 			return new_stack
 		end
@@ -30,16 +30,18 @@ core.register_tool("mcl_fire:flint_and_steel", {
 		)
 		local used = false
 		if pointed_thing.type == "node" then
-			local nodedef = core.registered_nodes[core.get_node(pointed_thing.under).name]
+			local name = core.get_node(pointed_thing.under).name
+			local nodedef = core.registered_nodes[name]
 			if nodedef and nodedef._on_ignite then
 				local overwrite = nodedef._on_ignite(user, pointed_thing)
 				if not overwrite then
 					mcl_fire.set_fire(pointed_thing, user, false)
 				end
-			else
+				used = true
+			elseif core.get_item_group(name, "fire") == 0 then
 				mcl_fire.set_fire(pointed_thing, user, false)
+				used = true
 			end
-			used = true
 		end
 		if itemstack:get_count() == 0 and idef.sound and idef.sound.breaks then
 			core.sound_play(idef.sound.breaks, {pos=user:get_pos(), gain=0.5}, true)
