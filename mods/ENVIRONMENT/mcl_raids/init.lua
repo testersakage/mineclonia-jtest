@@ -113,7 +113,6 @@ function mcl_raids.do_spawn_pos_phase (phaseno, center, attempts)
 				and is_clear (node_above)
 				and is_clear (node)
 				and is_opaque_or_snow (node_below) then
-				print ("SUCCESS: ", xoff, zoff)
 				return surface
 			end
 		end
