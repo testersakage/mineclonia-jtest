@@ -38,7 +38,6 @@ core.register_craftitem("mcl_clock:clock", {
 	inventory_image = mcl_clock.images[1],
 	groups = { tool=1, clock = 1, disable_repair=1 },
 	wield_image = "",
-	stack_max = 1,
 	_on_entity_step = function(self, dtime, itemstring)
 		self._clock_timer = (self._clock_timer or 0) - dtime
 		if self._clock_timer > 0 then return end
