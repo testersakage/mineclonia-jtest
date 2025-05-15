@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_amethyst x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-05-13 15:26+0000\n"
+"PO-Revision-Date: 2025-05-15 20:04+0000\n"
 "Last-Translator: zachtyll <zachtyll@noreply.codeberg.org>\n"
 "Language-Team: Swedish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_amethyst/sv/>\n"
@@ -18,52 +18,55 @@ msgid "Block of Amethyst"
 msgstr "Ametistblock"
 
 msgid "The Block of Amethyst is a decoration block crafted from amethyst shards."
-msgstr ""
+msgstr "Ametistblocket är ett dekorationsblock tillverkat av ametistskärvor."
 
 msgid "Budding Amethyst"
-msgstr ""
+msgstr "Knoppande ametist"
 
 msgid "The Budding Amethyst can grow amethyst"
-msgstr ""
+msgstr "Knoppande ametist kan odla ametister"
 
 msgid "Amethyst Shard"
-msgstr ""
+msgstr "Ametistskärva"
 
 msgid "An amethyst shard is a crystalline mineral."
-msgstr ""
+msgstr "En Ametistskärva är av kristallint material."
 
 msgid "Calcite"
-msgstr ""
+msgstr "Kalkspat"
 
 msgid "Calcite can be found as part of amethyst geodes."
-msgstr ""
+msgstr "Kalkspat kan hittas som en del av ametistgeoder."
 
 msgid "Tinted Glass"
-msgstr ""
+msgstr "Färgat glas"
 
 msgid "Tinted Glass is a type of glass which blocks lights while it is visually transparent."
 msgstr ""
+"Färgat glas är en glastyp som blockerar ljus samtidigt som det är visuellt "
+"transparent."
 
 msgid "Small Amethyst Bud"
-msgstr ""
+msgstr "Liten ametistknopp"
 
 msgid "Small Amethyst Bud is the first growth of amethyst bud."
-msgstr ""
+msgstr "Liten ametistknopp är det första utvecklingsstadiet av en ametistknopp."
 
 msgid "Medium Amethyst Bud"
-msgstr ""
+msgstr "Mellanstor ametistknopp"
 
 msgid "Medium Amethyst Bud is the second growth of amethyst bud."
 msgstr ""
+"Mellanstor ametistknopp är det andra utvecklingsstadiet av en ametistknopp."
 
 msgid "Large Amethyst Bud"
-msgstr ""
+msgstr "Stor ametistknopp"
 
 msgid "Large Amethyst Bud is the third growth of amethyst bud."
-msgstr ""
+msgstr "Stor ametistknopp är det tredje utvecklingsstadiet av en ametistknopp."
 
 msgid "Amethyst Cluster"
-msgstr ""
+msgstr "Ametistkluster"
 
 msgid "Amethyst Cluster is the final growth of amethyst bud."
-msgstr ""
+msgstr "Ametistkluster är det sista utvecklingsstadiet av en ametistknopp."
