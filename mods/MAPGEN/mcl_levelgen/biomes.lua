@@ -1498,6 +1498,7 @@ local registered_biomes = {}
 mcl_levelgen.registered_biomes = registered_biomes
 
 function mcl_levelgen.register_biome (name, def)
+	assert (def.temperature, "Biome definition does not define a temperature")
 	registered_biomes[name] = def
 end
 
@@ -1772,6 +1773,7 @@ mcl_levelgen.register_biome ("Beach", {
 			"mcl_levelgen:freeze_top_layer",
 		},
 	},
+	temperature = 0.8,
 })
 
 mcl_levelgen.register_biome ("BirchForest", {
@@ -2340,6 +2342,7 @@ mcl_levelgen.register_biome ("DeepFrozenOcean", {
 	},
 	has_precipitation = true,
 	temperature = 0.500000,
+	temperature_modifier = "frozen",
 })
 
 mcl_levelgen.register_biome ("DeepLukewarmOcean", {
@@ -3031,6 +3034,7 @@ mcl_levelgen.register_biome ("FrozenOcean", {
 	},
 	has_precipitation = true,
 	temperature = 0.000000,
+	temperature_modifier = "frozen",
 })
 
 mcl_levelgen.register_biome ("FrozenPeaks", {
@@ -6032,3 +6036,139 @@ if false then
 	end
 end
 
+------------------------------------------------------------------------
+-- Biome ID assignment and post-processing.
+------------------------------------------------------------------------
+
+local seed = mcl_levelgen.ull (0, 1234)
+local rng = mcl_levelgen.jvm_random (seed)
+-- N.B: Not to be confused with the `temperature' worldgen noise.
+local TEMPERATURE_NOISE
+	= mcl_levelgen.make_simplex_noise (rng, { 0, })
+local seed = mcl_levelgen.ull (0, 3456)
+local rng = mcl_levelgen.jvm_random (seed)
+local FROZEN_BIOME_NOISE
+	= mcl_levelgen.make_simplex_noise (rng, { -2, -1, 0, })
+local seed = mcl_levelgen.ull (0, 2345)
+local rng = mcl_levelgen.jvm_random (seed)
+local BIOME_SELECTOR_NOISE
+	= mcl_levelgen.make_simplex_noise (rng, { 0, })
+
+if false then
+	for x = -256, 255 do
+		for z = -256, 255 do
+			local value = TEMPERATURE_NOISE (x * 0.05, z * 0.05, false) * 7.0
+			print (value)
+		end
+	end
+end
+
+if false then
+	for x = -256, 255 do
+		for z = -256, 255 do
+			local value = FROZEN_BIOME_NOISE (x * 0.05, z * 0.05, false) * 7.0
+			print (value)
+		end
+	end
+end
+
+local mathmax = math.max
+local biome_name_to_id_map = {}
+local biome_id_to_name_map = {}
+local registered_biomes_id = {}
+local biome_id_callbacks = {}
+
+mcl_levelgen.biome_name_to_id_map = biome_name_to_id_map
+mcl_levelgen.biome_id_to_name_map = biome_id_to_name_map
+mcl_levelgen.registered_biomes_id = registered_biomes_id
+
+function mcl_levelgen.assign_biome_ids (assignments)
+	local maxid = -1
+	local isnew = {}
+
+	for biome, id in pairs (assignments) do
+		local biomedata = registered_biomes[biome]
+		if biomedata then
+			assert (id <= 255)
+			biome_name_to_id_map[biome] = id
+			biome_id_to_name_map[id] = biome
+			registered_biomes_id[id] = biomedata
+		end
+		maxid = mathmax (maxid, id)
+	end
+
+	-- Assign IDs to biomes not in the map.
+	for biome, data in pairs (registered_biomes) do
+		if not biome_name_to_id_map[biome] then
+			maxid = maxid + 1
+			if maxid >= 255 then
+				error ("Biome IDs exhausted")
+			end
+			biome_name_to_id_map[biome] = maxid
+			biome_id_to_name_map[maxid] = biome
+			registered_biomes_id[maxid] = data
+			assignments[biome] = maxid
+			isnew[maxid] = true
+		end
+	end
+
+	print ("Biome ID assignments: ")
+	print ("  (* = New ID assignment)")
+	for id = 0, maxid do
+		local name = biome_id_to_name_map[id]
+		if name then
+			print (string.format ("%3d%-2s%s", id,
+					      isnew[id] and "*" or "", name))
+		end
+	end
+
+	for _, fn in ipairs (biome_id_callbacks) do
+		fn ()
+	end
+end
+
+function mcl_levelgen.register_on_biome_ids_available (fn)
+	table.insert (biome_id_callbacks, fn)
+end
+
+-- Biome properties.
+
+local function get_temperature_in_biome (biome, x, y, z)
+	local biome = registered_biomes[biome]
+	local temp = biome.temperature
+
+	-- Apply temperature modifier.
+	if biome.temperature_modifier == "frozen" then
+		local temp = FROZEN_BIOME_NOISE (x * 0.05, z * 0.05)
+		local selector = BIOME_SELECTOR_NOISE (x * 0.2, z * 0.2)
+		if temp + selector < 0.3 then
+			local selector1 = BIOME_SELECTOR_NOISE (x * 0.09, z * 0.09)
+			if selector1 < 0.8 then
+				temp = 0.2
+			end
+		end
+	end
+
+	-- And altitude chill.
+	if y > 80 then
+		local chill = TEMPERATURE_NOISE (x / 8.0, z / 8.0) * 8.0
+		return temp - (chill + y - 80) * 0.05 / 40
+	end
+	return temp
+end
+
+mcl_levelgen.get_temperature_in_biome = get_temperature_in_biome
+
+local function is_temp_snowy (biome, x, y, z)
+	local temp = get_temperature_in_biome (biome, x, y, z)
+	return temp < 0.15
+end
+
+mcl_levelgen.is_temp_snowy = is_temp_snowy
+
+local function is_temp_rainy (biome, x, y, z)
+	local temp = get_temperature_in_biome (biome, x, y, z)
+	return temp >= 0.15
+end
+
+mcl_levelgen.is_temp_rainy = is_temp_rainy
