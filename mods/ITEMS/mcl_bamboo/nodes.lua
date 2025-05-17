@@ -55,7 +55,8 @@ function mcl_bamboo.grow(pos)
 	local bottom = mcl_util.traverse_tower_group(pos,-1,"bamboo_tree")
 	local top,h = mcl_util.traverse_tower_group(bottom,1,"bamboo_tree")
 
-	if h < max_height and core.get_node_light(vector.offset(top,0,1,0)) >= 9 then
+	local light = core.get_node_light(vector.offset(top,0,1,0)) or 0
+	if h < max_height and light >= 9 then
 		if core.get_node(vector.offset(top,0,1,0)).name ~= "air" then return end
 		core.set_node(vector.offset(top,0,1,0), {name=core.get_node(bottom).name})
 		mcl_bamboo.check_structure(pos)
