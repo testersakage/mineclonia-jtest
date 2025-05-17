@@ -154,6 +154,14 @@ function mcl_worlds.get_cloud_parameters()
 			color="#FFF0FEF",
 			ambient = "#201060",
 		}
+	elseif mg_name == "singlenode" then
+		-- mcl_levelgen enabled.  Layer 197.
+		return {
+			height = 261,
+			speed = {x=-2, z=0},
+			thickness = 4,
+			color = "#FFF0FEF",
+		}
 	else
 		-- MC-style clouds: Layer 127, thickness 4, fly to the “West”
 		return {
