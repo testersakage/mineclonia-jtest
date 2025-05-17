@@ -50,6 +50,11 @@ local level_preset_template = {
 	registry = {},
 
 	----------------------------------------------------------------
+	-- Surface configuration.
+	----------------------------------------------------------------
+	create_surface_rules = nil,
+
+	----------------------------------------------------------------
 	-- Standard noises.
 	----------------------------------------------------------------
 	noises = {},
@@ -1227,7 +1232,9 @@ local function register_terrain_funcs (preset, registry, noises, jaggedness,
 	local offset = add (const (MINECRAFT_BASE_OFFSET),
 			    overworld_offset_function (continentalness, erosion,
 						       pv, is_amplified))
-	offset = flat_cache (cache_2d (offset))
+	local offset_cached = cache_2d (offset)
+	offset_cached.user_flags = "cache_for_biome_indexing"
+	offset = flat_cache (offset_cached)
 	registry[name_offset] = offset
 	local factor = overworld_factor_function (continentalness, erosion,
 						  registry.ridges, pv,
@@ -1562,6 +1569,73 @@ local function initialize_overworld_biomes (preset, large_biomes,
 		end
 	end
 
+	-- Strip caching or interpolating wrappers excepting cache2ds;
+	-- used to optimize depth computation.
+	local index_cache, index = {}, nil
+	local x_origin, z_origin, width_x, width_z
+
+	local biome_cache_2d = {}
+	function biome_cache_2d:__call (x, y, z, blender)
+		if index then
+			local x = index_cache[index + 5]
+			if not x then
+				x = self.input (x, y, z, blender)
+				index_cache[index + 5] = x
+			end
+			return x
+		else
+			return self.input (x, y, z, blender)
+		end
+	end
+
+	function biome_cache_2d:petrify ()
+		local input = self.input:petrify ()
+		return function (x, y, z, blender)
+			if index then
+				local val = index_cache[index + 5]
+				if not val then
+					val = input (x, y, z, blender)
+					index_cache[index + 5] = val
+				end
+				return val
+			else
+				return input (x, y, z, blender)
+			end
+		end
+	end
+
+	function biome_cache_2d:min_value ()
+		return self.input:min_value ()
+	end
+
+	function biome_cache_2d:max_value ()
+		return self.input:max_value ()
+	end
+
+	local cache_2d = nil
+	local make_density_function = mcl_levelgen.make_density_function
+	local function strip_markers_instantiating_cache2ds (dfunc)
+		if dfunc.is_marker then
+			if dfunc.name == "cache_2d"
+				and dfunc.user_flags == "cache_for_biome_indexing" then
+				if cache_2d then
+					print ("WARNING: more than one `cache2d' appears in depth function")
+					print (debug.traceback ())
+					return dfunc.input
+				else
+					cache_2d = table.merge (biome_cache_2d, {
+						input = dfunc.input,
+					})
+					cache_2d = make_density_function (cache_2d)
+					return cache_2d
+				end
+			end
+			return dfunc.input
+		else
+			return dfunc
+		end
+	end
+
 	local registry, noises = preset.registry, preset.noises
 	local shift_x, shift_z = registry.shift_x, registry.shift_z
 	local temp_noise = large_biomes and noises.temperature_large
@@ -1591,6 +1665,9 @@ local function initialize_overworld_biomes (preset, large_biomes,
 		= preset.erosion:wrap (strip_markers, identity):petrify ()
 	local depth_stripped
 		= preset.depth:wrap (strip_markers, identity):petrify ()
+	local depth_cached
+		= preset.depth:wrap (strip_markers_instantiating_cache2ds,
+				     identity):petrify ()
 	local ridges_stripped
 		= preset.ridges:wrap (strip_markers, identity):petrify ()
 	local biome_lut = preset.biome_lut
@@ -1598,12 +1675,63 @@ local function initialize_overworld_biomes (preset, large_biomes,
 	preset.index_biomes = function (self, qx, qy, qz)
 		local x, y, z = toblock (qx), toblock (qy), toblock (qz)
 		return index_biome_lut (biome_lut,
-					temperature_stripped (x, y, z),
-					vegetation_stripped (x, y, z),
-					continents_stripped (x, y, z),
-					erosion_stripped (x, y, z),
+					temperature_stripped (x, 0, z),
+					vegetation_stripped (x, 0, z),
+					continents_stripped (x, 0, z),
+					erosion_stripped (x, 0, z),
 					depth_stripped (x, y, z),
-					ridges_stripped (x, y, z))
+					ridges_stripped (x, 0, z))
+	end
+
+	preset.index_biomes_begin = function (self, wx, wz, xorigin, zorigin)
+		for i = 1, wx * wz * 6 do
+			index_cache[i] = false
+		end
+		x_origin = xorigin
+		z_origin = zorigin
+		width_x = wx
+		width_z = wz
+	end
+
+	-- local zone = require ("jit.zone")
+
+	preset.index_biomes_cached = function (self, qx, qy, qz)
+		local x, y, z = toblock (qx), toblock (qy), toblock (qz)
+		local cx = qx - x_origin
+		local cz = qz - z_origin
+		index = ((cx * width_z) + cz) * 6 + 1
+		local t, v, c, e, r = index_cache[index]
+		if t then
+			-- zone ("Cached biome lookups")
+			v = index_cache[index + 1]
+			c = index_cache[index + 2]
+			e = index_cache[index + 3]
+			r = index_cache[index + 4]
+
+			local val = index_biome_lut (biome_lut, t, v, c, e,
+						     depth_cached (x, y, z), r)
+			index = nil
+			-- zone ()
+			return val
+		end
+
+		-- zone ("Uncached biome data computation")
+		t = temperature_stripped (x, y, z)
+		v = vegetation_stripped (x, y, z)
+		c = continents_stripped (x, y, z)
+		e = erosion_stripped (x, y, z)
+		r = ridges_stripped (x, y, z)
+		index_cache[index] = t
+		index_cache[index + 1] = v
+		index_cache[index + 2] = c
+		index_cache[index + 3] = e
+		index_cache[index + 4] = r
+
+		local val = index_biome_lut (biome_lut, t, v, c, e,
+					     depth_cached (x, y, z), r)
+		index = nil
+		-- zone ()
+		return val
 	end
 
 	-- For purposes of engineering only.
@@ -1763,6 +1891,12 @@ function overworld_preset_template:index_biomes_block (x, y, z)
 	return self:index_biomes (toquart (x), toquart (y), toquart (z))
 end
 
+local function initialize_overworld_surface_rules (preset)
+	preset.create_surface_rules = function (self)
+		return mcl_levelgen.overworld_surface_rule (self, true, false, true)
+	end
+end
+
 function mcl_levelgen.make_overworld_preset (seed)
 	local preset = copy_preset (overworld_preset_template)
 	initialize_random (preset, seed)
@@ -1770,5 +1904,6 @@ function mcl_levelgen.make_overworld_preset (seed)
 	initialize_density_functions (preset)
 	initialize_overworld_biomes (preset, false, false)
 	initialize_overworld_generation (preset)
+	initialize_overworld_surface_rules (preset)
 	return preset
 end

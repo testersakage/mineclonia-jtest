@@ -103,6 +103,31 @@ local function togrid_y (pos)
 	return floor (pos / GRID_UNIT_Y)
 end
 
+local bor = bit.bor
+local band = bit.band
+local lshift = bit.lshift
+local arshift = bit.arshift
+
+local function longhash (x, y, z)
+	return bor (band (x, 0x3ff), lshift (band (y, 0x3ff), 10),
+		    lshift (band (z, 0x3ff), 20))
+end
+
+local function unhash (pos)
+	return arshift (lshift (pos, 22), 22),
+		arshift (lshift (pos, 12), 22),
+		arshift (lshift (pos, 2), 22)
+end
+
+local XZMASK = 0xf
+local YMASK = 0x3f
+
+local function gindex (xgrid, ygrid, zgrid)
+	return bor (bor (lshift (band (xgrid, XZMASK), 10),
+			 lshift (band (ygrid, YMASK), 4)),
+		    band (zgrid, XZMASK)) + 1
+end
+
 function mcl_levelgen.create_localized_aquifer (preset, terrain_generator)
 	local aquifer = table.copy (localized_aquifer)
 	aquifer:initialize (preset)
@@ -116,16 +141,28 @@ function mcl_levelgen.create_localized_aquifer (preset, terrain_generator)
 	-- divisible by GRID_UNIT_Y.  The chunk size must therefore be
 	-- adjusted accordingly.
 	local base = preset.min_y % GRID_UNIT_Y
-	local grid_size_vert = togrid_y (base + terrain_generator.chunksize) + 3
+	local grid_size_vert = togrid_y (base + terrain_generator.level_height) + 3
 	aquifer.y_base = base
 	aquifer.xz_size = grid_size_horiz
 	aquifer.y_size = grid_size_vert
-	local cache_size = grid_size_horiz * grid_size_vert * grid_size_horiz
+	local cache_size = gindex (grid_size_horiz - 1, grid_size_vert - 1,
+				   grid_size_horiz - 1)
 	aquifer.cache_size = cache_size
-	aquifer.content_cache = {}
-	aquifer.content_cache[cache_size] = nil
-	aquifer.location_cache = {}
-	aquifer.location_cache[cache_size] = nil
+
+	if grid_size_horiz > XZMASK + 1 or grid_size_vert > YMASK + 1 then
+		error ("Grid coordinates are not representable; reduce level "
+		       .. "or chunk size")
+	end
+
+	local content_cache = {}
+	local location_cache = {}
+	for i = 1, cache_size do
+		content_cache[i] = false
+		location_cache[i] = false
+	end
+	aquifer.content_cache = content_cache
+	aquifer.location_cache = location_cache
+
 	aquifer.cid_default_block = terrain_generator.cid_default_block
 	aquifer.cid_default_fluid = terrain_generator.cid_default_fluid
 
@@ -151,8 +188,6 @@ local z_grid_origin
 local y_grid_origin
 local location_cache
 local content_cache
-local xz_size
-local y_size
 local cid_default_fluid
 local cid_default_block
 local rng
@@ -165,7 +200,13 @@ local spread
 local barrier
 local terrain_generator
 
+-- local thit = 0
+-- local tmiss = 0
+-- local tm = 0
+
 function localized_aquifer:reseat (min_x, min_y, min_z)
+	-- print (thit, tmiss, string.format ("%.2f%%", thit / (thit + tmiss) * 100))
+	-- thit, tmiss = 0, 0
 	x_origin = min_x - GRID_UNIT_XZ
 	z_origin = min_z - GRID_UNIT_XZ
 	-- MIN_Y must be relative to the level origin.
@@ -173,6 +214,8 @@ function localized_aquifer:reseat (min_x, min_y, min_z)
 	assert (x_origin % GRID_UNIT_XZ == 0)
 	assert (z_origin % GRID_UNIT_XZ == 0)
 	assert (y_origin % GRID_UNIT_Y  == 0)
+	-- print (string.format ("%.2f", (tm + 0.5) * 1000))
+	-- tm = 0
 
 	x_grid_origin = togrid_xz (min_x) - 1
 	z_grid_origin = togrid_xz (min_z) - 1
@@ -181,11 +224,9 @@ function localized_aquifer:reseat (min_x, min_y, min_z)
 	location_cache = self.location_cache
 	content_cache = self.content_cache
 	for i = 1, self.cache_size do
-		location_cache[i] = nil
-		content_cache[i] = nil
+		location_cache[i] = false
+		content_cache[i] = false
 	end
-	xz_size = self.xz_size
-	y_size = self.y_size
 	terrain_generator = self.terrain_generator
 	cid_default_block = self.cid_default_block
 	cid_default_fluid = self.cid_default_fluid
@@ -201,29 +242,6 @@ end
 
 local huge = math.huge
 local minuscule_liquid_level = -32768
-local bor = bit.bor
-local band = bit.band
-
-local function longhash (x, y, z)
-	return (32768 + x) * 65536 * 65536
-		+ (32768 + y) * 65536
-		+ (32768 + z)
-end
-
-local function unhash (pos)
-	return floor (pos / (65536 * 65536)) - 32768,
-		band (floor (pos / 65536), 0xffff) - 32768,
-		pos % 65536 - 32768
-end
-
-local function gindex (xz_size, y_size, xgrid, ygrid, zgrid)
-	-- assert (xgrid >= 0 and ygrid >= 0 and zgrid >= 0)
-	-- assert (xgrid < xz_size and ygrid < y_size and zgrid < xz_size,
-	-- 	tostring (xgrid) .. ", " .. xz_size .. ", "
-	-- 	.. tostring (ygrid) .. ", " .. y_size .. ", "
-	-- 	.. tostring (zgrid) .. ", " .. xz_size)
-	return xgrid + ((zgrid * y_size) + ygrid) * xz_size + 1
-end
 
 local function flood_stochastically (x, y, z, min_surface_top)
 	-- These are (global) aquifer section coordinates rather than
@@ -366,14 +384,14 @@ local function decode_fluid_content (data)
 	return band (data, 0xffff) - 0x8000, band (data, 0x10000) ~= 0
 end
 
-local function get_fluid_content (x, y, z, cache, gindex)
-	local val = cache[gindex]
+local function get_fluid_content (x, y, z, gindex)
+	local val = content_cache[gindex]
 	if val then
 		return decode_fluid_content (val)
 	end
 	local surface_level, lava = compute_fluid_content (x, y, z)
 	val = encode_fluid_content (surface_level, lava)
-	cache[gindex] = val
+	content_cache[gindex] = val
 	return surface_level, lava
 end
 
@@ -438,105 +456,133 @@ local function get_pressure (x, y, z, level_closest, lava_closest,
 	return 2.0
 end
 
-local posbuf = { 0, 0, 0, }
-local distbuf = { 0, 0, 0, }
-local hashbuf = { }
+local distbuf = { 0, 0, 0, 0, 0, 0 }
 for i = 1, 12 do
-	hashbuf[i] = 0
+	distbuf[#distbuf] = 0
 end
 
-local pos_closest = 1
-local pos_average = 2
-local pos_furthest = 3
 local dist_closest = 1
 local dist_average = 2
 local dist_furthest = 3
+local pos_closest = 4
+local pos_average = 5
+local pos_furthest = 6
 
-local offsets = {}
-for dx = 0, 1 do
-	for dy = -1, 1 do
-		for dz = 0, 1 do
-			table.insert (offsets, dx)
-			table.insert (offsets, dy)
-			table.insert (offsets, dz)
-		end
+local offsets = {
+	0,
+	-1,
+	0,
+	0,
+	-1,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	1,
+	0,
+	1,
+	0,
+	0,
+	1,
+	1,
+	1,
+	-1,
+	0,
+	1,
+	-1,
+	1,
+	1,
+	0,
+	0,
+	1,
+	0,
+	1,
+	1,
+	1,
+	0,
+	1,
+	1,
+	1,
+}
+
+local function fix_distances (distbuf, pos, dx, dy, dz)
+	local d = dx * dx + dy * dy + dz * dz
+
+	if distbuf[dist_closest] >= d then
+		distbuf[pos_furthest] = distbuf[pos_average]
+		distbuf[dist_furthest] = distbuf[dist_average]
+		distbuf[pos_average] = distbuf[pos_closest]
+		distbuf[dist_average] = distbuf[dist_closest]
+		distbuf[pos_closest] = pos
+		distbuf[dist_closest] = d
+	elseif distbuf[dist_average] >= d then
+		distbuf[pos_furthest] = distbuf[pos_average]
+		distbuf[dist_furthest] = distbuf[dist_average]
+		distbuf[pos_average] = pos
+		distbuf[dist_average] = d
+	elseif distbuf[dist_furthest] >= d then
+		distbuf[pos_furthest] = pos
+		distbuf[dist_furthest] = d
 	end
 end
 
-local function pick_grid_positions (rx, ry, rz)
-	local hashbuf = hashbuf
-	do
-		local xstart = floor ((rx - 5) / 16)
-		local ystart = floor ((ry + 1) / 12)
-		local zstart = floor ((rz - 5) / 16)
-		for i = 1, 12 do
-			local xgrid = xstart + offsets[(i - 1) * 3 + 1]
-			local ygrid = ystart + offsets[(i - 1) * 3 + 2]
-			local zgrid = zstart + offsets[(i - 1) * 3 + 3]
-			local index = gindex (xz_size, y_size,
-					      xgrid, ygrid, zgrid,
-					      i, zstart)
-			local pos = location_cache[index]
-			if not pos then
-				local xrnd = xgrid + x_grid_origin
-				local yrnd = ygrid + y_grid_origin
-				local zrnd = zgrid + z_grid_origin
-				rng:reseed_positional (xrnd, yrnd, zrnd)
+local function pick_grid_positions (distbuf, rx, ry, rz)
+	local offsets = offsets
+	local xstart = arshift (rx - 5, 4)
+	local ystart = floor ((ry + 1) / 12)
+	local zstart = arshift (rz - 5, 4)
+	local j = 7
+	for i = 1, 36, 3 do
+		local xgrid = xstart + offsets[i]
+		local ygrid = ystart + offsets[i + 1]
+		local zgrid = zstart + offsets[i + 2]
+		local index = gindex (xgrid, ygrid, zgrid)
+		local pos = location_cache[index]
+		if not pos then
+			local xrnd = xgrid + x_grid_origin
+			local yrnd = ygrid + y_grid_origin
+			local zrnd = zgrid + z_grid_origin
+			rng:reseed_positional (xrnd, yrnd, zrnd)
 
-				local x = rng:next_within (CENTER_VARIABILITY_XZ)
-				x = xgrid * GRID_UNIT_XZ + x
-				local y = rng:next_within (CENTER_VARIABILITY_Y)
-				y = ygrid * GRID_UNIT_Y + y
-				local z = rng:next_within (CENTER_VARIABILITY_XZ)
-				z = zgrid * GRID_UNIT_XZ + z
-				pos = longhash (x, y, z)
-				location_cache[index] = pos
-			end
-			hashbuf[i] = pos
+			local x = rng:next_within (CENTER_VARIABILITY_XZ)
+			local lx = xgrid * GRID_UNIT_XZ + x
+			local y = rng:next_within (CENTER_VARIABILITY_Y)
+			local ly = ygrid * GRID_UNIT_Y + y
+			local z = rng:next_within (CENTER_VARIABILITY_XZ)
+			local lz = zgrid * GRID_UNIT_XZ + z
+			pos = longhash (lx, ly, lz)
+			location_cache[index] = pos
 		end
+		distbuf[j] = pos
+		j = j + 1
 	end
 
-	for _, value in ipairs (hashbuf) do
-		local lx, ly, lz = unhash (value)
-		local d
-		do
-			local dx = lx - rx
-			local dy = ly - ry
-			local dz = lz - rz
-			d = dx * dx + dy * dy + dz * dz
-		end
+	-- Extract the array bounds check from the loop below.  The
+	-- loop body is practically never reached, as each condition
+	-- in fix_distances but the first encountered by the jit winds
+	-- up returning to its prologue.
 
-		if distbuf[dist_closest] >= d then
-			posbuf[pos_furthest] = posbuf[pos_average]
-			distbuf[dist_furthest] = distbuf[dist_average]
-			posbuf[pos_average] = posbuf[pos_closest]
-			distbuf[dist_average] = distbuf[dist_closest]
-			posbuf[pos_closest] = value
-			distbuf[dist_closest] = d
-		elseif distbuf[dist_average] >= d then
-			posbuf[pos_furthest] = posbuf[pos_average]
-			distbuf[dist_furthest] = distbuf[dist_average]
-			posbuf[pos_average] = value
-			distbuf[dist_average] = d
-		elseif distbuf[dist_furthest] >= d then
-			posbuf[pos_furthest] = value
-			distbuf[dist_furthest] = d
-		end
+	for j = 7, 18 do
+		local lx, ly, lz = unhash (distbuf[j])
+		fix_distances (distbuf, distbuf[j], lx - rx, ly - ry, lz - rz)
 	end
 end
 
 local function depth_at_id (posid)
-	local lx, ly, lz = unhash (posbuf[posid])
+	local lx, ly, lz = unhash (distbuf[posid])
 	local gx, gy, gz = floor (lx / 16), floor (ly / 12), floor (lz / 16)
-	local index = gindex (xz_size, y_size, gx, gy, gz)
+	local index = gindex (gx, gy, gz)
 	return get_fluid_content (lx + x_origin, ly + y_origin,
-				  lz + z_origin, content_cache, index)
+				  lz + z_origin, index)
 end
 
 function localized_aquifer.get_node (_, x, y, z, density)
 	if y < LAVA_FLOODING_THRESHOLD then
 		return cid_lava_source, 0
 	else
+		local distbuf = distbuf
 		distbuf[dist_closest] = huge
 		distbuf[dist_average] = huge
 		distbuf[dist_furthest] = huge
@@ -544,16 +590,13 @@ function localized_aquifer.get_node (_, x, y, z, density)
 		-- Select the three closest positions out of 2x3x2
 		-- random positions selected from around the center of
 		-- this grid coordinate.
-		pick_grid_positions (x - x_origin, y - y_origin, z - z_origin)
+		-- local clock = os.clock ()
+		pick_grid_positions (distbuf, x - x_origin, y - y_origin, z - z_origin)
+		-- tm = tm + os.clock () - clock
 
 		-- Ascertain the fluid content of the nearest position.
-		local depth, lava = depth_at_id (dist_closest)
+		local depth, lava = depth_at_id (pos_closest)
 		local d = closeness (distbuf[dist_closest], distbuf[dist_average])
-
-		-- if x == 26 and y == -4 and z == 31 then
-		-- 	print ("D: ", d, distbuf[dist_closest],
-		-- 	       distbuf[dist_average])
-		-- end
 
 		-- If the nearest aquifer center is too distant from
 		-- the second closest to be significant, return the
@@ -568,7 +611,7 @@ function localized_aquifer.get_node (_, x, y, z, density)
 			-- position and its nearest neighbors is
 			-- sufficiently great to prompt barrier
 			-- formation.
-			local avg_depth, avg_lava = depth_at_id (dist_average)
+			local avg_depth, avg_lava = depth_at_id (pos_average)
 			local pressure
 				= get_pressure (x, y, z, depth, lava,
 						avg_depth, avg_lava)
@@ -582,7 +625,7 @@ function localized_aquifer.get_node (_, x, y, z, density)
 			local d0 = closeness (distbuf[dist_closest], distbuf[dist_furthest])
 			local d1 = closeness (distbuf[dist_average], distbuf[dist_furthest])
 			if d0 > 0.0 or d1 > 0.0 then
-				local far_depth, far_lava = depth_at_id (dist_furthest)
+				local far_depth, far_lava = depth_at_id (pos_furthest)
 				if d0 > 0.0 then
 					local pressure = get_pressure (x, y, z, depth, lava,
 								       far_depth, far_lava)
@@ -607,10 +650,10 @@ function localized_aquifer.get_node (_, x, y, z, density)
 end
 
 -- if true then
+-- 	mcl_levelgen.make_surface_system = function () end
 -- 	local seed = mcl_levelgen.ull (0, 3228473)
 -- 	local level = mcl_levelgen.make_overworld_preset (seed)
 -- 	local terrain = mcl_levelgen.make_terrain_generator (level, 80)
 
 -- 	terrain.aquifer:reseat (-64, -64, -192)
--- 	print (terrain.aquifer:get_node (-55, 59, -202, 0.0))
 -- end
