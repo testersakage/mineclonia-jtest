@@ -48,6 +48,10 @@ local function lerp3d (u, v, w, s1, s2, s3, s4, s5, s6, s7, s8)
 		       lerp2d (u, v, s5, s6, s7, s8))
 end
 
+mcl_levelgen.lerp1d = lerp1d
+mcl_levelgen.lerp2d = lerp2d
+mcl_levelgen.lerp3d = lerp3d
+
 function mcl_levelgen.make_octave (rng)
 	local xoff = rng:next_double () * 256.0
 	local yoff = rng:next_double () * 256.0
@@ -482,7 +486,7 @@ function mcl_levelgen.simplex_octave (rng)
 	return tbl
 end
 
-function indexof (list, val)
+local function indexof (list, val)
 	for i, v in ipairs (list) do
 		if v == val then
 			return i

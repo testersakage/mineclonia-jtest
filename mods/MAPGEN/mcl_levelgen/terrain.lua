@@ -22,13 +22,15 @@ local toquart = mcl_levelgen.toquart
 local terrain_generator = {}
 mcl_levelgen.terrain_generator = terrain_generator
 
-local cid_stone, cid_water_source
+local cid_stone, cid_water_source, cid_air
 if core and core.get_content_id then
 	cid_stone = core.get_content_id ("mcl_core:stone")
 	cid_water_source = core.get_content_id ("mcl_core:water_source")
+	cid_air = core.CONTENT_AIR
 else
-	cid_stone = 0
+	cid_stone = 3
 	cid_water_source = 1
+	cid_air = 0
 end
 
 ------------------------------------------------------------------------
@@ -59,7 +61,7 @@ function density_function:max_value ()
 	return self.input:max_value ()
 end
 
-function density_function:petrify ()
+function density_function:petrify_internal ()
 	local func = self.__call
 	if not self.saved_min_value then
 		self.saved_min_value = self.input:min_value ()
@@ -361,6 +363,61 @@ function cache_2d:__call (x, y, z, blender)
 end
 
 ------------------------------------------------------------------------
+-- Heightmap storage.  Two pairs of 10 bit values are recorded in
+-- `heightmap' array for each horizontal position in a MapChunk
+-- representing the values of the WORLD_SURFACE_WG and OCEAN_FLOOR_WG
+-- heightmaps.  See: https://minecraft.wiki/w/Heightmap
+------------------------------------------------------------------------
+
+local lshift = bit.lshift
+local rshift = bit.rshift
+local bor = bit.bor
+local band = bit.band
+local mathmin = math.min
+local mathmax = math.max
+
+local function pack_height_map (surface, motion_blocking)
+	local bias = 512
+	local bits = 10
+
+	return bor (lshift (surface + bias, bits),
+		    motion_blocking + bias)
+end
+
+local function unpack_height_map (vals)
+	local bias = 512
+	local bits = 10
+	local mask = 0x3ff
+	local surface = rshift (vals, bits) - bias
+	local motion_blocking = band (vals, mask) - bias
+	return surface, motion_blocking
+end
+
+mcl_levelgen.unpack_height_map = unpack_height_map
+
+local function update_height_map (map, x, y, z, isair, isstone, chunksize)
+	local index = x * chunksize + z + 1
+	local surface, motion_blocking = unpack_height_map (map[index])
+
+	if not isair then
+		surface = mathmax (surface, y + 1)
+	end
+
+	if isstone then
+		motion_blocking = mathmax (motion_blocking, y + 1)
+	end
+	map[index] = pack_height_map (surface, motion_blocking)
+end
+
+function terrain_generator:clear_height_map ()
+	local map = self.heightmap
+	local chunksize = self.chunksize
+	for i = 1, chunksize * chunksize do
+		map[i] = 0
+	end
+end
+
+------------------------------------------------------------------------
 -- Terrain generation.
 ------------------------------------------------------------------------
 
@@ -369,7 +426,7 @@ local function fill_interpolators (self, initial, x_cell,
 				   n_cells_z, n_cells_y)
 	local interpolators = self.interpolators
 	for zoff = 0, n_cells_z do
-		for _, interpolator in pairs (interpolators) do
+		for _, interpolator in ipairs (interpolators) do
 			interpolator:fill_noise_slice (initial, x_cell,
 						       z_cell, zoff,
 						       y_base,
@@ -381,25 +438,25 @@ local function fill_interpolators (self, initial, x_cell,
 end
 
 local function interpolator_update (self, y, z)
-	for _, interpolator in pairs (self.interpolators) do
+	for _, interpolator in ipairs (self.interpolators) do
 		interpolator:cache_yz_values (y, z)
 	end
 end
 
 local function interpolator_update_y (self, progress)
-	for _, interpolator in pairs (self.interpolators) do
+	for _, interpolator in ipairs (self.interpolators) do
 		interpolator:y_interpolate (progress)
 	end
 end
 
 local function interpolator_update_x (self, progress)
-	for _, interpolator in pairs (self.interpolators) do
+	for _, interpolator in ipairs (self.interpolators) do
 		interpolator:x_interpolate (progress)
 	end
 end
 
 local function interpolator_update_z (self, progress)
-	for _, interpolator in pairs (self.interpolators) do
+	for _, interpolator in ipairs (self.interpolators) do
 		interpolator:z_interpolate (progress)
 	end
 end
@@ -407,7 +464,7 @@ end
 local function prepare_interpolation (self, origin_x, origin_z, x_cell,
 				      z_cell, y_base, n_cells_xz, n_cells_y)
 	local cachers = self.flat_caches
-	for _, cacher in pairs (cachers) do
+	for _, cacher in ipairs (cachers) do
 		cacher:prime_noise_arrays (origin_x, origin_z)
 	end
 
@@ -417,7 +474,7 @@ end
 
 local function exchange_slices (self)
 	local interpolators = self.interpolators
-	for _, interpolator in pairs (interpolators) do
+	for _, interpolator in ipairs (interpolators) do
 		interpolator.noises_here, interpolator.noises_next
 			= interpolator.noises_next, interpolator.noises_here
 	end
@@ -425,18 +482,17 @@ end
 
 local function reset_interpolators (self)
 	local interpolators = self.interpolators
-	for _, interpolator in pairs (interpolators) do
+	for _, interpolator in ipairs (interpolators) do
 		interpolator.value = false
 	end
 
 	local caches = self.caches_to_clear
-	for _, cache in pairs (caches) do
+	for _, cache in ipairs (caches) do
 		cache:clear_cache ()
 	end
 end
 
 local mathmax = math.max
-local mathmin = math.min
 local floor = math.floor
 local ceil = math.ceil
 
@@ -466,12 +522,28 @@ end
 
 local function clear_surface_level_cache (self)
 	local cache = self.surface_level_cache
-	for i, _ in pairs (cache) do
+	for i, _ in ipairs (cache) do
 		cache[i] = nil
 	end
 end
 
-function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
+local gen_nodes = {}
+
+local function encode_node (cid, param2)
+	return bor (lshift (cid, 8), param2)
+end
+mcl_levelgen.encode_node = encode_node
+
+local function decode_node (node)
+	return rshift (node, 8), band (node, 0xff)
+end
+mcl_levelgen.decode_node = decode_node
+
+local function index (x, y, z, chunksize, level_height)
+	return ((x * level_height) + y) * chunksize + z + 1
+end
+
+function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	local y_min = self.y_min
 	local chunksize = self.chunksize
 
@@ -487,7 +559,7 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 	local level_height = self.level_height
 	local horiz_cells = ceil (chunksize / cell_width)
 
-	local y_bottom, y_top
+	-- Return if there is nothing to generate.
 	do
 		local level_y_max = y_min + level_height - 1
 		local y_bottom_block = mathmax (y, y_min)
@@ -495,21 +567,29 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 		if y_top_block - y_bottom_block < 0 then
 			return false
 		end
-		y_bottom = floor (y_bottom_block / cell_height)
-		y_top = floor (y_top_block / cell_height)
 	end
+
+	-- Reset the temporary heightmap.
+	self:clear_height_map ()
 
 	-- Reseat the aquifer.
 	local aquifer, get_node = self.aquifer, self.aquifer.get_node
-	aquifer:reseat (x, y, z)
+	aquifer:reseat (x, y_min, z)
 	local cid_default_block = self.cid_default_block
 
 	-- Initialize flat cachers and interpolators.
-	local y_total = y_top - y_bottom + 1
+	local y_total = floor (level_height / cell_height)
+	local y_bottom = floor (y_min / cell_height)
 	local final_density = self.final_density
 	prepare_interpolation (self, x, z, x_cell, z_cell, y_bottom,
 			       horiz_cells, y_total)
 
+	-- Table of nodes produced for this horizontal section of the
+	-- level.
+	local gn = gen_nodes
+
+	-- Height map holding height levels at horizontal positions.
+	local map = self.heightmap
 	for x1 = 0, horiz_cells - 1 do
 		local x_base = x1 * cell_width + x
 
@@ -519,10 +599,9 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 
 		for z1 = 0, horiz_cells - 1 do
 			local z_base = z1 * cell_width + z
-			for yblock = 0, y_total - 1 do
-				local y1 = y_top - yblock
-				local y_base = y1 * cell_height
-				interpolator_update (self, y1 - y_bottom, z1)
+			for y1 = y_total - 1, 0, -1 do
+				local y_base = y1 * cell_height + y_min
+				interpolator_update (self, y1, z1)
 
 				-- Begin processing individual blocks
 				-- in this cell.
@@ -540,18 +619,23 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 							local progress = internal_z / cell_width
 							local z_pos = z_base + internal_z
 							interpolator_update_z (self, progress)
-
 							local density = final_density (x_pos, y_pos, z_pos, nil)
 							local cid, param2
 								= state_from_density (aquifer, get_node,
 										      cid_default_block,
 										      x_pos, y_pos,
 										      z_pos, density)
-							local index = vm_index (x_pos - x,
-										y_pos - y,
-										z_pos - z)
-							cids[index] = cid
-							param2s[index] = param2
+
+							local x, y, z = x_pos - x,
+								y_pos - y_min,
+								z_pos - z
+							local i = index (x, y, z, chunksize,
+									 level_height)
+							gn[i] = encode_node (cid, param2)
+							update_height_map (map, x, y, z,
+									   cid == cid_air,
+									   cid == cid_default_block,
+									   chunksize, cid)
 						end
 					end
 				end
@@ -564,12 +648,35 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index)
 
 	-- Reset flat caches.
 	local flat_caches = self.flat_caches
-	for _, cache in pairs (flat_caches) do
+	for _, cache in ipairs (flat_caches) do
 		cache:clear_cache ()
 	end
 
 	-- Reset preliminary surface level cache.
 	clear_surface_level_cache (self)
+
+	-- Process surface systems.
+	if biomes then
+		local system = self.surface_system
+		system:post_process (self, x, y, z, gn, map, chunksize, biomes)
+	end
+
+	-- Write the section that intersects the output area to CIDs
+	-- and PARAM2.
+	local y0 = mathmax (y, y_min)
+	local y1 = mathmin (y_max, y_min + level_height - 1)
+	local i = index (0, y0 - y_min, 0, chunksize, level_height)
+	local skip = (level_height - (y1 - y0 + 1)) * chunksize
+	for ix = 0, chunksize - 1 do
+		for iy = y0, y1 do
+			for iz = 0, chunksize - 1 do
+				local idx = vm_index (ix, iy - y, iz)
+				cids[idx], param2s[idx]	= decode_node (gn[i])
+				i = i + 1
+			end
+		end
+		i = i + skip
+	end
 	return true
 end
 
@@ -588,10 +695,6 @@ local function sample_preliminary_surface_level (dfn, min_y, max_y, x, z, step)
 end
 
 -- X and Z are to be absolute positions.
-
-local lshift = bit.lshift
-local bor = bit.bor
-local band = bit.band
 
 function terrain_generator:get_preliminary_surface_level (x, z)
 	local cache = self.surface_level_cache
@@ -730,5 +833,12 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 	else
 		gen.aquifer = mcl_levelgen.create_default_aquifer (preset, gen)
 	end
+
+	local heightmap = {}
+	for i = 1, chunksize * chunksize do
+		heightmap[i] = 0	
+	end
+	gen.heightmap = heightmap
+	gen.surface_system = mcl_levelgen.make_surface_system (preset)
 	return gen
 end
