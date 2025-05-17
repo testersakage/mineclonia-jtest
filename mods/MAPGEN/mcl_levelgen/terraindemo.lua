@@ -6,6 +6,7 @@ local overworld_terrain
 	= mcl_levelgen.make_terrain_generator (level, 80)
 
 local a, b = {}, {}
+local biomes = {}
 
 local clock = os.clock ()
 
@@ -15,11 +16,21 @@ end
 
 print ("Starting to generate terrain...")
 
-for i = 1, 300 do
+local function do_generate (x, y, z)
+	mcl_levelgen.generate_biomes_at_block (level, biomes,
+					       x / 16,
+					       level.min_y / 16,
+					       z / 16, 5,
+					       level.height / 16)
+	overworld_terrain:generate (x, y, z, a, b, index, biomes)
+end
 
-overworld_terrain:generate (-48 + i * 16, -32, -48 + i * 32, a, b, index)
-overworld_terrain:generate (-48 + i * 16, 0, -48 + i * 16, a, b, index)
-overworld_terrain:generate (-48 + i * 32, 0, -48 + i * 16, a, b, index)
+for i = 1, 15 do
+
+do_generate (-48 + i * 16, -32, -48 + i * 32)
+do_generate (-48 + i * 16, -32, -48 + i * 32)
+do_generate (-48 + i * 16, 0, -48 + i * 16)
+do_generate (-48 + i * 32, 0, -48 + i * 16)
 
 print ("Generated " .. i * 3 .. " MapChunks...")
 

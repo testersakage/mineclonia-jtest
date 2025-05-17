@@ -376,58 +376,58 @@ if detect_luajit () then
 	end
 
 	function addull (a, b)
-		local along = a[2] * 0x100000000ull + a[1]
-		local blong = b[2] * 0x100000000ull + b[1]
+		local along = 0x100000000ull * a[2] + a[1]
+		local blong = 0x100000000ull * b[2] + b[1]
 		local value = along + blong
-		a[1] = tonumber (band (value, 0xffffffff))
+		a[1] = tonumber (band (value, 0xffffffffull))
 		a[2] = tonumber (rshift (value, 32))
 	end
 
 	function addkull (a, k)
-		local along = a[2] * 0x100000000ull + a[1]
+		local along = 0x100000000ull * a[2] + a[1]
 		local value = along + k
-		a[1] = tonumber (band (value, 0xffffffff))
+		a[1] = tonumber (band (value, 0xffffffffull))
 		a[2] = tonumber (rshift (value, 32))
 	end
 
 	-- Avoid expensive normalization by performing unsigned
 	-- arithmetic.
 	function andull (a, b)
-		a[1] = band (a[1], b[1] * 1ull)
-		a[2] = band (a[2], b[2] * 1ull)
+		a[1] = tonumber (band (a[1] * 1ull, b[1] * 1ull))
+		a[2] = tonumber (band (a[2] * 1ull, b[2] * 1ull))
 	end
 
 	function xorull (a, b)
-		a[1] = bxor (a[1], b[1] * 1ull)
-		a[2] = bxor (a[2], b[2] * 1ull)
+		a[1] = tonumber (bxor (a[1] * 1ull, b[1] * 1ull))
+		a[2] = tonumber (bxor (a[2] * 1ull, b[2] * 1ull))
 	end
 
 	function rotlull (a, k)
-		local along = a[2] * 0x100000000ull + a[1]
+		local along = 0x100000000ull * a[2] + a[1]
 		local value = rol (along, k)
-		a[1] = tonumber (band (value, 0xffffffff))
-		a[2] = tonumber (rshift (value, 32))
+		a[1] = tonumber (band (value, 0xffffffffull))
+		a[2] = tonumber (rshift (value, 32ull))
 	end
 
 	function shrull (a, k)
-		local along = a[2] * 0x100000000ull + a[1]
+		local along = 0x100000000ull * a[2] + a[1]
 		local value = rshift (along, k)
-		a[1] = tonumber (band (value, 0xffffffff))
-		a[2] = tonumber (rshift (value, 32))
+		a[1] = tonumber (band (value, 0xffffffffull))
+		a[2] = tonumber (rshift (value, 32ull))
 	end
 
 	function ashrull (a, k)
-		local along = a[2] * 0x100000000ull + a[1]
+		local along = 0x100000000ull * a[2] + a[1]
 		local value = arshift (along, k)
-		a[1] = tonumber (band (value, 0xffffffff))
-		a[2] = tonumber (rshift (value, 32))
+		a[1] = tonumber (band (value, 0xffffffffull))
+		a[2] = tonumber (rshift (value, 32ull))
 	end
 
 	function shlull (a, k)
-		local along = a[2] * 0x100000000ull + a[1]
+		local along = 0x100000000ull * a[2] + a[1]
 		local value = lshift (along, k)
-		a[1] = tonumber (band (value, 0xffffffff))
-		a[2] = tonumber (rshift (value, 32))
+		a[1] = tonumber (band (value, 0xffffffffull))
+		a[2] = tonumber (rshift (value, 32ull))
 	end
 end
 
@@ -765,6 +765,37 @@ local function seed_from_position (seed, x, y, z)
 	ashrull (seed, 16)
 end
 
+if false and detect_luajit () then -- XXX: this runs afoul of Luajit compiler issues.
+	local rshift = bit.rshift
+	local arshift = bit.arshift
+	local tobit = bit.tobit
+
+	local function lj_seed_from_position (seed, x, y, z)
+		local x, y, z = x * 1ull, y * 1ull, z * 1ull
+		local xf = arshift (lshift (x * 3129871ull, 32), 32)
+		local zf = z * 116129781ull
+		local t1 = bxor (xf, bxor (zf, tobit (y)))
+		local value = arshift (t1 * t1 * 42317861ull + t1 * 11ull, 16)
+		seed[1] = tonumber (band (value, 0xffffffff))
+		seed[2] = tonumber (rshift (value, 32))
+	end
+
+	if true then
+		math.randomseed (0)
+		for i = 1, 100 do
+			local x = math.random (-0x8000, 0x7fff)
+			local y = math.random (-0x8000, 0x7fff)
+			local z = math.random (-0x8000, 0x7fff)
+			local ull1 = ull (0, 0)
+			local ull2 = ull (0, 0)
+			seed_from_position (ull1, x, y, z)
+			lj_seed_from_position (ull2, x, y, z)
+			assert (equalull (ull1, ull2))
+		end
+	end
+	seed_from_position = lj_seed_from_position
+end
+
 mcl_levelgen.seed_from_position = seed_from_position
 
 local function xoroshiro_scale (bound, fn)
@@ -799,15 +830,14 @@ function mcl_levelgen.xoroshiro_function (seedlo, seedhi)
 		addull (lo1, seedhi)
 		rotlull (lo1, 17)
 		addull (lo1, seedlo)
-		hi1[1] = bxor (seedhi[1], seedlo[1])
-		hi1[2] = bxor (seedhi[2], seedlo[2])
+		hi1[1] = seedhi[1]
+		hi1[2] = seedhi[2]
+		xorull (hi1, seedlo)
 		rotlull (seedlo, 49)
-		seedlo[1] = bxor (seedlo[1], hi1[1])
-		seedlo[2] = bxor (seedlo[2], hi1[2])
+		xorull (seedlo, hi1)
 		local h1l, h1h = hi1[1], hi1[2]
 		shlull (hi1, 21)
-		seedlo[1] = normalize (bxor (seedlo[1], hi1[1]))
-		seedlo[2] = normalize (bxor (seedlo[2], hi1[2]))
+		xorull (seedlo, hi1)
 		seedhi[1] = h1l
 		seedhi[2] = h1h
 		rotlull (seedhi, 28)

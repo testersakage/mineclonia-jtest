@@ -78,8 +78,36 @@ function density_function:__call (x, y, z, blender)
 	error ("Unimplemented: __call")
 end
 
+local function clone_function (fn)
+	if not debug.upvaluejoin then
+		return fn
+	end
+
+	-- Luajit-specific optimization: creating a new GCproto
+	-- compels values of a solitary closure created from it to be
+	-- specialized to itself.  It may be a win to implement this
+	-- more portably by means of print and loadstring.
+	local dumped = string.dump (fn)
+	local cloned = loadstring (dumped)
+	local i = 1
+	while true do
+		local name = debug.getupvalue (fn, i)
+		if not name then
+			break
+		end
+		debug.upvaluejoin (cloned, i, fn, i)
+		i = i + 1
+	end
+	return cloned
+end
+
 function density_function:petrify ()
-	error ("Unimplemented: petrify")
+	local fn = self:petrify_internal ()
+	return clone_function (fn)
+end
+
+function density_function:petrify_internal ()
+	error ("Unimplemented: petrify_internal")
 end
 
 function density_function:fill (array, n, provider, provider_data)
@@ -261,7 +289,7 @@ function old_blended_noise:__call (x, y, z, blender)
 				   self.upper_noise)
 end
 
-function old_blended_noise:petrify ()
+function old_blended_noise:petrify_internal ()
 	local xz_multiplier = self.xz_multiplier
 	local y_multiplier = self.y_multiplier
 	local smear_scale_multiplier = self.smear_scale_multiplier
@@ -377,7 +405,7 @@ function noise_func:__call (x, y, z, blender)
 			   z * self.xz_scale)
 end
 
-function noise_func:petrify ()
+function noise_func:petrify_internal ()
 	local xz_scale = self.xz_scale
 	local y_scale = self.y_scale
 	local noise = self.noise.get_value
@@ -428,7 +456,7 @@ function blend_alpha:__call (x, y, z, blender)
 	return 1.0
 end
 
-function blend_alpha:petrify ()
+function blend_alpha:petrify_internal ()
 	return function (x, y, z, blender)
 		return 1.0
 	end
@@ -458,7 +486,7 @@ function blend_density:transform (x, y, z, blender, input)
 	return input
 end
 
-function blend_density:petrify ()
+function blend_density:petrify_internal ()
 	return self.input:petrify ()
 end
 
@@ -488,7 +516,7 @@ function beardifier:__call (x, y, z, blender)
 	return 0.0
 end
 
-function beardifier:petrify ()
+function beardifier:petrify_internal ()
 	return function ()
 		return 0.0
 	end
@@ -516,6 +544,7 @@ end
 local marker_func = {
 	input = nil,
 	is_marker = true,
+	user_flags = nil,
 	name = "", -- One of "interpolated", "flat_cache", "cache_2d",
 		   -- or "cache_once".
 }
@@ -524,7 +553,7 @@ function marker_func:__call (x, y, z, blender)
 	return self.input (x, y, z, blender)
 end
 
-function marker_func:petrify ()
+function marker_func:petrify_internal ()
 	return self.input:petrify ()
 end
 
@@ -540,6 +569,7 @@ function marker_func:wrap_internal (applicator, noise_visitor, visited)
 						noise_visitor,
 						visited)
 	local copy = mcl_levelgen.make_marker_func (self.name, input)
+	copy.user_flags = self.user_flags
 	local val = applicator (copy)
 	visited[self] = val
 	return val
@@ -581,7 +611,7 @@ function constop:transform (x, y, z, blender, value)
 	end
 end
 
-function constop:petrify ()
+function constop:petrify_internal ()
 	local input = self.input:petrify ()
 	local constant = self.constant
 	if self.name == "multiply" then
@@ -693,7 +723,7 @@ function binop:__call (x, y, z, blender)
 	end
 end
 
-function binop:petrify (x, y, z, blender)
+function binop:petrify_internal (x, y, z, blender)
 	local arg1 = self.arg1:petrify ()
 	local arg2 = self.arg2:petrify ()
 	local op = self.name
@@ -930,7 +960,7 @@ function end_island_func:__call (x, y, z, blender)
 	return (density - 8.0) / 128.0
 end
 
-function end_island_func:petrify ()
+function end_island_func:petrify_internal ()
 	local noise = self.noise
 	return function (x, y, z, blender)
 		local density
@@ -977,7 +1007,7 @@ function weird_scaled_sampler:transform (x, y, z, blender, value)
 	return val * abs (self.noise (x / val, y / val, z / val))
 end
 
-function weird_scaled_sampler:petrify ()
+function weird_scaled_sampler:petrify_internal ()
 	local input = self.input:petrify ()
 	local mapper = self.mapper
 	local noise = self.noise.get_value
@@ -1081,7 +1111,7 @@ function shifted_noise:__call (x, y, z, blender)
 	return self.noise (x1, y1, z1)
 end
 
-function shifted_noise:petrify (x, y, z, blender)
+function shifted_noise:petrify_internal (x, y, z, blender)
 	local xz_scale = self.xz_scale
 	local y_scale = self.y_scale
 	local shift_x = self.shift_x:petrify ()
@@ -1161,7 +1191,7 @@ function range_choice:__call (x, y, z, blender)
 	end
 end
 
-function range_choice:petrify ()
+function range_choice:petrify_internal ()
 	local input = self.input:petrify ()
 	local min_inclusive = self.min_inclusive
 	local max_exclusive = self.max_exclusive
@@ -1272,7 +1302,7 @@ function shift_a:__call (x, y, z, blender)
 	return shift_noise_compute (self.offset_noise, x, 0, z)
 end
 
-function shift_a:petrify ()
+function shift_a:petrify_internal ()
 	local offset_noise = self.offset_noise
 	return function (x, y, z, blender)
 		return shift_noise_compute (offset_noise, x, 0, z)
@@ -1305,7 +1335,7 @@ function shift_b:__call (x, y, z, blender)
 	return shift_noise_compute (self.offset_noise, z, x, 0)
 end
 
-function shift_b:petrify ()
+function shift_b:petrify_internal ()
 	local offset_noise = self.offset_noise
 	return function (x, y, z, blender)
 		return shift_noise_compute (offset_noise, z, x, 0)
@@ -1338,7 +1368,7 @@ function shift:__call (x, y, z, blender)
 	return shift_noise_compute (self.offset_noise, x, y, z)
 end
 
-function shift:petrify ()
+function shift:petrify_internal ()
 	local offset_noise = self.offset_noise
 	return function (x, y, z, blender)
 		return shift_noise_compute (offset_noise, x, y, z)
@@ -1377,8 +1407,8 @@ function clamp_func:transform (x, y, z, blender, value)
 	return clamp (value, self.min, self.max)
 end
 
-function clamp_func:petrify ()
-	local input = self.input:petrify ()
+function clamp_func:petrify_internal ()
+	local input = self.input:petrify_internal ()
 	local min = self.min
 	local max = self.max
 	return function (x, y, z, blender)
@@ -1455,7 +1485,7 @@ function unary:transform (x, y, z, blender, value)
 	return unary_transform (self.name, value)
 end
 
-function unary:petrify ()
+function unary:petrify_internal ()
 	local input = self.input:petrify ()
 	local op = self.name
 	if op == "abs" then
@@ -1803,7 +1833,7 @@ function spline:__call (x, y, z, blender)
 	return self.spline (x, y, z, blender)
 end
 
-function spline:petrify ()
+function spline:petrify_internal ()
 	return petrify_spline (self.spline)
 end
 
@@ -1976,7 +2006,7 @@ function constant:__call (x, y, z, blender)
 	return self.constant
 end
 
-function constant:petrify ()
+function constant:petrify_internal ()
 	return function (x, y, z, blender)
 		return self.constant
 	end
@@ -2032,7 +2062,7 @@ function y_clamped_gradient:__call (x, y, z, blender)
 	end
 end
 
-function y_clamped_gradient:petrify ()
+function y_clamped_gradient:petrify_internal ()
 	local from_y, to_y = self.from_y, self.to_y
 	local from_value = self.from_value
 	local to_value = self.to_value
