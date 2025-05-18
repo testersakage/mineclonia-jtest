@@ -14,7 +14,7 @@ local function roundN(n, d)
 end
 
 core.register_on_generated(function(minp, maxp, blockseed)
-	if core.global_exists ("mcl_levelgen") then
+	if mcl_levelgen.levelgen_enabled then
 		return
 	end
 	local t1 = os.clock()

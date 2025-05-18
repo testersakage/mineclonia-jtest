@@ -1,9 +1,6 @@
 -- TODO:
 --
--- Verify (or complete) implementations of water_cond and
--- temperature_cond.
---
--- Implement icebergs.
+-- Verify temperature_cond.
 
 ------------------------------------------------------------------------
 -- Surface rules
@@ -30,7 +27,7 @@
 --
 ------------------------------------------------------------------------
 
-local cid_air, cid_water_source, cid_lava
+local cid_air, cid_water_source, cid_lava_source
 if core and core.get_content_id then
 	cid_air = core.CONTENT_AIR
 	cid_water_source = core.get_content_id ("mcl_core:water_source")
@@ -181,14 +178,18 @@ local steep = table.merge (surface_condition, {
 })
 local mathmin = math.min
 local mathmax = math.max
+local unpack_height_map = mcl_levelgen.unpack_height_map
 local steep_chunksize = 5
+local steep_x_origin, steep_z_origin
 
 local function hindex (heightmap, x, z)
-	return heightmap[x * steep_chunksize + z + 1]
+	local idx = x * steep_chunksize + z + 1
+	local surface, _ = unpack_height_map (heightmap[idx])
+	return surface
 end
 
 local function steep_exists (ctx, system)
-	local x, z = ctx[X], ctx[Z]
+	local x, z = ctx[X] - steep_x_origin, ctx[Z] - steep_z_origin
 
 	-- XXX: this reads as though it would only detect precipices
 	-- down the north and east faces of a mountain.
@@ -201,8 +202,8 @@ local function steep_exists (ctx, system)
 	local zmax = band (z, -16) + mathmin (zchunk + 1, 15)
 
 	local heightmap = ctx[HEIGHTMAP]
-	if hindex (heightmap, x, zmin)
-		>= hindex (heightmap, x, zmax) + 4 then
+	if hindex (heightmap, x, zmax)
+		>= hindex (heightmap, x, zmin) + 4 then
 		return true
 	else
 		-- Repeat along the X axis.
@@ -214,8 +215,12 @@ local function steep_exists (ctx, system)
 	end
 end
 
-local function assemble_steep (val, condition)
-	return string.format ("%s = steep_exists (ctx, system)", val)
+local function closures_for_steep (cond)
+	return { steep_exists, }
+end
+
+local function assemble_steep (val, condition, steep_exists)
+	return string.format ("%s = %s (ctx, system)", val, steep_exists)
 end
 
 steep = make_surface_condition (steep)
@@ -286,7 +291,7 @@ local function map_surface_depth (val, max)
 	return (val + 1.0) / 2.0 * max
 end
 
-local function closures_for_assemble_stone_depth_check (cond)
+local function closures_for_stone_depth_check (cond)
 	return { map_surface_depth, }
 end
 
@@ -562,7 +567,7 @@ local function indexof (list, val)
 	return -1
 end
 
-local debug_surface_rules = true
+local debug_surface_rules = false
 
 function mcl_levelgen.compile_surface_rule (rule, biome, system)
 	local stmts = {}
@@ -621,8 +626,8 @@ function mcl_levelgen.compile_surface_rule (rule, biome, system)
 			compile_condition (ret, condition.target)
 			table.insert (stmts, { "not", ret, })
 		elseif condition.name == "mcl_levelgen:steep" then
-			table.insert (stmts, { "callproc", ret, assemble_steep, nil,
-					       condition, })
+			table.insert (stmts, { "callproc", ret, assemble_steep,
+					       closures_for_steep, condition, })
 		elseif condition.name == "mcl_levelgen:temperature" then
 			table.insert (stmts, { "callproc", ret, assemble_temperature, nil,
 					       condition, })
@@ -637,7 +642,7 @@ function mcl_levelgen.compile_surface_rule (rule, biome, system)
 			end
 		elseif condition.name == "mcl_levelgen:stone_depth_check" then
 			table.insert (stmts, { "callproc", ret, assemble_stone_depth_check,
-					       closures_for_assemble_stone_depth_check,
+					       closures_for_stone_depth_check,
 					       condition, })
 		elseif condition.name == "mcl_levelgen:water" then
 			table.insert (stmts, { "callproc", ret, assemble_water, nil,
@@ -671,7 +676,13 @@ function mcl_levelgen.compile_surface_rule (rule, biome, system)
 				table.insert (stmts, { "end", })
 			end
 		elseif rule.name == "mcl_levelgen:block" then
-			table.insert (stmts, { "set", ret, rule.cid, rule.param2, })
+			local param2 = rule.param2
+			if param2 == "grass_palette_index" then
+				local biomes = mcl_levelgen.registered_biomes[biome]
+				param2 = biomes.grass_palette_index
+				assert (type (param2) == "number")
+			end
+			table.insert (stmts, { "set", ret, rule.cid, param2, })
 		elseif rule.name == "mcl_levelgen:bandlands" then
 			local noise = valalloc ()
 			local mesa_band_offset_noise = system.mesa_band_offset_noise
@@ -1247,8 +1258,10 @@ function mcl_levelgen.compile_surface_rule (rule, biome, system)
 		print ("Compiled surface rule for biome `" .. biome .. "'")
 		print ("=======================SURFACE RULE FUNCTION======================")
 		print (str)
-		print ("=========================CLOSURES & NOISES========================")
-		print (dump (closures_1))
+		if dump then
+			print ("=========================CLOSURES & NOISES========================")
+			print (dump (closures_1))
+		end
 		print ("==================================================================")
 	end
 	return fn, str
@@ -1424,26 +1437,11 @@ function mcl_levelgen.make_surface_system (preset)
 	return values
 end
 
-local biome_id_eroded_mesa
-local biome_id_frozen_ocean
-local biome_id_deep_frozen_ocean
-
-mcl_levelgen.register_on_biome_ids_available (function ()
-	local biome_name_to_id_map = mcl_levelgen.biome_name_to_id_map
-	biome_id_eroded_mesa
-		= biome_name_to_id_map["ErodedMesa"]
-	biome_id_frozen_ocean
-		= biome_name_to_id_map["FrozenOcean"]
-	biome_id_deep_frozen_ocean
-		= biome_name_to_id_map["DeepFrozenOcean"]
-end)
-
 ------------------------------------------------------------------------
 -- Surface system processing.
 ------------------------------------------------------------------------
 
 local bindex = mcl_levelgen.biome_table_index
-local unpack_height_map = mcl_levelgen.unpack_height_map
 local abs = math.abs
 local ceil = math.ceil
 local decode_node = mcl_levelgen.decode_node
@@ -1501,7 +1499,13 @@ end
 
 local toquart = mcl_levelgen.toquart
 local context = {}
-local rtz = mcl_levelgen.rtz
+
+local function rtz (n)
+	if n < 0 then
+		return ceil (n)
+	end
+	return floor (n)
+end
 
 local function compute_surface_depth (self, x, z)
 	local rng = self.rng
@@ -1545,8 +1549,77 @@ function surface_system:get_secondary_surface (x, z)
 	return self.surface_secondary_noise (x, 0, z)
 end
 
+local munge_biome_coords = mcl_levelgen.munge_biome_coords
+local seed = nil
+
+local function munge_biome_index (x, y, z, level_min, bx, bz)
+	local qx, qy, qz = munge_biome_coords (seed, x, y, z)
+	qy = qy - toquart (level_min)
+	return qx - toquart (bx), qy, qz - toquart (bz)
+end
+
+local get_temperature_in_biome = mcl_levelgen.get_temperature_in_biome
+
+local function build_icebergs (self, preliminary_surface, biome, nodes,
+			       absx, absz, surface_y, idx)
+	local surface = self.iceberg_surface_noise
+	local pillar = self.iceberg_pillar_noise
+	local pillar_roof = self.iceberg_pillar_roof_noise
+	local selector
+		= mathmin (abs (surface (absx, 0.0, absz) * 8.25),
+			   pillar (absx * 1.28, 0.0, absz * 1.28) * 15.0)
+	if not (selector <= 1.8) then
+		local roof = abs (pillar_roof (absx * 1.17, 0.0, absz * 1.17) * 1.5)
+		local height = mathmin (selector * selector * 1.2,
+					ceil (roof * 40.0) + 14.0)
+		local temp_at_sea_level
+			= get_temperature_in_biome (biome, absx, 63, absz)
+		if temp_at_sea_level > 0.1 then
+			height = height - 2.0
+		end
+
+		local sea_level = self.sea_level
+		local topy, ymin
+		if height > 2.0 then
+			topy = rtz (height + sea_level)
+			ymin = rtz (sea_level - height - 7)
+		else
+			topy = 0
+			ymin = 0
+		end
+
+		local rng = self.rng
+		rng:reseed_positional (absx, 0, absz)
+		local snowdepth = 2 + rng:next_within (4)
+		local level_min = self.min_y
+		local snow_min = sea_level + 18 + rng:next_within (10)
+		local snow = encode_node (self.cid_snow_block, 0)
+		local packed_ice = encode_node (self.cid_packed_ice, 0)
+
+		for y = mathmax (surface_y, topy + 1), preliminary_surface, -1 do
+			local i = idx + (y - level_min) * steep_chunksize
+			if (decode_node (nodes[i]) == cid_air
+			    and y < topy
+			    and rng:next_double () > 0.01)
+				or (decode_node (nodes[i]) == cid_water_source
+				    and ymin ~= 0.0 and y > ymin and y < sea_level
+				    and rng:next_double () > 0.15) then
+				if snowdepth >= 0 and y > snow_min then
+					nodes[i] = snow
+					snowdepth = snowdepth - 1
+				else
+					nodes[i] = packed_ice
+				end
+			end
+		end
+	end
+end
+
 function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunksize, biomes)
 	steep_chunksize = chunksize
+	steep_x_origin = x
+	steep_z_origin = z
+	seed = terrain.biome_seed
 	local legacy_rng = self.legacy_rng
 	local height_mul = legacy_rng and 0 or 1
 	local level_height = self.level_height
@@ -1563,13 +1636,21 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 			local absz = z + dz
 			local surface, _
 				= unpack_height_map (heightmap[dx * chunksize + dz + 1])
-			local test_location = surface * height_mul
-			local biome = biomes[bindex (toquart (dx),
-						     toquart (test_location),
-						     toquart (dz),
-						     toquart (chunksize),
-						     toquart (level_height),
-						     toquart (chunksize))]
+			local test_location = surface * height_mul + level_min
+			local chunk_quart = toquart (chunksize)
+			local level_height_chunk = toquart (level_height)
+			local idx
+			do
+				local ix, iy, iz = munge_biome_index (absx,
+								      test_location,
+								      absz,
+								      level_min,
+								      x, z)
+				idx = bindex (ix, iy, iz, chunk_quart,
+					      level_height_chunk,
+					      chunk_quart)
+			end
+			local biome = biomes[idx]
 
 			if biome == "ErodedMesa" then
 				-- TODO: update the height map after this process.
@@ -1617,12 +1698,20 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 					local dist_to_bottom_ceiling = y - cave_ceiling_pos + 1
 
 					if y <= gen_max and node == cid_default_block then
-						local biome = biomes[bindex (toquart (dx),
-									     toquart (y),
-									     toquart (dz),
-									     toquart (chunksize),
-									     toquart (level_height),
-									     toquart (chunksize))]
+						local idx
+						do
+							local ix, iy, iz
+								= munge_biome_index (absx,
+										     y + level_min,
+										     absz,
+										     level_min,
+										     x, z)
+							idx = bindex (ix, iy, iz,
+								      chunk_quart,
+								      level_height_chunk,
+								      chunk_quart)
+						end
+						local biome = biomes[idx]
 						update_surface_ctx_y (self, context,
 								      solid_blocks_from_air,
 								      dist_to_bottom_ceiling,
@@ -1635,6 +1724,13 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 						end
 					end
 				end
+			end
+
+			if biome == "FrozenOcean" or biome == "DeepFrozenOcean" then
+				local level = get_min_surface_level (context, self)
+				local idx = dx * chunksize * level_height + dz + 1
+				build_icebergs (self, level, biome, nodes, absx, absz,
+						surface, idx)
 			end
 		end
 	end

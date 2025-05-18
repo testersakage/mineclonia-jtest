@@ -45,7 +45,6 @@ local function rtz (n)
 	end
 	return floor (n)
 end
-mcl_levelgen.rtz = rtz
 
 local LONG_MAX_AS_DOUBLE = (2 ^ 63 - 1)
 local LONG_MIN_AS_DOUBLE = -(2 ^ 63)
@@ -334,22 +333,7 @@ local function stringtoull (x, str)
 	return true
 end
 
-local function mul2ull (a, b)
-	local lo, hi = a[1], a[2]
-	mulull (a, b[1])
-	a[1], lo = lo, a[1]
-	a[2], hi = hi, a[2]
-	mulull (a, b[2])
-	shlull (a, 32)
-	lo, b[1] = b[1], lo
-	hi, b[2] = b[2], hi
-	addull (a, b)
-	b[1] = lo
-	b[2] = hi
-end
-
 if detect_luajit () then
-	local tobit = bit.tobit
 	local rshift = bit.rshift
 	local arshift = bit.arshift
 	local rol = bit.rol
@@ -429,6 +413,20 @@ if detect_luajit () then
 		a[1] = tonumber (band (value, 0xffffffffull))
 		a[2] = tonumber (rshift (value, 32ull))
 	end
+end
+
+local function mul2ull (a, b)
+	local lo, hi = a[1], a[2]
+	mulull (a, b[1])
+	a[1], lo = lo, a[1]
+	a[2], hi = hi, a[2]
+	mulull (a, b[2])
+	shlull (a, 32)
+	lo, b[1] = b[1], lo
+	hi, b[2] = b[2], hi
+	addull (a, b)
+	b[1] = lo
+	b[2] = hi
 end
 
 -- Tests.
@@ -819,7 +817,6 @@ function mcl_levelgen.xoroshiro_function (seedlo, seedhi)
 		seedlo[2], seedlo[1] = 1779033703, 4089235721
 	end
 	local lo1, hi1 = { nil, nil, }, { nil, nil, }
-	local bxor = bit.bxor
 
 	-- print ("seed: " .. tostringull (seedlo)
 	--        .. " " .. tostringull (seedhi))
@@ -1223,4 +1220,117 @@ if false then
 	print (factory ({ x = 120, y = 120, z = -370, }):next_integer ())
 	print (factory ("sticking it to microsoft"):next_integer ())
 	print (factory ("========================"):next_integer ())
+end
+
+------------------------------------------------------------------------
+-- Biome position randomization.
+------------------------------------------------------------------------
+
+-- Simple LCJ.
+local MULTIPLIER = ull (0x5851f42d, 0x4c957f2d)
+local INCREMENT = ull (0x14057b7e, 0xf767814f)
+
+local tmp = ull (0, 0)
+
+local function lcj_next (seed, increment)
+	tmp[1] = seed[1]
+	tmp[2] = seed[2]
+
+	-- seed = (seed * (seed * MULTIPLIER + INCREMENT))
+	mul2ull (tmp, MULTIPLIER)
+	addull (tmp, INCREMENT)
+	mul2ull (seed, tmp)
+	addull (seed, increment)
+end
+
+if detect_luajit () then
+	function lcj_next (seed, increment)
+		local cseed = 0x100000000ull * seed[2] + seed[1]
+		local increment
+			= 0x100000000ull * increment[2] + increment[1]
+		cseed = cseed * (cseed * 0x5851f42d4c957f2dull
+				 + 0x14057b7ef767814full)
+			+ increment
+		seed[1] = tonumber (band (cseed, 0xffffffff))
+		seed[2] = tonumber (rshift (cseed, 32))
+	end
+end
+
+mcl_levelgen.lcj_next = lcj_next
+
+if true then
+	local seed = ull (99012, 99374)
+	local incr = ull (339487593, 444335790)
+	local function test (seed, value)
+		if false then
+			print (seed)
+		else
+			assert (seed == value)
+		end
+	end
+	-- print ("seed: ", tostringull (seed), "incr: ", tostringull (incr))
+	lcj_next (seed, incr)
+	test (tostringull (seed), "226211238292676308")
+	lcj_next (seed, incr)
+	test (tostringull (seed), "6872378287299025514")
+	lcj_next (seed, incr)
+	test (tostringull (seed), "17378588871388729976")
+	lcj_next (seed, incr)
+	test (tostringull (seed), "1242224386663429366")
+	lcj_next (seed, incr)
+	test (tostringull (seed), "1805386566417395244")
+	lcj_next (seed, incr)
+	test (tostringull (seed), "12805274662464243346")
+	lcj_next (seed, incr)
+	test (tostringull (seed), "14060706522678048432")
+	lcj_next (seed, incr)
+	test (tostringull (seed), "12111425423540952062")
+	lcj_next (seed, incr)
+	test (tostringull (seed), "7280341539614422212")
+	lcj_next (seed, incr)
+	test (tostringull (seed), "7655099306983539706")
+
+	local seed1 = ull (0, 0)
+	stringtoull (seed1, "2520521153677540398")
+	stringtoull (incr, "162")
+	lcj_next (seed1, incr)
+	test (tostringull (seed1), "14919993831747797192")
+end
+
+local function biomeseedull (dst, seed)
+	local lo, hi = seed[1], seed[2]
+	local str = string.char (band (lo, 0xff))
+		.. string.char (band (rshift (lo, 0x8), 0xff))
+		.. string.char (band (rshift (lo, 0x10), 0xff))
+		.. string.char (band (rshift (lo, 0x18), 0xff))
+		.. string.char (band (hi, 0xff))
+		.. string.char (band (rshift (hi, 0x8), 0xff))
+		.. string.char (band (rshift (hi, 0x10), 0xff))
+		.. string.char (band (rshift (hi, 0x18), 0xff))
+	local shasum = mcl_levelgen.sha.sha256 (str):sub (1, 16)
+	lo = 0
+	for i = 0, 3 do
+		local byte = tonumber (shasum:sub (i * 2 + 1, i * 2 + 2), 16)
+		lo = bor (lo, lshift (byte, i * 8))
+	end
+	hi = 0
+	for i = 4, 7 do
+		local byte = tonumber (shasum:sub (i * 2 + 1, i * 2 + 2), 16)
+		hi = bor (hi, lshift (byte, (i - 4) * 8))
+	end
+	dst[1] = normalize (lo)
+	dst[2] = normalize (hi)
+end
+
+mcl_levelgen.biomeseedull = biomeseedull
+
+if true then
+	local seed1 = ull (0, 0)
+	stringtoull (seed1, "3948575739")
+	local seed2 = ull (0, 0)
+	stringtoull (seed2, "18413248036093821064")
+	biomeseedull (seed1, seed1)
+	biomeseedull (seed2, seed2)
+	assert (tostringull (seed1) == "17623870130031917223")
+	assert (tostringull (seed2) == "6736552460589820823")
 end
