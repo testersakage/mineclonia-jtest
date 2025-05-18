@@ -1076,7 +1076,7 @@ local function erosion_factor_function (erosion, ridges, pv, target_factor, is_l
 	else
 		local pv_spline_1 = mcl_levelgen.spline_from_points (pv, {
 			point (-0.7, default),
-			point (0.15, maybe_amplify (1.37)),
+			point (-0.15, maybe_amplify (1.37)),
 		})
 		local pv_spline_2 = mcl_levelgen.spline_from_points (pv, {
 			point (0.45, default),
