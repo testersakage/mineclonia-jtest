@@ -6345,7 +6345,7 @@ function mcl_levelgen.munge_biome_coords (seed, x, y, z)
 			max_distance = dist
 		end
 	end
-	
+
 	local dx = rshift (band (nearest_transform, 4), 2)
 	local dy = rshift (band (nearest_transform, 2), 1)
 	local dz = band (nearest_transform, 1)
