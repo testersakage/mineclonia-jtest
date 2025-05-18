@@ -1445,6 +1445,7 @@ local bindex = mcl_levelgen.biome_table_index
 local abs = math.abs
 local ceil = math.ceil
 local decode_node = mcl_levelgen.decode_node
+local pack_height_map = mcl_levelgen.pack_height_map
 
 local function build_bryce_formations (self, x, z, dx, dz, surface_y, heightmap,
 				       nodes, chunksize)
@@ -1474,16 +1475,15 @@ local function build_bryce_formations (self, x, z, dx, dz, surface_y, heightmap,
 			for y = 0, surface_y - 1 do
 				local cid, _ = decode_node (nodes[index])
 				if cid == cid_water then
-					return
+					return surface_y
 				elseif cid == cid_default_block then
 					break
 				end
 				index = index - chunksize
 			end
 
-			-- XXX: does Minecraft update the level heightmap?
 			local height = mathmin (height_adj, level_height)
-			local index = (dx * level_height + height_adj)
+			local index = (dx * level_height + height)
 				* chunksize + dz + 1
 			local default = encode_node (cid_default_block, 0)
 			for y = 0, height do
@@ -1493,8 +1493,15 @@ local function build_bryce_formations (self, x, z, dx, dz, surface_y, heightmap,
 				nodes[index] = default
 				index = index - chunksize
 			end
+
+			-- Update the heightmap.
+			local idx = dx * chunksize + dz + 1
+			heightmap[idx] = pack_height_map (height + 1,
+							  height + 1)
+			return height + 1
 		end
 	end
+	return surface_y
 end
 
 local toquart = mcl_levelgen.toquart
@@ -1653,9 +1660,9 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 			local biome = biomes[idx]
 
 			if biome == "ErodedMesa" then
-				-- TODO: update the height map after this process.
-				build_bryce_formations (self, absx, absz, dx, dz, surface,
-							heightmap, nodes, chunksize)
+				surface = build_bryce_formations (self, absx, absz, dx, dz,
+								  surface, heightmap, nodes,
+								  chunksize)
 			end
 
 			-- Begin iteration.
@@ -1666,7 +1673,7 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 			local idx = dx * chunksize * level_height + dz + 1
 			local cid_default_block = self.cid_default_block
 
-			for y = surface - level_min, gen_min, -1 do
+			for y = surface, gen_min, -1 do
 				local i = idx + chunksize * y
 				local node, _ = decode_node (nodes[i])
 				if node == cid_air then

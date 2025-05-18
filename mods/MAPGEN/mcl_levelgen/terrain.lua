@@ -385,6 +385,8 @@ local function pack_height_map (surface, motion_blocking)
 		    motion_blocking + bias)
 end
 
+mcl_levelgen.pack_height_map = pack_height_map
+
 local function unpack_height_map (vals)
 	local bias = 512
 	local bits = 10
