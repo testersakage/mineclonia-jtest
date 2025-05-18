@@ -16,6 +16,7 @@
 -- from noise.
 ------------------------------------------------------------------------
 
+local ipairs = ipairs
 local toblock = mcl_levelgen.toblock
 local toquart = mcl_levelgen.toquart
 
@@ -840,5 +841,6 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 	end
 	gen.heightmap = heightmap
 	gen.surface_system = mcl_levelgen.make_surface_system (preset)
+	gen.biome_seed = mcl_levelgen.get_biome_seed (preset.seed)
 	return gen
 end

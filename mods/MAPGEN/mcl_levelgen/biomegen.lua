@@ -6,7 +6,9 @@
 local N = 4
 
 local function index (x, y, z, dx, dy, dz)
-	return x * dy * dz + y * dx + z + 1
+	return (x + 1) * (dy + 2) * (dz + 2)
+		+ (y + 1) * (dz + 2)
+		+ (z + 1) + 1
 end
 mcl_levelgen.biome_table_index = index
 
@@ -15,23 +17,26 @@ local id_to_name_map = mcl_levelgen.biome_id_to_name_map
 if not core or core.save_gen_notify then -- Mapgen environment.
 
 -- Return biomes in the table BIOMES for each position in the region
--- from X, Y, Z to X1, Y1, Z1, in PRESET, which must be Minecraft
--- block positions divided by 4.  The index of each position so
--- divided in this table is produced from the difference between each
--- such position and the supplied origin in X-major, Z-minor order.
+-- from X, Y, Z to X1, Y1, Z1, and a margin of one QuartPos around the
+-- same, in PRESET, which must be Minecraft block positions divided by
+-- 4.  The index of each position so divided in this table is produced
+-- from the difference between each such position and the supplied
+-- origin in X-major, Z-minor order.
 
 function mcl_levelgen.generate_biomes (preset, biomes, x, y, z, x1, y1, z1)
-	local dx = x1 - x + 1
-	local dy = y1 - y + 1
-	local dz = z1 - z + 1
-	preset:index_biomes_begin (dx, dz, x, z)
+	local dx = x1 - x + 3
+	local dy = y1 - y + 3
+	local dz = z1 - z + 3
+	local max = 0
+	preset:index_biomes_begin (dx, dz, x - 1, z - 1)
 
-	for xpos = x, x1 do
-		for ypos = y, y1 do
-			for zpos = z, z1 do
-				local biome = preset:index_biomes_cached (xpos, ypos, zpos)
+	for xpos = x - 1, x1 + 1 do
+		for ypos = y - 1, y1 + 1 do
+			for zpos = z - 1, z1 + 1 do
+				local biome
+					= preset:index_biomes_cached (xpos, ypos, zpos)
 				local idx = index (xpos - x, ypos - y, zpos - z,
-						   dx, dy, dz)
+						   dx - 2, dy - 2, dz - 2)
 				biomes[idx] = biome
 			end
 		end
@@ -76,10 +81,10 @@ local mathmax = math.max
 function mcl_levelgen.encode_biomes (biomes, y0, yh, w, h, hash_for_testing)
 	local qw = w * N
 	local qh = h * N
-	local max_index = index (qw - 1, qh - 1, qw - 1, qw, qh, qw)
+	local max_index = index (qw, qh, qw, qw, qh, qw)
 	assert (#biomes == max_index)
-	local x_stride = qw * qh
-	local y_stride = qw
+	local x_stride = (qw + 2) * (qh + 2)
+	local y_stride = (qw + 2)
 	local compressed = {}
 	local min = mathmax (0, -y0)
 	local max = mathmin (yh - 1, h - y0 - 1)
@@ -153,16 +158,39 @@ end
 
 if core and core.get_meta then -- Mod environment.
 
+local band = bit.band
+local arshift = bit.arshift
 local floor = math.floor
 local mod_storage = core.get_mod_storage ()
 local v = vector.zero ()
 local toquart = mcl_levelgen.toquart
+local conv_pos
+local OVERWORLD_OFFSET, seed
+local munge_biome_coords = mcl_levelgen.munge_biome_coords
+
+core.register_on_mods_loaded (function ()
+	OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
+	seed = mcl_levelgen.biome_seed
+	conv_pos = mcl_levelgen.conv_pos
+	assert (OVERWORLD_OFFSET)
+	assert (seed)
+	assert (conv_pos)
+end)
 
 function mcl_levelgen.get_biome (pos)
-	local bx, by, bz
-	bx = floor (pos.x / 16)
-	by = floor (pos.y / 16)
-	bz = floor (pos.z / 16)
+	v.x = floor (pos.x + 0.5)
+	v.y = floor (pos.y + 0.5)
+	v.z = floor (pos.z + 0.5)
+	local mc_pos = conv_pos (v)
+	local qx, qy, qz = munge_biome_coords (seed, mc_pos.x,
+					       mc_pos.y,
+					       mc_pos.z)
+	qz = -qz - 1
+	qy = qy - OVERWORLD_OFFSET / 4
+
+	local bx = arshift (qx, 2)
+	local by = arshift (qy, 2)
+	local bz = arshift (qz, 2)
 
 	-- Do not attempt this if the engine might block to obtain
 	-- metadata for this node.
@@ -190,9 +218,9 @@ function mcl_levelgen.get_biome (pos)
 		meta:set_string ("mcl_levelgen:biome_index", str)
 	end
 
-	local qx = toquart (floor (pos.x - v.x))
-	local qy = toquart (floor (pos.y - v.y))
-	local qz = toquart (floor (pos.z - v.z))
+	local qx = band (qx, 3)
+	local qy = band (qy, 3)
+	local qz = band (qz, 3)
 	return mcl_levelgen.index_biome_list (str, qx, qy, qz)
 end
 
