@@ -1546,7 +1546,11 @@ end
 -- Overworld presets.
 ------------------------------------------------------------------------
 
-local toblock = mcl_levelgen.toblock
+local lshift = bit.lshift
+local function toblock (x)
+	return lshift (x, 2)
+end
+
 local toquart = mcl_levelgen.toquart
 local index_biome_lut = mcl_levelgen.index_biome_lut
 local index_biome_lut_naively = mcl_levelgen.index_biome_lut_naively

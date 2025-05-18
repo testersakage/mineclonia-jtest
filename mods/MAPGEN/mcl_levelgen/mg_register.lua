@@ -6,7 +6,7 @@
 
 if core.global_exists ("jit") then
 	jit.opt.start ("maxmcode=16777216", "maxtrace=8000",
-		       "loopunroll=10", "maxside=1000")
+		       "loopunroll=15", "maxside=1000")
 	-- require ("jit.dump").start ("+biraxmT", "server_perf.txt")
 	-- local profile = require ("jit.p")
 	-- profile.start ("fz")
@@ -36,6 +36,7 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	area = VoxelArea (vector.subtract (emin, minp),
 			  vector.subtract (emax, minp))
 	vmanip:get_data (cids)
+	vmanip:get_param2_data (param2s)
 	local block_x = minp.x / 16
 	local block_y = (OVERWORLD_OFFSET + minp.y) / 16
 	local block_z = minp.z / 16

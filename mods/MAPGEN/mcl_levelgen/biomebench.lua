@@ -3,9 +3,7 @@ mcl_levelgen.assign_biome_ids ({})
 
 -- Number of quart positions per MapBlock.
 local N = 4
-local function index (x, y, z, dx, dy, dz)
-	return x * dy * dz + y * dx + z + 1
-end
+local index = mcl_levelgen.biome_table_index
 local seed = mcl_levelgen.ull (0, 3228473)
 local level = mcl_levelgen.make_overworld_preset (seed)
 local biomes = {}
