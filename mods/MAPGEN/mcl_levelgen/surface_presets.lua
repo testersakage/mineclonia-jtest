@@ -328,8 +328,8 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 					      stone),
 				     if_true (biome ("WarmOcean", "LukewarmOcean",
 						     "DeepLukewarmOcean"),
-					      sand_surface)),
-			   stone_surface)
+					      sand_surface),
+				     stone_surface))
 	local overworld_surface
 		= sequence (if_true (ON_FLOOR,
 				     sequence (wooded_badlands_dirt,
