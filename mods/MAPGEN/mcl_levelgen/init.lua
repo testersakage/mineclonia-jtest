@@ -11,6 +11,8 @@ end
 
 mcl_levelgen = { prefix = prefix, }
 mcl_levelgen.md5 = dofile (prefix .. "/md5.lua")
+mcl_levelgen.sha = dofile (prefix .. "/sha2.lua")
+
 dofile (prefix .. "/random.lua")
 dofile (prefix .. "/noise.lua")
 dofile (prefix .. "/density_funcs.lua")

@@ -87,21 +87,21 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 		= getcid ("mcl_colorblocks:hardened_clay_orange")
 	local cid_terracotta
 		= getcid ("mcl_colorblocks:hardened_clay")
-	local cid_yellow_terracotta
-		= getcid ("mcl_colorblocks:hardened_clay_yellow")
-	local cid_brown_terracotta
-		= getcid ("mcl_colorblocks:hardened_clay_brown")
-	local cid_red_terracotta
-		= getcid ("mcl_colorblocks:hardened_clay_red")
-	local cid_light_gray_terracotta
-		= getcid ("mcl_colorblocks:hardened_clay_silver")
+	-- local cid_yellow_terracotta
+	-- 	= getcid ("mcl_colorblocks:hardened_clay_yellow")
+	-- local cid_brown_terracotta
+	-- 	= getcid ("mcl_colorblocks:hardened_clay_brown")
+	-- local cid_red_terracotta
+	-- 	= getcid ("mcl_colorblocks:hardened_clay_red")
+	-- local cid_light_gray_terracotta
+	-- 	= getcid ("mcl_colorblocks:hardened_clay_silver")
 	local cid_red_sand = getcid ("mcl_core:redsand")
 	local cid_red_sandstone = getcid ("mcl_core:redsandstone")
 	local cid_air = getcid ("air")
 	local cid_bedrock = getcid ("mcl_core:bedrock")
 	local cid_deepslate = getcid ("mcl_deepslate:deepslate")
 
-	local grass_block = block (cid_grass_block, 0)
+	local grass_block = block (cid_grass_block, "grass_palette_index")
 	local dirt = block (cid_dirt, 0)
 	local sandstone = block (cid_sandstone, 0)
 	local sand = block (cid_sand, 0)
@@ -119,17 +119,16 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 	local white_terracotta = block (cid_white_terracotta, 0)
 	local orange_terracotta = block (cid_orange_terracotta, 0)
 	local terracotta = block (cid_terracotta, 0)
-	local yellow_terracotta = block (cid_yellow_terracotta, 0)
-	local brown_terracotta = block (cid_brown_terracotta, 0)
-	local red_terracotta = block (cid_red_terracotta, 0)
-	local light_gray_terracotta = block (cid_light_gray_terracotta, 0)
+	-- local yellow_terracotta = block (cid_yellow_terracotta, 0)
+	-- local brown_terracotta = block (cid_brown_terracotta, 0)
+	-- local red_terracotta = block (cid_red_terracotta, 0)
+	-- local light_gray_terracotta = block (cid_light_gray_terracotta, 0)
 	local red_sand = block (cid_red_sand, 0)
 	local red_sandstone = block (cid_red_sandstone, 0)
 	local air = block (cid_air, 0)
 	local bedrock = block (cid_bedrock, 0)
 	local deepslate = block (cid_deepslate, 0)
 
-	local rules = {}
 	local anchor_coarse_dirt = y_above_test (97, 2)
 	local anchor_orange_terracotta = y_above_test (256, 0)
 	local anchor_terracotta_begin = y_surface_test (63, -1)
@@ -139,7 +138,7 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 	local anchor_63_abs = y_above_test (63, 0)
 	local water_offset = water_above_test (-1, 0)
 	local water_absence = water_surface_test (0, 0)
-	local dry = water_surface_test (-6, 1)
+	local near_surface = water_surface_test (-6, -1)
 	local hole = mcl_levelgen.hole_cond ()
 	local is_frozen_ocean = biome ("FrozenOcean", "DeepFrozenOcean")
 	local steep = mcl_levelgen.steep_cond ()
@@ -214,6 +213,7 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 				     sequence (if_true (steep, packed_ice),
 					       if_true (noise ("packed_ice", 0.0, 0.2),
 							packed_ice),
+					       if_true (noise ("ice", 0.0, 0.025), ice),
 					       if_true (water_absence, snow_block))),
 			    if_true (biome ("SnowySlopes"),
 				     sequence (if_true (steep, stone),
@@ -290,7 +290,7 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 										    red_sandstone),
 									   red_sand)),
 							if_false (hole, orange_terracotta),
-							if_true (dry, white_terracotta),
+							if_true (near_surface, white_terracotta),
 							stone_surface)),
 				     if_true (anchor_terracotta_begin,
 					      sequence (if_true (anchor_63_abs,
@@ -298,9 +298,9 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 									   orange_terracotta)),
 							bandlands)),
 				     if_true (UNDER_FLOOR,
-					      if_true (dry, white_terracotta))))
+					      if_true (near_surface, white_terracotta))))
 	local temperature = mcl_levelgen.temperature_cond ()
-	local frozen_ocean_and_floor
+	local dry_floor
 		= if_true (ON_FLOOR,
 			   if_true (water_offset,
 				    sequence (if_true (is_frozen_ocean,
@@ -311,7 +311,7 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 									  water))),
 					      frozen_peaks_and_floor)))
 	local inland_floor
-		= if_true (dry,
+		= if_true (near_surface,
 			   sequence (if_true (ON_FLOOR,
 					      if_true (is_frozen_ocean,
 						       if_true (hole, water))),
@@ -336,7 +336,7 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 					       swamp_wetland,
 					       mangrove_swamp_wetland)),
 			    mesa_bandlands,
-			    frozen_ocean_and_floor,
+			    dry_floor,
 			    inland_floor,
 			    default_surface)
 
