@@ -100,7 +100,8 @@ function mcl_vars.get_chunk_number(pos) -- unsigned int
 		 c.x + k_positive
 end
 
-if true then
+if singlenode then
+	mcl_vars.enable_mcl_levelgen = true
 	mcl_vars.mg_overworld_min = -128
 	mcl_vars.mg_overworld_max_official = mcl_vars.mg_overworld_min
 		+ minecraft_new_height_limit

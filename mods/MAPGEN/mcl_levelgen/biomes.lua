@@ -15,10 +15,11 @@
 
 local ipairs = ipairs
 local floor = math.floor
+local ceil = math.ceil
+local rshift = bit.rshift
 local arshift = bit.arshift
 local lshift = bit.lshift
 local band = bit.band
-local rtz = mcl_levelgen.rtz
 
 local function toquart (x)
 	return arshift (x, 2)
@@ -39,6 +40,13 @@ mcl_levelgen.toblock = toblock
 ------------------------------------------------------------------------
 -- Biome parameter accessors.
 ------------------------------------------------------------------------
+
+local function rtz (n)
+	if n < 0 then
+		return ceil (n)
+	end
+	return floor (n)
+end
 
 local function temperature (x)
 	return x[1]
@@ -72,13 +80,9 @@ local function quantize (x)
 	return rtz (x * 10000)
 end
 
-mcl_levelgen.quantize = quantize
-
 local function unquantize (x)
 	return x / 10000.0
 end
-
-mcl_levelgen.unquantize = unquantize
 
 local function build_biome_extents (temperature_min,
 				    temperature_max,
@@ -130,6 +134,28 @@ local function build_biome_extents (temperature_min,
 		}
 	}
 end
+
+-- Redefine a number of functions after they are captured by
+-- `build_biome_extents' to avoid blacklisting, as they are referenced
+-- extensively from code that admits of compilation.
+local function rtz (n)
+	if n < 0 then
+		return ceil (n)
+	end
+	return floor (n)
+end
+
+local function quantize (x)
+	return rtz (x * 10000)
+end
+
+mcl_levelgen.quantize = quantize
+
+local function unquantize (x)
+	return x / 10000.0
+end
+
+mcl_levelgen.unquantize = unquantize
 
 ------------------------------------------------------------------------
 -- R-Tree data structure.
@@ -1499,6 +1525,8 @@ mcl_levelgen.registered_biomes = registered_biomes
 
 function mcl_levelgen.register_biome (name, def)
 	assert (def.temperature, "Biome definition does not define a temperature")
+	assert (def.grass_palette_index,
+		"Biome definition does not define a grass palette index")
 	registered_biomes[name] = def
 end
 
@@ -1522,6 +1550,7 @@ mcl_levelgen.register_biome ("TheVoid", {
 	},
 	has_precipitation = false,
 	temperature = 0.5,
+	grass_palette_index = 0,
 })
 
 local OVERWORLD_DEFAULT_ORES = {
@@ -1633,6 +1662,7 @@ mcl_levelgen.register_biome ("Mesa", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
+	grass_palette_index = 19,
 })
 
 mcl_levelgen.register_biome ("BambooJungle", {
@@ -1685,6 +1715,7 @@ mcl_levelgen.register_biome ("BambooJungle", {
 	},
 	has_precipitation = true,
 	temperature = 0.95,
+	grass_palette_index = 26,
 })
 
 mcl_levelgen.register_biome ("BasaltDeltas", {
@@ -1728,6 +1759,7 @@ mcl_levelgen.register_biome ("BasaltDeltas", {
 		{},
 	},
 	temperature = 2.0,
+	grass_palette_index = 16,
 })
 
 mcl_levelgen.register_biome ("Beach", {
@@ -1774,6 +1806,7 @@ mcl_levelgen.register_biome ("Beach", {
 		},
 	},
 	temperature = 0.8,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("BirchForest", {
@@ -1822,6 +1855,7 @@ mcl_levelgen.register_biome ("BirchForest", {
 	},
 	has_precipitation = true,
 	temperature = 0.6,
+	grass_palette_index = 15,
 })
 
 mcl_levelgen.register_biome ("CherryGrove", {
@@ -1900,6 +1934,7 @@ mcl_levelgen.register_biome ("CherryGrove", {
 	},
 	has_precipitation = true,
 	temperature = 0.500000,
+	grass_palette_index = 11,
 })
 
 mcl_levelgen.register_biome ("ColdOcean", {
@@ -1981,6 +2016,7 @@ mcl_levelgen.register_biome ("ColdOcean", {
 	},
 	has_precipitation = true,
 	temperature = 0.500000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("CrimsonForest", {
@@ -2024,6 +2060,7 @@ mcl_levelgen.register_biome ("CrimsonForest", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
+	grass_palette_index = 1,
 })
 
 mcl_levelgen.register_biome ("DarkForest", {
@@ -2103,6 +2140,7 @@ mcl_levelgen.register_biome ("DarkForest", {
 	},
 	has_precipitation = true,
 	temperature = 0.700000,
+	grass_palette_index = 18,
 })
 
 mcl_levelgen.register_biome ("DeepColdOcean", {
@@ -2184,6 +2222,7 @@ mcl_levelgen.register_biome ("DeepColdOcean", {
 	},
 	has_precipitation = false,
 	temperature = 0.500000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("DeepDark", {
@@ -2260,6 +2299,7 @@ mcl_levelgen.register_biome ("DeepDark", {
 	},
 	has_precipitation = false,
 	temperature = 0.800000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("DeepFrozenOcean", {
@@ -2343,6 +2383,7 @@ mcl_levelgen.register_biome ("DeepFrozenOcean", {
 	has_precipitation = true,
 	temperature = 0.500000,
 	temperature_modifier = "frozen",
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("DeepLukewarmOcean", {
@@ -2424,6 +2465,7 @@ mcl_levelgen.register_biome ("DeepLukewarmOcean", {
 	},
 	has_precipitation = true,
 	temperature = 0.500000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("DeepOcean", {
@@ -2505,6 +2547,7 @@ mcl_levelgen.register_biome ("DeepOcean", {
 	},
 	has_precipitation = true,
 	temperature = 0.500000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("Desert", {
@@ -2588,6 +2631,7 @@ mcl_levelgen.register_biome ("Desert", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
+	grass_palette_index = 17,
 })
 
 mcl_levelgen.register_biome ("DripstoneCaves", {
@@ -2671,6 +2715,7 @@ mcl_levelgen.register_biome ("DripstoneCaves", {
 	},
 	has_precipitation = true,
 	temperature = 0.800000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("EndBarrens", {
@@ -2681,6 +2726,7 @@ mcl_levelgen.register_biome ("EndBarrens", {
 	},
 	has_precipitation = false,
 	temperature = 0.500000,
+	grass_palette_index = 15,
 })
 
 mcl_levelgen.register_biome ("EndHighlands", {
@@ -2705,6 +2751,7 @@ mcl_levelgen.register_biome ("EndHighlands", {
 	},
 	has_precipitation = false,
 	temperature = 0.500000,
+	grass_palette_index = 15,
 })
 
 mcl_levelgen.register_biome ("EndMidlands", {
@@ -2715,6 +2762,7 @@ mcl_levelgen.register_biome ("EndMidlands", {
 	},
 	has_precipitation = false,
 	temperature = 0.500000,
+	grass_palette_index = 15,
 })
 
 mcl_levelgen.register_biome ("ErodedMesa", {
@@ -2794,6 +2842,7 @@ mcl_levelgen.register_biome ("ErodedMesa", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
+	grass_palette_index = 20,
 })
 
 mcl_levelgen.register_biome ("FlowerForest", {
@@ -2873,6 +2922,7 @@ mcl_levelgen.register_biome ("FlowerForest", {
 	},
 	has_precipitation = true,
 	temperature = 0.700000,
+	grass_palette_index = 14,
 })
 
 mcl_levelgen.register_biome ("Forest", {
@@ -2952,6 +3002,7 @@ mcl_levelgen.register_biome ("Forest", {
 	},
 	has_precipitation = true,
 	temperature = 0.700000,
+	grass_palette_index = 13,
 })
 
 mcl_levelgen.register_biome ("FrozenOcean", {
@@ -3035,6 +3086,7 @@ mcl_levelgen.register_biome ("FrozenOcean", {
 	has_precipitation = true,
 	temperature = 0.000000,
 	temperature_modifier = "frozen",
+	grass_palette_index = 2,
 })
 
 mcl_levelgen.register_biome ("FrozenPeaks", {
@@ -3110,6 +3162,7 @@ mcl_levelgen.register_biome ("FrozenPeaks", {
 	},
 	has_precipitation = true,
 	temperature = -0.700000,
+	grass_palette_index = 2,
 })
 
 mcl_levelgen.register_biome ("FrozenRiver", {
@@ -3188,6 +3241,7 @@ mcl_levelgen.register_biome ("FrozenRiver", {
 	},
 	has_precipitation = true,
 	temperature = 0.000000,
+	grass_palette_index = 2,
 })
 
 mcl_levelgen.register_biome ("Grove", {
@@ -3266,6 +3320,7 @@ mcl_levelgen.register_biome ("Grove", {
 	},
 	has_precipitation = true,
 	temperature = -0.200000,
+	grass_palette_index = 2,
 })
 
 mcl_levelgen.register_biome ("IceSpikes", {
@@ -3347,6 +3402,7 @@ mcl_levelgen.register_biome ("IceSpikes", {
 	},
 	has_precipitation = true,
 	temperature = 0.000000,
+	grass_palette_index = 2,
 })
 
 mcl_levelgen.register_biome ("JaggedPeaks", {
@@ -3422,6 +3478,7 @@ mcl_levelgen.register_biome ("JaggedPeaks", {
 	},
 	has_precipitation = true,
 	temperature = -0.700000,
+	grass_palette_index = 2,
 })
 
 mcl_levelgen.register_biome ("Jungle", {
@@ -3503,6 +3560,7 @@ mcl_levelgen.register_biome ("Jungle", {
 	},
 	has_precipitation = true,
 	temperature = 0.950000,
+	grass_palette_index = 24,
 })
 
 mcl_levelgen.register_biome ("LukewarmOcean", {
@@ -3583,6 +3641,7 @@ mcl_levelgen.register_biome ("LukewarmOcean", {
 	},
 	has_precipitation = true,
 	temperature = 0.500000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("LushCaves", {
@@ -3663,6 +3722,7 @@ mcl_levelgen.register_biome ("LushCaves", {
 	},
 	has_precipitation = true,
 	temperature = 0.500000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("MangroveSwamp", {
@@ -3740,6 +3800,7 @@ mcl_levelgen.register_biome ("MangroveSwamp", {
 	},
 	has_precipitation = true,
 	temperature = 0.800000,
+	grass_palette_index = 27,
 })
 
 mcl_levelgen.register_biome ("Meadow", {
@@ -3818,6 +3879,7 @@ mcl_levelgen.register_biome ("Meadow", {
 	},
 	has_precipitation = true,
 	temperature = 0.500000,
+	grass_palette_index = 30,
 })
 
 mcl_levelgen.register_biome ("MushroomIslands", {
@@ -3894,6 +3956,7 @@ mcl_levelgen.register_biome ("MushroomIslands", {
 	},
 	has_precipitation = true,
 	temperature = 0.900000,
+	grass_palette_index = 29,
 })
 
 mcl_levelgen.register_biome ("NetherWastes", {
@@ -3937,6 +4000,7 @@ mcl_levelgen.register_biome ("NetherWastes", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
+	grass_palette_index = 17,
 })
 
 mcl_levelgen.register_biome ("Ocean", {
@@ -4018,6 +4082,7 @@ mcl_levelgen.register_biome ("Ocean", {
 	},
 	has_precipitation = true,
 	temperature = 0.500000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("OldGrowthBirchForest", {
@@ -4097,6 +4162,7 @@ mcl_levelgen.register_biome ("OldGrowthBirchForest", {
 	},
 	has_precipitation = true,
 	temperature = 0.600000,
+	grass_palette_index = 15,
 })
 
 mcl_levelgen.register_biome ("OldGrowthPineTaiga", {
@@ -4181,6 +4247,7 @@ mcl_levelgen.register_biome ("OldGrowthPineTaiga", {
 	},
 	has_precipitation = true,
 	temperature = 0.300000,
+	grass_palette_index = 31,
 })
 
 mcl_levelgen.register_biome ("OldGrowthSpruceTaiga", {
@@ -4265,6 +4332,7 @@ mcl_levelgen.register_biome ("OldGrowthSpruceTaiga", {
 	},
 	has_precipitation = true,
 	temperature = 0.250000,
+	grass_palette_index = 12,
 })
 
 mcl_levelgen.register_biome ("Plains", {
@@ -4344,6 +4412,7 @@ mcl_levelgen.register_biome ("Plains", {
 	},
 	has_precipitation = true,
 	temperature = 0.800000,
+	grass_palette_index = 11,
 })
 
 mcl_levelgen.register_biome ("River", {
@@ -4423,6 +4492,7 @@ mcl_levelgen.register_biome ("River", {
 	},
 	has_precipitation = true,
 	temperature = 0.500000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("Savannah", {
@@ -4502,6 +4572,7 @@ mcl_levelgen.register_biome ("Savannah", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
+	grass_palette_index = 1,
 })
 
 mcl_levelgen.register_biome ("SavannahPlateau", {
@@ -4581,6 +4652,7 @@ mcl_levelgen.register_biome ("SavannahPlateau", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
+	grass_palette_index = 1,
 })
 
 mcl_levelgen.register_biome ("SmallEndIslands", {
@@ -4594,6 +4666,7 @@ mcl_levelgen.register_biome ("SmallEndIslands", {
 	},
 	has_precipitation = false,
 	temperature = 0.500000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("SnowyBeach", {
@@ -4671,6 +4744,7 @@ mcl_levelgen.register_biome ("SnowyBeach", {
 	},
 	has_precipitation = true,
 	temperature = 0.050000,
+	grass_palette_index = 32,
 })
 
 mcl_levelgen.register_biome ("SnowyPlains", {
@@ -4749,6 +4823,7 @@ mcl_levelgen.register_biome ("SnowyPlains", {
 	},
 	has_precipitation = true,
 	temperature = 0.000000,
+	grass_palette_index = 10,
 })
 
 mcl_levelgen.register_biome ("SnowySlopes", {
@@ -4826,6 +4901,7 @@ mcl_levelgen.register_biome ("SnowySlopes", {
 	},
 	has_precipitation = true,
 	temperature = -0.300000,
+	grass_palette_index = 10,
 })
 
 mcl_levelgen.register_biome ("SnowyTaiga", {
@@ -4906,6 +4982,7 @@ mcl_levelgen.register_biome ("SnowyTaiga", {
 	},
 	has_precipitation = true,
 	temperature = -0.500000,
+	grass_palette_index = 10,
 })
 
 mcl_levelgen.register_biome ("SoulSandValley", {
@@ -4949,6 +5026,7 @@ mcl_levelgen.register_biome ("SoulSandValley", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
+	grass_palette_index = 17,
 })
 
 mcl_levelgen.register_biome ("SparseJungle", {
@@ -5029,6 +5107,7 @@ mcl_levelgen.register_biome ("SparseJungle", {
 	},
 	has_precipitation = true,
 	temperature = 0.950000,
+	grass_palette_index = 26,
 })
 
 mcl_levelgen.register_biome ("StonyPeaks", {
@@ -5103,6 +5182,7 @@ mcl_levelgen.register_biome ("StonyPeaks", {
 	},
 	has_precipitation = true,
 	temperature = 1.000000,
+	grass_palette_index = 33,
 })
 
 mcl_levelgen.register_biome ("StonyShore", {
@@ -5180,6 +5260,7 @@ mcl_levelgen.register_biome ("StonyShore", {
 	},
 	has_precipitation = true,
 	temperature = 0.200000,
+	grass_palette_index = 34,
 })
 
 mcl_levelgen.register_biome ("SunflowerPlains", {
@@ -5260,6 +5341,7 @@ mcl_levelgen.register_biome ("SunflowerPlains", {
 	},
 	has_precipitation = true,
 	temperature = 0.800000,
+	grass_palette_index = 11,
 })
 
 mcl_levelgen.register_biome ("Swamp", {
@@ -5343,6 +5425,7 @@ mcl_levelgen.register_biome ("Swamp", {
 	},
 	has_precipitation = true,
 	temperature = 0.800000,
+	grass_palette_index = 28,
 })
 
 mcl_levelgen.register_biome ("Taiga", {
@@ -5423,6 +5506,7 @@ mcl_levelgen.register_biome ("Taiga", {
 	},
 	has_precipitation = true,
 	temperature = 0.250000,
+	grass_palette_index = 12,
 })
 
 mcl_levelgen.register_biome ("TheEnd", {
@@ -5440,6 +5524,7 @@ mcl_levelgen.register_biome ("TheEnd", {
 	},
 	has_precipitation = false,
 	temperature = 0.500000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("WarmOcean", {
@@ -5521,6 +5606,7 @@ mcl_levelgen.register_biome ("WarmOcean", {
 	},
 	has_precipitation = true,
 	temperature = 0.500000,
+	grass_palette_index = 0,
 })
 
 mcl_levelgen.register_biome ("WarpedForest", {
@@ -5566,6 +5652,7 @@ mcl_levelgen.register_biome ("WarpedForest", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
+	grass_palette_index = 17,
 })
 
 mcl_levelgen.register_biome ("WindsweptForest", {
@@ -5647,6 +5734,7 @@ mcl_levelgen.register_biome ("WindsweptForest", {
 	},
 	has_precipitation = true,
 	temperature = 0.200000,
+	grass_palette_index = 34,
 })
 
 mcl_levelgen.register_biome ("WindsweptGravellyHills", {
@@ -5728,6 +5816,7 @@ mcl_levelgen.register_biome ("WindsweptGravellyHills", {
 	},
 	has_precipitation = true,
 	temperature = 0.200000,
+	grass_palette_index = 34,
 })
 
 mcl_levelgen.register_biome ("WindsweptHills", {
@@ -5809,6 +5898,7 @@ mcl_levelgen.register_biome ("WindsweptHills", {
 	},
 	has_precipitation = true,
 	temperature = 0.200000,
+	grass_palette_index = 34,
 })
 
 mcl_levelgen.register_biome ("WindsweptSavannah", {
@@ -5887,6 +5977,7 @@ mcl_levelgen.register_biome ("WindsweptSavannah", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
+	grass_palette_index = 34,
 })
 
 mcl_levelgen.register_biome ("WoodedMesa", {
@@ -5967,6 +6058,7 @@ mcl_levelgen.register_biome ("WoodedMesa", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
+	grass_palette_index = 19,
 })
 
 if false then
@@ -6042,7 +6134,7 @@ end
 
 local seed = mcl_levelgen.ull (0, 1234)
 local rng = mcl_levelgen.jvm_random (seed)
--- N.B: Not to be confused with the `temperature' worldgen noise.
+-- N.B: Not to be confused with the `temperature' level generation noise.
 local TEMPERATURE_NOISE
 	= mcl_levelgen.make_simplex_noise (rng, { 0, })
 local seed = mcl_levelgen.ull (0, 3456)
@@ -6139,9 +6231,9 @@ local function get_temperature_in_biome (biome, x, y, z)
 
 	-- Apply temperature modifier.
 	if biome.temperature_modifier == "frozen" then
-		local temp = FROZEN_BIOME_NOISE (x * 0.05, z * 0.05)
+		local temp_offset = FROZEN_BIOME_NOISE (x * 0.05, z * 0.05)
 		local selector = BIOME_SELECTOR_NOISE (x * 0.2, z * 0.2)
-		if temp + selector < 0.3 then
+		if temp_offset + selector < 0.3 then
 			local selector1 = BIOME_SELECTOR_NOISE (x * 0.09, z * 0.09)
 			if selector1 < 0.8 then
 				temp = 0.2
@@ -6172,3 +6264,98 @@ local function is_temp_rainy (biome, x, y, z)
 end
 
 mcl_levelgen.is_temp_rainy = is_temp_rainy
+
+------------------------------------------------------------------------
+-- Biome position randomization.
+------------------------------------------------------------------------
+
+local tmp, tmp1 = mcl_levelgen.ull (0, 0), mcl_levelgen.ull (0, 0)
+local lcj_next = mcl_levelgen.lcj_next
+local extkull = mcl_levelgen.extkull
+local ashrull = mcl_levelgen.ashrull
+
+local function munge_distance (seed, tqx, tqy, tqz, tpx, tpy, tpz)
+	tmp[1], tmp[2] = seed[1], seed[2]
+	local tmp1 = tmp1
+	extkull (tmp1, tqx)
+	lcj_next (tmp, tmp1)
+	extkull (tmp1, tqy)
+	lcj_next (tmp, tmp1)
+	extkull (tmp1, tqz)
+	lcj_next (tmp, tmp1)
+	extkull (tmp1, tqx)
+	lcj_next (tmp, tmp1)
+	extkull (tmp1, tqy)
+	lcj_next (tmp, tmp1)
+	extkull (tmp1, tqz)
+	lcj_next (tmp, tmp1)
+	tmp1[1], tmp1[2] = tmp[1], tmp[2]
+	ashrull (tmp1, 24)
+	local bp = band (tmp1[1], 1023) / 1024.0
+	local dx = (bp - 0.5) * 0.9
+
+	lcj_next (tmp, seed)
+	tmp1[1], tmp1[2] = tmp[1], tmp[2]
+	ashrull (tmp1, 24)
+	local bp = band (tmp1[1], 1023) / 1024.0
+	local dy = (bp - 0.5) * 0.9
+
+	lcj_next (tmp, seed)
+	tmp1[1], tmp1[2] = tmp[1], tmp[2]
+	ashrull (tmp1, 24)
+	local bp = band (tmp1[1], 1023) / 1024.0
+	local dz = (bp - 0.5) * 0.9
+	return (tpz + dz) * (tpz + dz)
+		+ (tpy + dy) * (tpy + dy)
+		+ (tpx + dx) * (tpx + dx)
+end
+
+-- Return a displaced version of the quart position of the block
+-- position X, Y, Z.  This position is lightly randomized and is not
+-- consulted during biome generation, only when accessing generated
+-- biome data.
+--
+-- Value is guaranteed to fall within one QuartBlock's distance of X,
+-- Y, Z's absolute position on each axis.
+
+function mcl_levelgen.munge_biome_coords (seed, x, y, z)
+	x = x - 2
+	y = y - 2
+	z = z - 2
+	local qx = arshift (x, 2)
+	local qy = arshift (y, 2)
+	local qz = arshift (z, 2)
+	local progress_x = band (x, 3) / 4.0
+	local progress_y = band (y, 3) / 4.0
+	local progress_z = band (z, 3) / 4.0
+
+	local nearest_transform = 0
+	local max_distance = huge
+
+	for i = 0, 7 do
+		local dx = rshift (band (i, 4), 2)
+		local dy = rshift (band (i, 2), 1)
+		local dz = band (i, 1)
+		local dist = munge_distance (seed, qx + dx, qy + dy,
+					     qz + dz, progress_x - dx,
+					     progress_y - dy,
+					     progress_z - dz)
+		if max_distance > dist then
+			nearest_transform = i
+			max_distance = dist
+		end
+	end
+	
+	local dx = rshift (band (nearest_transform, 4), 2)
+	local dy = rshift (band (nearest_transform, 2), 1)
+	local dz = band (nearest_transform, 1)
+	return qx + dx, qy + dy, qz + dz
+end
+
+-- Convert a level seed SEED into a biome seed and return the result.
+
+function mcl_levelgen.get_biome_seed (seed)
+	local tmp = mcl_levelgen.ull (0, 0)
+	mcl_levelgen.biomeseedull (tmp, seed)
+	return tmp
+end

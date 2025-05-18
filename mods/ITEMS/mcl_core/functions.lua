@@ -178,14 +178,23 @@ core.register_abm({
 local grass_spread_randomizer = PseudoRandom(core.get_mapgen_setting("seed"))
 
 function mcl_core.get_grass_palette_index(pos)
-	local biome_data = core.get_biome_data(pos)
 	local index = 0
-	if biome_data then
-		local biome = biome_data.biome
-		local biome_name = core.get_biome_name(biome)
-		local reg_biome = core.registered_biomes[biome_name]
-		if reg_biome then
-			index = reg_biome._mcl_palette_index
+	if mcl_levelgen.levelgen_enabled then
+		local biome = mcl_levelgen.get_biome (pos)
+		if not biome then
+			return nil
+		end
+		local biome_data = mcl_levelgen.registered_biomes[biome]
+		return biome_data.grass_palette_index
+	else
+		local biome_data = core.get_biome_data(pos)
+		if biome_data then
+			local biome = biome_data.biome
+			local biome_name = core.get_biome_name(biome)
+			local reg_biome = core.registered_biomes[biome_name]
+			if reg_biome then
+				index = reg_biome._mcl_palette_index
+			end
 		end
 	end
 	return index
@@ -193,7 +202,11 @@ end
 
 -- Return appropriate grass block node for pos
 function mcl_core.get_grass_block_type(pos)
-	return {name = "mcl_core:dirt_with_grass", param2 = mcl_core.get_grass_palette_index(pos)}
+	local idx = mcl_core.get_grass_palette_index(pos)
+	if idx then
+		return {name = "mcl_core:dirt_with_grass", param2 = idx}
+	end
+	return nil
 end
 
 ------------------------------

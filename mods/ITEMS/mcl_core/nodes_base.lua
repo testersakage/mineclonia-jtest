@@ -365,7 +365,11 @@ core.register_node("mcl_core:dirt_with_grass", {
 		local node = core.get_node(pos)
 		if node.param2 == 0 then
 			local new_node = mcl_core.get_grass_block_type(pos)
-			if new_node.param2 ~= 0 or new_node.name ~= "mcl_core:dirt_with_grass" then
+			if not new_node then
+				return mcl_core.on_snowable_construct(pos)
+			end
+			if new_node.param2 ~= 0
+				or new_node.name ~= "mcl_core:dirt_with_grass" then
 				core.set_node(pos, new_node)
 			end
 		end
