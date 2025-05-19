@@ -956,6 +956,22 @@ function mcl_levelgen.xoroshiro (seedlo, seedhi)
 				hi_seed[2], hi_seed[1] = 1779033703, 4089235721
 			end
 		end,
+		reseeding_data = {
+			false, false, false, false,
+			seedlo, seedhi,
+		},
+		reseed = function (self, ull)
+			local data = self.reseeding_data
+			local lo_seed = data[5]
+			local hi_seed = data[6]
+			seed_from_ull (lo_seed, hi_seed, ull)
+			mix64 (lo_seed)
+			mix64 (hi_seed)
+			if zeroull (lo_seed) and zeroull (hi_seed) then
+				seedlo[2], seedlo[1] = 0x9e3779b9, 0x7f4a7c15
+				hi_seed[2], hi_seed[1] = 1779033703, 4089235721
+			end
+		end,
 	}, seedlo, seedhi
 end
 
@@ -975,6 +991,20 @@ if true then
 		local value = reseedable:next_long ()
 		assert (equalull (value, factory_value))
 	end
+
+	local seed1 = ull (0, 0)
+	local seed2 = ull (0, 0)
+	local x = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+	stringtoull (seed1, "3948575739")
+	stringtoull (seed2, "18413248036093821064")
+	x:reseed (seed1)
+	assert (tostringull (x:next_long ()) == "1166925898593515289")
+	assert (tostringull (x:next_long ()) == "3959461064507847451")
+	assert (tostringull (x:next_long ()) == "12831638853348124801")
+	x:reseed (seed2)
+	assert (tostringull (x:next_long ()) == "17696910518188760863")
+	assert (tostringull (x:next_long ()) == "4876660131927854451")
+	assert (tostringull (x:next_long ()) == "2153688626528828990")
 end
 
 if false then
@@ -1151,6 +1181,16 @@ function mcl_levelgen.jvm_random (seed)
 			xorull (storage, MULTIPLIER)
 			andull (storage, SEED_MASK)
 		end,
+		reseeding_data = {
+			false, seed_storage,
+		},
+		reseed = function (self, seed)
+			local storage = self.reseeding_data[2]
+			storage[1] = seed[1]
+			storage[2] = seed[2]
+			xorull (storage, MULTIPLIER)
+			andull (storage, SEED_MASK)
+		end,
 	}, seed_storage
 end
 
@@ -1169,6 +1209,20 @@ if true then
 		local value = reseedable:next_long ()
 		assert (equalull (value, factory_value))
 	end
+
+	local x = mcl_levelgen.jvm_random (extull (0))
+	local seed1 = ull (0, 0)
+	local seed2 = ull (0, 0)
+	stringtoull (seed1, "3948575739")
+	stringtoull (seed2, "18413248036093821064")
+	x:reseed (seed1)
+	assert (tostringull (x:next_long ()) == "11919139927092448892")
+	assert (tostringull (x:next_long ()) == "13835344951310129447")
+	assert (tostringull (x:next_long ()) == "13590812842237688474")
+	x:reseed (seed2)
+	assert (tostringull (x:next_long ()) == "5543589759440410229")
+	assert (tostringull (x:next_long ()) == "4799685316607659139")
+	assert (tostringull (x:next_long ()) == "12852779243211759225")
 end
 
 
@@ -1333,4 +1387,43 @@ if true then
 	biomeseedull (seed2, seed2)
 	assert (tostringull (seed1) == "17623870130031917223")
 	assert (tostringull (seed2) == "6736552460589820823")
+end
+
+------------------------------------------------------------------------
+-- Level decoration and carver randomization.
+------------------------------------------------------------------------
+
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1
+-- /net/minecraft/util/math/random/ChunkRandom.html#setCarverSeed(long,int,int)
+
+-- Temporaries for set_carver_seed.
+local tmp, cxu, czu = ull (0, 0), ull (0, 0), ull (0, 0)
+
+function mcl_levelgen.set_carver_seed (rng, seed, cx, cz)
+	rng:reseed (seed)
+
+	local a = rng:next_long ()
+	tmp[1], tmp[2], a = a[1], a[2], tmp
+	local b = rng:next_long ()
+
+	-- (long) cx * a ^ (long) cz * b ^ seed
+	extkull (cxu, cx)
+	extkull (czu, cz)
+	mul2ull (cxu, a)
+	mul2ull (czu, b)
+	xorull (cxu, czu)
+	xorull (cxu, seed)
+	rng:reseed (cxu)
+end
+
+if true then
+	local lcg = mcl_levelgen.jvm_random (ull (0, 0))
+	mcl_levelgen.set_carver_seed (lcg, extull (304853), 25, 45)
+	assert (lcg:next_within (5000) == 2936)
+	assert (lcg:next_within (5000) == 4880)
+	assert (lcg:next_within (5000) == 4375)
+	mcl_levelgen.set_carver_seed (lcg, extull (304853), -2503, -1774)
+	assert (lcg:next_within (5000) == 4611)
+	assert (lcg:next_within (5000) == 2202)
+	assert (lcg:next_within (5000) == 4126)
 end

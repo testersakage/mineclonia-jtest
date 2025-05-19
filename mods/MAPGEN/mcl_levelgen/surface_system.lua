@@ -239,9 +239,13 @@ local temperature = table.merge (surface_condition, {
 })
 local is_temp_snowy = mcl_levelgen.is_temp_snowy
 
-local function assemble_temperature (val, condition)
-	local str = "is_temp_snowy (ctx[BIOME_NAME], ctx[X], ctx[Y], ctx[Z])"
-	return string.format ("%s = %s", val, str)
+local function assemble_temperature (val, condition, is_temp_snowy)
+	local str = " (ctx[BIOME_NAME], ctx[X], ctx[Y], ctx[Z])"
+	return string.format ("%s = %s %s", val, is_temp_snowy, str)
+end
+
+local function closures_for_temperature (cond)
+	return { is_temp_snowy, }
 end
 
 temperature = make_surface_condition (temperature)
@@ -629,8 +633,8 @@ function mcl_levelgen.compile_surface_rule (rule, biome, system)
 			table.insert (stmts, { "callproc", ret, assemble_steep,
 					       closures_for_steep, condition, })
 		elseif condition.name == "mcl_levelgen:temperature" then
-			table.insert (stmts, { "callproc", ret, assemble_temperature, nil,
-					       condition, })
+			table.insert (stmts, { "callproc", ret, assemble_temperature,
+					       closures_for_temperature, condition, })
 		elseif condition.name == "mcl_levelgen:biome" then
 			assert (biome)
 			if biome ~= condition.biome
@@ -758,8 +762,8 @@ function mcl_levelgen.compile_surface_rule (rule, biome, system)
 					str = string.format ("val%04d = 0x%x -- %s",
 							     stmt[2], encoded, name)
 				else
-					str = string.format ("val%04d = \"%s\"", stmt[2],
-							     stmt[3])
+					str = string.format ("val%04d = 0x%x -- %s", stmt[2],
+							     105030, stmt[3])
 				end
 			elseif stmt[1] == "move" then
 				str = string.format ("val%04d = val%04d", stmt[2],
@@ -1634,7 +1638,10 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 	local context = context
 	local gen_min = y - level_min
 	local gen_max = gen_min + chunksize - 1
-	gen_min = mathmax (gen_min, 0)
+
+	-- Generate one layer beneath the origin Y position to
+	-- guarantee that carvers may detect exposed dirt.
+	gen_min = mathmax (gen_min - 1, 0)
 
 	context[HEIGHTMAP] = heightmap
 	for dx = 0, chunksize - 1 do
@@ -1741,4 +1748,33 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 			end
 		end
 	end
+end
+
+local carver_biomes
+local carver_bx, carver_bz, carver_chunksize, carver_terrain
+
+function surface_system:initialize_for_carver (biomes, heightmap, bx, bz, chunksize,
+					       terrain)
+	carver_biomes = biomes
+	carver_bx = bx
+	carver_bz = bz
+	carver_chunksize = toquart (chunksize)
+	carver_terrain = terrain
+	context[HEIGHTMAP] = heightmap
+end
+
+function surface_system:evaluate_for_carver (x, y, z, submerged)
+	local level_min = self.min_y
+	local level_height_chunk = toquart (self.level_height)
+	local ix, iy, iz = munge_biome_index (x, y, z, level_min,
+					      carver_bx, carver_bz)
+	local idx = bindex (ix, iy, iz, carver_chunksize,
+			    level_height_chunk,
+			    carver_chunksize)
+	local biome = carver_biomes[idx]
+	local fn = self.rule_fns[biome]
+	update_surface_ctx (self, context, x, z, carver_terrain)
+	update_surface_ctx_y (self, context, 1, 1,
+			      submerged and y + 1 or -huge, y, biome)
+	return fn (context, self)
 end
