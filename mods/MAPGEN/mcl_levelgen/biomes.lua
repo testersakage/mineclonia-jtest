@@ -80,10 +80,6 @@ local function quantize (x)
 	return rtz (x * 10000)
 end
 
-local function unquantize (x)
-	return x / 10000.0
-end
-
 local function build_biome_extents (temperature_min,
 				    temperature_max,
 				    humidity_min,
