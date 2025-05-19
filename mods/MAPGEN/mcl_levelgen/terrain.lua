@@ -658,10 +658,15 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	-- Reset preliminary surface level cache.
 	clear_surface_level_cache (self)
 
-	-- Process surface systems.
+	-- Process surface systems and carvers.
 	if biomes then
 		local system = self.surface_system
 		system:post_process (self, x, y, z, gn, map, chunksize, biomes)
+
+		-- local clock = os.clock ()
+		mcl_levelgen.carve_terrain (self.preset, gn, biomes, map,
+					    x, y, z, chunksize, self)
+		-- print (string.format ("%.2f", (os.clock () - clock) * 1000))
 	end
 
 	-- Write the section that intersects the output area to CIDs

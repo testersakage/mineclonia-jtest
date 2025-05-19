@@ -23,6 +23,7 @@ dofile (prefix .. "/biomegen.lua")
 dofile (prefix .. "/aquifer.lua")
 dofile (prefix .. "/surface_system.lua")
 dofile (prefix .. "/surface_presets.lua")
+dofile (prefix .. "/carvers.lua")
 
 -- Is this file being loaded into Minetest?
 if core and core.get_current_modname then

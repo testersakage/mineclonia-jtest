@@ -137,7 +137,7 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 	local anchor_swamp_water_begin = y_above_test (62, 0)
 	local anchor_63_abs = y_above_test (63, 0)
 	local water_offset = water_above_test (-1, 0)
-	local water_absence = water_surface_test (0, 0)
+	local water_absence = water_above_test (0, 0)
 	local near_surface = water_surface_test (-6, -1)
 	local hole = mcl_levelgen.hole_cond ()
 	local is_frozen_ocean = biome ("FrozenOcean", "DeepFrozenOcean")
