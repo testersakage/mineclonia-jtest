@@ -226,3 +226,13 @@ mcl_info.register_debug_field("Location", {
 		return string.format("Void: x:%.1f y:%.1f z:%.1f", pos.x, pos.y, pos.z)
 	end
 })
+
+mcl_info.register_debug_field ("Location (Level generator)", {
+	level = 3,
+	func = function (_, pos)
+		local pos = mcl_levelgen.conv_pos (pos)
+		return vector.to_string (pos)
+			.. " Level generator chunk: "
+			.. vector.to_string (vector.divide (pos, 16):apply (math.floor))
+	end,
+})
