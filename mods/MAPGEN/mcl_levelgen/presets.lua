@@ -1576,7 +1576,7 @@ local function initialize_overworld_biomes (preset, large_biomes,
 	-- Strip caching or interpolating wrappers excepting cache2ds;
 	-- used to optimize depth computation.
 	local index_cache, index = {}, nil
-	local x_origin, z_origin, width_x, width_z
+	local x_origin, z_origin, width_z
 
 	local biome_cache_2d = {}
 	function biome_cache_2d:__call (x, y, z, blender)
@@ -1693,7 +1693,6 @@ local function initialize_overworld_biomes (preset, large_biomes,
 		end
 		x_origin = xorigin
 		z_origin = zorigin
-		width_x = wx
 		width_z = wz
 	end
 

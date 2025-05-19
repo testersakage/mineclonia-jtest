@@ -27,7 +27,6 @@ function mcl_levelgen.generate_biomes (preset, biomes, x, y, z, x1, y1, z1)
 	local dx = x1 - x + 3
 	local dy = y1 - y + 3
 	local dz = z1 - z + 3
-	local max = 0
 	preset:index_biomes_begin (dx, dz, x - 1, z - 1)
 
 	for xpos = x - 1, x1 + 1 do
@@ -163,7 +162,6 @@ local arshift = bit.arshift
 local floor = math.floor
 local mod_storage = core.get_mod_storage ()
 local v = vector.zero ()
-local toquart = mcl_levelgen.toquart
 local conv_pos
 local OVERWORLD_OFFSET, seed
 local munge_biome_coords = mcl_levelgen.munge_biome_coords
