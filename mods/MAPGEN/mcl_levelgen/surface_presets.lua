@@ -205,7 +205,8 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 					       if_true (surface_threshold (1.0),
 							stone),
 					       if_true (surface_threshold (-1.0),
-							dirt))),
+							dirt),
+					       stone_surface)),
 			    if_true (biome ("MangroveSwamp"), mud),
 			    dirt)
 	local frozen_peaks_and_floor
