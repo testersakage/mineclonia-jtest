@@ -15,7 +15,7 @@ core.register_node("mcl_deepslate:deepslate", {
 	tiles = { "mcl_deepslate_top.png", "mcl_deepslate_top.png", "mcl_deepslate.png" },
 	paramtype2 = "facedir",
 	on_place = mcl_util.rotate_axis,
-	groups = { pickaxey = 1, stone = 1, building_block = 1, material_stone = 1, converts_to_moss = 1 },
+	groups = { pickaxey = 1, stone = 1, building_block = 1, material_stone = 1, converts_to_moss = 1, overworld_carvable = 1 },
 	drop = cobble,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_rotate = screwdriver.rotate_3way,

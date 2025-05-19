@@ -325,7 +325,7 @@ core.register_node("mcl_mangrove:mangrove_mud_roots", {
 		"mcl_mud.png^mcl_mangrove_roots_side.png",
 		"mcl_mud.png^mcl_mangrove_roots_side.png",
 	},
-	groups = {handy=1, shovely=1, axey=1, soil_fungus=1, building_block=1},
+	groups = {handy=1, shovely=1, axey=1, soil_fungus=1, building_block=1, overworld_carvable=1},
 	sounds = mcl_sounds.node_sound_sand_defaults(),
 	_mcl_hardness = 0.7,
 })

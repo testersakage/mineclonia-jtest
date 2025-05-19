@@ -6,7 +6,11 @@
 
 if core.global_exists ("jit") then
 	jit.opt.start ("maxmcode=16777216", "maxtrace=8000",
-		       "loopunroll=15", "maxside=1000")
+		       -- Just large enough that loops employing RNGs
+		       -- can be unrolled and compiled but the
+		       -- fix_distances loop in pick_grid_positions is
+		       -- not.
+		       "loopunroll=45", "maxside=1000")
 	-- require ("jit.dump").start ("+biraxmT", "server_perf.txt")
 	-- local profile = require ("jit.p")
 	-- profile.start ("fz")
@@ -14,6 +18,10 @@ end
 
 local seed = mcl_levelgen.seed
 local overworld_preset = mcl_levelgen.make_overworld_preset (seed)
+
+-- Load carvers into biome descriptions.
+mcl_levelgen.load_carvers ()
+
 local mt_chunksize = math.max (1, tonumber (core.get_mapgen_setting ("chunksize")) or 5)
 local chunksize = mt_chunksize * 16
 local overworld_terrain
@@ -29,6 +37,9 @@ local function index (x, y, z)
 end
 
 local floor = math.floor
+
+-- local profile = require ("jit.p")
+-- profile.start ("fv")
 
 core.register_on_generated (function (vmanip, minp, maxp, _)
 	-- local clock = os.clock ()
