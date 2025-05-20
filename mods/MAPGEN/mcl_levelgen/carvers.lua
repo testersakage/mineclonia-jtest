@@ -120,7 +120,8 @@ local function carve_block (self, x, y, z, dx, dy, dz, dirt_exposed_p)
 			if cid == cid_dirt then
 				local system = surface_system
 				local submerged	= decode_node (value) ~= cid_air
-				local value = system:evaluate_for_carver (x, y, z, submerged)
+				local value = system:evaluate_for_carver (x, y - 1, z,
+									  submerged)
 				if value then
 					nodes[idx] = value
 				end
