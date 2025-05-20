@@ -45,7 +45,7 @@ local level_preset_template = {
 	initial_density_without_jaggedness = nil,
 	final_density = nil,
 	vein_toggle = nil,
-	vein_riged = nil,
+	vein_ridged = nil,
 	vein_gap = nil,
 	registry = {},
 
@@ -1830,6 +1830,20 @@ end
 
 mcl_levelgen.check_overworld_at_extrema = check_overworld_at_extrema
 
+local ORE_VEIN_COPPER_MIN = 0
+local ORE_VEIN_COPPER_MAX = 50
+local ORE_VEIN_IRON_MIN = -60
+local ORE_VEIN_IRON_MAX = -8
+local ORE_VEIN_MAX_HEIGHT = 50 -- Copper.
+local ORE_VEIN_MIN_HEIGHT = -60 -- Iron.
+
+mcl_levelgen.ORE_VEIN_COPPER_MIN = ORE_VEIN_COPPER_MIN
+mcl_levelgen.ORE_VEIN_COPPER_MAX = ORE_VEIN_COPPER_MAX
+mcl_levelgen.ORE_VEIN_IRON_MIN = ORE_VEIN_IRON_MIN
+mcl_levelgen.ORE_VEIN_IRON_MAX = ORE_VEIN_IRON_MAX
+mcl_levelgen.ORE_VEIN_MIN_HEIGHT = ORE_VEIN_MIN_HEIGHT
+mcl_levelgen.ORE_VEIN_MAX_HEIGHT = ORE_VEIN_MAX_HEIGHT
+
 local function initialize_overworld_generation (params, large_biomes, amplified)
 	local registry, noises = params.registry, params.noises
 	params.barrier_noise = noise_func (noises.aquifer_barrier, 1.0, 0.5)
@@ -1875,6 +1889,24 @@ local function initialize_overworld_generation (params, large_biomes, amplified)
 	local tapered_initial
 		= check_overworld_at_extrema (scaled_offset, amplified)
 	params.initial_density_without_jaggedness = tapered_initial
+
+	local vein_toggle
+		= noodle_interpolation (registry.y,
+					noise_func (params.noises.ore_veininess, 1.5, 1.5),
+					ORE_VEIN_MIN_HEIGHT, ORE_VEIN_MAX_HEIGHT, 0)
+	local vein_a
+		= noodle_interpolation (registry.y,
+					noise_func (params.noises.ore_vein_a, 4.0, 4.0),
+					ORE_VEIN_MIN_HEIGHT, ORE_VEIN_MAX_HEIGHT, 0)
+	local vein_b
+		= noodle_interpolation (registry.y,
+					noise_func (params.noises.ore_vein_b, 4.0, 4.0),
+					ORE_VEIN_MIN_HEIGHT, ORE_VEIN_MAX_HEIGHT, 0)
+	local vein_ridged = add (const (-0.08), max (dabs (vein_a), dabs (vein_b)))
+	local vein_gap = noise_func (params.noises.ore_gap, 1.0, 1.0)
+	params.vein_toggle = vein_toggle
+	params.vein_ridged = vein_ridged
+	params.vein_gap = vein_gap
 end
 
 -- Overworld preset functions.
@@ -1888,6 +1920,7 @@ local overworld_preset_template = table.merge (level_preset_template, {
 	noise_cell_width = toblock (1),
 	noise_cell_height = toblock (2),
 	aquifers_enabled = true,
+	ore_veins_enabled = true,
 })
 
 function overworld_preset_template:index_biomes_block (x, y, z)

@@ -93,8 +93,7 @@ end
 
 -- local root_chunk
 
-local function carve_block (self, x, y, z, dx, dy, dz, nodes, chunksize,
-			    level_height, dirt_exposed_p)
+local function carve_block (self, x, y, z, dx, dy, dz, dirt_exposed_p)
 	local idx = (dx * level_height + dy) * chunksize + dz + 1
 	-- if dx + chunk_x == 10979 and dz + chunk_z == -5809 then
 	-- 	nodes[idx] = encode_node (core.get_content_id ("mcl_core:glass"), 0)
@@ -110,7 +109,7 @@ local function carve_block (self, x, y, z, dx, dy, dz, nodes, chunksize,
 	end
 
 	if not self.replaceable[cid] then
-		return false, dirt_exposed_p
+		return dirt_exposed_p
 	end
 
 	local value = get_block (self, x, y, z)
@@ -130,9 +129,9 @@ local function carve_block (self, x, y, z, dx, dy, dz, nodes, chunksize,
 
 		-- TODO: avoid processing the same position twice.
 		nodes[idx] = value
-		return true, dirt_exposed_p
+		return dirt_exposed_p
 	end
-	return false, dirt_exposed_p
+	return dirt_exposed_p
 	-- nodes[idx] = encode_node (cid_air, 0)
 	-- return true, dirt_exposed_p
 end
@@ -141,36 +140,34 @@ local mathmax = math.max
 local mathmin = math.min
 local floor = math.floor
 
-local function carve (self, x, y, z, width, height, nodes, chunksize,
-		      level_min, level_height, bypass_p)
+local function carve (self, x, y, z, width, height, bypass_p)
 	-- Test whether a rectangle of (16 + WIDTH * 2.0) * 2 x (16 +
 	-- WIDTH * 2.0) * 2 around X, Y, Z, intersects with this
 	-- MapChunk.
 
 	local radius = 16 + width * 2.0
 	do
-		local cx1, cz1 = chunk_x + chunksize, chunk_z + chunksize
-		local tx = x - radius
-		local tz = z - radius
-		local tx1 = x + radius
-		local tz1 = z + radius
-		if not (tx <= cx1 and chunk_x <= tx1
-			and tz <= cz1 and chunk_z <= tz1) then
+		if not ((x - radius) <= (chunk_x + chunksize)
+			and chunk_x <= (x + radius)
+			and (z - radius) <= (chunk_z + chunksize)
+			and chunk_z <= (z + radius)) then
 			-- No intersection.
 			return false
 		end
 	end
 
-	local chunk_min_x = mathmax (floor (x - width) - chunk_x - 1, 0)
-	local chunk_max_x = mathmin (floor (x + width) - chunk_x, chunksize - 1)
-	local chunk_min_z = mathmax (floor (z - width) - chunk_z - 1, 0)
-	local chunk_max_z = mathmin (floor (z + width) - chunk_z, chunksize - 1)
-	local chunk_min_y = mathmax (floor (y - height) - 1 - level_min, 1)
-	local chunk_max_y = mathmin (floor (y + height) + 1 - level_min, level_height - 1)
-	local modified = false
-	assert (chunk_min_x >= 0)
-	assert (chunk_min_y >= 0)
-	assert (chunk_min_z >= 0)
+	local chunk_min_x
+		= mathmax (floor (x - width) - chunk_x - 1, 0)
+	local chunk_max_x
+		= mathmin (floor (x + width) - chunk_x, chunksize - 1)
+	local chunk_min_z
+		= mathmax (floor (z - width) - chunk_z - 1, 0)
+	local chunk_max_z
+		= mathmin (floor (z + width) - chunk_z, chunksize - 1)
+	local chunk_min_y
+		= mathmax (floor (y - height) - 1 - level_min, 1)
+	local chunk_max_y
+		= mathmin (floor (y + height) + 1 - level_min, level_height - 1)
 
 	for x1 = chunk_min_x, chunk_max_x do
 		local absx = x1 + chunk_x
@@ -188,18 +185,14 @@ local function carve (self, x, y, z, width, height, nodes, chunksize,
 						-- redundant
 						-- processing of
 						-- carved nodes.
-						local modified_p
-						modified_p, dirt_exposed
+						dirt_exposed
 							= carve_block (self, absx, absy, absz,
-								       x1, y1, z1, nodes, chunksize,
-								       level_height, dirt_exposed)
-						modified = modified or modified_p
+								       x1, y1, z1, dirt_exposed)
 					end
 				end
 			end
 		end
 	end
-	return modified
 end
 
 -- Return whether no more intersections remain between X, Y, Z, and
@@ -251,8 +244,7 @@ end
 local function create_room (self, x, y, z, room_size, room_height_scale)
 	local width = 1.5 + room_size
 	local height = width * room_height_scale
-	carve (self, x, y, z, width, height, nodes, chunksize, level_min,
-	       level_height, cave_bypass_p)
+	carve (self, x, y, z, width, height, cave_bypass_p)
 end
 
 local placeholder = mcl_levelgen.ull (0, 0)
@@ -334,7 +326,6 @@ local function create_tunnel (self, x, y, z, seed, horiz_radius, vert_radius,
 				return
 			end
 			carve (self, x, y, z, w * horiz_radius, h * vert_radius,
-			       nodes, chunksize, level_min, level_height,
 			       cave_bypass_p)
 		end
 	end
@@ -577,7 +568,6 @@ local function carve_ravine (self, seed, x, y, z, thickness, yaw, pitch, length,
 			-- 	print ("Thickness", i, thickness, x_radius, y_radius, val)
 			-- end
 			carve (self, x, y, z, x_radius, y_radius,
-			       nodes, chunksize, level_min, level_height,
 			       ravine_bypass_p)
 		end
 	end
