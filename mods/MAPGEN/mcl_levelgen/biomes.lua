@@ -574,13 +574,6 @@ local WINDSWEPT_BIOMES = {
 		"WindsweptForest",
 		"WindsweptForest",
 	},
-	{
-		"WindsweptHills",
-		"WindsweptHills",
-		"WindsweptHills",
-		"WindsweptForest",
-		"WindsweptForest",
-	},
 	NO_BIOMES,
 	NO_BIOMES,
 }
@@ -791,7 +784,7 @@ local function select_beach (temp, humidity)
 end
 
 local function potentially_select_windswept_savannah (temp, humidity, weirdness, plain)
-	if temp >= 1 and humidity <= 4 and weirdness[2] > 0 then
+	if temp > 2 and humidity <= 4 and weirdness[2] >= 0 then
 		return "WindsweptSavannah"
 	else
 		return plain
@@ -1276,7 +1269,7 @@ local function register_peak_pv_biomes (nodes, weirdness)
 			local windswept_savannah
 				= potentially_select_windswept_savannah (i, j,
 									 weirdness,
-									 plain)
+									 windswept)
 			local peak = select_peak (i, j, weirdness)
 			register_peak_pv_biomes_for_climate_grade (nodes, i, j,
 								   temp_range,
