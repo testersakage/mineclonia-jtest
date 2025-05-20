@@ -67,6 +67,10 @@ function carver:carve (x, z, rng)
 	error ("Unimplemented: carve")
 end
 
+function carver:is_origin_chunk (rng)
+	return rng:next_float () <= self.probability
+end
+
 local function get_block (self, x, y, z)
 	if y <= self.lava_level then
 		return encode_node (cid_lava, 0)
@@ -161,7 +165,7 @@ local function carve (self, x, y, z, width, height, nodes, chunksize,
 	local chunk_max_x = mathmin (floor (x + width) - chunk_x, chunksize - 1)
 	local chunk_min_z = mathmax (floor (z - width) - chunk_z - 1, 0)
 	local chunk_max_z = mathmin (floor (z + width) - chunk_z, chunksize - 1)
-	local chunk_min_y = mathmax (floor (y - height) - 1 - level_min, 0)
+	local chunk_min_y = mathmax (floor (y - height) - 1 - level_min, 1)
 	local chunk_max_y = mathmin (floor (y + height) + 1 - level_min, level_height - 1)
 	local modified = false
 	assert (chunk_min_x >= 0)
@@ -176,10 +180,10 @@ local function carve (self, x, y, z, width, height, nodes, chunksize,
 			local distz = (absz + 0.5 - z) / width
 			if distx * distx + distz * distz < 1.0 then
 				local dirt_exposed
-				for y1 = chunk_min_y, chunk_max_y do
+				for y1 = chunk_max_y, chunk_min_y + 1, -1 do
 					local absy = y1 + level_min
 					local disty = (absy - 0.5 - y) / height
-					if not bypass_p (distx, disty, distz, y1) then
+					if not bypass_p (distx, disty, distz, absy) then
 						-- TODO: avoid
 						-- redundant
 						-- processing of
@@ -238,10 +242,6 @@ local cave_carver = table.merge (carver, {
 	cave_y_scale = 1.0,
 })
 
-function cave_carver:is_origin_chunk (rng)
-	return rng:next_float () <= self.probability
-end
-
 local floor_level = 0
 
 local function cave_bypass_p (dx, dy, dz, absy)
@@ -266,7 +266,7 @@ local function copyull (ull)
 end
 
 local pi = math.pi
-local prin
+-- local prin
 
 local function create_tunnel (self, x, y, z, seed, horiz_radius, vert_radius,
 			      thickness, yaw, pitch, first_seg, length, y_scale,
@@ -297,7 +297,7 @@ local function create_tunnel (self, x, y, z, seed, horiz_radius, vert_radius,
 		yaw_variance = yaw_variance * 0.75
 		pitch_variance = pitch_variance
 			+ ((rng:next_float () - rng:next_float ())
-				* rng:next_float () * 2.0) 
+				* rng:next_float () * 2.0)
 		yaw_variance = yaw_variance
 			+ ((rng:next_float () - rng:next_float ())
 				* rng:next_float () * 4.0)
@@ -410,8 +410,202 @@ function cave_carver:carve (x, z, rng)
 end
 
 ------------------------------------------------------------------------
--- Ravine carver.  TODO!
+-- Ravine carver.
 ------------------------------------------------------------------------
+
+local EPSILON = math.pow (2, -52)
+local EPSILON_INVERSE = math.pow (2, 52)
+local FLOAT_EPSILON = math.pow (2, -23)
+local FLOAT_MIN = math.pow (2, -126)
+local FLOAT_MAX = math.pow (2, 128) - math.pow (2, 104)
+local mathabs = math.abs
+local huge = math.huge
+local ceil = math.ceil
+
+local emulate_single_precision = false
+local roundf32
+
+if emulate_single_precision then
+
+local function round_to_even (x)
+	return x + EPSILON_INVERSE - EPSILON_INVERSE
+end
+
+local function signbit (x)
+	return (x == -0.0 or x <= 0) and -1
+		or (x == 0.0) and 0 or 1
+end
+
+function roundf32 (x)
+	local abs, sign = mathabs (x), signbit (x)
+
+	if abs < FLOAT_MIN then
+		return sign * round_to_even (abs / FLOAT_MIN / FLOAT_EPSILON)
+			* FLOAT_MIN * FLOAT_EPSILON
+	else
+		local i = (1 + FLOAT_EPSILON / EPSILON) * abs
+		local result = i - (i - abs)
+		if result > FLOAT_MAX or result ~= result then
+			return huge
+		end
+
+		return sign * result
+	end
+end
+
+else
+
+function roundf32 (x)
+	return x
+end
+
+end
+
+local quantized_sin = {}
+
+for i = 0, 65535 do
+	quantized_sin[i + 1] = mathsin (i * pi * 2.0 / 65536.0)
+end
+
+local function rtz (n)
+	if n < 0 then
+		return ceil (n)
+	end
+	return floor (n)
+end
+
+local band = bit.band
+
+local function qsin (x)
+	local val = rtz (x * 10430.378) -- 2pi / 65536.0f
+	return quantized_sin[band (val, 65535) + 1]
+end
+
+local function qcos (x)
+	local val = rtz (x * 10430.378 + 16384.0)
+	return quantized_sin[band (val, 65535) + 1]
+end
+
+local ravine_carver = table.merge (carver, {
+	vertical_rotation = function (rng)
+		return 0.0
+	end,
+	distance_factor = function (rng)
+		return 1.0
+	end,
+	thickness = function (rng)
+		return 1.0
+	end,
+	width_smoothness = 0,
+	horizontal_radius_factor = function (rng)
+		return 1.0
+	end,
+	vertical_radius_default_factor = 1.0,
+	vertical_radius_center_factor = 1.0,
+})
+
+local squeezevec = {
+	[0] = math.huge,
+}
+
+local function get_vertical_radius (self, rng, initial_y_radius, length, i)
+	local center = 1.0 - mathabs (0.5 - roundf32 (i / length)) * 2.0
+	local factor = self.vertical_radius_default_factor
+		+ self.vertical_radius_center_factor * center
+	return roundf32 (factor * initial_y_radius
+			 * roundf32 (rng:next_float () * 0.25 + 0.75))
+end
+
+local function ravine_bypass_p (dx, dy, dz, absy)
+	local y = absy - level_min
+	return (dx * dx + dz * dz) * squeezevec[y] + (dy * dy) / 6.0 >= 1.0
+end
+
+-- local prin
+
+local function carve_ravine (self, seed, x, y, z, thickness, yaw, pitch, length, y_scale)
+	local rng = tunnel_rng
+	rng:reseed (seed)
+
+	local squeeze = 1.0
+	local smooth = self.width_smoothness
+	for i = 1, level_height do
+		if i == 1 or rng:next_within (smooth) == 0 then
+			squeeze = roundf32 (1.0 + rng:next_float ()
+					    * rng:next_float ())
+		end
+		squeezevec[i] = roundf32 (squeeze * squeeze)
+	end
+
+	-- if prin then
+	-- 	print (unpack (squeezevec))
+	-- end
+
+	local pitch_variability = 0.0
+	local yaw_variability = 0.0
+	local horiz_sampler = self.horizontal_radius_factor
+	for i = 1, length do
+		local radius = 1.5 + roundf32 (qsin ((i - 1) * pi / length)
+					       * thickness)
+		local val = horiz_sampler (rng)
+		local x_radius = roundf32 (radius * val)
+		local y_radius = get_vertical_radius (self, rng, radius * y_scale,
+						      length, i - 1)
+		local pxz = qcos (pitch)
+		y = y + qsin (pitch)
+		x = x + roundf32 (qcos (yaw) * pxz)
+		z = z + roundf32 (qsin (yaw) * pxz)
+		pitch = roundf32 (pitch * 0.7 + pitch_variability * 0.05)
+		yaw = roundf32 (yaw + yaw_variability * 0.05)
+		pitch_variability = roundf32 (pitch_variability * 0.8)
+		yaw_variability = roundf32 (yaw_variability * 0.5)
+		pitch_variability = pitch_variability
+			+ roundf32 (((rng:next_float () - rng:next_float ())
+					* rng:next_float () * 2.0))
+		yaw_variability = yaw_variability
+			+ roundf32 (((rng:next_float () - rng:next_float ())
+					* rng:next_float () * 4.0))
+		-- if prin then
+		-- 	print ("carve_ravine  ", x_radius, y_radius, x, y, z, pitch,
+		-- 	       yaw, pitch_variability, yaw_variability)
+		-- end
+		if rng:next_within (4) ~= 0 then
+			if no_longer_reachable (x, y, z, length - i + 1, thickness) then
+				return
+			end
+			-- if prin then
+			-- 	print ("Thickness", i, thickness, x_radius, y_radius, val)
+			-- end
+			carve (self, x, y, z, x_radius, y_radius,
+			       nodes, chunksize, level_min, level_height,
+			       ravine_bypass_p)
+		end
+	end
+end
+
+function ravine_carver:carve (x, z, rng)
+	-- local ox, oz = x, z
+	local range_in_blocks = 16 * (self.range * 2 - 1)
+	local x = x + rng:next_within (16)
+	local y = self.y (rng)
+	local z = z + rng:next_within (16)
+	local yaw = rng:next_float () * pi * 2
+	local pitch = self.vertical_rotation (rng)
+	local y_scale = self.y_scale (rng)
+	local thickness = self.thickness (rng)
+	local dist = floor (range_in_blocks
+			    * roundf32 (self.distance_factor (rng)))
+	local seed = rng:next_long ()
+	-- if ox == 1280 and oz == 6000 then
+	-- 	prin = true
+	-- 	print (x, y, z, yaw, pitch, y_scale, thickness, dist)
+	-- else
+	-- 	prin = false
+	-- end
+	carve_ravine (self, seed, x, y, z, roundf32 (thickness),
+		      roundf32 (yaw), roundf32 (pitch), dist,
+		      roundf32 (y_scale))
+end
 
 ------------------------------------------------------------------------
 -- Carver registration.
@@ -495,6 +689,16 @@ local function uniform_float (min_inclusive, max_inclusive)
 	end
 end
 
+local function trapezoidal_float (min, max, bound)
+	local diff = max - min
+	local bound_diff = (diff - bound) / 2.0
+	local base_diff = diff - bound
+	return function (rng)
+		return min + rng:next_float () * base_diff
+			+ rng:next_float () * bound_diff
+	end
+end
+
 local OVERWORLD_BOTTOM = -64
 
 local default_cave_carver = table.merge (cave_carver, {
@@ -557,9 +761,46 @@ local cave_extra_underground_carver = table.merge (cave_carver, {
 	floor_level = uniform_float (-1.0, -0.4),
 })
 
+local default_ravine_carver = table.merge (ravine_carver, {
+	probability = 0.01,
+	y = uniform_height (10, 67),
+	y_scale = function ()
+		return 3.0
+	end,
+	lava_level = OVERWORLD_BOTTOM + 8,
+	replaceable = {
+		"group:overworld_carvable",
+		"group:dirt",
+		"group:sand",
+		"group:hardened_clay",
+		"mcl_core:stone_with_iron",
+		"mcl_deepslate:deepslate_with_iron",
+		"mcl_copper:stone_with_copper",
+		"mcl_deepslate:deepslate_with_copper",
+		"mcl_core:water_source",
+		"mcl_core:gravel",
+		"mcl_sus_nodes:gravel",
+		"mcl_core:sandstone",
+		"mcl_core:redsandstone",
+		"mcl_amethyst:calcite",
+		"mcl_core:snowblock",
+		"mcl_core:packed_ice",
+		"mcl_raw_ores:raw_iron_block",
+		"mcl_copper:block_raw",
+	},
+	vertical_rotation = uniform_float (-0.125, 0.125),
+	distance_factor = uniform_float (0.75, 1.0),
+	thickness = trapezoidal_float (0.0, 6.0, 2.0),
+	width_smoothness = 3,
+	horizontal_radius_factor = uniform_float (0.75, 1.0),
+	vertical_radius_default_factor = 1.0,
+	vertical_radius_center_factor = 0.0,
+})
+
 mcl_levelgen.register_carver ("mcl_levelgen:cave_carver", default_cave_carver)
 mcl_levelgen.register_carver ("mcl_levelgen:cave_extra_underground_carver",
 			      cave_extra_underground_carver)
+mcl_levelgen.register_carver ("mcl_levelgen:ravine_carver", default_ravine_carver)
 
 ------------------------------------------------------------------------
 -- Carver generation.
