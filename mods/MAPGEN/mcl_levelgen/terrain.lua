@@ -24,14 +24,129 @@ local terrain_generator = {}
 mcl_levelgen.terrain_generator = terrain_generator
 
 local cid_stone, cid_water_source, cid_air
-if core and core.get_content_id then
+local cid_copper_ore, cid_deepslate_iron_ore, cid_raw_copper, cid_raw_iron
+local cid_granite, cid_tuff
+
+local function init_cids ()
 	cid_stone = core.get_content_id ("mcl_core:stone")
 	cid_water_source = core.get_content_id ("mcl_core:water_source")
 	cid_air = core.CONTENT_AIR
+	cid_copper_ore = core.get_content_id ("mcl_copper:stone_with_copper")
+	cid_deepslate_iron_ore = core.get_content_id ("mcl_deepslate:deepslate_with_iron")
+	cid_raw_copper = core.get_content_id ("mcl_copper:block_raw")
+	cid_raw_iron = core.get_content_id ("mcl_raw_ores:raw_iron_block")
+	cid_granite = core.get_content_id ("mcl_core:granite")
+	cid_tuff = core.get_content_id ("mcl_deepslate:tuff")
+end
+
+if core and core.get_content_id then
+	if core.register_on_mods_loaded then
+		core.register_on_mods_loaded (init_cids)
+	else
+		init_cids ()
+	end
 else
 	cid_stone = 3
 	cid_water_source = 1
 	cid_air = 0
+	cid_copper_ore = 91
+	cid_deepslate_iron_ore = 92
+	cid_raw_copper = 93
+	cid_raw_iron = 94
+	cid_granite = 95
+	cid_tuff = 96
+end
+
+------------------------------------------------------------------------
+-- Ore veins.
+------------------------------------------------------------------------
+local mathabs = math.abs
+local mathmin = math.min
+local mathmax = math.max
+
+local ORE_VEIN_COPPER_MIN = mcl_levelgen.ORE_VEIN_COPPER_MIN
+local ORE_VEIN_COPPER_MAX = mcl_levelgen.ORE_VEIN_COPPER_MAX
+local ORE_VEIN_IRON_MIN = mcl_levelgen.ORE_VEIN_IRON_MIN
+local ORE_VEIN_IRON_MAX = mcl_levelgen.ORE_VEIN_IRON_MAX
+local ORE_VEIN_MIN_HEIGHT = mcl_levelgen.ORE_VEIN_MIN_HEIGHT
+local ORE_VEIN_MAX_HEIGHT = mcl_levelgen.ORE_VEIN_MAX_HEIGHT
+
+local function vein_select (selector)
+	if selector > 0.0 then
+		return ORE_VEIN_COPPER_MIN,
+			ORE_VEIN_COPPER_MAX,
+			cid_copper_ore,
+			cid_raw_copper,
+			cid_granite
+	else
+		return ORE_VEIN_IRON_MIN,
+			ORE_VEIN_IRON_MAX,
+			cid_deepslate_iron_ore,
+			cid_raw_iron,
+			cid_tuff
+	end
+end
+
+local function map_values (val, in_min, in_max, out_min, out_max)
+	if val <= in_min then
+		return out_min
+	elseif val >= in_max then
+		return out_max
+	else
+		local x = (val - in_min) / (in_max - in_min)
+		return out_min + x * (out_max - out_min)
+	end
+end
+
+-- veiny, nwithveins, ntotal = 0, 0, 0
+
+local function vein_block_at_position (gen, x, y, z, cid_default_block)
+	if y < ORE_VEIN_MIN_HEIGHT or y > ORE_VEIN_MAX_HEIGHT then
+		return cid_default_block, 0
+	end
+
+	local vein_toggle = gen.vein_toggle
+	local selector = vein_toggle (x, y, z, nil)
+	local min, max, ore, raw, filler = vein_select (selector)
+	local yabove = max - y
+	local ybelow = y - min
+	if yabove >= 0 and ybelow >= 0 then
+		local mindist = mathmin (yabove, ybelow)
+		local ore_density = mathabs (selector)
+		-- Reduce the likelyhood of ore generation near the
+		-- periphery of a vein.
+		local fringe_penalty = map_values (mindist, 0.0, 20.0, -0.2, 0.0)
+		if ore_density + fringe_penalty < 0.4 then
+			return cid_default_block, 0
+		else
+			local rng = gen.ore_random
+			rng:reseed_positional (x, y, z)
+
+			-- if x == -45 and y == 15 and z == 186 then
+			-- 	print (rng:next_float ())
+			-- 	print (rng:next_float ())
+			-- 	print (rng:next_float ())
+			-- 	print (ore_density)
+			-- 	print (map_values (ore_density, 0.4, 0.6, 0.1, 0.3))
+			-- 	rng:reseed_positional (x, y, z)
+			-- end
+
+			if rng:next_float () > 0.7
+				or gen.vein_ridged (x, y, z, nil) >= 0.0 then
+				return cid_default_block, 0
+			end
+
+			local type_selector
+				= map_values (ore_density, 0.4, 0.6, 0.1, 0.3)
+			if rng:next_float () < type_selector
+				and gen.vein_gap (x, y, z, nil) > -0.3 then
+				return (rng:next_float () < 0.02 and raw or ore), 0
+			end
+			return filler, 0
+		end
+	else
+		return cid_default_block, 0
+	end
 end
 
 ------------------------------------------------------------------------
@@ -374,8 +489,6 @@ local lshift = bit.lshift
 local rshift = bit.rshift
 local bor = bit.bor
 local band = bit.band
-local mathmin = math.min
-local mathmax = math.max
 
 local function pack_height_map (surface, motion_blocking)
 	local bias = 512
@@ -516,9 +629,22 @@ local ceil = math.ceil
 -- end
 
 local function state_from_density (aquifer, get_node, cid_default_block,
-				   x, y, z, density)
+				   x, y, z, density, veins, gen)
 	if density > 0.0 then
+		if veins then
+			return vein_block_at_position (gen, x, y, z,
+						       cid_default_block)
+		end
 		return cid_default_block, 0
+	end
+	if veins then
+		local cid, param2 = get_node (aquifer, x, y, z, density)
+		if cid == cid_default_block then
+			return vein_block_at_position (gen, x, y, z,
+						       cid_default_block)
+		else
+			return cid, param2
+		end
 	end
 	return get_node (aquifer, x, y, z, density)
 end
@@ -590,6 +716,7 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	-- Table of nodes produced for this horizontal section of the
 	-- level.
 	local gn = gen_nodes
+	local veins = self.preset.ore_veins_enabled
 
 	-- Height map holding height levels at horizontal positions.
 	local map = self.heightmap
@@ -627,8 +754,8 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 								= state_from_density (aquifer, get_node,
 										      cid_default_block,
 										      x_pos, y_pos,
-										      z_pos, density)
-
+										      z_pos, density,
+										      veins, self)
 							local x, y, z = x_pos - x,
 								y_pos - y_min,
 								z_pos - z
@@ -685,6 +812,11 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 		end
 		i = i + skip
 	end
+	-- if veiny > 0 then
+	-- 	nwithveins = nwithveins + 1
+	-- 	veiny = 0
+	-- end
+	-- ntotal = ntotal + 1
 	return true
 end
 
@@ -844,10 +976,18 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 
 	local heightmap = {}
 	for i = 1, chunksize * chunksize do
-		heightmap[i] = 0	
+		heightmap[i] = 0
 	end
 	gen.heightmap = heightmap
 	gen.surface_system = mcl_levelgen.make_surface_system (preset)
 	gen.biome_seed = mcl_levelgen.get_biome_seed (preset.seed)
+
+	if preset.ore_veins_enabled then
+		local ore = preset.factory ("minecraft:ore"):fork_positional ()
+		gen.ore_random = ore:create_reseedable ()
+		gen.vein_toggle = wrapnext (preset.vein_toggle)
+		gen.vein_ridged = wrapnext (preset.vein_ridged)
+		gen.vein_gap = wrapnext (preset.vein_gap)
+	end
 	return gen
 end

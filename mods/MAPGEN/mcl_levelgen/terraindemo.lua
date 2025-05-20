@@ -33,8 +33,10 @@ do_generate (-48 + i * 16, -32, -48 + i * 32)
 do_generate (-48 + i * 16, 0, -48 + i * 16)
 do_generate (-48 + i * 32, 0, -48 + i * 16)
 
-print ("Generated " .. i * 3 .. " MapChunks...")
+print ("Generated " .. i * 4 .. " MapChunks...")
 
 end
 
 print ("Generation completed in: " .. math.floor (os.clock () - clock + 0.5) .. " s")
+-- print (string.format ("%.3f%%", (nwithveins / ntotal * 100)), nwithveins, ntotal)
+

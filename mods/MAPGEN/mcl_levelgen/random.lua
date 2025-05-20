@@ -745,8 +745,10 @@ local function sext (int)
 	return band (int, 0x80000000) ~= 0 and UINT_MAX or 0
 end
 
+local tmp = ull (0, 0)
+
 local function seed_from_position (seed, x, y, z)
-	local tmp = extull (z)
+	extkull (tmp, z)
 	extkull (seed, x)
 	mulull (seed, 3129871)
 	seed[2] = sext (seed[1])
@@ -763,16 +765,16 @@ local function seed_from_position (seed, x, y, z)
 	ashrull (seed, 16)
 end
 
-if false and detect_luajit () then -- XXX: this runs afoul of Luajit compiler issues.
+if true and detect_luajit () then
 	local rshift = bit.rshift
 	local arshift = bit.arshift
 	local tobit = bit.tobit
 
 	local function lj_seed_from_position (seed, x, y, z)
-		local x, y, z = x * 1ull, y * 1ull, z * 1ull
+		local x, y, z = x * 1ll * 1ull, y * 1ll * 1ull, z * 1ll * 1ull
 		local xf = arshift (lshift (x * 3129871ull, 32), 32)
 		local zf = z * 116129781ull
-		local t1 = bxor (xf, bxor (zf, tobit (y)))
+		local t1 = bxor (xf, bxor (zf, y))
 		local value = arshift (t1 * t1 * 42317861ull + t1 * 11ull, 16)
 		seed[1] = tonumber (band (value, 0xffffffff))
 		seed[2] = tonumber (rshift (value, 32))
