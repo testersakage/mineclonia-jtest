@@ -317,6 +317,11 @@ local function assemble_stone_depth_check (val, cond, map_surface_depth)
 					    "system:get_secondary_surface (ctx[X], ctx[Z])",
 					    cond.secondary_depth_range)
 	end
+-- 	str = str .. "\n" .. [[
+-- if ctx[X] == -914 and ctx[Y] == 12 + 64 and ctx[Z] == -1251 then
+-- 	print (ctx, ctx[STONE_DEPTH_ABOVE])
+-- end
+-- ]]
 	return str
 end
 
@@ -1525,7 +1530,7 @@ local function compute_surface_depth (self, x, z)
 	return rtz (value * 2.75 + 3.0 + rng:next_double () * 0.25)
 end
 
-local function update_surface_ctx (self, context, x, z, terrain)
+local function update_surface_ctx (self, context, x, z, terrain, update_cache)
 	context[X] = x
 	context[Z] = z
 
@@ -1533,8 +1538,14 @@ local function update_surface_ctx (self, context, x, z, terrain)
 	context[SURFACE_DEPTH] = compute_surface_depth (self, x, z)
 
 	-- Update the preliminary surface depth variables if it
-	-- appears appropriate.
-	if band (z, 0xf) == 0 then
+	-- appears appropriate or if invoked from a carver (in which
+	-- event there is no guarantee that the request appertains to
+	-- the last section to be processed).
+	if band (z, 0xf) == 0 or update_cache then
+		if update_cache then
+			z = band (z, -16)
+		end
+
 		local x = band (x, -16)
 		context[PRELIMINARY_SURFACE_XZ00]
 			= terrain:get_preliminary_surface_level (x, z)
@@ -1673,7 +1684,7 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 			end
 
 			-- Begin iteration.
-			update_surface_ctx (self, context, absx, absz, terrain)
+			update_surface_ctx (self, context, absx, absz, terrain, false)
 			local solid_blocks_from_air = 0
 			local liquid_top = -huge
 			local cave_ceiling_pos = huge
@@ -1773,7 +1784,7 @@ function surface_system:evaluate_for_carver (x, y, z, submerged)
 			    carver_chunksize)
 	local biome = carver_biomes[idx]
 	local fn = self.rule_fns[biome]
-	update_surface_ctx (self, context, x, z, carver_terrain)
+	update_surface_ctx (self, context, x, z, carver_terrain, true)
 	update_surface_ctx_y (self, context, 1, 1,
 			      submerged and y + 1 or -huge, y, biome)
 	return fn (context, self)
