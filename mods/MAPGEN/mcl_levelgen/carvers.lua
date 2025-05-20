@@ -12,7 +12,7 @@ if core then
 	cid_grass_block = core.get_content_id ("mcl_core:dirt_with_grass")
 	cid_mycelium = core.get_content_id ("mcl_core:mycelium")
 	cid_dirt = core.get_content_id ("mcl_core:dirt")
-	cid_lava = core.get_content_id ("mcl_core:dirt")
+	cid_lava = core.get_content_id ("mcl_core:lava_source")
 	cid_air = core.CONTENT_AIR
 else
 	cid_grass_block = 10
