@@ -44,6 +44,10 @@ core.register_abm({
 	end
 })
 
+function mcl_trees.can_grow(pos)
+	return not (core.get_node_light(pos) <= 7 and core.get_node_light(pos, 0.5) < core.LIGHT_MAX)
+end
+
 core.register_abm({
 	label = "Tree growth",
 	nodenames = {"group:sapling"},
@@ -53,11 +57,19 @@ core.register_abm({
 	action = function(pos, node)
 		-- instead of checking if there are no non-transparent nodes between the sapling and the sky,
 		-- which would be too laborious in an abm, check if the node would be in full daylight at noon.
-		if core.get_node_light(pos) <= 7 and core.get_node_light(pos, 0.5) < core.LIGHT_MAX then
+		if not mcl_trees.can_grow(pos) then
 			core.remove_node(pos)
-			core.add_item(pos, node)
+			mcl_util.drop_item_stack(pos, ItemStack(node.name))
 		else
-			mcl_trees.grow_tree(pos, node)
+			if node.param2 < 2 then
+				node.param2 = node.param2 + 1
+				core.swap_node(pos, node)
+			else
+				local t = core.get_node_timer(pos)
+				if not t:is_started() then
+					t:start(mcl_util.float_random(27,63))
+				end
+			end
 		end
 	end,
 })

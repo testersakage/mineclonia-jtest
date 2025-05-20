@@ -232,6 +232,15 @@ local tpl_sapling = {
 		if not node_below then return false end
 		return core.get_item_group(node_below.name, "soil_sapling") > 1
 	end),
+	on_timer = function(pos)
+		local node = core.get_node(pos)
+		if mcl_trees.can_grow(pos) then
+			mcl_trees.grow_tree(pos, node)
+		else
+			core.remove_node(pos)
+			mcl_util.drop_item_stack(pos, ItemStack(node.name))
+		end
+	end,
 	_on_bone_meal = function(itemstack, placer, pointed_thing, pos, node) ---@diagnostic disable-line: unused-local
 		if math.random() > 0.45 then return end --sapling has a 45% chance to grow when bone mealing
 		return mcl_trees.grow_tree(pos,node)
