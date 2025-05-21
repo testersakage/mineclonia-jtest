@@ -95,6 +95,7 @@ function mcl_cauldrons.add_level(pos, amount, liquid)
 		end
 		node.name = mcl_cauldrons.get_cauldron_name(water_level + amount, liquid)
 		mcl_redstone.swap_node(pos, node)
+		mcl_redstone._notify_observer_neighbours(pos)
 		return true
 	end
 end
