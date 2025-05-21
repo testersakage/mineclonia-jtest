@@ -36,13 +36,6 @@ function mob_class:item_drop(cooked, looting_level, mcl_reason)
 		local chance = 1 / dropdef.chance
 		local looting_type = dropdef.looting
 
-		-- Always drop mob heads when killed by a charged creeper explosion.
-		if (dropdef.mob_head and mcl_reason
-		    and mcl_reason.type == "explosion"
-		    and mcl_reason.mob_name == "mobs_mc:creeper_charged") then
-		    chance = 1
-		end
-
 		if looting_level > 0 then
 			local chance_function = dropdef.looting_chance_function
 			if chance_function then
@@ -62,6 +55,13 @@ function mob_class:item_drop(cooked, looting_level, mcl_reason)
 
 		if do_common_looting then
 			num = num + math.floor(math.random(0, looting_level) + 0.5)
+		end
+
+		-- Always drop mob heads when killed by a charged creeper explosion.
+		if (dropdef.mob_head and mcl_reason
+		    and mcl_reason.type == "explosion"
+		    and mcl_reason.mob_name == "mobs_mc:creeper_charged") then
+		    num = 1
 		end
 
 		if num > 0 then
