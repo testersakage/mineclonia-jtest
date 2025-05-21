@@ -47,11 +47,10 @@ local drops_common = {
 
 local drops_zombie = table.copy (drops_common)
 table.insert (drops_zombie, {
-	-- Zombie Head
 	name = "mcl_heads:zombie",
-	chance = 200, -- 0.5%
-	min = 1,
-	max = 1,
+	chance = 1,
+	min = 0,
+	max = 0,
 	mob_head = true,
 })
 

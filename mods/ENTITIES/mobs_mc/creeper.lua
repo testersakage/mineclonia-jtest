@@ -43,14 +43,12 @@ local creeper_defs = {
 			max = 2,
 			looting = "common",
 		},
-
-		-- Head
 		{
 			name = "mcl_heads:creeper",
-			chance = 200, -- 0.5%
-			min = 1,
-			max = 1,
-			mob_head = 1,
+			chance = 1,
+			min = 0,
+			max = 0,
+			mob_head = true,
 		},
 	},
 	animation = {

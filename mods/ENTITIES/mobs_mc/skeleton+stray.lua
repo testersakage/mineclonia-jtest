@@ -74,9 +74,9 @@ local skeleton = table.merge (posing_humanoid, {
 		},
 		{
 			name = "mcl_heads:skeleton",
-			chance = 200, -- 0.5% chance
-			min = 1,
-			max = 1,
+			chance = 1,
+			min = 0,
+			max = 0,
 			mob_head = true,
 		},
 	},
