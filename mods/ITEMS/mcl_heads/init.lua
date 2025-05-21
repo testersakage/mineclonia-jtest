@@ -118,25 +118,10 @@ local function wall_on_rotate(pos, node, _, mode, _)
 	end
 end
 
---- @class HeadDef
---- @field name string identifier for node
---- @field texture string armor texture for node
---- @field description string translated description
---- @field longdesc string translated doc description
---- @field range_mob? string name of mob affected by range reduction
---- @field range_factor? number factor of range reduction
-
---- registers a head
---- @param head_def HeadDef head node definition
-function mcl_heads.register_head(head_def)
+local function register_floor(head_def)
 	local name = "mcl_heads:" ..head_def.name
-	if head_def.groups then
-		for k, v in pairs(head_def.groups) do
-			mcl_heads.deftemplate.groups[k] = v
-		end
-	end
-	-- register the floor head node
 	core.register_node(":"..name, table.update(table.copy(mcl_heads.deftemplate), {
+		mesh = head_def.mesh,
 		description = head_def.description,
 		_doc_items_longdesc = head_def.longdesc,
 		tiles = { head_def.texture },
@@ -145,9 +130,51 @@ function mcl_heads.register_head(head_def)
 		_mcl_armor_mob_range_factor = head_def.range_factor,
 		_mcl_armor_texture = "[combine:64x32:32,0=" ..head_def.texture,
 	}))
+end
 
+local function register_wall(head_def)
+	local name = "mcl_heads:" ..head_def.name
+	local tiles = {
+		{ name = "[combine:16x16:-4,-4=" ..head_def.texture, align_style = "world" }, -- front
+		{ name = "[combine:16x16:-20,-4="..head_def.texture, align_style = "world" }, -- back
+
+		{ name = "[combine:16x16:-8,-4=" ..head_def.texture, align_style = "world" }, -- right
+		{ name = "[combine:16x16:0,-4="  ..head_def.texture, align_style = "world" }, -- left
+
+		{ name = "([combine:16x16:-4,0=" ..head_def.texture ..")^[transformR180", align_style = "node" }, -- top
+		{ name = "([combine:16x16:-12,0=" ..head_def.texture ..")^[transformR180", align_style = "node" }, -- bottom
+	}
+	core.register_node(":"..name .."_wall", table.update(table.copy(mcl_heads.deftemplate), {
+		drawtype = head_def.drawtype or "nodebox",
+		mesh = head_def.mesh or "",
+		paramtype = "light",
+		paramtype2 = "wallmounted",
+		node_box = {
+			type = "wallmounted",
+			wall_bottom = { -0.25, -0.5, -0.25, 0.25, 0.0, 0.25, },
+			wall_top = { -0.25, 0.0, -0.25, 0.25, 0.5, 0.25, },
+			wall_side = { -0.5, -0.25, -0.25, 0.0, 0.25, 0.25, },
+		},
+		groups = {
+			handy = 1,
+			head = 1,
+			deco_block = 1,
+			dig_by_piston = 1,
+			not_in_creative_inventory = 1,
+			pathfinder_partial = 2,
+		},
+		_doc_items_create_entry = false,
+		-- Note: -x coords go right per-pixel, -y coords go down per-pixel
+		on_rotate = wall_on_rotate,
+		tiles = head_def.tiles or tiles,
+		drop = name,
+	}))
+end
+
+local function register_ceiling(head_def)
+	local name = "mcl_heads:" ..head_def.name
 	core.register_node(":"..name.."_ceiling", table.update(table.copy(mcl_heads.deftemplate), {
-		mesh = "mcl_heads_ceiling.obj",
+		mesh = head_def.mesh or "mcl_heads_ceiling.obj",
 		groups = {
 			handy = 1,
 			head = 1,
@@ -174,40 +201,28 @@ function mcl_heads.register_head(head_def)
 		_mcl_armor_texture = "[combine:64x32:32,0=" ..head_def.texture,
 	}))
 
-	-- register the wall head node
-	core.register_node(":"..name .."_wall", table.update(table.copy(mcl_heads.deftemplate), {
-		drawtype = "nodebox",
-		paramtype = "light",
-		paramtype2 = "wallmounted",
-		node_box = {
-			type = "wallmounted",
-			wall_bottom = { -0.25, -0.5, -0.25, 0.25, 0.0, 0.25, },
-			wall_top = { -0.25, 0.0, -0.25, 0.25, 0.5, 0.25, },
-			wall_side = { -0.5, -0.25, -0.25, 0.0, 0.25, 0.25, },
-		},
-		groups = {
-			handy = 1,
-			head = 1,
-			deco_block = 1,
-			dig_by_piston = 1,
-			not_in_creative_inventory = 1,
-			pathfinder_partial = 2,
-		},
-		_doc_items_create_entry = false,
-		-- Note: -x coords go right per-pixel, -y coords go down per-pixel
-		on_rotate = wall_on_rotate,
-		tiles = {
-			{ name = "[combine:16x16:-4,-4=" ..head_def.texture, align_style = "world" }, -- front
-			{ name = "[combine:16x16:-20,-4="..head_def.texture, align_style = "world" }, -- back
+end
 
-			{ name = "[combine:16x16:-8,-4=" ..head_def.texture, align_style = "world" }, -- right
-			{ name = "[combine:16x16:0,-4="  ..head_def.texture, align_style = "world" }, -- left
+--- @class HeadDef
+--- @field name string identifier for node
+--- @field texture string armor texture for node
+--- @field description string translated description
+--- @field longdesc string translated doc description
+--- @field range_mob? string name of mob affected by range reduction
+--- @field range_factor? number factor of range reduction
 
-			{ name = "([combine:16x16:-4,0=" ..head_def.texture ..")^[transformR180", align_style = "node" }, -- top
-			{ name = "([combine:16x16:-12,0=" ..head_def.texture ..")^[transformR180", align_style = "node" }, -- bottom
-		},
-		drop = name,
-	}))
+--- registers a head
+--- @param head_def HeadDef head node definition
+function mcl_heads.register_head(head_def)
+	if head_def.groups then
+		for k, v in pairs(head_def.groups) do
+			mcl_heads.deftemplate.groups[k] = v
+		end
+	end
+
+	register_floor(head_def)
+	register_wall(head_def)
+	register_ceiling(head_def)
 end
 
 mcl_heads.register_head{
@@ -256,6 +271,33 @@ mcl_heads.register_head{
 	longdesc = S("A wither skeleton skull is a small decorative block which resembles the skull of a wither skeleton. It can also be worn as a helmet for fun, but does not offer any protection."),
 	groups = {rarity = 2}
 }
+
+-- Piglin head
+local defpiglin = {
+	name = "piglin",
+	mesh = "mcl_heads_piglin_floor.obj",
+	texture = "extra_mobs_piglin.png",
+	description = S("Piglin Head"),
+	longdesc = S("A piglin head is a small decorative block which resembles the head of a piglin. It can also be worn as a helmet, which reduces the detection range of piglins by 50%."),
+	range_mob = "mobs_mc:piglin",
+	range_factor = 0.5,
+	groups = {rarity = 1}
+}
+if defpiglin.groups then
+	for k, v in pairs(defpiglin.groups) do
+		mcl_heads.deftemplate.groups[k] = v
+	end
+end
+register_floor(defpiglin)
+register_ceiling(table.update(table.copy(defpiglin), {
+	mesh = "mcl_heads_piglin_ceiling.obj",
+	texture = "extra_mobs_piglin.png^[transformR180",
+}))
+register_wall(table.update(table.copy(defpiglin), {
+	drawtype = "mesh",
+	mesh = "mcl_heads_piglin_wall.obj",
+	tiles = {"extra_mobs_piglin.png"},
+}))
 
 -- convert old placed heads
 local old_rots = {
