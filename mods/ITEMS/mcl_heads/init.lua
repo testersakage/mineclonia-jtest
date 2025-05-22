@@ -128,8 +128,23 @@ local function register_floor(head_def)
 
 		_mcl_armor_mob_range_mob = head_def.range_mob,
 		_mcl_armor_mob_range_factor = head_def.range_factor,
-		_mcl_armor_texture = "[combine:64x32:32,0=" ..head_def.texture,
+		_mcl_armor_texture = head_def._mcl_armor_texture or ("[combine:64x32:32,0=" ..head_def.texture),
+		_mcl_armor_entity = name,
 	}))
+	core.register_entity(":"..name, {
+		physical = false,
+		collisionbox = {0, 0, 0, 0, 0, 0},
+		visual = "mesh",
+		mesh = head_def.mesh or "mcl_heads_floor.obj",
+		textures = { head_def.texture },
+		visual_size = {x=8.1, y=8.1, z=8.1},
+		pointable = false,
+		makes_footstep_sound = false,
+		static_save = false,
+		on_activate = function(self)
+			self.object:set_properties({is_visible = false})
+		end
+	})
 end
 
 local function register_wall(head_def)
@@ -276,12 +291,13 @@ mcl_heads.register_head{
 local defpiglin = {
 	name = "piglin",
 	mesh = "mcl_heads_piglin_floor.obj",
-	texture = "extra_mobs_piglin.png",
+	texture = "mcl_heads_piglin.png",
 	description = S("Piglin Head"),
 	longdesc = S("A piglin head is a small decorative block which resembles the head of a piglin. It can also be worn as a helmet, which reduces the detection range of piglins by 50%."),
 	range_mob = "mobs_mc:piglin",
 	range_factor = 0.5,
-	groups = {rarity = 1}
+	groups = {rarity = 1},
+	_mcl_armor_texture = "blank.png",
 }
 if defpiglin.groups then
 	for k, v in pairs(defpiglin.groups) do
@@ -291,12 +307,12 @@ end
 register_floor(defpiglin)
 register_ceiling(table.update(table.copy(defpiglin), {
 	mesh = "mcl_heads_piglin_ceiling.obj",
-	texture = "extra_mobs_piglin.png^[transformR180",
+	texture = "mcl_heads_piglin.png^[transformR180",
 }))
 register_wall(table.update(table.copy(defpiglin), {
 	drawtype = "mesh",
 	mesh = "mcl_heads_piglin_wall.obj",
-	tiles = {"extra_mobs_piglin.png"},
+	tiles = {"mcl_heads_piglin.png"},
 }))
 
 -- convert old placed heads

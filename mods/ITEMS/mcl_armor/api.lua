@@ -18,12 +18,35 @@ function mcl_armor.play_equip_sound(stack, obj, pos, unequip)
 	end
 end
 
+function mcl_armor.head_entity_equip(player)
+	local inv = mcl_util.get_inventory(player, true)
+	local head = inv:get_stack("armor", 2)
+	local def = core.registered_nodes[head:get_name()]
+	if def and def._mcl_armor_entity then
+		local entity = core.add_entity(player:get_pos(), def._mcl_armor_entity)
+		if not entity then return end
+		local player_name = player:get_player_name()
+		mcl_armor.head_entity[player_name] = entity
+		entity:set_properties({is_visible = true})
+		entity:set_attach(player, "Head", {x=0, y=4, z=0}, {x=0, y=0, z=0}, false)
+	end
+end
+
+function mcl_armor.head_entity_unequip(player)
+	local player_name = player:get_player_name()
+	if mcl_armor.head_entity[player_name] then
+		mcl_armor.head_entity[player_name]:remove()
+		mcl_armor.head_entity[player_name] = nil
+	end
+end
+
 function mcl_armor.on_equip(itemstack, obj)
 	local def = itemstack:get_definition()
 	mcl_armor.play_equip_sound(itemstack, obj)
 	if def._on_equip then
 		def._on_equip(obj, itemstack)
 	end
+	mcl_armor.head_entity_equip(obj)
 	mcl_armor.update(obj)
 end
 
@@ -33,8 +56,15 @@ function mcl_armor.on_unequip(itemstack, obj)
 	if def._on_unequip then
 		def._on_unequip(obj, itemstack)
 	end
+	mcl_armor.head_entity_unequip(obj)
 	mcl_armor.update(obj)
 end
+
+core.register_on_joinplayer(function(player)
+	core.after(0, function ()
+		mcl_armor.head_entity_equip(player)
+	end)
+end)
 
 function mcl_armor.equip(itemstack, obj, swap)
 	local def = itemstack:get_definition()
@@ -330,6 +360,7 @@ function mcl_armor.update(obj)
 							info.view_range_factors[mob_range_mob] = def._mcl_armor_mob_range_factor
 						end
 					end
+
 				end
 				if i == 5 then
 					info.depth_strider_level
