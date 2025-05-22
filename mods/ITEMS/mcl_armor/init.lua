@@ -111,6 +111,10 @@ mcl_armor.trims = {
 	}
 }
 
+-- Hold the players attached head entity
+-- example: mcl_armor.head_entity[player:get_player_name()] = entity
+mcl_armor.head_entity = {}
+
 local modpath = core.get_modpath("mcl_armor")
 
 dofile(modpath .. "/api.lua")
