@@ -167,6 +167,7 @@ core.register_on_joinplayer(function(player)
 
 	core.after(1, function()
 		if player:is_player() then
+			mcl_armor.head_entity_equip(player)
 			mcl_armor.update(player)
 		end
 	end)

@@ -65,12 +65,6 @@ function mcl_armor.on_unequip(itemstack, obj)
 	mcl_armor.update(obj)
 end
 
-core.register_on_joinplayer(function(player)
-	core.after(0, function ()
-		mcl_armor.head_entity_equip(player)
-	end)
-end)
-
 function mcl_armor.equip(itemstack, obj, swap)
 	local def = itemstack:get_definition()
 
