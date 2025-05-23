@@ -116,11 +116,13 @@ core.register_entity("mcl_armor_stand:armor_entity", {
 		self.node_pos = vector.round(self.object:get_pos())
 		self.inventory = core.get_meta(self.node_pos):get_inventory()
 		migrate_inventory(self.inventory)
+		mcl_armor.head_entity_equip(self.object)
 		mcl_armor.update(self.object)
 	end,
 	on_step = function(self)
 		if core.get_node(self.node_pos).name ~= "mcl_armor_stand:armor_stand" then
 			self.object:remove()
+			mcl_armor.head_entity_unequip(self.object)
 		end
 	end,
 	update_armor = function(self, info)

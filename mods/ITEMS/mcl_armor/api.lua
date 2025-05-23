@@ -18,17 +18,22 @@ function mcl_armor.play_equip_sound(stack, obj, pos, unequip)
 	end
 end
 
-function mcl_armor.head_entity_equip(player)
-	local inv = mcl_util.get_inventory(player, true)
+function mcl_armor.head_entity_equip(obj)
+	local inv = mcl_util.get_inventory(obj, true)
 	local head = inv:get_stack("armor", 2)
 	local def = core.registered_nodes[head:get_name()]
 	if def and def._mcl_armor_entity then
-		local entity = core.add_entity(player:get_pos(), def._mcl_armor_entity)
+		local entity = core.add_entity(obj:get_pos(), def._mcl_armor_entity)
 		if not entity then return end
-		local player_name = player:get_player_name()
+		local player_name = obj:get_player_name()
 		mcl_armor.head_entity[player_name] = entity
 		entity:set_properties({is_visible = true})
-		entity:set_attach(player, "Head", {x=0, y=4, z=0}, {x=0, y=0, z=0}, false)
+		if obj:is_player() then
+			entity:set_attach(obj, "Head", {x=0, y=4, z=0}, {x=0, y=0, z=0})
+		else
+			-- Armor Stand
+			entity:set_attach(obj, "", {x=0, y=14, z=0}, {x=0, y=0, z=0})
+		end
 	end
 end
 
@@ -46,7 +51,6 @@ function mcl_armor.on_equip(itemstack, obj)
 	if def._on_equip then
 		def._on_equip(obj, itemstack)
 	end
-	mcl_armor.head_entity_equip(obj)
 	mcl_armor.update(obj)
 end
 
@@ -56,7 +60,6 @@ function mcl_armor.on_unequip(itemstack, obj)
 	if def._on_unequip then
 		def._on_unequip(obj, itemstack)
 	end
-	mcl_armor.head_entity_unequip(obj)
 	mcl_armor.update(obj)
 end
 
@@ -94,12 +97,14 @@ function mcl_armor.equip(itemstack, obj, swap)
 			if swap then
 				new_stack = itemstack
 				itemstack = old_stack
+				mcl_armor.head_entity_unequip(obj)
 				mcl_armor.on_unequip(old_stack, obj)
 			else
 				new_stack = itemstack:take_item()
 			end
 
 			inv:set_stack("armor", element.index, new_stack)
+			mcl_armor.head_entity_equip(obj)
 			mcl_armor.on_equip(new_stack, obj)
 		end
 	end
