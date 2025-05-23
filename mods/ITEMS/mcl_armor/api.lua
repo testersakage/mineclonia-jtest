@@ -51,6 +51,7 @@ function mcl_armor.on_equip(itemstack, obj)
 	if def._on_equip then
 		def._on_equip(obj, itemstack)
 	end
+	mcl_armor.head_entity_equip(obj)
 	mcl_armor.update(obj)
 end
 
@@ -60,6 +61,7 @@ function mcl_armor.on_unequip(itemstack, obj)
 	if def._on_unequip then
 		def._on_unequip(obj, itemstack)
 	end
+	mcl_armor.head_entity_unequip(obj)
 	mcl_armor.update(obj)
 end
 
@@ -97,14 +99,12 @@ function mcl_armor.equip(itemstack, obj, swap)
 			if swap then
 				new_stack = itemstack
 				itemstack = old_stack
-				mcl_armor.head_entity_unequip(obj)
 				mcl_armor.on_unequip(old_stack, obj)
 			else
 				new_stack = itemstack:take_item()
 			end
 
 			inv:set_stack("armor", element.index, new_stack)
-			mcl_armor.head_entity_equip(obj)
 			mcl_armor.on_equip(new_stack, obj)
 		end
 	end
