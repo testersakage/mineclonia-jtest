@@ -120,6 +120,24 @@ end
 
 local function register_floor(head_def)
 	local name = "mcl_heads:" ..head_def.name
+	local entity_name
+	if head_def.mesh then
+		entity_name = name
+		core.register_entity(":"..name, {
+			physical = false,
+			collisionbox = {0, 0, 0, 0, 0, 0},
+			visual = "mesh",
+			mesh = head_def.mesh,
+			textures = { head_def.texture },
+			visual_size = {x=8.1, y=8.1, z=8.1},
+			pointable = false,
+			makes_footstep_sound = false,
+			static_save = false,
+			on_activate = function(self)
+				self.object:set_properties({is_visible = false})
+			end
+		})
+	end
 	core.register_node(":"..name, table.update(table.copy(mcl_heads.deftemplate), {
 		mesh = head_def.mesh,
 		description = head_def.description,
@@ -129,22 +147,8 @@ local function register_floor(head_def)
 		_mcl_armor_mob_range_mob = head_def.range_mob,
 		_mcl_armor_mob_range_factor = head_def.range_factor,
 		_mcl_armor_texture = head_def._mcl_armor_texture or ("[combine:64x32:32,0=" ..head_def.texture),
-		_mcl_armor_entity = name,
+		_mcl_armor_entity = entity_name,
 	}))
-	core.register_entity(":"..name, {
-		physical = false,
-		collisionbox = {0, 0, 0, 0, 0, 0},
-		visual = "mesh",
-		mesh = head_def.mesh or "mcl_heads_floor.obj",
-		textures = { head_def.texture },
-		visual_size = {x=8.1, y=8.1, z=8.1},
-		pointable = false,
-		makes_footstep_sound = false,
-		static_save = false,
-		on_activate = function(self)
-			self.object:set_properties({is_visible = false})
-		end
-	})
 end
 
 local function register_wall(head_def)
@@ -215,7 +219,6 @@ local function register_ceiling(head_def)
 		_mcl_armor_mob_range_factor = head_def.range_factor,
 		_mcl_armor_texture = "[combine:64x32:32,0=" ..head_def.texture,
 	}))
-
 end
 
 --- @class HeadDef

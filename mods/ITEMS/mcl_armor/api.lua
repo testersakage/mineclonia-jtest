@@ -22,7 +22,7 @@ function mcl_armor.head_entity_equip(obj)
 	local inv = mcl_util.get_inventory(obj, true)
 	local head = inv:get_stack("armor", 2)
 	local def = core.registered_nodes[head:get_name()]
-	if def and def._mcl_armor_entity then
+	if def and def._mcl_armor_entity ~= nil then
 		local entity = core.add_entity(obj:get_pos(), def._mcl_armor_entity)
 		if not entity then return end
 		local player_name = obj:get_player_name()
