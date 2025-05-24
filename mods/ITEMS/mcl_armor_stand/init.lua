@@ -112,6 +112,7 @@ core.register_entity("mcl_armor_stand:armor_entity", {
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
 	on_activate = function(self)
+		self._id = "id_"..core.sha1(core.get_gametime()..core.pos_to_string(self.object:get_pos())..tostring(math.random()))
 		self.object:set_armor_groups({immortal = 1})
 		self.node_pos = vector.round(self.object:get_pos())
 		self.inventory = core.get_meta(self.node_pos):get_inventory()

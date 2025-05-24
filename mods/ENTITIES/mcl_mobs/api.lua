@@ -440,6 +440,8 @@ function mob_class:mob_activate (staticdata, dtime)
 	self:display_wielditem (false)
 	self:display_wielditem (true)
 
+	mcl_armor.head_entity_equip(self.object)
+
 	if type (self._armor_texture_slots) == "number" then
 		self._armor_texture_slots = {
 			[self._armor_texture_slots] = {

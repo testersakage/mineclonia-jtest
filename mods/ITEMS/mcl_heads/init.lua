@@ -118,25 +118,32 @@ local function wall_on_rotate(pos, node, _, mode, _)
 	end
 end
 
+function mcl_heads.register_entity(def)
+	core.register_entity(":"..def.name, {
+		physical = false,
+		collisionbox = {0, 0, 0, 0, 0, 0},
+		visual = "mesh",
+		mesh = def.mesh,
+		textures = { def.texture },
+		tiles = { def.texture },
+		visual_size = {x=8.1, y=8.1, z=8.1},
+		pointable = false,
+		makes_footstep_sound = false,
+		static_save = false,
+		on_activate = function(self)
+			self.object:set_properties({is_visible = false})
+		end
+	})
+end
+
 local function register_floor(head_def)
 	local name = "mcl_heads:" ..head_def.name
 	local entity_name
 	if head_def.mesh then
 		entity_name = name
-		core.register_entity(":"..name, {
-			physical = false,
-			collisionbox = {0, 0, 0, 0, 0, 0},
-			visual = "mesh",
-			mesh = head_def.mesh,
-			textures = { head_def.texture },
-			visual_size = {x=8.1, y=8.1, z=8.1},
-			pointable = false,
-			makes_footstep_sound = false,
-			static_save = false,
-			on_activate = function(self)
-				self.object:set_properties({is_visible = false})
-			end
-		})
+		mcl_heads.register_entity(table.update(table.copy(head_def), {
+			name = name
+		}))
 	end
 	core.register_node(":"..name, table.update(table.copy(mcl_heads.deftemplate), {
 		mesh = head_def.mesh,

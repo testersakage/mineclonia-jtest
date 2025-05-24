@@ -19,29 +19,47 @@ function mcl_armor.play_equip_sound(stack, obj, pos, unequip)
 end
 
 function mcl_armor.head_entity_equip(obj)
-	local inv = mcl_util.get_inventory(obj, true)
-	local head = inv:get_stack("armor", 2)
+	local luaentity = obj:get_luaentity()
+	local entity_name = luaentity and luaentity.object:get_entity_name() or nil
+	local inv, head
+
+	if entity_name == "mcl_armor_stand:armor_entity"
+		or obj:is_player() then
+		inv = mcl_util.get_inventory(obj, true)
+		head = inv:get_stack("armor", 2)
+	else
+		inv = luaentity.armor_list
+		if not inv then return end
+		head = ItemStack(inv["head"])
+	end
+
 	local def = core.registered_nodes[head:get_name()]
 	if def and def._mcl_armor_entity ~= nil then
 		local entity = core.add_entity(obj:get_pos(), def._mcl_armor_entity)
 		if not entity then return end
-		local player_name = obj:get_player_name()
-		mcl_armor.head_entity[player_name] = entity
 		entity:set_properties({is_visible = true})
 		if obj:is_player() then
 			entity:set_attach(obj, "Head", {x=0, y=4, z=0}, {x=0, y=0, z=0})
+			mcl_armor.head_entity[obj:get_player_name()] = entity
 		else
-			-- Armor Stand
-			entity:set_attach(obj, "", {x=0, y=14, z=0}, {x=0, y=0, z=0})
+			-- TODO: rename all mobs head bone to "Head"
+			local bone = entity_name ~= "mcl_armor_stand:armor_entity" and "Head" or ""
+			local offset = entity_name ~= "mcl_armor_stand:armor_entity" and 4.3 or 14
+			if entity_name ~= "mcl_armor_stand:armor_entity" then
+				-- Make it bigger if it worn by mobs
+				entity:set_properties({visual_size={x=9,y=9,z=9}})
+			end
+			entity:set_attach(obj, bone, {x=0, y=offset, z=0}, {x=0, y=0, z=0})
+			mcl_armor.head_entity[luaentity._id] = entity
 		end
 	end
 end
 
-function mcl_armor.head_entity_unequip(player)
-	local player_name = player:get_player_name()
-	if mcl_armor.head_entity[player_name] then
-		mcl_armor.head_entity[player_name]:remove()
-		mcl_armor.head_entity[player_name] = nil
+function mcl_armor.head_entity_unequip(obj)
+	local id = obj:is_player() and obj:get_player_name() or obj:get_luaentity()._id
+	if mcl_armor.head_entity[id] then
+		mcl_armor.head_entity[id]:remove()
+		mcl_armor.head_entity[id] = nil
 	end
 end
 
