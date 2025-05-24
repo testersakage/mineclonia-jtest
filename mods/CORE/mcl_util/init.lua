@@ -6,6 +6,7 @@ mcl_util = {}
 -- `table` extensions
 dofile(modpath .. "/table.lua")
 core.register_mapgen_script (modpath .. "/table.lua")
+core.register_async_dofile (modpath .. "/table.lua")
 -- Utilities for environment access (nodes, mapgen)
 dofile(modpath .. "/environment.lua")
 -- Item-related utilities

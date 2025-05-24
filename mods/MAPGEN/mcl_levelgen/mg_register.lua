@@ -22,7 +22,8 @@ local overworld_preset = mcl_levelgen.make_overworld_preset (seed)
 -- Load carvers into biome descriptions.
 mcl_levelgen.load_carvers ()
 
-local mt_chunksize = math.max (1, tonumber (core.get_mapgen_setting ("chunksize")) or 5)
+local mt_chunksize
+	= math.max (1, tonumber (core.get_mapgen_setting ("chunksize")) or 5)
 local chunksize = mt_chunksize * 16
 local overworld_terrain
 	= mcl_levelgen.make_terrain_generator (overworld_preset, chunksize)
@@ -73,6 +74,8 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	vmanip:set_data (cids)
 	vmanip:set_param2_data (param2s)
 	vmanip:update_liquids ()
+	vmanip:set_lighting ({day=0, night=0,})
+	vmanip:calc_lighting ()
 
 	-- zone ("Biome encoding")
 	local compressed = mcl_levelgen.encode_biomes (biomes, block_y - level_min,
@@ -81,4 +84,12 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	core.save_gen_notify ("mcl_levelgen:biome_data", compressed)
 	-- zone ()
 	-- print (string.format ("%.2f", os.clock () - clock))
+
+	-- zone ("Heightmap production")
+	mcl_levelgen.regenerate_heightmap (mcl_levelgen.gen_node_cache,
+					   overworld_terrain.heightmap,
+					   chunksize, overworld_preset)
+	core.save_gen_notify ("mcl_levelgen:level_height_map",
+			      overworld_terrain.heightmap)
+	-- zone ()
 end)

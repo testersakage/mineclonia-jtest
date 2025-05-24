@@ -27,6 +27,14 @@
 --
 ------------------------------------------------------------------------
 
+local verbose = mcl_levelgen.verbose
+
+local function verbose_print (...)
+	if verbose then
+		print (...)
+	end
+end
+
 local cid_air, cid_water_source, cid_lava_source
 if core and core.get_content_id then
 	cid_air = core.CONTENT_AIR
@@ -1362,9 +1370,9 @@ local function create_terracotta_bands (self, rng)
 	assert (#array == 192)
 
 	if core then
-		print ("*=*=  Terracotta bands  =*=*")
+		verbose_print ("*=*=  Terracotta bands  =*=*")
 		for i = 1, #array do
-			print (core.get_name_from_content_id (array[i]))
+			verbose_print (core.get_name_from_content_id (array[i]))
 		end
 	end
 

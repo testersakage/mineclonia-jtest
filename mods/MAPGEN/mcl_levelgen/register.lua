@@ -2,25 +2,42 @@
 -- Level generator registration.
 ------------------------------------------------------------------------
 
-local seed_str = core.get_mapgen_setting ("seed")
+mcl_levelgen.verbose = false
+
+if mcl_vars.enable_mcl_levelgen then
+
+local seed
 local ull = mcl_levelgen.ull
 local tostringull = mcl_levelgen.tostringull
 local stringtoull = mcl_levelgen.stringtoull
 
-if mcl_vars.enable_mcl_levelgen then
+if core.get_mapgen_setting then
+	local seed_str = core.get_mapgen_setting ("seed")
 
-local seed = ull (0, 0)
-mcl_levelgen.seed = seed
-if not stringtoull (seed, seed_str) then
-	core.log ("error", "`" .. seed_str .. "' is not a valid seed")
+	seed = ull (0, 0)
+	mcl_levelgen.seed = seed
+	if not stringtoull (seed, seed_str) then
+		core.log ("error", "`" .. seed_str .. "' is not a valid seed")
+	end
+	core.ipc_set ("mcl_levelgen:level_seed", seed)
+
+	-- XXX: render this a user option.
+	mcl_levelgen.verbose = true
+else
+	-- Async environment.
+	seed = core.ipc_get ("mcl_levelgen:level_seed")
+	mcl_levelgen.seed = seed
 end
+
 mcl_levelgen.biome_seed = mcl_levelgen.get_biome_seed (seed)
 mcl_levelgen.levelgen_enabled = true
 
 -- Load existing biome ID assignments.
 local assignments = {}
 local mod_storage
-if core.save_gen_notify then
+
+if core and not core.get_mod_storage then
+	-- Async or mapgen environment.
 	assignments = core.ipc_get ("mcl_levelgen:biome_id_assignments")
 else
 	mod_storage = core.get_mod_storage ()
@@ -35,6 +52,9 @@ mcl_levelgen.assign_biome_ids (assignments)
 
 if core.save_gen_notify then
 	dofile (mcl_levelgen.prefix .. "/mg_register.lua")
+elseif not core.get_mod_storage then
+	-- Async environment.
+	dofile (mcl_levelgen.prefix .. "/async_register.lua")
 else
 	core.log ("action", ("[mcl_levelgen]: Initializing level generation with seed "
 			     .. tostringull (seed) .. " (Biome seed: "
@@ -43,6 +63,17 @@ else
 				core.serialize (assignments))
 	core.ipc_set ("mcl_levelgen:biome_id_assignments", assignments)
 	core.register_mapgen_script (mcl_levelgen.prefix .. "/init.lua")
+	dofile (mcl_levelgen.prefix .. "/post_processing.lua")
+end
+
+local register_levelgen_script = mcl_levelgen.register_levelgen_script
+register_levelgen_script (mcl_levelgen.prefix .. "/default_features.lua")
+
+if core and not core.get_node then
+	-- Run level generation scripts.
+	for _, script in ipairs (core.ipc_get ("mcl_levelgen:levelgen_scripts")) do
+		dofile (script)
+	end
 end
 
 else
