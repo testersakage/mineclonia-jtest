@@ -151,6 +151,23 @@ function mcl_levelgen.index_biome_list (list, qx, qy, qz)
 	return id_to_name_map[biome]
 end
 
+local insert = table.insert
+
+function mcl_levelgen.expand_biome_list (list, dest, seen)
+	local i, n = 1, #list
+	while i <= n do
+		local biome = byte (list, i + 1)
+		if not seen[biome] then
+			seen[biome] = true
+			local name = id_to_name_map[biome]
+			if name then
+				insert (dest, name)
+			end
+		end
+		i = i + 2
+	end
+end
+
 ------------------------------------------------------------------------
 -- Biome data storage.
 ------------------------------------------------------------------------
@@ -222,6 +239,29 @@ function mcl_levelgen.get_biome (pos)
 	return mcl_levelgen.index_biome_list (str, qx, qy, qz)
 end
 
+function mcl_levelgen.get_biome_meta (bx, by, bz)
+	v.x = bx * 16
+	v.y = by * 16
+	v.z = bz * 16
+	local meta = core.get_meta (v)
+	local str = meta:get_string ("mcl_levelgen:biome_index")
+	if not str or str == "" then
+		-- Biome index was overwritten; load it from mod
+		-- storage.
+		str = mod_storage:get_string (table.concat ({
+			tostring (bx), ",",
+			tostring (by), ",",
+			tostring (bz),
+		}))
+
+		if not str or str == "" then
+			return nil
+		end
+		meta:set_string ("mcl_levelgen:biome_index", str)
+	end
+	return str
+end
+
 local function save_biome_index (pos, bx, by, bz, index)
 	local meta = core.get_meta (pos)
 	meta:set_string ("mcl_levelgen:biome_index", index)
@@ -232,7 +272,10 @@ local function save_biome_index (pos, bx, by, bz, index)
 	}), index)
 end
 
-core.set_gen_notify ({ custom = true, }, nil, { "mcl_levelgen:biome_data", })
+core.set_gen_notify ({ custom = true, }, nil, {
+	"mcl_levelgen:biome_data",
+	"mcl_levelgen:level_height_map",
+})
 
 core.register_on_generated (function (minp, maxp, blockseed)
 	local custom = core.get_mapgen_object ("gennotify").custom

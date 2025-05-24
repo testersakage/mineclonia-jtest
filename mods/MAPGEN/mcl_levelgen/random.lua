@@ -557,6 +557,7 @@ mcl_levelgen.extull = extull
 mcl_levelgen.extkull = extkull
 mcl_levelgen.dtoull = dtoull
 mcl_levelgen.stringtoull = stringtoull
+mcl_levelgen.ltull = ltull
 
 ------------------------------------------------------------------------
 -- Rng-number generator interface.
@@ -575,7 +576,7 @@ end
 function mcl_levelgen.wrap_pr (pr)
 	local r = 1 / 2147483647
 	return {
-		next_long = function (self, ull)
+		next_long = function (self)
 			local max = 2147483647
 			return ull (0, pr:next (0, max))
 		end,
@@ -1398,8 +1399,8 @@ end
 -- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1
 -- /net/minecraft/util/math/random/ChunkRandom.html#setCarverSeed(long,int,int)
 
--- Temporaries for set_carver_seed.
-local tmp, cxu, czu = ull (0, 0), ull (0, 0), ull (0, 0)
+-- Temporaries for set_carver_seed and friends.
+local tmp, tmp1, cxu, czu = ull (0, 0), ull (0, 0), ull (0, 0), ull (0, 0)
 
 function mcl_levelgen.set_carver_seed (rng, seed, cx, cz)
 	rng:reseed (seed)
@@ -1428,4 +1429,46 @@ if true then
 	assert (lcg:next_within (5000) == 4611)
 	assert (lcg:next_within (5000) == 2202)
 	assert (lcg:next_within (5000) == 4126)
+end
+
+function mcl_levelgen.set_population_seed (rng, seed, cx, cz)
+	rng:reseed (seed)
+	local a = rng:next_long ()
+	tmp[1], tmp[2], a = a[1], a[2], tmp
+	local b = rng:next_long ()
+	tmp1[1], tmp1[2], b = b[1], b[2], tmp1
+
+	-- (long) cx * (a | 1) + (long) cz * (b | 1) ^ seed
+	a[1] = normalize (bor (a[1], 1))
+	b[1] = normalize (bor (b[1], 1))
+	extkull (cxu, cx)
+	extkull (czu, cz)
+	mul2ull (a, cxu)
+	mul2ull (b, czu)
+	addull (a, b)
+	xorull (a, seed)
+	rng:reseed (a)
+	return a
+end
+
+function mcl_levelgen.set_decorator_seed (rng, pop, index, step)
+	czu[1], czu[2] = pop[1], pop[2]
+	extkull (cxu, index)
+	addull (czu, cxu)
+	extkull (cxu, fmod (step * 10000, 0x80000000))
+	addull (czu, cxu)
+	rng:reseed (czu)
+end
+
+if true then
+	local lcg = mcl_levelgen.jvm_random (ull (0, 0))
+	local pop = mcl_levelgen.set_population_seed (lcg, extull (304853),
+						      -11270, 9304)
+	assert (lcg:next_within (5000) == 1925)
+	assert (lcg:next_within (5000) == 182)
+	assert (lcg:next_within (5000) == 75)
+	mcl_levelgen.set_decorator_seed (lcg, pop, 33, 11)
+	assert (lcg:next_within (5000) == 2357)
+	assert (lcg:next_within (5000) == 4883)
+	assert (lcg:next_within (5000) == 3244)
 end

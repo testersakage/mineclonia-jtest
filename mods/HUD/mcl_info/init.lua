@@ -186,11 +186,21 @@ mcl_info.register_debug_field("Node below",{
 mcl_info.register_debug_field("Biome",{
 	level = 3,
 	func = function(_, pos)
-		local biome = mcl_levelgen.get_biome (pos)
-		if biome then
-			return biome
+		if mcl_levelgen.levelgen_enabled then
+			local biome = mcl_levelgen.get_biome (pos)
+			if biome then
+				return biome
+			else
+				return "No biome"
+			end
 		else
-			return "No biome"
+			local biome_data = core.get_biome_data (pos)
+			local biome = biome_data and core.get_biome_name (biome_data.biome) or "No biome"
+			if biome_data then
+				return string.format ("%s (%s), Humidity: %.1f, Temperature: %.1f",
+						      biome, biome_data.biome, biome_data.humidity,
+						      biome_data.heat)
+			end
 		end
 	end
 })
@@ -225,14 +235,4 @@ mcl_info.register_debug_field("Location", {
 		-- outside of scoped bounds.
 		return string.format("Void: x:%.1f y:%.1f z:%.1f", pos.x, pos.y, pos.z)
 	end
-})
-
-mcl_info.register_debug_field ("Location (Level generator)", {
-	level = 3,
-	func = function (_, pos)
-		local pos = mcl_levelgen.conv_pos (pos)
-		return vector.to_string (pos)
-			.. " Level generator chunk: "
-			.. vector.to_string (vector.divide (pos, 16):apply (math.floor))
-	end,
 })
