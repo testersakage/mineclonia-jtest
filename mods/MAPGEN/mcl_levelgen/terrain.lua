@@ -23,13 +23,14 @@ local toquart = mcl_levelgen.toquart
 local terrain_generator = {}
 mcl_levelgen.terrain_generator = terrain_generator
 
-local cid_stone, cid_water_source, cid_air
+local cid_stone, cid_water_source, cid_lava_source, cid_air
 local cid_copper_ore, cid_deepslate_iron_ore, cid_raw_copper, cid_raw_iron
 local cid_granite, cid_tuff
 
 local function init_cids ()
 	cid_stone = core.get_content_id ("mcl_core:stone")
 	cid_water_source = core.get_content_id ("mcl_core:water_source")
+	cid_lava_source = core.get_content_id ("mcl_core:lava_source")
 	cid_air = core.CONTENT_AIR
 	cid_copper_ore = core.get_content_id ("mcl_copper:stone_with_copper")
 	cid_deepslate_iron_ore = core.get_content_id ("mcl_deepslate:deepslate_with_iron")
@@ -48,6 +49,7 @@ if core and core.get_content_id then
 else
 	cid_stone = 3
 	cid_water_source = 1
+	cid_lava_source = 1
 	cid_air = 0
 	cid_copper_ore = 91
 	cid_deepslate_iron_ore = 92
@@ -657,6 +659,7 @@ local function clear_surface_level_cache (self)
 end
 
 local gen_nodes = {}
+mcl_levelgen.gen_node_cache = gen_nodes
 
 local function encode_node (cid, param2)
 	return bor (lshift (cid, 8), param2)
@@ -990,4 +993,34 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 		gen.vein_gap = wrapnext (preset.vein_gap)
 	end
 	return gen
+end
+
+------------------------------------------------------------------------
+-- Heightmap recomputation.
+------------------------------------------------------------------------
+
+function mcl_levelgen.regenerate_heightmap (nodes, heightmap, chunksize,
+					    preset)
+	local level_height = preset.height
+	-- Clear the heightmap first.
+	for i = 1, chunksize * chunksize do
+		heightmap[i] = 0
+	end
+
+	for y = level_height - 1, 0, -1 do
+		for x = 0, chunksize - 1 do
+			for z = 0, chunksize - 1 do
+				local index = index (x, y, z, chunksize,
+						     level_height)
+				local cid, _ = decode_node (nodes[index])
+				local isair = cid == cid_air
+				local isstone = cid ~= cid_air
+					and cid ~= cid_lava_source
+					and cid ~= cid_water_source
+				update_height_map (heightmap, x, y, z,
+						   isair, isstone,
+						   chunksize)
+			end
+		end
+	end
 end

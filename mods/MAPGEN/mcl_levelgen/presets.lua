@@ -1779,6 +1779,19 @@ local function initialize_overworld_biomes (preset, large_biomes,
 			0.0,
 		}
 	end
+
+	local all_biomes, seen = {}, {}
+
+	for _, node in ipairs (nodes) do
+		if not seen[node.value] then
+			table.insert (all_biomes, node.value)
+			seen[node.value] = true
+		end
+	end
+
+	preset.generated_biomes = function (self)
+		return all_biomes
+	end
 end
 
 local SURFACE_DENSITY = 1.5625
