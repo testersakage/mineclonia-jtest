@@ -267,8 +267,8 @@ function mcl_player.get_player_formspec_model(player, x, y, w, h, fsname)
 	if armordef and armordef._mcl_armor_entity ~= nil then
 		formspec = table.concat({
 			formspec,
-			string.format("model[%s,%s;%s,%s;;%s;%s;0,0;false;false;%s,%s]",
-				x+0.6, y-1.90, w - 1.2, h - 1.2, armordef.mesh, armordef.tiles[1], anim.x, anim.y)
+			string.format("model[%s,%s;%s,%s;;%s;%s;0,0;false;false]",
+				x+0.6, y-1.90, w - 1.2, h - 1.2, armordef.mesh, armordef.tiles[1])
 		})
 	end
 	return formspec
