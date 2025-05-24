@@ -1,0 +1,491 @@
+The level generator only exposes interfaces for registering features
+and structures, and does not admit of customization by mods in any
+other respect (e.g. terrain presets, surface systems, aquifers, and
+biome placement).  Moreover, it handles positions in Minecraft's
+coordinate system, which chiefly differs from Minetest's in an
+inverted X axis.
+
+Mod authors must also be aware that structures and features are liable
+to run in any environment--whether async environments, an emerge
+environment, or the main Lua modding environment, and only exercise
+facilities available in all of them.
+
+In the same spirit, many of the facilities here (even though they may
+be available in the main Lua environment) must never be invoked at
+top-level, only within scripts provided to `register_levelgen_script'.
+
+
+SCRIPT REGISTRATION
+
+Function: mcl_levelgen.register_levelgen_script (SCRIPT)
+
+Register SCRIPT to execute in every context where structure or feature
+placement is processed; registered scripts are executed in the same
+sequence as they are defined.  All facilities documented after this
+function, unless otherwise stated, are only safe to invoke from within
+this mapgen script.
+
+
+FEATURE REGISTRATION
+
+As in Minecraft, features are defined and configured in three stages.
+Plain features provide the code that places a feature by reference to
+a number of configuration parameters; these features may be combined
+with a collection of such parameters to define "configured features."
+In their turn, a sequence of functions referred to as "placement
+modifiers" are executed to derive a list of positions in which to
+place a configured feature from the northwest origin of each Minecraft
+chunk (16x384x16 volume), a combination of which with a placement
+function constitutes a "placed feature."  Features of every degree of
+completion are assigned unique identifiers and are freely composable.
+
+Features do not generate unless they appear in a biome's feature list,
+which is not accessible to mods as stringent consistency requirements
+are imposed by the feature generation system as regards the precedence
+of feature definitions across different biomes, for it is possible for
+a chunk to intersect up to sixteen unrelated biomes.  Mods are
+permitted to alter the feature lists of independent biomes through an
+interface that maintains these invariants.
+
+Function: mcl_levelgen.register_feature (ID, FEATURE)
+
+Register the plain feature FEATURE with the identifier ID.  FEATURE
+must be a table of arbitrary information and functions, of which the
+following are required:
+
+{
+	place = function (X, Y, Z, CFG, RNG) ... end,
+
+Place this feature with its origin at X, Y, Z, by means of the level
+access functions documented below.  CFG is the configured feature on
+whose behalf this feature is being placed.  RNG is the same PRNG that
+is provided to placement modifiers, in a state unmodified since the
+completion of the last placement modifier defined in the placed
+feature on whose behalf CFG is being placed.
+
+}
+
+Function: mcl_levelgen.register_configured_feature (ID, CONFIGURED_FEATURE)
+
+Associate a configuration with the feature named therein as a
+configured feature identified by ID.  CONFIGURED_FEATURE must be a
+table which is to be supplied to the feature's `place' function and
+may hold arbitrary information excepting a field `feature', which must
+be the ID of a plain feature.
+
+Function: mcl_levelgen.register_placed_feature (ID, PLACED_FEATURE)
+
+Associate a configured feature with a list of placement modifiers in
+the table PLACED_FEATURE.  PLACED_FEATURE must be a table of the
+following form:
+
+{
+	configured_feature = "<id>",
+
+Must identify a configured feature defined as illustrated above.
+
+	placement_modifiers = {...},
+
+Must contain a list of placement modifier functions, as illustrated
+in subsequent sections.
+
+}
+
+Function: mcl_levelgen.generate_feature (ID, BEFORE, BIOMES, STAGE)
+
+Generate the placed feature identified by ID before the feature BEFORE
+during the stage STAGE (an integer from 1 to 12) in the provided list
+of biomes BIOMES, and after all biomes generated in preceding stages.
+If BEFORE is not generated in any of these biomes, generate the
+designated feature after all other features heretofore defined to
+generate in the biomes concerned.
+
+ID may only be registered for generation once per stage, and an error
+will be signaled if this requirement is not satisfied.
+
+
+LEVEL ACCESS FACILITIES
+
+When invoked, a feature's placement mechanisms are only granted a
+limited view of the data of the level.  This view encompasses an
+accessible region of a single chunk at the center of the level where
+features should originate, and a one chunk margin of context into
+which feature contents may extrude.  This restricts the horizontal
+dimensions of a feature to a distance of 32 nodes around its origin,
+which characteristic distinguishes features from the other type of
+decoration, the structure, whose dimensions can be much greater.
+Inasmuch as Minetest levels are incrementally generated vertically as
+well as horizontally, a variable number of MapBlocks are accessible
+vertically: a minimum of two MapBlocks (32 nodes) of vertical context
+is provided in either direction for feature extrusions--which may be
+shorter at the vertical extremes of the level--surrounding one or more
+MapBlocks where features may originate.  The net result is that at the
+minimum, a feature may extend 32x64x32 blocks from its center, but
+that to guarantee the absence of truncation only features that
+originate at the center of the view, not within the context, may be
+placed.  Biome and heightmap information is available for all
+MapBlocks in this area, context or not, and the heightmap may be
+modified in either direction as blocks are created or removed.
+
+The functions and variables documented in this section are available
+to all placement modifiers and features.
+
+Variable: mcl_levelgen.placement_run_minp
+
+Vector containing the minimum position, in Minecraft block
+coordinates, of the section of the level in which features may
+originate.
+
+Variable: mcl_levelgen.placement_run_maxp
+
+Vector containing the maximum position (inclusive), in Minecraft block
+coordinates, of the section of the level in which features may
+originate.
+
+Any position within one MapBlock of the cuboid defined by
+placement_run_minp and placement_run_maxp horizontally and two
+MapBlocks vertically (if not truncated by the bottom of the level) is
+also accessible and may be altered.
+
+Variable: mcl_levelgen.level_min
+
+Integer value providing the bottommost vertical position of the level
+in which feature placement is proceeding.
+
+Variable: mcl_levelgen.level_height
+
+Integer value providing the height (in blocks from the bottommost
+vertical position) of the level in which feature placement is
+proceeding.
+
+Function: mcl_levelgen.index_heightmap (X, Z)
+
+Return two values with the Y position of the uppermost block at X, Z
+\(which must be absolute positions within the accessible region of the
+level) that is non-solid by criteria particular to each value:
+
+For the purposes of the first value `WORLD_SURFACE', a block is
+considered solid if it is not air, so that ocean surfaces and the like
+will be represented in its values.
+
+With the second value `MOTION_BLOCKING', a block is only solid if it
+obstructs movement (i.e., `walkable' in Minetest nomenclature,
+although when initially producing heightmaps the level generator
+assumes that terrain consists of only walkable and liquid nodes, and
+proceeds accordingly.)
+
+Occasionally (after modifications to the level in the presence of
+insufficient context), the value of the heightmap at a given position
+may be uncertain and only known to be below a certain position.  If
+the vertical context now available is sufficient to compute its true
+value, compute and return the same.  If otherwise, return the position
+at the bottom of the context to this placement operation in lieu of
+the values in doubt.
+
+Signal an error if the requested position horizontally exceeds the
+accessible region of the level.
+
+Function: mcl_levelgen.index_biome (X, Y, Z)
+
+Return the (munged) biome at X, Y, Z, absolute block positions that
+must remain within the accessible region of the level in a form not
+truncated by the confines of the level.  If this requirement is not
+satisfied, signal an error.  Value may be nil if Y is outside the
+level.
+
+Function: mcl_levelgen.get_block (X, Y, Z)
+
+Return the content ID and param2 value of the block at X, Y, Z, or nil
+if the position designated is outside the accessible region of the
+level.
+
+Function: mcl_levelgen.set_block (X, Y, Z, CID, PARAM2)
+
+Set the block at X, Y, Z, to CID and PARAM2, and adjust heightmaps
+correspondingly.  If X, Y, Z are outside the accessible region of the
+level in a form not truncated by the confines of the level potentially
+log a warning but disregard the error.
+
+You must make arrangements to correct the lighting in this area by
+means of `mcl_levelgen.fix_lighting' if any nodes should be inserted
+that could possibly affect lighting.
+
+Function: mcl_levelgen.fix_lighting (X1, Y1, Z1, X2, Y2, Z2)
+
+Arrange to fix lighting (with `core.fix_light') in the cuboid defined
+by X1, Y1, Z1, and X2, Y2, Z2, all inclusive.  These coordinates will
+be converted into Minetest's native coordinate system, but no further
+validation or transformations are applied.
+
+
+PLACEMENT MODIFIERS
+
+A placement modifier is a function that is invoked with a block
+position and is expected to return a list of positions individually to
+be provided to the next placement modifier defined in the same placed
+feature, till the last placement modifier is executed and the
+positions it produces are given to feature placement functions.  The
+first placement modifier is invoked with the absolute coordinates of
+the bottom northwest corner of the Minecraft chunk being processed.
+In addition to the three arguments specifying the block position to be
+processed, an RNG is supplied that is guaranteed to produce identical
+results for identical combination of Minecraft chunk and seed.  See
+RANDOM NUMBER GENERATOR INTERFACE.
+
+Function: <placement modifier> (X, Y, Z, RNG)
+
+See above.  X, Y, Z specify a block position and RNG provides a random
+number generator.  Value must be an array of the form { X Y Z ... },
+where every group of three elements specifies a position that will be
+provided to the next placement modifier defined.  Upon completion of
+all placement modifiers, RNG will be provided to the plain feature's
+`place' method.
+
+
+RANDOM NUMBER GENERATOR INTERFACE
+
+Random number generators operate on 64-bit values represented as
+tables of unsigned 32-bit values represented as Lua numbers.  Most
+functions for operating on these values are two-operand operations
+that store the result in the first (destination) operand.  By
+convention, these tables are referred to as `ull' values.  (`unsigned
+long long' being generally the 64-bit unsigned integer type provided
+by C compilers, and also the suffix which indicates such values in C
+and Luajit.)
+
+Function: mcl_levelgen.tostringull (ULL)
+
+Return the string representation of ULL as an unsigned, 64-bit,
+number.
+
+Function: mcl_levelgen.ull (HI, LO)
+
+Return a table of { LO, HI, }, where LO and HI are unsigned 32-bit
+values represented as Lua numbers respectively providing the 32
+low-order and high-order words of a 64-bit value.  If LO or HI do not
+satisfy these constraints, behavior is undefined.
+
+Function: mcl_levelgen.addull (DST, SRC)
+
+Add SRC to DST (both ull values) with wraparound arithmetic and return
+the result in DST.
+
+Function: mcl_levelgen.addkull (DST, K)
+
+Add K to DST and store the result in DST.  DST must be a ull value,
+and K a 32-bit unsigned value represented as a Lua number.  If K does
+not satisfy this constraint, behavior is undefined.
+
+Function: mcl_levelgen.negull (DST)
+
+Calculate the two's complement of DST and store the result in DST,
+with wraparound arithmetic for overflows (i.e., -(-0x8000000000000000)
+== -0x1).
+
+Function: mcl_levelgen.subull (DST, SRC)
+
+Subtract SRC from DST (both ulls) and store the difference in DST.
+
+Function: mcl_levelgen.divull (DST, K)
+
+Divide DST (an unsigned ull value) by K (an unsigned integer value <=
+0x7fff) and store the quotient in DST.  If K does not satisfy this
+constraint, behavior is undefined.
+
+Function: mcl_levelgen.mulull (DST, K)
+
+Multiply DST (an unsigned ull value) by K (an unsigned 32-bit value)
+and store the low-order 64 bits of the product in DST, returning the
+remaining 32-bits as a Lua number.  If K does not satisfy the
+constraint imposed on it, behavior is undefined.
+
+Function: mcl_levelgen.ashrull (DST, K)
+
+Shift DST right K bits with sign-extension, storing the result in DST.
+K must be a number between 0 and 64; otherwise behavior is undefined.
+
+Function: mcl_levelgen.shrull (DST, K)
+
+Shift DST right K bits with zero-extension, storing the result in DST.
+K must be a number between 0 and 64; otherwise behavior is undefined.
+
+Function: mcl_levelgen.shlull (DST, K)
+
+Shift DST left K bits, storing the result in DST.  K must be a number
+between 0 and 64; otherwise behavior is undefined.
+
+Function: mcl_levelgen.rotlull (DST, K)
+
+Rotate DST left K bits, storing the result in DST.  K must be a number
+between 0 and 64; otherwise behavior is undefined.
+
+Function: mcl_levelgen.andull (DST, SRC)
+
+Compute the logical and of SRC with DST, storing the result in DST.
+
+Function: mcl_levelgen.xorull (DST, SRC)
+
+Compute the logical xor of SRC with DST, storing the result in DST.
+
+Function: mcl_levelgen.extull (INT)
+
+Sign-extend INT, a 32-bit signed value represented as a Lua number,
+into a ull value and return the latter.  If INT is not a number
+between -0x8000000 and 0x7fffffff, behavior is undefined.
+
+Function: mcl_levelgen.extkull (DST, K)
+
+Sign-extend K, a 32-bit signed value represented as a Lua number, and
+store the result in DST, a ull value.  If K is not a number between
+-0x8000000 and 0x7fffffff, behavior is undefined.
+
+Function: mcl_levelgen.dtoull (DST, K)
+
+Truncate K, a double (Lua real number), into DST, with IEEE
+round-to-zero semantics and representing values larger than LONG_MAX
+or smaller than LONG_MIN as positive or negative infinity as the case
+may be.  This is intended to be identical to `(long) (double) K' in
+Java.
+
+Function: mcl_levelgen.stringtoull (DST, STR)
+
+Parse STR, a base-10 sequence of digits, and store the result in DST.
+Value is true if the number is valid and does not overflow DST, and
+false otherwise.
+
+Function: mcl_levelgen.ltull (A, B)
+
+Return whether B is less than A (both ull values).
+
+Each pseudo-random number generator is a table providing the following
+methods:
+
+Function: rng:next_long ()
+
+Return a pseudo-random 64-bit value as a ull value.  The storage
+backing this ull value may be reused or hold state important to the
+random number generator, and therefore it must never be modified.
+(That is, it must always appear on the right hand side of any
+arithmetic operation, or be copied before modification.)
+
+Function: rng:next_integer ()
+
+Return a pseudo-random signed 32-bit value as a Lua number between
+-0x80000000 and 0x7fffffff.
+
+Function: rng:next_within (Y)
+
+Return a pseudo-random value between 0 and Y - 1, where Y is a Lua
+integer between 0 and 0x7fffffff.  If Y exceeds this range, behavior
+is undefined.
+
+Function: rng:next_boolean ()
+
+Return a pseudo-random boolean.
+
+Function: rng:next_float ()
+
+Return a pseudo-random single precision real value.
+
+Function: rng:next_double ()
+
+Return a pseudo-random double precision real value.
+
+Function: rng:fork ()
+
+Return a new pseudo-random number generator seeded by this
+pseudo-random generator.  The pseudo-random number generator is
+entirely a new creation, not a continuation of RNG, and its next value
+is not the same as RNG's before `fork' was invoked.
+
+Function: rng:fork_positional ()
+
+Return a table whose `__call' metamethod may be directly invoked with
+a vector of integer coordinates to derive a new PRNG from a state
+computed at the time the method was invoked and the same position, or
+a string, to do so from a string.  The table also provides another
+method as an optimization, which is documented after the remaining
+PRNG methods.
+
+Function: rng:consume (N)
+
+Consume N values without returning anything.  This advances the RNG's
+state by an equivalent of N invocations of `next_long',
+`next_boolean', `next_float', or `next_double'.
+
+Function: rng:reseed_positional (X, Y, Z)
+
+Reset RNG to a state equivalent to that of a PRNG produced by calling
+the positional RNG table by which it was created with a vector of (X,
+Y, Z).  Behavior is undefined if RNG was not created by `next_within'.
+
+Function: rng:reseed (SEED)
+
+Reset RNG's seed to SEED in an implementation-dependent manner.  Two
+PRNGs of the same type reseeded with the same value will always
+produce identical pseudo-random numbers, but otherwise the relation
+between SEED and whatever parameters existed is not defined.
+
+Function: positional_rng:create_reseedable ()
+
+Return a PRNG primed with the state of this positional RNG table, but
+whose `reseed_positional' method may be invoked with a position to
+reset its state to be equivalent to the result of invoking the
+`__call' metamethod with the same position.  Behavior is undefined if
+a pseudo-random number is requested of such a pseudo-random number
+generator before `reseed_positional' is invoked.
+
+Two types of PRNGs are available to user programs, attended by a
+number of utilities for generating their parameters.
+
+Function: mcl_levelgen.xoroshiro (SEEDLO, SEEDHI)
+
+Return a Xoroshiro128++ random number generator from a 128-bit seed
+defined by SEEDLO and SEEDHI, both ull values.  SEEDLO and SEEDHI are
+copied; callers may reuse their storage for other purposes.
+
+See: https://prng.di.unimi.it.
+
+Function: mcl_levelgen.jvm_random (SEED)
+
+Return a JVM-compatible random number generator from a 64-bit seed
+SEED, a ull value.  SEED is copied; callers may reuse its storage for
+other purposes.
+
+Function: mcl_levelgen.seed_from_ull (LO, HI, SEED)
+
+Create a 128-bit seed from SEED, a ull value, and store its low 64 bits
+in LO and its high 64 bits HI, all ull values.
+
+Function: mcl_levelgen.mix64 (DST)
+
+Apply David Strafford's Mix13 bit mixer to DST, a ull value.  In some
+contexts, Minecraft transforms the output of
+`mcl_levelgen.seed_from_ull' with this bit mixer before it is employed
+to seed a Xoroshiro128++ PRNG.
+
+See: https://zimbry.blogspot.com/2011/09/better-bit-mixing-improving-on.html
+
+Function: mcl_levelgen.seed_from_string (LO, HI, STR)
+
+Create a 128-bit seed from the MD5 hash of STR, a string, and store
+its low 64 bits in LO and its high 64 bits HI, both ull values.
+
+Function: mcl_levelgen.seed_from_position (SEED, X, Y, Z)
+
+Create a 64-bit seed from X, Y, Z, which are integer block positions,
+and store the result in SEED, a ull value.
+
+
+STANDARD PLACED FEATURES
+
+
+STANDARD CONFIGURED FEATURES
+
+
+STANDARD PLACEMENT MODIFIERS
+
+
+STRUCTURES
+
+XXX: Implement structures and document structure registration APIs.
