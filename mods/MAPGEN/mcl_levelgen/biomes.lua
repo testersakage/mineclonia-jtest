@@ -37,6 +37,14 @@ mcl_levelgen.toquart = toquart
 mcl_levelgen.inquart = inquart
 mcl_levelgen.toblock = toblock
 
+local verbose = mcl_levelgen.verbose
+
+local function verbose_print (...)
+	if verbose then
+		print (...)
+	end
+end
+
 ------------------------------------------------------------------------
 -- Biome parameter accessors.
 ------------------------------------------------------------------------
@@ -646,7 +654,7 @@ local function construct_biome (textid, temperature, humidity,
 				weirdness, offset)
 	assert (type (textid) == "string")
 	if not mcl_levelgen.registered_biomes[textid] then
-		print ("Unregistered biome: " .. textid)
+		verbose_print ("Unregistered biome: " .. textid)
 	end
 	local extents = build_biome_extents (temperature[1],
 					     temperature[2],
@@ -817,6 +825,22 @@ local function register_medium_pv_biomes_for_climate_grade (nodes, i, j,
 							    windswept_savannah,
 							    windswept_coast,
 							    slope)
+	register_surface_biome (nodes, slope,
+				temp_range, humidity_range,
+				range_select (NEAR_INLAND_CONTINENTALNESS,
+					      FAR_INLAND_CONTINENTALNESS),
+				erosion_grades[1], weirdness,
+				0.0)
+	register_surface_biome (nodes, plain_or_badlands_or_slope,
+				temp_range, humidity_range,
+				range_select (NEAR_INLAND_CONTINENTALNESS,
+					      MID_INLAND_CONTINENTALNESS),
+				erosion_grades[2], weirdness,
+				0.0)
+	register_surface_biome (nodes, i == 1 and slope or plateau,
+				temp_range, humidity_range,
+				FAR_INLAND_CONTINENTALNESS,
+				erosion_grades[2], weirdness, 0.0)
 	register_surface_biome (nodes, plain, temp_range,
 				humidity_range,
 				NEAR_INLAND_CONTINENTALNESS,
@@ -843,18 +867,6 @@ local function register_medium_pv_biomes_for_climate_grade (nodes, i, j,
 				range_select (MID_INLAND_CONTINENTALNESS,
 					      FAR_INLAND_CONTINENTALNESS),
 				erosion_grades[3], weirdness,
-				0.0)
-	register_surface_biome (nodes, slope,
-				temp_range, humidity_range,
-				range_select (NEAR_INLAND_CONTINENTALNESS,
-					      FAR_INLAND_CONTINENTALNESS),
-				erosion_grades[1], weirdness,
-				0.0)
-	register_surface_biome (nodes, plain_or_badlands_or_slope,
-				temp_range, humidity_range,
-				range_select (NEAR_INLAND_CONTINENTALNESS,
-					      MID_INLAND_CONTINENTALNESS),
-				erosion_grades[2], weirdness,
 				0.0)
 	register_surface_biome (nodes, plain_or_badlands,
 				temp_range, humidity_range,
@@ -1358,35 +1370,27 @@ end
 
 local function register_biomes_on_land (nodes)
 	-- Register biomes against the weirdness values that will
-	-- yield PV values appropriate for them.
+	-- yield PV values appropriate for them.  WARNING: the order
+	-- in which biomes are defined is significant and directly
+	-- influences the precedence of the features they define.
+	-- There is no rhyme or reason to the order specified in this
+	-- function, but it was produced by a computer program that
+	-- attempted random permutations of these PV grades till the
+	-- biome list aligned with Minecraft 1.20.4.
 
-	-- Medium PV.
-	print ("*** Medium PV biomes")
 	register_medium_pv_biomes (nodes, {-1.0, -0.93333334,})
-	register_medium_pv_biomes (nodes, {-0.4, -0.26666668,})
-	register_medium_pv_biomes (nodes, {0.26666668, 0.4,})
-	register_medium_pv_biomes (nodes, {0.93333334, 1.0,})
-
-	-- High PV.
-	print ("*** High PV biomes")
 	register_high_pv_biomes (nodes, {-0.93333334, -0.7666667})
-	register_high_pv_biomes (nodes, {-0.56666666, -0.4,})
-	register_high_pv_biomes (nodes, {0.4, 0.56666666,})
-	register_high_pv_biomes (nodes, {0.7666667, 0.93333334,})
-
-	-- Low PV.
-	print ("*** Low PV biomes")
-	register_low_pv_biomes (nodes, {-0.26666668, -0.05,})
-	register_low_pv_biomes (nodes, {0.05, 0.26666668,})
-
-	-- Peaks.
-	print ("*** Peak biomes")
 	register_peak_pv_biomes (nodes, {-0.7666667, -0.56666666,})
-	register_peak_pv_biomes (nodes, {0.56666666, 0.7666667,})
-
-	-- Valleys.
-	print ("*** Valley biomes")
+	register_high_pv_biomes (nodes, {-0.56666666, -0.4,})
+	register_medium_pv_biomes (nodes, {-0.4, -0.26666668,})
+	register_low_pv_biomes (nodes, {-0.26666668, -0.05,})
 	register_valley_pv_biomes (nodes, {-0.05, 0.05,})
+	register_low_pv_biomes (nodes, {0.05, 0.26666668,})
+	register_medium_pv_biomes (nodes, {0.26666668, 0.4,})
+	register_high_pv_biomes (nodes, {0.4, 0.56666666,})
+	register_peak_pv_biomes (nodes, {0.56666666, 0.7666667,})
+	register_high_pv_biomes (nodes, {0.7666667, 0.93333334,})
+	register_medium_pv_biomes (nodes, {0.93333334, 1.0,})
 end
 
 local UNDERGROUND_DEPTH = {
@@ -1416,8 +1420,8 @@ end
 local function print_biome_report (levelname, nodes)
 	local nunique, seen, unique = 0, {}, {}
 	local cost_total = 0
-	print (string.format ("Registered %d biome definitions for level %s",
-			      #nodes, levelname))
+	verbose_print (string.format ("Registered %d biome definitions for level %s",
+				      #nodes, levelname))
 	for _, biome in pairs (nodes) do
 		if not seen[biome.value] then
 			seen[biome.value] = 0
@@ -1428,28 +1432,31 @@ local function print_biome_report (levelname, nodes)
 		cost_total = cost_total + vol_extents (biome.extents)
 		seen[biome.value] = cost
 	end
-	print (string.format ("  (comprising %d unique biomes, distributed as follows:)",
-			      nunique))
+	verbose_print (string.format ("  (comprising %d unique biomes, distributed as follows:)",
+				      nunique))
 	table.sort (unique, function (a, b)
 		return seen[a] > seen[b]
 	end)
 	for _, biome in pairs (unique) do
 		local str = string.format ("%-25s%.8f%%", biome,
 					   seen[biome] / cost_total * 100.0)
-		print (str)
+		verbose_print (str)
 	end
 end
 
 local function construct_overworld_lut ()
 	local nodes = {}
-	print ("** Registering offshore biomes")
+	verbose_print ("** Registering offshore biomes")
 	register_biomes_at_sea (nodes)
-	print ("** Registering inland biomes")
+	verbose_print ("** Registering inland biomes")
 	register_biomes_on_land (nodes)
-	print ("** Registering cave & Deep Dark biomes")
+	verbose_print ("** Registering cave & Deep Dark biomes")
 	register_biomes_underground (nodes)
 	print_biome_report ("Overworld", nodes)
-	return build_rtree (nodes), nodes
+
+	-- Preserve `node''s order, as this ultimately affects the
+	-- order in which biome decorations are assigned IDs.
+	return build_rtree (table.copy (nodes)), nodes
 end
 
 local function rtree_index_silly (coords, nodes)
@@ -1641,7 +1648,7 @@ mcl_levelgen.register_biome ("Mesa", {
 			"mcl_levelgen:patch_dead_bush_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane_badlands",
+			"mcl_farming:patch_sugar_cane_badlands",
 			"mcl_farming:patch_pumpkin",
 			"mcl_levelgen:patch_cactus_decorated",
 		},
@@ -1693,7 +1700,7 @@ mcl_levelgen.register_biome ("BambooJungle", {
 			"mcl_levelgen:patch_grass_jungle",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_levelgen:vines",
 			"mcl_farming:patch_melon",
@@ -1835,7 +1842,7 @@ mcl_levelgen.register_biome ("BirchForest", {
 			"mcl_flowers:flower_default",
 			"mcl_levelgen:patch_grass_forest",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -1993,7 +2000,7 @@ mcl_levelgen.register_biome ("ColdOcean", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_ocean:seagrass_cold",
 			"mcl_ocean:seagrass_simple",
@@ -2120,7 +2127,7 @@ mcl_levelgen.register_biome ("DarkForest", {
 			"mcl_levelgen:patch_grass_forest",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -2199,9 +2206,9 @@ mcl_levelgen.register_biome ("DeepColdOcean", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
-			"mcl_levelgen:seagrass_deep_cold",
+			"mcl_ocean:seagrass_deep_cold",
 			"mcl_ocean:seagrass_simple",
 			"mcl_ocean:kelp_cold",
 		},
@@ -2279,7 +2286,7 @@ mcl_levelgen.register_biome ("DeepDark", {
 			"mcl_levelgen:patch_grass_plain",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -2362,7 +2369,7 @@ mcl_levelgen.register_biome ("DeepFrozenOcean", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -2442,7 +2449,7 @@ mcl_levelgen.register_biome ("DeepLukewarmOcean", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_ocean:seagrass_deep_warm",
 			"mcl_ocean:seagrass_simple",
@@ -2524,7 +2531,7 @@ mcl_levelgen.register_biome ("DeepOcean", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_ocean:seagrass_deep",
 			"mcl_ocean:seagrass_simple",
@@ -2610,7 +2617,7 @@ mcl_levelgen.register_biome ("Desert", {
 			"mcl_levelgen:patch_dead_bush_2",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane_desert",
+			"mcl_farming:patch_sugar_cane_desert",
 			"mcl_farming:patch_pumpkin",
 			"mcl_levelgen:patch_cactus_desert",
 		},
@@ -2695,7 +2702,7 @@ mcl_levelgen.register_biome ("DripstoneCaves", {
 			"mcl_levelgen:patch_grass_plain",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -2821,7 +2828,7 @@ mcl_levelgen.register_biome ("ErodedMesa", {
 			"mcl_levelgen:patch_dead_bush_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane_badlands",
+			"mcl_farming:patch_sugar_cane_badlands",
 			"mcl_farming:patch_pumpkin",
 			"mcl_levelgen:patch_cactus_decorated",
 		},
@@ -2902,7 +2909,7 @@ mcl_levelgen.register_biome ("FlowerForest", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -2982,7 +2989,7 @@ mcl_levelgen.register_biome ("Forest", {
 			"mcl_levelgen:patch_grass_forest",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -3065,7 +3072,7 @@ mcl_levelgen.register_biome ("FrozenOcean", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -3221,7 +3228,7 @@ mcl_levelgen.register_biome ("FrozenRiver", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -3300,7 +3307,7 @@ mcl_levelgen.register_biome ("Grove", {
 		{
 			"mcl_levelgen:glow_lichen",
 			"mcl_trees:trees_grove",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -3382,7 +3389,7 @@ mcl_levelgen.register_biome ("IceSpikes", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -3538,7 +3545,7 @@ mcl_levelgen.register_biome ("Jungle", {
 			"mcl_levelgen:patch_grass_jungle",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_levelgen:vines",
 			"mcl_farming:patch_melon",
@@ -3619,7 +3626,7 @@ mcl_levelgen.register_biome ("LukewarmOcean", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_ocean:seagrass_warm",
 			"mcl_ocean:kelp_warm",
@@ -3936,7 +3943,7 @@ mcl_levelgen.register_biome ("MushroomIslands", {
 			"mcl_mushrooms:mushroom_island_vegetation",
 			"mcl_mushrooms:brown_mushroom_taiga",
 			"mcl_mushrooms:red_mushroom_taiga",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -4059,7 +4066,7 @@ mcl_levelgen.register_biome ("Ocean", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_ocean:seagrass_normal",
 			"mcl_ocean:seagrass_simple",
@@ -4142,7 +4149,7 @@ mcl_levelgen.register_biome ("OldGrowthBirchForest", {
 			"mcl_levelgen:patch_grass_forest",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -4226,7 +4233,7 @@ mcl_levelgen.register_biome ("OldGrowthPineTaiga", {
 			"mcl_mushrooms:red_mushroom_old_growth",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_farming:patch_berry_common",
 		},
@@ -4311,7 +4318,7 @@ mcl_levelgen.register_biome ("OldGrowthSpruceTaiga", {
 			"mcl_mushrooms:red_mushroom_old_growth",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_farming:patch_berry_common",
 		},
@@ -4392,7 +4399,7 @@ mcl_levelgen.register_biome ("Plains", {
 			"mcl_levelgen:patch_grass_plain",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -4471,7 +4478,7 @@ mcl_levelgen.register_biome ("River", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_ocean:seagrass_river",
 		},
@@ -4552,7 +4559,7 @@ mcl_levelgen.register_biome ("Savannah", {
 			"mcl_levelgen:patch_grass_savanna",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -4632,7 +4639,7 @@ mcl_levelgen.register_biome ("SavannahPlateau", {
 			"mcl_levelgen:patch_grass_savanna",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -4724,7 +4731,7 @@ mcl_levelgen.register_biome ("SnowyBeach", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -4803,7 +4810,7 @@ mcl_levelgen.register_biome ("SnowyPlains", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -4881,7 +4888,7 @@ mcl_levelgen.register_biome ("SnowySlopes", {
 		},
 		{
 			"mcl_levelgen:glow_lichen",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -4961,7 +4968,7 @@ mcl_levelgen.register_biome ("SnowyTaiga", {
 			"mcl_levelgen:patch_grass_taiga_2",
 			"mcl_mushrooms:brown_mushroom_taiga",
 			"mcl_mushrooms:red_mushroom_taiga",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_farming:patch_berry_rare",
 		},
@@ -5085,7 +5092,7 @@ mcl_levelgen.register_biome ("SparseJungle", {
 			"mcl_levelgen:patch_grass_jungle",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_levelgen:vines",
 			"mcl_farming:patch_melon_sparse",
@@ -5240,7 +5247,7 @@ mcl_levelgen.register_biome ("StonyShore", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -5321,7 +5328,7 @@ mcl_levelgen.register_biome ("SunflowerPlains", {
 			"mcl_levelgen:patch_grass_plain",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -5404,7 +5411,7 @@ mcl_levelgen.register_biome ("Swamp", {
 			"mcl_mushrooms:red_mushroom_swamp",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane_swamp",
+			"mcl_farming:patch_sugar_cane_swamp",
 			"mcl_farming:patch_pumpkin",
 			"mcl_ocean:seagrass_swamp",
 		},
@@ -5485,7 +5492,7 @@ mcl_levelgen.register_biome ("Taiga", {
 			"mcl_levelgen:patch_grass_taiga_2",
 			"mcl_mushrooms:brown_mushroom_taiga",
 			"mcl_mushrooms:red_mushroom_taiga",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_farming:patch_berry_common",
 		},
@@ -5583,7 +5590,7 @@ mcl_levelgen.register_biome ("WarmOcean", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 			"mcl_ocean:warm_ocean_vegetation",
 			"mcl_ocean:seagrass_warm",
@@ -5714,7 +5721,7 @@ mcl_levelgen.register_biome ("WindsweptForest", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -5796,7 +5803,7 @@ mcl_levelgen.register_biome ("WindsweptGravellyHills", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -5878,7 +5885,7 @@ mcl_levelgen.register_biome ("WindsweptHills", {
 			"mcl_levelgen:patch_grass_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -5957,7 +5964,7 @@ mcl_levelgen.register_biome ("WindsweptSavannah", {
 			"mcl_levelgen:patch_grass_normal",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane",
+			"mcl_farming:patch_sugar_cane",
 			"mcl_farming:patch_pumpkin",
 		},
 		{
@@ -6037,7 +6044,7 @@ mcl_levelgen.register_biome ("WoodedMesa", {
 			"mcl_levelgen:patch_dead_bush_badlands",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
-			"mcl_levelgen:patch_sugar_cane_badlands",
+			"mcl_farming:patch_sugar_cane_badlands",
 			"mcl_farming:patch_pumpkin",
 			"mcl_levelgen:patch_cactus_decorated",
 		},
@@ -6193,8 +6200,8 @@ function mcl_levelgen.assign_biome_ids (assignments)
 		end
 	end
 
-	print ("Biome ID assignments: ")
-	print ("  (* = New ID assignment)")
+	verbose_print ("Biome ID assignments: ")
+	verbose_print ("  (* = New ID assignment)")
 	for id = 0, maxid do
 		local name = biome_id_to_name_map[id]
 		if name then
