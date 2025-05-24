@@ -122,8 +122,8 @@ core.register_entity("mcl_armor_stand:armor_entity", {
 	end,
 	on_step = function(self)
 		if core.get_node(self.node_pos).name ~= "mcl_armor_stand:armor_stand" then
-			self.object:remove()
 			mcl_armor.head_entity_unequip(self.object)
+			self.object:remove()
 		end
 	end,
 	update_armor = function(self, info)
