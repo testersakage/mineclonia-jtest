@@ -320,8 +320,7 @@ local function create_tunnel (self, x, y, z, seed, horiz_radius, vert_radius,
 
 		if rng:next_within (4) ~= 0 then
 			-- Return once the ellipsoid no longer
-			-- influences with any portion of the
-			-- MapChunk.
+			-- influences any portion of the MapChunk.
 			if no_longer_reachable (x, y, z, length - i + 1,
 						thickness) then
 				return
@@ -637,7 +636,7 @@ function mcl_levelgen.load_carvers ()
 		local carvers = {}
 		local biomecarvers = biome.carvers.air or {}
 		for _, carver in ipairs (biomecarvers) do
-			if not registered_carvers[carver] then
+			if not registered_carvers[carver] and mcl_levelgen.verbose then
 				print ("Biome `" .. name
 				       .. "' declares an undefined carver `"
 				       .. carver .. "'")
