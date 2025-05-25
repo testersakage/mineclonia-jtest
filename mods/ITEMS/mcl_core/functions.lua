@@ -253,7 +253,9 @@ core.register_abm({
 			if core.get_item_group(n2.name, "grass_block") ~= 0 then
 				n2 = mcl_core.get_grass_block_type(pos)
 			end
-			core.swap_node(pos, n2)
+			if n2 then
+				core.swap_node(pos, n2)
+			end
 
 			-- If this was mycelium, uproot plant above
 			if n2.name == "mcl_core:mycelium" then
