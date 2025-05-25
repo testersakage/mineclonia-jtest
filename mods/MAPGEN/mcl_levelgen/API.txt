@@ -370,7 +370,7 @@ Function: mcl_levelgen.negull (DST)
 
 Calculate the two's complement of DST and store the result in DST,
 with wraparound arithmetic for overflows (i.e., -(-0x8000000000000000)
-== -0x1).
+== -0x8000000000000000).
 
 Function: mcl_levelgen.subull (DST, SRC)
 
