@@ -184,6 +184,30 @@ The feature placement stage to which the feature currently being
 placed appertains; value is undefined if a placement operation is not
 in progress.
 
+Variable: mcl_levelgen.heightmap_modifications
+
+Table indexed by a hashed horizontal block positions that enumerates
+the initial values of all heightmap entries which have been modified
+in the course of this placement run, and maps them to their initial
+values.
+
+This table should be consulted by any feature that deposits
+superstrata (such as snow layers) over the surface of the level.  If a
+position appears in this list, any superstrata should be moved from
+the original surface (supplied by this table) to the surface indicated
+by the new heightmap, or, if none exists, a new superstratum should be
+generated at the provided position, even if it should exist outside
+the chunk where this placement run originates.  This guarantees that
+the superstrata are deposited correctly over portions of features that
+extrude from their chunks of origin.
+
+Function: mcl_levelgen.unpack_heightmap_modification (KEY, VALUE)
+
+Return four values, to wit: the X and Z coordinates of the heightmap
+position represented in DATA (a key in `heightmap_modifications') and
+the heightmap values which `index_heightmap' would have returned prior
+to the execution of this placement run.
+
 Function: mcl_levelgen.index_heightmap (X, Z)
 
 Return two values with the Y position of the uppermost block at X, Z
@@ -550,15 +574,16 @@ Select a feature at random from amongst entries specified in its
 configuration, which must be a table of the form:
 
 {
-	default = "<ID>",
+	default = <ID or table>,
 
-The placed feature that will be selected by default, if no feature's
+The placed feature that will be selected by default (either an ID or a
+table such as `register_placed_feature' may accept), if no feature's
 condition was satisfied.
 
 	features = {
 		 {
 			chance = CHANCE,
-			feature = "<ID>",
+			feature = <ID or table>,
 		 },
 		 ...
 	}
