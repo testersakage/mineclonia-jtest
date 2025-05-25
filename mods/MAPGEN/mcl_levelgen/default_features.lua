@@ -1,4 +1,7 @@
 local mcl_levelgen = mcl_levelgen
+local ipairs = ipairs
+local pairs = pairs
+
 ------------------------------------------------------------------------
 -- Fundamental features.
 ------------------------------------------------------------------------
@@ -17,7 +20,9 @@ local function random_selector_place (_, x, y, z, cfg, rng)
 		local id = feature.feature
 
 		if rng:next_float () < feature.chance then
-			local feature_desc = registered_placed_features[id]
+			local feature_desc = type (id) == "table"
+				and id
+				or registered_placed_features[id]
 			if not feature_desc and not warned[id] then
 				core.log ("warning", table.concat ({
 					"Random selector attempted to place a ",
@@ -25,13 +30,15 @@ local function random_selector_place (_, x, y, z, cfg, rng)
 				}))
 				warned[id] = true
 			elseif feature_desc then
-				place_one_feature (feature, x, y, z)
+				place_one_feature (feature_desc, x, y, z)
 				return
 			end
 		end
 	end
 
-	local default_desc = registered_placed_features[cfg.default]
+	local default_desc = type (cfg.default) == "table"
+		and cfg.default
+		or registered_placed_features[cfg.default]
 	if not default_desc then
 		if not warned[cfg.default] then
 			core.log ("warning", table.concat ({
@@ -58,6 +65,7 @@ local index_biome = mcl_levelgen.index_biome
 local index_heightmap = mcl_levelgen.index_heightmap
 local get_block = mcl_levelgen.get_block
 local set_block = mcl_levelgen.set_block
+local cid_air = core.CONTENT_AIR
 local cid_snow = core.get_content_id ("mcl_core:snow")
 local cid_water_source = core.get_content_id ("mcl_core:water_source")
 local cid_ice = core.get_content_id ("mcl_core:ice")
@@ -75,37 +83,86 @@ local snowy_blocks = {
 	[cid_podzol] = cid_podzol_snow,
 }
 
+local exposed_blocks = {
+	[cid_grass_snowy] = cid_grass,
+	[cid_mycelium_snow] = cid_mycelium,
+	[cid_podzol_snow] = cid_podzol,
+}
+
+local unpack_heightmap_modification
+	= mcl_levelgen.unpack_heightmap_modification
+
+local function freeze_layer_common (x1, z1, surface)
+	local biome = index_biome (x1, surface, z1)
+	local frigid
+		= mcl_levelgen.is_temp_snowy (biome, x1, surface, z1)
+
+	if frigid then
+		-- Freeze the node below if it is
+		-- water and not brighter than 10.
+		-- TODO: test light levels.
+		local cid, _ = get_block (x1, surface - 1, z1)
+		if cid == cid_water_source then
+			set_block (x1, surface - 1, z1, cid_ice, 255)
+			-- Place one snow layer if the
+			-- temperature is sufficiently frigid.
+		elseif mcl_levelgen.can_place_snow (x1, surface, z1) then
+			set_block (x1, surface, z1, cid_snow, 0)
+			local replacement = snowy_blocks[cid]
+			if replacement then
+				set_block (x1, surface - 1, z1,
+					   replacement, -1)
+			end
+		end
+	end
+end
+
 local function place_freeze_top_layer (_, x, y, z, cfg, rng)
 	local start_y = mcl_levelgen.placement_run_minp.y
 	local end_y = mcl_levelgen.placement_run_maxp.y
+	local heightmap_modifications = mcl_levelgen.heightmap_modifications
+
+	for key, value in pairs (heightmap_modifications) do
+		local x, z, surface, _
+			= unpack_heightmap_modification (key, value)
+		local surface = surface - 1
+
+		if surface >= start_y - 32 and surface <= end_y + 32 then
+			-- If the surface has moved, remove any snow layers or
+			-- ice that may have been placed at the previous location
+			local old_cid, _ = get_block (x, surface, z)
+			if old_cid == cid_snow then
+				set_block (x, surface, z, cid_air, 0)
+			end
+
+			if surface > start_y - 32 then
+				local old_cid, param2 = get_block (x, surface - 1, z)
+				-- A param2 of 255 indicates that this
+				-- ice was placed by freeze_top_layer.
+				if old_cid == cid_ice and param2 == 255 then
+					set_block (x, surface - 1, z, cid_water_source, 0)
+				else
+					local replacement = exposed_blocks[old_cid]
+					if replacement then
+						set_block (x, surface - 1, z, replacement,
+							   param2)
+					end
+				end
+			end
+		end
+
+		local surface_new, _ = index_heightmap (x, z)
+		if surface_new >= start_y - 31 and surface <= end_y + 32 then
+			freeze_layer_common (x, z, surface_new)
+		end
+	end
+
 	for dx = 0, 15 do
 		for dz = 0, 15 do
 			local x1, z1 = x + dx, z + dz
 			local surface, _ = index_heightmap (x1, z1)
-
 			if surface >= start_y and surface <= end_y then
-				local biome = index_biome (x1, surface, z1)
-				local frigid
-					= mcl_levelgen.is_temp_snowy (biome, x1, surface, z1)
-
-				if frigid then
-					-- Freeze the node below if it is
-					-- water and not brighter than 10.
-					-- TODO: test light levels.
-					local cid, _ = get_block (x1, surface - 1, z1)
-					if cid == cid_water_source then
-						set_block (x1, surface - 1, z1, cid_ice, 0)
-						-- Place one snow layer if the
-						-- temperature is sufficiently frigid.
-					elseif mcl_levelgen.can_place_snow (x1, surface, z1) then
-						set_block (x1, surface, z1, cid_snow, 0)
-						local replacement = snowy_blocks[cid]
-						if replacement then
-							set_block (x1, surface - 1, z1,
-								   replacement, -1)
-						end
-					end
-				end
+				freeze_layer_common (x1, z1, surface)
 			end
 		end
 	end
