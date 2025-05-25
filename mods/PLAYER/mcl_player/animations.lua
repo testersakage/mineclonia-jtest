@@ -258,20 +258,9 @@ function mcl_player.get_player_formspec_model(player, x, y, w, h, fsname)
 	for k,v in pairs(textures) do
 		textures[k] = core.formspec_escape(v)
 	end
-	local formspec = string.format("model[%s,%s;%s,%s;%s;%s;%s;0,180;false;false;%s,%s]",
+	return string.format("model[%s,%s;%s,%s;%s;%s;%s;0,180;false;false;%s,%s]",
 		x, y, w, h, fsname, model, table.concat(textures, ","),
 		anim.x, anim.y)
-	local inv = mcl_util.get_inventory(player, true)
-	local head = inv:get_stack("armor", 2)
-	local armordef = core.registered_nodes[head:get_name()]
-	if armordef and armordef._mcl_armor_entity ~= nil then
-		formspec = table.concat({
-			formspec,
-			string.format("model[%s,%s;%s,%s;;%s;%s;0,0;false;false]",
-				x+0.6, y-1.90, w - 1.2, h - 1.2, armordef.mesh, armordef.tiles[1])
-		})
-	end
-	return formspec
 end
 
 function mcl_player.player_set_animation(player, anim_name, speed)
