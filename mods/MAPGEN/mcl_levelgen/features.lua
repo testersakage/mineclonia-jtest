@@ -1,4 +1,5 @@
 local ipairs = ipairs
+local pairs = pairs
 local mathmax = math.max
 local mathmin = math.min
 local band = bit.band
@@ -7,6 +8,9 @@ local bnot = bit.bnot
 local lshift = bit.lshift
 local rshift = bit.rshift
 local arshift = bit.arshift
+local floor = math.floor
+local ceil = math.ceil
+local huge = math.huge
 
 --------------------------------------------------------------------------
 -- Level feature placement.
@@ -328,6 +332,19 @@ function mcl_levelgen.initialize_biome_features ()
 	end
 end
 
+local portable_schematics = {}
+
+function mcl_levelgen.register_portable_schematic (id, specifier)
+	if portable_schematics[id] then
+		error ("Schematic already registered: " .. id)
+	end
+	local data = core.read_schematic (specifier, {
+		write_yslice_prob = "all",
+	})
+	portable_schematics[id] = data
+	core.ipc_set ("mcl_levelgen:portable_schematics", portable_schematics)
+end
+
 if core and mcl_levelgen.load_feature_environment then
 
 ------------------------------------------------------------------------
@@ -367,11 +384,13 @@ local REQUIRED_CONTEXT_XZ = mcl_levelgen.REQUIRED_CONTEXT_XZ
 local cids, param2s = {}, {}
 local area = nil
 local vm_modified = false
+local relight_rgn = {}
 
 mcl_levelgen.placement_run_minp = run_minp
 mcl_levelgen.placement_run_maxp = run_maxp
 mcl_levelgen.placement_level_min = 0
 mcl_levelgen.placement_level_height = 0
+mcl_levelgen.current_placed_feature = nil
 
 function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_offset,
 					p_level_min, p_level_height)
@@ -390,10 +409,11 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 	mcl_levelgen.placement_level_min = p_level_min
 	level_height = p_level_height
 	mcl_levelgen.placement_level_height = p_level_height
+	relight_rgn = mcl_util.empty_region
 
-	run_min_y = mathmax ((run.y1 - REQUIRED_CONTEXT_Y) * 16,
+	run_min_y = mathmax ((run.y1 - REQUIRED_CONTEXT_Y) * 16 + p_y_offset,
 			     p_level_min)
-	run_max_y = mathmin ((run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15,
+	run_max_y = mathmin ((run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15 + p_y_offset,
 			     p_level_min + p_level_height - 1)
 	run_min_x = (run.x - REQUIRED_CONTEXT_XZ) * 16
 	run_max_x = (run.x + REQUIRED_CONTEXT_XZ) * 16 + 15
@@ -409,6 +429,18 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 		vm:set_data (cids)
 		vm:set_param2_data (param2s)
 	end
+
+	local relight_list = {}
+	if relight_rgn then
+		relight_rgn:walk (insert, relight_list)
+	end
+
+	vm = nil
+	relight_rgn = nil
+	biomes = nil
+	heightmap = nil
+	cids, param2s = {}, {}
+	return relight_list
 end
 
 local function is_not_air (cid, param2)
@@ -443,6 +475,8 @@ local function complete_partial_heightmap (x, z, current_min, idx,
 
 	local value = heightmap[idx]
 	local flags = rshift (value, 30)
+	local shift = (flag == SURFACE_UNCERTAIN
+		      and 10 or 0)
 
 	for y = current_min, run_min_y do
 		local cid, param2 = get_block_1 (x, y, z)
@@ -450,15 +484,11 @@ local function complete_partial_heightmap (x, z, current_min, idx,
 			local mask = 0x3ff
 			local bias = -512
 			local k = y + 1 - level_min
-			local bits = (flag == SURFACE_UNCERTAIN
-				      and 10 or 0)
-			mask = bnot (lshift (mask, bits))
+			mask = bnot (lshift (mask, shift))
 			value = bor (band (mask, value,
 					   bnot (lshift (flag, 30))),
-				     lshift (k + bias, bits))
+				     lshift (k + bias, shift))
 			heightmap[idx] = value
-
-			print ("Corrected partial heightmap", x, z, "=", y)
 			return y + 1
 		end
 	end
@@ -468,8 +498,8 @@ local function complete_partial_heightmap (x, z, current_min, idx,
 	local mask = 0x3ff
 	local bias = -512
 	local k = run_min_y - level_min
-	mask = bnot (lshift (mask, bits))
-	value = bor (band (mask, value), lshift (k + bias, bits))
+	mask = bnot (lshift (mask, shift))
+	value = bor (band (mask, value), lshift (k + bias, shift))
 	heightmap[idx] = value
 	return run_min_y
 end
@@ -525,7 +555,7 @@ function mcl_levelgen.index_biome (x, y, z)
 
 	local qx, qy, qz = munge_biome_coords (biome_seed, x, y, z)
 
-	-- Convert thiws QuartPos into the Minetest coordinate system.
+	-- Convert this QuartPos into the Minetest coordinate system.
 	local dz = qz - toquart (run_min_z)
 	local run_origin = (run.z - REQUIRED_CONTEXT_XZ) * 16
 	qz = toquart (run_origin) + HORIZONTAL_QUARTS_PER_RUN - dz - 1
@@ -543,28 +573,16 @@ function mcl_levelgen.get_block (x, y, z)
 	local run_z = run_min_z
 	if z - run_z >= HEIGHTMAP_SIZE_NODES
 		or x - run_x >= HEIGHTMAP_SIZE_NODES
-		or z - run_z <= 0 or x - run_x <= 0 then
+		or z - run_z <= 0
+		or x - run_x <= 0
+		or y > run_max_y
+		or y < run_min_y then
 		return nil, nil
 	end
 	return get_block_1 (x, y, z)
 end
 
-function mcl_levelgen.set_block (x, y, z, cid, param2)
-	local run_x = run_min_x
-	local run_z = run_min_z
-	if z - run_z >= HEIGHTMAP_SIZE_NODES
-		or x - run_x >= HEIGHTMAP_SIZE_NODES
-		or z - run_z <= 0 or x - run_x <= 0 then
-		core.log ("warning", "A feature placement function is writing "
-			  .. " outside the placement run")
-		core.log ("warning", debug.traceback ())
-		return
-	end
-	local idx = index (x, y, z)
-	cids[idx] = cid
-	param2s[idx] = param2
-	vm_modified = true
-
+local function correct_heightmaps (x, y, z, cid, param2)
 	-- Correct heightmaps to agree with the new state of the
 	-- level.
 	local idx = heightmap_index (x, z)
@@ -604,28 +622,294 @@ function mcl_levelgen.set_block (x, y, z, cid, param2)
 		flags = band (flags, bnot (MOTION_BLOCKING_UNCERTAIN))
 	end
 
-	heightmap[value] = bor (lshift (flags, 30),
-				pack_height_map (surface - level_min,
-						 motion_blocking - level_min))
+	heightmap[idx] = bor (lshift (flags, 30),
+			      pack_height_map (surface - level_min,
+					       motion_blocking - level_min))
+end
+
+function mcl_levelgen.set_block (x, y, z, cid, param2)
+	local run_x = run_min_x
+	local run_z = run_min_z
+	if z - run_z >= HEIGHTMAP_SIZE_NODES
+		or x - run_x >= HEIGHTMAP_SIZE_NODES
+		or z - run_z <= 0 or x - run_x <= 0 then
+		core.log ("warning", "A feature placement function is writing "
+			  .. " outside the placement run")
+		core.log ("warning", debug.traceback ())
+		return
+	end
+	if y < run_min_y or y > run_max_y then
+		if y > run_maxp.y + REQUIRED_CONTEXT_Y * 16
+			or y < run_minp.y - REQUIRED_CONTEXT_Y * 16 then
+			core.log ("warning", "A feature placement function is writing "
+				  .. " outside the placement run")
+			core.log ("warning", debug.traceback ())
+		end
+		return
+	end
+	local idx = index (x, y, z)
+	cids[idx] = cid
+	if param2 ~= -1 then
+		param2s[idx] = param2
+	end
+	vm_modified = true
+	correct_heightmaps (x, y, z, cid, param2)
+end
+
+local function update_relight_rgn (aabb)
+	local new_relight_rgn = relight_rgn:union (aabb)
+	if not new_relight_rgn then
+		local simplified = relight_rgn:simplify ()
+		new_relight_rgn = simplified:union (aabb)
+	end
+	relight_rgn = new_relight_rgn
 end
 
 function mcl_levelgen.fix_lighting (x1, y1, z1, x2, y2, z2)
-	-- TODO
+	if not relight_rgn then
+		return
+	end
+
+	local aabb = {
+		x1, y1 - y_offset, -z1 - 1,
+		x2 + 1, y2 - y_offset + 1, -z2,
+	}
+	update_relight_rgn (aabb)
+end
+
+------------------------------------------------------------------------
+-- Schematic placement.
+------------------------------------------------------------------------
+
+local portable_schematics = nil
+local cid_ignore = core.CONTENT_IGNORE
+
+local function encode_schem_data (cid, param2, probability, force_place)
+	if cid > 32767 then
+		-- If you encounter this error, please create a more
+		-- accommodating data packing scheme.
+		error ("Schematic contains content with unrepresentable CID: " .. cid)
+	end
+
+	assert (cid <= 32767 and param2 <= 255 and probability <= 255)
+	local force_place = force_place and 1 or 0
+	return bor (lshift (force_place, 31), lshift (cid, 16),
+		    lshift (param2, 8), probability)
+end
+
+local function decode_schem_data (data)
+	local force_place = rshift (data, 31)
+	local cid = band (rshift (data, 16), 0x7fff)
+	local param2 = band (rshift (data, 8), 0xff)
+	local probability = band (data, 0xff)
+	return cid, param2, probability, force_place
+end
+
+function mcl_levelgen.initialize_portable_schematics ()
+	portable_schematics
+		= core.ipc_get ("mcl_levelgen:portable_schematics")
+	assert (type (portable_schematics) == "table")
+
+	-- Post-process the schematic's data.
+	for key, schematic in pairs (portable_schematics) do
+		for i, elem in ipairs (schematic.data) do
+			if not core.registered_nodes [elem.name] then
+				schematic.data[i]
+					= encode_schem_data (cid_ignore, 0, 0, false)
+			else
+				local cid = core.get_content_id (elem.name)
+				schematic.data[i]
+					= encode_schem_data (cid, elem.param2,
+							     elem.prob,
+							     elem.force_place)
+			end
+		end
+	end
+end
+
+local ull = mcl_levelgen.ull
+local schematic_rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+local rotations = {
+	"0", "90", "180", "270",
+}
+local v = vector.zero ()
+
+local function rtz (n)
+	if n < 0 then
+		return ceil (n)
+	end
+	return floor (n)
+end
+
+local MTSCHEM_PROB_ALWAYS = 0x7f
+local MTSCHEM_PROB_NEVER  = 0x00
+
+local function hash_schem_pos (x, z)
+	return bor (lshift ((x + 32767), 16), (z + 32767))
+end
+
+local function copy_to_data (schematic, size, px, py, pz, rot, force_place)
+	local xstride = 1
+	local ystride = size.x
+	local zstride = size.x * size.y
+	local size = schematic.size
+	local sx = size.x
+	local sy = size.y
+	local sz = size.z
+	local xz_updates = {}
+
+	local i_start, i_step_x, i_step_z
+	if rot == "90" then
+		i_start = sx - 1
+		i_step_x = zstride
+		i_step_z = -xstride
+		sx, sz = sz, sx
+	elseif rot == "180" then
+		i_start = zstride * (sz - 1) + sx - 1
+		i_step_x = -xstride
+		i_step_z = -zstride
+	elseif rot == "270" then
+		i_start = zstride * (sz - 1)
+		i_step_x = -zstride
+		i_step_z = xstride
+		sx, sz = sz, sx
+	else
+		i_start = 0
+		i_step_x = xstride
+		i_step_z = zstride
+	end
+
+	local y_map = py
+	local yprob = schematic.yslice_prob
+	local schemdata = schematic.data
+	local rng = schematic_rng
+	for y = 0, sy - 1 do
+		if yprob[y + 1].prob == MTSCHEM_PROB_ALWAYS
+			or yprob[y + 1].prob > 1 + rng:next_within (0x80) then
+			for z = 0, sz - 1 do
+				local i = z * i_step_z + y * ystride + i_start
+				for x = 0, sx - 1 do
+					local gx = px + x
+					local gy = py + y
+					local gz = pz + z
+
+					if area:contains (gx, gy, gz) then
+						local data = schemdata[i + 1]
+						local cid, param2, probability, force_place_node
+							= decode_schem_data (data)
+
+						if probability ~= MTSCHEM_PROB_NEVER then
+							local vi = area:index (gx, y_map, gz)
+							if force_place or force_place_node
+								or cids[vi] == cid_air
+								or cids[vi] == content_ignore then
+
+								local continue = probability == MTSCHEM_PROB_ALWAYS
+									or probability > 1 + rng:next_within (0x80)
+								if continue then
+									cids[vi] = cid
+									-- TODO: rotate param2!
+									param2s[vi] = param2
+
+									local hash = hash_schem_pos (x, z)
+									local val = xz_updates[hash] or -huge
+									xz_updates[hash] = mathmax (val, y)
+								end
+							end
+						end
+						i = i + i_step_x
+					end
+				end
+			end
+		end
+		y_map = y_map + 1
+	end
+
+	-- Fix heightmaps.
+	for key, absy in pairs (xz_updates) do
+		local x = rshift (key, 16) - 32767 + px
+		local zoff = band (key, 65535) - 32767
+		local z = -pz - 1 - zoff
+		local idx = heightmap_index (x, z)
+		local surface, motion_blocking, _
+			= unpack_augmented_height_map (heightmap[idx])
+
+		local y = (py + absy) + y_offset - level_min
+		if surface <= y or motion_blocking <= y then
+			local cid, param2 = get_block_1 (x, y, z)
+			correct_heightmaps (x, y + level_min, z, cid, param2)
+		end
+	end
+end
+
+function mcl_levelgen.place_schematic (x, y, z, schematic, rotation, force_place,
+				       flags, rng)
+	local schematic = portable_schematics[schematic]
+	assert (schematic)
+	schematic_rng:reseed (rng:next_long ())
+	local rng = schematic_rng
+
+	if rotation == "random" then
+		local x = 1 + rng:next_within (4)
+		rotation = rotations[x]
+	else
+		if rotation ~= "0"
+			or rotation ~= "90"
+			or rotation ~= "180"
+			or rotation ~= "270" then
+			error ("Invalid rotation provided to `place_schematic'", rotation)
+		end
+	end
+
+	local x = x
+	local y = y - y_offset
+	local z = -z - 1
+	local size = schematic.size
+
+	if rotation == "90" or rotation == "270" then
+		v.x = size.z
+		v.y = size.y
+		v.z = size.x
+	end
+
+	if flags then
+		if flags.place_center_x
+			or flags.place_center_y
+			or flags.place_center_z then
+			size = vector.copy (size)
+			if flags.place_center_x then
+				x = x - rtz ((size.x - 1) / 2)
+			end
+			if flags.place_center_z then
+				z = z - rtz ((size.z - 1) / 2)
+			end
+			if flags.place_center_y then
+				y = y - rtz ((size.y - 1) / 2)
+			end
+		end
+	end
+
+	copy_to_data (schematic, size, x, y, z, rotation, force_place)
+	update_relight_rgn ({
+		x, y, z,
+		x + size.x,
+		y + size.y,
+		z + size.z,
+	})
 end
 
 ------------------------------------------------------------------------
 -- Feature generation.
 ------------------------------------------------------------------------
 
-local ull = mcl_levelgen.ull
 local rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
 local expand_biome_list = mcl_levelgen.expand_biome_list
 
-local function place_one_feature (feature) -- A placed feature.
+local function place_one_feature (feature, x, y, z) -- A placed feature.
 	local id = feature.configured_feature
 	local cfg = registered_configured_features[id]
 	local positions = {
-		run_minp.x, level_min, run_minp.z,
+		x or run_minp.x, y or level_min, z or run_minp.z,
 	}
 	local positions_next = {}
 
@@ -635,9 +919,11 @@ local function place_one_feature (feature) -- A placed feature.
 			local y = positions[i + 1]
 			local z = positions[i + 2]
 			local values = modifier (x, y, z, rng)
-			assert (#values % 3 == 0)
-			for _, value in ipairs (values) do
-				insert (positions_next, value)
+			assert (not values or #values % 3 == 0)
+			if values then
+				for _, value in ipairs (values) do
+					insert (positions_next, value)
+				end
 			end
 		end
 
@@ -656,6 +942,7 @@ local function place_one_feature (feature) -- A placed feature.
 	end
 	return placed
 end
+mcl_levelgen.place_one_feature = place_one_feature
 
 local registered_biomes = mcl_levelgen.registered_biomes
 local sort = table.sort
@@ -702,6 +989,8 @@ function mcl_levelgen.process_features_1 ()
 
 			if feature then
 				mcl_levelgen.set_decorator_seed (rng, pop, idx - 1, step - 1)
+				mcl_levelgen.current_placed_feature = name
+				mcl_levelgen.current_step = step
 				place_one_feature (feature)
 			elseif not warned[name] then
 				core.log ("warning", "Placing undefined feature: " .. name)

@@ -34,5 +34,6 @@ dofile (prefix .. "/scripting.lua")
 -- Is this file being loaded into Minetest?
 if core and core.get_current_modname then
 	dofile (prefix .. "/util.lua")
+	dofile (prefix .. "/nodeprops.lua")
 	dofile (prefix .. "/register.lua")
 end

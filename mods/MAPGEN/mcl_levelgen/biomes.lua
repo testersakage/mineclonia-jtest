@@ -37,10 +37,8 @@ mcl_levelgen.toquart = toquart
 mcl_levelgen.inquart = inquart
 mcl_levelgen.toblock = toblock
 
-local verbose = mcl_levelgen.verbose
-
 local function verbose_print (...)
-	if verbose then
+	if mcl_levelgen.verbose then
 		print (...)
 	end
 end
@@ -1540,9 +1538,7 @@ mcl_levelgen.register_biome ("TheVoid", {
 		{},
 		{},
 		{},
-		{
-			"mcl_levelgen:void_start_platform",
-		},
+		{},
 	},
 	has_precipitation = false,
 	temperature = 0.5,
@@ -6205,8 +6201,9 @@ function mcl_levelgen.assign_biome_ids (assignments)
 	for id = 0, maxid do
 		local name = biome_id_to_name_map[id]
 		if name then
-			print (string.format ("%3d%-2s%s", id,
-					      isnew[id] and "*" or "", name))
+			verbose_print (string.format ("%3d%-2s%s", id,
+						      isnew[id] and "*" or "",
+						      name))
 		end
 	end
 
@@ -6227,7 +6224,8 @@ local function get_temperature_in_biome (biome, x, y, z)
 
 	-- Apply temperature modifier.
 	if biome.temperature_modifier == "frozen" then
-		local temp_offset = FROZEN_BIOME_NOISE (x * 0.05, z * 0.05)
+		local temp_offset
+			= FROZEN_BIOME_NOISE (x * 0.05, z * 0.05) * 7.0
 		local selector = BIOME_SELECTOR_NOISE (x * 0.2, z * 0.2)
 		if temp_offset + selector < 0.3 then
 			local selector1 = BIOME_SELECTOR_NOISE (x * 0.09, z * 0.09)

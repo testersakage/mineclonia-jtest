@@ -77,7 +77,7 @@ local INDICES = floor ((SS * HEIGHT * SS * 8 + NUMBER_BITS - 1) / NUMBER_BITS)
 -- TODO: generalize to multiple dimensions.
 local OVERWORLD_MIN = mcl_vars.mg_overworld_min
 local OVERWORLD_MIN_BLOCK = OVERWORLD_MIN / 16
-local OVERWORLD_MAX_BLOCK = OVERWORLD_MIN_BLOCK + HEIGHT - 1
+local OVERWORLD_MAX_BLOCK = OVERWORLD_MIN_BLOCK + 24 - 1
 local storage = core.get_mod_storage and core.get_mod_storage () or nil
 
 local function section (bx, bz)
@@ -708,15 +708,19 @@ local function async_function (vm, run, heightmap, biomes)
 	-- 	end
 	-- end
 	local preset = mcl_levelgen.overworld_preset
-	mcl_levelgen.process_features (vm, run, heightmap, biomes,
-				       OVERWORLD_OFFSET, preset.min_y,
-				       preset.height)
-	return vm, run, heightmap
+	local relight_list
+		= mcl_levelgen.process_features (vm, run, heightmap, biomes,
+						 OVERWORLD_OFFSET, preset.min_y,
+						 preset.height)
+	return vm, run, heightmap, relight_list
 end
+
+local v1 = vector.zero ()
+local v2 = vector.zero ()
 
 local apply_heightmap_modifications
 
-local function run_execution_cb (vm, run, heightmap)
+local function run_execution_cb (vm, run, heightmap, relight_queue)
 	-- It appears that this calback is occasionally called oftener
 	-- than once.
 	local run_hash = hashmapblock (run.x, run.y1, run.z)
@@ -727,7 +731,7 @@ local function run_execution_cb (vm, run, heightmap)
 	end
 	mb_records[run_hash] = nil
 
-	vm:write_to_map (false)
+	vm:write_to_map (false, true)
 
 	-- Unlock all MapBlocks that were locked for the duration of
 	-- this run.
@@ -768,10 +772,13 @@ local function run_execution_cb (vm, run, heightmap)
 	if heightmap then
 		apply_heightmap_modifications (run, heightmap)
 	end
-end
 
-local v1 = vector.zero ()
-local v2 = vector.zero ()
+	for _, rgn in ipairs (relight_queue) do
+		v1.x, v1.y, v1.z = rgn[1], rgn[2], rgn[3]
+		v2.x, v2.y, v2.z = rgn[4], rgn[5], rgn[6]
+		core.fix_light (v1, v2)
+	end
+end
 
 local function cancel_mapblock_run (run, y_min, y_max)
 	local run_hash = hashmapblock (run.x, run.y1, run.z)
@@ -1301,7 +1308,17 @@ function biome_data_for_run (run, result)
 			for y = y1, y2 do
 				local hash = hashmapblock (x, y, z)
 				data[hash] = get_biome_meta (x, y, z)
-				assert (data[hash])
+				if not data[hash] then
+					local err
+						= string.format ("Biome metadata for MapBlock %d,%d,%d is unavailable",
+								 x, y, z)
+					core.log ("warning", err)
+
+					local plains
+						= mcl_levelgen.biome_name_to_id_map["TheVoid"]
+					data[hash] = string.char (64)
+						.. string.char (plains)
+				end
 			end
 		end
 	end

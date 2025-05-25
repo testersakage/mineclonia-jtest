@@ -21,8 +21,13 @@ if core.get_mapgen_setting then
 	end
 	core.ipc_set ("mcl_levelgen:level_seed", seed)
 
-	-- XXX: render this a user option.
-	mcl_levelgen.verbose = true
+	if core.settings then
+		mcl_levelgen.verbose
+			= core.settings:get_bool ("mcl_verbose_level_generation") or false
+		core.ipc_set ("mcl_levelgen:verbose", mcl_levelgen.verbose)
+	else
+		mcl_levelgen.verbose = core.ipc_get ("mcl_levelgen:verbose")
+	end
 else
 	-- Async environment.
 	seed = core.ipc_get ("mcl_levelgen:level_seed")
@@ -66,14 +71,15 @@ else
 	dofile (mcl_levelgen.prefix .. "/post_processing.lua")
 end
 
-local register_levelgen_script = mcl_levelgen.register_levelgen_script
-register_levelgen_script (mcl_levelgen.prefix .. "/default_features.lua")
-
 if core and not core.get_node then
+	mcl_levelgen.is_levelgen_environment = true
 	-- Run level generation scripts.
 	for _, script in ipairs (core.ipc_get ("mcl_levelgen:levelgen_scripts")) do
 		dofile (script)
 	end
+elseif core then
+	mcl_levelgen.register_levelgen_script (mcl_levelgen.prefix
+					       .. "/default_features.lua")
 end
 
 else

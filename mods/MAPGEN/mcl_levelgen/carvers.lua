@@ -8,11 +8,19 @@ local decode_node = mcl_levelgen.decode_node
 
 local cid_grass_block, cid_mycelium, cid_dirt, cid_air, cid_lava
 
-if core then
+local function init_cids ()
 	cid_grass_block = core.get_content_id ("mcl_core:dirt_with_grass")
 	cid_mycelium = core.get_content_id ("mcl_core:mycelium")
 	cid_dirt = core.get_content_id ("mcl_core:dirt")
 	cid_lava = core.get_content_id ("mcl_core:lava_source")
+end
+
+if core then
+	if core.register_on_mods_loaded then
+		core.register_on_mods_loaded (init_cids)
+	else
+		init_cids ()
+	end
 	cid_air = core.CONTENT_AIR
 else
 	cid_grass_block = 10
