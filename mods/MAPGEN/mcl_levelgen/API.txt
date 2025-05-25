@@ -130,17 +130,18 @@ dimensions of a feature to a distance of 32 nodes around its origin,
 which characteristic distinguishes features from the other type of
 decoration, the structure, whose dimensions can be much greater.
 Inasmuch as Minetest levels are incrementally generated vertically as
-well as horizontally, a variable number of MapBlocks are accessible
-vertically: a minimum of two MapBlocks (32 nodes) of vertical context
-is provided in either direction for feature extrusions--which may be
-shorter at the vertical extremes of the level--surrounding one or more
-MapBlocks where features may originate.  The net result is that at the
-minimum, a feature may extend 32x64x32 blocks from its center, but
-that to guarantee the absence of truncation only features that
-originate at the center of the view, not within the context, may be
-placed.  Biome and heightmap information is available for all
-MapBlocks in this area, context or not, and the heightmap may be
-modified in either direction as blocks are created or removed.
+well as horizontally, the number of MapBlocks that are accessible is
+also constrained (and variable): a minimum of two MapBlocks (32 nodes)
+of vertical context is provided in either direction for feature
+extrusions--which may be shorter at the vertical extremes of the
+level--surrounding one or more MapBlocks where features may originate.
+The net result is that at the minimum, a feature may extend 32x64x32
+blocks from its center, but that to guarantee the absence of
+truncation only features that originate at the center of the view, not
+within the context, may be placed.  Biome and heightmap information is
+available for all MapBlocks in this area, context or not, and the
+heightmap may be modified on either axis as blocks are created or
+removed.
 
 The functions and variables documented in this section are available
 to all placement modifiers and features.
