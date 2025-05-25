@@ -214,21 +214,21 @@ local function set_mapblock_state (bx, by, bz, state)
 				      lshift (state, bit_index))
 end
 
-local function mapblock_flag (bx, by, bz, i)
-	return band (rshift (mapblock_flagbyte (bx, by, bz), i + 3), 1)
-end
+-- local function mapblock_flag (bx, by, bz, i)
+-- 	return band (rshift (mapblock_flagbyte (bx, by, bz), i + 3), 1)
+-- end
 
-local function set_mapblock_flag (bx, by, bz, i)
-	local section, section_index, bit_index	= mapblock_index (bx, by, bz)
-	section[section_index] = bor (lshift (1, bit_index + i + 3),
-				      section[section_index])
-end
+-- local function set_mapblock_flag (bx, by, bz, i)
+-- 	local section, section_index, bit_index	= mapblock_index (bx, by, bz)
+-- 	section[section_index] = bor (lshift (1, bit_index + i + 3),
+-- 				      section[section_index])
+-- end
 
-local function clear_mapblock_flag (bx, by, bz, i)
-	local section, section_index, bit_index	= mapblock_index (bx, by, bz)
-	section[section_index] = band (bnot (lshift (1, bit_index + i + 3)),
-				       section[section_index])
-end
+-- local function clear_mapblock_flag (bx, by, bz, i)
+-- 	local section, section_index, bit_index	= mapblock_index (bx, by, bz)
+-- 	section[section_index] = band (bnot (lshift (1, bit_index + i + 3)),
+-- 				       section[section_index])
+-- end
 
 local function save_section (hash, sdata)
 	loaded_mb_sections[hash] = false
@@ -515,7 +515,7 @@ end
 
 -- local mapblock_lockers = {}
 -- local function whohasit (x, y, z)
--- 	return mapblock_lockers[core.hash_node_position (vector.new (x, y, z))]	
+-- 	return mapblock_lockers[core.hash_node_position (vector.new (x, y, z))]
 -- end
 -- local function record_whohasit (x, y, z, run)
 -- 	mapblock_lockers[core.hash_node_position (vector.new (x, y, z))] = run
@@ -851,6 +851,7 @@ local function post_mapblock_run (run)
 
 	local heightmap = construct_heightmap_for_run (run)
 	local biomes = biome_data_for_run (run)
+	core.load_area (v1, v2)
 	local vm = VoxelManip (v1, v2)
 	core.handle_async (async_function, run_execution_cb, vm, run,
 			   heightmap, biomes)
@@ -1239,7 +1240,6 @@ end
 
 local function restore_heightmap_segment (run, src, dx, dz)
 	local id = mapblock_heightmap (run.x + dx, run.z + dz)
-	local heightmap = load_heightmap (id)
 
 	-- Transform output coordinates.
 	local x = 16 + dx * 16
@@ -1430,15 +1430,11 @@ local function init_hud (player)
 	meta:set_int ("mcl_levelgen:debug_hud_enabled", 1)
 	huds[player] = player:hud_add ({
 		type = "text",
-		position = {
-			x = 0.5,
-			y = 1.0,
-		},
 		alignment = {
 			x = 1,
 			y = -1,
 		},
-		text = core.colorize ("#ffffff", hud_text (player)),
+		text = core.colorize ("#808080", hud_text (player)),
 		style = 5,
 		position = {x = 0.0073, y = 0.889},
 	})
@@ -1457,7 +1453,7 @@ local function update_hud (player)
 	local hud = huds[player]
 	if hud then
 		player:hud_change (hud, "text",
-				   core.colorize ("#ffffff", hud_text (player)))
+				   core.colorize ("#808080", hud_text (player)))
 	end
 end
 
@@ -1473,7 +1469,7 @@ core.register_chatcommand ("level_generation_status", {
 		if toggle == "on" then
 			init_hud (player)
 		elseif toggle == "off" then
-			disable_hud (player)
+			delete_hud (player)
 		end
 	end,
 })
@@ -1496,4 +1492,3 @@ end)
 core.register_async_dofile (mcl_levelgen.prefix .. "/init.lua")
 
 end -- if not mcl_levelgen.load_feature_environment
-

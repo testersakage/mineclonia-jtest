@@ -255,12 +255,11 @@ core.register_abm({
 			end
 			if n2 then
 				core.swap_node(pos, n2)
-			end
-
-			-- If this was mycelium, uproot plant above
-			if n2.name == "mcl_core:mycelium" then
-				if core.get_item_group(core.get_node(above).name, "non_mycelium_plant") > 0 then
-					core.dig_node(above)
+				-- If this was mycelium, uproot plant above
+				if n2.name == "mcl_core:mycelium" then
+					if core.get_item_group(core.get_node(above).name, "non_mycelium_plant") > 0 then
+						core.dig_node(above)
+					end
 				end
 			end
 		end

@@ -769,7 +769,6 @@ end
 if true and detect_luajit () then
 	local rshift = bit.rshift
 	local arshift = bit.arshift
-	local tobit = bit.tobit
 
 	local function lj_seed_from_position (seed, x, y, z)
 		local x, y, z = x * 1ll * 1ull, y * 1ll * 1ull, z * 1ll * 1ull
