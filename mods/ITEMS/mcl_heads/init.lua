@@ -145,6 +145,11 @@ local function register_floor(head_def)
 			name = name
 		}))
 	end
+	if head_def.groups then
+		for k, v in pairs(head_def.groups) do
+			mcl_heads.deftemplate.groups[k] = v
+		end
+	end
 	core.register_node(":"..name, table.update(table.copy(mcl_heads.deftemplate), {
 		mesh = head_def.mesh,
 		description = head_def.description,
@@ -239,12 +244,6 @@ end
 --- registers a head
 --- @param head_def HeadDef head node definition
 function mcl_heads.register_head(head_def)
-	if head_def.groups then
-		for k, v in pairs(head_def.groups) do
-			mcl_heads.deftemplate.groups[k] = v
-		end
-	end
-
 	register_floor(head_def)
 	register_wall(head_def)
 	register_ceiling(head_def)
@@ -309,11 +308,6 @@ local defpiglin = {
 	groups = {rarity = 1},
 	_mcl_armor_texture = "blank.png",
 }
-if defpiglin.groups then
-	for k, v in pairs(defpiglin.groups) do
-		mcl_heads.deftemplate.groups[k] = v
-	end
-end
 register_floor(defpiglin)
 register_ceiling(table.update(table.copy(defpiglin), {
 	mesh = "mcl_heads_piglin_ceiling.obj",
@@ -323,6 +317,27 @@ register_wall(table.update(table.copy(defpiglin), {
 	drawtype = "mesh",
 	mesh = "mcl_heads_piglin_wall.obj",
 	tiles = {"mcl_heads_piglin.png"},
+}))
+
+-- Dragon head
+local defdragon = {
+	name = "dragon",
+	mesh = "mcl_heads_dragon_floor.obj",
+	texture = "mcl_heads_dragon.png",
+	description = S("Dragon Head"),
+	longdesc = S("A dragon head is a decorative block which resembles the head of a dragon. It can also be worn as a helmet."),
+	groups = {rarity = 3},
+	_mcl_armor_texture = "blank.png",
+}
+register_floor(defdragon)
+register_ceiling(table.update(table.copy(defdragon), {
+	mesh = "mcl_heads_dragon_ceiling.obj",
+	texture = "mcl_heads_dragon.png^[transformR180",
+}))
+register_wall(table.update(table.copy(defdragon), {
+	drawtype = "mesh",
+	mesh = "mcl_heads_dragon_wall.obj",
+	tiles = {"mcl_heads_dragon.png"},
 }))
 
 -- convert old placed heads
