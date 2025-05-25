@@ -23,7 +23,22 @@ Register SCRIPT to execute in every context where structure or feature
 placement is processed; registered scripts are executed in the same
 sequence as they are defined.  All facilities documented after this
 function, unless otherwise stated, are only safe to invoke from within
-this mapgen script.
+such a mapgen script.
+
+Function: mcl_levelgen.register_portable_schematic (ID, SPECIFIER)
+
+Arrange to import the schematic specified by SPECIFIER (either a file
+name or a schematic table, as with `core.read_schematic') into each
+feature placement environment as ID, a string identifier.  ID may
+subsequently be supplied to `mcl_levelgen.place_schematic'.  This
+function must be invoked at top level during mod initialization.
+
+Variable: mcl_levelgen.is_levelgen_environment
+
+Value is true if this environment is one in which a registered script
+is to be or is being loaded.  Naturally, it is permissible to access
+this variable outside a level generator environment, in which case it
+is either nil or false.
 
 
 FEATURE REGISTRATION
@@ -158,6 +173,17 @@ Integer value providing the height (in blocks from the bottommost
 vertical position) of the level in which feature placement is
 proceeding.
 
+Variable: mcl_levelgen.current_placed_feature
+
+The ID of the placed feature currently being placed; value is
+undefined if a placement operation is not in progress.
+
+Variable: mcl_levelgen.current_stage
+
+The feature placement stage to which the feature currently being
+placed appertains; value is undefined if a placement operation is not
+in progress.
+
 Function: mcl_levelgen.index_heightmap (X, Z)
 
 Return two values with the Y position of the uppermost block at X, Z
@@ -210,12 +236,51 @@ You must make arrangements to correct the lighting in this area by
 means of `mcl_levelgen.fix_lighting' if any nodes should be inserted
 that could possibly affect lighting.
 
+Function: mcl_levelgen.is_position_hospitable (CID, X, Y, Z)
+
+Return whether the position X, Y, Z is hospitable to blocks of type
+CID.  X, Y, Z may be any position within the accessible region of the
+level, but as this function may examine the specified position's
+surroundings, value may be inaccurate near the edges of the said
+region.  Value is nil elsewhere.
+
+This function is currently implemented for nodes of the following
+types:
+
+  - mcl_core:snow
+  - mcl_core:snow_{2..8}
+  - group:sapling
+
+Modders are encouraged to extend this function by means of overloading
+to understand their own blocks' environmental requirements if those
+blocks should appear in generated features or structures.
+
 Function: mcl_levelgen.fix_lighting (X1, Y1, Z1, X2, Y2, Z2)
 
 Arrange to fix lighting (with `core.fix_light') in the cuboid defined
 by X1, Y1, Z1, and X2, Y2, Z2, all inclusive.  These coordinates will
 be converted into Minetest's native coordinate system, but no further
 validation or transformations are applied.
+
+Function: mcl_levelgen.place_schematic (X, Y, Z, SCHEMATIC, ROTATION,
+					REPLACEMENTS, FORCE_PLACEMENT,
+					FLAGS, RNG)
+
+Place the schematic identified by SCHEMATIC (which must have
+previously been imported by means of
+`mcl_levelgen.register_portable_schematic') at X, Y, Z.  Treat X, Y,
+and Z as coordinates in the Minecraft coordinate system, but convert
+them to Minetest's coordinate system and apply the schematic without
+transformations.  Derive a random number generator from RNG and invoke
+it when evaluating randomness.
+
+If SCHEMATIC should exceed the accessible region of the level, it will
+be silently truncated.
+
+ROTATION, FORCE_PLACEMENT, and FLAGS, are as in
+`core.place_schematic'.  There is no parameter accepting a table of
+replacements, and in its place you must guarantee that your schematics
+are up to date.
 
 
 PLACEMENT MODIFIERS
@@ -477,6 +542,43 @@ Create a 64-bit seed from X, Y, Z, which are integer block positions,
 and store the result in SEED, a ull value.
 
 
+STANDARD PLAIN FEATURES
+
+Placed feature: mcl_levelgen:random_selector
+
+Select a feature at random from amongst entries specified in its
+configuration, which must be a table of the form:
+
+{
+	default = "<ID>",
+
+The placed feature that will be selected by default, if no feature's
+condition was satisfied.
+
+	features = {
+		 {
+			chance = CHANCE,
+			feature = "<ID>",
+		 },
+		 ...
+	}
+
+A list of placed features that will be attempted in consecution, each
+attempt having a probability of success of CHANCE.  If no attempt
+should succeed, the defined default value is generated instead.
+
+When executing, `mcl_levelgen.current_placed_feature' is the placed
+feature referencing the configuration specifying this feature, and is
+not influenced by the placed feature that is selected.  Placement
+modifiers such as `mcl_levelgen.build_biome' and the like proceed
+accordingly.
+
+Each placed feature's modifiers will be executed a second time for
+each position that is provided to this random selector.
+
+}
+
+
 STANDARD PLACED FEATURES
 
 
@@ -484,6 +586,65 @@ STANDARD CONFIGURED FEATURES
 
 
 STANDARD PLACEMENT MODIFIERS
+
+Function: mcl_levelgen.build_weighted_list (list)
+
+Take a weighted list of elements of the form:
+
+{
+	weight = WEIGHT,
+	data = DATA,
+}
+
+and return a function which accepts a PRNG and returns a random
+element's DATA field, weighted by specified WEIGHTs.  This is not a
+placement modifier.
+
+Function: mcl_levelgen.build_count (N)
+
+Return a placement modifier which duplicates the input position N
+times.  N must be a function that accepts an RNG and yields the number
+of duplicates to produce.
+
+Function: mcl_levelgen.build_in_square ()
+
+Return a placement modifier which returns a position at a random
+offset of 0 to 15 blocks along the X and Z axes from the input
+position.
+
+Function: mcl_levelgen.build_in_biome ()
+
+Return a placement modifier which enforces feature lists in biome
+definitions by excluding any positions which do not fall within a
+biome that defines the feature being evaluated.
+
+Function: mcl_levelgen.build_heightmap (heightmap)
+
+Return a placement modifier which places each position supplied at the
+provided heightmap.  Two heightmaps are available for purposes of
+level generation:
+
+      "world_surface"	- The surface of the level as defined by blocks
+      			  that are not air.
+      "motion_blocking" - The surface of the level as defined by blocks
+      			  that obstruct movement (i.e. are `walkable').
+
+As heightmaps are liable to be modified by feature placement, a
+feature that has already been placed may be duplicated when another
+vertical section of the level is emerged or otherwise new surfaces
+created by this or another feature are exposed.  Therefore it is best
+for features which utilize this placement modifier to be
+idempotent--as, for example, a tree feature that only permits
+placement where saplings can grow but not on canopies.
+
+Function: mcl_levelgen.build_surface_water_depth_filter (N)
+
+Return a placement modifier that excludes any surface where the world
+surface is more than N blocks above the surface of the level as
+defined by the `motion_blocking' heightmap, upon the (marginal)
+assumption that water is the only block capable of separating the two
+heightmaps.  XXX: this is subject to change if a dedicated
+`ocean_surface' heightmap is introduced for parity with Minecraft.
 
 
 STRUCTURES

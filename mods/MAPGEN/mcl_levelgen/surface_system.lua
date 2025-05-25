@@ -27,10 +27,8 @@
 --
 ------------------------------------------------------------------------
 
-local verbose = mcl_levelgen.verbose
-
 local function verbose_print (...)
-	if verbose then
+	if mcl_levelgen.verbose then
 		print (...)
 	end
 end
@@ -38,8 +36,15 @@ end
 local cid_air, cid_water_source, cid_lava_source
 if core and core.get_content_id then
 	cid_air = core.CONTENT_AIR
-	cid_water_source = core.get_content_id ("mcl_core:water_source")
-	cid_lava_source = core.get_content_id ("mcl_core:lava_source")
+	if core.register_on_mods_loaded then
+		core.register_on_mods_loaded (function ()
+			cid_water_source = core.get_content_id ("mcl_core:water_source")
+			cid_lava_source = core.get_content_id ("mcl_core:lava_source")
+		end)
+	else
+		cid_water_source = core.get_content_id ("mcl_core:water_source")
+		cid_lava_source = core.get_content_id ("mcl_core:lava_source")
+	end
 else
 	cid_air = 0
 	cid_water_source = 1

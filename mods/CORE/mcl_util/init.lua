@@ -25,3 +25,5 @@ dofile(modpath .. "/roman.lua")
 dofile(modpath .. "/compat.lua")
 -- Shape library.
 dofile(modpath.."/shape.lua")
+core.register_mapgen_script (modpath .. "/shape.lua")
+core.register_async_dofile (modpath .. "/shape.lua")
