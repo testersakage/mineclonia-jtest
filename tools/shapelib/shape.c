@@ -141,20 +141,25 @@ bisect (edges, nmemb, value)
 {
   int low = 0, high = nmemb - 1;
 
-  while (low != high)
+  if (nmemb)
     {
-      int mid = (low + high) / 2;
+      while (low != high)
+	{
+	  int mid = (low + high) / 2;
 
-      if (edges[mid] < value)
-	low = mid + 1;
-      else
-	high = mid;
+	  if (edges[mid] < value)
+	    low = mid + 1;
+	  else
+	    high = mid;
+	}
+
+      if (edges[low] > value)
+	return low > 0 ? edges + low - 1 : NULL;
+
+      return edges + low;
     }
 
-  if (edges[low] > value)
-    return low > 0 ? edges + low - 1 : NULL;
-
-  return edges + low;
+  return NULL;
 }
 
 #define XINDEX(x, base)				\

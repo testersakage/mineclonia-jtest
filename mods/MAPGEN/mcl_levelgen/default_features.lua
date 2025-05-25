@@ -180,6 +180,7 @@ end
 
 local get_biome = mcl_levelgen.index_biome
 local registered_biomes = mcl_levelgen.registered_biomes
+local indexof = table.indexof
 
 function mcl_levelgen.build_in_biome ()
 	local last_biome, last_result = nil
@@ -195,15 +196,14 @@ function mcl_levelgen.build_in_biome ()
 			= mcl_levelgen.current_placed_feature
 		local current_step
 			= mcl_levelgen.current_step
-		if biome == last_biome then
-			return last_result
+		if biome ~= last_biome then
+			local step_features = def.features[current_step]
+			last_result = step_features
+				and indexof (step_features,
+					     current_feature) ~= -1
+			last_biome = biome
 		end
-		local step_features = def.features[current_step]
-		last_result = step_features
-			and indexof (step_features,
-				     current_feature) ~= -1
-		last_biome = biome
-		return last_result
+		return last_result and { x, y, z, } or nil
 	end
 end
 
