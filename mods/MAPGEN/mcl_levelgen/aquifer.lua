@@ -9,7 +9,13 @@ local cid_air, cid_lava_source
 
 if core and core.get_content_id then
 	cid_air = core.CONTENT_AIR
-	cid_lava_source = core.get_content_id ("mcl_core:lava_source")
+	if core.register_on_mods_loaded then
+		core.register_on_mods_loaded (function ()
+			cid_lava_source = core.get_content_id ("mcl_core:lava_source")
+		end)
+	else
+		cid_lava_source = core.get_content_id ("mcl_core:lava_source")
+	end
 else
 	cid_air = 0
 	cid_lava_source = 4

@@ -3,7 +3,11 @@
 --- implementation, which is included for reference, as you would
 --- expect, in tools/shapelib/shape.c.
 
-if not mcl_util then
+if core then
+	if not core.global_exists ("mcl_util") then
+		mcl_util = {}
+	end
+elseif not mcl_util then
 	mcl_util = {}
 end
 
@@ -40,21 +44,23 @@ end
 
 local function bisect (edges, nmemb, value)
 	local low, high, mid = 0, nmemb - 1
-
-	while low ~= high do
-		mid = floor ((low + high) / 2)
-		if edges[mid + 1] < value then
-			low = mid + 1
-		else
-			high = mid
+	if nmemb > 0 then
+		while low ~= high do
+			mid = floor ((low + high) / 2)
+			if edges[mid + 1] < value then
+				low = mid + 1
+			else
+				high = mid
+			end
 		end
-	end
 
-	if edges[low + 1] > value then
-		return low > 0 and low or nil
-	end
+		if edges[low + 1] > value then
+			return low > 0 and low or nil
+		end
 
-	return low + 1
+		return low + 1
+	end
+	return nil
 end
 
 local band = bit.band
@@ -879,6 +885,7 @@ local function region_init_from_aabb (aabb)
 		aabb[3],
 		aabb[6],
 	}
+	setmetatable (region, region_class)
 	return region
 end
 
@@ -1013,4 +1020,3 @@ local function region_select_face (region, normal_axis, pos)
 end
 
 region_class.select_face = region_select_face
-
