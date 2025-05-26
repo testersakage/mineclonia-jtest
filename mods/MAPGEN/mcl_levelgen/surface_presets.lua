@@ -100,6 +100,7 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 	local cid_air = getcid ("air")
 	local cid_bedrock = getcid ("mcl_core:bedrock")
 	local cid_deepslate = getcid ("mcl_deepslate:deepslate")
+	local cid_podzol = getcid ("mcl_core:podzol")
 
 	local grass_block = block (cid_grass_block, "grass_palette_index")
 	local dirt = block (cid_dirt, 0)
@@ -128,6 +129,7 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 	local air = block (cid_air, 0)
 	local bedrock = block (cid_bedrock, 0)
 	local deepslate = block (cid_deepslate, 0)
+	local podzol = block (cid_podzol, 0)
 
 	local anchor_coarse_dirt = y_above_test (97, 2)
 	local anchor_orange_terracotta = y_above_test (256, 0)
@@ -243,6 +245,12 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 					       if_true (surface_threshold (-1.0),
 							grass_surface),
 					       stone_surface)),
+			    if_true (biome ("OldGrowthPineTaiga",
+					    "OldGrowthSpruceTaiga"),
+				     sequence (if_true (surface_threshold (1.75),
+							coarse_dirt),
+					       if_true (surface_threshold (-0.95),
+							podzol))),
 			    if_true (biome ("IceSpikes"),
 				     if_true (water_absence, snow_block)),
 			    if_true (biome ("MangroveSwamp"), mud),

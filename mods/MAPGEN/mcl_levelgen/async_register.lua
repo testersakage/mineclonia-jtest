@@ -4,9 +4,6 @@
 
 print ("* Initializing async environment")
 
-local seed = mcl_levelgen.seed
-
-mcl_levelgen.overworld_preset = mcl_levelgen.make_overworld_preset (seed)
 mcl_levelgen.load_feature_environment = true
 
 -- Load `features.lua' a second time to define the feature generation
