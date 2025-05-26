@@ -180,10 +180,7 @@ local grass_spread_randomizer = PseudoRandom(core.get_mapgen_setting("seed"))
 function mcl_core.get_grass_palette_index(pos)
 	local index = 0
 	if mcl_levelgen.levelgen_enabled then
-		local biome = mcl_levelgen.get_biome (pos)
-		if not biome then
-			return nil
-		end
+		local biome = mcl_levelgen.get_biome (pos, true)
 		local biome_data = mcl_levelgen.registered_biomes[biome]
 		return biome_data.grass_palette_index
 	else

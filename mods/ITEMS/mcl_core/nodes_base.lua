@@ -1034,7 +1034,7 @@ for i=1,8 do
 			mcl_core.clear_snow_dirt(npos, node)
 		end,
 		node_box = node_box,
-		groups = {shovely=1, attached_node=1, deco_block=1, dig_by_water=1, dig_by_piston=1, snow_cover=1, top_snow=i, unsticky = 1, pathfinder_partial = i < 5 and 1 or 2},
+		groups = {shovely=1, attached_node=1, deco_block=1, dig_by_water=1, dig_by_piston=1, snow_cover=1, top_snow=i, unsticky = 1, pathfinder_partial = i < 5 and 1 or 2, snow_layer = 1},
 		sounds = mcl_sounds.node_sound_snow_defaults(),
 		on_construct = mcl_core.on_snow_construct,
 		on_place = on_place,

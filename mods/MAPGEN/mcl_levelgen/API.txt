@@ -25,13 +25,18 @@ sequence as they are defined.  All facilities documented after this
 function, unless otherwise stated, are only safe to invoke from within
 such a mapgen script.
 
-Function: mcl_levelgen.register_portable_schematic (ID, SPECIFIER)
+Function: mcl_levelgen.register_portable_schematic (ID, SPECIFIER,
+	  					    NORMALIZE_YPROB)
 
 Arrange to import the schematic specified by SPECIFIER (either a file
 name or a schematic table, as with `core.read_schematic') into each
 feature placement environment as ID, a string identifier.  ID may
 subsequently be supplied to `mcl_levelgen.place_schematic'.  This
 function must be invoked at top level during mod initialization.
+
+If NORMALIZE_YPROB is true, replace each Y slice's generation
+probability with the maximum possible value.  This is significant with
+misbegotten schematics that expect such slices always to be generated.
 
 Variable: mcl_levelgen.is_levelgen_environment
 
@@ -238,11 +243,10 @@ accessible region of the level.
 
 Function: mcl_levelgen.index_biome (X, Y, Z)
 
-Return the (munged) biome at X, Y, Z, absolute block positions that
-must remain within the accessible region of the level in a form not
-truncated by the confines of the level.  If this requirement is not
-satisfied, signal an error.  Value may be nil if Y is outside the
-level.
+Return the (munged) biome at X, Y, Z.  You should endeavor to confine
+this position to the accessible region of the level, as biome
+generation may take place if this value exists outside the level,
+which is comparatively more expensive.
 
 Function: mcl_levelgen.get_block (X, Y, Z)
 
@@ -306,6 +310,11 @@ ROTATION, FORCE_PLACEMENT, and FLAGS, are as in
 `core.place_schematic'.  There is no parameter accepting a table of
 replacements, and in its place you must guarantee that your schematics
 are up to date.
+
+Value is a list { X1, Y1, Z1, X2, Y2, Z2, } specifying the minimum and
+maximum extents (inclusive) of the placed schematic in Minecraft's
+coordinate system.  This bounding box is not limited to the accessible
+region of the level.
 
 
 PLACEMENT MODIFIERS
@@ -671,6 +680,49 @@ defined by the `motion_blocking' heightmap, upon the (marginal)
 assumption that water is the only block capable of separating the two
 heightmaps.  XXX: this is subject to change if a dedicated
 `ocean_surface' heightmap is introduced for parity with Minecraft.
+
+Function: mcl_levelgen.build_environment_scan (PARMS)
+
+Return a placement modifier that scans for a block matching a
+predicate and in a direction specified in PARAMS, or, failing that,
+returns a position outside the accessible region of the level in the
+direction of the search.
+
+PARAMS must be a table of the form:
+
+{
+
+	direction = -1 or 1,
+
+Direction in which to scan for an eligible block.
+
+	max_steps = -1 or 1,
+
+The number of iterations of the search to execute.
+
+	allowed_search_condition = function (X, Y, Z) ... end or nil,
+
+Optional predicate which if defined is invoked with the coordinates of
+the position being evaluated upon each iteration of the search to
+decide whether the next iteration of a search should be permitted to
+commence.  If false is returned, an inaccessible position will be
+returned without further processing before the first iteration of the
+search, or, during or after this iteration, the search will conclude
+as if `target_condition' returned true on the next iteration, except
+that if it does not actually return true an inaccessible position will
+be returned instead.
+
+	target_condition = function (X, Y, Z) ... end,
+
+Predicate evaluated upon each iteration of the search; a value of true
+will result in the provided position being returned.
+
+}
+
+Function: mcl_levelgen.build_rarity_filter (N)
+
+Return a placement modifier that returns its input coordinates only
+1/N of the time.
 
 
 STRUCTURES
