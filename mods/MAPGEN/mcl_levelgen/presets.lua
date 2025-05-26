@@ -1223,7 +1223,7 @@ local MINECRAFT_Y_GRADIENT_MIN = -4064
 local MINECRAFT_Y_GRADIENT_MAX = 4062
 local MINECRAFT_BASE_OFFSET = -0.50375
 
-local function register_terrain_funcs (preset, registry, noises, jaggedness,
+local function register_terrain_funcs (preset, registry, noises, jagged,
 				       continentalness, erosion,
 				       name_offset, name_factor, name_jaggedness,
 				       name_depth, name_sloped_cheese, is_amplified)
@@ -1250,7 +1250,7 @@ local function register_terrain_funcs (preset, registry, noises, jaggedness,
 	local depth = add (y_clamped_gradient (-64, 320, 1.5, -1.5), offset)
 	registry[name_depth] = depth
 
-	local jaggedness_final = mul (jaggedness, half_negative (jaggedness))
+	local jaggedness_final = mul (jaggedness, half_negative (jagged))
 	local depth_jaggedness = add (depth, jaggedness_final)
 	local product_factor = mul (depth_jaggedness, factor)
 	local gradient = mul (const (4.0), quarter_negative (product_factor))

@@ -192,7 +192,16 @@ core.register_on_mods_loaded (function ()
 	assert (conv_pos)
 end)
 
-function mcl_levelgen.get_biome (pos)
+local overworld_preset = nil
+
+local function sample_biome (qx, qy, qz) -- TODO: multiple levels.
+	if not overworld_preset then
+		overworld_preset = mcl_levelgen.overworld_preset
+	end
+	return overworld_preset:index_biomes (qx, qy, qz)
+end
+
+function mcl_levelgen.get_biome (pos, allow_sample)
 	v.x = floor (pos.x + 0.5)
 	v.y = floor (pos.y + 0.5)
 	v.z = floor (pos.z + 0.5)
@@ -207,13 +216,15 @@ function mcl_levelgen.get_biome (pos)
 	local by = arshift (qy, 2)
 	local bz = arshift (qz, 2)
 
-	-- Do not attempt this if the engine might block to obtain
-	-- metadata for this node.
-	v.x = bx * 16
-	v.y = by * 16
-	v.z = bz * 16
-	if not core.get_node_or_nil (v) then
-		return nil
+	if not allow_sample then
+		-- Do not attempt this if the engine might block to
+		-- obtain metadata for this node.
+		v.x = bx * 16
+		v.y = by * 16
+		v.z = bz * 16
+		if not core.get_node_or_nil (v) then
+			return nil
+		end
 	end
 
 	local meta = core.get_meta (v)
@@ -228,6 +239,11 @@ function mcl_levelgen.get_biome (pos)
 		}))
 
 		if not str or str == "" then
+			-- The caller absolutely requires a biome, so
+			-- sample.
+			if allow_sample then
+				return sample_biome (qx, qy, qz)
+			end
 			return nil
 		end
 		meta:set_string ("mcl_levelgen:biome_index", str)

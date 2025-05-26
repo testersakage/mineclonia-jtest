@@ -205,7 +205,10 @@ local cid_air
 local is_cid_sapling = {}
 local is_cid_dirt = {}
 local is_cid_snow_layer, cid_snow = {}
+local paramtype2 = {}
 local mathmin = math.min
+
+mcl_levelgen.is_cid_dirt = is_cid_dirt
 
 local function initialize_nodeprops ()
 	cid_ice = core.get_content_id ("mcl_core:ice")
@@ -257,6 +260,7 @@ local function initialize_nodeprops ()
 		if def.groups.dirt and def.groups.dirt >= 1 then
 			is_cid_dirt[cid] = true
 		end
+		paramtype2[cid] = def.paramtype2
 	end
 end
 
@@ -284,6 +288,116 @@ local function get_node_shape (x, y, z)
 		end
 		return value, reusable
 	end
+end
+
+local rotate_facedir = {
+	-- Table value = rotated facedir
+	-- Columns: 0, 90, 180, 270 degrees rotation around vertical axis
+	-- Rotation is anticlockwise as seen from above (+Y)
+
+	0, 1, 2, 3,  -- Initial facedir 0 to 3
+	1, 2, 3, 0,
+	2, 3, 0, 1,
+	3, 0, 1, 2,
+
+	4, 13, 10, 19,  -- 4 to 7
+	5, 14, 11, 16,
+	6, 15, 8, 17,
+	7, 12, 9, 18,
+
+	8, 17, 6, 15,  -- 8 to 11
+	9, 18, 7, 12,
+	10, 19, 4, 13,
+	11, 16, 5, 14,
+
+	12, 9, 18, 7,  -- 12 to 15
+	13, 10, 19, 4,
+	14, 11, 16, 5,
+	15, 8, 17, 6,
+
+	16, 5, 14, 11,  -- 16 to 19
+	17, 6, 15, 8,
+	18, 7, 12, 9,
+	19, 4, 13, 10,
+
+	20, 23, 22, 21,  -- 20 to 23
+	21, 20, 23, 22,
+	22, 21, 20, 23,
+	23, 22, 21, 20,
+}
+
+local ROTATE_0 = 0
+local ROTATE_90 = 1
+local ROTATE_180 = 2
+local ROTATE_270 = 3
+
+local wallmounted_to_rot = {
+	ROTATE_0,
+	ROTATE_180,
+	ROTATE_90,
+	ROTATE_270,
+}
+
+local rot_to_wallmounted = {
+	[ROTATE_0] = 2,
+	[ROTATE_90] = 4,
+	[ROTATE_180] = 3,
+	[ROTATE_270] = 5,
+}
+
+local band = bit.band
+local bor = bit.bor
+local bnot = bit.bnot
+local DWM_COUNT = 8
+
+local function namerot (rot)
+	if rot == "0" then
+		return ROTATE_0
+	elseif rot == "90" then
+		return ROTATE_90
+	elseif rot == "180" then
+		return ROTATE_180
+	else
+		return ROTATE_270
+	end
+end
+
+-- See MapNode::rotateAlongYAxis in mapnode.cpp.
+function mcl_levelgen.rotate_param2 (cid, param2, rot)
+	local cpt2 = paramtype2[cid]
+	local rot = namerot (rot)
+
+	if cpt2 == "facedir" or cpt2 == "colorfacedir" then
+		local facedir = band (param2, 31) % 24
+		local index = facedir * 4 + rot + 1
+		param2 = band (param2, bnot (31))
+		param2 = bor (param2, rotate_facedir[index])
+	elseif cpt2 == "4dir" or cpt2 == "color4dir" then
+		local facedir = band (param2, 3)
+		local index = facedir * 4 + rot + 1
+		param2 = band (param2, bnot (3))
+		param2 = bor (param2, rotate_facedir[index])
+	elseif cpt2 == "wallmounted" or "colorwallmounted" then
+		local wmountface = mathmin (band (param2, 0x07), DWM_COUNT - 1)
+		if wmountface > 1 then
+			local oldrot = wallmounted_to_rot[wmountface - 2 + 1]
+			param2 = band (param2, bnot (7))
+			local newrot = rot_to_wallmounted[band (oldrot - rot, 3)]
+			param2 = bor (param2, newrot)
+		end
+	elseif cpt2 == "degrotate" then
+		local angle = param2 -- in 1.5 deg increments
+		angle = angle + 60 * rot;
+		angle = angle % 240;
+		param2 = angle
+	elseif cpt2 == "colordegrotate" then
+		local angle = band (param2, 0x1f) -- in 15 deg increments
+		local color = band (param2, 0xe0)
+		angle = angle + 6 * rot
+		angle = angle % 24
+		param2 = bor (angle, color)
+	end
+	return param2
 end
 
 --------------------------------------------------------------------------

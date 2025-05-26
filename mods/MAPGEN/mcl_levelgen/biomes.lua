@@ -1918,7 +1918,7 @@ mcl_levelgen.register_biome ("CherryGrove", {
 			"mcl_levelgen:patch_tall_grass_2",
 			"mcl_levelgen:patch_grass_plain",
 			"mcl_levelgen:flower_cherry",
-			"mcl_levelgen:trees_cherry",
+			"mcl_trees:trees_cherry",
 		},
 		{
 			"mcl_levelgen:freeze_top_layer",

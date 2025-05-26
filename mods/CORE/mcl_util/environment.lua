@@ -736,8 +736,14 @@ function mcl_util.safe_place(pos, node, player, itemstack)
 end
 
 function mcl_util.get_pos_p2(pos)
-	local biomedef = core.registered_biomes[core.get_biome_name(core.get_biome_data(pos).biome)]
-	return biomedef and biomedef._mcl_palette_index or 0
+	if not mcl_levelgen.levelgen_enabled then
+		local biomedef = core.registered_biomes[core.get_biome_name(core.get_biome_data(pos).biome)]
+		return biomedef and biomedef._mcl_palette_index or 0
+	else
+		local biome = mcl_levelgen.get_biome (pos, true)
+		local biomedef = mcl_levelgen.registered_biomes[biome]
+		return biomedef.grass_palette_index or 0
+	end
 end
 
 function mcl_util.traverse_tower(pos, dir, callback)

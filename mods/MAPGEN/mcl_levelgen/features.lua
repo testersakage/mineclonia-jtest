@@ -334,13 +334,20 @@ end
 
 local portable_schematics = {}
 
-function mcl_levelgen.register_portable_schematic (id, specifier)
+function mcl_levelgen.register_portable_schematic (id, specifier, normalize_yprob)
 	if portable_schematics[id] then
 		error ("Schematic already registered: " .. id)
 	end
 	local data = core.read_schematic (specifier, {
 		write_yslice_prob = "all",
 	})
+	if normalize_yprob then
+		for y = 1, data.size.y do
+			data.yslice_prob[y] = {
+				prob = 0xff,
+			}
+		end
+	end
 	portable_schematics[id] = data
 	core.ipc_set ("mcl_levelgen:portable_schematics", portable_schematics)
 end
@@ -386,6 +393,7 @@ local area = nil
 local vm_modified = false
 local relight_rgn = {}
 local heightmap_modifications
+local preset
 
 mcl_levelgen.placement_run_minp = run_minp
 mcl_levelgen.placement_run_maxp = run_maxp
@@ -399,7 +407,7 @@ local function collect_unlit_region (aabb, list)
 end
 
 function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_offset,
-					p_level_min, p_level_height)
+					p_level_min, p_level_height, p_preset)
 	run = p_run
 	run_minp.x = run.x * 16
 	run_minp.z = -(run.z * 16 + 16)
@@ -418,6 +426,7 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 	relight_rgn = mcl_util.empty_region
 	heightmap_modifications = {}
 	mcl_levelgen.heightmap_modifications = heightmap_modifications
+	preset = p_preset
 
 	run_min_y = mathmax ((run.y1 - REQUIRED_CONTEXT_Y) * 16 + p_y_offset,
 			     p_level_min)
@@ -427,6 +436,12 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 	run_max_x = (run.x + REQUIRED_CONTEXT_XZ) * 16 + 15
 	run_min_z = run_minp.z - REQUIRED_CONTEXT_XZ * 16
 	run_max_z = run_min_z + HEIGHTMAP_SIZE_NODES - 1
+	mcl_levelgen.placement_run_min_y = run_min_y
+	mcl_levelgen.placement_run_max_y = run_max_y
+	mcl_levelgen.placement_run_min_z = run_min_z
+	mcl_levelgen.placement_run_max_z = run_max_z
+	mcl_levelgen.placement_run_min_x = run_min_x
+	mcl_levelgen.placement_run_max_x = run_max_x
 	vm:get_data (cids)
 	vm:get_param2_data (param2s)
 	area = VoxelArea (vm:get_emerged_area ())
@@ -568,12 +583,18 @@ function mcl_levelgen.index_biome (x, y, z)
 	local run_origin = (run.z - REQUIRED_CONTEXT_XZ) * 16
 	qz = toquart (run_origin) + HORIZONTAL_QUARTS_PER_RUN - dz - 1
 	qy = qy - toquart (y_offset)
+	qy = mathmax (qy, toquart (level_min))
 
 	local bx, by, bz = arshift (qx, 2), arshift (qy, 2), arshift (qz, 2)
 	local hash = hashmapblock (bx, by, bz)
 	local list = biomes[hash]
-	return index_biome_list (list, band (qx, 3), band (qy, 3),
-				 band (qz, 3))
+
+	if list then
+		return index_biome_list (list, band (qx, 3), band (qy, 3),
+					 band (qz, 3))
+	else
+		return preset:index_biomes (qx, qy, qz)
+	end
 end
 
 function mcl_levelgen.get_block (x, y, z)
@@ -738,7 +759,7 @@ local function encode_schem_data (cid, param2, probability, force_place)
 end
 
 local function decode_schem_data (data)
-	local force_place = rshift (data, 31)
+	local force_place = rshift (data, 31) ~= 0
 	local cid = band (rshift (data, 16), 0x7fff)
 	local param2 = band (rshift (data, 8), 0xff)
 	local probability = band (data, 0xff)
@@ -781,12 +802,14 @@ local function rtz (n)
 	return floor (n)
 end
 
-local MTSCHEM_PROB_ALWAYS = 0x7f
+local MTSCHEM_PROB_ALWAYS = 0xFF
 local MTSCHEM_PROB_NEVER  = 0x00
 
 local function hash_schem_pos (x, z)
 	return bor (lshift ((x + 32767), 16), (z + 32767))
 end
+
+local rotate_param2 = mcl_levelgen.rotate_param2
 
 local function copy_to_data (schematic, size, px, py, pz, rot, force_place)
 	local xstride = 1
@@ -825,7 +848,7 @@ local function copy_to_data (schematic, size, px, py, pz, rot, force_place)
 	local rng = schematic_rng
 	for y = 0, sy - 1 do
 		if yprob[y + 1].prob == MTSCHEM_PROB_ALWAYS
-			or yprob[y + 1].prob > 1 + rng:next_within (0x80) then
+			or yprob[y + 1].prob >= 1 + rng:next_within (0xff) then
 			for z = 0, sz - 1 do
 				local i = z * i_step_z + y * ystride + i_start
 				for x = 0, sx - 1 do
@@ -842,13 +865,16 @@ local function copy_to_data (schematic, size, px, py, pz, rot, force_place)
 							local vi = area:index (gx, y_map, gz)
 							if force_place or force_place_node
 								or cids[vi] == cid_air
-								or cids[vi] == content_ignore then
+								or cids[vi] == cid_ignore then
 
 								local continue = probability == MTSCHEM_PROB_ALWAYS
 									or probability > 1 + rng:next_within (0x80)
 								if continue then
 									cids[vi] = cid
-									-- TODO: rotate param2!
+
+									if rot ~= "0" then
+										param2 = rotate_param2 (cid, param2, rot)
+									end
 									param2s[vi] = param2
 
 									local hash = hash_schem_pos (x, z)
@@ -938,6 +964,10 @@ function mcl_levelgen.place_schematic (x, y, z, schematic, rotation, force_place
 		z + size.z,
 	})
 	vm_modified = true
+	return {
+		x, y + y_offset, -z - size.z,
+		x + size.x, y + size.y + y_offset, -z - 1,
+	}
 end
 
 ------------------------------------------------------------------------

@@ -4,10 +4,11 @@
 
 mcl_levelgen.verbose = false
 
+local ull = mcl_levelgen.ull
+
 if mcl_vars.enable_mcl_levelgen then
 
 local seed
-local ull = mcl_levelgen.ull
 local tostringull = mcl_levelgen.tostringull
 local stringtoull = mcl_levelgen.stringtoull
 
@@ -36,6 +37,10 @@ end
 
 mcl_levelgen.biome_seed = mcl_levelgen.get_biome_seed (seed)
 mcl_levelgen.levelgen_enabled = true
+
+-- Create level presets now.
+local seed = mcl_levelgen.seed
+mcl_levelgen.overworld_preset = mcl_levelgen.make_overworld_preset (seed)
 
 -- Load existing biome ID assignments.
 local assignments = {}
