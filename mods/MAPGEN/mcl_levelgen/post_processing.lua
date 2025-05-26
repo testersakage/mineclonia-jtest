@@ -501,6 +501,20 @@ local function test_block_status (x, y, z)
 		and mathabs (dz) <= generation_radius + 1
 end
 
+local surroundings = {
+}
+
+for x = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
+	for z = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
+		if mathabs (x) > REQUIRED_CONTEXT_XZ then
+			table.insert (surroundings, x)
+			table.insert (surroundings, z)
+		end
+	end
+end
+
+local n_surroundings = #surroundings
+
 local function adequate_context_exists_p (x, y, z)
 	for x = x - REQUIRED_CONTEXT_XZ, x + REQUIRED_CONTEXT_XZ do
 		for z = z - REQUIRED_CONTEXT_XZ, z + REQUIRED_CONTEXT_XZ do
@@ -510,6 +524,18 @@ local function adequate_context_exists_p (x, y, z)
 			end
 		end
 	end
+
+	-- Verify that a further MapBlock's radius around the context
+	-- itself has been generated, or subsequent level generation
+	-- may overwrite any data that is written into the context.
+	for i = 1, n_surroundings, 2 do
+		local x = x + surroundings[i]
+		local z = z + surroundings[i + 1]
+		if mapblock_state (x, y, z) == MBS_UNKNOWN then
+			return false
+		end
+	end
+
 	return true
 end
 
