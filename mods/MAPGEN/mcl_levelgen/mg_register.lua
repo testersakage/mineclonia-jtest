@@ -16,9 +16,7 @@ if core.global_exists ("jit") then
 	-- profile.start ("fz")
 end
 
-local seed = mcl_levelgen.seed
-local overworld_preset = mcl_levelgen.make_overworld_preset (seed)
-
+local overworld_preset = mcl_levelgen.overworld_preset
 -- Load carvers into biome descriptions.
 mcl_levelgen.load_carvers ()
 
