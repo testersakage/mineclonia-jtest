@@ -43,7 +43,7 @@ local function random_selector_place (_, x, y, z, cfg, rng)
 		if not warned[cfg.default] then
 			core.log ("warning", table.concat ({
 				"Random selector attempted to place a ",
-				"nonexistent default placed feature, ", id,
+				"nonexistent default placed feature, ", cfg.default,
 			}))
 			warned[cfg.default] = true
 		end
@@ -69,7 +69,7 @@ local cid_air = core.CONTENT_AIR
 local cid_snow = core.get_content_id ("mcl_core:snow")
 local cid_water_source = core.get_content_id ("mcl_core:water_source")
 local cid_ice = core.get_content_id ("mcl_core:ice")
-local cid_dirt = core.get_content_id ("mcl_core:dirt")
+-- local cid_dirt = core.get_content_id ("mcl_core:dirt")
 local cid_grass = core.get_content_id ("mcl_core:dirt_with_grass")
 local cid_grass_snowy = core.get_content_id ("mcl_core:dirt_with_grass_snow")
 local cid_mycelium = core.get_content_id ("mcl_core:mycelium")
@@ -208,8 +208,6 @@ function mcl_levelgen.build_weighted_list (list)
 	end
 end
 
-local insert = table.insert
-
 function mcl_levelgen.build_count (n)
 	return function (x, y, z, rng)
 		local cnt = n (rng)
@@ -302,6 +300,65 @@ function mcl_levelgen.build_surface_water_depth_filter (n)
 		local surface, motion_blocking
 			= index_heightmap (x, z)
 		if surface - motion_blocking <= n then
+			return { x, y, z, }
+		else
+			return {}
+		end
+	end
+end
+
+local function in_range (x, y, z)
+	local min_x = mcl_levelgen.placement_run_min_x
+	local min_y = mcl_levelgen.placement_run_min_y
+	local min_z = mcl_levelgen.placement_run_min_z
+	local max_x = mcl_levelgen.placement_run_max_x
+	local max_y = mcl_levelgen.placement_run_max_y
+	local max_z = mcl_levelgen.placement_run_max_z
+	return x >= min_x and y >= min_y and z >= min_z
+		and x <= max_x and y <= max_x and z <= max_z
+end
+
+local function always ()
+	return true
+end
+
+local MAX_POS = 512
+
+function mcl_levelgen.build_environment_scan (parms)
+	local direction = parms.direction
+	local allowed_search_condition = parms.allowed_search_condition	or always
+	local target_condition = parms.target_condition
+	local max_steps = parms.max_steps
+
+	return function (x, y, z, rng)
+		if not allowed_search_condition (x, y, z) then
+			return { x, direction * MAX_POS, z, }
+		else
+			for i = 1, max_steps do
+				if target_condition (x, y, z) then
+					return { x, y, z, }
+				end
+
+				y = y + direction
+				if not in_range (x, y, z) then
+					return { x, direction * MAX_POS, z, }
+				end
+
+				if not allowed_search_condition (x, y, z) then
+					break
+				end
+			end
+			return target_condition (x, y, z) and { x, y, z, }
+				or { x, direction * MAX_POS, z, }
+		end
+	end
+end
+
+function mcl_levelgen.build_rarity_filter (n)
+	local chance = 1.0 / n
+
+	return function (x, y, z, rng)
+		if rng:next_float () < chance then
 			return { x, y, z, }
 		else
 			return {}

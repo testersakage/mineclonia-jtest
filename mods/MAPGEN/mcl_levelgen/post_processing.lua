@@ -737,7 +737,7 @@ local function async_function (vm, run, heightmap, biomes)
 	local relight_list
 		= mcl_levelgen.process_features (vm, run, heightmap, biomes,
 						 OVERWORLD_OFFSET, preset.min_y,
-						 preset.height)
+						 preset.height, preset)
 	return vm, run, heightmap, relight_list
 end
 
