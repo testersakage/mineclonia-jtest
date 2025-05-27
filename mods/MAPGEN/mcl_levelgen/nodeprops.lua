@@ -205,6 +205,7 @@ local cid_air
 local is_cid_sapling = {}
 local is_cid_dirt = {}
 local is_cid_snow_layer, cid_snow = {}
+local is_cid_walkable = {}
 local paramtype2 = {}
 local mathmin = math.min
 
@@ -232,8 +233,10 @@ local function initialize_nodeprops ()
 	for name, def in pairs (core.registered_nodes) do
 		local cid = core.get_content_id (name)
 		if not def.walkable then
+			is_cid_walkable[cid] = false
 			static_node_shapes[cid] = EMPTY_SHAPE
 		else
+			is_cid_walkable[cid] = true
 			local boxes = def.collision_box or def.node_box
 
 			if not boxes or boxes.type == "regular" then
@@ -250,7 +253,7 @@ local function initialize_nodeprops ()
 					error (string.format ("`%s''s collision box is too complex",
 							      name))
 				end
-				static_node_shapes[cid] = fixed
+				static_node_shapes[cid] = shape
 			end
 		end
 
@@ -407,6 +410,10 @@ end
 local supports_snow = {}
 
 function mcl_levelgen.is_position_hospitable (cid, x, y, z)
+	if not cid then
+		return false
+	end
+
 	if is_cid_snow_layer[cid] then
 		-- Test whether the surface of the node below is not
 		-- any manner of ice and is sturdy, or mud, soul sand,
@@ -427,6 +434,9 @@ function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 			return supports_snow[hash]
 		end
 		local shape, reusable = get_node_shape (x, y - 1, z)
+		if not shape then
+			return false
+		end
 		local top_face = shape:select_face ("y", 0.5)
 		local sturdy = top_face:equal_p (FULL_BLOCK)
 		if reusable then
@@ -449,6 +459,11 @@ function mcl_levelgen.can_place_snow (x, y, z)
 		return is_position_hospitable (cid_snow, x, y, z)
 	end
 	return false
+end
+
+function mcl_levelgen.is_position_walkable (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return is_cid_walkable[cid]
 end
 
 --------------------------------------------------------------------------
