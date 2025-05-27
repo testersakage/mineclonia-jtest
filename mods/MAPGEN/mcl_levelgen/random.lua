@@ -656,6 +656,32 @@ function mcl_levelgen.wrap_random ()
 	}
 end
 
+local mathsqrt = math.sqrt
+local mathlog = math.log
+
+local function marsaglia_polar_function (next_double)
+	local spare = nil
+	return function ()
+		if spare then
+			local v = spare
+			spare = nil
+			return v
+		end
+
+		local u, v, s
+		repeat
+			u = 2.0 * next_double () - 1.0
+			v = 2.0 * next_double () - 1.0
+			s = u * u + v * v
+		until not (s >= 1.0 or s == 0.0)
+		s = mathsqrt (-2.0 * mathlog (s) / s)
+		spare = v * s
+		return u * s
+	end, function ()
+		spare = nil
+	end
+end
+
 ------------------------------------------------------------------------
 -- Minecraft-compatible Xoroshiro++ 128-bit RNG.
 -- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/util/math/random/Xoroshiro128PlusPlusRandom.html
@@ -853,6 +879,14 @@ function mcl_levelgen.xoroshiro (seedlo, seedhi)
 	local r53 = 1 / 0x1fffffffffffff
 	local scratch = { nil, nil, }
 
+	local function next_double (_)
+		local ull = fn ()
+		shrull (ull, 11)
+		return (ull[2] * (UINT_MAX + 1) + ull[1]) * r53
+	end
+	local next_gaussian, reset_gaussian
+		= marsaglia_polar_function (next_double)
+
 	-- It is guaranteed that `next_integer' and `next_within' may
 	-- safely be cached.
 	return {
@@ -872,11 +906,7 @@ function mcl_levelgen.xoroshiro (seedlo, seedhi)
 			shrull (ull, 40)
 			return ull[1] * r24
 		end,
-		next_double = function (self)
-			local ull = fn ()
-			shrull (ull, 11)
-			return (ull[2] * (UINT_MAX + 1) + ull[1]) * r53
-		end,
+		next_double = next_double,
 		fork = function (self)
 			local lo1, hi1 = unpack (fn ())
 			local lo2, hi2 = unpack (fn ())
@@ -957,6 +987,7 @@ function mcl_levelgen.xoroshiro (seedlo, seedhi)
 				seedlo[2], seedlo[1] = 0x9e3779b9, 0x7f4a7c15
 				hi_seed[2], hi_seed[1] = 1779033703, 4089235721
 			end
+			reset_gaussian ()
 		end,
 		reseeding_data = {
 			false, false, false, false,
@@ -973,7 +1004,9 @@ function mcl_levelgen.xoroshiro (seedlo, seedhi)
 				seedlo[2], seedlo[1] = 0x9e3779b9, 0x7f4a7c15
 				hi_seed[2], hi_seed[1] = 1779033703, 4089235721
 			end
+			reset_gaussian ()
 		end,
+		next_gaussian = next_gaussian,
 	}, seedlo, seedhi
 end
 
@@ -1007,6 +1040,21 @@ if true then
 	assert (tostringull (x:next_long ()) == "17696910518188760863")
 	assert (tostringull (x:next_long ()) == "4876660131927854451")
 	assert (tostringull (x:next_long ()) == "2153688626528828990")
+
+	local seed = ull (0, 0)
+	stringtoull (seed, "300980754")
+	seed_from_ull (seed1, seed2, seed)
+	mix64 (seed1)
+	mix64 (seed2)
+	local x = mcl_levelgen.xoroshiro (seed1, seed2)
+	local abs = math.abs
+	local D = 16e-15
+	assert (abs (x:next_gaussian () - 0.05778929000253813) < D)
+	assert (abs (x:next_gaussian () - -0.0010128593488433443) < D)
+	assert (abs (x:next_gaussian () - -0.1341293654492881) < D)
+	assert (abs (x:next_gaussian () - -0.78415967880207) < D)
+	assert (abs (x:next_gaussian () - 0.6635210098754315) < D)
+	assert (abs (x:next_gaussian () - -0.26174819256398935) < D)
 end
 
 if false then
@@ -1081,6 +1129,15 @@ function mcl_levelgen.jvm_random (seed)
 	local scratch = ull (nil, nil)
 	local scratch1 = ull (nil, nil)
 
+	local function next_double (_)
+		local ull = ull (0, fn (26))
+		shlull (ull, 27)
+		addkull (ull, fn (27))
+		return (ull[2] * (UINT_MAX + 1) + ull[1]) * r53
+	end
+	local next_gaussian, reset_gaussian
+		= marsaglia_polar_function (next_double)
+
 	-- It is guaranteed that `next_integer' and `next_within' may
 	-- safely be cached.
 	return {
@@ -1119,12 +1176,7 @@ function mcl_levelgen.jvm_random (seed)
 		next_float = function (self)
 			return fn (24) * r24
 		end,
-		next_double = function (self)
-			local ull = ull (0, fn (26))
-			shlull (ull, 27)
-			addkull (ull, fn (27))
-			return (ull[2] * (UINT_MAX + 1) + ull[1]) * r53
-		end,
+		next_double = next_double,
 		fork = function (self)
 			return mcl_levelgen.jvm_random (self:next_long ())
 		end,
@@ -1182,6 +1234,7 @@ function mcl_levelgen.jvm_random (seed)
 			xorull (storage, scratch1)
 			xorull (storage, MULTIPLIER)
 			andull (storage, SEED_MASK)
+			reset_gaussian ()
 		end,
 		reseeding_data = {
 			false, seed_storage,
@@ -1192,7 +1245,9 @@ function mcl_levelgen.jvm_random (seed)
 			storage[2] = seed[2]
 			xorull (storage, MULTIPLIER)
 			andull (storage, SEED_MASK)
+			reset_gaussian ()
 		end,
+		next_gaussian = next_gaussian,
 	}, seed_storage
 end
 

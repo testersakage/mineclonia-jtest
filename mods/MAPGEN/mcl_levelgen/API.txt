@@ -316,6 +316,12 @@ maximum extents (inclusive) of the placed schematic in Minecraft's
 coordinate system.  This bounding box is not limited to the accessible
 region of the level.
 
+Function: mcl_levelgen.is_position_walkable (X, Y, Z)
+
+Return whether the block at X, Y, and Z is solid (or `walkable' in
+Minetest argot).  Value is false if the provided position is not
+within the accessible region of the level.
+
 
 PLACEMENT MODIFIERS
 
@@ -490,6 +496,10 @@ Function: rng:next_double ()
 
 Return a pseudo-random double precision real value.
 
+Function: rng:next_gaussian ()
+
+Return a real number with Gaussian (normal) distribution.
+
 Function: rng:fork ()
 
 Return a new pseudo-random number generator seeded by this
@@ -580,8 +590,8 @@ STANDARD PLAIN FEATURES
 
 Placed feature: mcl_levelgen:random_selector
 
-Select a feature at random from amongst entries specified in its
-configuration, which must be a table of the form:
+Select a feature at random from amongst entries specified in this
+feature's configuration, which must be a table of the form:
 
 {
 	default = <ID or table>,
@@ -612,6 +622,21 @@ Each placed feature's modifiers will be executed a second time for
 each position that is provided to this random selector.
 
 }
+
+Plain feature: mcl_levelgen:simple_random_selector
+
+Select a feature with uniform distribution from amongst a list of
+features specified in the configuration, which must be a table of the
+form:
+
+{
+	features = {
+		 <ID or table>, ...
+	},
+}
+
+where `features' is to hold placed features in the same format as is
+accepted by `mcl_levelgen:random_selector'.
 
 
 STANDARD PLACED FEATURES
@@ -723,6 +748,24 @@ Function: mcl_levelgen.build_rarity_filter (N)
 
 Return a placement modifier that returns its input coordinates only
 1/N of the time.
+
+Function: mcl_levelgen.build_height_range (N)
+
+Return a placement modifier that returns each input coordinate with
+its Y component replaced by the value yielded by applying N to the
+provided PRNG.
+
+Function: mcl_levelgen.build_constant_height_offset (N)
+
+Return a placement modifier that returns each input coordinate with
+its Y component displaced by N.
+
+Function: mcl_levelgen.build_random_offset (XZ_SCALE, Y_SCALE)
+
+Return a placement modifier that returns each input coordinate with
+its X and Z components displaced by values yielded by applying
+XZ_SCALE to the provided RNG, and its Y component displaced by Y_SCALE
+in like manner.
 
 
 STRUCTURES
