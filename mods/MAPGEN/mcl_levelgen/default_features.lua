@@ -57,6 +57,39 @@ mcl_levelgen.register_feature ("mcl_levelgen:random_selector", {
 })
 
 ------------------------------------------------------------------------
+-- Simple random selector.
+-- mcl_levelgen:simple_random_selector
+------------------------------------------------------------------------
+
+local registered_placed_features = mcl_levelgen.registered_placed_features
+local place_one_feature = mcl_levelgen.place_one_feature
+local warned = {}
+
+local function simple_random_selector_place (_, x, y, z, cfg, rng)
+	local values = #cfg.features
+	assert (values > 0)
+	local idx = 1 + rng:next_within (values)
+	local id = cfg.features[idx]
+	local feature_desc = type (id) == "table"
+		and id
+		or registered_placed_features[id]
+	if not feature_desc and not warned[id] then
+		core.log ("warning", table.concat ({
+			"Random selector attempted to place a ",
+			"nonexistent placed feature, ", id,
+		}))
+		warned[id] = true
+	elseif feature_desc then
+		place_one_feature (feature_desc, x, y, z)
+		return
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:simple_random_selector", {
+	place = simple_random_selector_place,
+})
+
+------------------------------------------------------------------------
 -- Freeze Top Layer
 -- mcl_levelgen:freeze_top_layer
 ------------------------------------------------------------------------
@@ -363,5 +396,27 @@ function mcl_levelgen.build_rarity_filter (n)
 		else
 			return {}
 		end
+	end
+end
+
+function mcl_levelgen.build_height_range (n)
+	return function (x, y, z, rng)
+		return { x, n (rng), z, }
+	end
+end
+
+function mcl_levelgen.build_constant_height_offset (n)
+	return function (x, y, z, rng)
+		return { x, y + n, z, }
+	end
+end
+
+function mcl_levelgen.build_random_offset (xz_scale, y_scale)
+	return function (x, y, z, rng)
+		return {
+			x + xz_scale (rng),
+			y + y_scale (rng),
+			z + xz_scale (rng),
+		}
 	end
 end
