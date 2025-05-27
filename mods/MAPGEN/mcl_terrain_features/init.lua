@@ -509,6 +509,10 @@ mcl_structures.register_structure("large_dripstone_stalagmite", {
 			empty_air_length = empty_air_length + 1
 		end
 
+		if core.get_item_group(core.get_node(vector.offset(pos, 0, empty_air_length, 0)).name, "solid") then
+			return false
+		end
+
 		generate_dripstone(pos, math.min(20, empty_air_length * mcl_util.float_random(0.4, 0.8)), 1)
 		return true
 	end
