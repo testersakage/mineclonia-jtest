@@ -533,6 +533,7 @@ mcl_levelgen.register_configured_feature ("mcl_dripstone:pointed_dripstone", {
 				E ({
 					direction = -1,
 					max_steps = 12,
+					allowed_search_condition = air_or_water_p,
 					target_condition
 						= mcl_levelgen.is_position_walkable,
 				}),
@@ -545,6 +546,7 @@ mcl_levelgen.register_configured_feature ("mcl_dripstone:pointed_dripstone", {
 				E ({
 					direction = 1,
 					max_steps = 12,
+					allowed_search_condition = air_or_water_p,
 					target_condition
 						= mcl_levelgen.is_position_walkable,
 				}),
