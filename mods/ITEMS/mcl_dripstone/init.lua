@@ -434,3 +434,6 @@ mcl_structures.register_structure("dripstone_stalagtite", {
 		return true
 	end,
 })
+
+local modpath = core.get_modpath (core.get_current_modname ())
+mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")
