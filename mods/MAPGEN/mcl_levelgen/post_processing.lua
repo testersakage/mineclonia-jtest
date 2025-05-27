@@ -263,6 +263,7 @@ if not mcl_levelgen.load_feature_environment then
 end
 
 local blurb = "An existing MapBlock (%d) was reported to post_process_mapchunk: X: %d, Y: %d, Z: %d"
+local fmt = "MapBlock %d,%d,%d (%d) was likely overwritten by the generation of the region between %s and %s"
 local save_heightmap
 
 local function post_process_mapchunk (minp, maxp)
@@ -279,6 +280,23 @@ local function post_process_mapchunk (minp, maxp)
 		return
 	end
 
+	-- Verify that no locked or generated mapblocks have been
+	-- overwritten by overgeneration.
+	for x = bx - 1, bx1 + 1 do
+		for y = by - 1, by1 + 1 do
+			for z = bz - 1, bz1 + 1 do
+				local current = mapblock_state (x, y, z)
+				if current == MBS_GENERATED
+					or current == MBS_LOCKED then
+					local blurb = string.format (fmt, x, y, z, current,
+								     minp:to_string (),
+								     maxp:to_string ())
+					core.log ("warning", blurb)
+				end
+			end
+		end
+	end
+
 	for x = bx, bx1 do
 		for y = by, by1 do
 			for z = bz, bz1 do
@@ -291,11 +309,12 @@ local function post_process_mapchunk (minp, maxp)
 					set_mapblock_state (x, y, z, MBS_PROTO_CHUNK)
 					assert (mapblock_state (x, y, z) == MBS_PROTO_CHUNK)
 				else
-					dbg (blurb, current, x, y, z)
+					core.log ("warning", string.format (blurb, current, x, y, z))
 				end
 			end
 		end
 	end
+
 	save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
 end
 
@@ -389,6 +408,7 @@ local function mintree_dequeue (self, item)
 		shift_down (self, heap[1], 1)
 	end
 	n.idx = nil
+	n.penalized = nil
 	return n
 end
 
@@ -513,6 +533,15 @@ for x = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
 	end
 end
 
+local all_surroundings = {
+}
+
+for x = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
+	for z = REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
+		table.insert (all_surroundings, x, z)
+	end
+end
+
 local n_surroundings = #surroundings
 
 local function vertical_context_generated (x, y, z)
@@ -551,9 +580,7 @@ local function adequate_context_exists_p (x, y, z)
 	end
 
 	return vertical_context_generated (x, y + 1, z)
-		and vertical_context_generated (x, y + 2, z)
 		and vertical_context_generated (x, y - 1, z)
-		and vertical_context_generated (x, y - 2, z)
 end
 
 -- local mapblock_lockers = {}
@@ -613,7 +640,7 @@ local function maybe_reprioritize (player_x, player_y, player_z, x, y, z)
 	local hash = hashmapblock (x, y, z)
 	local value = mb_records[hash]
 
-	if value and value.idx then
+	if value and value.idx and not value.penalized then
 		local dx = player_x - x
 		local dy = player_y - y
 		local dz = player_z - z
@@ -852,6 +879,9 @@ end
 
 local construct_heightmap_for_run
 local biome_data_for_run
+local compare_block_status = core.compare_block_status
+
+local v = vector.zero ()
 
 local function post_mapblock_run (run)
 	dbg ("Issuing MapBlock run: X: %d, Y: %d - %d, Z: %d", run.x,
@@ -868,6 +898,32 @@ local function post_mapblock_run (run)
 			       OVERWORLD_MIN_BLOCK)
 	local y_max = mathmin (run.y2 + REQUIRED_CONTEXT_Y,
 			       OVERWORLD_MAX_BLOCK)
+
+	-- Verify that none of the run's context adjoins a MapBlock
+	-- that is being emerged, as otherwise it may be overwritten
+	-- after post-processing by an emerge thread despite the
+	-- checks in adequate_context_exists_p & co.
+
+	for y = run.y1 - REQUIRED_CONTEXT_Y - 1, run.y2 + REQUIRED_CONTEXT_Y + 1 do
+		v.y = y * 16
+		local array = (y <= run.y1 - REQUIRED_CONTEXT_Y
+			       or y >= run.y2 + REQUIRED_CONTEXT_Y)
+			and all_surroundings or surroundings
+		local n_surroundings = #array
+
+		for i = 1, n_surroundings, 2 do
+			local x = run.x + array[i]
+			local z = run.z + array[i + 1]
+
+			v.x = x * 16
+			v.z = z * 16
+			if compare_block_status (v, "emerging")
+				and not compare_block_status (v, "loaded") then
+				feature_placement_queue:enqueue (run, run.priority + 120)
+				return
+			end
+		end
+	end
 
 	-- Verify that the context of the run is consistent, and
 	-- abandon it if it has since been unloaded.
@@ -1373,7 +1429,6 @@ end
 ------------------------------------------------------------------------
 
 local huds = {}
-local v = vector.zero ()
 
 local function get_status_string (bx, by, bz)
 	v.x = bx * 16
