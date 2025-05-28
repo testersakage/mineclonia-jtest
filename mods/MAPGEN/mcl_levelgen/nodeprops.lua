@@ -206,6 +206,10 @@ local is_cid_sapling = {}
 local is_cid_dirt = {}
 local is_cid_snow_layer, cid_snow = {}
 local is_cid_walkable = {}
+local is_cid_double_plant = {}
+local is_cid_bush = {}
+local is_cid_leaf = {}
+local double_plant_tops = {}
 local paramtype2 = {}
 local mathmin = math.min
 
@@ -262,6 +266,24 @@ local function initialize_nodeprops ()
 		end
 		if def.groups.dirt and def.groups.dirt >= 1 then
 			is_cid_dirt[cid] = true
+		end
+		if def.groups.double_plant and def.groups.double_plant >= 1 then
+			is_cid_double_plant[cid] = true
+			if def.groups.double_plant == 1 then
+				local node = name .. "_top"
+				local cid_top = minetest.get_content_id (node)
+				double_plant_tops[cid] = cid_top
+			end
+		end
+		if ((def.groups.plant and def.groups.plant >= 1)
+			or (def.groups.double_plant and def.groups.double_plant >= 1)
+			or (def.groups.flower and def.groups.flower >= 1))
+			and not is_cid_sapling[cid] then
+			-- TODO: wallmounted nodes!
+			is_cid_bush[cid] = true
+		end
+		if (def.groups.leaves and def.groups.leaves >= 1) then
+			is_cid_leaf[cid] = true
 		end
 		paramtype2[cid] = def.paramtype2
 	end
@@ -443,7 +465,7 @@ function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 			supports_snow[hash] = sturdy
 		end
 		return sturdy
-	elseif is_cid_sapling[cid] then
+	elseif is_cid_sapling[cid] or is_cid_bush[cid] then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_dirt[cid]
 	end
@@ -454,7 +476,7 @@ end
 local is_position_hospitable = mcl_levelgen.is_position_hospitable
 
 function mcl_levelgen.can_place_snow (x, y, z)
-	local cid, param2 = get_block (x, y, z)
+	local cid, _ = get_block (x, y, z)
 	if cid == cid_air or is_cid_snow_layer[cid] then
 		return is_position_hospitable (cid_snow, x, y, z)
 	end
@@ -464,6 +486,20 @@ end
 function mcl_levelgen.is_position_walkable (x, y, z)
 	local cid, _ = get_block (x, y, z)
 	return is_cid_walkable[cid]
+end
+
+function mcl_levelgen.is_leaf_or_air (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_air or is_cid_leaf[cid]
+end
+
+function mcl_levelgen.is_air_with_dirt_below (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	if cid == cid_air then
+		local cid, _ = get_block (x, y - 1, z)
+		return is_cid_dirt[cid]
+	end
+	return false
 end
 
 function mcl_levelgen.adjoins_air (x, y, z)
@@ -492,6 +528,17 @@ function mcl_levelgen.adjoins_air (x, y, z)
 		return true
 	end
 	return false
+end
+
+function mcl_levelgen.double_plant_p (cid)
+	return is_cid_double_plant[cid]
+end
+
+function mcl_levelgen.place_double_plant (cid, x, y, z, param2, set_block)
+	local top_cid = double_plant_tops[cid]
+	assert (top_cid, "Double plant (cid = " .. cid .. ") has no matching top node")
+	set_block (x, y, z, cid, param2)
+	set_block (x, y + 1, z, top_cid, param2)
 end
 
 --------------------------------------------------------------------------

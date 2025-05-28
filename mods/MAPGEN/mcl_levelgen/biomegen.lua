@@ -278,9 +278,24 @@ function mcl_levelgen.get_biome_meta (bx, by, bz)
 	return str
 end
 
+local v = vector.new (0, 0, 0)
+
 local function save_biome_index (pos, bx, by, bz, index)
-	local meta = core.get_meta (pos)
-	meta:set_string ("mcl_levelgen:biome_index", index)
+	-- Saving biome data into an unloaded mapblock's metadata
+	-- within a register_on_generated callback triggers a Minetest
+	-- bug where the mapchunk is liable to be generated twice if
+	-- it has been unloaded since generation.
+	v.x = bx * 16
+	v.z = bz * 16
+	v.y = by * 16
+	if core.compare_block_status (v, "loaded") then
+		local meta = core.get_meta (pos)
+		meta:set_string ("mcl_levelgen:biome_index", index)
+	else
+		core.log ("info", "save_biome_index: Averted possible regeneration of "
+			  .. bx .. "," .. by .. "," .. bz)
+	end
+
 	mod_storage:set_string (table.concat ({
 		tostring (bx), ",",
 		tostring (by), ",",

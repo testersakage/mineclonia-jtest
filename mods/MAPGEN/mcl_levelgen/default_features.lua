@@ -216,6 +216,7 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:freeze_top_layer", {
 
 ------------------------------------------------------------------------
 -- Ore placement.
+-- mcl_levelgen:ore
 ------------------------------------------------------------------------
 
 local mathsin = math.sin
@@ -438,6 +439,101 @@ function mcl_levelgen.construct_ore_substitution_list (items)
 end
 
 ------------------------------------------------------------------------
+-- Patch.
+-- mcl_levelgen:random_patch
+------------------------------------------------------------------------
+
+-- local patch_configuration = {
+-- 	placed_feature = nil,
+-- 	tries = nil,
+-- 	xz_spread = nil,
+-- 	y_spread = nil,
+-- }
+
+local blurb = "Patch attempted to place nonexistent feature: "
+
+local function patch_random_place (_, x, y, z, cfg, rng)
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+
+	local feature = cfg.placed_feature
+	if type (feature) == "string" then
+		feature = mcl_levelgen.registered_placed_features[feature]
+		if not feature then
+			if not warned[feature] then
+				core.log ("warning", blurb .. feature)
+				warned[feature] = true
+			end
+			return false
+		end
+	end
+
+	local yspread = cfg.y_spread + 1
+	local xzspread = cfg.xz_spread + 1
+	local placed = false
+	for i = 1, cfg.tries do
+		-- Triangular distribution.
+		local dx = rng:next_within (xzspread)
+			- rng:next_within (xzspread)
+		local dy = rng:next_within (yspread)
+			- rng:next_within (yspread)
+		local dz = rng:next_within (xzspread)
+			- rng:next_within (xzspread)
+
+		if place_one_feature (feature, x + dx, y + dy, z + dz) then
+			placed = true
+		end
+	end
+	return placed
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:random_patch", {
+	place = patch_random_place,
+})
+
+------------------------------------------------------------------------
+-- Simple block feature.
+-- mcl_levelgen:simple_block
+------------------------------------------------------------------------
+
+local double_plant_p = mcl_levelgen.double_plant_p
+local is_position_hospitable = mcl_levelgen.is_position_hospitable
+
+local place_double_plant = mcl_levelgen.place_double_plant
+
+local function simple_block_place (_, x, y, z, cfg, rng)
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+
+	local cid_to_place, param2 = cfg.content (x, y, z, rng)
+	if param2 == "grass_palette_index" then
+		local biome = index_biome (x, y, z)
+		local def = mcl_levelgen.registered_biomes[biome]
+		param2 = def and def.grass_palette_index or 0
+	end
+
+	if is_position_hospitable (cid_to_place, x, y, z) then
+		if double_plant_p (cid_to_place) then
+			if (get_block (x, y + 1, z)) ~= cid_air then
+				return false
+			end
+			place_double_plant (cid_to_place, x, y, z, param2,
+					    set_block)
+		else
+			set_block (x, y, z, cid_to_place, param2)
+		end
+		return true
+	end
+	return false
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:simple_block", {
+	place = simple_block_place,
+})
+
+------------------------------------------------------------------------
 -- Fundamental placement modifiers.
 ------------------------------------------------------------------------
 
@@ -464,9 +560,50 @@ function mcl_levelgen.build_weighted_list (list)
 	end
 end
 
+function mcl_levelgen.build_weighted_cid_provider (list)
+	local total_weight = 0
+	for _, entry in ipairs (list) do
+		total_weight = total_weight + entry.weight
+	end
+	return function (x, y, z, rng)
+		if total_weight == 0 then
+			return nil, nil
+		else
+			local cnt = rng:next_within (total_weight)
+			for _, entry in ipairs (list) do
+				cnt = cnt - entry.weight
+				if cnt < 0 then
+					return entry.cid, entry.param2
+				end
+			end
+			return nil, nil
+		end
+	end
+end
+
 function mcl_levelgen.build_count (n)
 	return function (x, y, z, rng)
 		local cnt = n (rng)
+		local results = {}
+		for i = 1, cnt do
+			results[#results + 1] = x
+			results[#results + 1] = y
+			results[#results + 1] = z
+		end
+		return results
+	end
+end
+
+local BIOME_SELECTOR_NOISE = mcl_levelgen.BIOME_SELECTOR_NOISE
+
+function mcl_levelgen.build_noise_threshold_count (noise_level, above_noise,
+						   below_noise)
+	return function (x, y, z, rng)
+		local noise = BIOME_SELECTOR_NOISE (x / 200.0, z / 200.0)
+		local cnt = above_noise
+		if noise < noise_level then
+			cnt = below_noise
+		end
 		local results = {}
 		for i = 1, cnt do
 			results[#results + 1] = x
@@ -1067,6 +1204,7 @@ local overworld = mcl_levelgen.overworld_preset
 local OVERWORLD_TOP = overworld.min_y + overworld.height - 1
 local OVERWORLD_MIN = overworld.min_y
 local THIRTY = function () return 30 end
+local TWENTY = function () return 20 end
 local TWO = function () return 2 end
 local FOURTY_SIX = function () return 46 end
 local SIXTEEN = function () return 16 end
@@ -1092,7 +1230,7 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_coal_upper", {
 mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_coal_lower", {
 	configured_feature = "mcl_levelgen:ore_coal_buried",
 	placement_modifiers = {
-		mcl_levelgen.build_count (THIRTY),
+		mcl_levelgen.build_count (TWENTY),
 		mcl_levelgen.build_in_square (),
 		mcl_levelgen.build_height_range (trapezoidal_height (0, 192, 0)),
 		mcl_levelgen.build_in_biome (),
@@ -1373,3 +1511,179 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_tuff", {
 	},
 })
 
+-- Soil/ground vegetation.
+
+local FIVE = function () return 5 end
+local cid_double_grass = core.get_content_id ("mcl_flowers:double_grass")
+local cid_tallgrass = core.get_content_id ("mcl_flowers:tallgrass")
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:block_tall_grass", {
+	feature = "mcl_levelgen:simple_block",
+	content = function (_, _, _, rng)
+		return cid_double_grass, "grass_palette_index"
+	end,
+})
+
+local function require_air (x, y, z, rng)
+	local cid, _ = get_block (x, y, z)
+	if cid == cid_air then
+		return { x, y, z, }
+	end
+	return nil
+end
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_tall_grass", {
+	feature = "mcl_levelgen:random_patch",
+	placed_feature = {
+		configured_feature = "mcl_levelgen:block_tall_grass",
+		placement_modifiers = {
+			require_air,
+		},
+	},
+	tries = 96,
+	xz_spread = 7,
+	y_spread = 3,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_tall_grass", {
+	configured_feature = "mcl_levelgen:patch_tall_grass",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (5),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_tall_grass_2", {
+	configured_feature = "mcl_levelgen:patch_tall_grass",
+	placement_modifiers = {
+		mcl_levelgen.build_noise_threshold_count (-0.8, 7, 0),
+		mcl_levelgen.build_rarity_filter (32),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:block_short_grass", {
+	feature = "mcl_levelgen:simple_block",
+	content = function (_, _, _, rng)
+		return cid_tallgrass, "grass_palette_index"
+	end,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_grass", {
+	feature = "mcl_levelgen:random_patch",
+	placed_feature = {
+		configured_feature = "mcl_levelgen:block_short_grass",
+		placement_modifiers = {
+			require_air,
+		},
+	},
+	tries = 32,
+	xz_spread = 7,
+	y_spread = 3,
+})
+
+local E = mcl_levelgen.build_environment_scan
+local scan_beneath_leaves = E ({
+	allowed_search_condition = mcl_levelgen.is_leaf_or_air,
+	target_condition = mcl_levelgen.is_air_with_dirt_below,
+	max_steps = 24,
+	direction = -1,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_grass_normal", {
+	configured_feature = "mcl_levelgen:patch_grass",
+	placement_modifiers = {
+		mcl_levelgen.build_count (FIVE),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		scan_beneath_leaves,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_grass_badlands", {
+	configured_feature = "mcl_levelgen:patch_grass",
+	placement_modifiers = {
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		scan_beneath_leaves,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_grass_plain", {
+	configured_feature = "mcl_levelgen:patch_grass",
+	placement_modifiers = {
+		mcl_levelgen.build_noise_threshold_count (-0.8, 10, 5),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		scan_beneath_leaves,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_grass_savannah", {
+	configured_feature = "mcl_levelgen:patch_grass",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWENTY),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		scan_beneath_leaves,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local C = mcl_levelgen.build_weighted_cid_provider
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:block_taiga_grass", {
+	feature = "mcl_levelgen:simple_block",
+	content = C ({
+		{
+			weight = 1,
+			cid = cid_tallgrass,
+			param2 = "grass_palette_index",
+		},
+		{
+			weight = 4,
+			cid = core.get_content_id ("mcl_flowers:fern"),
+			param2 = "grass_palette_index",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_taiga_grass", {
+	feature = "mcl_levelgen:random_patch",
+	placed_feature = {
+		configured_feature = "mcl_levelgen:block_taiga_grass",
+		placement_modifiers = {
+			require_air,
+		},
+	},
+	tries = 32,
+	xz_spread = 7,
+	y_spread = 3,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_grass_taiga", {
+	configured_feature = "mcl_levelgen:patch_taiga_grass",
+	placement_modifiers = {
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		scan_beneath_leaves,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_grass_taiga_2", {
+	configured_feature = "mcl_levelgen:patch_taiga_grass",
+	placement_modifiers = {
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		scan_beneath_leaves,
+		mcl_levelgen.build_in_biome (),
+	},
+})

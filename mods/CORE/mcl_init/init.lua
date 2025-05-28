@@ -103,6 +103,7 @@ end
 if singlenode then
 	mcl_vars.enable_mcl_levelgen = true
 	mcl_vars.mg_overworld_min = -128
+	mcl_vars.mg_overworld_min_old = -128
 	mcl_vars.mg_overworld_max_official = mcl_vars.mg_overworld_min
 		+ minecraft_new_height_limit
 	mcl_vars.mg_bedrock_overworld_min = mcl_vars.mg_overworld_min
