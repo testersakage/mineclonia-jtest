@@ -120,16 +120,18 @@ end
 
 function mcl_heads.register_entity(def)
 	core.register_entity(":"..def.name, {
-		physical = false,
-		collisionbox = {0, 0, 0, 0, 0, 0},
-		visual = "mesh",
-		mesh = def.mesh,
-		textures = { def.texture },
-		tiles = { def.texture },
-		visual_size = {x=8.1, y=8.1, z=8.1},
-		pointable = false,
-		makes_footstep_sound = false,
-		static_save = false,
+		initial_properties = {
+			physical = false,
+			collisionbox = {0, 0, 0, 0, 0, 0},
+			visual = "mesh",
+			mesh = def.mesh,
+			textures = { def.texture },
+			tiles = { def.texture },
+			visual_size = {x=8.1, y=8.1, z=8.1},
+			pointable = false,
+			makes_footstep_sound = false,
+			static_save = false,
+		},
 		on_activate = function(self)
 			self.object:set_properties({is_visible = false})
 		end
