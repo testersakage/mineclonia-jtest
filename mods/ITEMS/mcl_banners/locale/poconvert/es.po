@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-05-27 13:41+0000\n"
+"PO-Revision-Date: 2025-05-28 10:42+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/es/>\n"
@@ -1356,130 +1356,130 @@ msgid "Orange Banner"
 msgstr "Estandarte naranja"
 
 msgid "Orange Base"
-msgstr ""
+msgstr "Campaña naranja"
 
 msgid "Orange Base Dexter Canton"
-msgstr ""
+msgstr "Cantón naranja en campaña a diestra"
 
 msgid "Orange Base Gradient"
-msgstr ""
+msgstr "Gradiente naranja en base"
 
 msgid "Orange Base Indented"
-msgstr ""
+msgstr "Base naranja dentada"
 
 msgid "Orange Base Sinister Canton"
-msgstr ""
+msgstr "Cantón naranja en campaña a siniestra"
 
 msgid "Orange Bend"
-msgstr ""
+msgstr "Banda naranja"
 
 msgid "Orange Bend Sinister"
-msgstr ""
+msgstr "Banda naranja a siniestra"
 
 msgid "Orange Bordure"
-msgstr ""
+msgstr "Bordura naranja"
 
 msgid "Orange Bordure Indented"
-msgstr ""
+msgstr "Bordura naranja dentada"
 
 msgid "Orange Bricks"
-msgstr ""
+msgstr "Mazonado naranja"
 
 msgid "Orange Chevron"
-msgstr ""
+msgstr "Chevrón naranja"
 
 msgid "Orange Chevron Inverted"
-msgstr ""
+msgstr "Chevrón naranja invertido"
 
 msgid "Orange Chief"
-msgstr ""
+msgstr "Jefe naranja"
 
 msgid "Orange Chief Dexter Canton"
-msgstr ""
+msgstr "Cantón naranja en jefe a diestra"
 
 msgid "Orange Chief Indented"
-msgstr ""
+msgstr "Jefe naranja dentado"
 
 msgid "Orange Chief Sinister Canton"
-msgstr ""
+msgstr "Cantón naranja en jefe a siniestra"
 
 msgid "Orange Creeper Charge"
-msgstr ""
+msgstr "Estampado naranja de creeper"
 
 msgid "Orange Cross"
-msgstr ""
+msgstr "Cruz naranja"
 
 msgid "Orange Fess"
-msgstr ""
+msgstr "Franja naranja"
 
 msgid "Orange Flow"
-msgstr ""
+msgstr "Estampado naranja de espiral"
 
 msgid "Orange Flower Charge"
-msgstr ""
+msgstr "Estampado naranja de flor"
 
 msgid "Orange Globe Charge"
-msgstr ""
+msgstr "Planeta naranja"
 
 msgid "Orange Gradient"
-msgstr ""
+msgstr "Gradiente naranja"
 
 msgid "Orange Guster"
-msgstr ""
+msgstr "Estampado naranja de breeze"
 
 msgid "Orange Lozenge"
-msgstr ""
+msgstr "Rombo naranja"
 
 msgid "Orange Pale"
-msgstr ""
+msgstr "Palo naranja"
 
 msgid "Orange Pale Dexter"
-msgstr ""
+msgstr "Palo naranja a diestra"
 
 msgid "Orange Pale Sinister"
-msgstr ""
+msgstr "Palo naranja a siniestra"
 
 msgid "Orange Paly"
-msgstr ""
+msgstr "Bastonado naranja"
 
 msgid "Orange Per Bend"
-msgstr ""
+msgstr "Tronchado naranja"
 
 msgid "Orange Per Bend Inverted"
-msgstr ""
+msgstr "Tronchado naranja invertido"
 
 msgid "Orange Per Bend Sinister"
-msgstr ""
+msgstr "Tajado naranja"
 
 msgid "Orange Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Tajado naranja invertido"
 
 msgid "Orange Per Fess"
-msgstr ""
+msgstr "Cortado naranja"
 
 msgid "Orange Per Fess Inverted"
-msgstr ""
+msgstr "Cortado naranja invertido"
 
 msgid "Orange Per Pale"
-msgstr ""
+msgstr "Flanco naranja"
 
 msgid "Orange Per Pale Inverted"
-msgstr ""
+msgstr "Flanco naranja invertido"
 
 msgid "Orange Piglin Charge"
-msgstr ""
+msgstr "Hocico naranja"
 
 msgid "Orange Roundel"
-msgstr ""
+msgstr "Roel naranja"
 
 msgid "Orange Saltire"
-msgstr ""
+msgstr "Aspa naranja"
 
 msgid "Orange Skull Charge"
-msgstr ""
+msgstr "Estampado naranja de calavera"
 
 msgid "Orange Thing Charge"
-msgstr ""
+msgstr "Estampado naranja de una cosa"
 
 msgid "Piglin Banner Pattern"
 msgstr ""
@@ -1488,130 +1488,130 @@ msgid "Pink Banner"
 msgstr "Estandarte rosa"
 
 msgid "Pink Base"
-msgstr ""
+msgstr "Campaña rosa"
 
 msgid "Pink Base Dexter Canton"
-msgstr ""
+msgstr "Cantón rosa en campaña a diestra"
 
 msgid "Pink Base Gradient"
-msgstr ""
+msgstr "Gradiente rosa en base"
 
 msgid "Pink Base Indented"
-msgstr ""
+msgstr "Base rosa dentada"
 
 msgid "Pink Base Sinister Canton"
-msgstr ""
+msgstr "Cantón rosa en campaña a siniestra"
 
 msgid "Pink Bend"
-msgstr ""
+msgstr "Banda rosa"
 
 msgid "Pink Bend Sinister"
-msgstr ""
+msgstr "Banda rosa a siniestra"
 
 msgid "Pink Bordure"
-msgstr ""
+msgstr "Bordura rosa"
 
 msgid "Pink Bordure Indented"
-msgstr ""
+msgstr "Bordura rosa dentada"
 
 msgid "Pink Bricks"
-msgstr ""
+msgstr "Mazonado rosa"
 
 msgid "Pink Chevron"
-msgstr ""
+msgstr "Chevrón rosa"
 
 msgid "Pink Chevron Inverted"
-msgstr ""
+msgstr "Chevrón rosa invertido"
 
 msgid "Pink Chief"
-msgstr ""
+msgstr "Jefe rosa"
 
 msgid "Pink Chief Dexter Canton"
-msgstr ""
+msgstr "Cantón rosa en jefe a diestra"
 
 msgid "Pink Chief Indented"
-msgstr ""
+msgstr "Jefe rosa dentado"
 
 msgid "Pink Chief Sinister Canton"
-msgstr ""
+msgstr "Cantón rosa en jefe a siniestra"
 
 msgid "Pink Creeper Charge"
-msgstr ""
+msgstr "Estampado rosa de creeper"
 
 msgid "Pink Cross"
-msgstr ""
+msgstr "Cruz rosa"
 
 msgid "Pink Fess"
-msgstr ""
+msgstr "Franja rosa"
 
 msgid "Pink Flow"
-msgstr ""
+msgstr "Estampado rosa de espiral"
 
 msgid "Pink Flower Charge"
-msgstr ""
+msgstr "Estampado rosa de flor"
 
 msgid "Pink Globe Charge"
-msgstr ""
+msgstr "Planeta rosa"
 
 msgid "Pink Gradient"
-msgstr ""
+msgstr "Gradiente rosa"
 
 msgid "Pink Guster"
-msgstr ""
+msgstr "Estampado rosa de breeze"
 
 msgid "Pink Lozenge"
-msgstr ""
+msgstr "Rombo rosa"
 
 msgid "Pink Pale"
-msgstr ""
+msgstr "Palo rosa"
 
 msgid "Pink Pale Dexter"
-msgstr ""
+msgstr "Palo rosa a diestra"
 
 msgid "Pink Pale Sinister"
-msgstr ""
+msgstr "Palo rosa a siniestra"
 
 msgid "Pink Paly"
-msgstr ""
+msgstr "Bastonado rosa"
 
 msgid "Pink Per Bend"
-msgstr ""
+msgstr "Tronchado rosa"
 
 msgid "Pink Per Bend Inverted"
-msgstr ""
+msgstr "Tronchado rosa invertido"
 
 msgid "Pink Per Bend Sinister"
-msgstr ""
+msgstr "Tajado rosa"
 
 msgid "Pink Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Tajado rosa invertido"
 
 msgid "Pink Per Fess"
-msgstr ""
+msgstr "Cortado rosa"
 
 msgid "Pink Per Fess Inverted"
-msgstr ""
+msgstr "Cortado rosa invertido"
 
 msgid "Pink Per Pale"
-msgstr ""
+msgstr "Flanco rosa"
 
 msgid "Pink Per Pale Inverted"
-msgstr ""
+msgstr "Flanco rosa invertido"
 
 msgid "Pink Piglin Charge"
-msgstr ""
+msgstr "Hocico rosa"
 
 msgid "Pink Roundel"
-msgstr ""
+msgstr "Roel rosa"
 
 msgid "Pink Saltire"
-msgstr ""
+msgstr "Aspa rosa"
 
 msgid "Pink Skull Charge"
-msgstr ""
+msgstr "Estampado rosa de calavera"
 
 msgid "Pink Thing Charge"
-msgstr ""
+msgstr "Estamapado rosa de una cosa"
 
 msgid "Purple Banner"
 msgstr "Estandarte morado"
