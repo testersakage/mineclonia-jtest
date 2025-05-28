@@ -20,7 +20,7 @@ end
 
 function mcl_armor.head_entity_equip(obj)
 	local luaentity = obj:get_luaentity()
-	local entity_name = luaentity and luaentity.object:get_entity_name() or nil
+	local entity_name = luaentity and luaentity.name or nil
 	local inv, head
 
 	if entity_name == "mcl_armor_stand:armor_entity"
