@@ -1725,6 +1725,13 @@ local zombified_piglin = table.merge (zombie, {
 			max = 1,
 			looting = "rare",
 		},
+		{
+			name = "mcl_heads:piglin",
+			chance = 1,
+			min = 0,
+			max = 0,
+			mob_head = true,
+		},
 	},
 	head_swivel = "Head",
 	bone_eye_height = 6.7495,
