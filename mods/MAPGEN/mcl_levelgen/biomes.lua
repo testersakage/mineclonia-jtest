@@ -4552,7 +4552,7 @@ mcl_levelgen.register_biome ("Savannah", {
 			"mcl_levelgen:patch_tall_grass",
 			"mcl_trees:trees_savanna",
 			"mcl_flowers:flower_warm",
-			"mcl_levelgen:patch_grass_savanna",
+			"mcl_levelgen:patch_grass_savannah",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
 			"mcl_farming:patch_sugar_cane",
@@ -4632,7 +4632,7 @@ mcl_levelgen.register_biome ("SavannahPlateau", {
 			"mcl_levelgen:patch_tall_grass",
 			"mcl_trees:trees_savanna",
 			"mcl_flowers:flower_warm",
-			"mcl_levelgen:patch_grass_savanna",
+			"mcl_levelgen:patch_grass_savannah",
 			"mcl_mushrooms:brown_mushroom_normal",
 			"mcl_mushrooms:red_mushroom_normal",
 			"mcl_farming:patch_sugar_cane",
@@ -6137,6 +6137,7 @@ local seed = mcl_levelgen.ull (0, 2345)
 local rng = mcl_levelgen.jvm_random (seed)
 local BIOME_SELECTOR_NOISE
 	= mcl_levelgen.make_simplex_noise (rng, { 0, })
+mcl_levelgen.BIOME_SELECTOR_NOISE = BIOME_SELECTOR_NOISE
 
 if false then
 	for x = -256, 255 do
