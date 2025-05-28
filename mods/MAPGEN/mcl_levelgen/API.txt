@@ -279,6 +279,9 @@ types:
   - mcl_core:snow
   - mcl_core:snow_{2..8}
   - group:sapling
+  - group:plant
+  - group:double_plant
+  - group:flower
 
 Modders are encouraged to extend this function by means of overloading
 to understand their own blocks' environmental requirements if those
@@ -687,6 +690,36 @@ REPLACEMENT is to be substituted during ore generation, and PARAM2 is
 either nil (which is equivalent to 0) or the param2 value that will be
 assigned to REPLACEMENT whenever it is substituted for a target.
 
+Plain feature: mcl_levelgen:random_patch
+
+Attempt repeatedly to place the placed feature specified in the
+configuration at random positions selected from a range prescribed in
+the configuration with triangular distribution.  The configuration
+must be a table of the form:
+
+{
+	placed_feature = FEATURE (<ID or table>),
+	tries = TRIES,
+	xz_spread = XZ_SPREAD,
+	y_spread = Y_SPREAD,
+}
+
+where FEATURE is the identifier or table of a placed feature, as in
+`mcl_levelgen:random_selector', TRIES is the number of attempts that
+will be made to place the said feature, and XZ_SPREAD and Y_SPREAD are
+the horizontal and vertical radii around the origin position of the
+random patch feature within which the feature to be repeated may be
+placed.
+
+Plain feature: mcl_levelgen:simple_block
+
+Place a node at the origin, provided that the latter is hospitable to
+the node as decided by `mcl_levelgen.is_position_hospitable'; special
+treatment is afforded to double plants.  The configuration must
+contain a single field CONTENT, a function accepting the origin of the
+feature and a PRNG and yielding the content ID and param2 values of a
+block to place.
+
 
 STANDARD PLACED FEATURES
 
@@ -696,7 +729,7 @@ STANDARD CONFIGURED FEATURES
 
 STANDARD PLACEMENT MODIFIERS
 
-Function: mcl_levelgen.build_weighted_list (list)
+Function: mcl_levelgen.build_weighted_list (LIST)
 
 Take a weighted list of elements of the form:
 
@@ -709,11 +742,37 @@ and return a function which accepts a PRNG and returns a random
 element's DATA field, weighted by specified WEIGHTs.  This is not a
 placement modifier.
 
+Feature: mcl_levelgen.build_weighted_cid_provider (LIST)
+
+Take a weighted list of elements of the form:
+
+{
+	weight = WEIGHT,
+	cid = CID,
+	param2 = PARAM2,
+}
+
+and return a function which accepts (and discards) three coordinate
+values and a PRNG and yields a random CID and param2 value, which
+function is suitable as the CONTENT parameter to a
+`mcl_levelgen:simple_block' feature.  This is not a placement
+modifier.
+
 Function: mcl_levelgen.build_count (N)
 
 Return a placement modifier which duplicates the input position N
 times.  N must be a function that accepts an RNG and yields the number
 of duplicates to produce.
+
+Function mcl_levelgen.build_noise_threshold_count (NOISE_LEVEL,
+	 					   ABOVE_NOISE,
+						   BELOW_NOISE)
+
+Return a placement modifier which duplicates the input position a
+variable number of times contingent on the value of the biome selector
+noise at the said position.  ABOVE_NOISE is the number of duplications
+to perform when the noise exceeds NOISE_LEVEL, and BELOW_NOISE is that
+number otherwise.
 
 Function: mcl_levelgen.build_in_square ()
 

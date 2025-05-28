@@ -36,10 +36,11 @@ local function push (list, seen, value)
 end
 
 local floor = math.floor
+local mathmax = math.max
 
 local function bitset_size (x, y, z)
 	local value = ((x * EDGES_PER_AXIS - 1 + y - 1) * EDGES_PER_AXIS) + z
-	return floor ((value + WORD_BITS - 1) / WORD_BITS)
+	return mathmax (0, floor ((value + WORD_BITS - 1) / WORD_BITS))
 end
 
 local function bisect (edges, nmemb, value)
@@ -487,9 +488,9 @@ function region_class:intersect_p (r)
 end
 
 local function any_occupied_p (region)
-	for x = 1, region.x_size do
-		for y = 1, region.y_size do
-			for z = 1, region.z_size do
+	for x = 0, region.x_size - 1 do
+		for y = 0, region.y_size - 1 do
+			for z = 0, region.z_size - 1 do
 				if is_occupied_p (region, x, y, z) then
 					return true
 				end
