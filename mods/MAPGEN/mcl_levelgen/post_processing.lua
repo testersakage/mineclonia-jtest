@@ -266,6 +266,19 @@ local blurb = "An existing MapBlock (%d) was reported to post_process_mapchunk: 
 local fmt = "MapBlock %d,%d,%d (%d) was likely overwritten by the generation of the region between %s and %s"
 local save_heightmap
 
+local function require_regeneration (current, x, y, z)
+	-- Regenerate this mapblock or arrange to have it regenerated
+	-- when regeneration of its surroundings is complete.  This
+	-- would not be necessary if the engine were not liable
+	-- sporadically to generate existing mapblocks.
+	if current == MBS_GENERATED then
+		set_mapblock_state (x, y, z, MBS_PROTO_CHUNK)
+	end
+	-- A locked & generated or simply locked MapBlock's contents
+	-- are already available and will soon be restored to the
+	-- level.
+end
+
 local function post_process_mapchunk (minp, maxp)
 	local bx = minp.x / 16
 	local by = minp.y / 16
@@ -287,11 +300,13 @@ local function post_process_mapchunk (minp, maxp)
 			for z = bz - 1, bz1 + 1 do
 				local current = mapblock_state (x, y, z)
 				if current == MBS_GENERATED
-					or current == MBS_LOCKED then
+					or current == MBS_LOCKED
+					or current == MBS_LOCKED_GENERATED then
 					local blurb = string.format (fmt, x, y, z, current,
 								     minp:to_string (),
 								     maxp:to_string ())
 					core.log ("warning", blurb)
+					require_regeneration (current, x, y, z)
 				end
 			end
 		end
@@ -310,6 +325,10 @@ local function post_process_mapchunk (minp, maxp)
 					assert (mapblock_state (x, y, z) == MBS_PROTO_CHUNK)
 				else
 					core.log ("warning", string.format (blurb, current, x, y, z))
+					if current == MBS_LOCKED_GENERATED
+						or current == MBS_GENERATED then
+						require_regeneration (current, x, y, z)
+					end
 				end
 			end
 		end
