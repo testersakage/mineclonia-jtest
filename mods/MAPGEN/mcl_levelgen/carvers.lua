@@ -690,7 +690,7 @@ end
 local function trapezoidal_float (min, max, bound)
 	local diff = max - min
 	local bound_diff = (diff - bound) / 2.0
-	local base_diff = diff - bound
+	local base_diff = diff - bound_diff
 	return function (rng)
 		return min + rng:next_float () * base_diff
 			+ rng:next_float () * bound_diff
