@@ -405,12 +405,16 @@ mcl_levelgen.register_configured_feature ("mcl_dripstone:dripstone_cluster", {
 	end,
 })
 
+local overworld = mcl_levelgen.overworld_preset
+local OVERWORLD_TOP = overworld.min_y + overworld.height - 1
+local OVERWORLD_MIN = overworld.min_y
+
 mcl_levelgen.register_placed_feature ("mcl_dripstone:dripstone_cluster", {
 	configured_feature = "mcl_dripstone:dripstone_cluster",
 	placement_modifiers = {
 		mcl_levelgen.build_count (uniform_height (48, 96)),
 		mcl_levelgen.build_in_square (),
-		mcl_levelgen.build_height_range (uniform_height (0, 256)),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN, 256)),
 		mcl_levelgen.build_in_biome (),
 	},
 })
@@ -574,7 +578,7 @@ mcl_levelgen.register_placed_feature ("mcl_dripstone:pointed_dripstone", {
 	placement_modifiers = {
 		mcl_levelgen.build_count (uniform_height (192, 256)),
 		mcl_levelgen.build_in_square (),
-		mcl_levelgen.build_height_range (uniform_height (0, 256)),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN, 256)),
 		mcl_levelgen.build_count (uniform_height (0, 5)),
 		mcl_levelgen.build_random_offset (clamped_gaussian_int (0.0, 3.0, 10, -10),
 						  clamped_gaussian_int (0.0, 0.6, 2, -2)),
@@ -816,7 +820,7 @@ mcl_levelgen.register_placed_feature ("mcl_dripstone:large_dripstone", {
 	placement_modifiers = {
 		mcl_levelgen.build_count (uniform_height (10, 48)),
 		mcl_levelgen.build_in_square (),
-		mcl_levelgen.build_height_range (uniform_height (0, 256)),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN, 256)),
 		mcl_levelgen.build_in_biome (),
 	},
 })
