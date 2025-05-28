@@ -322,6 +322,14 @@ Return whether the block at X, Y, and Z is solid (or `walkable' in
 Minetest argot).  Value is false if the provided position is not
 within the accessible region of the level.
 
+Function: mcl_levelgen.adjoins_air (X, Y, Z)
+
+Return whether the block at X, Y, and Z, is in contact with air along
+any one of the three axes.  If the provided position is inaccessible,
+proceed to test its neighbors nodes regardless.  Adjoining positions
+that are inaccessible are not accounted air blocks and will not yield
+a `true' value.
+
 
 PLACEMENT MODIFIERS
 
@@ -637,6 +645,47 @@ form:
 
 where `features' is to hold placed features in the same format as is
 accepted by `mcl_levelgen:random_selector'.
+
+Plain feature: mcl_levelgen:ore
+
+Generate an ellipsoidal mass of ores around the provided position.
+The configuration must be a table of the form:
+
+{
+	discard_chance_on_air_exposure = DISCARD_CHANCE_ON_AIR_EXPOSURE,
+	size = SIZE,
+	substitutions = SUBSTITUTION_LIST,
+}
+
+Where DISCARD_CHANCE_ON_AIR_EXPOSURE is a number between 0.0 and 1.0
+providing a probability that an ore block contacting air will not be
+generated, SIZE is the maximum number of ore blobs that will figure in
+this blob, and SUBSTITUTION_LIST is a list of blocks and the ores by
+which they should be replaced produced by
+`mcl_levelgen.construct_ore_substitution_list'.
+
+Each mass of ores generates as an ellipsoid of variable dimensions in
+which smaller (up to SIZE) spherical blobs of ore material generate by
+replacing blocks identified in the substitution list, with floor (1 +
+SIZE / 8.0) being the maximum number of ore blocks capable of
+generating in each such blob.
+
+Function: mcl_levelgen.construct_ore_substitution_list (ITEMS)
+
+Convert ITEMS into an equivalent ore substitution list.  ITEMS should
+be a table of the form:
+
+{
+	target = TARGET,
+	replacement = REPLACEMENT,
+	param2 = PARAM2 or nil,
+}
+
+where TARGET, if prefixed by `group:', identifies a group for whose
+members, or otherwise, a node for which the node identified by
+REPLACEMENT is to be substituted during ore generation, and PARAM2 is
+either nil (which is equivalent to 0) or the param2 value that will be
+assigned to REPLACEMENT whenever it is substituted for a target.
 
 
 STANDARD PLACED FEATURES
