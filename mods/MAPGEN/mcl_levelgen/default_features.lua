@@ -215,6 +215,229 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:freeze_top_layer", {
 })
 
 ------------------------------------------------------------------------
+-- Ore placement.
+------------------------------------------------------------------------
+
+local mathsin = math.sin
+local mathcos = math.cos
+local mathmin = math.min
+local mathmax = math.max
+local floor = math.floor
+local ceil = math.ceil
+
+-- local ore_configuration = {
+-- 	substitutions = {},
+-- 	size = "",
+-- 	discard_chance_on_air_exposure = 0.0,
+-- }
+
+local run_minp = mcl_levelgen.placement_run_minp
+local run_maxp = mcl_levelgen.placement_run_maxp
+local pi = math.pi
+local BLOCKS_PER_BLOB = 8.0
+
+local lerp1d = mcl_levelgen.lerp1d
+local adjoins_air = mcl_levelgen.adjoins_air
+
+local function ore_placement_test (cid, x, y, z, rng, cfg)
+	for _, substitution in ipairs (cfg.substitutions) do
+		if substitution[1] == cid then
+			local chance = cfg.discard_chance_on_air_exposure
+			if (chance >= 1.0 or (chance <= 0.0
+					      and rng:next_float () < chance))
+				and adjoins_air (x, y, z) then
+				return nil, nil
+			end
+
+			return substitution[2], substitution[3]
+		end
+	end
+
+	return nil, nil
+end
+
+local function ore_place_1 (x1, x2, z1, z2, y1, y2,
+			    xmin, ymin, zmin, hsize,
+			    ysize, cfg, rng)
+	local placed = false
+	local cnt_ores = cfg.size
+
+	-- Array of tuples of four elements supplying the position of
+	-- each blob and its radius
+	local ore_poses = {}
+
+	local r = 1 / (cnt_ores * 4)
+	for i = 1, cnt_ores * 4, 4 do
+		local progress = i * r
+		local x = lerp1d (progress, x1, x2)
+		local y = lerp1d (progress, y1, y2)
+		local z = lerp1d (progress, z1, z2)
+		local blob_radius = rng:next_double ()
+			* cnt_ores / 16.0
+		local blob_radius_1
+			= ((mathsin (pi * progress) + 1.0)
+				* blob_radius + 1.0) / 2.0
+
+		ore_poses[i] = x
+		ore_poses[i + 1] = y
+		ore_poses[i + 2] = z
+		ore_poses[i + 3] = blob_radius_1
+	end
+
+	-- Delete blobs that intersect too egregiously.
+	for i = 0, cnt_ores - 2 do
+		local idx = i * 4 + 1
+
+		if ore_poses[idx + 3] >= 0.0 then
+			for i = 0, cnt_ores - 1 do
+				local idx1 = i * 4 + 1
+				local dx = ore_poses[idx] - ore_poses[idx1]
+				local dy = ore_poses[idx + 1] - ore_poses[idx1 + 1]
+				local dz = ore_poses[idx + 2] - ore_poses[idx1 + 2]
+				local dradius
+					= ore_poses[idx + 3] - ore_poses[idx1 + 3]
+				local d = dx * dx + dy * dy + dz * dz
+				if dradius * dradius > d then
+					if dradius > 0.0 then
+						ore_poses[idx1 + 3] = -1.0
+					else
+						ore_poses[idx + 3] = -1.0
+					end
+				end
+			end
+		end
+	end
+
+	-- Place each blob.
+	for i = 1, cnt_ores * 4, 4 do
+		local r = ore_poses[i + 3]
+		if r >= 0.0 then
+			local cx = ore_poses[i]
+			local cy = ore_poses[i + 1]
+			local cz = ore_poses[i + 2]
+			local bxmin = mathmax (floor (cx - r), xmin)
+			local bymin = mathmax (floor (cy - r), ymin)
+			local bzmin = mathmax (floor (cz - r), zmin)
+			local sr = 1 / r
+			local bxmax = mathmin (mathmax (floor (cx + r), bxmin),
+					       xmin + hsize - 1)
+			local bzmax = mathmin (mathmax (floor (cz + r), bzmin),
+					       zmin + hsize - 1)
+			local bymax = mathmin (mathmax (floor (cy + r), bymin),
+					       ymin + ysize - 1)
+
+			for x = bxmin, bxmax do
+				for y = bymin, bymax do
+					for z = bzmin, bzmax do
+						local dx = (x + 0.5 - cx) * sr
+						local dy = (y + 0.5 - cy) * sr
+						local dz = (z + 0.5 - cz) * sr
+
+						if dx * dx + dy * dy + dz * dz < 1.0 then
+							local cid, _ = get_block (x, y, z)
+							if cid then
+								local param2
+								cid, param2 = ore_placement_test (cid, x, y, z,
+												  rng, cfg)
+								if cid then
+									-- if mcl_levelgen.current_placed_feature
+									-- 	== "mcl_levelgen:ore_emerald" then
+									-- 	print (x, y, z)
+									-- end
+									set_block (x, y, z, cid, param2)
+									placed = true
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	return placed
+end
+
+local function ore_place (_, x, y, z, cfg, rng)
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+
+	-- Derive the bounds of the ellipsoid in which ores will be
+	-- placed in individual blobs.
+
+	local dir = rng:next_float () * pi
+	local size_ellipsoid = cfg.size / BLOCKS_PER_BLOB
+	local size_half = ceil ((cfg.size / BLOCKS_PER_BLOB + 1.0) / 2.0)
+
+	-- Bounds of ellipsoid within which blobs may generate.
+	local x1 = x - mathsin (dir) * size_ellipsoid
+	local x2 = x + mathsin (dir) * size_ellipsoid
+	local z1 = z - mathcos (dir) * size_ellipsoid
+	local z2 = z + mathcos (dir) * size_ellipsoid
+	local y1 = y + rng:next_within (3) - 2 -- -2 to 0
+	local y2 = y + rng:next_within (3) - 2 -- -2 to 0
+
+	-- Absolute confines of level modification.  The largest
+	-- naturally generating ore (tuff) has a size of 64 and
+	-- consequently the maximum extent of an ore vein on any axis
+	-- is 13*2 blocks from the center, which is comfortably within
+	-- the 32 block feature size limit.
+
+	local hradius = ceil (size_ellipsoid) + size_half
+	local xmin = x - hradius
+	local zmin = z - hradius
+	local ymin = y - 2 - size_half -- 2 = blob height.
+	local hsize = hradius * 2.0
+	local ysize = (2 + size_half) * 2.0
+
+	-- Verify that at least one position within these confines is
+	-- beneath the surface of the level.
+	for x = xmin, xmin + hsize do
+		for z = zmin, zmin + hsize do
+			local _, blocking = index_heightmap (x, z)
+			if ymin <= blocking then
+				return ore_place_1 (x1, x2, z1, z2, y1, y2,
+						    xmin, ymin, zmin, hsize,
+						    ysize, cfg, rng)
+			end
+		end
+	end
+	return false
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:ore", {
+	place = ore_place,
+})
+
+function mcl_levelgen.construct_ore_substitution_list (items)
+	local substitutions = {}
+
+	for _, tbl in ipairs (items) do
+		local cids = {}
+		local target = tbl.target
+		if target:sub (1, 6) == "group:" then
+			local group = target:sub (7)
+			for name, tbl in pairs (core.registered_nodes) do
+				if tbl.groups[group] and tbl.groups[group] > 0 then
+					local id = core.get_content_id (name)
+					table.insert (cids, id)
+				end
+			end
+		else
+			table.insert (cids, core.get_content_id (target))
+		end
+
+		for _, cid in ipairs (cids) do
+			table.insert (substitutions, {
+				cid, core.get_content_id (tbl.replacement),
+				tbl.param2 or 0,
+			})
+		end
+	end
+	return substitutions
+end
+
+------------------------------------------------------------------------
 -- Fundamental placement modifiers.
 ------------------------------------------------------------------------
 
@@ -266,7 +489,6 @@ function mcl_levelgen.build_in_square ()
 	return in_square
 end
 
-local get_biome = mcl_levelgen.index_biome
 local registered_biomes = mcl_levelgen.registered_biomes
 local indexof = table.indexof
 
@@ -348,7 +570,7 @@ local function in_range (x, y, z)
 	local max_y = mcl_levelgen.placement_run_max_y
 	local max_z = mcl_levelgen.placement_run_max_z
 	return x >= min_x and y >= min_y and z >= min_z
-		and x <= max_x and y <= max_x and z <= max_z
+		and x <= max_x and y <= max_y and z <= max_z
 end
 
 local function always ()
@@ -420,3 +642,734 @@ function mcl_levelgen.build_random_offset (xz_scale, y_scale)
 		}
 	end
 end
+
+------------------------------------------------------------------------
+-- Default placed features.
+------------------------------------------------------------------------
+
+-- TODO: export these functions and remove duplicates.
+
+local function rtz (n)
+	if n < 0 then
+		return ceil (n)
+	end
+	return floor (n)
+end
+
+local function trapezoidal_height (min, max, bound)
+	local diff = max - min
+	local bound_diff = rtz ((diff - bound) / 2)
+	local base_diff = diff - bound_diff
+	return function (rng)
+		if bound >= diff then
+			return rng:next_within (diff + 1) + min
+		else
+			return min + rng:next_within (base_diff + 1)
+				+ rng:next_within (bound_diff + 1)
+		end
+	end
+end
+
+local function uniform_height (min_inclusive, max_inclusive)
+	local diff = max_inclusive - min_inclusive + 1
+	return function (rng)
+		return rng:next_within (diff) + min_inclusive
+	end
+end
+
+local O = mcl_levelgen.construct_ore_substitution_list
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_coal", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 17,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_coal",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_coal",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_coal_buried", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.5,
+	size = 17,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_coal",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_coal",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_andesite", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 64,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:andesite",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_core:andesite",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_clay", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 33,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:clay",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_core:clay",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_copper_large", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 20,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_copper:stone_with_copper",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_copper",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_copper_small", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 10,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_copper:stone_with_copper",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_copper",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_diamond_buried", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 1.0,
+	size = 8,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_diamond",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_diamond",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_diamond_large", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.7,
+	size = 12,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_diamond",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_diamond",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_diamond_medium", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.5,
+	size = 8,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_diamond",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_diamond",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_diamond_small", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.5,
+	size = 4,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_diamond",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_diamond",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_diorite", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 64,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:diorite",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_core:diorite",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_dirt", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 33,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:dirt",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_core:dirt",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_emerald", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 3,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_emerald",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_emerald",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_gold_buried", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.5,
+	size = 9,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_gold",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_gold",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_gold", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 9,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_gold",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_gold",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_granite", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 64,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:granite",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_core:granite",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_gravel", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 33,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:gravel",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_core:gravel",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_infested", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 9,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_monster_eggs:monster_egg_stone",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_monster_eggs:monster_egg_deepslate",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_iron", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 9,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_iron",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_iron",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_iron_small", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 4,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_iron",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_iron",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_lapis_buried", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 1.0,
+	size = 7,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_lapis",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_lapis",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_lapis", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 7,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_lapis",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_lapis",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_redstone", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 8,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_core:stone_with_redstone",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:deepslate_with_redstone",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_tuff", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 64,
+	substitutions = O ({
+		{
+			target = "group:stone_ore_target",
+			replacement = "mcl_deepslate:tuff",
+		},
+		{
+			target = "group:deepslate_ore_target",
+			replacement = "mcl_deepslate:tuff",
+		},
+	}),
+})
+
+local overworld = mcl_levelgen.overworld_preset
+local OVERWORLD_TOP = overworld.min_y + overworld.height - 1
+local OVERWORLD_MIN = overworld.min_y
+local THIRTY = function () return 30 end
+local TWO = function () return 2 end
+local FOURTY_SIX = function () return 46 end
+local SIXTEEN = function () return 16 end
+local SEVEN = function () return 7 end
+local FOUR = function () return 4 end
+local ONE_HUNDRED = function () return 100 end
+local FIFTY = function () return 50 end
+-- local SIX = function () return 6 end
+local FOURTEEN = function () return 14 end
+local TEN = function () return 10 end
+local NINETY = function () return 90 end
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_coal_upper", {
+	configured_feature = "mcl_levelgen:ore_coal",
+	placement_modifiers = {
+		mcl_levelgen.build_count (THIRTY),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (136, OVERWORLD_TOP)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_coal_lower", {
+	configured_feature = "mcl_levelgen:ore_coal_buried",
+	placement_modifiers = {
+		mcl_levelgen.build_count (THIRTY),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (trapezoidal_height (0, 192, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_andesite_lower", {
+	configured_feature = "mcl_levelgen:ore_andesite",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (0, 60)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_andesite_upper", {
+	configured_feature = "mcl_levelgen:ore_andesite",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (6),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (64, 128)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_clay", {
+	configured_feature = "mcl_levelgen:ore_clay",
+	placement_modifiers = {
+		mcl_levelgen.build_count (FOURTY_SIX),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (0, 256)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_copper", {
+	configured_feature = "mcl_levelgen:ore_copper_small",
+	placement_modifiers = {
+		mcl_levelgen.build_count (SIXTEEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (trapezoidal_height (-16, 112, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_copper_large", {
+	configured_feature = "mcl_levelgen:ore_copper_large",
+	placement_modifiers = {
+		mcl_levelgen.build_count (SIXTEEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (trapezoidal_height (-16, 112, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local diamond_range = trapezoidal_height (OVERWORLD_MIN - 80, OVERWORLD_MIN + 80, 0)
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_diamond", {
+	configured_feature = "mcl_levelgen:ore_diamond_small",
+	placement_modifiers = {
+		mcl_levelgen.build_count (SEVEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (diamond_range),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_diamond_buried", {
+	configured_feature = "mcl_levelgen:ore_diamond_buried",
+	placement_modifiers = {
+		mcl_levelgen.build_count (FOUR),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (diamond_range),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_diamond_large", {
+	configured_feature = "mcl_levelgen:ore_diamond_large",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (9),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (diamond_range),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_diamond_medium", {
+	configured_feature = "mcl_levelgen:ore_diamond_medium",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (trapezoidal_height (-64, 4, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_diorite_lower", {
+	configured_feature = "mcl_levelgen:ore_diorite",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (0, 60)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_diorite_upper", {
+	configured_feature = "mcl_levelgen:ore_diorite",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (6),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (64, 128)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_dirt", {
+	configured_feature = "mcl_levelgen:ore_dirt",
+	placement_modifiers = {
+		mcl_levelgen.build_count (SEVEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (0, 160)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_emerald", {
+	configured_feature = "mcl_levelgen:ore_emerald",
+	placement_modifiers = {
+		mcl_levelgen.build_count (ONE_HUNDRED),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (trapezoidal_height (-16, 480, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_gold_extra", {
+	configured_feature = "mcl_levelgen:ore_gold",
+	placement_modifiers = {
+		mcl_levelgen.build_count (FIFTY),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (32, 256, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_gold", {
+	configured_feature = "mcl_levelgen:ore_gold_buried",
+	placement_modifiers = {
+		mcl_levelgen.build_count (FOUR),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (trapezoidal_height (-64, 32, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_gold_lower", {
+	configured_feature = "mcl_levelgen:ore_gold_buried",
+	placement_modifiers = {
+		mcl_levelgen.build_count (uniform_height (0, 1)),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (-64, -48)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_granite_lower", {
+	configured_feature = "mcl_levelgen:ore_granite",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (0, 60)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_granite_upper", {
+	configured_feature = "mcl_levelgen:ore_granite",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (6),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (0, 60)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_gravel", {
+	configured_feature = "mcl_levelgen:ore_gravel",
+	placement_modifiers = {
+		mcl_levelgen.build_count (FOURTEEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN,
+								 OVERWORLD_TOP)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_infested", {
+	configured_feature = "mcl_levelgen:ore_infested",
+	placement_modifiers = {
+		mcl_levelgen.build_count (FOURTEEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN, 63)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_iron_middle", {
+	configured_feature = "mcl_levelgen:ore_iron",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (trapezoidal_height (-24, 56, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_iron_small", {
+	configured_feature = "mcl_levelgen:ore_iron_small",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (trapezoidal_height (OVERWORLD_MIN,
+								     72, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_iron_upper", {
+	configured_feature = "mcl_levelgen:ore_iron",
+	placement_modifiers = {
+		mcl_levelgen.build_count (NINETY),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (trapezoidal_height (80, 384, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_lapis_buried", {
+	configured_feature = "mcl_levelgen:ore_lapis_buried",
+	placement_modifiers = {
+		mcl_levelgen.build_count (FOUR),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN, 64)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_lapis", {
+	configured_feature = "mcl_levelgen:ore_lapis",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (trapezoidal_height (-32, 32, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_redstone", {
+	configured_feature = "mcl_levelgen:ore_redstone",
+	placement_modifiers = {
+		mcl_levelgen.build_count (FOUR),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN, 15)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_tuff", {
+	configured_feature = "mcl_levelgen:ore_tuff",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
