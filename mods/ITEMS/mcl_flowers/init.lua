@@ -70,17 +70,7 @@ function mcl_flowers.on_bone_meal_simple(_, _, _, pos, n)
 end
 
 function mcl_flowers.get_palette_color_from_pos(pos)
-	local biome_data = core.get_biome_data(pos)
-	local index = 0
-	if biome_data then
-		local biome = biome_data.biome
-		local biome_name = core.get_biome_name(biome)
-		local reg_biome = core.registered_biomes[biome_name]
-		if reg_biome then
-			index = reg_biome._mcl_palette_index
-		end
-	end
-	return index
+	return mcl_util.get_pos_p2 (pos)
 end
 
 -- on_place function for flowers
