@@ -466,6 +466,34 @@ function mcl_levelgen.is_position_walkable (x, y, z)
 	return is_cid_walkable[cid]
 end
 
+function mcl_levelgen.adjoins_air (x, y, z)
+	local cid, _ = get_block (x - 1, y, z)
+	if cid == cid_air then
+		return true
+	end
+	local cid, _ = get_block (x, y, z - 1)
+	if cid == cid_air then
+		return true
+	end
+	local cid, _ = get_block (x + 1, y, z)
+	if cid == cid_air then
+		return true
+	end
+	local cid, _ = get_block (x, y, z + 1)
+	if cid == cid_air then
+		return true
+	end
+	local cid, _ = get_block (x, y - 1, z)
+	if cid == cid_air then
+		return true
+	end
+	local cid, _ = get_block (x, y + 1, z)
+	if cid == cid_air then
+		return true
+	end
+	return false
+end
+
 --------------------------------------------------------------------------
 -- Late initialization.
 --------------------------------------------------------------------------
