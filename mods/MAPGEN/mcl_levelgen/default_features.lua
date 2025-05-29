@@ -244,7 +244,7 @@ local function ore_placement_test (cid, x, y, z, rng, cfg)
 	for _, substitution in ipairs (cfg.substitutions) do
 		if substitution[1] == cid then
 			local chance = cfg.discard_chance_on_air_exposure
-			if (chance >= 1.0 or (chance <= 0.0
+			if (chance >= 1.0 or (chance > 0.0
 					      and rng:next_float () < chance))
 				and adjoins_air (x, y, z) then
 				return nil, nil
