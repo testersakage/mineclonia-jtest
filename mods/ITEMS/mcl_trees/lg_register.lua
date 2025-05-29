@@ -1,3 +1,7 @@
+if not core.global_exists ("mcl_trees") then
+	mcl_trees = {}
+end
+
 local mathmax = math.max
 local mathmin = math.min
 local mathabs = math.abs
@@ -80,6 +84,8 @@ local function apply_biome_coloration (aabb)
 		end
 	end
 end
+
+mcl_trees.apply_biome_coloration = apply_biome_coloration
 
 local function register_tree_feature (name, schematic_set, after_place, details,
 				      sapling_type, trunk_offset,

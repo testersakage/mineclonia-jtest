@@ -268,3 +268,5 @@ mcl_flowerpots.register_potted("mcl_lush_caves:azalea_flowering", {
 	mesh = "mcl_lush_caves_flowerpot.obj"
 })
 
+dofile (modpath .. "/lg_register.lua")
+mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")
