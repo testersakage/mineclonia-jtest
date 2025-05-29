@@ -723,6 +723,9 @@ local function update_relight_rgn (aabb)
 		local simplified = relight_rgn:simplify ()
 		new_relight_rgn = simplified:union (aabb)
 	end
+	if not new_relight_rgn then
+		core.log ("warning", "Lighting region grew too complex")
+	end
 	relight_rgn = new_relight_rgn
 end
 
@@ -732,8 +735,8 @@ function mcl_levelgen.fix_lighting (x1, y1, z1, x2, y2, z2)
 	end
 
 	local aabb = {
-		x1, y1 - y_offset, -z1 - 1,
-		x2 + 1, y2 - y_offset + 1, -z2,
+		x1, y1 - y_offset, -z2,
+		x2 + 1, y2 - y_offset + 1, -z1 - 1,
 	}
 	update_relight_rgn (aabb)
 end
