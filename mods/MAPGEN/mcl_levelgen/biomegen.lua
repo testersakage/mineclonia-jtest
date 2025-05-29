@@ -242,7 +242,7 @@ function mcl_levelgen.get_biome (pos, allow_sample)
 			-- The caller absolutely requires a biome, so
 			-- sample.
 			if allow_sample then
-				return sample_biome (qx, qy, qz)
+				return sample_biome (qx, qy, -qz - 1)
 			end
 			return nil
 		end

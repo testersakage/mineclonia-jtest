@@ -201,7 +201,12 @@ local cid_packed_ice
 local cid_mud
 local cid_soul_sand
 local cid_honey_block
+local cid_dead_bush
+local cid_red_sand
+local cid_sand
 local cid_air
+local cid_water_source
+local cid_water_flowing
 local is_cid_sapling = {}
 local is_cid_dirt = {}
 local is_cid_snow_layer, cid_snow = {}
@@ -209,6 +214,7 @@ local is_cid_walkable = {}
 local is_cid_double_plant = {}
 local is_cid_bush = {}
 local is_cid_leaf = {}
+local is_cid_terracotta = {}
 local double_plant_tops = {}
 local paramtype2 = {}
 local mathmin = math.min
@@ -221,7 +227,12 @@ local function initialize_nodeprops ()
 	cid_mud = core.get_content_id ("mcl_mud:mud")
 	cid_soul_sand = core.get_content_id ("mcl_nether:soul_sand")
 	cid_honey_block = core.get_content_id ("mcl_honey:honey_block")
+	cid_dead_bush = core.get_content_id ("mcl_core:deadbush")
+	cid_sand = core.get_content_id ("mcl_core:sand")
+	cid_red_sand = core.get_content_id ("mcl_core:redsand")
 	cid_air = core.CONTENT_AIR
+	cid_water_source = core.get_content_id ("mcl_core:water_source")
+	cid_water_flowing = core.get_content_id ("mcl_core:water_flowing")
 
 	for i = 1, 8 do
 		local cid
@@ -278,12 +289,17 @@ local function initialize_nodeprops ()
 		if ((def.groups.plant and def.groups.plant >= 1)
 			or (def.groups.double_plant and def.groups.double_plant >= 1)
 			or (def.groups.flower and def.groups.flower >= 1))
+			and not (def.groups.dripleaf and def.groups.dripleaf >= 1)
+			and def.groups.attached_node ~= 4
 			and not is_cid_sapling[cid] then
 			-- TODO: wallmounted nodes!
 			is_cid_bush[cid] = true
 		end
 		if (def.groups.leaves and def.groups.leaves >= 1) then
 			is_cid_leaf[cid] = true
+		end
+		if def.groups.hardened_clay and def.groups.hardened_clay >= 1 then
+			is_cid_terracotta[cid] = true
 		end
 		paramtype2[cid] = def.paramtype2
 	end
@@ -299,19 +315,21 @@ local function get_node_shape (x, y, z)
 	local cid, param2 = get_block (x, y, z)
 	if static_node_shapes[cid] then
 		return static_node_shapes[cid], true
-	else
+	elseif cid then
 		local hash = bor (lshift (cid, 8), param2)
 		if node_shape_cache[hash] then
 			return node_shape_cache[hash], true
 		end
 
-		local value, reusable
-			= decompose_AABBs (get_node_boxes (x, y, z))
+		local boxes, reusable = get_node_boxes (x, y, z)
+		local value = decompose_AABBs (boxes)
 		assert (value, cid .. "'s collision box is too complex")
 		if reusable then
 			node_shape_cache[hash] = value
 		end
 		return value, reusable
+	else
+		return nil, false
 	end
 end
 
@@ -465,6 +483,12 @@ function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 			supports_snow[hash] = sturdy
 		end
 		return sturdy
+	elseif cid == cid_dead_bush then
+		local cid, _ = get_block (x, y - 1, z)
+		return cid == cid_sand
+			or cid == cid_red_sand
+			or is_cid_terracotta[cid]
+			or is_cid_dirt[cid]
 	elseif is_cid_sapling[cid] or is_cid_bush[cid] then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_dirt[cid]
@@ -493,11 +517,35 @@ function mcl_levelgen.is_leaf_or_air (x, y, z)
 	return cid == cid_air or is_cid_leaf[cid]
 end
 
+function mcl_levelgen.is_water_or_air (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_air
+		or cid == cid_water_source
+		or cid == cid_water_flowing
+end
+
+function mcl_levelgen.is_air (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_air
+end
+
 function mcl_levelgen.is_air_with_dirt_below (x, y, z)
 	local cid, _ = get_block (x, y, z)
 	if cid == cid_air then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_dirt[cid]
+	end
+	return false
+end
+
+function mcl_levelgen.is_air_with_dirt_sand_or_terracotta_below (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	if cid == cid_air then
+		local cid, _ = get_block (x, y - 1, z)
+		return is_cid_dirt[cid]
+			or cid == cid_sand
+			or cid == cid_red_sand
+			or is_cid_terracotta[cid]
 	end
 	return false
 end
@@ -539,6 +587,66 @@ function mcl_levelgen.place_double_plant (cid, x, y, z, param2, set_block)
 	assert (top_cid, "Double plant (cid = " .. cid .. ") has no matching top node")
 	set_block (x, y, z, cid, param2)
 	set_block (x, y + 1, z, top_cid, param2)
+end
+
+local sturdy = {}
+
+function mcl_levelgen.face_sturdy_p (x, y, z, axis, dir)
+	if axis == "z" then
+		dir = -dir
+	end
+	local shape, reusable = get_node_shape (x, y, z)
+	if shape and reusable then
+		if sturdy[shape] ~= nil then
+			return sturdy[shape]
+		end
+		local face = shape:select_face (axis, dir * 0.5)
+		sturdy[shape] = face:equal_p (FULL_BLOCK)
+		return sturdy[shape]
+	elseif shape then
+		local face = shape:select_face (axis, dir * 0.5)
+		return face:equal_p (FULL_BLOCK)
+	end
+	return false
+end
+
+local face_sturdy_p = mcl_levelgen.face_sturdy_p
+function mcl_levelgen.is_bottom_face_sturdy (x, y, z)
+	return face_sturdy_p (x, y, z, "y", -1.0)
+end
+
+--------------------------------------------------------------------------
+-- Utility functions.
+--------------------------------------------------------------------------
+
+function mcl_levelgen.construct_cid_list (names)
+	local cids = {}
+	for _, target in ipairs (names) do
+		if target:sub (1, 6) == "group:" then
+			local group = target:sub (7)
+			for name, tbl in pairs (core.registered_nodes) do
+				if tbl.groups[group] and tbl.groups[group] > 0 then
+					local id = core.get_content_id (name)
+					table.insert (cids, id)
+				end
+			end
+		else
+			table.insert (cids, core.get_content_id (target))
+		end
+	end
+	return cids
+end
+
+function mcl_levelgen.facedir_to_wallmounted (axis, dir)
+	if axis == "y" then
+		return dir >= 0 and 0 or -1
+	elseif axis == "x" then
+		return dir >= 0 and 2 or 3
+	elseif axis == "z" then
+		return dir >= 0 and 5 or 4
+	else
+		assert (false)
+	end
 end
 
 --------------------------------------------------------------------------
