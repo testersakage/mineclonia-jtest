@@ -278,10 +278,11 @@ types:
 
   - mcl_core:snow
   - mcl_core:snow_{2..8}
+  - mcl_core:deadbush
   - group:sapling
   - group:plant
   - group:double_plant
-  - group:flower
+  - group:flower (excepting those where `attached_node == 4')
 
 Modders are encouraged to extend this function by means of overloading
 to understand their own blocks' environmental requirements if those
@@ -332,6 +333,45 @@ any one of the three axes.  If the provided position is inaccessible,
 proceed to test its neighbors nodes regardless.  Adjoining positions
 that are inaccessible are not accounted air blocks and will not yield
 a `true' value.
+
+Function: mcl_levelgen.is_water_or_air (X, Y, Z)
+
+Return whether the block at X, Y, Z is a water source, flowing water,
+or air.
+
+Function: mcl_levelgen.is_air (X, Y, Z)
+
+Return whether the block at X, Y, Z is air.
+
+Function: mcl_levelgen.is_air_with_dirt_below (X, Y, Z)
+
+Return whether the block at X, Y, Z is air with a block capable of
+supporting plantlife below.
+
+Function: mcl_levelgen.is_air_with_dirt_sand_or_terracotta_below (X, Y, Z)
+
+Return whether the block at X, Y, Z is air with a block capable of
+supporting plantlife, or sand, red sand, or terracotta below.
+
+Function: mcl_levelgen.face_sturdy_p (x, y, z, axis, dir)
+
+Return whether the face of the collision box of the block at X, Y, Z
+contacting the edge of its block in the level along the axis AXIS
+\(either "x", "y", or "z") and in the direction DIR (either -1.0 or
+1.0) is sturdy, i.e., occupies exactly one node lengthwise and
+breadthwise without interruption.
+
+Function: mcl_levelgen.is_bottom_face_sturdy (x, y, z, axis, dir)
+
+Return whether the face of the collision box of the blcok at X, Y - 1,
+Z which faces upwards is sturdy.
+
+Function: mcl_levelgen.facedir_to_wallmounted (AXIS, DIR)
+
+Return a `param2' value suitable for transforming a block whose
+`paramtype2' is `wallmounted' to rest against a sturdy face contacting
+it in the direction DIR (either -1 or 1) along the axis AXIS (one of
+"x", "y", and "z").
 
 
 PLACEMENT MODIFIERS
@@ -720,6 +760,140 @@ contain a single field CONTENT, a function accepting the origin of the
 feature and a PRNG and yielding the content ID and param2 values of a
 block to place.
 
+Plain feature: mcl_levelgen:vegetation_patch
+
+Generate a patch of substrate on the floor or ceiling of a region and
+stochastically distribute a form of vegetation over the generated
+substrate.  The configuration must be a table of the form:
+
+{
+	replaceable = <list of CIDs>,
+
+List of content IDs that may be replaced by the substrate material.
+You probably ought to generate this list with `construct_cid_list',
+which see.
+
+	surface = SURFACE,
+
+The direction of the surface to which the substrate (and therefore
+vegetation) will attach.  Either "floor" or "ceiling".
+
+	depth = DEPTH <function (RNG) ... end>,
+
+Function accepting a PRNG and yielding a random integer; see below.
+
+	extra_edge_column_chance = EXTRA_EDGE_COLUMN_CHANCE,
+	extra_bottom_block_chance = EXTRA_BOTTOM_BLOCK_CHANCE,
+	ground = function (X, Y, Z, RNG) ... end,
+
+Function accepting a position and a PRNG and yielding the CID and
+param2 values of a substrate material to be generated at the provided
+position.  For every position in a surface to which the substrate will
+attach that rests horizontally within a random radius of the origin
+position of this feature, a column of replaceable blocks DEPTH (or
+DEPTH + 1 if EXTRA_BOTTOM_BLOCK_CHANCE is satisfied) in height in the
+direction of the said surface will be replaced with content values
+supplied by this function; positions precisely at this radius from the
+origin along one of the two axes will only generate vegetation with a
+probability of EXTRA_EDGE_COLUMN_CHANCE, and positions at the corners
+of the patch will not be generated at all.
+
+	vegetation_feature = <ID or table>,
+
+Placed feature (generally an instance of `mcl_levelgen:block_column')
+to be generated beneath or above each column of substrate blocks where
+vegetation is to be generated, as the case may be.  This is defined as
+in `minecraft:random_patch'.
+
+	vegetation_chance = VEGETATION_CHANCE,
+
+The likelihood that a column of substrate blocks will develop
+vegetation.
+
+	vertical_range = VERTICAL_RANGE,
+
+The number of blocks from the Y position of the origin where feature
+placement is permitted to search for a ceiling or a floor to replace
+with substrate.
+
+	xz_radius = function (RNG) ... end,
+
+Function accepting a PRNG and yielding a number of blocks along the X
+or Z axes for which to attempt to generate substrate material and
+vegetation; the radius mentioned in the documentation for GROUND.
+
+	update_light = UPDATE_LIGHT,
+
+Whether to update lighting around generated vegetation after
+completion, assuming that generated vegetation extends over no more
+than 31 blocks from the origin position.
+
+}
+
+Function: mcl_levelgen.construct_cid_list (NAMES)
+
+Return a list of containing each content ID that is identified by one
+of the identifiers in NAMES; either `group:foo', which identifies
+every defined node assigned to the group `foo', or another string,
+which identifies the node by that name.
+
+Identifiers that do not name groups must be valid, or
+`core.get_content_id' will signal an error.
+
+Plain feature: mcl_levelgen:block_column
+
+Generate a column of blocks comprising segments of varying materials
+and length in a specified direction, truncating these columns to fit
+within any obstructions detected by a placement predicate.  The
+configuration must be a table of the form:
+
+{
+	layers = {
+	       {
+			height = HEIGHT,
+			content = CONTENT,
+	       },
+	       ...
+	},
+	direction = DIRECTION (-1 or 1),
+	allowed_placement = ALLOWED_PLACEMENT,
+	prioritize_tip = PRIORITIZE_TIP,
+}
+
+In each layer (segment), HEIGHT must be a function accepting a PRNG
+and yielding the height of the segment, and CONTENT must be a function
+accepting a position X, Y, Z and yielding the content ID and param2 of
+a value to place at that position.
+
+DIRECTION is the direction (down or up, according as it is -1 or 1) in
+which these segments will be stacked.
+
+ALLOWED_PLACEMENT is a function accepting a position X, Y, Z and
+deciding whether it is an obstruction, which will occasion truncation
+of the column, or it may be replaced by an element of a segment.
+
+PRIORITIZE_TIP decides the direction from which truncation of the
+column proceeds in cases of obstructions.  If true, segments are
+deleted, or shrunk, if sufficiently large, till the resultant column
+is small enough to fit within the space available, from the first
+segment defined forward.  Otherwise, the column is simply truncated to
+the last position before the obstruction.
+
+Plain feature: mcl_levelgen:waterlogged_vegetation_patch
+
+Place substrate material and vegetation as does
+`mcl_levelgen:vegetation', but replace each substrate block which is
+surrounded on all four cardinal directions and supported below by
+blocks of whose faces those oriented towards the substrate blocks are
+sturdy (i.e., occupy exactly one node lengthwise and breadthwise) with
+water, and generate such vegetation as would have attached to such
+substrates within the water by which they will have been replaced.
+
+Plain feature: mcl_levelgen:vines
+
+Generate and attach a single vine to an appropriate face adjoining the
+origin, if possible.  This feature accepts no configuration options.
+
 
 STANDARD PLACED FEATURES
 
@@ -739,8 +913,9 @@ Take a weighted list of elements of the form:
 }
 
 and return a function which accepts a PRNG and returns a random
-element's DATA field, weighted by specified WEIGHTs.  This is not a
-placement modifier.
+element's DATA field, weighted by specified WEIGHTs.  DATA may either
+be an integer, or a function that accepts a PRNG and yields a random
+value.  This is not a placement modifier.
 
 Feature: mcl_levelgen.build_weighted_cid_provider (LIST)
 
@@ -755,7 +930,9 @@ Take a weighted list of elements of the form:
 and return a function which accepts (and discards) three coordinate
 values and a PRNG and yields a random CID and param2 value, which
 function is suitable as the CONTENT parameter to a
-`mcl_levelgen:simple_block' feature.  This is not a placement
+`mcl_levelgen:simple_block' feature.  PARAM2 may also be the string
+"grass_palette_index", which is replaced by the palette index of the
+color of the biome at the current position.  This is not a placement
 modifier.
 
 Function: mcl_levelgen.build_count (N)
@@ -764,9 +941,9 @@ Return a placement modifier which duplicates the input position N
 times.  N must be a function that accepts an RNG and yields the number
 of duplicates to produce.
 
-Function mcl_levelgen.build_noise_threshold_count (NOISE_LEVEL,
-	 					   ABOVE_NOISE,
-						   BELOW_NOISE)
+Function: mcl_levelgen.build_noise_threshold_count (NOISE_LEVEL,
+	 					    ABOVE_NOISE,
+						    BELOW_NOISE)
 
 Return a placement modifier which duplicates the input position a
 variable number of times contingent on the value of the biome selector

@@ -501,13 +501,17 @@ local double_plant_p = mcl_levelgen.double_plant_p
 local is_position_hospitable = mcl_levelgen.is_position_hospitable
 
 local place_double_plant = mcl_levelgen.place_double_plant
+local ull = mcl_levelgen.ull
+local simple_block_rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
 
 local function simple_block_place (_, x, y, z, cfg, rng)
+	simple_block_rng:reseed (rng:next_long ())
 	if y < run_minp.y or y > run_maxp.y then
 		return false
 	end
 
-	local cid_to_place, param2 = cfg.content (x, y, z, rng)
+	local cid_to_place, param2
+		= cfg.content (x, y, z, simple_block_rng)
 	if param2 == "grass_palette_index" then
 		local biome = index_biome (x, y, z)
 		local def = mcl_levelgen.registered_biomes[biome]
@@ -552,7 +556,11 @@ function mcl_levelgen.build_weighted_list (list)
 			for _, entry in ipairs (list) do
 				cnt = cnt - entry.weight
 				if cnt < 0 then
-					return entry.data
+					if type (entry.data) == "number" then
+						return entry.data
+					else
+						return entry.data (rng)
+					end
 				end
 			end
 			return nil
@@ -781,6 +789,374 @@ function mcl_levelgen.build_random_offset (xz_scale, y_scale)
 end
 
 ------------------------------------------------------------------------
+-- Vegetation patch.
+-- mcl_levelgen:vegetation_patch
+------------------------------------------------------------------------
+
+local mathabs = math.abs
+
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/VegetationPatchFeature.html
+-- https://minecraft.wiki/w/Vegetation_patch
+
+-- local vegetation_patch_cfg = {
+-- 	replaceable = nil,
+-- 	ground = nil,
+-- 	surface = nil, -- "ceiling" or "floor"
+-- 	depth = nil,
+-- 	extra_bottom_block_chance = nil,
+-- 	vegetation_feature = nil,
+-- 	vegetation_chance = nil,
+-- 	vertical_range = nil,
+-- 	xz_radius = nil,
+-- 	extra_edge_column_chance = nil,
+-- 	update_light = true,
+-- }
+
+local face_sturdy_p = mcl_levelgen.face_sturdy_p
+
+local vegetation_directions = {
+	ceiling = 1,
+	floor = -1,
+}
+
+local function place_ground_surface (self, surfaces, dir, x, y, z, cfg, rng)
+	-- x, y, z form the position from whence the plant will extend
+	-- in growth_dir.  If it is empty and the block above is
+	-- capable of supporting a plant, replace it with a moss
+	-- surface.
+
+	local cid, _ = get_block (x, y, z)
+	if cid ~= cid_air
+		or not face_sturdy_p (x, y + dir, z, "y", -dir) then
+		return
+	end
+
+	local depth = cfg.depth (rng)
+	local extra = cfg.extra_bottom_block_chance
+	if extra > 0.0 and rng:next_float () < extra then
+		depth = depth + 1
+	end
+
+	local replaceable = cfg.replaceable
+	local ground = cfg.ground
+	
+	for y1 = y + dir, y + dir * depth, dir do
+		local cid = get_block (x, y1, z)
+		if indexof (replaceable, cid) ~= -1 then
+			local cid, param2 = ground (x, y1, z, rng)
+			set_block (x, y1, z, cid, param2)
+			surfaces[#surfaces + 1] = {
+				x, y, z,
+			}
+		end
+	end
+end
+
+local function place_ground_surfaces (self, surfaces, x, y, z, rx, rz, cfg, rng)
+	local dir = vegetation_directions[cfg.surface]
+	assert (dir)
+	local growth_dir = -dir
+	local edge_chance = cfg.extra_edge_column_chance
+	local vrange = cfg.vertical_range
+
+	for dx = -rx, rx do
+		for dz = -rz, rz do
+			local at_x_edge = mathabs (dx) == rx
+			local at_z_edge = mathabs (dz) == rz
+			local at_one_edge = at_x_edge or at_z_edge
+			local at_both_edges = at_x_edge and at_z_edge
+
+			-- Omit corners and reduce the probability of
+			-- generation at the extrema of the patch.
+			if not at_both_edges then
+				if not at_one_edge
+					or rng:next_float () < edge_chance then
+					local x, z = x + dx, z + dz
+					local y = y
+
+					-- Locate a surface within
+					-- range to which to attach.
+					for iy = y, y + dir * (vrange - 1), dir do
+						y = iy
+						local cid, _ = get_block (x, iy, z)
+						if cid ~= cid_air then
+							break
+						end
+					end
+
+					-- Leave this surface.
+					for iy = y, y + growth_dir * (vrange - 1), growth_dir do
+						y = iy
+						local cid, _ = get_block (x, iy, z)
+						if cid == cid_air then
+							break
+						end
+					end
+
+					self:place_ground_surface (surfaces, dir, x, y, z, cfg, rng)
+				end
+			end
+		end
+	end
+end
+
+local blurb = "Vegetation patch attempted to place nonexistent feature: "
+
+local function place_vegetation (self, placed_surfaces, cfg, rng)
+	local chance = cfg.vegetation_chance
+	local feature = cfg.vegetation_feature
+	if type (feature) == "string" then
+		feature = mcl_levelgen.registered_placed_features[feature]
+		if not feature then
+			if not warned[feature] then
+				core.log ("warning", blurb .. feature)
+				warned[feature] = true
+			end
+			return
+		end
+	end
+
+	for _, pos in ipairs (placed_surfaces) do
+		local x, y, z = pos[1], pos[2], pos[3]
+		if chance >= 0.0 and rng:next_float () < chance then
+			place_one_feature (feature, x, y, z)
+		end
+	end
+end
+
+local vegetation_patch_rng
+	= mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+local fix_lighting = mcl_levelgen.fix_lighting
+
+local function vegetation_patch_place (self, x, y, z, cfg, rng)
+	vegetation_patch_rng:reseed (rng:next_long ())
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+
+	local rng = vegetation_patch_rng
+	local xz_radius = cfg.xz_radius
+	local rx = xz_radius (rng) + 1
+	local rz = xz_radius (rng) + 1
+	local placed_surfaces = {}
+	self:place_ground_surfaces (placed_surfaces, x, y, z, rx, rz, cfg, rng)
+	self:place_vegetation (placed_surfaces, cfg, rng)
+	if cfg.update_light then
+		fix_lighting (x - rx - 2, y - 31, z - rz - 2,
+			      x + rx + 2, y + 31, z + rz + 2)
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:vegetation_patch", {
+	place = vegetation_patch_place,
+	place_ground_surface = place_ground_surface,
+	place_ground_surfaces = place_ground_surfaces,
+	place_vegetation = place_vegetation,
+})
+
+------------------------------------------------------------------------
+-- Block column feature.
+-- mcl_levelgen:block_column
+------------------------------------------------------------------------
+
+-- local block_column_cfg = {
+-- 	layers = {
+-- 		height = function (rng) ... end,
+-- 		content = function (x, y, z, rng) ... end,
+-- 	}, -- ``segments'' would be a more apposite identifier.
+-- 	direction = nil,
+-- 	allowed_placement = nil,
+-- 	prioritize_tip = false,
+-- }
+
+local function abridge_segments (seg_heights, height, lim, cfg)
+	local shrink = height - lim
+
+	if not cfg.prioritize_tip then
+		for i = #seg_heights, 1, -1 do
+			local k = seg_heights[i]
+			local d = mathmin (k, shrink)
+			shrink = shrink - d
+			seg_heights[i] = seg_heights[i] - d
+			if shrink == 0 then
+				break
+			end
+		end
+	else
+		for i = 1, #seg_heights do
+			local k = seg_heights[i]
+			local d = mathmin (k, shrink)
+			shrink = shrink - d
+			seg_heights[i] = seg_heights[i] - d
+			if shrink == 0 then
+				break
+			end
+		end
+	end
+end
+
+local function block_column_place (_, x, y, z, cfg, rng)
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+
+	-- Establish total height and truncate segments if
+	-- insufficient.
+	local height = 0
+	local seg_heights = {}
+	local segments = cfg.layers
+
+	for i, segment in ipairs (segments) do
+		local this_height = segment.height (rng)
+		seg_heights[i] = this_height
+		height = height + this_height
+	end
+
+	local allowed_placement = cfg.allowed_placement
+	local dir = cfg.direction
+	if height == 0 then
+		return false
+	else
+		for i = 0, height - 1 do
+			local y1 = y + (i * dir)
+
+			-- Truncate the segment array to the first
+			-- position that is not placeable.
+			if not allowed_placement (x, y1, z) then
+				abridge_segments (seg_heights, height, i, cfg)
+				break
+			end
+		end
+
+		local y1 = y
+		for i, segment in ipairs (segments) do
+			local this_height = seg_heights[i]
+			if this_height > 0 then
+				for i = 1, this_height do
+					local cid, param2
+						= segment.content (x, y1, z, rng)
+					set_block (x, y1, z, cid, param2)
+					y1 = y1 + dir
+				end
+			end
+		end
+
+		return true
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:block_column", {
+	place = block_column_place,
+})
+
+------------------------------------------------------------------------
+-- Waterlogged vegetation patch.
+-- mcl_levelgen:waterlogged_vegetation_patch
+------------------------------------------------------------------------
+
+local function containing_faces_sturdy_p (x, y, z)
+	return face_sturdy_p (x - 1, y, z, "x", 1)
+		and face_sturdy_p (x, y, z - 1, "z", 1)
+		and face_sturdy_p (x + 1, y, z, "x", -1)
+		and face_sturdy_p (x, y, z + 1, "z", -1)
+		and face_sturdy_p (x, y - 1, z, "y", 1)
+end
+
+local function waterlogged_place_ground_surfaces (self, surfaces, x, y, z, rx,
+						  rz, cfg, rng)
+	local new_surfaces = {}
+	local insert = table.insert
+
+	-- Place ground surfaces as usual.
+	place_ground_surfaces (self, surfaces, x, y, z, rx, rz, cfg, rng)
+
+	-- Enumerate nodes that are not exposed, i.e. are not in
+	-- contact with a face that is not whole.
+	for i = #surfaces, 1, -1 do
+		local pos = surfaces[i]
+		pos[2] = pos[2] - 1
+		if containing_faces_sturdy_p (pos[1], pos[2], pos[3]) then
+			insert (new_surfaces, pos)
+		end
+		-- Erase surfaces in the process.
+		surfaces[i] = nil
+	end
+
+	-- Replace the same with water sources and report them as new
+	-- surfaces.
+	for i = #new_surfaces, 1, -1 do
+		local pos = new_surfaces[i]
+		insert (surfaces, pos)
+		local x, y, z = pos[1], pos[2], pos[3]
+		set_block (x, y, z, cid_water_source, 0)
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:waterlogged_vegetation_patch", {
+	place = vegetation_patch_place,
+	place_ground_surface = place_ground_surface,
+	place_ground_surfaces = waterlogged_place_ground_surfaces,
+	place_vegetation = place_vegetation,
+})
+
+------------------------------------------------------------------------
+-- Vines.
+-- mcl_levelgen:vines
+------------------------------------------------------------------------
+
+local is_air = mcl_levelgen.is_air
+local vines_faces = {
+	{
+		"y", 1, 0, 1, 0,
+	},
+	{
+		"x", -1, -1, 0, 0,
+	},
+	{
+		"x", 1, 1, 0, 0,
+	},
+	{
+		"z", -1, 0, 0, -1,
+	},
+	{
+		"z", 1, 0, 0, 1,
+	},
+}
+
+local function unpack5 (k)
+	return k[1], k[2], k[3], k[4], k[5]
+end
+
+local cid_vine = core.get_content_id ("mcl_core:vine")
+local facedir_to_wallmounted = mcl_levelgen.facedir_to_wallmounted
+
+local function vines_place (_, x, y, z, cfg, rng)
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+
+	if not is_air (x, y, z) then
+		return false
+	else
+		for _, facing in ipairs (vines_faces) do
+			local axis, dir, dx, dy, dz = unpack5 (facing)
+			if face_sturdy_p (x + dx, y + dy, z + dz, axis, -dir) then
+				local dir = facedir_to_wallmounted (axis, dir)
+				set_block (x, y, z, cid_vine, dir)
+			end
+		end
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:vines", {
+	place = vines_place,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:vines", {
+	feature = "mcl_levelgen:vines",
+})
+
+------------------------------------------------------------------------
 -- Default placed features.
 ------------------------------------------------------------------------
 
@@ -813,6 +1189,9 @@ local function uniform_height (min_inclusive, max_inclusive)
 		return rng:next_within (diff) + min_inclusive
 	end
 end
+
+mcl_levelgen.uniform_height = uniform_height
+mcl_levelgen.trapezoidal_height = trapezoidal_height
 
 local O = mcl_levelgen.construct_ore_substitution_list
 
@@ -1216,6 +1595,7 @@ local FIFTY = function () return 50 end
 local FOURTEEN = function () return 14 end
 local TEN = function () return 10 end
 local NINETY = function () return 90 end
+local TWENTY_FIVE = function () return 25 end
 
 mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_coal_upper", {
 	configured_feature = "mcl_levelgen:ore_coal",
@@ -1516,6 +1896,9 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_tuff", {
 local FIVE = function () return 5 end
 local cid_double_grass = core.get_content_id ("mcl_flowers:double_grass")
 local cid_tallgrass = core.get_content_id ("mcl_flowers:tallgrass")
+local cid_fern = core.get_content_id ("mcl_flowers:fern")
+local cid_double_fern = core.get_content_id ("mcl_flowers:double_fern")
+local cid_dead_bush = core.get_content_id ("mcl_core:deadbush")
 
 mcl_levelgen.register_configured_feature ("mcl_levelgen:block_tall_grass", {
 	feature = "mcl_levelgen:simple_block",
@@ -1593,6 +1976,18 @@ local scan_beneath_leaves = E ({
 	max_steps = 24,
 	direction = -1,
 })
+local scan_beneath_leaves_far = E ({
+	allowed_search_condition = mcl_levelgen.is_leaf_or_air,
+	target_condition = mcl_levelgen.is_air_with_dirt_below,
+	max_steps = 31,
+	direction = -1,
+})
+local scan_beneath_leaves_for_terracotta = E ({
+	allowed_search_condition = mcl_levelgen.is_leaf_or_air,
+	target_condition = mcl_levelgen.is_air_with_dirt_sand_or_terracotta_below,
+	max_steps = 24,
+	direction = -1,
+})
 
 mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_grass_normal", {
 	configured_feature = "mcl_levelgen:patch_grass",
@@ -1649,7 +2044,7 @@ mcl_levelgen.register_configured_feature ("mcl_levelgen:block_taiga_grass", {
 		},
 		{
 			weight = 4,
-			cid = core.get_content_id ("mcl_flowers:fern"),
+			cid = cid_fern,
 			param2 = "grass_palette_index",
 		},
 	}),
@@ -1684,6 +2079,147 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_grass_taiga_2", {
 		mcl_levelgen.build_in_square (),
 		mcl_levelgen.build_heightmap ("world_surface"),
 		scan_beneath_leaves,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_grass_forest", {
+	configured_feature = "mcl_levelgen:patch_grass",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		scan_beneath_leaves_far,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:block_jungle_grass", {
+	feature = "mcl_levelgen:simple_block",
+	content = C ({
+		{
+			weight = 3,
+			cid = cid_tallgrass,
+			param2 = "grass_palette_index",
+		},
+		{
+			weight = 1,
+			cid = cid_fern,
+			param2 = "grass_palette_index",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_grass_jungle", {
+	feature = "mcl_levelgen:random_patch",
+	placed_feature = {
+		configured_feature = "mcl_levelgen:block_jungle_grass",
+		placement_modifiers = {
+			function (x, y, z, rng)
+				local cid, _ = get_block (x, y, z)
+				if cid == cid_air then
+					local cid, _ = get_block (x, y - 1, 0)
+					if cid ~= cid_podzol then
+						return { x, y, z, }
+					end
+				end
+				return nil
+			end,
+		},
+	},
+	tries = 32,
+	xz_spread = 7,
+	y_spread = 3,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_grass_jungle", {
+	configured_feature = "mcl_levelgen:patch_grass_jungle",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWENTY_FIVE),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		scan_beneath_leaves_far,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:block_large_fern", {
+	feature = "mcl_levelgen:simple_block",
+	content = function (_, _, _, _)
+		return cid_double_fern, "grass_palette_index"
+	end,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_large_fern", {
+	feature = "mcl_levelgen:random_patch",
+	placed_feature = {
+		configured_feature = "mcl_levelgen:block_large_fern",
+		placement_modifiers = {
+			require_air,
+		},
+	},
+	tries = 96,
+	xz_spread = 7,
+	y_spread = 3,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_large_fern", {
+	configured_feature = "mcl_levelgen:patch_large_fern",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (5),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		scan_beneath_leaves,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:block_dead_bush", {
+	feature = "mcl_levelgen:simple_block",
+	content = function (_, _, _, _)
+		return cid_dead_bush, 0
+	end,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_dead_bush", {
+	feature = "mcl_levelgen:random_patch",
+	placed_feature = {
+		configured_feature = "mcl_levelgen:block_dead_bush",
+		placement_modifiers = {
+			require_air,
+		},
+	},
+	tries = 4,
+	xz_spread = 7,
+	y_spread = 3,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_dead_bush", {
+	configured_feature = "mcl_levelgen:patch_dead_bush",
+	placement_modifiers = {
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_dead_bush_2", {
+	configured_feature = "mcl_levelgen:patch_dead_bush",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_dead_bush_badlands", {
+	configured_feature = "mcl_levelgen:patch_dead_bush",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWENTY),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		scan_beneath_leaves_for_terracotta,
 		mcl_levelgen.build_in_biome (),
 	},
 })
