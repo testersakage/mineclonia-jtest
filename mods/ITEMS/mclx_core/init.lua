@@ -39,12 +39,12 @@ core.register_node("mclx_core:river_water_flowing", table.merge(water_f, {
 	_on_bottle_place = mcl_core.get_bottle_place_on_water("mcl_potions:river_water"),
 	special_tiles = {
 		{
-			image="default_river_water_flowing_animated.png",
+			name = "default_river_water_flowing_animated.png",
 			backface_culling=false,
 			animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=4.0}
 		},
 		{
-			image="default_river_water_flowing_animated.png",
+			name = "default_river_water_flowing_animated.png",
 			backface_culling=false,
 			animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=4.0}
 		},
