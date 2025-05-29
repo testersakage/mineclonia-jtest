@@ -423,8 +423,10 @@ core.register_abm({
 		if not below then
 			return
 		end
-		-- Pop out flower if not on dirt, grass block or too low brightness
-		if (below.name ~= "mcl_core:dirt" and core.get_item_group(below.name, "grass_block") ~= 1 and below.name ~= "mcl_lush_caves:moss") or (core.get_node_light(pos, 0.5) < 8) then
+		-- Pop out flower if not on dirt, or grass block.
+		if (below.name ~= "mcl_core:dirt"
+		    and core.get_item_group(below.name, "grass_block") ~= 1
+		    and below.name ~= "mcl_lush_caves:moss") then
 			core.dig_node(pos)
 			return
 		end

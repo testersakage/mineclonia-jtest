@@ -260,3 +260,6 @@ mcl_flowerpots.register_potted_flower("mcl_lush_caves:azalea_flowering", {
 	desc = S("Flowering Azalea Plant"),
 	image = "mcl_lush_caves_azalea_flowering_side.png",
 })
+
+dofile (modpath .. "/lg_register.lua")
+mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")
