@@ -38,6 +38,17 @@ If NORMALIZE_YPROB is true, replace each Y slice's generation
 probability with the maximum possible value.  This is significant with
 misbegotten schematics that expect such slices always to be generated.
 
+Function: mcl_levelgen.register_notification_handler (NAME, HANDLER)
+
+Register a function to be invoked whenever a placement run where it
+has been requested completes.  NAME is an identifier that may be
+provided to `mcl_levelgen.notify_generated', and HANDLER is a function
+that is invoked with two arguments, to wit, NAME and the data provided
+to `mcl_levelgen.notify_generated', or a list thereof if
+`mcl_levelgen.notify_generated' was invoked with APPEND set to true.
+
+This function must be invoked at top level during mod initialization.
+
 Variable: mcl_levelgen.is_levelgen_environment
 
 Value is true if this environment is one in which a registered script
@@ -372,6 +383,23 @@ Return a `param2' value suitable for transforming a block whose
 `paramtype2' is `wallmounted' to rest against a sturdy face contacting
 it in the direction DIR (either -1 or 1) along the axis AXIS (one of
 "x", "y", and "z").
+
+Function: mcl_levelgen.notify_generated (NAME, DATA, APPEND)
+
+Arrange to invoke the generation handler identified by NAME (see
+`mcl_levelgen.register_notification_handler') after this placement run
+completes.  DATA is data to be provided to this handler; if APPEND is
+false, invoke the handler once for each call to this function, with
+DATA as its sole argument.  Otherwise, aggregate DATA into one or more
+lists, and provide these lists to handler functions in its stead.
+
+Behavior is undefined if `notify_generated' is ever called with the
+same NAME but inconsistent values of APPEND.
+
+Function: mcl_levelgen.convert_level_position (X, Y, Z)
+
+Return the position X, Y, Z, converted into Minetest's coordinate
+system.
 
 
 PLACEMENT MODIFIERS
@@ -950,6 +978,17 @@ variable number of times contingent on the value of the biome selector
 noise at the said position.  ABOVE_NOISE is the number of duplications
 to perform when the noise exceeds NOISE_LEVEL, and BELOW_NOISE is that
 number otherwise.
+
+Function: mcl_levelgen.build_noise_based_count (NOISE_TO_COUNT_RATIO,
+						NOISE_FACTOR,
+						NOISE_OFFSET)
+
+Return a placement modifier which duplicates the input position by a
+multiple of the value of the biome selector noise at the said position.
+
+Despite their names, NOISE_FACTOR is the persistence (inverse of
+frequency) at which the noise will be sampled and NOISE_TO_COUNT_RATIO
+is the amplitude of its results.
 
 Function: mcl_levelgen.build_in_square ()
 
