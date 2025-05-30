@@ -447,13 +447,22 @@ end
 --------------------------------------------------------------------------------
 
 -- List of supported surfaces for seagrass and kelp.
+-- Note that Minecraft supports placing kelp on all surfaces but magma
+-- blocks.
 kelp.surfaces = {
-	{ name="dirt",    nodename="mcl_core:dirt",    },
-	{ name="sand",    nodename="mcl_core:sand",    },
-	{ name="redsand", nodename="mcl_core:redsand", },
-	{ name="gravel",  nodename="mcl_core:gravel",  },
+	{ name="dirt",		nodename="mcl_core:dirt",		},
+	{ name="sand",		nodename="mcl_core:sand",		},
+	{ name="redsand",	nodename="mcl_core:redsand",		},
+	{ name="gravel",	nodename="mcl_core:gravel",		},
+	{ name="stone",		nodename="mcl_core:stone",		},
+	{ name="andesite",	nodename="mcl_core:andesite",		},
+	{ name="cobble",	nodename="mcl_core:cobble",		},
+	{ name="diorite",	nodename="mcl_core:diorite",		},
+	{ name="clay",		nodename="mcl_core:clay",		},
+	{ name="granite",	nodename="mcl_core:granite",		},
+	{ name="sandstone",	nodename="mcl_core:sandstone",		},
+	{ name="redsandstone",	nodename="mcl_core:redsandstone",	},
 }
-kelp.registered_surfaces = {}
 
 -- Commented properties are the ones obtained using register_kelp_surface.
 -- If you define your own properties, it overrides the default ones.
@@ -544,6 +553,15 @@ function kelp.register_kelp_surface(surface, surface_deftemplate, surface_docs)
 	surface_deftemplate._mcl_falling_node_alternative = surface_deftemplate._mcl_falling_node_alternative or (falling_node and nodename or nil)
 
 	core.register_node(surfacename, surface_deftemplate)
+
+	if core.ipc_get then
+		local surfaces = core.ipc_get ("mcl_ocean:registered_kelp_surfaces") or {}
+		table.insert (surfaces, {
+			name = name,
+			nodename = nodename,
+		})
+		core.ipc_set ("mcl_ocean:registered_kelp_surfaces", surfaces)
+	end
 end
 
 -- Kelp surfaces nodes ---------------------------------------------------------
@@ -650,3 +668,24 @@ core.register_abm({
 	catch_up = false,
 	action = grow_kelp,
 })
+
+--------------------------------------------------------------------------------
+-- Async feature generation.
+--------------------------------------------------------------------------------
+
+local function unpack4 (x)
+	return x[1], x[2], x[3], x[4]
+end
+
+local v = vector.zero ()
+
+mcl_levelgen.register_notification_handler ("mcl_ocean:kelp_age", function (_, poses_with_age)
+	for _, gendata in ipairs (poses_with_age) do
+		local age
+		v.x, v.y, v.z, age = unpack4 (gendata)
+		local node = core.get_node (v)
+		if core.get_item_group (node.name, "kelp") >= 1 then
+			store_age (v, age)
+		end
+	end
+end)

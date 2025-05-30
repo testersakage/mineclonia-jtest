@@ -104,7 +104,7 @@ function mcl_levelgen.encode_biomes (biomes, y0, yh, w, h, hash_for_testing)
 					local ybase = base
 					for iy = 0, N - 1 do
 						for iz = 1, N do
-							local b = biomes[base - iz]
+							local b = biomes[ybase - iz]
 							if b == biome or not biome then
 								n = n + 1
 							else
@@ -168,6 +168,28 @@ function mcl_levelgen.expand_biome_list (list, dest, seen)
 	end
 end
 
+function mcl_levelgen.debug_biome_list (list)
+	local i, n = 1, #list
+	local biomes = {}
+	while i <= n do
+		local nbiomes = byte (list, i)
+		local biome = byte (list, i + 1)
+		for k = 1, nbiomes do
+			insert (biomes, id_to_name_map[biome])
+		end
+		i = i + 2
+	end
+	print (#biomes .. " biome entries")
+	for y = N - 1, 0, -1 do
+		for x = 0, N - 1 do
+			local idx = x * N * N + y * N
+			print (string.format (" (%d): %-24s %-24s %-24s %-24s",
+					      y, biomes[idx + 1], biomes[idx + 2],
+					      biomes[idx + 3], biomes[idx + 4]))
+		end
+	end
+end
+
 ------------------------------------------------------------------------
 -- Biome data storage.
 ------------------------------------------------------------------------
@@ -201,7 +223,7 @@ local function sample_biome (qx, qy, qz) -- TODO: multiple levels.
 	return overworld_preset:index_biomes (qx, qy, qz)
 end
 
-function mcl_levelgen.get_biome (pos, allow_sample)
+function mcl_levelgen.get_biome (pos, allow_sample, always_sample)
 	v.x = floor (pos.x + 0.5)
 	v.y = floor (pos.y + 0.5)
 	v.z = floor (pos.z + 0.5)
@@ -209,6 +231,9 @@ function mcl_levelgen.get_biome (pos, allow_sample)
 	local qx, qy, qz = munge_biome_coords (seed, mc_pos.x,
 					       mc_pos.y,
 					       mc_pos.z)
+	if always_sample then
+		return sample_biome (qx, qy, qz)
+	end
 	qz = -qz - 1
 	qy = qy - OVERWORLD_OFFSET / 4
 

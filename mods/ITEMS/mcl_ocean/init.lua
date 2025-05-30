@@ -1,16 +1,20 @@
 mcl_ocean = {}
+local modpath = core.get_modpath (core.get_current_modname ())
 
 -- Prismarine (includes sea lantern)
-dofile(core.get_modpath(core.get_current_modname()).."/prismarine.lua")
+dofile(modpath.."/prismarine.lua")
 
 -- Corals
-dofile(core.get_modpath(core.get_current_modname()).."/corals.lua")
+dofile(modpath.."/corals.lua")
 
 -- Seagrass
-dofile(core.get_modpath(core.get_current_modname()).."/seagrass.lua")
+dofile(modpath.."/seagrass.lua")
 
 -- Kelp
-dofile(core.get_modpath(core.get_current_modname()).."/kelp.lua")
+dofile(modpath.."/kelp.lua")
 
 -- Sea Pickle
-dofile(core.get_modpath(core.get_current_modname()).."/sea_pickle.lua")
+dofile(modpath.."/sea_pickle.lua")
+
+-- Async feature registration.
+mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")

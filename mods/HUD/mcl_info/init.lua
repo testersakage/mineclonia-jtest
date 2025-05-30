@@ -188,10 +188,11 @@ mcl_info.register_debug_field("Biome",{
 	func = function(_, pos)
 		if mcl_levelgen.levelgen_enabled then
 			local biome = mcl_levelgen.get_biome (pos)
+			local biome_sampled = mcl_levelgen.get_biome (pos, true, true)
 			if biome then
-				return biome
+				return biome .. " / " .. biome_sampled
 			else
-				return "No biome"
+				return "No biome / " .. biome_sampled
 			end
 		else
 			local biome_data = core.get_biome_data (pos)
