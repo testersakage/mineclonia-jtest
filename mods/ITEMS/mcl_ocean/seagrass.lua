@@ -148,6 +148,9 @@ for s=1, #surfaces do
 		doc.add_entry_alias("nodes", "mcl_ocean:seagrass_dirt", "nodes", "mcl_ocean:seagrass_"..surfaces[s][1])
 	end
 end
+if core.ipc_set then
+	core.ipc_set ("mcl_ocean:seagrass_surfaces", surfaces)
+end
 
 if mod_doc then
 	doc.add_entry_alias("nodes", "mcl_ocean:seagrass_dirt", "craftitems", "mcl_ocean:seagrass")

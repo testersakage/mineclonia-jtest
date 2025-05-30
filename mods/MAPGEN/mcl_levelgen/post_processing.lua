@@ -71,6 +71,7 @@ local mathmax = math.max
 local SS = 256
 local SSHIFT = 8
 local HEIGHT = 32
+local HEIGHT_SHIFT = 5
 local NUMBER_BITS = 4
 local INDICES = floor ((SS * HEIGHT * SS * 8 + NUMBER_BITS - 1) / NUMBER_BITS)
 
@@ -548,12 +549,71 @@ local function test_block_status (x, y, z)
 		and mathabs (dz) <= generation_radius + 1
 end
 
+local function nearest_power_of_2 (x)
+	local k, m = 1, 0
+	while x > k do
+		k = lshift (k, 1)
+		m = m + 1
+	end
+	return k, m
+end
+
+local mbs_cache = { }
+local mbs_cache_width, mbs_cache_shift_base
+	= nearest_power_of_2 ((generation_radius + REQUIRED_CONTEXT_XZ + 1) * 2 + 1)
+local mbs_cache_shift_x = mbs_cache_shift_base + HEIGHT_SHIFT
+
+local mbs_cache_min_x
+local mbs_cache_min_y
+local mbs_cache_min_z
+
+local function local_set_mapblock_state (x, y, z, state)
+	set_mapblock_state (x, y, z, state)
+	local ix = x - mbs_cache_min_x
+	local iy = y - mbs_cache_min_y
+	local iz = z - mbs_cache_min_z
+	-- assert (ix >= 0 and iy >= 0 and iz >= 0
+	-- 	and ix < mbs_cache_width
+	-- 	and iy < HEIGHT
+	-- 	and iz < mbs_cache_width)
+	local hash = bor (lshift (ix, mbs_cache_shift_x),
+			  lshift (iz, HEIGHT_SHIFT), iy) + 1
+	mbs_cache[hash] = state
+end
+
+local function local_mapblock_state (x, y, z)
+	local ix = x - mbs_cache_min_x
+	local iy = y - mbs_cache_min_y
+	local iz = z - mbs_cache_min_z
+	-- assert (ix >= 0 and iy >= 0 and iz >= 0
+	-- 	and ix < mbs_cache_width
+	-- 	and iy < HEIGHT
+	-- 	and iz < mbs_cache_width)
+	local hash = bor (lshift (ix, mbs_cache_shift_x),
+			  lshift (iz, HEIGHT_SHIFT), iy) + 1
+	local k = mbs_cache[hash]
+	if k then
+		return k
+	end
+	k = mapblock_state (x, y, z)
+	mbs_cache[hash] = k
+	return k
+end
+
+local function clear_mbs_cache (width)
+	local nelem = width * HEIGHT * width
+	for i = 1, nelem do
+		mbs_cache[i] = false
+	end
+end
+
 local surroundings = {
 }
 
 for x = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
 	for z = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
-		if mathabs (x) > REQUIRED_CONTEXT_XZ then
+		if mathabs (x) > REQUIRED_CONTEXT_XZ
+			or mathabs (z) > REQUIRED_CONTEXT_XZ then
 			table.insert (surroundings, x)
 			table.insert (surroundings, z)
 		end
@@ -564,35 +624,50 @@ local all_surroundings = {
 }
 
 for x = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
-	for z = REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
-		table.insert (all_surroundings, x, z)
+	for z = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
+		table.insert (all_surroundings, x)
+		table.insert (all_surroundings, z)
 	end
 end
 
 local n_surroundings = #surroundings
+local n_all_surroundings = #all_surroundings
 
 local function vertical_context_generated (x, y, z)
 	if y > OVERWORLD_MAX_BLOCK or y < OVERWORLD_MIN_BLOCK then
 		return true
 	end
-	for x = x - REQUIRED_CONTEXT_XZ - 1, x + REQUIRED_CONTEXT_XZ + 1 do
-		for z = z - REQUIRED_CONTEXT_XZ - 1, z + REQUIRED_CONTEXT_XZ + 1 do
-			if mapblock_state (x, y, z) == MBS_UNKNOWN then
-				return false
-			end
+	-- for x = x - REQUIRED_CONTEXT_XZ - 1, x + REQUIRED_CONTEXT_XZ + 1 do
+	-- 	for z = z - REQUIRED_CONTEXT_XZ - 1, z + REQUIRED_CONTEXT_XZ + 1 do
+	-- 		if local_mapblock_state (x, y, z) == MBS_UNKNOWN then
+	-- 			return false
+	-- 		end
+	-- 	end
+	-- end
+	for i = 1, n_all_surroundings, 2 do
+		local dx = all_surroundings[i]
+		local dz = all_surroundings[i + 1]
+		if local_mapblock_state (x + dx, y, z + dz) == MBS_UNKNOWN then
+			return false
 		end
 	end
 	return true
 end
 
-local function adequate_context_exists_p (x, y, z)
+local function adequate_context_exists_p (x, y, z, curstate)
 	for x = x - REQUIRED_CONTEXT_XZ, x + REQUIRED_CONTEXT_XZ do
 		for z = z - REQUIRED_CONTEXT_XZ, z + REQUIRED_CONTEXT_XZ do
-			if mapblock_state (x, y, z) < MBS_PROTO_CHUNK
+			if local_mapblock_state (x, y, z) < MBS_PROTO_CHUNK
 				or not test_block_status (x, y, z) then
 				return false
 			end
 		end
+	end
+
+	if curstate == MBS_GENERATED then
+		-- A MapBlock can't have been generated unless its
+		-- surroundings were previously.
+		return true
 	end
 
 	-- Verify that a further MapBlock's margin around the context
@@ -601,7 +676,7 @@ local function adequate_context_exists_p (x, y, z)
 	for i = 1, n_surroundings, 2 do
 		local x = x + surroundings[i]
 		local z = z + surroundings[i + 1]
-		if mapblock_state (x, y, z) == MBS_UNKNOWN then
+		if local_mapblock_state (x, y, z) == MBS_UNKNOWN then
 			return false
 		end
 	end
@@ -637,12 +712,12 @@ local function queue_mapblock_run (x, y_start, y_end, z, d)
 			for y = context_start, context_end do
 				local rec = mb_records[hashmapblock (x, y, z)]
 				assert (not rec or rec == run)
-				local state = mapblock_state (x, y, z)
+				local state = local_mapblock_state (x, y, z)
 				if state == MBS_PROTO_CHUNK then
-					set_mapblock_state (x, y, z, MBS_LOCKED)
+					local_set_mapblock_state (x, y, z, MBS_LOCKED)
 					-- record_whohasit (x, y, z, run)
 				elseif state == MBS_GENERATED then
-					set_mapblock_state (x, y, z, MBS_LOCKED_GENERATED)
+					local_set_mapblock_state (x, y, z, MBS_LOCKED_GENERATED)
 					-- record_whohasit (x, y, z, run)
 				else
 					-- dbg ("MapBlock conflict: ", x, y, z,
@@ -657,7 +732,7 @@ local function queue_mapblock_run (x, y_start, y_end, z, d)
 	-- Enqueue this run of MapBlocks.
 	for y = y_start, y_end do
 		assert (mapblock_state (x, y, z) == MBS_LOCKED)
-		set_mapblock_state (x, y, z, MBS_REGENERATING)
+		local_set_mapblock_state (x, y, z, MBS_REGENERATING)
 	end
 	feature_placement_queue:enqueue (run, d)
 	-- dbg ("  --> Feature placement queue: " .. dump (feature_placement_queue))
@@ -704,9 +779,10 @@ local function attempt_feature_placement (player_x, player_y, player_z, x, z)
 			end
 		end
 
-		local context_adequate = adequate_context_exists_p (x, y, z)
-		if mapblock_state (x, y, z) == MBS_PROTO_CHUNK
-			and context_adequate then
+		local curstate = local_mapblock_state (x, y, z)
+		local context_adequate
+			= adequate_context_exists_p (x, y, z, curstate)
+		if curstate == MBS_PROTO_CHUNK and context_adequate then
 			local min = mathmax (-(y - OVERWORLD_MIN_BLOCK - 2), 0)
 			local max = mathmax (-(OVERWORLD_MAX_BLOCK - y - 2), 0)
 			local required_below = REQUIRED_CONTEXT_Y - min
@@ -805,19 +881,23 @@ local function async_function (vm, run, heightmap, biomes)
 	-- 	end
 	-- end
 	local preset = mcl_levelgen.overworld_preset
-	local relight_list
+	local relight_list, gen_notifies
 		= mcl_levelgen.process_features (vm, run, heightmap, biomes,
 						 OVERWORLD_OFFSET, preset.min_y,
 						 preset.height, preset)
-	return vm, run, heightmap, relight_list
+	return vm, run, heightmap, relight_list, gen_notifies
 end
 
 local v1 = vector.zero ()
 local v2 = vector.zero ()
+local warned = {}
+local registered_notification_handlers = {}
+mcl_levelgen.registered_notification_handlers
+	= registered_notification_handlers
 
 local apply_heightmap_modifications
 
-local function run_execution_cb (vm, run, heightmap, relight_queue)
+local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies)
 	-- It appears that this calback is occasionally called oftener
 	-- than once.
 	local run_hash = hashmapblock (run.x, run.y1, run.z)
@@ -875,6 +955,17 @@ local function run_execution_cb (vm, run, heightmap, relight_queue)
 		v2.x, v2.y, v2.z = rgn[4], rgn[5], rgn[6]
 		core.fix_light (v1, v2)
 	end
+
+	for _, notify in ipairs (gen_notifies) do
+		local name = notify.name
+		local handler = registered_notification_handlers[name]
+		if not handler and not warned[name] then
+			warned[name] = true
+			core.log ("warning", "Invoking unknown feature generation handler: " .. name)
+		elseif handler then
+			handler (notify.name, notify.data)
+		end
+	end
 end
 
 local function cancel_mapblock_run (run, y_min, y_max)
@@ -926,32 +1017,6 @@ local function post_mapblock_run (run)
 	local y_max = mathmin (run.y2 + REQUIRED_CONTEXT_Y,
 			       OVERWORLD_MAX_BLOCK)
 
-	-- Verify that none of the run's context adjoins a MapBlock
-	-- that is being emerged, as otherwise it may be overwritten
-	-- after post-processing by an emerge thread despite the
-	-- checks in adequate_context_exists_p & co.
-
-	for y = run.y1 - REQUIRED_CONTEXT_Y - 1, run.y2 + REQUIRED_CONTEXT_Y + 1 do
-		v.y = y * 16
-		local array = (y <= run.y1 - REQUIRED_CONTEXT_Y
-			       or y >= run.y2 + REQUIRED_CONTEXT_Y)
-			and all_surroundings or surroundings
-		local n_surroundings = #array
-
-		for i = 1, n_surroundings, 2 do
-			local x = run.x + array[i]
-			local z = run.z + array[i + 1]
-
-			v.x = x * 16
-			v.z = z * 16
-			if compare_block_status (v, "emerging")
-				and not compare_block_status (v, "loaded") then
-				feature_placement_queue:enqueue (run, run.priority + 120)
-				return
-			end
-		end
-	end
-
 	-- Verify that the context of the run is consistent, and
 	-- abandon it if it has since been unloaded.
 	for x = run.x - REQUIRED_CONTEXT_XZ,
@@ -1001,11 +1066,18 @@ local function schedule_regeneration (dtime)
 	-- the quantity of generation context available.  Dispatch the
 	-- generation queue.
 
+	-- local clock = core.get_us_time ()
+
 	for player in mcl_util.connected_players () do
 		local pos = mcl_util.get_nodepos (player:get_pos ())
 		local x = floor (pos.x / 16)
 		local y = floor (pos.y / 16)
 		local z = floor (pos.z / 16)
+
+		mbs_cache_min_x = x - generation_radius - 3
+		mbs_cache_min_y = OVERWORLD_MIN_BLOCK
+		mbs_cache_min_z = z - generation_radius - 3
+		clear_mbs_cache (mbs_cache_width)
 
 		player_x, player_y, player_z = x, y, z
 		attempt_feature_placement (x, y, z, x, z)
@@ -1045,6 +1117,8 @@ local function schedule_regeneration (dtime)
 			cnt = cnt + 2
 		end
 	end
+
+	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
 
 	local start_time = core.get_us_time ()
 	repeat
@@ -1608,6 +1682,15 @@ end)
 core.register_on_leaveplayer (function (player)
 	huds[player] = nil
 end)
+
+------------------------------------------------------------------------
+-- Scripting interface.
+------------------------------------------------------------------------
+
+function mcl_levelgen.register_notification_handler (name, handler)
+	assert (type (name) == "string")
+	registered_notification_handlers[name] = handler
+end
 
 ------------------------------------------------------------------------
 -- Async environment registration.
