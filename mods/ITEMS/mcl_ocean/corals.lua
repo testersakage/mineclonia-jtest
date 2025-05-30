@@ -8,6 +8,7 @@ local corals = {
 	{ "fire", S("Fire Coral Block"), S("Dead Fire Coral Block"), S("Fire Coral"), S("Dead Fire Coral"), S("Fire Coral Fan"), S("Dead Fire Coral Fan") },
 	{ "horn", S("Horn Coral Block"), S("Dead Horn Coral Block"), S("Horn Coral"), S("Dead Horn Coral"), S("Horn Coral Fan"), S("Dead Horn Coral Fan") },
 }
+mcl_ocean.corals = corals
 
 local function coral_on_place(itemstack, placer, pointed_thing)
 	if pointed_thing.type ~= "node" or not placer then
@@ -241,6 +242,10 @@ for c=1, #corals do
 		doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral_fan", "nodes", "mcl_ocean:dead_"..id.."_coral_fan")
 		doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral_block", "nodes", "mcl_ocean:dead_"..id.."_coral_block")
 	end
+end
+
+if core.ipc_set then
+	core.ipc_set ("mcl_ocean:coral_types", corals)
 end
 
 -- Turn corals and coral fans to dead corals if not inside a water source

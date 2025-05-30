@@ -1643,7 +1643,8 @@ if luajit_present then
 	-- jit.off (mob_class.gwp_essay_drop, true)
 	-- jit.off (mob_class.gwp_essay_jump, true)
 	jit.opt.start ("maxtrace=24000", "maxrecord=32000",
-		       "minstitch=3", "maxmcode=163840")
+		       "minstitch=3", "maxmcode=163840",
+		       "loopunroll=40", "maxside=1000")
 end
 
 ----------------------------------------------------------------------------------

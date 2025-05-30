@@ -266,8 +266,7 @@ function mcl_levelgen.register_configured_feature (id, configured_feature)
 	assert (configured_feature.feature)
 	if not registered_features[configured_feature.feature] then
 		error ("Configured feature " .. id .. " refers to a feature "
-		       .. placed_feature.configured_feature
-		       .. " that does not exist")
+		       .. configured_feature.feature .. " that does not exist")
 	end
 	registered_configured_features[id] = configured_feature
 end
@@ -391,7 +390,7 @@ local REQUIRED_CONTEXT_XZ = mcl_levelgen.REQUIRED_CONTEXT_XZ
 local cids, param2s = {}, {}
 local area = nil
 local vm_modified = false
-local relight_rgn = {}
+local relight_rgn, gen_notifies = nil, {}
 local heightmap_modifications
 local preset
 
@@ -404,6 +403,13 @@ mcl_levelgen.heightmap_modifications = heightmap_modifications
 
 local function collect_unlit_region (aabb, list)
 	insert (list, aabb)
+end
+
+function mcl_levelgen.convert_level_position (x, y, z)
+	local dz = z - run_min_z
+	local run_origin = (run.z - REQUIRED_CONTEXT_XZ) * 16
+	local z = run_origin + (HEIGHTMAP_SIZE_NODES - dz - 1)
+	return x, y - y_offset, z
 end
 
 function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_offset,
@@ -427,6 +433,7 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 	heightmap_modifications = {}
 	mcl_levelgen.heightmap_modifications = heightmap_modifications
 	preset = p_preset
+	gen_notifies = {}
 
 	run_min_y = mathmax ((run.y1 - REQUIRED_CONTEXT_Y) * 16 + p_y_offset,
 			     p_level_min)
@@ -463,7 +470,7 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 	biomes = nil
 	heightmap = nil
 	cids, param2s = {}, {}
-	return relight_list
+	return relight_list, gen_notifies
 end
 
 local function is_not_air (cid, param2)
@@ -1073,6 +1080,25 @@ function mcl_levelgen.process_features_1 ()
 			end
 		end
 	end
+end
+
+function mcl_levelgen.notify_generated (name, data, append)
+	assert (type (name) == "string")
+	if append then
+		local last_generated = gen_notifies[#gen_notifies]
+		if last_generated and last_generated.name == name then
+			assert (last_generated.append)
+			insert (last_generated.data, data)
+			return
+		end
+		data = { data, }
+	end
+
+	insert (gen_notifies, {
+		name = name,
+		data = data,
+		append = append,
+	})
 end
 
 end
