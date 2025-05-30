@@ -622,6 +622,22 @@ function mcl_levelgen.build_noise_threshold_count (noise_level, above_noise,
 	end
 end
 
+function mcl_levelgen.build_noise_based_count (noise_to_count_ratio, noise_factor,
+					       noise_offset)
+	return function (x, y, z, rng)
+		local noise = BIOME_SELECTOR_NOISE (x / noise_factor,
+						    z / noise_factor)
+		local cnt = ceil ((noise + noise_offset) * noise_to_count_ratio)
+		local results = {}
+		for i = 1, cnt do
+			results[#results + 1] = x
+			results[#results + 1] = y
+			results[#results + 1] = z
+		end
+		return results
+	end
+end
+
 local function in_square (x, y, z, rng)
 	return {
 		x + rng:next_within (16),
