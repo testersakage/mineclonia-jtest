@@ -849,42 +849,28 @@ end
 
 local REGENERATION_QUOTA_US = 8000
 
+if mcl_levelgen.load_feature_environment then
+	-- This global variable holds the last VM to be supplied to
+	-- async_function.  It exists as, for reasons that ought to
+	-- require no explanation, a VM cannot be closed before the
+	-- function returns.
+	levelgen_previous_vm = nil
+end
+
 local function async_function (vm, run, heightmap, biomes)
+	if levelgen_previous_vm and levelgen_previous_vm.close then
+		levelgen_previous_vm:close ()
+	end
 	-- These constants must be redundantly defined within this
 	-- function, as constants in upvalues are not transferred to
 	-- the async environment.
 	local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
-
-	-- local rshift = bit.rshift
-	-- local band = bit.band
-	-- local function unpack_height_map (vals)
-	-- 	local bias = 512
-	-- 	local bits = 10
-	-- 	local mask = 0x3ff
-	-- 	local surface = rshift (vals, bits) - bias
-	-- 	local motion_blocking = band (vals, mask) - bias
-	-- 	return surface, motion_blocking
-	-- end
-
-	-- -- Cover the surface of the level in glass.
-	-- local x, y1, y2, z = run.x * 16, run.y1 * 16, run.y2 * 16 + 15, run.z * 16
-	-- for y = y1, y2 do
-	-- 	for z1 = z, z + 15 do
-	-- 		for x1 = x, x + 15 do
-	-- 			local idx = (x1 - x + 16) * 48 + (48 - (z1 - z + 16) - 1) + 1
-	-- 			local surface = (unpack_height_map (heightmap[idx])) - 128
-	-- 			local v = vector.new (x1, surface, z1)
-	-- 			vm:set_node_at (v, {
-	-- 				name = "mcl_core:glass_magenta",
-	-- 			})
-	-- 		end
-	-- 	end
-	-- end
 	local preset = mcl_levelgen.overworld_preset
 	local relight_list, gen_notifies
 		= mcl_levelgen.process_features (vm, run, heightmap, biomes,
 						 OVERWORLD_OFFSET, preset.min_y,
 						 preset.height, preset)
+	levelgen_previous_vm = vm
 	return vm, run, heightmap, relight_list, gen_notifies
 end
 
@@ -908,7 +894,11 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 	end
 	mb_records[run_hash] = nil
 
-	vm:write_to_map (false, true)
+	vm:write_to_map (false)
+	-- 5.13.0 only API.
+	if vm.close then
+		vm:close ()
+	end
 
 	-- Unlock all MapBlocks that were locked for the duration of
 	-- this run.
@@ -1045,6 +1035,9 @@ local function post_mapblock_run (run)
 	local vm = VoxelManip (v1, v2)
 	core.handle_async (async_function, run_execution_cb, vm, run,
 			   heightmap, biomes)
+	if vm.close then
+		vm:close ()
+	end
 
 	-- mb_records will continue to hold `run' until such time as
 	-- it completely processed as a further test of consistency.
