@@ -98,8 +98,8 @@ local function limit_put(_, inventory, index, stack, count)
 
 	local old_stack = inventory:get_stack("armor", element_index)
 
-	if old_stack:is_empty() or index ~= 1 and old_stack:get_name() ~= stack:get_name() and count <= 1 then
-		return count
+	if old_stack:is_empty() or (index ~= 1 and old_stack:get_name() ~= stack:get_name()) then
+		return math.min(1, count)
 	else
 		return 0
 	end
