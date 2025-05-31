@@ -199,6 +199,8 @@ local FULL_BLOCK = decompose_AABBs ({{
 local cid_ice
 local cid_packed_ice
 local cid_mud
+local cid_mangrove_propagule
+local cid_hanging_mangrove_propagule
 local cid_soul_sand
 local cid_honey_block
 local cid_dead_bush
@@ -215,6 +217,7 @@ local is_cid_double_plant = {}
 local is_cid_bush = {}
 local is_cid_leaf = {}
 local is_cid_terracotta = {}
+local is_cid_soil_propagule = {}
 local double_plant_tops = {}
 local paramtype2 = {}
 local mathmin = math.min
@@ -225,6 +228,9 @@ local function initialize_nodeprops ()
 	cid_ice = core.get_content_id ("mcl_core:ice")
 	cid_packed_ice = core.get_content_id ("mcl_core:packed_ice")
 	cid_mud = core.get_content_id ("mcl_mud:mud")
+	cid_mangrove_propagule = core.get_content_id ("mcl_mangrove:propagule")
+	cid_hanging_mangrove_propagule
+		= core.get_content_id ("mcl_mangrove:hanging_propagule_1")
 	cid_soul_sand = core.get_content_id ("mcl_nether:soul_sand")
 	cid_honey_block = core.get_content_id ("mcl_honey:honey_block")
 	cid_dead_bush = core.get_content_id ("mcl_core:deadbush")
@@ -300,6 +306,9 @@ local function initialize_nodeprops ()
 		end
 		if def.groups.hardened_clay and def.groups.hardened_clay >= 1 then
 			is_cid_terracotta[cid] = true
+		end
+		if def.groups.soil_propagule and def.groups.soil_propagule >= 1 then
+			is_cid_soil_propagule[cid] = true
 		end
 		paramtype2[cid] = def.paramtype2
 	end
@@ -489,6 +498,10 @@ function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 			or cid == cid_red_sand
 			or is_cid_terracotta[cid]
 			or is_cid_dirt[cid]
+	elseif cid == cid_mangrove_propagule
+		or cid == cid_hanging_mangrove_propagule then
+		local cid, _ = get_block (x, y - 1, z)
+		return is_cid_soil_propagule[cid]
 	elseif is_cid_sapling[cid] or is_cid_bush[cid] then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_dirt[cid]

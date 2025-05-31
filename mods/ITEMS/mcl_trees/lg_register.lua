@@ -24,6 +24,7 @@ local function build_hospitability_check (cid)
 		end
 	end
 end
+mcl_trees.build_hospitability_check = build_hospitability_check
 
 local get_block = mcl_levelgen.get_block
 
@@ -59,6 +60,13 @@ local biomecolor_nodes = {}
 local registered_biomes = mcl_levelgen.registered_biomes
 local index_biome = mcl_levelgen.index_biome
 
+local function get_biome_color (x, y, z)
+	local biome = index_biome (x, y, z)
+	local def = registered_biomes[biome]
+	return 32 + def.grass_palette_index
+end
+mcl_trees.get_biome_color = get_biome_color
+
 local function apply_biome_coloration (aabb)
 	local x1, y1, z1 = aabb[1], aabb[2], aabb[3]
 	local x2, y2, z2 = aabb[4], aabb[5], aabb[6]
@@ -75,9 +83,7 @@ local function apply_biome_coloration (aabb)
 			for z = z1, z2 do
 				local cid, _ = get_block (x, y, z)
 				if biomecolor_nodes[cid] then
-					local biome = index_biome (x, y, z)
-					local def = registered_biomes[biome]
-					local idx = 32 + def.grass_palette_index
+					local idx = get_biome_color (x, y, z)
 					set_block (x, y, z, cid, idx)
 				end
 			end
@@ -280,6 +286,10 @@ local dirs = {
 	{0, -1,},
 }
 
+local beehive_param2 = {
+	3, 0, 1, 2,
+}
+
 local function place_beehive (x, y, z, cfg, rng)
 	local leaf_cid = cfg.leaf_cid
 	if rng:next_float () >= cfg.beehive_probability then
@@ -292,7 +302,8 @@ local function place_beehive (x, y, z, cfg, rng)
 	for i = 2, 8 do
 		local cid, _ = get_block (x, y + i, z)
 		if cid == leaf_cid then
-			set_block (x, y + i - 1, z, cid_bee_nest, 0)
+			set_block (x, y + i - 1, z, cid_bee_nest,
+				   beehive_param2[dir])
 			fix_lighting (x, y + i, z, x, y + i, z)
 			break
 		end
@@ -1117,4 +1128,819 @@ mcl_levelgen.register_placed_feature ("mcl_trees:trees_cherry", {
 	},
 })
 
+------------------------------------------------------------------------
+-- Procedural generation of trees.  This configured feature is only
+-- utilized by mangroves.
+--
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/TreeFeature.html
+------------------------------------------------------------------------
+
+local huge = math.huge
+
+-- local procedural_tree_cfg = {
+-- 	trunk_content = nil,
+-- 	trunk_placer = nil,
+-- 	foliage_content = nil,
+-- 	root_placer = nil,
+-- 	dirt_content = nil,
+-- 	minimum_size = nil,
+-- 	decorators = nil,
+-- 	ignore_vines = false,
+-- 	force_dirt = false,
+-- }
+
+-- local feature_size_iface = {
+-- 	min_size = nil,
+-- 	max_size = nil,
+-- 	min_clipped_height = nil,
+-- 	radius_at_height = nil,
+-- }
+
+-- local trunk_placer_iface = {
+-- 	generate_trunk = nil,
+-- 	can_replace = nil,
+-- 	get_height = nil,
+-- }
+
+-- local foliage_placer_iface = {
+-- 	offset = nil,
+-- 	radius = nil,
+-- 	generate_foliage = nil,
+-- 	get_random_height = nil,
+-- 	get_foliage_radius = nil,
+-- }
+
+-- local root_placer_iface = {
+-- 	find_trunk_pos = nil,
+-- 	generate_roots = nil,
+-- }
+
+-- Tree decorators are simply functions.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/treedecorator/TreeDecorator.html
+
+local cid_vine = core.get_content_id ("mcl_core:vine")
+local replaceable_by_trees = {
+	"air",
+	"group:leaves",
+	"group:seagrass",
+	"group:water",
+	"mcl_core:deadbush",
+	"mcl_core:vine",
+	"mcl_crimson:crimson_roots",
+	"mcl_crimson:nether_sprouts",
+	"mcl_crimson:warped_roots",
+	"mcl_flowers:double_fern",
+	"mcl_flowers:double_grass",
+	"mcl_flowers:double_grass_top",
+	"mcl_flowers:lilac",
+	"mcl_flowers:peony",
+	"mcl_flowers:rose_bush",
+	"mcl_flowers:sunflower",
+	"mcl_flowers:tallgrass",
+	"mcl_lush_caves:hanging_roots",
+	-- TODO:
+	-- "mcl_flowers:pitcher_plant",
+	-- "mcl_levelgen:glow_lichen",
+}
+mcl_trees.replaceable_by_trees = replaceable_by_trees
+
+local is_cid_replaceable_by_trees = {}
+local is_cid_wood = {}
+
+for _, cid in ipairs (mcl_levelgen.construct_cid_list (replaceable_by_trees)) do
+	is_cid_replaceable_by_trees[cid] = true
 end
+
+for _, cid in ipairs (mcl_levelgen.construct_cid_list ({"group:wood"})) do
+	is_cid_wood[cid] = true
+end
+
+local function is_vine (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_vine
+end
+
+local function gauge_headroom (tree_height, trunk_x, trunk_y, trunk_z, cfg)
+	local ignore_vines = cfg.ignore_vines
+	local size = cfg.minimum_size
+	local trunk_placer = cfg.trunk_placer
+
+	for dy = 0, tree_height + 1 do
+		local r = size:radius_at_height (tree_height, dy)
+
+		for dx = -r, r do
+			for dz = -r, r do
+				local x = trunk_x + dx
+				local y = trunk_y + dy
+				local z = trunk_z + dz
+
+				if not trunk_placer:can_replace (x, y, z)
+					or (not ignore_vines and is_vine (x, y, z)) then
+					return dy - 2 -- One additional node for foliage.
+				end
+			end
+		end
+	end
+	return tree_height
+end
+
+local function procedural_tree_place (x, y, z, cfg, rng)
+	local trunk_placer = cfg.trunk_placer
+	local foliage_placer = cfg.foliage_placer
+	local tree_height
+		= trunk_placer:get_height (rng)
+	local foliage_height
+		= foliage_placer:get_random_height (rng, tree_height, cfg)
+	local trunk_height = tree_height - foliage_height
+	local foliage_radius
+		= cfg.foliage_placer:get_foliage_radius (rng, trunk_height)
+	local trunk_x, trunk_y, trunk_z = x, y, z
+	local root_placer = cfg.root_placer
+	if root_placer then
+		trunk_x, trunk_y, trunk_z
+			= root_placer:find_trunk_pos (x, y, z, rng)
+	end
+	local min_y = mathmin (y, trunk_y)
+	local max_y = mathmax (y, trunk_y)
+
+	local level_min = mcl_levelgen.placement_level_min
+	local level_max = level_min + mcl_levelgen.placement_level_height - 1
+	if min_y <= level_min or max_y > level_max then
+		return false
+	end
+
+	local min_clipped = cfg.minimum_size.min_clipped_height
+	local free_height = gauge_headroom (tree_height, trunk_x, trunk_y,
+					    trunk_z, cfg)
+
+	if free_height >= tree_height
+		or (min_clipped and free_height >= min_clipped) then
+		if root_placer
+			and not root_placer:generate_roots (x, y, z, trunk_x, trunk_y, trunk_z,
+							    cfg, rng) then
+			return false
+		end
+
+		local generated_logs = {}
+		trunk_placer:generate_trunk (trunk_x, trunk_y, trunk_z,
+					     free_height, cfg, rng,
+					     generated_logs)
+		for _, logdata in ipairs (generated_logs) do
+			foliage_placer:generate_foliage (logdata, free_height,
+							 foliage_height,
+							 foliage_radius, cfg, rng)
+		end
+		return true
+	end
+	return false
+end
+
+local generated_blocks = {}
+local tree_minp = vector.zero ()
+local tree_maxp = vector.zero ()
+local band = bit.band
+
+local function longhash (x, y, z)
+	return (32768 + x) * 65536 * 65536 + (32768 + y) * 65536
+		+ (32768 + z)
+end
+
+local function unhash (pos)
+	return floor (pos / (65536 * 65536)) - 32768,
+		band (floor (pos / 65536), 0xffff) - 32768,
+		pos % 65536 - 32768
+end
+
+local procedural_tree_rng = mcl_levelgen.xoroshiro (ull (0), ull (0))
+
+local function tree_place (_, x, y, z, cfg, rng)
+	procedural_tree_rng:reseed (rng:next_long ())
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+
+	local rng = procedural_tree_rng
+	-- Initialize the environment for procedural tree generation.
+	tree_minp.x = huge
+	tree_minp.y = huge
+	tree_minp.z = huge
+	tree_maxp.x = -huge
+	tree_maxp.y = -huge
+	tree_maxp.z = -huge
+	generated_blocks = {}
+
+	if not procedural_tree_place (x, y, z, cfg, rng) then
+		return false
+	end
+
+	local decorators = cfg.decorators
+	for _, decorator in ipairs (decorators) do
+		decorator (rng, generated_blocks)
+	end
+	return true
+end
+
+mcl_levelgen.register_feature ("mcl_trees:tree", {
+	place = tree_place,
+})
+
+------------------------------------------------------------------------
+-- Tree placement environment.
+------------------------------------------------------------------------
+
+function mcl_trees.place_root_block (x, y, z, cid, param2)
+	local hash = longhash (x, y, z)
+	generated_blocks[hash] = "root"
+	set_block (x, y, z, cid, param2)
+	tree_minp.x = mathmin (tree_minp.x, x)
+	tree_minp.y = mathmin (tree_minp.y, y)
+	tree_minp.z = mathmin (tree_minp.z, z)
+	tree_maxp.x = mathmax (tree_maxp.x, x)
+	tree_maxp.y = mathmax (tree_maxp.y, y)
+	tree_maxp.z = mathmax (tree_maxp.z, z)
+end
+
+function mcl_trees.place_trunk_block (x, y, z, cid, param2)
+	local hash = longhash (x, y, z)
+	generated_blocks[hash] = "trunk"
+	set_block (x, y, z, cid, param2)
+	tree_minp.x = mathmin (tree_minp.x, x)
+	tree_minp.y = mathmin (tree_minp.y, y)
+	tree_minp.z = mathmin (tree_minp.z, z)
+	tree_maxp.x = mathmax (tree_maxp.x, x)
+	tree_maxp.y = mathmax (tree_maxp.y, y)
+	tree_maxp.z = mathmax (tree_maxp.z, z)
+end
+
+function mcl_trees.place_foliage_block (x, y, z, cid, param2)
+	local hash = longhash (x, y, z)
+	generated_blocks[hash] = "foliage"
+	set_block (x, y, z, cid, param2)
+	tree_minp.x = mathmin (tree_minp.x, x)
+	tree_minp.y = mathmin (tree_minp.y, y)
+	tree_minp.z = mathmin (tree_minp.z, z)
+	tree_maxp.x = mathmax (tree_maxp.x, x)
+	tree_maxp.y = mathmax (tree_maxp.y, y)
+	tree_maxp.z = mathmax (tree_maxp.z, z)
+end
+
+function mcl_trees.is_position_replaceable (x, y, z)
+	local cid, param2 = get_block (x, y, z)
+	return cid == cid_air or is_cid_replaceable_by_trees[cid], cid, param2
+end
+
+------------------------------------------------------------------------
+-- Upwards branching trunk placement.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/trunk/UpwardsBranchingTrunkPlacer.html
+------------------------------------------------------------------------
+
+local upwards_branching_trunk_placer = {
+	height_rand_b = 0,
+	height_rand_a = 0,
+	base_height = 0,
+	extra_branch_steps = nil,
+	extra_branch_length = nil,
+	place_branch_per_log_probability = nil,
+	can_grow_through = {},
+}
+
+local insert = table.insert
+
+local dirs = {
+	{ 1, 0, },
+	{ 0, 1, },
+	{ -1, 0, },
+	{ 0, -1, },
+}
+
+local indexof = table.indexof
+local is_position_replaceable = mcl_trees.is_position_replaceable
+local place_trunk_block = mcl_trees.place_trunk_block
+
+local function place_wood (x, y, z, content, grow_through, rng)
+	local valid, cid, _ = is_position_replaceable (x, y, z)
+	if valid or indexof (grow_through, cid) ~= -1 then
+		local cid, param2 = content (x, y, z, rng)
+		place_trunk_block (x, y, z, cid, param2)
+		return true
+	end
+	return false
+end
+
+local function place_trunk_branch (rng, generated_logs, free_height,
+				   x, y, z, dir, branch_length,
+				   branch_steps, content, grow_through)
+	local ymax = y + branch_length
+	local length_rem = branch_length
+
+	while length_rem < free_height and branch_steps > 0 do
+		if length_rem >= 1 then
+			ymax = y + length_rem
+			x = x + dir[1]
+			z = z + dir[2]
+			insert (generated_logs, {
+				x, ymax, z, 0, false,
+			})
+			if place_wood (x, ymax, z, content,
+				       grow_through, rng) then
+				ymax = ymax + 1
+			end
+		end
+		length_rem = length_rem + 1
+		branch_steps = branch_steps - 1
+	end
+
+	-- Was this branch of the mangrove trunk generated?
+	if ymax - y > 1 then
+		insert (generated_logs, {
+			x, ymax, z, 0, false,
+		})
+		insert (generated_logs, {
+			x, ymax - 2, z, 0, false,
+		})
+	end
+end
+
+function upwards_branching_trunk_placer:generate_trunk (trunk_x, trunk_y, trunk_z,
+							free_height, cfg, rng,
+							generated_logs)
+	local branch_probability = self.place_branch_per_log_probability
+	local content = cfg.trunk_content
+	local grow_through = self.can_grow_through
+	for dy = 0, free_height - 1 do
+		local y = trunk_y + dy
+		if place_wood (trunk_x, y, trunk_z,
+			       content, grow_through, rng)
+			and dy < free_height - 1
+			and rng:next_float () < branch_probability then
+			local dir = dirs[1 + rng:next_within (4)]
+			local branch_length_dist = self.extra_branch_length (rng)
+				- self.extra_branch_length (rng) - 1
+			local branch_steps = self.extra_branch_steps (rng)
+			local branch_length = mathmax (branch_length_dist, 0)
+			place_trunk_branch (rng, generated_logs, free_height,
+					    trunk_x, y, trunk_z,
+					    dir, branch_length, branch_steps,
+					    content, grow_through)
+		end
+
+		if dy == free_height - 1 then
+			insert (generated_logs, {
+				trunk_x, y + 1, trunk_z, 0, false,
+			})
+		end
+	end
+end
+
+function upwards_branching_trunk_placer:can_replace (x, y, z)
+	local valid, cid, _ = is_position_replaceable (x, y, z)
+	return valid or is_cid_wood[cid]
+end
+
+function upwards_branching_trunk_placer:get_height (rng)
+	local ra = self.height_rand_a
+	local rb = self.height_rand_b
+	return self.base_height
+		+ rng:next_within (ra + 1)
+		+ rng:next_within (rb + 1)
+end
+
+function mcl_trees.create_upwards_branching_trunk_placer (data)
+	return table.merge (upwards_branching_trunk_placer, data)
+end
+
+------------------------------------------------------------------------
+-- Random spread foliage placer.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/foliage/RandomSpreadFoliagePlacer.html
+------------------------------------------------------------------------
+
+local random_spread_foliage_placer = {
+	radius = nil,
+	leaf_placement_attempts = nil,
+	foliage_height = nil,
+}
+
+local place_foliage_block = mcl_trees.place_foliage_block
+
+function random_spread_foliage_placer:generate_one_foliage_block (x, y, z, content, rng)
+	local valid, _, _ = is_position_replaceable (x, y, z)
+	if not valid then
+		return false
+	else
+		local content, param2 = content (x, y, z, rng)
+		place_foliage_block (x, y, z, content, param2)
+		return true
+	end
+end
+
+function random_spread_foliage_placer:generate_foliage (logdata, free_height,
+							foliage_height,
+							foliage_radius, cfg, rng)
+	-- LOGDATA is a list of 5 elements: the position of the log, a
+	-- delta to apply to the radius of the foliage, and whether
+	-- the trunk is thicker than a single block.  The latter two
+	-- fields are not utilized by mangrove trees.
+
+	local radius = foliage_radius
+	local height = foliage_height
+	local x, y, z = logdata[1], logdata[2], logdata[3]
+	local content = cfg.foliage_content
+	for i = 1, self.leaf_placement_attempts do
+		local dx = rng:next_within (radius) - rng:next_within (radius)
+		local dy = rng:next_within (height) - rng:next_within (height)
+		local dz = rng:next_within (radius) - rng:next_within (radius)
+		self:generate_one_foliage_block (x + dx, y + dy, z + dz, content, rng)
+	end
+end
+
+function random_spread_foliage_placer:get_foliage_radius (rng, trunk_height)
+	return self.radius (rng)
+end
+
+function random_spread_foliage_placer:get_random_height (rng, tree_height, cfg)
+	return self.foliage_height (rng)
+end
+
+function mcl_trees.create_random_spread_foliage_placer (data)
+	return table.merge (random_spread_foliage_placer, data)
+end
+
+------------------------------------------------------------------------
+-- Two layers feature size.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/size/TwoLayersFeatureSize.html
+------------------------------------------------------------------------
+
+local two_layers_feature_size = {
+	limit = nil,
+	lower_size = nil,
+	upper_size = nil,
+}
+
+function two_layers_feature_size:radius_at_height (total, dy)
+	if dy < self.limit then
+		return self.lower_size
+	else
+		return self.upper_size
+	end
+end
+
+function mcl_trees.create_two_layers_feature_size (data)
+	return table.merge (two_layers_feature_size, data)
+end
+
+------------------------------------------------------------------------
+-- Pathfinding mangrove root placement.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/root/MangroveRootPlacer.html
+------------------------------------------------------------------------
+
+local mangrove_root_placement = {
+	can_grow_through = nil,
+	muddy_roots_in = nil,
+	muddy_roots_content = nil,
+	max_root_width = nil,
+	max_root_length = nil,
+	random_skew_chance = 0,
+
+	trunk_offset_y = nil,
+	root_content = nil,
+	above_root_content = nil,
+	above_root_placement_chance = nil,
+}
+
+local function manhattan3d (ax, ay, az, bx, by, bz)
+	return mathabs (ax - bx)
+		+ mathabs (az - bz)
+		+ mathabs (ay - by)
+end
+
+local function root_replaceable (self, x, y, z)
+	local valid, cid, _ = is_position_replaceable (x, y, z)
+	if not valid then
+		return indexof (self.can_grow_through, cid) ~= -1
+	end
+	return true
+end
+
+function mangrove_root_placement:find_trunk_pos (x, y, z, rng)
+	return x, y + self.trunk_offset_y (rng), z
+end
+
+local function get_viable_offshoots (self, start_x, start_y, start_z,
+				     trunk_x, trunk_y, trunk_z, dir, rng)
+	local pos_below = {
+		start_x,
+		start_y - 1,
+		start_z,
+	}
+	local pos_horiz = {
+		start_x + dir[1],
+		start_y,
+		start_z + dir[2],
+	}
+	local pos_horiz_below = {
+		start_x + dir[1],
+		start_y - 1,
+		start_z + dir[2],
+	}
+
+	local max_dist = self.max_root_width
+	local skew = self.random_skew_chance
+	local dist_to_trunk = manhattan3d (start_x, start_y, start_z,
+					   trunk_x, trunk_y, trunk_z)
+	-- Distance limit reached; extend vertically only.
+	if dist_to_trunk > max_dist then
+		return pos_below
+	elseif dist_to_trunk > max_dist - 3 then
+		-- If moving horizontally, do so at a greater incline.
+		if rng:next_float () < skew then
+			return pos_below, pos_horiz_below
+		else
+			return pos_below
+		end
+	elseif rng:next_float () < skew then
+		return pos_below
+	elseif rng:next_boolean () then
+		return pos_horiz
+	else
+		return pos_below
+	end
+
+end
+
+local function grow_offshoots (self, start_x, start_y, start_z,
+			       direction, trunk_x, trunk_y,
+			       trunk_z, list, rng, depth)
+	if depth >= self.max_root_length
+		or #list > self.max_root_length then
+		return false
+	end
+
+	local v1, v2 = get_viable_offshoots (self, start_x, start_y, start_z,
+					     trunk_x, trunk_y, trunk_z, direction,
+					     rng)
+	if root_replaceable (self, v1[1], v1[2], v1[3]) then
+		-- Not yet in contact with the ground.
+		insert (list, v1)
+		if not grow_offshoots (self, v1[1], v1[2], v1[3], direction,
+				       trunk_x, trunk_y, trunk_z, list, rng,
+				       depth + 1) then
+			return false
+		end
+	end
+	if v2 and root_replaceable (self, v2[1], v2[2], v2[3]) then
+		-- Not yet in contact with the ground.
+		insert (list, v2)
+		if not grow_offshoots (self, v2[1], v2[2], v2[3], direction,
+				       trunk_x, trunk_y, trunk_z, list, rng,
+				       depth + 1) then
+			return false
+		end
+	end
+
+	return true
+end
+
+function mangrove_root_placement:generate_roots (x, y, z, trunk_x, trunk_y, trunk_z,
+						 cfg, rng)
+	local roots = {}
+
+	for y = y, trunk_y - 1 do
+		if not root_replaceable (self, x, y, z) then
+			return false
+		end
+	end
+
+	insert (roots, {{ trunk_x, trunk_y - 1, trunk_z, }})
+	for _, direction in ipairs (dirs) do
+		local start_x = trunk_x + direction[1]
+		local start_y = trunk_y
+		local start_z = trunk_z + direction[2]
+		local list = {}
+
+		if not grow_offshoots (self, start_x, start_y, start_z,
+				       direction, trunk_x, trunk_y,
+				       trunk_z, list, rng, 0) then
+			return false
+		end
+		insert (list, { start_x, start_y, start_z, })
+		insert (roots, list)
+	end
+
+	local root_content = self.root_content
+	for _, rootlist in ipairs (roots) do
+		for _, root in ipairs (rootlist) do
+			self:place_root (root[1], root[2], root[3], rng,
+					 root_content)
+		end
+	end
+	fix_lighting (tree_minp.x, tree_minp.y, tree_minp.z,
+		      tree_maxp.x, tree_maxp.y, tree_maxp.z)
+	return true
+end
+
+local place_root_block = mcl_trees.place_root_block
+local is_air = mcl_levelgen.is_air
+
+function mangrove_root_placement:place_root (x, y, z, rng, root_content)
+	local cid, _ = get_block (x, y, z)
+	local cid_new, param2
+	if indexof (self.muddy_roots_in, cid) ~= -1 then
+		cid_new, param2 = self.muddy_roots_content (x, y, z, rng)
+	else
+		cid_new, param2 = root_content (x, y, z, rng)
+	end
+	place_root_block (x, y, z, cid_new, param2)
+	local content_above = self.above_root_content
+	if content_above
+		and rng:next_float () < self.above_root_placement_chance
+		and is_air (x, y + 1, z) then
+		local cid_above, param2 = content_above (x, y + 1, z, rng)
+		place_root_block (x, y + 1, z, cid_above, param2)
+	end
+end
+
+function mcl_trees.create_mangrove_root_placement (data)
+	return table.merge (mangrove_root_placement, data)
+end
+
+------------------------------------------------------------------------
+-- Tree decorators.
+------------------------------------------------------------------------
+
+local MAX_VINES = 4
+
+local facedir_to_wallmounted = mcl_levelgen.facedir_to_wallmounted
+
+local function try_decorate_with_vines (x, y, z, axis, attach_dir)
+	local param2 = facedir_to_wallmounted (axis, attach_dir)
+	for i = 1, MAX_VINES + 1 do
+		local cid, _ = get_block (x, y, z)
+		if cid ~= cid_air then
+			break
+		end
+		set_block (x, y, z, cid_vine, param2)
+		y = y - 1
+	end
+end
+
+local function decorate_with_vines (rng, generated_blocks, probability)
+	for block, blocktype in pairs (generated_blocks) do
+		if blocktype == "foliage" then
+			local x, y, z = unhash (block)
+
+			if rng:next_float () < probability then
+				try_decorate_with_vines (x - 1, y, z, "x", 1)
+			end
+			if rng:next_float () < probability then
+				try_decorate_with_vines (x + 1, y, z, "x", -1)
+			end
+			if rng:next_float () < probability then
+				try_decorate_with_vines (x, y, z - 1, "z", 1)
+			end
+			if rng:next_float () < probability then
+				try_decorate_with_vines (x, y, z + 1, "z", -1)
+			end
+		end
+	end
+end
+
+function mcl_levelgen.build_leave_vine_decoration (probability)
+	return function (rng, generated_blocks)
+		return decorate_with_vines (rng, generated_blocks, probability)
+	end
+end
+
+local fisher_yates = mcl_levelgen.fisher_yates
+
+local function sufficient_air_blocks (x, y, z, dir, required)
+	for i = 1, required do
+		if not is_air (x, y, z) then
+			return false
+		end
+		x, y, z = x + dir[1], y + dir[2], z + dir[3]
+	end
+	return true
+end
+
+local function attach_to_leaves (rng, generated_blocks, cfg)
+	local probability = cfg.probability
+	local exclusion_radius_xz = cfg.exclusion_radius_xz
+	local exclusion_radius_y = cfg.exclusion_radius_y
+	local content = cfg.content
+	local required_empty_blocks = cfg.required_empty_blocks
+	local directions = cfg.directions
+
+	local leaves = {}
+	for block, blocktype in pairs (generated_blocks) do
+		if blocktype == "foliage" then
+			insert (leaves, block)
+		end
+	end
+	fisher_yates (leaves, rng)
+
+	local n_directions = #directions
+	local excluded = {}
+	for _, pos in ipairs (leaves) do
+		local dir = directions[1 + rng:next_within (n_directions)]
+		local x, y, z = unhash (pos)
+		x = x + dir[1]
+		y = y + dir[2]
+		z = z + dir[3]
+		local newhash = longhash (x, y, z)
+
+		if not excluded[newhash] and rng:next_float () < probability
+			and sufficient_air_blocks (x, y, z, dir, required_empty_blocks) then
+			for dy = -exclusion_radius_y, exclusion_radius_y do
+				for dx = -exclusion_radius_xz, exclusion_radius_xz do
+					for dz = -exclusion_radius_xz, exclusion_radius_xz do
+						local exclude
+							= longhash (x + dx, y + dy, z + dz)
+						excluded[exclude] = true
+					end
+				end
+			end
+			local cid, param2 = content (x, y, z, rng)
+			set_block (x, y, z, cid, param2)
+		end
+	end
+end
+
+function mcl_levelgen.build_attach_to_leaves_decoration (cfg)
+	return function (rng, generated_blocks)
+		attach_to_leaves (rng, generated_blocks, cfg)
+	end
+end
+
+local sort = table.sort
+
+local function compare_y (a, b)
+	local _, y1, _ = unhash (a)
+	local _, y2, _ = unhash (b)
+	return y1 < y2
+end
+
+local function gety (hash)
+	local _, y, _ = unhash (hash)
+	return y
+end
+
+local direction_indices = {
+	1, 2, 3, 4,
+}
+
+local function decorate_with_beehive (rng, generated_blocks, probability)
+	if rng:next_float () >= probability then
+		return
+	end
+
+	local leaves, logs = {}, {}
+	for block, blocktype in pairs (generated_blocks) do
+		if blocktype == "foliage" then
+			insert (leaves, block)
+		elseif blocktype == "trunk" then
+			insert (logs, block)
+		end
+	end
+	sort (leaves, compare_y)
+	sort (logs, compare_y)
+
+	-- Ascertain the bottommost layer where logs and leaves
+	-- contact.
+	local contact
+	if #leaves > 0 then
+		contact = mathmax (gety (leaves[1]) - 1, gety (logs[1]) + 1)
+	else
+		-- Failing that, a random offset from the bottom.
+		contact = mathmin (gety (logs[1]) - 1 + rng:next_within (3) + 1,
+				   gety (logs[#logs]))
+	end
+
+	fisher_yates (logs, rng)
+	fisher_yates (direction_indices, rng)
+	for _, log in ipairs (logs) do
+		local x, y, z = unhash (log)
+		if y == contact then
+			for _, dir in ipairs (direction_indices) do
+				local direction = dirs[dir]
+				local x1 = x + direction[1]
+				local z1 = z + direction[2]
+
+				if is_air (x1, y, z1) then
+					set_block (x1, y, z1, cid_bee_nest,
+						   beehive_param2[dir])
+					fix_lighting (x1, y, z1, x1, y, z1)
+					return
+				end
+			end
+		end
+	end
+end
+
+function mcl_levelgen.build_beehive_decoration (probability)
+	return function (rng, generated_blocks)
+		decorate_with_beehive (rng, generated_blocks, probability)
+	end
+end
+
+end
+
