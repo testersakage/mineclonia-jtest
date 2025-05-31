@@ -593,29 +593,7 @@ mcl_levelgen.register_placed_feature ("mcl_lush_caves:azalea_tree", {
 	placement_modifiers = {},
 })
 
-local replaceable_by_trees = {
-	"air",
-	"group:leaves",
-	"group:seagrass",
-	"group:water",
-	"mcl_core:deadbush",
-	"mcl_core:vine",
-	"mcl_crimson:crimson_roots",
-	"mcl_crimson:nether_sprouts",
-	"mcl_crimson:warped_roots",
-	"mcl_flowers:double_fern",
-	"mcl_flowers:double_grass",
-	"mcl_flowers:double_grass_top",
-	"mcl_flowers:lilac",
-	"mcl_flowers:peony",
-	"mcl_flowers:rose_bush",
-	"mcl_flowers:sunflower",
-	"mcl_flowers:tallgrass",
-	"mcl_lush_caves:hanging_roots",
-	-- TODO:
-	-- "mcl_flowers:pitcher_plant",
-	-- "mcl_levelgen:glow_lichen",
-}
+local replaceable_by_trees = mcl_trees.replaceable_by_trees
 
 local azalea_tree_grows_on = {
 	"group:dirt",
