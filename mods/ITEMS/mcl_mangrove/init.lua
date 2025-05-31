@@ -365,3 +365,6 @@ core.register_abm({
 		end
 	end
 })
+
+mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")
+
