@@ -2012,6 +2012,11 @@ local scan_beneath_leaves_for_water = E ({
 	direction = -1,
 })
 
+mcl_levelgen.scan_beneath_leaves = scan_beneath_leaves
+mcl_levelgen.scan_beneath_leaves_far = scan_beneath_leaves_far
+mcl_levelgen.scan_beneath_leaves_for_terracotta = scan_beneath_leaves_for_terracotta
+mcl_levelgen.scan_beneath_leaves_for_water = scan_beneath_leaves_for_water
+
 mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_grass_normal", {
 	configured_feature = "mcl_levelgen:patch_grass",
 	placement_modifiers = {

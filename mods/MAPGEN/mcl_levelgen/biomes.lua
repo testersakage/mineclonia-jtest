@@ -1691,7 +1691,7 @@ mcl_levelgen.register_biome ("BambooJungle", {
 		{
 			"mcl_levelgen:glow_lichen",
 			"mcl_bamboo:bamboo",
-			"mcl_bamboo:bamboo_vegetation",
+			"mcl_trees:bamboo_vegetation",
 			"mcl_flowers:flower_warm",
 			"mcl_levelgen:patch_grass_jungle",
 			"mcl_mushrooms:brown_mushroom_normal",
