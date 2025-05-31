@@ -2117,7 +2117,7 @@ mcl_levelgen.register_biome ("DarkForest", {
 		},
 		{
 			"mcl_levelgen:glow_lichen",
-			"mcl_levelgen:dark_forest_vegetation",
+			"mcl_trees:dark_forest_vegetation",
 			"mcl_flowers:forest_flowers",
 			"mcl_flowers:flower_default",
 			"mcl_levelgen:patch_grass_forest",

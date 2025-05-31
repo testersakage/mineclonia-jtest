@@ -1915,6 +1915,7 @@ local cid_tallgrass = core.get_content_id ("mcl_flowers:tallgrass")
 local cid_fern = core.get_content_id ("mcl_flowers:fern")
 local cid_double_fern = core.get_content_id ("mcl_flowers:double_fern")
 local cid_dead_bush = core.get_content_id ("mcl_core:deadbush")
+local cid_waterlily = core.get_content_id ("mcl_flowers:waterlily")
 
 mcl_levelgen.register_configured_feature ("mcl_levelgen:block_tall_grass", {
 	feature = "mcl_levelgen:simple_block",
@@ -2001,6 +2002,12 @@ local scan_beneath_leaves_far = E ({
 local scan_beneath_leaves_for_terracotta = E ({
 	allowed_search_condition = mcl_levelgen.is_leaf_or_air,
 	target_condition = mcl_levelgen.is_air_with_dirt_sand_or_terracotta_below,
+	max_steps = 24,
+	direction = -1,
+})
+local scan_beneath_leaves_for_water = E ({
+	allowed_search_condition = mcl_levelgen.is_leaf_or_air,
+	target_condition = mcl_levelgen.is_air_with_water_source_below,
 	max_steps = 24,
 	direction = -1,
 })
@@ -2236,6 +2243,37 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_dead_bush_badlands", {
 		mcl_levelgen.build_in_square (),
 		mcl_levelgen.build_heightmap ("world_surface"),
 		scan_beneath_leaves_for_terracotta,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:block_waterlily", {
+	feature = "mcl_levelgen:simple_block",
+	content = function (_, _, _, _)
+		return cid_waterlily, 0
+	end,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_waterlily", {
+	feature = "mcl_levelgen:random_patch",
+	placed_feature = {
+		configured_feature = "mcl_levelgen:block_waterlily",
+		placement_modifiers = {
+			require_air,
+		},
+	},
+	tries = 10,
+	xz_spread = 7,
+	y_spread = 3,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_waterlily", {
+	configured_feature = "mcl_levelgen:patch_waterlily",
+	placement_modifiers = {
+		mcl_levelgen.build_count (FOUR),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
+		scan_beneath_leaves_for_water,
 		mcl_levelgen.build_in_biome (),
 	},
 })

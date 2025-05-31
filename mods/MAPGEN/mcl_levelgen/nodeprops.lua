@@ -218,6 +218,7 @@ local is_cid_bush = {}
 local is_cid_leaf = {}
 local is_cid_terracotta = {}
 local is_cid_soil_propagule = {}
+local is_cid_water_floating_node = {}
 local double_plant_tops = {}
 local paramtype2 = {}
 local mathmin = math.min
@@ -309,6 +310,9 @@ local function initialize_nodeprops ()
 		end
 		if def.groups.soil_propagule and def.groups.soil_propagule >= 1 then
 			is_cid_soil_propagule[cid] = true
+		end
+		if def.groups.floating_node == 3 then
+			is_cid_water_floating_node[cid] = true
 		end
 		paramtype2[cid] = def.paramtype2
 	end
@@ -502,6 +506,9 @@ function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 		or cid == cid_hanging_mangrove_propagule then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_soil_propagule[cid]
+	elseif is_cid_water_floating_node[cid] then
+		local cid, _ = get_block (x, y - 1, z)
+		return cid == cid_water_source
 	elseif is_cid_sapling[cid] or is_cid_bush[cid] then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_dirt[cid]
@@ -547,6 +554,15 @@ function mcl_levelgen.is_air_with_dirt_below (x, y, z)
 	if cid == cid_air then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_dirt[cid]
+	end
+	return false
+end
+
+function mcl_levelgen.is_air_with_water_source_below (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	if cid == cid_air then
+		local cid, _ = get_block (x, y - 1, z)
+		return cid == cid_water_source
 	end
 	return false
 end
