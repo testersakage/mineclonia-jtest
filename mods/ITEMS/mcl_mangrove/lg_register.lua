@@ -20,29 +20,46 @@ local cid_mangrove_propagule
 	= core.get_content_id ("mcl_mangrove:propagule")
 local cid_hanging_mangrove_propagule
 	= core.get_content_id ("mcl_mangrove:hanging_propagule_1")
+local cid_water_source
+	= core.get_content_id ("mcl_core:water_source")
+local cid_water_logged_roots
+	= core.get_content_id ("mcl_mangrove:water_logged_roots")
 
 local mangrove_can_grow_through = mcl_levelgen.construct_cid_list ({
-	"mcl_mud:mud",
+	"mcl_core:vine",
+	"mcl_lush_caves:moss_carpet",
+	"mcl_mangrove:hanging_propagule_1",
 	"mcl_mangrove:mangrove_mud_roots",
 	"mcl_mangrove:mangrove_roots",
-	"mcl_trees:leaves_mangrove",
 	"mcl_mangrove:propagule",
-	"mcl_mangrove:hanging_propagule_1",
-	"mcl_lush_caves:moss_carpet",
-	"mcl_core:vine",
+	"mcl_mangrove:water_logged_roots",
+	"mcl_mud:mud",
+	"mcl_trees:leaves_mangrove",
 })
 
 local mangrove_roots_can_grow_through = mcl_levelgen.construct_cid_list ({
-	"mcl_mud:mud",
+	"group:snow_layer",
+	"mcl_lush_caves:moss_carpet",
+	"mcl_mangrove:hanging_propagule_1",
 	"mcl_mangrove:mangrove_mud_roots",
 	"mcl_mangrove:mangrove_roots",
 	"mcl_mangrove:propagule",
-	"mcl_mangrove:hanging_propagule_1",
-	"mcl_lush_caves:moss_carpet",
-	"group:snow_layer",
+	"mcl_mangrove:water_logged_roots",
+	"mcl_mud:mud",
 })
 
 local get_biome_color = mcl_trees.get_biome_color
+local get_block = mcl_levelgen.get_block
+
+local function maybe_waterlog_mangrove_roots (x, y, z, rng)
+	local existing, _ = get_block (x, y, z)
+	if existing == cid_water_source
+		or existing == cid_water_logged_roots then
+		return cid_water_logged_roots, 0
+	else
+		return cid_mangrove_roots, 0
+	end
+end
 
 mcl_levelgen.register_configured_feature ("mcl_mangrove:mangrove", {
 	feature = "mcl_trees:tree",
@@ -88,9 +105,7 @@ mcl_levelgen.register_configured_feature ("mcl_mangrove:mangrove", {
 		above_root_content = function (x, y, z, rng)
 			return cid_moss_carpet, 0
 		end,
-		root_content = function (x, y, z, rng)
-			return cid_mangrove_roots, 0
-		end,
+		root_content = maybe_waterlog_mangrove_roots,
 		trunk_offset_y = mcl_levelgen.uniform_height (1, 3),
 	}),
 	decorators = {
@@ -161,9 +176,7 @@ mcl_levelgen.register_configured_feature ("mcl_mangrove:tall_mangrove", {
 		above_root_content = function (x, y, z, rng)
 			return cid_moss_carpet, 0
 		end,
-		root_content = function (x, y, z, rng)
-			return cid_mangrove_roots, 0
-		end,
+		root_content = maybe_waterlog_mangrove_roots,
 		trunk_offset_y = mcl_levelgen.uniform_height (3, 7),
 	}),
 	decorators = {
