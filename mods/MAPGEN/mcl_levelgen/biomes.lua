@@ -5969,7 +5969,7 @@ mcl_levelgen.register_biome ("WindsweptSavannah", {
 	},
 	has_precipitation = false,
 	temperature = 2.000000,
-	grass_palette_index = 34,
+	grass_palette_index = 1,
 })
 
 mcl_levelgen.register_biome ("WoodedMesa", {
