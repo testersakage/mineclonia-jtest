@@ -776,7 +776,7 @@ end
 local function select_windswept (temp, humidity, weirdness)
 	local value = WINDSWEPT_BIOMES[temp][humidity]
 	return (value and value ~= 0)
-		and value or select_ordinary_or_badlands (temp, humidity, weirdness)
+		and value or select_ordinary_biome (temp, humidity, weirdness)
 end
 
 local function select_beach (temp, humidity)
@@ -799,9 +799,9 @@ end
 
 local function select_windswept_or_coast (temp, humidity, weirdness)
 	local plain_or_beach
-	if weirdness[2] > 0 then
+	if weirdness[2] >= 0 then
 		plain_or_beach
-			= select_ordinary_or_badlands (temp, humidity, weirdness)
+			= select_ordinary_biome (temp, humidity, weirdness)
 	else
 		plain_or_beach
 			= select_beach (temp, humidity, weirdness)
