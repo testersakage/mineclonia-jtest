@@ -294,6 +294,7 @@ types:
   - group:plant
   - group:double_plant
   - group:flower (excepting those where `attached_node == 4')
+  - group:floating_node (only when 3)
   - mcl_mangrove:propagule
   - mcl_mangrove:hanging_propagule_1
 
@@ -360,6 +361,11 @@ Function: mcl_levelgen.is_air_with_dirt_below (X, Y, Z)
 
 Return whether the block at X, Y, Z is air with a block capable of
 supporting plantlife below.
+
+Function: mcl_levelgen.is_air_with_water_source_below (X, Y, Z)
+
+Return whether the block at X, Y, Z is air with a water source block
+below.
 
 Function: mcl_levelgen.is_air_with_dirt_sand_or_terracotta_below (X, Y, Z)
 
