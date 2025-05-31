@@ -217,8 +217,10 @@ local is_cid_double_plant = {}
 local is_cid_bush = {}
 local is_cid_leaf = {}
 local is_cid_terracotta = {}
+local is_cid_soil_bamboo = {}
 local is_cid_soil_propagule = {}
 local is_cid_water_floating_node = {}
+local is_cid_bamboo = {}
 local double_plant_tops = {}
 local paramtype2 = {}
 local mathmin = math.min
@@ -311,8 +313,14 @@ local function initialize_nodeprops ()
 		if def.groups.soil_propagule and def.groups.soil_propagule >= 1 then
 			is_cid_soil_propagule[cid] = true
 		end
+		if def.groups.soil_bamboo and def.groups.soil_bamboo >= 1 then
+			is_cid_soil_bamboo[cid] = true
+		end
 		if def.groups.floating_node == 3 then
 			is_cid_water_floating_node[cid] = true
+		end
+		if def.groups.bamboo and def.groups.bamboo >= 1 then
+			is_cid_bamboo[cid] = true
 		end
 		paramtype2[cid] = def.paramtype2
 	end
@@ -502,6 +510,9 @@ function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 			or cid == cid_red_sand
 			or is_cid_terracotta[cid]
 			or is_cid_dirt[cid]
+	elseif is_cid_bamboo[cid] then
+		local cid, _ = get_block (x, y - 1, z)
+		return is_cid_soil_bamboo[cid]
 	elseif cid == cid_mangrove_propagule
 		or cid == cid_hanging_mangrove_propagule then
 		local cid, _ = get_block (x, y - 1, z)
