@@ -451,6 +451,35 @@ register_tree_feature ("cherry", cherry, nil, nil,
 register_tree_feature ("cherry_with_beehive", cherry_with_beehive, nil, nil,
 		       "mcl_trees:sapling_cherry_blossom", 0, 7, 9)
 
+local dark_oak = {
+	modpath .. "/schematics/mcl_core_dark_oak.mts",
+}
+
+local is_water_or_air = mcl_levelgen.is_water_or_air
+local cid_dirt = get_content_id ("mcl_core:dirt")
+
+local function fix_hanging_trunks (x, y, z, cfg, rng)
+	local trunk_cid = cfg.cid_trunk
+	local modified = false
+	for dx = -4, 4 do
+		for dz = -4, 4 do
+			local cid, _ = get_block (x + dx, y, z + dz)
+			if cid == trunk_cid
+				and is_water_or_air (x + dx, y - 1, z + dz) then
+				set_block (x + dx, y - 1, z + dz, cid_dirt, true)
+				modified = true
+			end
+		end
+	end
+	if modified then
+		fix_lighting (x - 4, y - 1, z - 4, x + 4, y, z + 4)
+	end
+end
+
+register_tree_feature ("dark_oak", dark_oak, fix_hanging_trunks, {
+	cid_trunk = get_content_id ("mcl_trees:tree_dark_oak"),
+}, "mcl_trees:sapling_dark_oak", 0, 6, 9)
+
 if mcl_levelgen.is_levelgen_environment then
 
 for name, def in pairs (core.registered_nodes) do
@@ -1121,6 +1150,52 @@ mcl_levelgen.register_placed_feature ("mcl_trees:trees_cherry", {
 				data = 11,
 			},
 		})),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_surface_water_depth_filter (0),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_trees:dark_forest_vegetation", {
+	feature = "mcl_levelgen:random_selector",
+	default = "mcl_trees:oak",
+	features = {
+		{
+			chance = 1/40,
+			feature = {
+				configured_feature = "mcl_mushrooms:huge_brown_mushroom",
+				placement_modifiers = {},
+			},
+		},
+		{
+			chance = 1/20,
+			feature = {
+				configured_feature = "mcl_mushrooms:huge_red_mushroom",
+				placement_modifiers = {},
+			},
+		},
+		{
+			chance = 2/3,
+			feature = "mcl_trees:dark_oak",
+		},
+		{
+			chance = 1/5,
+			feature = "mcl_trees:birch",
+		},
+		{
+			chance = 1/10,
+			feature = "mcl_trees:fancy_oak",
+		},
+	},
+})
+
+local SIXTEEN = function (_) return 16 end
+
+mcl_levelgen.register_placed_feature ("mcl_trees:dark_forest_vegetation", {
+	configured_feature = "mcl_trees:dark_forest_vegetation",
+	placement_modifiers = {
+		mcl_levelgen.build_count (SIXTEEN),
 		mcl_levelgen.build_in_square (),
 		mcl_levelgen.build_surface_water_depth_filter (0),
 		mcl_levelgen.build_heightmap ("motion_blocking"),
