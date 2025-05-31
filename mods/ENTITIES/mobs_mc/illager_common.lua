@@ -48,7 +48,7 @@ function patrolling_mob:promote_to_raidcaptain ()
 end
 
 function patrolling_mob:on_spawn ()
-	if not self._structure_spawn
+	if not self._structure_generation_spawn
 		and not self._raid_spawn
 		and not self._patrol_spawn
 	then
