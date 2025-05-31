@@ -3780,7 +3780,7 @@ mcl_levelgen.register_biome ("MangroveSwamp", {
 		},
 		{
 			"mcl_levelgen:glow_lichen",
-			"mcl_trees:trees_mangrove",
+			"mcl_mangrove:trees_mangrove",
 			"mcl_levelgen:patch_grass_normal",
 			"mcl_levelgen:patch_dead_bush",
 			"mcl_levelgen:patch_waterlily",
