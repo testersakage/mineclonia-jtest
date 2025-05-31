@@ -295,6 +295,7 @@ types:
   - group:double_plant
   - group:flower (excepting those where `attached_node == 4')
   - group:floating_node (only when 3)
+  - group:bamboo
   - mcl_mangrove:propagule
   - mcl_mangrove:hanging_propagule_1
 
