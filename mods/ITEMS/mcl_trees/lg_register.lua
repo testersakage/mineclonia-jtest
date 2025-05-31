@@ -1203,6 +1203,48 @@ mcl_levelgen.register_placed_feature ("mcl_trees:dark_forest_vegetation", {
 	},
 })
 
+mcl_levelgen.register_configured_feature ("mcl_trees:bamboo_vegetation", {
+	feature = "mcl_levelgen:random_selector",
+	default = {
+		configured_feature = "mcl_levelgen:patch_grass_jungle",
+		placement_modifiers = {},
+	},
+	features = {
+		{
+			chance = 1/20,
+			feature = "mcl_trees:fancy_oak",
+		},
+		{
+			chance = 3/20,
+			feature = "mcl_trees:jungle_bush",
+		},
+		{
+			chance = 7/10,
+			feature = "mcl_trees:mega_jungle",
+		},
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_trees:bamboo_vegetation", {
+	configured_feature = "mcl_trees:bamboo_vegetation",
+	placement_modifiers = {
+		mcl_levelgen.build_count (W ({
+			{
+				weight = 9,
+				data = 30,
+			},
+			{
+				weight = 1,
+				data = 31,
+			},
+		})),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_surface_water_depth_filter (0),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
 ------------------------------------------------------------------------
 -- Procedural generation of trees.  This configured feature is only
 -- utilized by mangroves.

@@ -83,3 +83,5 @@ core.register_abm({
 		mcl_bamboo.grow(pos)
 	end,
 })
+
+mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")
