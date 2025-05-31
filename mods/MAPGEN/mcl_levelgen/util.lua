@@ -1,4 +1,18 @@
 ------------------------------------------------------------------------
+-- Simple utility functions.
+------------------------------------------------------------------------
+
+function mcl_levelgen.fisher_yates (tbl, rng)
+	for i = #tbl, 2, -1 do
+		local j = 1 + rng:next_within (i)
+		tbl[i], tbl[j] = tbl[j], tbl[i]
+	end
+	return tbl
+end
+
+if core then
+
+------------------------------------------------------------------------
 -- Minetest-specific utilities.
 ------------------------------------------------------------------------
 
@@ -17,4 +31,6 @@ function mcl_levelgen.conv_pos (v)
 	-- positions are further offset along the Z axis by a delta of
 	-- -1.
 	return vector.new (v.x, v.y + OVERWORLD_OFFSET, -v.z - 1)
+end
+
 end

@@ -482,13 +482,7 @@ mcl_levelgen.register_configured_feature ("mcl_ocean:coral_claw", {
 -- Coral "trees".
 ------------------------------------------------------------------------
 
-local function fisher_yates (tbl, rng)
-	for i = #tbl, 2, -1 do
-		local j = 1 + rng:next_within (i)
-		tbl[i], tbl[j] = tbl[j], tbl[i]
-	end
-	return tbl
-end
+local fisher_yates = mcl_levelgen.fisher_yates
 
 local function place_tree_coral_decoration (self, x, y, z, rng, desc)
 	local trunkheight = 1 + rng:next_within (3)
