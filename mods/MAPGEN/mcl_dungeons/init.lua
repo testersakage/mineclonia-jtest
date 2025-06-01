@@ -3,10 +3,11 @@
 mcl_dungeons = {}
 
 local mg_name = core.get_mapgen_setting("mg_name")
-local generate_in_singlenode = false
+local generate_in_singlenode = mcl_levelgen.levelgen_enabled
 
 -- Are dungeons disabled?
-if mcl_vars.mg_dungeons == false or (mg_name == "singlenode" and not generate_in_singlenode) then
+if mcl_vars.mg_dungeons == false
+	or (mg_name == "singlenode" and not generate_in_singlenode) then
 	return
 end
 
@@ -390,3 +391,26 @@ function mcl_dungeons.spawn_dungeon(p1, _, pr)
 end
 
 mcl_mapgen_core.register_generator("dungeons", nil, dungeons_nodes, 999999)
+
+local modpath = core.get_modpath (core.get_current_modname ())
+mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")
+
+local function handle_dungeon_meta (_, data)
+	local pr = PcgRandom (data.loot_seed)
+	for _, chest in ipairs (data.chests) do
+		local loot = mcl_loot.get_multi_loot (loottable, pr)
+		local meta = core.get_meta (chest)
+		local inv = meta:get_inventory ()
+		if core.get_node (chest).name == "mcl_chests:chest" then
+			mcl_structures.construct_nodes (chest, chest, {
+				"mcl_chests:chest",
+			})
+			mcl_loot.fill_inventory (inv, "main", loot,
+						 PseudoRandom (chest.chest_seed))
+		end
+	end
+	mcl_mobspawners.setup_spawner (data.position, data.mob)
+end
+
+mcl_levelgen.register_notification_handler ("mcl_dungeons:dungeon_meta",
+					    handle_dungeon_meta)
