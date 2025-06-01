@@ -391,6 +391,7 @@ local cids, param2s = {}, {}
 local area = nil
 local vm_modified = false
 local relight_rgn, gen_notifies = nil, {}
+local fluids_to_transform = {}
 local heightmap_modifications
 local preset
 
@@ -411,6 +412,7 @@ function mcl_levelgen.convert_level_position (x, y, z)
 	local z = run_origin + (HEIGHTMAP_SIZE_NODES - dz - 1)
 	return x, y - y_offset, z
 end
+convert_level_position = mcl_levelgen.convert_level_position
 
 function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_offset,
 					p_level_min, p_level_height, p_preset)
@@ -434,6 +436,7 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 	mcl_levelgen.heightmap_modifications = heightmap_modifications
 	preset = p_preset
 	gen_notifies = {}
+	fluids_to_transform = {}
 
 	run_min_y = mathmax ((run.y1 - REQUIRED_CONTEXT_Y) * 16 + p_y_offset,
 			     p_level_min)
@@ -470,7 +473,7 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 	biomes = nil
 	heightmap = nil
 	cids, param2s = {}, {}
-	return relight_list, gen_notifies
+	return relight_list, gen_notifies, fluids_to_transform
 end
 
 local function is_not_air (cid, param2)
@@ -746,6 +749,13 @@ function mcl_levelgen.fix_lighting (x1, y1, z1, x2, y2, z2)
 		x2 + 1, y2 - y_offset + 1, -z1 - 1,
 	}
 	update_relight_rgn (aabb)
+end
+
+function mcl_levelgen.transform_fluid (x, y, z)
+	local x, y, z = convert_level_position (x, y, z)
+	insert (fluids_to_transform, x)
+	insert (fluids_to_transform, y)
+	insert (fluids_to_transform, z)
 end
 
 ------------------------------------------------------------------------
