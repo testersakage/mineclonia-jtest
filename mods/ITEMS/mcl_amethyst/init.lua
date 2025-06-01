@@ -192,5 +192,9 @@ if core.get_modpath("mcl_spyglass") then
 	end
 end
 
--- Amethyst Growing
-dofile(core.get_modpath(core.get_current_modname()) .. "/grow.lua")
+-- Amethyst Growth
+local modpath = core.get_modpath (core.get_current_modname ())
+dofile(modpath .. "/grow.lua")
+
+-- Level generation.
+mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")

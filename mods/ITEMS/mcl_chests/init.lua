@@ -421,7 +421,11 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		paramtype = "light",
 		paramtype2 = "facedir",
 		sounds = mcl_sounds.node_sound_wood_defaults(),
-		groups = { deco_block = 1 },
+		groups = {
+			deco_block = 1,
+			features_cannot_replace
+				= basename == "chest" and 1 or 0,
+		},
 		on_construct = function(pos, _)
 			local node = core.get_node(pos)
 			node.name = small_name
@@ -480,6 +484,8 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			not_in_creative_inventory = 1,
 			pathfinder_partial = 2,
 			piglin_protected = 1,
+			features_cannot_replace
+				= basename == "chest" and 1 or 0,
 		},
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_wood_defaults(),
@@ -622,6 +628,8 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			double_chest = 1,
 			pathfinder_partial = 2,
 			piglin_protected = 1,
+			features_cannot_replace
+				= basename == "chest" and 1 or 0,
 		},
 		drop = drop,
 		is_ground_content = false,
@@ -790,6 +798,8 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			double_chest = 2,
 			pathfinder_partial = 2,
 			piglin_protected = 1,
+			features_cannot_replace
+				= basename == "chest" and 1 or 0,
 		},
 		drop = drop,
 		is_ground_content = false,
