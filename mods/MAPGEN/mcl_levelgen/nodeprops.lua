@@ -221,6 +221,7 @@ local is_cid_soil_bamboo = {}
 local is_cid_soil_propagule = {}
 local is_cid_water_floating_node = {}
 local is_cid_bamboo = {}
+local is_cid_solid = {}
 local double_plant_tops = {}
 local paramtype2 = {}
 local mathmin = math.min
@@ -321,6 +322,12 @@ local function initialize_nodeprops ()
 		end
 		if def.groups.bamboo and def.groups.bamboo >= 1 then
 			is_cid_bamboo[cid] = true
+		end
+		if def.groups.solid and def.groups.solid >= 1
+			and (not def.groups.chest_entity
+			     or def.groups.chest_entity == 0)
+			and name ~= "mcl_chests:chest" then
+			is_cid_solid[cid] = true
 		end
 		paramtype2[cid] = def.paramtype2
 	end
@@ -616,6 +623,40 @@ function mcl_levelgen.adjoins_air (x, y, z)
 		return true
 	end
 	return false
+end
+
+function mcl_levelgen.count_adjoining_solids (x, y, z)
+	local cnt, cnt_x, cnt_z = 0, 0, 0
+	local cid, _ = get_block (x - 1, y, z)
+	if is_cid_solid[cid] then
+		cnt = cnt + 1
+		cnt_x = cnt_x + 1
+	end
+	local cid, _ = get_block (x, y, z - 1)
+	if is_cid_solid[cid] then
+		cnt = cnt + 1
+		cnt_z = cnt_z + 1
+	end
+	local cid, _ = get_block (x + 1, y, z)
+	if is_cid_solid[cid] then
+		cnt = cnt + 1
+		cnt_x = cnt_x + 1
+	end
+	local cid, _ = get_block (x, y, z + 1)
+	if is_cid_solid[cid] then
+		cnt = cnt + 1
+		cnt_z = cnt_z + 1
+	end
+	return cnt, cnt_x, cnt_z
+end
+
+function mcl_levelgen.is_solid (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return is_cid_solid[cid]
+end
+
+function mcl_levelgen.solid_p (cid)
+	return is_cid_solid[cid]
 end
 
 function mcl_levelgen.double_plant_p (cid)
