@@ -725,14 +725,33 @@ function mcl_levelgen.build_heightmap (heightmap)
 	end
 end
 
+local MIN_POS = -32768
+
 function mcl_levelgen.build_surface_water_depth_filter (n)
 	return function (x, y, z, rng)
-		local surface, motion_blocking
-			= index_heightmap (x, z)
+		local surface, motion_blocking = index_heightmap (x, z)
 		if surface - motion_blocking <= n then
 			return { x, y, z, }
 		else
-			return {}
+			return { x, MIN_POS, z, }
+		end
+	end
+end
+
+function mcl_levelgen.build_surface_relative_threshold_filter (heightmap,
+							       min_inclusive,
+							       max_inclusive)
+	return function (x, y, z, rng)
+		local surface, motion_blocking = index_heightmap (x, z)
+		local y_test = heightmap == "motion_blocking"
+			and motion_blocking or surface
+
+		local min = y_test + min_inclusive
+		local max = y_test + max_inclusive
+		if min <= y and y <= max then
+			return { x, y, z, }
+		else
+			return { x, MIN_POS, z, }
 		end
 	end
 end
@@ -761,7 +780,8 @@ function mcl_levelgen.build_environment_scan (parms)
 	local max_steps = parms.max_steps
 
 	return function (x, y, z, rng)
-		if not allowed_search_condition (x, y, z) then
+		if not in_range (x, y, z)
+			or not allowed_search_condition (x, y, z) then
 			return { x, direction * MAX_POS, z, }
 		else
 			for i = 1, max_steps do
@@ -869,7 +889,7 @@ local function place_ground_surface (self, surfaces, dir, x, y, z, cfg, rng)
 
 	local replaceable = cfg.replaceable
 	local ground = cfg.ground
-	
+
 	for y1 = y + dir, y + dir * depth, dir do
 		local cid = get_block (x, y1, z)
 		if indexof (replaceable, cid) ~= -1 then
@@ -1184,6 +1204,191 @@ mcl_levelgen.register_feature ("mcl_levelgen:vines", {
 
 mcl_levelgen.register_configured_feature ("mcl_levelgen:vines", {
 	feature = "mcl_levelgen:vines",
+})
+
+------------------------------------------------------------------------
+-- Lava Lake (erstwhile Lake).
+-- mcl_levelgen:lake
+------------------------------------------------------------------------
+
+-- local lake_cfg = {
+-- 	fluid_cid = nil,
+-- 	barrier_cid = nil,
+-- }
+local lake_rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+local ipos3 = mcl_levelgen.ipos3
+local solid_p = mcl_levelgen.solid_p
+local irreplaceable_cids = mcl_levelgen.construct_cid_list ({
+	"group:features_cannot_replace",
+})
+local barrier_immune = mcl_levelgen.construct_cid_list ({
+	"group:features_cannot_replace",
+	"group:leaves",
+	"group:tree",
+})
+
+local cid_water_source
+	= core.get_content_id ("mcl_core:water_source")
+local cid_lava_source
+	= core.get_content_id ("mcl_core:lava_source")
+local cid_stone
+	= core.get_content_id ("mcl_core:stone")
+
+local function water_or_lava_source_p (cid)
+	return cid == cid_water_source
+		or cid == cid_lava_source
+end
+
+local function hash_lake_pos (x, y, z)
+	return (x * 16 + z) * 8 + y
+end
+
+local function is_lake (in_range, x, y, z)
+	if x >= 16 or y >= 8 or z >= 16
+		or x < 0 or y < 0 or z < 0 then
+		return false
+	end
+	return in_range[hash_lake_pos (x, y, z)]
+end
+
+local transform_fluid = mcl_levelgen.transform_fluid
+
+local function lake_place (_, x, y, z, cfg, rng)
+	lake_rng:reseed (rng:next_long ())
+	if y <= run_minp.y + 4 or y > run_maxp.y then
+		return false
+	else
+		local in_range = {}
+		local fluid_cid = cfg.fluid_cid
+
+		-- Fill IN_RANGE with 8 randomly produced lakes
+		-- starting from the northwest corner.
+		local rng = lake_rng
+		local n_centers = 0
+		for i = 0, 8 do
+			-- Width of pool.
+			local wx = rng:next_double () * 6.0 + 3.0
+			local wy = rng:next_double () * 4.0 + 2.0
+			local wz = rng:next_double () * 6.0 + 3.0
+
+			local rx = wx * 0.5
+			local ry = wy * 0.5
+			local rz = wz * 0.5
+
+			-- Center of pool.
+			local xcenter
+				= rng:next_double () * (16.0 - wx - 2.0) + 1.0 + rx
+			local ycenter
+				= rng:next_double () * (8.0 - wy - 4.0) + 2.0 + ry
+			local zcenter
+				= rng:next_double () * (16.0 - wz - 2.0) + 1.0 + rz
+			local rrx = 1 / rx
+			local rry = 1 / ry
+			local rrz = 1 / rz
+
+			for x, y, z in ipos3 (1, 1, 1, 15, 7, 15) do
+				local dx = (x - xcenter) * rrx
+				local dz = (z - zcenter) * rry
+				local dy = (y - ycenter) * rrz
+
+				if dx * dx + dz * dz + dy * dy < 1.0 then
+					in_range[hash_lake_pos (x, y, z)] = true
+				end
+			end
+
+			-- Detect whether a lake has already been
+			-- generated here, largely for good measure as
+			-- lakes should not modify heightmaps in a
+			-- manner that requires them to be idempotent.
+			local cid, _ = get_block (floor (x + xcenter),
+						  floor (y + ycenter),
+						  floor (z + zcenter))
+			if cid == fluid_cid then
+				n_centers = n_centers + 1
+			end
+		end
+
+		-- This lake has already been generated.
+		if n_centers >= 8 then
+			return true
+		end
+
+		-- Verify that the perimeter of the lake is solid and
+		-- that there is no liquid above.
+		local base_y = y - 4
+		local base_x = x
+		local base_z = z
+		local border, lake = {}, {}
+		for x, y, z in ipos3 (0, 0, 0, 15, 7, 15) do
+			local is_lake_p = is_lake (in_range, x, y, z)
+			local borders_lake = not is_lake_p
+				and ((is_lake (in_range, x - 1, y, z))
+					or (is_lake (in_range, x + 1, y, z))
+					or (is_lake (in_range, x, y, z - 1))
+					or (is_lake (in_range, x, y, z + 1))
+					or (is_lake (in_range, x, y - 1, z))
+					or (is_lake (in_range, x, y + 1, z)))
+
+			if borders_lake then
+				local cid, _ = get_block (base_x + x, base_y + y, base_z + z)
+
+				if y >= 4 and water_or_lava_source_p (cid) then
+					return false
+				elseif y < 4 and not solid_p (cid) and cid ~= fluid_cid then
+					-- A non-solid block or alien fluid
+					-- exists in the lake's border.
+					return false
+				end
+				border[#border + 1] = base_x + x
+				border[#border + 1] = base_y + y
+				border[#border + 1] = base_z + z
+			elseif is_lake_p then
+				lake[#lake + 1] = base_x + x
+				lake[#lake + 1] = base_y + y
+				lake[#lake + 1] = base_z + z
+			end
+		end
+
+		fix_lighting (x, base_y, z, x + 15, y + 15, z + 15)
+
+		-- Create the lake.
+		for i = 1, #lake, 3 do
+			local x, y, z = lake[i], lake[i + 1], lake[i + 2]
+			local cid, _ = get_block (x, y, z)
+			if indexof (irreplaceable_cids, cid) == -1 then
+				if (y - base_y) >= 4 then
+					set_block (x, y, z, cid_air, 0)
+				else
+					set_block (x, y, z, fluid_cid, 0)
+				end
+				transform_fluid (x, y, z)
+			end
+		end
+
+		local barrier_cid = cfg.barrier_cid
+		if barrier_cid == cid_air then
+			return true
+		end
+
+		-- Create the barrier.
+
+		for i = 1, #border, 3 do
+			local x, y, z = border[i], border[i + 1], border[i + 2]
+			if (y - base_y) < 4 or rng:next_boolean () then
+				local cid, _ = get_block (x, y, z)
+				if solid_p (cid)
+					and indexof (barrier_immune, cid) == -1 then
+					set_block (x, y, z, barrier_cid)
+				end
+				transform_fluid (x, y, z)
+			end
+		end
+		return true
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:lake", {
+	place = lake_place,
 })
 
 ------------------------------------------------------------------------
@@ -2305,6 +2510,47 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_waterlily", {
 		mcl_levelgen.build_in_square (),
 		mcl_levelgen.build_heightmap ("world_surface"),
 		scan_beneath_leaves_for_water,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local huge = math.huge
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:lake_lava", {
+	feature = "mcl_levelgen:lake",
+	fluid_cid = cid_lava_source,
+	barrier_cid = cid_stone,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:lake_lava_underground", {
+	configured_feature = "mcl_levelgen:lake_lava",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (9),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN,
+								 OVERWORLD_TOP)),
+		E ({
+			direction = -1,
+			max_steps = 32,
+			target_condition = function (x, y, z)
+				if y >= mcl_levelgen.placement_level_min + 5 then
+					return is_air (x, y, z)
+				end
+				return false
+			end,
+		}),
+		mcl_levelgen.build_surface_relative_threshold_filter ("world_surface",
+								      -huge, -5),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:lake_lava_surface", {
+	configured_feature = "mcl_levelgen:lake_lava",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (200),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("world_surface"),
 		mcl_levelgen.build_in_biome (),
 	},
 })
