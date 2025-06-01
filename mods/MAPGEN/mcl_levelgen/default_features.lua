@@ -257,6 +257,13 @@ local function ore_placement_test (cid, x, y, z, rng, cfg)
 	return nil, nil
 end
 
+local function orehash (x1, y1, z1, cx, cy, cz)
+	local dx = x1 - cx + 256
+	local dz = y1 - cy + 256
+	local dy = z1 - cz + 256
+	return ((dx * 512 + dz) * 512) + dy
+end
+
 local function ore_place_1 (x1, x2, z1, z2, y1, y2,
 			    xmin, ymin, zmin, hsize,
 			    ysize, cfg, rng)
@@ -289,27 +296,32 @@ local function ore_place_1 (x1, x2, z1, z2, y1, y2,
 	for i = 0, cnt_ores - 2 do
 		local idx = i * 4 + 1
 
-		if ore_poses[idx + 3] >= 0.0 then
+		if ore_poses[idx + 3] > 0.0 then
 			for i = 0, cnt_ores - 1 do
 				local idx1 = i * 4 + 1
-				local dx = ore_poses[idx] - ore_poses[idx1]
-				local dy = ore_poses[idx + 1] - ore_poses[idx1 + 1]
-				local dz = ore_poses[idx + 2] - ore_poses[idx1 + 2]
-				local dradius
-					= ore_poses[idx + 3] - ore_poses[idx1 + 3]
-				local d = dx * dx + dy * dy + dz * dz
-				if dradius * dradius > d then
-					if dradius > 0.0 then
-						ore_poses[idx1 + 3] = -1.0
-					else
-						ore_poses[idx + 3] = -1.0
+				if ore_poses[idx1 + 3] > 0.0 then
+					local dx = ore_poses[idx] - ore_poses[idx1]
+					local dy = ore_poses[idx + 1] - ore_poses[idx1 + 1]
+					local dz = ore_poses[idx + 2] - ore_poses[idx1 + 2]
+					local dradius
+						= ore_poses[idx + 3] - ore_poses[idx1 + 3]
+					local d = dx * dx + dy * dy + dz * dz
+					if dradius * dradius > d then
+						if dradius > 0.0 then
+							ore_poses[idx1 + 3] = -1.0
+						else
+							ore_poses[idx + 3] = -1.0
+						end
 					end
 				end
 			end
 		end
 	end
 
-	-- Place each blob.
+	-- Place each blob, taking care not to place the same blob
+	-- twice.
+	local written = {}
+
 	for i = 1, cnt_ores * 4, 4 do
 		local r = ore_poses[i + 3]
 		if r >= 0.0 then
@@ -326,6 +338,7 @@ local function ore_place_1 (x1, x2, z1, z2, y1, y2,
 					       zmin + hsize - 1)
 			local bymax = mathmin (mathmax (floor (cy + r), bymin),
 					       ymin + ysize - 1)
+			local org_x, org_y, org_z = x1, y1, z1
 
 			for x = bxmin, bxmax do
 				for y = bymin, bymax do
@@ -335,18 +348,19 @@ local function ore_place_1 (x1, x2, z1, z2, y1, y2,
 						local dz = (z + 0.5 - cz) * sr
 
 						if dx * dx + dy * dy + dz * dz < 1.0 then
-							local cid, _ = get_block (x, y, z)
-							if cid then
-								local param2
-								cid, param2 = ore_placement_test (cid, x, y, z,
-												  rng, cfg)
+							local hash = orehash (x, y, z, org_x,
+									      org_y, org_z)
+							if not written[hash] then
+								written[hash] = true
+								local cid, _ = get_block (x, y, z)
 								if cid then
-									-- if mcl_levelgen.current_placed_feature
-									-- 	== "mcl_levelgen:ore_emerald" then
-									-- 	print (x, y, z)
-									-- end
-									set_block (x, y, z, cid, param2)
-									placed = true
+									local param2
+									cid, param2 = ore_placement_test (cid, x, y, z,
+													  rng, cfg)
+									if cid then
+										set_block (x, y, z, cid, param2)
+										placed = true
+									end
 								end
 							end
 						end
@@ -1612,6 +1626,7 @@ local FOURTEEN = function () return 14 end
 local TEN = function () return 10 end
 local NINETY = function () return 90 end
 local TWENTY_FIVE = function () return 25 end
+local EIGHT = function () return 8 end
 
 mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_coal_upper", {
 	configured_feature = "mcl_levelgen:ore_coal",
@@ -1893,6 +1908,17 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_redstone", {
 		mcl_levelgen.build_count (FOUR),
 		mcl_levelgen.build_in_square (),
 		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN, 15)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_redstone_lower", {
+	configured_feature = "mcl_levelgen:ore_redstone",
+	placement_modifiers = {
+		mcl_levelgen.build_count (EIGHT),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN - 32,
+								 OVERWORLD_MIN + 32)),
 		mcl_levelgen.build_in_biome (),
 	},
 })

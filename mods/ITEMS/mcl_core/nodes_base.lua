@@ -669,7 +669,13 @@ core.register_node("mcl_core:bedrock", {
 	_doc_items_longdesc = S("Bedrock is a very hard type of rock. It can not be broken, destroyed, collected or moved by normal means, unless in Creative Mode.").."\n"..
 		S("In the End dimension, starting a fire on this block will create an eternal fire."),
 	tiles = {"mcl_core_bedrock.png"},
-	groups = {creative_breakable=1, building_block=1, material_stone=1, unmovable_by_piston = 1},
+	groups = {
+		creative_breakable=1,
+		building_block=1,
+		material_stone=1,
+		unmovable_by_piston = 1,
+		features_cannot_replace = 1,
+	},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	is_ground_content = false,
 	on_blast = function() end,
