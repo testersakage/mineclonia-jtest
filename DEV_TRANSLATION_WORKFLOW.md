@@ -1,5 +1,7 @@
 # The Mineclonia Translation Maintenance Workflow
 
+THANK YOU RISHU TAMHANAKAR
+
 _Adapted from the [Repixture](https://codeberg.org/Wuzzy/Repixture) translation maintenance workflow._
 
 This document is directed to *developers* describing how to make sure the Mineclonia translation files stay up to date and functional.
