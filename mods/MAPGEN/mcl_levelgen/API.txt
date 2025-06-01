@@ -310,6 +310,13 @@ by X1, Y1, Z1, and X2, Y2, Z2, all inclusive.  These coordinates will
 be converted into Minetest's native coordinate system, but no further
 validation or transformations are applied.
 
+Function: mcl_levelgen.transform_fluid (X, Y, Z)
+
+Arrange to add the block at X, Y, Z to the fluid transformation queue
+upon the completion of this run.  These coordinates will be converted
+into Minetest's native coordinate system, but no further validation or
+transformations will be applied.
+
 Function: mcl_levelgen.place_schematic (X, Y, Z, SCHEMATIC, ROTATION,
 					REPLACEMENTS, FORCE_PLACEMENT,
 					FLAGS, RNG)
@@ -1032,12 +1039,25 @@ placement where saplings can grow but not on canopies.
 
 Function: mcl_levelgen.build_surface_water_depth_filter (N)
 
-Return a placement modifier that excludes any surface where the world
-surface is more than N blocks above the surface of the level as
-defined by the `motion_blocking' heightmap, upon the (marginal)
-assumption that water is the only block capable of separating the two
-heightmaps.  XXX: this is subject to change if a dedicated
-`ocean_surface' heightmap is introduced for parity with Minecraft.
+Return a placement modifier that excludes any position (by
+substituting a position guaranteed to sit outside the accessible
+region of the level) where the world surface is more than N blocks
+above the surface of the level as defined by the difference between
+the `world_surface' and `motion_blocking' heightmaps, upon the
+(marginal) assumption that water is the only block capable of
+separating the two heightmaps.  XXX: this is subject to change if a
+dedicated `ocean_surface' heightmap is introduced for parity with
+Minecraft.
+
+Function: mcl_levelgen.build_surface_water_depth_filter (HEIGHTMAP,
+	  						 MIN_INCLUSIVE,
+							 MAX_INCLUSIVE)
+
+Return a placement modifier that excludes any position (by
+substituting a position guaranteed to sit outside the accessible
+region of the level) which does not vertically rest between a range of
+MIN_INCLUSIVE to MAX_INCLUSIVE around the surface defined by the
+heightmap HEIGHTMAP.
 
 Function: mcl_levelgen.build_environment_scan (PARMS)
 
