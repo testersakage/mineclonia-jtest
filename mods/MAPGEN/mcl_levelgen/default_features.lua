@@ -1392,6 +1392,400 @@ mcl_levelgen.register_feature ("mcl_levelgen:lake", {
 })
 
 ------------------------------------------------------------------------
+-- Small Iceberg.
+--
+-- Yarn isn't helpful, sorry.  These numbers and formulas were derived
+-- from visual inspection, printfs, and from the Minecraft wiki but
+-- are virtually certainly incorrect.
+------------------------------------------------------------------------
+
+-- local iceberg_cfg = {
+-- 	content = nil,
+-- }
+
+local preset = mcl_levelgen.overworld_preset
+local OVERWORLD_SEA_LEVEL = preset.sea_level
+local iceberg_rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+local cid_snow_block = core.get_content_id ("mcl_core:snowblock")
+local cid_packed_ice = core.get_content_id ("mcl_core:packed_ice")
+-- local cid_blue_concrete = core.get_content_id ("mcl_colorblocks:concrete_blue")
+local cid_blue_ice = core.get_content_id ("mcl_core:blue_ice")
+local mathceil = math.ceil
+local huge = math.huge
+
+local function iceberg_p (cid)
+	return cid == cid_ice
+		or cid == cid_packed_ice
+		or cid == cid_blue_ice
+		or cid == cid_snow_block
+end
+
+local function iceberg_place_common (rng, x, y, z, snow, content)
+	local cid, _ = get_block (x, y, z)
+	if cid == cid_air or cid == cid_snow_block
+		or cid == cid_ice
+		or cid == cid_water_source then
+		if snow and cid ~= cid_water_source then
+			set_block (x, y, z, cid_snow_block, 0)
+		else
+			local cid, param2 = content (x, y, z)
+			set_block (x, y, z, cid, param2)
+		end
+	end
+end
+
+local function count_adjoining_iceberg (x, y, z)
+	local cnt = 0
+	local cid, _ = get_block (x - 1, y, z)
+	if iceberg_p (cid) then
+		cnt = cnt + 1
+	end
+	local cid, _ = get_block (x + 1, y, z)
+	if iceberg_p (cid) then
+		cnt = cnt + 1
+	end
+	local cid, _ = get_block (x, y, z - 1)
+	if iceberg_p (cid) then
+		cnt = cnt + 1
+	end
+	local cid, _ = get_block (x, y, z + 1)
+	if iceberg_p (cid) then
+		cnt = cnt + 1
+	end
+	return cnt
+end
+
+local function iceberg_trim_surface (x, y, z, height, radius)
+	for x, y, z in ipos3 (x - radius, y, z - radius,
+			      x + radius, y + height, z + radius) do
+		local cid, _ = get_block (x, y, z)
+		if iceberg_p (cid) or cid == cid_snow then
+			-- Icebergs mustn't generate overhangs
+			-- otherwise than by carving.
+			local cid_below, _ = get_block (x, y - 1, z)
+			if cid_below == cid_air then
+				set_block (x, y, z, cid_air, 0)
+
+				-- Arrange that the block above also
+				-- be eliminated.
+				set_block (x, y + 1, z, cid_air, 0)
+			elseif iceberg_p (cid) then
+				local adjoining_iceberg
+					= count_adjoining_iceberg (x, y, z)
+				if adjoining_iceberg < 2 then
+					set_block (x, y, z, cid_air, 0)
+				end
+			end
+		end
+	end
+end
+
+local function carving_radius_above (rng, dy, height, carve_radius)
+	local broadness = 3.5 - rng:next_float ()
+	local curved
+	if height > 15 + rng:next_within (5) then
+		-- Too tall to be scaled by the formula below
+		-- comfortably.
+		local k = dy < 3 + rng:next_within (6) and dy / 2 or dy
+		curved = (1.0 - k / (height * broadness * 0.4)) * carve_radius
+	else
+		curved = (1.0 - (dy * dy) / (height * broadness)) * carve_radius
+	end
+	return mathceil (curved / 2.0)
+end
+
+local function carving_radius_keen (rng, dy, height, carve_radius)
+	local broadness = 1.0 + rng:next_float () * 0.5
+	local curved = (1.0 - dy / (height * broadness)) * carve_radius
+	return mathceil (curved / 2.0)
+end
+
+local function dist_to_ellipse_center (x, z, r_major, r_minor, angle)
+	local m1, m2 = mathcos (angle), mathsin (angle)
+
+	-- Vector from center.
+	local d1, d2 = x * m1 + z * -m2, x * m2 + z * m1
+
+	-- Normalize and take length.
+	local s1, s2 = d1 / r_major, d2 / r_minor
+	return s1 * s1 + s2 * s2
+end
+
+local function carve_block (above_sea_level_p, x, y, z)
+	local cid, _ = get_block (x, y, z)
+
+	if iceberg_p (cid) then
+		if not above_sea_level_p then
+			set_block (x, y, z, cid_water_source, 0)
+		else
+			set_block (x, y, z, cid_air, 0)
+		end
+	end
+end
+
+local function carve_common (radius, above_sea_level_p, x, y, z,
+			     ellipse_dx, ellipse_dz,
+			     dy, angle, semi_major, semi_minor)
+	local y = y + dy
+	local r_major = radius + 1 + floor (semi_major / 3)
+	local r_minor = mathmin (radius - 3, 3) + floor (semi_minor / 2) - 1
+
+	for dx = -r_major, r_major do
+		for dz = -r_major, r_major do
+			local edist = dist_to_ellipse_center (dx - ellipse_dx,
+							      dz - ellipse_dz,
+							      r_major, r_minor,
+							      angle)
+			if edist < 1.0 then
+				carve_block (above_sea_level_p, x + dx, y, z + dz)
+			end
+		end
+	end
+end
+
+-- Elliptic icebergs.
+
+local function real_semiminor (dy, height, semi_minor)
+	if dy > 0 and height - dy <= 3 then
+		-- Shrink ellipse near the top.
+		return semi_minor - (4 - (height - dy))
+	end
+	return semi_minor
+end
+
+local function real_semimajor (dy, depth, semi_major)
+	local k = semi_major
+	return mathceil (k * (1.0 - (dy * dy) / (depth * 8.0)))
+end
+
+local function iceberg_carve_elliptic (rng, x, y, z, carve_radius, height,
+				       semi_major, angle, semi_minor)
+	local lim = mathmax (semi_major - 5, 1)
+	-- Range: -(lim - 1) ... lim - 1
+	local dx = 1 + rng:next_within (lim * 2 - 1) - lim
+	local dz = 1 + rng:next_within (lim * 2 - 1) - lim
+	local carving_angle = angle + pi * 0.5
+
+	for dy = 0, height - 3 do
+		local radius = carving_radius_above (rng, dy, height, carve_radius)
+		carve_common (radius, true, x, y, z, dx, dz, dy, carving_angle,
+			      semi_major, semi_minor)
+	end
+
+	for dy = -height + rng:next_within (5), -1 do
+		local radius = carving_radius_keen (rng, -dy, height, carve_radius)
+		carve_common (radius, false, x, y, z, dx, dz, dy, carving_angle,
+			      semi_major, semi_minor)
+	end
+end
+
+local function iceberg_place_elliptic (rng, x, y, z, content)
+	local snowable = rng:next_double () < 0.3
+	local angle = rng:next_double () * pi * 2
+
+	-- https://minecraft.wiki/w/Iceberg_(feature)#Dimensions
+	local semi_major = 11 - rng:next_within (5)
+	local semi_minor = 3 + rng:next_within (3)
+	local base_height = rng:next_within (6) + 6
+	local carve_radius = mathmin (11, (rng:next_within (7)
+					   + base_height - rng:next_within (5)))
+	local depth_below = mathmin (rng:next_within (11) + base_height, 18)
+	local rmax = semi_major
+	local snow_threshold = mathmax (1, floor (base_height / 3))
+
+	for dx, dy, dz in ipos3 (-rmax, 0, -rmax, rmax, base_height - 1, rmax) do
+		local minor = real_semiminor (dy, base_height, semi_minor)
+		local edist = dist_to_ellipse_center (dx, dz, rmax, minor, angle)
+		if edist < 1.0 then
+			local x, y, z = x + dx, y + dy, z + dz
+			-- Thaw icebergs lightly as their perimeters
+			-- are approached.
+			if edist < 0.5 or rng:next_double () < 0.9 then
+				local snowy = false
+				if snowable and rng:next_double () < 0.95 then
+					local snow_threshold_1
+						= rng:next_within (snow_threshold)
+					snowy = base_height - dy
+						<= (snow_threshold_1 + base_height * 0.6)
+				end
+				iceberg_place_common (rng, x, y, z, snowy, content)
+			end
+		end
+	end
+
+	iceberg_trim_surface (x, y, z, base_height, rmax)
+
+	for dx, dy, dz in ipos3 (-rmax, -depth_below + 1, -rmax, rmax, -1, rmax) do
+		-- XXX: it appears this isn't exclusively employed in
+		-- carving.
+		local r = carving_radius_keen (rng, -dy, depth_below, carve_radius)
+		-- XXX: Minecraft does not take the abs of this value
+		-- and only applies it to the X axis, producing
+		-- overhangs of kinds where an iceberg meets the ocean
+		-- surface and is truncated on one side of a single
+		-- axis.  Whether this is intentional or just an
+		-- oversight on their part is debatable, but we ought
+		-- to reproduce the same effect.
+		if dx < r then
+			local major = real_semimajor (dy, depth_below, semi_major)
+			local edist = dist_to_ellipse_center (dx, dz, major,
+							      semi_minor, angle)
+			if edist < 1.0 then
+				-- Thaw icebergs lightly as their perimeters
+				-- are approached.
+				local x, y, z = x + dx, y + dy, z + dz
+				if edist < 0.5 or rng:next_double () < 0.9 then
+					iceberg_place_common (rng, x, y, z, false, content)
+				end
+			end
+		end
+	end
+
+	if rng:next_double () < 0.9 then
+		iceberg_carve_elliptic (rng, x, y, z, carve_radius, base_height,
+					semi_major, angle, semi_minor)
+	end
+	fix_lighting (x - rmax, y - depth_below + 1, z - rmax,
+		      x + rmax, y + base_height - 1, z + rmax)
+end
+
+-- Circular icebergs.
+
+local function iceberg_carve_circular (rng, x, y, z, carving_radius, height)
+	local sx = rng:next_boolean () and -1 or 1
+	local sz = rng:next_boolean () and -1 or 1
+
+	local dx, dz
+	if rng:next_boolean () then
+		local lim2 = mathmax ((carving_radius
+				       - floor (carving_radius / 2) - 1), 1)
+		dx = (floor (carving_radius / 2) + 1 - rng:next_within (lim2)) * sx
+		dz = (floor (carving_radius / 2) + 1 - rng:next_within (lim2)) * sz
+	else
+		local lim1 = mathmax (floor (carving_radius / 2) - 2, 1)
+		dx = rng:next_within (lim1) * sx
+		dz = rng:next_within (lim1) * sz
+	end
+
+	local carving_angle = rng:next_double () * pi * 2.0
+	local semi_major = 11 - rng:next_within (5)
+	local semi_minor = 3 + rng:next_within (3)
+
+	for dy = 0, height - 3 do
+		local radius = carving_radius_above (rng, dy, height,
+						     carving_radius)
+		carve_common (radius, true, x, y, z, dx, dz, dy, carving_angle,
+			      semi_major, semi_minor)
+	end
+
+	for dy = -height + rng:next_within (5), -1 do
+		local radius = carving_radius_keen (rng, -dy, height,
+						    carving_radius)
+		carve_common (radius, false, x, y, z, dx, dz, dy, carving_angle,
+			      semi_major, semi_minor)
+	end
+end
+
+local function clamp (value, min, max)
+	return mathmax (mathmin (value, max), min)
+end
+
+local function dist_to_circle_center (rng, dx, dz, r)
+	local offset = 10.0 * clamp (rng:next_float (), 0.2, 0.8) / r
+	return dx * dx + dz * dz - offset
+end
+
+-- local function kontent ()
+-- 	return cid_blue_concrete, 0
+-- end
+
+local function iceberg_place_circular (rng, x, y, z, content)
+	local snowable = rng:next_double () < 0.3
+	local height = rng:next_within (15) + 3
+
+	-- There is a 10% chance of generating an abnormally tall
+	-- iceberg.
+	if rng:next_double () < 0.1 then
+		height = mathmin (31, height + rng:next_within (19) + 7)
+	end
+
+	local carving_radius = mathmin (11, (rng:next_within (7)
+					     + height - rng:next_within (5)))
+	local depth_below = mathmin (rng:next_within (11) + height, 18)
+	local snow_threshold = mathmax (1, floor (height / 2))
+
+	for dx, dy, dz in ipos3 (-11, 0, -11, 11, height - 1, 11) do
+		local r = carving_radius_above (rng, dy, height, carving_radius)
+		if dx < r then -- ???
+			local rsqr = r * r
+			local dist = dist_to_circle_center (rng, dx, dz, r)
+			local dalways = 3 + rng:next_within (3)
+			if dist < rsqr
+				and dist ~= -huge
+				and dist ~= huge
+				and (dist < (dalways * dalways)
+				     or rng:next_double () < 0.9) then
+				local snowy = false
+				if snowable then
+					local snow_threshold_1
+						= rng:next_within (snow_threshold)
+					snowy = height - dy
+						<= (snow_threshold_1 + height * 0.6)
+				end
+				iceberg_place_common (rng, x + dx, y + dy, z + dz,
+						      snowy, content)
+			end
+		end
+	end
+
+	iceberg_trim_surface (x, y, z, height, floor (carving_radius / 2))
+
+	for dx, dy, dz in ipos3 (-11, -depth_below + 1, -11, 11, -1, 11) do
+		local r = carving_radius_keen (rng, -dy, height, carving_radius)
+		if dx < r then -- ???
+			local rsqr = r * r
+			local dist = dist_to_circle_center (rng, dx, dz, r)
+			local dalways = 3 + rng:next_within (3)
+			if dist < rsqr
+				and dist ~= -huge
+				and dist ~= huge
+				and (dist < (dalways * dalways)
+				     or rng:next_double () < 0.9) then
+				iceberg_place_common (rng, x + dx, y + dy, z + dz,
+						      false, content)
+			end
+		end
+	end
+
+	if rng:next_double () < 0.3 then
+		iceberg_carve_circular (rng, x, y, z, carving_radius, height)
+	end
+	fix_lighting (x - 11, y - depth_below + 1, z - 11,
+		      x + 11, y + height - 1, z + 11)
+end
+
+local function iceberg_place (_, x, y, z, cfg, rng)
+	iceberg_rng:reseed (rng:next_long ())
+	if OVERWORLD_SEA_LEVEL < run_minp.y or OVERWORLD_SEA_LEVEL > run_maxp.y then
+		return false
+	else
+		local rng = iceberg_rng
+		if rng:next_float () < 0.3 then
+			iceberg_place_elliptic (rng, x, OVERWORLD_SEA_LEVEL, z,
+						cfg.content)
+		else
+			iceberg_place_circular (rng, x, OVERWORLD_SEA_LEVEL, z,
+						cfg.content)
+		end
+		return true
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:iceberg", {
+	place = iceberg_place,
+})
+
+------------------------------------------------------------------------
 -- Default placed features.
 ------------------------------------------------------------------------
 
@@ -2514,8 +2908,6 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_waterlily", {
 	},
 })
 
-local huge = math.huge
-
 mcl_levelgen.register_configured_feature ("mcl_levelgen:lake_lava", {
 	feature = "mcl_levelgen:lake",
 	fluid_cid = cid_lava_source,
@@ -2551,6 +2943,44 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:lake_lava_surface", {
 		mcl_levelgen.build_rarity_filter (200),
 		mcl_levelgen.build_in_square (),
 		mcl_levelgen.build_heightmap ("world_surface"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:iceberg_packed", {
+	feature = "mcl_levelgen:iceberg",
+	content = function (x, y, z, rng)
+		return cid_packed_ice, 0
+	end,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:iceberg_blue", {
+	feature = "mcl_levelgen:iceberg",
+	content = function (x, y, z, rng)
+		return cid_blue_ice, 0
+	end,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:iceberg_packed", {
+	configured_feature = "mcl_levelgen:iceberg_packed",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (9),
+		mcl_levelgen.build_in_square (),
+		function (x, y, z, rng)
+			return { x, OVERWORLD_SEA_LEVEL, z, }
+		end,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:iceberg_blue", {
+	configured_feature = "mcl_levelgen:iceberg_blue",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (200),
+		mcl_levelgen.build_in_square (),
+		function (x, y, z, rng)
+			return { x, OVERWORLD_SEA_LEVEL, z, }
+		end,
 		mcl_levelgen.build_in_biome (),
 	},
 })
