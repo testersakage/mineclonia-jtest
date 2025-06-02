@@ -74,42 +74,7 @@ local function distance_to_dripstone_probability (radius_x, radius_z,
 	return max_chance + (1.0 - max_chance) * x
 end
 
-local function find_ceiling_and_floor (x, y, z, range, is_air, is_solid)
-	local floor, ceiling = nil, nil
-	local yfloor, yceiling = y, y
-
-	if not is_air (x, y, z) then
-		return nil, nil
-	end
-
-	for y = 1, range do
-		if floor == nil then
-			if is_air (x, yfloor, z) then
-				yfloor = yfloor - 1
-			elseif is_solid (x, yfloor, z) then
-				floor = yfloor
-			else
-				floor = false
-			end
-		end
-
-		if ceiling == nil then
-			if is_air (x, yceiling, z) then
-				yceiling = yceiling + 1
-			elseif is_solid (x, yceiling, z) then
-				ceiling = yceiling
-			else
-				ceiling = false
-			end
-		end
-
-		if floor ~= nil and ceiling ~= nil then
-			break
-		end
-	end
-
-	return ceiling, floor
-end
+local find_ceiling_and_floor = mcl_levelgen.find_ceiling_and_floor
 
 local function clamped_gaussian (rng, min, max, mean, deviation)
 	local x = mean + rng:next_gaussian () * deviation
