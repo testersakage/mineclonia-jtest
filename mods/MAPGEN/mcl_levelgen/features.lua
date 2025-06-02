@@ -633,7 +633,7 @@ function mcl_levelgen.unpack_heightmap_modification (hash, value)
 end
 
 local function find_solid_surface (x, y, z, is_solid)
-	for y = y, run_min_y do
+	for y = y, run_min_y, -1 do
 		if is_solid (get_block_1 (x, y, z)) then
 			return y + 1
 		end
@@ -650,7 +650,6 @@ local function correct_heightmaps (x, y, z, cid, param2)
 	local surface, motion_blocking
 		= unpack_augmented_height_map (value)
 	local modified = false
-
 	surface = surface + level_min
 	motion_blocking = motion_blocking + level_min
 

@@ -860,6 +860,7 @@ local FLYING_LIQUID_SPEED	= 0.4
 local FLYING_GROUND_SPEED	= 2.0
 local FLYING_AIR_SPEED		= 0.4
 local BASE_SLIPPERY		= 0.98
+local BASE_SLIPPERY_1		= 0.989
 local BASE_FRICTION		= 0.6
 local LIQUID_FORCE		= 0.28
 local LAVA_FORCE		= 0.09
@@ -1277,7 +1278,11 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 		-- mobs that jump while in motion or walk off ledges.
 		if self._was_touching_ground
 			and slippery and slippery > 0 then
-			friction = BASE_SLIPPERY
+			if slippery > 3 then
+				friction = BASE_SLIPPERY_1
+			else
+				friction = BASE_SLIPPERY
+			end
 		elseif self._was_touching_ground then
 			friction = BASE_FRICTION
 		else
@@ -1400,7 +1405,11 @@ function mob_class:flying_step (dtime, moveresult, self_pos)
 		local friction
 
 		if touching_ground and slippery and slippery > 0 then
-			friction = BASE_SLIPPERY * AIR_FRICTION
+			if slippery > 3 then
+				friction = BASE_SLIPPERY_1 * AIR_FRICTION
+			else
+				friction = BASE_SLIPPERY * AIR_FRICTION
+			end
 			speed = scale_speed_flying (FLYING_GROUND_SPEED, friction)
 		elseif touching_ground then
 			friction = BASE_FRICTION * AIR_FRICTION
