@@ -362,7 +362,7 @@ local function coral_block_place (x, y, z, rng, desc)
 			local cid_pickle = cids[1 + rng:next_within (#cids)]
 			set_block (x, y, z, cid_pickle, 0)
 		else
-			set_block (x, y, z, desc.cid_coral_block)
+			set_block (x, y, z, desc.cid_coral_block, 0)
 		end
 
 		return true
