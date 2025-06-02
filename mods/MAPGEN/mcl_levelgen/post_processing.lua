@@ -52,6 +52,7 @@ local rshift = bit.rshift
 local arshift = bit.arshift
 
 local floor = math.floor
+local ceil = math.ceil
 local mathmin = math.min
 local mathmax = math.max
 
@@ -728,14 +729,18 @@ end
 -- 	mapblock_lockers[core.hash_node_position (vector.new (x, y, z))] = run
 -- end
 
-local function queue_mapblock_run (x, y_start, y_end, z, d)
+local function queue_mapblock_run (x, y_start, y_end, z, d, supplemental,
+				   data)
 	local run = getmapblock (x, y_start, z)
 
 	run.x = x
 	run.z = z
 	run.y1 = y_start
 	run.y2 = y_end
-	dbg ("Queueing mapblock run: X: %d, Y: %d - %d, Z: %d", x, y_start, y_end, z)
+	run.supplemental = supplemental
+	run.data = data
+	dbg ("Queueing mapblock run: X: %d, Y: %d - %d, Z: %d (supplemental: %s)",
+	     x, y_start, y_end, z, tostring (supplemental))
 
 	-- Lock surrounding MapBlocks.
 	local context_start = mathmax (y_start - REQUIRED_CONTEXT_Y,
@@ -764,10 +769,16 @@ local function queue_mapblock_run (x, y_start, y_end, z, d)
 		end
 	end
 
-	-- Enqueue this run of MapBlocks.
+	-- Enqueue this run of MapBlocks; its state should be updated
+	-- to MBS_GENERATED unless it is a supplemental run.
 	for y = y_start, y_end do
-		assert (mapblock_state (x, y, z) == MBS_LOCKED)
-		local_set_mapblock_state (x, y, z, MBS_REGENERATING)
+		if not supplemental then
+			assert (local_mapblock_state (x, y, z) == MBS_LOCKED)
+			local_set_mapblock_state (x, y, z, MBS_REGENERATING)
+		else
+			assert (local_mapblock_state (x, y, z) == MBS_LOCKED_GENERATED
+				or local_mapblock_state (x, y, z) == MBS_LOCKED)
+		end
 	end
 	feature_placement_queue:enqueue (run, d)
 	-- dbg ("  --> Feature placement queue: " .. dump (feature_placement_queue))
@@ -856,7 +867,8 @@ function attempt_feature_placement (x, z)
 
 			if y + 1 ~= last_y and prev_y then
 				queue_mapblock_run (x, last_y, prev_y, z,
-						    mathmin (d, min_d))
+						    mathmin (d, min_d),
+						    false, nil)
 				prev_y = y
 				min_d = d
 			elseif not prev_y then
@@ -871,7 +883,8 @@ function attempt_feature_placement (x, z)
 		local y_initial = runs[1]
 		local d_initial = runs[2]
 		queue_mapblock_run (x, y_initial, prev_y, z,
-				    mathmin (min_d, d_initial))
+				    mathmin (min_d, d_initial),
+				    false, nil)
 	end
 end
 
@@ -894,12 +907,13 @@ local function async_function (vm, run, heightmap, biomes)
 	-- the async environment.
 	local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
 	local preset = mcl_levelgen.overworld_preset
-	local relight_list, gen_notifies, fluids_to_transform
+	local relight_list, gen_notifies, fluids_to_transform, features, c_above, c_below
 		= mcl_levelgen.process_features (vm, run, heightmap, biomes,
 						 OVERWORLD_OFFSET, preset.min_y,
 						 preset.height, preset)
 	levelgen_previous_vm = vm
-	return vm, run, heightmap, relight_list, gen_notifies, fluids_to_transform
+	return vm, run, heightmap, relight_list, gen_notifies,
+		fluids_to_transform, features, c_above, c_below
 end
 
 local v1 = vector.zero ()
@@ -911,9 +925,12 @@ mcl_levelgen.registered_notification_handlers
 
 local apply_heightmap_modifications
 local schedule_regeneration_for_unlock
+local apply_feature_context_requisitions
 
 local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies,
-				 fluids_to_transform)
+				 fluids_to_transform,
+				 features_requesting_additional_context,
+				 c_above, c_below)
 	if shutdown_complete then
 		vm:close ()
 		return
@@ -941,6 +958,7 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 			       OVERWORLD_MIN_BLOCK)
 	local y_max = mathmin (run.y2 + REQUIRED_CONTEXT_Y,
 			       OVERWORLD_MAX_BLOCK)
+	local supplemental = run.supplemental
 
 	dbg ("Completed MapBlock run: X: %d, Y: %d - %d, Z: %d",
 	     run.x, run.y1, run.y2, run.z)
@@ -949,7 +967,8 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 			      run.z - REQUIRED_CONTEXT_XZ,
 			      run.x + REQUIRED_CONTEXT_XZ, y_max,
 			      run.z + REQUIRED_CONTEXT_XZ) do
-		if x == run.x and y >= run.y1 and y <= run.y2 and z == run.z then
+		if (x == run.x and y >= run.y1 and y <= run.y2 and z == run.z)
+			and not supplemental then
 			local state = mapblock_state (x, y, z)
 			assert (state == MBS_REGENERATING)
 			set_mapblock_state (x, y, z, MBS_GENERATED)
@@ -961,8 +980,8 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 				set_mapblock_state (x, y, z, MBS_GENERATED)
 			else
 				dbg ("MapBlock execution inconsistency detected: ")
-				dbg ("  From X: %d, Y: %d - %d, Z: %d", run.x, run.y1,
-				     run.y2, run.z)
+				dbg ("  From X: %d, Y: %d - %d, Z: %d (supplemental: %s)",
+				     run.x, run.y1, run.y2, run.z, tostring (run.supplemental))
 				dbg ("  X: %d, Y: %d, Z: %d is %d rather than L or G",
 				     x, y, z, state)
 				assert (false)
@@ -974,11 +993,13 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 		apply_heightmap_modifications (run, heightmap)
 	end
 
+	-- local time = core.get_us_time ()
 	for _, rgn in ipairs (relight_queue) do
 		v1.x, v1.y, v1.z = rgn[1], rgn[2], rgn[3]
 		v2.x, v2.y, v2.z = rgn[4], rgn[5], rgn[6]
 		core.fix_light (v1, v2)
 	end
+	-- print (string.format ("%.2f", (core.get_us_time () - time) / 1000))
 
 	for _, notify in ipairs (gen_notifies) do
 		local name = notify.name
@@ -1000,6 +1021,8 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 		core.transforming_liquid_add (v1)
 	end
 
+	apply_feature_context_requisitions (run, features_requesting_additional_context,
+					    c_above, c_below)
 	schedule_regeneration_for_unlock (run.x, run.z)
 end
 
@@ -1178,41 +1201,45 @@ end
 
 mcl_levelgen.schedule_regeneration_per_player = schedule_regeneration_per_player
 
+local check_supplemental_generation
+
 function schedule_regeneration_for_emerge (bx, bx1, by, by1, bz, bz1)
-	if generation_radius == 1 then
-		refresh_player_block_positions ()
-		-- Each MapBlock is capable of influencing the
-		-- generation of other blocks within two blocks of
-		-- itself on either axis, the one as context and the
-		-- other by reason of being generated.
-		mbs_cache_min_x = bx - REQUIRED_CONTEXT_XZ - 3
-		mbs_cache_min_y = OVERWORLD_MIN_BLOCK
-		mbs_cache_min_z = bz - REQUIRED_CONTEXT_XZ - 3
-		clear_mbs_cache (mbs_cache_width)
-		for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ - 1,
-					 by,
-					 bz - REQUIRED_CONTEXT_XZ - 1,
-					 bx1 + REQUIRED_CONTEXT_XZ + 1,
-					 by,
-					 bz1 + REQUIRED_CONTEXT_XZ + 1) do
+	refresh_player_block_positions ()
+	-- Each MapBlock is capable of influencing the generation of
+	-- other blocks within two blocks of itself on either axis,
+	-- the one as context and the other by reason of being
+	-- generated.
+	mbs_cache_min_x = bx - REQUIRED_CONTEXT_XZ - 3
+	mbs_cache_min_y = OVERWORLD_MIN_BLOCK
+	mbs_cache_min_z = bz - REQUIRED_CONTEXT_XZ - 3
+	clear_mbs_cache (mbs_cache_width)
+	for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ - 1,
+				 by,
+				 bz - REQUIRED_CONTEXT_XZ - 1,
+				 bx1 + REQUIRED_CONTEXT_XZ + 1,
+				 by,
+				 bz1 + REQUIRED_CONTEXT_XZ + 1) do
+		check_supplemental_generation (bx, bz)
+		if generation_radius == 1 then
 			attempt_feature_placement (bx, bz)
 		end
 	end
 end
 
 function schedule_regeneration_for_unlock (bx, bz)
-	if generation_radius == 1 then
-		refresh_player_block_positions ()
-		mbs_cache_min_x = bx - REQUIRED_CONTEXT_XZ - 3
-		mbs_cache_min_y = OVERWORLD_MIN_BLOCK
-		mbs_cache_min_z = bz - REQUIRED_CONTEXT_XZ - 3
-		clear_mbs_cache (mbs_cache_width)
-		for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ - 1,
-					 0,
-					 bz - REQUIRED_CONTEXT_XZ - 1,
-					 bx + REQUIRED_CONTEXT_XZ + 1,
-					 0,
-					 bz + REQUIRED_CONTEXT_XZ + 1) do
+	refresh_player_block_positions ()
+	mbs_cache_min_x = bx - REQUIRED_CONTEXT_XZ - 3
+	mbs_cache_min_y = OVERWORLD_MIN_BLOCK
+	mbs_cache_min_z = bz - REQUIRED_CONTEXT_XZ - 3
+	clear_mbs_cache (mbs_cache_width)
+	for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ - 1,
+				 0,
+				 bz - REQUIRED_CONTEXT_XZ - 1,
+				 bx + REQUIRED_CONTEXT_XZ + 1,
+				 0,
+				 bz + REQUIRED_CONTEXT_XZ + 1) do
+		check_supplemental_generation (bx, bz)
+		if generation_radius == 1 then
 			attempt_feature_placement (bx, bz)
 		end
 	end
@@ -1246,6 +1273,8 @@ local function schedule_regeneration (dtime)
 	-- ncalls = 0
 end
 
+local additional_ctx_requisitions = {}
+
 local function save_feature_placement_queue ()
 	if generation_radius == 1 then
 		-- Cancel every run that is currently in progress by
@@ -1263,6 +1292,9 @@ local function save_feature_placement_queue ()
 
 		local sdata = core.serialize (feature_placement_queue)
 		storage:set_string ("feature_placement_queue", sdata)
+
+		local sdata = core.serialize (additional_ctx_requisitions)
+		storage:set_string ("additional_ctx_requisitions", sdata)
 
 		-- At this point, the state of the level generator has
 		-- been saved to disk and any extant tasks which might
@@ -1290,6 +1322,26 @@ local function restore_feature_placement_queue ()
 				end
 			end
 		end
+
+		local sdata = storage:get_string ("additional_ctx_requisitions")
+		if sdata ~= nil and sdata ~= "" then
+			local n = 0
+			local additional_ctx_requisitions = core.deserialize (sdata)
+			for k, req in ipairs (additional_ctx_requisitions) do
+				v1.x = (req.x - REQUIRED_CONTEXT_XZ - 1) * 16
+				v1.z = (req.z - REQUIRED_CONTEXT_XZ - 1) * 16
+				v1.y = req.min
+				v2.x = (req.x + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
+				v2.z = (req.z + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
+				v2.y = req.max
+				core.emerge_area (v1, v2)
+				n = n + 1
+			end
+			local blurb = "[mcl_levelgen]: Replayed %d placement run requisitions"
+			if n > 1 then
+				core.log ("action", string.format (blurb, n))
+			end
+		end
 	end
 end
 
@@ -1297,6 +1349,83 @@ if not mcl_levelgen.load_feature_environment then
 	core.register_globalstep (schedule_regeneration)
 	core.register_on_shutdown (save_feature_placement_queue)
 	restore_feature_placement_queue ()
+end
+
+------------------------------------------------------------------------
+-- Supplemental generation.  This facility enables features with
+-- immense vertical context requirements to request execution in an
+-- isolated environment with additional context, subject to certain
+-- handicaps documented in API.txt.
+------------------------------------------------------------------------
+
+-- local function supplemental_context_cb (run)
+-- 	dbg ("Supplemental context is available for run: %s", dump (run))
+-- end
+
+function apply_feature_context_requisitions (run, features_requesting_additional_context,
+					     above, below)
+	if not (above > 0 or below > 0) then
+		return nil
+	end
+
+	dbg ("Supplemental context requested by run: X: %d, Y: %d - %d, Z: %d: %d, %d",
+	     run.x, run.y1, run.y2, run.z, above, below)
+
+	local hash = hashmapblock (run.x, 0, run.z)
+	local existing = additional_ctx_requisitions[hash] or {
+		min = run.y1 * 16,
+		max = run.y2 * 16 + 15,
+		x = run.x,
+		z = run.z,
+		features = {},
+	}
+	additional_ctx_requisitions[hash] = existing
+	existing.min = mathmax (mathmin (existing.min, run.y1 * 16 - below),
+				OVERWORLD_MIN)
+	existing.max = mathmin (mathmax (existing.max, run.y2 * 16 + 15 + above),
+				OVERWORLD_MAX_BLOCK * 16)
+	for _, feature in ipairs (features_requesting_additional_context) do
+		if table.indexof (existing.features, feature) == -1 then
+			table.insert (existing.features, feature)
+		end
+	end
+	v1.x = (run.x - REQUIRED_CONTEXT_XZ - 1) * 16
+	v1.z = (run.z - REQUIRED_CONTEXT_XZ - 1) * 16
+	v1.y = existing.min
+	v2.x = (run.x + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
+	v2.z = (run.z + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
+	v2.y = existing.max
+	core.emerge_area (v1, v2)
+end
+
+function check_supplemental_generation (bx, bz)
+	local hash = hashmapblock (bx, 0, bz)
+	local requirements = additional_ctx_requisitions[hash]
+	if requirements then
+		-- Are the requirements met?
+		local y1 = floor (requirements.min / 16)
+		local y2 = ceil (requirements.max / 16)
+
+		local first_locked = mathmax (OVERWORLD_MIN_BLOCK,
+					      y1 - REQUIRED_CONTEXT_Y)
+		local last_locked = mathmax (OVERWORLD_MIN_BLOCK,
+					     y2 + REQUIRED_CONTEXT_Y)
+
+		for by = first_locked, last_locked do
+			if not adequate_context_exists_p (bx, by, bz) then
+				return
+			end
+		end
+
+		dbg ("Supplemental context has appeared from %d to %d at %d,%d",
+		     y1, y2, bx, bz)
+		queue_mapblock_run (bx, y1, y2, bz, 0, true, requirements)
+
+		-- If any further requirements should arrive in the
+		-- interim, defer posting them till this run completes
+		-- if they overlap.
+		additional_ctx_requisitions[hash] = nil
+	end
 end
 
 ------------------------------------------------------------------------

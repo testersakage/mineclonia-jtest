@@ -16,7 +16,11 @@ local function register_infested_block(name, description, overrides)
 			An infested block is a block from which a silverfish will pop out when it is broken.
 			It looks identical to its normal counterpart.
 		]]),
-		groups = table.merge(olddef.groups, {spawns_silverfish = 1}),
+		groups = table.merge(olddef.groups, {
+			spawns_silverfish = 1,
+			stone_ore_target = 0,
+			deepslate_ore_target = 0,
+		}),
 		drop = "",
 		_mcl_silk_touch_drop = {name},
 		_mcl_hardness = olddef._mcl_hardness / 2,

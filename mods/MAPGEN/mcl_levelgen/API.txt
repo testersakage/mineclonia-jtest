@@ -417,6 +417,23 @@ Function: mcl_levelgen.convert_level_position (X, Y, Z)
 Return the position X, Y, Z, converted into Minetest's coordinate
 system.
 
+Function: mcl_levelgen.request_additional_context (YABOVE, YBELOW)
+
+Request that another placement run involving the current feature be
+scheduled with, ideally, YABOVE and YBELOW blocks of additional
+vertical context.
+
+As this function triggers asynchronous MapBlock generation that is
+none the less liable to incur a performance penalty and/or delay the
+generation of MapBlocks nearer to the player, this function should not
+be invoked lightly.
+
+Placement runs triggered in response to requests for context disregard
+the generated status of existing MapBlocks or mark MapBlocks as
+finished upon completion, and in consequence features which invoke
+this function should be idempotent in both these and other runs or
+they may be duplicated, with whatever ramifications that implies.
+
 
 PLACEMENT MODIFIERS
 
