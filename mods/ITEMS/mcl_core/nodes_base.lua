@@ -856,6 +856,28 @@ core.register_node("mcl_core:packed_ice", {
 	sounds = mcl_sounds.node_sound_ice_defaults(),
 	_mcl_hardness = 0.5,
 	_mcl_silk_touch_drop = true,
+	_mcl_crafting_output = {
+		square3 = {
+			output = "mcl_core:blue_ice",
+		},
+	},
+})
+
+core.register_node ("mcl_core:blue_ice", {
+	description = S("Blue Ice"),
+	_doc_items_longdesc = S("Blue Ice is a still more compressed form of ice.  It is opaque and solid."),
+	tiles = {"mcl_core_ice_blue.png"},
+	groups = {
+		handy = 1,
+		pickaxey = 1,
+		slippery = 4,
+		building_block = 1,
+		ice = 1,
+	},
+	drop = "",
+	sounds = mcl_sounds.node_sound_ice_defaults (),
+	_mcl_hardness = 2.8,
+	_mcl_silk_touch_drop = true,
 })
 
 -- Frosted Ice (4 nodes)
