@@ -87,6 +87,7 @@ local trades_purchasing_table = {
 
 local trades_special_table = {
 	{ E(), { "mcl_core:packed_ice", 1, 1, }, 6, 0 },
+	{ E(6), { "mcl_core:blue_ice", 1, 1, }, 6, 0 },
 	{ E(), { "mcl_mobitems:gunpowder", 4, 4, }, 2, 0 },
 	{ E(), { get_random_tree, 8, 8, }, 6, 0 },
 	{ E(3), { "mcl_core:podzol", 3, 3, }, 6, 0 },

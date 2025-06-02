@@ -1007,7 +1007,7 @@ local function cancel_mapblock_run (run, y_min, y_max)
 	local run_hash = hashmapblock (run.x, run.y1, run.z)
 	assert (mb_records[run_hash] == run)
 
-	for x, y, z in ipos2 (run.x - REQUIRED_CONTEXT_XZ, y_min,
+	for x, y, z in ipos1 (run.x - REQUIRED_CONTEXT_XZ, y_min,
 			      run.z - REQUIRED_CONTEXT_XZ,
 			      run.x + REQUIRED_CONTEXT_XZ, y_max,
 			      run.z + REQUIRED_CONTEXT_XZ) do
@@ -1034,7 +1034,7 @@ local function resume_mapblock_run (run)
 	local ymax = mathmin (OVERWORLD_MAX_BLOCK,
 			      run.y2 + REQUIRED_CONTEXT_Y)
 
-	for x, y, z in ipos2 (run.x - REQUIRED_CONTEXT_XZ, ymin,
+	for x, y, z in ipos1 (run.x - REQUIRED_CONTEXT_XZ, ymin,
 			      run.z - REQUIRED_CONTEXT_XZ,
 			      run.x + REQUIRED_CONTEXT_XZ, ymax,
 			      run.z + REQUIRED_CONTEXT_XZ) do
@@ -1077,29 +1077,26 @@ local function post_mapblock_run (run)
 	local y_max = mathmin (run.y2 + REQUIRED_CONTEXT_Y,
 			       OVERWORLD_MAX_BLOCK)
 
-	-- Verify that the context of the run is consistent, and
-	-- abandon it if it has since been unloaded.
-	for x = run.x - REQUIRED_CONTEXT_XZ,
-		run.x + REQUIRED_CONTEXT_XZ do
-		for z = run.z - REQUIRED_CONTEXT_XZ,
-			run.z + REQUIRED_CONTEXT_XZ do
-			for y = y_min, y_max do
-				local state = mapblock_state (x, y, z)
-				if not (state == MBS_LOCKED
-					or state == MBS_LOCKED_GENERATED
-					or state == MBS_REGENERATING) then
-					local blurb = "  Inconsistency detected: X: %d, Y: %d, Z: %d is %d, not locked"
-					dbg (blurb, x, y, z, state)
-					assert (false)
-				end
+	for x, y, z in ipos2 (run.x - REQUIRED_CONTEXT_XZ, y_min,
+			      run.z - REQUIRED_CONTEXT_XZ,
+			      run.x + REQUIRED_CONTEXT_XZ, y_max,
+			      run.z + REQUIRED_CONTEXT_XZ) do
+		-- Verify that the context of the run is consistent,
+		-- and abandon it if it has since been unloaded.
+		local state = mapblock_state (x, y, z)
+		if not (state == MBS_LOCKED
+			or state == MBS_LOCKED_GENERATED
+			or state == MBS_REGENERATING) then
+			local blurb = "  Inconsistency detected: X: %d, Y: %d, Z: %d is %d, not locked"
+			dbg (blurb, x, y, z, state)
+			assert (false)
+		end
 
-				-- This condition cannot trigger if
-				-- generation_radius == 1.
-				if not test_block_status (x, y, z) then
-					cancel_mapblock_run (run, y_min, y_max)
-					return
-				end
-			end
+		-- This condition cannot trigger if
+		-- generation_radius == 1.
+		if not test_block_status (x, y, z) then
+			cancel_mapblock_run (run, y_min, y_max)
+			return
 		end
 	end
 
@@ -1192,7 +1189,7 @@ function schedule_regeneration_for_emerge (bx, bx1, by, by1, bz, bz1)
 		mbs_cache_min_y = OVERWORLD_MIN_BLOCK
 		mbs_cache_min_z = bz - REQUIRED_CONTEXT_XZ - 3
 		clear_mbs_cache (mbs_cache_width)
-		for bx, by, bz in ipos1 (bx - REQUIRED_CONTEXT_XZ - 1,
+		for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ - 1,
 					 by,
 					 bz - REQUIRED_CONTEXT_XZ - 1,
 					 bx1 + REQUIRED_CONTEXT_XZ + 1,
@@ -1210,7 +1207,7 @@ function schedule_regeneration_for_unlock (bx, bz)
 		mbs_cache_min_y = OVERWORLD_MIN_BLOCK
 		mbs_cache_min_z = bz - REQUIRED_CONTEXT_XZ - 3
 		clear_mbs_cache (mbs_cache_width)
-		for bx, by, bz in ipos1 (bx - REQUIRED_CONTEXT_XZ - 1,
+		for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ - 1,
 					 0,
 					 bz - REQUIRED_CONTEXT_XZ - 1,
 					 bx + REQUIRED_CONTEXT_XZ + 1,
