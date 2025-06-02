@@ -1786,10 +1786,9 @@ mcl_levelgen.register_feature ("mcl_levelgen:iceberg", {
 })
 
 ------------------------------------------------------------------------
--- Default placed features.
+-- Blue Ice outgrowths.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/BlueIceFeature.html
 ------------------------------------------------------------------------
-
--- TODO: export these functions and remove duplicates.
 
 local function rtz (n)
 	if n < 0 then
@@ -1797,6 +1796,104 @@ local function rtz (n)
 	end
 	return floor (n)
 end
+
+local BLUE_ICE_ATTEMPTS = 200
+
+local function blue_ice_replaceable_p (cid)
+	return cid == cid_air
+		or cid == cid_water_source
+		or cid == cid_packed_ice
+		or cid == cid_ice
+end
+
+local dirs_up_only = {
+	{ 1, 0, 0, },
+	{ -1, 0, 0, },
+	{ 0, 0, 1, },
+	{ 0, 0, -1, },
+	{ 0, 1, 0, },
+}
+
+local dirs_all = {
+	{ 1, 0, 0, },
+	{ -1, 0, 0, },
+	{ 0, 0, 1, },
+	{ 0, 0, -1, },
+	{ 0, 1, 0, },
+	{ 0, -1, 0, },
+}
+
+local function blue_ice_place (_, x, y, z, cfg, rng)
+	iceberg_rng:reseed (rng:next_long ())
+	local target_y = OVERWORLD_SEA_LEVEL - 1
+	if target_y < run_minp.y or target_y > run_maxp.y then
+		return false
+	elseif y > target_y then
+		return false
+	else
+		local rng = iceberg_rng
+		-- Find an adjoining packed ice block.
+		local found = false
+		for _, dir in ipairs (dirs_up_only) do
+			local x1 = x + dir[1]
+			local y1 = y + dir[2]
+			local z1 = z + dir[3]
+			local cid, _ = get_block (x1, y1, z1)
+			if cid == cid_packed_ice then
+				found = true
+				break
+			end
+		end
+		if not found then
+			return false
+		end
+
+		set_block (x, y, z, cid_blue_ice, 0)
+		for i = 0, BLUE_ICE_ATTEMPTS do
+			local yoff = rng:next_within (5) - rng:next_within (6)
+
+			if yoff > -6 then
+				local xz_dist = 3 + mathmin (0, ceil (yoff / 2))
+				local dx = rng:next_within (xz_dist)
+					- rng:next_within (xz_dist)
+				local dz = rng:next_within (xz_dist)
+					- rng:next_within (xz_dist)
+				local x, y, z = x + dx, y + yoff, z + dz
+
+				-- If this block is air, water, or any
+				-- other form of ice, attempt to
+				-- replace it with a blue ice block
+				-- attached to another of its ilk.
+
+				local cid, _ = get_block (x, y, z)
+				if blue_ice_replaceable_p (cid) then
+					for _, dir in ipairs (dirs_all) do
+						local x1 = x + dir[1]
+						local y1 = y + dir[2]
+						local z1 = z + dir[3]
+						local cid, _ = get_block (x1, y1, z1)
+						if cid == cid_blue_ice then
+							set_block (x, y, z, cid_blue_ice, 0)
+							break
+						end
+					end
+				end
+			end
+		end
+		fix_lighting (x - 3, y - 5, x - 3, x + 3, y + 4, z - 3)
+		return true
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:blue_ice", {
+	place = blue_ice_place,
+})
+
+------------------------------------------------------------------------
+-- Default placed features.
+------------------------------------------------------------------------
+
+-- TODO: export these functions and remove duplicates.
 
 local function trapezoidal_height (min, max, bound)
 	local diff = max - min
@@ -2981,6 +3078,20 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:iceberg_blue", {
 		function (x, y, z, rng)
 			return { x, OVERWORLD_SEA_LEVEL, z, }
 		end,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:blue_ice", {
+	feature = "mcl_levelgen:blue_ice",
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:blue_ice", {
+	configured_feature = "mcl_levelgen:blue_ice",
+	placement_modifiers = {
+		mcl_levelgen.build_count (uniform_height (0, 19)),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (30, 61)),
 		mcl_levelgen.build_in_biome (),
 	},
 })
