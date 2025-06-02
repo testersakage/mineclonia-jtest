@@ -60,7 +60,7 @@ local geode_malus = mcl_levelgen.construct_cid_list ({
 	"group:lava",
 	"group:water",
 	"mcl_core:bedrock",
-	-- "mcl_core:blue_ice",
+	"mcl_core:blue_ice",
 	"mcl_core:ice",
 	"mcl_core:packed_ice",
 })
