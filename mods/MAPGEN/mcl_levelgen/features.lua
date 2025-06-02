@@ -32,9 +32,6 @@ local NUM_GENERATION_STEPS = 11
 -- maintaining the relative position of each feature in its feature
 -- list.
 
-local registered_features = {}
-mcl_levelgen.registered_features = {}
-
 local function indexof (list, val)
 	for i, v in ipairs (list) do
 		if v == val then
@@ -198,8 +195,6 @@ local function merge_feature_precedences (preset)
 	-- elements in reverse order of iteration.
 	local seen = {}
 	for _, feature in ipairs (all_features) do
-		local items = {}
-
 		-- First, detect cycles.
 		local success = dfs (feature, feature_deps[feature], feature_deps, nil)
 
@@ -394,13 +389,15 @@ local relight_rgn, gen_notifies = nil, {}
 local fluids_to_transform = {}
 local heightmap_modifications
 local preset
+local features_requesting_additional_context = {}
+local context_expansion_below, context_expansion_above
 
 mcl_levelgen.placement_run_minp = run_minp
 mcl_levelgen.placement_run_maxp = run_maxp
 mcl_levelgen.placement_level_min = 0
 mcl_levelgen.placement_level_height = 0
 mcl_levelgen.current_placed_feature = nil
-mcl_levelgen.heightmap_modifications = heightmap_modifications
+mcl_levelgen.heightmap_modifications = nil
 
 local function collect_unlit_region (aabb, list)
 	insert (list, aabb)
@@ -456,6 +453,9 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 	vm:get_param2_data (param2s)
 	area = VoxelArea (vm:get_emerged_area ())
 	vm_modified = false
+	features_requesting_additional_context = {}
+	context_expansion_above = 0
+	context_expansion_below = 0
 	mcl_levelgen.process_features_1 ()
 
 	if vm_modified then
@@ -473,7 +473,10 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 	biomes = nil
 	heightmap = nil
 	cids, param2s = {}, {}
-	return relight_list, gen_notifies, fluids_to_transform
+	return relight_list, gen_notifies, fluids_to_transform,
+		features_requesting_additional_context,
+		context_expansion_above,
+		context_expansion_below
 end
 
 local function is_not_air (cid, param2)
@@ -507,7 +510,6 @@ local function complete_partial_heightmap (x, z, current_min, idx,
 	end
 
 	local value = heightmap[idx]
-	local flags = rshift (value, 30)
 	local shift = (flag == SURFACE_UNCERTAIN
 		      and 10 or 0)
 
@@ -698,6 +700,7 @@ local function correct_heightmaps (x, y, z, cid, param2)
 end
 
 function mcl_levelgen.set_block (x, y, z, cid, param2)
+	assert (cid and param2)
 	local run_x = run_min_x
 	local run_z = run_min_z
 	if z - run_z >= HEIGHTMAP_SIZE_NODES
@@ -755,6 +758,17 @@ function mcl_levelgen.transform_fluid (x, y, z)
 	insert (fluids_to_transform, x)
 	insert (fluids_to_transform, y)
 	insert (fluids_to_transform, z)
+end
+
+function mcl_levelgen.request_additional_context (yabove, ybelow)
+	local feature = mcl_levelgen.current_placed_feature
+	if indexof (features_requesting_additional_context, feature) == -1 then
+		insert (features_requesting_additional_context, feature)
+	end
+	context_expansion_above
+		= mathmax (context_expansion_above, yabove)
+	context_expansion_below
+		= mathmax (context_expansion_below, ybelow)
 end
 
 ------------------------------------------------------------------------
@@ -1039,6 +1053,11 @@ local registered_biomes = mcl_levelgen.registered_biomes
 local sort = table.sort
 local warned = {}
 
+local function run_permits_feature_p (run, feature)
+	return not run.supplemental
+		or indexof (run.data.features, feature) ~= -1
+end
+
 function mcl_levelgen.process_features_1 ()
 	local seed = mcl_levelgen.seed
 	local pop = mcl_levelgen.set_population_seed (rng, seed,
@@ -1063,7 +1082,8 @@ function mcl_levelgen.process_features_1 ()
 
 			if biomefeatures then
 				for _, feature in ipairs (biomefeatures) do
-					if not seen[feature] then
+					if not seen[feature]
+						and run_permits_feature_p (run, feature) then
 						seen[feature] = true
 						assert (indices[feature])
 						insert (features, indices[feature])

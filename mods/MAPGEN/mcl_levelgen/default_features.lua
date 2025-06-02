@@ -102,7 +102,6 @@ local cid_air = core.CONTENT_AIR
 local cid_snow = core.get_content_id ("mcl_core:snow")
 local cid_water_source = core.get_content_id ("mcl_core:water_source")
 local cid_ice = core.get_content_id ("mcl_core:ice")
--- local cid_dirt = core.get_content_id ("mcl_core:dirt")
 local cid_grass = core.get_content_id ("mcl_core:dirt_with_grass")
 local cid_grass_snowy = core.get_content_id ("mcl_core:dirt_with_grass_snow")
 local cid_mycelium = core.get_content_id ("mcl_core:mycelium")
@@ -1378,7 +1377,7 @@ local function lake_place (_, x, y, z, cfg, rng)
 				local cid, _ = get_block (x, y, z)
 				if solid_p (cid)
 					and indexof (barrier_immune, cid) == -1 then
-					set_block (x, y, z, barrier_cid)
+					set_block (x, y, z, barrier_cid, 0)
 				end
 				transform_fluid (x, y, z)
 			end
@@ -1890,6 +1889,209 @@ mcl_levelgen.register_feature ("mcl_levelgen:blue_ice", {
 })
 
 ------------------------------------------------------------------------
+-- Forest Rock.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/ForestRockFeature.html
+------------------------------------------------------------------------
+
+-- local forest_rock_cfg = {
+-- 	cid = nil,
+-- 	param2 = nil,
+-- }
+
+local function forest_rock_advance_rng (rng)
+	for i = 1, 3 do
+		for j = 1, 6 do
+			rng:next_within (2)
+		end
+	end
+end
+
+local stone_or_dirt = mcl_levelgen.construct_cid_list ({
+	"group:stone_ore_target",
+	"group:deepslate_ore_target",
+	"group:dirt",
+})
+
+local function forest_rock_place (_, x, y, z, cfg, rng)
+	if y < run_minp.y or y > run_maxp.y then
+		forest_rock_advance_rng (rng)
+		return false
+	end
+
+	local cid, param2 = cfg.cid, cfg.param2
+	local cid_below, _ = get_block (x, y - 1, z)
+	if cid_below == cid
+		or indexof (stone_or_dirt, cid_below) == -1 then
+		forest_rock_advance_rng (rng)
+		return false
+	end
+
+	for i = 1, 3 do
+		local rx = rng:next_within (2)
+		local ry = rng:next_within (2)
+		local rz = rng:next_within (2)
+		local d = (rx + ry + rz) * 0.333 + 0.5
+		local dsqr = d * d
+
+		for x1, y1, z1 in ipos3 (x - rx, y - ry, z - rz,
+					 x + rx, y + ry, z + rz) do
+			local dx = (x - x1) * (x - x1)
+			local dy = (y - y1) * (y - y1)
+			local dz = (z - z1) * (z - z1)
+
+			if dx + dy + dz <= dsqr then
+				set_block (x1, y1, z1, cid, param2)
+			end
+		end
+	end
+	fix_lighting (x - 3, y - 3, z - 3, x + 3, y + 3, z + 3)
+	return true
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:forest_rock", {
+	place = forest_rock_place,
+})
+
+------------------------------------------------------------------------
+-- Underwater magma.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/UnderwaterMagmaFeature.html
+------------------------------------------------------------------------
+
+-- local underwater_magma_cfg = {
+-- 	floor_search_range = nil,
+-- 	placement_radius_around_floor = nil,
+-- 	placement_probability_per_valid_position = nil,
+-- }
+
+local find_ceiling_and_floor = mcl_levelgen.find_ceiling_and_floor
+local cid_magma_block = core.get_content_id ("mcl_nether:magma")
+
+local function is_water_source (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_water_source
+end
+
+local function is_not_water_source (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid ~= cid_water_source
+end
+
+local is_water_or_air = mcl_levelgen.is_water_or_air
+
+local function essay_magma_placement (x, y, z)
+	if not is_water_or_air (x, y, z)
+		and not is_water_or_air (x, y - 1, z)
+		and not is_water_or_air (x - 1, y, z)
+		and not is_water_or_air (x, y, z - 1)
+		and not is_water_or_air (x + 1, y, z)
+		and not is_water_or_air (x, y, z + 1) then
+		set_block (x, y, z, cid_magma_block, 0)
+		return true
+	end
+	return false
+end
+
+local function underwater_magma_place (_, x, y, z, cfg, rng)
+	if y < run_minp.y or y > run_maxp.y then
+		local r = cfg.placement_radius_around_floor
+		local rr = r * 2 + 1
+		rng:consume (rr * rr * rr)
+		return false
+	else
+		local range = cfg.floor_search_range
+		local _, floor
+			= find_ceiling_and_floor (x, y, z, range,
+						  is_water_source,
+						  is_not_water_source)
+
+		if not floor then
+			local r = cfg.placement_radius_around_floor
+			local rr = r * 2 + 1
+			rng:consume (rr * rr * rr)
+			return false
+		end
+
+		local radius = cfg.placement_radius_around_floor
+		local probability = cfg.placement_probability_per_valid_position
+
+		local set = false
+		for x, y, z in ipos3 (x - radius, y - radius, z - radius,
+				      x + radius, y + radius, z + radius) do
+			if rng:next_double () < probability
+				and essay_magma_placement (x, y, z) then
+				set = true
+			end
+		end
+		if set then
+			fix_lighting (x - radius, y - radius, z - radius,
+				      x + radius, y + radius, z + radius)
+		end
+		return set
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:underwater_magma", {
+	place = underwater_magma_place,
+})
+
+------------------------------------------------------------------------
+-- Disk.
+-- mcl_levelgen:disk
+------------------------------------------------------------------------
+
+-- local disk_cfg = {
+-- 	target = nil,
+-- 	content = nil,
+-- 	radius = nil,
+-- 	half_height = nil,
+-- }
+
+local disk_rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+
+local function disk_replace_column (x, top, bottom, z, cfg, rng)
+	local content = cfg.content
+	local pred = cfg.target
+	local set = false
+
+	for y = top, bottom, -1 do
+		if pred (x, y, z) then
+			local cid, param2 = content (x, y, z, rng)
+			set_block (x, y, z, cid, param2)
+			set = true
+		end
+	end
+	return set
+end
+
+local function disk_place (_, x, y, z, cfg, rng)
+	disk_rng:reseed (rng:next_long ())
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	else
+		local top = y + cfg.half_height
+		local bottom = y - cfg.half_height
+		local radius = cfg.radius (disk_rng)
+		local replaced = false
+
+		for dx, dy, dz in ipos3 (-radius, 0, -radius,
+					 radius, 0, radius) do
+			local d = dx * dx + dz * dz + dy * dy
+			if d <= radius * radius then
+				if disk_replace_column (x + dx, top, bottom, z + dz,
+							cfg, disk_rng) then
+					replaced = true
+				end
+			end
+		end
+		return replaced
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:disk", {
+	place = disk_place,
+})
+
+------------------------------------------------------------------------
 -- Default placed features.
 ------------------------------------------------------------------------
 
@@ -2323,6 +2525,7 @@ local TEN = function () return 10 end
 local NINETY = function () return 90 end
 local TWENTY_FIVE = function () return 25 end
 local EIGHT = function () return 8 end
+local THREE = function () return 3 end
 
 mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_coal_upper", {
 	configured_feature = "mcl_levelgen:ore_coal",
@@ -3092,6 +3295,180 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:blue_ice", {
 		mcl_levelgen.build_count (uniform_height (0, 19)),
 		mcl_levelgen.build_in_square (),
 		mcl_levelgen.build_height_range (uniform_height (30, 61)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local cid_mossy_cobblestone = core.get_content_id ("mcl_core:mossycobble")
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:forest_rock", {
+	feature = "mcl_levelgen:forest_rock",
+	cid = cid_mossy_cobblestone,
+	param2 = 0,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:forest_rock", {
+	configured_feature = "mcl_levelgen:forest_rock",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:underwater_magma", {
+	feature = "mcl_levelgen:underwater_magma",
+	floor_search_range = 5,
+	placement_probability_per_valid_position = 0.5,
+	placement_radius_around_floor = 1,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:underwater_magma", {
+	configured_feature = "mcl_levelgen:underwater_magma",
+	placement_modifiers = {
+		mcl_levelgen.build_count (uniform_height (44, 52)),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN, 256)),
+		mcl_levelgen.build_surface_relative_threshold_filter ("motion_blocking",
+								      -huge, -2),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local cid_clay_block = core.get_content_id ("mcl_core:clay")
+local cid_dirt = core.get_content_id ("mcl_core:dirt")
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_clay", {
+	feature = "mcl_levelgen:disk",
+	half_height = 1,
+	radius = uniform_height (2, 3),
+	content = function (x, y, z, rng)
+		return cid_clay_block, 0
+	end,
+	target = function (x, y, z)
+		local cid, _ = get_block (x, y, z)
+		return cid == cid_dirt or cid == cid_clay_block
+	end,
+})
+
+local cid_mud = core.get_content_id ("mcl_mud:mud")
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_grass", {
+	feature = "mcl_levelgen:disk",
+	half_height = 2,
+	radius = uniform_height (2, 6),
+	content = function (x, y, z, rng)
+		local above, _ = get_block (x, y + 1, z, rng)
+		if not solid_p (above) or above == cid_water_source then
+			return cid_grass, 0
+		else
+			return cid_dirt, 0
+		end
+	end,
+	target = function (x, y, z)
+		local cid, _ = get_block (x, y, z)
+		return cid == cid_dirt or cid == cid_mud
+	end,
+})
+
+local function is_dirt_or_grass_block (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_dirt or cid == cid_grass
+end
+
+local cid_gravel = core.get_content_id ("mcl_core:gravel")
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_gravel", {
+	feature = "mcl_levelgen:disk",
+	half_height = 2,
+	radius = uniform_height (2, 5),
+	content = function (x, y, z, rng)
+		return cid_gravel, 0
+	end,
+	target = is_dirt_or_grass_block,
+})
+
+local cid_sand = core.get_content_id ("mcl_core:sand")
+local cid_sandstone = core.get_content_id ("mcl_core:sandstone")
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_sand", {
+	feature = "mcl_levelgen:disk",
+	half_height = 2,
+	radius = uniform_height (2, 6),
+	content = function (x, y, z, rng)
+		if is_air (x, y - 1, z) then
+			return cid_sandstone, 0
+		else
+			return cid_sand, 0
+		end
+	end,
+	target = is_dirt_or_grass_block,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:disk_clay", {
+	configured_feature = "mcl_levelgen:disk_clay",
+	placement_modifiers = {
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		function (x, y, z, rng)
+			if is_water_source (x, y, z) then
+				return { x, y, z, }
+			else
+				return nil
+			end
+		end,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:disk_grass", {
+	configured_feature = "mcl_levelgen:disk_grass",
+	placement_modifiers = {
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_constant_height_offset (-1),
+		function (x, y, z, rng)
+			local cid, _ = get_block (x, y, z)
+			if cid == cid_mud then
+				return { x, y, z, }
+			else
+				return nil
+			end
+		end,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:disk_gravel", {
+	configured_feature = "mcl_levelgen:disk_gravel",
+	placement_modifiers = {
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		function (x, y, z, rng)
+			if is_water_source (x, y, z) then
+				return { x, y, z, }
+			else
+				return nil
+			end
+		end,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:disk_sand", {
+	configured_feature = "mcl_levelgen:disk_sand",
+	placement_modifiers = {
+		mcl_levelgen.build_count (THREE),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		function (x, y, z, rng)
+			if is_water_source (x, y, z) then
+				return { x, y, z, }
+			else
+				return nil
+			end
+		end,
 		mcl_levelgen.build_in_biome (),
 	},
 })

@@ -21,6 +21,8 @@ local THREE = function (_) return 3 end
 local TWENTY_FIVE = function (_) return 25 end
 local TWO_HUNDRED_AND_FIFTY_SIX = function (_) return 256 end
 
+local mathmax = math.max
+
 ------------------------------------------------------------------------
 -- Async lush caves.
 ------------------------------------------------------------------------
@@ -360,14 +362,17 @@ mcl_levelgen.register_configured_feature ("mcl_lush_caves:moss_vegetation", {
 		{
 			weight = 25,
 			cid = cid_moss_carpet,
+			param2 = 0,
 		},
 		{
 			weight = 50,
 			cid = cid_short_grass,
+			param2 = 0,
 		},
 		{
 			weight = 10,
 			cid = cid_double_grass,
+			param2 = 0,
 		},
 	}),
 })
@@ -477,16 +482,23 @@ local function generate_roots (x, y, y1, z, cfg)
 	end
 end
 
+local leaf_air_or_non_walkable_p = mcl_levelgen.leaf_air_or_non_walkable_p
+local blurb1 = "Azalea tree generation space tests failed: %d,%d,%d: %s"
+
 local function has_space_for_tree (x, y, z, cfg)
 	local required_space = cfg.required_vertical_space_for_tree
 	local allowed_water = cfg.allowed_vertical_water_for_tree
 	for i = 0, required_space - 1 do
 		local cid, _ = get_block (x, y + i, z)
-		if cid ~= cid_air
-		-- Permit the first ALLOWED_WATER blocks to be water.
+		if not leaf_air_or_non_walkable_p (cid)
+		-- Permit the first ALLOWED_WATER blocks to be water
+		-- and permit azalea trees to replace leaves.
 			and (i >= allowed_water
 			     or (cid ~= cid_water_source
 				 and cid ~= cid_water_flowing)) then
+			local str = string.format (blurb1, x, y + i, z,
+						   core.get_name_from_content_id (cid))
+			core.log ("info", str)
 			return false
 		end
 	end
@@ -499,6 +511,9 @@ local function generate_tree_and_roots (x, y, z, cfg)
 		local d = (y + dy) - run_maxp.y
 		if d > ACCESSIBLE_CONTEXT_SIZE then
 			core.log ("info", string.format (blurb, x, y, z, run_minp.y, run_maxp.y, dy))
+			-- At least 32 blocks above sea level.
+			local requisition = mathmax (64 - y, 0) + 32
+			mcl_levelgen.request_additional_context (requisition, 0)
 			return false
 		end
 

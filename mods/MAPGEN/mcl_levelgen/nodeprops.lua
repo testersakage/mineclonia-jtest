@@ -555,6 +555,12 @@ function mcl_levelgen.is_leaf_or_air (x, y, z)
 	return cid == cid_air or is_cid_leaf[cid]
 end
 
+function mcl_levelgen.leaf_air_or_non_walkable_p (cid)
+	return cid == cid_air
+		or is_cid_leaf[cid]
+		or not is_cid_walkable[cid]
+end
+
 function mcl_levelgen.is_water_or_air (x, y, z)
 	local cid, _ = get_block (x, y, z)
 	return cid == cid_air
@@ -728,6 +734,43 @@ function mcl_levelgen.facedir_to_wallmounted (axis, dir)
 	else
 		assert (false)
 	end
+end
+
+function mcl_levelgen.find_ceiling_and_floor (x, y, z, range, is_air, is_solid)
+	local floor, ceiling = nil, nil
+	local yfloor, yceiling = y, y
+
+	if not is_air (x, y, z) then
+		return nil, nil
+	end
+
+	for y = 1, range do
+		if floor == nil then
+			if is_air (x, yfloor, z) then
+				yfloor = yfloor - 1
+			elseif is_solid (x, yfloor, z) then
+				floor = yfloor
+			else
+				floor = false
+			end
+		end
+
+		if ceiling == nil then
+			if is_air (x, yceiling, z) then
+				yceiling = yceiling + 1
+			elseif is_solid (x, yceiling, z) then
+				ceiling = yceiling
+			else
+				ceiling = false
+			end
+		end
+
+		if floor ~= nil and ceiling ~= nil then
+			break
+		end
+	end
+
+	return ceiling, floor
 end
 
 --------------------------------------------------------------------------
