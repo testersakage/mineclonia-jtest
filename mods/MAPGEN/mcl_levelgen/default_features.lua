@@ -234,7 +234,6 @@ local ceil = math.ceil
 local run_minp = mcl_levelgen.placement_run_minp
 local run_maxp = mcl_levelgen.placement_run_maxp
 local pi = math.pi
-local BLOCKS_PER_BLOB = 8.0
 
 local lerp1d = mcl_levelgen.lerp1d
 local adjoins_air = mcl_levelgen.adjoins_air
@@ -380,6 +379,7 @@ local function ore_place (_, x, y, z, cfg, rng)
 	-- placed in individual blobs.
 
 	local dir = rng:next_float () * pi
+	local BLOCKS_PER_BLOB = 8.0
 	local size_ellipsoid = cfg.size / BLOCKS_PER_BLOB
 	local size_half = ceil ((cfg.size / BLOCKS_PER_BLOB + 1.0) / 2.0)
 
@@ -463,8 +463,6 @@ end
 -- 	y_spread = nil,
 -- }
 
-local blurb = "Patch attempted to place nonexistent feature: "
-
 local function patch_random_place (_, x, y, z, cfg, rng)
 	if y < run_minp.y or y > run_maxp.y then
 		return false
@@ -475,6 +473,7 @@ local function patch_random_place (_, x, y, z, cfg, rng)
 		feature = mcl_levelgen.registered_placed_features[feature]
 		if not feature then
 			if not warned[feature] then
+				local blurb = "Patch attempted to place nonexistent feature: "
 				core.log ("warning", blurb .. feature)
 				warned[feature] = true
 			end
@@ -949,8 +948,6 @@ local function place_ground_surfaces (self, surfaces, x, y, z, rx, rz, cfg, rng)
 	end
 end
 
-local blurb = "Vegetation patch attempted to place nonexistent feature: "
-
 local function place_vegetation (self, placed_surfaces, cfg, rng)
 	local chance = cfg.vegetation_chance
 	local feature = cfg.vegetation_feature
@@ -958,6 +955,7 @@ local function place_vegetation (self, placed_surfaces, cfg, rng)
 		feature = mcl_levelgen.registered_placed_features[feature]
 		if not feature then
 			if not warned[feature] then
+				local blurb = "Vegetation patch attempted to place nonexistent feature: "
 				core.log ("warning", blurb .. feature)
 				warned[feature] = true
 			end
@@ -1796,8 +1794,6 @@ local function rtz (n)
 	return floor (n)
 end
 
-local BLUE_ICE_ATTEMPTS = 200
-
 local function blue_ice_replaceable_p (cid)
 	return cid == cid_air
 		or cid == cid_water_source
@@ -1848,7 +1844,7 @@ local function blue_ice_place (_, x, y, z, cfg, rng)
 		end
 
 		set_block (x, y, z, cid_blue_ice, 0)
-		for i = 0, BLUE_ICE_ATTEMPTS do
+		for i = 0, 200 do
 			local yoff = rng:next_within (5) - rng:next_within (6)
 
 			if yoff > -6 then
@@ -2367,6 +2363,79 @@ mcl_levelgen.register_feature ("mcl_levelgen:ice_spike", {
 })
 
 ------------------------------------------------------------------------
+-- Spring.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/SpringFeature.html
+------------------------------------------------------------------------
+
+-- local spring_cfg = {
+-- 	fluid_cid = nil,
+-- 	requires_block_below = nil,
+-- 	rock_count = nil,
+-- 	hole_count = nil,
+-- 	valid_blocks = nil,
+-- }
+
+local function spring_place (_, x, y, z, cfg, rng)
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	else
+		local rock, hole = 0, 0
+		local valid_blocks = cfg.valid_blocks
+		local cid, _ = get_block (x, y + 1, z)
+		if indexof (valid_blocks, cid) == -1 then
+			return false
+		end
+		local cid, _ = get_block (x, y, z)
+		if cid ~= cid_air and indexof (valid_blocks, cid) == -1 then
+			return false
+		end
+		local cid, _ = get_block (x, y - 1, z)
+		if indexof (valid_blocks, cid) ~= -1 then
+			rock = rock + 1
+		elseif cfg.requires_block_below then
+			return false
+		elseif cid == cid_air then
+			hole = hole + 1
+		end
+		local cid, _ = get_block (x - 1, y, z)
+		if indexof (valid_blocks, cid) ~= -1 then
+			rock = rock + 1
+		elseif cid == cid_air then
+			hole = hole + 1
+		end
+		local cid, _ = get_block (x + 1, y, z)
+		if indexof (valid_blocks, cid) ~= -1 then
+			rock = rock + 1
+		elseif cid == cid_air then
+			hole = hole + 1
+		end
+		local cid, _ = get_block (x, y, z - 1)
+		if indexof (valid_blocks, cid) ~= -1 then
+			rock = rock + 1
+		elseif cid == cid_air then
+			hole = hole + 1
+		end
+		local cid, _ = get_block (x, y, z + 1)
+		if indexof (valid_blocks, cid) ~= -1 then
+			rock = rock + 1
+		elseif cid == cid_air then
+			hole = hole + 1
+		end
+		if rock == cfg.rock_count and hole == cfg.hole_count then
+			set_block (x, y, z, cfg.fluid_cid, 0)
+			transform_fluid (x, y, z)
+			fix_lighting (x, y, z, x, y, z)
+			return true
+		end
+		return false
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:spring", {
+	place = spring_place,
+})
+
+------------------------------------------------------------------------
 -- Default placed features.
 ------------------------------------------------------------------------
 
@@ -2390,6 +2459,27 @@ local function uniform_height (min_inclusive, max_inclusive)
 	local diff = max_inclusive - min_inclusive + 1
 	return function (rng)
 		return rng:next_within (diff) + min_inclusive
+	end
+end
+
+local function ckd_random (rng, a, b)
+	if a >= b then
+		return a
+	else
+		return a + rng:next_within (b - a)
+	end
+end
+
+-- https://mcreator.net/forum/105563/biased-bottom-height-provider
+
+local function very_biased_to_bottom_height (min_inclusive, max_inclusive,
+					     inner)
+	assert (max_inclusive - min_inclusive > inner, "Outer range is empty")
+	local inner_end = min_inclusive + inner
+	return function (rng)
+		local r1 = ckd_random (rng, inner_end, max_inclusive)
+		local r2 = ckd_random (rng, min_inclusive, inner_end - 1)
+		return ckd_random (rng, min_inclusive, r2 - 1 + r1)
 	end
 end
 
@@ -2801,6 +2891,7 @@ local NINETY = function () return 90 end
 local TWENTY_FIVE = function () return 25 end
 local EIGHT = function () return 8 end
 local THREE = function () return 3 end
+local ONE_HUNDRED_AND_TWENTY_SEVEN = function () return 127 end
 
 mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_coal_upper", {
 	configured_feature = "mcl_levelgen:ore_coal",
@@ -3808,6 +3899,99 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:ice_patch", {
 				return nil
 			end
 		end,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:vines", {
+	configured_feature = "mcl_levelgen:vines",
+	placement_modifiers = {
+		mcl_levelgen.build_count (ONE_HUNDRED_AND_TWENTY_SEVEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (64, 100)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:spring_water", {
+	feature = "mcl_levelgen:spring",
+	hole_count = 1,
+	rock_count = 4,
+	requires_block_below = true,
+	fluid_cid = cid_water_source,
+	valid_blocks = mcl_levelgen.construct_cid_list ({
+		"mcl_amethyst:calcite",
+		"mcl_core:andesite",
+		"mcl_core:diorite",
+		"mcl_core:dirt",
+		"mcl_core:granite",
+		"mcl_core:packed_ice",
+		"mcl_core:stone",
+		"mcl_deepslate:deepslate",
+		"mcl_deepslate:tuff",
+		"mcl_powder_snow:powder_snow",
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:spring_lava_frozen", {
+	feature = "mcl_levelgen:spring",
+	hole_count = 1,
+	rock_count = 4,
+	requires_block_below = true,
+	fluid_cid = cid_lava_source,
+	valid_blocks = mcl_levelgen.construct_cid_list ({
+		"mcl_core:packed_ice",
+		"mcl_core:snowblock",
+		"mcl_powder_snow:powder_snow",
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:spring_lava_overworld", {
+	feature = "mcl_levelgen:spring",
+	hole_count = 1,
+	rock_count = 4,
+	requires_block_below = true,
+	fluid_cid = cid_lava_source,
+	valid_blocks = mcl_levelgen.construct_cid_list ({
+		"mcl_amethyst:calcite",
+		"mcl_core:andesite",
+		"mcl_core:diorite",
+		"mcl_core:dirt",
+		"mcl_core:granite",
+		"mcl_core:stone",
+		"mcl_deepslate:deepslate",
+		"mcl_deepslate:tuff",
+	}),
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:spring_water", {
+	configured_feature = "mcl_levelgen:spring_water",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWENTY_FIVE),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN, 192)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:spring_lava", {
+	configured_feature = "mcl_levelgen:spring_lava_overworld",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWENTY),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (very_biased_to_bottom_height (OVERWORLD_MIN,
+									       OVERWORLD_TOP - 8, 8)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:spring_lava_frozen", {
+	configured_feature = "mcl_levelgen:spring_lava_frozen",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWENTY),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (very_biased_to_bottom_height (OVERWORLD_MIN,
+									       OVERWORLD_TOP - 8, 8)),
 		mcl_levelgen.build_in_biome (),
 	},
 })
