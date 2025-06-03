@@ -1691,29 +1691,35 @@ local function unpack_augmented_height_map (vals)
 	local mask = 0x3ff
 	local surface = band (rshift (vals, bits), mask) - bias
 	local motion_blocking = band (vals, mask) - bias
-	return surface, motion_blocking, rshift (vals, 30)
+	return surface, motion_blocking, rshift (vals, 28)
 end
 
 local function pack_augmented_height_map (surface, motion_blocking, flags)
-	-- Bit 31 indicates that the true value of `surface' is only
+	-- Bit 29 indicates that the true value of `surface' is only
 	-- known to be an indeterminate value between the value
-	-- returned and the bottom of the level.  Bit 32 means the
-	-- same of `motion_blocking'.
+	-- returned and the bottom of the level.  Bit 30 means the
+	-- same of `motion_blocking'.  Bit 31 means that `surface' has
+	-- changed; bit 32 means that of `motion_blocking'.
 
 	local bias = 512
 	local bits = 10
 	local mask = 0x3ff
 	local surface = lshift (band (surface + bias, mask), bits)
 	local motion_blocking = band (motion_blocking + bias, mask)
-	return bor (surface, motion_blocking, lshift (flags, 30))
+	return bor (surface, motion_blocking, lshift (flags, 28))
 end
 
 local SURFACE_UNCERTAIN = 0x1
 local MOTION_BLOCKING_UNCERTAIN = 0x2
+local SURFACE_MODIFIED = 0x4
+local MOTION_BLOCKING_MODIFIED = 0x8
+local MODIFIED_MASK = bnot (bor (SURFACE_UNCERTAIN, MOTION_BLOCKING_MODIFIED))
 
 mcl_levelgen.unpack_augmented_height_map = unpack_augmented_height_map
 mcl_levelgen.SURFACE_UNCERTAIN = SURFACE_UNCERTAIN
+mcl_levelgen.SURFACE_MODIFIED = SURFACE_MODIFIED
 mcl_levelgen.MOTION_BLOCKING_UNCERTAIN = MOTION_BLOCKING_UNCERTAIN
+mcl_levelgen.MOTION_BLOCKING_MODIFIED = MOTION_BLOCKING_MODIFIED
 
 local function copy_heightmap_segment (run, dst, wg, dx, dz)
 	-- Transform output coordinates.
@@ -1819,10 +1825,12 @@ local function restore_heightmap_segment (run, src, dx, dz)
 	local idx_dst = x * HEIGHTMAP_SIZE_NODES + z + 1
 	local idx_src = origin_x * cs + origin_z + 1
 	local dst = heightmap.data
-	local run_min_y = (run.y1 - REQUIRED_CONTEXT_Y) * 16 - OVERWORLD_MIN_BLOCK
-	local run_max_y = (run.y2 + REQUIRED_CONTEXT_Y) * 16 - OVERWORLD_MIN_BLOCK
+	local run_min_y = (run.y1 - REQUIRED_CONTEXT_Y) * 16
+		- OVERWORLD_MIN
+	local run_max_y = (run.y2 + REQUIRED_CONTEXT_Y) * 16
+		- OVERWORLD_MIN + 15
 
-	for x1 = 1, 16 do
+	for x1 = 0, 15 do
 		for i = 0, 15 do
 			local old = dst[idx_src + i]
 			local new = src[idx_dst + i]
@@ -1835,19 +1843,26 @@ local function restore_heightmap_segment (run, src, dx, dz)
 			local new_1, new_2, new_flags
 				= unpack_augmented_height_map (new)
 
-			if new_1 >= old_1
-				or (old_1 - 1 >= run_min_y and old_1 - 1 <= run_max_y) then
-				old_1 = new_1
-				flags = bor (band (flags, bnot (SURFACE_UNCERTAIN)),
-					     band (new_flags, SURFACE_UNCERTAIN))
+			if band (new_flags, SURFACE_MODIFIED) ~= 0 then
+				if new_1 >= old_1
+					or (old_1 - 1 >= run_min_y and old_1 - 1 <= run_max_y) then
+					old_1 = new_1
+					flags = bor (band (flags, bnot (SURFACE_UNCERTAIN)),
+						     band (new_flags, SURFACE_UNCERTAIN))
+				end
 			end
-			if new_2 >= old_2
-				or (old_2 - 1 >= run_min_y and old_2 - 1 <= run_max_y) then
-				old_2 = new_2
-				flags = bor (band (flags, bnot (MOTION_BLOCKING_UNCERTAIN)),
-					     band (new_flags, MOTION_BLOCKING_UNCERTAIN))
+			if band (new_flags, MOTION_BLOCKING_MODIFIED) ~= 0 then
+				if new_2 >= old_2
+					or (old_2 - 1 >= run_min_y and old_2 - 1 <= run_max_y) then
+					old_2 = new_2
+					flags = bor (band (flags, bnot (MOTION_BLOCKING_UNCERTAIN)),
+						     band (new_flags, MOTION_BLOCKING_UNCERTAIN))
+				end
 			end
-			dst[idx_src + i] = pack_augmented_height_map (old_1, old_2, flags)
+
+			flags = band (flags, MODIFIED_MASK)
+			dst[idx_src + i]
+				= pack_augmented_height_map (old_1, old_2, flags)
 		end
 
 		idx_dst = idx_dst + HEIGHTMAP_SIZE_NODES
