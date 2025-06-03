@@ -380,6 +380,8 @@ local unpack_augmented_height_map = mcl_levelgen.unpack_augmented_height_map
 local pack_height_map = mcl_levelgen.pack_height_map
 local SURFACE_UNCERTAIN = mcl_levelgen.SURFACE_UNCERTAIN
 local MOTION_BLOCKING_UNCERTAIN = mcl_levelgen.MOTION_BLOCKING_UNCERTAIN
+local SURFACE_MODIFIED = mcl_levelgen.SURFACE_MODIFIED
+local MOTION_BLOCKING_MODIFIED = mcl_levelgen.MOTION_BLOCKING_MODIFIED
 local REQUIRED_CONTEXT_Y = mcl_levelgen.REQUIRED_CONTEXT_Y
 local REQUIRED_CONTEXT_XZ = mcl_levelgen.REQUIRED_CONTEXT_XZ
 local cids, param2s = {}, {}
@@ -520,7 +522,7 @@ local function complete_partial_heightmap (x, z, current_min, idx,
 			local k = y + 1 - level_min
 			mask = bnot (lshift (mask, shift))
 			value = bor (band (mask, value,
-					   bnot (lshift (flag, 30))),
+					   bnot (lshift (flag, 28))),
 				     lshift (k + bias, shift))
 			heightmap[idx] = value
 			return y + 1
@@ -656,7 +658,7 @@ local function correct_heightmaps (x, y, z, cid, param2)
 	surface = surface + level_min
 	motion_blocking = motion_blocking + level_min
 
-	local flags = rshift (value, 30)
+	local flags = rshift (value, 28)
 
 	if not is_not_air (cid, param2) then
 		if (surface - 1) == y then
@@ -665,11 +667,13 @@ local function correct_heightmaps (x, y, z, cid, param2)
 			if surface == run_min_y then
 				flags = bor (flags, SURFACE_UNCERTAIN)
 			end
+			flags = bor (flags, SURFACE_MODIFIED)
 			modified = true
 		end
 	elseif surface < y + 1 then
 		surface = y + 1
-		flags = band (flags, bnot (SURFACE_UNCERTAIN))
+		flags = bor (band (flags, bnot (SURFACE_UNCERTAIN)),
+			     SURFACE_MODIFIED)
 		modified = true
 	end
 
@@ -681,11 +685,13 @@ local function correct_heightmaps (x, y, z, cid, param2)
 			if motion_blocking == run_min_y then
 				flags = bor (flags, MOTION_BLOCKING_UNCERTAIN)
 			end
+			flags = bor (flags, MOTION_BLOCKING_MODIFIED)
 			modified = true
 		end
 	elseif motion_blocking < y + 1 then
 		motion_blocking = y + 1
-		flags = band (flags, bnot (MOTION_BLOCKING_UNCERTAIN))
+		flags = bor (band (flags, bnot (MOTION_BLOCKING_UNCERTAIN)),
+			     MOTION_BLOCKING_MODIFIED)
 		modified = true
 	end
 
@@ -694,7 +700,7 @@ local function correct_heightmaps (x, y, z, cid, param2)
 		if not heightmap_modifications[hash] then
 			heightmap_modifications[hash] = value
 		end
-		heightmap[idx] = bor (lshift (flags, 30),
+		heightmap[idx] = bor (lshift (flags, 28),
 				      pack_height_map (surface - level_min,
 						       motion_blocking - level_min))
 	end

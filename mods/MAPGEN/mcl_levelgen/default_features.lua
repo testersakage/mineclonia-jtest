@@ -3639,7 +3639,7 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:lake_lava_surface", {
 	placement_modifiers = {
 		mcl_levelgen.build_rarity_filter (200),
 		mcl_levelgen.build_in_square (),
-		mcl_levelgen.build_heightmap ("world_surface"),
+		mcl_levelgen.build_heightmap ("world_surface_wg"),
 		mcl_levelgen.build_in_biome (),
 	},
 })
