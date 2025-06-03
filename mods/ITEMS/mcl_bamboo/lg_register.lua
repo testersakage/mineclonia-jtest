@@ -54,7 +54,7 @@ local function bamboo_place (_, x, y, z, cfg, rng)
 					if d < dsqr then
 						local x = x + dx
 						local z = z + dz
-						local y = index_heightmap (x, z)
+						local y = index_heightmap (x, z, false)
 						if is_air_with_dirt_below (x, y, z) then
 							set_block (x, y - 1, z, cid_podzol, 0)
 						end
