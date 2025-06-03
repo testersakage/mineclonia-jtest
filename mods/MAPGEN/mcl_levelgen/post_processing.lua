@@ -898,7 +898,7 @@ if mcl_levelgen.load_feature_environment then
 	levelgen_previous_vm = nil
 end
 
-local function async_function (vm, run, heightmap, biomes)
+local function async_function (vm, run, heightmap, wg_heightmap, biomes)
 	if levelgen_previous_vm and levelgen_previous_vm.close then
 		levelgen_previous_vm:close ()
 	end
@@ -908,8 +908,8 @@ local function async_function (vm, run, heightmap, biomes)
 	local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
 	local preset = mcl_levelgen.overworld_preset
 	local relight_list, gen_notifies, fluids_to_transform, features, c_above, c_below
-		= mcl_levelgen.process_features (vm, run, heightmap, biomes,
-						 OVERWORLD_OFFSET, preset.min_y,
+		= mcl_levelgen.process_features (vm, run, heightmap, wg_heightmap,
+						 biomes, OVERWORLD_OFFSET, preset.min_y,
 						 preset.height, preset)
 	levelgen_previous_vm = vm
 	return vm, run, heightmap, relight_list, gen_notifies,
@@ -1079,7 +1079,7 @@ local function resume_mapblock_run (run)
 	mb_records[run_hash] = run
 end
 
-local construct_heightmap_for_run
+local construct_heightmaps_for_run
 local biome_data_for_run
 
 local v = vector.zero ()
@@ -1123,11 +1123,12 @@ local function post_mapblock_run (run)
 		end
 	end
 
-	local heightmap = construct_heightmap_for_run (run)
+	local heightmap, wg_heightmap
+		= construct_heightmaps_for_run (run)
 	local biomes = biome_data_for_run (run)
 	local vm = VoxelManip (v1, v2)
 	core.handle_async (async_function, run_execution_cb, vm, run,
-			   heightmap, biomes)
+			   heightmap, wg_heightmap, biomes)
 	if vm.close then
 		vm:close ()
 	end
@@ -1468,7 +1469,7 @@ local function load_heightmap (id)
 	return tem
 end
 
-local function mapblock_heightmap (x, z)
+local function mapblock_heightmap (x, z, worldgen)
 	local w1 = mapblock_flagbyte (x, OVERWORLD_MIN_BLOCK, z)
 	local w2 = mapblock_flagbyte (x, OVERWORLD_MIN_BLOCK + 1, z)
 	local w3 = mapblock_flagbyte (x, OVERWORLD_MIN_BLOCK + 2, z)
@@ -1485,14 +1486,19 @@ local function mapblock_heightmap (x, z)
 	--        band (rshift (w6, 3), 0xf),
 	--        band (rshift (w7, 3), 0xf),
 	--        band (rshift (w8, 3), 0xf))
-	return bor (band (rshift (w1, 3), 0xf),
-		    lshift (band (rshift (w2, 3), 0xf), 4),
-		    lshift (band (rshift (w3, 3), 0xf), 8),
-		    lshift (band (rshift (w4, 3), 0xf), 12),
-		    lshift (band (rshift (w5, 3), 0xf), 16),
-		    lshift (band (rshift (w6, 3), 0xf), 20),
-		    lshift (band (rshift (w7, 3), 0xf), 24),
-		    lshift (band (rshift (w8, 3), 0xf), 28))
+	local value = bor (band (rshift (w1, 3), 0xf),
+			   lshift (band (rshift (w2, 3), 0xf), 4),
+			   lshift (band (rshift (w3, 3), 0xf), 8),
+			   lshift (band (rshift (w4, 3), 0xf), 12),
+			   lshift (band (rshift (w5, 3), 0xf), 16),
+			   lshift (band (rshift (w6, 3), 0xf), 20),
+			   lshift (band (rshift (w7, 3), 0xf), 24),
+			   lshift (band (rshift (w8, 3), 0xf), 28))
+	if worldgen then
+		return value ~= 0 and value + 1 or 0
+	else
+		return value
+	end
 end
 
 local function set_mapblock_heightmap (x, z, id)
@@ -1548,10 +1554,8 @@ local function allocate_heightmap_id ()
 	local heightmap_id
 	-- Not 0x80000000 as heightmap IDs are offset by 1.
 		= storage:get_int ("next_heightmap_id", 0) % 0x7fffffff
-	storage:set_int ("next_heightmap_id", heightmap_id + 1)
-
-	-- Bias these IDs slightly to guarantee allocation of hash tables.
-	return (heightmap_id + 0x3fffffff) % 0x80000000 + 1
+	storage:set_int ("next_heightmap_id", heightmap_id + 2)
+	return heightmap_id + 1
 end
 
 local function write_heightmap (id, x, y, z, chunksize, data)
@@ -1564,6 +1568,14 @@ local function write_heightmap (id, x, y, z, chunksize, data)
 	})
 	local compressed = core.compress (heightmap_data, "zstd")
 	storage:set_string ("heightmap" .. id, compressed)
+end
+
+local function copy_table (heightmap)
+	local value = {}
+	for i = 1, #heightmap do
+		value[i] = heightmap[i]
+	end
+	return value
 end
 
 function save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
@@ -1584,7 +1596,7 @@ function save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
 
 	for x = bx, bx1 do
 		for z = bz, bz1 do
-			local heightmap = mapblock_heightmap (x, z)
+			local heightmap = mapblock_heightmap (x, z, false)
 			-- Retain the heightmap assignments of
 			-- existing MapBlocks.
 			if heightmap == 0 then
@@ -1592,6 +1604,15 @@ function save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
 				-- is referenced by a MapBlock.
 				if not used then
 					used = true
+
+					-- Heightmap is written twice;
+					-- the second map is assigned
+					-- an ID 1 MapBlock greater
+					-- than the first, which is
+					-- never altered and as such
+					-- always represents the
+					-- terrain of the world at the
+					-- time of generation.
 					write_heightmap (id, bx, by, bz, chunksize, data)
 					loaded_heightmaps[id] = {
 						x = bx,
@@ -1601,6 +1622,15 @@ function save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
 						data = data,
 					}
 					heightmap_ttl[id] = HEIGHTMAP_TTL
+					write_heightmap (id + 1, bx, by, bz, chunksize, data)
+					loaded_heightmaps[id + 1] = {
+						x = bx,
+						y = by,
+						z = bz,
+						chunksize = chunksize,
+						data = copy_table (data),
+					}
+					heightmap_ttl[id + 1] = HEIGHTMAP_TTL
 				end
 				set_mapblock_heightmap (x, z, id)
 			end
@@ -1671,13 +1701,13 @@ mcl_levelgen.unpack_augmented_height_map = unpack_augmented_height_map
 mcl_levelgen.SURFACE_UNCERTAIN = SURFACE_UNCERTAIN
 mcl_levelgen.MOTION_BLOCKING_UNCERTAIN = MOTION_BLOCKING_UNCERTAIN
 
-local function copy_heightmap_segment (run, dst, dx, dz)
+local function copy_heightmap_segment (run, dst, wg, dx, dz)
 	-- Transform output coordinates.
 	local x = 16 + dx * 16
 	local z = (HEIGHTMAP_SIZE - (2 + dz)) * 16
 
 	-- Transform heightmap coordinates.
-	local id = mapblock_heightmap (run.x + dx, run.z + dz)
+	local id = mapblock_heightmap (run.x + dx, run.z + dz, wg)
 	local heightmap = load_heightmap (id)
 	assert (run.x + dx >= heightmap.x)
 	assert (run.z + dz >= heightmap.z)
@@ -1706,26 +1736,39 @@ local function copy_heightmap_segment (run, dst, dx, dz)
 	end
 end
 
--- Create a heightmap REQUIRED_CONTEXT_XZ * 2 + 1 Minecraft chunks in
+-- Create heightmaps REQUIRED_CONTEXT_XZ * 2 + 1 Minecraft chunks in
 -- width and length for the run RUN, represented in the Minecraft
--- coordinate system.
+-- coordinate system.  Value is the heightmap representing the current
+-- and potentially modified state of the level followed by that which
+-- represents the state of the level at the time of generation.
 
-function construct_heightmap_for_run (run)
-	local heightmap = {}
+function construct_heightmaps_for_run (run)
+	local heightmap, wg_heightmap = {}, {}
 	local expected_size = HEIGHTMAP_SIZE_NODES * HEIGHTMAP_SIZE_NODES
 	heightmap[expected_size] = nil
 
-	copy_heightmap_segment (run, heightmap, -1, -1)
-	copy_heightmap_segment (run, heightmap, -1, 0)
-	copy_heightmap_segment (run, heightmap, -1, 1)
-	copy_heightmap_segment (run, heightmap, 0, -1)
-	copy_heightmap_segment (run, heightmap, 0, 0)
-	copy_heightmap_segment (run, heightmap, 0, 1)
-	copy_heightmap_segment (run, heightmap, 1, -1)
-	copy_heightmap_segment (run, heightmap, 1, 0)
-	copy_heightmap_segment (run, heightmap, 1, 1)
+	copy_heightmap_segment (run, heightmap, false, -1, -1)
+	copy_heightmap_segment (run, heightmap, false, -1, 0)
+	copy_heightmap_segment (run, heightmap, false, -1, 1)
+	copy_heightmap_segment (run, heightmap, false, 0, -1)
+	copy_heightmap_segment (run, heightmap, false, 0, 0)
+	copy_heightmap_segment (run, heightmap, false, 0, 1)
+	copy_heightmap_segment (run, heightmap, false, 1, -1)
+	copy_heightmap_segment (run, heightmap, false, 1, 0)
+	copy_heightmap_segment (run, heightmap, false, 1, 1)
 	assert (#heightmap == expected_size)
-	return heightmap
+
+	copy_heightmap_segment (run, wg_heightmap, true, -1, -1)
+	copy_heightmap_segment (run, wg_heightmap, true, -1, 0)
+	copy_heightmap_segment (run, wg_heightmap, true, -1, 1)
+	copy_heightmap_segment (run, wg_heightmap, true, 0, -1)
+	copy_heightmap_segment (run, wg_heightmap, true, 0, 0)
+	copy_heightmap_segment (run, wg_heightmap, true, 0, 1)
+	copy_heightmap_segment (run, wg_heightmap, true, 1, -1)
+	copy_heightmap_segment (run, wg_heightmap, true, 1, 0)
+	copy_heightmap_segment (run, wg_heightmap, true, 1, 1)
+	assert (#wg_heightmap == expected_size)
+	return heightmap, wg_heightmap
 end
 
 local function restore_heightmap_segment (run, src, dx, dz)
@@ -1734,7 +1777,7 @@ local function restore_heightmap_segment (run, src, dx, dz)
 	local z = (HEIGHTMAP_SIZE - (2 + dz)) * 16
 
 	-- Transform heightmap coordinates.
-	local id = mapblock_heightmap (run.x + dx, run.z + dz)
+	local id = mapblock_heightmap (run.x + dx, run.z + dz, false)
 	local heightmap = load_heightmap (id)
 	assert (run.x + dx >= heightmap.x)
 	assert (run.z + dz >= heightmap.z)
@@ -1867,8 +1910,8 @@ local function debug_index_heightmap (heightmap, node_x, node_z)
 	return surface, motion_blocking, flags
 end
 
-local function get_heightmap_string (x, z, self_pos)
-	local id = mapblock_heightmap (x, z)
+local function get_heightmap_string (x, z, self_pos, generation_only)
+	local id = mapblock_heightmap (x, z, generation_only)
 	if id == 0 then
 		return " (none)"
 	else
@@ -1907,8 +1950,10 @@ local function hud_text (player)
 	end
 	table.insert (tbl, string.format ("You: %d, %d, %d, %s\n", x, y, z,
 					  get_status_string (x, y, z)))
-	table.insert (tbl, string.format ("Heightmap: %s",
-					  get_heightmap_string (x, z, self_pos)))
+	table.insert (tbl, string.format ("Heightmap: %s\n",
+					  get_heightmap_string (x, z, self_pos, false)))
+	table.insert (tbl, string.format ("Heightmap (Generation time): %s",
+					  get_heightmap_string (x, z, self_pos, true)))
 	return table.concat (tbl)
 end
 

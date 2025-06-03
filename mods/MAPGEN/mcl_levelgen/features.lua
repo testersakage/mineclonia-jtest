@@ -371,7 +371,7 @@ else
 end
 
 local run_minp, run_maxp = vector.new (), vector.new ()
-local vm, run, heightmap, biomes, y_offset, level_min, level_height
+local vm, run, heightmap, wg_heightmap, biomes, y_offset, level_min, level_height
 local run_min_y, run_max_y, run_min_x, run_max_x, run_min_z, run_max_z
 
 local HEIGHTMAP_SIZE = mcl_levelgen.HEIGHTMAP_SIZE
@@ -408,8 +408,8 @@ function mcl_levelgen.convert_level_position (x, y, z)
 end
 convert_level_position = mcl_levelgen.convert_level_position
 
-function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_offset,
-					p_level_min, p_level_height, p_preset)
+function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap, p_biomes,
+					p_y_offset, p_level_min, p_level_height, p_preset)
 	run = p_run
 	run_minp.x = run.x * 16
 	run_minp.z = -(run.z * 16 + 16)
@@ -419,6 +419,7 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 	run_maxp.y = run.y2 * 16 + p_y_offset + 15
 	vm = p_vm
 	heightmap = p_heightmap
+	wg_heightmap = p_wg_heightmap
 	biomes = p_biomes
 	y_offset = p_y_offset
 	level_min = p_level_min
@@ -469,6 +470,7 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_biomes, p_y_
 	relight_rgn = nil
 	biomes = nil
 	heightmap = nil
+	wg_heightmap = nil
 	cids, param2s = {}, {}
 	return relight_list, gen_notifies, fluids_to_transform,
 		features_requesting_additional_context,
@@ -542,7 +544,7 @@ local function heightmap_index (x, z)
 	return (dx * HEIGHTMAP_SIZE_NODES) + dz + 1
 end
 
-function mcl_levelgen.index_heightmap (x, z)
+function mcl_levelgen.index_heightmap (x, z, generation_only)
 	local run_x = run_min_x
 	local run_z = run_min_z
 	if z - run_z >= HEIGHTMAP_SIZE_NODES
@@ -551,6 +553,8 @@ function mcl_levelgen.index_heightmap (x, z)
 		error ("Heightmap index out of bounds")
 	end
 	local idx = heightmap_index (x, z)
+	local heightmap = generation_only
+		and wg_heightmap or heightmap
 	local surface, motion_blocking, flags
 		= unpack_augmented_height_map (heightmap[idx])
 	surface = surface + level_min
