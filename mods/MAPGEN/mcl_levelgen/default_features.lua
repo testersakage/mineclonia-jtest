@@ -141,8 +141,7 @@ local function freeze_layer_common (x1, z1, surface)
 			set_block (x1, surface, z1, cid_snow, 0)
 			local replacement = snowy_blocks[cid]
 			if replacement then
-				set_block (x1, surface - 1, z1,
-					   replacement, -1)
+				set_block (x1, surface - 1, z1, replacement, -1)
 			end
 		end
 	end
@@ -158,28 +157,24 @@ local function place_freeze_top_layer (_, x, y, z, cfg, rng)
 			= unpack_heightmap_modification (key, value)
 		local surface = surface - 1
 
-		if surface >= start_y - 32 and surface <= end_y + 32 then
-			-- If the surface has moved, remove any snow layers or
-			-- ice that may have been placed at the previous location
-			local old_cid, _ = get_block (x, surface, z)
-			if old_cid == cid_snow then
-				set_block (x, surface, z, cid_air, 0)
-			end
+		-- If the surface has moved, remove any snow layers or
+		-- ice that may have been placed at the previous location
+		local old_cid, _ = get_block (x, surface, z)
+		if old_cid == cid_snow then
+			set_block (x, surface, z, cid_air, 0)
 
-			if surface > start_y - 32 then
-				local old_cid, param2 = get_block (x, surface - 1, z)
-				-- A param2 of 255 indicates that this
-				-- ice was placed by freeze_top_layer.
-				if old_cid == cid_ice and param2 == 255 then
-					set_block (x, surface - 1, z, cid_water_source, 0)
-				else
-					local replacement = exposed_blocks[old_cid]
-					if replacement then
-						set_block (x, surface - 1, z, replacement,
-							   param2)
-					end
-				end
+			local old_cid, param2 = get_block (x, surface - 1, z)
+			local replacement = exposed_blocks[old_cid]
+			if replacement then
+				set_block (x, surface - 1, z, replacement, param2)
 			end
+		end
+
+		local old_cid, param2 = get_block (x, surface, z)
+		-- A param2 of 255 indicates that this
+		-- ice was placed by freeze_top_layer.
+		if old_cid == cid_ice and param2 == 255 then
+			set_block (x, surface, z, cid_water_source, 0)
 		end
 
 		local surface_new, _ = index_heightmap (x, z, false)
