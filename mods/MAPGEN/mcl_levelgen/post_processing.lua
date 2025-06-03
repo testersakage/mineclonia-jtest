@@ -1310,15 +1310,17 @@ local function restore_feature_placement_queue ()
 		local sdata = storage:get_string ("feature_placement_queue")
 		if sdata ~= nil and sdata ~= "" then
 			local queue = core.deserialize (sdata)
-			setmetatable (queue, mintree_meta)
+			if queue then
+				setmetatable (queue, mintree_meta)
 
-			if queue.size > 0 then
-				local blurb = "[mcl_levelgen]: Resuming %d feature placement tasks"
-				core.log ("action", string.format (blurb, queue.size))
-				feature_placement_queue = queue
+				if queue.size > 0 then
+					local blurb = "[mcl_levelgen]: Resuming %d feature placement tasks"
+					core.log ("action", string.format (blurb, queue.size))
+					feature_placement_queue = queue
 
-				for i = 1, queue.size do
-					resume_mapblock_run (queue.heap[i])
+					for i = 1, queue.size do
+						resume_mapblock_run (queue.heap[i])
+					end
 				end
 			end
 		end
