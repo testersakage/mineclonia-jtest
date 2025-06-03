@@ -26,7 +26,7 @@ local notify_generated = mcl_levelgen.notify_generated
 local convert_level_position = mcl_levelgen.convert_level_position
 
 local function kelp_place (_, x, y, z, cfg, rng)
-	local _, ocean = index_heightmap (x, z)
+	local _, ocean = index_heightmap (x, z, false)
 	local height = 1 + rng:next_within (10)
 	local age = rng:next_within (MAX_AGE + 1)
 
@@ -108,7 +108,7 @@ for _, surface in ipairs (seagrass_surfaces) do
 end
 
 local function seagrass_place (self, x, y, z, cfg, rng)
-	local _, ocean = index_heightmap (x, z)
+	local _, ocean = index_heightmap (x, z, false)
 	local is_tall = rng:next_float ()
 	local simple = self.simple
 	local dx = simple and 0 or (rng:next_within (8) - rng:next_within (8))
@@ -638,7 +638,7 @@ local function sea_pickle_place (_, x, y, z, cfg, rng)
 			local dx = rng:next_within (8) - rng:next_within (8)
 			local dz = rng:next_within (8) - rng:next_within (8)
 			local x, z = x + dx, z + dz
-			local _, y = index_heightmap (x, z)
+			local _, y = index_heightmap (x, z, false)
 			local cid_below, _ = get_block (x, y - 1, z)
 			local pickles = sea_pickle_cids[cid_below]
 			if pickles then
