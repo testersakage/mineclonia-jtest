@@ -1694,6 +1694,20 @@ local function unpack_augmented_height_map (vals)
 	return surface, motion_blocking, rshift (vals, 30)
 end
 
+local function pack_augmented_height_map (surface, motion_blocking, flags)
+	-- Bit 31 indicates that the true value of `surface' is only
+	-- known to be an indeterminate value between the value
+	-- returned and the bottom of the level.  Bit 32 means the
+	-- same of `motion_blocking'.
+
+	local bias = 512
+	local bits = 10
+	local mask = 0x3ff
+	local surface = lshift (band (surface + bias, mask), bits)
+	local motion_blocking = band (motion_blocking + bias, mask)
+	return bor (surface, motion_blocking, lshift (flags, 30))
+end
+
 local SURFACE_UNCERTAIN = 0x1
 local MOTION_BLOCKING_UNCERTAIN = 0x2
 
@@ -1771,6 +1785,20 @@ function construct_heightmaps_for_run (run)
 	return heightmap, wg_heightmap
 end
 
+-- Reconciliation of divergent heightmaps.
+--
+-- Vertically separated runs should be prevented from writing outdated
+-- values to the heightmap.  As runs cannot modify content beyond the
+-- the accessible region of the level, reconciling modifications where
+-- the heightmap value increases is trivial--simply a matter of taking
+-- the greater of the two values.  If a value is reduced, the
+-- reduction must only be applied if the previous value sits within
+-- the region locked by the run whose modifications are being applied,
+-- for otherwise the heightmap has been altered by another run with a
+-- higher accessible region or the code that corrects heightmaps is
+-- defective and has overstepped the run's confines (and in neither
+-- case is it desirable to apply the changes).
+
 local function restore_heightmap_segment (run, src, dx, dz)
 	-- Transform output coordinates.
 	local x = 16 + dx * 16
@@ -1791,10 +1819,35 @@ local function restore_heightmap_segment (run, src, dx, dz)
 	local idx_dst = x * HEIGHTMAP_SIZE_NODES + z + 1
 	local idx_src = origin_x * cs + origin_z + 1
 	local dst = heightmap.data
+	local run_min_y = (run.y1 - REQUIRED_CONTEXT_Y) * 16 - OVERWORLD_MIN_BLOCK
+	local run_max_y = (run.y2 + REQUIRED_CONTEXT_Y) * 16 - OVERWORLD_MIN_BLOCK
 
 	for x1 = 1, 16 do
 		for i = 0, 15 do
-			dst[idx_src + i] = src[idx_dst + i]
+			local old = dst[idx_src + i]
+			local new = src[idx_dst + i]
+
+			-- Must only apply these modifications
+			-- if RUN was in a position to edit
+			-- the previous value.
+			local old_1, old_2, flags
+				= unpack_augmented_height_map (old)
+			local new_1, new_2, new_flags
+				= unpack_augmented_height_map (new)
+
+			if new_1 >= old_1
+				or (old_1 - 1 >= run_min_y and old_1 - 1 <= run_max_y) then
+				old_1 = new_1
+				flags = bor (band (flags, bnot (SURFACE_UNCERTAIN)),
+					     band (new_flags, SURFACE_UNCERTAIN))
+			end
+			if new_2 >= old_2
+				or (old_2 - 1 >= run_min_y and old_2 - 1 <= run_max_y) then
+				old_2 = new_2
+				flags = bor (band (flags, bnot (MOTION_BLOCKING_UNCERTAIN)),
+					     band (new_flags, MOTION_BLOCKING_UNCERTAIN))
+			end
+			dst[idx_src + i] = pack_augmented_height_map (old_1, old_2, flags)
 		end
 
 		idx_dst = idx_dst + HEIGHTMAP_SIZE_NODES
