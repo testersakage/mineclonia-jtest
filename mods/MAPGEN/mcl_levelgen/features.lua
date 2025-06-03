@@ -404,10 +404,7 @@ local function collect_unlit_region (aabb, list)
 end
 
 function mcl_levelgen.convert_level_position (x, y, z)
-	local dz = z - run_min_z
-	local run_origin = (run.z - REQUIRED_CONTEXT_XZ) * 16
-	local z = run_origin + (HEIGHTMAP_SIZE_NODES - dz - 1)
-	return x, y - y_offset, z
+	return x, y - y_offset, -z - 1
 end
 convert_level_position = mcl_levelgen.convert_level_position
 
