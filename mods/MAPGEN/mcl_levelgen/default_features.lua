@@ -63,7 +63,6 @@ mcl_levelgen.register_feature ("mcl_levelgen:random_selector", {
 
 local registered_placed_features = mcl_levelgen.registered_placed_features
 local place_one_feature = mcl_levelgen.place_one_feature
-local warned = {}
 
 local function simple_random_selector_place (_, x, y, z, cfg, rng)
 	local values = #cfg.features
@@ -183,7 +182,7 @@ local function place_freeze_top_layer (_, x, y, z, cfg, rng)
 			end
 		end
 
-		local surface_new, _ = index_heightmap (x, z)
+		local surface_new, _ = index_heightmap (x, z, false)
 		if surface_new >= start_y - 31 and surface <= end_y + 32 then
 			freeze_layer_common (x, z, surface_new)
 		end
@@ -192,7 +191,7 @@ local function place_freeze_top_layer (_, x, y, z, cfg, rng)
 	for dx = 0, 15 do
 		for dz = 0, 15 do
 			local x1, z1 = x + dx, z + dz
-			local surface, _ = index_heightmap (x1, z1)
+			local surface, _ = index_heightmap (x1, z1, false)
 			if surface >= start_y and surface <= end_y then
 				freeze_layer_common (x1, z1, surface)
 			end
@@ -408,7 +407,7 @@ local function ore_place (_, x, y, z, cfg, rng)
 	-- beneath the surface of the level.
 	for x = xmin, xmin + hsize do
 		for z = zmin, zmin + hsize do
-			local _, blocking = index_heightmap (x, z)
+			local _, blocking = index_heightmap (x, z, false)
 			if ymin <= blocking then
 				return ore_place_1 (x1, x2, z1, z2, y1, y2,
 						    xmin, ymin, zmin, hsize,
@@ -693,7 +692,7 @@ end
 local index_heightmap = mcl_levelgen.index_heightmap
 
 local function heightmap_world_surface (x, y, z, rng)
-	local surface, _ = index_heightmap (x, z)
+	local surface, _ = index_heightmap (x, z, false)
 
 	if surface <= mcl_levelgen.placement_level_min then
 		return {}
@@ -703,7 +702,27 @@ local function heightmap_world_surface (x, y, z, rng)
 end
 
 local function heightmap_motion_blocking (x, y, z, rng)
-	local _, surface = index_heightmap (x, z)
+	local _, surface = index_heightmap (x, z, false)
+
+	if surface <= mcl_levelgen.placement_level_min then
+		return {}
+	else
+		return { x, surface, z, }
+	end
+end
+
+local function heightmap_world_surface_wg (x, y, z, rng)
+	local surface, _ = index_heightmap (x, z, true)
+
+	if surface <= mcl_levelgen.placement_level_min then
+		return {}
+	else
+		return { x, surface, z, }
+	end
+end
+
+local function heightmap_motion_blocking_wg (x, y, z, rng)
+	local _, surface = index_heightmap (x, z, true)
 
 	if surface <= mcl_levelgen.placement_level_min then
 		return {}
@@ -714,12 +733,18 @@ end
 
 function mcl_levelgen.build_heightmap (heightmap)
 	assert (heightmap == "world_surface"
-		or heightmap == "motion_blocking")
+		or heightmap == "motion_blocking"
+		or heightmap == "world_surface_wg"
+		or heightmap == "motion_blocking_wg")
 
 	if heightmap == "world_surface" then
 		return heightmap_world_surface
-	else
+	elseif heightmap == "motion_blocking" then
 		return heightmap_motion_blocking
+	elseif heightmap == "world_surface_wg" then
+		return heightmap_world_surface_wg
+	elseif heightmap == "motion_blocking_wg" then
+		return heightmap_motion_blocking_wg
 	end
 end
 
@@ -727,7 +752,8 @@ local MIN_POS = -32768
 
 function mcl_levelgen.build_surface_water_depth_filter (n)
 	return function (x, y, z, rng)
-		local surface, motion_blocking = index_heightmap (x, z)
+		local surface, motion_blocking
+			= index_heightmap (x, z, false)
 		if surface - motion_blocking <= n then
 			return { x, y, z, }
 		else
@@ -739,8 +765,18 @@ end
 function mcl_levelgen.build_surface_relative_threshold_filter (heightmap,
 							       min_inclusive,
 							       max_inclusive)
+	assert (heightmap == "world_surface"
+		or heightmap == "motion_blocking"
+		or heightmap == "world_surface_wg"
+		or heightmap == "motion_blocking_wg")
+	local heightmap = (heightmap == "motion_blocking_wg" and "motion_blocking")
+		or (heightmap == "world_surface_wg" and "world_surface")
+		or heightmap
+	local generation_only = heightmap == "world_surface_wg"
+		or heightmap == "motion_blocking_wg"
 	return function (x, y, z, rng)
-		local surface, motion_blocking = index_heightmap (x, z)
+		local surface, motion_blocking
+			= index_heightmap (x, z, generation_only)
 		local y_test = heightmap == "motion_blocking"
 			and motion_blocking or surface
 
@@ -3737,11 +3773,6 @@ mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_grass", {
 	end,
 })
 
-local function is_dirt_or_grass_block (x, y, z)
-	local cid, _ = get_block (x, y, z)
-	return cid == cid_dirt or cid == cid_grass
-end
-
 local cid_gravel = core.get_content_id ("mcl_core:gravel")
 
 mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_gravel", {
@@ -3751,7 +3782,10 @@ mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_gravel", {
 	content = function (x, y, z, rng)
 		return cid_gravel, 0
 	end,
-	target = is_dirt_or_grass_block,
+	target = function (x, y, z)
+		local cid, _ = get_block (x, y, z)
+		return cid == cid_dirt or cid == cid_grass
+	end,
 })
 
 mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_sand", {
@@ -3765,7 +3799,10 @@ mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_sand", {
 			return cid_sand, 0
 		end
 	end,
-	target = is_dirt_or_grass_block,
+	target = function (x, y, z)
+		local cid, _ = get_block (x, y, z)
+		return cid == cid_dirt or cid == cid_grass
+	end,
 })
 
 mcl_levelgen.register_placed_feature ("mcl_levelgen:disk_clay", {
