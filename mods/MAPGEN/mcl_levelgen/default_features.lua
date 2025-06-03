@@ -2058,6 +2058,16 @@ local function disk_replace_column (x, top, bottom, z, cfg, rng)
 			local cid, param2 = content (x, y, z, rng)
 			set_block (x, y, z, cid, param2)
 			set = true
+
+			-- Remove snow or plantlife that this node is
+			-- no longer capable of supporting.
+			local cid_above, _ = get_block (x, y + 1, z)
+			if not is_position_hospitable (cid_above, x, y + 1, z) then
+				set_block (x, y + 1, z, cid_air, 0)
+				if double_plant_p (cid_above) then
+					set_block (x, y + 2, z, cid_air, 0)
+				end
+			end
 		end
 	end
 	return set
@@ -2089,6 +2099,271 @@ end
 
 mcl_levelgen.register_feature ("mcl_levelgen:disk", {
 	place = disk_place,
+})
+
+------------------------------------------------------------------------
+-- Desert Well.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/DesertWellFeature.html
+------------------------------------------------------------------------
+
+-- local desert_well_cfg = {}
+local is_solid = mcl_levelgen.is_solid
+
+local cid_sand = core.get_content_id ("mcl_core:sand")
+local cid_sandstone = core.get_content_id ("mcl_core:sandstone")
+local cid_sandstone_slab = core.get_content_id ("mcl_stairs:slab_sandstone")
+local cid_suspicious_sand = core.get_content_id ("mcl_sus_nodes:sand")
+
+local convert_level_position = mcl_levelgen.convert_level_position
+
+local function place_suspicious_sand (dir, x, y, z, rng)
+	local x = x + dir[1]
+	local z = z + dir[2]
+	set_block (x, y, z, cid_suspicious_sand, dir)
+	mcl_levelgen.notify_generated ("mcl_sus_nodes:suspicious_sand_meta", {
+		pos = vector.new (convert_level_position (x, y, z)),
+		loot_seed = mathabs (rng:next_integer ()),
+		name = "desert_well",
+	})
+end
+
+local function desert_well_advance_rng (rng)
+	rng:next_within (4)
+	rng:next_within (4)
+	rng:next_integer ()
+	rng:next_integer ()
+end
+
+local function desert_well_place (_, x, y, z, cfg, rng)
+	if y < run_minp.y or y > run_maxp.y then
+		desert_well_advance_rng (rng)
+		return false
+	else
+		-- Move to the first solid block below.
+		while not is_solid (x, y, z) do
+			if not in_range (x, y, z) then
+				desert_well_advance_rng (rng)
+				return false
+			end
+			y = y - 1
+		end
+
+		-- Test that the foundation is solid and prevent
+		-- repeated placement.
+		local sy = y
+		for x, y, z in ipos3 (x - 2, y - 2, z - 2,
+				      x + 2, y - 0, z + 2) do
+			if is_air (x, y, z) and y ~= sy then
+				desert_well_advance_rng (rng)
+				return false
+			else
+				local cid, _ = get_block (x, y, z)
+				if cid == cid_sandstone_slab then
+					desert_well_advance_rng (rng)
+					return false
+				end
+			end
+		end
+
+		-- Replace the foundation with sandstone.
+		for x, y, z in ipos3 (x - 2, y - 2, z - 2, x + 2, y, z + 2) do
+			set_block (x, y, z, cid_sandstone, 0)
+		end
+
+		-- Create a cross-shaped well supported by sand.
+		for dx, dy, dz in ipos3 (-1, -1, -1, 1, 0, 1) do
+			local x, y, z = x + dx, y + dy, z + dz
+			if not ((dx == -1 or dx == 1) and (dz == -1 or dz == 1)) then
+				if dy == -1 then
+					set_block (x, y, z, cid_sand, 0)
+				else
+					set_block (x, y, z, cid_water_source, 0)
+				end
+			end
+		end
+
+		-- Line the well with sandstone.
+		for dx, dy, dz in ipos3 (-2, 1, -2, 2, 1, 2) do
+			local x, y, z = x + dx, y + dy, z + dz
+			if dx == -2 or dz == -2 or dx == 2 or dz == 2 then
+				if dx == 0 or dz == 0 then
+					set_block (x, y, z, cid_sandstone_slab, 0)
+				else
+					set_block (x, y, z, cid_sandstone, 0)
+				end
+			end
+		end
+
+		-- Build the dome.
+		for dx, dy, dz in ipos3 (-1, 4, -1, 1, 4, 1) do
+			local x, y, z = x + dx, y + dy, z + dz
+			if dx == 0 and dz == 0 then
+				set_block (x, y, z, cid_sandstone, 0)
+			else
+				set_block (x, y, z, cid_sandstone_slab, 0)
+			end
+		end
+
+		for y = y + 1, y + 3 do
+			set_block (x - 1, y, z - 1, cid_sandstone, 0)
+			set_block (x - 1, y, z + 1, cid_sandstone, 0)
+			set_block (x + 1, y, z - 1, cid_sandstone, 0)
+			set_block (x + 1, y, z + 1, cid_sandstone, 0)
+		end
+
+		local dirs = {
+			{ 1, 0, },
+			{ -1, 0, },
+			{ 0, 1, },
+			{ 0, -1, },
+		}
+		local d1 = dirs[1 + rng:next_within (4)]
+		local d2 = dirs[1 + rng:next_within (4)]
+		place_suspicious_sand (d1, x, y - 1, z, rng)
+		place_suspicious_sand (d2, x, y - 2, z, rng)
+		fix_lighting (x - 2, y - 2, z - 2, x + 2, y + 4, z + 2)
+		return true
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:desert_well", {
+	place = desert_well_place,
+})
+
+------------------------------------------------------------------------
+-- Ice Spike.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/IceSpikeFeature.html
+------------------------------------------------------------------------
+
+local ice_spike_rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+local request_additional_context = mcl_levelgen.request_additional_context
+local cid_dirt = core.get_content_id ("mcl_core:dirt")
+
+local function ice_spike_replaceable_p (cid)
+	return cid == cid_air
+		or cid == cid_dirt
+		or cid == cid_snow_block
+		or cid == cid_ice
+end
+
+local function is_ice_spike_replaceable (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return ice_spike_replaceable_p (cid)
+end
+
+-- local cid_glass = core.get_content_id ("mcl_core:glass")
+
+local function ice_spike_place (_, x, y, z, cfg, rng)
+	ice_spike_rng:reseed (rng:next_long ())
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	else
+		-- Move to the first solid block below.
+		while not is_solid (x, y, z) do
+			if not in_range (x, y, z) then
+				return false
+			end
+			y = y - 1
+		end
+		local cid, _ = get_block (x, y, z)
+		if cid ~= cid_snow_block then
+			return false
+		end
+
+		y = y + rng:next_within (4)
+		local min_changed = y
+		local rng = ice_spike_rng
+		local bulb_height = rng:next_within (4) + 7
+		local bulb_radius = rng:next_within (2) + floor (bulb_height / 4)
+
+		-- Potentially generate a tall ice spike.
+		if bulb_radius > 1 and rng:next_within (60) == 0 then
+			y = y + 10 + rng:next_within (30)
+		end
+
+		-- Request additional context if necessary.
+		do
+			local max_y = mcl_levelgen.placement_run_max_y
+			local top = y + bulb_radius + 1
+			if top > max_y then
+				local requisition = top - max_y
+				request_additional_context (requisition, 0)
+				return false
+			end
+		end
+
+		-- Build the bulb.
+		for i = 0, bulb_height - 1 do
+			local r = (1.0 - i / bulb_radius) * bulb_radius
+			local rb = mathceil (r)
+			local r = r * r
+			for ix, iy, iz in ipos3 (x - rb, y + i, z - rb,
+						 x + rb, y + i, z + rb) do
+				local dx = (ix - x) * (ix - x)
+				local dz = (iz - z) * (iz - z)
+				local corner_p = dx == r or dz == r
+				if (dx + dz <= r or (dx == 0 and dz == 0))
+					and (not corner_p
+					     or (dx == 0 and dz == 0)
+					     or rng:next_float () <= 0.75) then
+					if is_ice_spike_replaceable (ix, iy, iz) then
+						set_block (ix, iy, iz, cid_packed_ice, 0)
+					end
+					if i ~= 0 and rb > 1 then
+						if is_ice_spike_replaceable (ix, y - i, iz) then
+							set_block (ix, y - i, iz, cid_packed_ice, 0)
+						end
+					end
+				end
+			end
+		end
+
+		-- Run this spike into the ground.
+		local extension_radius = bulb_radius - 1
+		if extension_radius < 0 then
+			extension_radius = 0
+		else
+			extension_radius = 1
+		end
+		local min_y = mcl_levelgen.placement_run_min_y
+		for dx = -extension_radius, extension_radius do
+			for dz = -extension_radius, extension_radius do
+				local y = y - 1
+				local min_y = mathmax (51, min_y)
+				local runlength = 50
+				if mathabs (dx) == 1 or mathabs (dz) == 1 then
+					runlength = rng:next_within (5)
+				end
+
+				-- Fill this column with intermittent
+				-- segments of packed ice that extend
+				-- into the surface.
+				while y >= min_y do
+					local cid, _ = get_block (x + dx, y, z + dz)
+					if not ice_spike_replaceable_p (cid)
+						and cid ~= cid_packed_ice then
+						break
+					end
+
+					set_block (x + dx, y, z + dz, cid_packed_ice, 0)
+					min_changed = mathmin (min_changed, y)
+					y = y - 1
+					runlength = runlength - 1
+					if runlength <= 0 then
+						y = y - rng:next_within (5) + 1
+						runlength = rng:next_within (5)
+					end
+				end
+			end
+		end
+		fix_lighting (x - bulb_radius, min_changed, y - bulb_radius,
+			      x + bulb_radius, y + bulb_height - 1, z + bulb_radius)
+		return true
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:ice_spike", {
+	place = ice_spike_place,
 })
 
 ------------------------------------------------------------------------
@@ -3337,7 +3612,6 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:underwater_magma", {
 })
 
 local cid_clay_block = core.get_content_id ("mcl_core:clay")
-local cid_dirt = core.get_content_id ("mcl_core:dirt")
 
 mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_clay", {
 	feature = "mcl_levelgen:disk",
@@ -3388,9 +3662,6 @@ mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_gravel", {
 	end,
 	target = is_dirt_or_grass_block,
 })
-
-local cid_sand = core.get_content_id ("mcl_core:sand")
-local cid_sandstone = core.get_content_id ("mcl_core:sandstone")
 
 mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_sand", {
 	feature = "mcl_levelgen:disk",
@@ -3464,6 +3735,74 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:disk_sand", {
 		mcl_levelgen.build_heightmap ("motion_blocking"),
 		function (x, y, z, rng)
 			if is_water_source (x, y, z) then
+				return { x, y, z, }
+			else
+				return nil
+			end
+		end,
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:desert_well", {
+	feature = "mcl_levelgen:desert_well",
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:desert_well", {
+	configured_feature = "mcl_levelgen:desert_well",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (1000),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ice_spike", {
+	feature = "mcl_levelgen:ice_spike",
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ice_spike", {
+	configured_feature = "mcl_levelgen:ice_spike",
+	placement_modifiers = {
+		mcl_levelgen.build_count (THREE),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local cid_coarse_dirt = core.get_content_id ("mcl_core:coarse_dirt")
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ice_patch", {
+	feature = "mcl_levelgen:disk",
+	half_height = 1,
+	radius = uniform_height (2, 3),
+	content = function (x, y, z, rng)
+		return cid_packed_ice, 0
+	end,
+	target = function (x, y, z)
+		local cid, _ = get_block (x, y, z)
+		return cid == cid_dirt
+			or cid == cid_grass
+			or cid == cid_podzol
+			or cid == cid_coarse_dirt
+			or cid == cid_mycelium
+			or cid == cid_snow_block
+			or cid == cid_ice
+	end,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ice_patch", {
+	configured_feature = "mcl_levelgen:ice_patch",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_constant_height_offset (-1),
+		function (x, y, z)
+			local cid, _ = get_block (x, y, z)
+			if cid == cid_snow_block then
 				return { x, y, z, }
 			else
 				return nil

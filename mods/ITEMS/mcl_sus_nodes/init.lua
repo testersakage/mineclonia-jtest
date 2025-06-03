@@ -22,18 +22,39 @@ local sus_drops_default = {
 	"mcl_flowerpots:flower_pot",
 }
 
+local desert_well_loot = {
+	stacks_min = 1,
+	stacks_max = 1,
+	items = {
+		{ itemstring = "mcl_pottery_sherds:arms_up", weight = 2, },
+		{ itemstring = "mcl_pottery_sherds:brewer", weight = 2, },
+		{ itemstring = "mcl_core:brick", weight = 1 },
+		{ itemstring = "mcl_core:emerald", weight = 1 },
+		{ itemstring = "mcl_core:stick", weight = 1 },
+		{ itemstring = "mcl_sus_stew:stew", weight = 1 },
+
+	},
+}
+
 function mcl_sus_nodes.get_random_item(pos)
 	local meta = core.get_meta(pos)
-	local struct = meta:get_string("structure")
-	local structdef = mcl_structures.registered_structures[struct]
-	local pr = PcgRandom(core.hash_node_position(pos))
-	if struct ~= "" and structdef and structdef.loot and structdef.loot["SUS"] then
-		local lootitems = mcl_loot.get_multi_loot(structdef.loot["SUS"], pr)
-		if #lootitems > 0 then
-			return lootitems[1]
-		end
+	local str = meta:get_string ("mcl_sus_nodes:desert_well_loot_seed")
+	if str ~= "" then
+		local seed = tonumber (str)
+		local pr = PcgRandom (seed)
+		return mcl_loot.get_multi_loot (desert_well_loot, pr)
 	else
-		return sus_drops_default[pr:next(1, #sus_drops_default)]
+		local struct = meta:get_string("structure")
+		local structdef = mcl_structures.registered_structures[struct]
+		local pr = PcgRandom (core.hash_node_position(pos))
+		if struct ~= "" and structdef and structdef.loot and structdef.loot["SUS"] then
+			local lootitems = mcl_loot.get_multi_loot(structdef.loot["SUS"], pr)
+			if #lootitems > 0 then
+				return lootitems[1]
+			end
+		else
+			return sus_drops_default[pr:next(1, #sus_drops_default)]
+		end
 	end
 end
 
@@ -223,3 +244,18 @@ mcl_sus_nodes.register_sus_node("sand","mcl_core:sand",{
 mcl_sus_nodes.register_sus_node("gravel","mcl_core:gravel",{
 	description = S("Suspicious Gravel"),
 })
+
+------------------------------------------------------------------------
+-- Level generator interface.
+------------------------------------------------------------------------
+
+local function handle_suspicious_sand_meta (name, data)
+	if data.name == "desert_well" then
+		local meta = core.get_meta (data.pos)
+		meta:set_string ("mcl_sus_nodes:desert_well_loot_seed",
+				 tostring (data.loot_seed))
+	end
+end
+
+mcl_levelgen.register_notification_handler ("mcl_sus_nodes:suspicious_sand_meta",
+					    handle_suspicious_sand_meta)
