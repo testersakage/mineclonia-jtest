@@ -352,7 +352,8 @@ mcl_levelgen.register_configured_feature ("mcl_levelgen:glow_lichen", {
 	can_place_on_floor = false,
 	can_place_on_wall = true,
 	chance_of_spreading = 0.5,
-	search_range = 20,
+	-- This option is actually not implemented by Minecraft.
+	search_range = 0,
 })
 
 local uniform_height = mcl_levelgen.uniform_height
@@ -367,7 +368,7 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:glow_lichen", {
 		mcl_levelgen.build_height_range (uniform_height (OVERWORLD_MIN,
 								 256)),
 		mcl_levelgen.build_in_square (),
-		mcl_levelgen.build_surface_relative_threshold_filter ("motion_blocking",
+		mcl_levelgen.build_surface_relative_threshold_filter ("motion_blocking_wg",
 								      -huge, -13),
 		mcl_levelgen.build_in_biome (),
 	},

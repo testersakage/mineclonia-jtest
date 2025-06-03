@@ -647,7 +647,7 @@ local function generate_large_dripstone (parms, rng, wind)
 	local dir = parms.dir
 	local y, origin_y = parms.origin_y, parms.origin_y
 	local x, z = parms.origin_x, parms.origin_z
-	local max = parms.is_stalagmite	and (index_heightmap (x, z)) or huge
+	local max = parms.is_stalagmite	and (index_heightmap (x, z, true)) or huge
 	for dx = -radius, radius do
 		for dz = -radius, radius do
 			local dist = mathsqrt (dx * dx + dz * dz)

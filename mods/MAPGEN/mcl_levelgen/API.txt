@@ -225,7 +225,7 @@ position represented in DATA (a key in `heightmap_modifications') and
 the heightmap values which `index_heightmap' would have returned prior
 to the execution of this placement run.
 
-Function: mcl_levelgen.index_heightmap (X, Z)
+Function: mcl_levelgen.index_heightmap (X, Z, GENERATION_ONLY)
 
 Return two values with the Y position of the uppermost block at X, Z
 \(which must be absolute positions within the accessible region of the
@@ -247,7 +247,10 @@ may be uncertain and only known to be below a certain position.  If
 the vertical context now available is sufficient to compute its true
 value, compute and return the same.  If otherwise, return the position
 at the bottom of the context to this placement operation in lieu of
-the values in doubt.
+the values in doubt; or if GENERATION_ONLY, return the values of the
+heightmap as they existed when the accessible region of the level was
+generated, excluding all modifications to the level by any previous
+feature placement.
 
 Signal an error if the requested position horizontally exceeds the
 accessible region of the level.
@@ -1038,21 +1041,28 @@ biome that defines the feature being evaluated.
 Function: mcl_levelgen.build_heightmap (heightmap)
 
 Return a placement modifier which places each position supplied at the
-provided heightmap.  Two heightmaps are available for purposes of
+provided heightmap.  Four heightmaps are available for purposes of
 level generation:
 
-      "world_surface"	- The surface of the level as defined by blocks
-      			  that are not air.
-      "motion_blocking" - The surface of the level as defined by blocks
-      			  that obstruct movement (i.e. are `walkable').
+      "world_surface"		- The surface of the level as defined
+      				  by blocks that are not air.
 
-As heightmaps are liable to be modified by feature placement, a
-feature that has already been placed may be duplicated when another
-vertical section of the level is emerged or otherwise new surfaces
-created by this or another feature are exposed.  Therefore it is best
-for features which utilize this placement modifier to be
-idempotent--as, for example, a tree feature that only permits
-placement where saplings can grow but not on canopies.
+      "motion_blocking"		- The surface of the level as defined
+      				  by blocks that obstruct movement
+				  (i.e. are `walkable').
+      "world_surface_wg"	- The value of "world_surface" at the
+				  at the time of generation.
+      "motion_blocking_wg"	- The value of "motion_blocking" at the
+				  at the time of generation.
+
+As heightmaps (except those suffixed with "_wg") are liable to be
+modified by feature placement, a feature that has already been placed
+may be duplicated when another vertical section of the level is
+emerged or otherwise new surfaces created by this or another feature
+are exposed.  Therefore it is best for features which utilize this
+placement modifier to be idempotent--as, for example, a tree feature
+that only permits placement where saplings can grow but not on
+canopies.
 
 Function: mcl_levelgen.build_surface_water_depth_filter (N)
 
