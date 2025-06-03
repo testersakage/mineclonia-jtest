@@ -178,7 +178,14 @@ function core.handle_node_drops(pos, drops, digger)
 
 	if shearsy_level and shearsy_level > 0 and nodedef._mcl_shears_drop then
 		if nodedef._mcl_shears_drop == true then
-			drops = { dug_node.name }
+			local name = nodedef._mcl_shears_drop_name or dug_node.name
+			if nodedef._mcl_shears_drop_cnt then
+				local stack = ItemStack (name)
+				stack:set_count (nodedef._mcl_shears_drop_cnt)
+				drops = { stack, }
+			else
+				drops = { name }
+			end
 		else
 			drops = nodedef._mcl_shears_drop
 		end
