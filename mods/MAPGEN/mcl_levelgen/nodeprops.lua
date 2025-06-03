@@ -568,6 +568,12 @@ function mcl_levelgen.is_water_or_air (x, y, z)
 		or cid == cid_water_flowing
 end
 
+function mcl_levelgen.water_or_air_p (cid)
+	return cid == cid_air
+		or cid == cid_water_source
+		or cid == cid_water_flowing
+end
+
 function mcl_levelgen.is_air (x, y, z)
 	local cid, _ = get_block (x, y, z)
 	return cid == cid_air

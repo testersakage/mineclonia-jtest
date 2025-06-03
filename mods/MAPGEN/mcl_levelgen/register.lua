@@ -85,6 +85,12 @@ if core and not core.get_node then
 elseif core then
 	mcl_levelgen.register_levelgen_script (mcl_levelgen.prefix
 					       .. "/default_features.lua")
+
+	-- The previous file has reached Lua's file-local variable
+	-- limit and consequently a number of default features are
+	-- implemented in a separate file.
+	mcl_levelgen.register_levelgen_script (mcl_levelgen.prefix
+					       .. "/default_features1.lua")
 end
 
 else
