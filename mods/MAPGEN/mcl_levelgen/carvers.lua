@@ -95,9 +95,9 @@ end
 
 -- Replace the block at X, Y, Z with the appropriate fluid or air
 -- block for its position.  If the block currently present at this
--- position is grass or mycellium and its removal exposes dirt, apply
--- surface rules to the exposed dirt block.
--- Return whether any dirt was exposed.
+-- position is grass or mycelium and its removal exposes dirt, apply
+-- surface rules to the exposed dirt block.  Return whether any dirt
+-- was exposed.
 
 -- local root_chunk
 

@@ -2,6 +2,13 @@
 -- Level generator callbacks.
 ------------------------------------------------------------------------
 
+mcl_levelgen.load_feature_environment = true
+
+-- Load `features.lua' a second time to define the feature generation
+-- environment.
+dofile (mcl_levelgen.prefix .. "/post_processing.lua")
+dofile (mcl_levelgen.prefix .. "/features.lua")
+
 -- local zone = require ("jit.zone")
 
 if core.global_exists ("jit") then
