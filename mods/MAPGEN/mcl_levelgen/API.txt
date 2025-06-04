@@ -293,6 +293,8 @@ types:
   - mcl_core:snow
   - mcl_core:snow_{2..8}
   - mcl_core:deadbush
+  - mcl_core:reeds
+  - mcl_core:cactus
   - group:sapling
   - group:plant
   - group:double_plant
@@ -301,6 +303,8 @@ types:
   - group:bamboo
   - mcl_mangrove:propagule
   - mcl_mangrove:hanging_propagule_1
+  - mcl_mushrooms:mushroom_red
+  - mcl_mushrooms:mushroom_brown
 
 Modders are encouraged to extend this function by means of overloading
 to understand their own blocks' environmental requirements if those
@@ -340,10 +344,28 @@ ROTATION, FORCE_PLACEMENT, and FLAGS, are as in
 replacements, and in its place you must guarantee that your schematics
 are up to date.
 
+Each block in a schematic will be transformed by any schematic
+processors that are active.  It is recommended that you employ this
+mechanism rather than probabilities and force_place directives to
+alter a schematic to fit its surroundings.  Schematic processors are
+documented in their own section, SCHEMATIC PROCESSORS.
+
 Value is a list { X1, Y1, Z1, X2, Y2, Z2, } specifying the minimum and
 maximum extents (inclusive) of the placed schematic in Minecraft's
 coordinate system.  This bounding box is not limited to the accessible
 region of the level.
+
+Function: mcl_levelgen.random_schematic_rotation (RNG)
+
+Given a pseudo-random number generator RNG, return a random rotation
+\(one of "0", "90", "180", "270") suitable as the ROTATION argument to
+`mcl_levelgen.place_schematic'.
+
+Function: mcl_levelgen.get_schematic_size (SCHEMATIC, ROTATION)
+
+Return three values X, Y, Z representing the size of the schematic
+identified by SCHEMATIC after rotation by ROTATION, both as in
+`mcl_levelgen.place_schematic'.
 
 Function: mcl_levelgen.is_position_walkable (X, Y, Z)
 
@@ -383,7 +405,7 @@ Function: mcl_levelgen.is_air_with_dirt_sand_or_terracotta_below (X, Y, Z)
 Return whether the block at X, Y, Z is air with a block capable of
 supporting plantlife, or sand, red sand, or terracotta below.
 
-Function: mcl_levelgen.face_sturdy_p (x, y, z, axis, dir)
+Function: mcl_levelgen.face_sturdy_p (X, Y, Z, AXIS, DIR)
 
 Return whether the face of the collision box of the block at X, Y, Z
 contacting the edge of its block in the level along the axis AXIS
@@ -391,7 +413,7 @@ contacting the edge of its block in the level along the axis AXIS
 1.0) is sturdy, i.e., occupies exactly one node lengthwise and
 breadthwise without interruption.
 
-Function: mcl_levelgen.is_bottom_face_sturdy (x, y, z, axis, dir)
+Function: mcl_levelgen.is_bottom_face_sturdy (X, Y, Z, AXIS, DIR)
 
 Return whether the face of the collision box of the blcok at X, Y - 1,
 Z which faces upwards is sturdy.
@@ -402,6 +424,39 @@ Return a `param2' value suitable for transforming a block whose
 `paramtype2' is `wallmounted' to rest against a sturdy face contacting
 it in the direction DIR (either -1 or 1) along the axis AXIS (one of
 "x", "y", and "z").
+
+Variable: mcl_levelgen.FACE_NORTH
+Variable: mcl_levelgen.FACE_WEST
+Variable: mcl_levelgen.FACE_SOUTH
+Variable: mcl_levelgen.FACE_EAST
+Variable: mcl_levelgen.FACE_UP
+Variable: mcl_levelgen.FACE_DOWN
+
+Bitmasks and enumerals identifying their titular cardinal directions,
+utilized by the three functions documented below.
+
+Variable: mcl_levelgen.face_opposites
+
+Table between each enumeral above and the face opposite it.
+
+Variable: mcl_levelgen.FACE_ORDINALS
+
+List of each enumeral above, in the order in which they are stated.
+
+Variable: mcl_levelgen.face_directions
+
+Table between each enumeral above and a list { X, Y, Z, } representing
+the direction which the face represented by the enumeral faces.
+
+Function: mcl_levelgen.get_sturdy_faces (X, Y, Z)
+
+Return a bitmask with each face of the block at X, Y, Z that is sturdy
+\(as in face_sturdy_p) set.
+
+Function: mcl_levelgen.ordinal_to_wallmounted (ORDINAL)
+
+Return the wallmounted `param2' value that corresponds to an
+attachment to the face represented by the enumeral ORDINAL.
 
 Function: mcl_levelgen.notify_generated (NAME, DATA, APPEND)
 
@@ -699,6 +754,68 @@ Function: mcl_levelgen.seed_from_position (SEED, X, Y, Z)
 
 Create a 64-bit seed from X, Y, Z, which are integer block positions,
 and store the result in SEED, a ull value.
+
+
+SCHEMATIC PROCESSORS
+
+Schematic processors are functions that accept a block position, PRNG,
+and block content from the level and from a schematic and yield either
+the values rendered to them, a transformed value, or nil to halt
+transformation and omit placement of the block being processed.  As a
+mechanism by which to alter schematic data prior to placement, they
+are preferable to Minetest's own `force_place' or placement
+probability directives.
+
+Function: <schematic processor> (X, Y, Z, RNG, CID_CURRENT, PARAM2_CURRENT,
+	  	     		 CID, PARAM2)
+
+Return the content values (content ID and param2) that should be
+placed in lieu of CID and PARAM2 at that position in the level which
+is defined by the coordinates X, Y, Z.  RNG is the pseudo-random
+number generator provided to `mcl_levelgen.place_schematic', and
+CID_CURRENT and PARAM2_CURRENT are the content ID and param2 values of
+the content currently existing in the level at that position.
+
+Returning a value of nil will prompt placement of the block being
+processed to abort (although structure placement will proceed to
+completion).  Otherwise, the CID and PARAM2 values returned will be
+provided to the next schematic processor that was defined, and so
+forth, till no schematic processors remain and they are placed in the
+level.
+
+Whether schematic processors are executed if a schematic node's
+Minetest probability value is not 255 is undefined, but a schematic
+processor will not be executed during attempts to place blocks beyond
+the accessible region of the level.  Schematic processors are executed
+in the same sequence as they were provided to
+`push_schematic_processor' (or `push_schematic_processors').
+
+Function: mcl_levelgen.push_schematic_processor (PROCESSOR_FUNCTION)
+
+Push and activate the schematic processor function PROCESSOR_FUNCTION.
+It will be executed after all functions previously pushed and not yet
+deactivated.
+
+Value is the number of schematic processors that were installed before
+a call to this function, which may be provided to
+`pop_schematic_processors' to deactivate it and all schematic
+processors installed after it.
+
+Function: mcl_levelgen.pop_schematic_processors (CURRENT)
+
+Deactivate all schematic processors pushed and activated by and after
+the call to `push_schematic_processor' which returned CURRENT.
+Behavior is undefined if this function is invoked more than once per
+invocation of `push_schematic_processor'.
+
+Function: mcl_levelgen.push_schematic_processors (PROCESSORS)
+
+Push and activate each function in the list PROCESSORS in the manner
+of `push_schematic_processors', and return the number of processors
+that were active before the first element of the list was pushed and
+activated.  That is, the value that the first call to a notional
+equivalent sequence of calls to `push_schematic_processors' would
+return.
 
 
 STANDARD PLAIN FEATURES
@@ -1066,15 +1183,13 @@ canopies.
 
 Function: mcl_levelgen.build_surface_water_depth_filter (N)
 
-Return a placement modifier that excludes any position (by
-substituting a position guaranteed to sit outside the accessible
-region of the level) where the world surface is more than N blocks
-above the surface of the level as defined by the difference between
-the `world_surface' and `motion_blocking' heightmaps, upon the
-(marginal) assumption that water is the only block capable of
-separating the two heightmaps.  XXX: this is subject to change if a
-dedicated `ocean_surface' heightmap is introduced for parity with
-Minecraft.
+Return a placement modifier that excludes any position (by returning
+nil) where the world surface is more than N blocks above the surface
+of the level as defined by the difference between the `world_surface'
+and `motion_blocking' heightmaps, upon the (marginal) assumption that
+water is the only block capable of separating the two heightmaps.
+XXX: this is subject to change if a dedicated `ocean_surface'
+heightmap is introduced for parity with Minecraft.
 
 Function: mcl_levelgen.build_surface_water_depth_filter (HEIGHTMAP,
 	  						 MIN_INCLUSIVE,

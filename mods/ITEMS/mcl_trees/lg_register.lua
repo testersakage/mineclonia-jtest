@@ -42,6 +42,7 @@ end
 local set_block = mcl_levelgen.set_block
 local run_minp = mcl_levelgen.placement_run_minp
 local run_maxp = mcl_levelgen.placement_run_maxp
+local is_water_or_air = mcl_levelgen.is_water_or_air
 
 local function test_clearance (x, y, z, min, max, rng)
 	local trunk_height = min + rng:next_within (max - min + 1)
@@ -49,7 +50,7 @@ local function test_clearance (x, y, z, min, max, rng)
 		if y > run_maxp.y + 32 then
 			return false
 		end
-		if (get_block (x, y, z)) ~= cid_air then
+		if not is_water_or_air (x, y, z) then
 			return false
 		end
 	end
@@ -119,14 +120,14 @@ local function register_tree_feature (name, schematic_set, after_place, details,
 					rng:consume (1)
 					rng:next_within (n)
 					rng:consume (after_place and 2 or 1)
-					return
+					return false
 				end
 
 				if not test_clearance (x, y, z, min_trunk_clearance,
 						       max_trunk_clearance, rng) then
 					rng:next_within (n)
 					rng:consume (after_place and 2 or 1)
-					return
+					return false
 				end
 
 				local i = 1 + rng:next_within (n)
@@ -141,6 +142,7 @@ local function register_tree_feature (name, schematic_set, after_place, details,
 					after_place (x, y, z, cfg, rng)
 				end
 				apply_biome_coloration (aabb)
+				return true
 			end,
 			tree_type = name,
 		}))
@@ -455,7 +457,6 @@ local dark_oak = {
 	modpath .. "/schematics/mcl_core_dark_oak.mts",
 }
 
-local is_water_or_air = mcl_levelgen.is_water_or_air
 local cid_dirt = get_content_id ("mcl_core:dirt")
 
 local function fix_hanging_trunks (x, y, z, cfg, rng)
@@ -991,7 +992,7 @@ mcl_levelgen.register_placed_feature ("mcl_trees:trees_swamp", {
 			},
 		})),
 		mcl_levelgen.build_in_square (),
-		mcl_levelgen.build_surface_water_depth_filter (0),
+		mcl_levelgen.build_surface_water_depth_filter (2),
 		mcl_levelgen.build_heightmap ("motion_blocking"),
 		mcl_levelgen.build_in_biome (),
 		build_hospitability_check (cid_oak_sapling),

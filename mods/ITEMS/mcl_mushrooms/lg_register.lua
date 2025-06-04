@@ -290,3 +290,147 @@ mcl_levelgen.register_placed_feature ("mcl_mushrooms:mushroom_island_vegetation"
 		mcl_levelgen.build_in_biome (),
 	},
 })
+
+------------------------------------------------------------------------
+-- Little Mushrooms.
+------------------------------------------------------------------------
+
+local is_air = mcl_levelgen.is_air
+
+local function require_air (x, y, z, rng)
+	if is_air (x, y, z) then
+		return { x, y, z, }
+	else
+		return nil
+	end
+end
+
+local cid_brown_mushroom
+	= core.get_content_id ("mcl_mushrooms:mushroom_brown")
+local cid_red_mushroom
+	= core.get_content_id ("mcl_mushrooms:mushroom_red")
+
+mcl_levelgen.register_configured_feature ("mcl_mushrooms:brown_mushroom_block", {
+	feature = "mcl_levelgen:simple_block",
+	content = function (x, y, z, rng)
+		return cid_brown_mushroom, 0
+	end,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_mushrooms:red_mushroom_block", {
+	feature = "mcl_levelgen:simple_block",
+	content = function (x, y, z, rng)
+		return cid_red_mushroom, 0
+	end,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_mushrooms:patch_brown_mushroom", {
+	feature = "mcl_levelgen:random_patch",
+	placed_feature = {
+		configured_feature = "mcl_mushrooms:brown_mushroom_block",
+		placement_modifiers = {
+			require_air,
+		},
+	},
+	tries = 96,
+	xz_spread = 7,
+	y_spread = 3,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_mushrooms:patch_red_mushroom", {
+	feature = "mcl_levelgen:random_patch",
+	placed_feature = {
+		configured_feature = "mcl_mushrooms:red_mushroom_block",
+		placement_modifiers = {
+			require_air,
+		},
+	},
+	tries = 96,
+	xz_spread = 7,
+	y_spread = 3,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_mushrooms:brown_mushroom_normal", {
+	configured_feature = "mcl_mushrooms:patch_brown_mushroom",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (256),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local THREE = function (_) return 3 end
+local TWO = function (_) return 2 end
+
+mcl_levelgen.register_placed_feature ("mcl_mushrooms:brown_mushroom_old_growth", {
+	configured_feature = "mcl_mushrooms:patch_brown_mushroom",
+	placement_modifiers = {
+		mcl_levelgen.build_count (THREE),
+		mcl_levelgen.build_rarity_filter (4),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_mushrooms:brown_mushroom_swamp", {
+	configured_feature = "mcl_mushrooms:patch_brown_mushroom",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_rarity_filter (4),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_mushrooms:brown_mushroom_taiga", {
+	configured_feature = "mcl_mushrooms:patch_brown_mushroom",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (4),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_mushrooms:red_mushroom_normal", {
+	configured_feature = "mcl_mushrooms:patch_red_mushroom",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (512),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_mushrooms:red_mushroom_old_growth", {
+	configured_feature = "mcl_mushrooms:patch_red_mushroom",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (171),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_mushrooms:red_mushroom_swamp", {
+	configured_feature = "mcl_mushrooms:patch_red_mushroom",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (64),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_mushrooms:red_mushroom_taiga", {
+	configured_feature = "mcl_mushrooms:patch_red_mushroom",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (256),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_in_biome (),
+	},
+})
