@@ -752,7 +752,7 @@ function mcl_levelgen.build_surface_water_depth_filter (n)
 		if surface - motion_blocking <= n then
 			return { x, y, z, }
 		else
-			return { x, MIN_POS, z, }
+			return nil
 		end
 	end
 end
@@ -2503,8 +2503,27 @@ end
 
 -- https://mcreator.net/forum/105563/biased-bottom-height-provider
 
+-- MAX_INCLUSIVE is actually exclusive but retains this misleading
+-- identifier for consistency with Minecraft.
+
+function mcl_levelgen.biased_to_bottom_height (min_inclusive, max_inclusive,
+					       inner)
+	if not inner then
+		inner = 1
+	end
+	assert (max_inclusive - min_inclusive > inner, "Outer range is empty")
+	local range_base = max_inclusive - min_inclusive - inner + 1
+	return function (rng)
+		local base = rng:next_within (range_base)
+		return rng:next_within (base + inner) + min_inclusive
+	end
+end
+
 local function very_biased_to_bottom_height (min_inclusive, max_inclusive,
 					     inner)
+	if not inner then
+		inner = 1
+	end
 	assert (max_inclusive - min_inclusive > inner, "Outer range is empty")
 	local inner_end = min_inclusive + inner
 	return function (rng)
@@ -2516,6 +2535,7 @@ end
 
 mcl_levelgen.uniform_height = uniform_height
 mcl_levelgen.trapezoidal_height = trapezoidal_height
+mcl_levelgen.very_biased_to_bottom_height = very_biased_to_bottom_height
 
 local O = mcl_levelgen.construct_ore_substitution_list
 
@@ -3576,8 +3596,8 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_dead_bush_badlands", {
 
 mcl_levelgen.register_configured_feature ("mcl_levelgen:block_waterlily", {
 	feature = "mcl_levelgen:simple_block",
-	content = function (_, _, _, _)
-		return cid_waterlily, 0
+	content = function (_, _, _, rng)
+		return cid_waterlily, rng:next_within (4)
 	end,
 })
 

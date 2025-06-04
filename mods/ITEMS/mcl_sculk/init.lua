@@ -292,3 +292,7 @@ core.register_craftitem("mcl_sculk:echo_shard", {
 	inventory_image = "mcl_sculk_echo_shard.png",
 	wield_image = "mcl_sculk_echo_shard.png"
 })
+
+local modpath = core.get_modpath (core.get_current_modname ())
+mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")
+

@@ -76,7 +76,7 @@ else
 	dofile (mcl_levelgen.prefix .. "/post_processing.lua")
 end
 
-if core and not core.get_node then
+if core and not core.get_player_by_name then
 	mcl_levelgen.is_levelgen_environment = true
 	-- Run level generation scripts.
 	for _, script in ipairs (core.ipc_get ("mcl_levelgen:levelgen_scripts")) do
@@ -89,6 +89,7 @@ elseif core then
 	-- The previous file has reached Lua's file-local variable
 	-- limit and consequently a number of default features are
 	-- implemented in a separate file.
+	dofile (mcl_levelgen.prefix .. "/default_features1.lua")
 	mcl_levelgen.register_levelgen_script (mcl_levelgen.prefix
 					       .. "/default_features1.lua")
 end
