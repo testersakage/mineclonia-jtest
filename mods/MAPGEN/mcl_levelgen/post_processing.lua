@@ -1398,6 +1398,7 @@ function apply_feature_context_requisitions (run, features_requesting_additional
 	v2.x = (run.x + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
 	v2.z = (run.z + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
 	v2.y = existing.max
+	dbg ("  -> Emerging %s, %s", v1:to_string (), v2:to_string ())
 	core.emerge_area (v1, v2)
 end
 
@@ -1411,8 +1412,11 @@ function check_supplemental_generation (bx, bz)
 
 		local first_locked = mathmax (OVERWORLD_MIN_BLOCK,
 					      y1 - REQUIRED_CONTEXT_Y)
-		local last_locked = mathmax (OVERWORLD_MIN_BLOCK,
+		local last_locked = mathmin (OVERWORLD_MAX_BLOCK,
 					     y2 + REQUIRED_CONTEXT_Y)
+
+		dbg ("Testing supplemental context requisition from %d to %d at %d,%d",
+		     y1, y2, bx, bz)
 
 		for by = first_locked, last_locked do
 			if not adequate_context_exists_p (bx, by, bz) then

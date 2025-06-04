@@ -209,6 +209,18 @@ local cid_sand
 local cid_air
 local cid_water_source
 local cid_water_flowing
+local cid_lava_source
+local cid_lava_flowing
+local cid_grass_block
+local cid_sugar_cane
+local cid_cactus
+local cid_mushroom_red
+local cid_mushroom_brown
+local cid_mycelium
+local cid_podzol
+local cid_crimson_nylum
+local cid_warped_nylum
+
 local is_cid_sapling = {}
 local is_cid_dirt = {}
 local is_cid_snow_layer, cid_snow = {}
@@ -222,11 +234,12 @@ local is_cid_soil_propagule = {}
 local is_cid_water_floating_node = {}
 local is_cid_bamboo = {}
 local is_cid_solid = {}
+local is_cid_buildable_to = {}
+local is_cid_frosted_ice = {}
 local double_plant_tops = {}
 local paramtype2 = {}
 local mathmin = math.min
 
-mcl_levelgen.is_cid_dirt = is_cid_dirt
 
 local function initialize_nodeprops ()
 	cid_ice = core.get_content_id ("mcl_core:ice")
@@ -243,6 +256,17 @@ local function initialize_nodeprops ()
 	cid_air = core.CONTENT_AIR
 	cid_water_source = core.get_content_id ("mcl_core:water_source")
 	cid_water_flowing = core.get_content_id ("mcl_core:water_flowing")
+	cid_lava_source = core.get_content_id ("mcl_core:lava_source")
+	cid_lava_flowing = core.get_content_id ("mcl_core:lava_flowing")
+	cid_grass_block = core.get_content_id ("mcl_core:dirt_with_grass")
+	cid_sugar_cane = core.get_content_id ("mcl_core:reeds")
+	cid_cactus = core.get_content_id ("mcl_core:cactus")
+	cid_mushroom_red = core.get_content_id ("mcl_mushrooms:mushroom_red")
+	cid_mushroom_brown = core.get_content_id ("mcl_mushrooms:mushroom_brown")
+	cid_mycelium = core.get_content_id ("mcl_core:mycelium")
+	cid_podzol = core.get_content_id ("mcl_core:podzol")
+	cid_crimson_nylum = core.get_content_id ("mcl_crimson:crimson_nylium")
+	cid_warped_nylum = core.get_content_id ("mcl_crimson:warped_nylium")
 
 	for i = 1, 8 do
 		local cid
@@ -328,6 +352,12 @@ local function initialize_nodeprops ()
 			     or def.groups.chest_entity == 0)
 			and name ~= "mcl_chests:chest" then
 			is_cid_solid[cid] = true
+		end
+		if def.buildable_to then
+			is_cid_buildable_to[cid] = true
+		end
+		if def.groups.frosted_ice and def.groups.frosted_ice >= 1 then
+			is_cid_frosted_ice[cid] = true
 		end
 		paramtype2[cid] = def.paramtype2
 	end
@@ -472,10 +502,153 @@ function mcl_levelgen.rotate_param2 (cid, param2, rot)
 end
 
 --------------------------------------------------------------------------
+-- Ordinal face utilities.
+--------------------------------------------------------------------------
+
+local FACE_NORTH	= 0x01
+local FACE_WEST		= 0x02
+local FACE_SOUTH	= 0x04
+local FACE_EAST		= 0x08
+local FACE_UP		= 0x10
+local FACE_DOWN		= 0x20
+
+local face_opposites = {
+	[FACE_NORTH] = FACE_SOUTH,
+	[FACE_SOUTH] = FACE_NORTH,
+	[FACE_WEST]  = FACE_EAST,
+	[FACE_EAST]  = FACE_WEST,
+	[FACE_UP]    = FACE_UP,
+	[FACE_DOWN]  = FACE_DOWN,
+}
+
+local face_directions = {
+	[FACE_NORTH] = { 0, 0, -1, },
+	[FACE_SOUTH] = { 0, 0, 1, },
+	[FACE_WEST]  = { -1, 0, 0, },
+	[FACE_EAST]  = { 1, 0, 0, },
+	[FACE_UP]    = { 0, 1, 0, },
+	[FACE_DOWN]  = { 0, -1, 0, },
+}
+
+local FACE_ORDINALS = {
+	FACE_NORTH,
+	FACE_WEST,
+	FACE_SOUTH,
+	FACE_EAST,
+	FACE_UP,
+	FACE_DOWN,
+}
+
+mcl_levelgen.FACE_NORTH = FACE_NORTH
+mcl_levelgen.FACE_WEST = FACE_WEST
+mcl_levelgen.FACE_SOUTH = FACE_SOUTH
+mcl_levelgen.FACE_EAST = FACE_EAST
+mcl_levelgen.FACE_UP = FACE_UP
+mcl_levelgen.FACE_DOWN = FACE_DOWN
+
+mcl_levelgen.face_opposites = face_opposites
+mcl_levelgen.face_directions = face_directions
+mcl_levelgen.FACE_ORDINALS = FACE_ORDINALS
+
+local ordinal_sturdy = {}
+
+local function get_sturdy_faces_1 (shape, reusable)
+	if reusable and ordinal_sturdy[shape] then
+		return ordinal_sturdy[shape]
+	elseif shape then
+		local faces = 0
+		local north = shape:select_face ("z", 0.5)
+		local west = shape:select_face ("x", -0.5)
+		local south = shape:select_face ("z", -0.5)
+		local east = shape:select_face ("x", 0.5)
+		local up = shape:select_face ("y", 0.5)
+		local down = shape:select_face ("y", -0.5)
+		assert (north and west and south and east and up and down)
+
+		if north:equal_p (FULL_BLOCK) then
+			faces = bor (faces, FACE_NORTH)
+		end
+		if south:equal_p (FULL_BLOCK) then
+			faces = bor (faces, FACE_SOUTH)
+		end
+		if east:equal_p (FULL_BLOCK) then
+			faces = bor (faces, FACE_EAST)
+		end
+		if west:equal_p (FULL_BLOCK) then
+			faces = bor (faces, FACE_WEST)
+		end
+		if up:equal_p (FULL_BLOCK) then
+			faces = bor (faces, FACE_UP)
+		end
+		if down:equal_p (FULL_BLOCK) then
+			faces = bor (faces, FACE_DOWN)
+		end
+		if reusable then
+			ordinal_sturdy[shape] = faces
+		end
+		return faces
+	else
+		return false
+	end
+end
+
+function mcl_levelgen.get_sturdy_faces (x, y, z)
+	local shape, reusable = get_node_shape (x, y, z)
+	return get_sturdy_faces_1 (shape, reusable)
+end
+
+function mcl_levelgen.ordinal_to_wallmounted (ordinal)
+	if ordinal == FACE_UP then
+		return 0
+	elseif ordinal == FACE_DOWN then
+		return 1
+	elseif ordinal == FACE_EAST then
+		return 2
+	elseif ordinal == FACE_WEST then
+		return 3
+	elseif ordinal == FACE_SOUTH then
+		return 4
+	elseif ordinal == FACE_NORTH then
+		return 5
+	else
+		assert (false)
+	end
+end
+
+--------------------------------------------------------------------------
 -- Feature generation interface.
 --------------------------------------------------------------------------
 
 local supports_snow = {}
+
+local function sugar_cane_test_1 (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_water_source
+		or cid == cid_water_flowing
+		or is_cid_frosted_ice[cid]
+end
+
+local function sugar_cane_test (x, y, z)
+	return sugar_cane_test_1 (x - 1, y, z)
+		or sugar_cane_test_1 (x + 1, y, z)
+		or sugar_cane_test_1 (x, y, z - 1)
+		or sugar_cane_test_1 (x, y, z + 1)
+end
+
+local function cactus_test_1 (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return not (is_cid_solid[cid]
+		    or cid == cid_cactus
+		    or cid == cid_lava_source
+		    or cid == cid_lava_flowing)
+end
+
+local function cactus_test (x, y, z)
+	return cactus_test_1 (x - 1, y, z)
+		and cactus_test_1 (x + 1, y, z)
+		and cactus_test_1 (x, y, z - 1)
+		and cactus_test_1 (x, y, z + 1)
+end
 
 function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 	if not cid then
@@ -517,6 +690,19 @@ function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 			or cid == cid_red_sand
 			or is_cid_terracotta[cid]
 			or is_cid_dirt[cid]
+	elseif cid == cid_sugar_cane then
+		local cid, _ = get_block (x, y - 1, z)
+		if cid == cid_sugar_cane then
+			return true
+		else
+			return (cid == cid_sand or cid == cid_red_sand
+				or is_cid_dirt[cid])
+				and sugar_cane_test (x, y - 1, z)
+		end
+	elseif cid == cid_cactus then
+		local cid, _ = get_block (x, y - 1, z)
+		return (cid == cid_sand or cid == cid_red_sand)
+			and cactus_test (x, y, z)
 	elseif is_cid_bamboo[cid] then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_soil_bamboo[cid]
@@ -524,6 +710,12 @@ function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 		or cid == cid_hanging_mangrove_propagule then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_soil_propagule[cid]
+	elseif cid == cid_mushroom_red or cid == cid_mushroom_brown then
+		local cid, _ = get_block (x, y - 1, z)
+		return cid == cid_mycelium
+			or cid == cid_podzol
+			or cid == cid_crimson_nylum
+			or cid == cid_warped_nylum
 	elseif is_cid_water_floating_node[cid] then
 		local cid, _ = get_block (x, y - 1, z)
 		return cid == cid_water_source
@@ -568,10 +760,26 @@ function mcl_levelgen.is_water_or_air (x, y, z)
 		or cid == cid_water_flowing
 end
 
+function mcl_levelgen.is_water_air_or_lava (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_air
+		or cid == cid_water_source
+		or cid == cid_water_flowing
+		or cid == cid_lava_source
+		or cid == cid_lava_flowing
+end
+
 function mcl_levelgen.water_or_air_p (cid)
 	return cid == cid_air
 		or cid == cid_water_source
 		or cid == cid_water_flowing
+end
+
+function mcl_levelgen.water_or_lava_p (cid)
+	return cid == cid_water_source
+		or cid == cid_water_flowing
+		or cid == cid_lava_source
+		or cid == cid_lava_flowing
 end
 
 function mcl_levelgen.is_air (x, y, z)
@@ -579,11 +787,25 @@ function mcl_levelgen.is_air (x, y, z)
 	return cid == cid_air
 end
 
+function mcl_levelgen.is_water_source (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_water_source
+end
+
 function mcl_levelgen.is_air_with_dirt_below (x, y, z)
 	local cid, _ = get_block (x, y, z)
 	if cid == cid_air then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_dirt[cid]
+	end
+	return false
+end
+
+function mcl_levelgen.is_air_with_grass_below (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	if cid == cid_air then
+		local cid, _ = get_block (x, y - 1, z)
+		return cid == cid_grass_block
 	end
 	return false
 end
@@ -682,21 +904,12 @@ function mcl_levelgen.place_double_plant (cid, x, y, z, param2, set_block)
 	set_block (x, y + 1, z, top_cid, param2)
 end
 
-local sturdy = {}
-
 function mcl_levelgen.face_sturdy_p (x, y, z, axis, dir)
 	if axis == "z" then
 		dir = -dir
 	end
-	local shape, reusable = get_node_shape (x, y, z)
-	if shape and reusable then
-		if sturdy[shape] ~= nil then
-			return sturdy[shape]
-		end
-		local face = shape:select_face (axis, dir * 0.5)
-		sturdy[shape] = face:equal_p (FULL_BLOCK)
-		return sturdy[shape]
-	elseif shape then
+	local shape, _ = get_node_shape (x, y, z)
+	if shape then
 		local face = shape:select_face (axis, dir * 0.5)
 		return face:equal_p (FULL_BLOCK)
 	end
@@ -706,6 +919,15 @@ end
 local face_sturdy_p = mcl_levelgen.face_sturdy_p
 function mcl_levelgen.is_bottom_face_sturdy (x, y, z)
 	return face_sturdy_p (x, y, z, "y", -1.0)
+end
+
+function mcl_levelgen.buildable_to_p (cid)
+	return cid == cid_air or is_cid_buildable_to[cid] ~= nil
+end
+
+function mcl_levelgen.is_buildable_to (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_air or is_cid_buildable_to[cid] ~= nil
 end
 
 --------------------------------------------------------------------------
@@ -732,7 +954,7 @@ end
 
 function mcl_levelgen.facedir_to_wallmounted (axis, dir)
 	if axis == "y" then
-		return dir >= 0 and 0 or -1
+		return dir >= 0 and 0 or 1
 	elseif axis == "x" then
 		return dir >= 0 and 2 or 3
 	elseif axis == "z" then
