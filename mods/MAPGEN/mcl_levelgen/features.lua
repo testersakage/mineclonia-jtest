@@ -410,6 +410,10 @@ function mcl_levelgen.convert_level_position (x, y, z)
 end
 convert_level_position = mcl_levelgen.convert_level_position
 
+local function convert_minetest_position (x, y, z)
+	return x, y + y_offset, -z - 1
+end
+
 function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap, p_biomes,
 					p_y_offset, p_level_min, p_level_height, p_preset)
 	run = p_run
@@ -784,6 +788,41 @@ end
 
 local portable_schematics = nil
 local cid_ignore = core.CONTENT_IGNORE
+local active_processors = {}
+
+function mcl_levelgen.push_schematic_processor (processor_function)
+	local current = #active_processors
+	insert (active_processors, processor_function)
+	return current
+end
+
+function mcl_levelgen.push_schematic_processors (processors)
+	local current = #active_processors
+	for _, processor in ipairs (processors) do
+		insert (active_processors, processor)
+	end
+	return current
+end
+
+function mcl_levelgen.pop_schematic_processors (current)
+	for i = current + 1, #active_processors do
+		active_processors[i] = nil
+	end
+end
+
+local function apply_schematic_processors (x, y, z, rng, cid, param2)
+	local cid_current, param2_current = get_block_1 (x, y, z)
+	for _, processor in ipairs (active_processors) do
+		-- print ("  --> ", cid, param2)
+		cid, param2 = processor (x, y, z, rng, cid_current,
+					 param2_current, cid, param2)
+		-- print ("  <-- ", cid, param2)
+		if not cid then
+			return nil, nil
+		end
+	end
+	return cid, param2
+end
 
 local function encode_schem_data (cid, param2, probability, force_place)
 	if cid > 32767 then
@@ -851,11 +890,11 @@ end
 
 local rotate_param2 = mcl_levelgen.rotate_param2
 
-local function copy_to_data (schematic, size, px, py, pz, rot, force_place)
+local function copy_to_data (schematic, px, py, pz, rot, force_place)
+	local size = schematic.size
 	local xstride = 1
 	local ystride = size.x
 	local zstride = size.x * size.y
-	local size = schematic.size
 	local sx = size.x
 	local sy = size.y
 	local sz = size.z
@@ -886,6 +925,8 @@ local function copy_to_data (schematic, size, px, py, pz, rot, force_place)
 	local yprob = schematic.yslice_prob
 	local schemdata = schematic.data
 	local rng = schematic_rng
+	local have_processors = #active_processors > 0
+
 	for y = 0, sy - 1 do
 		if yprob[y + 1].prob == MTSCHEM_PROB_ALWAYS
 			or yprob[y + 1].prob >= 1 + rng:next_within (0xff) then
@@ -898,14 +939,31 @@ local function copy_to_data (schematic, size, px, py, pz, rot, force_place)
 
 					if area:contains (gx, gy, gz) then
 						local data = schemdata[i + 1]
+						if not data then
+							core.log ("warning", "Placing invalid schematic...  idx="
+								  .. i .. " rot=" .. rot)
+							return
+						end
+
 						local cid, param2, probability, force_place_node
 							= decode_schem_data (data)
 
 						if probability ~= MTSCHEM_PROB_NEVER then
+							if have_processors then
+								-- print (gx, y_map, gz)
+								local x, y, z
+									= convert_minetest_position (gx, y_map, gz)
+								cid, param2
+									= apply_schematic_processors (x, y, z,
+												      rng, cid,
+												      param2)
+								-- print ("  -->", cid, param2)
+							end
+
 							local vi = area:index (gx, y_map, gz)
-							if force_place or force_place_node
-								or cids[vi] == cid_air
-								or cids[vi] == cid_ignore then
+							if cid and (force_place or force_place_node
+								    or cids[vi] == cid_air
+								    or cids[vi] == cid_ignore) then
 
 								local continue = probability == MTSCHEM_PROB_ALWAYS
 									or probability > 1 + rng:next_within (0x80)
@@ -949,6 +1007,23 @@ local function copy_to_data (schematic, size, px, py, pz, rot, force_place)
 	end
 end
 
+function mcl_levelgen.random_schematic_rotation (rng)
+	local x = 1 + rng:next_within (4)
+	return rotations[x]
+end
+
+function mcl_levelgen.get_schematic_size (schematic, rotation)
+	local schematic = portable_schematics[schematic]
+	assert (schematic)
+	local size = schematic.size
+
+	if rotation == "90" or rotation == "270" then
+		return size.z, size.y, size.x
+	else
+		return size.x, size.y, size.z
+	end
+end
+
 function mcl_levelgen.place_schematic (x, y, z, schematic, rotation, force_place,
 				       flags, rng)
 	local schematic = portable_schematics[schematic]
@@ -961,9 +1036,9 @@ function mcl_levelgen.place_schematic (x, y, z, schematic, rotation, force_place
 		rotation = rotations[x]
 	else
 		if rotation ~= "0"
-			or rotation ~= "90"
-			or rotation ~= "180"
-			or rotation ~= "270" then
+			and rotation ~= "90"
+			and rotation ~= "180"
+			and rotation ~= "270" then
 			error ("Invalid rotation provided to `place_schematic'", rotation)
 		end
 	end
@@ -977,6 +1052,7 @@ function mcl_levelgen.place_schematic (x, y, z, schematic, rotation, force_place
 		v.x = size.z
 		v.y = size.y
 		v.z = size.x
+		size = v
 	end
 
 	if flags then
@@ -996,7 +1072,7 @@ function mcl_levelgen.place_schematic (x, y, z, schematic, rotation, force_place
 		end
 	end
 
-	copy_to_data (schematic, size, x, y, z, rotation, force_place)
+	copy_to_data (schematic, x, y, z, rotation, force_place)
 	update_relight_rgn ({
 		x, y, z,
 		x + size.x,
