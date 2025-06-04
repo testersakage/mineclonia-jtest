@@ -400,6 +400,7 @@ local magma_cube_big = {
 	description = S("Magma Cube - big"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	hp_min = 16,
 	hp_max = 16,
 	xp_min = 4,
