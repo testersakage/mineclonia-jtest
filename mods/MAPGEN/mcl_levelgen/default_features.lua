@@ -2493,6 +2493,14 @@ local function uniform_height (min_inclusive, max_inclusive)
 	end
 end
 
+function mcl_levelgen.clamped_height (source, min_inclusive, max_inclusive)
+	return function (rng)
+		local value = source (rng)
+		return mathmax (mathmin (value, max_inclusive),
+				min_inclusive)
+	end
+end
+
 local function ckd_random (rng, a, b)
 	if a >= b then
 		return a
