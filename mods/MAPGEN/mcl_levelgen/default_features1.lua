@@ -798,7 +798,7 @@ local cid_red_sand = core.get_content_id ("mcl_core:redsand")
 
 local function require_air_with_sand_below (x, y, z, rng)
 	if is_air (x, y, z) then
-		local cid, param2 = get_block (x, y - 1, z)
+		local cid, _ = get_block (x, y - 1, z)
 		if cid == cid_sand or cid == cid_red_sand then
 			return { x, y, z, }
 		end
@@ -839,3 +839,175 @@ mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_cactus_desert", {
 		mcl_levelgen.build_in_biome (),
 	},
 })
+
+------------------------------------------------------------------------
+-- Noise-based content providers.
+-- https://maven.fabricmc.net/docs/yarn-1.20.5-pre3+build.2/net/minecraft/world/gen/stateprovider/NoiseThresholdBlockStateProvider.html &c.
+------------------------------------------------------------------------
+
+function mcl_levelgen.build_noise_threshold_provider (parms)
+	local threshold = parms.threshold
+	local high_chance = parms.high_chance
+	local default_content = parms.default_content
+	local high_content = parms.high_content
+	local low_content = parms.low_content
+	local noise = parms.noise
+
+	assert (type (threshold) == "number")
+	assert (type (high_chance) == "number")
+	assert (type (default_content) == "table"
+		and type (default_content[1]) == "number"
+		and type (default_content[2]) == "number")
+	assert (type (high_content) == "table")
+	assert (type (low_content) == "table")
+	for _, content in ipairs (high_content) do
+		assert (type (content) == "table"
+			and type (content[1]) == "number"
+			and (type (content[2]) == "number"
+			     or type (content[2]) == "string"))
+	end
+	for _, content in ipairs (low_content) do
+		assert (type (content) == "table"
+			and type (content[1]) == "number"
+			and (type (content[2]) == "number"
+			     or type (content[2]) == "string"))
+	end
+	assert (type (noise) == "table")
+	assert (type (noise.amplitudes) == "table")
+	for _, amplitude in ipairs (noise.amplitudes) do
+		assert (type (amplitude) == "number")
+	end
+	assert (type (noise.first_octave) == "number")
+	-- ull value.
+	assert (type (parms.seed) == "table"
+		and type (parms.seed[1]) == "number"
+		and type (parms.seed[2]) == "number")
+	assert (type (parms.scale) == "number")
+	local scale = parms.scale
+
+	local rng = mcl_levelgen.jvm_random (parms.seed)
+	local noise = mcl_levelgen.make_normal_noise (rng, noise.first_octave,
+						      noise.amplitudes, true)
+	local n_low = #low_content
+	local n_high = #high_content
+	return function (x, y, z, rng)
+		local value = noise (x * scale, y * scale, z * scale)
+		if value < threshold then
+			local content = low_content[1 + rng:next_within (n_low)]
+			return content[1], content[2]
+		elseif rng:next_float () < high_chance then
+			local content = high_content[1 + rng:next_within (n_high)]
+			return content[1], content[2]
+		else
+			return default_content[1], default_content[2]
+		end
+	end
+end
+
+local floor = math.floor
+
+function mcl_levelgen.build_noise_content_provider (parms)
+	local noise = parms.noise
+	assert (type (noise) == "table")
+	assert (type (noise.amplitudes) == "table")
+	for _, amplitude in ipairs (noise.amplitudes) do
+		assert (type (amplitude) == "number")
+	end
+	assert (type (noise.first_octave) == "number")
+	-- ull value.
+	assert (type (parms.seed) == "table"
+		and type (parms.seed[1]) == "number"
+		and type (parms.seed[2]) == "number")
+	assert (type (parms.scale) == "number")
+	local scale = parms.scale
+
+	local content = parms.content
+	for _, content in ipairs (content) do
+		assert (type (content) == "table"
+			and type (content[1]) == "number"
+			and (type (content[2]) == "number"
+			     or type (content[2]) == "string"))
+	end
+
+	local rng = mcl_levelgen.jvm_random (parms.seed)
+	local noise = mcl_levelgen.make_normal_noise (rng, noise.first_octave,
+						      noise.amplitudes, true)
+	local n_content = #content
+	return function (x, y, z, rng)
+		local value = noise (x * scale, y * scale, z * scale)
+		local k = mathmin (mathmax ((1.0 + value) / 2.0, 0.0), 0.9999)
+		local content = content[1 + floor (n_content * k)]
+		return content[1], content[2]
+	end
+end
+
+function mcl_levelgen.build_dual_noise_content_provider (parms)
+	local noise = parms.noise
+	assert (type (noise) == "table")
+	assert (type (noise.amplitudes) == "table")
+	for _, amplitude in ipairs (noise.amplitudes) do
+		assert (type (amplitude) == "number")
+	end
+	assert (type (noise.first_octave) == "number")
+	local slow_noise = parms.slow_noise
+	assert (type (slow_noise) == "table")
+	assert (type (slow_noise.amplitudes) == "table")
+	for _, amplitude in ipairs (slow_noise.amplitudes) do
+		assert (type (amplitude) == "number")
+	end
+	assert (type (slow_noise.first_octave) == "number")
+
+	-- ull value.
+	assert (type (parms.seed) == "table"
+		and type (parms.seed[1]) == "number"
+		and type (parms.seed[2]) == "number")
+	assert (type (parms.scale) == "number")
+
+	local rng = mcl_levelgen.jvm_random (parms.seed)
+	local noise = mcl_levelgen.make_normal_noise (rng, noise.first_octave,
+						      noise.amplitudes, true)
+	local rng_slow = mcl_levelgen.jvm_random (parms.seed)
+	local slow_noise
+		= mcl_levelgen.make_normal_noise (rng_slow,
+						  slow_noise.first_octave,
+						  slow_noise.amplitudes, true)
+	assert (type (parms.variety) == "table")
+	local variety_min = parms.variety.min
+	local variety_max = parms.variety.max + 1
+	assert (type (variety_min) == "number")
+	assert (type (variety_max) == "number")
+
+	assert (type (parms.scale) == "number")
+	local scale = parms.scale
+	assert (type (parms.slow_scale) == "number")
+	local slow_scale = parms.slow_scale
+
+	local content = parms.content
+	for _, content in ipairs (content) do
+		assert (type (content) == "table"
+			and type (content[1]) == "number"
+			and (type (content[2]) == "number"
+			     or type (content[2]) == "string"))
+	end
+	local n_content = #content
+
+	return function (x, y, z, rng)
+		local slow_value = slow_noise (x * slow_scale,
+					       y * slow_scale,
+					       z * slow_scale)
+
+		-- Derive the number of items to include from
+		-- slow_value.
+		local cnt = floor (mathmin (mathmax ((slow_value + 1.0), 0.0), 1.0)
+				   * (variety_max - variety_min) + variety_min)
+		local value = noise (x * scale, y * scale, z * scale)
+		local k = mathmin (mathmax ((1.0 + value) / 2.0, 0.0), 0.9999)
+		local idx_variety = floor (cnt * k)
+		local value_1 = slow_noise ((x + floor (idx_variety * 54545)) * slow_scale, 0,
+					    (z + floor (idx_variety * 34234)) * slow_scale)
+		local idx1 = mathmin (mathmax ((1.0 + value_1) / 2.0, 0.0), 0.9999)
+			* n_content
+		local content = content[1 + floor (idx1)]
+		return content[1], content[2]
+	end
+end
