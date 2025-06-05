@@ -239,7 +239,7 @@ local is_cid_frosted_ice = {}
 local double_plant_tops = {}
 local paramtype2 = {}
 local mathmin = math.min
-
+mcl_levelgen.is_cid_dirt = is_cid_dirt
 
 local function initialize_nodeprops ()
 	cid_ice = core.get_content_id ("mcl_core:ice")
