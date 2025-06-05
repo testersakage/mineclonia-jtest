@@ -462,3 +462,5 @@ if mod_mcimport and mg_name == "singlenode" then
 end
 
 dofile(modpath.."/register.lua")
+
+mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")

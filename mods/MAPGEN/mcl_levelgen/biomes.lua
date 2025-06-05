@@ -1917,7 +1917,7 @@ mcl_levelgen.register_biome ("CherryGrove", {
 			"mcl_levelgen:glow_lichen",
 			"mcl_levelgen:patch_tall_grass_2",
 			"mcl_levelgen:patch_grass_plain",
-			"mcl_levelgen:flower_cherry",
+			"mcl_flowers:flower_cherry",
 			"mcl_trees:trees_cherry",
 		},
 		{
@@ -5318,7 +5318,7 @@ mcl_levelgen.register_biome ("SunflowerPlains", {
 		{
 			"mcl_levelgen:glow_lichen",
 			"mcl_levelgen:patch_tall_grass_2",
-			"mcl_levelgen:patch_sunflower",
+			"mcl_flowers:patch_sunflower",
 			"mcl_trees:trees_plains",
 			"mcl_flowers:flower_plains",
 			"mcl_levelgen:patch_grass_plain",
