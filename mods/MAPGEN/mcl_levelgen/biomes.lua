@@ -20,6 +20,7 @@ local rshift = bit.rshift
 local arshift = bit.arshift
 local lshift = bit.lshift
 local band = bit.band
+local bor = bit.bor
 
 local function toquart (x)
 	return arshift (x, 2)
@@ -313,8 +314,8 @@ local function construct_subtree (nodes)
 	if #children > 0 then
 		local extents = compute_extents (children)
 		table.insert (subtrees, {
-				extents = extents,
-				children = children,
+			extents = extents,
+			children = children,
 		})
 	end
 	return subtrees
@@ -328,7 +329,47 @@ local function subtree_cost (subtrees)
 	return cost
 end
 
-local function build_rtree (nodes)
+local function pack1 (extents)
+	local min = extents[1]
+	local max = extents[2]
+	assert (min <= 32767 and min >= -32768)
+	assert (max <= 32767 and max >= -32768)
+	return bor (lshift (min, 16), max + 32768)
+end
+
+local function pack_extents_1 (extents)
+	return {
+		pack1 (extents[1]),
+		pack1 (extents[2]),
+		pack1 (extents[3]),
+		pack1 (extents[4]),
+		pack1 (extents[5]),
+		pack1 (extents[6]),
+		pack1 (extents[7]),
+	}
+end
+
+local function pack_extents (rtree)
+	local new_extents = pack_extents_1 (rtree.extents)
+	if rtree.children then
+		local children = {}
+		for _, child in ipairs (rtree.children) do
+			table.insert (children, pack_extents (child))
+		end
+		return {
+			extents = new_extents,
+			children = children,
+		}
+	else
+		assert (rtree.value)
+		return {
+			extents = new_extents,
+			value = rtree.value,
+		}
+	end
+end
+
+local function build_rtree_internal (nodes)
 	if #nodes == 0 then
 		error ("A bucket must contain children")
 	elseif #nodes <= M then
@@ -370,7 +411,7 @@ local function build_rtree (nodes)
 			if #child.children <= M then
 				realchildren[i] = child
 			else
-				realchildren[i] = build_rtree (child.children)
+				realchildren[i] = build_rtree_internal (child.children)
 			end
 		end
 		return {
@@ -380,9 +421,13 @@ local function build_rtree (nodes)
 	end
 end
 
+local function build_rtree (nodes)
+	return pack_extents (build_rtree_internal (nodes))
+end
+
 local function distance_to_value (range, value)
-	local dmax = value - range[2]
-	local dmin = range[1] - value
+	local dmax = value - band (range, 0xffff) + 32768
+	local dmin = arshift (range, 16) - value
 	-- For consistency with Minecraft, this comparison function
 	-- treats the upper bounds of these ranges as inclusive
 	-- values.
@@ -396,20 +441,13 @@ end
 
 local function distance_total (extents, coords)
 	local d = 0
-	d = d + sqr (distance_to_value (temperature (extents),
-					temperature (coords)))
-	d = d + sqr (distance_to_value (humidity (extents),
-					humidity (coords)))
-	d = d + sqr (distance_to_value (continentalness (extents),
-					continentalness (coords)))
-	d = d + sqr (distance_to_value (erosion (extents),
-					erosion (coords)))
-	d = d + sqr (distance_to_value (depth (extents),
-					depth (coords)))
-	d = d + sqr (distance_to_value (weirdness (extents),
-					weirdness (coords)))
-	d = d + sqr (distance_to_value (offset (extents),
-					offset (coords)))
+	d = d + sqr (distance_to_value (extents[1], coords[1]))
+	d = d + sqr (distance_to_value (extents[2], coords[2]))
+	d = d + sqr (distance_to_value (extents[3], coords[3]))
+	d = d + sqr (distance_to_value (extents[4], coords[4]))
+	d = d + sqr (distance_to_value (extents[5], coords[5]))
+	d = d + sqr (distance_to_value (extents[6], coords[6]))
+	d = d + sqr (distance_to_value (extents[7], coords[7]))
 	return d
 end
 
@@ -6097,8 +6135,8 @@ if false then
 		-- produces false positives when validating the biome
 		-- system.
 		function distance_to_value (range, value)
-			local dmax = value - range[2]
-			local dmin = range[1] - value
+			local dmax = value - band (range, 0xffff) + 32768
+			local dmin = arshift (range, 16) - value
 			return dmax >= 0 and dmax + 1 or max (dmin, 0)
 		end
 
