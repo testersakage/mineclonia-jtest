@@ -295,6 +295,11 @@ local enderman = {
 -- Enderman visuals and mechanics.
 ------------------------------------------------------------------------
 
+function enderman:despawn_allowed ()
+	return (self._taken_node == "" or not self._taken_node)
+		and mob_class.despawn_allowed (self)
+end
+
 function enderman:set_animation (anim, custom_speed)
 	if self.attack then
 		anim = "attack"
@@ -473,7 +478,6 @@ local function enderman_grief (self, self_pos, dtime)
 			local dug = core.get_node_or_nil(take_pos)
 			if dug and dug.name == "air" then
 				self._taken_node = node.name
-				self.persistent = true
 				local def = core.registered_nodes[self._taken_node]
 				-- Update animation and texture accordingly (adds visibly carried block)
 				local block_type
