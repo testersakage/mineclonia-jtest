@@ -4,6 +4,9 @@ local S = core.get_translator("mobs_mc")
 
 local slime_chunk_spawn_max = mcl_worlds.layer_to_y(40)
 
+local only_peaceful_mobs
+	= core.settings:get_bool ("only_peaceful_mobs", false)
+
 local mapgen_seed = core.get_mapgen_setting("seed")
 
 local function in_slime_chunk(pos)
@@ -540,32 +543,39 @@ mcl_mobs.register_egg("mobs_mc:slime_big", S("Slime"), "#52a03e", "#7ebf6d")
 -- Modern Slime & Magma Cube spawning.
 ------------------------------------------------------------------------
 
-local monster_spawner = mobs_mc.monster_spawner
-local slime_spawner = table.merge (monster_spawner, {
+local default_spawner = mcl_mobs.default_spawner
+local slime_spawner = table.merge (default_spawner, {
+	spawn_placement = "ground",
+	spawn_category = "monster",
 	name = "mobs_mc:slime_big", -- Nominal name; governs collision tests.
 	weight = 100,
 	pack_max = 4,
 	pack_min = 4,
 	biomes = mobs_mc.monster_biomes,
-	max_light = 15,
 })
 
 function slime_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+	if mcl_vars.difficulty == 0 or only_peaceful_mobs then
+		return false
+	end
+
 	local biome = core.get_biome_data (node_pos)
 	if biome then
 		local name = core.get_biome_name (biome.biome)
 		if name == "Swampland" or name == "MangroveSwamp" then
 			if swamp_spawn (spawn_pos) then
-				return monster_spawner.test_spawn_position (self, spawn_pos,
-									    node_pos, sdata,
-									    node_cache)
+				if default_spawner.test_spawn_position (self, spawn_pos,
+									node_pos, sdata,
+									node_cache) then
+					return true
+				end
 			end
 		end
 
 		if spawn_pos.y <= slime_chunk_spawn_max + 0.5
 			and math.random (1, 10) == 1
 			and in_slime_chunk (spawn_pos) then
-			return monster_spawner.test_spawn_position (self, spawn_pos,
+			return default_spawner.test_spawn_position (self, spawn_pos,
 								    node_pos, sdata,
 								    node_cache)
 		end
