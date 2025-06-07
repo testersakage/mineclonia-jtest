@@ -408,7 +408,7 @@ end
 function mcl_levelgen.convert_level_position (x, y, z)
 	return x, y - y_offset, -z - 1
 end
-convert_level_position = mcl_levelgen.convert_level_position
+local convert_level_position = mcl_levelgen.convert_level_position
 
 local function convert_minetest_position (x, y, z)
 	return x, y + y_offset, -z - 1
@@ -596,13 +596,14 @@ function mcl_levelgen.index_biome (x, y, z)
 	end
 
 	local qx, qy, qz = munge_biome_coords (biome_seed, x, y, z)
+	local org_qx, org_qy, org_qz = qx, qy, qz
 
 	-- Convert this QuartPos into the Minetest coordinate system.
 	local dz = qz - toquart (run_min_z)
 	local run_origin = (run.z - REQUIRED_CONTEXT_XZ) * 16
 	qz = toquart (run_origin) + HORIZONTAL_QUARTS_PER_RUN - dz - 1
-	qy = qy - toquart (y_offset)
 	qy = mathmax (qy, toquart (level_min))
+	qy = qy - toquart (y_offset)
 
 	local bx, by, bz = arshift (qx, 2), arshift (qy, 2), arshift (qz, 2)
 	local hash = hashmapblock (bx, by, bz)
@@ -612,7 +613,7 @@ function mcl_levelgen.index_biome (x, y, z)
 		return index_biome_list (list, band (qx, 3), band (qy, 3),
 					 band (qz, 3))
 	else
-		return preset:index_biomes (qx, qy, qz)
+		return preset:index_biomes (org_qx, org_qy, org_qz)
 	end
 end
 
@@ -709,6 +710,8 @@ local function correct_heightmaps (x, y, z, cid, param2)
 						       motion_blocking - level_min))
 	end
 end
+
+mcl_levelgen.is_walkable = is_walkable
 
 function mcl_levelgen.set_block (x, y, z, cid, param2)
 	assert (cid and param2)

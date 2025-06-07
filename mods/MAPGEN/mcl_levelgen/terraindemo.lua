@@ -1,4 +1,5 @@
 dofile ("init.lua")
+dofile ("mineshaft.lua")
 
 local seed = mcl_levelgen.ull (0, 3228473)
 local level = mcl_levelgen.make_overworld_preset (seed)
