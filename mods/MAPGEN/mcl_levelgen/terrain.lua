@@ -43,13 +43,16 @@ end
 if core and core.get_content_id then
 	if core.register_on_mods_loaded then
 		core.register_on_mods_loaded (init_cids)
+		core.register_on_mods_loaded (function ()
+			mcl_levelgen.init_ore_veins ()
+		end)
 	else
 		init_cids ()
 	end
 else
 	cid_stone = 3
 	cid_water_source = 1
-	cid_lava_source = 1
+	cid_lava_source = 4
 	cid_air = 0
 	cid_copper_ore = 91
 	cid_deepslate_iron_ore = 92
@@ -73,19 +76,33 @@ local ORE_VEIN_IRON_MAX = mcl_levelgen.ORE_VEIN_IRON_MAX
 local ORE_VEIN_MIN_HEIGHT = mcl_levelgen.ORE_VEIN_MIN_HEIGHT
 local ORE_VEIN_MAX_HEIGHT = mcl_levelgen.ORE_VEIN_MAX_HEIGHT
 
+local COPPER_VEIN, IRON_VEIN
+
+function mcl_levelgen.init_ore_veins ()
+	COPPER_VEIN = {
+		ORE_VEIN_COPPER_MIN,
+		ORE_VEIN_COPPER_MAX,
+		cid_copper_ore,
+		cid_raw_copper,
+		cid_granite,
+	}
+
+	IRON_VEIN = {
+		ORE_VEIN_IRON_MIN,
+		ORE_VEIN_IRON_MAX,
+		cid_deepslate_iron_ore,
+		cid_raw_iron,
+		cid_tuff,
+	}
+end
+
+mcl_levelgen.init_ore_veins ()
+
 local function vein_select (selector)
 	if selector > 0.0 then
-		return ORE_VEIN_COPPER_MIN,
-			ORE_VEIN_COPPER_MAX,
-			cid_copper_ore,
-			cid_raw_copper,
-			cid_granite
+		return COPPER_VEIN
 	else
-		return ORE_VEIN_IRON_MIN,
-			ORE_VEIN_IRON_MAX,
-			cid_deepslate_iron_ore,
-			cid_raw_iron,
-			cid_tuff
+		return IRON_VEIN
 	end
 end
 
@@ -107,11 +124,10 @@ local function vein_block_at_position (gen, x, y, z, cid_default_block)
 		return cid_default_block, 0
 	end
 
-	local vein_toggle = gen.vein_toggle
-	local selector = vein_toggle (x, y, z, nil)
-	local min, max, ore, raw, filler = vein_select (selector)
-	local yabove = max - y
-	local ybelow = y - min
+	local selector = gen.vein_toggle (x, y, z, nil)
+	local vein = vein_select (selector)
+	local yabove = vein[2] - y
+	local ybelow = y - vein[1]
 	if yabove >= 0 and ybelow >= 0 then
 		local mindist = mathmin (yabove, ybelow)
 		local ore_density = mathabs (selector)
@@ -142,9 +158,9 @@ local function vein_block_at_position (gen, x, y, z, cid_default_block)
 				= map_values (ore_density, 0.4, 0.6, 0.1, 0.3)
 			if rng:next_float () < type_selector
 				and gen.vein_gap (x, y, z, nil) > -0.3 then
-				return (rng:next_float () < 0.02 and raw or ore), 0
+				return (rng:next_float () < 0.02 and vein[4] or vein[3]), 0
 			end
-			return filler, 0
+			return vein[5], 0
 		end
 	else
 		return cid_default_block, 0
@@ -528,7 +544,7 @@ local function update_height_map (map, x, y, z, isair, isstone, chunksize)
 end
 
 function terrain_generator:clear_height_map ()
-	local map = self.heightmap
+	local map = self.heightmap_wg
 	local chunksize = self.chunksize
 	for i = 1, chunksize * chunksize do
 		map[i] = 0
@@ -662,7 +678,7 @@ local gen_nodes = {}
 mcl_levelgen.gen_node_cache = gen_nodes
 
 local function encode_node (cid, param2)
-	return bor (lshift (cid, 8), param2)
+	return lshift (cid, 8) + param2
 end
 mcl_levelgen.encode_node = encode_node
 
@@ -673,6 +689,31 @@ mcl_levelgen.decode_node = decode_node
 
 local function index (x, y, z, chunksize, level_height)
 	return ((x * level_height) + y) * chunksize + z + 1
+end
+
+local function generate_step (self, x_pos, y_pos, z_pos,
+			      aquifer, get_node,
+			      cid_default_block, veins,
+			      x, y_min, z, gn, map_wg,
+			      final_density, chunksize,
+			      level_height)
+	local density = final_density (x_pos, y_pos, z_pos, nil)
+	local cid, param2
+		= state_from_density (aquifer, get_node,
+				      cid_default_block,
+				      x_pos, y_pos,
+				      z_pos, density,
+				      veins, self)
+	local x, y, z = x_pos - x,
+		y_pos - y_min,
+		z_pos - z
+	local i = index (x, y, z, chunksize,
+			 level_height)
+	gn[i] = encode_node (cid, param2)
+	update_height_map (map_wg, x, y, z,
+			   cid == cid_air,
+			   cid == cid_default_block,
+			   chunksize, cid)
 end
 
 function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
@@ -701,6 +742,9 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 		end
 	end
 
+	-- Build structure references and starts.
+	mcl_levelgen.prepare_structures (self.structures, self, x, z)
+
 	-- Reset the temporary heightmap.
 	self:clear_height_map ()
 
@@ -722,7 +766,7 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	local veins = self.preset.ore_veins_enabled
 
 	-- Height map holding height levels at horizontal positions.
-	local map = self.heightmap
+	local map_wg = self.heightmap_wg
 	for x1 = 0, horiz_cells - 1 do
 		local x_base = x1 * cell_width + x
 
@@ -750,25 +794,14 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 
 						for internal_z = 0, cell_width - 1 do
 							local progress = internal_z / cell_width
-							local z_pos = z_base + internal_z
 							interpolator_update_z (self, progress)
-							local density = final_density (x_pos, y_pos, z_pos, nil)
-							local cid, param2
-								= state_from_density (aquifer, get_node,
-										      cid_default_block,
-										      x_pos, y_pos,
-										      z_pos, density,
-										      veins, self)
-							local x, y, z = x_pos - x,
-								y_pos - y_min,
-								z_pos - z
-							local i = index (x, y, z, chunksize,
-									 level_height)
-							gn[i] = encode_node (cid, param2)
-							update_height_map (map, x, y, z,
-									   cid == cid_air,
-									   cid == cid_default_block,
-									   chunksize, cid)
+							local z_pos = z_base + internal_z
+							generate_step (self, x_pos, y_pos, z_pos,
+								       aquifer, get_node,
+								       cid_default_block, veins,
+								       x, y_min, z, gn, map_wg,
+								       final_density, chunksize,
+								       level_height)
 						end
 					end
 				end
@@ -791,12 +824,24 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	-- Process surface systems and carvers.
 	if biomes then
 		local system = self.surface_system
-		system:post_process (self, x, y, z, gn, map, chunksize, biomes)
+		system:post_process (self, x, y, z, gn, map_wg, chunksize, biomes)
 
 		-- local clock = os.clock ()
-		mcl_levelgen.carve_terrain (self.preset, gn, biomes, map,
+		mcl_levelgen.carve_terrain (self.preset, gn, biomes, map_wg,
 					    x, y, z, chunksize, self)
 		-- print (string.format ("%.2f", (os.clock () - clock) * 1000))
+	end
+
+	-- Regenerate the heightmap (or rather two heightmaps: one
+	-- representing the state of the terrain after surface system
+	-- and carver execution, and the second after structure
+	-- placement).
+	self:regenerate_heightmaps (gn, chunksize, self.preset)
+
+	-- Process structures.
+	if biomes then
+		mcl_levelgen.finish_structures (self.structures, self, biomes,
+						x, y, z, index, gn)
 	end
 
 	-- Write the section that intersects the output area to CIDs
@@ -821,6 +866,66 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	-- end
 	-- ntotal = ntotal + 1
 	return true
+end
+
+function terrain_generator:get_one_height (x, z, is_solid)
+	local y_min = self.y_min
+	local cell_width = self.cell_width
+	local cell_height = self.cell_height
+	local x_cell = floor (x / cell_width)
+	local z_cell = floor (z / cell_width)
+	local level_height = self.level_height
+	local y_bottom = floor (y_min / cell_height)
+	local y_total = floor (level_height / cell_height)
+
+	-- Reseat the aquifer.
+	local x_chunk, z_chunk = band (x, -16), band (z, -16)
+	local aquifer, get_node = self.aquifer, self.aquifer.get_node
+	aquifer:reseat (x_chunk, y_min, z_chunk)
+	local veins = self.preset.ore_veins_enabled
+
+	-- Prepare interpolation by filling both ZY-slices and
+	-- clearing the flat cache.
+	prepare_interpolation (self, x_chunk, z_chunk, x_cell, z_cell,
+			       y_bottom, 1, y_total)
+	fill_interpolators (self, false, x_cell + 1, z_cell, y_bottom,
+			    1, y_total)
+
+	local progress_x = (x % cell_width) / cell_width
+	local progress_z = (z % cell_width) / cell_width
+	local final_density = self.final_density
+	local cid_default_block = self.cid_default_block
+
+	for y = y_total - 1, 0, -1 do
+		local y_base = y * cell_height + y_min
+		interpolator_update (self, y, 0)
+		-- Begin processing individual blocks
+		-- in this cell.
+		for internal_y = cell_height - 1, 0, -1 do
+			local y_pos = y_base + internal_y
+			local progress = internal_y / cell_height
+			interpolator_update_y (self, progress)
+			interpolator_update_x (self, progress_x)
+			interpolator_update_z (self, progress_z)
+			local density = final_density (x, y, z)
+
+			if not is_solid then
+				if density >= 0.0 then
+					return y_pos + 1
+				end
+			else
+				local cid, param2
+					= state_from_density (aquifer, get_node,
+							      cid_default_block,
+							      x, y_pos, z, density,
+							      veins, self)
+				if is_solid (cid, param2) then
+					return y_pos + 1
+				end
+			end
+		end
+	end
+	return -32768
 end
 
 local huge = math.huge
@@ -977,11 +1082,15 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 		gen.aquifer = mcl_levelgen.create_default_aquifer (preset, gen)
 	end
 
-	local heightmap = {}
+	gen.structures = mcl_levelgen.make_structure_level (preset)
+
+	local heightmap, heightmap_wg = {}, {}
 	for i = 1, chunksize * chunksize do
 		heightmap[i] = 0
+		heightmap_wg[i] = 0
 	end
 	gen.heightmap = heightmap
+	gen.heightmap_wg = heightmap_wg
 	gen.surface_system = mcl_levelgen.make_surface_system (preset)
 	gen.biome_seed = mcl_levelgen.get_biome_seed (preset.seed)
 
@@ -999,19 +1108,21 @@ end
 -- Heightmap recomputation.
 ------------------------------------------------------------------------
 
-function mcl_levelgen.regenerate_heightmap (nodes, heightmap, chunksize,
-					    preset)
+function terrain_generator:regenerate_heightmaps (nodes, chunksize, preset)
+	local heightmap = self.heightmap_wg
+	local heightmap_structures = self.heightmap
 	local level_height = preset.height
-	-- Clear the heightmap first.
+	-- Reset the heightmap first.
 	for i = 1, chunksize * chunksize do
 		heightmap[i] = 0
 	end
 
 	for y = level_height - 1, 0, -1 do
+		local ybase = y * chunksize
 		for x = 0, chunksize - 1 do
+			local xbase = ybase + x * chunksize * level_height
 			for z = 0, chunksize - 1 do
-				local index = index (x, y, z, chunksize,
-						     level_height)
+				local index = xbase + z + 1
 				local cid, _ = decode_node (nodes[index])
 				local isair = cid == cid_air
 				local isstone = cid ~= cid_air
@@ -1020,6 +1131,8 @@ function mcl_levelgen.regenerate_heightmap (nodes, heightmap, chunksize,
 				update_height_map (heightmap, x, y, z,
 						   isair, isstone,
 						   chunksize)
+				local idx = x + chunksize * z + 1
+				heightmap_structures[idx] = heightmap[idx]
 			end
 		end
 	end

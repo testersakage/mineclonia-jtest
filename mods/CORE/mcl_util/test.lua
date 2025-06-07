@@ -34,12 +34,12 @@ local function AABB_intersect_p (a, b)
 	local x1a, y1a, z1a, x2a, y2a, z2a = unpack (a)
 	local x1b, y1b, z1b, x2b, y2b, z2b = unpack (b)
 
-	return x1a <= x1b
-		and y1a <= y1b
-		and z1a <= z1b
-		and x2a >= x2b
-		and y2a >= y2b
-		and z2a >= z2b
+	return x1a <= x2b
+		and y1a <= y2b
+		and z1a <= z2b
+		and x2a >= x1b
+		and y2a >= y1b
+		and z2a >= z1b
 end
 
 local function AABB_intersect (a, b)

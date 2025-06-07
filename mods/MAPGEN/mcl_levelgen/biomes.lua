@@ -14,6 +14,7 @@
 ------------------------------------------------------------------------
 
 local ipairs = ipairs
+local tonumber = tonumber
 local floor = math.floor
 local ceil = math.ceil
 local rshift = bit.rshift
@@ -426,15 +427,14 @@ local function build_rtree (nodes)
 end
 
 local function distance_to_value (range, value)
-	local dmax = value - band (range, 0xffff) + 32768
-	local dmin = arshift (range, 16) - value
+	local dmax = tonumber (value - band (range, 0xffff) + 32768)
+	local dmin = tonumber (arshift (range, 16) - value)
 	-- For consistency with Minecraft, this comparison function
 	-- treats the upper bounds of these ranges as inclusive
 	-- values.
 	return dmax > 0 and dmax or max (dmin, 0)
 end
 
--- XXX: why square these values rather than take their `abs'?
 local function sqr (x)
 	return x * x
 end
@@ -1559,6 +1559,7 @@ function mcl_levelgen.register_biome (name, def)
 	assert (def.temperature, "Biome definition does not define a temperature")
 	assert (def.grass_palette_index,
 		"Biome definition does not define a grass palette index")
+	assert (def.groups, "Biome definition does not define a group list")
 	registered_biomes[name] = def
 end
 
@@ -1581,6 +1582,7 @@ mcl_levelgen.register_biome ("TheVoid", {
 	has_precipitation = false,
 	temperature = 0.5,
 	grass_palette_index = 0,
+	groups = {},
 })
 
 local OVERWORLD_DEFAULT_ORES = {
@@ -1693,6 +1695,10 @@ mcl_levelgen.register_biome ("Mesa", {
 	has_precipitation = false,
 	temperature = 2.000000,
 	grass_palette_index = 19,
+	groups = {
+		is_badlands = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("BambooJungle", {
@@ -1746,6 +1752,10 @@ mcl_levelgen.register_biome ("BambooJungle", {
 	has_precipitation = true,
 	temperature = 0.95,
 	grass_palette_index = 26,
+	groups = {
+		is_jungle = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("BasaltDeltas", {
@@ -1790,6 +1800,9 @@ mcl_levelgen.register_biome ("BasaltDeltas", {
 	},
 	temperature = 2.0,
 	grass_palette_index = 16,
+	groups = {
+		is_nether = true,
+	},
 })
 
 mcl_levelgen.register_biome ("Beach", {
@@ -1837,6 +1850,10 @@ mcl_levelgen.register_biome ("Beach", {
 	},
 	temperature = 0.8,
 	grass_palette_index = 0,
+	groups = {
+		is_beach = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("BirchForest", {
@@ -1886,6 +1903,10 @@ mcl_levelgen.register_biome ("BirchForest", {
 	has_precipitation = true,
 	temperature = 0.6,
 	grass_palette_index = 15,
+	groups = {
+		is_forest = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("CherryGrove", {
@@ -1965,6 +1986,10 @@ mcl_levelgen.register_biome ("CherryGrove", {
 	has_precipitation = true,
 	temperature = 0.500000,
 	grass_palette_index = 11,
+	groups = {
+		is_mountain = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("ColdOcean", {
@@ -2047,6 +2072,9 @@ mcl_levelgen.register_biome ("ColdOcean", {
 	has_precipitation = true,
 	temperature = 0.500000,
 	grass_palette_index = 0,
+	groups = {
+		is_ocean = true,
+	},
 })
 
 mcl_levelgen.register_biome ("CrimsonForest", {
@@ -2091,6 +2119,9 @@ mcl_levelgen.register_biome ("CrimsonForest", {
 	has_precipitation = false,
 	temperature = 2.000000,
 	grass_palette_index = 1,
+	groups = {
+		is_nether = true,
+	},
 })
 
 mcl_levelgen.register_biome ("DarkForest", {
@@ -2171,6 +2202,10 @@ mcl_levelgen.register_biome ("DarkForest", {
 	has_precipitation = true,
 	temperature = 0.700000,
 	grass_palette_index = 18,
+	groups = {
+		is_forest = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("DeepColdOcean", {
@@ -2253,6 +2288,10 @@ mcl_levelgen.register_biome ("DeepColdOcean", {
 	has_precipitation = false,
 	temperature = 0.500000,
 	grass_palette_index = 0,
+	groups = {
+		is_deep_ocean = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("DeepDark", {
@@ -2330,6 +2369,9 @@ mcl_levelgen.register_biome ("DeepDark", {
 	has_precipitation = false,
 	temperature = 0.800000,
 	grass_palette_index = 0,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("DeepFrozenOcean", {
@@ -2414,6 +2456,10 @@ mcl_levelgen.register_biome ("DeepFrozenOcean", {
 	temperature = 0.500000,
 	temperature_modifier = "frozen",
 	grass_palette_index = 0,
+	groups = {
+		is_deep_ocean = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("DeepLukewarmOcean", {
@@ -2496,6 +2542,10 @@ mcl_levelgen.register_biome ("DeepLukewarmOcean", {
 	has_precipitation = true,
 	temperature = 0.500000,
 	grass_palette_index = 0,
+	groups = {
+		is_deep_ocean = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("DeepOcean", {
@@ -2578,6 +2628,10 @@ mcl_levelgen.register_biome ("DeepOcean", {
 	has_precipitation = true,
 	temperature = 0.500000,
 	grass_palette_index = 0,
+	groups = {
+		is_deep_ocean = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("Desert", {
@@ -2662,6 +2716,9 @@ mcl_levelgen.register_biome ("Desert", {
 	has_precipitation = false,
 	temperature = 2.000000,
 	grass_palette_index = 17,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("DripstoneCaves", {
@@ -2746,6 +2803,9 @@ mcl_levelgen.register_biome ("DripstoneCaves", {
 	has_precipitation = true,
 	temperature = 0.800000,
 	grass_palette_index = 0,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("EndBarrens", {
@@ -2757,6 +2817,9 @@ mcl_levelgen.register_biome ("EndBarrens", {
 	has_precipitation = false,
 	temperature = 0.500000,
 	grass_palette_index = 15,
+	groups = {
+		is_end = true,
+	},
 })
 
 mcl_levelgen.register_biome ("EndHighlands", {
@@ -2782,6 +2845,9 @@ mcl_levelgen.register_biome ("EndHighlands", {
 	has_precipitation = false,
 	temperature = 0.500000,
 	grass_palette_index = 15,
+	groups = {
+		is_end = true,
+	},
 })
 
 mcl_levelgen.register_biome ("EndMidlands", {
@@ -2793,6 +2859,9 @@ mcl_levelgen.register_biome ("EndMidlands", {
 	has_precipitation = false,
 	temperature = 0.500000,
 	grass_palette_index = 15,
+	groups = {
+		is_end = true,
+	},
 })
 
 mcl_levelgen.register_biome ("ErodedMesa", {
@@ -2873,6 +2942,10 @@ mcl_levelgen.register_biome ("ErodedMesa", {
 	has_precipitation = false,
 	temperature = 2.000000,
 	grass_palette_index = 20,
+	groups = {
+		is_badlands = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("FlowerForest", {
@@ -2953,6 +3026,10 @@ mcl_levelgen.register_biome ("FlowerForest", {
 	has_precipitation = true,
 	temperature = 0.700000,
 	grass_palette_index = 14,
+	groups = {
+		is_forest = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("Forest", {
@@ -3033,6 +3110,10 @@ mcl_levelgen.register_biome ("Forest", {
 	has_precipitation = true,
 	temperature = 0.700000,
 	grass_palette_index = 13,
+	groups = {
+		is_forest = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("FrozenOcean", {
@@ -3117,6 +3198,10 @@ mcl_levelgen.register_biome ("FrozenOcean", {
 	temperature = 0.000000,
 	temperature_modifier = "frozen",
 	grass_palette_index = 2,
+	groups = {
+		is_ocean = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("FrozenPeaks", {
@@ -3193,6 +3278,10 @@ mcl_levelgen.register_biome ("FrozenPeaks", {
 	has_precipitation = true,
 	temperature = -0.700000,
 	grass_palette_index = 2,
+	groups = {
+		is_mountain = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("FrozenRiver", {
@@ -3272,6 +3361,9 @@ mcl_levelgen.register_biome ("FrozenRiver", {
 	has_precipitation = true,
 	temperature = 0.000000,
 	grass_palette_index = 2,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("Grove", {
@@ -3351,6 +3443,10 @@ mcl_levelgen.register_biome ("Grove", {
 	has_precipitation = true,
 	temperature = -0.200000,
 	grass_palette_index = 2,
+	groups = {
+		is_forest = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("IceSpikes", {
@@ -3433,6 +3529,9 @@ mcl_levelgen.register_biome ("IceSpikes", {
 	has_precipitation = true,
 	temperature = 0.000000,
 	grass_palette_index = 2,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("JaggedPeaks", {
@@ -3509,6 +3608,10 @@ mcl_levelgen.register_biome ("JaggedPeaks", {
 	has_precipitation = true,
 	temperature = -0.700000,
 	grass_palette_index = 2,
+	groups = {
+		is_mountain = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("Jungle", {
@@ -3591,6 +3694,10 @@ mcl_levelgen.register_biome ("Jungle", {
 	has_precipitation = true,
 	temperature = 0.950000,
 	grass_palette_index = 24,
+	groups = {
+		is_jungle = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("LukewarmOcean", {
@@ -3672,6 +3779,10 @@ mcl_levelgen.register_biome ("LukewarmOcean", {
 	has_precipitation = true,
 	temperature = 0.500000,
 	grass_palette_index = 0,
+	groups = {
+		is_ocean = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("LushCaves", {
@@ -3753,6 +3864,9 @@ mcl_levelgen.register_biome ("LushCaves", {
 	has_precipitation = true,
 	temperature = 0.500000,
 	grass_palette_index = 0,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("MangroveSwamp", {
@@ -3831,6 +3945,9 @@ mcl_levelgen.register_biome ("MangroveSwamp", {
 	has_precipitation = true,
 	temperature = 0.800000,
 	grass_palette_index = 27,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("Meadow", {
@@ -3910,6 +4027,10 @@ mcl_levelgen.register_biome ("Meadow", {
 	has_precipitation = true,
 	temperature = 0.500000,
 	grass_palette_index = 30,
+	groups = {
+		is_mountain = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("MushroomIslands", {
@@ -3987,6 +4108,9 @@ mcl_levelgen.register_biome ("MushroomIslands", {
 	has_precipitation = true,
 	temperature = 0.900000,
 	grass_palette_index = 29,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("NetherWastes", {
@@ -4031,6 +4155,9 @@ mcl_levelgen.register_biome ("NetherWastes", {
 	has_precipitation = false,
 	temperature = 2.000000,
 	grass_palette_index = 17,
+	groups = {
+		is_nether = true,
+	},
 })
 
 mcl_levelgen.register_biome ("Ocean", {
@@ -4113,6 +4240,10 @@ mcl_levelgen.register_biome ("Ocean", {
 	has_precipitation = true,
 	temperature = 0.500000,
 	grass_palette_index = 0,
+	groups = {
+		is_ocean = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("OldGrowthBirchForest", {
@@ -4193,6 +4324,10 @@ mcl_levelgen.register_biome ("OldGrowthBirchForest", {
 	has_precipitation = true,
 	temperature = 0.600000,
 	grass_palette_index = 15,
+	groups = {
+		is_forest = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("OldGrowthPineTaiga", {
@@ -4278,6 +4413,10 @@ mcl_levelgen.register_biome ("OldGrowthPineTaiga", {
 	has_precipitation = true,
 	temperature = 0.300000,
 	grass_palette_index = 31,
+	groups = {
+		is_overworld = true,
+		is_taiga = true,
+	},
 })
 
 mcl_levelgen.register_biome ("OldGrowthSpruceTaiga", {
@@ -4363,6 +4502,10 @@ mcl_levelgen.register_biome ("OldGrowthSpruceTaiga", {
 	has_precipitation = true,
 	temperature = 0.250000,
 	grass_palette_index = 12,
+	groups = {
+		is_overworld = true,
+		is_taiga = true,
+	},
 })
 
 mcl_levelgen.register_biome ("Plains", {
@@ -4443,6 +4586,9 @@ mcl_levelgen.register_biome ("Plains", {
 	has_precipitation = true,
 	temperature = 0.800000,
 	grass_palette_index = 11,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("River", {
@@ -4523,6 +4669,10 @@ mcl_levelgen.register_biome ("River", {
 	has_precipitation = true,
 	temperature = 0.500000,
 	grass_palette_index = 0,
+	groups = {
+		is_overworld = true,
+		is_river = true,
+	},
 })
 
 mcl_levelgen.register_biome ("Savannah", {
@@ -4603,6 +4753,10 @@ mcl_levelgen.register_biome ("Savannah", {
 	has_precipitation = false,
 	temperature = 2.000000,
 	grass_palette_index = 1,
+	groups = {
+		is_overworld = true,
+		is_savannah = true,
+	},
 })
 
 mcl_levelgen.register_biome ("SavannahPlateau", {
@@ -4683,6 +4837,10 @@ mcl_levelgen.register_biome ("SavannahPlateau", {
 	has_precipitation = false,
 	temperature = 2.000000,
 	grass_palette_index = 1,
+	groups = {
+		is_overworld = true,
+		is_savannah = true,
+	},
 })
 
 mcl_levelgen.register_biome ("SmallEndIslands", {
@@ -4697,6 +4855,9 @@ mcl_levelgen.register_biome ("SmallEndIslands", {
 	has_precipitation = false,
 	temperature = 0.500000,
 	grass_palette_index = 0,
+	groups = {
+		is_end = true,
+	},
 })
 
 mcl_levelgen.register_biome ("SnowyBeach", {
@@ -4775,6 +4936,10 @@ mcl_levelgen.register_biome ("SnowyBeach", {
 	has_precipitation = true,
 	temperature = 0.050000,
 	grass_palette_index = 32,
+	groups = {
+		is_beach = true,
+		is_overworld = true,
+	}
 })
 
 mcl_levelgen.register_biome ("SnowyPlains", {
@@ -4854,6 +5019,9 @@ mcl_levelgen.register_biome ("SnowyPlains", {
 	has_precipitation = true,
 	temperature = 0.000000,
 	grass_palette_index = 10,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("SnowySlopes", {
@@ -4932,6 +5100,10 @@ mcl_levelgen.register_biome ("SnowySlopes", {
 	has_precipitation = true,
 	temperature = -0.300000,
 	grass_palette_index = 10,
+	groups = {
+		is_mountain = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("SnowyTaiga", {
@@ -5013,6 +5185,10 @@ mcl_levelgen.register_biome ("SnowyTaiga", {
 	has_precipitation = true,
 	temperature = -0.500000,
 	grass_palette_index = 10,
+	groups = {
+		is_overworld = true,
+		is_taiga = true,
+	},
 })
 
 mcl_levelgen.register_biome ("SoulSandValley", {
@@ -5057,6 +5233,9 @@ mcl_levelgen.register_biome ("SoulSandValley", {
 	has_precipitation = false,
 	temperature = 2.000000,
 	grass_palette_index = 17,
+	groups = {
+		is_nether = true,
+	},
 })
 
 mcl_levelgen.register_biome ("SparseJungle", {
@@ -5138,6 +5317,10 @@ mcl_levelgen.register_biome ("SparseJungle", {
 	has_precipitation = true,
 	temperature = 0.950000,
 	grass_palette_index = 26,
+	groups = {
+		is_jungle = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("StonyPeaks", {
@@ -5213,6 +5396,10 @@ mcl_levelgen.register_biome ("StonyPeaks", {
 	has_precipitation = true,
 	temperature = 1.000000,
 	grass_palette_index = 33,
+	groups = {
+		is_mountain = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("StonyShore", {
@@ -5291,6 +5478,9 @@ mcl_levelgen.register_biome ("StonyShore", {
 	has_precipitation = true,
 	temperature = 0.200000,
 	grass_palette_index = 34,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("SunflowerPlains", {
@@ -5372,6 +5562,9 @@ mcl_levelgen.register_biome ("SunflowerPlains", {
 	has_precipitation = true,
 	temperature = 0.800000,
 	grass_palette_index = 11,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("Swamp", {
@@ -5456,6 +5649,9 @@ mcl_levelgen.register_biome ("Swamp", {
 	has_precipitation = true,
 	temperature = 0.800000,
 	grass_palette_index = 28,
+	groups = {
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("Taiga", {
@@ -5537,6 +5733,10 @@ mcl_levelgen.register_biome ("Taiga", {
 	has_precipitation = true,
 	temperature = 0.250000,
 	grass_palette_index = 12,
+	groups = {
+		is_overworld = true,
+		is_taiga = true,
+	},
 })
 
 mcl_levelgen.register_biome ("TheEnd", {
@@ -5555,6 +5755,9 @@ mcl_levelgen.register_biome ("TheEnd", {
 	has_precipitation = false,
 	temperature = 0.500000,
 	grass_palette_index = 0,
+	groups = {
+		is_end = true,
+	},
 })
 
 mcl_levelgen.register_biome ("WarmOcean", {
@@ -5637,6 +5840,10 @@ mcl_levelgen.register_biome ("WarmOcean", {
 	has_precipitation = true,
 	temperature = 0.500000,
 	grass_palette_index = 0,
+	groups = {
+		is_ocean = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("WarpedForest", {
@@ -5683,6 +5890,9 @@ mcl_levelgen.register_biome ("WarpedForest", {
 	has_precipitation = false,
 	temperature = 2.000000,
 	grass_palette_index = 17,
+	groups = {
+		is_nether = true,
+	},
 })
 
 mcl_levelgen.register_biome ("WindsweptForest", {
@@ -5765,6 +5975,10 @@ mcl_levelgen.register_biome ("WindsweptForest", {
 	has_precipitation = true,
 	temperature = 0.200000,
 	grass_palette_index = 34,
+	groups = {
+		is_hill = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("WindsweptGravellyHills", {
@@ -5847,6 +6061,10 @@ mcl_levelgen.register_biome ("WindsweptGravellyHills", {
 	has_precipitation = true,
 	temperature = 0.200000,
 	grass_palette_index = 34,
+	groups = {
+		is_hill = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("WindsweptHills", {
@@ -5929,6 +6147,10 @@ mcl_levelgen.register_biome ("WindsweptHills", {
 	has_precipitation = true,
 	temperature = 0.200000,
 	grass_palette_index = 34,
+	groups = {
+		is_hill = true,
+		is_overworld = true,
+	},
 })
 
 mcl_levelgen.register_biome ("WindsweptSavannah", {
@@ -6008,6 +6230,10 @@ mcl_levelgen.register_biome ("WindsweptSavannah", {
 	has_precipitation = false,
 	temperature = 2.000000,
 	grass_palette_index = 1,
+	groups = {
+		is_overworld = true,
+		is_savannah = true,
+	},
 })
 
 mcl_levelgen.register_biome ("WoodedMesa", {
@@ -6089,6 +6315,67 @@ mcl_levelgen.register_biome ("WoodedMesa", {
 	has_precipitation = false,
 	temperature = 2.000000,
 	grass_palette_index = 19,
+	groups = {
+		is_badlands = true,
+		is_overworld = true,
+	},
+})
+
+------------------------------------------------------------------------
+-- Biome groups.
+------------------------------------------------------------------------
+
+local function indexof (list, val)
+	for i, v in ipairs (list) do
+		if v == val then
+			return i
+		end
+	end
+	return -1
+end
+
+function mcl_levelgen.build_biome_list (id_or_group_list)
+	local names = {}
+	for _, id in ipairs (id_or_group_list) do
+		if string.find (id, "#") == 1 then
+			local group = string.sub (id, 2)
+			for name, biome in pairs (registered_biomes) do
+				if biome.groups[group]
+					and indexof (names, name) == -1 then
+					table.insert (names, name)
+				end
+			end
+		else
+			if not registered_biomes[id] then
+				error ("Biome does not exist: " .. id)
+			end
+			if indexof (names, id) == -1 then
+				table.insert (names, id)
+			end
+		end
+	end
+	return names
+end
+
+function mcl_levelgen.modify_biome_groups (biomes_or_groups, groups)
+	for _, id in ipairs (mcl_levelgen.build_biome_list (biomes_or_groups)) do
+		local biome = registered_biomes[id]
+		assert (biome)
+
+		for group, value in pairs (groups) do
+			if biome.groups[group] ~= nil
+				and biome.groups[group] ~= value then
+				print (string.format ("Warning: overriding biome %s's `%s' group to `%s'",
+						      id, group, tostring (value)))
+			end
+			biome.groups[group] = value
+		end
+	end
+end
+
+mcl_levelgen.modify_biome_groups ({ "#is_deep_ocean", }, {
+	is_ocean = true,
+	is_deep_ocean = true,
 })
 
 if false then

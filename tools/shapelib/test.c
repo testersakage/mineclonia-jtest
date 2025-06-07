@@ -74,12 +74,12 @@ test_AABB_to_rgn (void)
 static int
 AABB_intersect_p (AABB *a, AABB *b)
 {
-  return (a->x1 <= b->x1
-	  && a->y1 <= b->y1
-	  && a->z1 <= b->z1
-	  && a->x2 >= b->x2
-	  && a->y2 >= b->y2
-	  && a->z2 >= b->z2);
+  return (a->x1 <= b->x2
+	  && a->y1 <= b->y2
+	  && a->z1 <= b->z2
+	  && a->x2 >= b->x1
+	  && a->y2 >= b->y1
+	  && a->z2 >= b->z1);
 }
 
 static void

@@ -47,7 +47,7 @@ local function make_ipos_iterator ()
 	end
 
 	return function (ix1, iy1, iz1, ix2, iy2, iz2)
-		if ix1 > ix2 or iy1 > iy2 then
+		if ix1 > ix2 or iy1 > iy2 or iz1 > iz2 then
 			return iter_nil
 		end
 		x1, x2, y1, y2, z1, z2 = ix1, ix2, iy1, iy2, iz1, iz2

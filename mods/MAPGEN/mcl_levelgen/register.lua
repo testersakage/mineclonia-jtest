@@ -4,6 +4,11 @@
 
 mcl_levelgen.verbose = false
 
+
+-- Constants required by level generator scripts.
+mcl_levelgen.REQUIRED_CONTEXT_Y = 2
+mcl_levelgen.REQUIRED_CONTEXT_XZ = 1
+
 local ull = mcl_levelgen.ull
 
 if mcl_vars.enable_mcl_levelgen then
@@ -60,12 +65,10 @@ end
 -- Assign IDs to new biomes if any.
 mcl_levelgen.assign_biome_ids (assignments)
 
-if core.save_gen_notify then
-	dofile (mcl_levelgen.prefix .. "/mg_register.lua")
-elseif not core.get_mod_storage then
+if not core.get_mod_storage and not core.save_gen_notify then
 	-- Async environment.
 	dofile (mcl_levelgen.prefix .. "/async_register.lua")
-else
+elseif core.get_mod_storage then
 	core.log ("action", ("[mcl_levelgen]: Initializing level generation with seed "
 			     .. tostringull (seed) .. " (Biome seed: "
 			     .. tostringull (mcl_levelgen.biome_seed) .. ")"))
@@ -83,6 +86,9 @@ if core and not core.get_player_by_name then
 		dofile (script)
 	end
 elseif core then
+	dofile (mcl_levelgen.prefix .. "/default_structures.lua")
+	mcl_levelgen.register_levelgen_script (mcl_levelgen.prefix
+					       .. "/default_structures.lua")
 	mcl_levelgen.register_levelgen_script (mcl_levelgen.prefix
 					       .. "/default_features.lua")
 
@@ -92,6 +98,12 @@ elseif core then
 	dofile (mcl_levelgen.prefix .. "/default_features1.lua")
 	mcl_levelgen.register_levelgen_script (mcl_levelgen.prefix
 					       .. "/default_features1.lua")
+end
+
+if core and not core.get_mod_storage and core.get_gen_notify then
+	-- Emerge environment; create terrain after structures are
+	-- registered.
+	dofile (mcl_levelgen.prefix .. "/mg_register.lua")
 end
 
 else

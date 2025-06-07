@@ -2,12 +2,9 @@
 -- Level generator callbacks.
 ------------------------------------------------------------------------
 
-mcl_levelgen.load_feature_environment = true
+mcl_levelgen.initialize_nodeprops_in_async_env ()
 
--- Load `features.lua' a second time to define the feature generation
--- environment.
-dofile (mcl_levelgen.prefix .. "/post_processing.lua")
-dofile (mcl_levelgen.prefix .. "/features.lua")
+local lighting_disabled = mcl_levelgen.lighting_disabled
 
 -- local zone = require ("jit.zone")
 
@@ -79,8 +76,13 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	vmanip:set_data (cids)
 	vmanip:set_param2_data (param2s)
 	vmanip:update_liquids ()
-	vmanip:set_lighting ({day=0, night=0,})
-	vmanip:calc_lighting ()
+
+	if not lighting_disabled then
+		vmanip:set_lighting ({day=0, night=0,})
+		vmanip:calc_lighting ()
+	end
+	local notifications = mcl_levelgen.flush_structure_generation_notifications ()
+	core.save_gen_notify ("mcl_levelgen:gen_notifies", notifications)
 
 	-- zone ("Biome encoding")
 	local compressed = mcl_levelgen.encode_biomes (biomes, block_y - level_min,
@@ -90,11 +92,8 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	-- zone ()
 	-- print (string.format ("%.2f", os.clock () - clock))
 
-	-- zone ("Heightmap production")
-	mcl_levelgen.regenerate_heightmap (mcl_levelgen.gen_node_cache,
-					   overworld_terrain.heightmap,
-					   chunksize, overworld_preset)
-	core.save_gen_notify ("mcl_levelgen:level_height_map",
-			      overworld_terrain.heightmap)
-	-- zone ()
+	core.save_gen_notify ("mcl_levelgen:level_height_map", {
+		level = overworld_terrain.heightmap,
+		wg = overworld_terrain.heightmap_wg,
+	})
 end)
