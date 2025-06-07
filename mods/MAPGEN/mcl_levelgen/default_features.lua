@@ -660,7 +660,7 @@ local registered_biomes = mcl_levelgen.registered_biomes
 local indexof = table.indexof
 
 function mcl_levelgen.build_in_biome ()
-	local last_biome, last_result = nil
+	local last_biome, last_result = nil, nil
 	return function (x, y, z, rng)
 		if y < mcl_levelgen.placement_run_minp.y
 			or y > mcl_levelgen.placement_run_maxp.y then
@@ -668,12 +668,10 @@ function mcl_levelgen.build_in_biome ()
 		end
 
 		local biome = index_biome (x, y, z)
-		local def = registered_biomes[biome]
-		local current_feature
-			= mcl_levelgen.current_placed_feature
-		local current_step
-			= mcl_levelgen.current_step
+		local current_feature = mcl_levelgen.current_placed_feature
+		local current_step = mcl_levelgen.current_step
 		if biome ~= last_biome then
+			local def = registered_biomes[biome]
 			local step_features = def.features[current_step]
 			last_result = step_features
 				and indexof (step_features,

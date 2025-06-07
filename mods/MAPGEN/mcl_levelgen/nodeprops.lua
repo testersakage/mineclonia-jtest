@@ -1,5 +1,6 @@
 local bor = bit.bor
 local lshift = bit.lshift
+local rshift = bit.rshift
 
 local decompose_AABBs = mcl_util.decompose_AABBs
 
@@ -236,6 +237,7 @@ local is_cid_bamboo = {}
 local is_cid_solid = {}
 local is_cid_buildable_to = {}
 local is_cid_frosted_ice = {}
+local is_cid_opaque = {}
 local double_plant_tops = {}
 local paramtype2 = {}
 local mathmin = math.min
@@ -358,6 +360,9 @@ local function initialize_nodeprops ()
 		end
 		if def.groups.frosted_ice and def.groups.frosted_ice >= 1 then
 			is_cid_frosted_ice[cid] = true
+		end
+		if def.groups.opaque and def.groups.opaque >= 1 then
+			is_cid_opaque[cid] = true
 		end
 		paramtype2[cid] = def.paramtype2
 	end
@@ -588,7 +593,7 @@ local function get_sturdy_faces_1 (shape, reusable)
 		end
 		return faces
 	else
-		return false
+		return 0
 	end
 end
 
@@ -613,6 +618,23 @@ function mcl_levelgen.ordinal_to_wallmounted (ordinal)
 	else
 		assert (false)
 	end
+end
+
+local get_sturdy_faces = mcl_levelgen.get_sturdy_faces
+
+function mcl_levelgen.count_sturdy_neighbors (x, y, z)
+	local north = get_sturdy_faces (x, y, z - 1)
+	local south = get_sturdy_faces (x, y, z + 1)
+	local west = get_sturdy_faces (x - 1, y, z)
+	local east = get_sturdy_faces (x + 1, y, z)
+	local up = get_sturdy_faces (x, y + 1, z)
+	local down = get_sturdy_faces (x, y - 1, z)
+	return band (south, FACE_NORTH)
+		+ rshift (band (east, FACE_WEST), 1)
+		+ rshift (band (north, FACE_SOUTH), 2)
+		+ rshift (band (west, FACE_EAST), 3)
+		+ rshift (band (down, FACE_UP), 4)
+		+ rshift (band (up, FACE_DOWN), 5)
 end
 
 --------------------------------------------------------------------------
@@ -891,6 +913,10 @@ end
 
 function mcl_levelgen.solid_p (cid)
 	return is_cid_solid[cid]
+end
+
+function mcl_levelgen.opaque_p (cid)
+	return is_cid_opaque[cid]
 end
 
 function mcl_levelgen.double_plant_p (cid)

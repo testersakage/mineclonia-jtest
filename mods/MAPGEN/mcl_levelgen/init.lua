@@ -16,6 +16,7 @@ end
 mcl_levelgen = { prefix = prefix, }
 mcl_levelgen.md5 = dofile (prefix .. "/md5.lua")
 mcl_levelgen.sha = dofile (prefix .. "/sha2.lua")
+mcl_levelgen.lighting_disabled = true
 
 dofile (prefix .. "/random.lua")
 dofile (prefix .. "/noise.lua")
@@ -29,6 +30,7 @@ dofile (prefix .. "/surface_system.lua")
 dofile (prefix .. "/surface_presets.lua")
 dofile (prefix .. "/carvers.lua")
 dofile (prefix .. "/features.lua")
+dofile (prefix .. "/structures.lua")
 dofile (prefix .. "/scripting.lua")
 dofile (prefix .. "/util.lua")
 

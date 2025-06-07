@@ -5,6 +5,7 @@ local ipos2 = mcl_levelgen.ipos2
 local S = core.get_translator ("mcl_levelgen")
 local mt_chunksize = core.ipc_get ("mcl_levelgen:mt_chunksize")
 local chunksize = mt_chunksize * 16
+local lighting_disabled = mcl_levelgen.lighting_disabled
 
 --------------------------------------------------------------------------
 -- Level post-processing.
@@ -273,6 +274,7 @@ end
 local blurb = "An existing MapBlock (%d) was reported to post_process_mapchunk: X: %d, Y: %d, Z: %d (src = %s, %s)"
 local fmt = "MapBlock %d,%d,%d (%d) was likely overwritten by the generation of the region between %s and %s"
 local save_heightmap
+local run_structure_notifications
 local attempt_feature_placement
 
 local function require_regeneration (current, x, y, z)
@@ -349,6 +351,7 @@ local function post_process_mapchunk (minp, maxp)
 	end
 
 	save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
+	run_structure_notifications ()
 	schedule_regeneration_for_emerge (bx, bx1, by, by1, bz, bz1)
 end
 
@@ -515,11 +518,8 @@ local function getmapblock (x, y, z)
 	return value
 end
 
-local REQUIRED_CONTEXT_Y = 2  -- 2 MapBlocks ought to be taller than
-			      -- the tallest feature generated.
-local REQUIRED_CONTEXT_XZ = 1
-mcl_levelgen.REQUIRED_CONTEXT_Y = REQUIRED_CONTEXT_Y
-mcl_levelgen.REQUIRED_CONTEXT_XZ = REQUIRED_CONTEXT_XZ
+local REQUIRED_CONTEXT_Y = mcl_levelgen.REQUIRED_CONTEXT_Y
+local REQUIRED_CONTEXT_XZ = mcl_levelgen.REQUIRED_CONTEXT_XZ
 local huge = math.huge
 
 -- XXX: `compare_block_status' is surprisingly expensive; therefore
@@ -926,6 +926,7 @@ mcl_levelgen.registered_notification_handlers
 local apply_heightmap_modifications
 local schedule_regeneration_for_unlock
 local apply_feature_context_requisitions
+local run_notification_handlers
 
 local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies,
 				 fluids_to_transform,
@@ -997,21 +998,12 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 	for _, rgn in ipairs (relight_queue) do
 		v1.x, v1.y, v1.z = rgn[1], rgn[2], rgn[3]
 		v2.x, v2.y, v2.z = rgn[4], rgn[5], rgn[6]
-		core.fix_light (v1, v2)
-	end
-	-- print (string.format ("%.2f", (core.get_us_time () - time) / 1000))
-
-	for _, notify in ipairs (gen_notifies) do
-		local name = notify.name
-		local handler = registered_notification_handlers[name]
-		if not handler and not warned[name] then
-			warned[name] = true
-			core.log ("warning", "Invoking unknown feature generation handler: " .. name)
-		elseif handler then
-			handler (notify.name, notify.data)
+		if not lighting_disabled then
+			core.fix_light (v1, v2)
 		end
 	end
-
+	-- print (string.format ("%.2f", (core.get_us_time () - time) / 1000))
+	run_notification_handlers (gen_notifies)
 	-- Queue all fluids that were marked for transformation.
 	for i = 1, #fluids_to_transform, 3 do
 		local x = fluids_to_transform[i]
@@ -1459,10 +1451,10 @@ local function load_heightmap (id)
 
 	-- print ("Loading heightmap " .. id)
 	local data = storage:get_string ("heightmap" .. id)
-	local str = core.decompress (data, "zstd")
-	if data == "" or not str then
-		error ("Could not satisfy heightmap request; Level is corrupt")
+	if data == "" then
+		error (string.format ("Could not request for heightmap %d; Level is corrupt", id))
 	end
+	local str = core.decompress (data, "zstd")
 	local fn, err = loadstring (str)
 	if not fn then
 		error (string.format ("Heightmap %d is corrupt: %s", id, err))
@@ -1574,23 +1566,22 @@ local function write_heightmap (id, x, y, z, chunksize, data)
 	storage:set_string ("heightmap" .. id, compressed)
 end
 
-local function copy_table (heightmap)
-	local value = {}
-	for i = 1, #heightmap do
-		value[i] = heightmap[i]
-	end
-	return value
-end
+-- local function copy_table (heightmap)
+-- 	local value = {}
+-- 	for i = 1, #heightmap do
+-- 		value[i] = heightmap[i]
+-- 	end
+-- 	return value
+-- end
 
 function save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
 	local custom = core.get_mapgen_object ("gennotify").custom
-	if not custom then
-		return
-	end
-	local data = custom["mcl_levelgen:level_height_map"]
-	if not data then
-		return
-	end
+	assert (custom)
+	local heightmaps = custom["mcl_levelgen:level_height_map"]
+	assert (heightmaps)
+	local data = heightmaps.level
+	local data_wg = heightmaps.wg
+	assert (data and data_wg)
 
 	-- Verify the dimensions of this heightmap.
 	local idx_max = chunksize * chunksize
@@ -1626,13 +1617,13 @@ function save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
 						data = data,
 					}
 					heightmap_ttl[id] = HEIGHTMAP_TTL
-					write_heightmap (id + 1, bx, by, bz, chunksize, data)
+					write_heightmap (id + 1, bx, by, bz, chunksize, data_wg)
 					loaded_heightmaps[id + 1] = {
 						x = bx,
 						y = by,
 						z = bz,
 						chunksize = chunksize,
-						data = copy_table (data),
+						data = data_wg,
 					}
 					heightmap_ttl[id + 1] = HEIGHTMAP_TTL
 				end
@@ -2096,6 +2087,33 @@ end)
 function mcl_levelgen.register_notification_handler (name, handler)
 	assert (type (name) == "string")
 	registered_notification_handlers[name] = handler
+end
+
+function run_notification_handlers (gen_notifies)
+	for _, notify in ipairs (gen_notifies) do
+		local name = notify.name
+		local handler = registered_notification_handlers[name]
+		if not handler and not warned[name] then
+			warned[name] = true
+			core.log ("warning", "Invoking unknown feature generation handler: " .. name)
+		elseif handler then
+			handler (notify.name, notify.data)
+		end
+	end
+end
+
+function run_structure_notifications ()
+	local custom = core.get_mapgen_object ("gennotify").custom
+	assert (custom)
+	local notifications = custom["mcl_levelgen:gen_notifies"]
+	assert (notifications)
+	run_notification_handlers (notifications)
+end
+
+-- TODO: generalize to multiple dimensions.
+local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
+function mcl_levelgen.level_to_minetest_position (x, y, z)
+	return x, y - OVERWORLD_OFFSET, -z - 1
 end
 
 ------------------------------------------------------------------------
