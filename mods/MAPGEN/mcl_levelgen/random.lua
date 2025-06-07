@@ -220,6 +220,7 @@ local function detect_luajit ()
 	local fn = loadstring ("return 0x1ull")
 	return fn and type (fn ()) == "cdata"
 end
+mcl_levelgen.detect_luajit = detect_luajit
 
 local function shlull (a, k)
 	local hi, lo = a[2], a[1]
@@ -1164,10 +1165,12 @@ function mcl_levelgen.jvm_random (seed)
 			end
 
 			local n, m
-			repeat
+			n = fn (31)
+			m = n % y
+			while (n - m + (y - 1)) >= 0x7fffffff do
 				n = fn (31)
 				m = n % y
-			until (n - m + (y - 1)) < 0x7fffffff
+			end 
 			return m
 		end,
 		next_boolean = function (self)
@@ -1447,7 +1450,7 @@ if true then
 end
 
 ------------------------------------------------------------------------
--- Level decoration and carver randomization.
+-- Level decoration, structure, and carver randomization.
 ------------------------------------------------------------------------
 
 -- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1
@@ -1525,4 +1528,44 @@ if true then
 	assert (lcg:next_within (5000) == 2357)
 	assert (lcg:next_within (5000) == 4883)
 	assert (lcg:next_within (5000) == 3244)
+end
+
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/
+-- net/minecraft/util/math/random/ChunkRandom.html#setRegionSeed(long,int,int,int)
+-- https://github.com/spawnmason/randar-explanation/issues/3
+-- https://www.minecraftforum.net/forums/minecraft-java-edition/seeds/3004110-repeating-decorations-trees-ores-etc-seeds
+
+local REGION_X_MULTIPLIER = ull (0x4f, 0x9939f508)
+local REGION_Z_MULTIPLIER = ull (0x1e, 0xf1565bd5)
+
+local rxu, rzu = ull (0, 0), ull (0, 0)
+
+function mcl_levelgen.set_region_seed (rng, level_seed, region_x, region_z,
+				       salt)
+	extkull (rxu, region_x)
+	extkull (rzu, region_z)
+	mul2ull (rxu, REGION_X_MULTIPLIER)
+	mul2ull (rzu, REGION_Z_MULTIPLIER)
+	addull (rxu, rzu)
+	addull (rxu, level_seed)
+	extkull (rzu, salt)
+	addull (rxu, rzu)
+	rng:reseed (rxu)
+end
+
+if true then
+	local lcg = mcl_levelgen.jvm_random (ull (0, 0))
+	local level_seed = ull (0, 0)
+	stringtoull (level_seed, "3689348814741910323")
+	mcl_levelgen.set_region_seed (lcg, level_seed, 353, 192, -77583)
+	assert (lcg:next_within (5000) == 3651)
+	assert (lcg:next_within (5000) == 716)
+	assert (lcg:next_within (5000) == 4205)
+	assert (lcg:next_within (5000) == 4093)
+	stringtoull (level_seed, "194")
+	mcl_levelgen.set_region_seed (lcg, level_seed, -442, -757, 1210)
+	assert (lcg:next_within (5000) == 838)
+	assert (lcg:next_within (5000) == 4832)
+	assert (lcg:next_within (5000) == 3972)
+	assert (lcg:next_within (5000) == 253)	
 end

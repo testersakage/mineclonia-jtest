@@ -1592,7 +1592,8 @@ end
 local get_temperature_in_biome = mcl_levelgen.get_temperature_in_biome
 
 local function build_icebergs (self, preliminary_surface, biome, nodes,
-			       absx, absz, surface_y, idx)
+			       absx, absz, surface_y, heightmap, idx,
+			       heightmap_idx)
 	local surface = self.iceberg_surface_noise
 	local pillar = self.iceberg_pillar_noise
 	local pillar_roof = self.iceberg_pillar_roof_noise
@@ -1627,8 +1628,9 @@ local function build_icebergs (self, preliminary_surface, biome, nodes,
 		local snow = encode_node (self.cid_snow_block, 0)
 		local packed_ice = encode_node (self.cid_packed_ice, 0)
 
-		for y = mathmax (surface_y, topy + 1), preliminary_surface, -1 do
-			local i = idx + (y - level_min) * steep_chunksize
+		for y = mathmax (surface_y + level_min, topy + 1), preliminary_surface, -1 do
+			local height = y - level_min
+			local i = idx + height * steep_chunksize
 			if (decode_node (nodes[i]) == cid_air
 			    and y < topy
 			    and rng:next_double () > 0.01)
@@ -1640,6 +1642,13 @@ local function build_icebergs (self, preliminary_surface, biome, nodes,
 					snowdepth = snowdepth - 1
 				else
 					nodes[i] = packed_ice
+				end
+
+				-- Update the heightmap.
+				if height >= surface_y then
+					heightmap[heightmap_idx] = pack_height_map (height + 1,
+										    height + 1)
+					surface_y = height + 1
 				end
 			end
 		end
@@ -1656,12 +1665,6 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 	local level_height = self.level_height
 	local level_min = self.min_y
 	local context = context
-	local gen_min = y - level_min
-	local gen_max = gen_min + chunksize - 1
-
-	-- Generate one layer beneath the origin Y position to
-	-- guarantee that carvers may detect exposed dirt.
-	gen_min = mathmax (gen_min - 1, 0)
 
 	context[HEIGHTMAP] = heightmap
 	for dx = 0, chunksize - 1 do
@@ -1700,7 +1703,7 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 			local idx = dx * chunksize * level_height + dz + 1
 			local cid_default_block = self.cid_default_block
 
-			for y = surface, gen_min, -1 do
+			for y = surface, 0, -1 do
 				local i = idx + chunksize * y
 				local node, _ = decode_node (nodes[i])
 				if node == cid_air then
@@ -1731,7 +1734,7 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 					solid_blocks_from_air = solid_blocks_from_air + 1
 					local dist_to_bottom_ceiling = y - cave_ceiling_pos + 1
 
-					if y <= gen_max and node == cid_default_block then
+					if node == cid_default_block then
 						local idx
 						do
 							local ix, iy, iz
@@ -1763,8 +1766,9 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 			if biome == "FrozenOcean" or biome == "DeepFrozenOcean" then
 				local level = get_min_surface_level (context, self)
 				local idx = dx * chunksize * level_height + dz + 1
+				local heightmap_idx = dx * chunksize + dz + 1
 				build_icebergs (self, level, biome, nodes, absx, absz,
-						surface, idx)
+						surface, heightmap, idx, heightmap_idx)
 			end
 		end
 	end
