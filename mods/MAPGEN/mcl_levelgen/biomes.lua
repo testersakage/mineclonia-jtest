@@ -6672,6 +6672,64 @@ function mcl_levelgen.munge_biome_coords (seed, x, y, z)
 	return qx + dx, qy + dy, qz + dz
 end
 
+if mcl_levelgen.detect_luajit () then
+	local function lcj_next (seed, increment)
+		return seed * (seed * 0x5851f42d4c957f2dll
+			       + 0x14057b7ef767814fll)
+			+ increment
+	end
+
+	local function munge_one (value)
+		local fixed = band (arshift (value, 24), 1023ll)
+		local bp = tonumber (fixed) / 1024.0
+		return (bp - 0.5) * 0.9
+	end
+
+	-- local munge_biome_coords = mcl_levelgen.munge_biome_coords
+	-- local test_values = {}
+	-- local ipos3 = mcl_levelgen.ipos3
+	-- local seed = mcl_levelgen.ull (485850, 399343388)
+
+	-- for x, y, z in ipos3 (-100, -100, -100, 100, 100, 100) do
+	-- 	table.insert (test_values, { munge_biome_coords (seed, x, y, z) })
+	-- 	-- if #test_values % 100000 == 0 then
+	-- 	-- 	print (#test_values)
+	-- 	-- end
+	-- end
+
+	function munge_distance (seed, tqx, tqy, tqz, tpx, tpy, tpz)
+		local seed = 0x100000000ll * seed[2] + seed[1]
+		local increment = seed
+		seed = lcj_next (seed, tqx * 1ll)
+		seed = lcj_next (seed, tqy * 1ll)
+		seed = lcj_next (seed, tqz * 1ll)
+		seed = lcj_next (seed, tqx * 1ll)
+		seed = lcj_next (seed, tqy * 1ll)
+		seed = lcj_next (seed, tqz * 1ll)
+
+		local dx = munge_one (seed)
+		seed = lcj_next (seed, increment)
+		local dy = munge_one (seed)
+		seed = lcj_next (seed, increment)
+		local dz = munge_one (seed)
+		return (tpz + dz) * (tpz + dz)
+			+ (tpy + dy) * (tpy + dy)
+			+ (tpx + dx) * (tpx + dx)
+	end
+
+	-- local test_values_1 = {}
+	-- for x, y, z in ipos3 (-100, -100, -100, 100, 100, 100) do
+	-- 	table.insert (test_values_1, { munge_biome_coords (seed, x, y, z) })
+	-- end
+	-- for i = 1, #test_values do
+	-- 	local x1, y1, z1 = unpack (test_values[i])
+	-- 	local x2, y2, z2 = unpack (test_values_1[i])
+	-- 	assert (x1 == x2)
+	-- 	assert (y1 == y2)
+	-- 	assert (z1 == z2)
+	-- end
+end
+
 -- Convert a level seed SEED into a biome seed and return the result.
 
 function mcl_levelgen.get_biome_seed (seed)

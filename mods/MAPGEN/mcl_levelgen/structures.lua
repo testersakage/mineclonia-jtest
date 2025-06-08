@@ -385,7 +385,14 @@ function mcl_levelgen.make_structure_level (preset)
 		structure_sets = {},
 		structure_starts = {},
 		structure_refs = {},
+		cnt_starts = 0,
 	}
+
+	local structure_start_link = {}
+	structure_start_link.next = structure_start_link
+	structure_start_link.prev = structure_start_link
+	structure_level.structure_start_link = structure_start_link
+
 	-- Enumerate all structure sets containing structures eligible
 	-- to generate in biomes defined by PRESET.
 
@@ -471,15 +478,15 @@ end
 -- Prepare structure generation for a MapChunk at X, Z.  TERRAIN
 -- should be the terrain generator in use.
 
-local structure_start_x
-local structure_start_z
 local chunksize
 
 local function struct_hash (cx, cz)
-	local x = cx - structure_start_x
-	local z = cz - structure_start_z
+	-- One bit wider than necessary to accomodate chunks near the
+	-- edge(s) of the level.
+	local x = cx + 4096
+	local z = cz + 4096
 	assert (x >= 0 and z >= 0)
-	return bor (lshift (x, 8), z)
+	return bor (lshift (x, 13), z)
 end
 
 local function internal_chunk_hash (dx, dz)
@@ -536,7 +543,7 @@ local function collect_structure_references (starts, cx, cz)
 	for x = cx - 8, cx + 8 do
 		for z = cz - 8, cz + 8 do
 			local hash = struct_hash (x, z)
-			local local_starts = starts[hash]
+			local local_starts = starts[hash].starts
 			for _, start in ipairs (local_starts) do
 				if intersect_2d_p (start.bbox, x1, z1, x2, z2) then
 					refs[#refs + 1] = start
@@ -548,11 +555,13 @@ local function collect_structure_references (starts, cx, cz)
 	return refs
 end
 
+local MAX_LOADED_STARTS = 16384
+
 function mcl_levelgen.prepare_structures (level, terrain, x, z)
 	local cx, cz = floor (x / 16), floor (z / 16)
 	local starts = level.structure_starts
-	structure_start_x = cx - 8
-	structure_start_z = cz - 8
+	local starts_created = 0
+	local link = level.structure_start_link
 
 	-- Build a map of structure starts in each chunk within 8
 	-- MapBlocks of the MapChunk at X, Z.
@@ -560,17 +569,31 @@ function mcl_levelgen.prepare_structures (level, terrain, x, z)
 	for x = cx - 8, cx + chunksize + 7 do
 		for z = cz - 8, cz + chunksize + 7 do
 			local hash = struct_hash (x, z)
-			local local_starts = starts[hash]
-			if not local_starts then
-				local_starts = {}
-				starts[hash] = local_starts
+			local start = starts[hash]
+			if not start then
+				local local_starts = {}
+				local record = {
+					starts = local_starts,
+					hash = hash,
+					prev = link,
+					next = link.next,
+				}
+				link.next.prev = record
+				link.next = record
+				starts[hash] = record
+				get_structure_starts (level, terrain, x, z,
+						      insert_structure_start,
+						      local_starts)
+				starts_created = starts_created + 1
+			else
+				-- Relink to the start of the list.
+				start.next.prev = start.prev
+				start.prev.next = start.next
+				start.next = link.next
+				start.last = link
+				link.next.prev = start
+				link.next = start
 			end
-			for i = 1, #local_starts do
-				local_starts[i] = nil
-			end
-			get_structure_starts (level, terrain, x, z,
-					      insert_structure_start,
-					      local_starts)
 		end
 	end
 
@@ -584,6 +607,10 @@ function mcl_levelgen.prepare_structures (level, terrain, x, z)
 			refs[ihash] = collect_structure_references (starts, cx, cz)
 		end
 	end
+
+	-- Remove excess elements from the start cache.
+	local cnt = level.cnt_starts + starts_created
+	level.cnt_starts = cnt
 end
 
 local function execute_structure_start_in_chunk (level, terrain, start, rng,
@@ -622,6 +649,16 @@ local function place_structures_in_chunk (level, terrain, starts, i,
 	end
 end
 
+-- local function count_entries (link)
+-- 	local k = link.next
+-- 	local n = 0
+-- 	while k ~= link do
+-- 		n = n + 1
+-- 		k = k.next
+-- 	end
+-- 	return n
+-- end
+
 function mcl_levelgen.finish_structures (level, terrain, biomes, x, y, z,
 					 index, nodes)
 	chunksize = floor (terrain.chunksize / 16)
@@ -643,6 +680,22 @@ function mcl_levelgen.finish_structures (level, terrain, biomes, x, y, z,
 				end
 			end
 		end
+	end
+
+	local starts = level.structure_starts
+	local link = level.structure_start_link
+	local cnt = level.cnt_starts
+	if cnt > MAX_LOADED_STARTS then
+		-- Remove the least recently loaded entries from the
+		-- cache.
+		local n = cnt - MAX_LOADED_STARTS
+		for i = 1, n do
+			local prev = link.prev
+			starts[prev.hash] = nil
+			link.prev = prev.prev
+			link.prev.next = link
+		end
+		level.cnt_starts = MAX_LOADED_STARTS
 	end
 end
 
@@ -858,7 +911,7 @@ function mcl_levelgen.beardify (level, terrain, weights, index, x, z)
 	for cx = cx - 8, cx + chunksize_1 + 7 do
 		for cz = cz - 8, cz + chunksize_1 + 7 do
 			local hash = struct_hash (cx, cz)
-			local local_starts = starts[hash]
+			local local_starts = starts[hash].starts
 
 			for _, start in ipairs (local_starts) do
 				if start.terrain_adaptation ~= "none"
