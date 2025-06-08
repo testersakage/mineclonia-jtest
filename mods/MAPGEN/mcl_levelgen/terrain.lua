@@ -674,8 +674,7 @@ local function clear_surface_level_cache (self)
 	end
 end
 
-local gen_nodes = {}
-mcl_levelgen.gen_node_cache = gen_nodes
+local gen_node_caches = {}
 
 local function encode_node (cid, param2)
 	return lshift (cid, 8) + param2
@@ -697,23 +696,28 @@ local function generate_step (self, x_pos, y_pos, z_pos,
 			      x, y_min, z, gn, map_wg,
 			      final_density, chunksize,
 			      level_height)
-	local density = final_density (x_pos, y_pos, z_pos, nil)
+	-- GN currently holds beardifier influences.
+	local i = index (x_pos - x, y_pos - y_min, z_pos - z,
+			 chunksize, level_height)
+	local density
+		= final_density (x_pos, y_pos, z_pos, nil) + gn[i]
 	local cid, param2
 		= state_from_density (aquifer, get_node,
 				      cid_default_block,
 				      x_pos, y_pos,
 				      z_pos, density,
 				      veins, self)
-	local x, y, z = x_pos - x,
-		y_pos - y_min,
-		z_pos - z
-	local i = index (x, y, z, chunksize,
-			 level_height)
 	gn[i] = encode_node (cid, param2)
-	update_height_map (map_wg, x, y, z,
+	update_height_map (map_wg, x_pos - x,
+			   y_pos - y_min,
+			   z_pos - z,
 			   cid == cid_air,
 			   cid == cid_default_block,
 			   chunksize, cid)
+end
+
+local function level_size_key (chunksize, level_height)
+	return chunksize * 1024 + level_height
 end
 
 function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
@@ -745,6 +749,12 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	-- Build structure references and starts.
 	mcl_levelgen.prepare_structures (self.structures, self, x, z)
 
+	-- Table of nodes produced for this horizontal section of the
+	-- level.  Also reused to store beardifier influences if need
+	-- be.
+	local gn = gen_node_caches[level_size_key (chunksize, level_height)]
+	mcl_levelgen.beardify (self.structures, self, gn, index, x, z)
+
 	-- Reset the temporary heightmap.
 	self:clear_height_map ()
 
@@ -759,10 +769,6 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	local final_density = self.final_density
 	prepare_interpolation (self, x, z, x_cell, z_cell, y_bottom,
 			       horiz_cells, y_total)
-
-	-- Table of nodes produced for this horizontal section of the
-	-- level.
-	local gn = gen_nodes
 	local veins = self.preset.ore_veins_enabled
 
 	-- Height map holding height levels at horizontal positions.
@@ -859,6 +865,10 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 			end
 		end
 		i = i + skip
+	end
+	-- Reset the chunksize/beardifier density cache.
+	for i = 1, chunksize * level_height * chunksize do
+		gn[i] = 0.0
 	end
 	-- if veiny > 0 then
 	-- 	nwithveins = nwithveins + 1
@@ -1101,6 +1111,16 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize)
 		gen.vein_ridged = wrapnext (preset.vein_ridged)
 		gen.vein_gap = wrapnext (preset.vein_gap)
 	end
+
+	local key = level_size_key (chunksize, gen.level_height)
+	if not gen_node_caches[key] then
+		local cache = {}
+		for i = 1, chunksize * gen.level_height * chunksize do
+			cache[i] = 0.0
+		end
+		gen_node_caches[key] = cache
+	end
+
 	return gen
 end
 
