@@ -70,6 +70,21 @@ function mcl_walls.update_wall(pos)
 	core.add_node(pos, {name = basename..sum})
 end
 
+-- XXX: render this asynchronous and move it into nodeprops.lua.
+local level_to_minetest_position = mcl_levelgen.level_to_minetest_position
+local update_wall = mcl_walls.update_wall
+local v = vector.zero ()
+
+mcl_levelgen.register_notification_handler ("mcl_walls:update_walls", function (_, data)
+	for _, pos in ipairs (data) do
+		local x, y, z = level_to_minetest_position (pos.x, pos.y, pos.z)
+		v.x = x
+		v.y = y
+		v.z = z
+		update_wall (v)
+	end
+end)
+
 local function update_wall_global(pos)
 	for i = 1,5 do
 		local dir = directions[i]

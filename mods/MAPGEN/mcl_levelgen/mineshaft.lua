@@ -340,16 +340,7 @@ local function set_block_reorientated (piece, x, y, z, cid, param2)
 	mineshaft_set_block (x, y, z, cid, param2)
 end
 
-local AABB_intersect_p = mcl_levelgen.AABB_intersect_p
-
-local function any_collisions (pieces, bbox)
-	for _, piece in ipairs (pieces) do
-		if AABB_intersect_p (piece.bbox, bbox) then
-			return true
-		end
-	end
-	return false
-end
+local any_collisions = mcl_levelgen.any_collisions
 
 local generate_random_piece
 
@@ -901,7 +892,8 @@ local function build_chains_or_pillars (x, y, z)
 		if continue_pillars then
 			local y1 = y - progress
 			local cid, _ = get_block (x, y1, z)
-			if cid == cid_air or cid == cid_water_source then
+			if (cid == cid_air or cid == cid_water_source)
+				and get_sturdy_faces then
 				local below = get_sturdy_faces (x, y1 - 1, z)
 				if band (below, FACE_UP) ~= 0 then
 					local wood_cid = mineshaft_wood_cid
@@ -918,7 +910,8 @@ local function build_chains_or_pillars (x, y, z)
 		if continue_chains then
 			local y1 = y + progress
 			local cid, _ = get_block (x, y1, z)
-			if cid == cid_air or cid == cid_water_source then
+			if (cid == cid_air or cid == cid_water_source)
+				and get_sturdy_faces then
 				local above = get_sturdy_faces (x, y1 + 1, z)
 				if band (above, FACE_DOWN) ~= 0 then
 					-- Construct chains.
@@ -1401,7 +1394,7 @@ end
 -- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/structure/MineshaftStructure.html
 ------------------------------------------------------------------------
 
-local AABB_from_pieces = mcl_levelgen.AABB_from_pieces
+local bbox_from_pieces = mcl_levelgen.bbox_from_pieces
 local bbox_center = mcl_levelgen.bbox_center
 
 local function mineshaft_create_pieces (self, pieces, level, terrain, rng, x, z)
@@ -1415,7 +1408,7 @@ local function mineshaft_create_pieces (self, pieces, level, terrain, rng, x, z)
 	local sea_level = preset.sea_level
 	local dy
 	if self.is_mesa then
-		local bbox = AABB_from_pieces (pieces)
+		local bbox = bbox_from_pieces (pieces)
 		local x, y, z = bbox_center (bbox)
 		local surface = terrain:get_one_height (x, z, nil)
 		-- print (" Mineshaft center @ " .. x .. "," .. y .. "," .. z)
@@ -1431,7 +1424,7 @@ local function mineshaft_create_pieces (self, pieces, level, terrain, rng, x, z)
 	else
 		rng.log = false
 		-- print ("Unified bb: " .. string.format ("(%d,%d,%d) - (%d,%d,%d)",
-		-- 					unpack (AABB_from_pieces (pieces))))
+		-- 					unpack (bbox_from_pieces (pieces))))
 		dy = mcl_levelgen.shift_into (pieces, sea_level, preset.min_y,
 					      rng, 10)
 		-- print (" Mineshaft dy: " .. dy)
@@ -1507,7 +1500,7 @@ mcl_levelgen.modify_biome_groups ({"DeepDark",}, {
 mcl_levelgen.register_structure ("mcl_levelgen:mineshaft", {
 	step = mcl_levelgen.UNDERGROUND_STRUCTURES,
 	create_start = mineshaft_create_start,
-	terrain_adjustment = "none",
+	terrain_adaptation = "none",
 	biomes = mcl_levelgen.build_biome_list ({"#has_structure_mineshaft",}),
 	is_mesa = false,
 })
@@ -1515,7 +1508,7 @@ mcl_levelgen.register_structure ("mcl_levelgen:mineshaft", {
 mcl_levelgen.register_structure ("mcl_levelgen:mineshaft_mesa", {
 	step = mcl_levelgen.UNDERGROUND_STRUCTURES,
 	create_start = mineshaft_create_start,
-	terrain_adjustment = "none",
+	terrain_adaptation = "none",
 	biomes = mcl_levelgen.build_biome_list ({"#has_structure_mineshaft_mesa",}),
 	is_mesa = true,
 })

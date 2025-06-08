@@ -99,6 +99,8 @@ local function dfs (start, graph, g_next, visited, depth)
 	return true
 end
 
+--[[
+
 if false then
 
 local function bfs (start, consider_item, g_next)
@@ -117,6 +119,8 @@ local function bfs (start, consider_item, g_next)
 end
 
 end
+
+]]
 
 local function dfs1 (start, consider_item, g_next)
 	local elems = g_next[start]
@@ -326,26 +330,6 @@ function mcl_levelgen.initialize_biome_features ()
 	end
 end
 
-local portable_schematics = {}
-
-function mcl_levelgen.register_portable_schematic (id, specifier, normalize_yprob)
-	if portable_schematics[id] then
-		error ("Schematic already registered: " .. id)
-	end
-	local data = core.read_schematic (specifier, {
-		write_yslice_prob = "all",
-	})
-	if normalize_yprob then
-		for y = 1, data.size.y do
-			data.yslice_prob[y] = {
-				prob = 0xff,
-			}
-		end
-	end
-	portable_schematics[id] = data
-	core.ipc_set ("mcl_levelgen:portable_schematics", portable_schematics)
-end
-
 if core and mcl_levelgen.load_feature_environment then
 
 ------------------------------------------------------------------------
@@ -371,10 +355,9 @@ else
 end
 
 local run_minp, run_maxp = vector.new (), vector.new ()
-local vm, run, heightmap, wg_heightmap, biomes, y_offset, level_min, level_height
+local vm, run, heightmap, wg_heightmap, biomes, y_offset, level_min
 local run_min_y, run_max_y, run_min_x, run_max_x, run_min_z, run_max_z
 
-local HEIGHTMAP_SIZE = mcl_levelgen.HEIGHTMAP_SIZE
 local HEIGHTMAP_SIZE_NODES = mcl_levelgen.HEIGHTMAP_SIZE_NODES
 local unpack_augmented_height_map = mcl_levelgen.unpack_augmented_height_map
 local pack_height_map = mcl_levelgen.pack_height_map
@@ -430,7 +413,6 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 	y_offset = p_y_offset
 	level_min = p_level_min
 	mcl_levelgen.placement_level_min = p_level_min
-	level_height = p_level_height
 	mcl_levelgen.placement_level_height = p_level_height
 	relight_rgn = mcl_util.empty_region
 	heightmap_modifications = {}
@@ -632,13 +614,13 @@ function mcl_levelgen.get_block (x, y, z)
 end
 
 local function hash_heightmap_modification (x, z)
-	return bor (lshift (x + 32767, 16), z + 32767)
+	return bor (lshift (x + 32768, 16), z + 32768)
 end
 
 function mcl_levelgen.unpack_heightmap_modification (hash, value)
 	local surface, motion_blocking
 		= unpack_augmented_height_map (value)
-	return rshift (hash, 16) - 32767, band (hash, 0xffff) - 32767,
+	return rshift (hash, 16) - 32768, band (hash, 0xffff) - 32768,
 		surface + level_min, motion_blocking + level_min
 end
 
@@ -652,7 +634,7 @@ local function find_solid_surface (x, y, z, is_solid)
 	return run_min_y
 end
 
-local function correct_heightmaps (x, y, z, cid, param2)
+local function correct_heightmaps (x, y, z, cid, param2, force)
 	-- Correct heightmaps to agree with the new state of the
 	-- level.
 	local idx = heightmap_index (x, z)
@@ -666,7 +648,7 @@ local function correct_heightmaps (x, y, z, cid, param2)
 	local flags = rshift (value, 28)
 
 	if not is_not_air (cid, param2) then
-		if (surface - 1) == y then
+		if (surface - 1) == y or force then
 			-- Search downwards.
 			surface = find_solid_surface (x, y, z, is_not_air)
 			if surface == run_min_y then
@@ -683,7 +665,7 @@ local function correct_heightmaps (x, y, z, cid, param2)
 	end
 
 	if not is_walkable (cid, param2) then
-		if (motion_blocking - 1) == y then
+		if (motion_blocking - 1) == y or force then
 			-- Search downwards.
 			motion_blocking
 				= find_solid_surface (x, y, z, is_walkable)
@@ -740,7 +722,7 @@ function mcl_levelgen.set_block (x, y, z, cid, param2)
 		param2s[idx] = param2
 	end
 	vm_modified = true
-	correct_heightmaps (x, y, z, cid, param2)
+	correct_heightmaps (x, y, z, cid, param2, false)
 end
 
 local function update_relight_rgn (aabb)
@@ -789,7 +771,7 @@ end
 -- Schematic placement.
 ------------------------------------------------------------------------
 
-local portable_schematics = nil
+local portable_schematics = mcl_levelgen.portable_schematics
 local cid_ignore = core.CONTENT_IGNORE
 local active_processors = {}
 
@@ -827,48 +809,7 @@ local function apply_schematic_processors (x, y, z, rng, cid, param2)
 	return cid, param2
 end
 
-local function encode_schem_data (cid, param2, probability, force_place)
-	if cid > 32767 then
-		-- If you encounter this error, please create a more
-		-- accommodating data packing scheme.
-		error ("Schematic contains content with unrepresentable CID: " .. cid)
-	end
-
-	assert (cid <= 32767 and param2 <= 255 and probability <= 255)
-	local force_place = force_place and 1 or 0
-	return bor (lshift (force_place, 31), lshift (cid, 16),
-		    lshift (param2, 8), probability)
-end
-
-local function decode_schem_data (data)
-	local force_place = rshift (data, 31) ~= 0
-	local cid = band (rshift (data, 16), 0x7fff)
-	local param2 = band (rshift (data, 8), 0xff)
-	local probability = band (data, 0xff)
-	return cid, param2, probability, force_place
-end
-
-function mcl_levelgen.initialize_portable_schematics ()
-	portable_schematics
-		= core.ipc_get ("mcl_levelgen:portable_schematics")
-	assert (type (portable_schematics) == "table")
-
-	-- Post-process the schematic's data.
-	for key, schematic in pairs (portable_schematics) do
-		for i, elem in ipairs (schematic.data) do
-			if not core.registered_nodes[elem.name] then
-				schematic.data[i]
-					= encode_schem_data (cid_ignore, 0, 0, false)
-			else
-				local cid = core.get_content_id (elem.name)
-				schematic.data[i]
-					= encode_schem_data (cid, elem.param2,
-							     elem.prob,
-							     elem.force_place)
-			end
-		end
-	end
-end
+local decode_schem_data = mcl_levelgen.decode_schem_data
 
 local ull = mcl_levelgen.ull
 local schematic_rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
@@ -888,7 +829,7 @@ local MTSCHEM_PROB_ALWAYS = 0xFF
 local MTSCHEM_PROB_NEVER  = 0x00
 
 local function hash_schem_pos (x, z)
-	return bor (lshift ((x + 32767), 16), (z + 32767))
+	return bor (lshift ((x + 32768), 16), (z + 32768))
 end
 
 local rotate_param2 = mcl_levelgen.rotate_param2
@@ -967,7 +908,6 @@ local function copy_to_data (schematic, px, py, pz, rot, force_place)
 							if cid and (force_place or force_place_node
 								    or cids[vi] == cid_air
 								    or cids[vi] == cid_ignore) then
-
 								local continue = probability == MTSCHEM_PROB_ALWAYS
 									or probability > 1 + rng:next_within (0x80)
 								if continue then
@@ -994,8 +934,8 @@ local function copy_to_data (schematic, px, py, pz, rot, force_place)
 
 	-- Fix heightmaps.
 	for key, absy in pairs (xz_updates) do
-		local x = rshift (key, 16) - 32767 + px
-		local zoff = band (key, 65535) - 32767
+		local x = rshift (key, 16) - 32768 + px
+		local zoff = band (key, 65535) - 32768
 		local z = -pz - 1 - zoff
 		local idx = heightmap_index (x, z)
 		local surface, motion_blocking, _
@@ -1005,7 +945,7 @@ local function copy_to_data (schematic, px, py, pz, rot, force_place)
 		if surface + level_min <= y
 			or motion_blocking + level_min <= y then
 			local cid, param2 = get_block_1 (x, y, z)
-			correct_heightmaps (x, y, z, cid, param2)
+			correct_heightmaps (x, y, z, cid, param2, true)
 		end
 	end
 end
@@ -1078,14 +1018,17 @@ function mcl_levelgen.place_schematic (x, y, z, schematic, rotation, force_place
 	copy_to_data (schematic, x, y, z, rotation, force_place)
 	update_relight_rgn ({
 		x, y, z,
-		x + size.x,
-		y + size.y,
-		z + size.z,
+		x + size.x - 1,
+		y + size.y - 1,
+		z + size.z - 1,
 	})
 	vm_modified = true
 	return {
-		x, y + y_offset, -z - size.z,
-		x + size.x, y + size.y + y_offset, -z - 1,
+		x, y + y_offset,
+		-z - size.z,
+		x + size.x - 1,
+		y + size.y + y_offset - 1,
+		-z - 1,
 	}
 end
 
