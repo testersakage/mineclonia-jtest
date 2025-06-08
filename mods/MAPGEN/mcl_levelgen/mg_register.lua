@@ -43,10 +43,9 @@ end
 local floor = math.floor
 
 -- local profile = require ("jit.p")
--- profile.start ("fv")
 
 core.register_on_generated (function (vmanip, minp, maxp, _)
-	-- local clock = os.clock ()
+	-- profile.start ("5fv")
 	local emin, emax = vmanip:get_emerged_area ()
 	area = VoxelArea (vector.subtract (emin, minp),
 			  vector.subtract (emax, minp))
@@ -62,6 +61,7 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	local level_height = overworld_preset.height / 16
 	assert (level_min == floor (level_min))
 	assert (level_height == floor (level_height))
+	-- local clock = core.get_us_time ()
 	-- zone ("Biome generation")
 	mcl_levelgen.generate_biomes_at_block (overworld_preset, biomes,
 					       block_x, level_min, block_z,
@@ -73,6 +73,7 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 					   index, biomes) then
 		return
 	end
+	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
 	-- zone ()
 	vmanip:set_data (cids)
 	vmanip:set_param2_data (param2s)
@@ -91,10 +92,11 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 						       level_height)
 	core.save_gen_notify ("mcl_levelgen:biome_data", compressed)
 	-- zone ()
-	-- print (string.format ("%.2f", os.clock () - clock))
 
 	core.save_gen_notify ("mcl_levelgen:level_height_map", {
 		level = overworld_terrain.heightmap,
 		wg = overworld_terrain.heightmap_wg,
 	})
+	-- print ("=== Generation complete ===")
+	-- profile.stop ()
 end)

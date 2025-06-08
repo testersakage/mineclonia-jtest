@@ -1390,7 +1390,10 @@ function surface_system:initialize (preset)
 		getcid = core.get_content_id
 	else
 		local mincid = 50
-		function getcid ()
+		function getcid (name)
+			if name == preset.default_block then
+				return 3	
+			end
 			mincid = mincid + 1
 			return mincid - 1
 		end
