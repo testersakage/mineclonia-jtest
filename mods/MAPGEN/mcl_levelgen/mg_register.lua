@@ -3,6 +3,7 @@
 ------------------------------------------------------------------------
 
 mcl_levelgen.initialize_nodeprops_in_async_env ()
+mcl_levelgen.initialize_portable_schematics ()
 
 local lighting_disabled = mcl_levelgen.lighting_disabled
 

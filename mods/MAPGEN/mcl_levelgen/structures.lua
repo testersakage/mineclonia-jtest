@@ -19,6 +19,9 @@
 -- generated MapChunk is emerged.
 ------------------------------------------------------------------------
 
+local mcl_levelgen = mcl_levelgen
+local ipairs = ipairs
+local pairs = pairs
 local ull = mcl_levelgen.ull
 local insert = table.insert
 
@@ -142,6 +145,7 @@ if false then
 	end
 end
 
+local rshift = bit.rshift
 local arshift = bit.arshift
 local lshift = bit.lshift
 local bxor = bit.bxor
@@ -337,6 +341,15 @@ function mcl_levelgen.register_structure (keyword, def)
 		and def.step > 0
 		and def.step <= NUM_GENERATION_STEPS)
 	def.name = keyword
+	if not def.terrain_adaptation then
+		def.terrain_adaptation = "none"
+	else
+		assert (def.terrain_adaptation == "none"
+			or def.terrain_adaptation == "beard_thin"
+			or def.terrain_adaptation == "beard_box"
+			or def.terrain_adaptation == "bury"
+			or def.terrain_adaptation == "encapsulate")
+	end
 	mcl_levelgen.registered_structures[keyword] = def
 	local by_step = registered_structures_by_step[def.step]
 	table.insert (by_step, keyword)
@@ -657,7 +670,7 @@ mcl_levelgen.bbox_height = bbox_height
 mcl_levelgen.bbox_width_x = bbox_width_x
 mcl_levelgen.bbox_width_z = bbox_width_z
 
-local function AABB_from_pieces (pieces)
+local function bbox_from_pieces (pieces)
 	local bbox = {
 		huge, huge, huge,
 		-huge, -huge, -huge,
@@ -673,18 +686,19 @@ local function AABB_from_pieces (pieces)
 	end
 	return bbox
 end
-mcl_levelgen.AABB_from_pieces = AABB_from_pieces
+mcl_levelgen.bbox_from_pieces = bbox_from_pieces
 
 function mcl_levelgen.create_structure_start (structure_def, pieces)
 	if #pieces == 0 then
 		return nil
 	end
 
-	local bbox = AABB_from_pieces (pieces)
+	local bbox = bbox_from_pieces (pieces)
 	return {
 		structure = structure_def.name,
 		bbox = bbox,
 		pieces = pieces,
+		terrain_adaptation = structure_def.terrain_adaptation,
 	}
 end
 
@@ -706,7 +720,7 @@ function mcl_levelgen.shift_into (pieces, top_y, bottom_y, rng,
 				  top_penalty)
 	-- print ("TopY: " .. top_y .. " BottomY: " .. bottom_y)
 	local advisory_top_y = top_y - top_penalty
-	local bbox = AABB_from_pieces (pieces)
+	local bbox = bbox_from_pieces (pieces)
 	local max_y = bbox_height (bbox) + bottom_y + 1
 	-- print ("MaxY: " .. max_y .. " AdvisoryTopY: " .. advisory_top_y)
 	if max_y < advisory_top_y then
@@ -727,6 +741,137 @@ function mcl_levelgen.bbox_center (bbox)
 	local ch = floor (height / 2)
 	local cl = floor (length / 2)
 	return cw + bbox[1], ch + bbox[2], cl + bbox[3]
+end
+
+function mcl_levelgen.any_collisions (pieces, bbox)
+	for _, piece in ipairs (pieces) do
+		if AABB_intersect_p (piece.bbox, bbox) then
+			return true
+		end
+	end
+	return false
+end
+
+------------------------------------------------------------------------
+-- Beardification.
+------------------------------------------------------------------------
+
+local beard_weights = {}
+local ipos1 = mcl_levelgen.ipos1
+local sqrt = math.sqrt
+
+for x, y, z in ipos1 (0, 0, 0, 24, 24, 24) do
+	local idx = ((x * 24) + y) * 24 + z + 1
+	local dx, dy, dz = x - 12, y - 12 + 0.5, z - 12
+	local length = dx * dx + dy * dy + dz * dz
+	beard_weights[idx] = math.exp (-length / 16)
+end
+
+local function map_bury (dx, dy, dz)
+	local length = sqrt (dx * dx + dy * dy + dz * dz)
+	if length > 6.0 then
+		return 0.0
+	else
+		return 1.0 - length / 6.0
+	end
+end
+
+local function map_beard_or_beard_box (dx, dy, dz, dy_floor)
+	local dx_idx = dx + 12
+	local dy_idx = dy + 12
+	local dz_idx = dz + 12
+
+	if not (dx_idx >= 0 and dy_idx >= 0 and dz_idx >= 0
+		and dx_idx < 24 and dy_idx < 24 and dz_idx < 24) then
+		return 0.0
+	end
+	local idx = ((dx_idx * 24) + dy_idx) * 24 + dz_idx + 1
+	local dist_center = dy_floor + 0.5
+	local dist_sqr = (dx * dx + dist_center * dist_center + dz * dz)
+	local inv_value = 1.0 / sqrt (dist_sqr / 2.0)
+	local floor_scale = -dist_center * inv_value / 2.0
+	return floor_scale * beard_weights[idx]
+end
+
+local function apply_terrain_adaptation (pieces, terrain_adaptation,
+					 weights, index, bbox, chunksize,
+					 level_height, x_chunk, z_chunk,
+					 y_min)
+	for _, piece in ipairs (pieces) do
+		local piece_bbox = piece.bbox
+		local x1 = mathmax (piece_bbox[1] - 12, bbox[1] + 12)
+		local y1 = mathmax (piece_bbox[2] - 12, bbox[2])
+		local z1 = mathmax (piece_bbox[3] - 12, bbox[3] + 12)
+		local x2 = mathmin (piece_bbox[4] + 12, bbox[4] - 12)
+		local y2 = mathmin (piece_bbox[5] + 12, bbox[5])
+		local z2 = mathmin (piece_bbox[6] + 12, bbox[6] - 12)
+		for x, y, z in ipos1 (x1, y1, z1, x2, y2, z2) do
+			local dx = mathmax (0, piece_bbox[1] - x, x - piece_bbox[4])
+			local dz = mathmax (0, piece_bbox[3] - z, z - piece_bbox[6])
+			local yground = piece_bbox[2]
+			local dy = y - yground
+			local dy_final = dy
+
+			if terrain_adaptation == "beard_box"
+				or terrain_adaptation == "encapsulate" then
+				dy_final = mathmax (0, yground - y, y - piece_bbox[5])
+			end
+
+			local value
+			if terrain_adaptation == "bury" then
+				value = map_bury (dx, dy_final / 2.0, dz)
+			elseif terrain_adaptation == "beard_thin"
+				or terrain_adaptation == "beard_box" then
+				value = map_beard_or_beard_box (dx, dy_final, dz, dy) * 0.8
+			else -- if terrain_adaptation == "encapsulate" then
+				value = map_bury (dx / 2.0, dy_final / 2.0, dz / 2.0) * 0.8
+			end
+			local idx = index (x - x_chunk, y - y_min,
+					   z - z_chunk, chunksize,
+					   level_height)
+			weights[idx] = weights[idx] + value
+		end
+	end
+end
+
+-- Fill WEIGHTS with beardifier weights from each piece intersecting
+-- the MapChunk at X, Y, with reference to structure starts stored in
+-- LEVEL.
+--
+-- WEIGHTS must be initialized to 0.
+
+function mcl_levelgen.beardify (level, terrain, weights, index, x, z)
+	local chunksize = terrain.chunksize
+	local level_height = terrain.level_height
+	local y_min = terrain.y_min
+	local bbox = {
+		x - 12,
+		y_min,
+		z - 12,
+		x + 12 + chunksize - 1,
+		y_min + level_height - 1,
+		z + 12 + chunksize - 1,
+	}
+	local starts = level.structure_starts
+	local cx, cz = floor (x / 16), floor (z / 16)
+	local chunksize_1 = floor (terrain.chunksize / 16)
+	for cx = cx - 8, cx + chunksize_1 + 7 do
+		for cz = cz - 8, cz + chunksize_1 + 7 do
+			local hash = struct_hash (cx, cz)
+			local local_starts = starts[hash]
+
+			for _, start in ipairs (local_starts) do
+				if start.terrain_adaptation ~= "none"
+					and AABB_intersect_p (start.bbox, bbox) then
+					apply_terrain_adaptation (start.pieces,
+								  start.terrain_adaptation,
+								  weights, index, bbox,
+								  chunksize, level_height,
+								  x, z, y_min)
+				end
+			end
+		end
+	end
 end
 
 ------------------------------------------------------------------------
@@ -782,7 +927,11 @@ end
 
 if not mcl_levelgen.load_feature_environment then
 
+local decode_node = mcl_levelgen.decode_node
+local encode_node = mcl_levelgen.encode_node
+
 local cid_air
+local cid_air_encoded
 local cids_walkable = {}
 
 if core and core.get_content_id then
@@ -801,15 +950,14 @@ if core and core.get_content_id then
 		initialize_cids ()
 	end
 	cid_air = core.CONTENT_AIR
+	cid_air_encoded = encode_node (cid_air, 0)
 else
 	cid_air = 0
 	for i = 2, 2048 do
 		cids_walkable[i] = true
 	end
+	cid_air_encoded = encode_node (cid_air, 0)
 end
-
-local decode_node = mcl_levelgen.decode_node
-local encode_node = mcl_levelgen.encode_node
 
 local function block_index (x, y, z)
 	return index (x - nodes_origin_x, y - level_min,
@@ -861,7 +1009,7 @@ local function find_solid_surface (x, y, z, is_solid)
 	return level_min
 end
 
-local function correct_heightmaps (x, y, z, cid, param2)
+local function correct_heightmaps (x, y, z, cid, param2, force)
 	-- Correct heightmaps to agree with the new state of the
 	-- level.
 	local idx = heightmap_index (x, z)
@@ -875,7 +1023,7 @@ local function correct_heightmaps (x, y, z, cid, param2)
 	-- end
 
 	if not is_not_air (cid, param2) then
-		if (surface - 1) == y then
+		if (surface - 1) == y or force then
 			-- Search downwards.
 			surface = find_solid_surface (x, y, z, is_not_air)
 		end
@@ -884,7 +1032,7 @@ local function correct_heightmaps (x, y, z, cid, param2)
 	end
 
 	if not is_walkable (cid, param2) then
-		if (motion_blocking - 1) == y then
+		if (motion_blocking - 1) == y or force then
 			-- Search downwards.
 			motion_blocking = find_solid_surface (x, y, z, is_walkable)
 		end
@@ -909,7 +1057,7 @@ function mcl_levelgen.set_block (x, y, z, cid, param2)
 	local node = encode_node (cid, param2)
 	local idx = block_index (x, y, z)
 	nodes[idx] = node
-	correct_heightmaps (x, y, z, cid, param2)
+	correct_heightmaps (x, y, z, cid, param2, false)
 end
 
 function mcl_levelgen.set_block_checked (x, y, z, cid, param2, writable_p)
@@ -927,7 +1075,7 @@ function mcl_levelgen.set_block_checked (x, y, z, cid, param2, writable_p)
 			nodes[idx] = node
 		end
 	end
-	correct_heightmaps (x, y, z, cid, param2)
+	correct_heightmaps (x, y, z, cid, param2, false)
 end
 
 function mcl_levelgen.reorientate_coords (piece, x, y, z)
@@ -984,7 +1132,12 @@ end
 
 function mcl_levelgen.notify_generated (name, x, y, z, data, append)
 	assert (type (name) == "string")
-	if y >= nodes_origin_y and y < nodes_origin_y + level_height then
+	if y >= nodes_origin_y
+		and y < nodes_origin_y + level_chunksize
+		and x >= origin_x
+		and z >= origin_z
+		and x < origin_x + 16
+		and z < origin_z + 16 then
 		if append then
 			local last_generated = gen_notifies[#gen_notifies]
 			if last_generated and last_generated.name == name then
@@ -1007,6 +1160,308 @@ function mcl_levelgen.flush_structure_generation_notifications ()
 	local n = gen_notifies
 	gen_notifies = {}
 	return n
+end
+
+------------------------------------------------------------------------
+-- Schematic placement.
+------------------------------------------------------------------------
+
+local portable_schematics = mcl_levelgen.portable_schematics
+local cid_ignore = core and core.CONTENT_IGNORE or 5000
+local cid_ignore_encoded = encode_node (cid_ignore, 0)
+local active_processors = {}
+
+function mcl_levelgen.push_schematic_processor (processor_function)
+	local current = #active_processors
+	insert (active_processors, processor_function)
+	return current
+end
+
+function mcl_levelgen.push_schematic_processors (processors)
+	local current = #active_processors
+	for _, processor in ipairs (processors) do
+		insert (active_processors, processor)
+	end
+	return current
+end
+
+function mcl_levelgen.pop_schematic_processors (current)
+	for i = current + 1, #active_processors do
+		active_processors[i] = nil
+	end
+end
+
+local function apply_schematic_processors (x, y, z, rng, cid, param2)
+	local cid_current, param2_current = get_block_1 (x, y, z)
+	for _, processor in ipairs (active_processors) do
+		-- print ("  --> ", cid, param2)
+		cid, param2 = processor (x, y, z, rng, cid_current,
+					 param2_current, cid, param2)
+		-- print ("  <-- ", cid, param2)
+		if not cid then
+			return nil, nil
+		end
+	end
+	return cid, param2
+end
+
+local decode_schem_data = mcl_levelgen.decode_schem_data
+
+local ull = mcl_levelgen.ull
+local schematic_rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+local rotations = {
+	"0", "90", "180", "270",
+}
+local v = { x = 0, y = 0, z = 0, }
+
+local MTSCHEM_PROB_ALWAYS = 0xFF
+local MTSCHEM_PROB_NEVER  = 0x00
+
+local function hash_schem_pos (x, z)
+	return bor (lshift ((x + 32768), 16), (z + 32768))
+end
+
+local function copy_to_data (schematic, px, py, pz, rot, force_place)
+	local size = schematic.size
+	local xstride = 1
+	local ystride = size.x
+	local zstride = size.x * size.y
+	local sx = size.x
+	local sy = size.y
+	local sz = size.z
+	local xz_updates = {}
+	local y_generate = {}
+	local rotate_param2 = mcl_levelgen.rotate_param2
+
+	local i_start, i_step_x, i_step_z
+	if rot == "90" then
+		i_start = sx - 1
+		i_step_x = zstride
+		i_step_z = -xstride
+		sx, sz = sz, sx
+	elseif rot == "180" then
+		i_start = zstride * (sz - 1) + sx - 1
+		i_step_x = -xstride
+		i_step_z = -zstride
+	elseif rot == "270" then
+		i_start = zstride * (sz - 1)
+		i_step_x = -zstride
+		i_step_z = xstride
+		sx, sz = sz, sx
+	else
+		i_start = 0
+		i_step_x = xstride
+		i_step_z = zstride
+	end
+
+	local yprob = schematic.yslice_prob
+	local schemdata = schematic.data
+	local rng = schematic_rng
+	local have_processors = #active_processors > 0
+
+	local min_y = mathmax (py, level_min)
+	local max_y = mathmin (py + sy - 1, level_max_y)
+	for y = min_y, max_y do
+		local yprob = yprob[y - min_y + 1].prob
+		if yprob == MTSCHEM_PROB_ALWAYS
+			or yprob >= 1 + rng:next_within (0xff) then
+			y_generate[y] = true
+		else
+			y_generate[y] = false
+		end
+	end
+
+	for x, y, z in ipos1 (mathmax (px, origin_x),
+			      min_y,
+			      mathmax (pz, origin_z),
+			      mathmin (px + sx - 1, origin_x + 15),
+			      max_y,
+			      mathmin (pz + sz - 1, origin_z + 15)) do
+		if y_generate[y] then
+			local schem_z = sz - (z - pz + 1)
+			local schem_x = x - px
+			local schem_y = y - py
+			local schem_idx = schem_z * i_step_z
+				+ schem_y * ystride
+				+ schem_x * i_step_x
+				+ i_start + 1
+			local data = schemdata[schem_idx]
+			if not data then
+				core.log ("warning", "Placing invalid schematic...  idx="
+					  .. schem_idx .. " (" .. #schemdata .. ")"
+					  .. " rot=" .. rot)
+				return
+			end
+			local cid, param2, probability, force_place_node
+				= decode_schem_data (data)
+			if probability ~= MTSCHEM_PROB_NEVER then
+				if have_processors then
+					cid, param2
+						= apply_schematic_processors (x, y, z, rng, cid, param2)
+				end
+
+				local idx = block_index (x, y, z)
+				if cid and (force_place or force_place_node
+					    or nodes[idx] == cid_air_encoded
+					    or nodes[idx] == cid_ignore_encoded) then
+					local continue = probability == MTSCHEM_PROB_ALWAYS
+						or probability > 1 + rng:next_within (0x80)
+					if continue then
+						if rot ~= "0" then
+							param2 = rotate_param2 (cid, param2, rot)
+						end
+						nodes[idx] = encode_node (cid, param2)
+						local hash = hash_schem_pos (x, z)
+						local val = xz_updates[hash] or -huge
+						xz_updates[hash] = mathmax (val, y)
+					end
+				end
+			end
+		end
+	end
+
+	-- Fix heightmaps.
+	for key, y in pairs (xz_updates) do
+		local x = rshift (key, 16) - 32768
+		local z = band (key, 65535) - 32768
+		local idx = heightmap_index (x, z)
+		local surface, motion_blocking
+			= unpack_height_map (heightmap[idx])
+
+		if surface + level_min <= y
+			or motion_blocking + level_min <= y then
+			local cid, param2 = get_block_1 (x, y, z)
+			correct_heightmaps (x, y, z, cid, param2, true)
+		end
+	end
+end
+
+function mcl_levelgen.random_schematic_rotation (rng)
+	local x = 1 + rng:next_within (4)
+	return rotations[x]
+end
+
+function mcl_levelgen.get_schematic_size (schematic, rotation)
+	local schematic = portable_schematics[schematic]
+	assert (schematic)
+	local size = schematic.size
+
+	if rotation == "90" or rotation == "270" then
+		return size.z, size.y, size.x
+	else
+		return size.x, size.y, size.z
+	end
+end
+local get_schematic_size = mcl_levelgen.get_schematic_size
+
+function mcl_levelgen.place_schematic (x, y, z, schematic, rotation, force_place,
+				       flags, rng)
+	local schematic = portable_schematics[schematic]
+	assert (schematic)
+	schematic_rng:reseed (rng:next_long ())
+	local rng = schematic_rng
+
+	if rotation == "random" then
+		local x = 1 + rng:next_within (4)
+		rotation = rotations[x]
+	else
+		if rotation ~= "0"
+			and rotation ~= "90"
+			and rotation ~= "180"
+			and rotation ~= "270" then
+			error ("Invalid rotation provided to `place_schematic'", rotation)
+		end
+	end
+
+	local size = schematic.size
+
+	if rotation == "90" or rotation == "270" then
+		v.x = size.z
+		v.y = size.y
+		v.z = size.x
+		size = v
+	end
+
+	if flags then
+		if flags.place_center_x
+			or flags.place_center_y
+			or flags.place_center_z then
+			size = vector.copy (size)
+			if flags.place_center_x then
+				x = x - rtz ((size.x - 1) / 2)
+			end
+			if flags.place_center_z then
+				z = z - rtz ((size.z - 1) / 2)
+			end
+			if flags.place_center_y then
+				y = y - rtz ((size.y - 1) / 2)
+			end
+		end
+	end
+
+	copy_to_data (schematic, x, y, z, rotation, force_place)
+	return {
+		x, y, z,
+		x + size.x - 1, y + size.y - 1, z + size.z - 1,
+	}
+end
+
+------------------------------------------------------------------------
+-- Schematic structure piece.
+------------------------------------------------------------------------
+
+local place_schematic = mcl_levelgen.place_schematic
+local push_schematic_processors = mcl_levelgen.push_schematic_processors
+local pop_schematic_processors = mcl_levelgen.pop_schematic_processors
+local NO_FLAGS = {}
+
+local function place_schematic_structure_piece (self, level, terrain, rng,
+						x1, z1, x2, z2)
+	local bbox = self.bbox
+	local x, y, z = bbox[1], bbox[2], bbox[3]
+	local processors = self.processors
+	local sentinel = self.placement_sentinel
+	if processors then
+		local i = push_schematic_processors (processors)
+		place_schematic (x, y, z, self.schematic, self.rotation,
+				 self.force_place, NO_FLAGS, rng)
+		pop_schematic_processors (i)
+	else
+		place_schematic (x, y, z, self.schematic, self.rotation,
+				 self.force_place, NO_FLAGS, rng)
+	end
+	if sentinel then
+		sentinel (self, rng)
+	end
+end
+
+function mcl_levelgen.make_schematic_piece (schematic_id, x, y, z,
+					    rotation, rng, center,
+					    force_place, processors,
+					    placement_sentinel)
+	if rotation == "random" then
+		local x = 1 + rng:next_within (4)
+		rotation = rotations[x]
+	end
+	local sx, sy, sz = get_schematic_size (schematic_id, rotation)
+	if center then
+		x = x - rtz ((sx - 1) / 2)
+		z = z - rtz ((sz - 1) / 2)
+	end
+	return {
+		rotation = rotation,
+		place = place_schematic_structure_piece,
+		schematic = schematic_id,
+		force_place = force_place,
+		processors = processors,
+		placement_sentinel = placement_sentinel,
+		bbox = {
+			x, y, z,
+			x + sx - 1,
+			y + sy - 1,
+			z + sz - 1,
+		},
+	}
 end
 
 end

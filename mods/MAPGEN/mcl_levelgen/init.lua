@@ -18,6 +18,7 @@ mcl_levelgen.md5 = dofile (prefix .. "/md5.lua")
 mcl_levelgen.sha = dofile (prefix .. "/sha2.lua")
 mcl_levelgen.lighting_disabled = true
 
+dofile (prefix .. "/util.lua")
 dofile (prefix .. "/random.lua")
 dofile (prefix .. "/noise.lua")
 dofile (prefix .. "/density_funcs.lua")
@@ -29,10 +30,10 @@ dofile (prefix .. "/aquifer.lua")
 dofile (prefix .. "/surface_system.lua")
 dofile (prefix .. "/surface_presets.lua")
 dofile (prefix .. "/carvers.lua")
+dofile (prefix .. "/schematics.lua")
 dofile (prefix .. "/features.lua")
 dofile (prefix .. "/structures.lua")
 dofile (prefix .. "/scripting.lua")
-dofile (prefix .. "/util.lua")
 
 -- Is this file being loaded into Minetest?
 if core and core.get_current_modname then
