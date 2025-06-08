@@ -50,8 +50,8 @@ function aquifer:initialize (preset)
 		self.cid_default_fluid = core.get_content_id (preset.default_fluid)
 		self.cid_default_block = core.get_content_id (preset.default_block)
 	else
-		self.cid_default_block = 1
-		self.cid_default_fluid = 2
+		self.cid_default_block = 3
+		self.cid_default_fluid = 1
 	end
 end
 

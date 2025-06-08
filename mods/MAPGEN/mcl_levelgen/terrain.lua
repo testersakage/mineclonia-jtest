@@ -747,7 +747,9 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	end
 
 	-- Build structure references and starts.
+	-- local clock = core.get_us_time ()
 	mcl_levelgen.prepare_structures (self.structures, self, x, z)
+	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
 
 	-- Table of nodes produced for this horizontal section of the
 	-- level.  Also reused to store beardifier influences if need
@@ -846,8 +848,10 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 
 	-- Process structures.
 	if biomes then
+		-- local clock = core.get_us_time ()
 		mcl_levelgen.finish_structures (self.structures, self, biomes,
 						x, y, z, index, gn)
+		-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
 	end
 
 	-- Write the section that intersects the output area to CIDs
