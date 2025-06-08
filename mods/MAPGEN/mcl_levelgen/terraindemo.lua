@@ -1,5 +1,6 @@
 dofile ("init.lua")
 dofile ("mineshaft.lua")
+dofile ("beardifier_demo.lua")
 
 local seed = mcl_levelgen.ull (0, 3228473)
 local level = mcl_levelgen.make_overworld_preset (seed)
@@ -29,10 +30,10 @@ end
 
 for i = 1, 15 do
 
-do_generate (-48 + i * 16, -32, -48 + i * 32)
-do_generate (-48 + i * 16, -32, -48 + i * 32)
-do_generate (-48 + i * 16, 0, -48 + i * 16)
-do_generate (-48 + i * 32, 0, -48 + i * 16)
+do_generate (-48 + i * 3 * 16, -32, -48 + i * 3 * 32)
+do_generate (-48 + i * 3 * 16, -32, -48 + i * -3 * 32)
+do_generate (-48 + i * 3 * 16, 0, -48 + i * 6 * 16)
+do_generate (-48 + i * 3 * 32, 0, -48 + i * 6 * 16)
 
 print ("Generated " .. i * 4 .. " MapChunks...")
 

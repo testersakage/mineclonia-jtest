@@ -4,30 +4,33 @@
 
 local ipairs = ipairs
 local gradients = {
-	{1, 1, 0},
-	{-1, 1, 0},
-	{1, -1, 0},
-	{-1, -1, 0},
-	{1, 0, 1},
-	{-1, 0, 1},
-	{1, 0, -1},
-	{-1, 0, -1},
-	{0, 1, 1},
-	{0, -1, 1},
-	{0, 1, -1},
-	{0, -1, -1},
-	{1, 1, 0},
-	{0, -1, 1},
-	{-1, 1, 0},
-	{0, -1, -1},
+	1, 1, 0,
+	-1, 1, 0,
+	1, -1, 0,
+	-1, -1, 0,
+	1, 0, 1,
+	-1, 0, 1,
+	1, 0, -1,
+	-1, 0, -1,
+	0, 1, 1,
+	0, -1, 1,
+	0, 1, -1,
+	0, -1, -1,
+	1, 1, 0,
+	0, -1, 1,
+	-1, 1, 0,
+	0, -1, -1,
 }
 
 local floor = math.floor
 local band = bit.band
 
 local function dotproduct (vecno, x, y, z)
-	local vec = gradients[band (vecno, 0xf) + 1]
-	local x0, y0, z0 = vec[1], vec[2], vec[3]
+	local n = band (vecno, 0xf)
+	local i = n + n + n
+	local x0, y0, z0 = gradients[i + 1],
+		gradients[i + 2],
+		gradients[i + 3]
 	return x0 * x + y0 * y + z0 * z
 end
 

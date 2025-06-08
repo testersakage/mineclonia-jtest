@@ -238,6 +238,7 @@ local is_cid_solid = {}
 local is_cid_buildable_to = {}
 local is_cid_frosted_ice = {}
 local is_cid_opaque = {}
+local is_cid_wall = {}
 local double_plant_tops = {}
 local paramtype2 = {}
 local mathmin = math.min
@@ -363,6 +364,9 @@ local function initialize_nodeprops ()
 		end
 		if def.groups.opaque and def.groups.opaque >= 1 then
 			is_cid_opaque[cid] = true
+		end
+		if def.groups.wall and def.groups.wall >= 1 then
+			is_cid_wall[cid] = true
 		end
 		paramtype2[cid] = def.paramtype2
 	end
@@ -921,6 +925,10 @@ end
 
 function mcl_levelgen.double_plant_p (cid)
 	return is_cid_double_plant[cid]
+end
+
+function mcl_levelgen.wall_p (cid)
+	return is_cid_wall[cid]
 end
 
 function mcl_levelgen.place_double_plant (cid, x, y, z, param2, set_block)
