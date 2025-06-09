@@ -8,7 +8,7 @@ local overworld_terrain
 	= mcl_levelgen.make_terrain_generator (level, 80)
 mcl_levelgen.load_carvers ()
 
-local a, b = {}, {}
+local a, b, structuremask = {}, {}, {}
 local biomes = {}
 
 local clock = os.clock ()
@@ -25,7 +25,8 @@ local function do_generate (x, y, z)
 					       level.min_y / 16,
 					       z / 16, 5,
 					       level.height / 16)
-	overworld_terrain:generate (x, y, z, a, b, index, biomes)
+	overworld_terrain:generate (x, y, z, a, b, structuremask,
+				    index, biomes)
 end
 
 for i = 1, 15 do
