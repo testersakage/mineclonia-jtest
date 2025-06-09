@@ -116,7 +116,7 @@ local bbox_center = mcl_levelgen.bbox_center
 
 local function placement_sentinel (piece, rng)
 	local schematic = piece.schematic
-		
+
 	if schematic == "mcl_levelgen:pillager_outpost_cage_1"
 		or schematic == "mcl_levelgen:pillager_outpost_cage_2" then
 		local x, _, z = bbox_center (piece.bbox)
@@ -214,7 +214,7 @@ local function select_feature_piece (tower, terrain, pieces, rng, heightcache)
 
 	local height = heightcache[idx]
 	if height then
-		-- Cage or tent already placed.  Scatter scarecrows 
+		-- Cage or tent already placed.  Scatter scarecrows
 		-- around.
 		local dx = rng:next_within (4) - 6
 		local dz = rng:next_within (4) - 6
@@ -248,7 +248,7 @@ local function assemble_pillager_outpost (terrain, x, y, z, rng)
 		local piece = select_feature_piece (piece, terrain, pieces,
 						    rng, heightcache)
 		if piece then
-			table.insert (pieces, piece)
+			insert (pieces, piece)
 		end
 	end
 	return pieces

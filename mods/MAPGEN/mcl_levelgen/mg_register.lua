@@ -32,7 +32,7 @@ local overworld_terrain
 	= mcl_levelgen.make_terrain_generator (overworld_preset, chunksize)
 local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
 
-local cids, param2s, biomes = {}, {}, {}
+local cids, param2s, structuremask, biomes = {}, {}, {}, {}
 
 local area = nil
 
@@ -70,7 +70,7 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	-- zone ("Terrain generation")
 	if not overworld_terrain:generate (minp.x, OVERWORLD_OFFSET + minp.y,
 					   -minp.z - chunksize, cids, param2s,
-					   index, biomes) then
+					   structuremask, index, biomes) then
 		return
 	end
 	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
@@ -97,6 +97,11 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 		level = overworld_terrain.heightmap,
 		wg = overworld_terrain.heightmap_wg,
 	})
+
+	if #structuremask > 6 then
+		core.save_gen_notify ("mcl_levelgen:structure_mask",
+				      structuremask)
+	end
 	-- print ("=== Generation complete ===")
 	-- profile.stop ()
 end)

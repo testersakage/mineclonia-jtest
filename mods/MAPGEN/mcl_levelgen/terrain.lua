@@ -507,6 +507,7 @@ local lshift = bit.lshift
 local rshift = bit.rshift
 local bor = bit.bor
 local band = bit.band
+local bnot = bit.bnot
 
 local function pack_height_map (surface, motion_blocking)
 	local bias = 512
@@ -682,9 +683,17 @@ end
 mcl_levelgen.encode_node = encode_node
 
 local function decode_node (node)
-	return rshift (node, 8), band (node, 0xff)
+	return band (rshift (node, 8), 0xffff),
+		band (node, 0xff)
 end
 mcl_levelgen.decode_node = decode_node
+
+local function structure_decode_node (node)
+	return band (rshift (node, 8), 0xffff),
+		band (node, 0xff),
+		rshift (node, 24)
+end
+mcl_levelgen.structure_decode_node = structure_decode_node
 
 local function index (x, y, z, chunksize, level_height)
 	return ((x * level_height) + y) * chunksize + z + 1
@@ -720,7 +729,51 @@ local function level_size_key (chunksize, level_height)
 	return chunksize * 1024 + level_height
 end
 
-function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
+local function initialize_structuremask (structuremask)
+	local x1, y1, z1 = structuremask[1],
+		structuremask[2],
+		structuremask[3]
+	local x2, y2, z2 = structuremask[4],
+		structuremask[5],
+		structuremask[6]
+
+	if z2 >= z1 and y2 >= y1 and x2 >= x1 then
+		local size = (z2 - z1 + 1) * (y2 - y1 + 1) * (x2 - x1 + 1)
+		local size_word = rshift (size + 7, 3)
+		for i = 7, size_word + 6 do
+			structuremask[i] = 0
+		end
+		for i = size_word + 7, #structuremask do
+			structuremask[i] = nil
+		end
+	else
+		for i = 7, #structuremask do
+			structuremask[i] = nil
+		end
+	end
+end
+
+local function update_structuremask (x, y, z, structuremask,
+				     structure_step)
+	-- 4 bits are available for each structuremask element, and 8
+	-- can occupy each element of the array.
+	local ix = x - structuremask[1]
+	local iy = y - structuremask[2]
+	local iz = z - structuremask[3]
+	local w = (structuremask[4] - structuremask[1]) + 1
+	local h = (structuremask[5] - structuremask[2]) + 1
+	local l = (structuremask[6] - structuremask[3]) + 1
+	local idx = ((ix * h) + iy) * l + iz
+	local elem = rshift (idx, 3) + 7
+	local bit = lshift (band (idx, 7), 2)
+	local current = structuremask[elem]
+	local mask = bnot (lshift (0xf, bit))
+	structuremask[elem] = bor (band (current, mask),
+				   lshift (structure_step, bit))
+	return elem
+end
+	
+function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_index, biomes)
 	local y_min = self.y_min
 	local chunksize = self.chunksize
 
@@ -830,15 +883,13 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	clear_surface_level_cache (self)
 
 	-- Process surface systems and carvers.
-	if biomes then
-		local system = self.surface_system
-		system:post_process (self, x, y, z, gn, map_wg, chunksize, biomes)
+	local system = self.surface_system
+	system:post_process (self, x, y, z, gn, map_wg, chunksize, biomes)
 
-		-- local clock = os.clock ()
-		mcl_levelgen.carve_terrain (self.preset, gn, biomes, map_wg,
-					    x, y, z, chunksize, self)
-		-- print (string.format ("%.2f", (os.clock () - clock) * 1000))
-	end
+	-- local clock = os.clock ()
+	mcl_levelgen.carve_terrain (self.preset, gn, biomes, map_wg,
+				    x, y, z, chunksize, self)
+	-- print (string.format ("%.2f", (os.clock () - clock) * 1000))
 
 	-- Regenerate the heightmap (or rather two heightmaps: one
 	-- representing the state of the terrain after surface system
@@ -847,12 +898,16 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	self:regenerate_heightmaps (gn, chunksize, self.preset)
 
 	-- Process structures.
-	if biomes then
-		-- local clock = core.get_us_time ()
-		mcl_levelgen.finish_structures (self.structures, self, biomes,
-						x, y, z, index, gn)
-		-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
-	end
+	local structure_extents
+		= mcl_levelgen.finish_structures (self.structures, self,
+						  biomes, x, y, z, index, gn)
+	structuremask[1] = structure_extents[1]
+	structuremask[2] = mathmax (structure_extents[2], y)
+	structuremask[3] = structure_extents[3]
+	structuremask[4] = structure_extents[4]
+	structuremask[5] = mathmin (structure_extents[5], y_max)
+	structuremask[6] = structure_extents[6]
+	initialize_structuremask (structuremask)
 
 	-- Write the section that intersects the output area to CIDs
 	-- and PARAM2.
@@ -860,11 +915,25 @@ function terrain_generator:generate (x, y, z, cids, param2s, vm_index, biomes)
 	local y1 = mathmin (y_max, y_min + level_height - 1)
 	local i = index (0, y0 - y_min, 0, chunksize, level_height)
 	local skip = (level_height - (y1 - y0 + 1)) * chunksize
+	local structure_idx
 	for ix = 0, chunksize - 1 do
+		local x_within_p = ix >= (structuremask[1] - x)
+			and ix <= (structuremask[4] - x)
 		for iy = y0, y1 do
+			local y_within_p = iy >= (structuremask[2])
+				and iy <= (structuremask[5])
 			for iz = 0, chunksize - 1 do
+				local z_within_p = iz >= (structuremask[3] - z)
+					and iz <= (structuremask[6] - z)
 				local idx = vm_index (ix, iy - y, iz)
-				cids[idx], param2s[idx]	= decode_node (gn[i])
+				local structure_step
+				cids[idx], param2s[idx], structure_step
+					= structure_decode_node (gn[i])
+				if x_within_p and y_within_p and z_within_p then
+					structure_idx
+						= update_structuremask (x + ix, iy, z + iz,
+									structuremask, structure_step)
+				end
 				i = i + 1
 			end
 		end
