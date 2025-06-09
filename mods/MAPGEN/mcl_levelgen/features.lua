@@ -461,7 +461,6 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 	if relight_rgn then
 		relight_rgn:walk (collect_unlit_region, relight_list)
 	end
-	
 
 	vm = nil
 	relight_rgn = nil
