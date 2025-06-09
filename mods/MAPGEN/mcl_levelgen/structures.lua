@@ -626,6 +626,7 @@ local set_population_seed = mcl_levelgen.set_population_seed
 local set_decorator_seed = mcl_levelgen.set_decorator_seed
 local prepare_structure_placement0
 local prepare_structure_placement1
+local current_generation_step
 local gen_notifies = {}
 
 local function place_structures_in_chunk (level, terrain, starts, i,
@@ -635,6 +636,7 @@ local function place_structures_in_chunk (level, terrain, starts, i,
 	local rng = structure_rng
 	local pop = set_population_seed (rng, level.level_seed, x1, z1)
 
+	current_generation_step = i
 	prepare_structure_placement1 (level, terrain, x1, z1)
 
 	for j, sid in ipairs (structures) do
@@ -658,6 +660,10 @@ end
 -- 	end
 -- 	return n
 -- end
+
+local structure_extents = {
+	0, 0, 0, 0, 0, 0,
+}
 
 function mcl_levelgen.finish_structures (level, terrain, biomes, x, y, z,
 					 index, nodes)
@@ -697,6 +703,7 @@ function mcl_levelgen.finish_structures (level, terrain, biomes, x, y, z,
 		end
 		level.cnt_starts = MAX_LOADED_STARTS
 	end
+	return structure_extents
 end
 
 function mcl_levelgen.structure_biome_test (level, structure_def, x, y, z)
@@ -961,6 +968,12 @@ function prepare_structure_placement0 (level, terrain, p_biomes,
 	nodes_origin_y = y
 	nodes_origin_z = z
 	gen_notifies = {}
+	structure_extents[1] = huge
+	structure_extents[2] = huge
+	structure_extents[3] = huge
+	structure_extents[4] = -huge
+	structure_extents[5] = -huge
+	structure_extents[6] = -huge
 
 	mcl_levelgen.placement_level_min = level_min
 	mcl_levelgen.placement_level_height = level_height
@@ -982,6 +995,13 @@ if not mcl_levelgen.load_feature_environment then
 
 local decode_node = mcl_levelgen.decode_node
 local encode_node = mcl_levelgen.encode_node
+
+local ENCODED_NODE_MASK = 0xffffff
+
+local function structure_encode_node (cid, param2)
+	local node = encode_node (cid, param2)
+	return node + lshift (current_generation_step, 24)
+end
 
 local cid_air
 local cid_air_encoded
@@ -1100,6 +1120,15 @@ local function correct_heightmaps (x, y, z, cid, param2, force)
 					  motion_blocking - level_min)
 end
 
+local function update_structure_extents (x, y, z)
+	structure_extents[1] = mathmin (x, structure_extents[1])
+	structure_extents[2] = mathmin (y, structure_extents[2])
+	structure_extents[3] = mathmin (z, structure_extents[3])
+	structure_extents[4] = mathmax (x, structure_extents[4])
+	structure_extents[5] = mathmax (y, structure_extents[5])
+	structure_extents[6] = mathmax (z, structure_extents[6])
+end
+
 function mcl_levelgen.set_block (x, y, z, cid, param2)
 	if x < origin_x or x >= origin_x + 16
 		or z < origin_z or z >= origin_z + 16
@@ -1107,10 +1136,11 @@ function mcl_levelgen.set_block (x, y, z, cid, param2)
 		return nil
 	end
 
-	local node = encode_node (cid, param2)
+	local node = structure_encode_node (cid, param2)
 	local idx = block_index (x, y, z)
 	nodes[idx] = node
 	correct_heightmaps (x, y, z, cid, param2, false)
+	update_structure_extents (x, y, z)
 end
 
 function mcl_levelgen.set_block_checked (x, y, z, cid, param2, writable_p)
@@ -1120,15 +1150,14 @@ function mcl_levelgen.set_block_checked (x, y, z, cid, param2, writable_p)
 		return nil
 	end
 
-	local node = encode_node (cid, param2)
+	local node = structure_encode_node (cid, param2)
 	local idx = block_index (x, y, z)
-	do
-		local cid, param2 = decode_node (nodes[idx])
-		if writable_p (cid, param2) then
-			nodes[idx] = node
-		end
+	local cid_1, param2_1 = decode_node (nodes[idx])
+	if writable_p (cid_1, param2_1) then
+		nodes[idx] = node
+		correct_heightmaps (x, y, z, cid, param2, false)
+		update_structure_extents (x, y, z)
 	end
-	correct_heightmaps (x, y, z, cid, param2, false)
 end
 
 function mcl_levelgen.reorientate_coords (piece, x, y, z)
@@ -1354,19 +1383,21 @@ local function copy_to_data (schematic, px, py, pz, rot, force_place)
 				end
 
 				local idx = block_index (x, y, z)
+				local current = band (nodes[idx], ENCODED_NODE_MASK)
 				if cid and (force_place or force_place_node
-					    or nodes[idx] == cid_air_encoded
-					    or nodes[idx] == cid_ignore_encoded) then
+					    or current == cid_air_encoded
+					    or current == cid_ignore_encoded) then
 					local continue = probability == MTSCHEM_PROB_ALWAYS
 						or probability > 1 + rng:next_within (0x80)
 					if continue then
 						if rot ~= "0" then
 							param2 = rotate_param2 (cid, param2, rot)
 						end
-						nodes[idx] = encode_node (cid, param2)
+						nodes[idx] = structure_encode_node (cid, param2)
 						local hash = hash_schem_pos (x, z)
 						local val = xz_updates[hash] or -huge
 						xz_updates[hash] = mathmax (val, y)
+						update_structure_extents (x, y, z)
 					end
 				end
 			end

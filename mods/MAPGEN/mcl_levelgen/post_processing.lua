@@ -1,6 +1,7 @@
 local ipairs = ipairs
 local ipos1 = mcl_levelgen.ipos1
 local ipos2 = mcl_levelgen.ipos2
+local insert = table.insert
 
 local S = core.get_translator ("mcl_levelgen")
 local mt_chunksize = core.ipc_get ("mcl_levelgen:mt_chunksize")
@@ -273,7 +274,7 @@ end
 
 local blurb = "An existing MapBlock (%d) was reported to post_process_mapchunk: X: %d, Y: %d, Z: %d (src = %s, %s)"
 local fmt = "MapBlock %d,%d,%d (%d) was likely overwritten by the generation of the region between %s and %s"
-local save_heightmap
+local save_gen_data
 local run_structure_notifications
 local attempt_feature_placement
 
@@ -350,7 +351,7 @@ local function post_process_mapchunk (minp, maxp)
 		-- parent[hash] = { minp = minp, maxp = maxp, }
 	end
 
-	save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
+	save_gen_data (bx, bx1, by, by1, bz, bz1, chunksize)
 	run_structure_notifications ()
 	schedule_regeneration_for_emerge (bx, bx1, by, by1, bz, bz1)
 end
@@ -898,7 +899,8 @@ if mcl_levelgen.load_feature_environment then
 	levelgen_previous_vm = nil
 end
 
-local function async_function (vm, run, heightmap, wg_heightmap, biomes)
+local function async_function (vm, run, heightmap, wg_heightmap, biomes,
+			       structure_masks)
 	if levelgen_previous_vm and levelgen_previous_vm.close then
 		levelgen_previous_vm:close ()
 	end
@@ -909,6 +911,7 @@ local function async_function (vm, run, heightmap, wg_heightmap, biomes)
 	local preset = mcl_levelgen.overworld_preset
 	local relight_list, gen_notifies, fluids_to_transform, features, c_above, c_below
 		= mcl_levelgen.process_features (vm, run, heightmap, wg_heightmap,
+						 structure_masks,
 						 biomes, OVERWORLD_OFFSET, preset.min_y,
 						 preset.height, preset)
 	levelgen_previous_vm = vm
@@ -1115,12 +1118,14 @@ local function post_mapblock_run (run)
 		end
 	end
 
-	local heightmap, wg_heightmap
+	local heightmap, wg_heightmap, structure_masks
 		= construct_heightmaps_for_run (run)
 	local biomes = biome_data_for_run (run)
 	local vm = VoxelManip (v1, v2)
+
 	core.handle_async (async_function, run_execution_cb, vm, run,
-			   heightmap, wg_heightmap, biomes)
+			   heightmap, wg_heightmap, biomes,
+			   structure_masks)
 	if vm.close then
 		vm:close ()
 	end
@@ -1428,7 +1433,7 @@ function check_supplemental_generation (bx, bz)
 end
 
 ------------------------------------------------------------------------
--- Heightmap provisioning.
+-- Heightmap & structure mask provisioning.
 --
 -- Each generated MapChunk provides a heightmap that continues to
 -- exist indefinitely; they are recorded when a horizontal MapChunk is
@@ -1436,6 +1441,10 @@ end
 -- tagging data of the bottommost 8 MapBlocks of each horizontal
 -- column.  Heightmaps are liable partially to be modified by
 -- decoration placement.
+--
+-- Each heightmap structure additionally holds a table of structures
+-- mapping regions of its MapBlock to a packed array of values
+-- associating nodes with the structure generation step(s).
 ------------------------------------------------------------------------
 
 local loaded_heightmaps = {}
@@ -1554,14 +1563,25 @@ local function allocate_heightmap_id ()
 	return heightmap_id + 1
 end
 
-local function write_heightmap (id, x, y, z, chunksize, data)
-	local heightmap_data = table.concat ({
+local function write_heightmap (id, x, y, z, chunksize, data, structure_masks)
+	local list = {
 		"return {",
 		string.format ("x=%d, y=%d, z=%d, chunksize=%d, data={",
 			       x, y, z, chunksize),
 		table.concat (data, ","),
-		"}}",
-	})
+		"},",
+	}
+	if structure_masks then
+		table.insert (list, "structure_masks={")
+		for _, mask in ipairs (structure_masks) do
+			table.insert (list, "{")
+			table.insert (list, table.concat (mask, ","))
+			table.insert (list, "},")
+		end
+		table.insert (list, "}")
+	end
+	table.insert (list, "}")
+	local heightmap_data = table.concat (list)
 	local compressed = core.compress (heightmap_data, "zstd")
 	storage:set_string ("heightmap" .. id, compressed)
 end
@@ -1574,7 +1594,9 @@ end
 -- 	return value
 -- end
 
-function save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
+local indexof = table.indexof
+
+function save_gen_data (bx, bx1, by, by1, bz, bz1, chunksize)
 	local custom = core.get_mapgen_object ("gennotify").custom
 	assert (custom)
 	local heightmaps = custom["mcl_levelgen:level_height_map"]
@@ -1588,6 +1610,21 @@ function save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
 	assert (#data == idx_max)
 	local id = allocate_heightmap_id ()
 	local used = false
+
+	local structuremask = custom["mcl_levelgen:structure_mask"]
+	local assigned = {}
+
+	-- if structuremask then
+	-- 	for i = 7, #structuremask do
+	-- 		if structuremask[i] ~= 0 then
+	-- 			print ("Nonempty structuremask",
+	-- 			       structuremask[1],
+	-- 			       structuremask[2],
+	-- 			       structuremask[3])
+	-- 			break
+	-- 		end
+	-- 	end
+	-- end
 
 	for x = bx, bx1 do
 		for z = bz, bz1 do
@@ -1608,16 +1645,19 @@ function save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
 					-- always represents the
 					-- terrain of the world at the
 					-- time of generation.
-					write_heightmap (id, bx, by, bz, chunksize, data)
+					local structure_masks = { structuremask, }
+					write_heightmap (id, bx, by, bz, chunksize, data,
+							 structure_masks)
 					loaded_heightmaps[id] = {
 						x = bx,
 						y = by,
 						z = bz,
 						chunksize = chunksize,
 						data = data,
+						structure_masks = structure_masks,
 					}
 					heightmap_ttl[id] = HEIGHTMAP_TTL
-					write_heightmap (id + 1, bx, by, bz, chunksize, data_wg)
+					write_heightmap (id + 1, bx, by, bz, chunksize, data_wg, nil)
 					loaded_heightmaps[id + 1] = {
 						x = bx,
 						y = by,
@@ -1628,6 +1668,15 @@ function save_heightmap (bx, bx1, by, by1, bz, bz1, chunksize)
 					heightmap_ttl[id + 1] = HEIGHTMAP_TTL
 				end
 				set_mapblock_heightmap (x, z, id)
+			elseif structuremask
+				and indexof (assigned, heightmap) == -1 then
+				table.insert (assigned, heightmap)
+
+				-- Assign this structure mask to this
+				-- MapBlock's generation data list.
+				local heightmap = load_heightmap (heightmap)
+				table.insert (heightmap.structure_masks,
+					      structuremask)
 			end
 		end
 	end
@@ -1643,7 +1692,8 @@ local function manage_heightmaps (dtime)
 			write_heightmap (id, heightmap.x,
 					 heightmap.y, heightmap.z,
 					 heightmap.chunksize,
-					 heightmap.data)
+					 heightmap.data,
+					 heightmap.structure_masks)
 			loaded_heightmaps[id] = nil
 		else
 			heightmap_ttl[id] = ttl - dtime
@@ -1660,7 +1710,8 @@ local function save_heightmaps ()
 		write_heightmap (id, heightmap.x,
 				 heightmap.y, heightmap.z,
 				 heightmap.chunksize,
-				 heightmap.data)
+				 heightmap.data,
+				 heightmap.structure_masks)
 		loaded_heightmaps[id] = nil
 	end
 end
@@ -1716,7 +1767,12 @@ mcl_levelgen.SURFACE_MODIFIED = SURFACE_MODIFIED
 mcl_levelgen.MOTION_BLOCKING_UNCERTAIN = MOTION_BLOCKING_UNCERTAIN
 mcl_levelgen.MOTION_BLOCKING_MODIFIED = MOTION_BLOCKING_MODIFIED
 
-local function copy_heightmap_segment (run, dst, wg, dx, dz)
+local AABB_intersect_p = mcl_levelgen.AABB_intersect_p
+local scratch = {}
+
+local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
+
+local function copy_heightmap_segment (run, dst, wg, dx, dz, structure_masks)
 	-- Transform output coordinates.
 	local x = 16 + dx * 16
 	local z = (HEIGHTMAP_SIZE - (2 + dz)) * 16
@@ -1749,6 +1805,23 @@ local function copy_heightmap_segment (run, dst, wg, dx, dz)
 		idx_dst = idx_dst + HEIGHTMAP_SIZE_NODES
 		idx_src = idx_src + cs
 	end
+
+	-- Load any structure masks that intersect the run.
+	if structure_masks then
+		scratch[1] = run_x
+		scratch[2] = ((run.y1 - REQUIRED_CONTEXT_Y) * 16) + OVERWORLD_OFFSET
+		scratch[3] = -run_z - 16
+		scratch[4] = run_x + 15
+		scratch[5] = ((run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15) + OVERWORLD_OFFSET
+		scratch[6] = -run_z - 1
+
+		for _, mask in ipairs (heightmap.structure_masks) do
+			if AABB_intersect_p (mask, scratch)
+				and indexof (structure_masks, mask) == -1 then
+				insert (structure_masks, mask)
+			end
+		end
+	end
 end
 
 -- Create heightmaps REQUIRED_CONTEXT_XZ * 2 + 1 Minecraft chunks in
@@ -1756,34 +1829,36 @@ end
 -- coordinate system.  Value is the heightmap representing the current
 -- and potentially modified state of the level followed by that which
 -- represents the state of the level at the time of generation.
+--
+-- Additionally return any structure masks intersecting the run.
 
 function construct_heightmaps_for_run (run)
-	local heightmap, wg_heightmap = {}, {}
+	local heightmap, wg_heightmap, structure_masks = {}, {}, {}
 	local expected_size = HEIGHTMAP_SIZE_NODES * HEIGHTMAP_SIZE_NODES
 	heightmap[expected_size] = nil
 
-	copy_heightmap_segment (run, heightmap, false, -1, -1)
-	copy_heightmap_segment (run, heightmap, false, -1, 0)
-	copy_heightmap_segment (run, heightmap, false, -1, 1)
-	copy_heightmap_segment (run, heightmap, false, 0, -1)
-	copy_heightmap_segment (run, heightmap, false, 0, 0)
-	copy_heightmap_segment (run, heightmap, false, 0, 1)
-	copy_heightmap_segment (run, heightmap, false, 1, -1)
-	copy_heightmap_segment (run, heightmap, false, 1, 0)
-	copy_heightmap_segment (run, heightmap, false, 1, 1)
+	copy_heightmap_segment (run, heightmap, false, -1, -1, structure_masks)
+	copy_heightmap_segment (run, heightmap, false, -1, 0, structure_masks)
+	copy_heightmap_segment (run, heightmap, false, -1, 1, structure_masks)
+	copy_heightmap_segment (run, heightmap, false, 0, -1, structure_masks)
+	copy_heightmap_segment (run, heightmap, false, 0, 0, structure_masks)
+	copy_heightmap_segment (run, heightmap, false, 0, 1, structure_masks)
+	copy_heightmap_segment (run, heightmap, false, 1, -1, structure_masks)
+	copy_heightmap_segment (run, heightmap, false, 1, 0, structure_masks)
+	copy_heightmap_segment (run, heightmap, false, 1, 1, structure_masks)
 	assert (#heightmap == expected_size)
 
-	copy_heightmap_segment (run, wg_heightmap, true, -1, -1)
-	copy_heightmap_segment (run, wg_heightmap, true, -1, 0)
-	copy_heightmap_segment (run, wg_heightmap, true, -1, 1)
-	copy_heightmap_segment (run, wg_heightmap, true, 0, -1)
-	copy_heightmap_segment (run, wg_heightmap, true, 0, 0)
-	copy_heightmap_segment (run, wg_heightmap, true, 0, 1)
-	copy_heightmap_segment (run, wg_heightmap, true, 1, -1)
-	copy_heightmap_segment (run, wg_heightmap, true, 1, 0)
-	copy_heightmap_segment (run, wg_heightmap, true, 1, 1)
+	copy_heightmap_segment (run, wg_heightmap, true, -1, -1, nil)
+	copy_heightmap_segment (run, wg_heightmap, true, -1, 0, nil)
+	copy_heightmap_segment (run, wg_heightmap, true, -1, 1, nil)
+	copy_heightmap_segment (run, wg_heightmap, true, 0, -1, nil)
+	copy_heightmap_segment (run, wg_heightmap, true, 0, 0, nil)
+	copy_heightmap_segment (run, wg_heightmap, true, 0, 1, nil)
+	copy_heightmap_segment (run, wg_heightmap, true, 1, -1, nil)
+	copy_heightmap_segment (run, wg_heightmap, true, 1, 0, nil)
+	copy_heightmap_segment (run, wg_heightmap, true, 1, 1, nil)
 	assert (#wg_heightmap == expected_size)
-	return heightmap, wg_heightmap
+	return heightmap, wg_heightmap, structure_masks
 end
 
 -- Reconciliation of divergent heightmaps.
@@ -1962,7 +2037,7 @@ local function get_status_string (bx, by, bz)
 end
 
 local template
-	= "ID: %d; X: %d, Y: %d, Z: %d; CS: %d\nWORLD_SURFACE: %s%3d MOTION_BLOCKING: %s%3d"
+	= "ID: %d; X: %d, Y: %d, Z: %d; CS: %d\nWORLD_SURFACE: %s%3d MOTION_BLOCKING: %s%3d\nStructure at position: %s (%d)"
 
 local function debug_index_heightmap (heightmap, node_x, node_z)
 	local cs = heightmap.chunksize
@@ -1973,6 +2048,47 @@ local function debug_index_heightmap (heightmap, node_x, node_z)
 	return surface, motion_blocking, flags
 end
 
+local function debug_index_structuremask (heightmap, x, y, z)
+	if not heightmap.structure_masks then
+		return 0
+	end
+
+	local level_x = x
+	local level_y = y + mcl_levelgen.OVERWORLD_OFFSET
+	local level_z = -z - 1
+
+	for _, mask in ipairs (heightmap.structure_masks) do
+		local x1, y1, z1 = mask[1], mask[2], mask[3]
+		local x2, y2, z2 = mask[4], mask[5], mask[6]
+
+		if level_x >= x1 and level_y >= y1 and level_z >= z1
+			and level_x <= x2 and level_y <= y2 and level_z <= z2 then
+			local h = (y2 - y1) + 1
+			local l = (z2 - z1) + 1
+			local ix, iy, iz = level_x - x1, level_y - y1, level_z - z1
+			local idx = ((ix * h) + iy) * l + iz
+			local elem = rshift (idx, 3) + 7
+			local bit = lshift (band (idx, 7), 2)
+			return band (rshift (mask[elem], bit), 0xf)
+		end
+	end
+	return 0
+end
+
+local STRUCTURE_STAGE_NAMES = {
+	[0] = "TERRAIN",
+	"RAW_GENERATION",
+	"LAKES",
+	"LOCAL_MODIFICATIONS",
+	"UNDERGROUND_STRUCTURES",
+	"SURFACE_STRUCTURES",
+	"STRONGHOLDS",
+	"UNDERGROUND_ORES",
+	"FLUID_SPRINGS",
+	"VEGETAL_DECORATION",
+	"TOP_LAYER_MODIFICATION",
+}
+
 local function get_heightmap_string (x, z, self_pos, generation_only)
 	local id = mapblock_heightmap (x, z, generation_only)
 	if id == 0 then
@@ -1982,6 +2098,9 @@ local function get_heightmap_string (x, z, self_pos, generation_only)
 		local surface, motion_blocking, flags
 			= debug_index_heightmap (heightmap, self_pos.x,
 						 self_pos.z)
+		local structure_stage
+			= debug_index_structuremask (heightmap, self_pos.x,
+						     self_pos.y, self_pos.z)
 		local surface_quals
 			= band (flags, SURFACE_UNCERTAIN) ~= 0 and "?" or ""
 		local motion_blocking_quals
@@ -1990,7 +2109,9 @@ local function get_heightmap_string (x, z, self_pos, generation_only)
 				      heightmap.x, heightmap.y, heightmap.z,
 				      heightmap.chunksize,
 				      surface_quals, surface,
-				      motion_blocking_quals, motion_blocking)
+				      motion_blocking_quals, motion_blocking,
+				      STRUCTURE_STAGE_NAMES[structure_stage],
+				      structure_stage)
 	end
 end
 
