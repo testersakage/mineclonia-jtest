@@ -376,6 +376,8 @@ local heightmap_modifications
 local preset
 local features_requesting_additional_context = {}
 local context_expansion_below, context_expansion_above
+local structure_masks
+local current_step
 
 mcl_levelgen.placement_run_minp = run_minp
 mcl_levelgen.placement_run_maxp = run_maxp
@@ -397,8 +399,10 @@ local function convert_minetest_position (x, y, z)
 	return x, y + y_offset, -z - 1
 end
 
-function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap, p_biomes,
-					p_y_offset, p_level_min, p_level_height, p_preset)
+function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap,
+					p_structure_masks,
+					p_biomes, p_y_offset, p_level_min,
+					p_level_height, p_preset)
 	run = p_run
 	run_minp.x = run.x * 16
 	run_minp.z = -(run.z * 16 + 16)
@@ -442,8 +446,12 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 	features_requesting_additional_context = {}
 	context_expansion_above = 0
 	context_expansion_below = 0
+	structure_masks = p_structure_masks
+	current_step = 0
+	-- local clock = core.get_us_time ()
+	-- mcl_levelgen.test_structuremask ()
 	mcl_levelgen.process_features_1 ()
-
+	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
 	if vm_modified then
 		vm:set_data (cids)
 		vm:set_param2_data (param2s)
@@ -453,6 +461,7 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 	if relight_rgn then
 		relight_rgn:walk (collect_unlit_region, relight_list)
 	end
+	
 
 	vm = nil
 	relight_rgn = nil
@@ -464,6 +473,28 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 		features_requesting_additional_context,
 		context_expansion_above,
 		context_expansion_below
+end
+
+local function conflicting_structure_mask (x, y, z)
+	for _, mask in ipairs (structure_masks) do
+		local x1, y1, z1 = mask[1], mask[2], mask[3]
+		local x2, y2, z2 = mask[4], mask[5], mask[6]
+
+		if x >= x1 and y >= y1 and z >= z1
+			and x <= x2 and y <= y2 and z <= z2 then
+			local w = (x2 - x1) + 1
+			local h = (y2 - y1) + 1
+			local l = (z2 - z1) + 1
+			local ix = x - x1
+			local iy = y - y1
+			local iz = z - z1
+			local idx = ((ix * h) + iy) * l + iz
+			local elem = rshift (idx, 3) + 7
+			local bit = lshift (band (idx, 7), 2)
+			return band (rshift (mask[elem], bit), 0xf) > current_step
+		end
+	end
+	return false
 end
 
 local function is_not_air (cid, param2)
@@ -716,6 +747,9 @@ function mcl_levelgen.set_block (x, y, z, cid, param2)
 		end
 		return
 	end
+	if conflicting_structure_mask (x, y, z) then
+		return
+	end
 	local idx = index (x, y, z)
 	cids[idx] = cid
 	if param2 ~= -1 then
@@ -723,6 +757,21 @@ function mcl_levelgen.set_block (x, y, z, cid, param2)
 	end
 	vm_modified = true
 	correct_heightmaps (x, y, z, cid, param2, false)
+end
+
+local ipos3 = mcl_levelgen.ipos3
+local cid_glass_magenta = core.get_content_id ("mcl_core:glass_magenta")
+
+function mcl_levelgen.test_structuremask ()
+	for x, y, z in ipos3 (run_min_x, run_min_y, run_min_z,
+			      run_max_x, run_max_y, run_max_z) do
+		if conflicting_structure_mask (x, y, z) then
+			local idx = index (x, y, z)
+			cids[idx] = cid_glass_magenta
+			param2s[idx] = 0
+			vm_modified = true
+		end
+	end
 end
 
 local function update_relight_rgn (aabb)
@@ -893,12 +942,15 @@ local function copy_to_data (schematic, px, py, pz, rot, force_place)
 							= decode_schem_data (data)
 
 						if probability ~= MTSCHEM_PROB_NEVER then
+							local x_level, y_level, z_level
+								= convert_minetest_position (gx, y_map, gz)
+
 							if have_processors then
 								-- print (gx, y_map, gz)
-								local x, y, z
-									= convert_minetest_position (gx, y_map, gz)
 								cid, param2
-									= apply_schematic_processors (x, y, z,
+									= apply_schematic_processors (x_level,
+												      y_level,
+												      z_level,
 												      rng, cid,
 												      param2)
 								-- print ("  -->", cid, param2)
@@ -910,7 +962,10 @@ local function copy_to_data (schematic, px, py, pz, rot, force_place)
 								    or cids[vi] == cid_ignore) then
 								local continue = probability == MTSCHEM_PROB_ALWAYS
 									or probability > 1 + rng:next_within (0x80)
-								if continue then
+								if continue
+									and not conflicting_structure_mask (x_level,
+													    y_level,
+													    z_level) then
 									cids[vi] = cid
 
 									if rot ~= "0" then
@@ -1131,6 +1186,7 @@ function mcl_levelgen.process_features_1 ()
 				mcl_levelgen.set_decorator_seed (rng, pop, idx - 1, step - 1)
 				mcl_levelgen.current_placed_feature = name
 				mcl_levelgen.current_step = step
+				current_step = step
 				place_one_feature (feature)
 			elseif not warned[name] then
 				core.log ("warning", "Placing undefined feature: " .. name)
