@@ -1514,22 +1514,26 @@ end
 local seed_from_ull = mcl_levelgen.seed_from_ull
 local mix64 = mcl_levelgen.mix64
 
+function mcl_levelgen.xoroshiro_from_seed (seed)
+	local lo, hi = ull (0, 0), ull (0, 0)
+	seed_from_ull (lo, hi, seed)
+	-- print ("unmixed", mcl_levelgen.tostringull (lo),
+	--        mcl_levelgen.tostringull (hi))
+	mix64 (lo)
+	mix64 (hi)
+	-- print (mcl_levelgen.tostringull (seed) .. " => "
+	--        .. mcl_levelgen.tostringull (lo)
+	--        .. " " .. mcl_levelgen.tostringull (hi))
+	return mcl_levelgen.xoroshiro (lo, hi)
+end
+
 local function initialize_random (preset, seed)
 	local rng
 	preset.seed = copyull (seed)
 	if preset.use_legacy_random_source then
 		rng = mcl_levelgen.jvm_random (seed)
 	else
-		local lo, hi = ull (0, 0), ull (0, 0)
-		seed_from_ull (lo, hi, seed)
-		-- print ("unmixed", mcl_levelgen.tostringull (lo),
-		--        mcl_levelgen.tostringull (hi))
-		mix64 (lo)
-		mix64 (hi)
-		-- print (mcl_levelgen.tostringull (seed) .. " => "
-		--        .. mcl_levelgen.tostringull (lo)
-		--        .. " " .. mcl_levelgen.tostringull (hi))
-		rng = mcl_levelgen.xoroshiro (lo, hi)
+		rng = mcl_levelgen.xoroshiro_from_seed (seed)
 	end
 	preset.factory = rng:fork_positional ()
 end
