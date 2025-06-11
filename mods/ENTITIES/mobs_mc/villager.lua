@@ -3485,8 +3485,8 @@ local function remove_provisional_poi (pos)
 	mcl_villages.remove_poi (poi.id)
 end
 
-function villager:claim_poi (target)
-	local node = core.get_node (target)
+function villager:claim_poi (target, node)
+	local node = node or core.get_node (target)
 	local profession = get_profession (node.name)
 	if not profession or (self._profession
 				and self._profession ~= profession.name) then
@@ -3528,7 +3528,7 @@ function villager:acquire_job_site (self_pos, dtime)
 		if not result then
 			if dist < 2 then
 				remove_provisional_poi (target)
-				self:claim_poi (target)
+				self:claim_poi (target, nil)
 			else
 				relinquish_provisional_poi (target)
 				local hash = hash_pos (target)
@@ -4581,7 +4581,7 @@ local villager_gift_tables = {
 				amount_min = 1.0,
 			},
 			{
-				itemstring = "mcl_core:bucket_water",
+				itemstring = "mcl_buckets:bucket_water",
 				amount_max = 3.0,
 				amount_min = 1.0,
 			},
@@ -4591,7 +4591,7 @@ local villager_gift_tables = {
 				amount_min = 1.0,
 			},
 			{
-				itemstring = "mcl_core:coal",
+				itemstring = "mcl_core:coal_lump",
 				amount_max = 3.0,
 				amount_min = 2.0,
 				weight = 2,
@@ -4609,7 +4609,7 @@ local villager_gift_tables = {
 				weight = 2,
 			},
 			{
-				itemstring = "mcl_core:feather",
+				itemstring = "mcl_mobitems:feather",
 				amount_max = 3.0,
 				amount_min = 1.0,
 				weight = 6,
@@ -4694,7 +4694,7 @@ local villager_gift_tables = {
 				weight = 2,
 			},
 			{
-				itemstring = "mcl_wool:light_gray",
+				itemstring = "mcl_wool:silver",
 				amount_max = 3.0,
 				amount_min = 1.0,
 				weight = 2,
@@ -4738,7 +4738,7 @@ local villager_gift_tables = {
 				weight = 5,
 			},
 			{
-				itemstring = "mcl_core:coal",
+				itemstring = "mcl_core:coal_lump",
 				amount_min = 1.0,
 				amount_max = 3.0,
 			},
@@ -4828,7 +4828,7 @@ local villager_gift_tables = {
 				itemstring = "mcl_mobitems:iron_horse_armor",
 			},
 			{
-				itemstring = "mcl_mobitems:golden_horse_armor",
+				itemstring = "mcl_mobitems:gold_horse_armor",
 			},
 			{
 				itemstring = "mcl_mobitems:diamond_horse_armor",

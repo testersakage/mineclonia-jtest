@@ -114,7 +114,7 @@ local cid_chest_small = core.get_content_id ("mcl_chests:chest_small")
 local notify_generated = mcl_levelgen.notify_generated
 local bbox_center = mcl_levelgen.bbox_center
 
-local function placement_sentinel (piece, rng)
+local function placement_sentinel (piece, rng, _, _, _, _)
 	local schematic = piece.schematic
 
 	if schematic == "mcl_levelgen:pillager_outpost_cage_1"
@@ -161,11 +161,11 @@ local function select_tower_piece (terrain, x, y, z, rng)
 	if rng:next_boolean () then
 		return make_schematic_piece ("mcl_levelgen:pillager_outpost_tower_short",
 					     x, y, z, "random", rng, true, true,
-					     TOWER_PROCESSORS, placement_sentinel)
+					     TOWER_PROCESSORS, placement_sentinel, nil)
 	else
 		return make_schematic_piece ("mcl_levelgen:pillager_outpost_tower_tall",
 					     x, y, z, "random", rng, true, true,
-					     TOWER_PROCESSORS, placement_sentinel)
+					     TOWER_PROCESSORS, placement_sentinel, nil)
 	end
 end
 
@@ -220,7 +220,7 @@ local function select_feature_piece (tower, terrain, pieces, rng, heightcache)
 		local dz = rng:next_within (4) - 6
 		local piece = make_schematic_piece ("mcl_levelgen:pillager_outpost_scarecrow",
 						    x + dx, height, z + dz, rotation,
-						    rng, true, true, nil, nil)
+						    rng, true, true, nil, nil, nil)
 		if not any_collisions (pieces, piece.bbox) then
 			return piece
 		else
@@ -232,7 +232,7 @@ local function select_feature_piece (tower, terrain, pieces, rng, heightcache)
 		local selector = 1 + rng:next_within (3)
 		return make_schematic_piece (schematics[selector], x, height,
 					     z, "random", rng, true, true, nil,
-					     placement_sentinel)
+					     placement_sentinel, nil)
 	end
 end
 
@@ -295,5 +295,5 @@ mcl_levelgen.register_structure_set ("mcl_levelgen:pillager_outpost", {
 		"mcl_levelgen:pillager_outpost",
 	},
 	placement = R (0.2, "legacy_type_1", 32, 8, 165745296,
-		       "linear", nil, { "mcl_levelgen:villages", 10, }),
+		       "linear", nil, { "mcl_villages:villages", 10, }),
 })
