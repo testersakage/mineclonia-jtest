@@ -16,9 +16,17 @@ function mcl_levelgen.register_portable_schematic (id, specifier, normalize_ypro
 	if portable_schematics[id] then
 		error ("Schematic already registered: " .. id)
 	end
-	local data = core.read_schematic (specifier, {
-		write_yslice_prob = "all",
-	})
+	-- Is this schematic already valid?
+	local data
+	if type (specifier) == "table" and specifier.data then
+		-- Reuse this table, as core.read_schematic will
+		-- delete `data' otherwise.
+		data = specifier
+	else
+		data = core.read_schematic (specifier, {
+			write_yslice_prob = "all",
+		})
+	end
 	if normalize_yprob then
 		for y = 1, data.size.y do
 			data.yslice_prob[y] = {

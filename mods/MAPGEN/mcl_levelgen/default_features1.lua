@@ -659,13 +659,13 @@ local function add_pile_block (x, y, z, rng, content)
 	return false
 end
 
-local function block_pile_place (_, x, y, z, rng, cfg)
+local function block_pile_place (_, x, y, z, cfg, rng)
 	local min_y = mcl_levelgen.placement_level_min
 	if y < min_y + 5 then
 		return false
 	else
 		pile_rng:reseed (rng:next_long ())
-		if y < run_minp.y or y > run_minp.max then
+		if y < run_minp.y or y > run_maxp.y then
 			return false
 		end
 
