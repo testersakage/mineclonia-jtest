@@ -946,9 +946,9 @@ local function register_medium_pv_biomes_for_climate_grade (nodes, i, j,
 					      FAR_INLAND_CONTINENTALNESS),
 				erosion_grades[6], weirdness,
 				0.0)
-	local eroded_coast = beach
+	local eroded_coast = plain
 	if weirdness[2] < 0 then
-		eroded_coast = plain
+		eroded_coast = beach
 	end
 	register_surface_biome (nodes, eroded_coast,
 				temp_range, humidity_range,
