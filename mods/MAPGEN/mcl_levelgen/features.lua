@@ -378,6 +378,7 @@ local features_requesting_additional_context = {}
 local context_expansion_below, context_expansion_above
 local structure_masks
 local current_step
+local structure_features
 
 mcl_levelgen.placement_run_minp = run_minp
 mcl_levelgen.placement_run_maxp = run_maxp
@@ -400,7 +401,7 @@ local function convert_minetest_position (x, y, z)
 end
 
 function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap,
-					p_structure_masks,
+					p_structure_masks, p_structure_features,
 					p_biomes, p_y_offset, p_level_min,
 					p_level_height, p_preset)
 	run = p_run
@@ -424,6 +425,7 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 	preset = p_preset
 	gen_notifies = {}
 	fluids_to_transform = {}
+	structure_features = p_structure_features
 
 	run_min_y = mathmax ((run.y1 - REQUIRED_CONTEXT_Y) * 16 + p_y_offset,
 			     p_level_min)
@@ -1091,6 +1093,9 @@ end
 ------------------------------------------------------------------------
 
 local rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+local tmp = mcl_levelgen.xoroshiro_from_seed (mcl_levelgen.seed)
+local tmp = tmp:fork_positional () ("mcl_levelgen:structure_features")
+local structure_rng = tmp:fork_positional ():create_reseedable ()
 local expand_biome_list = mcl_levelgen.expand_biome_list
 
 local function place_one_feature (feature, x, y, z) -- A placed feature.
@@ -1139,6 +1144,19 @@ local warned = {}
 local function run_permits_feature_p (run, feature)
 	return not run.supplemental
 		or indexof (run.data.features, feature) ~= -1
+end
+
+local function place_structure_feature (feature_cfg)
+	local x, y, z = feature_cfg[1], feature_cfg[2], feature_cfg[3]
+	structure_rng:reseed_positional (x, y, z)
+	local id = feature_cfg[5]
+	local cfg = registered_configured_features[id]
+	if not cfg then
+		core.log ("warning", "Structure requesting unknown configured feature: " .. id)
+		return
+	end
+	local plain_feature = registered_features[cfg.feature]
+	plain_feature:place (x, y, z, cfg, structure_rng)
 end
 
 function mcl_levelgen.process_features_1 ()
@@ -1190,6 +1208,15 @@ function mcl_levelgen.process_features_1 ()
 			elseif not warned[name] then
 				core.log ("warning", "Placing undefined feature: " .. name)
 				warned[name] = true
+			end
+		end
+
+		-- Generate features whose generation was requested by
+		-- structures.
+		for _, feature_cfg in ipairs (structure_features) do
+			local feature_step = feature_cfg[4]
+			if step == feature_step then
+				place_structure_feature (feature_cfg)
 			end
 		end
 	end

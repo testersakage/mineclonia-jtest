@@ -1512,18 +1512,27 @@ mcl_levelgen.rtree_index_silly = rtree_index_silly
 mcl_levelgen.rtree_index_closest = rtree_index_closest
 mcl_levelgen.construct_overworld_lut = construct_overworld_lut
 
+local scratch = {}
+
+local function quantize_index (temperature, humidity,
+			       continentalness, erosion,
+			       depth, weirdness)
+	scratch[1] = quantize (temperature)
+	scratch[2] = quantize (humidity)
+	scratch[3] = quantize (continentalness)
+	scratch[4] = quantize (erosion)
+	scratch[5] = quantize (depth)
+	scratch[6] = quantize (weirdness)
+	scratch[7] = 0.0
+	return scratch
+end
+
 function mcl_levelgen.index_biome_lut (tree, temperature, humidity,
 				       continentalness,
 				       erosion, depth, weirdness)
-	local coords = {
-		quantize (temperature),
-		quantize (humidity),
-		quantize (continentalness),
-		quantize (erosion),
-		quantize (depth),
-		quantize (weirdness),
-		0.0,
-	}
+	local coords = quantize_index (temperature, humidity,
+				       continentalness, erosion,
+				       depth, weirdness)
 	local value, distance = rtree_index_closest (coords, tree)
 	return value.value, value, distance
 end
@@ -6645,9 +6654,9 @@ function mcl_levelgen.munge_biome_coords (seed, x, y, z)
 	local qx = arshift (x, 2)
 	local qy = arshift (y, 2)
 	local qz = arshift (z, 2)
-	local progress_x = band (x, 3) / 4.0
-	local progress_y = band (y, 3) / 4.0
-	local progress_z = band (z, 3) / 4.0
+	x = band (x, 3) / 4.0
+	y = band (y, 3) / 4.0
+	z = band (z, 3) / 4.0
 
 	local nearest_transform = 0
 	local max_distance = huge
@@ -6657,19 +6666,18 @@ function mcl_levelgen.munge_biome_coords (seed, x, y, z)
 		local dy = rshift (band (i, 2), 1)
 		local dz = band (i, 1)
 		local dist = munge_distance (seed, qx + dx, qy + dy,
-					     qz + dz, progress_x - dx,
-					     progress_y - dy,
-					     progress_z - dz)
+					     qz + dz, x - dx, y - dy,
+					     z - dz)
 		if max_distance > dist then
 			nearest_transform = i
 			max_distance = dist
 		end
 	end
 
-	local dx = rshift (band (nearest_transform, 4), 2)
-	local dy = rshift (band (nearest_transform, 2), 1)
-	local dz = band (nearest_transform, 1)
-	return qx + dx, qy + dy, qz + dz
+	x = rshift (band (nearest_transform, 4), 2)
+	y = rshift (band (nearest_transform, 2), 1)
+	z = band (nearest_transform, 1)
+	return qx + x, qy + y, qz + z
 end
 
 if mcl_levelgen.detect_luajit () then

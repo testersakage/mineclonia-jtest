@@ -11,6 +11,9 @@ dofile(mcl_villages.modpath.."/buildings.lua")
 dofile(mcl_villages.modpath.."/paths.lua")
 dofile(mcl_villages.modpath.."/pois.lua")
 dofile(mcl_villages.modpath.."/api.lua")
+dofile(mcl_villages.modpath.."/schemgen.lua")
+
+mcl_levelgen.register_levelgen_script (mcl_villages.modpath .. "/lg_register.lua")
 
 --
 -- load settlements on server
