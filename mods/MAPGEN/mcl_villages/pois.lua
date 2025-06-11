@@ -751,8 +751,8 @@ mcl_villages.register_poi ("mcl_villages:bell", {
 	village_center = true,
 })
 
-mcl_villages.register_poi ("mcl_villages:provisional_poi", {
-	is_valid = function (nodepos)
+local function any_poi_valid ()
+	return function (nodepos)
 		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
 			or node.name == "mcl_blast_furnace:blast_furnace"
@@ -769,6 +769,15 @@ mcl_villages.register_poi ("mcl_villages:provisional_poi", {
 			or core.get_item_group (node.name, "composter") > 0
 			or core.get_item_group (node.name, "brewing_stand") > 0
 			or core.get_item_group (node.name, "cauldron") > 0)
-	end,
+	end
+end
+
+mcl_villages.register_poi ("mcl_villages:provisional_poi", {
+	is_valid = any_poi_valid,
+	village_center = false,
+})
+
+mcl_villages.register_poi ("mcl_villages:worldgen_reservation", {
+	is_valid = any_poi_valid,
 	village_center = false,
 })

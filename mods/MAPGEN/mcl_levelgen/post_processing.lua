@@ -900,7 +900,7 @@ if mcl_levelgen.load_feature_environment then
 end
 
 local function async_function (vm, run, heightmap, wg_heightmap, biomes,
-			       structure_masks)
+			       structure_masks, structure_features)
 	if levelgen_previous_vm and levelgen_previous_vm.close then
 		levelgen_previous_vm:close ()
 	end
@@ -911,7 +911,7 @@ local function async_function (vm, run, heightmap, wg_heightmap, biomes,
 	local preset = mcl_levelgen.overworld_preset
 	local relight_list, gen_notifies, fluids_to_transform, features, c_above, c_below
 		= mcl_levelgen.process_features (vm, run, heightmap, wg_heightmap,
-						 structure_masks,
+						 structure_masks, structure_features,
 						 biomes, OVERWORLD_OFFSET, preset.min_y,
 						 preset.height, preset)
 	levelgen_previous_vm = vm
@@ -1076,6 +1076,7 @@ end
 
 local construct_heightmaps_for_run
 local biome_data_for_run
+local structure_features_for_run
 
 local v = vector.zero ()
 
@@ -1121,11 +1122,12 @@ local function post_mapblock_run (run)
 	local heightmap, wg_heightmap, structure_masks
 		= construct_heightmaps_for_run (run)
 	local biomes = biome_data_for_run (run)
+	local structure_features = structure_features_for_run (run)
 	local vm = VoxelManip (v1, v2)
 
 	core.handle_async (async_function, run_execution_cb, vm, run,
 			   heightmap, wg_heightmap, biomes,
-			   structure_masks)
+			   structure_masks, structure_features)
 	if vm.close then
 		vm:close ()
 	end
@@ -2236,6 +2238,60 @@ local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
 function mcl_levelgen.level_to_minetest_position (x, y, z)
 	return x, y - OVERWORLD_OFFSET, -z - 1
 end
+
+------------------------------------------------------------------------
+-- Structure deferred feature generation.
+------------------------------------------------------------------------
+
+local level_to_minetest_position = mcl_levelgen.level_to_minetest_position
+
+function structure_features_for_run (run)
+	local features = {}
+
+	if not run.supplemental then
+		local x, z = run.x, run.z
+		for y = run.y1, run.y2 do
+			local name = "dg" .. hashmapblock (x, y, z)
+			local deferred_data = storage:get_string (name)
+			if deferred_data and deferred_data ~= "" then
+				local record = core.deserialize (deferred_data)
+				for _, feature in ipairs (record) do
+					table.insert (features, feature)
+				end
+			end
+		end
+	end
+	return features
+end
+
+local function handle_deferred_generation (_, data)
+	local x, y, z = level_to_minetest_position (data[1], data[2], data[3])
+	local bx, by, bz = arshift (x, 4), arshift (y, 4), arshift (z, 4)
+	local hash = hashmapblock (bx, by, bz)
+	local deferred_data = storage:get_string ("dg" .. hash)
+	local list
+	if deferred_data and deferred_data ~= "" then
+		list = core.deserialize (deferred_data)
+
+		-- Don't permit the same feature to be generated twice
+		-- in the same position.
+		for _, existing in ipairs (list) do
+			if existing[1] == data[1]
+				and existing[2] == data[2]
+				and existing[3] == data[3]
+				and existing[4] == data[4] then
+				return
+			end
+		end
+		table.insert (list, data)
+	else
+		list = { data, }
+	end
+	storage:set_string ("dg" .. hash, core.serialize (list))
+end
+
+mcl_levelgen.register_notification_handler ("mcl_levelgen:defer_feature_placement",
+					    handle_deferred_generation)
 
 ------------------------------------------------------------------------
 -- Async environment registration.

@@ -10,15 +10,15 @@ local lighting_disabled = mcl_levelgen.lighting_disabled
 -- local zone = require ("jit.zone")
 
 if core.global_exists ("jit") then
-	jit.opt.start ("maxmcode=16777216", "maxtrace=8000",
+	jit.opt.start ("maxmcode=33554432", "maxtrace=100000",
 		       -- Just large enough that loops employing RNGs
 		       -- can be unrolled and compiled but the
 		       -- fix_distances loop in pick_grid_positions is
 		       -- not.
 		       "loopunroll=35", "maxside=1000")
-	-- require ("jit.dump").start ("+biraxmT", "server_perf.txt")
+	-- require ("jit.dump").start ("+birxmT", "server_perf.txt")
 	-- local profile = require ("jit.p")
-	-- profile.start ("fz")
+	-- profile.start ("fv")
 end
 
 local overworld_preset = mcl_levelgen.overworld_preset
@@ -43,9 +43,33 @@ end
 local floor = math.floor
 
 -- local profile = require ("jit.p")
+-- local v = require ("jit.v")
+
+-- local function do_jit_ctrl ()
+-- 	if core.ipc_get ("mcl_levelgen:jit_flush") then
+-- 		jit.flush ()
+-- 		core.ipc_set ("mcl_levelgen:jit_flush", false)
+-- 	end
+-- 	if core.ipc_get ("mcl_levelgen:jit_profiler") then
+-- 		profile.start ("f2v")
+-- 		core.ipc_set ("mcl_levelgen:jit_profiler", false)
+-- 	end
+-- 	if core.ipc_get ("mcl_levelgen:jit_v") then
+-- 		require ("jit.v").start ()
+-- 		core.ipc_set ("mcl_levelgen:jit_profiler", false)
+-- 	end
+-- 	if core.ipc_get ("mcl_levelgen:jit_profiler_flush") then
+-- 		profile.stop ()
+-- 		core.ipc_set ("mcl_levelgen:jit_profiler_flush", false)
+-- 	end
+-- end
+
+-- local icnt = 0
+-- profile.start ("fv")
 
 core.register_on_generated (function (vmanip, minp, maxp, _)
 	-- profile.start ("5fv")
+	-- do_jit_ctrl ()
 	local emin, emax = vmanip:get_emerged_area ()
 	area = VoxelArea (vector.subtract (emin, minp),
 			  vector.subtract (emax, minp))
@@ -61,6 +85,8 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	local level_height = overworld_preset.height / 16
 	assert (level_min == floor (level_min))
 	assert (level_height == floor (level_height))
+	-- print (string.format ("{%d,%d,%d,%d,%d,%d,},", minp.x, minp.y, minp.z,
+	-- 		      maxp.x, maxp.y, maxp.z))
 	-- local clock = core.get_us_time ()
 	-- zone ("Biome generation")
 	mcl_levelgen.generate_biomes_at_block (overworld_preset, biomes,
@@ -71,6 +97,9 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	if not overworld_terrain:generate (minp.x, OVERWORLD_OFFSET + minp.y,
 					   -minp.z - chunksize, cids, param2s,
 					   structuremask, index, biomes) then
+		local notifications
+			= mcl_levelgen.flush_structure_generation_notifications ()
+		core.save_gen_notify ("mcl_levelgen:gen_notifies", notifications)
 		return
 	end
 	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
@@ -102,6 +131,11 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 		core.save_gen_notify ("mcl_levelgen:structure_mask",
 				      structuremask)
 	end
-	-- print ("=== Generation complete ===")
-	-- profile.stop ()
+	-- icnt = icnt + 1
+	-- print (icnt)
+	-- if icnt >= 20 then
+	-- 	print ("\n=== 20 chunks generated ===")
+	-- 	icnt = 0
+	-- 	profile.start ("fv")
+	-- end
 end)

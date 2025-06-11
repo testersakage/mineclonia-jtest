@@ -126,15 +126,13 @@ local function vein_block_at_position (gen, x, y, z, cid_default_block)
 
 	local selector = gen.vein_toggle (x, y, z, nil)
 	local vein = vein_select (selector)
-	local yabove = vein[2] - y
-	local ybelow = y - vein[1]
-	if yabove >= 0 and ybelow >= 0 then
-		local mindist = mathmin (yabove, ybelow)
-		local ore_density = mathabs (selector)
+	if vein[2] - y >= 0 and y - vein[1] >= 0 then
+		local mindist = mathmin (vein[2] - y, y - vein[1])
 		-- Reduce the likelyhood of ore generation near the
 		-- periphery of a vein.
-		local fringe_penalty = map_values (mindist, 0.0, 20.0, -0.2, 0.0)
-		if ore_density + fringe_penalty < 0.4 then
+		local fringe_penalty
+			= map_values (mindist, 0.0, 20.0, -0.2, 0.0)
+		if mathabs (selector) + fringe_penalty < 0.4 then
 			return cid_default_block, 0
 		else
 			local rng = gen.ore_random
@@ -155,7 +153,7 @@ local function vein_block_at_position (gen, x, y, z, cid_default_block)
 			end
 
 			local type_selector
-				= map_values (ore_density, 0.4, 0.6, 0.1, 0.3)
+				= map_values (mathabs (selector), 0.4, 0.6, 0.1, 0.3)
 			if rng:next_float () < type_selector
 				and gen.vein_gap (x, y, z, nil) > -0.3 then
 				return (rng:next_float () < 0.02 and vein[4] or vein[3]), 0
@@ -513,8 +511,8 @@ local function pack_height_map (surface, motion_blocking)
 	local bias = 512
 	local bits = 10
 
-	return bor (lshift (surface + bias, bits),
-		    motion_blocking + bias)
+	return lshift (surface + bias, bits)
+		+ (motion_blocking + bias)
 end
 
 mcl_levelgen.pack_height_map = pack_height_map
@@ -760,7 +758,6 @@ local function update_structuremask (x, y, z, structuremask,
 	local ix = x - structuremask[1]
 	local iy = y - structuremask[2]
 	local iz = z - structuremask[3]
-	local w = (structuremask[4] - structuremask[1]) + 1
 	local h = (structuremask[5] - structuremask[2]) + 1
 	local l = (structuremask[6] - structuremask[3]) + 1
 	local idx = ((ix * h) + iy) * l + iz
@@ -772,7 +769,7 @@ local function update_structuremask (x, y, z, structuremask,
 				   lshift (structure_step, bit))
 	return elem
 end
-	
+
 function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_index, biomes)
 	local y_min = self.y_min
 	local chunksize = self.chunksize
@@ -844,18 +841,15 @@ function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_i
 				-- Begin processing individual blocks
 				-- in this cell.
 				for internal_y = cell_height - 1, 0, -1 do
-					local progress = internal_y / cell_height
 					local y_pos = y_base + internal_y
-					interpolator_update_y (self, progress)
+					interpolator_update_y (self, internal_y / cell_height)
 
 					for internal_x = 0, cell_width - 1 do
-						local progress = internal_x / cell_width
 						local x_pos = x_base + internal_x
-						interpolator_update_x (self, progress)
+						interpolator_update_x (self, internal_x / cell_width)
 
 						for internal_z = 0, cell_width - 1 do
-							local progress = internal_z / cell_width
-							interpolator_update_z (self, progress)
+							interpolator_update_z (self, internal_z / cell_width)
 							local z_pos = z_base + internal_z
 							generate_step (self, x_pos, y_pos, z_pos,
 								       aquifer, get_node,
@@ -898,9 +892,11 @@ function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_i
 	self:regenerate_heightmaps (gn, chunksize, self.preset)
 
 	-- Process structures.
+	-- local clock = core.get_us_time ()
 	local structure_extents
 		= mcl_levelgen.finish_structures (self.structures, self,
 						  biomes, x, y, z, index, gn)
+	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
 	structuremask[1] = structure_extents[1]
 	structuremask[2] = mathmax (structure_extents[2], y)
 	structuremask[3] = structure_extents[3]
@@ -915,7 +911,6 @@ function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_i
 	local y1 = mathmin (y_max, y_min + level_height - 1)
 	local i = index (0, y0 - y_min, 0, chunksize, level_height)
 	local skip = (level_height - (y1 - y0 + 1)) * chunksize
-	local structure_idx
 	for ix = 0, chunksize - 1 do
 		local x_within_p = ix >= (structuremask[1] - x)
 			and ix <= (structuremask[4] - x)
@@ -930,9 +925,8 @@ function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_i
 				cids[idx], param2s[idx], structure_step
 					= structure_decode_node (gn[i])
 				if x_within_p and y_within_p and z_within_p then
-					structure_idx
-						= update_structuremask (x + ix, iy, z + iz,
-									structuremask, structure_step)
+					update_structuremask (x + ix, iy, z + iz,
+							      structuremask, structure_step)
 				end
 				i = i + 1
 			end

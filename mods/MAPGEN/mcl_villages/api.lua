@@ -161,6 +161,9 @@ local function adjust_weights(biome, crop_type)
 	table.sort(weighted_crops[biome][crop_type], function(a, b)
 		return a.total < b.total
 	end)
+	if core.ipc_set then
+		core.ipc_set ("mcl_villages:crop_types", weighted_crops)
+	end
 end
 
 function mcl_villages.get_crop_types()
@@ -203,7 +206,6 @@ function mcl_villages.register_crop(crop_def)
 	end
 
 	for biome, weight in pairs(crop_def.biomes) do
-
 		if crop_list[biome] == nil then
 			crop_list[biome] = {}
 		end

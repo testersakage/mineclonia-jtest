@@ -664,7 +664,7 @@ function mcl_villages.post_process_village(blockseed)
 
 				local job_pos = table.remove(jobs, 1)
 				if job_pos then
-					l:claim_poi (job_pos)
+					l:claim_poi (job_pos, nil)
 				end
 
 				for _, callback in pairs(mcl_villages.on_villager_placed) do

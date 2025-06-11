@@ -487,10 +487,13 @@ function mcl_levelgen.rotate_param2 (cid, param2, rot)
 		local index = facedir * 4 + rot + 1
 		param2 = band (param2, bnot (3))
 		param2 = bor (param2, rotate_facedir[index])
-	elseif cpt2 == "wallmounted" or "colorwallmounted" then
+	elseif cpt2 == "wallmounted" or cpt2 == "colorwallmounted" then
 		local wmountface = mathmin (band (param2, 0x07), DWM_COUNT - 1)
 		if wmountface > 1 then
 			local oldrot = wallmounted_to_rot[wmountface - 2 + 1]
+			if not oldrot then
+				return param2
+			end
 			param2 = band (param2, bnot (7))
 			local newrot = rot_to_wallmounted[band (oldrot - rot, 3)]
 			param2 = bor (param2, newrot)
