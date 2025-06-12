@@ -237,6 +237,7 @@ function mcl_potions.register_potion(def)
 	if def.has_splash or def.has_splash == nil then
 		local splash_desc = S("Splash @1", pdef.description)
 		local sdef = {}
+		sdef._id_override = def._id_override
 		sdef._tt = def._tt
 		sdef._dynamic_tt = def._dynamic_tt
 		sdef._longdesc = def._longdesc
@@ -260,6 +261,7 @@ function mcl_potions.register_potion(def)
 	if def.has_lingering or def.has_lingering == nil then
 		local ling_desc = S("Lingering @1", pdef.description)
 		local ldef = {}
+		ldef._id_override = def._id_override
 		ldef._tt = def._tt
 		ldef._dynamic_tt = def._dynamic_tt
 		ldef._longdesc = def._longdesc
@@ -293,6 +295,7 @@ function mcl_potions.register_potion(def)
 			arr_desc = S("Strange Tipped Arrow")
 		end
 		local adef = {}
+		adef._id_override = def._id_override
 		adef._tt = def._tt
 		adef._dynamic_tt = def._dynamic_tt
 		adef._longdesc = def._longdesc

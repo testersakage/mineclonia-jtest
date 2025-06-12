@@ -12,10 +12,11 @@ local function arrow_image(colorstring, opacity)
 end
 
 function mcl_potions.register_arrow(name, desc, color, def)
+	local id = def._id_override or "mcl_potions:"..name
 	local tt = def._tt or ""
 	local groups = {ammo=1, ammo_bow=1, ammo_crossbow=1, brewitem=1, tipped_arrow = 1, _mcl_potion=1}
 	if def.nocreative then groups.not_in_creative_inventory = 1 end
-	core.register_craftitem("mcl_potions:"..name.."_arrow", table.merge (arrow_def, {
+	core.register_craftitem(id.."_arrow", table.merge (arrow_def, {
 		description = desc,
 		_tt_help = arrow_tt .. "\n" .. tt,
 		_dynamic_tt = def._dynamic_tt,
@@ -36,7 +37,7 @@ function mcl_potions.register_arrow(name, desc, color, def)
 
 	local ARROW_ENTITY = table.copy(core.registered_entities["mcl_bows:arrow_entity"])
 	ARROW_ENTITY.initial_properties.textures = arrow_image (color, 100)
-	ARROW_ENTITY._itemstring = "mcl_potions:"..name.."_arrow"
+	ARROW_ENTITY._itemstring = id.."_arrow"
 
 	function ARROW_ENTITY:_extra_hit_func (obj)
 		local potency, plus = 0, 0
@@ -55,13 +56,13 @@ function mcl_potions.register_arrow(name, desc, color, def)
 		if def.custom_effect then def.custom_effect (obj, potency+1, nil, self._shooter) end
 	end
 
-	core.register_entity("mcl_potions:"..name.."_arrow_entity", ARROW_ENTITY)
+	core.register_entity(id.."_arrow_entity", ARROW_ENTITY)
 
 	core.register_craft({
-		output = "mcl_potions:"..name.."_arrow 8",
+		output = id.."_arrow 8",
 		recipe = {
 			{"mcl_bows:arrow","mcl_bows:arrow","mcl_bows:arrow"},
-			{"mcl_bows:arrow","mcl_potions:"..name.."_lingering","mcl_bows:arrow"},
+			{"mcl_bows:arrow",id.."_lingering","mcl_bows:arrow"},
 			{"mcl_bows:arrow","mcl_bows:arrow","mcl_bows:arrow"}
 		}
 	})

@@ -287,6 +287,18 @@ local function complete_output_table (input, out_table, copy)
 end
 
 core.register_on_mods_loaded (function ()
+	local splash_table = {}
+	local lingering_table = {}
+	for potion, def in pairs(potions) do
+		if def.has_splash then
+			splash_table[potion] = potion.."_splash"
+			if def.has_lingering then
+				lingering_table[potion.."_splash"] = potion.."_lingering"
+			end
+		end
+	end
+	mcl_potions.register_table_modifier("mcl_mobitems:gunpowder", splash_table)
+	mcl_potions.register_table_modifier("mcl_potions:dragon_breath", lingering_table)
 	local copy = {}
 	for k, v in pairs (output_table) do
 		complete_output_table (k, v, copy)
@@ -432,18 +444,6 @@ local function fill_inversion_table() -- autofills with splash and lingering inv
 end
 core.register_on_mods_loaded(fill_inversion_table)
 
-local splash_table = {}
-local lingering_table = {}
-for potion, def in pairs(potions) do
-	if def.has_splash then
-		splash_table[potion] = potion.."_splash"
-		if def.has_lingering then
-			lingering_table[potion.."_splash"] = potion.."_lingering"
-		end
-	end
-end
-mcl_potions.register_table_modifier("mcl_mobitems:gunpowder", splash_table)
-mcl_potions.register_table_modifier("mcl_potions:dragon_breath", lingering_table)
 
 
 local meta_mod_table = { }
