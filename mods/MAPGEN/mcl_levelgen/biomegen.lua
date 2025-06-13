@@ -332,6 +332,7 @@ core.set_gen_notify ({ custom = true, }, nil, {
 	"mcl_levelgen:biome_data",
 	"mcl_levelgen:level_height_map",
 	"mcl_levelgen:structure_mask",
+	"mcl_levelgen:structure_pieces",
 	"mcl_levelgen:gen_notifies",
 })
 

@@ -2,6 +2,10 @@
 -- Level generator callbacks.
 ------------------------------------------------------------------------
 
+local ipairs = ipairs
+local mathmin = math.min
+local mathmax = math.max
+
 mcl_levelgen.initialize_nodeprops_in_async_env ()
 mcl_levelgen.initialize_portable_schematics ()
 
@@ -67,6 +71,30 @@ local floor = math.floor
 -- local icnt = 0
 -- profile.start ("fv")
 
+local function unpack6 (x)
+	return x[1], x[2], x[3], x[4], x[5], x[6]
+end
+
+local function transform_structure_pieces (pieces, minp, maxp)
+	for _, piece in ipairs (pieces) do
+		local x1, y1, z1, x2, y2, z2 = unpack6 (piece)
+		z1, z2 = -z2 - 1, -z1 - 1
+
+		piece[1] = mathmax (x1, minp.x)
+		piece[2] = mathmax (y1 - OVERWORLD_OFFSET, minp.y)
+		piece[3] = mathmax (z1, minp.z)
+		piece[4] = mathmin (x2, maxp.x)
+		piece[5] = mathmin (y2 - OVERWORLD_OFFSET, maxp.y)
+		piece[6] = mathmin (z2, maxp.z)
+
+		if piece[1] > piece[4] or piece[2] > piece[5] or piece[3] > piece[6] then
+			core.log ("warning", ("[mcl_levelgen]: Invalid structure extents: "
+					      .. string.format ("(%d,%d,%d) - (%d,%d,%d)",
+								unpack6 (piece))))
+		end
+	end
+end
+
 core.register_on_generated (function (vmanip, minp, maxp, _)
 	-- profile.start ("5fv")
 	-- do_jit_ctrl ()
@@ -97,9 +125,10 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	if not overworld_terrain:generate (minp.x, OVERWORLD_OFFSET + minp.y,
 					   -minp.z - chunksize, cids, param2s,
 					   structuremask, index, biomes) then
-		local notifications
-			= mcl_levelgen.flush_structure_generation_notifications ()
+		local notifications, _
+			= mcl_levelgen.flush_structure_gen_data ()
 		core.save_gen_notify ("mcl_levelgen:gen_notifies", notifications)
+		core.save_gen_notify ("mcl_levelgen:structure_pieces", nil)
 		return
 	end
 	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
@@ -112,8 +141,10 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 		vmanip:set_lighting ({day=0, night=0,})
 		vmanip:calc_lighting ()
 	end
-	local notifications = mcl_levelgen.flush_structure_generation_notifications ()
+	local notifications, pieces = mcl_levelgen.flush_structure_gen_data ()
 	core.save_gen_notify ("mcl_levelgen:gen_notifies", notifications)
+	transform_structure_pieces (pieces, minp, maxp)
+	core.save_gen_notify ("mcl_levelgen:structure_pieces", pieces)
 
 	-- zone ("Biome encoding")
 	local compressed = mcl_levelgen.encode_biomes (biomes, block_y - level_min,

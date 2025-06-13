@@ -118,7 +118,7 @@ local function do_generate (x1, y1, z1, x2, y2, z2)
 	overworld_terrain:generate (x1, OVERWORLD_OFFSET + y1,
 				    -z1 - 80, a, b, structuremask,
 				    index, biomes)
-	mcl_levelgen.flush_structure_generation_notifications ()
+	mcl_levelgen.flush_structure_gen_data ()
 end
 
 for i = 0, 14 do
