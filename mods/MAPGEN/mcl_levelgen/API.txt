@@ -317,13 +317,6 @@ by X1, Y1, Z1, and X2, Y2, Z2, all inclusive.  These coordinates will
 be converted into Minetest's native coordinate system, but no further
 validation or transformations are applied.
 
-Function: mcl_levelgen.transform_fluid (X, Y, Z)
-
-Arrange to add the block at X, Y, Z to the fluid transformation queue
-upon the completion of this run.  These coordinates will be converted
-into Minetest's native coordinate system, but no further validation or
-transformations will be applied.
-
 Function: mcl_levelgen.place_schematic (X, Y, Z, SCHEMATIC, ROTATION,
 					REPLACEMENTS, FORCE_PLACEMENT,
 					FLAGS, RNG)

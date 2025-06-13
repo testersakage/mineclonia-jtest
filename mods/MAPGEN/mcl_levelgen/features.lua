@@ -371,7 +371,6 @@ local cids, param2s = {}, {}
 local area = nil
 local vm_modified = false
 local relight_rgn, gen_notifies = nil, {}
-local fluids_to_transform = {}
 local heightmap_modifications
 local preset
 local features_requesting_additional_context = {}
@@ -424,7 +423,6 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 	mcl_levelgen.heightmap_modifications = heightmap_modifications
 	preset = p_preset
 	gen_notifies = {}
-	fluids_to_transform = {}
 	structure_features = p_structure_features
 
 	run_min_y = mathmax ((run.y1 - REQUIRED_CONTEXT_Y) * 16 + p_y_offset,
@@ -470,7 +468,7 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 	heightmap = nil
 	wg_heightmap = nil
 	cids, param2s = {}, {}
-	return relight_list, gen_notifies, fluids_to_transform,
+	return relight_list, gen_notifies,
 		features_requesting_additional_context,
 		context_expansion_above,
 		context_expansion_below
@@ -796,13 +794,6 @@ function mcl_levelgen.fix_lighting (x1, y1, z1, x2, y2, z2)
 		x2 + 1, y2 - y_offset + 1, -z1 - 1,
 	}
 	update_relight_rgn (aabb)
-end
-
-function mcl_levelgen.transform_fluid (x, y, z)
-	local x, y, z = convert_level_position (x, y, z)
-	insert (fluids_to_transform, x)
-	insert (fluids_to_transform, y)
-	insert (fluids_to_transform, z)
 end
 
 function mcl_levelgen.request_additional_context (yabove, ybelow)
