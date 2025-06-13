@@ -421,7 +421,7 @@ function mcl_levelgen.generate_stronghold_positions (preset, parms)
 		-- range.
 		local center_x = cx * 16 + 8
 		local center_z = cz * 16 + 8
-		local biome, x, y, z
+		local biome, x, _, z
 			= locate_biome_in_area (preset, center_x,
 						0, center_z, 112, biome_rng,
 						is_preferred_biome,
@@ -816,13 +816,40 @@ end
 local current_structure_start
 local current_structure_piece
 
+local level_chunksize
+local nodes_origin_x
+local nodes_origin_y
+local nodes_origin_z
+local placed_pieces = {}
+local piece_recorded = {}
+
 local function execute_structure_start_in_chunk (level, terrain, start, rng,
-						 x1, z1, x2, z2)
+						 x1, z1, x2, z2, sid, chunksum)
 	current_structure_start = start
 	for _, piece in ipairs (start.pieces) do
-		if intersect_2d_p (piece.bbox, x1, z1, x2, z2) then
+		local bbox = piece.bbox
+		if intersect_2d_p (bbox, x1, z1, x2, z2) then
 			current_structure_piece = piece
 			piece:place (level, terrain, rng, x1, z1, x2, z2)
+		end
+
+		if not piece_recorded[piece]
+			and intersect_2d_p (bbox, nodes_origin_x,
+					    nodes_origin_z,
+					    nodes_origin_x + level_chunksize - 1,
+					    nodes_origin_z + level_chunksize - 1)
+			and bbox[5] >= nodes_origin_y
+			and bbox[2] < nodes_origin_y + level_chunksize then
+			insert (placed_pieces, {
+				bbox[1],
+				bbox[2],
+				bbox[3],
+				bbox[4],
+				bbox[5],
+				bbox[6],
+				sid,
+			})
+			piece_recorded[piece] = true
 		end
 	end
 	current_structure_piece = nil
@@ -837,7 +864,7 @@ local current_generation_step
 local gen_notifies = {}
 
 local function place_structures_in_chunk (level, terrain, starts, i,
-					  structures, cx, cz)
+					  structures, cx, cz, chunksum)
 	local x1, z1 = cx * 16, cz * 16
 	local x2, z2 = x1 + 15, z1 + 15
 	local rng = structure_rng
@@ -852,7 +879,8 @@ local function place_structures_in_chunk (level, terrain, starts, i,
 		for _, start in ipairs (starts) do
 			if start.structure == sid then
 				execute_structure_start_in_chunk (level, terrain, start,
-								  rng, x1, z1, x2, z2)
+								  rng, x1, z1, x2, z2,
+								  sid, chunksum)
 			end
 		end
 	end
@@ -889,7 +917,8 @@ function mcl_levelgen.finish_structures (level, terrain, biomes, x, y, z,
 					local hash = internal_chunk_hash (dx, dz)
 					local starts = refs[hash]
 					place_structures_in_chunk (level, terrain, starts, i,
-								   structures, cx + dx, cz + dz)
+								   structures, cx + dx, cz + dz,
+								   dx + dz)
 				end
 			end
 		end
@@ -1180,14 +1209,10 @@ local biomes
 local heightmap
 local heightmap_wg
 local index
-local level_chunksize
 local level_height
 local level_max_y
 local level_min
 local nodes
-local nodes_origin_x
-local nodes_origin_y
-local nodes_origin_z
 
 function prepare_structure_placement0 (level, terrain, p_biomes,
 				       p_index, x, y, z, p_nodes)
@@ -1480,10 +1505,12 @@ function mcl_levelgen.notify_generated (name, x, y, z, data, append)
 	end
 end
 
-function mcl_levelgen.flush_structure_generation_notifications ()
-	local n = gen_notifies
+function mcl_levelgen.flush_structure_gen_data ()
+	local notifies, pieces = gen_notifies, placed_pieces
 	gen_notifies = {}
-	return n
+	placed_pieces = {}
+	piece_recorded = {}
+	return notifies, pieces
 end
 
 function mcl_levelgen.current_structure_start ()
