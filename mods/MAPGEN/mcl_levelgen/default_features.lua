@@ -1277,8 +1277,6 @@ local function is_lake (in_range, x, y, z)
 	return in_range[hash_lake_pos (x, y, z)]
 end
 
-local transform_fluid = mcl_levelgen.transform_fluid
-
 local function lake_place (_, x, y, z, cfg, rng)
 	lake_rng:reseed (rng:next_long ())
 	if y <= run_minp.y + 4 or y > run_maxp.y then
@@ -1387,7 +1385,6 @@ local function lake_place (_, x, y, z, cfg, rng)
 				else
 					set_block (x, y, z, fluid_cid, 0)
 				end
-				transform_fluid (x, y, z)
 			end
 		end
 
@@ -1406,7 +1403,6 @@ local function lake_place (_, x, y, z, cfg, rng)
 					and indexof (barrier_immune, cid) == -1 then
 					set_block (x, y, z, barrier_cid, 0)
 				end
-				transform_fluid (x, y, z)
 			end
 		end
 		return true
@@ -2452,7 +2448,6 @@ local function spring_place (_, x, y, z, cfg, rng)
 		end
 		if rock == cfg.rock_count and hole == cfg.hole_count then
 			set_block (x, y, z, cfg.fluid_cid, 0)
-			transform_fluid (x, y, z)
 			fix_lighting (x, y, z, x, y, z)
 			return true
 		end
