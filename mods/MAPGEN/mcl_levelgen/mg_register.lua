@@ -135,7 +135,6 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	-- zone ()
 	vmanip:set_data (cids)
 	vmanip:set_param2_data (param2s)
-	vmanip:update_liquids ()
 
 	if not lighting_disabled then
 		vmanip:set_lighting ({day=0, night=0,})
