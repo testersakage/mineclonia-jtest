@@ -500,6 +500,10 @@ local shutdown_complete = false
 local feature_placement_queue = new_mintree ()
 local mb_records = {}
 
+function mcl_levelgen.get_feature_placement_queue ()
+	return feature_placement_queue
+end
+
 local function hashmapblock (x, y, z)
 	return lshift (y + 2048, 24)
 		+ lshift (x + 2048, 12)
@@ -1597,6 +1601,7 @@ end
 -- end
 
 local indexof = table.indexof
+local save_structure_pieces
 
 function save_gen_data (bx, bx1, by, by1, bz, bz1, chunksize)
 	local custom = core.get_mapgen_object ("gennotify").custom
@@ -1681,6 +1686,11 @@ function save_gen_data (bx, bx1, by, by1, bz, bz1, chunksize)
 					      structuremask)
 			end
 		end
+	end
+
+	local pieces = custom["mcl_levelgen:structure_pieces"]
+	if pieces then
+		save_structure_pieces (pieces)
 	end
 end
 
@@ -1997,7 +2007,7 @@ function biome_data_for_run (run, result)
 end
 
 ------------------------------------------------------------------------
--- Mapblock flag HUD.
+-- Debug HUD.
 ------------------------------------------------------------------------
 
 local huds = {}
@@ -2117,6 +2127,28 @@ local function get_heightmap_string (x, z, self_pos, generation_only)
 	end
 end
 
+local function get_structure_string (self_pos)
+	local strs = {}
+
+	for i, entry in pairs (mcl_levelgen.get_structures_at (self_pos, true)) do
+		if #strs >= 1 then
+			table.insert (strs, ", ")
+		end
+		table.insert (strs, (entry.data .. " // "
+				     .. vector.to_string (entry.min)
+				     .. " "
+				     .. vector.to_string (entry.max)))
+	end
+	if #strs > 3 then
+		local n = #strs
+		for i = 5, #strs do
+			strs[i] = nil
+		end
+		strs[4] = ", and " .. (n - 3) .. " more"
+	end
+	return table.concat (strs)
+end
+
 local function hud_text (player)
 	local self_pos = mcl_util.get_nodepos (player:get_pos ())
 	local x = floor (self_pos.x / 16)
@@ -2138,8 +2170,10 @@ local function hud_text (player)
 					  get_status_string (x, y, z)))
 	table.insert (tbl, string.format ("Heightmap: %s\n",
 					  get_heightmap_string (x, z, self_pos, false)))
-	table.insert (tbl, string.format ("Heightmap (Generation time): %s",
+	table.insert (tbl, string.format ("Heightmap (Generation time): %s\n",
 					  get_heightmap_string (x, z, self_pos, true)))
+	table.insert (tbl, string.format ("Intersecting structures: %s",
+					  get_structure_string (self_pos)))
 	return table.concat (tbl)
 end
 
@@ -2292,6 +2326,63 @@ end
 
 mcl_levelgen.register_notification_handler ("mcl_levelgen:defer_feature_placement",
 					    handle_deferred_generation)
+
+------------------------------------------------------------------------
+-- Structure storage.
+-- This implements an AreaStore where the extents of all structures are
+-- saved for rapid indexing.
+------------------------------------------------------------------------
+
+local structure_extents = AreaStore ()
+
+do
+	local str = storage:get_string ("structure_extents")
+	if str and str ~= "" then
+		local data = core.decompress (str, "zstd")
+		structure_extents:from_string (data)
+	end
+end
+
+local v1, v2 = vector.zero (), vector.zero ()
+
+local function unpack6 (aabb)
+	return aabb[1], aabb[2], aabb[3], aabb[4], aabb[5], aabb[6]
+end
+
+function save_structure_pieces (pieces)
+	structure_extents:reserve (#pieces)
+	for _, piece in ipairs (pieces) do
+		local x1, y1, z1, x2, y2, z2 = unpack6 (piece)
+		local sid = piece[7]
+		v1.x, v1.y, v1.z = x1, y1, z1
+		v2.x, v2.y, v2.z = x2, y2, z2
+		local id = structure_extents:insert_area (v1, v2, sid)
+		if not id then
+			local blurb = table.concat ({
+				"[mcl_levelgen]: Failed to record structure piece: ",
+				sid,
+				" spanning ",
+				string.format ("(%d,%d,%d) - (%d,%d,%d)",
+					       x1, y1, z1, x2, y2, z2),
+			})
+			core.log ("error", blurb)
+		end
+	end
+end
+
+local function save_structure_extents ()
+	local str = structure_extents:to_string ()
+	local data = core.compress (str, "zstd")
+	storage:set_string ("structure_extents", data)
+	core.log ("info", ("[mcl_levelgen]: Structure extents occupy "
+			   .. #str .. " bytes (" .. #data .. " bytes compressed)"))
+end
+
+function mcl_levelgen.get_structures_at (pos, include_corners)
+	return structure_extents:get_areas_for_pos (pos, include_corners, true)
+end
+
+core.register_on_shutdown (save_structure_extents)
 
 ------------------------------------------------------------------------
 -- Async environment registration.
