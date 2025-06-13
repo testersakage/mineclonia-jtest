@@ -483,7 +483,6 @@ local function conflicting_structure_mask (x, y, z)
 
 		if x >= x1 and y >= y1 and z >= z1
 			and x <= x2 and y <= y2 and z <= z2 then
-			local w = (x2 - x1) + 1
 			local h = (y2 - y1) + 1
 			local l = (z2 - z1) + 1
 			local ix = x - x1
