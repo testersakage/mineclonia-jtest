@@ -24,6 +24,8 @@ local ipairs = ipairs
 local pairs = pairs
 local ull = mcl_levelgen.ull
 local insert = table.insert
+local mathcos = math.cos
+local mathsin = math.sin
 
 local function indexof (list, val)
 	for i, v in ipairs (list) do
@@ -97,7 +99,8 @@ function build_random_spread_chunk_test (spacing, separation, spread_method)
 	end
 
 	local rng = default_rng
-	return function (level_seed, salt, cx, cz)
+	return function (level, salt, cx, cz)
+		local level_seed = level.level_seed
 		-- Divide the level into SPACING sized regions and
 		-- select a random chunk within that is at least
 		-- SEPARATION removed from adjacent regions.
@@ -257,10 +260,195 @@ function structure_starts_in_chunk_p (level, placement, cx, cz)
 	local method = placement.frequency_reduction_method
 	local frequency = placement.frequency
 	local salt = placement.salt
-	return placement.chunk_test (level_seed, salt, cx, cz)
+	return placement.chunk_test (level, salt, cx, cz)
 		and (frequency >= 1.0 or method (level_seed, salt,
 						 cx, cz, frequency))
 		and evaluate_exclusions (level, placement, cx, cz)
+end
+
+function mcl_levelgen.build_random_spread_placement (frequency, reduction,
+						     spacing, separation,
+						     salt, spread_type,
+						     locate_offset,
+						     exclusion_zone)
+	local tbl = {
+		frequency = frequency or 1.0,
+		frequency_reduction_method
+			= (reduction and assert (frequency_reducers[reduction]))
+				or frequency_reducer_default,
+		chunk_test = build_random_spread_chunk_test (spacing, separation,
+							     spread_type),
+		locate_offset = locate_offset or { 0, 0, 0, },
+		exclusion_zone = exclusion_zone,
+		salt = assert (salt),
+	}
+
+	return tbl
+end
+
+------------------------------------------------------------------------
+-- Concentric ring placement.
+------------------------------------------------------------------------
+
+-- local concentric_ring_cfg = {
+-- 	distance = distance,
+-- 	spread = spread,
+-- 	count = count,
+-- 	preferred_biomes = preferred_biomes,
+-- }
+
+local function struct_hash (cx, cz)
+	-- One bit wider than necessary to accomodate chunks near the
+	-- edge(s) of the level.
+	local x = cx + 4096
+	local z = cz + 4096
+	assert (x >= 0 and z >= 0)
+	return bor (lshift (x, 13), z)
+end
+
+local tostringull = mcl_levelgen.tostringull
+
+if core and core.get_mod_storage then
+
+local storage = core.get_mod_storage ()
+
+local registered_concentric_ring_configurations = {}
+	
+function mcl_levelgen.register_concentric_ring_configuration (name, parms)
+	registered_concentric_ring_configurations[name] = parms
+end
+
+function mcl_levelgen.prime_concentric_placement (preset, name)
+	local seed = tostringull (preset.seed)
+	local key = string.format ("concentric_ring_placement,%s,%s",
+				   seed, name)
+
+	local existing = storage:get_string (key)
+	local ipc_key = "mcl_levelgen:concentric_ring_cfgs," .. seed
+	local tbl = core.ipc_get (ipc_key) or {}
+	if existing and existing ~= "" then
+		tbl[name] = core.deserialize (existing)
+	else
+		core.log ("action", "[mcl_levelgen]: Preparing stronghold placement.  This may take a while.")
+		local def = registered_concentric_ring_configurations[name]
+		local list = mcl_levelgen.generate_stronghold_positions (preset, def)
+		storage:set_string (key, core.serialize (list))
+		tbl[name] = list
+	end
+	core.ipc_set (ipc_key, tbl)
+end
+
+else
+
+function mcl_levelgen.register_concentric_ring_configuration (name, parms)
+end
+
+function mcl_levelgen.prime_concentric_placement (preset, name)
+end
+
+end
+
+local blurb
+	= "Concentric ring placement was utilized in a preset for which it was not prepared"
+
+local function build_concentric_ring_chunk_test (tbl)
+	local id = tbl.id
+	return function (level, salt, cx, cz)
+		local hash = struct_hash (cx, cz)
+		local is_start = level.stronghold_starts[id]
+		assert (is_start, blurb)
+		return is_start[hash]
+	end
+end
+
+function mcl_levelgen.build_concentric_ring_placement (id, frequency, reduction, salt,
+						       locate_offset, exclusion_zone)
+	local tbl = {
+		id = id,
+		frequency = frequency or 1.0,
+		frequency_reduction_method
+			= (reduction and assert (frequency_reducers[reduction]))
+				or frequency_reducer_default,
+		salt = assert (salt),
+		locate_offset = locate_offset or { 0, 0, 0, },
+		exclusion_zone = exclusion_zone,
+	}
+	tbl.chunk_test = build_concentric_ring_chunk_test (tbl)
+	return tbl
+end
+
+local function is_preferred_biome (biome, preferred_biomes)
+	return indexof (preferred_biomes, biome) ~= -1
+end
+
+local locate_biome_in_area = mcl_levelgen.locate_biome_in_area
+local pi = math.pi
+
+local function round (x)
+	if x < 0 then
+		local int = ceil (x)
+		local frac = x - int
+		return int - ((frac <= -0.5) and 1 or 0)
+	end
+	local int = floor (x)
+	local frac = x - int
+	return int + ((frac >= 0.5) and 1 or 0)
+end
+
+function mcl_levelgen.generate_stronghold_positions (preset, parms)
+	local distance = parms.distance
+	local count = parms.count
+	local spread = parms.spread
+	local preferred_biomes = parms.preferred_biomes
+	local rng = mcl_levelgen.jvm_random (preset.seed)
+	local angle = rng:next_double () * pi * 2
+	local completed_spread = 0
+	local triangle_counter = 0
+	local positions = {}
+
+	for i = 0, count - 1 do
+		local dist_triangle
+			= (4 * distance + distance * triangle_counter * 6)
+		local dist_randomized = (rng:next_double () - 0.5)
+			* distance * 2.5
+		local dist_scaled
+			= dist_triangle + dist_randomized
+		local cx = round (mathcos (angle) * dist_scaled)
+		local cz = round (mathsin (angle) * dist_scaled)
+		local biome_rng = rng:fork ()
+
+		-- First attempt to locate a preferred biome within
+		-- range.
+		local center_x = cx * 16 + 8
+		local center_z = cz * 16 + 8
+		local biome, x, y, z
+			= locate_biome_in_area (preset, center_x,
+						0, center_z, 112, biome_rng,
+						is_preferred_biome,
+						preferred_biomes)
+		if biome then
+			insert (positions, {
+				arshift (x, 4),
+				arshift (z, 4),
+			})
+		else
+			insert (positions, {
+				cx, cz,
+			})
+		end
+
+		angle = angle + (pi * 2) / spread
+		completed_spread = completed_spread + 1
+		if completed_spread == spread then
+			triangle_counter = triangle_counter + 1
+			completed_spread = 0
+			spread = spread + (2 * spread / (triangle_counter + 1))
+			spread = mathmin (spread, count - i)
+			angle = angle + rng:next_double () * pi * 2
+		end
+	end
+
+	return positions
 end
 
 ------------------------------------------------------------------------
@@ -287,26 +475,6 @@ end
 
 mcl_levelgen.registered_structures = {}
 mcl_levelgen.registered_structure_sets = registered_structure_sets
-
-function mcl_levelgen.build_random_spread_placement (frequency, reduction,
-						     spacing, separation,
-						     salt, spread_type,
-						     locate_offset,
-						     exclusion_zone)
-	local tbl = {
-		frequency = frequency or 1.0,
-		frequency_reduction_method
-			= (reduction and assert (frequency_reducers[reduction]))
-				or frequency_reducer_default,
-		chunk_test = build_random_spread_chunk_test (spacing, separation,
-							     spread_type),
-		locate_offset = locate_offset or { 0, 0, 0, },
-		exclusion_zone = exclusion_zone,
-		salt = assert (salt),
-	}
-
-	return tbl
-end
 
 function mcl_levelgen.register_structure_set (keyword, tbl)
 	if mcl_levelgen.registered_structure_sets[keyword] then
@@ -401,7 +569,6 @@ function mcl_levelgen.make_structure_level (preset)
 	local structure_level = {
 		preset = preset,
 		level_seed = preset.seed,
-		concentric_rings_seed = preset.seed,
 		structure_sets = {},
 		structure_starts = {},
 		structure_refs = {},
@@ -422,6 +589,28 @@ function mcl_levelgen.make_structure_level (preset)
 			table.insert (structure_level.structure_sets, set)
 		end
 	end
+
+	-- Load (and hash) stronghold positions generated in the main
+	-- thread.
+	local stronghold_starts = {}
+	if core then
+		local seed = tostringull (preset.seed)
+		local ipc_key = "mcl_levelgen:concentric_ring_cfgs," .. seed
+		local tbl = core.ipc_get (ipc_key)
+
+		if tbl then
+			for name, list in pairs (tbl) do
+				local is_start = {}
+				for _, pos in ipairs (list) do
+					local hash = struct_hash (pos[1], pos[2])
+					is_start[hash] = true
+				end
+				stronghold_starts[name] = is_start
+			end
+		end
+	end
+	structure_level.stronghold_starts = stronghold_starts
+
 	return structure_level
 end
 
@@ -499,15 +688,6 @@ end
 -- should be the terrain generator in use.
 
 local chunksize
-
-local function struct_hash (cx, cz)
-	-- One bit wider than necessary to accomodate chunks near the
-	-- edge(s) of the level.
-	local x = cx + 4096
-	local z = cz + 4096
-	assert (x >= 0 and z >= 0)
-	return bor (lshift (x, 13), z)
-end
 
 local function internal_chunk_hash (dx, dz)
 	local x = dx
@@ -837,6 +1017,15 @@ function mcl_levelgen.any_collisions (pieces, bbox)
 		end
 	end
 	return false
+end
+
+function mcl_levelgen.first_collision (pieces, bbox)
+	for _, piece in ipairs (pieces) do
+		if AABB_intersect_p (piece.bbox, bbox) then
+			return piece
+		end
+	end
+	return nil
 end
 
 function mcl_levelgen.any_collisions_2d (pieces, bbox, parent)

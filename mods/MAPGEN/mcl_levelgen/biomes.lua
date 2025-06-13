@@ -6745,3 +6745,37 @@ function mcl_levelgen.get_biome_seed (seed)
 	mcl_levelgen.biomeseedull (tmp, seed)
 	return tmp
 end
+
+------------------------------------------------------------------------
+-- Biome locating.
+------------------------------------------------------------------------
+
+function mcl_levelgen.locate_biome_in_area (preset, x, y, z, radius, rng,
+					    predicate, arg)
+	local qx = toquart (x)
+	local qz = toquart (z)
+	local qy = toquart (y)
+	local qradius = toquart (radius)
+	local biome, pos_x, pos_z
+	local cnt_matching = 0
+
+	preset:index_biomes_begin (qradius * 2 + 1, qradius * 2 + 1,
+				   qx - qradius, qz - qradius)
+	for dz = -qradius, qradius do
+		for dx = -qradius, qradius do
+			local x, z = qx + dx, qz + dz
+			local located_biome
+				= preset:index_biomes_cached (x, qy, z)
+			if predicate (located_biome, arg) then
+			-- Select a random biome from within this area.
+				if not biome or rng:next_within (cnt_matching + 1) == 0 then
+					biome = located_biome
+					pos_x = toblock (x)
+					pos_z = toblock (z)
+				end
+				cnt_matching = cnt_matching + 1
+			end
+		end
+	end
+	return biome, pos_x, y, pos_z
+end

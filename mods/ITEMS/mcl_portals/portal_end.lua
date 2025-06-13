@@ -279,18 +279,25 @@ if core.get_modpath("screwdriver") then
 	rotate_frame_eye = false
 end
 
+local function maybe_activate_end_portal (pos, nosound)
+	local ok, ppos = check_end_portal_frame(pos)
+	if ok then
+		-- Epic 'portal open' sound effect that can be heard everywhere
+		if not nosound then
+			core.sound_play("mcl_portals_open_end_portal", {gain=0.8}, true)
+		end
+		end_portal_area(ppos)
+	end
+end
+
+mcl_portals.maybe_activate_end_portal = maybe_activate_end_portal
+
 local function after_place_node(pos, placer, itemstack, pointed_thing) ---@diagnostic disable-line: unused-local
 	local node = core.get_node(pos)
 	if node then
 		node.param2 = (node.param2+2) % 4
 		core.swap_node(pos, node)
-
-		local ok, ppos = check_end_portal_frame(pos)
-		if ok then
-			-- Epic 'portal open' sound effect that can be heard everywhere
-			core.sound_play("mcl_portals_open_end_portal", {gain=0.8}, true)
-			end_portal_area(ppos)
-		end
+		maybe_activate_end_portal (pos, false)
 	end
 end
 
