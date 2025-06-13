@@ -913,14 +913,15 @@ local function async_function (vm, run, heightmap, wg_heightmap, biomes,
 	-- the async environment.
 	local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
 	local preset = mcl_levelgen.overworld_preset
-	local relight_list, gen_notifies, fluids_to_transform, features, c_above, c_below
+	local relight_list, gen_notifies, features, c_above, c_below
 		= mcl_levelgen.process_features (vm, run, heightmap, wg_heightmap,
 						 structure_masks, structure_features,
 						 biomes, OVERWORLD_OFFSET, preset.min_y,
 						 preset.height, preset)
 	levelgen_previous_vm = vm
+
 	return vm, run, heightmap, relight_list, gen_notifies,
-		fluids_to_transform, features, c_above, c_below
+		features, c_above, c_below
 end
 
 local v1 = vector.zero ()
@@ -936,7 +937,6 @@ local apply_feature_context_requisitions
 local run_notification_handlers
 
 local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies,
-				 fluids_to_transform,
 				 features_requesting_additional_context,
 				 c_above, c_below)
 	if shutdown_complete then
@@ -954,6 +954,8 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 	end
 	mb_records[run_hash] = nil
 
+	-- local clock = core.get_us_time ()
+	vm:update_liquids ()
 	vm:write_to_map (false)
 	-- 5.13.0 only API.
 	if vm.close then
@@ -1011,15 +1013,6 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 	end
 	-- print (string.format ("%.2f", (core.get_us_time () - time) / 1000))
 	run_notification_handlers (gen_notifies)
-	-- Queue all fluids that were marked for transformation.
-	for i = 1, #fluids_to_transform, 3 do
-		local x = fluids_to_transform[i]
-		local y = fluids_to_transform[i + 1]
-		local z = fluids_to_transform[i + 2]
-		v1.x, v1.y, v1.z = x, y, z
-		core.transforming_liquid_add (v1)
-	end
-
 	apply_feature_context_requisitions (run, features_requesting_additional_context,
 					    c_above, c_below)
 	schedule_regeneration_for_unlock (run.x, run.z)
