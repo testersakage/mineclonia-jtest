@@ -207,6 +207,7 @@ globals = {
 	"mcla_generated_translations",
 	"dbg",
 	"mcl_serverplayer",
+	"mcl_levelgen",
 }
 
 read_globals = {
