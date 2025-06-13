@@ -209,6 +209,7 @@ globals = {
 	"dbg",
 	"mcl_serverplayer",
 	"mcl_liquids",
+	"mcl_levelgen",
 }
 
 read_globals = {
