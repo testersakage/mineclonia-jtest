@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-05-28 10:42+0000\n"
+"PO-Revision-Date: 2025-06-15 12:57+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/es/>\n"
@@ -1617,259 +1617,259 @@ msgid "Purple Banner"
 msgstr "Estandarte morado"
 
 msgid "Purple Base"
-msgstr ""
+msgstr "Campaña morada"
 
 msgid "Purple Base Dexter Canton"
-msgstr ""
+msgstr "Cantón morado en campaña a diestra"
 
 msgid "Purple Base Gradient"
-msgstr ""
+msgstr "Gradiente morado en base"
 
 msgid "Purple Base Indented"
-msgstr ""
+msgstr "Base morada dentada"
 
 msgid "Purple Base Sinister Canton"
-msgstr ""
+msgstr "Cantón morado en campaña a siniestra"
 
 msgid "Purple Bend"
-msgstr ""
+msgstr "Banda morada"
 
 msgid "Purple Bend Sinister"
-msgstr ""
+msgstr "Banda morada a siniestra"
 
 msgid "Purple Bordure"
-msgstr ""
+msgstr "Bordura morada"
 
 msgid "Purple Bordure Indented"
-msgstr ""
+msgstr "Bordura morada dentada"
 
 msgid "Purple Bricks"
-msgstr ""
+msgstr "Mazonado morado"
 
 msgid "Purple Chevron"
-msgstr ""
+msgstr "Chevrón morado"
 
 msgid "Purple Chevron Inverted"
-msgstr ""
+msgstr "Chevrón morado invertido"
 
 msgid "Purple Chief"
-msgstr ""
+msgstr "Jefe morado"
 
 msgid "Purple Chief Dexter Canton"
-msgstr ""
+msgstr "Cantón morado en jefe a diestra"
 
 msgid "Purple Chief Indented"
-msgstr ""
+msgstr "Jefe morado dentado"
 
 msgid "Purple Chief Sinister Canton"
-msgstr ""
+msgstr "Cantón morado en jefe a siniestra"
 
 msgid "Purple Creeper Charge"
-msgstr ""
+msgstr "Estampado morado de creeper"
 
 msgid "Purple Cross"
-msgstr ""
+msgstr "Cruz morada"
 
 msgid "Purple Fess"
-msgstr ""
+msgstr "Franja morada"
 
 msgid "Purple Flow"
-msgstr ""
+msgstr "Estampado morado de espiral"
 
 msgid "Purple Flower Charge"
-msgstr ""
+msgstr "Estampado morado de flor"
 
 msgid "Purple Globe Charge"
-msgstr ""
+msgstr "Planeta morado"
 
 msgid "Purple Gradient"
-msgstr ""
+msgstr "Gradiente morado"
 
 msgid "Purple Guster"
-msgstr ""
+msgstr "Estampado morado de breeze"
 
 msgid "Purple Lozenge"
-msgstr ""
+msgstr "Rombo morado"
 
 msgid "Purple Pale"
-msgstr ""
+msgstr "Palo morado"
 
 msgid "Purple Pale Dexter"
-msgstr ""
+msgstr "Palo morado a diestra"
 
 msgid "Purple Pale Sinister"
-msgstr ""
+msgstr "Palo morado a siniestra"
 
 msgid "Purple Paly"
-msgstr ""
+msgstr "Bastonado morado"
 
 msgid "Purple Per Bend"
-msgstr ""
+msgstr "Tronchado morado"
 
 msgid "Purple Per Bend Inverted"
-msgstr ""
+msgstr "Tronchado morado invertido"
 
 msgid "Purple Per Bend Sinister"
-msgstr ""
+msgstr "Tajado morado"
 
 msgid "Purple Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Tajado morado invertido"
 
 msgid "Purple Per Fess"
-msgstr ""
+msgstr "Cortado morado"
 
 msgid "Purple Per Fess Inverted"
-msgstr ""
+msgstr "Cortado morado invertido"
 
 msgid "Purple Per Pale"
-msgstr ""
+msgstr "Flanco morado"
 
 msgid "Purple Per Pale Inverted"
-msgstr ""
+msgstr "Flanco morado invertido"
 
 msgid "Purple Piglin Charge"
-msgstr ""
+msgstr "Hocico morado"
 
 msgid "Purple Roundel"
-msgstr ""
+msgstr "Roel morado"
 
 msgid "Purple Saltire"
-msgstr ""
+msgstr "Aspa morada"
 
 msgid "Purple Skull Charge"
-msgstr ""
+msgstr "Estampado morado de calavera"
 
 msgid "Purple Thing Charge"
-msgstr ""
+msgstr "Estampado morado de una cosa"
 
 msgid "Red Banner"
 msgstr "Estandarte roja"
 
 msgid "Red Base"
-msgstr ""
+msgstr "Campaña roja"
 
 msgid "Red Base Dexter Canton"
-msgstr ""
+msgstr "Cantón rojo en campaña a diestra"
 
 msgid "Red Base Gradient"
-msgstr ""
+msgstr "Gradiente rojo en base"
 
 msgid "Red Base Indented"
-msgstr ""
+msgstr "Base roja dentada"
 
 msgid "Red Base Sinister Canton"
-msgstr ""
+msgstr "Cantón rojo en campaña a siniestra"
 
 msgid "Red Bend"
-msgstr ""
+msgstr "Banda roja"
 
 msgid "Red Bend Sinister"
-msgstr ""
+msgstr "Banda roja a siniestra"
 
 msgid "Red Bordure"
-msgstr ""
+msgstr "Bordura roja"
 
 msgid "Red Bordure Indented"
-msgstr ""
+msgstr "Bordura roja dentada"
 
 msgid "Red Bricks"
-msgstr ""
+msgstr "Mazonado rojo"
 
 msgid "Red Chevron"
-msgstr ""
+msgstr "Chevrón rojo"
 
 msgid "Red Chevron Inverted"
-msgstr ""
+msgstr "Chevrón rojo invertido"
 
 msgid "Red Chief"
-msgstr ""
+msgstr "Jefe rojo"
 
 msgid "Red Chief Dexter Canton"
-msgstr ""
+msgstr "Cantón rojo en jefe a diestra"
 
 msgid "Red Chief Indented"
-msgstr ""
+msgstr "Jefe rojo dentado"
 
 msgid "Red Chief Sinister Canton"
-msgstr ""
+msgstr "Cantón rojo en jefe a siniestra"
 
 msgid "Red Creeper Charge"
-msgstr ""
+msgstr "Estampado rojo de creeper"
 
 msgid "Red Cross"
-msgstr ""
+msgstr "Cruz roja"
 
 msgid "Red Fess"
-msgstr ""
+msgstr "Franja roja"
 
 msgid "Red Flow"
-msgstr ""
+msgstr "Estampado rojo de espiral"
 
 msgid "Red Flower Charge"
-msgstr ""
+msgstr "Estampado rojo de flor"
 
 msgid "Red Globe Charge"
-msgstr ""
+msgstr "Planeta rojo"
 
 msgid "Red Gradient"
-msgstr ""
+msgstr "Gradiente rojo"
 
 msgid "Red Guster"
-msgstr ""
+msgstr "Estampado rojo de breeze"
 
 msgid "Red Lozenge"
-msgstr ""
+msgstr "Rombo rojo"
 
 msgid "Red Pale"
-msgstr ""
+msgstr "Palo rojo"
 
 msgid "Red Pale Dexter"
-msgstr ""
+msgstr "Palo rojo a diestra"
 
 msgid "Red Pale Sinister"
-msgstr ""
+msgstr "Palo rojo a siniestra"
 
 msgid "Red Paly"
-msgstr ""
+msgstr "Bastonado rojo"
 
 msgid "Red Per Bend"
-msgstr ""
+msgstr "Tronchado rojo"
 
 msgid "Red Per Bend Inverted"
-msgstr ""
+msgstr "Tronchado rojo invertido"
 
 msgid "Red Per Bend Sinister"
-msgstr ""
+msgstr "Tajado rojo"
 
 msgid "Red Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Tajado rojo invertido"
 
 msgid "Red Per Fess"
-msgstr ""
+msgstr "Cortado rojo"
 
 msgid "Red Per Fess Inverted"
-msgstr ""
+msgstr "Cortado rojo invertido"
 
 msgid "Red Per Pale"
-msgstr ""
+msgstr "Flanco rojo"
 
 msgid "Red Per Pale Inverted"
-msgstr ""
+msgstr "Flanco rojo invertido"
 
 msgid "Red Piglin Charge"
-msgstr ""
+msgstr "Hocico rojo"
 
 msgid "Red Roundel"
-msgstr ""
+msgstr "Roel rojo"
 
 msgid "Red Saltire"
-msgstr ""
+msgstr "Aspa roja"
 
 msgid "Red Skull Charge"
-msgstr ""
+msgstr "Estampado rojo de calavera"
 
 msgid "Red Thing Charge"
-msgstr ""
+msgstr "Estampado rojo de una cosa"
 
 msgid "Skull Banner Pattern"
 msgstr ""
@@ -1881,7 +1881,7 @@ msgid "White Banner"
 msgstr "Estandarte blanco"
 
 msgid "White Base"
-msgstr ""
+msgstr "Campaña blanca"
 
 msgid "White Base Dexter Canton"
 msgstr ""
