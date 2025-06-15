@@ -1,235 +1,213 @@
-local modname = minetest.get_current_modname()
-local S = minetest.get_translator(modname)
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 
-local plane_adjacents = {
-	vector.new(1,0,0),
-	vector.new(-1,0,0),
-	vector.new(0,0,1),
-	vector.new(0,0,-1)
-}
-
-local function get_height(pos,node)
-	local p = pos
-	local i = 0
-	repeat
-		i = i + 1
-		p = vector.offset(p,0,-1,0)
-	until minetest.get_node(p).name  ~= node.name
-	return i - 1
-end
-
-function mcl_lush_caves.dripleaf_grow(pos, node)
-	local t =  mcl_util.traverse_tower(pos,1) -- find_top(pos,node)
-	local h = get_height(t,node)
-	local target = vector.offset(t,0,1,0)
-	if minetest.get_node(target).name ~= "air" then return end
-	if h >= 5 then return end
-	minetest.set_node(t,node)
-	minetest.set_node(target,{name = "mcl_lush_caves:dripleaf_big"})
-	return true
-end
-
-minetest.register_node("mcl_lush_caves:dripleaf_big_waterroot", {
-		drawtype = "plantlike_rooted",
-		paramtype = "light",
-		paramtype2 = "leveled",
-		place_param2 = 16,
-		tiles = { "default_clay.png" },
-		special_tiles = {
-			{ name = "mcl_lush_caves_big_dripleaf_stem.png",
-				animation = {type="vertical_frames", aspect_w=16, aspect_h=16, length=2.0},
-				tileable_vertical = true,
-			}
-		},
-		inventory_image = "mcl_lush_caves_big_dripleaf_stem.png",
-		selection_box = {
-			type = "fixed",
-			fixed = {{ -3/16, -8/16, -3/16, 3/16, 8/16, 3/16 }},
-		},
-		groups = { handy = 1, dig_immediate = 3, not_in_creative_inventory = 1 },
-		drop = "",
-		node_placement_prediction = "",
-		_mcl_hardness = 0,
-		_mcl_blast_resistance = 0,
-		_mcl_silk_touch_drop = true,
-		_on_bone_meal = function(itemstack,placer, pointed_thing, pos, node)
-			if not pos then return end
-			return mcl_lush_caves.dripleaf_grow(pos,node)
-		end
-})
-minetest.register_node("mcl_lush_caves:dripleaf_big_stem", {
-	description = S("Dripleaf stem"),
-	_doc_items_create_entry = S("Dripleaf stem"),
-	_doc_items_entry_name = S("Dripleaf stem"),
-	_doc_items_longdesc = S("Dripleaf stem"),
-	paramtype = "light",
-	place_param2 = 3,
-	sunlight_propagates = true,
-	walkable = false,
-	drawtype = "plantlike",
-	tiles = {"mcl_lush_caves_big_dripleaf_stem.png"},
-	inventory_image = "mcl_lush_caves_big_dripleaf_stem.png",
-	wield_image = "mcl_lush_caves_big_dripleaf_stem.png",
-	selection_box = {
-		type = "fixed",
-		fixed = {{ -3/16, -8/16, -3/16, 3/16, 8/16, 3/16 }},
-	},
-	drop = "",
-	groups = { shearsy = 1, handy = 1, plant=1, supported_node=0, destroy_by_lava_flow=1, dig_by_piston=1 },
-	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0,
-	_mcl_blast_hardness = 0,
-	on_construct = function(pos)
-		local p = pos
-		local l = 0
-		local in_water = false
-		for _,a in pairs(plane_adjacents) do
-			if minetest.get_item_group(minetest.get_node(vector.add(pos,a)).name,"water") > 0 then
-				in_water = true
+local function kill_adjacent(self)
+	local pos = self.object:get_pos()
+	local node_above = core.get_node(vector.offset(pos,0,1,0))
+	if node_above and node_above.name == "mcl_lush_caves:dripleaf_big" then
+		core.remove_node(vector.offset(pos,0,1,0))
+		core.add_item(vector.offset(pos,0,1,0), {name="mcl_lush_caves:dripleaf_big"})
+	end
+	for object in core.objects_in_area(vector.offset(pos,0,-1,0), vector.offset(pos,0,1,0)) do
+		if object ~= self.object then
+			local entity = object:get_luaentity()
+			if entity and entity.name == "mcl_lush_caves:dripleaf_big_stem" then
+				core.after(0.05, function ()
+					entity.object:punch(entity.object, 1.0, {
+						full_punch_interval = 1.0,
+						damage_groups = {fleshy = 1},
+					}, nil)
+				end)
 			end
 		end
-		if not in_water then return end
-		repeat
-			l = l + 1
-			p = vector.offset(p,0,1,0)
-		until minetest.get_item_group(minetest.get_node(p).name,"water") <= 0
-		minetest.set_node(p,{name = "mcl_lush_caves:dripleaf_big"})
-		minetest.set_node(vector.offset(pos,0,-1,0),{ name = "mcl_lush_caves:dripleaf_big_waterroot", param2 = l * 16})
-	end,
-	_on_bone_meal = function(itemstack, clicker, pointed_thing, pos, node)
-		return mcl_lush_caves.dripleaf_grow(pos,node)
 	end
-})
-local dripleaf = {
-	description = S("Dripleaf"),
-	_doc_items_create_entry = S("Dripleaf"),
-	_doc_items_entry_name = S("Dripleaf"),
-	_doc_items_longdesc = S("Dripleaf"),
-	paramtype = "light",
-	place_param2 = 0,
-	sunlight_propagates = true,
-	walkable = true,
-	drawtype = "nodebox",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-8/16, -8/16, -8/16, 8/16, -7/16, 8/16},
-		},
+end
+
+--
+-- Small Dripleaf
+--
+
+core.register_entity("mcl_lush_caves:dripleaf_small_stem", {
+	initial_properties = {
+		hp_max = 1,
+		visual_size = {x=10,y=10},
+		visual = "mesh",
+		static_save = true,
+		paramtype2 = "facedir",
+		mesh = "dripleaf_small_stem.obj",
+		textures = {"mcl_lush_caves_dripleaf_small.png"},
+		backface_culling = false,
 	},
-	tiles = {"mcl_lush_caves_big_dripleaf_top.png"},
-	inventory_image = "mcl_lush_caves_big_dripleaf_top.png",
-	wield_image = "mcl_lush_caves_big_dripleaf_top.png",
+	update_rotation = function(self, facedir)
+		self.object:set_yaw(core.dir_to_yaw(core.facedir_to_dir(facedir)))
+	end,
+	on_punch = function(self, puncher)
+		local pos = self.object:get_pos()
+		local wield_item = puncher:get_wielded_item()
+		if wield_item:get_name() == "mcl_tools:shears" then
+			core.add_item(vector.offset(pos,0,1,0), {name="mcl_lush_caves:dripleaf_small"})
+			self.object:remove()
+		end
+		core.sound_play(mcl_sounds.node_sound_leaves_defaults().dug)
+		local leaf = core.get_node(vector.offset(pos,0,1,0))
+		if leaf.name == "mcl_lush_caves:dripleaf_small" then
+			core.remove_node(vector.offset(pos,0,1,0))
+		end
+	end,
+})
+core.register_node("mcl_lush_caves:dripleaf_small", {
+	description = S("Small Dripleaf"),
+	_doc_items_create_entry = S("Small Dripleaf"),
+	_doc_items_entry_name = S("Small Dripleaf"),
+	_doc_items_longdesc = S("Small Dripleaf"),
+	groups = {handy=1, deco_block=1, dig_by_piston=1},
+	drawtype = "mesh",
+	paramtype2 = "facedir",
+	mesh = "dripleaf_small.obj",
 	use_texture_alpha = "clip",
+	tiles = {"mcl_lush_caves_dripleaf_small.png","mcl_lush_caves_dripleaf_stem.png"},
 	selection_box = {
 		type = "fixed",
-		fixed = {
-			{-8/16, -8/16, -8/16, 8/16, -7/16, 8/16},
-		},
+		fixed = {-0.5,-1.5,-0.5, 0.5,0.5,0.5}
 	},
-	groups = { shearsy = 1, handy = 1, plant=1, supported_node=0, dig_by_water=1,destroy_by_lava_flow=1, dig_by_piston=1 },
+	walkable = false,
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0,
-	_mcl_blast_hardness = 0,
-	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-		if itemstack:get_name() ~= "mcl_dye:white" then return itemstack end
-		itemstack:take_item(1)
-		mcl_lush_caves.dripleaf_grow(vector.offset(pos,0,-1,0),{name = "mcl_lush_caves:dripleaf_big_stem" })
+	_mcl_shears_drop = true,
+	drop = "",
+	on_place = function (itemstack, placer, pointed_thing)
+		local pos = pointed_thing.above
+    local facedir = core.dir_to_facedir(placer:get_look_dir())
+		core.set_node(vector.offset(pos,0,1,0), {name="mcl_lush_caves:dripleaf_small", param2=facedir})
+		local stem = core.add_entity(pos, "mcl_lush_caves:dripleaf_small_stem")
+		local stem_entity = stem:get_luaentity()
+		if stem_entity then stem_entity:update_rotation(facedir) end
+		if not core.is_creative_enabled(placer:get_player_name()) then
+			itemstack:take_item()
+		end
+		return itemstack
+	end,
+	on_punch = function (pos)
+		for obj in core.objects_in_area(vector.offset(pos,0,-1,0),pos) do
+			local ent = obj:get_luaentity()
+			if ent and ent.name == "mcl_lush_caves:dripleaf_small_stem" then
+				ent.object:remove()
+			end
+		end
 	end
+})
+
+--
+-- Big dripleaf
+--
+
+core.register_entity("mcl_lush_caves:dripleaf_big_stem", {
+	initial_properties = {
+		hp_max = 1,
+		visual_size = {x=10,y=10},
+		visual = "mesh",
+		static_save = true,
+		paramtype2 = "facedir",
+		mesh = "dripleaf_big_stem.obj",
+		textures = {"mcl_lush_caves_dripleaf_big.png"},
+		backface_culling = false,
+	},
+	update_rotation = function(self, facedir)
+		self.object:set_yaw(core.dir_to_yaw(core.facedir_to_dir(facedir)))
+	end,
+	on_punch = function(self)
+		local pos = self.object:get_pos()
+		core.add_item(vector.offset(pos,0,1,0), {name="mcl_lush_caves:dripleaf_big"})
+		core.sound_play(mcl_sounds.node_sound_leaves_defaults().dug)
+	end,
+	on_death = kill_adjacent,
+})
+local dripleaf_big = {
+	description = S("Big Dripleaf"),
+	_doc_items_create_entry = S("Big Dripleaf"),
+	_doc_items_entry_name = S("Big Dripleaf"),
+	_doc_items_longdesc = S("Big Dripleaf"),
+	groups = {handy=1, deco_block=1, dig_by_piston=1},
+	drawtype = "mesh",
+	paramtype2 = "facedir",
+	mesh = "dripleaf_big.obj",
+	use_texture_alpha = "clip",
+	tiles = {"mcl_lush_caves_dripleaf_big.png"},
+	collision_box = {
+		type = "fixed",
+		fixed = {-0.5,0.45,-0.5,0.5,0.5,0.5}
+	},
+	on_place = function (itemstack, placer, pointed_thing)
+		local node_below = core.get_node(pointed_thing.under)
+		if node_below.name == "mcl_lush_caves:dripleaf_big" then
+			-- Place stacked entity
+			local facedir = node_below.param2
+			core.remove_node(pointed_thing.under)
+			core.set_node(vector.offset(pointed_thing.under,0,1,0), {name="mcl_lush_caves:dripleaf_big", param2=facedir})
+			local stem = core.add_entity(pointed_thing.under, "mcl_lush_caves:dripleaf_big_stem")
+			local stem_entity = stem:get_luaentity()
+			if stem_entity then stem_entity:update_rotation(facedir) end
+			core.sound_play(mcl_sounds.node_sound_leaves_defaults().place)
+			if not core.is_creative_enabled(placer:get_player_name()) then
+				itemstack:take_item()
+			end
+		else
+			-- Place single entity
+			core.sound_play(mcl_sounds.node_sound_leaves_defaults().place)
+			core.item_place_node(itemstack, placer, pointed_thing)
+		end
+		return itemstack
+	end,
+	on_dig = function (pos, node, digger)
+		for object in core.objects_in_area(pos, vector.offset(pos,0,-1,0)) do
+			if object then
+				local entity = object:get_luaentity()
+				entity.object:punch(entity.object, 1.0, {
+					full_punch_interval = 1.0,
+					damage_groups = {fleshy = 1},
+				}, nil)
+			end
+		end
+		core.node_dig(pos, node, digger)
+		return true
+	end,
 }
-local dripleaf_tipped = table.merge(dripleaf, {
-	walkable = false,
-	tiles = {"mcl_lush_caves_big_dripleaf_tip.png"},
-	on_timer = function(p,e)
-		minetest.swap_node(p,{name="mcl_lush_caves:dripleaf_big"})
+local dripleaf_big_tipped_half = table.merge(dripleaf_big, {
+	groups = {not_in_creative_inventory=1},
+	mesh = "dripleaf_big_tipped_half.obj",
+	on_timer = function(pos)
+		local n = core.get_node(pos)
+		core.swap_node(pos, {name="mcl_lush_caves:dripleaf_big_tipped_full", param2=n.param2})
+		local t = core.get_node_timer(pos)
+		t:start(3)
 	end,
 })
-
-dripleaf.mesecons = {effector = {
-	action_on = function(pos, node)
-		node.param2 = 1
-		minetest.swap_node(pos, node)
+local dripleaf_big_tipped_full = table.merge(dripleaf_big, {
+	groups = {not_in_creative_inventory=1},
+	walkable= false,
+	mesh = "dripleaf_big_tipped_full.obj",
+	on_timer = function(pos)
+		local n = core.get_node(pos)
+		core.swap_node(pos, {name="mcl_lush_caves:dripleaf_big", param2=n.param2})
 	end,
-	action_off = function(pos, node)
-		node.param2 = 0
-		minetest.swap_node(pos, node)
-	end,
-	rules = mesecon.rules.alldirs,
-}}
-
-minetest.register_node("mcl_lush_caves:dripleaf_big",dripleaf)
-minetest.register_node("mcl_lush_caves:dripleaf_big_tipped",dripleaf_tipped)
-
-minetest.register_node("mcl_lush_caves:dripleaf_small_stem", {
-	description = S("Small dripleaf stem"),
-	_doc_items_create_entry = S("Small dripleaf stem"),
-	_doc_items_entry_name = S("Small dripleaf stem"),
-	_doc_items_longdesc = S("Small dripleaf stem"),
-	paramtype = "light",
-	place_param2 = 3,
-	sunlight_propagates = true,
-	walkable = false,
-	drawtype = "plantlike",
-	tiles = {"mcl_lush_caves_small_dripleaf_stem_top.png"},
-	inventory_image = "mcl_lush_caves_small_dripleaf_stem_top.png",
-	wield_image = "mcl_lush_caves_small_dripleaf_stem_top.png",
-	selection_box = {
-		type = "fixed",
-		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}
-		},
-	},
-	groups = { shearsy = 1, handy = 1, plant=1, supported_node=0, dig_by_water=1,destroy_by_lava_flow=1, dig_by_piston=1 },
-	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0,
-	_mcl_blast_hardness = 0,
 })
-
-minetest.register_node("mcl_lush_caves:dripleaf_small", {
-	description = S("Dripleaf"),
-	_doc_items_create_entry = S("Dripleaf"),
-	_doc_items_entry_name = S("Dripleaf"),
-	_doc_items_longdesc = S("Dripleaf"),
-	paramtype = "light",
-	place_param2 = 3,
-	sunlight_propagates = true,
-	walkable = true,
-	drawtype = "nodebox",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-8/16, -8/16, -8/16, 8/16, -7/16, 8/16},
-		},
-	},
-	tiles = {"mcl_lush_caves_small_dripleaf_top.png"},
-	inventory_image = "mcl_lush_caves_small_dripleaf_top.png",
-	wield_image = "mcl_lush_caves_small_dripleaf_top.png",
-	use_texture_alpha = "clip",
-	selection_box = {
-		type = "fixed",
-		fixed = {
-			{-8/16, -8/16, -8/16, 8/16, -7/16, 8/16},
-		},
-	},
-	groups = { shearsy = 1, handy = 1, plant=1, supported_node=0, dig_by_water=1,destroy_by_lava_flow=1, dig_by_piston=1 },
-	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0,
-	_mcl_blast_hardness = 0,
-})
-
+core.register_node("mcl_lush_caves:dripleaf_big", dripleaf_big)
+core.register_node("mcl_lush_caves:dripleaf_big_tipped_half", dripleaf_big_tipped_half)
+core.register_node("mcl_lush_caves:dripleaf_big_tipped_full", dripleaf_big_tipped_full)
 
 local player_dripleaf = {}
-minetest.register_globalstep(function(dtime)
-	for _,p in pairs(minetest.get_connected_players()) do
-		local pos = p:get_pos()
-		local n = minetest.get_node(pos)
-		if n.name == "mcl_lush_caves:dripleaf_big" and n.param2 == 0 then
+core.register_globalstep(function(dtime)
+	for _,p in pairs(core.get_connected_players()) do
+		local pos = vector.offset(p:get_pos(),0,-1,0)
+		local n = core.get_node(pos)
+		if n.name == "mcl_lush_caves:dripleaf_big" then
 			if not player_dripleaf[p] then player_dripleaf[p] = 0 end
 			player_dripleaf[p] = player_dripleaf[p] + dtime
-			if player_dripleaf[p] > 1 then
-				minetest.swap_node(pos,{name = "mcl_lush_caves:dripleaf_big_tipped"})
+			core.debug(player_dripleaf[p])
+			if player_dripleaf[p] > 0.5 then
+				core.swap_node(pos,{name = "mcl_lush_caves:dripleaf_big_tipped_half", param2 = n.param2})
 				player_dripleaf[p] = nil
-				local t = minetest.get_node_timer(pos)
-				t:start(3)
+				local t = core.get_node_timer(pos)
+				t:start(0.5)
 			end
 		end
 	end
