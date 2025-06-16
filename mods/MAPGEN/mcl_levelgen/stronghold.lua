@@ -920,7 +920,7 @@ function essay_corridor (start, pieces, rng, x, y, z, dir, depth)
 	local bbox = rotated_block_box (x, y, z, -1, -1, 0, 5, 5, 7, dir)
 	-- print (string.format ("corridor bbox: (%d,%d,%d) - (%d,%d,%d)",
 	-- 		      unpack (bbox)) .. " " .. dir)
-	if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+	if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 		return {
 			place = corridor_place,
 			insert_children = corridor_insert_children,
@@ -982,7 +982,7 @@ function essay_prison_hall (start, pieces, rng, x, y, z, dir, depth)
 	local bbox = rotated_block_box (x, y, z, -1, -1, 0, 9, 5, 11, dir)
 	-- print (string.format ("prison_hall bbox: (%d,%d,%d) - (%d,%d,%d)",
 	-- 		      unpack (bbox)) .. " " .. dir)
-	if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+	if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 		return {
 			place = prison_hall_place,
 			insert_children = prison_hall_insert_children,
@@ -1026,7 +1026,7 @@ function essay_left_turn (start, pieces, rng, x, y, z, dir, depth)
 	local bbox = rotated_block_box (x, y, z, -1, -1, 0, 5, 5, 5, dir)
 	-- print (string.format ("left bbox: (%d,%d,%d) - (%d,%d,%d)",
 	-- 		      unpack (bbox)) .. " " .. dir)
-	if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+	if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 		return {
 			place = left_turn_place,
 			insert_children = left_turn_insert_children,
@@ -1070,7 +1070,7 @@ function essay_right_turn (start, pieces, rng, x, y, z, dir, depth)
 	local bbox = rotated_block_box (x, y, z, -1, -1, 0, 5, 5, 5, dir)
 	-- print (string.format ("right bbox: (%d,%d,%d) - (%d,%d,%d)",
 	-- 		      unpack (bbox)) .. " " .. dir)
-	if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+	if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 		return {
 			place = right_turn_place,
 			insert_children = right_turn_insert_children,
@@ -1224,7 +1224,7 @@ function essay_square_room (start, pieces, rng, x, y, z, dir, depth)
 	local bbox = rotated_block_box (x, y, z, -4, -1, 0, 11, 7, 11, dir)
 	-- print (string.format ("square_room bbox: (%d,%d,%d) - (%d,%d,%d)",
 	-- 		      unpack (bbox)) .. " " .. dir)
-	if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+	if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 		return {
 			place = square_room_place,
 			insert_children = square_room_insert_children,
@@ -1273,7 +1273,7 @@ function essay_stairs (start, pieces, rng, x, y, z, dir, depth)
 	local bbox = rotated_block_box (x, y, z, -1, -7, 0, 5, 11, 8, dir)
 	-- print (string.format ("stairs bbox: (%d,%d,%d) - (%d,%d,%d)",
 	-- 		      unpack (bbox)) .. " " .. dir)
-	if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+	if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 		return {
 			place = stairs_place,
 			insert_children = stairs_insert_children,
@@ -1331,7 +1331,7 @@ function essay_stairs_down (start, pieces, rng, x, y, z, dir, depth)
 	local bbox = rotated_block_box (x, y, z, -1, -7, 0, 5, 11, 5, dir)
 	-- print (string.format ("stairs_down bbox: (%d,%d,%d) - (%d,%d,%d)",
 	-- 		      unpack (bbox)) .. " " .. dir)
-	if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+	if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 		return {
 			depth = depth,
 			bbox = bbox,
@@ -1456,7 +1456,7 @@ function essay_five_way_crossing (start, pieces, rng, x, y, z, dir, depth)
 	local bbox = rotated_block_box (x, y, z, -4, -3, 0, 10, 9, 11, dir)
 	-- print (string.format ("five_way_crossing bbox: (%d,%d,%d) - (%d,%d,%d)",
 	-- 		      unpack (bbox)) .. " " .. dir)
-	if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+	if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 		local crossing = {
 			depth = depth,
 			bbox = bbox,
@@ -1514,7 +1514,7 @@ function essay_chest_corridor (start, pieces, rng, x, y, z, dir, depth)
 	local bbox = rotated_block_box (x, y, z, -1, -1, 0, 5, 5, 7, dir)
 	-- print (string.format ("chest_corridor bbox: (%d,%d,%d) - (%d,%d,%d)",
 	-- 		      unpack (bbox)) .. " " .. dir)
-	if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+	if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 		return {
 			place = chest_corridor_place,
 			insert_children = chest_corridor_insert_children,
@@ -1646,7 +1646,7 @@ function essay_library (start, pieces, rng, x, y, z, dir, depth)
 	local bbox = rotated_block_box (x, y, z, -4, -1, 0, 14, 11, 15, dir)
 	-- print (string.format ("library bbox: (%d,%d,%d) - (%d,%d,%d)",
 	-- 		      unpack (bbox)) .. " " .. dir)
-	if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+	if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 		return {
 			place = library_place,
 			insert_children = library_insert_children,
@@ -1658,7 +1658,7 @@ function essay_library (start, pieces, rng, x, y, z, dir, depth)
 		}
 	else
 		local bbox = rotated_block_box (x, y, z, -4, -1, 0, 14, 6, 15, dir)
-		if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+		if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 			return {
 				place = library_place,
 				insert_children = library_insert_children,
@@ -1800,7 +1800,7 @@ function make_portal_room (start, pieces, x, y, z, dir, depth)
 	local bbox = rotated_block_box (x, y, z, -4, -1, 0, 11, 8, 16, dir)
 	-- print (string.format ("portal_room bbox: (%d,%d,%d) - (%d,%d,%d)",
 	-- 		      unpack (bbox)) .. " " .. dir)
-	if bbox[1] > 10 and not any_collisions (pieces, bbox) then
+	if bbox[2] > 10 and not any_collisions (pieces, bbox) then
 		return {
 			place = portal_room_place,
 			insert_children = portal_room_insert_children,
