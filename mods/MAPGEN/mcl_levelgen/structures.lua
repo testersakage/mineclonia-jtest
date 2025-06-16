@@ -1521,6 +1521,28 @@ function mcl_levelgen.current_structure_piece ()
 	return current_structure_piece
 end
 
+function mcl_levelgen.height_of_lowest_corner_including_center (terrain, cx, cz, rotation)
+	local dx = 5
+	local dz = 5
+	if rotation == "90" then
+		dx = -5
+	elseif rotation == "180" then
+		dx = -5
+		dz = -5
+	elseif rotation == "270" then
+		dz = -5
+	end
+
+	local x1 = cx * 16 + 7
+	local z1 = cz * 16 + 7
+
+	local h1 = terrain:get_one_height (x1, z1, is_not_air)
+	local h2 = terrain:get_one_height (x1, z1 + dz, is_not_air)
+	local h3 = terrain:get_one_height (x1 + dx, z1, is_not_air)
+	local h4 = terrain:get_one_height (x1 + dx, z1 + dz, is_not_air)
+	return mathmin (h1, h2, h3, h4) - 1
+end
+
 ------------------------------------------------------------------------
 -- Feature placement.
 ------------------------------------------------------------------------
