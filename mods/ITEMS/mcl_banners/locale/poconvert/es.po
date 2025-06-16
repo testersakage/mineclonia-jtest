@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-06-15 12:57+0000\n"
+"PO-Revision-Date: 2025-06-17 02:11+0000\n"
 "Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
 "Language-Team: Spanish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/es/>\n"
@@ -567,13 +567,13 @@ msgid "Cyan Thing Charge"
 msgstr "Estampado cian de una cosa"
 
 msgid "Flow Banner Pattern"
-msgstr ""
+msgstr "Estampado de espiral"
 
 msgid "Flower Banner Pattern"
-msgstr ""
+msgstr "Estampado de flor"
 
 msgid "Globe Banner Pattern"
-msgstr ""
+msgstr "Estampado de planeta"
 
 msgid "Green Banner"
 msgstr "Estandarte verde"
@@ -834,7 +834,7 @@ msgid "Grey Thing Charge"
 msgstr "Estampado gris de una cosa"
 
 msgid "Guster Banner Pattern"
-msgstr ""
+msgstr "Estampado de breeze"
 
 msgid "Light Blue Banner"
 msgstr "Estandarte azul claro"
@@ -1482,7 +1482,7 @@ msgid "Orange Thing Charge"
 msgstr "Estampado naranja de una cosa"
 
 msgid "Piglin Banner Pattern"
-msgstr ""
+msgstr "Estampado de hocico"
 
 msgid "Pink Banner"
 msgstr "Estandarte rosa"
@@ -1872,10 +1872,10 @@ msgid "Red Thing Charge"
 msgstr "Estampado rojo de una cosa"
 
 msgid "Skull Banner Pattern"
-msgstr ""
+msgstr "Estampado de calavera"
 
 msgid "Thing Banner Pattern"
-msgstr ""
+msgstr "Estampado de una cosa"
 
 msgid "White Banner"
 msgstr "Estandarte blanco"
@@ -1884,253 +1884,253 @@ msgid "White Base"
 msgstr "Campaña blanca"
 
 msgid "White Base Dexter Canton"
-msgstr ""
+msgstr "Cantón blanco en campaña a diestra"
 
 msgid "White Base Gradient"
-msgstr ""
+msgstr "Gradiente blanco en base"
 
 msgid "White Base Indented"
-msgstr ""
+msgstr "Base blanca dentada"
 
 msgid "White Base Sinister Canton"
-msgstr ""
+msgstr "Cantón blanco en campaña a siniestra"
 
 msgid "White Bend"
-msgstr ""
+msgstr "Banda blanca"
 
 msgid "White Bend Sinister"
-msgstr ""
+msgstr "Banda blanca a siniestra"
 
 msgid "White Bordure"
-msgstr ""
+msgstr "Bordura blanca"
 
 msgid "White Bordure Indented"
-msgstr ""
+msgstr "Bordura blanca dentada"
 
 msgid "White Bricks"
-msgstr ""
+msgstr "Mazonado blanco"
 
 msgid "White Chevron"
-msgstr ""
+msgstr "Chevrón blanco"
 
 msgid "White Chevron Inverted"
-msgstr ""
+msgstr "Chevrón blanco invertido"
 
 msgid "White Chief"
-msgstr ""
+msgstr "Jefe blanco"
 
 msgid "White Chief Dexter Canton"
-msgstr ""
+msgstr "Cantón blanco en jefe a diestra"
 
 msgid "White Chief Indented"
-msgstr ""
+msgstr "Jefe blanco dentado"
 
 msgid "White Chief Sinister Canton"
-msgstr ""
+msgstr "Cantón blanco en jefe a siniestra"
 
 msgid "White Creeper Charge"
-msgstr ""
+msgstr "Estampado blanco de creeper"
 
 msgid "White Cross"
-msgstr ""
+msgstr "Cruz blanca"
 
 msgid "White Fess"
-msgstr ""
+msgstr "Franja blanca"
 
 msgid "White Flow"
-msgstr ""
+msgstr "Estampado blanco de espiral"
 
 msgid "White Flower Charge"
-msgstr ""
+msgstr "Estampado blanco de flor"
 
 msgid "White Globe Charge"
-msgstr ""
+msgstr "Planeta blanco"
 
 msgid "White Gradient"
-msgstr ""
+msgstr "Gradiente blanco"
 
 msgid "White Guster"
-msgstr ""
+msgstr "Estampado blanco de breeze"
 
 msgid "White Lozenge"
-msgstr ""
+msgstr "Rombo blanco"
 
 msgid "White Pale"
-msgstr ""
+msgstr "Palo blanco"
 
 msgid "White Pale Dexter"
-msgstr ""
+msgstr "Palo blanco a diestra"
 
 msgid "White Pale Sinister"
-msgstr ""
+msgstr "Palo blanco a siniestra"
 
 msgid "White Paly"
-msgstr ""
+msgstr "Bastonado blanco"
 
 msgid "White Per Bend"
-msgstr ""
+msgstr "Tronchado blanco"
 
 msgid "White Per Bend Inverted"
-msgstr ""
+msgstr "Tronchado blanco invertido"
 
 msgid "White Per Bend Sinister"
-msgstr ""
+msgstr "Tajado blanco"
 
 msgid "White Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Tajado blanco invertido"
 
 msgid "White Per Fess"
-msgstr ""
+msgstr "Cortado blanco"
 
 msgid "White Per Fess Inverted"
-msgstr ""
+msgstr "Cortado blanco invertido"
 
 msgid "White Per Pale"
-msgstr ""
+msgstr "Flanco blanco"
 
 msgid "White Per Pale Inverted"
-msgstr ""
+msgstr "Flanco blanco invertido"
 
 msgid "White Piglin Charge"
-msgstr ""
+msgstr "Hocico blanco"
 
 msgid "White Roundel"
-msgstr ""
+msgstr "Roel blanco"
 
 msgid "White Saltire"
-msgstr ""
+msgstr "Aspa blanca"
 
 msgid "White Skull Charge"
-msgstr ""
+msgstr "Estampado blanco de calavera"
 
 msgid "White Thing Charge"
-msgstr ""
+msgstr "Estampado blanco de una cosa"
 
 msgid "Yellow Banner"
 msgstr "Estandarte amarillo"
 
 msgid "Yellow Base"
-msgstr ""
+msgstr "Campaña amarilla"
 
 msgid "Yellow Base Dexter Canton"
-msgstr ""
+msgstr "Cantón amarillo en campaña a diestra"
 
 msgid "Yellow Base Gradient"
-msgstr ""
+msgstr "Gradiente amarillo en base"
 
 msgid "Yellow Base Indented"
-msgstr ""
+msgstr "Base amarilla dentada"
 
 msgid "Yellow Base Sinister Canton"
-msgstr ""
+msgstr "Cantón amarillo en campaña a siniestra"
 
 msgid "Yellow Bend"
-msgstr ""
+msgstr "Banda amarilla"
 
 msgid "Yellow Bend Sinister"
-msgstr ""
+msgstr "Banda amarilla a siniestra"
 
 msgid "Yellow Bordure"
-msgstr ""
+msgstr "Bordura amarilla"
 
 msgid "Yellow Bordure Indented"
-msgstr ""
+msgstr "Bordura amarilla dentada"
 
 msgid "Yellow Bricks"
-msgstr ""
+msgstr "Mazonado amarillo"
 
 msgid "Yellow Chevron"
-msgstr ""
+msgstr "Chevrón amarillo"
 
 msgid "Yellow Chevron Inverted"
-msgstr ""
+msgstr "Chevrón amarillo invertido"
 
 msgid "Yellow Chief"
-msgstr ""
+msgstr "Jefe amarillo"
 
 msgid "Yellow Chief Dexter Canton"
-msgstr ""
+msgstr "Cantón amarillo en jefe a diestra"
 
 msgid "Yellow Chief Indented"
-msgstr ""
+msgstr "Jefe amarillo dentado"
 
 msgid "Yellow Chief Sinister Canton"
-msgstr ""
+msgstr "Cantón amarillo en jefe a siniestra"
 
 msgid "Yellow Creeper Charge"
-msgstr ""
+msgstr "Estampado amarillo de creeper"
 
 msgid "Yellow Cross"
-msgstr ""
+msgstr "Cruz amarilla"
 
 msgid "Yellow Fess"
-msgstr ""
+msgstr "Franja amarilla"
 
 msgid "Yellow Flow"
-msgstr ""
+msgstr "Estampado amarillo de espiral"
 
 msgid "Yellow Flower Charge"
-msgstr ""
+msgstr "Estampado amarillo de flor"
 
 msgid "Yellow Globe Charge"
-msgstr ""
+msgstr "Planeta amarillo"
 
 msgid "Yellow Gradient"
-msgstr ""
+msgstr "Gradiente amarillo"
 
 msgid "Yellow Guster"
-msgstr ""
+msgstr "Estampado amarillo de breeze"
 
 msgid "Yellow Lozenge"
-msgstr ""
+msgstr "Rombo amarillo"
 
 msgid "Yellow Pale"
-msgstr ""
+msgstr "Palo amarillo"
 
 msgid "Yellow Pale Dexter"
-msgstr ""
+msgstr "Palo amarillo a diestra"
 
 msgid "Yellow Pale Sinister"
-msgstr ""
+msgstr "Palo amarillo a siniestra"
 
 msgid "Yellow Paly"
-msgstr ""
+msgstr "Bastonado amarillo"
 
 msgid "Yellow Per Bend"
-msgstr ""
+msgstr "Tronchado amarillo"
 
 msgid "Yellow Per Bend Inverted"
-msgstr ""
+msgstr "Tronchado amarillo invertido"
 
 msgid "Yellow Per Bend Sinister"
-msgstr ""
+msgstr "Tajado amarillo"
 
 msgid "Yellow Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Tajado amarillo invertido"
 
 msgid "Yellow Per Fess"
-msgstr ""
+msgstr "Cortado amarillo"
 
 msgid "Yellow Per Fess Inverted"
-msgstr ""
+msgstr "Cortado amarillo invertido"
 
 msgid "Yellow Per Pale"
-msgstr ""
+msgstr "Flanco amarillo"
 
 msgid "Yellow Per Pale Inverted"
-msgstr ""
+msgstr "Flanco amarillo invertido"
 
 msgid "Yellow Piglin Charge"
-msgstr ""
+msgstr "Hocico amarillo"
 
 msgid "Yellow Roundel"
-msgstr ""
+msgstr "Roel amarillo"
 
 msgid "Yellow Saltire"
-msgstr ""
+msgstr "Aspa amarilla"
 
 msgid "Yellow Skull Charge"
-msgstr ""
+msgstr "Estampado amarillo de calavera"
 
 msgid "Yellow Thing Charge"
-msgstr ""
+msgstr "Estampado amarillo de una cosa"
