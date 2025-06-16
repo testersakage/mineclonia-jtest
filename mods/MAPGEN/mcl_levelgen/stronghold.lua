@@ -854,7 +854,7 @@ end
 
 function create_blind_alley (pieces, rng, x, y, z, dir, depth)
 	local bbox = place_blind_alley (pieces, rng, x, y, z, dir)
-	if bbox and bbox[1] > 1 then
+	if bbox and bbox[2] > 1 then
 		return {
 			depth = depth,
 			bbox = bbox,
