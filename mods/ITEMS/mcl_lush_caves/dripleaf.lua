@@ -90,7 +90,7 @@ core.register_node("mcl_lush_caves:dripleaf_small", {
 	_doc_items_create_entry = S("Small Dripleaf"),
 	_doc_items_entry_name = S("Small Dripleaf"),
 	_doc_items_longdesc = S("Small Dripleaf"),
-	groups = {handy=1, deco_block=1, dig_by_piston=1},
+	groups = {shearsy=1, handy=1, plant=1, dig_by_piston=1, dripleaf=1},
 	drawtype = "mesh",
 	paramtype2 = "facedir",
 	mesh = "dripleaf_small.obj",
@@ -191,7 +191,7 @@ local dripleaf_big = {
 	_doc_items_create_entry = S("Big Dripleaf"),
 	_doc_items_entry_name = S("Big Dripleaf"),
 	_doc_items_longdesc = S("Big Dripleaf"),
-	groups = {handy=1, deco_block=1, dig_by_piston=1},
+	groups = {shearsy=1, handy=1, plant=1, dig_by_piston=1, dripleaf=1},
 	drawtype = "mesh",
 	paramtype2 = "facedir",
 	mesh = "dripleaf_big.obj",
@@ -261,7 +261,8 @@ core.register_globalstep(function(dtime)
 	for _,p in pairs(core.get_connected_players()) do
 		local pos = vector.offset(p:get_pos(),0,-1,0)
 		local node = core.get_node(pos)
-		if node and node.name == "mcl_lush_caves:dripleaf_big" then
+		if node and node.name == "mcl_lush_caves:dripleaf_big"
+			and mcl_redstone.get_power(pos) == 0 then
 			if not player_dripleaf[p] then player_dripleaf[p] = 0 end
 			player_dripleaf[p] = player_dripleaf[p] + dtime
 			if player_dripleaf[p] > 0.5 then
