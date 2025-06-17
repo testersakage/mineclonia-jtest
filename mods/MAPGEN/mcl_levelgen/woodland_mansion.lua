@@ -55,6 +55,7 @@ local schematics = {
 	"small_library",
 	"small_storage_room",
 	"spider",
+	"tree_chopping_room",
 	"triple_bedroom",
 	"wall",
 	"wheat_farm",
@@ -146,6 +147,27 @@ local function handle_mansion_spawn_mob (_, mob)
 	core.add_entity (v, mob_type)
 end
 
+local function handle_mansion_specific_loot (_, loot)
+	local x, y, z, stack, container, enchantment, level
+		= loot[1], loot[2], loot[3], loot[4], loot[5], loot[6], loot[7]
+	x, y, z = level_to_minetest_position (x, y, z)
+	v.x = x
+	v.y = y
+	v.z = z
+
+	local node = core.get_node (v)
+	if node.name == container then
+		mcl_structures.init_node_construct (v)
+		local stack = ItemStack (stack)
+		if enchantment then
+			mcl_enchanting.enchant (stack, enchantment, level)
+		end
+		local meta = core.get_meta (v)
+		local inv = meta:get_inventory ()
+		inv:set_stack ("main", 1, stack)
+	end
+end
+
 if core and not mcl_levelgen.is_levelgen_environment then
 	for _, schematic in ipairs (schematics) do
 		local name = "mcl_levelgen:woodland_mansion_" .. schematic
@@ -159,6 +181,8 @@ if core and not mcl_levelgen.is_levelgen_environment then
 						    handle_mansion_construct_node)
 	mcl_levelgen.register_notification_handler ("mcl_levelgen:mansion_spawn_mob",
 						    handle_mansion_spawn_mob)
+	mcl_levelgen.register_notification_handler ("mcl_levelgen:mansion_specific_loot",
+						    handle_mansion_specific_loot)
 	return
 end
 
@@ -480,10 +504,13 @@ local function verify_schematics (sx, sz, modules)
 	return modules
 end
 
-local is_cid_chest = {}
+local is_cid_chest_or_wire = {}
 
-for _, cid in ipairs (mcl_levelgen.construct_cid_list ({"group:chest_entity",})) do
-	is_cid_chest[cid] = true
+for _, cid in ipairs (mcl_levelgen.construct_cid_list ({
+	"group:chest_entity",
+	"group:redstone_wire",
+})) do
+	is_cid_chest_or_wire[cid] = true
 end
 
 local cid_soul_torch
@@ -497,7 +524,7 @@ local cid_air = core and core.CONTENT_AIR or nil
 
 local function default_processor (x, y, z, rng, cid_existing,
 				  param2_existing, cid, param2)
-	if is_cid_chest[cid] or cid == cid_hanging_banner then
+	if is_cid_chest_or_wire[cid] or cid == cid_hanging_banner then
 		notify_generated ("mcl_levelgen:mansion_construct_node", x, y, z,
 				  { x, y, z, }, true)
 	elseif cid == cid_soul_campfire_lit then
@@ -521,7 +548,7 @@ local default_processors = {
 
 local function chest_loot_processor (x, y, z, rng, cid_existing,
 				     param2_existing, cid, param2)
-	if is_cid_chest[cid] or cid == cid_hanging_banner then
+	if is_cid_chest_or_wire[cid] or cid == cid_hanging_banner then
 		notify_generated ("mcl_levelgen:mansion_construct_node", x, y, z,
 				  { x, y, z, mathabs (rng:next_integer ()), }, true)
 	elseif cid == cid_soul_campfire_lit then
@@ -541,6 +568,21 @@ local chest_loot_processors = {
 	wall_processor,
 }
 
+local function build_specific_loot_processor (stack, container_name,
+					      enchantment, level)
+	local cid_container = getcid (container_name)
+	return function (x, y, z, rng, cid_existing,
+			 param2_existing, cid, param2)
+		if cid == cid_container then
+			notify_generated ("mcl_levelgen:mansion_specific_loot", x, y, z, {
+				x, y, z,
+				stack, container_name, enchantment, level,
+			})
+		end
+		return cid, param2
+	end
+end
+
 local modules_first_storey = {
 	single = verify_schematics (7, 7, {
 		M ("flower_room", default_processors),
@@ -551,14 +593,20 @@ local modules_first_storey = {
 		M ("single_bedroom", default_processors),
 		M ("small_dining_room", default_processors),
 		M ("small_library", default_processors),
-		M ("allium_room", default_processors),
+		M ("allium_room", {
+			build_specific_loot_processor ("mcl_flowers:allium 8",
+						       "mcl_chests:chest_small"),
+		}),
 	}),
 	double = verify_schematics (7, 15, {
 		M ("wheat_farm", default_processors),
 		M ("gray_banner", chest_loot_processors),
 		M ("forge_room", default_processors),
 		M ("pile_room", default_processors),
-		M ("sapling_farm", default_processors),
+		M ("sapling_farm", {
+			build_specific_loot_processor ("mcl_trees:sapling_dark_oak 26",
+						       "mcl_chests:chest_small"),
+		}),
 		M ("melon_farm", default_processors),
 		M ("small_storage_room", default_processors),
 		M ("arch_hallway", chest_loot_processors),
@@ -569,8 +617,16 @@ local modules_first_storey = {
 		M ("bedroom_with_loft", chest_loot_processors),
 		M ("altar", default_processors),
 		M ("clean_chest", chest_loot_processors),
-		M ("ersatz_portal", default_processors),
+		M ("ersatz_portal", {
+			build_specific_loot_processor ("mcl_throwing:ender_pearl 2",
+						       "mcl_chests:trapped_chest_small"),
+		}),
 		M ("redstone_gaol", default_processors),
+		M ("tree_chopping_room", {
+			build_specific_loot_processor ("mcl_tools:axe_iron 1",
+						       "mcl_chests:chest_small",
+						       "efficiency", 1),
+		}),
 	}),
 	quad = verify_schematics (15, 15, {
 		M ("library", default_processors),
@@ -601,14 +657,20 @@ local modules_second_storey = {
 		M ("single_bedroom", default_processors),
 		M ("small_dining_room", default_processors),
 		M ("small_library", default_processors),
-		M ("allium_room", default_processors),
+		M ("allium_room", {
+			build_specific_loot_processor ("mcl_flowers:allium 8",
+						       "mcl_chests:chest_small"),
+		}),
 	}),
 	double = verify_schematics (7, 15, {
 		M ("wheat_farm", default_processors),
 		M ("gray_banner", chest_loot_processors),
 		M ("forge_room", default_processors),
 		M ("pile_room", default_processors),
-		M ("sapling_farm", default_processors),
+		M ("sapling_farm", {
+			build_specific_loot_processor ("mcl_trees:sapling_dark_oak 26",
+						       "mcl_chests:chest_small"),
+		}),
 		M ("melon_farm", default_processors),
 		M ("small_storage_room", default_processors),
 		M ("arch_hallway", chest_loot_processors),
@@ -618,9 +680,17 @@ local modules_second_storey = {
 		M ("master_bedroom", default_processors),
 		M ("bedroom_with_loft", chest_loot_processors),
 		M ("altar", default_processors),
-		M ("ersatz_portal", default_processors),
+		M ("ersatz_portal", {
+			build_specific_loot_processor ("mcl_throwing:ender_pearl 2",
+						       "mcl_chests:trapped_chest_small"),
+		}),
 		M ("redstone_gaol", default_processors),
 		M ("hidden_attic", chest_loot_processors),
+		M ("tree_chopping_room", {
+			build_specific_loot_processor ("mcl_tools:axe_iron 1",
+						       "mcl_chests:chest_small",
+						       "efficiency", 1),
+		}),
 	}),
 	quad = verify_schematics (15, 15, {
 		M ("situation_room", default_processors),
