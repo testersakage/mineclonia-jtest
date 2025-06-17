@@ -50,8 +50,8 @@ end
 core.register_node("mcl_lush_caves:dripleaf_small_stem", {
 	groups = {
 		shearsy=1, handy=1, plant=1,
-		dig_by_piston=1, dripleaf=1,
-		not_in_creative_inventory=1
+		dig_by_piston=1, dig_by_water=1, destroy_by_lava_flow=1,
+		dripleaf=1, not_in_creative_inventory=1
 	},
 	drawtype = "mesh",
 	paramtype = "light",
@@ -72,7 +72,8 @@ core.register_node("mcl_lush_caves:dripleaf_small", {
 	_doc_items_longdesc = S("Small Dripleaf"),
 	groups = {
 		shearsy=1, handy=1, plant=1, compostability = 30,
-		dig_by_piston=1, dripleaf=1
+		dig_by_piston=1, dig_by_water=1, destroy_by_lava_flow=1,
+		dripleaf=1
 	},
 	drawtype = "mesh",
 	paramtype = "light",
@@ -126,8 +127,8 @@ core.register_node("mcl_lush_caves:dripleaf_small", {
 core.register_node("mcl_lush_caves:dripleaf_big_stem", {
 	groups = {
 		shearsy=1, handy=1, plant=1,
-		dig_by_piston=1, dripleaf=1,
-		not_in_creative_inventory=1
+		dig_by_piston=1, dig_by_water=1, destroy_by_lava_flow=1,
+		dripleaf=1, not_in_creative_inventory=1
 	},
 	drawtype = "mesh",
 	paramtype = "light",
@@ -155,7 +156,8 @@ local dripleaf_big = {
 	_doc_items_longdesc = S("Big Dripleaf"),
 	groups = {
 		shearsy=1, handy=1, plant=1, compostability = 65,
-		dig_by_piston=1, dripleaf=1
+		dig_by_piston=1, dig_by_water=1, destroy_by_lava_flow=1,
+		dripleaf=1
 	},
 	drawtype = "mesh",
 	paramtype = "light",
