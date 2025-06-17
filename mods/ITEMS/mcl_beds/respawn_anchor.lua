@@ -15,6 +15,7 @@ for i=0,4 do
 			itemstack:take_item()
 		elseif mcl_worlds.pos_to_dimension(pos) ~= "nether" then
 			if node.name ~= "mcl_beds:respawn_anchor" then --only charged respawn anchors are exploding in the overworld & end in minecraft
+				minetest.remove_node(pos)
 				mcl_explosions.explode(pos, 5, {drop_chance = 0, fire = true})
 			end
 		elseif string.match(node.name, "mcl_beds:respawn_anchor_charged_") then
