@@ -3245,7 +3245,7 @@ local function register_decorations()
 		deco_type = "simple",
 		place_on = {"mcl_lush_caves:moss"},
 		biomes = lushcaves,
-		fill_ratio = 1,
+		fill_ratio = 0.5,
 		flags = "all_floors",
 		y_min = mcl_vars.mg_overworld_min,
 	})
@@ -3347,16 +3347,6 @@ local function register_decorations()
 		flags = "all_floors",
 		y_min = mcl_vars.mg_overworld_min,
 		biomes = lushcaves,
-	})
-
-	core.register_decoration({
-		deco_type = "simple",
-		place_on = "mcl_lush_caves:moss","mcl_core:clay",
-		fill_ratio = 0.5,
-		biomes = lushcaves,
-		decoration = "mcl_flowers:tallgrass",
-		y_min = mcl_vars.mg_overworld_min,
-		flags = "all_floors",
 	})
 
 	core.register_decoration({
