@@ -23,6 +23,9 @@ function mcl_potions.register_splash(name, descr, color, def)
 	if def.nocreative then groups.not_in_creative_inventory = 1 end
 
 	local function on_use(item, placer, pointed_thing)
+		local rc = mcl_util.call_on_rightclick(item, placer, pointed_thing)
+		if rc then return rc end
+
 		local dir = placer:get_look_dir()
 		local pos = placer:get_pos()
 		local potency = item:get_meta():get_int("mcl_potions:potion_potent")
