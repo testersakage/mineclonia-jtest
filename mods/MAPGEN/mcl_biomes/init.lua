@@ -3201,6 +3201,45 @@ local function register_decorations()
 		y_min = mcl_vars.mg_overworld_min,
 	})
 
+	for b=1, #lushcaves do
+		core.register_decoration({
+			deco_type = "schematic",
+			schematic = {
+				size = { x=1, y=5, z=1 },
+				data = {
+					{ name = "mcl_lush_caves:dripleaf_big_stem", prob=255 },
+					{ name = "mcl_lush_caves:dripleaf_big_stem", prob=255 },
+					{ name = "mcl_lush_caves:dripleaf_big_stem", prob=255 },
+					{ name = "mcl_lush_caves:dripleaf_big_stem", prob=255 },
+					{ name = "mcl_lush_caves:dripleaf_big", prob=255 },
+				},
+			},
+			place_on = {"mcl_lush_caves:moss","mcl_core:clay"},
+			fill_ratio = 0.05,
+			y_min = mcl_vars.mg_overworld_min,
+			param2_max = 3,
+			flags = "all_floors",
+			biomes = lushcaves[b],
+		})
+		core.register_decoration({
+			deco_type = "schematic",
+			schematic = {
+				size = { x=1, y=3, z=1 },
+				data = {
+					{ name = "air", prob=0 },
+					{ name = "mcl_lush_caves:dripleaf_small_stem", prob=255 },
+					{ name = "mcl_lush_caves:dripleaf_small", prob=255 },
+				},
+			},
+			place_on = {"mcl_lush_caves:moss","mcl_core:clay"},
+			fill_ratio = 0.05,
+			y_min = mcl_vars.mg_overworld_min,
+			param2_max = 3,
+			flags = "all_floors",
+			biomes = lushcaves[b],
+		})
+	end
+
 	core.register_decoration({
 		decoration = "mcl_flowers:tallgrass",
 		deco_type = "simple",
