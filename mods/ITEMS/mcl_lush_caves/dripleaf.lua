@@ -157,7 +157,7 @@ local dripleaf_big = {
 	groups = {
 		shearsy=1, handy=1, plant=1, compostability = 65,
 		dig_by_piston=1, dig_by_water=1, destroy_by_lava_flow=1,
-		dripleaf=1
+		pathfinder_partial = 2, dripleaf=1
 	},
 	drawtype = "mesh",
 	paramtype = "light",
