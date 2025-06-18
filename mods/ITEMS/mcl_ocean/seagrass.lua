@@ -8,6 +8,9 @@ local surfaces = {
 	{ "sand", "mcl_core:sand", 1 },
 	{ "redsand", "mcl_core:redsand", 1 },
 	{ "gravel", "mcl_core:gravel", 1 },
+	{ "prismarine", "mcl_ocean:prismarine", 1, },
+	{ "prismarine_brick", "mcl_ocean:prismarine_brick", 1, },
+	{ "prismarine_dark", "mcl_ocean:prismarine_dark", 1, },
 }
 
 local function seagrass_on_place(itemstack, placer, pointed_thing)

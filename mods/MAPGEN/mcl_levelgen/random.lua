@@ -1569,3 +1569,4 @@ if true then
 	assert (lcg:next_within (5000) == 3972)
 	assert (lcg:next_within (5000) == 253)	
 end
+

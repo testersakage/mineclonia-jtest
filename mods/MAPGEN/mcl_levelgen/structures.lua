@@ -313,7 +313,7 @@ if core and core.get_mod_storage then
 local storage = core.get_mod_storage ()
 
 local registered_concentric_ring_configurations = {}
-	
+
 function mcl_levelgen.register_concentric_ring_configuration (name, parms)
 	registered_concentric_ring_configurations[name] = parms
 end
@@ -707,6 +707,7 @@ local function intersect_2d_p (a, x1, z1, x2, z2)
 	return a[4] >= x1 and a[1] <= x2
 		and a[6] >= z1 and a[3] <= z2
 end
+mcl_levelgen.intersect_2d_p = intersect_2d_p
 
 local function AABB_intersect_p (a, b)
 	local x1a, y1a, z1a, x2a, y2a, z2a = unpack6 (a)
@@ -1003,6 +1004,18 @@ function mcl_levelgen.translate_vertically (pieces, dy)
 		local bbox = piece.bbox
 		bbox[2] = bbox[2] + dy
 		bbox[5] = bbox[5] + dy
+	end
+end
+
+function mcl_levelgen.translate_pieces (pieces, dx, dy, dz)
+	for _, piece in ipairs (pieces) do
+		local bbox = piece.bbox
+		bbox[1] = bbox[1] + dx
+		bbox[4] = bbox[4] + dx
+		bbox[2] = bbox[2] + dy
+		bbox[5] = bbox[5] + dy
+		bbox[3] = bbox[3] + dz
+		bbox[6] = bbox[6] + dz
 	end
 end
 
