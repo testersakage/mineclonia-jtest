@@ -173,8 +173,9 @@ local dripleaf_big = {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	on_place = mcl_util.generate_on_place_plant_function(function (pos)
 		local below = core.get_node(vector.offset(pos,0,-1,0))
-		dripleaf_allowed[#dripleaf_allowed+1] = "mcl_lush_caves:dripleaf_big"
-		if table.indexof(dripleaf_allowed, below.name) == -1 then
+		local allowed = table.copy(dripleaf_allowed)
+		allowed[#allowed+1] = "mcl_lush_caves:dripleaf_big"
+		if table.indexof(allowed, below.name) == -1 then
 			return false
 		end
 		local param2
