@@ -6779,3 +6779,27 @@ function mcl_levelgen.locate_biome_in_area (preset, x, y, z, radius, rng,
 	end
 	return biome, pos_x, y, pos_z
 end
+
+local ipos2 = mcl_levelgen.ipos2
+local insert = table.insert
+
+function mcl_levelgen.get_biomes_chebyshev (preset, x, y, z, r)
+	local qx1 = toquart (x - r)
+	local qy1 = toquart (y - r)
+	local qz1 = toquart (z - r)
+	local qx2 = toquart (x + r)
+	local qy2 = toquart (y + r)
+	local qz2 = toquart (z + r)
+
+	preset:index_biomes_begin (qx1, qz1, qx2 - qx1 + 1, qz2 - qx1 + 1)
+	local seen = {}
+	local biomes = {}
+
+	for qz, qx, qy in ipos2 (qz1, qx1, qy1, qz2, qx2, qy2) do
+		local biome = preset:index_biomes_cached (qx, qy, qz)
+		if not seen[biomes] then
+			insert (biomes, biome)
+		end
+	end
+	return biomes
+end

@@ -290,7 +290,7 @@ mcl_levelgen.register_structure ("mcl_levelgen:pillager_outpost", {
 	biomes = mcl_levelgen.build_biome_list ({"#has_pillager_outpost",}),
 })
 
-mcl_levelgen.register_structure_set ("mcl_levelgen:pillager_outpost", {
+mcl_levelgen.register_structure_set ("mcl_levelgen:pillager_outposts", {
 	structures = {
 		"mcl_levelgen:pillager_outpost",
 	},

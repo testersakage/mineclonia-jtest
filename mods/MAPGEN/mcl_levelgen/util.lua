@@ -2,6 +2,9 @@
 -- Simple utility functions.
 ------------------------------------------------------------------------
 
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/util/Util.html#shuffle(java.util.List,net.minecraft.util.math.random.Random)
+-- appears to be consistent with this function.
+
 function mcl_levelgen.fisher_yates (tbl, rng)
 	for i = #tbl, 2, -1 do
 		local j = 1 + rng:next_within (i)

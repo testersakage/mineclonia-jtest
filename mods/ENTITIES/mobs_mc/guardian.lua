@@ -53,10 +53,8 @@ local guardian = {
 		{name = "mcl_ocean:prismarine_shard",
 		chance = 1,
 		min = 0,
-		max = 32,
+		max = 2,
 		looting = "common",},
-		-- TODO: Reduce of drops when ocean monument is ready.
-
 		-- The following drops are approximations
 		-- Fish / prismarine crystal
 		{name = "mcl_fishing:fish_raw",
