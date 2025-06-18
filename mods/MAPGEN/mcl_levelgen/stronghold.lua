@@ -563,7 +563,7 @@ local function random_door_type (rng)
 end
 
 local function make_rotated_bbox (x, y, z, orientation, width, height, length)
-	if orientation == "west" or orientation == "east" then
+	if orientation == "north" or orientation == "south" then
 		return {
 			x, y, z, x + width - 1, y + height - 1, z + length - 1,
 		}

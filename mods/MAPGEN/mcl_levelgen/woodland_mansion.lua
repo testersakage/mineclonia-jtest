@@ -137,6 +137,8 @@ local function handle_mansion_construct_node (_, node_list)
 	end
 end
 
+local staticdata = core.serialize ({_structure_spawn = true,})
+
 local function handle_mansion_spawn_mob (_, mob)
 	local x, y, z, mob_type
 		= mob[1], mob[2], mob[3], mob[4]
@@ -144,7 +146,7 @@ local function handle_mansion_spawn_mob (_, mob)
 	v.x = x
 	v.y = y - 0.5
 	v.z = z
-	core.add_entity (v, mob_type)
+	core.add_entity (v, mob_type, staticdata)
 end
 
 local function handle_mansion_specific_loot (_, loot)

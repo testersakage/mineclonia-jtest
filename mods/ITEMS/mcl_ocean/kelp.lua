@@ -450,18 +450,21 @@ end
 -- Note that Minecraft supports placing kelp on all surfaces but magma
 -- blocks.
 kelp.surfaces = {
-	{ name="dirt",		nodename="mcl_core:dirt",		},
-	{ name="sand",		nodename="mcl_core:sand",		},
-	{ name="redsand",	nodename="mcl_core:redsand",		},
-	{ name="gravel",	nodename="mcl_core:gravel",		},
-	{ name="stone",		nodename="mcl_core:stone",		},
-	{ name="andesite",	nodename="mcl_core:andesite",		},
-	{ name="cobble",	nodename="mcl_core:cobble",		},
-	{ name="diorite",	nodename="mcl_core:diorite",		},
-	{ name="clay",		nodename="mcl_core:clay",		},
-	{ name="granite",	nodename="mcl_core:granite",		},
-	{ name="sandstone",	nodename="mcl_core:sandstone",		},
-	{ name="redsandstone",	nodename="mcl_core:redsandstone",	},
+	{ name="dirt",			nodename="mcl_core:dirt",		},
+	{ name="sand",			nodename="mcl_core:sand",		},
+	{ name="redsand",		nodename="mcl_core:redsand",		},
+	{ name="gravel",		nodename="mcl_core:gravel",		},
+	{ name="stone",			nodename="mcl_core:stone",		},
+	{ name="andesite",		nodename="mcl_core:andesite",		},
+	{ name="cobble",		nodename="mcl_core:cobble",		},
+	{ name="diorite",		nodename="mcl_core:diorite",		},
+	{ name="clay",			nodename="mcl_core:clay",		},
+	{ name="granite",		nodename="mcl_core:granite",		},
+	{ name="sandstone",		nodename="mcl_core:sandstone",		},
+	{ name="redsandstone",		nodename="mcl_core:redsandstone",	},
+	{ name="prismarine",		nodename="mcl_ocean:prismarine",	},
+	{ name="prismarine_brick",	nodename="mcl_ocean:prismarine_brick",	},
+	{ name="prismarine_dark",	nodename="mcl_ocean:prismarine_dark",	},
 }
 
 -- Commented properties are the ones obtained using register_kelp_surface.
@@ -545,7 +548,9 @@ function kelp.register_kelp_surface(surface, surface_deftemplate, surface_docs)
 	sounds.place = kelp.leaf_sounds.place
 
 	surface_deftemplate.tiles = surface_deftemplate.tiles or def_tiles
-	surface_deftemplate.inventory_image = surface_deftemplate.inventory_image or ("("..def_tiles[1]..")^mcl_ocean_kelp_item.png")
+	surface_deftemplate.inventory_image = surface_deftemplate.inventory_image
+		or ("("..(type (def_tiles[1]) == "string" and def_tiles[1] or def_tiles[1].name)
+		    ..")^mcl_ocean_kelp_item.png")
 	surface_deftemplate.sounds = surface_deftemplate.sound or sounds
 	local falling_node = core.get_item_group(nodename, "falling_node")
 	surface_deftemplate.node_dig_prediction = surface_deftemplate.node_dig_prediction or nodename
