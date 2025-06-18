@@ -804,6 +804,10 @@ function mcl_levelgen.water_or_air_p (cid)
 		or cid == cid_water_flowing
 end
 
+function mcl_levelgen.water_source_p (cid)
+	return cid == cid_water_source
+end
+
 function mcl_levelgen.water_or_lava_p (cid)
 	return cid == cid_water_source
 		or cid == cid_water_flowing
