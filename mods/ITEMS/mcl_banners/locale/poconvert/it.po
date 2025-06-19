@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-06-19 17:08+0000\n"
+"Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_banners/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.11.4\n"
 
 msgid "And one additional layer"
 msgstr ""
@@ -20,7 +21,7 @@ msgid "And @1 additional layers"
 msgstr ""
 
 msgid "Banner"
-msgstr ""
+msgstr "Stendardo"
 
 msgid "Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns by placing it with a dye in the loom, or with lots of dyes in crafting table."
 msgstr ""
@@ -41,262 +42,262 @@ msgid "Special Banner Pattern"
 msgstr ""
 
 msgid "Black Banner"
-msgstr ""
+msgstr "Stendardo nero"
 
 msgid "Black Base"
-msgstr ""
+msgstr "Fascia in punta nera"
 
 msgid "Black Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta nero"
 
 msgid "Black Base Gradient"
-msgstr ""
+msgstr "Sfumatura in punta nera"
 
 msgid "Black Base Indented"
-msgstr ""
+msgstr "Punta cuneata nera"
 
 msgid "Black Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta nero"
 
 msgid "Black Bend"
-msgstr ""
+msgstr "Banda nera"
 
 msgid "Black Bend Sinister"
-msgstr ""
+msgstr "Sbarra nera"
 
 msgid "Black Bordure"
-msgstr ""
+msgstr "Bordura nera"
 
 msgid "Black Bordure Indented"
-msgstr ""
+msgstr "Bordura dentata nera"
 
 msgid "Black Bricks"
-msgstr ""
+msgstr "Seminato di mattoni neri"
 
 msgid "Black Chevron"
-msgstr ""
+msgstr "Punta nera"
 
 msgid "Black Chevron Inverted"
-msgstr ""
+msgstr "Punta rovesciata nera"
 
 msgid "Black Chief"
-msgstr ""
+msgstr "Fascia in capo nera"
 
 msgid "Black Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo nero"
 
 msgid "Black Chief Indented"
-msgstr ""
+msgstr "Capo cuneato nero"
 
 msgid "Black Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo nero"
 
 msgid "Black Creeper Charge"
-msgstr ""
+msgstr "Volto di creeper nero"
 
 msgid "Black Cross"
-msgstr ""
+msgstr "Croce nera"
 
 msgid "Black Fess"
-msgstr ""
+msgstr "Fascia nera"
 
 msgid "Black Flow"
-msgstr ""
+msgstr "Flusso nero"
 
 msgid "Black Flower Charge"
-msgstr ""
+msgstr "Fiore nero"
 
 msgid "Black Globe Charge"
-msgstr ""
+msgstr "Globo nero"
 
 msgid "Black Gradient"
-msgstr ""
+msgstr "Sfumatura in capo nera"
 
 msgid "Black Guster"
-msgstr ""
+msgstr "Raffica nera"
 
 msgid "Black Lozenge"
-msgstr ""
+msgstr "Losanga nera"
 
 msgid "Black Pale"
-msgstr ""
+msgstr "Palo nero"
 
 msgid "Black Pale Dexter"
-msgstr ""
+msgstr "Palo destro nero"
 
 msgid "Black Pale Sinister"
-msgstr ""
+msgstr "Palo sinistro nero"
 
 msgid "Black Paly"
-msgstr ""
+msgstr "Palato nero"
 
 msgid "Black Per Bend"
-msgstr ""
+msgstr "Trinciato nero"
 
 msgid "Black Per Bend Inverted"
-msgstr ""
+msgstr "Trinciato rovesciato nero"
 
 msgid "Black Per Bend Sinister"
-msgstr ""
+msgstr "Tagliato nero"
 
 msgid "Black Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Tagliato rovesciato nero"
 
 msgid "Black Per Fess"
-msgstr ""
+msgstr "Troncato nero"
 
 msgid "Black Per Fess Inverted"
-msgstr ""
+msgstr "Troncato rovesciato nero"
 
 msgid "Black Per Pale"
-msgstr ""
+msgstr "Partito nero"
 
 msgid "Black Per Pale Inverted"
-msgstr ""
+msgstr "Partito rivoltato nero"
 
 msgid "Black Piglin Charge"
-msgstr ""
+msgstr "Grugno nero"
 
 msgid "Black Roundel"
-msgstr ""
+msgstr "Torta nera"
 
 msgid "Black Saltire"
-msgstr ""
+msgstr "Decusse nera"
 
 msgid "Black Skull Charge"
-msgstr ""
+msgstr "Teschio nero"
 
 msgid "Black Thing Charge"
-msgstr ""
+msgstr "Logo nero"
 
 msgid "Blue Banner"
-msgstr ""
+msgstr "Stendardo blu"
 
 msgid "Blue Base"
-msgstr ""
+msgstr "Fascia in punta blu"
 
 msgid "Blue Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta blu"
 
 msgid "Blue Base Gradient"
-msgstr ""
+msgstr "Sfumatura in punta blu"
 
 msgid "Blue Base Indented"
-msgstr ""
+msgstr "Punta cuneata blu"
 
 msgid "Blue Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta blu"
 
 msgid "Blue Bend"
-msgstr ""
+msgstr "Banda blu"
 
 msgid "Blue Bend Sinister"
-msgstr ""
+msgstr "Sbarra blu"
 
 msgid "Blue Bordure"
-msgstr ""
+msgstr "Bordura blu"
 
 msgid "Blue Bordure Indented"
-msgstr ""
+msgstr "Bordura dentata blu"
 
 msgid "Blue Bricks"
-msgstr ""
+msgstr "Seminato di mattoni blu"
 
 msgid "Blue Chevron"
-msgstr ""
+msgstr "Punta blu"
 
 msgid "Blue Chevron Inverted"
-msgstr ""
+msgstr "Punta rovesciata blu"
 
 msgid "Blue Chief"
-msgstr ""
+msgstr "Capo cuneato blu"
 
 msgid "Blue Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo blu"
 
 msgid "Blue Chief Indented"
-msgstr ""
+msgstr "Fascia in capo blu"
 
 msgid "Blue Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo blu"
 
 msgid "Blue Creeper Charge"
-msgstr ""
+msgstr "Volto di creeper blu"
 
 msgid "Blue Cross"
-msgstr ""
+msgstr "Croce blu"
 
 msgid "Blue Fess"
-msgstr ""
+msgstr "Fascia blu"
 
 msgid "Blue Flow"
-msgstr ""
+msgstr "Flusso blu"
 
 msgid "Blue Flower Charge"
-msgstr ""
+msgstr "Fiore blu"
 
 msgid "Blue Globe Charge"
-msgstr ""
+msgstr "Globo blu"
 
 msgid "Blue Gradient"
-msgstr ""
+msgstr "Sfumatura in capo blu"
 
 msgid "Blue Guster"
-msgstr ""
+msgstr "Raffica blu"
 
 msgid "Blue Lozenge"
-msgstr ""
+msgstr "Losanga blu"
 
 msgid "Blue Pale"
-msgstr ""
+msgstr "Palo blu"
 
 msgid "Blue Pale Dexter"
-msgstr ""
+msgstr "Palo destro blu"
 
 msgid "Blue Pale Sinister"
-msgstr ""
+msgstr "Palo sinistro blu"
 
 msgid "Blue Paly"
-msgstr ""
+msgstr "Palato blu"
 
 msgid "Blue Per Bend"
-msgstr ""
+msgstr "Trinciato blu"
 
 msgid "Blue Per Bend Inverted"
-msgstr ""
+msgstr "Trinciato rovesciato blu"
 
 msgid "Blue Per Bend Sinister"
-msgstr ""
+msgstr "Tagliato blu"
 
 msgid "Blue Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Tagliato rovesciato blu"
 
 msgid "Blue Per Fess"
-msgstr ""
+msgstr "Troncato blu"
 
 msgid "Blue Per Fess Inverted"
-msgstr ""
+msgstr "Troncato rovesciato blu"
 
 msgid "Blue Per Pale"
-msgstr ""
+msgstr "Partito blu"
 
 msgid "Blue Per Pale Inverted"
-msgstr ""
+msgstr "Partito rivoltato blu"
 
 msgid "Blue Piglin Charge"
-msgstr ""
+msgstr "Grugno blu"
 
 msgid "Blue Roundel"
-msgstr ""
+msgstr "Torta blu"
 
 msgid "Blue Saltire"
-msgstr ""
+msgstr "Decusse blu"
 
 msgid "Blue Skull Charge"
-msgstr ""
+msgstr "Teschio blu"
 
 msgid "Blue Thing Charge"
-msgstr ""
+msgstr "Logo blu"
 
 msgid "Bricks Banner Pattern"
 msgstr ""
@@ -308,7 +309,7 @@ msgid "Brown Base"
 msgstr ""
 
 msgid "Brown Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta marrone"
 
 msgid "Brown Base Gradient"
 msgstr ""
@@ -317,7 +318,7 @@ msgid "Brown Base Indented"
 msgstr ""
 
 msgid "Brown Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta marrone"
 
 msgid "Brown Bend"
 msgstr ""
@@ -344,13 +345,13 @@ msgid "Brown Chief"
 msgstr ""
 
 msgid "Brown Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo marrone"
 
 msgid "Brown Chief Indented"
 msgstr ""
 
 msgid "Brown Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo marrone"
 
 msgid "Brown Creeper Charge"
 msgstr ""
@@ -383,10 +384,10 @@ msgid "Brown Pale"
 msgstr ""
 
 msgid "Brown Pale Dexter"
-msgstr ""
+msgstr "Palo destro marrone"
 
 msgid "Brown Pale Sinister"
-msgstr ""
+msgstr "Palo sinistro marrone"
 
 msgid "Brown Paly"
 msgstr ""
@@ -443,7 +444,7 @@ msgid "Cyan Base"
 msgstr ""
 
 msgid "Cyan Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta ciano"
 
 msgid "Cyan Base Gradient"
 msgstr ""
@@ -452,7 +453,7 @@ msgid "Cyan Base Indented"
 msgstr ""
 
 msgid "Cyan Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta ciano"
 
 msgid "Cyan Bend"
 msgstr ""
@@ -479,13 +480,13 @@ msgid "Cyan Chief"
 msgstr ""
 
 msgid "Cyan Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo ciano"
 
 msgid "Cyan Chief Indented"
 msgstr ""
 
 msgid "Cyan Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo ciano"
 
 msgid "Cyan Creeper Charge"
 msgstr ""
@@ -518,10 +519,10 @@ msgid "Cyan Pale"
 msgstr ""
 
 msgid "Cyan Pale Dexter"
-msgstr ""
+msgstr "Palo destro ciano"
 
 msgid "Cyan Pale Sinister"
-msgstr ""
+msgstr "Palo sinistro ciano"
 
 msgid "Cyan Paly"
 msgstr ""
@@ -581,7 +582,7 @@ msgid "Green Base"
 msgstr ""
 
 msgid "Green Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta verde"
 
 msgid "Green Base Gradient"
 msgstr ""
@@ -590,7 +591,7 @@ msgid "Green Base Indented"
 msgstr ""
 
 msgid "Green Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta verde"
 
 msgid "Green Bend"
 msgstr ""
@@ -617,13 +618,13 @@ msgid "Green Chief"
 msgstr ""
 
 msgid "Green Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo verde"
 
 msgid "Green Chief Indented"
 msgstr ""
 
 msgid "Green Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo verde"
 
 msgid "Green Creeper Charge"
 msgstr ""
@@ -656,10 +657,10 @@ msgid "Green Pale"
 msgstr ""
 
 msgid "Green Pale Dexter"
-msgstr ""
+msgstr "Palo destro verde"
 
 msgid "Green Pale Sinister"
-msgstr ""
+msgstr "Palo sinistro verde"
 
 msgid "Green Paly"
 msgstr ""
@@ -710,7 +711,7 @@ msgid "Grey Base"
 msgstr ""
 
 msgid "Grey Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta grigio"
 
 msgid "Grey Base Gradient"
 msgstr ""
@@ -719,7 +720,7 @@ msgid "Grey Base Indented"
 msgstr ""
 
 msgid "Grey Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta grigio"
 
 msgid "Grey Bend"
 msgstr ""
@@ -746,13 +747,13 @@ msgid "Grey Chief"
 msgstr ""
 
 msgid "Grey Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo grigio"
 
 msgid "Grey Chief Indented"
 msgstr ""
 
 msgid "Grey Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo grigio"
 
 msgid "Grey Creeper Charge"
 msgstr ""
@@ -785,10 +786,10 @@ msgid "Grey Pale"
 msgstr ""
 
 msgid "Grey Pale Dexter"
-msgstr ""
+msgstr "Palo destro grigio"
 
 msgid "Grey Pale Sinister"
-msgstr ""
+msgstr "Palo sinistro grigio"
 
 msgid "Grey Paly"
 msgstr ""
@@ -842,7 +843,7 @@ msgid "Light Blue Base"
 msgstr ""
 
 msgid "Light Blue Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta azzurro"
 
 msgid "Light Blue Base Gradient"
 msgstr ""
@@ -851,7 +852,7 @@ msgid "Light Blue Base Indented"
 msgstr ""
 
 msgid "Light Blue Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta azzurro"
 
 msgid "Light Blue Bend"
 msgstr ""
@@ -878,13 +879,13 @@ msgid "Light Blue Chief"
 msgstr ""
 
 msgid "Light Blue Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo azzurro"
 
 msgid "Light Blue Chief Indented"
 msgstr ""
 
 msgid "Light Blue Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo azzurro"
 
 msgid "Light Blue Creeper Charge"
 msgstr ""
@@ -917,10 +918,10 @@ msgid "Light Blue Pale"
 msgstr ""
 
 msgid "Light Blue Pale Dexter"
-msgstr ""
+msgstr "Palo destro azzurro"
 
 msgid "Light Blue Pale Sinister"
-msgstr ""
+msgstr "Palo sinistro azzurro"
 
 msgid "Light Blue Paly"
 msgstr ""
@@ -971,7 +972,7 @@ msgid "Light Grey Base"
 msgstr ""
 
 msgid "Light Grey Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta grigio chiaro"
 
 msgid "Light Grey Base Gradient"
 msgstr ""
@@ -980,7 +981,7 @@ msgid "Light Grey Base Indented"
 msgstr ""
 
 msgid "Light Grey Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta grigio chiaro"
 
 msgid "Light Grey Bend"
 msgstr ""
@@ -1007,13 +1008,13 @@ msgid "Light Grey Chief"
 msgstr ""
 
 msgid "Light Grey Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo grigio chiaro"
 
 msgid "Light Grey Chief Indented"
 msgstr ""
 
 msgid "Light Grey Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo grigio chiaro"
 
 msgid "Light Grey Creeper Charge"
 msgstr ""
@@ -1046,7 +1047,7 @@ msgid "Light Grey Pale"
 msgstr ""
 
 msgid "Light Grey Pale Dexter"
-msgstr ""
+msgstr "Palo destro grigio chiaro"
 
 msgid "Light Grey Pale Sinister"
 msgstr ""
@@ -1100,7 +1101,7 @@ msgid "Lime Base"
 msgstr ""
 
 msgid "Lime Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta lime"
 
 msgid "Lime Base Gradient"
 msgstr ""
@@ -1109,7 +1110,7 @@ msgid "Lime Base Indented"
 msgstr ""
 
 msgid "Lime Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta lime"
 
 msgid "Lime Bend"
 msgstr ""
@@ -1136,13 +1137,13 @@ msgid "Lime Chief"
 msgstr ""
 
 msgid "Lime Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo lime"
 
 msgid "Lime Chief Indented"
 msgstr ""
 
 msgid "Lime Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo lime"
 
 msgid "Lime Creeper Charge"
 msgstr ""
@@ -1175,7 +1176,7 @@ msgid "Lime Pale"
 msgstr ""
 
 msgid "Lime Pale Dexter"
-msgstr ""
+msgstr "Palo destro lime"
 
 msgid "Lime Pale Sinister"
 msgstr ""
@@ -1229,7 +1230,7 @@ msgid "Magenta Base"
 msgstr ""
 
 msgid "Magenta Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta magenta"
 
 msgid "Magenta Base Gradient"
 msgstr ""
@@ -1238,7 +1239,7 @@ msgid "Magenta Base Indented"
 msgstr ""
 
 msgid "Magenta Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta magenta"
 
 msgid "Magenta Bend"
 msgstr ""
@@ -1265,13 +1266,13 @@ msgid "Magenta Chief"
 msgstr ""
 
 msgid "Magenta Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo magenta"
 
 msgid "Magenta Chief Indented"
 msgstr ""
 
 msgid "Magenta Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo magenta"
 
 msgid "Magenta Creeper Charge"
 msgstr ""
@@ -1304,7 +1305,7 @@ msgid "Magenta Pale"
 msgstr ""
 
 msgid "Magenta Pale Dexter"
-msgstr ""
+msgstr "Palo destro magenta"
 
 msgid "Magenta Pale Sinister"
 msgstr ""
@@ -1358,7 +1359,7 @@ msgid "Orange Base"
 msgstr ""
 
 msgid "Orange Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta arancione"
 
 msgid "Orange Base Gradient"
 msgstr ""
@@ -1367,7 +1368,7 @@ msgid "Orange Base Indented"
 msgstr ""
 
 msgid "Orange Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta arancione"
 
 msgid "Orange Bend"
 msgstr ""
@@ -1394,13 +1395,13 @@ msgid "Orange Chief"
 msgstr ""
 
 msgid "Orange Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo arancione"
 
 msgid "Orange Chief Indented"
 msgstr ""
 
 msgid "Orange Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo arancione"
 
 msgid "Orange Creeper Charge"
 msgstr ""
@@ -1433,7 +1434,7 @@ msgid "Orange Pale"
 msgstr ""
 
 msgid "Orange Pale Dexter"
-msgstr ""
+msgstr "Palo destro arancione"
 
 msgid "Orange Pale Sinister"
 msgstr ""
@@ -1490,7 +1491,7 @@ msgid "Pink Base"
 msgstr ""
 
 msgid "Pink Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta rosa"
 
 msgid "Pink Base Gradient"
 msgstr ""
@@ -1499,7 +1500,7 @@ msgid "Pink Base Indented"
 msgstr ""
 
 msgid "Pink Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta rosa"
 
 msgid "Pink Bend"
 msgstr ""
@@ -1526,13 +1527,13 @@ msgid "Pink Chief"
 msgstr ""
 
 msgid "Pink Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo rosa"
 
 msgid "Pink Chief Indented"
 msgstr ""
 
 msgid "Pink Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo rosa"
 
 msgid "Pink Creeper Charge"
 msgstr ""
@@ -1565,7 +1566,7 @@ msgid "Pink Pale"
 msgstr ""
 
 msgid "Pink Pale Dexter"
-msgstr ""
+msgstr "Palo destro rosa"
 
 msgid "Pink Pale Sinister"
 msgstr ""
@@ -1619,7 +1620,7 @@ msgid "Purple Base"
 msgstr ""
 
 msgid "Purple Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta viola"
 
 msgid "Purple Base Gradient"
 msgstr ""
@@ -1628,7 +1629,7 @@ msgid "Purple Base Indented"
 msgstr ""
 
 msgid "Purple Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta viola"
 
 msgid "Purple Bend"
 msgstr ""
@@ -1655,13 +1656,13 @@ msgid "Purple Chief"
 msgstr ""
 
 msgid "Purple Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo viola"
 
 msgid "Purple Chief Indented"
 msgstr ""
 
 msgid "Purple Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo viola"
 
 msgid "Purple Creeper Charge"
 msgstr ""
@@ -1694,7 +1695,7 @@ msgid "Purple Pale"
 msgstr ""
 
 msgid "Purple Pale Dexter"
-msgstr ""
+msgstr "Palo destro viola"
 
 msgid "Purple Pale Sinister"
 msgstr ""
@@ -1748,7 +1749,7 @@ msgid "Red Base"
 msgstr ""
 
 msgid "Red Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta rosso"
 
 msgid "Red Base Gradient"
 msgstr ""
@@ -1757,7 +1758,7 @@ msgid "Red Base Indented"
 msgstr ""
 
 msgid "Red Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta rosso"
 
 msgid "Red Bend"
 msgstr ""
@@ -1784,13 +1785,13 @@ msgid "Red Chief"
 msgstr ""
 
 msgid "Red Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo rosso"
 
 msgid "Red Chief Indented"
 msgstr ""
 
 msgid "Red Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo rosso"
 
 msgid "Red Creeper Charge"
 msgstr ""
@@ -1823,7 +1824,7 @@ msgid "Red Pale"
 msgstr ""
 
 msgid "Red Pale Dexter"
-msgstr ""
+msgstr "Palo destro rosso"
 
 msgid "Red Pale Sinister"
 msgstr ""
@@ -1883,7 +1884,7 @@ msgid "White Base"
 msgstr ""
 
 msgid "White Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta bianco"
 
 msgid "White Base Gradient"
 msgstr ""
@@ -1892,7 +1893,7 @@ msgid "White Base Indented"
 msgstr ""
 
 msgid "White Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta bianco"
 
 msgid "White Bend"
 msgstr ""
@@ -1919,13 +1920,13 @@ msgid "White Chief"
 msgstr ""
 
 msgid "White Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo bianco"
 
 msgid "White Chief Indented"
 msgstr ""
 
 msgid "White Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo bianco"
 
 msgid "White Creeper Charge"
 msgstr ""
@@ -1958,7 +1959,7 @@ msgid "White Pale"
 msgstr ""
 
 msgid "White Pale Dexter"
-msgstr ""
+msgstr "Palo destro bianco"
 
 msgid "White Pale Sinister"
 msgstr ""
@@ -2012,7 +2013,7 @@ msgid "Yellow Base"
 msgstr ""
 
 msgid "Yellow Base Dexter Canton"
-msgstr ""
+msgstr "Cantone destro della punta giallo"
 
 msgid "Yellow Base Gradient"
 msgstr ""
@@ -2021,7 +2022,7 @@ msgid "Yellow Base Indented"
 msgstr ""
 
 msgid "Yellow Base Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro della punta giallo"
 
 msgid "Yellow Bend"
 msgstr ""
@@ -2048,13 +2049,13 @@ msgid "Yellow Chief"
 msgstr ""
 
 msgid "Yellow Chief Dexter Canton"
-msgstr ""
+msgstr "Cantone destro del capo giallo"
 
 msgid "Yellow Chief Indented"
 msgstr ""
 
 msgid "Yellow Chief Sinister Canton"
-msgstr ""
+msgstr "Cantone sinistro del capo giallo"
 
 msgid "Yellow Creeper Charge"
 msgstr ""
@@ -2087,7 +2088,7 @@ msgid "Yellow Pale"
 msgstr ""
 
 msgid "Yellow Pale Dexter"
-msgstr ""
+msgstr "Palo destro giallo"
 
 msgid "Yellow Pale Sinister"
 msgstr ""
@@ -2133,4 +2134,3 @@ msgstr ""
 
 msgid "Yellow Thing Charge"
 msgstr ""
-
