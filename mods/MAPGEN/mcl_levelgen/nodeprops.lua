@@ -529,8 +529,8 @@ local face_opposites = {
 	[FACE_SOUTH] = FACE_NORTH,
 	[FACE_WEST]  = FACE_EAST,
 	[FACE_EAST]  = FACE_WEST,
-	[FACE_UP]    = FACE_UP,
-	[FACE_DOWN]  = FACE_DOWN,
+	[FACE_UP]    = FACE_DOWN,
+	[FACE_DOWN]  = FACE_UP,
 }
 
 local face_directions = {
@@ -619,9 +619,9 @@ function mcl_levelgen.ordinal_to_wallmounted (ordinal)
 	elseif ordinal == FACE_WEST then
 		return 3
 	elseif ordinal == FACE_SOUTH then
-		return 4
-	elseif ordinal == FACE_NORTH then
 		return 5
+	elseif ordinal == FACE_NORTH then
+		return 4
 	else
 		assert (false)
 	end
@@ -953,6 +953,14 @@ function mcl_levelgen.face_sturdy_p (x, y, z, axis, dir)
 	if shape then
 		local face = shape:select_face (axis, dir * 0.5)
 		return face:equal_p (FULL_BLOCK)
+	end
+	return false
+end
+
+function mcl_levelgen.is_full_block (x, y, z)
+	local shape, _ = get_node_shape (x, y, z)
+	if shape then
+		return shape:equal_p (FULL_BLOCK)
 	end
 	return false
 end
