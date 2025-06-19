@@ -1460,7 +1460,7 @@ local function load_heightmap (id)
 	-- print ("Loading heightmap " .. id)
 	local data = storage:get_string ("heightmap" .. id)
 	if data == "" then
-		error (string.format ("Could not request for heightmap %d; Level is corrupt", id))
+		error (string.format ("Could not satisfy request for heightmap %d; Level is corrupt", id))
 	end
 	local str = core.decompress (data, "zstd")
 	local fn, err = loadstring (str)
