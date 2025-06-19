@@ -1219,8 +1219,10 @@ local function vines_place (_, x, y, z, cfg, rng)
 			if face_sturdy_p (x + dx, y + dy, z + dz, axis, -dir) then
 				local dir = facedir_to_wallmounted (axis, dir)
 				set_block (x, y, z, cid_vine, dir)
+				return true
 			end
 		end
+		return false
 	end
 end
 

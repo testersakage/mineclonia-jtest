@@ -7,7 +7,10 @@ local R = mcl_levelgen.build_random_spread_placement
 
 local level_to_minetest_position = mcl_levelgen.level_to_minetest_position
 local v = vector.zero ()
-local staticdata = core.serialize ({_structure_spawn = true,})
+local staticdata = core.serialize ({
+	_structure_spawn = true,
+	persistent = true,
+})
 
 local function handle_monument_elder_guardian (_, data)
 	local x, y, z = level_to_minetest_position (data.x, data.y, data.z)
