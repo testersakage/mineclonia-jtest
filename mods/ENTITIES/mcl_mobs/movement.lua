@@ -762,8 +762,8 @@ local function has_strayed (self_pos, last_wp, next_wp)
 	local norm = vector.normalize (vec)
 	local closest = vector.multiply (norm, proj)
 	closest.x = clamp (closest.x, 0, vec.x)
-	closest.y = clamp (closest.y, 0, vec.x)
-	closest.z = clamp (closest.z, 0, vec.x)
+	closest.y = clamp (closest.y, 0, vec.y)
+	closest.z = clamp (closest.z, 0, vec.z)
 	local dx = closest.x - pos.x
 	local dy = closest.y - pos.y
 	local dz = closest.z - pos.z
