@@ -524,7 +524,7 @@ local cobweb_008_nodes = build_node_property_table ({
 })
 
 local cobweb_010_nodes = build_node_property_table ({
-	"group:stairs",
+	"group:stair",
 	"group:slab",
 })
 
