@@ -945,7 +945,7 @@ function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_i
 	return true
 end
 
-function terrain_generator:get_one_height (x, z, is_solid)
+local function get_one_height_or_column (self, x, z, predicate, arg)
 	local y_min = self.y_min
 	local cell_width = self.cell_width
 	local cell_height = self.cell_height
@@ -985,24 +985,73 @@ function terrain_generator:get_one_height (x, z, is_solid)
 			interpolator_update_x (self, progress_x)
 			interpolator_update_z (self, progress_z)
 			local density = final_density (x, y, z)
-
-			if not is_solid then
-				if density >= 0.0 then
-					return y_pos + 1
-				end
-			else
-				local cid, param2
-					= state_from_density (aquifer, get_node,
-							      cid_default_block,
-							      x, y_pos, z, density,
-							      veins, self)
-				if is_solid (cid, param2) then
-					return y_pos + 1
-				end
+			local value = predicate (self, aquifer, get_node,
+						 cid_default_block,
+						 x, y_pos, z, density,
+						 veins, arg)
+			if value then
+				return value
 			end
 		end
 	end
-	return -32768
+
+	return nil
+end
+
+local function get_one_height_processed (terrain, aquifer, get_node,
+					 cid_default_block,
+					 x, y_pos, z, density,
+					 veins, arg)
+	local cid, param2
+		= state_from_density (aquifer, get_node,
+				      cid_default_block,
+				      x, y_pos, z, density,
+				      veins, terrain)
+	if arg (cid, param2) then
+		return y_pos + 1
+	end
+	return nil
+end
+
+local function get_one_height_cb (_, _, _, _, _, y_pos, _, density, _, _)
+	if density >= 0.0 then
+		return y_pos + 1
+	end
+	return nil
+end
+
+function terrain_generator:get_one_height (x, z, is_solid)
+	if is_solid then
+		return get_one_height_or_column (self, x, z,
+						 get_one_height_processed,
+						 is_solid) or -32768
+	else
+		return get_one_height_or_column (self, x, z, get_one_height_cb,
+						 nil) or -32768
+	end
+end
+
+local get_one_column_y_min
+
+local function get_one_column_cb (terrain, aquifer, get_node,
+				  cid_default_block,
+				  x, y_pos, z, density,
+				  veins, arg)
+	local cid, param2
+		= state_from_density (aquifer, get_node,
+				      cid_default_block,
+				      x, y_pos, z, density,
+				      veins, terrain)
+	arg[y_pos - get_one_column_y_min + 1] = encode_node (cid, param2)
+end
+
+function terrain_generator:get_one_column (x, z, column_data)
+	local level_height = self.level_height
+	get_one_column_y_min = self.y_min
+	column_data[level_height + 1] = nil
+	get_one_height_or_column (self, x, z, get_one_column_cb,
+				  column_data)
+	return column_data
 end
 
 local huge = math.huge
