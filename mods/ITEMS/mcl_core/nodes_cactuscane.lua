@@ -58,11 +58,13 @@ mcl_flowerpots.register_potted_cube("mcl_core:cactus", {
 mcl_player.register_globalstep_slow(function(player)
 	-- Am I near a cactus?
 	local pos = player:get_pos()
-	local near = core.find_node_near(pos, 1, "mcl_core:cactus", true)
-	if near then
+	local a = vector.offset(pos,-1,0,-1)
+	local b = vector.offset(pos,1,0,1)
+	local nearby = core.find_nodes_in_area(a, b, {"mcl_core:cactus"})
+	for _,near in pairs(nearby) do
 		-- Am I touching the cactus? If so, it hurts
 		local dist = vector.distance(pos, near)
-		if dist < 1.1 then
+		if dist < 1 then
 			if player:get_hp() > 0 then
 				mcl_util.deal_damage(player, 1, {type = "cactus"})
 			end
