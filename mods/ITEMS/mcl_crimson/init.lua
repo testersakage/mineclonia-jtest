@@ -1,6 +1,9 @@
 local modname = core.get_current_modname()
 local S = core.get_translator(modname)
 local modpath = core.get_modpath(modname)
+
+mcl_crimson = {}
+
 -- Warped and Crimson fungus
 -- by debiankaios
 -- adapted for mcl2 by cora
@@ -84,7 +87,7 @@ end
 local max_vines_age = 25
 local grow_vines_direction = {[1] = 1, [2] = -1}
 
-function grow_vines(pos, amount, vine, dir, max_age)
+function mcl_crimson.grow_vines(pos, amount, vine, dir, max_age)
 	dir = dir or grow_vines_direction[core.get_item_group(vine, "vinelike_node")] or 1
 	local tip = mcl_util.traverse_tower(pos, dir)
 	local node_tip = core.get_node(tip)
@@ -279,7 +282,7 @@ local call_on_place = function(itemstack, placer, pointed_thing)
 	if mcl_util.check_position_protection(pos, placer) then return itemstack end
 
 	if node.name == idef.name then
-		if grow_vines(pointed_thing.under, 1, node.name) == 0 then return end
+		if mcl_crimson.grow_vines(pointed_thing.under, 1, node.name) == 0 then return end
 	elseif grow_dir == dir and core.get_item_group(node.name, "solid") ~= 0 then
 		core.item_place_node(itemstack, placer, pointed_thing, 0)
 	else
@@ -325,9 +328,9 @@ local function register_vines(name, def, extra_groups)
 			name,
 			name,
 		},
-		_mcl_hardness = 0.2,
+		_mcl_hardness = 0,
 		_on_bone_meal = function(_, _, _, pos)
-			grow_vines(pos, math.random(1, 3), name, nil, max_vines_age)
+			mcl_crimson.grow_vines(pos, math.random(1, 3), name, nil, max_vines_age)
 		end,
 		_mcl_on_rightclick_optional = function (pos, node, clicker, itemstack)
 			local item_name = clicker:get_wielded_item():get_name()
@@ -571,7 +574,7 @@ core.register_abm({
 	chance = 4,
 	action = function(pos, node)
 		if grow_vines_direction[core.get_item_group(node.name, "vinelike_node")] and node.param2 < max_vines_age then
-			grow_vines(pos, 1, node.name, nil, max_vines_age)
+			mcl_crimson.grow_vines(pos, 1, node.name, nil, max_vines_age)
 		end
 	end
 })

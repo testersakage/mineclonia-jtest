@@ -155,8 +155,6 @@ core.register_node("mcl_lush_caves:cave_vines", {
 	_doc_items_longdesc = S("Cave vines are decorative blocks growing from the ceiling of lush caves."),
 	_doc_items_hidden = false,
 	paramtype = "light",
-	--paramtype2 = "meshoptions",
-	--place_param2 = 3,
 	sunlight_propagates = true,
 	walkable = false,
 	climbable = true,
@@ -173,28 +171,27 @@ core.register_node("mcl_lush_caves:cave_vines", {
 	groups = {
 		handy=1, plant=1, vinelike_node=2,
 		dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1,
-		deco_block=1, cave_vine=1
+		deco_block=1, not_in_crative_inventory=1
 	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_hardness = 0,
 	drop = "",
-	_on_bone_meal = function(_, _, _, pos)
-		core.set_node(pos,{name="mcl_lush_caves:cave_vines_lit"})
+	_on_bone_meal = function(_, _, _, pos, node)
+		core.set_node(pos,{name="mcl_lush_caves:cave_vines_lit",
+			param2=node.param2})
 		return true
 	end,
-	_mcl_on_rightclick_optional = function (pos, _, clicker, itemstack)
-		local nb = core.get_node(vector.offset(pos,0,-1,0))
-		if core.get_item_group(nb.name, "cave_vine") ~= 1 then
-			local item = clicker:get_wielded_item()
-			local meta = core.get_meta(pos)
-			local shears = core.get_item_group(item:get_name(), "shears") > 0
-			local sheared = meta:get_int("sheared")
-			if shears and sheared ~= 1 then
-				core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
-				meta:set_int("sheared", 1)
-				local wear = mcl_autogroup.get_wear(item:get_name(), "shearsy")
-				itemstack:add_wear(wear)
-			end
+	_mcl_on_rightclick_optional = function (pos, node, clicker, itemstack)
+		local item_name = clicker:get_wielded_item():get_name()
+		local shears = core.get_item_group(item_name, "shears") > 0
+		local tip = mcl_util.traverse_tower(pos, -1)
+
+		if shears and vector.equals(pos, tip) then
+			core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+			local wear = mcl_autogroup.get_wear(item_name, "shearsy")
+			itemstack:add_wear(wear)
+			node.param2 = 25
+			core.swap_node(pos,node)
 		end
 	end
 })
@@ -206,8 +203,6 @@ core.register_node("mcl_lush_caves:cave_vines_lit", {
 	_doc_items_longdesc = S("Lit cave vines are light emitting decorative blocks growing from the ceiling of lush caves."),
 	_doc_items_hidden = false,
 	paramtype = "light",
-	--paramtype2 = "meshoptions",
-	--place_param2 = 3,
 	sunlight_propagates = true,
 	walkable = false,
 	climbable = true,
@@ -225,15 +220,16 @@ core.register_node("mcl_lush_caves:cave_vines_lit", {
 	groups = {
 		handy=1, plant=1, vinelike_node=2,
 		dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1,
-		deco_block=1, cave_vine=1
+		deco_block=1, not_in_crative_inventory=1
 	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_hardness = 0,
 	_mcl_shears_drop = true,
 	drop = "mcl_lush_caves:glow_berry",
-	on_rightclick = function(pos)
+	on_rightclick = function(pos, node)
 		core.add_item(pos,"mcl_lush_caves:glow_berry")
-		core.set_node(pos,{name="mcl_lush_caves:cave_vines"})
+		core.set_node(pos,{name="mcl_lush_caves:cave_vines",
+			param2=node.param2})
 	end,
 })
 
@@ -289,18 +285,21 @@ core.register_craftitem("mcl_lush_caves:glow_berry", {
 
 		if mcl_util.check_position_protection(pointed_thing.above, placer) then return end
 
-		local vine
-		if math.random() < 0.11 then
-			vine = "mcl_lush_caves:cave_vines_lit"
-		else
-			vine = "mcl_lush_caves:cave_vines"
-		end
+		local vine = "mcl_lush_caves:cave_vines"
 
 		local node = core.get_node(pointed_thing.under)
 		local different_vine = core.get_item_group(node.name, "vinelike_node") == 2 and node.name ~= vine
 		if different_vine then return end
 
 		core.place_node(pointed_thing.under, {name=vine}, placer)
+
+		if math.random() <= 0.11 then
+			vine = "mcl_lush_caves:cave_vines_lit"
+		end
+		-- Inherit param2 and grow berry if lucky
+		core.swap_node(vector.offset(pointed_thing.under,0,-1,0),
+			{name=vine, param2=node.param2+1})
+
 		core.sound_play(core.registered_nodes[vine].sounds.place, {pos=pointed_thing.above, gain=1}, true)
 		if not core.is_creative_enabled(placer:get_player_name()) then
 			itemstack:take_item(1)

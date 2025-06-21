@@ -181,18 +181,15 @@ core.register_abm({
 	interval = 180,
 	chance = 5,
 	action = function(pos, node)
-		local below = vector.offset(pos,0,-1,0)
-		local node_below = core.get_node(below)
-		if core.get_item_group(node_below.name, "cave_vine") ~= 1 then
-			local meta = core.get_meta(pos)
-			local sheared = meta:get_int("sheared")
-			if sheared == 1 then return end
-			node.name = "mcl_lush_caves:cave_vines"
-			if math.random() <= 0.11 then  -- 11% chance
-				node.name="mcl_lush_caves:cave_vines_lit"
-			end
-			if node_below.name == "air" then
-				core.swap_node(below,node)
+		local tip = mcl_util.traverse_tower(pos, -1)
+		local max_vines_age = 25
+		if vector.equals(pos, tip) then
+			if node.param2 < max_vines_age then
+				node.name = "mcl_lush_caves:cave_vines"
+				if math.random() <= 0.11 then
+					node.name = "mcl_lush_caves:cave_vines_lit"
+				end
+				mcl_crimson.grow_vines(pos, 1, node.name, -1, max_vines_age)
 			end
 		end
 	end
