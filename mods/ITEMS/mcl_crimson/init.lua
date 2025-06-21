@@ -305,7 +305,6 @@ local function register_vines(name, def, extra_groups)
 		paramtype = "light",
 		walkable = false,
 		climbable = true,
-		buildable_to = true,
 		groups = groups,
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		node_placement_prediction = "",
