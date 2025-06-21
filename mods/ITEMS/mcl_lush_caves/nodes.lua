@@ -170,7 +170,11 @@ core.register_node("mcl_lush_caves:cave_vines", {
 			{-7/16, -0.5, -7/16, 7/16, 0.5, 7/16}
 		},
 	},
-	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, deco_block=1},
+	groups = {
+		handy=1, plant=1, vinelike_node=2,
+		dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1,
+		deco_block=1, cave_vine=1
+	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_hardness = 0,
 	drop = "",
@@ -178,6 +182,21 @@ core.register_node("mcl_lush_caves:cave_vines", {
 		core.set_node(pos,{name="mcl_lush_caves:cave_vines_lit"})
 		return true
 	end,
+	_mcl_on_rightclick_optional = function (pos, _, clicker, itemstack)
+		local nb = core.get_node(vector.offset(pos,0,-1,0))
+		if core.get_item_group(nb.name, "cave_vine") ~= 1 then
+			local item = clicker:get_wielded_item()
+			local meta = core.get_meta(pos)
+			local shears = core.get_item_group(item:get_name(), "shears") > 0
+			local sheared = meta:get_int("sheared")
+			if shears and sheared ~= 1 then
+				core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+				meta:set_int("sheared", 1)
+				local wear = mcl_autogroup.get_wear(item:get_name(), "shearsy")
+				itemstack:add_wear(wear)
+			end
+		end
+	end
 })
 
 core.register_node("mcl_lush_caves:cave_vines_lit", {
@@ -203,7 +222,11 @@ core.register_node("mcl_lush_caves:cave_vines_lit", {
 			{-7/16, -0.5, -7/16, 7/16, 0.5, 7/16}
 		},
 	},
-	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, deco_block=1},
+	groups = {
+		handy=1, plant=1, vinelike_node=2,
+		dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1,
+		deco_block=1, cave_vine=1
+	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_hardness = 0,
 	_mcl_shears_drop = true,

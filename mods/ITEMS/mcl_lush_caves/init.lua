@@ -181,16 +181,19 @@ core.register_abm({
 	interval = 180,
 	chance = 5,
 	action = function(pos, node)
-		local pd1 = vector.offset(pos,0,-1,0)
-		local pd2 = vector.offset(pos,0,-2,0)
-		node.name = "mcl_lush_caves:cave_vines"
-		if  math.random(5) == 1 then
-			node.name="mcl_lush_caves:cave_vines_lit"
-		end
-		if core.get_node(pd1).name == "air" and core.get_node(pd2).name == "air" then
-			core.swap_node(pd1,node)
-		else
-			core.swap_node(pos,{name="mcl_lush_caves:cave_vines_lit"})
+		local below = vector.offset(pos,0,-1,0)
+		local node_below = core.get_node(below)
+		if core.get_item_group(node_below.name, "cave_vine") ~= 1 then
+			local meta = core.get_meta(pos)
+			local sheared = meta:get_int("sheared")
+			if sheared == 1 then return end
+			node.name = "mcl_lush_caves:cave_vines"
+			if math.random() <= 0.11 then  -- 11% chance
+				node.name="mcl_lush_caves:cave_vines_lit"
+			end
+			if node_below.name == "air" then
+				core.swap_node(below,node)
+			end
 		end
 	end
 })
