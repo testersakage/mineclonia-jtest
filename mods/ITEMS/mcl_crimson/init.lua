@@ -84,25 +84,11 @@ end
 local max_vines_age = 25
 local grow_vines_direction = {[1] = 1, [2] = -1}
 
-function set_vines_age(pos, node)
-	local dir = grow_vines_direction[core.get_item_group(node.name, "vinelike_node")]
-	local vpos, i = mcl_util.traverse_tower(pos, -dir)
-	for i = 1, i do
-		core.swap_node(vpos, { name = node.name, param2 = i })
-		vpos = vector.offset(vpos, 0, dir, 0)
-	end
-	return i
-end
-
-function get_vines_age(pos)
-	local node = core.get_node(pos)
-	return node.param2 > 0 and node.param2 or set_vines_age(pos, node)
-end
-
 function grow_vines(pos, amount, vine, dir, max_age)
 	dir = dir or grow_vines_direction[core.get_item_group(vine, "vinelike_node")] or 1
-	local tip, i = mcl_util.traverse_tower(pos, dir)
-	local age = get_vines_age(pos) + i -1
+	local tip = mcl_util.traverse_tower(pos, dir)
+	local node_tip = core.get_node(tip)
+	local age = node_tip.param2
 	amount = math.min(amount, max_age and max_age - age or amount)
 	for i=1, amount do
 		local p = vector.offset(tip,0,dir*i,0)
@@ -295,7 +281,7 @@ local call_on_place = function(itemstack, placer, pointed_thing)
 	if node.name == idef.name then
 		if grow_vines(pointed_thing.under, 1, node.name) == 0 then return end
 	elseif grow_dir == dir and core.get_item_group(node.name, "solid") ~= 0 then
-		core.item_place_node(itemstack, placer, pointed_thing, 1)
+		core.item_place_node(itemstack, placer, pointed_thing, 0)
 	else
 		return itemstack
 	end
@@ -343,6 +329,21 @@ local function register_vines(name, def, extra_groups)
 		_mcl_hardness = 0.2,
 		_on_bone_meal = function(_, _, _, pos)
 			grow_vines(pos, math.random(1, 3), name, nil, max_vines_age)
+		end,
+		_mcl_on_rightclick_optional = function (pos, node, clicker, itemstack)
+			local item_name = clicker:get_wielded_item():get_name()
+			local shears = core.get_item_group(item_name, "shears") > 0
+			local dir = grow_vines_direction[core.get_item_group(
+				node.name, "vinelike_node")] or 1
+			local tip = mcl_util.traverse_tower(pos, dir)
+
+			if shears and vector.equals(pos, tip) then
+				core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+				local wear = mcl_autogroup.get_wear(item_name, "shearsy")
+				itemstack:add_wear(wear)
+				node.param2 = 25
+				core.swap_node(pos,node)
+			end
 		end
 	}, def or {}))
 end
