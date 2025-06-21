@@ -54,7 +54,8 @@ mcl_tools.commondefs = {
 		groups = { sword = 1, weapon = 1 },
 		diggroups = { swordy = {}, swordy_cobweb = {}, swordy_bamboo = {} },
 		_mcl_diggroups = {
-			swordy_bamboo = { speed = 45, level = 1, uses = 238 }
+			swordy_cobweb = { speed = 15, level = 1, uses = 238 },
+			swordy_bamboo = { speed = 45, level = 1, uses = 238 },
 		},
 		craft_shapes = {
 			{
