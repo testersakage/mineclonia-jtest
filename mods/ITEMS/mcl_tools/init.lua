@@ -270,7 +270,7 @@ core.register_tool("mcl_tools:shears", {
 	sound = { breaks = "default_tool_breaks" },
 	_mcl_toollike_wield = true,
 	_mcl_diggroups = {
-		shearsy = { speed = 1.5, level = 1, uses = 238 },
+		shearsy = { speed = 15, level = 1, uses = 238 },
 		shearsy_wool = { speed = 5, level = 1, uses = 238 },
 		shearsy_cobweb = { speed = 15, level = 1, uses = 238 }
 	},
