@@ -171,7 +171,7 @@ core.register_node("mcl_lush_caves:cave_vines", {
 	groups = {
 		handy=1, plant=1, vinelike_node=2,
 		dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1,
-		deco_block=1, not_in_crative_inventory=1
+		deco_block=1, not_in_creative_inventory=1
 	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_hardness = 0,
@@ -220,7 +220,7 @@ core.register_node("mcl_lush_caves:cave_vines_lit", {
 	groups = {
 		handy=1, plant=1, vinelike_node=2,
 		dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1,
-		deco_block=1, not_in_crative_inventory=1
+		deco_block=1, not_in_creative_inventory=1
 	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_hardness = 0,
