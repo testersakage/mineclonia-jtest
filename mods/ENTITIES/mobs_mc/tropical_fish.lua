@@ -164,6 +164,14 @@ function tropical_fish:on_rightclick (clicker)
 	end
 end
 
+function tropical_fish:mob_activate (staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
+	self:set_properties(core.deserialize(staticdata))
+	return true
+end
+
 ------------------------------------------------------------------------
 -- Tropical Fish AI.
 ------------------------------------------------------------------------

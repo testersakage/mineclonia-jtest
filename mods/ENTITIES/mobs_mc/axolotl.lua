@@ -270,6 +270,14 @@ function axolotl:ai_step (dtime)
 	end
 end
 
+function axolotl:mob_activate (staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
+	self:set_properties(core.deserialize(staticdata))
+	return true
+end
+
 axolotl.ai_functions = {
 	axolotl_regenerate,
 	mob_class.check_breeding,

@@ -25,12 +25,20 @@ local function on_place_fish(itemstack, placer, pointed_thing)
 
 	local fish = itemstack:get_definition()._mcl_buckets_fish
 	if fish_names[fish] then
-		local o = core.add_entity(pos, "mobs_mc:" .. fish, core.serialize({ persistent = true }))
+		local props = table.merge(
+			core.deserialize(itemstack:get_meta():get_string("properties")) or {},
+			{persistent = true}
+		)
+
+		local bucket_name = itemstack:get_meta():get_string("name")
+		if bucket_name ~= "" then
+			props = table.merge(props, {nametag=bucket_name})
+		end
+
+		local o = core.add_entity(pos,
+			"mobs_mc:" .. fish, core.serialize(props))
+
 		if o and o:get_pos() then
-			local props = itemstack:get_meta():get_string("properties")
-			if props ~= "" then
-				o:set_properties(core.deserialize(props))
-			end
 			local water = "mcl_core:water_source"
 			if n.name == "mclx_core:river_water_source" then
 				water = n.name
