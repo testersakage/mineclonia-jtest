@@ -1936,12 +1936,14 @@ end
 local function run_preprocessors (rng, processors, template_or_sid)
 	local tbl = {}
 
-	for _, processor in ipairs (processors) do
-		if type (processor) == "table"
-			and processor.structure_preprocess then
-			local key, value
-				= processor.structure_preprocess (rng, template_or_sid)
-			tbl[key] = value
+	if processors then
+		for _, processor in ipairs (processors) do
+			if type (processor) == "table"
+				and processor.structure_preprocess then
+				local key, value
+					= processor.structure_preprocess (rng, template_or_sid)
+				tbl[key] = value
+			end
 		end
 	end
 
