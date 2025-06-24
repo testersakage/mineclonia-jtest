@@ -188,7 +188,21 @@ local sus_node_loot = {
 			-- 	itemstring = "mcl_jukebox:record_relic",
 			-- },
 		},
-	},	
+	},
+	desert_pyramid_archeology = {
+		stacks_min = 1,
+		stacks_max = 1,
+		items = {
+			{ itemstring = "mcl_pottery_sherds:archer", weight = 21, },
+			{ itemstring = "mcl_core:emerald", weight = 1 },
+			{ itemstring = "mcl_mobitems:gunpowder", weight = 1 },
+			{ itemstring = "mcl_pottery_sherds:miner", weight = 1, },
+			{ itemstring = "mcl_pottery_sherds:prize", weight = 1, },
+			{ itemstring = "mcl_pottery_sherds:skull", weight = 1, },
+			{ itemstring = "mcl_tnt:tnt", weight = 1 },
+			{ itemstring = "mcl_core:diamond", weight = 1 },
+		},
+	},
 }
 
 function mcl_sus_nodes.get_random_item(pos)
