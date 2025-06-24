@@ -1311,7 +1311,7 @@ local function restore_feature_placement_queue ()
 				setmetatable (queue, mintree_meta)
 
 				if queue.size > 0 then
-					local blurb = "[mcl_levelgen]: Resuming %d feature placement tasks"
+					local blurb = "[mcl_levelgen]: Resuming %d feature placement task(s)"
 					core.log ("action", string.format (blurb, queue.size))
 					feature_placement_queue = queue
 
@@ -2267,7 +2267,8 @@ function mcl_levelgen.level_to_minetest_position (x, y, z)
 end
 
 ------------------------------------------------------------------------
--- Structure deferred feature generation.
+-- Structure deferred feature generation & other structure-related
+-- sundries.
 ------------------------------------------------------------------------
 
 local level_to_minetest_position = mcl_levelgen.level_to_minetest_position
@@ -2319,6 +2320,22 @@ end
 
 mcl_levelgen.register_notification_handler ("mcl_levelgen:defer_feature_placement",
 					    handle_deferred_generation)
+
+local function handle_set_block_meta (_, data)
+	for _, pos in ipairs (data) do
+		local x, y, z
+			= level_to_minetest_position (pos[1], pos[2], pos[3])
+		v.x = x
+		v.y = y
+		v.z = z
+		core.load_area (v)
+		local meta = core.get_meta (v)
+		meta:from_table (data[4])
+	end
+end
+
+mcl_levelgen.register_notification_handler ("mcl_levelgen:set_block_meta",
+					    handle_set_block_meta)
 
 ------------------------------------------------------------------------
 -- Structure storage.
