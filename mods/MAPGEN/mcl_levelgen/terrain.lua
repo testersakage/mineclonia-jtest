@@ -945,6 +945,10 @@ function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_i
 	return true
 end
 
+------------------------------------------------------------------------
+-- Auxiliary terrain generation sampling.
+------------------------------------------------------------------------
+
 local function get_one_height_or_column (self, x, z, predicate, arg)
 	local y_min = self.y_min
 	local cell_width = self.cell_width
@@ -959,7 +963,6 @@ local function get_one_height_or_column (self, x, z, predicate, arg)
 	local x_chunk, z_chunk = band (x, -16), band (z, -16)
 	local aquifer, get_node = self.aquifer, self.aquifer.get_node
 	aquifer:reseat (x_chunk, y_min, z_chunk)
-	local veins = self.preset.ore_veins_enabled
 
 	-- Prepare interpolation by filling both ZY-slices and
 	-- clearing the flat cache.
@@ -973,6 +976,7 @@ local function get_one_height_or_column (self, x, z, predicate, arg)
 	local final_density = self.final_density
 	local cid_default_block = self.cid_default_block
 
+	local veins = self.preset.ore_veins_enabled
 	for y = y_total - 1, 0, -1 do
 		local y_base = y * cell_height + y_min
 		interpolator_update (self, y, 0)
@@ -984,7 +988,7 @@ local function get_one_height_or_column (self, x, z, predicate, arg)
 			interpolator_update_y (self, progress)
 			interpolator_update_x (self, progress_x)
 			interpolator_update_z (self, progress_z)
-			local density = final_density (x, y, z)
+			local density = final_density (x, y_pos, z)
 			local value = predicate (self, aquifer, get_node,
 						 cid_default_block,
 						 x, y_pos, z, density,
@@ -1054,7 +1058,195 @@ function terrain_generator:get_one_column (x, z, column_data)
 	return column_data
 end
 
+local function map_area_height_1 (self, value, x1_proper, z1_proper, x2_proper,
+				  z2_proper, processor, arg)
+	local y_min = self.y_min
+	local cell_width = self.cell_width
+	local cell_height = self.cell_height
+	local x_chunk, z_chunk = band (x1_proper, -16), band (z1_proper, -16)
+	local x_cell = floor (x_chunk / cell_width)
+	local z_cell = floor (z_chunk / cell_width)
+	local x_cells = ceil ((x2_proper - x_chunk + 1) / cell_width)
+	local z_cells = ceil ((z2_proper - z_chunk + 1) / cell_width)
+	local horiz_cells = mathmax (x_cells, z_cells)
+	local cell_base_x = floor (x1_proper / cell_width)
+	local cell_base_z = floor (z1_proper / cell_width)
+
+	-- Reseat the aquifer.
+	local aquifer = self.aquifer
+	aquifer:reseat (x_chunk, y_min, z_chunk)
+
+	-- Prepare interpolation by filling both ZY-slices and
+	-- clearing the flat cache.
+	local level_height = self.level_height
+	local y_bottom = floor (y_min / cell_height)
+	local y_total = floor (level_height / cell_height)
+	prepare_interpolation (self, x_chunk, z_chunk, cell_base_x, z_cell,
+			       y_bottom, horiz_cells, y_total)
+	local final_density = self.final_density
+
+	-- TODO: rearrange interpolation order to iterate over each
+	-- column exactly once if it can be established that such an
+	-- alteration will not produce unacceptably severe
+	-- inconsistencies with terrain generation.
+	for x1 = cell_base_x - x_cell, x_cells - 1 do
+		local x_base = x1 * cell_width + x_chunk
+
+		-- This calculates the _next_ slice's values.
+		fill_interpolators (self, false, x_cell + x1 + 1, z_cell,
+				    y_bottom, horiz_cells, y_total)
+
+		for z1 = cell_base_z - z_cell, z_cells - 1 do
+			local z_base = z1 * cell_width + z_chunk
+			for y1 = y_total - 1, 0, -1 do
+				local y_base = y1 * cell_height + y_min
+				interpolator_update (self, y1, z1)
+
+				-- Begin processing individual blocks
+				-- in this cell.
+				for internal_y = cell_height - 1, 0, -1 do
+					local y_pos = y_base + internal_y
+					interpolator_update_y (self, internal_y / cell_height)
+
+					local x0 = mathmax (0, x1_proper - x_base)
+					local x2 = mathmax (0, x_base + cell_width - 1 - x2_proper)
+					for internal_x = x0, cell_width - 1 - x2 do
+						local x_pos = x_base + internal_x
+						interpolator_update_x (self, internal_x / cell_width)
+
+						local z0 = mathmax (0, z1_proper - z_base)
+						local z2 = mathmax (0, z_base + cell_width - 1 - z2_proper)
+						for internal_z = z0, cell_width - 1 - z2 do
+							interpolator_update_z (self, internal_z / cell_width)
+							local z_pos = z_base + internal_z
+							value = processor (self, value,
+									   x_pos, y_pos, z_pos,
+									   final_density (x_pos,
+											  y_pos,
+											  z_pos),
+									   arg)
+						end
+					end
+				end
+			end
+		end
+
+		exchange_slices (self)
+		reset_interpolators (self)
+	end
+	return value
+end
+
+local function map_area_height (self, x1, z1, x2, z2, initial, processor, arg)
+	local x1_chunk = band (x1, -16)
+	local z1_chunk = band (z1, -16)
+	local chunksize = self.chunksize
+	local value = initial
+
+	for x1_iter = x1_chunk, x2, chunksize do
+		for z1_iter = z1_chunk, z2, chunksize do
+			local x1_proper = mathmax (x1_iter, x1)
+			local z1_proper = mathmax (z1_iter, z1)
+			local x2_proper = mathmin (x1_iter + chunksize - 1, x2)
+			local z2_proper = mathmin (z1_iter + chunksize - 1, z2)
+
+			value = map_area_height_1 (self, value, x1_proper,
+						   z1_proper, x2_proper,
+						   z2_proper, processor, arg)
+		end
+	end
+	return value
+end
+
+local area_heightmap_x1
+local area_heightmap_z1
+local area_heightmap_x2
+local area_heightmap_z2
+local area_heightmap_heightmap
+
+local function map_area_heightmap_no_solid (terrain, value, x, y, z, density, arg)
+	assert (x >= area_heightmap_x1 and x <= area_heightmap_x2)
+	assert (z >= area_heightmap_z1 and z <= area_heightmap_z2)
+
+	if density > 0.0 then
+		local length = area_heightmap_z2
+			- area_heightmap_z1 + 1
+		local dx = x - area_heightmap_x1
+		local dz = z - area_heightmap_z1
+		local idx = dx * length + dz + 1
+		if arg[idx] <= y then
+			arg[idx] = y + 1
+		end
+	end
+end
+
+local function map_area_heightmap (terrain, value, x, y, z, density, arg)
+	assert (x >= area_heightmap_x1 and x <= area_heightmap_x2)
+	assert (z >= area_heightmap_z1 and z <= area_heightmap_z2)
+
+	local cid, param2
+		= state_from_density (terrain.aquifer,
+				      terrain.aquifer.get_node,
+				      terrain.cid_default_block,
+				      x, y, z, density,
+				      terrain.ore_veins_enabled,
+				      terrain)
+	if arg (cid, param2) then
+		local length = area_heightmap_z2
+			- area_heightmap_z1 + 1
+		local dx = x - area_heightmap_x1
+		local dz = z - area_heightmap_z1
+		local idx = dx * length + dz + 1
+		if area_heightmap_heightmap[idx] <= y then
+			area_heightmap_heightmap[idx] = y + 1
+		end
+	end
+end
+
 local huge = math.huge
+
+function terrain_generator:area_heightmap (x1, z1, x2, z2, heightmap, is_solid)
+	local w = x2 - x1 + 1
+	local l = z2 - z1 + 1
+	local total = w * l
+	for i = 1, total do
+		heightmap[i] = -huge
+	end
+
+	-- Note: level-relative coordinates are returned, rather than
+	-- absolute ones as in heightmaps produced by
+	-- terrain_generator:generate.
+	area_heightmap_x1 = x1
+	area_heightmap_z1 = z1
+	area_heightmap_x2 = x2
+	area_heightmap_z2 = z2
+	if is_solid then
+		area_heightmap_heightmap = heightmap
+		map_area_height (self, x1, z1, x2, z2, nil,
+				 map_area_heightmap, is_solid)
+	else
+		map_area_height (self, x1, z1, x2, z2, nil,
+				 map_area_heightmap_no_solid,
+				 heightmap)
+	end
+	return total
+end
+
+local heightmap = {}
+
+function terrain_generator:area_min_height (x1, z1, x2, z2, is_solid)
+	local total = self:area_heightmap (x1, z1, x2, z2, heightmap,
+					   is_solid)
+	local value = heightmap[1]
+	for i = 2, total do
+		value = mathmin (value, heightmap[i])
+	end
+	return value
+end
+
+------------------------------------------------------------------------
+-- Aquifer and surface system interface.
+------------------------------------------------------------------------
 
 local function sample_preliminary_surface_level (dfn, min_y, max_y, x, z, step)
 	for y = max_y, min_y, -step do
