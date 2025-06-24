@@ -590,7 +590,7 @@ function mcl_levelgen.mirror_param2_x (cid, param2)
 		local angle = band (param2, 0x1f)
 		local color = band (param2, 0xe0)
 		angle = (24 - angle) % 24
-		param2 = bor (param2, color)
+		param2 = bor (angle, color)
 	end
 	return param2
 end
@@ -618,7 +618,7 @@ function mcl_levelgen.mirror_param2_z (cid, param2)
 		local angle = band (param2, 0x1f)
 		local color = band (param2, 0xe0)
 		angle = (12 - angle) % 24
-		param2 = bor (param2, color)
+		param2 = bor (angle, color)
 	end
 	return param2
 end
