@@ -380,7 +380,7 @@ local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv
 	end
 
 	-- Add new layer.
-	if not current or not current.id then return ItemStack("") end -- No pattern found.
+	if not banner or not current or not current.id then return ItemStack("") end -- No pattern found.
 	-- Get old layers.
 	local ometa = banner:get_meta()
 	local layers = mcl_banners.read_layers(ometa)
