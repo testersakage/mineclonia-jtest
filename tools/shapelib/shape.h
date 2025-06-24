@@ -38,6 +38,7 @@ typedef struct AABB AABB;
 #define OP_AND	2
 #define OP_SUB	3
 #define OP_NEQ	4
+#define OP_BNA	5
 
 #ifdef __STDC__
 #define PROTO(proto) proto
@@ -81,6 +82,8 @@ extern int region_equal_p PROTO ((struct cuboid_region *,
 				  struct cuboid_region *));
 extern int region_intersect_p PROTO ((struct cuboid_region *,
 				      struct cuboid_region *));
+extern int region_contains_p PROTO ((struct cuboid_region *,
+				     struct cuboid_region *));
 extern int region_empty_p PROTO ((struct cuboid_region *));
 extern int region_walk PROTO ((struct cuboid_region *, int (*) (AABB *, void *,
 								void *),
@@ -88,6 +91,7 @@ extern int region_walk PROTO ((struct cuboid_region *, int (*) (AABB *, void *,
 extern int region_simplify PROTO ((struct cuboid_region *,
 				   struct cuboid_region *));
 
+extern void region_init_from_AABB PROTO ((struct cuboid_region *, AABB *));
 extern int region_intersect PROTO ((struct cuboid_region *,
 				    struct cuboid_region *,
 				    AABB *));

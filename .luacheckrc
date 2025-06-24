@@ -235,6 +235,7 @@ read_globals = {
 			count = { read_only = false },
 			random_element = { read_only = false },
 			max_index = { read_only = false },
+			stable_sort = { read_only = false },
 		}
 	},
 

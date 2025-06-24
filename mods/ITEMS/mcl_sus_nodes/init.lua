@@ -32,28 +32,193 @@ local desert_well_loot = {
 		{ itemstring = "mcl_core:emerald", weight = 1 },
 		{ itemstring = "mcl_core:stick", weight = 1 },
 		{ itemstring = "mcl_sus_stew:stew", weight = 1 },
-
 	},
+}
+
+local sus_node_loot = {
+	trail_ruins_common = {
+		stacks_min = 1,
+		stacks_max = 1,
+		items = {
+			{
+				itemstring = "mcl_core:emerald",
+				weight = 2,
+			},
+			{
+				itemstring = "mcl_farming:wheat",
+				weight = 2,
+			},
+			{
+				itemstring = "mcl_tools:hoe_wood",
+				weight = 2,
+			},
+			{
+				itemstring = "mcl_core:clay_lump",
+				weight = 2,
+			},
+			{
+				itemstring = "mcl_core:brick",
+				weight = 2,
+			},
+			{
+				itemstring = "mcl_dyes:yellow",
+				weight = 2,
+			},
+			{
+				itemstring = "mcl_dyes:blue",
+				weight = 2,
+			},
+			{
+				itemstring = "mcl_dyes:light_blue",
+				weight = 2,
+			},
+			{
+				itemstring = "mcl_dyes:white",
+				weight = 2,
+			},
+			{
+				itemstring = "mcl_dyes:orange",
+				weight = 2,
+			},
+			{
+				itemstring = "mcl_candles:candle_1",
+				weight = 2,
+				func = function (stack, pr)
+					local colors = {
+						"red",
+						"green",
+						"purple",
+						"brown",
+					}
+					local color = colors[pr:next (1, #colors)]
+					mcl_candles.set_candle_properties (stack, color)
+				end,
+			},
+			{
+				itemstring = "mcl_panes:pane_magenta_flat",
+			},
+			{
+				itemstring = "mcl_panes:pane_pink_flat",
+			},
+			{
+				itemstring = "mcl_panes:pane_blue_flat",
+			},
+			{
+				itemstring = "mcl_panes:pane_light_blue_flat",
+			},
+			{
+				itemstring = "mcl_panes:pane_red_flat",
+			},
+			{
+				itemstring = "mcl_panes:pane_yellow_flat",
+			},
+			-- TODO!
+			-- {
+			-- 	itemstring = "mcl_signs:spruce_hanging_sign",
+			-- },
+			-- {
+			-- 	itemstring = "mcl_signs:oak_hanging_sign",
+			-- },
+			{
+				itemstring = "mcl_core:gold_nugget",
+			},
+			{
+				itemstring = "mcl_core:coal_lump",
+			},
+			{
+				itemstring = "mcl_farming:wheat_seeds",
+			},
+			{
+				itemstring = "mcl_farming:beetroot_seeds",
+			},
+			{
+				itemstring = "mcl_core:deadbush",
+			},
+			{
+				itemstring = "mcl_flowerpots:flower_pot",
+			},
+			{
+				itemstring = "mcl_mobitems:string",
+			}
+			-- TODO!
+			-- {
+			-- 	itemstring = "mcl_leads:lead",
+			-- },
+		},
+	},
+	trail_ruins_rare = {
+		stacks_min = 1,
+		stacks_max = 1,
+		items = {
+			{
+				itemstring = "mcl_pottery_sherds:burn",
+			},
+			{
+				itemstring = "mcl_pottery_sherds:danger",
+			},
+			{
+				itemstring = "mcl_pottery_sherds:friend",
+			},
+			{
+				itemstring = "mcl_pottery_sherds:heart",
+			},
+			{
+				itemstring = "mcl_pottery_sherds:heartbreak",
+			},
+			{
+				itemstring = "mcl_pottery_sherds:howl",
+			},
+			{
+				itemstring = "mcl_pottery_sherds:sheaf",
+			},
+			{
+				itemstring = "mcl_armor:wayfinder",
+			},
+			-- TODO!
+			-- {
+			-- 	itemstring = "mcl_armor:raiser",
+			-- },
+			-- {
+			-- 	itemstring = "mcl_armor:shaper",
+			-- },
+			-- {
+			-- 	itemstring = "mcl_armor:host",
+			-- },
+			-- {
+			-- 	itemstring = "mcl_jukebox:record_relic",
+			-- },
+		},
+	},	
 }
 
 function mcl_sus_nodes.get_random_item(pos)
 	local meta = core.get_meta(pos)
 	local str = meta:get_string ("mcl_sus_nodes:desert_well_loot_seed")
 	if str ~= "" then
-		local seed = tonumber (str)
+		local seed = tonumber (str) or 0
 		local pr = PcgRandom (seed)
-		return mcl_loot.get_multi_loot (desert_well_loot, pr)
+		return mcl_loot.get_loot (desert_well_loot, pr)[1]
 	else
-		local struct = meta:get_string("structure")
-		local structdef = mcl_structures.registered_structures[struct]
-		local pr = PseudoRandom(core.hash_node_position(pos))
-		if struct ~= "" and structdef and structdef.loot and structdef.loot["SUS"] then
-			local lootitems = mcl_loot.get_multi_loot(structdef.loot["SUS"], pr)
-			if #lootitems > 0 then
-				return lootitems[1]
-			end
+		local str = meta:get_string ("mcl_sus_nodes:loot_seed")
+		local kind = meta:get_string ("mcl_sus_nodes:loot_type")
+
+		if sus_node_loot[kind] then
+			local seed = tonumber (str) or 0
+			local pr = PcgRandom (seed)
+			local loot = mcl_loot.get_loot (sus_node_loot[kind], pr)
+			return loot[1]
 		else
-			return sus_drops_default[pr:next(1, #sus_drops_default)]
+			local struct = meta:get_string("structure")
+			local structdef = mcl_structures.registered_structures[struct]
+			local pr = PseudoRandom(core.hash_node_position(pos))
+			if struct ~= "" and structdef and structdef.loot and structdef.loot["SUS"] then
+				local lootitems = mcl_loot.get_multi_loot(structdef.loot["SUS"], pr)
+				if #lootitems > 0 then
+					return lootitems[1]
+				end
+			else
+				return sus_drops_default[pr:next(1, #sus_drops_default)]
+			end
 		end
 	end
 end
@@ -259,3 +424,22 @@ end
 
 mcl_levelgen.register_notification_handler ("mcl_sus_nodes:suspicious_sand_meta",
 					    handle_suspicious_sand_meta)
+
+local v = vector.zero ()
+local level_to_minetest_position
+	= mcl_levelgen.level_to_minetest_position
+
+local function handle_suspicious_sand_structure_meta (name, data)
+	-- print (#data)
+	for _, data in ipairs (data) do
+		v.x, v.y, v.z = level_to_minetest_position (data[1], data[2], data[3])
+		core.load_area (v)
+		local meta = core.get_meta (v)
+		-- print ("--->", data[4], data[5])
+		meta:set_string ("mcl_sus_nodes:loot_seed", tostring (data[4]))
+		meta:set_string ("mcl_sus_nodes:loot_type", data[5])
+	end
+end
+
+mcl_levelgen.register_notification_handler ("mcl_sus_nodes:suspicious_sand_structure_meta",
+					    handle_suspicious_sand_structure_meta)
