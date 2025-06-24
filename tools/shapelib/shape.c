@@ -368,7 +368,8 @@ get_dominating_values (l_dom, r_dom, l, r, l_base, r_base, l_max, r_max)
     : ((op) == OP_AND ? ((l) && (r))			\
        : ((op) == OP_SUB ? ((l) && !(r))		\
 	  : ((op) == OP_NEQ ? ((l) != (r))		\
-	     : (UNREACHABLE, 0))))))
+	     : ((op) == OP_BNA ? ((r) && !(l))		\
+		: (UNREACHABLE, 0)))))))
 
 /* Apply the boolean operation OP to the regions L and R, producing a
    new region in NEW, which should already have been cleared.  Value
@@ -751,6 +752,16 @@ region_intersect_p (l, r)
      struct cuboid_region *r;
 {
   return (l == r || region_evaluate (l, r, OP_AND));
+}
+
+/* Return whether L contains the entirety of R.  */
+
+int
+region_contains_p (l, r)
+     struct cuboid_region *l;
+     struct cuboid_region *r;
+{
+  return (l == r || !region_evaluate (l, r, OP_BNA));
 }
 
 static int
@@ -1306,7 +1317,7 @@ static unsigned int aabb_index[BITSET_SIZE (2, 2, 2)] = {
   0x1,
 };
 
-static void
+void
 region_init_from_AABB (region, aabb)
      struct cuboid_region *region;
      AABB *aabb;

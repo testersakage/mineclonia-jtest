@@ -393,7 +393,6 @@ end
 function mcl_levelgen.convert_level_position (x, y, z)
 	return x, y - y_offset, -z - 1
 end
-local convert_level_position = mcl_levelgen.convert_level_position
 
 local function convert_minetest_position (x, y, z)
 	return x, y + y_offset, -z - 1
@@ -818,6 +817,10 @@ local active_processors = {}
 function mcl_levelgen.push_schematic_processor (processor_function)
 	local current = #active_processors
 	insert (active_processors, processor_function)
+	-- if type (processor_function) == "table"
+	-- 	and processor_function.initialize then
+	-- 	processor_function.initialize ()
+	-- end
 	return current
 end
 
@@ -825,6 +828,10 @@ function mcl_levelgen.push_schematic_processors (processors)
 	local current = #active_processors
 	for _, processor in ipairs (processors) do
 		insert (active_processors, processor)
+		-- if type (processor) == "table"
+		-- 	and processor.initialize then
+		-- 	processor.initialize ()
+		-- end
 	end
 	return current
 end

@@ -400,6 +400,10 @@ local function get_node_shape (x, y, z)
 	end
 end
 
+--------------------------------------------------------------------------
+-- Node transformations.
+--------------------------------------------------------------------------
+
 local rotate_facedir = {
 	-- Table value = rotated facedir
 	-- Columns: 0, 90, 180, 270 degrees rotation around vertical axis
@@ -509,6 +513,112 @@ function mcl_levelgen.rotate_param2 (cid, param2, rot)
 		angle = angle + 6 * rot
 		angle = angle % 24
 		param2 = bor (angle, color)
+	end
+	return param2
+end
+
+--- Node mirroring.
+
+local mirror_x_facedir = {
+	-- X+
+	[0] = 0, 3, 2, 1,
+
+	-- Z+
+	4, 7, 6, 5,
+
+	-- Z-
+	8, 11, 10, 9,
+
+	-- X+
+	16, 19, 18, 17,
+
+	-- X-
+	12, 15,	14, 13,
+
+	-- Y-
+	20, 23, 22, 21,
+}
+
+local mirror_z_facedir = {
+	-- Y+
+	[0] = 2, 1, 0, 3,
+
+	-- Z+
+	10, 9, 8, 11,
+
+	-- Z-
+	6, 5, 4, 7,
+
+	-- X+
+	14, 13, 12, 15,
+
+	-- X-
+	18, 17, 16, 19,
+
+	-- Y-
+	22, 21, 20, 23,
+}
+
+local mirror_x_wallmounted = {
+	[0] = 1, 0, 3, 2, 4, 5,
+}
+
+local mirror_z_wallmounted = {
+	[0] = 0, 1, 2, 3, 5, 4,
+}
+
+function mcl_levelgen.mirror_param2_x (cid, param2)
+	local cpt2 = paramtype2[cid]
+
+	if cpt2 == "facedir" then
+		param2 = mirror_x_facedir[param2]
+	elseif cpt2 == "colorfacedir" then
+		local facedir = band (param2, 31) % 24
+		local color = band (param2, bnot (31))
+		param2 = bor (color, mirror_x_facedir[facedir])
+	elseif cpt2 == "wallmounted" then
+		param2 = mirror_x_wallmounted[param2]
+	elseif cpt2 == "colorwallmounted" then
+		local color = band (param2, bnot (7))
+		local wallmounted = band (param2, 7)
+		param2 = bor (color, mirror_x_wallmounted[wallmounted])
+	elseif cpt2 == "degrotate" then
+		local angle = param2
+		angle = (240 - angle) % 240
+		param2 = angle
+	elseif cpt2 == "colordegrotate" then
+		local angle = band (param2, 0x1f)
+		local color = band (param2, 0xe0)
+		angle = (24 - angle) % 24
+		param2 = bor (param2, color)
+	end
+	return param2
+end
+
+function mcl_levelgen.mirror_param2_z (cid, param2)
+	local cpt2 = paramtype2[cid]
+
+	if cpt2 == "facedir" then
+		param2 = mirror_z_facedir[param2]
+	elseif cpt2 == "colorfacedir" then
+		local facedir = band (param2, 31) % 24
+		local color = band (param2, bnot (31))
+		param2 = bor (color, mirror_z_facedir[facedir])
+	elseif cpt2 == "wallmounted" then
+		param2 = mirror_z_wallmounted[param2]
+	elseif cpt2 == "colorwallmounted" then
+		local color = band (param2, bnot (7))
+		local wallmounted = band (param2, 7)
+		param2 = bor (color, mirror_z_wallmounted[wallmounted])
+	elseif cpt2 == "degrotate" then
+		local angle = param2
+		angle = (120 - angle) % 240
+		param2 = angle
+	elseif cpt2 == "colordegrotate" then
+		local angle = band (param2, 0x1f)
+		local color = band (param2, 0xe0)
+		angle = (12 - angle) % 24
+		param2 = bor (param2, color)
 	end
 	return param2
 end

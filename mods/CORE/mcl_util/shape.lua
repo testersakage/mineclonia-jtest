@@ -40,7 +40,7 @@ local mathmax = math.max
 
 local function bitset_size (x, y, z)
 	local value = ((x * EDGES_PER_AXIS - 1 + y - 1) * EDGES_PER_AXIS) + z
-	return mathmax (0, floor ((value + WORD_BITS - 1) / WORD_BITS))
+	return mathmax (0, floor ((value + WORD_BITS - 1) / WORD_BITS) + 1)
 end
 
 local function bisect (edges, nmemb, value)
@@ -74,8 +74,7 @@ local function mark_occupied (region, x, y, z)
 	local idx = floor ((index / WORD_BITS)) + 1
 	local off = band (index, WORD_BITS - 1)
 	local mask = lshift (1, off)
-	region.solids[idx]
-		= bor (region.solids[idx] or 0, mask)
+	region.solids[idx] = bor (region.solids[idx], mask)
 end
 
 local function is_occupied_p (region, x, y, z)
@@ -84,7 +83,7 @@ local function is_occupied_p (region, x, y, z)
 	local idx = floor ((index / WORD_BITS)) + 1
 	local off = band (index, WORD_BITS - 1)
 	local mask = lshift (1, off)
-	return band (region.solids[idx] or 0, mask) ~= 0
+	return band (region.solids[idx], mask) ~= 0
 end
 
 function mcl_util.decompose_AABBs (aabbs)
@@ -120,11 +119,15 @@ function mcl_util.decompose_AABBs (aabbs)
 		y_size = #y_edges,
 		z_size = #z_edges,
 		b_size = b_size,
-		solids = {
-			[b_size] = nil,
-		},
+		solids = {},
 	}
 	setmetatable (region, region_class)
+	do
+		local solids = region.solids
+		for i = 1, b_size do
+			solids[i] = 0
+		end
+	end
 
 	-- Mark AABBs.
 	for _, aabb in ipairs (aabbs) do
@@ -196,15 +199,15 @@ local function get_dominating_values (il, ir, l, r, l_max, r_max)
 
 	if il == l_max then
 		ldom = nil
-		rdom = ir == r_max and nil or ir
+		rdom = ir ~= r_max and ir or nil
 	elseif ir == r_max then
-		ldom = il == l_max and nil or il
+		ldom = il ~= l_max and il or nil
 		rdom = nil
 	elseif l[il] < r[ir] then
 		ldom = il
-		rdom = ir == 1 and nil or ir - 1
+		rdom = ir ~= 1 and ir - 1 or nil
 	elseif r[ir] < l[il] then
-		ldom = il == 1 and nil or il - 1
+		ldom = il ~= 1 and il - 1 or nil
 		rdom = ir
 	else
 		ldom = il
@@ -230,10 +233,15 @@ mcl_util.OP_NEQ = function (l, r)
 	return l ~= r
 end
 
+mcl_util.OP_BNA = function (l, r)
+	return r and not l
+end
+
 local OP_OR = mcl_util.OP_OR
 local OP_AND = mcl_util.OP_AND
 local OP_SUB = mcl_util.OP_SUB
 local OP_NEQ = mcl_util.OP_NEQ
+local OP_BNA = mcl_util.OP_BNA
 
 local empty_region = {
 	x_size = 0,
@@ -285,11 +293,15 @@ local function region_op (l, r, op)
 		y_size = y_size,
 		z_size = z_size,
 		b_size = b_size,
-		solids = {
-			[b_size] = nil,
-		},
+		solids = {},
 	}
 	setmetatable (region, region_class)
+	do
+		local solids = region.solids
+		for i = 1, region.b_size do
+			solids[i] = 0
+		end
+	end
 
 	local lx_max = l.x_size + 1
 	local rx_max = r.x_size + 1
@@ -485,6 +497,10 @@ end
 
 function region_class:intersect_p (r)
 	return self == r or region_evaluate (self, r, OP_AND)
+end
+
+function region_class:contains_p (r)
+	return self == r or not region_evaluate (self, r, OP_BNA)
 end
 
 local function any_occupied_p (region)
@@ -763,8 +779,8 @@ region_class.walk = region_walk
 local function edge_redundant_p (region, edge, other_0_end, other_1_end, is_occupied_p)
 	local x_pos = edge
 
-	for y_pos = 0, other_0_end do
-		for z_pos = 0, other_1_end do
+	for y_pos = 1, other_0_end do
+		for z_pos = 1, other_1_end do
 			local prev_state = false
 			local state
 
@@ -840,7 +856,12 @@ local function region_simplify (region)
 
 	-- Allocate or resize solids array.
 	new.b_size = bitset_size (new.x_size, new.y_size, new.z_size)
-	new.solids[new.b_size] = nil
+	do
+		local solids = new.solids
+		for i = 1, new.b_size do
+			solids[i] = 0
+		end
+	end
 
 	for x = 1, #x_edges do
 		local src_x = bisect (region.x_edges, region.x_size, x_edges[x])
@@ -865,7 +886,13 @@ region_class.simplify = region_simplify
 -- Region utilities.
 ------------------------------------------------------------------------
 
-local default_solids = { 1, }
+local default_solids = {
+	1,
+}
+
+for i = 2, bitset_size (2, 2, 2) do
+	default_solids[i] = 0
+end
 
 local function region_init_from_aabb (aabb)
 	local region = {}
@@ -889,6 +916,7 @@ local function region_init_from_aabb (aabb)
 	setmetatable (region, region_class)
 	return region
 end
+mcl_util.region_init_from_aabb = region_init_from_aabb
 
 function region_class:intersect (aabb)
 	return region_op (self, region_init_from_aabb (aabb), OP_AND)
@@ -1005,9 +1033,12 @@ local function region_select_face (region, normal_axis, pos)
 		new.y_size = b_size
 	end
 
-	new.solids = {}
-	new.b_size
-		= bitset_size (new.x_size, new.y_size, new.z_size)
+	local solids = {}
+	new.solids = solids
+	new.b_size = bitset_size (new.x_size, new.y_size, new.z_size)
+	for i = 1, new.b_size do
+		solids[i] = 0
+	end
 
 	for b1 = 0, b_size - 1 do
 		for a1 = 0, a_size - 1 do
