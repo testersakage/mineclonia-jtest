@@ -9,6 +9,8 @@ core.register_craft({
 })
 
 -- Armor trims
+if not mcl_levelgen.is_levelgen_environment then
+
 core.register_craft({
 	output = "mcl_armor:eye",
 	recipe = {
@@ -26,3 +28,5 @@ core.register_craft({
         {"mcl_core:diamond","mcl_core:diamond","mcl_core:diamond"},
     }
 })
+
+end

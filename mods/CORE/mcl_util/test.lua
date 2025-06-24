@@ -1559,6 +1559,14 @@ local function test_shorthand_ops ()
 		-8.0, -8.0, -8.0,
 		8.0, 8.0, 8.0,
 	};
+	local narrow_though_extreme_cube = {
+		-0.5, -0.5, -0.5,
+		0.5, 0.5, 100.0,
+	};
+	local narrow_though_extreme_cube_1 = {
+		-0.5, -0.5, -0.5,
+		0.5, 0.5, 101.0,
+	};
 
 	local big = mcl_util.decompose_AABBs (big_region_1)
 	local lhs = mcl_util.decompose_AABBs ({basic_cube})
@@ -1575,6 +1583,26 @@ local function test_shorthand_ops ()
 	dest = big:union (basic_cube)
 	dest1 = big:op (lhs, mcl_util.OP_OR)
 	assert (dest1:equal_p (dest))
+
+	dest = big:subtract (basic_cube);
+	assert (not dest:contains_p (big))
+	assert (big:contains_p (dest))
+
+	dest1 = dest:union (narrow_though_extreme_cube)
+	assert (not big:contains_p (dest1))
+	assert (dest1:contains_p (dest))
+	lhs = dest1:union (basic_cube)
+	assert (lhs:contains_p (dest))
+	assert (lhs:contains_p (dest1))
+	assert (lhs:contains_p (big))
+	assert (not big:contains_p (lhs))
+	assert (not dest:contains_p (lhs))
+	assert (not dest1:contains_p (lhs))
+
+	local tmp = mcl_util.region_init_from_aabb (narrow_though_extreme_cube)
+	assert (lhs:contains_p (tmp))
+	tmp = mcl_util.region_init_from_aabb (narrow_though_extreme_cube_1)
+	assert (not lhs:contains_p (tmp))
 end
 
 local function test_faces ()

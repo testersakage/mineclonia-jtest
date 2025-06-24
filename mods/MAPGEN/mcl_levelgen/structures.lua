@@ -998,6 +998,7 @@ function mcl_levelgen.create_structure_start (structure_def, pieces)
 		terrain_adaptation = structure_def.terrain_adaptation,
 	}
 end
+local create_structure_start = mcl_levelgen.create_structure_start
 
 function mcl_levelgen.translate_vertically (pieces, dy)
 	for _, piece in ipairs (pieces) do
@@ -1265,6 +1266,20 @@ function prepare_structure_placement1 (level, terrain, x1, z1)
 	origin_z = z1
 end
 
+local cid_air
+
+if core then
+	cid_air = core.CONTENT_AIR
+else
+	cid_air = 0
+end
+
+local function is_not_air (cid, param2)
+	return cid ~= cid_air
+end
+
+mcl_levelgen.is_not_air = is_not_air
+
 if not mcl_levelgen.load_feature_environment then
 
 local decode_node = mcl_levelgen.decode_node
@@ -1277,7 +1292,6 @@ local function structure_encode_node (cid, param2)
 	return node + lshift (current_generation_step, 24)
 end
 
-local cid_air
 local cid_air_encoded
 local cids_walkable = {}
 
@@ -1296,10 +1310,8 @@ if core and core.get_content_id then
 	else
 		initialize_cids ()
 	end
-	cid_air = core.CONTENT_AIR
 	cid_air_encoded = encode_node (cid_air, 0)
 else
-	cid_air = 0
 	for i = 2, 2048 do
 		cids_walkable[i] = true
 	end
@@ -1333,16 +1345,11 @@ function mcl_levelgen.get_block (x, y, z)
 	return get_block_1 (x, y, z)
 end
 
-local function is_not_air (cid, param2)
-	return cid ~= cid_air
-end
-
 local function is_walkable (cid, param2)
 	return cids_walkable[cid]
 end
 
 mcl_levelgen.is_walkable = is_walkable
-mcl_levelgen.is_not_air = is_not_air
 
 local unpack_height_map = mcl_levelgen.unpack_height_map
 local pack_height_map = mcl_levelgen.pack_height_map
@@ -1417,6 +1424,8 @@ function mcl_levelgen.set_block (x, y, z, cid, param2)
 	correct_heightmaps (x, y, z, cid, param2, false)
 	update_structure_extents (x, y, z)
 end
+
+local set_block = mcl_levelgen.set_block
 
 function mcl_levelgen.set_block_checked (x, y, z, cid, param2, writable_p)
 	if x < origin_x or x >= origin_x + 16
@@ -1517,6 +1526,7 @@ function mcl_levelgen.notify_generated (name, x, y, z, data, append)
 		notify_generated_unchecked (name, data, append)
 	end
 end
+local notify_generated = mcl_levelgen.notify_generated
 
 function mcl_levelgen.flush_structure_gen_data ()
 	local notifies, pieces = gen_notifies, placed_pieces
@@ -1651,6 +1661,10 @@ local active_processors = {}
 function mcl_levelgen.push_schematic_processor (processor_function)
 	local current = #active_processors
 	insert (active_processors, processor_function)
+	-- if type (processor_function) == "table"
+	-- 	and processor_function.initialize then
+	-- 	processor_function.initialize ()
+	-- end
 	return current
 end
 
@@ -1658,6 +1672,10 @@ function mcl_levelgen.push_schematic_processors (processors)
 	local current = #active_processors
 	for _, processor in ipairs (processors) do
 		insert (active_processors, processor)
+		-- if type (processor) == "table"
+		-- 	and processor.initialize then
+		-- 	processor.initialize ()
+		-- end
 	end
 	return current
 end
@@ -1915,6 +1933,26 @@ local function place_schematic_structure_piece (self, level, terrain, rng,
 	end
 end
 
+local function run_preprocessors (rng, processors, template_or_sid)
+	local tbl = {}
+
+	for _, processor in ipairs (processors) do
+		if type (processor) == "table"
+			and processor.structure_preprocess then
+			local key, value
+				= processor.structure_preprocess (rng, template_or_sid)
+			tbl[key] = value
+		end
+	end
+
+	return tbl
+end
+
+function mcl_levelgen.get_preprocessor_metadata (key)
+	local piece = current_structure_piece
+	return piece.processor_data[key]
+end
+
 function mcl_levelgen.make_schematic_piece (schematic_id, x, y, z,
 					    rotation, rng, center,
 					    force_place, processors,
@@ -1935,6 +1973,8 @@ function mcl_levelgen.make_schematic_piece (schematic_id, x, y, z,
 		schematic = schematic_id,
 		force_place = force_place,
 		processors = processors,
+		processor_data = run_preprocessors (rng, processors,
+						    schematic_id),
 		placement_sentinel = placement_sentinel,
 		bbox = {
 			x, y, z,
@@ -1944,6 +1984,148 @@ function mcl_levelgen.make_schematic_piece (schematic_id, x, y, z,
 		},
 		ground_offset = ground_offset,
 	}
+end
+
+------------------------------------------------------------------------
+-- Template placement.
+------------------------------------------------------------------------
+
+local get_template_bounding_box
+local place_template_internal
+local generate_jigsaw
+local bounds = {}
+
+local function set_block_with_meta (x, y, z, cid, param2, meta)
+	set_block (x, y, z, cid, param2)
+	if meta then
+		notify_generated ("mcl_levelgen:set_block_meta", x, y, z, {
+			x, y, z, meta,
+		}, true)
+	end
+end
+
+function mcl_levelgen.place_template (template, x, y, z, px, pz, options,
+				      mirroring, rotation, rng)
+	bounds[1] = origin_x
+	bounds[2] = level_min
+	bounds[3] = origin_z
+	bounds[4] = origin_x + 15
+	bounds[5] = level_max_y
+	bounds[6] = origin_z + 15
+	place_template_internal (template, x, y, z, px, pz, options,
+				 bounds, mirroring, rotation,
+				 active_processors, rng,
+				 set_block_with_meta, get_block_1)
+end
+local place_template = mcl_levelgen.place_template
+
+local function place_template_structure_piece (self, level, terrain, rng,
+					       x1, z1, x2, z2)
+	local x, y, z = self.x, self.y, self.z
+	local processors = self.processors
+	if processors then
+		local i = push_schematic_processors (processors)
+		place_template (self.template, x, y, z, 0, 0,
+				self.options, self.mirroring,
+				self.rotation, rng)
+		pop_schematic_processors (i)
+	else
+		place_template (self.template, x, y, z, 0, 0,
+				self.options, self.mirroring,
+				self.rotation, rng)
+	end
+end
+
+function mcl_levelgen.make_template_piece (template, x, y, z,
+					   mirroring, rotation, rng,
+					   options, processors,
+					   ground_offset, bbox)
+	if not bbox then
+		bbox = get_template_bounding_box (template, x, y, z, 0, 0,
+						  mirroring, rotation)
+	end
+	return {
+		template = template,
+		rotation = rotation,
+		mirroring = mirroring,
+		place = place_template_structure_piece,
+		ground_offset = ground_offset,
+		options = options,
+		processors = processors,
+		processor_data = run_preprocessors (rng, processors,
+						    template),
+		x = x,
+		y = y,
+		z = z,
+		bbox = bbox,
+	}
+end
+local make_template_piece = mcl_levelgen.make_template_piece
+
+function mcl_levelgen.init_structures_after_templates ()
+	get_template_bounding_box = mcl_levelgen.get_template_bounding_box
+	place_template_internal = mcl_levelgen.place_template_internal
+	generate_jigsaw = mcl_levelgen.generate_jigsaw
+end
+
+------------------------------------------------------------------------
+-- Jigsaw structure generation.
+------------------------------------------------------------------------
+
+local structure_biome_test = mcl_levelgen.structure_biome_test
+
+local function jigsaw_create_piece (element, rotation, rng, sx, sy, sz, bbox)
+	local piece = make_template_piece (element.template, sx, sy, sz,
+					   nil, rotation, rng, nil,
+					   element.processors,
+					   element.ground_offset, bbox)
+	piece.element = element
+	piece.no_terrain_adaptation = element.no_terrain_adaptation
+	return piece
+end
+
+-- local jigsaw_structure = {
+-- 	max_distance_from_center = ...,
+-- 	project_start_to_heightmap = "world_surface_wg" or "motion_blocking_wg",
+-- 	size = ...,
+-- 	start_height = function (rng) ... end,
+-- 	start_jigsaw_name = "name" or nil,
+-- }
+
+local function project_start_to_world_surface_wg (x, z, level, terrain)
+	local height = terrain:get_one_height (x, z, is_not_air)
+	return height
+end
+
+local function project_start_to_motion_blocking_wg (x, z, level, terrain, _)
+	local height = terrain:get_one_height (x, z)
+	return height
+end
+
+local function jigsaw_test_generation_position (x, y, z, level, _, structure)
+	return structure_biome_test (level, structure, x, y, z)
+end
+
+function mcl_levelgen.jigsaw_create_start (self, level, terrain, rng, cx, cz)
+	local sx = cx * 16
+	local sz = cz * 16
+	local sy = self.start_height (rng)
+	local project_start = nil
+	local projection = self.project_start_to_heightmap
+	if projection == "world_surface_wg" then
+		project_start = project_start_to_world_surface_wg
+	elseif projection == "motion_blocking_wg" then
+		project_start = project_start_to_motion_blocking_wg
+	else
+		assert (not projection)
+	end
+	local pieces = generate_jigsaw (rng, sx, sy, sz, nil, self.start_pool,
+					self.start_jigsaw_name,
+					self.max_distance_from_center,
+					self.size, jigsaw_create_piece,
+					jigsaw_test_generation_position,
+					project_start, level, terrain, self)
+	return create_structure_start (self, pieces)
 end
 
 end
