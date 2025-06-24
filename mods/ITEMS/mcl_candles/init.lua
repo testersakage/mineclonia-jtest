@@ -1,3 +1,5 @@
+mcl_candles = {}
+
 local S = core.get_translator(core.get_current_modname())
 local D = mcl_util.get_dynamic_translator(core.get_current_modname())
 
@@ -20,6 +22,7 @@ local function set_candle_properties(stack, color)
 		stack:get_meta():set_string("wield_overlay", image)
 	end
 end
+mcl_candles.set_candle_properties = set_candle_properties
 
 local function drop_candles(pos, node, _, digger)
 	if digger and digger:is_player() and core.is_creative_enabled(digger:get_player_name()) then return end

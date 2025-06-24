@@ -84,3 +84,50 @@ function table.random_element(t)
 	local rk = keyset[math.random(#keyset)]
 	return t[rk], rk
 end
+
+-- Stable sorting.
+
+-- Attribution: https://github.com/1bardesign/batteries/blob/master/sort.lua
+
+local function sort_setup (array, less)
+	local n = #array
+	--trivial cases; empty or 1 element
+	local trivial = (n <= 1)
+	if not trivial then
+		--check less
+		if less (array[1], array[1]) then
+			error ("invalid order function for sorting;"
+			       .. " less(v, v) should not be true for any v.")
+		end
+	end
+	--setup complete
+	return trivial, n, less
+end
+
+local function insertion_sort_impl (array, first, last, less)
+	for i = first + 1, last do
+		local k = first
+		local v = array[i]
+		for j = i, first + 1, -1 do
+			if less (v, array[j - 1]) then
+				array[j] = array[j - 1]
+			else
+				k = j
+				break
+			end
+		end
+		array[k] = v
+	end
+end
+
+local function stable_sort (array, less)
+	--setup
+	local trivial, n
+	trivial, n, less = sort_setup (array, less)
+	if not trivial then
+		insertion_sort_impl (array, 1, n, less)
+	end
+	return array
+end
+
+table.stable_sort = stable_sort

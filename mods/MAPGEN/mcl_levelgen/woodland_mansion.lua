@@ -2052,7 +2052,7 @@ end
 local create_structure_start = mcl_levelgen.create_structure_start
 local make_schematic_piece = mcl_levelgen.make_schematic_piece
 
-local function prepare_mansion_foyer_wall (grid, x, y, z, xmin, zmin, rot)
+local function prepare_mansion_foyer_wall (grid, x, y, z, xmin, zmin, rot, rng)
 	-- Locate the foyer.
 	local fx, fz = nil
 	for dx = 0, grid.width - 1 do
@@ -2101,7 +2101,7 @@ local function prepare_mansion_foyer_wall (grid, x, y, z, xmin, zmin, rot)
 	foyer_min_x = x + foyer_min_x
 	foyer_min_z = z + foyer_min_z
 	return make_schematic_piece (foyer_schem, foyer_min_x, y, foyer_min_z,
-				     schematic_rot, nil, false, true, nil, nil,
+				     schematic_rot, rng, false, true, nil, nil,
 				     nil)
 end
 
@@ -2144,7 +2144,7 @@ local function woodland_mansion_create_start (self, level, terrain, rng, cx, cz)
 							  true, rot)
 			local foyer_wall_piece
 				= prepare_mansion_foyer_wall (grids[1], x, y, z,
-							      xmin, zmin, rot)
+							      xmin, zmin, rot, rng)
 			insert (pieces, piece_bottom)
 			insert (pieces, piece_top)
 			insert (pieces, wall_piece)

@@ -150,6 +150,34 @@ function mcl_levelgen.protected_blocks_processor (protected_cids)
 	end
 end
 
+-- function mcl_levelgen.capped_processor (limit, delegate)
+-- 	local count = 0
+-- 	local processor = function (x, y, z, rng, cid_existing,
+-- 				    param2_existing, cid, param2)
+-- 		if count < limit then
+-- 			local cid_1, param2_1
+-- 				= delegate (x, y, z, rng, cid_existing,
+-- 					    param2_existing, cid, param2)
+-- 			if cid_1 and param2_1
+-- 				and (cid ~= cid_1 or param2 ~= param2_1) then
+-- 				count = count + 1
+-- 			end
+-- 			return cid_1, param2_1
+-- 		end
+-- 		return cid, param2
+-- 	end
+-- 	local metatable = {
+-- 		__call = processor,
+-- 	}
+-- 	local tbl = {
+-- 		initialize = function ()
+-- 			count = 0
+-- 		end,
+-- 	}
+-- 	setmetatable (tbl, metatable)
+-- 	return tbl
+-- end
+
 function mcl_levelgen.wall_update_processor ()
 	local wall_p = mcl_levelgen.wall_p
 	local notify_generated = mcl_levelgen.notify_generated

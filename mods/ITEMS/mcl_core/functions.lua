@@ -758,7 +758,10 @@ end
 -- Show positions of barriers when player is wielding a barrier
 mcl_player.register_globalstep_slow(function(player)
 	local wi = player:get_wielded_item():get_name()
-	if wi == "mcl_core:barrier" or wi == "mcl_core:realm_barrier" or core.get_item_group(wi, "light_block") ~= 0 then
+	if wi == "mcl_core:barrier"
+		or wi == "mcl_core:realm_barrier"
+		or core.get_item_group(wi, "light_block") ~= 0
+		or wi == "mcl_levelgen:structure_void" then
 		local pos = vector.round(player:get_pos())
 		local r = 8
 		local vm = core.get_voxel_manip()
@@ -780,6 +783,8 @@ mcl_player.register_globalstep_slow(function(player)
 				tex = "mcl_core_barrier.png"
 			elseif nodename == "mcl_core:realm_barrier" then
 				tex = "mcl_core_barrier.png^[colorize:#FF00FF:127^[transformFX"
+			elseif nodename == "mcl_levelgen:structure_void" then
+				tex = "mcl_levelgen_structure_void.png"
 			elseif light_block_group ~= 0 then
 				tex = "mcl_core_light_" .. (light_block_group - 1) .. ".png"
 			end

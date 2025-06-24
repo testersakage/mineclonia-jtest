@@ -1787,11 +1787,19 @@ test_walk_AABBs (void)
 static void
 test_shorthand_ops (void)
 {
-  struct cuboid_region dest1, dest, big, lhs;
+  struct cuboid_region dest1, dest, big, lhs, tmp;
   int size_1 = sizeof big_region_1 / sizeof (AABB);
   static AABB basic_cube = {
     -8.0, -8.0, -8.0,
     8.0, 8.0, 8.0,
+  };
+  static AABB narrow_though_extreme_cube = {
+    -0.5, -0.5, -0.5,
+    0.5, 0.5, 100.0,
+  };
+  static AABB narrow_though_extreme_cube_1 = {
+    -0.5, -0.5, -0.5,
+    0.5, 0.5, 101.0,
   };
 
   region_init (&dest);
@@ -1815,6 +1823,25 @@ test_shorthand_ops (void)
   test (!region_union (&dest, &big, &basic_cube));
   test (!region_op (&dest1, &big, &lhs, OP_OR));
   test (region_equal_p (&dest, &dest1));
+
+  test (!region_subtract (&dest, &big, &basic_cube));
+  test (!region_contains_p (&dest, &big));
+  test (region_contains_p (&big, &dest));
+  test (!region_union (&dest1, &dest, &narrow_though_extreme_cube));
+  test (!region_contains_p (&big, &dest1));
+  test (region_contains_p (&dest1, &dest));
+  test (!region_union (&lhs, &dest1, &basic_cube));
+  test (region_contains_p (&lhs, &dest));
+  test (region_contains_p (&lhs, &dest1));
+  test (region_contains_p (&lhs, &big));
+  test (!region_contains_p (&big, &lhs));
+  test (!region_contains_p (&dest, &lhs));
+  test (!region_contains_p (&dest1, &lhs));
+
+  region_init_from_AABB (&tmp, &narrow_though_extreme_cube);
+  test (region_contains_p (&lhs, &tmp));
+  region_init_from_AABB (&tmp, &narrow_though_extreme_cube_1);
+  test (!region_contains_p (&lhs, &tmp));
 
   region_release (&dest);
   region_release (&dest1);

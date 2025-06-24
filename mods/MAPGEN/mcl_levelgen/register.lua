@@ -86,6 +86,8 @@ if core and not core.get_player_by_name then
 		dofile (script)
 	end
 elseif core then
+	-- Load and register jigsaw blocks.
+	dofile (mcl_levelgen.prefix .. "/jigsaw.lua")
 	dofile (mcl_levelgen.prefix .. "/default_structures.lua")
 	mcl_levelgen.register_levelgen_script (mcl_levelgen.prefix
 					       .. "/default_structures.lua")

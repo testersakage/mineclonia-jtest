@@ -102,6 +102,15 @@ mcl_armor.trims = {
 		["wayfinder"] = {
 			readable_name = "Wayfinder", dupe_item = "mcl_colorblocks:hardened_clay"
 		},
+		-- ["raiser"] = {
+		-- 	readable_name = "Raiser", dupe_item = "mcl_colorblocks:hardened_clay"
+		-- },
+		-- ["shaper"] = {
+		-- 	readable_name = "Shaper", dupe_item = "mcl_colorblocks:hardened_clay"
+		-- },
+		-- ["host"] = {
+		-- 	readable_name = "Host", dupe_item = "mcl_colorblocks:hardened_clay"
+		-- },
 		["bolt"]      = {
 			readable_name = "Bolt", dupe_item = "mcl_copper:block"
 		},
