@@ -14,3 +14,10 @@ function mcl_levelgen.register_levelgen_script (script)
 			      level_generator_scripts)
 	end
 end
+
+------------------------------------------------------------------------
+-- Feature environment stubs.
+------------------------------------------------------------------------
+
+function mcl_levelgen.register_loot_table (_, _)
+end

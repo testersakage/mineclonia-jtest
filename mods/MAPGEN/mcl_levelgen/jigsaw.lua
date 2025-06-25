@@ -233,6 +233,20 @@ button[0.5,4.65;1.0,0.5;corner_mode_toggle;Corner]
 field_close_on_enter[structure_name;false]
 ]]
 
+local data_formspec = [[
+formspec_version[6]
+size[11.75,5.45]
+position[0.5,0.5]
+field[0.5,1.0;10.75,0.5;value;Data Tag Value;%s]
+field[0.5,2.0;10.75,0.5;param1;Data Tag Parameter 1;%s]
+field[0.5,3.0;10.75,0.5;param2;Data Tag Parameter 2;%s]
+label[0.5,4.5;Data Mode - Game Logic Marker]
+button[0.5,4.65;1.0,0.5;data_mode_toggle;Data]
+field_close_on_enter[value;false]
+field_close_on_enter[param1;false]
+field_close_on_enter[param2;false]
+]]
+
 local structure_block = {
 	description = S ("Structure Block"),
 	_tt_help = S ("Saves, generates, or records structure data"),
@@ -451,10 +465,12 @@ core.register_on_mods_loaded (function ()
 		"group:structure_block",
 		"group:jigsaw_block",
 		"group:container",
+		"group:sign",
 	})
 	cids_to_construct = mcl_levelgen.construct_cid_list ({
 		"group:container",
 		"group:redstone_wire",
+		"group:sign",
 	})
 end)
 
@@ -469,6 +485,7 @@ local function construct_hash (dx, dy, dz)
 end
 
 local cid_jigsaw_block
+local cid_structure_block_data
 
 local function execute_save (player, pos, tbl)
 	if tbl.sx <= 0 or tbl.sy <= 0 or tbl.sz <= 0 then
@@ -491,6 +508,7 @@ local function execute_save (player, pos, tbl)
 	local names = {}
 	local nodes_to_construct = {}
 	local jigsaws = {}
+	local data_blocks = {}
 	local structure_template = {
 		nodes = nodes,
 		metadata = metadata,
@@ -500,6 +518,7 @@ local function execute_save (player, pos, tbl)
 		width = tbl.sx,
 		height = tbl.sy,
 		length = tbl.sz,
+		data_blocks = data_blocks,
 	}
 	local x1, y1, z1, x2, y2, z2
 		= template_bbox (tbl, pos.x, pos.y, pos.z)
@@ -544,6 +563,8 @@ local function execute_save (player, pos, tbl)
 
 		if cid == cid_jigsaw_block then
 			table.insert (jigsaws, idx)
+		elseif cid == cid_structure_block_data then
+			table.insert (data_blocks, idx)
 		end
 
 		if indexof (cids_to_construct, cid) ~= -1 then
@@ -648,6 +669,33 @@ core.register_node ("mcl_levelgen:structure_block_save", table.merge (structure_
 	on_rightclick = save_on_rightclick,
 }))
 
+-- Data structure block.
+
+local function data_save_data (meta)
+	local data = meta:get_string ("mcl_levelgen:structure_data_save_data")
+	if data ~= "" then
+		meta = core.deserialize (data)
+	else
+		meta = {
+			value = "",
+			param1 = "",
+			param2 = "",
+		}
+	end
+	return meta
+end
+
+local function data_formspec_processor (pos, _)
+	local meta = core.get_meta (pos)
+	local meta = data_save_data (meta)
+	return string.format (data_formspec, meta.value,
+			      meta.param1, meta.param2)
+end
+
+local function data_on_rightclick (pos, node, clicker, itemstack, pointed_thing)
+	display_formspec (pos, clicker, "data", data_formspec_processor)
+end
+
 core.register_node ("mcl_levelgen:structure_block_data", table.merge (structure_block, {
 	tiles = {
 		"mcl_levelgen_structure_block_data_top.png",
@@ -660,7 +708,11 @@ core.register_node ("mcl_levelgen:structure_block_data", table.merge (structure_
 	groups = table.merge (structure_block.groups, {
 		not_in_creative_inventory = 1,
 	}),
+	on_rightclick = data_on_rightclick,
 }))
+
+cid_structure_block_data
+	= core.get_content_id ("mcl_levelgen:structure_block_data")
 
 -- Corner structure block.
 
@@ -964,6 +1016,35 @@ local function handle_structure_block_formspec (player, formname, fields)
 			display_formspec (data.pos, player, "corner",
 					  corner_formspec_processor)
 		end
+		return true
+	elseif formname == "mcl_levelgen:structure_data_formspec" then
+		if not core.check_player_privs (player, "server") then
+			core.chat_send_player (player:get_player_name (),
+					       S ("`server' privileges are required to utilize structure blocks"))
+			return false
+		end
+
+		local meta = core.get_meta (data.pos)
+		local tbl = data_save_data (meta)
+
+		if fields.value then
+			tbl.value = fields.value
+		end
+		if fields.param1 then
+			tbl.param1 = fields.param1
+		end
+		if fields.param2 then
+			tbl.param2 = fields.param2
+		end
+
+		meta:set_string ("mcl_levelgen:structure_data_save_data",
+				 core.serialize (tbl))
+
+		if not fields.quit then
+			display_formspec (data.pos, player, "data",
+					  data_formspec_processor)
+		end
+
 		return true
 	end
 	return false

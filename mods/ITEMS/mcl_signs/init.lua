@@ -275,6 +275,10 @@ function sign_tpl.on_rightclick(pos, _, clicker, itemstack, _)
 	return itemstack
 end
 
+function sign_tpl.on_construct (pos)
+	mcl_signs.update_sign (pos)
+end
+
 function sign_tpl.on_destruct(pos)
 	mcl_signs.get_text_entity (pos, true)
 end
