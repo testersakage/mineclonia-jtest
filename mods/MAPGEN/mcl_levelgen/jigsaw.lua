@@ -399,15 +399,16 @@ local function execute_load (player, pos, data)
 		local keep_jigsaws = {
 			keep_jigsaws = true,
 		}
-		place_template_internal (data.loaded_template,
-					 pos.x + data.dx,
-					 pos.y + data.dy,
-					 -pos.z - 1 - data.dz,
-					 0, 0, keep_jigsaws, nil,
-					 mirroring, data.rotation,
-					 processors,
-					 rng, jigsaw_set_block,
-					 jigsaw_get_block)
+		local suppressions
+			= place_template_internal (data.loaded_template,
+						   pos.x + data.dx,
+						   pos.y + data.dy,
+						   -pos.z - 1 - data.dz,
+						   0, 0, keep_jigsaws, nil,
+						   mirroring, data.rotation,
+						   processors,
+						   rng, jigsaw_set_block,
+						   jigsaw_get_block)
 		vm:set_data (cids)
 		vm:set_param2_data (param2s)
 		vm:write_to_map (true)
@@ -417,7 +418,8 @@ local function execute_load (player, pos, data)
 					   -pos.z - 1 - data.dz,
 					   0, 0, mirroring,
 					   data.rotation,
-					   jigsaw_construct_block)
+					   jigsaw_construct_block,
+					   suppressions)
 		if vm.close then
 			vm:close ()
 		end
