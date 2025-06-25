@@ -1244,6 +1244,23 @@ function terrain_generator:area_min_height (x1, z1, x2, z2, is_solid)
 	return value
 end
 
+local function rtz (n)
+	if n < 0 then
+		return ceil (n)
+	end
+	return floor (n)
+end
+
+function terrain_generator:area_average_height (x1, z1, x2, z2, is_solid)
+	local total = self:area_heightmap (x1, z1, x2, z2, heightmap,
+					   is_solid)
+	local value = heightmap[1]
+	for i = 2, total do
+		value = value + heightmap[i]
+	end
+	return rtz (value / total)
+end
+
 ------------------------------------------------------------------------
 -- Aquifer and surface system interface.
 ------------------------------------------------------------------------

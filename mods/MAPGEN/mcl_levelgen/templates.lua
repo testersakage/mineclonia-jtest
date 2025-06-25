@@ -20,6 +20,8 @@ local band = bit.band
 local decode_node = mcl_levelgen.decode_node
 local encode_node = mcl_levelgen.encode_node
 local STRUCTURE_VOID = 0x100000000
+local insert = table.insert
+local indexof = table.indexof
 
 local function extract_idx (template, idx)
 	local idx = idx - 1
@@ -69,6 +71,13 @@ mcl_levelgen.facedir_to_jigsaw_dir = facedir_to_jigsaw_dir
 
 local cid_ignore = core.CONTENT_IGNORE
 local cid_air = core.CONTENT_AIR
+
+local function construct_unhash (value)
+	local x = rshift (value, 20)
+	local y = band (rshift (value, 10), 0x3ff)
+	local z = band (value, 0x3ff)
+	return x, y, z
+end
 
 function mcl_levelgen.read_structure_template (name)
 	local f, err, _ = io.open (name, "r")
@@ -156,10 +165,19 @@ function mcl_levelgen.read_structure_template (name)
 		end
 	end
 
-	for _, item in ipairs (data.nodes_to_construct) do
+	for i, item in ipairs (data.nodes_to_construct) do
 		if type (item) ~= "number" or item ~= floor (item) then
 			return nil, "Invalid element in node constructor list"
 		end
+
+		local dx, dy, dz = construct_unhash (item)
+		if dx < 0 or dy < 0 or dz < 0
+			or dx >= data.width or dy >= data.length or dz >= data.height then
+			return nil, "Node constructor out of bounds"
+		end
+
+		data.nodes_to_construct[i]
+			= ((dx * data.height) + dy) * data.length + dz + 1
 	end
 
 	local rpl_jigsaws = {}
@@ -214,7 +232,7 @@ function mcl_levelgen.read_structure_template (name)
 				return nil, "Placement priority not defined in jigsaw meta"
 			end
 
-			table.insert (rpl_jigsaws, {
+			insert (rpl_jigsaws, {
 				dx = dx,
 				dy = dy,
 				dz = dz,
@@ -323,6 +341,8 @@ local mirror_param2_x = mcl_levelgen.mirror_param2_x
 local mirror_param2_z = mcl_levelgen.mirror_param2_z
 local rotate_param2 = mcl_levelgen.rotate_param2
 local template_index = nil
+local template_meta = nil
+local template_suppressions = {}
 
 function mcl_levelgen.current_template_index ()
 	return template_index
@@ -340,6 +360,17 @@ local function apply_schematic_processors (processors, x, y, z, rng,
 		end
 	end
 	return cid, param2
+end
+
+function mcl_levelgen.get_current_template_meta ()
+	return template_meta
+end
+
+function mcl_levelgen.set_current_template_meta (tbl, suppress_construction)
+	template_meta = tbl
+	if suppress_construction then
+		insert (template_suppressions, template_index)
+	end
 end
 
 function mcl_levelgen.place_template_internal (data, x, y, z, px, pz, options,
@@ -428,6 +459,7 @@ function mcl_levelgen.place_template_internal (data, x, y, z, px, pz, options,
 	local n_processors = processors and #processors or 0
 	local keep_jigsaws = options and options.keep_jigsaws
 
+	template_suppressions = {}
 	for x, y, z in ipos1 (ix1, iy1, iz1, ix2, iy2, iz2) do
 		local dx, dz
 		if mirroring == "left_right" then
@@ -448,13 +480,13 @@ function mcl_levelgen.place_template_internal (data, x, y, z, px, pz, options,
 		if nodes[index] ~= STRUCTURE_VOID then
 			local cid, param2 = decode_node (nodes[index])
 			local meta_idx = rshift (nodes[index], 24)
-			local meta = meta_idx ~= 0 and metadata[meta_idx] or nil
+			template_meta = meta_idx ~= 0 and metadata[meta_idx] or nil
 			local jigsaw_meta = jigsaw_meta[meta_idx]
 
 			if jigsaw_meta and not keep_jigsaws then
 				cid = jigsaw_meta.cid_replace_with
 				if cid ~= nodes[index] then
-					param2, meta = 0, nil
+					param2, template_meta = 0, nil
 				end
 			end
 
@@ -474,29 +506,29 @@ function mcl_levelgen.place_template_internal (data, x, y, z, px, pz, options,
 				end
 
 				if cid then
-					set_block (x, y, z, cid, param2, meta)
+					set_block (x, y, z, cid, param2, template_meta)
 				end
 			end
 		end
 	end
-end
 
-local function construct_unhash (value)
-	local x = rshift (value, 20)
-	local y = band (rshift (value, 10), 0x3ff)
-	local z = band (value, 0x3ff)
-	return x, y, z
+	template_meta = nil
+	return template_suppressions
 end
 
 function mcl_levelgen.run_template_constructors (data, x, y, z, px, pz,
 						 mirroring, rotation,
-						 construct_block)
+						 construct_block,
+						 suppressions)
 	if data.nodes_to_construct then
-		for _, node in ipairs (data.nodes_to_construct) do
-			local dx, dy, dz = construct_unhash (node)
-			local dx, dy, dz = template_transform (data, dx, dy, dz, px, pz,
-							       mirroring, rotation)
-			construct_block (dx + x, dy + y, dz + z)
+		for _, idx in ipairs (data.nodes_to_construct) do
+			if not suppressions
+				or indexof (suppressions, idx) == -1 then
+				local dx, dy, dz = extract_idx (data, idx)
+				local dx, dy, dz = template_transform (data, dx, dy, dz, px, pz,
+								       mirroring, rotation)
+				construct_block (dx + x, dy + y, dz + z)
+			end
 		end
 	end
 end
@@ -610,8 +642,6 @@ end
 ------------------------------------------------------------------------
 -- Jigsaw placement.
 ------------------------------------------------------------------------
-
-local insert = table.insert
 
 local function get_jigsaw (element, name)
 	local template = element.template
