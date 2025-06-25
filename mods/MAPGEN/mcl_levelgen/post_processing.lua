@@ -2330,12 +2330,27 @@ local function handle_set_block_meta (_, data)
 		v.z = z
 		core.load_area (v)
 		local meta = core.get_meta (v)
-		meta:from_table (data[4])
+		meta:from_table (pos[4])
 	end
 end
 
 mcl_levelgen.register_notification_handler ("mcl_levelgen:set_block_meta",
 					    handle_set_block_meta)
+
+local function handle_construct_block (_, data)
+	for _, pos in ipairs (data) do
+		local x, y, z
+			= level_to_minetest_position (pos[1], pos[2], pos[3])
+		v.x = x
+		v.y = y
+		v.z = z
+		core.load_area (v)
+		mcl_structures.init_node_construct (v)
+	end
+end
+
+mcl_levelgen.register_notification_handler ("mcl_levelgen:construct_block",
+					    handle_construct_block)
 
 ------------------------------------------------------------------------
 -- Structure storage.
