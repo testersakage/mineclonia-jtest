@@ -2005,6 +2005,7 @@ end
 
 local get_template_bounding_box
 local place_template_internal
+local run_template_constructors
 local generate_jigsaw
 local bounds = {}
 
@@ -2017,6 +2018,12 @@ local function set_block_with_meta (x, y, z, cid, param2, meta)
 	end
 end
 
+local function construct_block (x, y, z)
+	notify_generated ("mcl_levelgen:construct_block", x, y, z, {
+		x, y, z,
+	}, true)
+end
+
 function mcl_levelgen.place_template (template, x, y, z, px, pz, options,
 				      mirroring, rotation, rng)
 	bounds[1] = origin_x
@@ -2025,10 +2032,13 @@ function mcl_levelgen.place_template (template, x, y, z, px, pz, options,
 	bounds[4] = origin_x + 15
 	bounds[5] = level_max_y
 	bounds[6] = origin_z + 15
-	place_template_internal (template, x, y, z, px, pz, options,
-				 bounds, mirroring, rotation,
-				 active_processors, rng,
-				 set_block_with_meta, get_block_1)
+	local suppressions
+		= place_template_internal (template, x, y, z, px, pz, options,
+					   bounds, mirroring, rotation,
+					   active_processors, rng,
+					   set_block_with_meta, get_block_1)
+	run_template_constructors (template, x, y, z, px, pz, mirroring,
+				   rotation, construct_block, suppressions)
 end
 local place_template = mcl_levelgen.place_template
 
@@ -2054,8 +2064,13 @@ function mcl_levelgen.make_template_piece (template, x, y, z,
 					   options, processors,
 					   ground_offset, bbox)
 	if not bbox then
-		bbox = get_template_bounding_box (template, x, y, z, 0, 0,
-						  mirroring, rotation)
+		local x1, y1, z1, x2, y2, z2
+			= get_template_bounding_box (template, x, y, z, 0, 0,
+						     mirroring, rotation)
+		bbox = {
+			x1, y1, z1,
+			x2, y2, z2,
+		}
 	end
 	return {
 		template = template,
@@ -2078,6 +2093,7 @@ local make_template_piece = mcl_levelgen.make_template_piece
 function mcl_levelgen.init_structures_after_templates ()
 	get_template_bounding_box = mcl_levelgen.get_template_bounding_box
 	place_template_internal = mcl_levelgen.place_template_internal
+	run_template_constructors = mcl_levelgen.run_template_constructors
 	generate_jigsaw = mcl_levelgen.generate_jigsaw
 end
 
