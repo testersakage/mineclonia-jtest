@@ -2044,19 +2044,49 @@ local place_template = mcl_levelgen.place_template
 
 local function place_template_structure_piece (self, level, terrain, rng,
 					       x1, z1, x2, z2)
-	local x, y, z = self.x, self.y, self.z
+	local x, y, z, px, pz = self.x, self.y, self.z, self.px, self.pz
 	local processors = self.processors
 	if processors then
 		local i = push_schematic_processors (processors)
-		place_template (self.template, x, y, z, 0, 0,
+		place_template (self.template, x, y, z, px, pz,
 				self.options, self.mirroring,
 				self.rotation, rng)
 		pop_schematic_processors (i)
 	else
-		place_template (self.template, x, y, z, 0, 0,
+		place_template (self.template, x, y, z, px, pz,
 				self.options, self.mirroring,
 				self.rotation, rng)
 	end
+end
+
+function mcl_levelgen.make_template_piece_with_pivot (template, x, y, z, px, pz,
+						      mirroring, rotation, rng,
+						      options, processors,
+						      ground_offset)
+	local x1, y1, z1, x2, y2, z2
+		= get_template_bounding_box (template, x, y, z, px, pz,
+					     mirroring, rotation)
+	local bbox = {
+		x1, y1, z1,
+		x2, y2, z2,
+	}
+	return {
+		template = template,
+		rotation = rotation,
+		mirroring = mirroring,
+		place = place_template_structure_piece,
+		ground_offset = ground_offset,
+		options = options,
+		processors = processors,
+		processor_data = run_preprocessors (rng, processors,
+						    template),
+		x = x,
+		y = y,
+		z = z,
+		px = px,
+		pz = pz,
+		bbox = bbox,
+	}
 end
 
 function mcl_levelgen.make_template_piece (template, x, y, z,
@@ -2085,6 +2115,8 @@ function mcl_levelgen.make_template_piece (template, x, y, z,
 		x = x,
 		y = y,
 		z = z,
+		px = 0,
+		pz = 0,
 		bbox = bbox,
 	}
 end

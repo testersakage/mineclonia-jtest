@@ -172,8 +172,9 @@ function mcl_levelgen.read_structure_template (name)
 
 		local dx, dy, dz = construct_unhash (item)
 		if dx < 0 or dy < 0 or dz < 0
-			or dx >= data.width or dy >= data.length or dz >= data.height then
-			return nil, "Node constructor out of bounds"
+			or dx >= data.width or dy >= data.height or dz >= data.length then
+			return nil, "Node constructor out of bounds: "
+				.. string.format ("%d,%d,%d", dx, dy, dz)
 		end
 
 		data.nodes_to_construct[i]
@@ -257,6 +258,51 @@ function mcl_levelgen.read_structure_template (name)
 	end
 	data.jigsaws = rpl_jigsaws
 	data.jigsaw_meta = jigsaw_meta
+
+	if not data.data_blocks then
+		data.data_block_data = {}
+	else
+		data.data_block_data = {}
+		for i, item in ipairs (data.data_blocks) do
+			if type (item) ~= "number" then
+				return nil, "Data block index is not a number"
+			end
+
+			local content = data.nodes[item]
+			local meta_idx = rshift (content, 24)
+
+			if meta_idx == 0 or not data.metadata[meta_idx] then
+				return nil, "Data block has no metadata"
+			end
+
+			local fields = data.metadata[meta_idx].fields
+			if not fields then
+				return nil, "Invalid data block meta"
+			end
+			local meta_str = fields["mcl_levelgen:structure_data_save_data"]
+			if not meta_str then
+				return nil, "Data block save data absent"
+			end
+			local _, meta = pcall (core.deserialize, meta_str)
+			if not meta or type (meta) ~= "table"
+				or type (meta.value) ~= "string"
+				or type (meta.param1) ~= "string"
+				or type (meta.param2) ~= "string" then
+				return nil, "Invalid data block meta"
+			end
+
+			local x, y, z = extract_idx (data, item)
+			data.data_block_data[i] = {
+				x = x,
+				y = y,
+				z = z,
+				idx = item,
+				value = meta.value,
+				param1 = meta.param1,
+				param2 = meta.param2,
+			}
+		end
+	end
 
 	return data
 end
@@ -373,16 +419,67 @@ function mcl_levelgen.set_current_template_meta (tbl, suppress_construction)
 	end
 end
 
+local x_stride, y_stride, z_stride, i_start
+local x1, y1, z1, x2, y2, z2
+local template_mirroring
+
+function mcl_levelgen.suppress_constructors (x, y, z)
+	if x <= x2 and y <= y2 and z <= z2
+		and x >= x1 and y >= y1 and z >= z1 then
+		local dx, dz
+		if template_mirroring == "left_right" then
+			dx = x - x1
+			dz = z2 - z
+		elseif template_mirroring == "front_back" then
+			dx = x2 - x
+			dz = z - z1
+		else
+			dx = x - x1
+			dz = z - z1
+		end
+
+		local dy = y - y1
+		local index = dx * x_stride
+			+ dy * y_stride
+			+ dz * z_stride + i_start
+		insert (template_suppressions, index)
+	end
+end
+
+local warned = {}
+local registered_data_block_processors = {}
+
+local function call_data_block_processor (rng, data, mirroring, rotation, x, y, z, item)
+	local value = item.value
+	local fn = registered_data_block_processors[value]
+	if fn then
+		return fn (rng, data, mirroring, rotation, x, y, z, item)
+	elseif not warned[value] then
+		core.log ("warning", "[mcl_levelgen]: Processing data block of unknown type: " .. value)
+		return nil, nil
+	end
+end
+
+local cid_structure_block_data
+
+if core.register_on_mods_loaded then
+	core.register_on_mods_loaded (function ()
+		cid_structure_block_data
+			= core.get_content_id ("mcl_levelgen:structure_block_data")
+	end)
+else
+	cid_structure_block_data
+		= core.get_content_id ("mcl_levelgen:structure_block_data")
+end
+
 function mcl_levelgen.place_template_internal (data, x, y, z, px, pz, options,
 					       bounds, mirroring, rotation,
 					       processors, rng, set_block, get_block)
-	local x_stride
-	local y_stride
-	local z_stride
-	local i_start
-	local mirror_param2
-	local ix1, iy1, iz1, ix2, iy2, iz2
-	local x1, y1, z1, x2, y2, z2
+	template_suppressions = {}
+
+	local mirror_param2, iterator
+	local initial_mirroring = mirroring
+	x1, y1, z1, x2, y2, z2
 		= get_template_bounding_box (data, x, y, z, px, pz,
 					     mirroring, rotation)
 
@@ -440,6 +537,8 @@ function mcl_levelgen.place_template_internal (data, x, y, z, px, pz, options,
 			end
 		end
 
+		local ix1, iy1, iz1, ix2, iy2, iz2
+
 		if bounds then
 			ix1 = mathmax (x1, bounds[1])
 			iy1 = mathmax (y1, bounds[2])
@@ -451,6 +550,29 @@ function mcl_levelgen.place_template_internal (data, x, y, z, px, pz, options,
 			ix1, iy1, iz1, ix2, iy2, iz2
 				= x1, y1, z1, x2, y2, z2
 		end
+
+		iterator = ipos1 (ix1, iy1, iz1, ix2, iy2, iz2)
+	end
+
+	template_mirroring = mirroring
+	local data_replacements = {}
+	do
+		-- Execute actions specified by data blocks.
+		for i, item in ipairs (data.data_block_data) do
+			local dx, dy, dz
+				= template_transform (data, item.x, item.y, item.z,
+						      px, pz, initial_mirroring,
+						      rotation)
+			local cid, param2
+				= call_data_block_processor (rng, data, initial_mirroring,
+							     rotation,
+							     x + dx, y + dy, z + dz, item)
+			if cid then
+				data_replacements[i] = encode_node (cid, param2)
+			else
+				data_replacements[i] = STRUCTURE_VOID
+			end
+		end
 	end
 
 	local nodes = data.nodes
@@ -459,8 +581,7 @@ function mcl_levelgen.place_template_internal (data, x, y, z, px, pz, options,
 	local n_processors = processors and #processors or 0
 	local keep_jigsaws = options and options.keep_jigsaws
 
-	template_suppressions = {}
-	for x, y, z in ipos1 (ix1, iy1, iz1, ix2, iy2, iz2) do
+	for x, y, z in iterator do
 		local dx, dz
 		if mirroring == "left_right" then
 			dx = x - x1
@@ -477,15 +598,27 @@ function mcl_levelgen.place_template_internal (data, x, y, z, px, pz, options,
 		local index = dx * x_stride
 			+ dy * y_stride
 			+ dz * z_stride + i_start
-		if nodes[index] ~= STRUCTURE_VOID then
-			local cid, param2 = decode_node (nodes[index])
-			local meta_idx = rshift (nodes[index], 24)
-			template_meta = meta_idx ~= 0 and metadata[meta_idx] or nil
+		local node = nodes[index]
+		do
+			local cid, _ = decode_node (node)
+			if cid == cid_structure_block_data then
+				local i = indexof (data.data_blocks, index)
+				if i ~= -1 then
+					node = data_replacements[i]
+				end
+			end
+		end
+		if node ~= STRUCTURE_VOID then
+			local cid, param2 = decode_node (node)
+			local meta_idx = rshift (node, 24)
+			template_meta = (meta_idx ~= 0
+					 and indexof (template_suppressions, index) == -1)
+				and metadata[meta_idx] or nil
 			local jigsaw_meta = jigsaw_meta[meta_idx]
 
 			if jigsaw_meta and not keep_jigsaws then
 				cid = jigsaw_meta.cid_replace_with
-				if cid ~= nodes[index] then
+				if cid ~= node then
 					param2, template_meta = 0, nil
 				end
 			end
@@ -1133,3 +1266,11 @@ mcl_levelgen.register_template_pool ("mcl_levelgen:empty", {
 })
 
 mcl_levelgen.init_structures_after_templates ()
+
+------------------------------------------------------------------------
+-- Data Block processors.
+------------------------------------------------------------------------
+
+function mcl_levelgen.register_data_block_processor (id, processor)
+	registered_data_block_processors[id] = processor
+end
