@@ -105,11 +105,21 @@ local function clone_function (fn)
 end
 
 function density_function:petrify ()
-	local fn = self:petrify_internal ()
-	return clone_function (fn)
+	return self:petrify_and_clone ({})
 end
 
-function density_function:petrify_internal ()
+function density_function:petrify_and_clone (visited)
+	if visited[self] then
+		return visited[self]
+	end
+
+	local fn = self:petrify_internal (visited)
+	local value = clone_function (fn)
+	visited[self] = value
+	return value
+end
+
+function density_function:petrify_internal (visited)
 	error ("Unimplemented: petrify_internal")
 end
 
@@ -148,6 +158,19 @@ end
 
 mcl_levelgen.density_function = density_function
 mcl_levelgen.make_density_function = make_density_function
+
+function mcl_levelgen.wrap_petrify_multiple (applicator, noise_visitor, funcs)
+	local visited = {}
+	local petrified = {}
+	local values = {}
+	for _, fn in ipairs (funcs) do
+		local wrapped = fn:wrap_internal (applicator,
+						  noise_visitor,
+						  visited)
+		table.insert (values, wrapped:petrify_and_clone (petrified))
+	end
+	return unpack (values)
+end
 
 ------------------------------------------------------------------------
 -- Unary transformers.  `input' must be a density function whose
@@ -292,7 +315,7 @@ function old_blended_noise:__call (x, y, z, blender)
 				   self.upper_noise)
 end
 
-function old_blended_noise:petrify_internal ()
+function old_blended_noise:petrify_internal (visited)
 	local xz_multiplier = self.xz_multiplier
 	local y_multiplier = self.y_multiplier
 	local smear_scale_multiplier = self.smear_scale_multiplier
@@ -408,7 +431,7 @@ function noise_func:__call (x, y, z, blender)
 			   z * self.xz_scale)
 end
 
-function noise_func:petrify_internal ()
+function noise_func:petrify_internal (visited)
 	local xz_scale = self.xz_scale
 	local y_scale = self.y_scale
 	local noise = self.noise.get_value
@@ -459,7 +482,7 @@ function blend_alpha:__call (x, y, z, blender)
 	return 1.0
 end
 
-function blend_alpha:petrify_internal ()
+function blend_alpha:petrify_internal (visited)
 	return function (x, y, z, blender)
 		return 1.0
 	end
@@ -489,8 +512,8 @@ function blend_density:transform (x, y, z, blender, input)
 	return input
 end
 
-function blend_density:petrify_internal ()
-	return self.input:petrify ()
+function blend_density:petrify_internal (visited)
+	return self.input:petrify_and_clone (visited)
 end
 
 function blend_density:max_value ()
@@ -527,8 +550,8 @@ function marker_func:__call (x, y, z, blender)
 	return self.input (x, y, z, blender)
 end
 
-function marker_func:petrify_internal ()
-	return self.input:petrify ()
+function marker_func:petrify_internal (visited)
+	return self.input:petrify_and_clone (visited)
 end
 
 function marker_func:fill (array, n, provider, provider_data)
@@ -585,17 +608,30 @@ function constop:transform (x, y, z, blender, value)
 	end
 end
 
-function constop:petrify_internal ()
-	local input = self.input:petrify ()
+function constop:petrify_internal (visited)
+	local input = self.input:petrify_and_clone (visited)
 	local constant = self.constant
+
 	if self.name == "multiply" then
-		return function (x, y, z, blender)
-			return input (x, y, z, blender) * constant
-		end
+		local str = table.concat ({
+			"return function (input)\n",
+			"return function (x, y, z, blender)\n",
+			string.format ("return input (x, y, z, blender) * %.7f\n",
+				       constant),
+			"end\n",
+			"end\n",
+		})
+		return loadstring (str) () (input)
 	else
-		return function (x, y, z, blender)
-			return input (x, y, z, blender) + constant
-		end
+		local str = table.concat ({
+			"return function (input)\n",
+			"return function (x, y, z, blender)\n",
+			string.format ("return input (x, y, z, blender) + %.7f\n",
+				       constant),
+			"end\n",
+			"end\n",
+		})
+		return loadstring (str) () (input)
 	end
 end
 
@@ -697,9 +733,9 @@ function binop:__call (x, y, z, blender)
 	end
 end
 
-function binop:petrify_internal (x, y, z, blender)
-	local arg1 = self.arg1:petrify ()
-	local arg2 = self.arg2:petrify ()
+function binop:petrify_internal (visited)
+	local arg1 = self.arg1:petrify_and_clone (visited)
+	local arg2 = self.arg2:petrify_and_clone (visited)
 	local op = self.name
 
 	if op == "add" then
@@ -934,7 +970,7 @@ function end_island_func:__call (x, y, z, blender)
 	return (density - 8.0) / 128.0
 end
 
-function end_island_func:petrify_internal ()
+function end_island_func:petrify_internal (visited)
 	local noise = self.noise
 	return function (x, y, z, blender)
 		local density
@@ -981,8 +1017,8 @@ function weird_scaled_sampler:transform (x, y, z, blender, value)
 	return val * abs (self.noise (x / val, y / val, z / val))
 end
 
-function weird_scaled_sampler:petrify_internal ()
-	local input = self.input:petrify ()
+function weird_scaled_sampler:petrify_internal (visited)
+	local input = self.input:petrify_and_clone (visited)
 	local mapper = self.mapper
 	local noise = self.noise.get_value
 
@@ -1085,12 +1121,12 @@ function shifted_noise:__call (x, y, z, blender)
 	return self.noise (x1, y1, z1)
 end
 
-function shifted_noise:petrify_internal (x, y, z, blender)
+function shifted_noise:petrify_internal (visited)
 	local xz_scale = self.xz_scale
 	local y_scale = self.y_scale
-	local shift_x = self.shift_x:petrify ()
-	local shift_y = self.shift_y:petrify ()
-	local shift_z = self.shift_z:petrify ()
+	local shift_x = self.shift_x:petrify_and_clone (visited)
+	local shift_y = self.shift_y:petrify_and_clone (visited)
+	local shift_z = self.shift_z:petrify_and_clone (visited)
 	local noise = self.noise.get_value
 	assert (noise)
 	return function (x, y, z, blender)
@@ -1165,12 +1201,14 @@ function range_choice:__call (x, y, z, blender)
 	end
 end
 
-function range_choice:petrify_internal ()
-	local input = self.input:petrify ()
+function range_choice:petrify_internal (visited)
+	local input = self.input:petrify_and_clone (visited)
 	local min_inclusive = self.min_inclusive
 	local max_exclusive = self.max_exclusive
-	local when_in_range = self.when_in_range:petrify ()
-	local when_out_of_range = self.when_out_of_range:petrify ()
+	local when_in_range
+		= self.when_in_range:petrify_and_clone (visited)
+	local when_out_of_range
+		= self.when_out_of_range:petrify_and_clone (visited)
 	return function (x, y, z, blender)
 		local value = input (x, y, z, blender)
 		if value >= min_inclusive and value < max_exclusive then
@@ -1276,7 +1314,7 @@ function shift_a:__call (x, y, z, blender)
 	return shift_noise_compute (self.offset_noise, x, 0, z)
 end
 
-function shift_a:petrify_internal ()
+function shift_a:petrify_internal (visited)
 	local offset_noise = self.offset_noise
 	return function (x, y, z, blender)
 		return shift_noise_compute (offset_noise, x, 0, z)
@@ -1309,7 +1347,7 @@ function shift_b:__call (x, y, z, blender)
 	return shift_noise_compute (self.offset_noise, z, x, 0)
 end
 
-function shift_b:petrify_internal ()
+function shift_b:petrify_internal (visited)
 	local offset_noise = self.offset_noise
 	return function (x, y, z, blender)
 		return shift_noise_compute (offset_noise, z, x, 0)
@@ -1342,7 +1380,7 @@ function shift:__call (x, y, z, blender)
 	return shift_noise_compute (self.offset_noise, x, y, z)
 end
 
-function shift:petrify_internal ()
+function shift:petrify_internal (visited)
 	local offset_noise = self.offset_noise
 	return function (x, y, z, blender)
 		return shift_noise_compute (offset_noise, x, y, z)
@@ -1381,8 +1419,8 @@ function clamp_func:transform (x, y, z, blender, value)
 	return clamp (value, self.min, self.max)
 end
 
-function clamp_func:petrify_internal ()
-	local input = self.input:petrify_internal ()
+function clamp_func:petrify_internal (visited)
+	local input = self.input:petrify_and_clone (visited)
 	local min = self.min
 	local max = self.max
 	return function (x, y, z, blender)
@@ -1459,8 +1497,8 @@ function unary:transform (x, y, z, blender, value)
 	return unary_transform (self.name, value)
 end
 
-function unary:petrify_internal ()
-	local input = self.input:petrify ()
+function unary:petrify_internal (visited)
+	local input = self.input:petrify_and_clone (visited)
 	local op = self.name
 	if op == "abs" then
 		return function (x, y, z, blender)
@@ -1641,21 +1679,166 @@ end
 
 mcl_levelgen.eval_spline = eval_spline
 
-local function petrify_spline (self)
-	local values = {}
-	local locations = self.locations
-	local derivatives = self.derivatives
-	local coord_provider = self.coordinate_provider:petrify ()
-	for _, spline in ipairs (self.values) do
-		if type (spline) ~= "number" then
-			table.insert (values, petrify_spline (spline))
-		else
-			table.insert (values, spline)
+local compile_splines = true
+local spline_debug = false
+local spline_id = 0
+
+local function indexof (list, val)
+	for i, v in ipairs (list) do
+		if v == val then
+			return i
 		end
 	end
-	return function (x, y, z, blender)
-		return eval_spline_1 (values, locations, derivatives,
-				      coord_provider, x, y, z, blender)
+	return -1
+end
+
+local function compile_spline (values, locations, derivatives,
+			       coord_provider, x, y, z, blender)
+	local strs = {
+		"function (x, y, z, blender)\n",
+		"local location = coord_provider (x, y, z, blender)\n"
+	}
+	local closures = {}
+	spline_id = spline_id + 1
+
+	local function assemble_value (value)
+		if type (value) == "number" then
+			return tostring (value)
+		else
+			local idx = indexof (closures, value)
+			if idx ~= -1 then
+				return string.format ("c%04d (x, y, z, blender)", idx)
+			else
+				local idx = #closures + 1
+				closures[idx] = value
+				return string.format ("c%04d (x, y, z, blender)", idx)
+			end
+		end
+	end
+
+	local function assemble_interp_outsized_value (locations, derivatives, idx)
+		local derv = derivatives[idx]
+		if derv == 0.0 then
+			return string.format ("local k = s")
+		end
+		return string.format ("local k = s + %.7f * (location - %.7f)",
+				      derv, locations[idx])
+	end
+
+	local function compile_one (min, max, values, locations, derivatives)
+		if max - min > 0 then
+			local mid = min + rshift (max - min, 1)
+			local loc = locations[mid]
+
+			table.insert (strs, string.format ("if %.7f >= location then\n", loc))
+			compile_one (min, mid, values, locations, derivatives)
+			table.insert (strs, string.format ("else\n"))
+			compile_one (mid + 1, max, values, locations, derivatives)
+			table.insert (strs, string.format ("end\n"))
+		else
+			local i = min
+
+			if i == 1 then
+				table.insert (strs, "local s = ")
+				table.insert (strs, assemble_value (values[1]))
+				table.insert (strs, "\n")
+				table.insert (strs, assemble_interp_outsized_value (locations,
+										    derivatives,
+										    1))
+				table.insert (strs, "\nreturn k\n")
+			elseif i > #locations then
+				table.insert (strs, "local s = ")
+				table.insert (strs, assemble_value (values[#values]))
+				table.insert (strs, "\n")
+				table.insert (strs, assemble_interp_outsized_value (locations,
+										    derivatives,
+										    #locations))
+				table.insert (strs, "\nreturn k\n")
+			else
+				local i1, i2 = min - 1, min
+				local loc_below = locations[i1]
+				local loc_above = locations[i2]
+				local val_below = assemble_value (values[i1])
+				local val_above = assemble_value (values[i2])
+				local deriv_below = derivatives[i1]
+				local deriv_above = derivatives[i2]
+				local loc_total = (loc_above - loc_below)
+				local progress = string.format ("(location - %.7f) / %.7f",
+								loc_below, loc_total)
+				table.insert (strs, "local val_below = " .. val_below .. "\n")
+				table.insert (strs, "local val_above = " .. val_above .. "\n")
+				local fmt = "return eval_spline_2 (%.7f, %.7f, %s, %s, val_below, val_above, %.7f, %.7f)\n"
+				table.insert (strs, string.format (fmt, loc_below, loc_above, progress,
+								   progress, deriv_below, deriv_above))
+			end
+		end
+	end
+
+	local min, max = 1, #locations + 1
+	compile_one (min, max, values, locations, derivatives)
+	table.insert (strs, "end")
+	local splinebody = table.concat (strs)
+
+	local arglist = {
+		"eval_spline_2",
+		"coord_provider",
+	}
+
+	for i = 1, #closures do
+		table.insert (arglist, string.format ("c%04d", i))
+	end
+	local builder = {
+		"return function (",
+		table.concat (arglist, ","), ")\n",
+		"return ",
+		splinebody,
+		"\nend\n",
+	}
+	local spline_function = table.concat (builder)
+	if spline_debug then
+		print (string.format ("=================== Spline %04d ===================",
+				      spline_id))
+		print (spline_function)
+		print ("===================================================")
+	end
+	local fn, err = loadstring (spline_function)
+	if err then
+		print (string.format ("Failed to compile spline %04d: %s", spline_id, err))
+		return nil
+	end
+	return fn () (eval_spline_2, coord_provider, unpack (closures))
+end
+
+local function petrify_spline (self, visited)
+	if visited[self] then
+		return visited[self]
+	else
+		local values = {}
+		local locations = self.locations
+		local derivatives = self.derivatives
+		local coord_provider
+			= self.coordinate_provider:petrify_and_clone (visited)
+		for _, spline in ipairs (self.values) do
+			if type (spline) ~= "number" then
+				table.insert (values, petrify_spline (spline, visited))
+			else
+				table.insert (values, spline)
+			end
+		end
+		if compile_splines then
+			local spline
+				= compile_spline (values, locations, derivatives,
+						  coord_provider)
+			if spline then
+				visited[self] = spline
+				return spline
+			end
+		end
+		local fn = function (x, y, z, blender)
+			return eval_spline_1 (values, locations, derivatives,
+					      coord_provider, x, y, z, blender)
+		end
+		visited[self] = fn
 	end
 end
 
@@ -1760,6 +1943,10 @@ local function make_spline_struct (coordinate, min_input, max_input,
 end
 
 local function wrap_spline (spline, applicator, noise_visitor, visited)
+	if visited[spline] then
+		return visited[spline]
+	end
+
 	local values1 = {}
 	for i, value in ipairs (spline.values) do
 		if type (value) == "number" then
@@ -1772,10 +1959,12 @@ local function wrap_spline (spline, applicator, noise_visitor, visited)
 	local provider = spline.coordinate_provider
 	local provider = provider:wrap_internal (applicator, noise_visitor,
 						 visited)
-	return make_spline_struct (provider, provider:min_value (),
-				   provider:max_value (),
-				   spline.locations, values1,
-				   spline.derivatives)
+	local value = make_spline_struct (provider, provider:min_value (),
+					  provider:max_value (),
+					  spline.locations, values1,
+					  spline.derivatives)
+	visited[spline] = value
+	return value
 end
 
 local spline = {
@@ -1807,8 +1996,8 @@ function spline:__call (x, y, z, blender)
 	return self.spline (x, y, z, blender)
 end
 
-function spline:petrify_internal ()
-	return petrify_spline (self.spline)
+function spline:petrify_internal (visited)
+	return petrify_spline (self.spline, visited)
 end
 
 function mcl_levelgen.spline_from_points (coordinate, points)
@@ -1980,7 +2169,7 @@ function constant:__call (x, y, z, blender)
 	return self.constant
 end
 
-function constant:petrify_internal ()
+function constant:petrify_internal (visited)
 	return function (x, y, z, blender)
 		return self.constant
 	end
@@ -2036,7 +2225,7 @@ function y_clamped_gradient:__call (x, y, z, blender)
 	end
 end
 
-function y_clamped_gradient:petrify_internal ()
+function y_clamped_gradient:petrify_internal (visited)
 	local from_y, to_y = self.from_y, self.to_y
 	local from_value = self.from_value
 	local to_value = self.to_value

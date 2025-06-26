@@ -193,12 +193,12 @@ function density_function:max_value ()
 	return self.input:max_value ()
 end
 
-function density_function:petrify_internal ()
+function density_function:petrify_internal (visited)
 	local func = self.__call
 	if not self.saved_min_value then
 		self.saved_min_value = self.input:min_value ()
 		self.saved_max_value = self.input:max_value ()
-		self.input = self.input:petrify ()
+		self.input = self.input:petrify_and_clone (visited)
 	end
 	return function (x, y, z, blender)
 		return func (self, x, y, z, blender)
