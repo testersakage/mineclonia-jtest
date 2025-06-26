@@ -121,6 +121,8 @@ local function do_generate (x1, y1, z1, x2, y2, z2)
 	mcl_levelgen.flush_structure_gen_data ()
 end
 
+jit.flush ()
+
 for i = 0, 14 do
 
 	do_generate (unpack (benchblocks[i * 4 + 1]))
