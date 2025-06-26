@@ -126,7 +126,7 @@ local library_name
 
 if is_LuaJIT then
    -- Assuming "bit" library is always available on LuaJIT
-   b = require"bit"
+   b = bit or require"bit"
    library_name = "bit"
    -- "ffi" is intentionally disabled on some systems for safety reason
    local LuaJIT_has_FFI, result = pcall(require, "ffi")
