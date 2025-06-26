@@ -1513,6 +1513,9 @@ mcl_levelgen.rtree_index_closest = rtree_index_closest
 mcl_levelgen.construct_overworld_lut = construct_overworld_lut
 
 local scratch = {}
+for i = 1, 7 do
+	scratch[i] = 0.0
+end
 
 local function quantize_index (temperature, humidity,
 			       continentalness, erosion,
@@ -1523,7 +1526,6 @@ local function quantize_index (temperature, humidity,
 	scratch[4] = quantize (erosion)
 	scratch[5] = quantize (depth)
 	scratch[6] = quantize (weirdness)
-	scratch[7] = 0.0
 	return scratch
 end
 
@@ -6791,7 +6793,7 @@ function mcl_levelgen.get_biomes_chebyshev (preset, x, y, z, r)
 	local qy2 = toquart (y + r)
 	local qz2 = toquart (z + r)
 
-	preset:index_biomes_begin (qx1, qz1, qx2 - qx1 + 1, qz2 - qx1 + 1)
+	preset:index_biomes_begin (qx1, qz1, qx2 - qx1 + 1, qz2 - qz1 + 1)
 	local seen = {}
 	local biomes = {}
 
