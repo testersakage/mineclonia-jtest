@@ -1528,6 +1528,12 @@ function mcl_levelgen.notify_generated (name, x, y, z, data, append)
 end
 local notify_generated = mcl_levelgen.notify_generated
 
+function mcl_levelgen.create_entity (x_block, y_block, z_block, name, staticdata)
+	notify_generated ("mcl_levelgen:create_entity_1", x_block, y_block, z_block, {
+		x_block, y_block, z_block, name, staticdata,
+	})
+end
+
 function mcl_levelgen.flush_structure_gen_data ()
 	local notifies, pieces = gen_notifies, placed_pieces
 	gen_notifies = {}
@@ -1575,6 +1581,29 @@ function mcl_levelgen.height_of_lowest_corner_including_center (terrain, cx, cz,
 	local h3 = terrain:get_one_height (x1 + dx, z1, is_not_air)
 	local h4 = terrain:get_one_height (x1 + dx, z1 + dz, is_not_air)
 	return mathmin (h1, h2, h3, h4) - 1
+end
+
+local ALL_DIRS = {
+	"north",
+	"east",
+	"south",
+	"west",
+}
+
+function mcl_levelgen.random_orientation (rng)
+	return ALL_DIRS[1 + rng:next_within (4)]
+end
+
+function mcl_levelgen.make_rotated_bbox (x, y, z, orientation, width, height, length)
+	if orientation == "north" or orientation == "south" then
+		return {
+			x, y, z, x + width - 1, y + height - 1, z + length - 1,
+		}
+	else
+		return {
+			x, y, z, x + length - 1, y + height - 1, z + width - 1,
+		}
+	end
 end
 
 ------------------------------------------------------------------------
