@@ -1233,7 +1233,6 @@ local function register_terrain_funcs (preset, registry, noises, jagged,
 			    overworld_offset_function (continentalness, erosion,
 						       pv, is_amplified))
 	local offset_cached = cache_2d (offset)
-	offset_cached.user_flags = "cache_for_biome_indexing"
 	offset = flat_cache (offset_cached)
 	registry[name_offset] = offset
 	local factor = overworld_factor_function (continentalness, erosion,
@@ -1562,6 +1561,8 @@ local index_biome_lut_naively = mcl_levelgen.index_biome_lut_naively
 local construct_overworld_lut = mcl_levelgen.construct_overworld_lut
 local quantize = mcl_levelgen.quantize
 
+local huge = math.huge
+
 local function initialize_overworld_biomes (preset, large_biomes,
 					    amplified)
 	local nodes
@@ -1577,18 +1578,18 @@ local function initialize_overworld_biomes (preset, large_biomes,
 		end
 	end
 
-	-- Strip caching or interpolating wrappers excepting cache2ds;
-	-- used to optimize depth computation.
 	local index_cache, index = {}, nil
 	local x_origin, z_origin, width_z
+	local n_indices = 0
 
-	local biome_cache_2d = {}
-	function biome_cache_2d:__call (x, y, z, blender)
+	local biome_flat_cache = {}
+	function biome_flat_cache:__call (x, y, z, blender)
 		if index then
-			local x = index_cache[index + 5]
-			if not x then
+			local i = self.offset
+			local x = index_cache[index + i]
+			if x == -huge then
 				x = self.input (x, y, z, blender)
-				index_cache[index + 5] = x
+				index_cache[index + i] = x
 			end
 			return x
 		else
@@ -1596,47 +1597,41 @@ local function initialize_overworld_biomes (preset, large_biomes,
 		end
 	end
 
-	function biome_cache_2d:petrify ()
-		local input = self.input:petrify ()
+	function biome_flat_cache:petrify_internal (visited)
+		local input = self.input:petrify_and_clone (visited)
+		local offset = self.offset
 		return function (x, y, z, blender)
-			if index then
-				local val = index_cache[index + 5]
-				if not val then
-					val = input (x, y, z, blender)
-					index_cache[index + 5] = val
-				end
-				return val
-			else
-				return input (x, y, z, blender)
+			local val = index_cache[index + offset]
+			if val == -huge then
+				val = input (x, y, z, blender)
+				index_cache[index + offset] = val
 			end
+			return val
 		end
 	end
 
-	function biome_cache_2d:min_value ()
+	function biome_flat_cache:min_value ()
 		return self.input:min_value ()
 	end
 
-	function biome_cache_2d:max_value ()
+	function biome_flat_cache:max_value ()
 		return self.input:max_value ()
 	end
 
-	local cache_2d = nil
 	local make_density_function = mcl_levelgen.make_density_function
-	local function strip_markers_instantiating_cache2ds (dfunc)
+
+	-- Strip caching or interpolating wrappers excepting
+	-- flat_caches; used to optimize noise computation.
+	local function do_flat_cache (dfunc)
 		if dfunc.is_marker then
-			if dfunc.name == "cache_2d"
-				and dfunc.user_flags == "cache_for_biome_indexing" then
-				if cache_2d then
-					print ("WARNING: more than one `cache2d' appears in depth function")
-					print (debug.traceback ())
-					return dfunc.input
-				else
-					cache_2d = table.merge (biome_cache_2d, {
-						input = dfunc.input,
-					})
-					cache_2d = make_density_function (cache_2d)
-					return cache_2d
-				end
+			if dfunc.name == "flat_cache" then
+				local flat_cache = table.merge (biome_flat_cache, {
+					input = dfunc.input,
+					offset = n_indices + 1,
+				})
+				n_indices = n_indices + 1
+				flat_cache = make_density_function (flat_cache)
+				return flat_cache
 			end
 			return dfunc.input
 		else
@@ -1663,21 +1658,35 @@ local function initialize_overworld_biomes (preset, large_biomes,
 		    or registry.depth)
 	preset.ridges = registry.ridges
 
-	local temperature_stripped
-		= preset.temperature:wrap (strip_markers, identity):petrify ()
-	local vegetation_stripped
-		= preset.vegetation:wrap (strip_markers, identity):petrify ()
-	local continents_stripped
-		= preset.continents:wrap (strip_markers, identity):petrify ()
-	local erosion_stripped
-		= preset.erosion:wrap (strip_markers, identity):petrify ()
-	local depth_stripped
-		= preset.depth:wrap (strip_markers, identity):petrify ()
-	local depth_cached
-		= preset.depth:wrap (strip_markers_instantiating_cache2ds,
-				     identity):petrify ()
-	local ridges_stripped
-		= preset.ridges:wrap (strip_markers, identity):petrify ()
+	local wrap_petrify_multiple = mcl_levelgen.wrap_petrify_multiple
+	local temperature_cached,
+		vegetation_cached,
+		continents_cached,
+		erosion_cached,
+		depth_cached,
+		ridges_cached = wrap_petrify_multiple (do_flat_cache, identity, {
+		preset.temperature,
+		preset.vegetation,
+		preset.continents,
+		preset.erosion,
+		preset.depth,
+		preset.ridges,
+	})
+
+	local temperature_stripped,
+		vegetation_stripped,
+		continents_stripped,
+		erosion_stripped,
+		depth_stripped,
+		ridges_stripped = wrap_petrify_multiple (strip_markers, identity, {
+		preset.temperature,
+		preset.vegetation,
+		preset.continents,
+		preset.erosion,
+		preset.depth,
+		preset.ridges,
+	})
+
 	local biome_lut = preset.biome_lut
 
 	preset.index_biomes = function (self, qx, qy, qz)
@@ -1692,53 +1701,26 @@ local function initialize_overworld_biomes (preset, large_biomes,
 	end
 
 	preset.index_biomes_begin = function (self, wx, wz, xorigin, zorigin)
-		for i = 1, wx * wz * 6 do
-			index_cache[i] = false
+		for i = 1, wx * wz * n_indices do
+			index_cache[i] = -huge
 		end
 		x_origin = xorigin
 		z_origin = zorigin
 		width_z = wz
 	end
 
-	-- local zone = require ("jit.zone")
-
 	preset.index_biomes_cached = function (self, qx, qy, qz)
 		local x, y, z = toblock (qx), toblock (qy), toblock (qz)
 		local cx = qx - x_origin
 		local cz = qz - z_origin
-		index = ((cx * width_z) + cz) * 6 + 1
-		local t, v, c, e, r = index_cache[index]
-		if t then
-			-- zone ("Cached biome lookups")
-			v = index_cache[index + 1]
-			c = index_cache[index + 2]
-			e = index_cache[index + 3]
-			r = index_cache[index + 4]
-
-			local val = index_biome_lut (biome_lut, t, v, c, e,
-						     depth_cached (x, y, z), r)
-			index = nil
-			-- zone ()
-			return val
-		end
-
-		-- zone ("Uncached biome data computation")
-		t = temperature_stripped (x, y, z)
-		v = vegetation_stripped (x, y, z)
-		c = continents_stripped (x, y, z)
-		e = erosion_stripped (x, y, z)
-		r = ridges_stripped (x, y, z)
-		index_cache[index] = t
-		index_cache[index + 1] = v
-		index_cache[index + 2] = c
-		index_cache[index + 3] = e
-		index_cache[index + 4] = r
-
-		local val = index_biome_lut (biome_lut, t, v, c, e,
-					     depth_cached (x, y, z), r)
-		index = nil
-		-- zone ()
-		return val
+		index = ((cx * width_z) + cz) * n_indices
+		local t = temperature_cached (x, y, z)
+		local v = vegetation_cached (x, y, z)
+		local c = continents_cached (x, y, z)
+		local e = erosion_cached (x, y, z)
+		local d = depth_cached (x, y, z)
+		local r = ridges_cached (x, y, z)
+		return index_biome_lut (biome_lut, t, v, c, e, d, r)
 	end
 
 	-- For purposes of engineering only.
