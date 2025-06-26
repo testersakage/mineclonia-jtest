@@ -89,16 +89,19 @@ local function clone_function (fn)
 	-- more portably by means of print and loadstring.
 	local dumped = string.dump (fn)
 	local cloned = loadstring (dumped)
-	local i = 1
-	while true do
-		local name = debug.getupvalue (fn, i)
-		if not name then
-			break
+	if cloned then
+		local i = 1
+		while true do
+			local name = debug.getupvalue (fn, i)
+			if not name then
+				break
+			end
+			debug.upvaluejoin (cloned, i, fn, i)
+			i = i + 1
 		end
-		debug.upvaluejoin (cloned, i, fn, i)
-		i = i + 1
+		return cloned
 	end
-	return cloned
+	return fn
 end
 
 function density_function:petrify ()
