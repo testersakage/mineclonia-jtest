@@ -87,7 +87,6 @@ mcl_levelgen.register_data_block_processor ("mcl_levelgen:set_loot_table",
 					    handle_set_loot_table)
 
 local function handle_create_entity (rng, data, mirroring, rotation, x, y, z, item)
-	mcl_levelgen
 	if mcl_levelgen.is_levelgen_environment then
 		notify_generated ("mcl_levelgen:create_entity_1", x, y, z, {
 			x, y, z, item.param1, item.param2,
