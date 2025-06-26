@@ -95,28 +95,8 @@ local mathmax = math.max
 local mathabs = math.abs
 local floor = math.floor
 
-local ALL_DIRS = {
-	"north",
-	"east",
-	"south",
-	"west",
-}
-
-local function random_orientation (rng)
-	return ALL_DIRS[1 + rng:next_within (4)]
-end
-
-local function make_rotated_bbox (x, y, z, orientation, width, height, length)
-	if orientation == "north" or orientation == "south" then
-		return {
-			x, y, z, x + width - 1, y + height - 1, z + length - 1,
-		}
-	else
-		return {
-			x, y, z, x + length - 1, y + height - 1, z + width - 1,
-		}
-	end
-end
+local random_orientation = mcl_levelgen.random_orientation
+local make_rotated_bbox = mcl_levelgen.make_rotated_bbox
 
 local reorientate_coords = mcl_levelgen.reorientate_coords
 local set_block = mcl_levelgen.set_block
