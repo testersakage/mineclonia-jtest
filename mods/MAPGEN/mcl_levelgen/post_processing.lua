@@ -64,6 +64,11 @@ end
 
 local generation_radius
 	= core.settings:get ("mcl_feature_placement_radius") or "0"
+
+-- Server-side occlusion culling prevents MapBlocks near the player
+-- from being regenerated, but only applies to MapBlocks that are yet
+-- to be emerged.  Therefore it should be harmless just to disable it.
+core.settings:set_bool ("server_side_occlusion_culling", false)
 generation_radius = mathmax (1, tonumber (generation_radius))
 
 --------------------------------------------------------------------------
@@ -505,8 +510,8 @@ function mcl_levelgen.get_feature_placement_queue ()
 end
 
 local function hashmapblock (x, y, z)
-	return lshift (y + 2048, 24)
-		+ lshift (x + 2048, 12)
+	return (y + 2048) * 16777216
+		+ (x + 2048) * 4096
 		+ (z + 2048)
 end
 
