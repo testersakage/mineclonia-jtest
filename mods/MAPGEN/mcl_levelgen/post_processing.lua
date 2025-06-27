@@ -5,7 +5,7 @@ local insert = table.insert
 
 local S = core.get_translator ("mcl_levelgen")
 local mt_chunksize = core.ipc_get ("mcl_levelgen:mt_chunksize")
-local chunksize = mt_chunksize * 16
+local chunksize = mt_chunksize.x * 16
 local lighting_disabled = mcl_levelgen.lighting_disabled
 
 --------------------------------------------------------------------------
@@ -568,7 +568,7 @@ if generation_radius > 1 then
 	base_cache_size = generation_radius
 else
 	local chunk_check_size
-		= mt_chunksize + (REQUIRED_CONTEXT_XZ + 1) * 2
+		= mt_chunksize.x + (REQUIRED_CONTEXT_XZ + 1) * 2
 	base_cache_size = mathmax (6, chunk_check_size)
 end
 
