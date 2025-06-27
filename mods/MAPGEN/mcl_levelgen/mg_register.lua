@@ -29,11 +29,12 @@ local overworld_preset = mcl_levelgen.overworld_preset
 -- Load carvers into biome descriptions.
 mcl_levelgen.load_carvers ()
 
-local mt_chunksize
-	= math.max (1, tonumber (core.get_mapgen_setting ("chunksize")) or 5)
-local chunksize = mt_chunksize * 16
+local mt_chunksize = core.ipc_get ("mcl_levelgen:mt_chunksize")
+local chunksize = mt_chunksize.x * 16
+local ychunksize = mt_chunksize.y * 16
 local overworld_terrain
-	= mcl_levelgen.make_terrain_generator (overworld_preset, chunksize)
+	= mcl_levelgen.make_terrain_generator (overworld_preset, chunksize,
+					       ychunksize)
 local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
 
 local cids, param2s, structuremask, biomes = {}, {}, {}, {}
@@ -99,6 +100,7 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	-- profile.start ("5fv")
 	-- do_jit_ctrl ()
 	local emin, emax = vmanip:get_emerged_area ()
+	-- print (minp, maxp)
 	area = VoxelArea (vector.subtract (emin, minp),
 			  vector.subtract (emax, minp))
 	vmanip:get_data (cids)
@@ -119,7 +121,7 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	-- zone ("Biome generation")
 	mcl_levelgen.generate_biomes_at_block (overworld_preset, biomes,
 					       block_x, level_min, block_z,
-					       mt_chunksize, level_height)
+					       mt_chunksize.x, level_height)
 	-- zone ()
 	-- zone ("Terrain generation")
 	if not overworld_terrain:generate (minp.x, OVERWORLD_OFFSET + minp.y,
@@ -146,9 +148,10 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 	core.save_gen_notify ("mcl_levelgen:structure_pieces", pieces)
 
 	-- zone ("Biome encoding")
-	local compressed = mcl_levelgen.encode_biomes (biomes, block_y - level_min,
-						       mt_chunksize, mt_chunksize,
-						       level_height)
+	local compressed
+		= mcl_levelgen.encode_biomes (biomes, block_y - level_min,
+					      mt_chunksize.y, mt_chunksize.x,
+					      level_height)
 	core.save_gen_notify ("mcl_levelgen:biome_data", compressed)
 	-- zone ()
 

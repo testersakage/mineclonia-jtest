@@ -818,6 +818,7 @@ local current_structure_start
 local current_structure_piece
 
 local level_chunksize
+local level_y_chunksize
 local nodes_origin_x
 local nodes_origin_y
 local nodes_origin_z
@@ -840,7 +841,7 @@ local function execute_structure_start_in_chunk (level, terrain, start, rng,
 					    nodes_origin_x + level_chunksize - 1,
 					    nodes_origin_z + level_chunksize - 1)
 			and bbox[5] >= nodes_origin_y
-			and bbox[2] < nodes_origin_y + level_chunksize then
+			and bbox[2] < nodes_origin_y + level_y_chunksize then
 			insert (placed_pieces, {
 				bbox[1],
 				bbox[2],
@@ -1236,6 +1237,7 @@ function prepare_structure_placement0 (level, terrain, p_biomes,
 	heightmap_wg = terrain.heightmap_wg
 	index = p_index
 	level_chunksize = terrain.chunksize
+	level_y_chunksize = terrain.chunksize_y
 	level_height = level.preset.height
 	level_min = level.preset.min_y
 	level_max_y = level_min + level_height - 1
@@ -1518,7 +1520,7 @@ mcl_levelgen.notify_generated_unchecked = notify_generated_unchecked
 function mcl_levelgen.notify_generated (name, x, y, z, data, append)
 	assert (type (name) == "string")
 	if y >= nodes_origin_y
-		and y < nodes_origin_y + level_chunksize
+		and y < nodes_origin_y + level_y_chunksize
 		and x >= origin_x
 		and z >= origin_z
 		and x < origin_x + 16
@@ -1660,7 +1662,7 @@ local function place_feature_structure_piece (self, level, terrain, rng,
 	else
 		if x >= x1 and z >= z1 and x <= x2 and z <= z2
 			and y >= nodes_origin_y
-			and y < nodes_origin_y + chunksize then
+			and y < nodes_origin_y + level_y_chunksize then
 			schedule_feature_placement (x, y, z, self.configured_feature)
 		end
 	end
