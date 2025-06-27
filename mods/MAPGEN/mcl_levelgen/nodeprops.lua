@@ -881,6 +881,10 @@ function mcl_levelgen.is_position_walkable (x, y, z)
 	return is_cid_walkable[cid]
 end
 
+function mcl_levelgen.walkable_p (cid)
+	return is_cid_walkable[cid]
+end
+
 function mcl_levelgen.is_leaf_or_air (x, y, z)
 	local cid, _ = get_block (x, y, z)
 	return cid == cid_air or is_cid_leaf[cid]
