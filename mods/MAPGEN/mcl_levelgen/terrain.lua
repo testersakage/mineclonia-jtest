@@ -778,7 +778,7 @@ function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_i
 	assert (z % 16 == 0)
 	assert (y % 16 == 0)
 
-	local y_max = y + chunksize - 1
+	local y_max = y + self.chunksize_y - 1
 	local cell_width = self.cell_width
 	local cell_height = self.cell_height
 	local x_cell = floor (x / cell_width)
@@ -1301,12 +1301,13 @@ end
 -- Terrain generator instantiation.
 ------------------------------------------------------------------------
 
-function mcl_levelgen.make_terrain_generator (preset, chunksize)
+function mcl_levelgen.make_terrain_generator (preset, chunksize, ychunksize)
 	local gen = table.copy (terrain_generator)
 	gen.preset = preset
 	gen.level_height = preset.height
 	gen.y_min = preset.min_y
 	gen.chunksize = chunksize
+	gen.chunksize_y = ychunksize
 	local cell_width = preset.noise_cell_width
 	local cell_height = preset.noise_cell_height
 	gen.cell_width = cell_width
