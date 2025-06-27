@@ -203,6 +203,38 @@ local sus_node_loot = {
 			{ itemstring = "mcl_core:diamond", weight = 1 },
 		},
 	},
+	ocean_ruins_cold = {
+		stacks_min = 1,
+		stacks_max = 1,
+		items = {
+			{ itemstring = "mcl_core:coal_lump", weight = 2 },
+			{ itemstring = "mcl_core:emerald", weight = 2 },
+			{ itemstring = "mcl_farming:wheat_item", weight = 2 },
+			{ itemstring = "mcl_farming:hoe_wood", weight = 2 },
+			{ itemstring = "mcl_core:gold_nugget", weight = 2 },
+			{ itemstring = "mcl_pottery_sherds:blade", weight = 1, },
+			{ itemstring = "mcl_pottery_sherds:explorer", weight = 1, },
+			{ itemstring = "mcl_pottery_sherds:mourner", weight = 1, },
+			{ itemstring = "mcl_pottery_sherds:plenty", weight = 1, },
+			{ itemstring = "mcl_tools:axe_iron", weight = 1 },
+		},
+	},
+	ocean_ruins_warm = {
+		stacks_min = 1,
+		stacks_max = 1,
+		items = {
+			{ itemstring = "mcl_core:coal_lump", weight = 2 },
+			{ itemstring = "mcl_core:emerald", weight = 2 },
+			{ itemstring = "mcl_farming:wheat_item", weight = 2 },
+			{ itemstring = "mcl_farming:hoe_wood", weight = 2 },
+			{ itemstring = "mcl_core:gold_nugget", weight = 2 },
+			{ itemstring = "mcl_pottery_sherds:angler", weight = 1, },
+			{ itemstring = "mcl_pottery_sherds:shelter", weight = 1, },
+			--FIXME: add sniffer egg { itemstring = "mobs_mc:SNIFFER", weight = 1, },
+			{ itemstring = "mcl_pottery_sherds:snort", weight = 1, },
+			{ itemstring = "mcl_tools:axe_iron", weight = 1 },
+		},
+	},
 }
 
 function mcl_sus_nodes.get_random_item(pos)
