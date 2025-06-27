@@ -6793,7 +6793,7 @@ function mcl_levelgen.get_biomes_chebyshev (preset, x, y, z, r)
 	local qy2 = toquart (y + r)
 	local qz2 = toquart (z + r)
 
-	preset:index_biomes_begin (qx1, qz1, qx2 - qx1 + 1, qz2 - qz1 + 1)
+	preset:index_biomes_begin (qx2 - qx1 + 1, qz2 - qz1 + 1, qx1, qz1)
 	local seen = {}
 	local biomes = {}
 
