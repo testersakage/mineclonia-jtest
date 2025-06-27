@@ -330,8 +330,8 @@ function glow_lichen_spread (x, y, z, faces, rng)
 				if test_wallmounted_face (x1, y1, z1, face) then
 					insert (spread_poses, {
 						x1 - dir[1],
-						x1 - dir[2],
-						x1 - dir[3],
+						y1 - dir[2],
+						z1 - dir[3],
 						face,
 					})
 				end

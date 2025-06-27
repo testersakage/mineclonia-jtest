@@ -1,5 +1,33 @@
 local prefix = "."
 
+local function init_chunksize ()
+	if not core.get_mapgen_chunksize then
+		local cs = core.get_mapgen_setting ("chunksize")
+		core.ipc_set ("mcl_levelgen:mt_chunksize",
+			      vector.new (cs, cs, cs))
+	else
+		local cs = core.get_mapgen_chunksize ()
+		if cs.x ~= cs.z then
+			local blurb = "Chunk size must be symmetrical along the X axis: "
+				.. vector.to_string (cs)
+			core.log ("error", blurb)
+			error ("Invalid chunk size")
+		end
+
+		local DESIRED_Y_SIZE = math.floor (384 / 16)
+		local DESIRED_Y_BASE = math.floor (-128 / 16)
+		cs.y = DESIRED_Y_SIZE
+		core.set_mapgen_setting ("chunksize", vector.to_string (cs), true)
+
+		local cs = core.get_mapgen_chunksize ()
+		local ceil = math.ceil
+		local v = vector.new (-ceil (cs.x / 2), DESIRED_Y_BASE,
+				      -ceil (cs.z / 2))
+		core.set_mapgen_setting ("chunk_origin", v:to_string ())
+		core.ipc_set ("mcl_levelgen:mt_chunksize", cs)
+	end
+end
+
 if core and not core.get_mod_storage then
 	prefix = core.ipc_get ("mcl_levelgen:modpath")
 	mcl_vars = core.ipc_get ("mcl_levelgen:mcl_vars")
@@ -7,10 +35,7 @@ elseif core then
 	prefix = core.get_modpath (core.get_current_modname ())
 	core.ipc_set ("mcl_levelgen:modpath", prefix)
 	core.ipc_set ("mcl_levelgen:mcl_vars", mcl_vars)
-
-	local mt_chunksize
-		= math.max (1, tonumber (core.get_mapgen_setting ("chunksize")) or 5)
-	core.ipc_set ("mcl_levelgen:mt_chunksize", mt_chunksize)
+	init_chunksize ()
 end
 
 mcl_levelgen = { prefix = prefix, }
