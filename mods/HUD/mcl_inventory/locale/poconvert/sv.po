@@ -1,0 +1,99 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mcl_inventory x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-05-15 20:04+0000\n"
+"Last-Translator: zachtyll <zachtyll@noreply.codeberg.org>\n"
+"Language-Team: Swedish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_inventory/sv/>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.11.4\n"
+
+msgid "Auto (use scroll bar if client version >= 5.11)"
+msgstr "Auto (använd rullningslisten om klientversionen är >= 5.11)"
+
+msgid "Off (use paging buttons, much better performance on client < 5.11)"
+msgstr ""
+
+msgid "On (more MC like experience, may be sluggish on client < 5.11)"
+msgstr ""
+
+msgid "Enable scroll bar on creative inventory"
+msgstr ""
+
+msgid "Building Blocks"
+msgstr ""
+
+msgid "Decoration Blocks"
+msgstr ""
+
+msgid "Redstone"
+msgstr ""
+
+msgid "Transportation"
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+msgid "Search Items"
+msgstr ""
+
+msgid "Foodstuffs"
+msgstr ""
+
+msgid "Tools"
+msgstr ""
+
+msgid "Combat"
+msgstr ""
+
+msgid "Mobs"
+msgstr "Mobs"
+
+msgid "Brewing"
+msgstr ""
+
+msgid "Materials"
+msgstr ""
+
+msgid "Survival Inventory"
+msgstr ""
+
+msgid "Not in Creative Inventory"
+msgstr ""
+
+msgid "Switch stack size"
+msgstr ""
+
+msgid "@1 / @2"
+msgstr ""
+
+msgid "Recipe book"
+msgstr ""
+
+msgid "Help"
+msgstr "Hjälp"
+
+msgid "Advancements"
+msgstr ""
+
+msgid "Player settings"
+msgstr ""
+
+msgid "Return to player inventory"
+msgstr ""
+
+msgid "Crafting table out of range!"
+msgstr ""
+
+msgid "Crafting"
+msgstr ""
+
+msgid "Fill Craft Grid"
+msgstr ""

@@ -3,39 +3,40 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-05-31 09:30+0000\n"
+"Last-Translator: YuukiHisashi <yuukihisashi@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mclx_stairs/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.11.4\n"
 
 msgid "Lapis Lazuli Stairs"
-msgstr ""
+msgstr "Escadas de Lápis Lazuli"
 
 msgid "Lapis Lazuli Slab"
-msgstr ""
+msgstr "Laje de Lápis Lazuli"
 
 msgid "Gold Stairs"
-msgstr ""
+msgstr "Escadas de Ouro"
 
 msgid "Gold Slab"
-msgstr ""
+msgstr "Laje de Ouro"
 
 msgid "Iron Stairs"
-msgstr ""
+msgstr "Escadas de Ferro"
 
 msgid "Iron Slab"
-msgstr ""
+msgstr "Laje de Ferro"
 
 msgid "Cracked Stone Brick Stairs"
-msgstr ""
+msgstr "Escadas de Tijolos de Pedra Rachada"
 
 msgid "Cracked Stone Brick Slab"
-msgstr ""
+msgstr "Laje de Tijolos de Pedra Rachada"
 
 msgid "Cracked Deepslate Brick Stairs"
 msgstr ""
@@ -50,221 +51,220 @@ msgid "Cracked Deepslate Tile Slab"
 msgstr ""
 
 msgid "End Stone Stairs"
-msgstr ""
+msgstr "Escadas de Pedra do End"
 
 msgid "End Stone Slab"
-msgstr ""
+msgstr "Laje de Pedra do End"
 
 msgid "Smooth Stone Stairs"
-msgstr ""
+msgstr "Escadas de Pedra Lisa"
 
 msgid "Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota"
 
 msgid "Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota"
 
 msgid "Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto"
 
 msgid "Double Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Duplo"
 
 msgid "Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto"
 
 msgid "Double Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Dupla"
 
 msgid "Black Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Preto"
 
 msgid "Black Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Preto"
 
 msgid "Black Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Preta"
 
 msgid "Black Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Preta"
 
 msgid "Blue Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Azul"
 
 msgid "Blue Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Azul"
 
 msgid "Blue Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Azul"
 
 msgid "Blue Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Azul"
 
 msgid "Brown Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Marrom"
 
 msgid "Brown Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Marrom"
 
 msgid "Brown Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Marrom"
 
 msgid "Brown Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Marrom"
 
 msgid "Cyan Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Ciano"
 
 msgid "Cyan Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Ciano"
 
 msgid "Cyan Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Ciano"
 
 msgid "Cyan Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Ciano"
 
 msgid "Green Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Verde"
 
 msgid "Green Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Verde"
 
 msgid "Green Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Verde"
 
 msgid "Green Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Verde"
 
 msgid "Grey Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Cinza"
 
 msgid "Grey Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Cinza"
 
 msgid "Grey Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Cinza"
 
 msgid "Grey Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Cinza"
 
 msgid "Light Blue Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Azul Claro"
 
 msgid "Light Blue Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Azul Claro"
 
 msgid "Light Blue Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Azul Claro"
 
 msgid "Light Blue Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Azul Claro"
 
 msgid "Light Grey Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Cinza Claro"
 
 msgid "Light Grey Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Cinza Claro"
 
 msgid "Light Grey Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Cinza Claro"
 
 msgid "Light Grey Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Cinza Claro"
 
 msgid "Lime Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Verde Lima"
 
 msgid "Lime Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Verde Lima"
 
 msgid "Lime Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Verde Lima"
 
 msgid "Lime Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Verde Lima"
 
 msgid "Magenta Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Magenta"
 
 msgid "Magenta Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Magenta"
 
 msgid "Magenta Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Magenta"
 
 msgid "Magenta Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Magenta"
 
 msgid "Orange Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Laranja"
 
 msgid "Orange Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Laranja"
 
 msgid "Orange Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Laranja"
 
 msgid "Orange Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Laranja"
 
 msgid "Pink Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Rosa"
 
 msgid "Pink Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Rosa"
 
 msgid "Pink Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Rosa"
 
 msgid "Pink Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Rosa"
 
 msgid "Purple Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Roxo"
 
 msgid "Purple Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Roxo"
 
 msgid "Purple Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Roxo"
 
 msgid "Purple Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Roxo"
 
 msgid "Red Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Vermelho"
 
 msgid "Red Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Vermelho"
 
 msgid "Red Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Vermelho"
 
 msgid "Red Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Vermelho"
 
 msgid "White Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Branco"
 
 msgid "White Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Branco"
 
 msgid "White Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Branco"
 
 msgid "White Terracotta Stairs"
-msgstr ""
+msgstr "Escadas de Terracota Branco"
 
 msgid "Yellow Concrete Slab"
-msgstr ""
+msgstr "Laje de Concreto Amarelo"
 
 msgid "Yellow Concrete Stairs"
-msgstr ""
+msgstr "Escadas de Concreto Amarelo"
 
 msgid "Yellow Terracotta Slab"
-msgstr ""
+msgstr "Laje de Terracota Amarelo"
 
 msgid "Yellow Terracotta Stairs"
-msgstr ""
-
+msgstr "Escadas de Terracota Amarelo"
