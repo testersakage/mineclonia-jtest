@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------
--- Overworld biome demonstration program.
+-- Overworld / Nether noise-based biome demonstration program.
 ------------------------------------------------------------------------
 
 local biome_colors = {
@@ -56,6 +56,13 @@ local biome_colors = {
 	SparseJungle = "#7ba331",
 	SnowyBeach = "#faf0c0",
 	WindsweptSavannah = "#e5da87",
+
+	-- Nether biomes.
+	BasaltDeltas = "#403636",
+	CrimsonForest = "#dd0808",
+	NetherWastes = "#bf3b3b",
+	SoulSandValley = "#5e3830",
+	WarpedForest = "#49907b",
 }
 
 ------------------------------------------------------------------------

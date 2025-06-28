@@ -1706,7 +1706,7 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 			local idx = dx * chunksize * level_height + dz + 1
 			local cid_default_block = self.cid_default_block
 
-			for y = surface, 0, -1 do
+			for y = mathmin (surface, level_height - 1), 0, -1 do
 				local i = idx + chunksize * y
 				local node, _ = decode_node (nodes[i])
 				if node == cid_air then

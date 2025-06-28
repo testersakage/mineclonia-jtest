@@ -33,6 +33,8 @@ local LAVA_FLOODING_THRESHOLD = -54
 
 function aquifer:get_node (x, y, z, density)
 	local sea_level = self.sea_level
+	-- This statement is harmless in the Nether, as the nether
+	-- originates at Y=0.
 	if y < mathmin (LAVA_FLOODING_THRESHOLD, sea_level) then
 		return cid_lava_source, 0
 	elseif y < sea_level then
@@ -138,7 +140,6 @@ function mcl_levelgen.create_localized_aquifer (preset, terrain_generator)
 	local aquifer = table.copy (localized_aquifer)
 	aquifer:initialize (preset)
 
-	-- TODO: initialize content IDs.
 	local grid_size_horiz = togrid_xz (terrain_generator.chunksize) + 2
 
 	-- Minecraft derives grid positions from absolute coordinates,
@@ -367,8 +368,7 @@ local function compute_fluid_content (x, y, z)
 				       min_surface_top,
 				       this_pos_submerged_p)
 
-	-- Decide whether to return lava.  TODO: disable this
-	-- mechanism in the Nether.
+	-- Decide whether to return lava.
 	if new_surface_level ~= huge
 		and new_surface_level < LAVA_GENERATION_THRESHOLD then
 		local xsection = floor (x / 64)
