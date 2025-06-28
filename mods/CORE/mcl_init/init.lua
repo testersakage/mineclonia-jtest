@@ -168,7 +168,13 @@ end
 mcl_vars.mg_overworld_max = mcl_vars.mapgen_edge_max
 
 -- The Nether (around Y = -29000)
-mcl_vars.mg_nether_min = -29067 -- Carefully chosen to be at a mapchunk border
+if mcl_vars.enable_mcl_levelgen then
+	mcl_vars.mg_nether_min = -29072
+else
+	-- XXX: the subsequent comment is drivel: it isn't so much as
+	-- a multiple of 16!!
+	mcl_vars.mg_nether_min = -29067 -- Carefully chosen to be at a mapchunk border
+end
 mcl_vars.mg_nether_max = mcl_vars.mg_nether_min + 128
 mcl_vars.mg_bedrock_nether_bottom_min = mcl_vars.mg_nether_min
 mcl_vars.mg_bedrock_nether_top_max = mcl_vars.mg_nether_max

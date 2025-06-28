@@ -310,23 +310,26 @@ function mcl_levelgen.generate_feature (id, before, biomes, stage)
 	end
 end
 
-local overworld_features = mcl_levelgen.overworld_features
-local overworld_feature_indices = {}
+local for_each_dimension = mcl_levelgen.for_each_dimension
 
 function mcl_levelgen.initialize_biome_features ()
-	local overworld = mcl_levelgen.overworld_preset
-	overworld_features = merge_feature_precedences (overworld)
+	for _, dim in for_each_dimension () do
+		local preset = dim.preset
+		preset.features = merge_feature_precedences (preset)
 
-	-- Construct a table mapping each registered biome's feature
-	-- list to the index of the same feature in the feature
-	-- precedence list.
+		-- Construct a table mapping each registered biome's
+		-- feature list to the index of the same feature in
+		-- the feature precedence list.
 
-	for step, features in ipairs (overworld_features) do
-		local tbl = {}
-		overworld_feature_indices[step] = tbl
-		for i, feature in ipairs (features) do
-			tbl[feature] = i
+		local feature_indices = {}
+		for step, features in ipairs (preset.features) do
+			local tbl = {}
+			feature_indices[step] = tbl
+			for i, feature in ipairs (features) do
+				tbl[feature] = i
+			end
 		end
+		preset.feature_indices = feature_indices
 	end
 end
 
@@ -1167,12 +1170,14 @@ function mcl_levelgen.process_features_1 ()
 	for _, index in pairs (biomes) do
 		expand_biome_list (index, gen_biomes, seen)
 	end
+	local dim_feature_indices = preset.feature_indices
+	local dim_features = preset.features
 
 	for step = 1, NUM_GENERATION_STEPS do
 		-- Collect the indices of the features that generate
 		-- in each biome intersecting the run.
 
-		local indices = overworld_feature_indices[step]
+		local indices = dim_feature_indices[step]
 		local features, seen = {}, {}
 		for _, biome in ipairs (gen_biomes) do
 			local def = registered_biomes[biome]
@@ -1191,7 +1196,7 @@ function mcl_levelgen.process_features_1 ()
 		end
 		sort (features)
 
-		local step_features = overworld_features[step]
+		local step_features = dim_features[step]
 		for _, idx in ipairs (features) do
 			local name = step_features[idx]
 			local feature = registered_placed_features[name]

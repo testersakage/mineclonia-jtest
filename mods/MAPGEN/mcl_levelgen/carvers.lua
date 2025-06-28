@@ -339,7 +339,7 @@ local function create_tunnel (self, x, y, z, seed, horiz_radius, vert_radius,
 	end
 end
 
-local function get_thickness (rng)
+function cave_carver:get_thickness (rng)
 	local val = rng:next_float () * 2.0 + rng:next_float ()
 	if rng:next_within (10) == 0 then
 		val = val * (rng:next_float () * rng:next_float () * 3.0 + 1.0)
@@ -390,7 +390,7 @@ function cave_carver:carve (x, z, rng)
 		for j = 1, cnt_tunnels do
 			local yaw = rng:next_float () * pi * 2
 			local pitch = (rng:next_float () - 0.5) / 4.0
-			local thickness = get_thickness (rng)
+			local thickness = self:get_thickness (rng)
 			local length = range_in_blocks
 				- rng:next_within (floor (range_in_blocks / 4))
 			local seed = rng:next_long ()
@@ -406,6 +406,19 @@ function cave_carver:carve (x, z, rng)
 			-- prin = false
 		end
 	end
+end
+
+------------------------------------------------------------------------
+-- Nether cave carver.
+------------------------------------------------------------------------
+
+local nether_cave_carver = table.merge (cave_carver, {
+	max_caves = 10,
+	cave_y_scale = 5.0,
+})
+
+function nether_cave_carver:get_thickness (rng)
+	return (rng:next_float () * 2.0 + rng:next_float ()) * 2.0
 end
 
 ------------------------------------------------------------------------
@@ -795,10 +808,34 @@ local default_ravine_carver = table.merge (ravine_carver, {
 	vertical_radius_center_factor = 0.0,
 })
 
+local nether_cave_carver = table.merge (nether_cave_carver, {
+	probability = 0.2,
+	y = uniform_height (0, 126),
+	y_scale = function (_) return 0.5 end,
+	floor_level = function (_) return -0.7 end,
+	lava_level = 10,
+	replaceable = {
+		"group:deepslate_ore_target",
+		"group:stone_ore_target",
+		"mcl_nether:netherrack",
+		"mcl_blackstone:basalt",
+		"mcl_blackstone:blackstone",
+		"mcl_crimson:warped_nylium",
+		"mcl_crimson:crimson_nylium",
+		"mcl_nether:nether_wart_block",
+		"mcl_crimson:warped_wart_block",
+		"mcl_nether:soul_sand",
+		"mcl_blackstone:soul_soil",
+	},
+	horizontal_radius_multiplier = function (_) return 1.0 end,
+	vertical_radius_multiplier = function (_) return 1.0 end,
+})
+
 mcl_levelgen.register_carver ("mcl_levelgen:cave_carver", default_cave_carver)
 mcl_levelgen.register_carver ("mcl_levelgen:cave_extra_underground_carver",
 			      cave_extra_underground_carver)
 mcl_levelgen.register_carver ("mcl_levelgen:ravine_carver", default_ravine_carver)
+mcl_levelgen.register_carver ("mcl_levelgen:nether_cave_carver", nether_cave_carver)
 
 ------------------------------------------------------------------------
 -- Carver generation.

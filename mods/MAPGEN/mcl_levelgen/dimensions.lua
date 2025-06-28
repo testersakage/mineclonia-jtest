@@ -170,3 +170,11 @@ mcl_levelgen.register_dimension ("mcl_levelgen:overworld", {
 		return mcl_levelgen.make_overworld_preset (seed)
 	end,
 })
+
+mcl_levelgen.register_dimension ("mcl_levelgen:nether", {
+	y_global = mcl_vars.mg_nether_min,
+	data_namespace = 1,
+	create_preset = function (self, seed)
+		return mcl_levelgen.make_nether_preset (seed)
+	end,
+})

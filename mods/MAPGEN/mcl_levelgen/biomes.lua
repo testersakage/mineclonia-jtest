@@ -1556,7 +1556,28 @@ function mcl_levelgen.index_biome_lut_naively (nodes, temperature, humidity,
 end
 
 ------------------------------------------------------------------------
--- Nether & End Biomes.
+-- Nether Biomes.
+------------------------------------------------------------------------
+
+function mcl_levelgen.construct_nether_lut ()
+	local ZERO = { 0.0, 0.0, }
+	local nodes = {
+		construct_biome ("NetherWastes", ZERO, ZERO, ZERO,
+				 ZERO, ZERO, ZERO, 0.0),
+		construct_biome ("SoulSandValley", ZERO, {-0.5, -0.5,},
+				 ZERO, ZERO, ZERO, ZERO, 0.0),
+		construct_biome ("CrimsonForest", {0.4, 0.4,},
+				 ZERO, ZERO, ZERO, ZERO, ZERO, 0.0),
+		construct_biome ("WarpedForest", ZERO, {0.5, 0.5,},
+				 ZERO, ZERO, ZERO, ZERO, 0.375),
+		construct_biome ("BasaltDeltas", {-0.5, -0.5,}, ZERO,
+				 ZERO, ZERO, ZERO, ZERO, 0.175),
+	}
+	return build_rtree (table.copy (nodes)), nodes
+end
+
+------------------------------------------------------------------------
+-- End Biomes.
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------

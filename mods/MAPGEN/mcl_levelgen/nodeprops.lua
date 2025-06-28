@@ -219,8 +219,8 @@ local cid_mushroom_red
 local cid_mushroom_brown
 local cid_mycelium
 local cid_podzol
-local cid_crimson_nylum
-local cid_warped_nylum
+local cid_crimson_nylium
+local cid_warped_nylium
 
 local is_cid_sapling = {}
 local is_cid_dirt = {}
@@ -268,8 +268,8 @@ local function initialize_nodeprops ()
 	cid_mushroom_brown = core.get_content_id ("mcl_mushrooms:mushroom_brown")
 	cid_mycelium = core.get_content_id ("mcl_core:mycelium")
 	cid_podzol = core.get_content_id ("mcl_core:podzol")
-	cid_crimson_nylum = core.get_content_id ("mcl_crimson:crimson_nylium")
-	cid_warped_nylum = core.get_content_id ("mcl_crimson:warped_nylium")
+	cid_crimson_nylium = core.get_content_id ("mcl_crimson:crimson_nylium")
+	cid_warped_nylium = core.get_content_id ("mcl_crimson:warped_nylium")
 
 	for i = 1, 8 do
 		local cid
@@ -853,8 +853,8 @@ function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 		local cid, _ = get_block (x, y - 1, z)
 		return cid == cid_mycelium
 			or cid == cid_podzol
-			or cid == cid_crimson_nylum
-			or cid == cid_warped_nylum
+			or cid == cid_crimson_nylium
+			or cid == cid_warped_nylium
 	elseif is_cid_water_floating_node[cid] then
 		local cid, _ = get_block (x, y - 1, z)
 		return cid == cid_water_source
