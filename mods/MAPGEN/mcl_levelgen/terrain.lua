@@ -23,7 +23,7 @@ local toquart = mcl_levelgen.toquart
 local terrain_generator = {}
 mcl_levelgen.terrain_generator = terrain_generator
 
-local cid_stone, cid_water_source, cid_lava_source, cid_air
+local cid_stone, cid_water_source, cid_lava_source, cid_nether_lava_source, cid_air
 local cid_copper_ore, cid_deepslate_iron_ore, cid_raw_copper, cid_raw_iron
 local cid_granite, cid_tuff
 
@@ -31,6 +31,8 @@ local function init_cids ()
 	cid_stone = core.get_content_id ("mcl_core:stone")
 	cid_water_source = core.get_content_id ("mcl_core:water_source")
 	cid_lava_source = core.get_content_id ("mcl_core:lava_source")
+	cid_nether_lava_source
+		= core.get_content_id ("mcl_nether:nether_lava_source")
 	cid_air = core.CONTENT_AIR
 	cid_copper_ore = core.get_content_id ("mcl_copper:stone_with_copper")
 	cid_deepslate_iron_ore = core.get_content_id ("mcl_deepslate:deepslate_with_iron")
@@ -245,7 +247,7 @@ function interpolator:create_noise_arrays (n_cells_y, n_cells_xz)
 	self.noises_next = t2
 	self.value = false
 
-	for i = 1, n_cells_y + 1 do
+	for i = 1, n_cells_xz + 1 do
 		local t3, t4 = {}, {}
 		t1[i], t2[i] = t3, t4
 
@@ -1473,6 +1475,7 @@ function terrain_generator:regenerate_heightmaps (nodes, chunksize, preset)
 				local isair = cid == cid_air
 				local isstone = cid ~= cid_air
 					and cid ~= cid_lava_source
+					and cid ~= cid_nether_lava_source
 					and cid ~= cid_water_source
 				update_height_map (heightmap, x, y, z,
 						   isair, isstone,
