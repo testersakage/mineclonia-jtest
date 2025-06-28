@@ -4,7 +4,7 @@ local ipos2 = mcl_levelgen.ipos2
 local insert = table.insert
 
 local S = core.get_translator ("mcl_levelgen")
-local mt_chunksize = core.ipc_get ("mcl_levelgen:mt_chunksize")
+local mt_chunksize = mcl_levelgen.mt_chunksize
 local chunksize = mt_chunksize.x * 16
 local lighting_disabled = mcl_levelgen.lighting_disabled
 
@@ -62,25 +62,21 @@ local function dbg (...)
 	-- print (string.format (...))
 end
 
-local generation_radius
-	= core.settings:get ("mcl_feature_placement_radius") or "0"
-
 -- Server-side occlusion culling prevents MapBlocks near the player
 -- from being regenerated, but only applies to MapBlocks that are yet
 -- to be emerged.  Therefore it should be harmless just to disable it.
 core.settings:set_bool ("server_side_occlusion_culling", false)
-generation_radius = mathmax (1, tonumber (generation_radius))
 
 --------------------------------------------------------------------------
 -- MapBlock tagging.
 --------------------------------------------------------------------------
 
--- Each MapBlock enjoys 8 bits' worth of tags globally accessible that
--- decide whether or not it is a proto-block.  These tags are stored
--- in mod storage in 256x24x256 sections (in the case of the
--- Overworld); when represented as doubles where 32 bits of the
--- significand are available for bitwise operations each section
--- amounts to roughly 4 megabytes.
+-- Each column of MapBlocks in each dimension enjoys 8 bits' worth of
+-- tags globally accessible that decide whether or not it is a
+-- proto-block.  These tags are stored in mod storage in 256x24x256
+-- sections (in the case of the Overworld); when represented as
+-- doubles where 32 bits of the significand are available for bitwise
+-- operations each section amounts to roughly 4 megabytes.
 
 local SS = 256
 local SSHIFT = 8
@@ -89,10 +85,67 @@ local HEIGHT_SHIFT = 5
 local NUMBER_BITS = 4
 local INDICES = floor ((SS * HEIGHT * SS * 8 + NUMBER_BITS - 1) / NUMBER_BITS)
 
--- TODO: generalize to multiple dimensions.
-local OVERWORLD_MIN = mcl_vars.mg_overworld_min
-local OVERWORLD_MIN_BLOCK = OVERWORLD_MIN / 16
-local OVERWORLD_MAX_BLOCK = OVERWORLD_MIN_BLOCK + 24 - 1
+local namespaces = {}
+local current_namespace_id = nil
+local current_namespace_height = nil
+local current_namespace = nil
+local max_data_namespace = 0
+
+local for_each_dimension = mcl_levelgen.for_each_dimension
+
+-- Build a list of namespaces from currently registered dimensions.
+
+if not mcl_levelgen.load_feature_environment then
+
+core.register_on_mods_loaded (function ()
+	for _, dim in for_each_dimension () do
+		local namespace = {
+			-- MapBlock extents of the level this
+			-- namespace represents in the global
+			-- coordinate system.
+			y_bottom = floor (dim.y_global / 16),
+			y_top = floor (dim.y_max / 16),
+
+			-- Node extents of the level this namespace
+			-- represents in the global coordinate system.
+			y_global = dim.y_global,
+			y_global_top = dim.y_max,
+
+			-- Bottom of level in its coordinate system.
+			y_min = dim.preset.min_y,
+
+			-- Offset for translating global coordinates
+			-- into level-local coordinates.
+			y_offset = dim.y_offset,
+
+			-- Identifiers.
+			dim_id = dim.id,
+			data_namespace = dim.data_namespace,
+		}
+		local height = namespace.y_top - namespace.y_bottom + 1
+		assert (height <= HEIGHT)
+		namespace.height = height
+		namespaces[dim.data_namespace] = namespace
+		max_data_namespace = mathmax (dim.data_namespace,
+					      max_data_namespace)
+	end
+	mcl_levelgen.clear_sections_loaded ()
+end)
+
+end
+
+local function switch_to_namespace (id)
+	if id then
+		current_namespace = namespaces[id]
+		current_namespace_id = id
+		current_namespace_height = current_namespace.height
+	else
+		current_namespace = nil
+		current_namespace_id = nil
+		current_namespace_height = nil
+	end
+end
+
 local storage = core.get_mod_storage and core.get_mod_storage () or nil
 
 local function section (bx, bz)
@@ -101,16 +154,18 @@ local function section (bx, bz)
 	return arshift (xs, SSHIFT), arshift (zs, SSHIFT)
 end
 
-local function section_hash (sx, sz)
-	return lshift (sx + 9, 5) + sz + 9
+local function section_hash (id, sx, sz)
+	return lshift (id, 10) + lshift (sx + 9, 5) + sz + 9
 end
 
 local loaded_mb_sections = {}
 local section_access_times = {}
 local sections_loaded = {}
 
-for i = 1, section_hash (17, 17) + 1 do
-	sections_loaded[i] = false
+function mcl_levelgen.clear_sections_loaded ()
+	for i = 1, section_hash (max_data_namespace, 8, 8) + 1 do
+		sections_loaded[i] = false
+	end
 end
 
 local function create_section (hash)
@@ -164,7 +219,7 @@ local function reset_loaded_section (section)
 end
 
 local function load_section (sx, sz)
-	local hash = section_hash (sx, sz)
+	local hash = section_hash (current_namespace_id, sx, sz)
 	local section = loaded_mb_sections[hash]
 	if not loaded_mb_sections[hash] then
 		local str = storage:get_string ("mbs," .. hash)
@@ -193,7 +248,7 @@ local function mapblock_index (bx, by, bz)
 	local sx, sz = section (bx, bz)
 	local section = load_section (sx, sz)
 	local ix = band (bx - 128, 0xff)
-	local iy = band (by + OVERWORLD_MIN_BLOCK, 0x1f)
+	local iy = band (by, 0x1f)
 	local iz = band (bz - 128, 0xff)
 	local index = bor (lshift (bor (lshift (ix, 8), iz), 5), iy)
 	local section_index = rshift (index, 2) + 1
@@ -203,7 +258,7 @@ end
 
 local function mapblock_index_1 (bx, by, bz)
 	local ix = band (bx - 128, 0xff)
-	local iy = band (by + OVERWORLD_MIN_BLOCK, 0x1f)
+	local iy = band (by, 0x1f)
 	local iz = band (bz - 128, 0xff)
 	local index = bor (lshift (bor (lshift (ix, 8), iz), 5), iy)
 	local section_index = rshift (index, 2) + 1
@@ -222,8 +277,8 @@ end
 
 local function set_mapblock_state (bx, by, bz, state)
 	local section, section_index, bit_index	= mapblock_index (bx, by, bz)
-	dbg ("  MapBlock state change: X: %d, Y: %d, Z: %d -> %d",
-	     bx, by, bz, state)
+	-- dbg ("  MapBlock state change: X: %d, Y: %d, Z: %d -> %d",
+	--      bx, by, bz, state)
 	section[section_index] = bor (band (bnot (lshift (0x7, bit_index)),
 					    section[section_index]),
 				      lshift (state, bit_index))
@@ -290,9 +345,7 @@ local function require_regeneration (current, x, y, z)
 	-- sporadically to generate existing mapblocks.
 	if current == MBS_GENERATED then
 		set_mapblock_state (x, y, z, MBS_PROTO_CHUNK)
-		if generation_radius == 1 then
-			attempt_feature_placement (x, y, z)
-		end
+		attempt_feature_placement (x, y, z)
 	end
 	-- A locked & generated or simply locked MapBlock's contents
 	-- are already available and will soon be restored to the
@@ -302,8 +355,9 @@ end
 -- local parent = {}
 
 local schedule_regeneration_for_emerge
+local dims_intersecting = mcl_levelgen.dims_intersecting
 
-local function post_process_mapchunk (minp, maxp)
+local function post_process_mapchunk_in_dim (minp, maxp, dim)
 	local bx = minp.x / 16
 	local by = minp.y / 16
 	local bz = minp.z / 16
@@ -311,11 +365,13 @@ local function post_process_mapchunk (minp, maxp)
 	local by1 = floor (maxp.y / 16)
 	local bz1 = floor (maxp.z / 16)
 
-	by = mathmax (by, OVERWORLD_MIN_BLOCK)
-	by1 = mathmin (by1, OVERWORLD_MAX_BLOCK)
-	if by1 - by < 0 then
-		return
-	end
+	switch_to_namespace (dim.data_namespace)
+
+	by = by - current_namespace.y_bottom
+	by1 = by1 - current_namespace.y_bottom
+
+	assert (by >= 0 and by <= current_namespace_height - 1)
+	assert (by1 >= 0 and by1 >= by and by1 <= current_namespace_height - 1)
 
 	-- Verify that no locked or generated mapblocks have been
 	-- overwritten by overgeneration.
@@ -359,6 +415,21 @@ local function post_process_mapchunk (minp, maxp)
 	save_gen_data (bx, bx1, by, by1, bz, bz1, chunksize)
 	run_structure_notifications ()
 	schedule_regeneration_for_emerge (bx, bx1, by, by1, bz, bz1)
+	switch_to_namespace (nil)
+end
+
+local function post_process_mapchunk (minp, maxp)
+	local generated = false
+	for y1, y2, ystart, yend, dim in dims_intersecting (minp.y, maxp.y) do
+		if generated then
+			break
+		end
+
+		minp.y = y1
+		maxp.y = y2
+		post_process_mapchunk_in_dim (minp, maxp, dim)
+		generated = true
+	end
 end
 
 if not mcl_levelgen.load_feature_environment then
@@ -537,21 +608,6 @@ local huge = math.huge
 -- instead one of distance.
 
 local mathabs = math.abs
-local player_x, player_y, player_z
-
-local function test_block_status (x, y, z)
-	if generation_radius > 1 then
-		local dx = player_x - x
-		local dy = player_y - y
-		local dz = player_z - z
-
-		return mathabs (dx) <= generation_radius + 1
-			and mathabs (dy) <= generation_radius + 1
-			and mathabs (dz) <= generation_radius + 1
-	else
-		return true
-	end
-end
 
 local function nearest_power_of_2 (x)
 	local k, m = 1, 0
@@ -562,15 +618,9 @@ local function nearest_power_of_2 (x)
 	return k, m
 end
 
-local base_cache_size
-
-if generation_radius > 1 then
-	base_cache_size = generation_radius
-else
-	local chunk_check_size
-		= mt_chunksize.x + (REQUIRED_CONTEXT_XZ + 1) * 2
-	base_cache_size = mathmax (6, chunk_check_size)
-end
+local chunk_check_size
+	= mt_chunksize.x + (REQUIRED_CONTEXT_XZ + 1) * 2
+local base_cache_size = mathmax (6, chunk_check_size)
 
 local player_block_positions = {}
 local n_player_block_positions
@@ -579,6 +629,7 @@ local function dist_to_nearest_player (x, y, z)
 	local d = huge
 	local n = n_player_block_positions
 	local p = player_block_positions
+	local y = y + current_namespace.y_bottom
 	for i = 1, n, 3 do
 		local x1, y1, z1 = p[i], p[i + 1], p[i + 2]
 		local dx = x - x1
@@ -596,9 +647,9 @@ local function refresh_player_block_positions ()
 		local x = floor (pos.x / 16)
 		local y = floor (pos.y / 16)
 		local z = floor (pos.z / 16)
-		table.insert (player_block_positions, x)
-		table.insert (player_block_positions, y)
-		table.insert (player_block_positions, z)
+		insert (player_block_positions, x)
+		insert (player_block_positions, y)
+		insert (player_block_positions, z)
 	end
 	n_player_block_positions = #player_block_positions
 end
@@ -660,8 +711,8 @@ for x = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
 	for z = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
 		if mathabs (x) > REQUIRED_CONTEXT_XZ
 			or mathabs (z) > REQUIRED_CONTEXT_XZ then
-			table.insert (surroundings, x)
-			table.insert (surroundings, z)
+			insert (surroundings, x)
+			insert (surroundings, z)
 		end
 	end
 end
@@ -671,8 +722,8 @@ local all_surroundings = {
 
 for x = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
 	for z = -REQUIRED_CONTEXT_XZ - 1, REQUIRED_CONTEXT_XZ + 1 do
-		table.insert (all_surroundings, x)
-		table.insert (all_surroundings, z)
+		insert (all_surroundings, x)
+		insert (all_surroundings, z)
 	end
 end
 
@@ -680,7 +731,7 @@ local n_surroundings = #surroundings
 local n_all_surroundings = #all_surroundings
 
 local function vertical_context_generated (x, y, z)
-	if y > OVERWORLD_MAX_BLOCK or y < OVERWORLD_MIN_BLOCK then
+	if y >= current_namespace_height or y < 0 then
 		return true
 	end
 	-- for x = x - REQUIRED_CONTEXT_XZ - 1, x + REQUIRED_CONTEXT_XZ + 1 do
@@ -703,8 +754,7 @@ end
 local function adequate_context_exists_p (x, y, z, curstate)
 	for x = x - REQUIRED_CONTEXT_XZ, x + REQUIRED_CONTEXT_XZ do
 		for z = z - REQUIRED_CONTEXT_XZ, z + REQUIRED_CONTEXT_XZ do
-			if local_mapblock_state (x, y, z) < MBS_PROTO_CHUNK
-				or not test_block_status (x, y, z) then
+			if local_mapblock_state (x, y, z) < MBS_PROTO_CHUNK then
 				return false
 			end
 		end
@@ -739,9 +789,15 @@ end
 -- 	mapblock_lockers[core.hash_node_position (vector.new (x, y, z))] = run
 -- end
 
+local function run_hash (run)
+	local y_bottom = current_namespace.y_bottom
+	return hashmapblock (run.x, run.y1 + y_bottom, run.z)
+end
+
 local function queue_mapblock_run (x, y_start, y_end, z, d, supplemental,
 				   data)
-	local run = getmapblock (x, y_start, z)
+	local y_bottom = current_namespace.y_bottom
+	local run = getmapblock (x, y_start + y_bottom, z)
 
 	run.x = x
 	run.z = z
@@ -749,18 +805,19 @@ local function queue_mapblock_run (x, y_start, y_end, z, d, supplemental,
 	run.y2 = y_end
 	run.supplemental = supplemental
 	run.data = data
+	run.namespace = current_namespace_id
+
 	dbg ("Queueing mapblock run: X: %d, Y: %d - %d, Z: %d (supplemental: %s)",
 	     x, y_start, y_end, z, tostring (supplemental))
 
 	-- Lock surrounding MapBlocks.
-	local context_start = mathmax (y_start - REQUIRED_CONTEXT_Y,
-				       OVERWORLD_MIN_BLOCK)
+	local context_start = mathmax (y_start - REQUIRED_CONTEXT_Y, 0)
 	local context_end = mathmin (y_end + REQUIRED_CONTEXT_Y,
-				     OVERWORLD_MAX_BLOCK)
+				     current_namespace_height - 1)
 	for x = x - REQUIRED_CONTEXT_XZ, x + REQUIRED_CONTEXT_XZ do
 		for z = z - REQUIRED_CONTEXT_XZ, z + REQUIRED_CONTEXT_XZ do
 			for y = context_start, context_end do
-				local rec = mb_records[hashmapblock (x, y, z)]
+				local rec = mb_records[hashmapblock (x, y + y_bottom, z)]
 				assert (not rec or rec == run)
 				local state = local_mapblock_state (x, y, z)
 				if state == MBS_PROTO_CHUNK then
@@ -810,7 +867,7 @@ end
 
 function attempt_feature_placement (x, z)
 	local sx, sz = section (x, z)
-	local hash = section_hash (sx, sz)
+	local hash = section_hash (current_namespace_id, sx, sz)
 	section_access_times[hash] = 0
 
 	-- Search for MapBlocks with valid and loaded context from
@@ -818,10 +875,11 @@ function attempt_feature_placement (x, z)
 	local cnt_below, last_above = 0, -huge
 	local runs = {}
 	local lastrun, nextrun = huge, -huge
+	local maxy = current_namespace_height - 1
 
-	for y = OVERWORLD_MIN_BLOCK, OVERWORLD_MAX_BLOCK do
+	for y = 0, maxy do
 		if y > last_above then
-			for i = y, OVERWORLD_MAX_BLOCK do
+			for i = y, maxy do
 				if adequate_context_exists_p (x, i, z) then
 					last_above = i
 				else
@@ -836,8 +894,8 @@ function attempt_feature_placement (x, z)
 		local d = dist_to_nearest_player (x, y, z)
 
 		if curstate == MBS_PROTO_CHUNK and context_adequate then
-			local min = mathmax (-(y - OVERWORLD_MIN_BLOCK - 2), 0)
-			local max = mathmax (-(OVERWORLD_MAX_BLOCK - y - 2), 0)
+			local min = mathmax (-(y - 2), 0)
+			local max = mathmax (-(maxy - y - 2), 0)
 			local required_below = REQUIRED_CONTEXT_Y - min
 			local required_above = REQUIRED_CONTEXT_Y - max
 			local cnt_above = last_above - y
@@ -849,8 +907,8 @@ function attempt_feature_placement (x, z)
 			-- this one's.
 				and (y == lastrun + 1
 				     or y > nextrun + REQUIRED_CONTEXT_Y) then
-				table.insert (runs, y)
-				table.insert (runs, d)
+				insert (runs, y)
+				insert (runs, d)
 				lastrun = y
 				nextrun = y + REQUIRED_CONTEXT_Y
 			end
@@ -908,20 +966,18 @@ if mcl_levelgen.load_feature_environment then
 	levelgen_previous_vm = nil
 end
 
-local function async_function (vm, run, heightmap, wg_heightmap, biomes,
+local function async_function (vm, run, dim_id, heightmap, wg_heightmap, biomes,
 			       structure_masks, structure_features)
 	if levelgen_previous_vm and levelgen_previous_vm.close then
 		levelgen_previous_vm:close ()
 	end
-	-- These constants must be redundantly defined within this
-	-- function, as constants in upvalues are not transferred to
-	-- the async environment.
-	local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
-	local preset = mcl_levelgen.overworld_preset
+	local dimension = mcl_levelgen.get_dimension (dim_id)
+	local y_offset = dimension.y_offset
+	local preset = dimension.preset
 	local relight_list, gen_notifies, features, c_above, c_below
 		= mcl_levelgen.process_features (vm, run, heightmap, wg_heightmap,
 						 structure_masks, structure_features,
-						 biomes, OVERWORLD_OFFSET, preset.min_y,
+						 biomes, y_offset, preset.min_y,
 						 preset.height, preset)
 	levelgen_previous_vm = vm
 
@@ -949,12 +1005,15 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 		return
 	end
 
+	switch_to_namespace (run.namespace)
+
 	-- It appears that this calback is occasionally called oftener
 	-- than once.
-	local run_hash = hashmapblock (run.x, run.y1, run.z)
+	local run_hash = run_hash (run)
 	if not mb_records[run_hash] then
 		dbg ("A MapBlock execution task completed twice: X: %d, Y: %d - %d, Z: %d",
 		     run.x, run.y1, run.y2, run.z)
+		switch_to_namespace (nil)
 		return
 	end
 	mb_records[run_hash] = nil
@@ -969,10 +1028,9 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 
 	-- Unlock all MapBlocks that were locked for the duration of
 	-- this run.
-	local y_min = mathmax (run.y1 - REQUIRED_CONTEXT_Y,
-			       OVERWORLD_MIN_BLOCK)
+	local y_min = mathmax (run.y1 - REQUIRED_CONTEXT_Y, 0)
 	local y_max = mathmin (run.y2 + REQUIRED_CONTEXT_Y,
-			       OVERWORLD_MAX_BLOCK)
+			       current_namespace_height - 1)
 	local supplemental = run.supplemental
 
 	dbg ("Completed MapBlock run: X: %d, Y: %d - %d, Z: %d",
@@ -1021,38 +1079,39 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 	apply_feature_context_requisitions (run, features_requesting_additional_context,
 					    c_above, c_below)
 	schedule_regeneration_for_unlock (run.x, run.z)
+	switch_to_namespace (nil)
 end
 
-local function cancel_mapblock_run (run, y_min, y_max)
-	local run_hash = hashmapblock (run.x, run.y1, run.z)
-	assert (mb_records[run_hash] == run)
+-- local function cancel_mapblock_run (run, y_min, y_max)
+-- 	local run_hash = run_hash (run)
+-- 	assert (mb_records[run_hash] == run)
 
-	for x, y, z in ipos1 (run.x - REQUIRED_CONTEXT_XZ, y_min,
-			      run.z - REQUIRED_CONTEXT_XZ,
-			      run.x + REQUIRED_CONTEXT_XZ, y_max,
-			      run.z + REQUIRED_CONTEXT_XZ) do
-		local state = mapblock_state (x, y, z)
-		assert (state == MBS_LOCKED
-			or state == MBS_LOCKED_GENERATED
-			or state == MBS_REGENERATING)
+-- 	for x, y, z in ipos1 (run.x - REQUIRED_CONTEXT_XZ, y_min,
+-- 			      run.z - REQUIRED_CONTEXT_XZ,
+-- 			      run.x + REQUIRED_CONTEXT_XZ, y_max,
+-- 			      run.z + REQUIRED_CONTEXT_XZ) do
+-- 		local state = mapblock_state (x, y, z)
+-- 		assert (state == MBS_LOCKED
+-- 			or state == MBS_LOCKED_GENERATED
+-- 			or state == MBS_REGENERATING)
 
-		if state == MBS_LOCKED then
-			set_mapblock_state (x, y, z, MBS_PROTO_CHUNK)
-		elseif state == MBS_LOCKED_GENERATED then
-			set_mapblock_state (x, y, z, MBS_GENERATED)
-		elseif state == MBS_REGENERATING then
-			set_mapblock_state (x, y, z, MBS_PROTO_CHUNK)
-		end
-	end
-	mb_records[run_hash] = nil
-end
+-- 		if state == MBS_LOCKED then
+-- 			set_mapblock_state (x, y, z, MBS_PROTO_CHUNK)
+-- 		elseif state == MBS_LOCKED_GENERATED then
+-- 			set_mapblock_state (x, y, z, MBS_GENERATED)
+-- 		elseif state == MBS_REGENERATING then
+-- 			set_mapblock_state (x, y, z, MBS_PROTO_CHUNK)
+-- 		end
+-- 	end
+-- 	mb_records[run_hash] = nil
+-- end
 
 local function resume_mapblock_run (run)
-	local run_hash = hashmapblock (run.x, run.y1, run.z)
-	local ymin = mathmax (OVERWORLD_MIN_BLOCK,
-			      run.y1 - REQUIRED_CONTEXT_Y)
-	local ymax = mathmin (OVERWORLD_MAX_BLOCK,
-			      run.y2 + REQUIRED_CONTEXT_Y)
+	switch_to_namespace (run.data_namespace)
+	local run_hash = run_hash (run)
+	local ymin = mathmax (0, run.y1 - REQUIRED_CONTEXT_Y)
+	local ymax = mathmin (run.y2 + REQUIRED_CONTEXT_Y,
+			      current_namespace_height - 1)
 
 	for x, y, z in ipos1 (run.x - REQUIRED_CONTEXT_XZ, ymin,
 			      run.z - REQUIRED_CONTEXT_XZ,
@@ -1074,6 +1133,7 @@ local function resume_mapblock_run (run)
 		set_mapblock_state (x, y, z, MBS_REGENERATING)
 	end
 	mb_records[run_hash] = run
+	switch_to_namespace (nil)
 end
 
 local construct_heightmaps_for_run
@@ -1086,17 +1146,19 @@ local function post_mapblock_run (run)
 	dbg ("Issuing MapBlock run: X: %d, Y: %d - %d, Z: %d", run.x,
 	     run.y1, run.y2, run.z)
 
+	switch_to_namespace (run.namespace)
 	v1.x = (run.x - REQUIRED_CONTEXT_XZ) * 16
 	v1.z = (run.z - REQUIRED_CONTEXT_XZ) * 16
-	v1.y = (run.y1 - REQUIRED_CONTEXT_Y) * 16
+	v1.y = (run.y1 - REQUIRED_CONTEXT_Y) * 16 + current_namespace.y_global
 	v2.x = (run.x + REQUIRED_CONTEXT_XZ) * 16 + 15
 	v2.z = (run.z + REQUIRED_CONTEXT_XZ) * 16 + 15
-	v2.y = (run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15
+	v2.y = (run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15 + current_namespace.y_global
+	v1.y = mathmax (v1.y, current_namespace.y_global)
+	v2.y = mathmin (v2.y, current_namespace.y_global_top)
 
-	local y_min = mathmax (run.y1 - REQUIRED_CONTEXT_Y,
-			       OVERWORLD_MIN_BLOCK)
-	local y_max = mathmin (run.y2 + REQUIRED_CONTEXT_Y,
-			       OVERWORLD_MAX_BLOCK)
+	local ymax = current_namespace_height - 1
+	local y_min = mathmax (run.y1 - REQUIRED_CONTEXT_Y, 0)
+	local y_max = mathmin (run.y2 + REQUIRED_CONTEXT_Y, ymax)
 
 	for x, y, z in ipos2 (run.x - REQUIRED_CONTEXT_XZ, y_min,
 			      run.z - REQUIRED_CONTEXT_XZ,
@@ -1112,13 +1174,6 @@ local function post_mapblock_run (run)
 			dbg (blurb, x, y, z, state)
 			assert (false)
 		end
-
-		-- This condition cannot trigger if
-		-- generation_radius == 1.
-		if not test_block_status (x, y, z) then
-			cancel_mapblock_run (run, y_min, y_max)
-			return
-		end
 	end
 
 	local heightmap, wg_heightmap, structure_masks
@@ -1126,9 +1181,10 @@ local function post_mapblock_run (run)
 	local biomes = biome_data_for_run (run)
 	local structure_features = structure_features_for_run (run)
 	local vm = VoxelManip (v1, v2)
+	local dim_id = current_namespace.dim_id
 
 	core.handle_async (async_function, run_execution_cb, vm, run,
-			   heightmap, wg_heightmap, biomes,
+			   dim_id, heightmap, wg_heightmap, biomes,
 			   structure_masks, structure_features)
 	if vm.close then
 		vm:close ()
@@ -1136,72 +1192,12 @@ local function post_mapblock_run (run)
 
 	-- mb_records will continue to hold `run' until such time as
 	-- it completely processed as a further test of consistency.
-	local run_hash = hashmapblock (run.x, run.y1, run.z)
+	local run_hash = run_hash (run)
 	assert (mb_records[run_hash] == run)
+	switch_to_namespace (nil)
 end
 
 local timer = 0
-
-local function schedule_regeneration_per_player (generation_radius)
-	-- Iterate over mapblocks in a circular pattern from the
-	-- position of each player.  Enroll them in the regeneration
-	-- queue subject to their distance to the nearest player and
-	-- the quantity of generation context available.  Dispatch the
-	-- generation queue.
-
-	-- local clock = core.get_us_time ()
-
-	refresh_player_block_positions ()
-	local p = player_block_positions
-	for i = 1, n_player_block_positions, 3 do
-		local x, y, z = p[i], p[i + 1], p[i + 2]
-
-		mbs_cache_min_x = x - generation_radius - 3
-		mbs_cache_min_y = OVERWORLD_MIN_BLOCK
-		mbs_cache_min_z = z - generation_radius - 3
-		clear_mbs_cache (mbs_cache_width)
-
-		player_x, player_y, player_z = x, y, z
-		attempt_feature_placement (x, z)
-
-		local cnt = 2
-		for i = 1, generation_radius do
-			local xstart = x - i
-			local zstart = z + i
-			local x_start, z_start = xstart, zstart
-
-			-- Clockwise X.
-			for x1 = 0, cnt - 1 do
-				attempt_feature_placement (x_start + x1, z_start)
-			end
-			x_start = x_start + cnt
-
-			-- Clockwise Z.
-			for z1 = 0, cnt - 1 do
-				attempt_feature_placement (x_start, z_start - z1)
-			end
-			z_start = z_start - cnt
-
-			-- Clockwise X.
-			for x1 = 0, cnt - 1 do
-				attempt_feature_placement (x_start - x1, z_start)
-			end
-			x_start = x_start - cnt
-			assert (x_start == xstart)
-
-			-- Clockwise Z.
-			for z1 = 0, cnt - 1 do
-				attempt_feature_placement (x_start, z_start + z1)
-			end
-			z_start = z_start + cnt
-			assert (z_start == zstart)
-
-			cnt = cnt + 2
-		end
-	end
-end
-
-mcl_levelgen.schedule_regeneration_per_player = schedule_regeneration_per_player
 
 local check_supplemental_generation
 
@@ -1212,7 +1208,7 @@ function schedule_regeneration_for_emerge (bx, bx1, by, by1, bz, bz1)
 	-- the one as context and the other by reason of being
 	-- generated.
 	mbs_cache_min_x = bx - REQUIRED_CONTEXT_XZ - 3
-	mbs_cache_min_y = OVERWORLD_MIN_BLOCK
+	mbs_cache_min_y = 0
 	mbs_cache_min_z = bz - REQUIRED_CONTEXT_XZ - 3
 	clear_mbs_cache (mbs_cache_width)
 	for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ - 1,
@@ -1222,16 +1218,14 @@ function schedule_regeneration_for_emerge (bx, bx1, by, by1, bz, bz1)
 				 by,
 				 bz1 + REQUIRED_CONTEXT_XZ + 1) do
 		check_supplemental_generation (bx, bz)
-		if generation_radius == 1 then
-			attempt_feature_placement (bx, bz)
-		end
+		attempt_feature_placement (bx, bz)
 	end
 end
 
 function schedule_regeneration_for_unlock (bx, bz)
 	refresh_player_block_positions ()
 	mbs_cache_min_x = bx - REQUIRED_CONTEXT_XZ - 3
-	mbs_cache_min_y = OVERWORLD_MIN_BLOCK
+	mbs_cache_min_y = 0
 	mbs_cache_min_z = bz - REQUIRED_CONTEXT_XZ - 3
 	clear_mbs_cache (mbs_cache_width)
 	for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ - 1,
@@ -1241,9 +1235,7 @@ function schedule_regeneration_for_unlock (bx, bz)
 				 0,
 				 bz + REQUIRED_CONTEXT_XZ + 1) do
 		check_supplemental_generation (bx, bz)
-		if generation_radius == 1 then
-			attempt_feature_placement (bx, bz)
-		end
+		attempt_feature_placement (bx, bz)
 	end
 end
 
@@ -1253,12 +1245,6 @@ local function schedule_regeneration (dtime)
 		return
 	end
 	timer = 0
-
-	if generation_radius > 1 then
-		schedule_regeneration_per_player (generation_radius)
-	end
-
-	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
 
 	local start_time = core.get_us_time ()
 	repeat
@@ -1278,73 +1264,69 @@ end
 local additional_ctx_requisitions = {}
 
 local function save_feature_placement_queue ()
-	if generation_radius == 1 then
-		-- Cancel every run that is currently in progress by
-		-- returning it to the feature placement queue.
-		for hash, run in pairs (mb_records) do
-			if not feature_placement_queue:contains (run) then
-				-- This run must have existed
-				-- previously.  Assign it its old
-				-- priority.
-				assert (run and run.priority)
-				feature_placement_queue:enqueue (run, run.priority)
-			end
+	-- Cancel every run that is currently in progress by
+	-- returning it to the feature placement queue.
+	for hash, run in pairs (mb_records) do
+		if not feature_placement_queue:contains (run) then
+			-- This run must have existed
+			-- previously.  Assign it its old
+			-- priority.
+			assert (run and run.priority)
+			feature_placement_queue:enqueue (run, run.priority)
 		end
-		mb_records = {}
-
-		local sdata = core.serialize (feature_placement_queue)
-		storage:set_string ("feature_placement_queue", sdata)
-
-		local sdata = core.serialize (additional_ctx_requisitions)
-		storage:set_string ("additional_ctx_requisitions", sdata)
-
-		-- At this point, the state of the level generator has
-		-- been saved to disk and any extant tasks which might
-		-- still complete should be disregarded.
-		shutdown_complete = true
-	else
-		storage:set_string ("feature_placement_queue", "")
 	end
+	mb_records = {}
+
+	local sdata = core.serialize (feature_placement_queue)
+	storage:set_string ("feature_placement_queue", sdata)
+
+	local sdata = core.serialize (additional_ctx_requisitions)
+	storage:set_string ("additional_ctx_requisitions", sdata)
+
+	-- At this point, the state of the level generator has
+	-- been saved to disk and any extant tasks which might
+	-- still complete should be disregarded.
+	shutdown_complete = true
 end
 
 local function restore_feature_placement_queue ()
-	if generation_radius == 1 then
-		local sdata = storage:get_string ("feature_placement_queue")
-		if sdata ~= nil and sdata ~= "" then
-			local queue = core.deserialize (sdata)
-			if queue then
-				setmetatable (queue, mintree_meta)
+	local sdata = storage:get_string ("feature_placement_queue")
+	if sdata ~= nil and sdata ~= "" then
+		local queue = core.deserialize (sdata)
+		if queue then
+			setmetatable (queue, mintree_meta)
 
-				if queue.size > 0 then
-					local blurb = "[mcl_levelgen]: Resuming %d feature placement task(s)"
-					core.log ("action", string.format (blurb, queue.size))
-					feature_placement_queue = queue
+			if queue.size > 0 then
+				local blurb = "[mcl_levelgen]: Resuming %d feature placement task(s)"
+				core.log ("action", string.format (blurb, queue.size))
+				feature_placement_queue = queue
 
-					for i = 1, queue.size do
-						resume_mapblock_run (queue.heap[i])
-					end
+				for i = 1, queue.size do
+					resume_mapblock_run (queue.heap[i])
 				end
 			end
 		end
+	end
 
-		local sdata = storage:get_string ("additional_ctx_requisitions")
-		if sdata ~= nil and sdata ~= "" then
-			local n = 0
-			local additional_ctx_requisitions = core.deserialize (sdata)
-			for k, req in ipairs (additional_ctx_requisitions) do
-				v1.x = (req.x - REQUIRED_CONTEXT_XZ - 1) * 16
-				v1.z = (req.z - REQUIRED_CONTEXT_XZ - 1) * 16
-				v1.y = req.min
-				v2.x = (req.x + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
-				v2.z = (req.z + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
-				v2.y = req.max
-				core.emerge_area (v1, v2)
-				n = n + 1
-			end
-			local blurb = "[mcl_levelgen]: Replayed %d placement run requisitions"
-			if n > 1 then
-				core.log ("action", string.format (blurb, n))
-			end
+	local sdata = storage:get_string ("additional_ctx_requisitions")
+	if sdata ~= nil and sdata ~= "" then
+		local n = 0
+		local additional_ctx_requisitions = core.deserialize (sdata)
+		for k, req in pairs (additional_ctx_requisitions) do
+			switch_to_namespace (req.data_namespace)
+			v1.x = (req.x - REQUIRED_CONTEXT_XZ - 1) * 16
+			v1.z = (req.z - REQUIRED_CONTEXT_XZ - 1) * 16
+			v1.y = req.min + current_namespace.y_global
+			v2.x = (req.x + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
+			v2.z = (req.z + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
+			v2.y = req.max + current_namespace.y_global
+			core.emerge_area (v1, v2)
+			n = n + 1
+			switch_to_namespace (nil)
+		end
+		local blurb = "[mcl_levelgen]: Replayed %d placement run requisitions"
+		if n > 1 then
+			core.log ("action", string.format (blurb, n))
 		end
 	end
 end
@@ -1375,19 +1357,19 @@ function apply_feature_context_requisitions (run, features_requesting_additional
 	dbg ("Supplemental context requested by run: X: %d, Y: %d - %d, Z: %d: %d, %d",
 	     run.x, run.y1, run.y2, run.z, above, below)
 
-	local hash = hashmapblock (run.x, 0, run.z)
+	local hash = hashmapblock (run.x, current_namespace_id, run.z)
 	local existing = additional_ctx_requisitions[hash] or {
 		min = run.y1 * 16,
 		max = run.y2 * 16 + 15,
 		x = run.x,
 		z = run.z,
+		data_namespace = run.data_namespace,
 		features = {},
 	}
 	additional_ctx_requisitions[hash] = existing
-	existing.min = mathmax (mathmin (existing.min, run.y1 * 16 - below),
-				OVERWORLD_MIN)
+	existing.min = mathmax (mathmin (existing.min, run.y1 * 16 - below), 0)
 	existing.max = mathmin (mathmax (existing.max, run.y2 * 16 + 15 + above),
-				OVERWORLD_MAX_BLOCK * 16)
+				current_namespace.y_global_top)
 	for _, feature in ipairs (features_requesting_additional_context) do
 		if table.indexof (existing.features, feature) == -1 then
 			table.insert (existing.features, feature)
@@ -1395,25 +1377,24 @@ function apply_feature_context_requisitions (run, features_requesting_additional
 	end
 	v1.x = (run.x - REQUIRED_CONTEXT_XZ - 1) * 16
 	v1.z = (run.z - REQUIRED_CONTEXT_XZ - 1) * 16
-	v1.y = existing.min
+	v1.y = existing.min + current_namespace.y_global
 	v2.x = (run.x + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
 	v2.z = (run.z + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
-	v2.y = existing.max
+	v2.y = existing.max + current_namespace.y_global
 	dbg ("  -> Emerging %s, %s", v1:to_string (), v2:to_string ())
 	core.emerge_area (v1, v2)
 end
 
 function check_supplemental_generation (bx, bz)
-	local hash = hashmapblock (bx, 0, bz)
+	local hash = hashmapblock (bx, current_namespace_id, bz)
 	local requirements = additional_ctx_requisitions[hash]
 	if requirements then
 		-- Are the requirements met?
 		local y1 = floor (requirements.min / 16)
 		local y2 = ceil (requirements.max / 16)
 
-		local first_locked = mathmax (OVERWORLD_MIN_BLOCK,
-					      y1 - REQUIRED_CONTEXT_Y)
-		local last_locked = mathmin (OVERWORLD_MAX_BLOCK,
+		local first_locked = mathmax (0, y1 - REQUIRED_CONTEXT_Y)
+		local last_locked = mathmin (current_namespace_height - 1,
 					     y2 + REQUIRED_CONTEXT_Y)
 
 		dbg ("Testing supplemental context requisition from %d to %d at %d,%d",
@@ -1479,14 +1460,14 @@ local function load_heightmap (id)
 end
 
 local function mapblock_heightmap (x, z, worldgen)
-	local w1 = mapblock_flagbyte (x, OVERWORLD_MIN_BLOCK, z)
-	local w2 = mapblock_flagbyte (x, OVERWORLD_MIN_BLOCK + 1, z)
-	local w3 = mapblock_flagbyte (x, OVERWORLD_MIN_BLOCK + 2, z)
-	local w4 = mapblock_flagbyte (x, OVERWORLD_MIN_BLOCK + 3, z)
-	local w5 = mapblock_flagbyte (x, OVERWORLD_MIN_BLOCK + 4, z)
-	local w6 = mapblock_flagbyte (x, OVERWORLD_MIN_BLOCK + 5, z)
-	local w7 = mapblock_flagbyte (x, OVERWORLD_MIN_BLOCK + 6, z)
-	local w8 = mapblock_flagbyte (x, OVERWORLD_MIN_BLOCK + 7, z)
+	local w1 = mapblock_flagbyte (x, 0, z)
+	local w2 = mapblock_flagbyte (x, 1, z)
+	local w3 = mapblock_flagbyte (x, 2, z)
+	local w4 = mapblock_flagbyte (x, 3, z)
+	local w5 = mapblock_flagbyte (x, 4, z)
+	local w6 = mapblock_flagbyte (x, 5, z)
+	local w7 = mapblock_flagbyte (x, 6, z)
+	local w8 = mapblock_flagbyte (x, 7, z)
 	-- print ("<- ", band (rshift (w1, 3), 0xf),
 	--        band (rshift (w2, 3), 0xf),
 	--        band (rshift (w3, 3), 0xf),
@@ -1531,28 +1512,28 @@ local function set_mapblock_heightmap (x, z, id)
 	--        rshift (w7, 3),
 	--        rshift (w8, 3))
 
-	i, bit = mapblock_index_1 (x, OVERWORLD_MIN_BLOCK, z)
+	i, bit = mapblock_index_1 (x, 0, z)
 	mask = bnot (lshift (0x78, bit)) -- 0x78 = (0xf << 3)
 	section[i] = bor (band (section[i], mask), lshift (w1, bit))
-	i, bit = mapblock_index_1 (x, OVERWORLD_MIN_BLOCK + 1, z)
+	i, bit = mapblock_index_1 (x, 1, z)
 	mask = bnot (lshift (0x78, bit)) -- 0x78 = (0xf << 3)
 	section[i] = bor (band (section[i], mask), lshift (w2, bit))
-	i, bit = mapblock_index_1 (x, OVERWORLD_MIN_BLOCK + 2, z)
+	i, bit = mapblock_index_1 (x, 2, z)
 	mask = bnot (lshift (0x78, bit)) -- 0x78 = (0xf << 3)
 	section[i] = bor (band (section[i], mask), lshift (w3, bit))
-	i, bit = mapblock_index_1 (x, OVERWORLD_MIN_BLOCK + 3, z)
+	i, bit = mapblock_index_1 (x, 3, z)
 	mask = bnot (lshift (0x78, bit)) -- 0x78 = (0xf << 3)
 	section[i] = bor (band (section[i], mask), lshift (w4, bit))
-	i, bit = mapblock_index_1 (x, OVERWORLD_MIN_BLOCK + 4, z)
+	i, bit = mapblock_index_1 (x, 4, z)
 	mask = bnot (lshift (0x78, bit)) -- 0x78 = (0xf << 3)
 	section[i] = bor (band (section[i], mask), lshift (w5, bit))
-	i, bit = mapblock_index_1 (x, OVERWORLD_MIN_BLOCK + 5, z)
+	i, bit = mapblock_index_1 (x, 5, z)
 	mask = bnot (lshift (0x78, bit)) -- 0x78 = (0xf << 3)
 	section[i] = bor (band (section[i], mask), lshift (w6, bit))
-	i, bit = mapblock_index_1 (x, OVERWORLD_MIN_BLOCK + 6, z)
+	i, bit = mapblock_index_1 (x, 6, z)
 	mask = bnot (lshift (0x78, bit)) -- 0x78 = (0xf << 3)
 	section[i] = bor (band (section[i], mask), lshift (w7, bit))
-	i, bit = mapblock_index_1 (x, OVERWORLD_MIN_BLOCK + 7, z)
+	i, bit = mapblock_index_1 (x, 7, z)
 	mask = bnot (lshift (0x78, bit)) -- 0x78 = (0xf << 3)
 	section[i] = bor (band (section[i], mask), lshift (w8, bit))
 	assert (mapblock_heightmap (x, z) == id)
@@ -1780,8 +1761,6 @@ mcl_levelgen.MOTION_BLOCKING_MODIFIED = MOTION_BLOCKING_MODIFIED
 local AABB_intersect_p = mcl_levelgen.AABB_intersect_p
 local scratch = {}
 
-local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
-
 local function copy_heightmap_segment (run, dst, wg, dx, dz, structure_masks)
 	-- Transform output coordinates.
 	local x = 16 + dx * 16
@@ -1818,11 +1797,12 @@ local function copy_heightmap_segment (run, dst, wg, dx, dz, structure_masks)
 
 	-- Load any structure masks that intersect the run.
 	if structure_masks then
+		local y_min = current_namespace.y_min
 		scratch[1] = run_x
-		scratch[2] = ((run.y1 - REQUIRED_CONTEXT_Y) * 16) + OVERWORLD_OFFSET
+		scratch[2] = ((run.y1 - REQUIRED_CONTEXT_Y) * 16) + y_min
 		scratch[3] = -run_z - 16
 		scratch[4] = run_x + 15
-		scratch[5] = ((run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15) + OVERWORLD_OFFSET
+		scratch[5] = ((run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15) + y_min
 		scratch[6] = -run_z - 1
 
 		for _, mask in ipairs (heightmap.structure_masks) do
@@ -1906,9 +1886,7 @@ local function restore_heightmap_segment (run, src, dx, dz)
 	local idx_src = origin_x * cs + origin_z + 1
 	local dst = heightmap.data
 	local run_min_y = (run.y1 - REQUIRED_CONTEXT_Y) * 16
-		- OVERWORLD_MIN
-	local run_max_y = (run.y2 + REQUIRED_CONTEXT_Y) * 16
-		- OVERWORLD_MIN + 15
+	local run_max_y = (run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15
 
 	for x1 = 0, 15 do
 		for i = 0, 15 do
@@ -1975,30 +1953,29 @@ local get_biome_meta = mcl_levelgen.get_biome_meta
 
 function biome_data_for_run (run, result)
 	local data = {}
+	local y_max = current_namespace_height - 1
 	local x1 = run.x - REQUIRED_CONTEXT_XZ
 	local z1 = run.z - REQUIRED_CONTEXT_XZ
-	local y1 = mathmax (run.y1 - REQUIRED_CONTEXT_Y,
-			    OVERWORLD_MIN_BLOCK)
-	local y2 = mathmin (run.y2 + REQUIRED_CONTEXT_Y,
-			    OVERWORLD_MAX_BLOCK)
+	local y1 = mathmax (run.y1 - REQUIRED_CONTEXT_Y, 0)
+	local y2 = mathmin (run.y2 + REQUIRED_CONTEXT_Y, y_max)
+	local y_bottom = current_namespace.y_bottom
 
-	for x = x1, x1 + 1 + REQUIRED_CONTEXT_XZ do
-		for z = z1, z1 + 1 + REQUIRED_CONTEXT_XZ do
-			for y = y1, y2 do
-				local hash = hashmapblock (x, y, z)
-				data[hash] = get_biome_meta (x, y, z)
-				if not data[hash] then
-					local err
-						= string.format ("Biome metadata for MapBlock %d,%d,%d is unavailable",
-								 x, y, z)
-					core.log ("warning", err)
+	for x, z, y in ipos2 (x1, z1, y1,
+			      x1 + 1 + REQUIRED_CONTEXT_XZ,
+			      z1 + 1 + REQUIRED_CONTEXT_XZ,
+			      y2) do
+		local hash = hashmapblock (x, y, z)
+		data[hash] = get_biome_meta (x, y + y_bottom, z)
+		if not data[hash] then
+			local err
+				= string.format ("Biome metadata for MapBlock %d,%d,%d is unavailable",
+						 x, y, z)
+			core.log ("warning", err)
 
-					local plains
-						= mcl_levelgen.biome_name_to_id_map["TheVoid"]
-					data[hash] = string.char (64)
-						.. string.char (plains)
-				end
-			end
+			local plains
+				= mcl_levelgen.biome_name_to_id_map["TheVoid"]
+			data[hash] = string.char (64)
+				.. string.char (plains)
 		end
 	end
 	return data
@@ -2064,7 +2041,7 @@ local function debug_index_structuremask (heightmap, x, y, z)
 	end
 
 	local level_x = x
-	local level_y = y + mcl_levelgen.OVERWORLD_OFFSET
+	local level_y = y + current_namespace.y_offset
 	local level_z = -z - 1
 
 	for _, mask in ipairs (heightmap.structure_masks) do
@@ -2152,10 +2129,15 @@ local function hud_text (player)
 	local x = floor (self_pos.x / 16)
 	local y = floor (self_pos.y / 16)
 	local z = floor (self_pos.z / 16)
+	local level_pos, dim = mcl_levelgen.conv_pos (self_pos)
 
-	if y < OVERWORLD_MIN_BLOCK or y > OVERWORLD_MAX_BLOCK then
+	if not dim then
 		return "Outside confines of level"
 	end
+
+	local namespace = current_namespace_id
+	switch_to_namespace (dim.data_namespace)
+	y = y - current_namespace.y_bottom
 
 	local tbl = {}
 	for z1 = 12, -11, -1 do
@@ -2164,14 +2146,30 @@ local function hud_text (player)
 		end
 		table.insert (tbl, "\n")
 	end
-	table.insert (tbl, string.format ("You: %d, %d, %d, %s\n", x, y, z,
-					  get_status_string (x, y, z)))
+	table.insert (tbl, string.format ("You: %d, %d, %d, %s (%s / %d, %d, %d)\n", x, y, z,
+					  get_status_string (x, y, z), dim.id,
+					  level_pos.x, level_pos.y, level_pos.z))
+	local biomestr
+	do
+		local biome = mcl_levelgen.get_biome (self_pos)
+		local biome_sampled = mcl_levelgen.get_biome (self_pos, true, true)
+		if biome then
+			biomestr = biome .. " / " .. biome_sampled .. "\n"
+		else
+			biomestr = "No biome / " .. biome_sampled .. "\n"
+		end
+	end
+	table.insert (tbl, biomestr)
+	table.insert (tbl, dim.preset:biome_debug_string (level_pos.x,
+							  level_pos.y,
+							  level_pos.z) .. "\n")
 	table.insert (tbl, string.format ("Heightmap: %s\n",
 					  get_heightmap_string (x, z, self_pos, false)))
 	table.insert (tbl, string.format ("Heightmap (Generation time): %s\n",
 					  get_heightmap_string (x, z, self_pos, true)))
 	table.insert (tbl, string.format ("Intersecting structures: %s",
 					  get_structure_string (self_pos)))
+	switch_to_namespace (namespace)
 	return table.concat (tbl)
 end
 
@@ -2265,10 +2263,14 @@ function run_structure_notifications ()
 	run_notification_handlers (notifications)
 end
 
--- TODO: generalize to multiple dimensions.
-local OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
 function mcl_levelgen.level_to_minetest_position (x, y, z)
-	return x, y - OVERWORLD_OFFSET, -z - 1
+	if current_namespace then
+		return x, y - current_namespace.y_offset, -z - 1
+	else
+		-- Don't convert Y positions if no dimension currently
+		-- exists; this is exercised by structure blocks.
+		return x, y, -z - 1
+	end
 end
 
 ------------------------------------------------------------------------

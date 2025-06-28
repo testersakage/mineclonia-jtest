@@ -63,24 +63,6 @@ mcl_superflat_classic (Classic superflat map generation) bool false
 
 mcl_difficulty (Difficulty) enum normal peaceful,easy,normal,hard
 
-# A radius around connected players in MapBlocks within which
-# MapBlocks will be scheduled for feature placement.
-#
-# If 1, MapBlocks will be scheduled for feature placement as they are
-# generated, and the level generator will pause and resume outstanding
-# feature placement tasks upon server termination and restarts.
-#
-# This yields a better experience for players, but is liable to incur
-# additional processing power requirements and leave undecorated
-# chunks extant if the reliability of the server's mod storage is not
-# guaranteed or if the server is not terminated cleanly.
-#
-# Caution: it is not prudent to alter this setting from a value other
-# than 1 to 1 in a world that has already been generated.
-#
-# Default: 1
-mcl_feature_placement_radius (Level feature placement radius) int 1
-
 [Players]
 # If enabled, players respawn at the bed they clicked instead of normal spawn.
 # This setting is only read at startup.

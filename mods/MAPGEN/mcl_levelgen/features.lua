@@ -405,10 +405,10 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 	run = p_run
 	run_minp.x = run.x * 16
 	run_minp.z = -(run.z * 16 + 16)
-	run_minp.y = run.y1 * 16 + p_y_offset
+	run_minp.y = run.y1 * 16 + p_level_min
 	run_maxp.x = run_minp.x + 15
 	run_maxp.z = run_minp.z + 15
-	run_maxp.y = run.y2 * 16 + p_y_offset + 15
+	run_maxp.y = run.y2 * 16 + p_level_min + 15
 	vm = p_vm
 	heightmap = p_heightmap
 	wg_heightmap = p_wg_heightmap
@@ -424,9 +424,9 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 	gen_notifies = {}
 	structure_features = p_structure_features
 
-	run_min_y = mathmax ((run.y1 - REQUIRED_CONTEXT_Y) * 16 + p_y_offset,
+	run_min_y = mathmax ((run.y1 - REQUIRED_CONTEXT_Y) * 16 + p_level_min,
 			     p_level_min)
-	run_max_y = mathmin ((run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15 + p_y_offset,
+	run_max_y = mathmin ((run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15 + p_level_min,
 			     p_level_min + p_level_height - 1)
 	run_min_x = (run.x - REQUIRED_CONTEXT_XZ) * 16
 	run_max_x = (run.x + REQUIRED_CONTEXT_XZ) * 16 + 15
@@ -613,7 +613,7 @@ function mcl_levelgen.index_biome (x, y, z)
 	local run_origin = (run.z - REQUIRED_CONTEXT_XZ) * 16
 	qz = toquart (run_origin) + HORIZONTAL_QUARTS_PER_RUN - dz - 1
 	qy = mathmax (qy, toquart (level_min))
-	qy = qy - toquart (y_offset)
+	qy = qy - toquart (level_min)
 
 	local bx, by, bz = arshift (qx, 2), arshift (qy, 2), arshift (qz, 2)
 	local hash = hashmapblock (bx, by, bz)
@@ -759,17 +759,17 @@ end
 local ipos3 = mcl_levelgen.ipos3
 local cid_glass_magenta = core.get_content_id ("mcl_core:glass_magenta")
 
-function mcl_levelgen.test_structuremask ()
-	for x, y, z in ipos3 (run_min_x, run_min_y, run_min_z,
-			      run_max_x, run_max_y, run_max_z) do
-		if conflicting_structure_mask (x, y, z) then
-			local idx = index (x, y, z)
-			cids[idx] = cid_glass_magenta
-			param2s[idx] = 0
-			vm_modified = true
-		end
-	end
-end
+-- function mcl_levelgen.test_structuremask ()
+-- 	for x, y, z in ipos3 (run_min_x, run_min_y, run_min_z,
+-- 			      run_max_x, run_max_y, run_max_z) do
+-- 		if conflicting_structure_mask (x, y, z) then
+-- 			local idx = index (x, y, z)
+-- 			cids[idx] = cid_glass_magenta
+-- 			param2s[idx] = 0
+-- 			vm_modified = true
+-- 		end
+-- 	end
+-- end
 
 local function update_relight_rgn (aabb)
 	local new_relight_rgn = relight_rgn:union (aabb)
