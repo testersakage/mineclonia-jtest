@@ -1536,6 +1536,12 @@ function mcl_levelgen.create_entity (x_block, y_block, z_block, name, staticdata
 	})
 end
 
+function mcl_levelgen.set_loot_table (x_block, y_block, z_block, rng, name)
+	notify_generated ("mcl_levelgen:set_loot_table_1", x_block, y_block, z_block, {
+		x_block, y_block, z_block, name, mathabs (rng:next_integer ()),
+	})
+end
+
 function mcl_levelgen.flush_structure_gen_data ()
 	local notifies, pieces = gen_notifies, placed_pieces
 	gen_notifies = {}
