@@ -2,9 +2,8 @@ local prefix = "."
 
 local function init_chunksize ()
 	if not core.get_mapgen_chunksize then
-		local cs = core.get_mapgen_setting ("chunksize")
-		core.ipc_set ("mcl_levelgen:mt_chunksize",
-			      vector.new (cs, cs, cs))
+		local cs = tonumber (core.get_mapgen_setting ("chunksize")) or 5
+		core.ipc_set ("mcl_levelgen:mt_chunksize", vector.new (cs, cs, cs))
 	else
 		local cs = core.get_mapgen_chunksize ()
 		if cs.x ~= cs.z then
@@ -23,7 +22,7 @@ local function init_chunksize ()
 		local ceil = math.ceil
 		local v = vector.new (-ceil (cs.x / 2), DESIRED_Y_BASE,
 				      -ceil (cs.z / 2))
-		core.set_mapgen_setting ("chunk_origin", v:to_string ())
+		core.set_mapgen_setting ("chunk_origin", v:to_string (), true)
 		core.ipc_set ("mcl_levelgen:mt_chunksize", cs)
 	end
 end
@@ -42,6 +41,8 @@ mcl_levelgen = { prefix = prefix, }
 mcl_levelgen.md5 = dofile (prefix .. "/md5.lua")
 mcl_levelgen.sha = dofile (prefix .. "/sha2.lua")
 mcl_levelgen.lighting_disabled = false
+
+mcl_levelgen.mt_chunksize = core.ipc_get ("mcl_levelgen:mt_chunksize")
 
 dofile (prefix .. "/util.lua")
 dofile (prefix .. "/random.lua")

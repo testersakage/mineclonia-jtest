@@ -43,10 +43,6 @@ end
 mcl_levelgen.biome_seed = mcl_levelgen.get_biome_seed (seed)
 mcl_levelgen.levelgen_enabled = true
 
--- Create level presets now.
-local seed = mcl_levelgen.seed
-mcl_levelgen.overworld_preset = mcl_levelgen.make_overworld_preset (seed)
-
 -- Load existing biome ID assignments.
 local assignments = {}
 local mod_storage
@@ -64,6 +60,13 @@ end
 
 -- Assign IDs to new biomes if any.
 mcl_levelgen.assign_biome_ids (assignments)
+
+-- Register default dimensions.
+dofile (mcl_levelgen.prefix .. "/dimensions.lua")
+
+-- Create level presets now.
+local seed = mcl_levelgen.seed
+mcl_levelgen.initialize_dimensions (seed)
 
 if not core.get_mod_storage and not core.save_gen_notify then
 	-- Async environment.
