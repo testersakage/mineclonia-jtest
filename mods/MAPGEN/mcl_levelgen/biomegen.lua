@@ -201,41 +201,36 @@ local arshift = bit.arshift
 local floor = math.floor
 local mod_storage = core.get_mod_storage ()
 local v = vector.zero ()
-local conv_pos
-local OVERWORLD_OFFSET, seed
+local conv_pos, seed
 local munge_biome_coords = mcl_levelgen.munge_biome_coords
 
 core.register_on_mods_loaded (function ()
-	OVERWORLD_OFFSET = mcl_levelgen.OVERWORLD_OFFSET
 	seed = mcl_levelgen.biome_seed
 	conv_pos = mcl_levelgen.conv_pos
-	assert (OVERWORLD_OFFSET)
 	assert (seed)
 	assert (conv_pos)
 end)
 
-local overworld_preset = nil
-
-local function sample_biome (qx, qy, qz) -- TODO: multiple levels.
-	if not overworld_preset then
-		overworld_preset = mcl_levelgen.overworld_preset
-	end
-	return overworld_preset:index_biomes (qx, qy, qz)
+local function sample_biome (dim, qx, qy, qz)
+	return dim.preset:index_biomes (qx, qy, qz)
 end
 
 function mcl_levelgen.get_biome (pos, allow_sample, always_sample)
 	v.x = floor (pos.x + 0.5)
 	v.y = floor (pos.y + 0.5)
 	v.z = floor (pos.z + 0.5)
-	local mc_pos = conv_pos (v)
+	local mc_pos, dim = conv_pos (v)
+	if not mc_pos then
+		return "TheVoid"
+	end
 	local qx, qy, qz = munge_biome_coords (seed, mc_pos.x,
 					       mc_pos.y,
 					       mc_pos.z)
 	if always_sample then
-		return sample_biome (qx, qy, qz)
+		return sample_biome (dim, qx, qy, qz)
 	end
 	qz = -qz - 1
-	qy = qy - OVERWORLD_OFFSET / 4
+	qy = qy - dim.y_offset / 4
 
 	local bx = arshift (qx, 2)
 	local by = arshift (qy, 2)
@@ -267,7 +262,7 @@ function mcl_levelgen.get_biome (pos, allow_sample, always_sample)
 			-- The caller absolutely requires a biome, so
 			-- sample.
 			if allow_sample then
-				return sample_biome (qx, qy, -qz - 1)
+				return sample_biome (dim, qx, qy, -qz - 1)
 			end
 			return nil
 		end
