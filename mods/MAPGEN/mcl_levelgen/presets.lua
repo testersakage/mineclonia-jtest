@@ -63,6 +63,12 @@ local level_preset_template = {
 	-- Standard random number generator factory.
 	----------------------------------------------------------------
 	factory = nil,
+
+	----------------------------------------------------------------
+	-- Feature configuration; initialized in features.lua.
+	----------------------------------------------------------------
+	feature_indices = {},
+	features = {},
 }
 
 -- NormalNoise parameters...
@@ -1545,10 +1551,6 @@ local function post_process (final_density)
 	return squeeze (mul (interpolated (final_density), const (0.64)))
 end
 
-------------------------------------------------------------------------
--- Overworld presets.
-------------------------------------------------------------------------
-
 local lshift = bit.lshift
 local function toblock (x)
 	return lshift (x, 2)
@@ -1558,15 +1560,14 @@ local toquart = mcl_levelgen.toquart
 local index_biome_lut = mcl_levelgen.index_biome_lut
 local index_biome_lut_naively = mcl_levelgen.index_biome_lut_naively
 
-local construct_overworld_lut = mcl_levelgen.construct_overworld_lut
 local quantize = mcl_levelgen.quantize
 
 local huge = math.huge
 
-local function initialize_overworld_biomes (preset, large_biomes,
-					    amplified)
+local function initialize_noise_biomes (preset, large_biomes, amplified, get_lut,
+					is_nether)
 	local nodes
-	preset.biome_lut, nodes = construct_overworld_lut ()
+	preset.biome_lut, nodes = get_lut ()
 
 	-- Strip caching or interpolating wrappers from density
 	-- functions.
@@ -1626,8 +1627,8 @@ local function initialize_overworld_biomes (preset, large_biomes,
 		if dfunc.is_marker then
 			if dfunc.name == "flat_cache" then
 				local flat_cache = table.merge (biome_flat_cache, {
-					input = dfunc.input,
-					offset = n_indices + 1,
+									input = dfunc.input,
+									offset = n_indices + 1,
 				})
 				n_indices = n_indices + 1
 				flat_cache = make_density_function (flat_cache)
@@ -1649,14 +1650,22 @@ local function initialize_overworld_biomes (preset, large_biomes,
 					       temp_noise)
 	preset.vegetation = shifted_noise_2d (shift_x, shift_z, 0.25,
 					      vegetation_noise)
-	preset.continents = large_biomes and registry.continents_large
-		or registry.continents
-	preset.erosion = large_biomes and registry.erosion_large
-		or registry.erosion
-	preset.depth = large_biomes and registry.depth_large
-		or (amplified and registry.depth_amplified
-		    or registry.depth)
-	preset.ridges = registry.ridges
+
+	if is_nether then
+		preset.continents = registry.zero
+		preset.erosion = registry.zero
+		preset.depth = registry.zero
+		preset.ridges = registry.zero
+	else
+		preset.continents = large_biomes and registry.continents_large
+			or registry.continents
+		preset.erosion = large_biomes and registry.erosion_large
+			or registry.erosion
+		preset.depth = large_biomes and registry.depth_large
+			or (amplified and registry.depth_amplified
+			    or registry.depth)
+		preset.ridges = registry.ridges
+	end
 
 	local wrap_petrify_multiple = mcl_levelgen.wrap_petrify_multiple
 	local temperature_cached,
@@ -1779,6 +1788,10 @@ local function initialize_overworld_biomes (preset, large_biomes,
 		return all_biomes
 	end
 end
+
+------------------------------------------------------------------------
+-- Overworld presets.
+------------------------------------------------------------------------
 
 local SURFACE_DENSITY = 1.5625
 
@@ -1932,13 +1945,79 @@ local function initialize_overworld_surface_rules (preset)
 	end
 end
 
+local construct_overworld_lut = mcl_levelgen.construct_overworld_lut
+
 function mcl_levelgen.make_overworld_preset (seed)
 	local preset = copy_preset (overworld_preset_template)
 	initialize_random (preset, seed)
 	initialize_noises (preset)
 	initialize_density_functions (preset)
-	initialize_overworld_biomes (preset, false, false)
+	initialize_noise_biomes (preset, false, false,
+				 construct_overworld_lut, false)
 	initialize_overworld_generation (preset)
 	initialize_overworld_surface_rules (preset)
+	return preset
+end
+
+------------------------------------------------------------------------
+-- Nether presets.
+------------------------------------------------------------------------
+
+local construct_nether_lut = mcl_levelgen.construct_nether_lut
+
+local function initialize_nether_generation (preset)
+	local registry = preset.registry
+	preset.barrier_noise = registry.zero
+	preset.fluid_level_floodedness_noise = registry.zero
+	preset.fluid_level_spread_noise = registry.zero
+	preset.lava_noise = registry.zero
+	preset.initial_density_without_jaggedness = registry.zero
+	preset.vein_toggle = registry.zero
+	preset.vein_ridged = registry.zero
+	preset.vein_gap = registry.zero
+
+	local nether_noise
+		= taper_off_at_extrema (registry.base_3d_noise_nether,
+					0, 128, 24, 0, 0.9375, -8, 24, 2.5)
+	preset.final_density = post_process (nether_noise)
+end
+
+local function initialize_nether_surface_rules (preset)
+	preset.create_surface_rules = function (self)
+		return mcl_levelgen.nether_surface_rule (self)
+	end
+end
+
+-- Nether preset functions.
+
+local nether_preset_template = table.merge (level_preset_template, {
+	min_y = 0,
+	height = 128,
+	sea_level = 32,
+	noise_size_horizontal = 1,
+	noise_size_vertical = 2,
+	noise_cell_width = toblock (1),
+	noise_cell_height = toblock (2),
+	aquifers_enabled = false,
+	ore_veins_enabled = false,
+	use_legacy_random_source = true,
+	default_block = "mcl_nether:netherrack",
+	default_fluid = "mcl_nether:nether_lava_source",
+})
+
+nether_preset_template.index_biomes_block
+	= overworld_preset_template.index_biomes_block
+
+local construct_nether_lut = mcl_levelgen.construct_nether_lut
+
+function mcl_levelgen.make_nether_preset (seed)
+	local preset = copy_preset (nether_preset_template)
+	initialize_random (preset, seed)
+	initialize_noises (preset)
+	initialize_density_functions (preset)
+	initialize_noise_biomes (preset, false, false,
+				 construct_nether_lut, true)
+	initialize_nether_generation (preset)
+	initialize_nether_surface_rules (preset)
 	return preset
 end

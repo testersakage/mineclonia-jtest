@@ -587,6 +587,7 @@ local function apply_vertical_placement (self, rng, terrain, height, placement, 
 					 create_air_pocket)
 	local preset = terrain.preset
 	local min_y = preset.min_y
+	local max_y = min_y + preset.height - 1
 	local min = min_y + 15
 	local base_y
 
@@ -628,7 +629,7 @@ local function apply_vertical_placement (self, rng, terrain, height, placement, 
 		predicate = is_walkable
 	end
 
-	for y = base_y, min + 1, -1 do
+	for y = mathmin (base_y, max_y), min + 1, -1 do
 		local idx = y - min_y + 1
 		local cid1, param11 = decode_node (col1[idx])
 		local cid2, param12 = decode_node (col2[idx])

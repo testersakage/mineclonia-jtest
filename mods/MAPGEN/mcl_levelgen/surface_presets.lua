@@ -30,6 +30,10 @@ local function if_true (cond, value)
 	return mcl_levelgen.condition_rule (cond, value)
 end
 
+local function not_cond (cond)
+	return mcl_levelgen.not_cond (cond)
+end
+
 local function if_false (cond, value)
 	local cond1 = mcl_levelgen.not_cond (cond)
 	return mcl_levelgen.condition_rule (cond1, value)
@@ -382,6 +386,123 @@ end
 ------------------------------------------------------------------------
 -- Nether surface system presets.
 ------------------------------------------------------------------------
+
+function mcl_levelgen.nether_surface_rule (preset)
+	local function getcid (name)
+		if core then
+			local id = core.get_content_id (name)
+			return id
+		else
+			return name
+		end
+	end
+
+	local function noise (name, min, max)
+		return mcl_levelgen.noise_threshold_cond (preset.noises[name],
+							  min, max or math.huge)
+	end
+
+	local cid_gravel = getcid ("mcl_core:gravel")
+	local cid_netherrack = getcid ("mcl_nether:netherrack")
+	local cid_basalt = getcid ("mcl_blackstone:basalt")
+	local cid_blackstone = getcid ("mcl_blackstone:blackstone")
+	local cid_soul_sand = getcid ("mcl_nether:soul_sand")
+	local cid_soul_soil = getcid ("mcl_blackstone:soul_soil")
+	local cid_warped_wart_block = getcid ("mcl_crimson:warped_wart_block")
+	local cid_nether_wart_block = getcid ("mcl_nether:nether_wart_block")
+	local cid_warped_nylium = getcid ("mcl_crimson:warped_nylium")
+	local cid_crimson_nylium = getcid ("mcl_crimson:crimson_nylium")
+	local cid_bedrock = getcid ("mcl_core:bedrock")
+
+	local gravel = block (cid_gravel, 0)
+	local netherrack = block (cid_netherrack, 0)
+	local basalt = block (cid_basalt, 0)
+	local blackstone = block (cid_blackstone, 0)
+	local soul_sand = block (cid_soul_sand, 0)
+	local soul_soil = block (cid_soul_soil, 0)
+	local warped_wart_block = block (cid_warped_wart_block, 0)
+	local nether_wart_block = block (cid_nether_wart_block, 0)
+	local warped_nylium = block (cid_warped_nylium, 0)
+	local crimson_nylium = block (cid_crimson_nylium, 0)
+	local bedrock = block (cid_bedrock, 0)
+
+	local level_max = preset.min_y + preset.height - 1
+	local level_min = preset.min_y
+	local at_lava = y_above_test (31, 0)
+	local above_lava = y_above_test (32, 0)
+	local not_submerged = y_surface_test (30, 0)
+	local near_lava = not_cond (y_surface_test (35, 0))
+	local in_bedrock_gradient = y_above_test (level_max - 5, 0)
+	local hole = mcl_levelgen.hole_cond ()
+	local netherrack_cond = noise ("netherrack", 0.54)
+	local nether_wart = noise ("nether_wart", 1.17)
+	local nether_state_selector
+		= noise ("nether_state_selector", 0.0)
+	local gravel_patch_near_lava
+		= if_true (noise ("patch", -0.012),
+			   if_true (not_submerged,
+				    if_true (near_lava, gravel)))
+	local basalt_deltas
+	-- Basalt within surface_depth of a ceiling surface, and
+	-- either basalt or blackstone otherwise.
+		= sequence (if_true (UNDER_CEILING, basalt),
+			    if_true (UNDER_FLOOR,
+				     sequence (gravel_patch_near_lava,
+					       if_true (nether_state_selector,
+							basalt),
+					       blackstone)))
+	local select_soul_sand_or_soil
+		= sequence (if_true (nether_state_selector, soul_sand),
+			    soul_soil)
+	local soul_sand_valley
+		= sequence (if_true (UNDER_CEILING, select_soul_sand_or_soil),
+			    if_true (UNDER_FLOOR,
+				     sequence (gravel_patch_near_lava,
+					       select_soul_sand_or_soil)))
+	local warped_nylium_or_wart_1
+		= if_true (at_lava, sequence (if_true (nether_wart, warped_wart_block),
+					      warped_nylium))
+	local warped_nylium_or_wart
+		= if_false (netherrack_cond, warped_nylium_or_wart_1)
+	local crimson_nylium_or_wart_1
+		= if_true (at_lava, sequence (if_true (nether_wart, nether_wart_block),
+					      crimson_nylium))
+	local crimson_nylium_or_wart
+		= if_false (netherrack_cond, crimson_nylium_or_wart_1)
+	local soul_sand_or_erosion
+		= if_true (noise ("soul_sand_layer", -0.012),
+			   sequence (if_false (hole,
+					       if_true (not_submerged,
+							if_true (near_lava,
+								 soul_sand))),
+				     netherrack))
+	local gravel_patch_not_hole
+		= if_true (at_lava,
+			   if_true (near_lava,
+				    if_true (noise ("gravel_layer", -0.012),
+					     sequence (if_true (above_lava, gravel),
+						       if_false (hole, gravel)))))
+
+	return mcl_levelgen.sequence_rule ({
+		if_true (vertical_gradient (preset, "minecraft:bedrock_floor",
+					    level_min, level_min + 5),
+			 bedrock),
+		if_false (vertical_gradient (preset, "minecraft:bedrock_roof",
+					     level_max - 5, level_max),
+			  bedrock),
+		if_true (in_bedrock_gradient, netherrack),
+		if_true (biome ("BasaltDeltas"), basalt_deltas),
+		if_true (biome ("SoulSandValley"), soul_sand_valley),
+		if_true (ON_FLOOR, sequence (if_true (biome ("WarpedForest"),
+						      warped_nylium_or_wart),
+					     if_true (biome ("CrimsonForest"),
+						      crimson_nylium_or_wart))),
+		if_true (biome ("NetherWastes"),
+			 sequence (if_true (UNDER_FLOOR, soul_sand_or_erosion),
+				   if_true (ON_FLOOR, gravel_patch_not_hole))),
+		netherrack,
+	})
+end
 
 ------------------------------------------------------------------------
 -- End surface system presets.
