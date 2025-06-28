@@ -81,7 +81,10 @@ function mcl_levelgen.encode_biomes (biomes, y0, yh, w, h, hash_for_testing)
 	local qw = w * N
 	local qh = h * N
 	local max_index = index (qw, qh, qw, qw, qh, qw)
-	assert (#biomes == max_index)
+	-- This assertion is no longer applicable as the biome list
+	-- may grow after a vertically larger dimension has been
+	-- generated.
+	-- assert (#biomes == max_index)
 	local x_stride = (qw + 2) * (qh + 2)
 	local y_stride = (qw + 2)
 	local compressed = {}
