@@ -1997,7 +1997,7 @@ local huds = {}
 
 local function get_status_string (bx, by, bz)
 	v.x = bx * 16
-	v.y = by * 16
+	v.y = by * 16 + current_namespace.y_global
 	v.z = bz * 16
 	local state = mapblock_state (bx, by, bz)
 	if core.compare_block_status (v, "loaded") then
