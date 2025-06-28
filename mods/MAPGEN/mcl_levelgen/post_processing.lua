@@ -1316,10 +1316,14 @@ local function restore_feature_placement_queue ()
 			switch_to_namespace (req.data_namespace)
 			v1.x = (req.x - REQUIRED_CONTEXT_XZ - 1) * 16
 			v1.z = (req.z - REQUIRED_CONTEXT_XZ - 1) * 16
-			v1.y = req.min + current_namespace.y_global
+			v1.y = band (req.min, -16)
+				+ current_namespace.y_global
+				- REQUIRED_CONTEXT_Y * 16
 			v2.x = (req.x + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
 			v2.z = (req.z + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
-			v2.y = req.max + current_namespace.y_global
+			v2.y = band (req.max + 15, -16)
+				+ current_namespace.y_global
+				+ REQUIRED_CONTEXT_Y * 16 + 15
 			core.emerge_area (v1, v2)
 			n = n + 1
 			switch_to_namespace (nil)
@@ -1377,10 +1381,14 @@ function apply_feature_context_requisitions (run, features_requesting_additional
 	end
 	v1.x = (run.x - REQUIRED_CONTEXT_XZ - 1) * 16
 	v1.z = (run.z - REQUIRED_CONTEXT_XZ - 1) * 16
-	v1.y = existing.min + current_namespace.y_global
+	v1.y = band (existing.min, -16)
+		+ current_namespace.y_global
+		- REQUIRED_CONTEXT_Y * 16
 	v2.x = (run.x + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
 	v2.z = (run.z + REQUIRED_CONTEXT_XZ + 1) * 16 + 15
-	v2.y = existing.max + current_namespace.y_global
+	v2.y = band (existing.max + 15, -16)
+		+ current_namespace.y_global
+		+ REQUIRED_CONTEXT_Y * 16 + 15
 	dbg ("  -> Emerging %s, %s", v1:to_string (), v2:to_string ())
 	core.emerge_area (v1, v2)
 end
