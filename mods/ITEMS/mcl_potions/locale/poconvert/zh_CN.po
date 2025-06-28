@@ -343,8 +343,8 @@ msgstr "无效果"
 msgid "A throwable potion that will shatter on impact, where it creates a magic cloud that lingers around for a while. Any player or mob inside the cloud will receive the potion's effect or set of effects, possibly repeatedly."
 msgstr "一种可投掷的药水，撞击时会破碎，随后产生一团魔法云雾，该云雾会萦绕留存一段时间。任何处于云雾中的玩家或生物都将受到药水的效果影响，而且可能会多次受到影响。"
 
-msgid "Use the “Punch” key to throw it."
-msgstr "使用“攻击”键来投掷它。"
+msgid "Use the “Place” key to throw it."
+msgstr ""
 
 msgid "Use the “Place” key to drink it."
 msgstr "使用“放置”键来饮用它。"

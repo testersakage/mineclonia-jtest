@@ -1,7 +1,7 @@
 # textdomain: mcl_player
 Graphics=Графика
 HUD=Интерфейс
-Inventory=
+Inventory=Инвентарь
 Misc=Разное
 Adapt UI for a better experience on touchscreen devices=Адаптировать интерфейс для лучшего взаимодействия на устройствах с сенсорным экраном
 May enlarge elements, add additional space, and change elements, e.g. add buttons to replace the missing enter key.@nNote that currently this is only implemented for a very limited number of formspecs.=Может увеличить элементы, добавить дополнительное пространство и изменить элементы, например, добавить кнопки вместо отсутствующей клавиши ввода.@nНо в настоящее время это реализовано только для очень ограниченного числа форм.

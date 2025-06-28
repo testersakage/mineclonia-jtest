@@ -1,13 +1,13 @@
 # textdomain: mcl_tt
 Unlimited uses=
-Painfully slow=Dolorosamente lento
+Painfully slow=Lentissimo
 Very slow=Molto lento
 Slow=Lento
-Fast=
-Very fast=
-Extremely fast=
-Instantaneous=
-Mining speed: @1=
+Fast=Veloce
+Very fast=Molto veloce
+Extremely fast=Velocissimo
+Instantaneous=Instantaneo
+Mining speed: @1=Velocità di scavo: @1
 Block breaking strength: @1=
 Damage: @1=
 Full punch interval: @1s=

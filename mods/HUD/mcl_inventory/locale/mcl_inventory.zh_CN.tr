@@ -1,8 +1,8 @@
 # textdomain: mcl_inventory
-Auto (use scroll bar if client version >@= 5.11)=
-Off (use paging buttons, much better performance on client < 5.11)=
-On (more MC like experience, may be sluggish on client < 5.11)=
-Enable scroll bar on creative inventory=
+Auto (use scroll bar if client >@= 5.11)=
+Off  (use paging buttons, faster)=
+On   (more MC like, slower)=
+Enable scrollable creative inventory=
 Building Blocks=建筑块
 Decoration Blocks=美化块
 Redstone=红石
@@ -19,6 +19,7 @@ Survival Inventory=生存物品栏
 Not in Creative Inventory=不在创造模式物品栏中
 Switch stack size=切换堆叠数量
 @1 / @2=@1 / @2
+Very large inventory displays may be slow when scrolling, especially on Luanti versions before 5.11.@nTherefore the creative inventory display can be split into pages with prev/next page buttons.@nMineclonia defaults to use scrolling unless an older Luanti version is detected.@nThis setting allows you to override that heuristic.=
 Recipe book=配方书
 Help=帮助
 Advancements=进度

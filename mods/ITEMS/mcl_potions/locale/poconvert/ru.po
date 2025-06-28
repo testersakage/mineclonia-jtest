@@ -343,8 +343,8 @@ msgstr "без эффекта"
 msgid "A throwable potion that will shatter on impact, where it creates a magic cloud that lingers around for a while. Any player or mob inside the cloud will receive the potion's effect or set of effects, possibly repeatedly."
 msgstr "Зелье, которое можно метать. Оно разбивается при ударе, образуя магическое облако, которое оседает на земле некоторое время. Любой игрок или моб внутри облака получит эффект или набор эффектов зелья, и возможно, неоднократно."
 
-msgid "Use the “Punch” key to throw it."
-msgstr "Нажмите [Ударить], чтобы бросить."
+msgid "Use the “Place” key to throw it."
+msgstr ""
 
 msgid "Use the “Place” key to drink it."
 msgstr "Нажмите [Использовать], чтобы выпить."
