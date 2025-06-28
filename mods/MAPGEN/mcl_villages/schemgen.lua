@@ -1240,7 +1240,7 @@ if mcl_levelgen.levelgen_enabled then
 	rng = rng:fork_positional ():create_reseedable ()
 end
 
-local function handle_villager_1 (data)
+local function handle_villager (_, data)
 	local bed, bell, poi = data.bed, data.bell, data.poi
 	v0.x, v0.y, v0.z
 		= level_to_minetest_position (bed[1], bed[2], bed[3])
@@ -1294,12 +1294,6 @@ local function handle_villager_1 (data)
 			param2 = 0,
 		})
 	end
-end
-
-local function handle_villager (_, data)
-	-- It is not safe to access node metadata within an
-	-- on_generated callback.
-	core.after (0, handle_villager_1, data)
 end
 
 mcl_levelgen.register_notification_handler ("mcl_villages:villager", handle_villager)
