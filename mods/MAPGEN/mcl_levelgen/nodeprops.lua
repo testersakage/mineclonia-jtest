@@ -212,6 +212,8 @@ local cid_water_source
 local cid_water_flowing
 local cid_lava_source
 local cid_lava_flowing
+local cid_nether_lava_source
+local cid_nether_lava_flowing
 local cid_grass_block
 local cid_sugar_cane
 local cid_cactus
@@ -221,6 +223,12 @@ local cid_mycelium
 local cid_podzol
 local cid_crimson_nylium
 local cid_warped_nylium
+local cid_soul_soil
+local cid_warped_roots
+local cid_crimson_roots
+local cid_warped_fungus
+local cid_crimson_fungus
+local cid_nether_sprouts
 
 local is_cid_sapling = {}
 local is_cid_dirt = {}
@@ -261,6 +269,10 @@ local function initialize_nodeprops ()
 	cid_water_flowing = core.get_content_id ("mcl_core:water_flowing")
 	cid_lava_source = core.get_content_id ("mcl_core:lava_source")
 	cid_lava_flowing = core.get_content_id ("mcl_core:lava_flowing")
+	cid_nether_lava_source
+		= core.get_content_id ("mcl_nether:nether_lava_source")
+	cid_nether_lava_flowing
+		= core.get_content_id ("mcl_nether:nether_lava_flowing")
 	cid_grass_block = core.get_content_id ("mcl_core:dirt_with_grass")
 	cid_sugar_cane = core.get_content_id ("mcl_core:reeds")
 	cid_cactus = core.get_content_id ("mcl_core:cactus")
@@ -270,6 +282,12 @@ local function initialize_nodeprops ()
 	cid_podzol = core.get_content_id ("mcl_core:podzol")
 	cid_crimson_nylium = core.get_content_id ("mcl_crimson:crimson_nylium")
 	cid_warped_nylium = core.get_content_id ("mcl_crimson:warped_nylium")
+	cid_soul_soil = core.get_content_id ("mcl_blackstone:soul_soil")
+	cid_crimson_roots = core.get_content_id ("mcl_crimson:crimson_roots")
+	cid_warped_roots = core.get_content_id ("mcl_crimson:warped_roots")
+	cid_crimson_fungus = core.get_content_id ("mcl_crimson:crimson_fungus")
+	cid_warped_fungus = core.get_content_id ("mcl_crimson:warped_fungus")
+	cid_nether_sprouts = core.get_content_id ("mcl_crimson:nether_sprouts")
 
 	for i = 1, 8 do
 		local cid
@@ -319,7 +337,7 @@ local function initialize_nodeprops ()
 			is_cid_double_plant[cid] = true
 			if def.groups.double_plant == 1 then
 				local node = name .. "_top"
-				local cid_top = minetest.get_content_id (node)
+				local cid_top = core.get_content_id (node)
 				double_plant_tops[cid] = cid_top
 			end
 		end
@@ -861,8 +879,19 @@ function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 	elseif is_cid_sapling[cid] or is_cid_bush[cid] then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_dirt[cid]
+	elseif cid == cid_crimson_roots or cid == cid_warped_roots
+		or cid == cid_nether_sprouts then
+		local cid, _ = get_block (x, y - 1, z)
+		return cid == cid_crimson_nylium
+			or cid == cid_warped_nylium
+			or cid == cid_soul_soil
+	elseif cid == cid_crimson_fungus or cid == cid_warped_fungus then
+		local cid, _ = get_block (x, y - 1, z)
+		return cid == cid_mycelium
+			or cid == cid_crimson_nylium
+			or cid == cid_warped_nylium
+			or cid == cid_soul_soil
 	end
-
 	return true
 end
 
@@ -910,6 +939,8 @@ function mcl_levelgen.is_water_air_or_lava (x, y, z)
 		or cid == cid_water_flowing
 		or cid == cid_lava_source
 		or cid == cid_lava_flowing
+		or cid == cid_nether_lava_source
+		or cid == cid_nether_lava_flowing
 end
 
 function mcl_levelgen.water_or_air_p (cid)
@@ -927,6 +958,8 @@ function mcl_levelgen.water_or_lava_p (cid)
 		or cid == cid_water_flowing
 		or cid == cid_lava_source
 		or cid == cid_lava_flowing
+		or cid == cid_nether_lava_source
+		or cid == cid_nether_lava_flowing
 end
 
 function mcl_levelgen.air_water_or_lava_p (cid)
@@ -935,6 +968,8 @@ function mcl_levelgen.air_water_or_lava_p (cid)
 		or cid == cid_water_flowing
 		or cid == cid_lava_source
 		or cid == cid_lava_flowing
+		or cid == cid_nether_lava_source
+		or cid == cid_nether_lava_flowing
 end
 
 function mcl_levelgen.is_air (x, y, z)
@@ -1093,12 +1128,12 @@ function mcl_levelgen.is_bottom_face_sturdy (x, y, z)
 end
 
 function mcl_levelgen.buildable_to_p (cid)
-	return cid == cid_air or is_cid_buildable_to[cid] ~= nil
+	return cid == cid_air or is_cid_buildable_to[cid]
 end
 
 function mcl_levelgen.is_buildable_to (x, y, z)
 	local cid, _ = get_block (x, y, z)
-	return cid == cid_air or is_cid_buildable_to[cid] ~= nil
+	return cid == cid_air or is_cid_buildable_to[cid]
 end
 
 --------------------------------------------------------------------------
@@ -1170,6 +1205,31 @@ function mcl_levelgen.find_ceiling_and_floor (x, y, z, range, is_air, is_solid)
 	end
 
 	return ceiling, floor
+end
+
+local dirs = {
+	{ -1, 0, 0, },
+	{ 1, 0, 0, },
+	{ 0, -1, 0, },
+	{ 0, 1, 0, },
+	{ 0, 0, -1, },
+	{ 0, 0, 1, },
+}
+
+function mcl_levelgen.just_one_neighboring_p (x, y, z, predicate)
+	local cnt_neighbors = 0
+	for _, dir in ipairs (dirs) do
+		local x, y, z = x + dir[1], y + dir[2], z + dir[3]
+		local cid, param2 = get_block (x, y, z)
+
+		if predicate (cid, param2) then
+			cnt_neighbors = cnt_neighbors + 1
+		end
+		if cnt_neighbors > 1 then
+			break
+		end
+	end
+	return cnt_neighbors == 1
 end
 
 --------------------------------------------------------------------------

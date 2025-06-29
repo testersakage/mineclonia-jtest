@@ -40,7 +40,7 @@ end
 mcl_levelgen = { prefix = prefix, }
 mcl_levelgen.md5 = dofile (prefix .. "/md5.lua")
 mcl_levelgen.sha = dofile (prefix .. "/sha2.lua")
-mcl_levelgen.lighting_disabled = true
+mcl_levelgen.lighting_disabled = false
 
 mcl_levelgen.mt_chunksize
 	= core and core.ipc_get ("mcl_levelgen:mt_chunksize")

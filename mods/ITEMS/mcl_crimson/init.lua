@@ -648,3 +648,5 @@ core.register_craft({
 		{"mcl_core:stick", warped_wood, "mcl_core:stick"},
 	}
 })
+
+mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")
