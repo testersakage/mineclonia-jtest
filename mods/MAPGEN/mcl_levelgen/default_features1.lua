@@ -47,6 +47,71 @@ end
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
+-- Placement modifiers.
+------------------------------------------------------------------------
+
+local index_heightmap = mcl_levelgen.index_heightmap
+local insert = table.insert
+local get_block = mcl_levelgen.get_block
+local cid_air = core.CONTENT_AIR
+
+local air_water_or_lava_p = mcl_levelgen.air_water_or_lava_p
+
+local function get_pos_above_layer (x, y, z, layerno, y_min)
+	-- Count layers from Y to the bottom of the level; determinism
+	-- suffers in the presence of incomplete columns...
+
+	local layer = 0
+	for y = y, y_min, -1 do
+		local cid_above, _ = get_block (x, y + 1, z)
+		local cid_here, _ = get_block (x, y, z)
+
+		if air_water_or_lava_p (cid_above)
+			and not air_water_or_lava_p (cid_here) then
+
+			if layer == layerno then
+				return y + 1
+			end
+
+			layer = layer + 1
+		end
+	end
+
+	return nil
+end
+
+function mcl_levelgen.build_count_on_every_layer (count)
+	return function (x, y, z, rng)
+		local layer_exists = false
+		local layer_no = 0
+		local values = {}
+		local y_min = mcl_levelgen.placement_level_min
+
+		repeat
+			layer_exists = false
+
+			for i = 1, count (rng) do
+				local x = rng:next_within (16) + x
+				local z = rng:next_within (16) + z
+				local _, motion_blocking
+					= index_heightmap (x, z, false)
+				local y = get_pos_above_layer (x, motion_blocking, z,
+							       layer_no, y_min)
+				if y then
+					layer_exists = true
+					insert (values, x)
+					insert (values, y)
+					insert (values, z)
+				end
+			end
+
+			layer_no = layer_no + 1
+		until not layer_exists
+		return values
+	end
+end
+
+------------------------------------------------------------------------
 -- Multiface Growth.
 -- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/MultifaceGrowthFeature.html
 ------------------------------------------------------------------------
@@ -80,7 +145,6 @@ local FACE_ORDINALS = mcl_levelgen.FACE_ORDINALS
 local is_water_or_air = mcl_levelgen.is_water_or_air
 local water_or_air_p = mcl_levelgen.water_or_air_p
 local fisher_yates = mcl_levelgen.fisher_yates
-local get_block = mcl_levelgen.get_block
 local set_block = mcl_levelgen.set_block
 local indexof = table.indexof
 
@@ -265,7 +329,6 @@ local function glow_lichen_alter_placement (x, y, z, face, rng,
 	return true
 end
 
-local insert = table.insert
 local face_sturdy_p = mcl_levelgen.face_sturdy_p
 
 local function test_wallmounted_face (x, y, z, dirface)
@@ -438,7 +501,6 @@ local function AABB_intersect (a, b)
 end
 
 local ipos3 = mcl_levelgen.ipos3
-local index_heightmap = mcl_levelgen.index_heightmap
 local request_additional_context
 	= mcl_levelgen.request_additional_context
 local push_schematic_processors = mcl_levelgen.push_schematic_processors
@@ -1328,7 +1390,7 @@ end
 
 mcl_levelgen.register_configured_feature ("mcl_levelgen:block_soul_fire", {
 	feature = "mcl_levelgen:simple_block",
-	content = function (_, _, _)
+	content = function (_, _, _, _)
 		return cid_soul_fire, 0
 	end,
 })

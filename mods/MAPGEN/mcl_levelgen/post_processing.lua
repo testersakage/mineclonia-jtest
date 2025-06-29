@@ -805,7 +805,7 @@ local function queue_mapblock_run (x, y_start, y_end, z, d, supplemental,
 	run.y2 = y_end
 	run.supplemental = supplemental
 	run.data = data
-	run.namespace = current_namespace_id
+	run.data_namespace = current_namespace_id
 
 	dbg ("Queueing mapblock run: X: %d, Y: %d - %d, Z: %d (supplemental: %s)",
 	     x, y_start, y_end, z, tostring (supplemental))
@@ -1005,7 +1005,7 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 		return
 	end
 
-	switch_to_namespace (run.namespace)
+	switch_to_namespace (run.data_namespace)
 
 	-- It appears that this calback is occasionally called oftener
 	-- than once.
@@ -1146,7 +1146,7 @@ local function post_mapblock_run (run)
 	dbg ("Issuing MapBlock run: X: %d, Y: %d - %d, Z: %d", run.x,
 	     run.y1, run.y2, run.z)
 
-	switch_to_namespace (run.namespace)
+	switch_to_namespace (run.data_namespace)
 	v1.x = (run.x - REQUIRED_CONTEXT_XZ) * 16
 	v1.z = (run.z - REQUIRED_CONTEXT_XZ) * 16
 	v1.y = (run.y1 - REQUIRED_CONTEXT_Y) * 16 + current_namespace.y_global
