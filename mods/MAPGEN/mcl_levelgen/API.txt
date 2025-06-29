@@ -305,6 +305,9 @@ types:
   - mcl_mangrove:hanging_propagule_1
   - mcl_mushrooms:mushroom_red
   - mcl_mushrooms:mushroom_brown
+  - mcl_crimson:{warped,crimson}_{fungus,roots}
+  - mcl_crimson:nether_sprouts
+
 
 Modders are encouraged to extend this function by means of overloading
 to understand their own blocks' environmental requirements if those
