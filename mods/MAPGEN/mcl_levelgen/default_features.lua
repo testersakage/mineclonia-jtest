@@ -3279,6 +3279,8 @@ local function require_air (x, y, z, rng)
 	return nil
 end
 
+mcl_levelgen.require_air = require_air
+
 mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_tall_grass", {
 	feature = "mcl_levelgen:random_patch",
 	placed_feature = {
