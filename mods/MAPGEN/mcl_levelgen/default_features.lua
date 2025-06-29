@@ -249,6 +249,8 @@ local function ore_placement_test (cid, x, y, z, rng, cfg)
 	return nil, nil
 end
 
+mcl_levelgen.ore_placement_test = ore_placement_test
+
 local function orehash (x1, y1, z1, cx, cy, cz)
 	local dx = x1 - cx + 256
 	local dz = y1 - cy + 256
