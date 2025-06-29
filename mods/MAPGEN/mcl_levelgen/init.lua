@@ -13,15 +13,15 @@ local function init_chunksize ()
 			error ("Invalid chunk size")
 		end
 
-		local DESIRED_Y_SIZE = math.floor (384 / 16)
-		local DESIRED_Y_BASE = math.floor (-128 / 16)
+		local floor = math.floor
+		local DESIRED_Y_SIZE = floor (384 / 16)
+		local DESIRED_Y_BASE = floor (-128 / 16)
 		cs.y = DESIRED_Y_SIZE
 		core.set_mapgen_setting ("chunksize", vector.to_string (cs), true)
 
 		local cs = core.get_mapgen_chunksize ()
-		local ceil = math.ceil
-		local v = vector.new (-ceil (cs.x / 2), DESIRED_Y_BASE,
-				      -ceil (cs.z / 2))
+		local v = vector.new (-floor (cs.x / 2), DESIRED_Y_BASE,
+				      -floor (cs.z / 2))
 		core.set_mapgen_setting ("chunk_origin", v:to_string (), true)
 		core.ipc_set ("mcl_levelgen:mt_chunksize", cs)
 	end
