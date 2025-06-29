@@ -1373,7 +1373,7 @@ function apply_feature_context_requisitions (run, features_requesting_additional
 	additional_ctx_requisitions[hash] = existing
 	existing.min = mathmax (mathmin (existing.min, run.y1 * 16 - below), 0)
 	existing.max = mathmin (mathmax (existing.max, run.y2 * 16 + 15 + above),
-				current_namespace.y_global_top)
+				current_namespace_height * 16 - 1)
 	for _, feature in ipairs (features_requesting_additional_context) do
 		if table.indexof (existing.features, feature) == -1 then
 			table.insert (existing.features, feature)
@@ -1399,7 +1399,7 @@ function check_supplemental_generation (bx, bz)
 	if requirements then
 		-- Are the requirements met?
 		local y1 = floor (requirements.min / 16)
-		local y2 = ceil (requirements.max / 16)
+		local y2 = floor (requirements.max / 16)
 
 		local first_locked = mathmax (0, y1 - REQUIRED_CONTEXT_Y)
 		local last_locked = mathmin (current_namespace_height - 1,
