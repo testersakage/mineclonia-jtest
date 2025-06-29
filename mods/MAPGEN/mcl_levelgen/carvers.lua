@@ -6,17 +6,18 @@
 local encode_node = mcl_levelgen.encode_node
 local decode_node = mcl_levelgen.decode_node
 
-local cid_grass_block, cid_mycelium, cid_dirt, cid_air, cid_lava
+local cid_grass_block, cid_mycelium, cid_dirt, cid_air, cid_lava, cid_nether_lava
 
 local function init_cids ()
 	cid_grass_block = core.get_content_id ("mcl_core:dirt_with_grass")
 	cid_mycelium = core.get_content_id ("mcl_core:mycelium")
 	cid_dirt = core.get_content_id ("mcl_core:dirt")
 	cid_lava = core.get_content_id ("mcl_core:lava_source")
+	cid_nether_lava = core.get_content_id ("mcl_nether:nether_lava_source")
 end
 
 if core then
-	if core.register_on_mods_loaded then
+	if core and core.get_mod_storage then
 		core.register_on_mods_loaded (init_cids)
 	else
 		init_cids ()
@@ -27,6 +28,7 @@ else
 	cid_mycelium = 11
 	cid_dirt = 12
 	cid_lava = 3
+	cid_nether_lava = 3
 	cid_air = 0
 end
 
@@ -39,6 +41,7 @@ local carver = {
 		return 0
 	end,
 	lava_level = 0,
+	cid_lava = cid_lava,
 	replaceable = {},
 	surface_system = nil,
 	aquifer = nil,
@@ -81,7 +84,7 @@ end
 
 local function get_block (self, x, y, z)
 	if y <= self.lava_level then
-		return encode_node (cid_lava, 0)
+		return encode_node (self.cid_lava, 0)
 	end
 
 	local default = aquifer.cid_default_block
@@ -415,6 +418,7 @@ end
 local nether_cave_carver = table.merge (cave_carver, {
 	max_caves = 10,
 	cave_y_scale = 5.0,
+	cid_lava = cid_nether_lava,
 })
 
 function nether_cave_carver:get_thickness (rng)

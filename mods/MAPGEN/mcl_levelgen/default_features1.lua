@@ -948,3 +948,491 @@ function mcl_levelgen.build_dual_noise_content_provider (parms)
 		return content[1], content[2]
 	end
 end
+
+------------------------------------------------------------------------
+-- Scatter Ore.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/ScatteredOreFeature.html
+------------------------------------------------------------------------
+
+local function round (x)
+	return floor (x + 0.5)
+end
+
+local ore_placement_test = mcl_levelgen.ore_placement_test
+
+local function scatter_ore_place (_, x, y, z, cfg, rng)
+	pile_rng:reseed (rng:next_long ())
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+
+	local rng = pile_rng
+	local size = rng:next_within (cfg.size + 1)
+	for r = 0, size - 1 do
+		local real_r = mathmin (7, r)
+		local dx = round ((rng:next_float () - rng:next_float ()) * real_r)
+		local dy = round ((rng:next_float () - rng:next_float ()) * real_r)
+		local dz = round ((rng:next_float () - rng:next_float ()) * real_r)
+		local x, y, z = x + dx, y + dy, z + dz
+
+		local cid, _ = get_block (x, y, z)
+		if cid then
+			local cid, param2
+				= ore_placement_test (cid, x, y, z, rng, cfg)
+			if cid then
+				set_block (x, y, z, cid, param2)
+			end
+		end
+	end
+	return true
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:scatter_ore", {
+	place = scatter_ore_place,
+})
+
+------------------------------------------------------------------------
+-- Netherrack Replace Blobs.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/ReplaceBlobsFeature.html
+------------------------------------------------------------------------
+
+local mathabs = math.abs
+
+-- local netherrack_replace_blobs_cfg = {
+-- 	target_cid = nil,
+--	content = nil,
+-- 	radius = function (_) ... return,
+-- }
+
+local function netherrack_replace_blobs_place (_, x, y, z, cfg, rng)
+	local radius = cfg.radius
+	local rx = radius (rng)
+	local ry = radius (rng)
+	local rz = radius (rng)
+	local r = mathmax (rx, ry, rz)
+
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+
+	local search_min
+		= mathmax (mcl_levelgen.placement_level_min, y - (32 - r))
+	local target = cfg.target_cid
+	while y >= search_min do
+		local cid, _ = get_block (x, y, z)
+		if cid == target then
+			local content = cfg.content
+
+			for x1, y1, z1 in ipos3 (x - rx, y - ry, z - rz,
+						 x + rx, y + ry, z + rz) do
+				local dist = mathabs (x1 - x)
+					+ mathabs (y1 - y)
+					+ mathabs (z1 - z)
+				if dist <= r then
+					local cid, _ = get_block (x1, y1, z1)
+					if cid == target then
+						local cid, param2
+							= content (x1, y1, z1, rng)
+						set_block (x1, y1, z1, cid, param2)
+					end
+				end
+			end
+
+			return true
+		end
+		y = y - 1
+	end
+	return false
+end
+
+mcl_levelgen.register_feature ("mcl_levelgen:netherrack_replace_blobs", {
+	place = netherrack_replace_blobs_place,
+})
+
+------------------------------------------------------------------------
+-- Nether Ores & related features.
+------------------------------------------------------------------------
+
+local O = mcl_levelgen.construct_ore_substitution_list
+local trapezoidal_height = mcl_levelgen.trapezoidal_height
+
+local TWO = function (_) return 2 end
+local FOUR = function (_) return 4 end
+local EIGHT = function (_) return 8 end
+local TEN = function (_) return 10 end
+local TWELVE = function (_) return 12 end
+local SIXTEEN = function (_) return 16 end
+local TWENTY = function (_) return 20 end
+local TWENTY_FIVE = function (_) return 25 end
+local THIRTY_TWO = function (_) return 32 end
+
+local nether_preset = mcl_levelgen.get_dimension ("mcl_levelgen:nether").preset
+local NETHER_MIN = nether_preset.min_y
+local NETHER_TOP = NETHER_MIN + nether_preset.height - 1
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_ancient_debris_large", {
+	feature = "mcl_levelgen:scatter_ore",
+	discard_chance_on_air_exposure = 1.0,
+	size = 3,
+	substitutions = O ({
+		{
+			target = "group:nether_ore_target",
+			replacement = "mcl_nether:ancient_debris",
+		},
+	}),
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_ancient_debris_small", {
+	feature = "mcl_levelgen:scatter_ore",
+	discard_chance_on_air_exposure = 1.0,
+	size = 2,
+	substitutions = O ({
+		{
+			target = "group:nether_ore_target",
+			replacement = "mcl_nether:ancient_debris",
+		},
+	}),
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_ancient_debris_large", {
+	configured_feature = "mcl_levelgen:ore_ancient_debris_large",
+	placement_modifiers = {
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (trapezoidal_height (8, 24, 0)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_debris_small", {
+	configured_feature = "mcl_levelgen:ore_ancient_debris_small",
+	placement_modifiers = {
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN + 8,
+								 NETHER_TOP - 8)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_blackstone", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 33,
+	substitutions = O ({
+		{
+			target = "mcl_nether:netherrack",
+			replacement = "mcl_blackstone:blackstone",
+		},
+	}),
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_blackstone", {
+	configured_feature = "mcl_levelgen:ore_blackstone",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (5, 31)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_nether_gold", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 10,
+	substitutions = O ({
+		{
+			target = "mcl_nether:netherrack",
+			replacement = "mcl_blackstone:nether_gold",
+		},
+	}),
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_gold_deltas", {
+	configured_feature = "mcl_levelgen:ore_nether_gold",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWENTY),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN + 10,
+								 NETHER_TOP - 10)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_gold_nether", {
+	configured_feature = "mcl_levelgen:ore_nether_gold",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN + 10,
+								 NETHER_TOP - 10)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_gravel_nether", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 33,
+	substitutions = O ({
+		{
+			target = "mcl_nether:netherrack",
+			replacement = "mcl_core:gravel",
+		},
+	}),
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_gravel_nether", {
+	configured_feature = "mcl_levelgen:ore_gravel_nether",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (5, 41)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_magma", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 33,
+	substitutions = O ({
+		{
+			target = "mcl_nether:netherrack",
+			replacement = "mcl_nether:magma",
+		},
+	}),
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_magma", {
+	configured_feature = "mcl_levelgen:ore_magma",
+	placement_modifiers = {
+		mcl_levelgen.build_count (FOUR),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (27, 36)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_quartz", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0.0,
+	size = 14,
+	substitutions = O ({
+		{
+			target = "mcl_nether:netherrack",
+			replacement = "mcl_nether:quartz_ore",
+		},
+	}),
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_quartz_deltas", {
+	configured_feature = "mcl_levelgen:ore_quartz",
+	placement_modifiers = {
+		mcl_levelgen.build_count (THIRTY_TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN + 10,
+								 NETHER_TOP - 10)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_quartz_nether", {
+	configured_feature = "mcl_levelgen:ore_quartz",
+	placement_modifiers = {
+		mcl_levelgen.build_count (SIXTEEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN + 10,
+								 NETHER_TOP - 10)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:ore_soul_sand", {
+	feature = "mcl_levelgen:ore",
+	discard_chance_on_air_exposure = 0,
+	size = 12,
+	substitutions = O ({
+		{
+			target = "mcl_nether:netherrack",
+			replacement = "mcl_nether:soul_sand",
+		},
+	})
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:ore_soul_sand", {
+	configured_feature = "mcl_levelgen:ore_soul_sand",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWELVE),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN, 31)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local cid_netherrack = core.get_content_id ("mcl_nether:netherrack")
+local cid_eternal_fire = core.get_content_id ("mcl_fire:eternal_fire")
+
+local function require_air_with_netherrack_below (x, y, z, rng)
+	if is_air (x, y, z) then
+		local cid, _ = get_block (x, y - 1, z)
+		if cid == cid_netherrack then
+			return { x, y, z, }
+		end
+	end
+	return nil
+end
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:block_fire", {
+	feature = "mcl_levelgen:simple_block",
+	content = function (_, _, _)
+		return cid_eternal_fire, 0
+	end,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_fire", {
+	feature = "mcl_levelgen:random_patch",
+	placed_feature = {
+		configured_feature = "mcl_levelgen:block_fire",
+		placement_modifiers = {
+			require_air_with_netherrack_below,
+		},
+	},
+	tries = 96,
+	xz_spread = 7,
+	y_spread = 3,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_fire", {
+	configured_feature = "mcl_levelgen:patch_fire",
+	placement_modifiers = {
+		mcl_levelgen.build_count (uniform_height (0, 5)),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN + 4,
+								 NETHER_TOP - 4)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local cid_soul_soil = core.get_content_id ("mcl_blackstone:soul_soil")
+local cid_soul_fire = core.get_content_id ("mcl_blackstone:soul_fire")
+
+local function require_air_with_soul_soil_below (x, y, z, rng)
+	if is_air (x, y, z) then
+		local cid, _ = get_block (x, y - 1, z)
+		if cid == cid_soul_soil then
+			return { x, y, z, }
+		end
+	end
+	return nil
+end
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:block_soul_fire", {
+	feature = "mcl_levelgen:simple_block",
+	content = function (_, _, _)
+		return cid_soul_fire, 0
+	end,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_soul_fire", {
+	feature = "mcl_levelgen:random_patch",
+	placed_feature = {
+		configured_feature = "mcl_levelgen:block_soul_fire",
+		placement_modifiers = {
+			require_air_with_soul_soil_below,
+		},
+	},
+	tries = 96,
+	xz_spread = 7,
+	y_spread = 3,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_soul_fire", {
+	configured_feature = "mcl_levelgen:patch_soul_fire",
+	placement_modifiers = {
+		mcl_levelgen.build_count (uniform_height (0, 5)),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN + 4,
+								 NETHER_TOP - 4)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local cid_blackstone = core.get_content_id ("mcl_blackstone:blackstone")
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:blackstone_blobs", {
+	feature = "mcl_levelgen:netherrack_replace_blobs",
+	radius = uniform_height (3, 7),
+	target_cid = cid_netherrack,
+	content = function (_, _, _, _)
+		return cid_blackstone, 0
+	end,
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:blackstone_blobs", {
+	configured_feature = "mcl_levelgen:blackstone_blobs",
+	placement_modifiers = {
+		mcl_levelgen.build_count (TWENTY_FIVE),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN,
+								 NETHER_TOP)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local cid_nether_lava_source
+	= core.get_content_id ("mcl_nether:nether_lava_source")
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:spring_nether_closed", {
+	feature = "mcl_levelgen:spring",
+	hole_count = 0,
+	rock_count = 5,
+	requires_block_below = true,
+	fluid_cid = cid_nether_lava_source,
+	valid_blocks = {
+		cid_netherrack,
+	},
+})
+
+mcl_levelgen.register_configured_feature ("mcl_levelgen:spring_nether_open", {
+	feature = "mcl_levelgen:spring",
+	hole_count = 1,
+	rock_count = 4,
+	requires_block_below = true,
+	fluid_cid = cid_nether_lava_source,
+	valid_blocks = {
+		cid_netherrack,
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:spring_closed", {
+	configured_feature = "mcl_levelgen:spring_nether_closed",
+	placement_modifiers = {
+		mcl_levelgen.build_count (SIXTEEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN + 10,
+								 NETHER_TOP - 10)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:spring_closed_double", {
+	configured_feature = "mcl_levelgen:spring_nether_closed",
+	placement_modifiers = {
+		mcl_levelgen.build_count (THIRTY_TWO),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN + 10,
+								 NETHER_TOP - 10)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_levelgen:spring_open", {
+	configured_feature = "mcl_levelgen:spring_nether_open",
+	placement_modifiers = {
+		mcl_levelgen.build_count (EIGHT),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN + 4,
+								 NETHER_TOP - 4)),
+		mcl_levelgen.build_in_biome (),
+	},
+})

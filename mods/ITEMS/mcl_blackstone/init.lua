@@ -4,7 +4,7 @@ core.register_node("mcl_blackstone:blackstone", {
 	description = S("Blackstone"),
 	tiles = {"mcl_blackstone_top.png", "mcl_blackstone_top.png", "mcl_blackstone_side.png"},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	groups = {cracky = 3, pickaxey=1, material_stone=1, cobble=1, stonecuttable=1, building_block=1},
+	groups = {cracky = 3, pickaxey=1, material_stone=1, cobble=1, stonecuttable=1, building_block=1, nether_ore_target=1},
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 	_mcl_crafting_output = {square2 = {output = "mcl_blackstone:blackstone_polished 4"}}
@@ -82,7 +82,7 @@ core.register_node("mcl_blackstone:basalt", {
 	paramtype2 = "facedir",
 	on_place = mcl_util.rotate_axis,
 	on_rotate = screwdriver.rotate_3way,
-	groups = {cracky = 3, pickaxey=1, material_stone=1, stonecuttable=1, building_block=1},
+	groups = {cracky = 3, pickaxey=1, material_stone=1, stonecuttable=1, building_block=1, nether_ore_target=1,},
 	_mcl_blast_resistance = 4.2,
 	_mcl_hardness = 1.25,
 	_mcl_cooking_output = "mcl_blackstone:basalt_smooth",
