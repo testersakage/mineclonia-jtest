@@ -1,13 +1,13 @@
 -- Checklist:
 --
--- - [ ] mcl_crimson:crimson_forest_vegetation
--- - [ ] mcl_crimson:crimson_fungi
--- - [ ] mcl_crimson:nether_sprouts
--- - [ ] mcl_crimson:patch_crimson_roots
--- - [ ] mcl_crimson:twisting_vines
--- - [ ] mcl_crimson:warped_forest_vegetation
--- - [ ] mcl_crimson:warped_fungi
--- - [ ] mcl_crimson:weeping_vines
+-- - [X] mcl_crimson:crimson_forest_vegetation
+-- - [X] mcl_crimson:crimson_fungi
+-- - [X] mcl_crimson:nether_sprouts
+-- - [X] mcl_crimson:patch_crimson_roots
+-- - [X] mcl_crimson:twisting_vines
+-- - [X] mcl_crimson:warped_forest_vegetation
+-- - [X] mcl_crimson:warped_fungi
+-- - [X] mcl_crimson:weeping_vines
 -- - [X] mcl_levelgen:blackstone_blobs
 -- - [X] mcl_levelgen:ore_ancient_debris_large
 -- - [X] mcl_levelgen:ore_blackstone
@@ -74,29 +74,14 @@ local cid_basalt = core.get_content_id ("mcl_blackstone:basalt")
 local cid_netherrack = core.get_content_id ("mcl_nether:netherrack")
 local cid_glowstone = core.get_content_id ("mcl_nether:glowstone")
 
-local dirs = {
-	{ -1, 0, 0, },
-	{ 1, 0, 0, },
-	{ 0, -1, 0, },
-	{ 0, 1, 0, },
-	{ 0, 0, -1, },
-	{ 0, 0, 1, },
-}
+local just_one_neighboring_p = mcl_levelgen.just_one_neighboring_p
+
+local function glowstone_p (cid, param2)
+	return cid == cid_glowstone
+end
 
 local function one_neighboring_glowstone_p (x1, y1, z1)
-	local cnt_neighbors = 0
-	for _, dir in ipairs (dirs) do
-		local x, y, z = x1 + dir[1], y1 + dir[2], z1 + dir[3]
-		local cid, _ = get_block (x, y, z)
-
-		if cid == cid_glowstone then
-			cnt_neighbors = cnt_neighbors + 1
-		end
-		if cnt_neighbors > 1 then
-			break
-		end
-	end
-	return cnt_neighbors == 1
+	return just_one_neighboring_p (x1, y1, z1, glowstone_p)
 end
 
 local function glowstone_blob_place (_, x, y, z, cfg, rng)
