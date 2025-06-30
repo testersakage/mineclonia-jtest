@@ -434,3 +434,31 @@ mcl_levelgen.register_placed_feature ("mcl_mushrooms:red_mushroom_taiga", {
 		mcl_levelgen.build_in_biome (),
 	},
 })
+
+local uniform_height = mcl_levelgen.uniform_height
+
+local nether_preset = mcl_levelgen.get_dimension ("mcl_levelgen:nether").preset
+local NETHER_MIN = nether_preset.min_y
+local NETHER_TOP = NETHER_MIN + nether_preset.height - 1
+
+mcl_levelgen.register_placed_feature ("mcl_mushrooms:brown_mushroom_nether", {
+	configured_feature = "mcl_mushrooms:patch_brown_mushroom",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (2),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN,
+								 NETHER_TOP)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_mushrooms:red_mushroom_nether", {
+	configured_feature = "mcl_mushrooms:patch_red_mushroom",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (2),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN,
+								 NETHER_TOP)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
