@@ -155,6 +155,7 @@ local function close_enough(a, b)
 end
 
 local function props_changed(props, oldprops)
+	local props = props or {}
 	if not oldprops then return true, props end
 	local changed = false
 	local p = {}
