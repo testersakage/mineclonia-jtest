@@ -138,7 +138,7 @@ local function handle_mansion_construct_node (_, node_list)
 end
 
 local staticdata = core.serialize ({
-	_structure_spawn = true,
+	_structure_generation_spawn = true,
 	persistent = true,
 })
 
