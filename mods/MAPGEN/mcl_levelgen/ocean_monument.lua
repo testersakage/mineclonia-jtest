@@ -8,7 +8,7 @@ local R = mcl_levelgen.build_random_spread_placement
 local level_to_minetest_position = mcl_levelgen.level_to_minetest_position
 local v = vector.zero ()
 local staticdata = core.serialize ({
-	_structure_spawn = true,
+	_structure_generation_spawn = true,
 	persistent = true,
 })
 
