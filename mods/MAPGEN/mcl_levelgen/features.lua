@@ -386,6 +386,7 @@ mcl_levelgen.placement_run_minp = run_minp
 mcl_levelgen.placement_run_maxp = run_maxp
 mcl_levelgen.placement_level_min = 0
 mcl_levelgen.placement_level_height = 0
+mcl_levelgen.placement_level = nil
 mcl_levelgen.current_placed_feature = nil
 mcl_levelgen.heightmap_modifications = nil
 
@@ -420,6 +421,7 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 	level_min = p_level_min
 	mcl_levelgen.placement_level_min = p_level_min
 	mcl_levelgen.placement_level_height = p_level_height
+	mcl_levelgen.placement_level = p_preset
 	relight_rgn = mcl_util.empty_region
 	heightmap_modifications = {}
 	mcl_levelgen.heightmap_modifications = heightmap_modifications

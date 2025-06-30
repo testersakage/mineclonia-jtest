@@ -972,6 +972,13 @@ function mcl_levelgen.air_water_or_lava_p (cid)
 		or cid == cid_nether_lava_flowing
 end
 
+function mcl_levelgen.lava_p (cid)
+	return cid == cid_lava_source
+		or cid == cid_lava_flowing
+		or cid == cid_nether_lava_source
+		or cid == cid_nether_lava_flowing
+end
+
 function mcl_levelgen.is_air (x, y, z)
 	local cid, _ = get_block (x, y, z)
 	return cid == cid_air
