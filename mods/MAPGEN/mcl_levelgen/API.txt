@@ -499,9 +499,9 @@ positions it produces are given to feature placement functions.  The
 first placement modifier is invoked with the absolute coordinates of
 the bottom northwest corner of the Minecraft chunk being processed.
 In addition to the three arguments specifying the block position to be
-processed, an RNG is supplied that is guaranteed to produce identical
-results for identical combination of Minecraft chunk and seed.  See
-RANDOM NUMBER GENERATOR INTERFACE.
+processed, a pseudo-random number generator is supplied that is
+guaranteed to produce identical results for identical combination of
+Minecraft chunk and seed.  See RANDOM NUMBER GENERATOR INTERFACE.
 
 Function: <placement modifier> (X, Y, Z, RNG)
 
@@ -1115,7 +1115,7 @@ modifier.
 Function: mcl_levelgen.build_count (N)
 
 Return a placement modifier which duplicates the input position N
-times.  N must be a function that accepts an RNG and yields the number
+times.  N must be a function that accepts a PRNG and yields the number
 of duplicates to produce.
 
 Function: mcl_levelgen.build_noise_threshold_count (NOISE_LEVEL,
@@ -1255,8 +1255,16 @@ Function: mcl_levelgen.build_random_offset (XZ_SCALE, Y_SCALE)
 
 Return a placement modifier that returns each input coordinate with
 its X and Z components displaced by values yielded by applying
-XZ_SCALE to the provided RNG, and its Y component displaced by Y_SCALE
-in like manner.
+XZ_SCALE to the provided PRNG, and its Y component displaced by
+Y_SCALE in like manner.
+
+Function: mcl_levelgen.build_constant_height_offset (COUNT)
+
+Return a placement modifier that returns a number of coordinates
+yielded by COUNT horizontally distributed at offsets of 0 to 15 from
+the input position on every air-separated vertical stratum of solid
+(non-air) blocks in the level.  COUNT must be a function that accepts
+a PRNG and yields the number of coordinates to produce on each layer.
 
 
 STRUCTURES
