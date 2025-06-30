@@ -137,11 +137,11 @@ local southeast_stair_dirs = {
 }
 
 local staticdata_witch = core.serialize ({
-	_structure_spawn = true,
+	_structure_generation_spawn = true,
 	persistent = true,
 })
 local staticdata_black_cat = core.serialize ({
-	_structure_spawn = true,
+	_structure_generation_spawn = true,
 	persistent = true,
 	_default_texture = "mobs_mc_cat_all_black.png",
 })
