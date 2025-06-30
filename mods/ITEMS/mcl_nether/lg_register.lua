@@ -1,40 +1,3 @@
--- Checklist:
---
--- - [X] mcl_crimson:crimson_forest_vegetation
--- - [X] mcl_crimson:crimson_fungi
--- - [X] mcl_crimson:nether_sprouts
--- - [X] mcl_crimson:patch_crimson_roots
--- - [X] mcl_crimson:twisting_vines
--- - [X] mcl_crimson:warped_forest_vegetation
--- - [X] mcl_crimson:warped_fungi
--- - [X] mcl_crimson:weeping_vines
--- - [X] mcl_levelgen:blackstone_blobs
--- - [X] mcl_levelgen:ore_ancient_debris_large
--- - [X] mcl_levelgen:ore_blackstone
--- - [X] mcl_levelgen:ore_debris_small
--- - [X] mcl_levelgen:ore_gold_deltas
--- - [X] mcl_levelgen:ore_gold_nether
--- - [X] mcl_levelgen:ore_gravel_nether
--- - [X] mcl_levelgen:ore_magma
--- - [X] mcl_levelgen:ore_quartz_deltas
--- - [X] mcl_levelgen:ore_quartz_nether
--- - [X] mcl_levelgen:ore_soul_sand
--- - [X] mcl_levelgen:patch_fire
--- - [X] mcl_levelgen:patch_soul_fire
--- - [X] mcl_levelgen:spring_closed
--- - [X] mcl_levelgen:spring_closed_double
--- - [X] mcl_levelgen:spring_open
--- - [ ] mcl_mushrooms:brown_mushroom_nether
--- - [ ] mcl_mushrooms:red_mushroom_nether
--- - [X] mcl_nether:basalt_blobs
--- - [X] mcl_nether:basalt_pillar
--- - [X] mcl_nether:delta
--- - [X] mcl_nether:glowstone
--- - [X] mcl_nether:glowstone_extra
--- - [ ] mcl_nether:large_basalt_columns
--- - [ ] mcl_nether:small_basalt_columns
--- - [ ] mcl_nether:spring_delta
-
 ------------------------------------------------------------------------
 -- Nether level generation.
 ------------------------------------------------------------------------
@@ -491,6 +454,243 @@ mcl_levelgen.register_placed_feature ("mcl_nether:basalt_blobs", {
 		mcl_levelgen.build_in_square (),
 		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN,
 								 NETHER_TOP)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+------------------------------------------------------------------------
+-- Basalt Columns.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/BasaltColumnsFeature.html
+------------------------------------------------------------------------
+
+-- local basalt_columns_cfg = {
+-- 	height = function (_) ... end,
+-- 	reach = function (_) ... end,
+-- }
+
+local cids_not_eligible_for_placement = mcl_levelgen.construct_cid_list ({
+	"mcl_chests:chest_left",
+	"mcl_chests:chest_right",
+	"mcl_chests:chest_small",
+	"mcl_core:bedrock",
+	"mcl_core:lava_source",
+	"mcl_fences:nether_brick_fence",
+	"mcl_mobspawners:spawner",
+	"mcl_nether:magma",
+	"mcl_nether:nether_brick",
+	"mcl_nether:nether_lava_source",
+	"mcl_nether:nether_wart",
+	"mcl_nether:soul_sand",
+	"mcl_stairs:stair_nether_brick",
+	"mcl_stairs:stair_nether_brick_inner",
+	"mcl_stairs:stair_nether_brick_outer",
+
+})
+
+local huge = math.huge
+
+local cid_air = core.CONTENT_AIR
+local lava_p = mcl_levelgen.lava_p
+local basalt_min_y = huge
+local basalt_max_y = -huge
+
+-- field_31495, field_31496, field_31497, and field_31498 appear to be
+-- unused.
+
+local function is_air_or_lava_sea (x, y, z, sea_level)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_air or (y <= sea_level and lava_p (cid))
+end
+
+local function position_can_support_column (x, y, z, sea_level)
+	if is_air_or_lava_sea (x, y, z, sea_level) then
+		local cid, _ = get_block (x, y - 1, z)
+		return cid ~= cid_air
+			and indexof (cids_not_eligible_for_placement, cid) == -1
+	end
+	return false
+end
+
+local function locate_surface_down (x, y, z, level_min, sea_level, lim)
+	while y > level_min + 1 and lim > 0 do
+		lim = lim - 1
+		if position_can_support_column (x, y, z, sea_level) then
+			return y
+		end
+		y = y - 1
+	end
+	return nil
+end
+
+local function locate_surface_up (x, y, z, level_max, lim)
+	-- This function is only called when it is known that Y is
+	-- above lava level and within a block that is not a valid
+	-- source for a column.
+	while y <= level_max and lim > 0 do
+		lim = lim - 1
+		local cid, _ = get_block (x, y, z)
+		if indexof (cids_not_eligible_for_placement, cid) ~= -1 then
+			return nil
+		elseif cid == cid_air then
+			return y
+		end
+		y = y + 1
+	end
+	return nil
+end
+
+local function generate_column_cluster (x, y, z, height, reach, sea_level)
+	local success = false
+	local level_min = mcl_levelgen.placement_level_min
+	local level_max = mcl_levelgen.placement_level_height + level_min - 1
+
+	for dx, _, dz in ipos3 (-reach, 0, -reach,
+				reach, 0, reach) do
+		local x, z = x + dx, z + dz
+		local dist = mathabs (dx) + mathabs (dz)
+		local lim = mathmin (dist, 32)
+		local y1
+		if is_air_or_lava_sea (x, y, z, sea_level) then
+			y1 = locate_surface_down (x, y, z, level_min,
+						  sea_level, lim)
+		else
+			y1 = locate_surface_up (x, y, z, level_max, lim)
+		end
+		local y = y1
+		if y then
+			local height = height - floor (dist / 2)
+			for y = y, y + height do
+				if is_air_or_lava_sea (x, y, z, sea_level) then
+					success = true
+					set_block (x, y, z, cid_basalt, 0)
+					basalt_min_y = mathmin (basalt_min_y, y)
+					basalt_max_y = mathmax (basalt_max_y, y)
+				else
+					local cid, _ = get_block (x, y, z)
+					if cid ~= cid_basalt then
+						break
+					end
+				end
+			end
+		end
+	end
+	return success
+end
+
+local function basalt_columns_place (_, x, y, z, cfg, rng)
+	nether_rng:reseed (rng:next_long ())
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+
+	local sea_level = mcl_levelgen.placement_level.sea_level
+	local rng = nether_rng
+
+	if not position_can_support_column (x, y, z, sea_level) then
+		return false
+	else
+		local height = cfg.height (rng)
+		local is_dense = rng:next_float () < 0.9
+		local r = mathmin (height, is_dense and 5 or 8)
+		local count = is_dense and 50 or 15
+		local any = false
+		local reach = cfg.reach
+
+		basalt_min_y = huge
+		basalt_max_y = -huge
+
+		for i = 1, count do
+			local dx = rng:next_within (r * 2 + 1) + -r
+			local dz = rng:next_within (r * 2 + 1) + -r
+			local dist = mathabs (dx) + mathabs (dz)
+
+			if dist <= height
+				and generate_column_cluster (x + dx, y,
+							     z + dz,
+							     height - dist,
+							     reach (rng),
+							     sea_level) then
+				any = true
+			end
+		end
+
+		if any then
+			fix_lighting (x - r, basalt_min_y, z - r,
+				      x + r, basalt_max_y, z + r)
+		end
+		return any
+	end
+end
+
+mcl_levelgen.register_feature ("mcl_nether:basalt_columns", {
+	place = basalt_columns_place,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_nether:large_basalt_columns", {
+	feature = "mcl_nether:basalt_columns",
+	height = uniform_height (5, 10),
+	reach = uniform_height (3, 2),
+})
+
+local ONE = function (_) return 1 end
+
+mcl_levelgen.register_configured_feature ("mcl_nether:small_basalt_columns", {
+	feature = "mcl_nether:basalt_columns",
+	height = uniform_height (1, 4),
+	reach = ONE,
+})
+
+local TWO = function (_) return 2 end
+
+mcl_levelgen.register_placed_feature ("mcl_nether:large_basalt_columns", {
+	configured_feature = "mcl_nether:large_basalt_columns",
+	placement_modifiers = {
+		mcl_levelgen.build_count_on_every_layer (TWO),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+local FOUR = function (_) return 4 end
+
+mcl_levelgen.register_placed_feature ("mcl_nether:small_basalt_columns", {
+	configured_feature = "mcl_nether:small_basalt_columns",
+	placement_modifiers = {
+		mcl_levelgen.build_count_on_every_layer (FOUR),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+------------------------------------------------------------------------
+-- Basalt Delta springs.
+------------------------------------------------------------------------
+
+local SIXTEEN = function (_) return 16 end
+
+local cid_gravel = core.get_content_id ("mcl_core:gravel")
+local cid_soul_sand = core.get_content_id ("mcl_nether:soul_sand")
+
+mcl_levelgen.register_configured_feature ("mcl_nether:spring_lava_nether", {
+	feature = "mcl_levelgen:spring",
+	hole_count = 1,
+	rock_count = 4,
+	requires_block_below = true,
+	fluid_cid = cid_nether_lava_source,
+	valid_blocks = {
+		cid_netherrack,
+		cid_soul_sand,
+		cid_gravel,
+		cid_magma_block,
+		cid_blackstone,
+	},
+})
+
+mcl_levelgen.register_placed_feature ("mcl_nether:spring_delta", {
+	configured_feature = "mcl_nether:spring_lava_nether",
+	placement_modifiers = {
+		mcl_levelgen.build_count (SIXTEEN),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_height_range (uniform_height (NETHER_MIN + 4,
+								 NETHER_TOP - 4)),
 		mcl_levelgen.build_in_biome (),
 	},
 })
