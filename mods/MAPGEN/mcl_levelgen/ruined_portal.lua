@@ -222,8 +222,37 @@ local cidtype = {}
 local cid_matching_mossy_stairs = {}
 local cid_matching_cracked_stairs = {}
 
+-- local cid_blackstone
+-- 	= core.get_content_id ("mcl_blackstone:blackstone")
+-- local cid_blackstone_slab
+-- 	= core.get_content_id ("mcl_slabs:slab_blackstone")
+-- local cid_blackstone_slab_top
+-- 	= core.get_content_id ("mcl_slabs:slab_blackstone_top")
+-- local cid_blackstone_stairs
+-- 	= core.get_content_id ("mcl_slabs:stair_blackstone")
+-- local cid_blackstone_stairs_inner
+-- 	= core.get_content_id ("mcl_slabs:stair_blackstone_inner")
+-- local cid_blackstone_stairs_outer
+-- 	= core.get_content_id ("mcl_slabs:stair_blackstone_outer")
+
+local cid_polished_blackstone
+	= core.get_content_id ("mcl_blackstone:blackstone_polished")
+local cid_polished_blackstone_slab
+	= core.get_content_id ("mcl_stairs:slab_blackstone_polished")
+local cid_polished_blackstone_slab_top
+	= core.get_content_id ("mcl_stairs:slab_blackstone_polished_top")
+local cid_polished_blackstone_stairs
+	= core.get_content_id ("mcl_stairs:stair_blackstone_polished")
+local cid_polished_blackstone_stairs_inner
+	= core.get_content_id ("mcl_stairs:stair_blackstone_polished_inner")
+local cid_polished_blackstone_stairs_outer
+	= core.get_content_id ("mcl_stairs:stair_blackstone_polished_outer")
+
+local blackstone_replacements = {}
+
 for _, cid in ipairs (cids_stone_bricks) do
 	cidtype[cid] = 0
+	blackstone_replacements[cid] = cid_polished_blackstone
 end
 
 for _, cid in ipairs (cids_stairs) do
@@ -235,16 +264,22 @@ for _, cid in ipairs (cids_stairs) do
 			= cid_cracked_stone_brick_stairs_outer
 		cid_matching_mossy_stairs[cid]
 			= cid_mossy_stone_brick_stairs_outer
+		blackstone_replacements[cid]
+			= cid_polished_blackstone_stairs_outer
 	elseif name:match ("_inner$") then
 		cid_matching_cracked_stairs[cid]
 			= cid_cracked_stone_brick_stairs_inner
 		cid_matching_mossy_stairs[cid]
 			= cid_mossy_stone_brick_stairs_inner
+		blackstone_replacements[cid]
+			= cid_polished_blackstone_stairs_inner
 	else
 		cid_matching_cracked_stairs[cid]
 			= cid_cracked_stone_brick_stairs
 		cid_matching_mossy_stairs[cid]
 			= cid_mossy_stone_brick_stairs
+		blackstone_replacements[cid]
+			= cid_polished_blackstone_stairs
 	end
 end
 
@@ -252,8 +287,12 @@ for _, cid in ipairs (cids_slabs) do
 	local name = core.get_name_from_content_id (cid)
 	if name:match ("_top$") then
 		cidtype[cid] = 3
+		blackstone_replacements[cid]
+			= cid_polished_blackstone_slab_top
 	else
 		cidtype[cid] = 2
+		blackstone_replacements[cid]
+			= cid_polished_blackstone_slab
 	end
 end
 
@@ -348,6 +387,15 @@ local function replace_lava_with_netherrack (x, y, z, rng, cid_existing,
 	return cid, param2
 end
 
+local function replace_with_blackstone (x, y, z, rng, cid_existing,
+					param2_existing, cid, param2)
+	local rpl_cid = blackstone_replacements[cid]
+	if rpl_cid then
+		return rpl_cid, param2
+	end
+	return cid, param2
+end
+
 local protected_cids
 	= mcl_levelgen.construct_cid_list ({"group:features_cannot_replace",})
 local PROTECTED_BLOCKS_PROCESSOR
@@ -384,9 +432,9 @@ local function build_processors (self)
 	push_schematic_processor (weather_blocks)
 	push_schematic_processor (replace_nonsolid_blocks_in_lava)
 	push_schematic_processor (post_ruined_portal_loot)
-	-- if self.replace_with_blackstone then
-	-- 	-- TODO!
-	-- end
+	if self.replace_with_blackstone then
+		push_schematic_processor (replace_with_blackstone)
+	end
 
 	return i
 end
