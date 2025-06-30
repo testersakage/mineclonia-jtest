@@ -54,7 +54,6 @@ local rshift = bit.rshift
 local arshift = bit.arshift
 
 local floor = math.floor
-local ceil = math.ceil
 local mathmin = math.min
 local mathmax = math.max
 
