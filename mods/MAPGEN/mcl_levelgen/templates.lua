@@ -921,7 +921,7 @@ local fisher_yates = mcl_levelgen.fisher_yates
 local stable_sort = table.stable_sort
 
 local function compare_selection_priority (a, b)
-	return a.metadata.selection_priority < b.metadata.selection_priority
+	return a.metadata.selection_priority > b.metadata.selection_priority
 end
 
 local function jigsaw_blocks_shuffled (rng, element, ignore)
@@ -997,8 +997,8 @@ end
 local function build_shuffled_element_list (rng, target_pool)
 	local pool = registered_template_pools[target_pool]
 	if not pool then
-		if not warned[pool] then
-			warned[pool] = true
+		if not warned[target_pool] then
+			warned[target_pool] = true
 			core.log ("error", table.concat ({
 				"[mcl_levelgen]: Template pool ",
 				pool,
@@ -1210,7 +1210,7 @@ local function fit_one_child (pieces, rng, item, queue, create_piece)
 											    z_target - jigsaw_z,
 											    target_bbox)
 								insert (pieces, piece)
-								local priority = target.metadata.placement_priority
+								local priority = jigsaw.metadata.placement_priority
 								if item.cur_depth + 1 < item.max_depth then
 									queue_insert (queue, priority, {
 										cur_depth = item.cur_depth + 1,
