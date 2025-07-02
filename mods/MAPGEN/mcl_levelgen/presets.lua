@@ -1963,8 +1963,6 @@ end
 -- Nether presets.
 ------------------------------------------------------------------------
 
-local construct_nether_lut = mcl_levelgen.construct_nether_lut
-
 local function initialize_nether_generation (preset)
 	local registry = preset.registry
 	preset.barrier_noise = registry.zero
