@@ -452,6 +452,8 @@ end
 -- mcl_levelgen:random_patch
 ------------------------------------------------------------------------
 
+local fix_lighting = mcl_levelgen.fix_lighting
+
 -- local patch_configuration = {
 -- 	placed_feature = nil,
 -- 	tries = nil,
@@ -493,6 +495,12 @@ local function patch_random_place (_, x, y, z, cfg, rng)
 			placed = true
 		end
 	end
+
+	if placed and cfg.fix_lighting then
+		fix_lighting (x - xzspread, y - yspread, z - xzspread,
+			      x + xzspread, y + yspread, z + xzspread)
+	end
+
 	return placed
 end
 
@@ -1004,7 +1012,6 @@ end
 
 local vegetation_patch_rng
 	= mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
-local fix_lighting = mcl_levelgen.fix_lighting
 
 local function vegetation_patch_place (self, x, y, z, cfg, rng)
 	vegetation_patch_rng:reseed (rng:next_long ())

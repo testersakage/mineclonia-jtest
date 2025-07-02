@@ -1337,7 +1337,7 @@ end
 if not mcl_levelgen.load_feature_environment then
 	core.register_globalstep (schedule_regeneration)
 	core.register_on_shutdown (save_feature_placement_queue)
-	restore_feature_placement_queue ()
+	core.register_on_mods_loaded (restore_feature_placement_queue)
 end
 
 ------------------------------------------------------------------------
@@ -2078,6 +2078,7 @@ local STRUCTURE_STAGE_NAMES = {
 	"SURFACE_STRUCTURES",
 	"STRONGHOLDS",
 	"UNDERGROUND_ORES",
+	"UNDERGROUND_DECORATION",
 	"FLUID_SPRINGS",
 	"VEGETAL_DECORATION",
 	"TOP_LAYER_MODIFICATION",

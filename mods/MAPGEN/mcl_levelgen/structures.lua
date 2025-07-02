@@ -660,11 +660,6 @@ local function get_structure_starts (level, terrain, cx, cz, cb, data)
 					idx = idx + 1
 				end
 
-				assert (idx <= n_structures, "idx = "
-					.. idx .. " eliminated = "
-					.. #indices_eliminated
-					.. " " .. "total_weight = "
-					.. total_weight)
 				local entry = structures[idx]
 				set_carver_seed (structure_rng, seed, cx, cz)
 				local start = entry.structure:create_start (level, terrain,
@@ -1612,6 +1607,41 @@ function mcl_levelgen.make_rotated_bbox (x, y, z, orientation, width, height, le
 			x, y, z, x + length - 1, y + height - 1, z + width - 1,
 		}
 	end
+end
+
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/util/math/BlockBox.html#rotated(int,int,int,int,int,int,int,int,int,net.minecraft.util.math.Direction)
+
+function mcl_levelgen.rotated_block_box (x, y, z, dx, dy, dz, width, height, length, dir)
+	if dir == "south" then
+		return {
+			x + dx, y + dy, z + dz,
+			x + width - 1 + dx,
+			y + height - 1 + dy,
+			z + length - 1 + dz,
+		}
+	elseif dir == "north" then
+		return {
+			x + dx, y + dy, z - length + 1 + dz,
+			x + width - 1 + dx,
+			y + height - 1 + dy,
+			z + dz,
+		}
+	elseif dir == "west" then
+		return {
+			x - length + 1 + dz, y + dy, z + dx,
+			x + dz,
+			y + height - 1 + dy,
+			z + width - 1 + dx,
+		}
+	elseif dir == "east" then
+		return {
+			x + dz, y + dy, z + dx,
+			x + length - 1 + dz,
+			y + height - 1 + dy,
+			z + width - 1 + dx,
+		}
+	end
+	assert (false)
 end
 
 ------------------------------------------------------------------------

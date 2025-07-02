@@ -391,6 +391,9 @@ mcl_levelgen.current_placed_feature = nil
 mcl_levelgen.heightmap_modifications = nil
 
 local function collect_unlit_region (aabb, list)
+	aabb[4] = aabb[4] - 1
+	aabb[5] = aabb[5] - 1
+	aabb[6] = aabb[6] - 1
 	insert (list, aabb)
 end
 
@@ -793,9 +796,15 @@ function mcl_levelgen.fix_lighting (x1, y1, z1, x2, y2, z2)
 		return
 	end
 
+	-- core.fix_light processes lighting with MapBlock granularity
+	-- anyway.
 	local aabb = {
-		x1, y1 - y_offset, -z2,
-		x2 + 1, y2 - y_offset + 1, -z1 - 1,
+		band (x1, -16),
+		band (y1 - y_offset, -16),
+		band (-z2 - 1, -16),
+		band (x2, -16) + 15 + 1,
+		band (y2 - y_offset, -16) + 15 + 1,
+		band (-z1, -16) + 15 + 1,
 	}
 	update_relight_rgn (aabb)
 end

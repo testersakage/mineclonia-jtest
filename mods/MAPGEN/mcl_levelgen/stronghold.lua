@@ -664,7 +664,7 @@ local function generate_child_piece (start, parent, pieces, rng, x, y, z, dir,
 				     depth, override)
 	local total, have_limited = produce_pieces ()
 
-	if total < 0 or not have_limited then
+	if not have_limited then
 		return nil
 	end
 
@@ -733,41 +733,7 @@ local function select_and_insert_child_piece (self, start, pieces, rng, x, y, z,
 	end
 end
 
--- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/util/math/BlockBox.html#rotated(int,int,int,int,int,int,int,int,int,net.minecraft.util.math.Direction)
-
-local function rotated_block_box (x, y, z, dx, dy, dz, width, height, length, dir)
-	if dir == "south" then
-		return {
-			x + dx, y + dy, z + dz,
-			x + width - 1 + dx,
-			y + height - 1 + dy,
-			z + length - 1 + dz,
-		}
-	elseif dir == "north" then
-		return {
-			x + dx, y + dy, z - length + 1 + dz,
-			x + width - 1 + dx,
-			y + height - 1 + dy,
-			z + dz,
-		}
-	elseif dir == "west" then
-		return {
-			x - length + 1 + dz, y + dy, z + dx,
-			x + dz,
-			y + height - 1 + dy,
-			z + width - 1 + dx,
-		}
-	elseif dir == "east" then
-		return {
-			x + dz, y + dy, z + dx,
-			x + length - 1 + dz,
-			y + height - 1 + dy,
-			z + width - 1 + dx,
-		}
-	end
-	assert (false)
-end
-
+local rotated_block_box = mcl_levelgen.rotated_block_box
 local any_collisions = mcl_levelgen.any_collisions
 local first_collision = mcl_levelgen.first_collision
 local AABB_intersect_p = mcl_levelgen.AABB_intersect_p
