@@ -1362,6 +1362,7 @@ mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_fire", {
 	tries = 96,
 	xz_spread = 7,
 	y_spread = 3,
+	fix_lighting = true,
 })
 
 mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_fire", {
@@ -1406,6 +1407,7 @@ mcl_levelgen.register_configured_feature ("mcl_levelgen:patch_soul_fire", {
 	tries = 96,
 	xz_spread = 7,
 	y_spread = 3,
+	fix_lighting = true,
 })
 
 mcl_levelgen.register_placed_feature ("mcl_levelgen:patch_soul_fire", {

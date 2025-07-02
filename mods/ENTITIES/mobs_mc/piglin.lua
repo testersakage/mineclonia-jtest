@@ -432,6 +432,7 @@ function piglin:post_load_staticdata ()
 	mob_class.post_load_staticdata (self)
 	if not self._piglin_initialized
 		and not self._structure_spawn
+		and not self._structure_generation_spawn
 		and pr:next (1, 10) <= 2 then
 		self.child = true
 		self.movement_speed = self.movement_speed * 1.2
@@ -467,7 +468,8 @@ function piglin:on_spawn ()
 		self:enchant_default_armor (mob_factor, pr)
 		self:set_armor_texture ()
 
-		if pr:next (1, 2) == 1 then
+		if self._structure_spawn_type == "crossbow"
+			or (not self._structure_spawn_type and pr:next (1, 2) == 1) then
 			self:set_wielditem (ItemStack ("mcl_bows:crossbow"))
 		else
 			self:set_wielditem (ItemStack ("mcl_tools:sword_gold"))

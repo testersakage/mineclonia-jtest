@@ -919,14 +919,16 @@ must be a table of the form:
 	tries = TRIES,
 	xz_spread = XZ_SPREAD,
 	y_spread = Y_SPREAD,
+	fix_lighting = FIX_LIGHTING,
 }
 
 where FEATURE is the identifier or table of a placed feature, as in
 `mcl_levelgen:random_selector', TRIES is the number of attempts that
-will be made to place the said feature, and XZ_SPREAD and Y_SPREAD are
-the horizontal and vertical radii around the origin position of the
-random patch feature within which the feature to be repeated may be
-placed.
+will be made to place the said feature, XZ_SPREAD and Y_SPREAD are the
+horizontal and vertical radii around the origin position of the random
+patch feature within which the feature to be repeated may be placed,
+and FIX_LIGHTING, a boolean, specifies whether to recompute lighting
+around the affected area of the level.
 
 Plain feature: mcl_levelgen:simple_block
 
