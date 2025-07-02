@@ -257,7 +257,7 @@ core.register_node("mcl_mobspawners:spawner", {
 	_tt_help = S("Makes mobs appear"),
 	_doc_items_longdesc = S("A mob spawner regularily causes mobs to appear around it while a player is nearby. Some mob spawners are disabled while in light."),
 	_doc_items_usagehelp = S("If you have a spawn egg, you can use it to change the mob to spawn. Just place the item on the mob spawner. Player-set mob spawners always spawn mobs regardless of the light level."),
-	groups = {pickaxey=1, material_stone=1, deco_block=1, unmovable_by_piston = 1, features_cannot_replace = 1,},
+	groups = {pickaxey=1, material_stone=1, deco_block=1, unmovable_by_piston = 1, features_cannot_replace = 1, jigsaw_preserve_meta = 1, jigsaw_construct = 1},
 	is_ground_content = false,
 	drop = "",
 
@@ -320,6 +320,24 @@ core.register_node("mcl_mobspawners:spawner", {
 			obj:remove()
 		end
 		mcl_experience.throw_xp(pos, math.random(15, 43))
+	end,
+
+	on_construct = function (pos)
+		local meta = core.get_meta (pos)
+		local mob = meta:get_string ("Mob")
+
+		if mob and mob ~= "" then
+			-- Create doll or replace existing doll
+			local doll = find_doll (pos)
+			if not doll then
+				doll = spawn_doll (pos)
+			end
+			set_doll_properties (doll, mob)
+
+			-- Start spawning very soon
+			local t = core.get_node_timer (pos)
+			t:start (2)
+		end
 	end,
 
 	on_punch = function(pos)

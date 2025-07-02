@@ -254,6 +254,7 @@ local structure_block = {
 		creative_breakable = 1,
 		unmovable_by_piston = 1,
 		structure_block = 1,
+		rarity = 3,
 	},
 	drop = "",
 	is_ground_content = false,
@@ -325,7 +326,8 @@ local function load_formspec_processor (pos, _)
 	local rotation_270_depressed
 		= meta.rotation == "270" and "[270]" or "270"
 
-	return string.format (load_formspec, meta.structure_name,
+	return string.format (load_formspec,
+			      core.formspec_escape (meta.structure_name),
 			      meta.dx,
 			      meta.dy,
 			      meta.dz,
@@ -466,11 +468,13 @@ core.register_on_mods_loaded (function ()
 		"group:jigsaw_block",
 		"group:container",
 		"group:sign",
+		"group:jigsaw_preserve_meta",
 	})
 	cids_to_construct = mcl_levelgen.construct_cid_list ({
 		"group:container",
 		"group:redstone_wire",
 		"group:sign",
+		"group:jigsaw_construct",
 	})
 end)
 
@@ -613,7 +617,8 @@ mcl_levelgen.save_save_data = save_save_data
 local function save_formspec_processor (pos, _)
 	local meta = core.get_meta (pos)
 	local meta = save_save_data (meta)
-	return string.format (save_formspec, meta.structure_name,
+	return string.format (save_formspec,
+			      core.formspec_escape (meta.structure_name),
 			      meta.dx,
 			      meta.dy,
 			      meta.dz,
@@ -688,8 +693,10 @@ end
 local function data_formspec_processor (pos, _)
 	local meta = core.get_meta (pos)
 	local meta = data_save_data (meta)
-	return string.format (data_formspec, meta.value,
-			      meta.param1, meta.param2)
+	return string.format (data_formspec,
+			      core.formspec_escape (meta.value),
+			      core.formspec_escape (meta.param1),
+			      core.formspec_escape (meta.param2))
 end
 
 local function data_on_rightclick (pos, node, clicker, itemstack, pointed_thing)
@@ -733,7 +740,8 @@ mcl_levelgen.corner_save_data = corner_save_data
 local function corner_formspec_processor (pos, _)
 	local meta = core.get_meta (pos)
 	local meta = corner_save_data (meta)
-	return string.format (corner_formspec, meta.structure_name)
+	return string.format (corner_formspec,
+			      core.formspec_escape (meta.structure_name))
 end
 
 local function corner_on_rightclick (pos, node, clicker, itemstack, pointed_thing)
@@ -1115,14 +1123,14 @@ local function jigsaw_formspec_processor (pos, player)
 	local axis = floor (node.param2 / 4)
 	local joint_type = (axis == 0 or axis == 5)
 		and string.format (joint_type_formspec,
-				   data.joint_type)
+				   core.formspec_escape (data.joint_type))
 		or ""
 
 	local formspec = string.format (jigsaw_formspec,
-					data.target_pool,
-					data.name,
-					data.target_name,
-					data.turns_into,
+					core.formspec_escape (data.target_pool),
+					core.formspec_escape (data.name),
+					core.formspec_escape (data.target_name),
+					core.formspec_escape (data.turns_into),
 					data.selection_priority,
 					data.placement_priority,
 					joint_type,
@@ -1186,6 +1194,7 @@ core.register_node ("mcl_levelgen:jigsaw_block", {
 		creative_breakable = 1,
 		unmovable_by_piston = 1,
 		jigsaw_block = 1,
+		rarity = 3,
 	},
 	tiles = {
 		"mcl_levelgen_jigsaw_block_top.png",
