@@ -1143,6 +1143,31 @@ function mcl_levelgen.is_buildable_to (x, y, z)
 	return cid == cid_air or is_cid_buildable_to[cid]
 end
 
+function mcl_levelgen.count_adjoining_non_air (x, y, z)
+	local cnt, cnt_x, cnt_z = 0, 0, 0
+	local cid, _ = get_block (x - 1, y, z)
+	if cid ~= cid_air then
+		cnt = cnt + 1
+		cnt_x = cnt_x + 1
+	end
+	local cid, _ = get_block (x, y, z - 1)
+	if cid ~= cid_air then
+		cnt = cnt + 1
+		cnt_z = cnt_z + 1
+	end
+	local cid, _ = get_block (x + 1, y, z)
+	if cid ~= cid_air then
+		cnt = cnt + 1
+		cnt_x = cnt_x + 1
+	end
+	local cid, _ = get_block (x, y, z + 1)
+	if cid ~= cid_air then
+		cnt = cnt + 1
+		cnt_z = cnt_z + 1
+	end
+	return cnt, cnt_x, cnt_z
+end
+
 --------------------------------------------------------------------------
 -- Utility functions.
 --------------------------------------------------------------------------
