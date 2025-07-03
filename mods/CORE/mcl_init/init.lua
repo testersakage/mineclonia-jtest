@@ -200,7 +200,13 @@ if mg_name == "flat" then
 end
 
 -- The End (surface at ca. Y = -27000)
-mcl_vars.mg_end_min = -27073 -- Carefully chosen to be at a mapchunk border
+if mcl_vars.enable_mcl_levelgen then
+	mcl_vars.mg_end_min = -27088
+else
+	-- XXX: the subsequent comment is drivel: it isn't so much as
+	-- a multiple of 16!!
+	mcl_vars.mg_end_min = -27073 -- Carefully chosen to be at a mapchunk border
+end
 mcl_vars.mg_end_max_official = mcl_vars.mg_end_min + minecraft_height_limit
 mcl_vars.mg_end_max = mcl_vars.mg_overworld_min - 2000
 mcl_vars.mg_end_platform_pos = { x = 100, y = mcl_vars.mg_end_min + 64, z = 0 }

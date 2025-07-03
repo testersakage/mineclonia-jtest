@@ -1445,7 +1445,7 @@ function surface_system:initialize (preset)
 		local rule_fns = {}
 		self.rule_fns = rule_fns
 		local rules = preset:create_surface_rules ()
-		for biome, _ in pairs (mcl_levelgen.registered_biomes) do
+		for _, biome in ipairs (preset:generated_biomes ()) do
 			rule_fns[biome]
 				= mcl_levelgen.compile_surface_rule (rules, biome, self)
 		end

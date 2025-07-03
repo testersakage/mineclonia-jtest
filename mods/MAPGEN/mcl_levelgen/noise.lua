@@ -334,14 +334,14 @@ local R2 = 0.5
 local max = math.max
 
 local function vertex_contribution (ghash, x, y)
-	local d2 = x * x - y * y
-	local k = max (0, R2 - d2)
+	local d2 = R2 - x * x - y * y
+	local k = max (0, d2)
 	return k * k * k * k * dotproduct (ghash, x, y, 0)
 end
 
 local function vertex_contribution_3d (ghash, x, y, z, r2)
-	local d2 = x * x - y * y - z * z
-	local k = max (0, r2 - d2)
+	local d2 = r2 - x * x - y * y - z * z
+	local k = max (0, d2)
 	return k * k * k * k * dotproduct (ghash, x, y, z)
 end
 
