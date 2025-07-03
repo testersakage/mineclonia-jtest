@@ -442,3 +442,71 @@ mcl_levelgen.register_placed_feature ("mcl_end:chorus_plant", {
 		mcl_levelgen.build_in_biome (),
 	},
 })
+
+------------------------------------------------------------------------
+-- End Gateway feature.
+-- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/feature/EndGatewayFeature.html
+------------------------------------------------------------------------
+
+-- local end_gateway_cfg = {
+-- 	exact = ...,
+-- 	exit_x = ...,
+-- 	exit_y = ...,
+-- 	exit_z = ...,
+-- }
+
+local cid_portal_gateway
+	= core.get_content_id ("mcl_portals:portal_gateway")
+local cid_bedrock
+	= core.get_content_id ("mcl_core:bedrock")
+local fix_lighting = mcl_levelgen.fix_lighting
+
+local function end_gateway_place (_, x, y, z, cfg, rng)
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+	set_block (x, y, z, cid_portal_gateway, 0)
+	set_block (x, y + 1, z, cid_bedrock, 0)
+	set_block (x - 1, y + 1, z, cid_bedrock, 0)
+	set_block (x + 1, y + 1, z, cid_bedrock, 0)
+	set_block (x, y + 1, z - 1, cid_bedrock, 0)
+	set_block (x, y + 1, z + 1, cid_bedrock, 0)
+	set_block (x, y + 2, z, cid_bedrock, 0)
+	set_block (x, y - 1, z, cid_bedrock, 0)
+	set_block (x - 1, y - 1, z, cid_bedrock, 0)
+	set_block (x + 1, y - 1, z, cid_bedrock, 0)
+	set_block (x, y - 1, z - 1, cid_bedrock, 0)
+	set_block (x, y - 1, z + 1, cid_bedrock, 0)
+	set_block (x, y - 2, z, cid_bedrock, 0)
+	notify_generated ("mcl_end:end_gateway", {
+		x, y, z, cfg.exact, cfg.exit_x,
+		cfg.exit_y, cfg.exit_z,
+	})
+	fix_lighting (x, y, z, x, y, z)
+	return true
+end
+
+mcl_levelgen.register_feature ("mcl_end:end_gateway", {
+	place = end_gateway_place,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_end:end_gateway_return", {
+	feature = "mcl_end:end_gateway",
+	exact = true,
+	exit_x = 100,
+	exit_y = 50,
+	exit_z = 0,
+})
+
+local ZERO = function (_) return 0 end
+
+mcl_levelgen.register_placed_feature ("mcl_end:end_gateway_return", {
+	configured_feature = "mcl_end:end_gateway_return",
+	placement_modifiers = {
+		mcl_levelgen.build_rarity_filter (700),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
+		mcl_levelgen.build_random_offset (ZERO, uniform_height (3, 9)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
