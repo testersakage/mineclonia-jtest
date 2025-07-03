@@ -2182,18 +2182,20 @@ local function hud_text (player)
 end
 
 local function init_hud (player)
-	local meta = player:get_meta ()
-	meta:set_int ("mcl_levelgen:debug_hud_enabled", 1)
-	huds[player] = player:hud_add ({
-		type = "text",
-		alignment = {
-			x = 1,
-			y = -1,
-		},
-		text = core.colorize ("#808080", hud_text (player)),
-		style = 5,
-		position = {x = 0.0073, y = 0.889},
-	})
+	if not huds[player] then
+		local meta = player:get_meta ()
+		meta:set_int ("mcl_levelgen:debug_hud_enabled", 1)
+		huds[player] = player:hud_add ({
+			type = "text",
+			alignment = {
+				x = 1,
+				y = -1,
+			},
+			text = core.colorize ("#808080", hud_text (player)),
+			style = 5,
+			position = {x = 0.0073, y = 0.889},
+		})
+	end
 end
 
 local function delete_hud (player)

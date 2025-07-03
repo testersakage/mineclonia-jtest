@@ -25,3 +25,21 @@ end
 
 mcl_levelgen.register_notification_handler ("mcl_end:spawn_end_crystal",
 					    handle_spawn_end_crystal)
+
+local v1 = vector.zero ()
+local function handle_end_gateway (_, data)
+	v.x, v.y, v.z
+		= level_to_minetest_position (data[1], data[2], data[3])
+	core.load_area (v)
+	local meta = core.get_meta (v)
+	if data[5] then
+		v1.x, v1.y, v1.z
+			= level_to_minetest_position (data[5], data[6], data[7])
+		meta:set_string ("mcl_portals:gateway_destination",
+				 core.pos_to_string (v1))
+	end
+	meta:set_int ("mcl_portals:gateway_exact", data[4] and 1 or 0)
+end
+
+mcl_levelgen.register_notification_handler ("mcl_end:end_gateway",
+					    handle_end_gateway)
