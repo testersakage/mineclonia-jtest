@@ -63,6 +63,13 @@ local biome_colors = {
 	NetherWastes = "#bf3b3b",
 	SoulSandValley = "#5e3830",
 	WarpedForest = "#49907b",
+
+	-- End biomes.
+	TheEnd = "#8080ff",
+	SmallEndIslands = "#bdb25f",
+	EndMidlands = "#a79d64",
+	EndHighlands = "#b09765",
+	EndBarrens = "#ca8c65",
 }
 
 ------------------------------------------------------------------------
