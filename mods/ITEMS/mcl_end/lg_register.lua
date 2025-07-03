@@ -41,6 +41,8 @@ local ipos3 = mcl_levelgen.ipos3
 local set_block = mcl_levelgen.set_block
 local notify_generated = mcl_levelgen.notify_generated
 local uniform_height = mcl_levelgen.uniform_height
+local run_minp = mcl_levelgen.placement_run_minp
+local run_maxp = mcl_levelgen.placement_run_maxp
 
 local function get_spikes (preset)
 	if preset.end_spikes then
@@ -139,8 +141,8 @@ local function end_spike_place_1 (preset, spike, r, run_min_y, run_max_y)
 	set_block (cx, height, cz, cid_bedrock, 0)
 
 	-- End Crystal.
-	local minp = mcl_levelgen.placement_run_minp
-	local maxp = mcl_levelgen.placement_run_maxp
+	local minp = run_minp
+	local maxp = run_maxp
 	if height >= run_min_y
 		and height <= run_max_y
 		and cx >= minp.x and cx <= maxp.x
@@ -196,6 +198,11 @@ local ceil = math.ceil
 local cid_end_stone = core.get_content_id ("mcl_end:end_stone")
 
 local function small_end_island_place (_, x, y, z, cfg, rng)
+	spike_rng:reseed (rng:next_long ())
+	if y < run_minp.y or y > run_maxp.y then
+		return
+	end
+	local rng = spike_rng
 	local r = rng:next_within (3) + 4.0
 	local dy = 0
 	while r > 0.5 do
