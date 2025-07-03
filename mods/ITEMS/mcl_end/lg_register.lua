@@ -200,7 +200,7 @@ local cid_end_stone = core.get_content_id ("mcl_end:end_stone")
 local function small_end_island_place (_, x, y, z, cfg, rng)
 	spike_rng:reseed (rng:next_long ())
 	if y < run_minp.y or y > run_maxp.y then
-		return
+		return false
 	end
 	local rng = spike_rng
 	local r = rng:next_within (3) + 4.0
@@ -248,6 +248,197 @@ mcl_levelgen.register_placed_feature ("mcl_end:end_island_decorated", {
 		})),
 		mcl_levelgen.build_in_square (),
 		mcl_levelgen.build_height_range (uniform_height (55, 70)),
+		mcl_levelgen.build_in_biome (),
+	},
+})
+
+------------------------------------------------------------------------
+-- Chorus Plant feature.
+------------------------------------------------------------------------
+
+local chorus_rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+
+local cid_chorus_plant
+	= core.get_content_id ("mcl_end:chorus_plant")
+local cid_chorus_flower
+	= core.get_content_id ("mcl_end:chorus_flower")
+local cid_chorus_flower_dead
+	= core.get_content_id ("mcl_end:chorus_flower_dead")
+
+local is_air = mcl_levelgen.is_air
+local get_block = mcl_levelgen.get_block
+
+local function is_end_stone (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_end_stone
+end
+
+local function longhash (x, y, z)
+	return (32768 + x) * 65536 * 65536 + (32768 + y) * 65536
+		+ (32768 + z)
+end
+
+local band = bit.band
+
+local function unhash (pos)
+	return floor (pos / (65536 * 65536)) - 32768,
+		band (floor (pos / 65536), 0xffff) - 32768,
+		pos % 65536 - 32768
+end
+
+local count_adjoining_non_air = mcl_levelgen.count_adjoining_non_air
+
+local function is_chorus_plant (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return cid == cid_chorus_plant
+end
+
+local MAX_FLOWER_AGE = 5 -- Maximum age of chorus flower before it dies
+
+local dirs = {
+	{ -1, 0, },
+	{ 1, 0, },
+	{ 0, -1, },
+	{ 0, 1, },
+}
+
+local function grow_chorous_flowers (flowers, out, rng)
+	for _, flower in ipairs (flowers) do
+		local x, y, z = unhash (flower)
+		local solids, _, _ = count_adjoining_non_air (x, y, z)
+		local branching = false
+		local h = 0
+		if solids == 0 then
+			for dy = 1, 4 do
+				if is_chorus_plant (x, y - dy, z) then
+					h = dy
+				else
+					break
+				end
+			end
+		end
+
+		local grow_chance
+		if h <= 1 then
+			grow_chance = 1.0
+		else
+			grow_chance = 0.15
+		end
+
+		if grow_chance then
+			local inpos = #out + 1
+			local written = false
+			local _, param2 = get_block (x, y, z)
+			local age = param2
+			if (grow_chance == 1.0
+			    or rng:next_double () < grow_chance) then
+				local grow = rng:next_within (4) + 1
+				local i_max
+				for i = 1, grow do
+					if not is_air (x, y + i, z)
+						or count_adjoining_non_air (x, y + i, z) > 1 then
+						break
+					end
+
+					if i > 1 then
+						set_block (x, y + i - 1, z, cid_chorus_plant, 0)
+					end
+					i_max = i
+				end
+				if i_max then
+					insert (out, longhash (x, y + i_max, z))
+					written = true
+				end
+			else
+				local branches
+
+				if not branching then
+					branches = 1 + rng:next_within (4)
+				else
+					branches = rng:next_within (4)
+				end
+
+				for i = 1, branches do
+					local dir = dirs[1 + rng:next_within (4)]
+					local x1, z1 = x + dir[1], z + dir[2]
+					if is_air (x1, y, z1)
+						and count_adjoining_non_air (x1, y, z1) == 1 then
+						insert (out, longhash (x1, y, z1))
+						written = true
+					end
+				end
+			end
+
+			local i1 = inpos
+			for i = inpos, #out do
+				local x, y, z = unhash (out[i])
+				local cid, _ = get_block (x, y, z)
+				if cid ~= cid_chorus_flower
+					and cid ~= cid_chorus_flower_dead then
+					set_block (x, y, z, cid_chorus_flower_dead, age + 1)
+					if age + 1 < MAX_FLOWER_AGE then
+						out[i1] = out[i]
+						i1 = i1 + 1
+					end
+				end
+			end
+
+			if written then
+				set_block (x, y, z, cid_chorus_plant, 0)
+			end
+
+			for i = i1, #out do
+				out[i] = nil
+			end
+		end
+	end
+end
+
+local function grow_chorus_plant (x, y, z, rng)
+	set_block (x, y, z, cid_chorus_flower, 0)
+	local flowers = {
+		longhash (x, y, z),
+	}
+	local flowers_next = {}
+	for i = 1, 45 do
+		grow_chorous_flowers (flowers, flowers_next, rng)
+		flowers, flowers_next = flowers_next, flowers
+		if #flowers == 0 then
+			return
+		end
+		for i = 1, #flowers_next do
+			flowers_next[i] = nil
+		end
+	end
+end
+
+local function chorus_plant_place (_, x, y, z, cfg, rng)
+	chorus_rng:reseed (rng:next_long ())
+	if y < run_minp.y or y > run_maxp.y then
+		return false
+	end
+	local rng = chorus_rng
+	if is_air (x, y, z) and is_end_stone (x, y - 1, z) then
+		grow_chorus_plant (x, y, z, rng)
+		return true
+	end
+	return false
+end
+
+mcl_levelgen.register_feature ("mcl_end:chorus_plant", {
+	place = chorus_plant_place,
+})
+
+mcl_levelgen.register_configured_feature ("mcl_end:chorus_plant", {
+	feature = "mcl_end:chorus_plant",
+})
+
+mcl_levelgen.register_placed_feature ("mcl_end:chorus_plant", {
+	configured_feature = "mcl_end:chorus_plant",
+	placement_modifiers = {
+		mcl_levelgen.build_count (uniform_height (0, 4)),
+		mcl_levelgen.build_in_square (),
+		mcl_levelgen.build_heightmap ("motion_blocking"),
 		mcl_levelgen.build_in_biome (),
 	},
 })
