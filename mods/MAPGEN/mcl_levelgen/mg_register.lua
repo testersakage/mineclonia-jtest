@@ -9,8 +9,6 @@ local mathmax = math.max
 mcl_levelgen.initialize_nodeprops_in_async_env ()
 mcl_levelgen.initialize_portable_schematics ()
 
-local lighting_disabled = mcl_levelgen.lighting_disabled
-
 -- local zone = require ("jit.zone")
 
 if core.global_exists ("jit") then
@@ -144,7 +142,7 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 		vmanip:set_data (cids)
 		vmanip:set_param2_data (param2s)
 
-		if not lighting_disabled then
+		if not dim.no_lighting then
 			vmanip:set_lighting ({day=0, night=0,})
 			vmanip:calc_lighting ()
 		end

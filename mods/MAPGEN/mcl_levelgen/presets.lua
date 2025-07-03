@@ -1996,6 +1996,7 @@ local nether_preset_template = table.merge (level_preset_template, {
 	noise_size_vertical = 2,
 	noise_cell_width = toblock (1),
 	noise_cell_height = toblock (2),
+	disable_mob_generation = true,
 	aquifers_enabled = false,
 	ore_veins_enabled = false,
 	use_legacy_random_source = true,
@@ -2017,5 +2018,141 @@ function mcl_levelgen.make_nether_preset (seed)
 				 construct_nether_lut, true)
 	initialize_nether_generation (preset)
 	initialize_nether_surface_rules (preset)
+	return preset
+end
+
+------------------------------------------------------------------------
+-- End presets.
+------------------------------------------------------------------------
+
+local end_preset_template = table.merge (level_preset_template, {
+	min_y = 0,
+	height = 128,
+	sea_level = 0,
+	noise_size_horizontal = 2,
+	noise_size_vertical = 1,
+	noise_cell_width = toblock (2),
+	noise_cell_height = toblock (1),
+	disable_mob_generation = true,
+	aquifers_enabled = false,
+	ore_veins_enabled = false,
+	use_legacy_random_source = true,
+	default_block = "mcl_end:end_stone",
+	default_fluid = "air",
+})
+
+end_preset_template.index_biomes_block
+	= overworld_preset_template.index_biomes_block
+
+local arshift = bit.arshift
+local lshift = bit.lshift
+local end_islands = mcl_levelgen.make_end_island_func
+
+local function initialize_end_biomes (preset)
+	-- Strip caching or interpolating wrappers from density
+	-- functions.
+	local function strip_markers (dfunc)
+		if dfunc.is_marker then
+			return dfunc.input
+		else
+			return dfunc
+		end
+	end
+
+	local registry = preset.registry
+	preset.vegetation = registry.zero
+	preset.temperature = registry.zero
+	preset.continents = registry.zero
+	preset.depth = registry.zero
+	preset.ridges = registry.zero
+	-- Actually just `end_island_eval (simplex_octave (...))',
+	-- but Minecraft can be observed performing this ridiculous
+	-- dance.
+	preset.erosion = cache_2d (end_islands (preset.seed))
+
+	local erosion_stripped
+		= preset.erosion:wrap (strip_markers, identity)
+
+	preset.index_biomes = function (self, qx, qy, qz)
+		local bx, bz
+			= toblock (qx), toblock (qz)
+		local sx, sz
+			= arshift (bx, 4), arshift (bz, 4)
+
+		if sx * sx + sz * sz <= 4096 then
+			return "TheEnd"
+		else
+			local erode_x = lshift (sx * 2 + 1, 3)
+			local erode_z = lshift (sz * 2 + 1, 3)
+			local value = erosion_stripped (erode_x, 0, erode_z)
+			if value > 0.25 then -- (40 - 8) / 128.0
+				return "EndHighlands"
+			elseif value >= -0.0625 then -- (0 - 8) / 128.0
+				return "EndMidlands"
+			elseif value >= -0.21875 then -- (-20.0 - 8) / 128.0
+				return "SmallEndIslands"
+			else
+				return "EndBarrens"
+			end
+		end
+	end
+
+	preset.index_biomes_cached = preset.index_biomes
+	preset.index_biomes_begin = function (self, wx, wz, xorigin, zorigin)
+	end
+	preset.biome_debug_string = function (self, x, y, z)
+		return "No data"
+	end
+	local all_biomes = {
+		"TheEnd",
+		"EndHighlands",
+		"EndMidlands",
+		"SmallEndIslands",
+		"EndBarrens",
+	}
+	preset.generated_biomes = function ()
+		return all_biomes
+	end
+
+	preset.index_biomes_cached = preset.index_biomes
+end
+
+local function initialize_end_generation (preset)
+	local registry = preset.registry
+	preset.barrier_noise = registry.zero
+	preset.fluid_level_floodedness_noise = registry.zero
+	preset.fluid_level_spread_noise = registry.zero
+	preset.lava_noise = registry.zero
+	preset.initial_density_without_jaggedness = registry.zero
+	preset.vein_toggle = registry.zero
+	preset.vein_ridged = registry.zero
+	preset.vein_gap = registry.zero
+
+	local end_islands_only
+		= taper_off_at_extrema (add (preset.erosion, const (-0.703125)),
+					0, 128, 72, -184, -23.4375, 4, 32,
+					-0.234375)
+	preset.initial_density_without_jaggedness = end_islands_only
+	local end_noise
+		= taper_off_at_extrema (registry.sloped_cheese_end,
+					0, 128, 72, -184, -23.4375, 4, 32,
+					-0.234375)
+	preset.final_density = post_process (end_noise)
+end
+
+local function initialize_end_surface_rules (preset)
+	preset.create_surface_rules = function (self)
+		return mcl_levelgen.end_surface_rule ()
+	end
+end
+
+function mcl_levelgen.make_end_preset (seed)
+	local preset = copy_preset (end_preset_template)
+	initialize_random (preset, seed)
+	initialize_noises (preset)
+	initialize_density_functions (preset)
+	initialize_end_biomes (preset)
+	initialize_end_generation (preset)
+	initialize_end_surface_rules (preset)
 	return preset
 end
