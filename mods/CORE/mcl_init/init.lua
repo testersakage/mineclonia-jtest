@@ -201,7 +201,7 @@ end
 
 -- The End (surface at ca. Y = -27000)
 if mcl_vars.enable_mcl_levelgen then
-	mcl_vars.mg_end_min = -27088
+	mcl_vars.mg_end_min = -26880
 else
 	-- XXX: the subsequent comment is drivel: it isn't so much as
 	-- a multiple of 16!!
