@@ -2864,7 +2864,7 @@ mcl_levelgen.register_biome ("EndHighlands", {
 		{},
 		{},
 		{
-			"mcl_portals:end_gateway_return",
+			"mcl_end:end_gateway_return",
 		},
 		{},
 		{},
