@@ -803,6 +803,7 @@ local function in_range (x, y, z)
 	return x >= min_x and y >= min_y and z >= min_z
 		and x <= max_x and y <= max_y and z <= max_z
 end
+mcl_levelgen.in_range = in_range
 
 local function always ()
 	return true
