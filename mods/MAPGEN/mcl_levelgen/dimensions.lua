@@ -52,6 +52,8 @@ function mcl_levelgen.initialize_dimensions (seed)
 		dim.preset = preset
 		dim.id = id
 		dim.data_namespace = desc.data_namespace
+		dim.no_lighting = desc.no_lighting
+			or mcl_levelgen.lighting_disabled
 		all_dimensions[id] = dim
 		table.insert (dims, dim)
 	end
@@ -169,6 +171,7 @@ mcl_levelgen.register_dimension ("mcl_levelgen:overworld", {
 	create_preset = function (self, seed)
 		return mcl_levelgen.make_overworld_preset (seed)
 	end,
+	no_lighting = false,
 })
 
 mcl_levelgen.register_dimension ("mcl_levelgen:nether", {
@@ -177,4 +180,14 @@ mcl_levelgen.register_dimension ("mcl_levelgen:nether", {
 	create_preset = function (self, seed)
 		return mcl_levelgen.make_nether_preset (seed)
 	end,
+	no_lighting = false,
+})
+
+mcl_levelgen.register_dimension ("mcl_levelgen:end", {
+	y_global = mcl_vars.mg_end_min,
+	data_namespace = 2,
+	create_preset = function (self, seed)
+		return mcl_levelgen.make_end_preset (seed)
+	end,
+	no_lighting = true,
 })

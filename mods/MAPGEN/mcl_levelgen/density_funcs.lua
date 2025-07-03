@@ -935,8 +935,7 @@ local function end_island_eval (noise, x, z)
 	local density
 
 	-- Generate a main end island at the center of the map.
-	density = 100.0 - sqrt (x * x + z * z) * 8.0
-	density = clamp (density, -100.0, 80.0)
+	density = (x * x + z * z) * 64.0
 
 	-- Generate outer islands after a distance of sqrt (4096) * 8
 	-- blocks from the center of the map according to noise.
@@ -952,15 +951,13 @@ local function end_island_eval (noise, x, z)
 				period = period % 13.0 + 9.0
 				local x_local = xfrac - x * 2
 				local z_local = zfrac - z * 2
-				local local_dist = sqrt (x_local * x_local + z_local * z_local)
-				local density1 = 100.0 - local_dist * period
-				density1 = clamp (density1, -100.0, 80.0)
-				density = mathmax (density1, density)
+				local local_dist = x_local * x_local + z_local * z_local
+				density = mathmin (local_dist * period * period, density)
 			end
 		end
 	end
 
-	return density
+	return clamp (100.0 - sqrt (density), -100.0, 80.0)
 end
 
 function end_island_func:__call (x, y, z, blender)
