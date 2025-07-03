@@ -2090,9 +2090,9 @@ local function initialize_end_biomes (preset)
 			elseif value >= -0.0625 then -- (0 - 8) / 128.0
 				return "EndMidlands"
 			elseif value >= -0.21875 then -- (-20.0 - 8) / 128.0
-				return "SmallEndIslands"
-			else
 				return "EndBarrens"
+			else
+				return "SmallEndIslands"
 			end
 		end
 	end
