@@ -507,3 +507,9 @@ end
 ------------------------------------------------------------------------
 -- End surface system presets.
 ------------------------------------------------------------------------
+
+function mcl_levelgen.end_surface_rule ()
+	local cid_end_stone = core.get_content_id ("mcl_end:end_stone")
+	local end_stone = block (cid_end_stone, 0)
+	return end_stone
+end
