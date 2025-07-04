@@ -69,7 +69,7 @@ core.register_lbm({
 	run_at_every_load = false,
 	action = function(pos, n)
 		if core.get_item_group(n.name,"biomecolor") == 0 then return end
-		local p2 = mcl_util.get_pos_p2(pos)
+		local p2 = mcl_util.get_pos_p2(pos, true)
 		if n.param2 ~= p2 then
 			n.param2 = p2
 			core.swap_node(pos, n)

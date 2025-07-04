@@ -7,6 +7,8 @@ local mathmin = math.min
 local mathabs = math.abs
 local floor = math.floor
 
+local band = bit.band
+
 local tree_placement_flags = {
 	place_center_x = true,
 	place_center_z = true,
@@ -64,7 +66,7 @@ local index_biome = mcl_levelgen.index_biome
 local function get_biome_color (x, y, z)
 	local biome = index_biome (x, y, z)
 	local def = registered_biomes[biome]
-	return 32 + def.grass_palette_index
+	return def.leaves_palette_index
 end
 mcl_trees.get_biome_color = get_biome_color
 
@@ -82,10 +84,10 @@ local function apply_biome_coloration (aabb)
 	for x = x1, x2 do
 		for y = y1, y2 do
 			for z = z1, z2 do
-				local cid, _ = get_block (x, y, z)
+				local cid, distance = get_block (x, y, z)
 				if biomecolor_nodes[cid] then
 					local idx = get_biome_color (x, y, z)
-					set_block (x, y, z, cid, idx)
+					set_block (x, y, z, cid, band (distance, -32) + idx)
 				end
 			end
 		end

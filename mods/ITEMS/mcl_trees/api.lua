@@ -150,7 +150,7 @@ local function set_placed_leaves_p2(pos)
 	local n = core.get_node(pos)
 	local palette_index = 0
 	if core.get_item_group(n.name, "biomecolor") ~= 0 then
-		palette_index = mcl_util.get_pos_p2(pos)
+		palette_index = mcl_util.get_pos_p2(pos, true)
 	end
 
 	-- 32 represents a log distance of 0 (which means the no decay)
