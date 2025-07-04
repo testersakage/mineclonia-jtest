@@ -76,13 +76,21 @@ function mcl_structures.get_struct(file)
 	end
 end
 
+local is_structure_constructor = false
+
+function mcl_structures.is_structure_constructor ()
+	return is_structure_constructor
+end
+
 -- Call on_construct on pos.
 -- Useful to init chests from formspec.
 local function init_node_construct(pos)
 	local node = core.get_node(pos)
 	local def = core.registered_nodes[node.name]
 	if def and def.on_construct then
+		is_structure_constructor = true
 		def.on_construct(pos)
+		is_structure_constructor = false
 		return true
 	end
 	return false

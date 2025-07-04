@@ -375,7 +375,7 @@ end
 
 local function jigsaw_construct_block (x, y, z)
 	v.x, v.y, v.z = x, y, -z - 1
-	mcl_structures.init_node_construct (v)
+	mcl_structures.init_node_construct (vector.copy (v))
 end
 
 local function execute_load (player, pos, data)
@@ -468,12 +468,15 @@ core.register_on_mods_loaded (function ()
 		"group:jigsaw_block",
 		"group:container",
 		"group:sign",
+		"mcl_itemframes:frame",
 		"group:jigsaw_preserve_meta",
 	})
 	cids_to_construct = mcl_levelgen.construct_cid_list ({
 		"group:container",
 		"group:redstone_wire",
+		"group:chest_entity",
 		"group:sign",
+		"mcl_itemframes:frame",
 		"group:jigsaw_construct",
 	})
 end)
