@@ -46,6 +46,7 @@ globals = {
 	"mcl_beehives",
 	"mcl_bells",
 	"mcl_biomes",
+	"mcl_biome_dispatch",
 	"mcl_blackstone",
 	"mcl_blast_furnace",
 	"mcl_boats",
