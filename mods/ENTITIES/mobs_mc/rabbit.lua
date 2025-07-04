@@ -127,24 +127,41 @@ function rabbit:set_nametag (nametag)
 	end
 end
 
+local spawns_white_rabbits_p, spawns_gold_rabbits_p
+
+core.register_on_mods_loaded (function ()
+	spawns_white_rabbits_p = mcl_biome_dispatch.make_biome_test ({
+		"FrozenOcean",
+		"FrozenPeaks",
+		"FrozenRiver",
+		"Grove",
+		"IceSpikes",
+		"JaggedPeaks",
+		"SnowyBeach",
+		"SnowyPlains",
+		"SnowySlopes",
+		"SnowyTaiga",
+	})
+	spawns_gold_rabbits_p = mcl_biome_dispatch.make_biome_test ({
+		"Desert",
+	})
+end)
+
 function rabbit:on_spawn ()
 	local texture = self._spawn_texture
 
 	if not texture then
 		local self_pos = self.object:get_pos ()
-		local data = core.get_biome_data (self_pos)
 		local random = math.random (100)
-		local name = core.get_biome_name (data.biome)
-		local definition = core.registered_biomes[name]
+		local name = mcl_biome_dispatch.get_biome_name (self_pos)
 
-		if definition._mcl_biome_type == "cold"
-			or definition._mcl_biome_type == "snowy" then
+		if spawns_white_rabbits_p (name) then
 			if random < 80 then
 				texture = "mobs_mc_rabbit_white.png"
 			else
 				texture = "mobs_mc_rabbit_white_splotched.png"
 			end
-		elseif name:find ("Desert") then
+		elseif spawns_gold_rabbits_p (name) then
 			texture = "mobs_mc_rabbit_gold.png"
 		elseif random < 50 then
 			texture = "mobs_mc_rabbit_brown.png"

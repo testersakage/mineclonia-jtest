@@ -123,12 +123,11 @@ function snow_golem:ai_step (dtime)
 
 	-- Is this biome inhospitable?
 	if self:check_timer ("biome_damage", 0.5) then
-		local self_pos = self.object:get_pos ()
-		local biome = core.get_biome_data (self_pos)
-		local name = biome and core.get_biome_name (biome.biome)
-		local def = name and core.registered_biomes[name]
-
-		if def and def._mcl_biome_type == "hot" then
+		local self_pos = mcl_util.get_nodepos (self.object:get_pos ())
+		local biome_name = mcl_biome_dispatch.get_biome_name (self_pos)
+		local temp = mcl_biome_dispatch.get_temperature_in_biome (biome_name,
+									  self_pos)
+		if temp > 1.0 then
 			self:damage_mob ("on_fire", 1.0)
 		end
 	end

@@ -43,6 +43,21 @@ function mcl_weather.set_sky_color(player, def)
 	})
 end
 
+local function get_sky_color (pos)
+	local nodepos = mcl_util.get_nodepos (pos)
+	return mcl_biome_dispatch.get_sky_color (pos)
+end
+
+local function get_fog_color (pos)
+	local nodepos = mcl_util.get_nodepos (pos)
+	return mcl_biome_dispatch.get_fog_color (pos)
+end
+
+local function get_both_colors (pos)
+	local nodepos = mcl_util.get_nodepos (pos)
+	return mcl_biome_dispatch.get_sky_and_fog_colors (pos)
+end
+
 mcl_weather.skycolor = {
 	-- Should be activated before do any effect.
 	active = true,
@@ -131,40 +146,8 @@ mcl_weather.skycolor = {
 			local dim = mcl_worlds.pos_to_dimension(pos)
 			local has_weather = (mcl_worlds.has_weather(pos) and (mcl_weather.state =="rain" or mcl_weather.state == "thunder") and mcl_weather.has_snow(pos)) or ((mcl_weather.state =="rain" or mcl_weather.state == "thunder") and mcl_weather.has_rain(pos))
 			local checkname = core.get_node(vector.new(pos.x,pos.y+1.5,pos.z)).name
-			if core.get_item_group(checkname, "water") ~= 0 then
-				local biome_index = core.get_biome_data(player:get_pos()).biome
-				local biome_name = core.get_biome_name(biome_index)
-				local biome = core.registered_biomes[biome_name]
-				if biome then water_color = biome._mcl_waterfogcolor end
-				if not biome then water_color = "#3F76E4" end
-				if checkname == "mclx_core:river_water_source" or checkname == "mclx_core:river_water_flowing" then water_color = "#0084FF" end
-				player:set_sky({ type = "regular",
-					sky_color = {
-						day_sky = water_color,
-						day_horizon = water_color,
-						dawn_sky = water_color,
-						dawn_horizon = water_color,
-						night_sky = water_color,
-						night_horizon = water_color,
-						indoors = water_color,
-						fog_sun_tint = water_color,
-						fog_moon_tint = water_color,
-						fog_tint_type = "custom"
-					},
-					clouds = false,
-				})
-			end
 			if dim == "overworld" then
-				local biomesky
-				local biomefog
-				local biome_index = core.get_biome_data(player:get_pos()).biome
-				local biome_name = core.get_biome_name(biome_index)
-				local biome = core.registered_biomes[biome_name]
-				if biome then
-					--core.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
-					biomesky = biome._mcl_skycolor
-					biomefog = biome._mcl_fogcolor
-				end
+				local biomesky, biomefog = get_both_colors (pos)
 				if (mcl_weather.state == "none") then
 					-- Clear weather
 					mcl_weather.set_sky_box_clear(player,biomesky,biomefog)
@@ -229,16 +212,7 @@ mcl_weather.skycolor = {
 					end
 				end
 			elseif dim == "end" then
-				local biomesky = "#000000"
-				--local biomefog = "#A080A0"
-				local biome_index = core.get_biome_data(player:get_pos()).biome
-				local biome_name = core.get_biome_name(biome_index)
-				local biome = core.registered_biomes[biome_name]
-				if biome then
-					--core.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
-					biomesky = biome._mcl_skycolor
-					--biomefog = biome._mcl_fogcolor -- The End biomes seemingly don't use the fog colour, despite having this value according to the wiki. The sky colour is seemingly used for both sky and fog?
-				end
+				local biomesky = get_sky_color (pos) or "#000000"
 				local t = "mcl_playerplus_end_sky.png"
 				player:set_sky({ type = "skybox",
 					base_color = biomesky,
@@ -250,16 +224,7 @@ mcl_weather.skycolor = {
 				player:set_stars({visible = false})
 				mcl_weather.skycolor.override_day_night_ratio(player, 0.5)
 			elseif dim == "nether" then
-				--local biomesky = "#6EB1FF"
-				local biomefog = "#330808"
-				local biome_index = core.get_biome_data(player:get_pos()).biome
-				local biome_name = core.get_biome_name(biome_index)
-				local biome = core.registered_biomes[biome_name]
-				if biome then
-					--core.log("action", string.format("Biome found for number: %s in biome: %s", tostring(biome_index), biome_name))
-					--biomesky = biome._mcl_skycolor -- The Nether biomes seemingly don't use the sky colour, despite having this value according to the wiki. The fog colour is used for both sky and fog.
-					biomefog = biome._mcl_fogcolor
-				end
+				local biomefog = get_fog_color (pos) or "#330808"
 				mcl_weather.set_sky_color(player, {
 					type = "regular",
 					sky_color = {
