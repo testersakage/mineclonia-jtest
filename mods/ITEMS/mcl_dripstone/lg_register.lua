@@ -371,7 +371,6 @@ mcl_levelgen.register_configured_feature ("mcl_dripstone:dripstone_cluster", {
 })
 
 local overworld = mcl_levelgen.overworld_preset
-local OVERWORLD_TOP = overworld.min_y + overworld.height - 1
 local OVERWORLD_MIN = overworld.min_y
 
 mcl_levelgen.register_placed_feature ("mcl_dripstone:dripstone_cluster", {
