@@ -1592,6 +1592,13 @@ function mcl_levelgen.register_biome (name, def)
 	assert (def.grass_palette_index,
 		"Biome definition does not define a grass palette index")
 	assert (def.groups, "Biome definition does not define a group list")
+	if def.grass_palette_index > 31
+		and not def.leaves_palette_index then
+		error ("Biome definition requires a leaf palette index but none "
+		       .. "is specified")
+	elseif not def.leaves_palette_index then
+		def.leaves_palette_index = def.grass_palette_index
+	end
 	registered_biomes[name] = def
 end
 
@@ -4968,6 +4975,7 @@ mcl_levelgen.register_biome ("SnowyBeach", {
 	has_precipitation = true,
 	temperature = 0.050000,
 	grass_palette_index = 32,
+	leaves_palette_index = 31,
 	groups = {
 		is_beach = true,
 		is_overworld = true,
@@ -5428,6 +5436,7 @@ mcl_levelgen.register_biome ("StonyPeaks", {
 	has_precipitation = true,
 	temperature = 1.000000,
 	grass_palette_index = 33,
+	leaves_palette_index = 11,
 	groups = {
 		is_mountain = true,
 		is_overworld = true,
@@ -5510,6 +5519,7 @@ mcl_levelgen.register_biome ("StonyShore", {
 	has_precipitation = true,
 	temperature = 0.200000,
 	grass_palette_index = 34,
+	leaves_palette_index = 31,
 	groups = {
 		is_overworld = true,
 	},
@@ -6007,6 +6017,7 @@ mcl_levelgen.register_biome ("WindsweptForest", {
 	has_precipitation = true,
 	temperature = 0.200000,
 	grass_palette_index = 34,
+	leaves_palette_index = 31,
 	groups = {
 		is_hill = true,
 		is_overworld = true,
@@ -6093,6 +6104,7 @@ mcl_levelgen.register_biome ("WindsweptGravellyHills", {
 	has_precipitation = true,
 	temperature = 0.200000,
 	grass_palette_index = 34,
+	leaves_palette_index = 31,
 	groups = {
 		is_hill = true,
 		is_overworld = true,
@@ -6179,6 +6191,7 @@ mcl_levelgen.register_biome ("WindsweptHills", {
 	has_precipitation = true,
 	temperature = 0.200000,
 	grass_palette_index = 34,
+	leaves_palette_index = 31,
 	groups = {
 		is_hill = true,
 		is_overworld = true,
