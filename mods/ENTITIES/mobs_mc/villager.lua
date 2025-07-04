@@ -2151,26 +2151,62 @@ local function villager_log (str)
 	end
 end
 
-local function villager_type_from_biome (biomedata)
-	if not biomedata then
+local desert_p, jungle_p, savannah_p, snowy_p, taiga_p, swamp_p
+
+core.register_on_mods_loaded (function ()
+	desert_p = mcl_biome_dispatch.make_biome_test ({
+		"#is_badlands",
+		"Desert",
+	})
+	jungle_p = mcl_biome_dispatch.make_biome_test ({
+		"#is_jungle",
+	})
+	snowy_p = mcl_biome_dispatch.make_biome_test ({
+		"DeepFrozenOcean",
+		"FrozenOcean",
+		"FrozenPeaks",
+		"FrozenRiver",
+		"Grove",
+		"IceSpikes",
+		"JaggedPeaks",
+		"SnowyBeach",
+		"SnowyPlains",
+		"SnowySlopes",
+		"SnowyTaiga",
+	})
+	savannah_p = mcl_biome_dispatch.make_biome_test ({
+		"#is_savannah",
+	})
+	taiga_p = mcl_biome_dispatch.make_biome_test ({
+		"OldGrowthPineTaiga",
+		"OldGrowthSpruceTaiga",
+		"Taiga",
+		"WindsweptForest",
+		"WindsweptGravellyHills",
+		"WindsweptHills",
+	})
+	swamp_p = mcl_biome_dispatch.make_biome_test ({
+		"Swamp",
+		"MangroveSwamp",
+	})
+end)
+
+local function villager_type_from_biome (name)
+	if not name then
 		return "plains"
 	end
 
-	local name = core.get_biome_name (biomedata.biome)
-
-	if name:find ("Mesa")
-		or name:find ("Desert") then
+	if desert_p (name) then
 		return "desert"
-	elseif name:find ("Jungle") then
+	elseif jungle_p (name) then
 		return "jungle"
-	elseif name:find ("Savanna") then
+	elseif savannah_p (name) then
 		return "savanna"
-	elseif name:find ("IcePlains")
-		or name:find ("ColdTaiga") then
+	elseif snowy_p (name) then
 		return "snowy"
-	elseif name:find ("Taiga") then
+	elseif taiga_p (name) then
 		return "taiga"
-	elseif name:find ("Swamp") then
+	elseif swamp_p (name) then
 		return "swamp"
 	else
 		return "plains"
@@ -2184,8 +2220,8 @@ function villager:on_spawn ()
 
 	if not rawget (self, "_villager_type") then
 		local self_pos = self.object:get_pos ()
-		local biomedata = core.get_biome_data (self_pos)
-		local villager_type = villager_type_from_biome (biomedata)
+		local biomename = mcl_biome_dispatch.get_biome_name (self_pos)
+		local villager_type = villager_type_from_biome (biomename)
 		self._villager_type = villager_type
 		self.base_texture[1] = self:get_overlaid_texture ()
 		self:set_textures (self.base_texture)
@@ -2338,8 +2374,8 @@ function villager:conceive_child (mate_entity, bed)
 	local villager_type
 	if random < 0.5 then
 		local self_pos = self.object:get_pos ()
-		local biomedata = core.get_biome_data (self_pos)
-		villager_type = villager_type_from_biome (biomedata)
+		local biomename = mcl_biome_dispatch.get_biome_name (self_pos)
+		villager_type = villager_type_from_biome (biomename)
 	elseif random < 0.75 then
 		villager_type = self._villager_type
 	else

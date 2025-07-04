@@ -130,37 +130,28 @@ end
 local wolf_variants = {
 	pale = wolf_variant ("wolf", nil),
 	spotted = wolf_variant ("wolf_spotted", {
-		"Savanna",
-		"SavannaM",
+		"#is_savannah",
 	}),
 	snowy = wolf_variant ("wolf_snowy", {
-		"IcePlains",
-		"IcePlainsSpikes",
+		"Grove",
 	}),
 	black = wolf_variant ("wolf_black", {
-		"MegaTaiga",
+		"OldGrowthPineTaiga",
 	}),
 	ashen = wolf_variant ("wolf_ashen", {
-		"ColdTaiga",
-		"ColdTaiga_beach",
-		"ColdTaiga_beach_water",
+		"SnowyTaiga",
 	}),
 	rusty = wolf_variant ("wolf_rusty", {
-		"Jungle",
-		"JungleEdge",
-		"BambooJungle",
+		"#is_jungle",
 	}),
 	woods = wolf_variant ("wolf_woods", {
 		"Forest",
-		"Forest_beach",
 	}),
 	chestnut = wolf_variant ("wolf_chestnut", {
-		"MegaSpruceTaiga",
+		"OldGrowthSpruceTaiga",
 	}),
 	striped = wolf_variant ("wolf_striped", {
-		"Mesa",
-		"MesaPlateauF",
-		"MesaPlateauFM",
+		"#is_badlands",
 	}),
 }
 
@@ -169,13 +160,9 @@ local variant_by_biome = {}
 core.register_on_mods_loaded (function ()
 	for name, variant in pairs (wolf_variants) do
 		if variant.biomes then
-			for _, biome in pairs (variant.biomes) do
-				local id = core.get_biome_id (biome)
-				if not id then
-					core.log ("warning", "[mobs_mc] Invalid biome " .. biome)
-				else
-					variant_by_biome[id] = name
-				end
+			local biomes = mcl_biome_dispatch.build_biome_list (variant.biomes)
+			for _, biome in ipairs (biomes) do
+				variant_by_biome[biome] = name
 			end
 		end
 	end
@@ -242,6 +229,9 @@ function wolf:wetness_modifier ()
 end
 
 function wolf:compute_textures ()
+	if not self._wolf_variant then
+		self._wolf_variant = "pale"
+	end
 	local variant = wolf_variants[self._wolf_variant]
 	assert (variant)
 	if self.tamed then
@@ -283,9 +273,9 @@ function wolf:update_textures ()
 	if not self._wolf_variant then
 		-- Establish which variant to spawn.
 		local self_pos = self.object:get_pos ()
-		local biome = core.get_biome_data (self_pos)
+		local biome = mcl_biome_dispatch.get_biome_name (self_pos)
 		local variant
-			= (biome and variant_by_biome[biome.biome]) or "pale"
+			= (biome and variant_by_biome[biome]) or "pale"
 		self._wolf_variant = variant
 	end
 
@@ -1012,9 +1002,9 @@ function wolf_spawner_taiga:test_supporting_node (node)
 end
 
 function wolf_spawner_taiga:prepare_to_spawn (pack_size, center)
-	local biome = core.get_biome_data (center)
+	local biome = mcl_biome_dispatch.get_biome_name (center)
 	local variant
-		= (biome and variant_by_biome[biome.biome]) or "pale"
+		= (biome and variant_by_biome[biome]) or "pale"
 	return {
 		_wolf_variant = variant,
 	}

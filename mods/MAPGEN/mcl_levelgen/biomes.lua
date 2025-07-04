@@ -1738,6 +1738,8 @@ mcl_levelgen.register_biome ("Mesa", {
 		is_badlands = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#6eb1ff",
 })
 
 mcl_levelgen.register_biome ("BambooJungle", {
@@ -1795,6 +1797,8 @@ mcl_levelgen.register_biome ("BambooJungle", {
 		is_jungle = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#77a8ff",
 })
 
 mcl_levelgen.register_biome ("BasaltDeltas", {
@@ -1842,6 +1846,8 @@ mcl_levelgen.register_biome ("BasaltDeltas", {
 	groups = {
 		is_nether = true,
 	},
+	fog_color = "#685f70",
+	sky_color = "#6eb1ff",
 })
 
 mcl_levelgen.register_biome ("Beach", {
@@ -1893,6 +1899,9 @@ mcl_levelgen.register_biome ("Beach", {
 		is_beach = true,
 		is_overworld = true,
 	},
+	has_precipitation = true,
+	fog_color = "#c0d8ff",
+	sky_color = "#78a7ff",
 })
 
 mcl_levelgen.register_biome ("BirchForest", {
@@ -1946,6 +1955,8 @@ mcl_levelgen.register_biome ("BirchForest", {
 		is_forest = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7aa5ff",
 })
 
 mcl_levelgen.register_biome ("CherryGrove", {
@@ -2029,6 +2040,8 @@ mcl_levelgen.register_biome ("CherryGrove", {
 		is_mountain = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("ColdOcean", {
@@ -2114,6 +2127,8 @@ mcl_levelgen.register_biome ("ColdOcean", {
 	groups = {
 		is_ocean = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("CrimsonForest", {
@@ -2161,6 +2176,8 @@ mcl_levelgen.register_biome ("CrimsonForest", {
 	groups = {
 		is_nether = true,
 	},
+	fog_color = "#330303",
+	sky_color = "#6eb1ff",
 })
 
 mcl_levelgen.register_biome ("DarkForest", {
@@ -2245,6 +2262,8 @@ mcl_levelgen.register_biome ("DarkForest", {
 		is_forest = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#79a6ff",
 })
 
 mcl_levelgen.register_biome ("DeepColdOcean", {
@@ -2331,6 +2350,8 @@ mcl_levelgen.register_biome ("DeepColdOcean", {
 		is_deep_ocean = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("DeepDark", {
@@ -2411,6 +2432,8 @@ mcl_levelgen.register_biome ("DeepDark", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#78a7ff",
 })
 
 mcl_levelgen.register_biome ("DeepFrozenOcean", {
@@ -2499,6 +2522,8 @@ mcl_levelgen.register_biome ("DeepFrozenOcean", {
 		is_deep_ocean = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("DeepLukewarmOcean", {
@@ -2585,6 +2610,8 @@ mcl_levelgen.register_biome ("DeepLukewarmOcean", {
 		is_deep_ocean = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("DeepOcean", {
@@ -2671,6 +2698,8 @@ mcl_levelgen.register_biome ("DeepOcean", {
 		is_deep_ocean = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("Desert", {
@@ -2758,6 +2787,8 @@ mcl_levelgen.register_biome ("Desert", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#6eb1ff",
 })
 
 mcl_levelgen.register_biome ("DripstoneCaves", {
@@ -2845,6 +2876,8 @@ mcl_levelgen.register_biome ("DripstoneCaves", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#78a7ff",
 })
 
 mcl_levelgen.register_biome ("EndBarrens", {
@@ -2859,6 +2892,8 @@ mcl_levelgen.register_biome ("EndBarrens", {
 	groups = {
 		is_end = true,
 	},
+	fog_color = "#a080a0",
+	sky_color = "#000000",
 })
 
 mcl_levelgen.register_biome ("EndHighlands", {
@@ -2887,6 +2922,8 @@ mcl_levelgen.register_biome ("EndHighlands", {
 	groups = {
 		is_end = true,
 	},
+	fog_color = "#a080a0",
+	sky_color = "#000000",
 })
 
 mcl_levelgen.register_biome ("EndMidlands", {
@@ -2901,6 +2938,8 @@ mcl_levelgen.register_biome ("EndMidlands", {
 	groups = {
 		is_end = true,
 	},
+	fog_color = "#a080a0",
+	sky_color = "#000000",
 })
 
 mcl_levelgen.register_biome ("ErodedMesa", {
@@ -2985,6 +3024,8 @@ mcl_levelgen.register_biome ("ErodedMesa", {
 		is_badlands = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#6eb1ff",
 })
 
 mcl_levelgen.register_biome ("FlowerForest", {
@@ -3069,6 +3110,8 @@ mcl_levelgen.register_biome ("FlowerForest", {
 		is_forest = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#79a6ff",
 })
 
 mcl_levelgen.register_biome ("Forest", {
@@ -3153,6 +3196,8 @@ mcl_levelgen.register_biome ("Forest", {
 		is_forest = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#79a6ff",
 })
 
 mcl_levelgen.register_biome ("FrozenOcean", {
@@ -3241,6 +3286,8 @@ mcl_levelgen.register_biome ("FrozenOcean", {
 		is_ocean = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7fa1ff",
 })
 
 mcl_levelgen.register_biome ("FrozenPeaks", {
@@ -3321,6 +3368,8 @@ mcl_levelgen.register_biome ("FrozenPeaks", {
 		is_mountain = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#859dff",
 })
 
 mcl_levelgen.register_biome ("FrozenRiver", {
@@ -3403,6 +3452,8 @@ mcl_levelgen.register_biome ("FrozenRiver", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7fa1ff",
 })
 
 mcl_levelgen.register_biome ("Grove", {
@@ -3486,6 +3537,8 @@ mcl_levelgen.register_biome ("Grove", {
 		is_forest = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#81a0ff",
 })
 
 mcl_levelgen.register_biome ("IceSpikes", {
@@ -3571,6 +3624,8 @@ mcl_levelgen.register_biome ("IceSpikes", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7fa1ff",
 })
 
 mcl_levelgen.register_biome ("JaggedPeaks", {
@@ -3651,6 +3706,8 @@ mcl_levelgen.register_biome ("JaggedPeaks", {
 		is_mountain = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#859dff",
 })
 
 mcl_levelgen.register_biome ("Jungle", {
@@ -3737,6 +3794,8 @@ mcl_levelgen.register_biome ("Jungle", {
 		is_jungle = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#77a8ff",
 })
 
 mcl_levelgen.register_biome ("LukewarmOcean", {
@@ -3822,6 +3881,8 @@ mcl_levelgen.register_biome ("LukewarmOcean", {
 		is_ocean = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("LushCaves", {
@@ -3906,6 +3967,8 @@ mcl_levelgen.register_biome ("LushCaves", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("MangroveSwamp", {
@@ -3987,6 +4050,8 @@ mcl_levelgen.register_biome ("MangroveSwamp", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#78a7ff",
 })
 
 mcl_levelgen.register_biome ("Meadow", {
@@ -4070,6 +4135,8 @@ mcl_levelgen.register_biome ("Meadow", {
 		is_mountain = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("MushroomIslands", {
@@ -4150,6 +4217,8 @@ mcl_levelgen.register_biome ("MushroomIslands", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#77a8ff",
 })
 
 mcl_levelgen.register_biome ("NetherWastes", {
@@ -4197,6 +4266,8 @@ mcl_levelgen.register_biome ("NetherWastes", {
 	groups = {
 		is_nether = true,
 	},
+	fog_color = "#330808",
+	sky_color = "#6eb1ff",
 })
 
 mcl_levelgen.register_biome ("Ocean", {
@@ -4283,6 +4354,8 @@ mcl_levelgen.register_biome ("Ocean", {
 		is_ocean = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("OldGrowthBirchForest", {
@@ -4367,6 +4440,8 @@ mcl_levelgen.register_biome ("OldGrowthBirchForest", {
 		is_forest = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7aa5ff",
 })
 
 mcl_levelgen.register_biome ("OldGrowthPineTaiga", {
@@ -4456,6 +4531,8 @@ mcl_levelgen.register_biome ("OldGrowthPineTaiga", {
 		is_overworld = true,
 		is_taiga = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ca3ff",
 })
 
 mcl_levelgen.register_biome ("OldGrowthSpruceTaiga", {
@@ -4545,6 +4622,8 @@ mcl_levelgen.register_biome ("OldGrowthSpruceTaiga", {
 		is_overworld = true,
 		is_taiga = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7da3ff",
 })
 
 mcl_levelgen.register_biome ("Plains", {
@@ -4628,6 +4707,8 @@ mcl_levelgen.register_biome ("Plains", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#78a7ff",
 })
 
 mcl_levelgen.register_biome ("River", {
@@ -4712,6 +4793,8 @@ mcl_levelgen.register_biome ("River", {
 		is_overworld = true,
 		is_river = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("Savannah", {
@@ -4796,6 +4879,8 @@ mcl_levelgen.register_biome ("Savannah", {
 		is_overworld = true,
 		is_savannah = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#6eb1ff",
 })
 
 mcl_levelgen.register_biome ("SavannahPlateau", {
@@ -4880,6 +4965,8 @@ mcl_levelgen.register_biome ("SavannahPlateau", {
 		is_overworld = true,
 		is_savannah = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#6eb1ff",
 })
 
 mcl_levelgen.register_biome ("SmallEndIslands", {
@@ -4897,6 +4984,8 @@ mcl_levelgen.register_biome ("SmallEndIslands", {
 	groups = {
 		is_end = true,
 	},
+	fog_color = "#a080a0",
+	sky_color = "#000000",
 })
 
 mcl_levelgen.register_biome ("SnowyBeach", {
@@ -4979,7 +5068,9 @@ mcl_levelgen.register_biome ("SnowyBeach", {
 	groups = {
 		is_beach = true,
 		is_overworld = true,
-	}
+	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7fa1ff",
 })
 
 mcl_levelgen.register_biome ("SnowyPlains", {
@@ -5062,6 +5153,8 @@ mcl_levelgen.register_biome ("SnowyPlains", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7fa1ff",
 })
 
 mcl_levelgen.register_biome ("SnowySlopes", {
@@ -5144,6 +5237,8 @@ mcl_levelgen.register_biome ("SnowySlopes", {
 		is_mountain = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#829fff",
 })
 
 mcl_levelgen.register_biome ("SnowyTaiga", {
@@ -5229,6 +5324,8 @@ mcl_levelgen.register_biome ("SnowyTaiga", {
 		is_overworld = true,
 		is_taiga = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#839eff",
 })
 
 mcl_levelgen.register_biome ("SoulSandValley", {
@@ -5276,6 +5373,8 @@ mcl_levelgen.register_biome ("SoulSandValley", {
 	groups = {
 		is_nether = true,
 	},
+	fog_color = "#1b4745",
+	sky_color = "#6eb1ff",
 })
 
 mcl_levelgen.register_biome ("SparseJungle", {
@@ -5361,6 +5460,8 @@ mcl_levelgen.register_biome ("SparseJungle", {
 		is_jungle = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#77a8ff",
 })
 
 mcl_levelgen.register_biome ("StonyPeaks", {
@@ -5441,6 +5542,8 @@ mcl_levelgen.register_biome ("StonyPeaks", {
 		is_mountain = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#76a8ff",
 })
 
 mcl_levelgen.register_biome ("StonyShore", {
@@ -5523,6 +5626,8 @@ mcl_levelgen.register_biome ("StonyShore", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7da2ff",
 })
 
 mcl_levelgen.register_biome ("SunflowerPlains", {
@@ -5607,6 +5712,8 @@ mcl_levelgen.register_biome ("SunflowerPlains", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#78a7ff",
 })
 
 mcl_levelgen.register_biome ("Swamp", {
@@ -5694,6 +5801,8 @@ mcl_levelgen.register_biome ("Swamp", {
 	groups = {
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#78a7ff",
 })
 
 mcl_levelgen.register_biome ("Taiga", {
@@ -5779,6 +5888,8 @@ mcl_levelgen.register_biome ("Taiga", {
 		is_overworld = true,
 		is_taiga = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7da3ff",
 })
 
 mcl_levelgen.register_biome ("TheEnd", {
@@ -5800,6 +5911,8 @@ mcl_levelgen.register_biome ("TheEnd", {
 	groups = {
 		is_end = true,
 	},
+	fog_color = "#a080a0",
+	sky_color = "#000000",
 })
 
 mcl_levelgen.register_biome ("WarmOcean", {
@@ -5886,6 +5999,8 @@ mcl_levelgen.register_biome ("WarmOcean", {
 		is_ocean = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7ba4ff",
 })
 
 mcl_levelgen.register_biome ("WarpedForest", {
@@ -5935,6 +6050,8 @@ mcl_levelgen.register_biome ("WarpedForest", {
 	groups = {
 		is_nether = true,
 	},
+	fog_color = "#1a051a",
+	sky_color = "#6eb1ff",
 })
 
 mcl_levelgen.register_biome ("WindsweptForest", {
@@ -6022,6 +6139,8 @@ mcl_levelgen.register_biome ("WindsweptForest", {
 		is_hill = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7da2ff",
 })
 
 mcl_levelgen.register_biome ("WindsweptGravellyHills", {
@@ -6109,6 +6228,8 @@ mcl_levelgen.register_biome ("WindsweptGravellyHills", {
 		is_hill = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7da2ff",
 })
 
 mcl_levelgen.register_biome ("WindsweptHills", {
@@ -6196,6 +6317,8 @@ mcl_levelgen.register_biome ("WindsweptHills", {
 		is_hill = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#7da2ff",
 })
 
 mcl_levelgen.register_biome ("WindsweptSavannah", {
@@ -6279,6 +6402,8 @@ mcl_levelgen.register_biome ("WindsweptSavannah", {
 		is_overworld = true,
 		is_savannah = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#6eb1ff",
 })
 
 mcl_levelgen.register_biome ("WoodedMesa", {
@@ -6364,6 +6489,8 @@ mcl_levelgen.register_biome ("WoodedMesa", {
 		is_badlands = true,
 		is_overworld = true,
 	},
+	fog_color = "#c0d8ff",
+	sky_color = "#6eb1ff",
 })
 
 ------------------------------------------------------------------------

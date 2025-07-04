@@ -25,17 +25,11 @@ local psdef= {
 
 function mcl_weather.has_snow(pos)
 	if not mcl_worlds.has_weather(pos) then return false end
-	local bn = core.get_biome_name(core.get_biome_data(pos).biome)
-	local bd = core.registered_biomes[bn]
 	if not mcl_weather.can_see_outdoors(pos) then
 		return false
 	end
-	if bd and bd._mcl_biome_type == "snowy" then return true end
-	if bd and bd._mcl_biome_type == "cold" then
-		if bn == "Taiga" and pos.y > 140 then return true end
-		if bn == "MegaSpruceTaiga" and pos.y > 100 then return true end
-	end
-	return false
+	local name = mcl_biome_dispatch.get_biome_name (pos)
+	return name and mcl_biome_dispatch.is_position_cold (name, pos)
 end
 
 function mcl_weather.snow.set_sky_box()
