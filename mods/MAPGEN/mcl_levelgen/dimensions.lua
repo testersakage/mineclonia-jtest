@@ -83,7 +83,7 @@ Level height: %d
 Level offset: %d
 Global minimum layer: %d
 Global maximum layer: %d]],
-				      dim.id, dim.preset.min_y, 
+				      dim.id, dim.preset.min_y,
 				      dim.preset.height, dim.y_offset,
 				      dim.y_global, dim.y_max))
 	end
