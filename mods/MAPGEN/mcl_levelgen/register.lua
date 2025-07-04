@@ -113,8 +113,22 @@ end
 
 else
 
+-- Define stubs for a number of functions that would otherwise not be
+-- loaded.
+
 mcl_levelgen.seed = ull (0, 0)
 mcl_levelgen.biome_seed = ull (0, 0)
 mcl_levelgen.levelgen_enabled = false
+
+function mcl_levelgen.register_notification_handler (_, _)
+end
+
+function mcl_levelgen.conv_pos (v)
+	return nil
+end
+
+function mcl_levelgen.conv_pos_raw (v)
+	return nil
+end
 
 end

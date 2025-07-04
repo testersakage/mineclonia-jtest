@@ -44,25 +44,20 @@ function mcl_weather.is_exposed_to_rain (pos)
 		or not mcl_worlds.has_weather (pos) then
 		return false
 	end
-	local data = core.get_biome_data (pos)
-	if not data then
-		return false
-	end
-	local name = core.get_biome_name (data.biome)
-	local def = core.registered_biomes[name]
-	return def and def._mcl_biome_type ~= "hot"
+	local name = mcl_biome_dispatch.get_biome_name (pos)
+	return not mcl_biome_dispatch.is_position_arid (name)
 		and mcl_weather.is_outdoor (pos)
-		and not mcl_weather.has_snow (pos)
+		and not mcl_biome_dispatch.is_position_cold (name, pos)
 end
+
+-- NOTE: this function does not take into account the presence of snow
+-- at the provided position.
 
 function mcl_weather.has_rain(pos)
 	if not mcl_worlds.has_weather(pos) then return false end
-	local bd = core.registered_biomes[core.get_biome_name(core.get_biome_data(pos).biome)]
-	if bd and bd._mcl_biome_type == "hot" then return false end
-	if not mcl_weather.can_see_outdoors(pos) then
-		return false
-	end
-	return true
+	local name = mcl_biome_dispatch.get_biome_name (pos)
+	return not mcl_biome_dispatch.is_position_arid (name)
+		and mcl_weather.can_see_outdoors (pos)
 end
 
 function mcl_weather.rain.sound_handler(player)

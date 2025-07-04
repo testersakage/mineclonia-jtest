@@ -559,26 +559,24 @@ function slime_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cac
 		return false
 	end
 
-	local biome = core.get_biome_data (node_pos)
-	if biome then
-		local name = core.get_biome_name (biome.biome)
-		if name == "Swampland" or name == "MangroveSwamp" then
-			if swamp_spawn (spawn_pos) then
-				if default_spawner.test_spawn_position (self, spawn_pos,
-									node_pos, sdata,
-									node_cache) then
-					return true
-				end
+	local name = mcl_biome_dispatch.get_biome_name (node_pos)
+	if name == "Swampland" or name == "Swamp"
+		or name == "MangroveSwamp" then
+		if swamp_spawn (spawn_pos) then
+			if default_spawner.test_spawn_position (self, spawn_pos,
+								node_pos, sdata,
+								node_cache) then
+				return true
 			end
 		end
+	end
 
-		if spawn_pos.y <= slime_chunk_spawn_max + 0.5
-			and math.random (1, 10) == 1
-			and in_slime_chunk (spawn_pos) then
-			return default_spawner.test_spawn_position (self, spawn_pos,
-								    node_pos, sdata,
-								    node_cache)
-		end
+	if spawn_pos.y <= slime_chunk_spawn_max + 0.5
+		and math.random (1, 10) == 1
+		and in_slime_chunk (spawn_pos) then
+		return default_spawner.test_spawn_position (self, spawn_pos,
+							    node_pos, sdata,
+							    node_cache)
 	end
 	return false
 end
