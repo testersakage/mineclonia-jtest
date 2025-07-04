@@ -53,7 +53,6 @@ end
 local index_heightmap = mcl_levelgen.index_heightmap
 local insert = table.insert
 local get_block = mcl_levelgen.get_block
-local cid_air = core.CONTENT_AIR
 
 local air_water_or_lava_p = mcl_levelgen.air_water_or_lava_p
 
@@ -82,7 +81,7 @@ end
 
 function mcl_levelgen.build_count_on_every_layer (count)
 	return function (x, y, z, rng)
-		local layer_exists = false
+		local layer_exists
 		local layer_no = 0
 		local values = {}
 		local y_min = mcl_levelgen.placement_level_min
