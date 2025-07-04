@@ -478,7 +478,7 @@ local function place_leaves_above (self, rng, x, y, z)
 		local biome = index_biome (x, y, z)
 		local def = registered_biomes[biome]
 		set_block (x, y + 1, z, cid_leaves_jungle,
-			   def.grass_palette_index)
+			   32 + def.leaves_palette_index)
 	end
 end
 
