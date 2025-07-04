@@ -764,8 +764,8 @@ function mcl_levelgen.set_block (x, y, z, cid, param2)
 	correct_heightmaps (x, y, z, cid, param2, false)
 end
 
-local ipos3 = mcl_levelgen.ipos3
-local cid_glass_magenta = core.get_content_id ("mcl_core:glass_magenta")
+-- local ipos3 = mcl_levelgen.ipos3
+-- local cid_glass_magenta = core.get_content_id ("mcl_core:glass_magenta")
 
 -- function mcl_levelgen.test_structuremask ()
 -- 	for x, y, z in ipos3 (run_min_x, run_min_y, run_min_z,

@@ -4,44 +4,44 @@
 -- https://learn.microsoft.com/en-us/minecraft/creator/reference/content/featuresreference/examples/features/minecraftgeode_feature?view=minecraft-bedrock-stable
 ------------------------------------------------------------------------
 
-local geode_block_cfg = {
-	filling_content = nil,
-	inner_layer_content = nil,
-	alternate_inner_layer_content = nil,
-	middle_layer_content = nil,
-	outer_layer_content = nil,
-	inner_placements = nil,
-	cannot_replace = nil,
-	invalid_blocks = nil,
-}
+-- local geode_block_cfg = {
+-- 	filling_content = nil,
+-- 	inner_layer_content = nil,
+-- 	alternate_inner_layer_content = nil,
+-- 	middle_layer_content = nil,
+-- 	outer_layer_content = nil,
+-- 	inner_placements = nil,
+-- 	cannot_replace = nil,
+-- 	invalid_blocks = nil,
+-- }
 
-local geode_layer_cfg = {
-	filling = nil,
-	inner_layer = nil,
-	middle_layer = nil,
-	outer_layer = nil,
-}
+-- local geode_layer_cfg = {
+-- 	filling = nil,
+-- 	inner_layer = nil,
+-- 	middle_layer = nil,
+-- 	outer_layer = nil,
+-- }
 
-local geode_crack_cfg = {
-	generate_crack_chance = nil,
-	base_crack_size = nil,
-	crack_point_offset = nil,
-}
+-- local geode_crack_cfg = {
+-- 	generate_crack_chance = nil,
+-- 	base_crack_size = nil,
+-- 	crack_point_offset = nil,
+-- }
 
-local geode_cfg = {
-	blocks = nil,
-	layers = nil,
-	crack = nil,
-	use_potential_placements_chance = nil,
-	use_alternate_layer0_chance = nil,
-	placements_require_layer0_alternate = nil,
-	outer_wall_distance = nil,
-	outer_wall_distance_max = nil,
-	distribution_points = nil,
-	point_offset = nil,
-	invalid_blocks_threshold = nil,
-	noise_multiplier = nil,
-}
+-- local geode_cfg = {
+-- 	blocks = nil,
+-- 	layers = nil,
+-- 	crack = nil,
+-- 	use_potential_placements_chance = nil,
+-- 	use_alternate_layer0_chance = nil,
+-- 	placements_require_layer0_alternate = nil,
+-- 	outer_wall_distance = nil,
+-- 	outer_wall_distance_max = nil,
+-- 	distribution_points = nil,
+-- 	point_offset = nil,
+-- 	invalid_blocks_threshold = nil,
+-- 	noise_multiplier = nil,
+-- }
 
 local overworld = mcl_levelgen.overworld_preset
 local overworld_seed = overworld.seed

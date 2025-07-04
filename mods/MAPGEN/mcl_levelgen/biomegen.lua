@@ -80,7 +80,7 @@ local mathmax = math.max
 function mcl_levelgen.encode_biomes (biomes, y0, yh, w, h, hash_for_testing)
 	local qw = w * N
 	local qh = h * N
-	local max_index = index (qw, qh, qw, qw, qh, qw)
+	-- local max_index = index (qw, qh, qw, qw, qh, qw)
 	-- This assertion is no longer applicable as the biome list
 	-- may grow after a vertically larger dimension has been
 	-- generated.
