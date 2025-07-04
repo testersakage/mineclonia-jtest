@@ -250,6 +250,7 @@ function bat_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache
 			end
 
 			return light <= maxlight
+				and not mcl_weather.can_see_outdoors (node_pos)
 		end
 	end
 	return false
