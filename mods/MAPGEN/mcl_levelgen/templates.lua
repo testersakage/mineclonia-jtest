@@ -464,6 +464,9 @@ local cid_structure_block_data
 
 if core.register_on_mods_loaded then
 	core.register_on_mods_loaded (function ()
+		if not mcl_levelgen.levelgen_enabled then
+			return false
+		end
 		cid_structure_block_data
 			= core.get_content_id ("mcl_levelgen:structure_block_data")
 	end)
@@ -692,6 +695,13 @@ local registered_template_pools = {}
 -- }
 
 function mcl_levelgen.register_template_pool (id, data)
+	if not mcl_levelgen.levelgen_enabled
+	-- XXX: this case would better be provided for by moving the
+	-- definition of mcl_levelgen:empty elsewhere...
+		and id ~= "mcl_levelgen:empty" then
+		return
+	end
+
 	if registered_template_pools[id] then
 		error ("Template pool " .. id .. " is already registered")
 	end

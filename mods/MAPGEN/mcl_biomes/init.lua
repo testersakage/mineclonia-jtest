@@ -161,7 +161,10 @@ local function register_biomes()
 		_mcl_biome_type = "snowy",
 		_mcl_palette_index = 2,
 		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_biome({
 		name = "IcePlainsSpikes_ocean",
@@ -179,7 +182,11 @@ local function register_biomes()
 		_mcl_biome_type = "snowy",
 		_mcl_palette_index = 2,
 		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+		},
 	})
 
 	-- Cold Taiga
@@ -199,7 +206,11 @@ local function register_biomes()
 		_mcl_biome_type = "snowy",
 		_mcl_palette_index = 3,
 		_mcl_skycolor = "#839EFF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_taiga = true,
+		},
 	})
 
 	-- A cold beach-like biome, implemented as low part of Cold Taiga
@@ -221,7 +232,11 @@ local function register_biomes()
 		_mcl_biome_type = "snowy",
 		_mcl_palette_index = 3,
 		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_taiga = true,
+		},
 	})
 	-- Water part of the beach. Added to prevent snow being on the ice.
 	core.register_biome({
@@ -241,7 +256,11 @@ local function register_biomes()
 		_mcl_biome_type = "snowy",
 		_mcl_palette_index = 3,
 		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_taiga = true,
+		},
 	})
 	core.register_biome({
 		name = "ColdTaiga_ocean",
@@ -259,7 +278,12 @@ local function register_biomes()
 		_mcl_biome_type = "snowy",
 		_mcl_palette_index = 3,
 		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_taiga = true,
+		},
 	})
 
 	-- Mega Pine Taiga
@@ -278,7 +302,11 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 4,
 		_mcl_skycolor = "#7CA3FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_taiga = true,
+		},
 	})
 	core.register_biome({
 		name = "MegaTaiga_ocean",
@@ -295,7 +323,12 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 4,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_taiga = true,
+		},
 	})
 
 	-- Mega Spruce Taiga
@@ -314,7 +347,11 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 5,
 		_mcl_skycolor = "#7DA3FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_taiga = true,
+		},
 	})
 	core.register_biome({
 		name = "MegaSpruceTaiga_ocean",
@@ -331,7 +368,12 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 5,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_taiga = true,
+		},
 	})
 
 	-- Extreme Hills
@@ -351,7 +393,11 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 6,
 		_mcl_skycolor = "#7DA2FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_hill = true,
+		},
 	})
 	core.register_biome({
 		name = "ExtremeHills_beach",
@@ -369,7 +415,11 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 6,
 		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_hill = true,
+		},
 	})
 	core.register_biome({
 		name = "ExtremeHills_ocean",
@@ -387,7 +437,12 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 6,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_hill = true,
+		},
 	})
 
 	-- Extreme Hills M
@@ -407,7 +462,11 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 7,
 		_mcl_skycolor = "#7DA2FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_hill = true,
+		},
 	})
 	core.register_biome({
 		name = "ExtremeHillsM_ocean",
@@ -424,7 +483,12 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 7,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_hill = true,
+		},
 	})
 
 	-- Extreme Hills+
@@ -446,7 +510,11 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 8,
 		_mcl_skycolor = "#7DA2FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_hill = true,
+		},
 	})
 	---- Sub-biome for Extreme Hills+ for those snow forests
 	core.register_biome({
@@ -466,7 +534,11 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 8,
 		_mcl_skycolor = "#7DA2FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_hill = true,
+		},
 	})
 	core.register_biome({
 		name = "ExtremeHills+_ocean",
@@ -483,7 +555,12 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 8,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_hill = true,
+		},
 	})
 
 	-- Stone beach
@@ -500,7 +577,11 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 9,
 		_mcl_skycolor = "#7DA2FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_beach = true,
+		},
 	})
 
 	core.register_biome({
@@ -517,7 +598,12 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 9,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_beach = true,
+		},
 	})
 
 	-- Ice Plains
@@ -540,7 +626,10 @@ local function register_biomes()
 		_mcl_biome_type = "snowy",
 		_mcl_palette_index = 10,
 		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_biome({
 		name = "IcePlains_ocean",
@@ -557,7 +646,11 @@ local function register_biomes()
 		_mcl_biome_type = "snowy",
 		_mcl_palette_index = 10,
 		_mcl_skycolor = "#7FA1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+		},
 	})
 
 	-- Plains
@@ -576,7 +669,10 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_biome({
 		name = "Plains_beach",
@@ -593,7 +689,10 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_biome({
 		name = "Plains_ocean",
@@ -610,7 +709,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+		},
 	})
 
 	core.register_biome({
@@ -628,7 +731,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 11,
 		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_mountain = true,
+		},
 	})
 
 	-- Sunflower Plains
@@ -647,7 +754,10 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 11,
 		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_biome({
 		name = "SunflowerPlains_ocean",
@@ -664,7 +774,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 11,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+		},
 	})
 
 	-- Taiga
@@ -683,7 +797,11 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 12,
 		_mcl_skycolor = "#7DA3FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_taiga = true,
+		},
 	})
 	core.register_biome({
 		name = "Taiga_beach",
@@ -700,7 +818,11 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 12,
 		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_taiga = true,
+		},
 	})
 	core.register_biome({
 		name = "Taiga_ocean",
@@ -717,7 +839,12 @@ local function register_biomes()
 		_mcl_biome_type = "cold",
 		_mcl_palette_index = 12,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_taiga = true,
+		},
 	})
 
 	-- Forest
@@ -736,7 +863,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 13,
 		_mcl_skycolor = "#79A6FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_forest = true,
+		},
 	})
 	core.register_biome({
 		name = "Forest_beach",
@@ -753,7 +884,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 13,
 		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_forest = true,
+		},
 	})
 	core.register_biome({
 		name = "Forest_ocean",
@@ -770,7 +905,12 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 13,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_forest = true,
+		},
 	})
 
 	-- Flower Forest
@@ -789,7 +929,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 14,
 		_mcl_skycolor = "#79A6FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_forest = true,
+		},
 	})
 	core.register_biome({
 		name = "FlowerForest_beach",
@@ -806,7 +950,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 14,
 		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_forest = true,
+		},
 	})
 	core.register_biome({
 		name = "FlowerForest_ocean",
@@ -823,7 +971,12 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 14,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_forest = true,
+		},
 	})
 
 	-- Birch Forest
@@ -842,7 +995,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 15,
 		_mcl_skycolor = "#7AA5FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_forest = true,
+		},
 	})
 	core.register_biome({
 		name = "BirchForest_ocean",
@@ -859,7 +1016,12 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 15,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_forest = true,
+		},
 	})
 
 	-- Birch Forest M
@@ -878,7 +1040,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 16,
 		_mcl_skycolor = "#7AA5FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_forest = true,
+		},
 	})
 	core.register_biome({
 		name = "BirchForestM_ocean",
@@ -895,7 +1061,12 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 16,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_forest = true,
+		},
 	})
 
 	-- Desert
@@ -915,7 +1086,10 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 17,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_biome({
 		name = "Desert_ocean",
@@ -932,7 +1106,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 17,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+		},
 	})
 
 	-- Roofed Forest
@@ -951,7 +1129,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 18,
 		_mcl_skycolor = "#79A6FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_forest = true,
+		},
 	})
 	core.register_biome({
 		name = "RoofedForest_ocean",
@@ -968,7 +1150,12 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 18,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_forest = true,
+		},
 	})
 
 	-- Mesa: Starts with a couple of sand-covered layers (the "sandlevel"),
@@ -988,7 +1175,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 19,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_badlands = true,
+		},
 	})
 	-- Helper biome for the red sand at the bottom of Mesas.
 	core.register_biome({
@@ -1007,7 +1198,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 19,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_badlands = true,
+		},
 	})
 	core.register_biome({
 		name = "Mesa_ocean",
@@ -1025,7 +1220,12 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 19,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_badlands = true,
+		},
 	})
 
 	-- Mesa Bryce: Variant of Mesa, but with perfect strata and a much smaller red sand desert
@@ -1044,7 +1244,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 20,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_badlands = true,
+		},
 	})
 	core.register_biome({
 		name = "MesaBryce_sandlevel",
@@ -1062,7 +1266,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 20,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_badlands = true,
+		},
 	})
 	core.register_biome({
 		name = "MesaBryce_ocean",
@@ -1080,7 +1288,12 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 20,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_badlands = true,
+		},
 	})
 
 
@@ -1103,7 +1316,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 21,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_badlands = true,
+		},
 	})
 	-- The oak forest plateau of this biome.
 	-- This is a plateau for grass blocks, dry shrubs, tall grass, coarse dirt and oaks.
@@ -1124,7 +1341,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 21,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_badlands = true,
+		},
 	})
 	core.register_biome({
 		name = "MesaPlateauF_sandlevel",
@@ -1142,7 +1363,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 21,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_badlands = true,
+		},
 	})
 	core.register_biome({
 		name = "MesaPlateauF_ocean",
@@ -1160,7 +1385,12 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 21,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_badlands = true,
+		},
 	})
 
 	-- Mesa Plateau FM
@@ -1183,7 +1413,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 22,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_badlands = true,
+		},
 	})
 	-- Grass plateau
 	core.register_biome({
@@ -1202,7 +1436,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 22,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_badlands = true,
+		},
 	})
 	core.register_biome({
 		name = "MesaPlateauFM_sandlevel",
@@ -1222,7 +1460,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 22,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_badlands = true,
+		},
 	})
 	core.register_biome({
 		name = "MesaPlateauFM_ocean",
@@ -1240,7 +1482,12 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 22,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_badlands = true,
+		},
 	})
 
 	-- Savanna
@@ -1259,7 +1506,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 1,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_savannah = true,
+		},
 	})
 	core.register_biome({
 		name = "Savanna_beach",
@@ -1276,7 +1527,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 1,
 		_mcl_skycolor = beach_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_savannah = true,
+		},
 	})
 	core.register_biome({
 		name = "Savanna_ocean",
@@ -1293,7 +1548,12 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 1,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_savannah = true,
+		},
 	})
 
 	-- Savanna M
@@ -1314,7 +1574,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 23,
 		_mcl_skycolor = "#6EB1FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_savannah = true,
+		},
 	})
 	core.register_biome({
 		name = "SavannaM_ocean",
@@ -1331,7 +1595,12 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 23,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_savannah = true,
+		},
 	})
 
 	-- Jungle
@@ -1350,7 +1619,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 24,
 		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_jungle = true,
+		},
 	})
 	core.register_biome({
 		name = "Jungle_shore",
@@ -1367,7 +1640,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 24,
 		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_jungle = true,
+		},
 	})
 	core.register_biome({
 		name = "Jungle_ocean",
@@ -1385,7 +1662,12 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 24,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_jungle = true,
+		},
 	})
 
 	-- Jungle M
@@ -1405,7 +1687,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 25,
 		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_jungle = true,
+		},
 	})
 	core.register_biome({
 		name = "JungleM_shore",
@@ -1422,7 +1708,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 25,
 		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_jungle = true,
+		},
 	})
 	core.register_biome({
 		name = "JungleM_ocean",
@@ -1440,7 +1730,12 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 25,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_jungle = true,
+		},
 	})
 
 	-- Bamboo Jungle
@@ -1459,7 +1754,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 26,
 		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_jungle = true,
+		},
 	})
 
 	core.register_biome({
@@ -1477,7 +1776,12 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 26,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_jungle = true,
+		},
 	})
 
 	-- Jungle Edge
@@ -1496,7 +1800,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 26,
 		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_jungle = true,
+		},
 	})
 	core.register_biome({
 		name = "JungleEdge_ocean",
@@ -1513,7 +1821,12 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 26,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_jungle = true,
+		},
 	})
 
 	-- Jungle Edge M (very rare).
@@ -1535,7 +1848,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 26,
 		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_jungle = true,
+		},
 	})
 	core.register_biome({
 		name = "JungleEdgeM_ocean",
@@ -1552,7 +1869,12 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 26,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_jungle = true,
+		},
 	})
 
 	-- Mangrove swamp
@@ -1572,7 +1894,10 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 27,
 		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_biome({
 		name = "MangroveSwamp_shore",
@@ -1589,7 +1914,10 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 27,
 		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_biome({
 		name = "MangroveSwamp_ocean",
@@ -1607,7 +1935,11 @@ local function register_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 27,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+		},
 	})
 	-- Swampland
 	core.register_biome({
@@ -1626,7 +1958,10 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 28,
 		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_biome({
 		name = "Swampland_shore",
@@ -1643,7 +1978,10 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 28,
 		_mcl_skycolor = "#78A7FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_biome({
 		name = "Swampland_ocean",
@@ -1661,7 +1999,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 28,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+		},
 	})
 
 	-- Mushroom Island / Mushroom Island Shore (rare)
@@ -1683,7 +2025,10 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 29,
 		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 
 	core.register_biome({
@@ -1701,7 +2046,10 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 29,
 		_mcl_skycolor = "#77A8FF",
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_biome({
 		name = "MushroomIsland_ocean",
@@ -1718,7 +2066,11 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 29,
 		_mcl_skycolor = ocean_skycolor,
-		_mcl_fogcolor = overworld_fogcolor
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+		},
 	})
 
 	core.register_biome({
@@ -1736,6 +2088,9 @@ local function register_biomes()
 		vertical_blend = 8,
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 21,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	core.register_decoration({
 		deco_type = "simple",
@@ -1766,6 +2121,9 @@ local function register_biomes()
 		heat_point = 57,
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 
 	core.register_biome({
@@ -1780,6 +2138,9 @@ local function register_biomes()
 		heat_point = 50,
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 
 	core.register_biome({
@@ -1798,6 +2159,10 @@ local function register_biomes()
 		heat_point = 57,
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+		},
 	})
 	core.register_biome({
 		name = "LushCaves_underground",
@@ -1815,6 +2180,9 @@ local function register_biomes()
 		heat_point = 57,
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
+		_mcl_groups = {
+			is_overworld = true,
+		},
 	})
 	-- Add deep ocean and underground biomes automatically.
 	for i=1, #overworld_biomes do
@@ -1837,7 +2205,12 @@ local function register_biomes()
 			_mcl_biome_type = core.registered_biomes[biome]._mcl_biome_type,
 			_mcl_palette_index = core.registered_biomes[biome]._mcl_palette_index,
 			_mcl_skycolor = ocean_skycolor,
-			_mcl_fogcolor = overworld_fogcolor
+			_mcl_fogcolor = overworld_fogcolor,
+			_mcl_groups = table.merge (core.registered_biomes[biome]._mcl_groups, {
+				is_overworld = true,
+				is_ocean = true,
+				is_deep_ocean = true,
+			}),
 		})
 
 		-- Underground biomes are used to identify the underground and to prevent nodes from the surface
@@ -1852,6 +2225,9 @@ local function register_biomes()
 			_mcl_palette_index = core.registered_biomes[biome]._mcl_palette_index,
 			_mcl_skycolor = core.registered_biomes[biome]._mcl_skycolor,
 			_mcl_fogcolor = core.registered_biomes[biome]._mcl_fogcolor,
+			_mcl_groups = table.merge (core.registered_biomes[biome]._mcl_groups, {
+				is_overworld = true,
+			}),
 		})
 		core.register_biome({
 			name = biome .. "_deep_underground",
@@ -1862,6 +2238,9 @@ local function register_biomes()
 			y_max = mcl_vars.mg_overworld_min_old,
 			_mcl_biome_type = core.registered_biomes[biome]._mcl_biome_type,
 			_mcl_palette_index = core.registered_biomes[biome]._mcl_palette_index,
+			_mcl_groups = table.merge (core.registered_biomes[biome]._mcl_groups, {
+				is_overworld = true,
+			}),
 		})
 
 	end
@@ -1917,7 +2296,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 17,
 --		_mcl_skycolor = nether_skycolor,
---		_mcl_fogcolor = "#330808"
+--		_mcl_fogcolor = "#330808",
+		_mcl_groups = {
+			is_nether = true,
+		},
 	})
 
 	core.register_decoration({
@@ -1948,7 +2330,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 17,
 --		_mcl_skycolor = nether_skycolor,
---		_mcl_fogcolor = "#1B4745"
+--		_mcl_fogcolor = "#1B4745",
+		_mcl_groups = {
+			is_nether = true,
+		},
 	})
 	core.register_decoration({
 		deco_type = "simple",
@@ -1999,7 +2384,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 17,
 --		_mcl_skycolor = nether_skycolor,
---		_mcl_fogcolor = "#330303"
+--		_mcl_fogcolor = "#330303",
+		_mcl_groups = {
+			is_nether = true,
+		},
 	})
 	core.register_decoration({
 		deco_type = "simple",
@@ -2028,7 +2416,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 17,
 --		_mcl_skycolor = nether_skycolor,
---		_mcl_fogcolor = "#1A051A"
+--		_mcl_fogcolor = "#1A051A",
+		_mcl_groups = {
+			is_nether = true,
+		},
 	})
 	core.register_decoration({
 		deco_type = "simple",
@@ -2057,7 +2448,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "hot",
 		_mcl_palette_index = 17,
 --		_mcl_skycolor = nether_skycolor,
---		_mcl_fogcolor = "#685F70"
+--		_mcl_fogcolor = "#685F70",
+		_mcl_groups = {
+			is_nether = true,
+		},
 	})
 
 	core.register_decoration({
@@ -2114,7 +2508,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 --		_mcl_skycolor = end_skycolor,
---		_mcl_fogcolor = end_fogcolor
+--		_mcl_fogcolor = end_fogcolor,
+		_mcl_groups = {
+			is_end = true,
+		},
 	})
 	core.register_biome({
 		name = "EndBarrens",
@@ -2131,7 +2528,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 --		_mcl_skycolor = end_skycolor,
---		_mcl_fogcolor = end_fogcolor
+--		_mcl_fogcolor = end_fogcolor,
+		_mcl_groups = {
+			is_end = true,
+		},
 	})
 	core.register_biome({
 		name = "EndMidlands",
@@ -2148,7 +2548,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 --		_mcl_skycolor = end_skycolor,
---		_mcl_fogcolor = end_fogcolor
+--		_mcl_fogcolor = end_fogcolor,
+		_mcl_groups = {
+			is_end = true,
+		},
 	})
 	core.register_biome({
 		name = "EndHighlands",
@@ -2165,7 +2568,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 --		_mcl_skycolor = end_skycolor,
---		_mcl_fogcolor = end_fogcolor
+--		_mcl_fogcolor = end_fogcolor,
+		_mcl_groups = {
+			is_end = true,
+		},
 	})
 	core.register_biome({
 		name = "EndSmallIslands",
@@ -2182,7 +2588,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 --		_mcl_skycolor = end_skycolor,
---		_mcl_fogcolor = end_fogcolor
+--		_mcl_fogcolor = end_fogcolor,
+		_mcl_groups = {
+			is_end = true,
+		},
 	})
 
 	core.register_biome({
@@ -2202,7 +2611,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 --		_mcl_skycolor = end_skycolor,
---		_mcl_fogcolor = end_fogcolor
+--		_mcl_fogcolor = end_fogcolor,
+		_mcl_groups = {
+			is_end = true,
+		},
 	})
 
 	core.register_biome({
@@ -2220,7 +2632,10 @@ local function register_dimension_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 0,
 --		_mcl_skycolor = end_skycolor,
---		_mcl_fogcolor = end_fogcolor
+--		_mcl_fogcolor = end_fogcolor,
+		_mcl_groups = {
+			is_end = true,
+		},
 	})
 
 end

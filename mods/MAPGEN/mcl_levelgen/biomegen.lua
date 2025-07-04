@@ -224,7 +224,7 @@ function mcl_levelgen.get_biome (pos, allow_sample, always_sample)
 	v.z = floor (pos.z + 0.5)
 	local mc_pos, dim = conv_pos (v)
 	if not mc_pos then
-		return "TheVoid"
+		return nil
 	end
 	local qx, qy, qz = munge_biome_coords (seed, mc_pos.x,
 					       mc_pos.y,
