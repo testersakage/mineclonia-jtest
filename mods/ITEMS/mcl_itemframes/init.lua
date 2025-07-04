@@ -154,9 +154,13 @@ end
 mcl_itemframes.tpl_node.on_destruct = remove_entity
 
 function mcl_itemframes.tpl_node.on_construct(pos)
-	local meta = core.get_meta(pos)
-	local inv = meta:get_inventory()
-	inv:set_size("main", 1)
+	if not mcl_structures.is_structure_constructor () then
+		local meta = core.get_meta(pos)
+		local inv = meta:get_inventory()
+		inv:set_size("main", 1)
+	else
+		update_entity (pos)
+	end
 end
 
 -- Entity functions
