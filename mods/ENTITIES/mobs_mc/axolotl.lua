@@ -274,7 +274,7 @@ function axolotl:mob_activate (staticdata, dtime)
 	if not mob_class.mob_activate (self, staticdata, dtime) then
 		return false
 	end
-	self:set_properties(core.deserialize(staticdata))
+	self:update_tag ()
 	return true
 end
 
