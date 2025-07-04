@@ -80,7 +80,7 @@ local function construct_unhash (value)
 end
 
 function mcl_levelgen.read_structure_template (name)
-	local f, err, _ = io.open (name, "r")
+	local f, err, _ = io.open (name, "rb")
 	if err then
 		return nil, "Opening " .. name .. ": " .. err
 	end
