@@ -86,6 +86,7 @@ local function set_block_protected (x, y, z, cid, param2, cannot_replace)
 end
 
 local insert = table.insert
+local fix_lighting = mcl_levelgen.fix_lighting
 
 local function place_geode_in_cube (x, y, z, dist_points, n_dist_points, crack_points,
 				    make_crack,
@@ -175,6 +176,7 @@ local function place_geode_in_cube (x, y, z, dist_points, n_dist_points, crack_p
 			end
 		end
 	end
+	fix_lighting (x + min, y + min, z + min, x + max, y + max, z + max)
 end
 
 local dirs = {
