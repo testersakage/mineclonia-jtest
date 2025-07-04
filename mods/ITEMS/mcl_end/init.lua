@@ -13,6 +13,8 @@ end
 ------------------------------------------------------------------------
 
 mcl_levelgen.register_levelgen_script (basepath .. "/lg_register.lua")
+mcl_levelgen.register_levelgen_script (basepath .. "/end_city.lua")
+dofile (basepath .. "/end_city.lua")
 
 local v = vector.zero ()
 local level_to_minetest_position = mcl_levelgen.level_to_minetest_position

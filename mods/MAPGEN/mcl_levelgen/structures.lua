@@ -2252,7 +2252,8 @@ function mcl_levelgen.jigsaw_create_start (self, level, terrain, rng, cx, cz)
 					self.max_distance_from_center,
 					self.size, jigsaw_create_piece,
 					jigsaw_test_generation_position,
-					project_start, level, terrain, self)
+					project_start, level, terrain, self,
+					level.preset.min_y, level.preset.height)
 	return create_structure_start (self, pieces)
 end
 
