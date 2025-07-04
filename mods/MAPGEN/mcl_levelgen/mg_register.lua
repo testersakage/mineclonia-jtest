@@ -144,8 +144,10 @@ core.register_on_generated (function (vmanip, minp, maxp, _)
 
 		if not dim.no_lighting then
 			vmanip:set_lighting ({day=0, night=0,})
-			vmanip:calc_lighting ()
 		end
+		-- Artificial light should be processed even when the
+		-- level is otherwise assumed to be sunlit.
+		vmanip:calc_lighting ()
 		local notifications, pieces
 			= mcl_levelgen.flush_structure_gen_data ()
 		core.save_gen_notify ("mcl_levelgen:gen_notifies", notifications)

@@ -372,7 +372,7 @@ core.register_node("mcl_banners:standing_banner", {
 	wield_image = "mcl_banners_item_base_48.png",
 
 	selection_box = {type = "fixed", fixed= {-0.3, -0.5, -0.3, 0.3, 0.5, 0.3} },
-	groups = {axey=1,handy=1, attached_node = 1, not_in_creative_inventory = 1, banner = 1, not_in_craft_guide = 1, material_wood=1, dig_by_piston=1, flammable=-1, unmovable_by_piston = 1},
+	groups = {axey=1,handy=1, attached_node = 1, not_in_creative_inventory = 1, banner = 1, not_in_craft_guide = 1, material_wood=1, dig_by_piston=1, flammable=-1, unmovable_by_piston = 1, jigsaw_preserve_meta = 1, jigsaw_construct = 1,},
 	stack_max = 16,
 	sounds = node_sounds,
 	drop = "", -- Item drops are handled in entity code
@@ -423,7 +423,7 @@ core.register_node("mcl_banners:hanging_banner", {
 		wall_bottom = { -0.49, -0.49, -0.49, -0.41, -0.41, 0.49 },
 	},
 	selection_box = {type = "wallmounted", wall_side = {-0.5, -0.5, -0.5, -4/16, 0.5, 0.5} },
-	groups = {axey=1,handy=1, attached_node = 1, not_in_creative_inventory = 1, banner = 1, not_in_craft_guide = 1, material_wood=1, flammable=-1, unmovable_by_piston = 1},
+	groups = {axey=1,handy=1, attached_node = 1, not_in_creative_inventory = 1, banner = 1, not_in_craft_guide = 1, material_wood=1, flammable=-1, unmovable_by_piston = 1, jigsaw_preserve_meta = 1, jigsaw_construct = 1},
 	stack_max = 16,
 	sounds = node_sounds,
 	drop = "", -- Item drops are handled in entity code

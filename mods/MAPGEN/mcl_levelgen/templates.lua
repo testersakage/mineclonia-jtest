@@ -702,6 +702,7 @@ function mcl_levelgen.register_template_pool (id, data)
 
 	local new_data = {
 		total_weight = 0,
+		must_complete = data.must_complete,
 		elements = {},
 	}
 
@@ -759,7 +760,7 @@ local function random_template_element (pool, rng)
 	end
 
 	if tbl.total_weight == 0 then
-		return nil
+		return nil, tbl.must_complete
 	else
 		local weight = rng:next_within (tbl.total_weight)
 		for _, element in ipairs (tbl.elements) do
@@ -768,7 +769,7 @@ local function random_template_element (pool, rng)
 				return element
 			end
 		end
-		return nil
+		return nil, tbl.must_complete
 	end
 end
 
@@ -790,10 +791,39 @@ local random_schematic_rotation = mcl_levelgen.random_schematic_rotation
 local bbox_center = mcl_levelgen.bbox_center
 local fit_children
 
+local function all_pieces_complete_p (plist)
+	for _, piece in ipairs (plist) do
+		assert (piece.must_complete)
+		if piece.jigsaws_satisfied < piece.jigsaws_required then
+			return false
+		end
+	end
+	return true
+end
+
+local function piece_retain_p (piece)
+	local plist = piece.parents_liable_to_removal
+	local must_complete = piece.must_complete
+	if not plist and not must_complete then
+		return true
+	else
+		assert (piece.jigsaws_satisfied <= piece.jigsaws_required)
+		if not must_complete
+			or (piece.jigsaws_satisfied == piece.jigsaws_required) then
+			return not plist
+				or all_pieces_complete_p (plist)
+		end
+		return false
+	end
+end
+
+local huge = math.huge
+
 function mcl_levelgen.generate_jigsaw (rng, x, y, z, rotation, start_pool,
 				       start_name, max_radius, max_depth,
 				       create_piece, test_spawn_position,
-				       project_start, arg1, arg2, arg3)
+				       project_start, arg1, arg2, arg3,
+				       level_min, level_height)
 	local pieces = {}
 	local rotation = rotation or random_schematic_rotation (rng)
 	local start = random_template_element (start_pool, rng)
@@ -862,10 +892,39 @@ function mcl_levelgen.generate_jigsaw (rng, x, y, z, rotation, start_pool,
 			bbox[2] + max_radius,
 			z_center + max_radius,
 		}
-		insert (pieces, create_piece (start, rotation, rng,
-					      sx, sy, sz, bbox))
+		if level_min and level_height then
+			bbox_max[2] = mathmax (bbox_max[2], level_min) 
+			bbox_max[5] = mathmin (bbox_max[5], level_min + level_height - 1)
+			if bbox_max[2] > bbox_max[5] then
+				return {}
+			end
+		end
+		local piece = create_piece (start, rotation, rng,
+					    sx, sy, sz, bbox)
+		insert (pieces, piece)
+
+		-- Non-Minecraft extension: if must_complete is
+		-- enabled for pool, pieces generated from the said
+		-- pool are to be removed if any jigsaws in the said
+		-- pieces' children not themselves marked with
+		-- `must_complete' fail to generate.
+		piece.must_complete = start_pool.must_complete
+		piece.jigsaws_required = huge
+		piece.jigsaws_satisfied = 0
+
 		fit_children (pieces, start, rng, bbox_max, max_depth,
 			      create_piece)
+		local i1 = 1
+		for i = 1, #pieces do
+			local piece = pieces[i]
+			if piece_retain_p (piece) then
+				pieces[i1] = piece
+				i1 = i1 + 1
+			end
+		end
+		for i = i1 + 1, #pieces do
+			pieces[i] = nil
+		end
 		return pieces
 	end
 end
@@ -1028,7 +1087,7 @@ local function build_shuffled_element_list (rng, target_pool)
 			array_default[n + i] = array_fallback[i]
 		end
 	end
-	return array_default
+	return array_default, pool.must_complete
 end
 
 local compositions = {
@@ -1100,7 +1159,31 @@ local function fit_one_child (pieces, rng, item, queue, create_piece)
 		shape_from_aabb_inclusive (parent.bbox),
 	}
 
-	local jigsaws = jigsaw_blocks_shuffled (rng, element, item.parent_jigsaw)
+	local jigsaws = jigsaw_blocks_shuffled (rng, element,
+						item.parent_jigsaw)
+	parent.jigsaws_required = #jigsaws
+
+	-- Update the number of jigsaws in the parent that have been
+	-- exhausted, and so forth, till the toplevel piece, or a
+	-- piece labeled `must_complete', is encountered.
+
+	if #jigsaws == 0 or parent.must_complete then
+		local parent = parent.parent
+
+		while parent do
+			local t = parent.jigsaws_satisfied
+			parent.jigsaws_satisfied = t + 1
+			if t + 1 < parent.jigsaws_required then
+				break
+			end
+
+			if parent.must_complete then
+				break
+			end
+			parent = parent.parent
+		end
+	end
+
 	-- print ("jigsaws: ", dump (jigsaws))
 	local rotations = {
 		"0",
@@ -1156,7 +1239,8 @@ local function fit_one_child (pieces, rng, item, queue, create_piece)
 		-- target pool.
 		local target_pool = jigsaw.metadata.target_pool
 		local target_name = jigsaw.metadata.target_name
-		local elements = build_shuffled_element_list (rng, target_pool)
+		local elements, must_complete
+			= build_shuffled_element_list (rng, target_pool)
 		fisher_yates (rotations, rng)
 		-- print ("Elements available: " .. #elements, target_pool)
 		if elements then
@@ -1210,6 +1294,35 @@ local function fit_one_child (pieces, rng, item, queue, create_piece)
 											    z_target - jigsaw_z,
 											    target_bbox)
 								insert (pieces, piece)
+								piece.parent = parent
+								piece.must_complete = must_complete
+								piece.jigsaws_satisfied = 0
+								-- If piece is never provided to fit_one_child,
+								-- it's a fair assumption that its jigsaws will
+								-- never be satisfied.
+								piece.jigsaws_required = huge
+
+								do
+									-- Maintain a record of parents which
+									-- are qualified `must_complete'.
+									local plist = parent.parents_liable_to_removal
+									local must_complete = parent.must_complete
+									if plist and must_complete then
+										local list = {}
+										for i = 1, #plist do
+											list[i] = plist[i]
+										end
+										insert (list, parent)
+										piece.parents_liable_to_removal = list
+									elseif plist then
+										piece.parents_liable_to_removal = plist
+									elseif must_complete then
+										piece.parents_liable_to_removal = {
+											parent,
+										}
+									end
+								end
+
 								local priority = jigsaw.metadata.placement_priority
 								if item.cur_depth + 1 < item.max_depth then
 									queue_insert (queue, priority, {
