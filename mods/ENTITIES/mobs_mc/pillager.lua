@@ -289,9 +289,6 @@ mcl_mobs.register_egg ("mobs_mc:pillager", S("Pillager"), "#532f36", "#959b9b", 
 ------------------------------------------------------------------------
 
 local mobs_spawn = core.settings:get_bool ("mobs_spawn", true)
-local mushroom_island = core.get_biome_id ("MushroomIsland")
-local mushroom_island_shore = core.get_biome_id ("MushroomIslandShore")
-
 local next_spawn_attempt = (12000 + pr:next (0, 1200)) / 20
 
 local function is_clear (nodepos, x, y, z)
@@ -337,6 +334,14 @@ local function spawn_patrolman (nodepos, as_leader)
 	return false
 end
 
+local is_mushroom_islands
+
+core.register_on_mods_loaded (function ()
+	is_mushroom_islands = mcl_biome_dispatch.make_biome_test ({
+		"MushroomIslands",
+	})
+end)
+
 core.register_globalstep (function (dtime)
 	if mcl_vars.difficulty == 0 or not mobs_spawn or only_peaceful_mobs then
 		return
@@ -380,10 +385,8 @@ core.register_globalstep (function (dtime)
 
 		-- Verify that spawning will not take place in an
 		-- ineligible biome.
-		local biome = core.get_biome_data (nodepos)
-		if not biome
-			or biome.biome == mushroom_island
-			or biome.biome == mushroom_island_shore then
+		local biome = mcl_biome_dispatch.get_biome_name (nodepos)
+		if not biome or is_mushroom_islands (biome) then
 			return
 		end
 

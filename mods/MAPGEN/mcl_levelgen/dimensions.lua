@@ -161,6 +161,24 @@ function mcl_levelgen.conv_pos (v)
 	return nil
 end
 
+function mcl_levelgen.conv_pos_raw (v)
+	local dim = dimension_at_layer (v.y)
+
+	if dim then
+		-- Minecraft's Z axis is inverted such that North is
+		-- -Z.
+		--
+		-- This function converts a Minetest position to the
+		-- equivalent that is considered by the level
+		-- generator.  As it is imperative for performance
+		-- that level generator chunks should be aligned with
+		-- Minetest MapBlocks, Minetest positions are further
+		-- offset along the Z axis by a delta of -1.
+		return v.x, v.y + dim.y_offset, -v.z - 1, dim
+	end
+	return nil
+end
+
 ------------------------------------------------------------------------
 -- Default dimensions.
 ------------------------------------------------------------------------
