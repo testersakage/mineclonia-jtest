@@ -43,17 +43,17 @@ end
 
 local function get_sky_color (pos)
 	local nodepos = mcl_util.get_nodepos (pos)
-	return mcl_biome_dispatch.get_sky_color (pos)
+	return mcl_biome_dispatch.get_sky_color (nodepos)
 end
 
 local function get_fog_color (pos)
 	local nodepos = mcl_util.get_nodepos (pos)
-	return mcl_biome_dispatch.get_fog_color (pos)
+	return mcl_biome_dispatch.get_fog_color (nodepos)
 end
 
 local function get_both_colors (pos)
 	local nodepos = mcl_util.get_nodepos (pos)
-	return mcl_biome_dispatch.get_sky_and_fog_colors (pos)
+	return mcl_biome_dispatch.get_sky_and_fog_colors (nodepos)
 end
 
 mcl_weather.skycolor = {
