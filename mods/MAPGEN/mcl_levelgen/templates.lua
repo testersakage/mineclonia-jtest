@@ -922,7 +922,7 @@ function mcl_levelgen.generate_jigsaw (rng, x, y, z, rotation, start_pool,
 				i1 = i1 + 1
 			end
 		end
-		for i = i1 + 1, #pieces do
+		for i = i1, #pieces do
 			pieces[i] = nil
 		end
 		return pieces
