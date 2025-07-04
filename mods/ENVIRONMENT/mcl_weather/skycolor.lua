@@ -1,8 +1,6 @@
 local mods_loaded = false
 local NIGHT_VISION_RATIO = 0.45
 
-local water_color = "#3F76E4"
-
 function mcl_weather.set_sky_box_clear(player, sky, fog)
 	local pos = player:get_pos()
 	if core.get_item_group(core.get_node(vector.new(pos.x,pos.y+1.5,pos.z)).name, "water") ~= 0 then return end
@@ -146,6 +144,28 @@ mcl_weather.skycolor = {
 			local dim = mcl_worlds.pos_to_dimension(pos)
 			local has_weather = (mcl_worlds.has_weather(pos) and (mcl_weather.state =="rain" or mcl_weather.state == "thunder") and mcl_weather.has_snow(pos)) or ((mcl_weather.state =="rain" or mcl_weather.state == "thunder") and mcl_weather.has_rain(pos))
 			local checkname = core.get_node(vector.new(pos.x,pos.y+1.5,pos.z)).name
+			if core.get_item_group(checkname, "water") ~= 0 then
+				local water_color = "#3F76E4"
+				if checkname == "mclx_core:river_water_source"
+					or checkname == "mclx_core:river_water_flowing" then
+					water_color = "#0084FF"
+				end
+				player:set_sky({ type = "regular",
+					sky_color = {
+						day_sky = water_color,
+						day_horizon = water_color,
+						dawn_sky = water_color,
+						dawn_horizon = water_color,
+						night_sky = water_color,
+						night_horizon = water_color,
+						indoors = water_color,
+						fog_sun_tint = water_color,
+						fog_moon_tint = water_color,
+						fog_tint_type = "custom"
+					},
+					clouds = false,
+				})
+			end
 			if dim == "overworld" then
 				local biomesky, biomefog = get_both_colors (pos)
 				if (mcl_weather.state == "none") then
