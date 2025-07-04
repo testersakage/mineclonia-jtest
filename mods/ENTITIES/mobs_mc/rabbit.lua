@@ -502,9 +502,9 @@ local rabbit_spawner_woody = table.merge (mobs_mc.animal_spawner, {
 	pack_max = 3,
 	biomes = {
 		"FlowerForest",
+		"OldGrowthPineTaiga",
+		"OldGrowthSpruceTaiga",
 		"Taiga",
-		"MegaSpruceTaiga",
-		"MegaTaiga",
 	},
 })
 
@@ -517,19 +517,16 @@ end
 function rabbit_spawner_woody:prepare_to_spawn (pack_size, center)
 	-- Select a variant for the entire pack.
 	local texture
-	local data = core.get_biome_data (center)
 	local random = math.random (100)
-	local name = core.get_biome_name (data.biome)
-	local definition = core.registered_biomes[name]
+	local name = mcl_biome_dispatch.get_biome_name (center)
 
-	if definition._mcl_biome_type == "cold"
-		or definition._mcl_biome_type == "snowy" then
+	if spawns_white_rabbits_p (name) then
 		if random < 80 then
 			texture = "mobs_mc_rabbit_white.png"
 		else
 			texture = "mobs_mc_rabbit_white_splotched.png"
 		end
-	elseif name:find ("Desert") then
+	elseif spawns_gold_rabbits_p (name) then
 		texture = "mobs_mc_rabbit_gold.png"
 	elseif random < 50 then
 		texture = "mobs_mc_rabbit_brown.png"
@@ -538,16 +535,18 @@ function rabbit_spawner_woody:prepare_to_spawn (pack_size, center)
 	else
 		texture = "mobs_mc_rabbit_black.png"
 	end
+
 	return {
 		_spawn_texture = texture,
 	}
 end
 
-local rabbit_spawner_cherry_grove = table.merge (rabbit_spawner_woody, {
+local rabbit_spawner_meadow_or_cherry_grove = table.merge (rabbit_spawner_woody, {
 	weight = 2,
 	pack_min = 2,
 	pack_max = 3,
 	biomes = {
+		"Meadow",
 		"CherryGrove",
 	},
 })
@@ -557,10 +556,22 @@ local rabbit_spawner_snowy = table.merge (rabbit_spawner_woody, {
 	pack_min = 2,
 	pack_max = 3,
 	biomes = {
-		"ColdTaiga",
-		"IcePlainsSpikes",
-		"IcePlains",
-		"ExtremeHills+_snowtop",
+		"FrozenOcean",
+		"FrozenRiver",
+		"IceSpikes",
+		"SnowyBeach",
+		"SnowyPlains",
+		"SnowySlopes",
+		"SnowyTaiga",
+	},
+})
+
+local rabbit_spawner_grove = table.merge (rabbit_spawner_woody, {
+	weight = 8,
+	pack_min = 2,
+	pack_max = 3,
+	biomes = {
+		"Grove",
 	},
 })
 
@@ -574,6 +585,7 @@ local rabbit_spawner_desert = table.merge (rabbit_spawner_woody, {
 })
 
 mcl_mobs.register_spawner (rabbit_spawner_woody)
-mcl_mobs.register_spawner (rabbit_spawner_cherry_grove)
+mcl_mobs.register_spawner (rabbit_spawner_meadow_or_cherry_grove)
 mcl_mobs.register_spawner (rabbit_spawner_snowy)
+mcl_mobs.register_spawner (rabbit_spawner_grove)
 mcl_mobs.register_spawner (rabbit_spawner_desert)

@@ -336,7 +336,6 @@ local axolotl_spawner = {
 	pack_max = 6,
 	weight = 10,
 	biomes = {
-		"LushCaves_underground",
 		"LushCaves",
 	},
 }

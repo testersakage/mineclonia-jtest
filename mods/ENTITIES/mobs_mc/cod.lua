@@ -124,7 +124,10 @@ mcl_mobs.register_egg("mobs_mc:cod", S("Cod"), "#c1a76a", "#e5c48b", 0)
 
 local cod_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
 	name = "mobs_mc:cod",
-	biomes = mobs_mc.overworld_biomes,
+	biomes = {
+		"Ocean",
+		"DeepOcean",
+	},
 	weight = 10,
 	pack_min = 3,
 	pack_max = 6,
@@ -134,4 +137,29 @@ function cod_spawner:init_group (list, sdata)
 	mob_class.school_init_group (list)
 end
 
+local cod_spawner_cold_ocean = table.merge (cod_spawner, {
+	weight = 15,
+	biomes = {
+		"ColdOcean",
+		"DeepColdOcean",
+	},
+})
+
+local cod_spawner_lukewarm_ocean = table.merge (cod_spawner, {
+	weight = 8,
+	biomes = {
+		"LukewarmOcean",
+	},
+})
+
+local cod_spawner_deep_lukewarm_ocean = table.merge (cod_spawner, {
+	weight = 15,
+	biomes = {
+		"DeepLukewarmOcean",
+	},
+})
+
 mcl_mobs.register_spawner (cod_spawner)
+mcl_mobs.register_spawner (cod_spawner_cold_ocean)
+mcl_mobs.register_spawner (cod_spawner_lukewarm_ocean)
+mcl_mobs.register_spawner (cod_spawner_deep_lukewarm_ocean)

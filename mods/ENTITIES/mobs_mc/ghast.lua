@@ -254,8 +254,8 @@ local ghast_spawner = table.merge (mobs_mc.monster_spawner, {
 	pack_min = 4,
 	pack_max = 4,
 	biomes = {
-		"Nether",
-		"SoulsandValley",
+		"NetherWastes",
+		"SoulSandValley",
 	},
 	weight = 50,
 	max_light = 15,
@@ -275,7 +275,7 @@ local ghast_spawner_basalt_delta = table.merge (ghast_spawner, {
 	pack_min = 1,
 	pack_max = 1,
 	biomes = {
-		"BasaltDelta",
+		"BasaltDeltas",
 	},
 	weight = 40,
 })

@@ -478,7 +478,7 @@ mcl_mobs.spawn_setup ({
 	min_height = mcl_vars.mg_lava_nether_max,
 	aoc = 3,
 	biomes = {
-		"Nether",
+		"NetherWastes",
 		"CrimsonForest"
 	},
 	chance = 200,

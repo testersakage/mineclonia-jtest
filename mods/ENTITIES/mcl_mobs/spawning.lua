@@ -1,3 +1,6 @@
+local pairs = pairs
+local ipairs = ipairs
+
 --lua locals
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
@@ -1043,6 +1046,7 @@ end
 
 local active_mobs_by_category = {}
 local registered_spawners = {}
+local registered_structure_spawners = {}
 
 -- This map between spawner lists and their total weight is rather
 -- contrived but avoids the creation of combined hash tables/arrays,
@@ -1051,6 +1055,7 @@ local total_weight = {}
 
 mcl_mobs.active_mobs_by_category = active_mobs_by_category
 mcl_mobs.registered_spawners = registered_spawners
+mcl_mobs.registered_structure_spawners = registered_structure_spawners
 
 -- https://nekoyue.github.io/ForgeJavaDocs-NG/javadoc/1.18.2/net/minecraft/world/entity/MobCategory.html
 
@@ -1142,18 +1147,34 @@ local function get_weighted_value (mob_types)
 	return nil
 end
 
+local levelgen_enabled = mcl_levelgen.levelgen_enabled
+local get_biome_name_nosample = mcl_biome_dispatch.get_biome_name_nosample
+local get_structures_at = mcl_levelgen.get_structures_at
+
+local function structure_override (pos, category)
+	local structures = get_structures_at (pos, false)
+	for _, structure in pairs (structures) do
+		local list = registered_structure_spawners[structure.data]
+		if list and list[category] then
+			return list[category]
+		end
+	end
+	return nil
+end
+
 local function get_eligible_spawn_type (pos, category)
+	local override = structure_override (pos, category)
+	if override then
+		return get_weighted_value (override)
+	end
 	local value
-	local biome = core.get_biome_data (pos)
-	if biome then
-		local spawners = registered_spawners[biome.biome]
-		if spawners then
-			-- XXX: reduce chances of spawning ambient water
-			-- creatures in rivers if possible.
-			local mob_types = spawners[category]
-			if mob_types then
-				value = get_weighted_value (mob_types)
-			end
+	local spawners = registered_spawners[get_biome_name_nosample (pos)]
+	if spawners then
+		-- XXX: reduce chances of spawning ambient water
+		-- creatures in rivers if possible.
+		local mob_types = spawners[category]
+		if mob_types then
+			value = get_weighted_value (mob_types)
 		end
 	end
 	return value
@@ -1170,7 +1191,8 @@ local function test_spawn_clearance (mob_def, spawn_pos, sdata)
 	return value
 end
 
-local function spawn_a_pack (pos, players, category, scratch0)
+local function spawn_a_pack (pos, players, category, scratch0,
+			     existing, global_max)
 	local player, player_pos = get_nearest_player (pos, players)
 	assert (player and player_pos)
 
@@ -1214,11 +1236,17 @@ local function spawn_a_pack (pos, players, category, scratch0)
 			local blurb = "[mcl_mobs] Spawned "
 				.. mob_def.name .. " at "
 				.. vector.to_string (spawn_pos)
+				.. " (" .. existing .. " / "
+				.. global_max .. "; category = "
+				.. category .. ")"
 			core.log ("action", blurb)
 		else
 			local blurb = "[mcl_mobs] Spawned pack of "
 				.. n_spawned .. " ".. mob_def.name
 				.. " around " .. vector.to_string (pos)
+				.. " (" .. existing .. " / "
+				.. global_max .. "; category = "
+				.. category .. ")"
 			core.log ("action", blurb)
 		end
 	end
@@ -1311,7 +1339,8 @@ function mcl_mobs.spawn_cycle (level, spawn_animals)
 						test_pos.x = math.random (x * 16, x * 16 + 15)
 						test_pos.z = math.random (z * 16, z * 16 + 15)
 						test_pos.y = position_in_chunk (chunk_data[chunk])
-						spawn_a_pack (test_pos, players, category, scratch0)
+						spawn_a_pack (test_pos, players, category, scratch0,
+							      existing, global_max)
 					end
 				end
 			end
@@ -1322,6 +1351,7 @@ end
 local default_spawner = {
 	weight = 100,
 	biomes = {},
+	structures = {},
 	despawn_distance_sqr = 128 * 128,
 	spawn_placement = "ground", -- misc, ground, aquatic, lava
 	spawn_category = "misc", -- Should be identical to that of the
@@ -1336,36 +1366,52 @@ function mcl_mobs.register_spawner (spawner)
 	table.insert (registered_spawners, spawner)
 end
 
+function mcl_mobs.suppress_spawning_in_structure (structure, category)
+	if not registered_structure_spawners[structure] then
+		registered_structure_spawners[structure] = {}
+	end
+	local data = registered_structure_spawners[structure]
+	if not data[category] then
+		data[category] = {}
+	end
+end
+
 mcl_mobs.default_spawner = default_spawner
 
--- Convert this table into a map between biome IDs and spawners
--- once all biomes are registered.
+-- Convert this table into a map between biome IDs, structures, and
+-- spawners once all biomes are registered.
 
 core.register_on_mods_loaded (function ()
 	local output = {}
 	local n = #registered_spawners
 	for i = 1, n do
 		local spawner = registered_spawners[i]
-		for _, biome in pairs (spawner.biomes) do
-			local id = core.get_biome_id (biome)
-			if not id then
-				core.log ("warning", table.concat ({
-					"Unknown biome in mob spawner for ",
-					spawner.name, ": ", biome,
-				}))
-			else
-				if not output[id] then
-					output[id] = {}
-				end
-
-				if not output[id][spawner.spawn_category] then
-					output[id][spawner.spawn_category] = {}
-				end
-
-				local list = output[id][spawner.spawn_category]
-				total_weight[list] = (total_weight[list] or 0) + spawner.weight
-				table.insert (list, spawner)
+		local biomes = mcl_biome_dispatch.build_biome_list (spawner.biomes)
+		for _, id in ipairs (biomes) do
+			if not output[id] then
+				output[id] = {}
 			end
+
+			if not output[id][spawner.spawn_category] then
+				output[id][spawner.spawn_category] = {}
+			end
+
+			local list = output[id][spawner.spawn_category]
+			total_weight[list] = (total_weight[list] or 0) + spawner.weight
+			table.insert (list, spawner)
+		end
+
+		for _, structure in ipairs (spawner.structures) do
+			if not registered_structure_spawners[structure] then
+				registered_structure_spawners[structure] = {}
+			end
+			local data = registered_structure_spawners[structure]
+			if not data[spawner.spawn_category] then
+				data[spawner.spawn_category] = {}
+			end
+			local list = data[spawner.spawn_category]
+			total_weight[list] = (total_weight[list] or 0) + spawner.weight
+			table.insert (list, spawner)
 		end
 	end
 	registered_spawners = output
@@ -1627,12 +1673,12 @@ core.register_globalstep (function (dtime)
 	spawn_timer = spawn_timer - dtime
 	passive_spawn_timer = passive_spawn_timer - dtime
 	if spawn_timer <= 0 then
-		-- local time = os.clock ()
+		-- local time = core.get_us_time ()
 		mcl_mobs.spawn_cycle ("overworld", false)
 		mcl_mobs.spawn_cycle ("nether", false)
 		mcl_mobs.spawn_cycle ("end", false)
-		-- local time = os.clock () - time
-		-- print (time * 1000 .. " ms")
+		-- local time = core.get_us_time () - time
+		-- print (time / 1000 .. " ms")
 		spawn_timer = 0.05
 	end
 	if passive_spawn_timer <= 0 then

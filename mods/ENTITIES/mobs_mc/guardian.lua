@@ -347,6 +347,67 @@ guardian.ai_functions = {
 }
 
 ------------------------------------------------------------------------
+-- Guardian spawning.
+------------------------------------------------------------------------
+
+local guardian_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:guardian",
+	weight = 1,
+	pack_min = 2,
+	pack_max = 4,
+	biomes = {},
+	spawn_placement = "aquatic",
+	structures = {
+		"mcl_levelgen:ocean_monument",
+	},
+})
+
+local pr = PcgRandom (math.floor (os.time () * 3985) % 0x100000000)
+local v = vector.new ()
+local mathmin = math.min
+
+local function guardian_visibility_test (node_pos)
+	-- Return whether the sky is not visible from the first
+	-- non-water node above NODE_POS.
+	v.x = node_pos.x
+	v.z = node_pos.z
+	for y = node_pos.y, mathmin (0, node_pos.y + 80) do
+		v.y = y
+		local node = core.get_node (v)
+		local def = core.registered_nodes[node.name]
+		if def and (not def.groups.water or def.groups.water == 0) then
+			local sky_visible = mcl_weather.can_see_outdoors (v)
+			return not sky_visible
+		end
+	end
+
+	-- Return whether the sky is not visible at sea level.
+	v.y = 0
+	return not mcl_weather.can_see_outdoors (v)
+end
+
+local function is_water (node)
+	local def = core.registered_nodes[node.name]
+	return def and def.groups.water and def.groups.water > 0
+end
+
+function guardian_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+	if mcl_vars.difficulty > 0
+		and is_water (self:get_node (node_cache, 0, node_pos))
+		and is_water (self:get_node (node_cache, -1, node_pos)) then
+		return pr:next (1, 20) == 1
+			or guardian_visibility_test (node_pos)
+	end
+	return nil
+end
+
+mcl_mobs.register_spawner (guardian_spawner)
+mcl_mobs.suppress_spawning_in_structure ("mcl_levelgen:ocean_monument",
+					 "underground_structures")
+mcl_mobs.suppress_spawning_in_structure ("mcl_levelgen:ocean_monument",
+					 "axolotls")
+
+------------------------------------------------------------------------
 -- Guardian sundries.
 ------------------------------------------------------------------------
 
