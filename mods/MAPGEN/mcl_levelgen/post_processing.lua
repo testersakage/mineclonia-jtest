@@ -1370,10 +1370,10 @@ function mcl_levelgen.is_regeneration_possible (dim, x, y, z)
 	local old_namespace, rc = current_namespace_id, false
 	switch_to_namespace (dim.data_namespace)
 	for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ,
-				 mathmin (0, by - REQUIRED_CONTEXT_Y),
+				 mathmax (0, by - REQUIRED_CONTEXT_Y),
 				 bz - REQUIRED_CONTEXT_XZ,
 				 bx + REQUIRED_CONTEXT_XZ,
-				 mathmax (by + REQUIRED_CONTEXT_Y,
+				 mathmin (by + REQUIRED_CONTEXT_Y,
 					  current_namespace_height - 1),
 				 bz + REQUIRED_CONTEXT_XZ) do
 		if mapblock_state (bx, by, bz) < MBS_GENERATED then
@@ -2471,6 +2471,31 @@ function mcl_levelgen.get_structures_at (pos, include_corners)
 end
 
 core.register_on_shutdown (save_structure_extents)
+
+------------------------------------------------------------------------
+-- Area protection.
+------------------------------------------------------------------------
+
+local old_is_protected = core.is_protected
+local conv_pos_dimension = mcl_levelgen.conv_pos_dimension
+local is_generated = mcl_levelgen.is_generated
+
+function core.is_protected (pos, name)
+	local x, y, z, dim = conv_pos_dimension (pos)
+	if dim then
+		local bx = floor (x / 16)
+		local by = floor (y / 16)
+		local bz = floor (z / 16)
+		if is_generated (dim, bx, by, bz) then
+			return old_is_protected (pos, name)
+		elseif name and name ~= "" then
+			core.chat_send_player (name, S ("You cannot modify the position at @1, which is not yet generated",
+							vector.to_string (pos)))
+		end
+		return true
+	end
+	return old_is_protected (pos, name)
+end
 
 ------------------------------------------------------------------------
 -- Async environment registration.
