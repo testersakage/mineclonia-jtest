@@ -3127,7 +3127,6 @@ function mob_class:gwp_open_and_memorize_door (door, dtime)
 	local node = core.get_node (door_node)
 	if core.get_item_group (node.name, "door") ~= 0
 		and core.get_item_group (node.name, "door_iron") == 0 then
-		local door_node = mcl_util.get_nodepos (door)
 		-- Don't open any doors that are still in or bordering
 		-- proto-chunks, lest a subsequent regeneration
 		-- operation restore a closed door node without
