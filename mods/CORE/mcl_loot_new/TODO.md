@@ -1,0 +1,13 @@
+- Translate all loot tables
+- Implement loot functions (item modifiers)
+- Implement predicates
+- Implement luck
+- Make structures spawn containers using new loot system
+- Make mob drops follow new loot system
+- Make piglin barters follow new loot system
+- (maybe) Make some node drops follow new loot system if it doesn't impact performance
+- Make fishing follow new loot system
+- Make archaeology (sus nodes) follow new loot system
+- Make mob armour follow new loot system
+- Make vaults follow new loot system
+- Delete old loot system

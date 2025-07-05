@@ -344,7 +344,7 @@ function mcl_util.drop_items_from_meta_container(lists)
 	--this check is provided as compatibility to the old (pre 0.90) behavior which would essentially always assume "main" as the list to drop
 		lists = { (lists or "main") }
 	end
-	return function(pos, _, oldmetadata)
+	return function(pos, _, oldmetadata, _)
 		if oldmetadata and oldmetadata.inventory then
 			for _,listname in pairs(lists) do
 				-- process in after_dig_node callback

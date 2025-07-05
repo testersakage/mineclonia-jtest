@@ -378,11 +378,18 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		end
 	end
 
-	local drop_items_chest = mcl_util.drop_items_from_meta_container("main")
+	local drop_items_chest_inner = mcl_util.drop_items_from_meta_container("main")
+	local function drop_items_chest(pos, oldnode, oldmetadata, digger)
+		-- Spawn loot in metadata table of chest if loot exists
+		core.debug(dump(pos), dump(oldnode), dump(oldmetadata), tostring(digger))
+		mcl_loot_new.materialise_container_loot_in_metadata_table(pos, digger, oldmetadata)
+		
+		drop_items_chest_inner(pos, oldnode, oldmetadata, digger)
+	end
 
 	local function on_chest_blast(pos)
 		local node = core.get_node(pos)
-		drop_items_chest(pos, node)
+		drop_items_chest(pos, node, core.get_meta(pos):to_table())
 		core.remove_node(pos)
 	end
 
@@ -529,10 +536,16 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		allow_metadata_inventory_take = protection_check_put_take,
 		allow_metadata_inventory_put = protection_check_put_take,
 		on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" moves stuff in chest at " .. core.pos_to_string(pos))
 		end,
 		on_metadata_inventory_put = function(pos, listname, _, stack, player)
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" moves stuff to chest at " .. core.pos_to_string(pos))
 			-- BEGIN OF LISTRING WORKAROUND
@@ -544,9 +557,20 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			mcl_redstone.update_comparators(pos)
 		end,
 		on_metadata_inventory_take = function(pos, _, _, _, player)
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" takes stuff from chest at " .. core.pos_to_string(pos))
 			mcl_redstone.update_comparators(pos)
+		end,
+		_on_hopper_in = function(pos)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, nil)
+		end,
+		_on_hopper_out = function(pos)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, nil)
 		end,
 		_mcl_hardness = 2.5,
 
@@ -556,6 +580,10 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				-- won't open if there is no space from the top
 				return false
 			end
+			
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, clicker)
+
 			local name = core.get_meta(pos):get_string("name")
 			if name == "" then
 				name = S("Chest")
@@ -681,10 +709,16 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			end
 		end,
 		on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" moves stuff in chest at " .. core.pos_to_string(pos))
 		end,
 		on_metadata_inventory_put = function(pos, listname, _, stack, player)
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" moves stuff to chest at " .. core.pos_to_string(pos))
 			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "left")
@@ -702,11 +736,22 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			mcl_redstone.update_comparators(other_pos)
 		end,
 		on_metadata_inventory_take = function(pos, _, _, _, player)
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" takes stuff from chest at " .. core.pos_to_string(pos))
 			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "left")
 			mcl_redstone.update_comparators(pos)
 			mcl_redstone.update_comparators(other_pos)
+		end,
+		_on_hopper_in = function(pos)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, nil)
+		end,
+		_on_hopper_out = function(pos)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, nil)
 		end,
 		_mcl_hardness = 2.5,
 
@@ -720,6 +765,9 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				-- won't open if there is no space from the top
 				return false
 			end
+
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, clicker)
 
 			local name = core.get_meta(pos):get_string("name")
 			if name == "" then
@@ -848,10 +896,16 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			end
 		end,
 		on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" moves stuff in chest at " .. core.pos_to_string(pos))
 		end,
 		on_metadata_inventory_put = function(pos, listname, _, stack, player)
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" moves stuff to chest at " .. core.pos_to_string(pos))
 			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "right")
@@ -869,11 +923,22 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			mcl_redstone.update_comparators(other_pos)
 		end,
 		on_metadata_inventory_take = function(pos, _, _, _, player)
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" takes stuff from chest at " .. core.pos_to_string(pos))
 			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "right")
 			mcl_redstone.update_comparators(pos)
 			mcl_redstone.update_comparators(other_pos)
+		end,
+		_on_hopper_in = function(pos)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, nil)
+		end,
+		_on_hopper_out = function(pos)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, nil)
 		end,
 		_mcl_hardness = 2.5,
 
@@ -887,6 +952,9 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				-- won't open if there is no space from the top
 				return false
 			end
+
+			-- Spawn loot in chest if exists
+			mcl_loot_new.materialise_container_loot(pos, clicker)
 
 			local name = core.get_meta(pos_other):get_string("name")
 			if name == "" then
@@ -1467,6 +1535,9 @@ for color, desc in pairs(boxtypes) do
 			end
 		end,
 		on_rightclick = function(pos, node, clicker)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, clicker)
+
 			player_chest_open(clicker, pos, small_name, { mob_texture }, node.param2, false, "mcl_chests_shulker",
 				"mcl_chests_shulker", true)
 		end,
@@ -1504,19 +1575,37 @@ for color, desc in pairs(boxtypes) do
 			end
 		end,
 		on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" moves stuff in shulker box at " .. core.pos_to_string(pos))
 		end,
 		on_metadata_inventory_put = function(pos, listname, _, stack, player)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" moves stuff to shulker box at " .. core.pos_to_string(pos))
 			mcl_redstone.update_comparators(pos)
 		end,
 		on_metadata_inventory_take = function(pos, _, _, _, player)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, player)
+
 			core.log("action", player:get_player_name() ..
 				" takes stuff from shulker box at " .. core.pos_to_string(pos))
 			mcl_redstone.update_comparators(pos)
 		end,
+		_on_hopper_in = function(pos)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, nil)
+		end,
+		_on_hopper_out = function(pos)
+			-- Spawn loot if exists
+			mcl_loot_new.materialise_container_loot(pos, nil)
+		end,
+
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 2,
 	})

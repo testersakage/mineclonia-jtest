@@ -284,6 +284,9 @@ function mcl_structures.register_structure(name,def,nospawn) --nospawn means it 
 			--catching of gennotify happens in mcl_mapgen_core
 		end)
 	end
+	for k, _ in pairs(def.loot or {}) do
+		core.debug(name, k)
+	end
 	mcl_structures.registered_structures[name] = def
 end
 
