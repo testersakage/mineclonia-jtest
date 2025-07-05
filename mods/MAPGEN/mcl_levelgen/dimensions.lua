@@ -181,6 +181,15 @@ function mcl_levelgen.conv_pos_raw (v)
 	return nil
 end
 
+function mcl_levelgen.conv_pos_dimension (v)
+	local dim = dimension_at_layer (v.y)
+
+	if dim then
+		return v.x, v.y - dim.y_global, v.z, dim
+	end
+	return nil
+end
+
 ------------------------------------------------------------------------
 -- Default dimensions.
 ------------------------------------------------------------------------
