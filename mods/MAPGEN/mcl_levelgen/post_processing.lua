@@ -1351,7 +1351,37 @@ function mcl_levelgen.is_emerged (dim, bx, by, bz)
 	local old_namespace, rc = current_namespace_id
 	switch_to_namespace (dim.data_namespace)
 	rc = mapblock_state (bx, by, bz) > MBS_UNKNOWN
-	switch_to_namespace (current_namespace_id)
+	switch_to_namespace (old_namespace)
+	return rc
+end
+
+function mcl_levelgen.is_generated (dim, bx, by, bz)
+	local old_namespace, rc = current_namespace_id
+	switch_to_namespace (dim.data_namespace)
+	rc = mapblock_state (bx, by, bz) == MBS_GENERATED
+	switch_to_namespace (old_namespace)
+	return rc
+end
+
+function mcl_levelgen.is_regeneration_possible (dim, x, y, z)
+	local bx = arshift (x, 4)
+	local by = arshift (y, 4)
+	local bz = arshift (z, 4)
+	local old_namespace, rc = current_namespace_id, false
+	switch_to_namespace (dim.data_namespace)
+	for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ,
+				 mathmin (0, by - REQUIRED_CONTEXT_Y),
+				 bz - REQUIRED_CONTEXT_XZ,
+				 bx + REQUIRED_CONTEXT_XZ,
+				 mathmax (by + REQUIRED_CONTEXT_Y,
+					  current_namespace_height - 1),
+				 bz + REQUIRED_CONTEXT_XZ) do
+		if mapblock_state (bx, by, bz) < MBS_GENERATED then
+			rc = true
+			break
+		end
+	end
+	switch_to_namespace (old_namespace)
 	return rc
 end
 

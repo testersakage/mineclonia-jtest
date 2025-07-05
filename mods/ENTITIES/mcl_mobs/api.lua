@@ -533,7 +533,8 @@ function mob_class:on_step (dtime, moveresult)
 	end
 
 	if self:check_despawn (pos, dtime)
-		or self:update_mob_caps () then
+		or self:update_mob_caps ()
+		or self:check_proto_chunk (pos, dtime) then
 		return true
 	end
 

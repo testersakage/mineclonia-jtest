@@ -1151,7 +1151,6 @@ local function get_weighted_value (mob_types)
 	return nil
 end
 
-local levelgen_enabled = mcl_levelgen.levelgen_enabled
 local get_biome_name_nosample = mcl_biome_dispatch.get_biome_name_nosample
 local get_structures_at = mcl_levelgen.get_structures_at
 
@@ -1195,6 +1194,21 @@ local function test_spawn_clearance (mob_def, spawn_pos, sdata)
 	return value
 end
 
+local is_position_completely_generated = mcl_mobs.is_position_completely_generated
+local spawn_proto_chunk_blurb
+	= "[mcl_mobs] Declining to spawn mob %s in proto-chunk at (%d,%d,%d)"
+
+local function test_generation (pos, mob_def)
+	if is_position_completely_generated (pos) then
+		return true
+	elseif logging then
+		local msg = string.format (spawn_proto_chunk_blurb,
+					   mob_def.name, pos.x, pos.y, pos.z)
+		core.log ("action", msg)
+	end
+	return false
+end
+
 local function spawn_a_pack (pos, players, category, scratch0,
 			     existing, global_max)
 	local player, player_pos = get_nearest_player (pos, players)
@@ -1225,7 +1239,8 @@ local function spawn_a_pack (pos, players, category, scratch0,
 		if dist < mob_def.despawn_distance_sqr
 			and dist > 576.0
 			and test_spawn_position (mob_def, spawn_pos, pos, sdata, {})
-			and test_spawn_clearance (mob_def, spawn_pos, sdata) then
+			and test_spawn_clearance (mob_def, spawn_pos, sdata)
+			and test_generation (pos, mob_def) then
 			local object = mob_def:spawn (spawn_pos, n_spawned + 1, sdata)
 			if object then
 				n_spawned = n_spawned + 1
