@@ -179,7 +179,7 @@ local function shipwreck_create_start (self, level, terrain, rng, cx, cz)
 		end
 
 		piece.y = y
-		bbox[5] = y + (bbox[6] - bbox[2])
+		bbox[5] = y + (bbox[5] - bbox[2])
 		bbox[2] = y
 		return create_structure_start (self, { piece, })
 	end
