@@ -290,7 +290,7 @@ mcl_levelgen.register_structure ("mcl_levelgen:pillager_outpost", {
 			-- around the center of the structure for
 			-- purposes of spawning.
 			local bbox = bbox_from_pieces (pieces)
-			local cx, cy, cz = bbox_center (bbox)
+			local cx, _, cz = bbox_center (bbox)
 			bbox[1] = cx - 35
 			bbox[2] = height - 12
 			bbox[3] = cz - 35

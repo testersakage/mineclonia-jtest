@@ -1072,6 +1072,21 @@ end
 
 local IDLE_TIME_MAX = 250
 
+local levelgen_enabled = mcl_levelgen.levelgen_enabled
+local conv_pos_dimension = mcl_levelgen.conv_pos_dimension
+local is_generated = mcl_levelgen.is_generated
+local floor = math.floor
+
+function mcl_mobs.is_position_completely_generated (pos)
+	if levelgen_enabled then
+		local x, y, z, dim = conv_pos_dimension (pos)
+		return not dim or is_generated (dim, floor (x / 16),
+						floor (y / 16),
+						floor (z / 16))
+	end
+	return true
+end
+
 function mob_class:init_ai ()
 	self.ai_idle_time = 2 + math.random (2)
 	if self._active_activity then
@@ -1098,6 +1113,38 @@ function mob_class:init_ai ()
 	-- seconds.
 	self._recent_attacker = nil
 	self._recent_attacker_age = 0
+
+	-- If spawned in a proto-chunk, suspend the mob's AI until
+	-- such time as the chunk where it resides is completely
+	-- generated.
+	local self_pos = self.object:get_pos ()
+	self_pos.x = floor (self_pos.x + 0.5)
+	self_pos.y = floor (self_pos.y + 0.5)
+	self_pos.z = floor (self_pos.z + 0.5)
+	if not mcl_mobs.is_position_completely_generated (self_pos) then
+		self._in_proto_chunk = 0.20
+	else
+		self._in_proto_chunk = nil
+	end
+end
+
+function mob_class:check_proto_chunk (self_pos, dtime)
+	local t = self._in_proto_chunk
+	if t ~= nil then
+		t = t - dtime
+		if t <= 0 then
+			local nodepos = mcl_util.get_nodepos (self_pos)
+			if mcl_mobs.is_position_completely_generated (nodepos) then
+				t = nil
+			else
+				t = 0.20
+			end
+		end
+		self._in_proto_chunk = t
+		return t ~= nil
+	else
+		return false
+	end
 end
 
 function mob_class:is_frightened ()
