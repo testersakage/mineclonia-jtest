@@ -131,6 +131,10 @@ function mcl_levelgen.conv_pos_raw (v)
 	return nil
 end
 
+function mcl_levelgen.conv_pos_dimension (v)
+	return nil
+end
+
 local empty = {}
 
 function mcl_levelgen.get_structures_at (_, _)

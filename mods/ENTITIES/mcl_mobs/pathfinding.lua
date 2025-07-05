@@ -767,6 +767,20 @@ local function gwp_get_node (pos)
 	return cache
 end
 
+local levelgen_enabled = mcl_levelgen.levelgen_enabled
+local conv_pos_dimension = mcl_levelgen.conv_pos_dimension
+local is_regeneration_possible
+	= mcl_levelgen.is_regeneration_possible
+
+local function gwp_node_regeneration_possible_p (door_node)
+	if not levelgen_enabled then
+		return false
+	end
+
+	local x, y, z, dim = conv_pos_dimension (door_node)
+	return is_regeneration_possible (dim, x, y, z)
+end
+
 mcl_mobs.gwp_get_node = gwp_get_node
 
 local ground_height_scratch = vector.zero ()
@@ -3122,10 +3136,16 @@ function mob_class:gwp_open_and_memorize_door (door, dtime)
 	if core.get_item_group (node.name, "door") ~= 0
 		and core.get_item_group (node.name, "door_iron") == 0 then
 		local door_node = mcl_util.get_nodepos (door)
-		if not mcl_doors.is_open (door_node) then
-			self:gwp_open_door (door_node, node, dtime)
+		-- Don't open any doors that are still in or bordering
+		-- proto-chunks, lest a subsequent regeneration
+		-- operation restore a closed door node without
+		-- replacing its metadata.
+		if not gwp_node_regeneration_possible_p (door_node) then
+			if not mcl_doors.is_open (door_node) then
+				self:gwp_open_door (door_node, node, dtime)
+			end
+			self:gwp_memorize_door (door)
 		end
-		self:gwp_memorize_door (door)
 	end
 end
 
