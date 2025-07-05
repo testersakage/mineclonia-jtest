@@ -3052,7 +3052,7 @@ local function door_has_other_users (self, door)
 			and entity.can_open_doors then
 			local pos = object:get_pos ()
 			if vector.distance (pos, door) <= 2
-				and is_door_in_waypoints (entity, pos) then
+				and is_door_in_waypoints (entity, door) then
 				return true
 			end
 			if math.abs (pos.y - door.y) <= 2.0
@@ -3077,11 +3077,12 @@ function mob_class:gwp_close_memorized_doors ()
 		elseif not is_door_in_waypoints (self, door)
 			and vector.distance (self_pos, door) <= 3
 			and not door_has_other_users (self, door) then
-			local node = core.get_node (door)
+			local door_node = mcl_util.get_nodepos (door)
+			local node = core.get_node (door_node)
 			if core.get_item_group (node.name, "door") ~= 0 then
-				if mcl_doors.is_open (door) then
+				if mcl_doors.is_open (door_node) then
 					local def = core.registered_nodes[node.name]
-					def.on_rightclick (door, node, self)
+					def.on_rightclick (door_node, node, self)
 				end
 			end
 		end
@@ -3107,7 +3108,8 @@ function mob_class:gwp_open_door (door_node, node, dtime)
 end
 
 function mob_class:gwp_open_and_memorize_door (door, dtime)
-	local node = core.get_node (door)
+	local door_node = mcl_util.get_nodepos (door)
+	local node = core.get_node (door_node)
 	if core.get_item_group (node.name, "door") ~= 0
 		and core.get_item_group (node.name, "door_iron") == 0 then
 		local door_node = mcl_util.get_nodepos (door)
