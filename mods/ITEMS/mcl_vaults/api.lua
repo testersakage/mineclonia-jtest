@@ -253,7 +253,7 @@ function mcl_vaults.register_vault(name, def)
 	}, def.node_on))
 
 	core.register_lbm({
-		name = "mcl_vaults:" .. name,
+		name = "mcl_vaults:" .. name .. "_item_entity",
 		label = "Activate vault item entity",
 		nodenames = {
 			"mcl_vaults:" .. name .. "_on",
@@ -264,8 +264,8 @@ function mcl_vaults.register_vault(name, def)
 	})
 
 	core.register_lbm({
-		name = "mcl_vaults:" .. name,
-		label = "Activate vault item entity",
+		name = "mcl_vaults:" .. name .. "_node_timer",
+		label = "Activate vault node timer",
 		nodenames = {
 			"mcl_vaults:" .. name,
 		},
