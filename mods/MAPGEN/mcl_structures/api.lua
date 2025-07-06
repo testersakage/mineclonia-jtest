@@ -27,15 +27,104 @@ function mcl_structures.is_disabled(structname)
 	return table.indexof(disabled_structures,structname) ~= -1
 end
 
-local function ecb_place(blockpos, action, calls_remaining, param) ---@diagnostic disable-line: unused-local
-	if calls_remaining >= 1 then return end
-	core.place_schematic(param.pos, param.schematic, param.rotation, param.replacements, param.force_placement, param.flags)
-	if param.after_placement_callback and param.p1 and param.p2 then
-		param.after_placement_callback(param.p1, param.p2, param.size, param.rotation, param.pr, param.callback_param)
+local function load_meta(specifier)
+	if type(specifier) == "table" then
+		return specifier
+	elseif type(specifier) == "string" then
+		-- Treat as filename
+		local file, err = io.open(specifier, "rb")
+		if file == nil then
+			error(err)
+		end
+		local compressed_data = file:read("*all")
+		file:close()
+		core.debug("Data from file " .. specifier .. " had length: " .. tostring(string.len(compressed_data)))
+		local table_string = core.decompress(compressed_data, "zstd")
+		local meta_table = core.deserialize(table_string, true)
+		return meta_table
 	end
 end
 
-function mcl_structures.place_schematic(pos, schematic, rotation, replacements, force_placement, flags, after_placement_callback, pr, callback_param)
+
+-- `pos`: vector
+-- `coord`: in meta pos format, array of {x, y, z}
+local function resolve_coordinates(coord, pos, rotation, size)
+	local x, y, z = unpack(coord)
+
+	-- Structures always have place_center_x and place_center_z (https://github.com/luanti-org/luanti/blob/2a8ee686d9b2b3c9caf556435d305bffedb13f34/src/mapgen/mg_schematic.cpp#L209-L214)
+	local centering_adjustment
+	if rotation == "0" or rotation == "180" then
+		centering_adjustment = vector.new(-math.floor((size.x-1)/2), 0, -math.floor((size.z-1)/2))
+	else
+		centering_adjustment = vector.new(-math.floor((size.z-1)/2), 0, -math.floor((size.x-1)/2))
+	end
+	core.debug("Adjusting by " .. dump(centering_adjustment))
+	core.debug("Size " .. dump(size, ""))
+	local pos = vector.add(pos, centering_adjustment)
+
+	-- Rotation is anticlockwise (https://github.com/luanti-org/luanti/blob/2a8ee686d9b2b3c9caf556435d305bffedb13f34/src/mapgen/mg_schematic.cpp#L126-L129)
+	if rotation == "0" then
+		return vector.add(pos, vector.new(x, y, z))
+	elseif rotation == "90" then
+		return vector.add(pos, vector.new(z, y, size.x-1 - x))
+	elseif rotation == "180" then
+		return vector.add(pos, vector.new(size.x-1 -x, y, size.z-1 - z)) 
+	elseif rotation == "270" then
+		return vector.add(pos, vector.new(size.z-1 - z, y, x))
+	else
+		error("Invalid rotation: " .. tostring(rotation))
+	end
+end
+
+local function apply_meta(meta_values, pos, rotation, size)
+	local applied_meta = {}
+	for schem_pos, meta_kv in pairs(meta_values) do
+		core.debug("coord: " .. dump(schem_pos))
+		local resolved_coord = resolve_coordinates(schem_pos, pos, rotation, size)
+		core.debug("Resolved " .. dump(schem_pos) .. " to " .. dump(resolved_coord) .. " with pos " .. dump(pos) .. " and rot " .. dump(rotation))
+		core.debug("ROT="..rotation.. "; Applying metadata to node at " .. dump(schem_pos, "") .. " name: " .. core.get_node(resolved_coord).name)
+		local meta = core.get_meta(resolved_coord)
+		applied_meta[resolved_coord] = meta_kv
+		for k, v in pairs(meta_kv) do
+			assert(type(k) == "string", "Metadata key must be a string")
+			if type(v) == "string" then
+				meta:set_string(k, v)
+			elseif type(v) == "number" then
+				meta:set_float(k, v)
+			else
+				error("Unsupported metadata value: " .. tostring(v))
+			end
+		end
+		--core.set_node(resolved_coord, {name = "mcl_colorblocks:glazed_terracotta_pink"})
+	end
+	return applied_meta
+	--core.set_node(pos, {name="mcl_torches:torch"})
+--
+	--local centering_adjustment = vector.new(-math.floor((size.x-1)/2), 0, -math.floor((size.z-1)/2))
+	--core.set_node(vector.add(pos, centering_adjustment), {name="mcl_lanterns:lantern_ceiling"})
+end
+
+local function ecb_place(blockpos, action, calls_remaining, param) ---@diagnostic disable-line: unused-local
+	if calls_remaining >= 1 then return end
+	core.place_schematic(param.pos, param.schematic, param.rotation, param.replacements, param.force_placement, param.flags)
+	local applied_meta
+	if param.meta then
+		local meta_values = load_meta(param.meta)
+		applied_meta = apply_meta(meta_values, param.pos, param.rotation, param.size)
+	end
+	if param.after_placement_callback and param.p1 and param.p2 then
+		param.after_placement_callback(param.p1, param.p2, param.size, param.rotation, param.pr, param.callback_param, applied_meta)
+	end
+end
+
+function mcl_structures.place_schematic(pos, schematic_specifier, rotation, replacements, force_placement, flags, after_placement_callback, pr, callback_param)
+	local schematic, meta
+	if type(schematic_specifier) == "table" and schematic_specifier.main ~= nil and schematic_specifier.meta ~= nil then
+		schematic = schematic_specifier.main
+		meta = schematic_specifier.meta
+	else
+		schematic = schematic_specifier
+	end
 	if type(schematic) ~= "table" and not mcl_util.file_exists(schematic) then
 		core.log("warning","[mcl_structures] schematic file "..tostring(schematic).." does not exist.")
 		return end
@@ -56,7 +145,7 @@ function mcl_structures.place_schematic(pos, schematic, rotation, replacements, 
 		local p1 = {x=pos.x    , y=pos.y           , z=pos.z    }
 		local p2 = {x=pos.x+x-1, y=pos.y+s.size.y-1, z=pos.z+z-1}
 		core.log("verbose", "[mcl_structures] size=" ..core.pos_to_string(s.size) .. ", rotation=" .. tostring(rotation) .. ", emerge from "..core.pos_to_string(p1) .. " to " .. core.pos_to_string(p2))
-		local param = {pos=vector.new(pos), schematic=s, rotation=rotation, replacements=replacements, force_placement=force_placement, flags=flags, p1=p1, p2=p2, after_placement_callback = after_placement_callback, size=vector.new(s.size), pr=pr, callback_param=callback_param}
+		local param = {pos=vector.new(pos), schematic=s, rotation=rotation, replacements=replacements, force_placement=force_placement, flags=flags, p1=p1, p2=p2, after_placement_callback = after_placement_callback, size=vector.new(s.size), pr=pr, callback_param=callback_param, meta=meta}
 		core.emerge_area(p1, p2, ecb_place, param)
 		return true
 	end
@@ -109,6 +198,18 @@ local function generate_loot(pos, def, pr)
 	local p1 = vector.offset(pos,-hl,-hl,-hl)
 	local p2 = vector.offset(pos,hl,hl,hl)
 	if def.loot then mcl_structures.fill_chests(p1,p2,def.loot,pr) end
+end
+
+local function set_container_loot(applied_meta, pr)
+	if not applied_meta then return end
+	for pos, meta_kv in pairs(applied_meta) do
+		if meta_kv.mcl_structures_loot_table ~= nil then
+			local meta = core.get_meta(pos)
+			meta:set_string("mcl_structures_loot_table", "")
+			meta:set_string("loot_table", meta_kv.mcl_structures_loot_table)
+			meta:set_string("loot_table_seed", tostring(pr:next() + 2147483648))
+		end
+	end
 end
 
 function mcl_structures.construct_nodes(p1,p2,nodes)
@@ -215,8 +316,9 @@ function mcl_structures.place_structure(pos, def, pr, blockseed, _)
 					for _,d in pairs(def.daughters) do
 						local p = vector.add(pos,d.pos)
 						local rot = d.rot or 0
-						mcl_structures.place_schematic(p, d.files[pr:next(1,#d.files)], rot, nil, true, "place_center_x,place_center_z",function()
+						mcl_structures.place_schematic(p, d.files[pr:next(1,#d.files)], rot, nil, true, "place_center_x,place_center_z",function(_p1, _p2, _size, _rotation, _pr, _callback_param, applied_meta)
 							if def.loot then generate_loot(pp,def,pr) end
+							set_container_loot(applied_meta, pr)
 							if def.construct_nodes then construct_nodes(pp,def) end
 							if def.after_place then
 								def.after_place(pos,def,pr)
@@ -227,9 +329,11 @@ function mcl_structures.place_structure(pos, def, pr, blockseed, _)
 			elseif def.after_place then
 				ap = def.after_place
 			end
-			mcl_structures.place_schematic(pp, file, rot,  def.replacements, true, "place_center_x,place_center_z",function(p1, p2, size, rotation) ---@diagnostic disable-line: unused-local
+			mcl_structures.place_schematic(pp, file, rot,  def.replacements, true, "place_center_x,place_center_z",function(_p1, _p2, _size, _rotation, _pr, _callback_param, applied_meta) ---@diagnostic disable-line: unused-local
 				if not def.daughters then
+					--core.debug(dump(pp), rot)
 					if def.loot then generate_loot(pp,def,pr) end
+					set_container_loot(applied_meta, pr)
 					if def.construct_nodes then construct_nodes(pp,def) end
 				end
 				return ap(pp, def, pr, blockseed)
@@ -255,6 +359,13 @@ function mcl_structures.place_structure(pos, def, pr, blockseed, _)
 end
 
 function mcl_structures.register_structure(name,def,nospawn) --nospawn means it will be placed by another (non-nospawn) structure that contains it's structblock i.e. it will not be placed by mapgen directly
+	if not def.filenames then
+		if def.loot then
+			core.debug("NO FILENAME BUT LOOT: " .. name)
+		else
+			core.debug("NO FILENAME: " .. name)
+		end
+	end
 	if mcl_structures.is_disabled(name) then return end
 	local flags = "place_center_x, place_center_z, force_placement"
 	if def.flags then flags = def.flags end
@@ -284,9 +395,9 @@ function mcl_structures.register_structure(name,def,nospawn) --nospawn means it 
 			--catching of gennotify happens in mcl_mapgen_core
 		end)
 	end
-	for k, _ in pairs(def.loot or {}) do
-		core.debug(name, k)
-	end
+	--for k, _ in pairs(def.loot or {}) do
+	--	core.debug(name, k)
+	--end
 	mcl_structures.registered_structures[name] = def
 end
 

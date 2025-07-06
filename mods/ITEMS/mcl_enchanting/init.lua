@@ -62,6 +62,13 @@ dofile(modpath .. "/engine.lua")
 dofile(modpath .. "/groupcaps.lua")
 dofile(modpath .. "/enchantments.lua")
 
+-- Get array of all enchantments
+local all_enchantments = {}
+for k, _ in pairs(mcl_enchanting.enchantments) do
+	table.insert(all_enchantments, k)
+end
+mcl_enchanting.all_enchantments = all_enchantments
+
 core.register_chatcommand("enchant", {
 	description = S("Enchant an item"),
 	params = S("<player> <enchantment> [<level>]"),

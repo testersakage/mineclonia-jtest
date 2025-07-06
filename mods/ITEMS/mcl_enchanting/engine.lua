@@ -374,6 +374,25 @@ function mcl_enchanting.get_random_enchantment(itemstack, treasure, weighted, ex
 	return #possible > 0 and possible[mcl_enchanting.random(pr, 1, #possible)]
 end
 
+function mcl_enchanting.get_random_enchantment_from(itemstack, enchantments, weighted, only_compatible, pr)
+	local possible = {}
+
+	for _, enchantment in ipairs(enchantments) do
+		local can_enchant, _, _, primary = mcl_enchanting.can_enchant(itemstack, enchantment, 1)
+
+		if (not only_compatible or can_enchant) then
+			local enchantment_def = mcl_enchanting.enchantments[enchantment]
+			local weight = weighted and enchantment_def.weight or 1
+
+			for _ = 1, weight do
+				table.insert(possible, enchantment)
+			end
+		end
+	end
+
+	return #possible > 0 and possible[mcl_enchanting.random(pr, 1, #possible)]
+end
+
 function mcl_enchanting.generate_random_enchantments(itemstack, enchantment_level, treasure, no_reduced_bonus_chance,
 													 ignore_already_enchanted, pr)
 	local itemname = itemstack:get_name()
@@ -465,6 +484,17 @@ end
 
 function mcl_enchanting.enchant_uniform_randomly(stack, exclude, pr)
 	local enchantment = mcl_enchanting.get_random_enchantment(stack, true, false, exclude, pr)
+
+	if enchantment then
+		mcl_enchanting.enchant(stack, enchantment,
+			mcl_enchanting.random(pr, 1, mcl_enchanting.enchantments[enchantment].max_level))
+	end
+
+	return stack
+end
+
+function mcl_enchanting.enchant_uniform_randomly_from(stack, enchantments, only_compatible, pr)
+	local enchantment = mcl_enchanting.get_random_enchantment_from(stack, enchantments, false, only_compatible, pr)
 
 	if enchantment then
 		mcl_enchanting.enchant(stack, enchantment,

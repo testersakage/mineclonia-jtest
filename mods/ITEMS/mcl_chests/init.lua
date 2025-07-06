@@ -491,6 +491,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_wood_defaults(),
 		on_construct = function(pos)
+			core.debug("CONSTRUCTING CHEST AT " .. dump(pos, ""))
 			local param2 = core.get_node(pos).param2
 			local meta = core.get_meta(pos)
 			local inv = meta:get_inventory()

@@ -1,4 +1,4 @@
-mcl_loot_new.register_loot_table("shipwreck_treasure", {
+mcl_loot_new.register_loot_table("chest/shipwreck_treasure", {
     pools = {
         {
             rolls = {min=3, max=6},

@@ -4,34 +4,25 @@ local filepath = modpath .. "/chests/"
 mcl_loot_new.register_loot_table("test_loot", {
     pools = {
         {
-            rolls = 1,
+            rolls = 10,
             entries = {
                 {
                     type = "item",
-                    name = "mcl_core:obsidian",
-                    functions = {
-                        {
-                            ["function"] = "set_count",
-                            count = {min=4, max=10}
-                        }
-                    }
-                },
-                {
-                    type = "item",
-                    name = "mcl_core:wood",
+                    name = "mcl_core:barrier",
                     functions = {
                         {
                             ["function"] = "set_count",
                             count = 1
                         }
                     }
-                }
+                },
             }
         }
     }
 })
 
 dofile(filepath.."shipwreck_treasure.lua")
+dofile(filepath.."ruined_portal.lua")
 
 
 --chests/shipwreck_map

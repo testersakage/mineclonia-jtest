@@ -4,7 +4,7 @@ mcl_loot_new = {}
 
 mcl_loot_new.loot_tables = {}
 
-dofile(modpath.."/loot_engine.lua")
+dofile(modpath.."/engine.lua")
 dofile(modpath.."/loot_context.lua")
 dofile(modpath.."/commands.lua")
 
@@ -102,6 +102,7 @@ end
 -- using `seed` for RNG and `context` as loot context params
 function mcl_loot_new.container_insert_loot(inv, loot_table, context, seed, pos)
     local loot = mcl_loot_new.sample_table(loot_table, context, PcgRandom(seed))
+    core.debug("LOOT: " .. dump(loot))
     local fill_seed = get_fill_seed(pos)
     fill_inventory(inv, "main", loot, PcgRandom(fill_seed))
 end
@@ -152,6 +153,8 @@ function mcl_loot_new.materialise_container_loot(pos, player)
     local loot_info = get_loot_meta(meta)
     if loot_info.loot_table == nil then return false end
     core.debug("actually materialising loot")
+
+    core.debug("SEED: " .. tostring(loot_info.seed))
 
     if loot_info.seed == nil then
         loot_info.seed = math.random(0, 18446744073709551615)
@@ -287,5 +290,41 @@ core.register_chatcommand("showmeta", {
         --core.debug(dump(core.get_meta(coords):to_table()))
         dbg_meta_at(coords)
         dbg_meta_at({x=0,y=41,z=0})
+    end
+})
+
+
+core.register_chatcommand("metaprocess", {
+    params = "",
+    description = "Save metadata in new mapgen format",
+    privs = {debug = true},
+    func = function(name, param)
+        local slash_pos = param:find("/")
+        
+        local filename = param:sub(1, slash_pos-1)
+        local data = param:sub(slash_pos+1)
+
+        local table_data = load("return " .. data)()
+        core.debug("Writing: " .. dump(table_data))
+        local serialised = core.serialize(table_data)
+        core.debug("Serialised: " .. serialised)
+        local compressed = core.compress(serialised, "zstd")
+        core.debug("Actually writing: " .. compressed)
+
+        local file = io.open(modpath.."/metadata/"..filename, "wb")
+        file:write(compressed)
+        file:close()
+
+
+        core.debug(string.len(compressed))
+        core.debug(core.decompress(compressed, "zstd"))
+
+        local file = io.open(modpath.."/metadata/"..filename, "rb")
+        local recovered = file:read("*all")
+        file:close()
+        core.debug(string.len(recovered))
+        core.debug(recovered)
+        core.debug(core.decompress(recovered, "zstd"))
+        return true, "Successfully wrote data to " .. modpath.."/metadata/"..filename
     end
 })

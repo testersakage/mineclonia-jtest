@@ -20,6 +20,9 @@ dofile(modpath.."/end_city.lua")
 dofile(modpath.."/ancient_hermitage.lua")
 
 
+dofile(modpath.."/test_structure.lua")
+
+
 mcl_structures.register_structure("desert_well",{
 	place_on = {"group:sand"},
 	flags = "place_center_x, place_center_z",
