@@ -1,6 +1,7 @@
 local S = core.get_translator(core.get_current_modname())
 
 local has_doc = core.get_modpath("doc")
+local mod_storage = core.get_mod_storage ()
 mcl_portals.registered_on_beat_game = {}
 function mcl_portals.register_on_beat_game(func)
 	table.insert(mcl_portals.registered_on_beat_game, func)
@@ -49,7 +50,7 @@ local function find_valid_spawn(target, attempts)
 	core.load_area(minp, maxp)
 	attempts = attempts or 1
 	if attempts > 10 then
-		return mcl_spawn.get_world_spawn_pos()
+		return mcl_spawn.get_world_spawn_pos(nil)
 	end
 	local nn = core.find_nodes_in_area_under_air(minp,maxp,{"group:solid"})
 	if #nn > 0 then
@@ -225,39 +226,96 @@ function mcl_portals.end_teleport(obj, pos)
 		if obj:is_player() then
 			obj:respawn()
 		else
-			local target = find_valid_spawn(mcl_spawn.get_world_spawn_pos())
+			local target = find_valid_spawn(mcl_spawn.get_world_spawn_pos(nil))
 			teleport_object(obj, target, dim)
 		end
 	else
 		-- End portal in any other dimension:
 		-- Teleport to the End at a fixed position.
 		-- The destination is built by mcl_structures.
-		core.load_area(vector.subtract(mcl_vars.mg_end_platform_pos, 8), vector.add(mcl_vars.mg_end_platform_pos, 8))
-		mcl_structures.place_structure(mcl_vars.mg_end_platform_pos, mcl_structures.registered_structures["end_spawn_obsidian_platform"], PcgRandom(core.get_mapgen_setting("seed")),-1)
+		core.load_area(vector.subtract(mcl_vars.mg_end_platform_pos, 8),
+			       vector.add(mcl_vars.mg_end_platform_pos, 8))
+		mcl_structures.place_structure(mcl_vars.mg_end_platform_pos,
+					       mcl_structures.registered_structures["end_spawn_obsidian_platform"],
+					       PcgRandom (core.get_mapgen_setting("seed")),-1)
 		teleport_object(obj, vector.offset(mcl_vars.mg_end_platform_pos, 0, 1, 0), dim)
+	end
+end
+
+local function end_teleport_cb (player, data)
+	teleport_object (player, data, "end")
+end
+
+local function end_teleport_entry_cb (player, data)
+	local platform = mcl_vars.mg_end_platform_pos
+	local v1 = vector.subtract (platform, 8)
+	local v2 = vector.add (platform, 8)
+	core.load_area (v1, v2)
+	local structure = mcl_structures.registered_structures["end_spawn_obsidian_platform"]
+	mcl_structures.place_structure (platform, structure,
+					PcgRandom (0), -1)
+	teleport_object (player, vector.offset (platform, 0, 0.5, 0),
+			 "overworld")
+	awards.unlock(player:get_player_name (), "mcl:enterEndPortal")
+
+	if mod_storage:get_int ("end_entered", 0) == 0 then
+		mod_storage:set_int ("end_entered", 1)
+		local exit_portal = mcl_structures.registered_structures["end_exit_portal"]
+		local pos = mcl_biome_dispatch.get_end_portal_pos ()
+		if pos then
+			core.load_area (vector.offset (pos, -8, 0, -8),
+					vector.offset (pos, 8, 0, 8))
+			mcl_structures.place_structure (pos, exit_portal,
+							-- Induce dragon spawning.
+							PcgRandom (0), 5556)
+		end
 	end
 end
 
 function mcl_portals.end_portal_teleport(pos)
 	for obj in core.objects_inside_radius(pos, 1) do
-		local lua_entity = obj:get_luaentity()
-		if obj:is_player() or lua_entity then
-			local objpos = obj:get_pos()
-			if objpos == nil then
-				return
-			end
+		if not mcl_levelgen.levelgen_enabled then
+			local lua_entity = obj:get_luaentity()
+			if obj:is_player() or lua_entity then
+				local objpos = obj:get_pos()
+				if objpos == nil then
+					return
+				end
 
-			-- Check if object is actually in portal.
-			objpos.y = math.ceil(objpos.y)
-			if core.get_node(objpos).name ~= "mcl_portals:portal_end" then
-				return
-			end
+				-- Check if object is actually in portal.
+				objpos.y = math.ceil(objpos.y)
+				if core.get_node(objpos).name ~= "mcl_portals:portal_end" then
+					return
+				end
 
-			if obj:is_player() and mcl_player.players[obj].attached == true then --luacheck: ignore 542 (empty if branch)
-				-- do nothing if player is attached to something in portal
+				if obj:is_player() and mcl_player.players[obj].attached == true then --luacheck: ignore 542 (empty if branch)
+					-- do nothing if player is attached to something in portal
+				else
+					mcl_portals.end_teleport(obj, objpos)
+					awards.unlock(obj:get_player_name(), "mcl:enterEndPortal")
+				end
+			end
+		elseif obj:is_player () then
+			-- TODO: teleporting non-player entities to/from the End.
+			local pos = obj:get_pos ()
+			local dim = mcl_levelgen.dimension_at_layer (pos.y)
+			if dim.id == "mcl_levelgen:end" then
+				local spawn = mcl_spawn.get_player_spawn_pos (obj)
+				if mcl_biome_dispatch.is_limbo_pos (spawn) then
+					obj:set_pos (spawn)
+				else
+					local v1 = vector.offset (spawn, -64, -64, -64)
+					local v2 = vector.offset (spawn, 64, 64, 64)
+					mcl_biome_dispatch.teleport_with_emerge (obj, v1, v2, S ("Leaving the End"),
+										 end_teleport_cb, spawn)
+				end
 			else
-				mcl_portals.end_teleport(obj, objpos)
-				awards.unlock(obj:get_player_name(), "mcl:enterEndPortal")
+				local v1 = vector.offset (mcl_vars.mg_end_exit_portal_pos,
+							  -128, -128, -128)
+				local v2 = vector.offset (mcl_vars.mg_end_exit_portal_pos,
+							  128, 128, 128)
+				mcl_biome_dispatch.teleport_with_emerge (obj, v1, v2, S ("Entering the End"),
+									 end_teleport_entry_cb)
 			end
 		end
 	end

@@ -1,4 +1,5 @@
 local ipairs = ipairs
+local S = core.get_translator (core.get_current_modname ())
 
 mcl_biome_dispatch = {}
 
@@ -440,4 +441,377 @@ end
 function mcl_biome_dispatch.make_biome_test (ids_or_tags)
 	local list = mcl_biome_dispatch.build_biome_list (ids_or_tags)
 	return (test_dispatchers[#list] or test_dispatcher_generic) (unpack (list))
+end
+
+------------------------------------------------------------------------
+-- Spawn position computation.
+------------------------------------------------------------------------
+
+local LIMBO_POSITION = vector.new (31007, 31007, 31007)
+
+local get_dimension = mcl_levelgen.get_dimension
+local global_spawnpoint = core.setting_get_pos ("static_spawnpoint")
+
+function mcl_biome_dispatch.get_spawn_point_2d ()
+	if levelgen_enabled and global_spawnpoint then
+		return global_spawnpoint
+	elseif levelgen_enabled then
+		local level = get_dimension ("mcl_levelgen:overworld")
+		local x, z = level.preset:find_spawn_position ()
+		global_spawnpoint = vector.new (x, 0, -z - 1)
+		return global_spawnpoint
+	else
+		return vector.new (0, 0, 0)
+	end
+end
+
+function mcl_biome_dispatch.use_detailed_spawning_mechanics ()
+	return levelgen_enabled
+end
+
+local function is_up_face_sturdy (v)
+	local node = core.get_node (v)
+	return mcl_mobs.is_up_face_sturdy (v, node)
+end
+
+local function is_walkable (v, y_off)
+	v.y = v.y + y_off
+	local node = core.get_node (v)
+	v.y = v.y - y_off
+	local def = core.registered_nodes[node.name]
+	return def and def.walkable
+end
+
+local function move_respawn_position (dim, v)
+	local surface, _
+		= mcl_levelgen.map_index_heightmap (dim, v.x, v.z, false)
+	if not surface then
+		return false
+	end
+	local y = surface + dim.y_global - 2
+	v.y = y
+	core.load_area (v)
+
+	if is_up_face_sturdy (v) then
+		local up_face_sturdy = true
+		-- Search upwards for solid ground.
+		for y = y, y + 80 do
+			if up_face_sturdy
+				and not is_walkable (v, 1)
+				and not is_walkable (v, 2) then
+				v.y = y + 0.5
+				return true
+			end
+			v.y = y + 1
+			up_face_sturdy = is_up_face_sturdy (v)
+		end
+	else
+		-- Search downwards for solid ground.
+		for y = y, y - 80, -1 do
+			if y < dim.y_global then
+				break
+			end
+			v.y = y
+			if is_up_face_sturdy (v)
+				and not is_walkable (v, 1)
+				and not is_walkable (v, 2) then
+				v.y = y + 0.5
+				return true
+			end
+		end
+	end
+	return false
+end
+
+local last_diameter, last_a, last_c
+
+local function findlcg (m)
+	if last_diameter == m then
+		return last_a, last_c
+	else
+		local a, c = mcl_util.findlcg (m)
+		last_a = a
+		last_c = c
+		last_diameter = m
+		return a, c
+	end
+end
+
+local floor = math.floor
+
+local function respawn_set_pos (player, _)
+	local pos = mcl_biome_dispatch.next_respawn_position (nil)
+	player:set_pos (pos)
+end
+
+function mcl_biome_dispatch.next_respawn_position (player)
+	local spawn_pos = mcl_biome_dispatch.get_spawn_point_2d ()
+	local spawn_radius = tonumber (core.settings:get ("mcl_spawn_radius")) or 24
+	local dim = get_dimension ("mcl_levelgen:overworld")
+	local v1 = vector.offset (spawn_pos, -spawn_radius, 0, -spawn_radius)
+	local v2 = vector.offset (spawn_pos, spawn_radius, 0, spawn_radius)
+	v1.y = dim.y_global
+	v2.y = dim.y_max
+	if not mcl_levelgen.is_area_fully_regenerated (dim, v1.x, v1.y, v1.z,
+						       v2.x, v2.y, v2.z) then
+		if not player then
+			return LIMBO_POSITION
+		end
+		return mcl_biome_dispatch.emerged_teleport_prepare (player,
+								    v1, v2,
+								    nil,
+								    respawn_set_pos,
+								    nil)
+	end
+
+	if player then
+		local meta = player:get_meta ()
+		meta:set_int ("mcl_biome_dispatch:in_spawn_limbo", 0)
+	end
+
+	local diameter = spawn_radius * 2 + 1
+	local m = diameter * diameter
+	local a, c = findlcg (m)
+	local state = math.random (0, m - 1)
+	local v = vector.copy (spawn_pos)
+
+	for i = 1, m do
+		state = mcl_util.lcg_next (a, c, m, state)
+		local dx = floor (state / diameter) - diameter
+		local dz = state % diameter - diameter
+
+		v.x = spawn_pos.x + dx
+		v.z = spawn_pos.z + dz
+
+		if move_respawn_position (dim, v) then
+			return v
+		end
+	end
+	local v = vector.copy (spawn_pos)
+	move_respawn_position (dim, v)
+	return v
+end
+
+local progress_str = nil
+
+local function report_spawn_generation_progress_1 ()
+	if progress_str and progress_str ~= 1 then
+		core.log ("action", progress_str)
+		progress_str = nil
+	end
+end
+
+local function report_spawn_generation_progress (progress)
+	if progress.total_regen > progress.n_regenerated then
+		if not progress_str then
+			core.after (0.5, report_spawn_generation_progress_1)
+		end
+		progress_str = string.format ("Emerged %d/%d MapBlocks; %d/%d MapBlocks regenerated",
+					      progress.n_emerged, progress.total_emerge,
+					      progress.n_regenerated, progress.total_regen)
+	elseif progress_str ~= 1 then
+		progress_str = 1
+		core.log ("action", string.format ("Completed regeneration of %d MapBlocks",
+						   progress.total_regen))
+	end
+end
+
+local function generate_spawn_area ()
+	local spawn_pos = mcl_biome_dispatch.get_spawn_point_2d ()
+	local spawn_radius = tonumber (core.settings:get ("mcl_spawn_radius")) or 24
+	local dim = get_dimension ("mcl_levelgen:overworld")
+	local v1 = vector.offset (spawn_pos, -spawn_radius,
+				  dim.y_global, -spawn_radius)
+	local v2 = vector.offset (spawn_pos, spawn_radius,
+				  dim.y_global + dim.y_max,
+				  spawn_radius)
+	core.log ("action", string.format ("Generating world spawn from (%d,%d,%d) to (%d,%d,%d)",
+					   v1.x, v1.y, v1.z, v2.x, v2.y, v2.z))
+	mcl_levelgen.generate_area (v1.x, v1.y, v1.z, v2.x, v2.y, v2.z,
+				    report_spawn_generation_progress)
+end
+
+if mcl_biome_dispatch.use_detailed_spawning_mechanics () then
+	core.register_on_mods_loaded (function ()
+		core.after (0.1, generate_spawn_area)
+	end)
+
+	-- Override static_spawnpoint before players are permitted to
+	-- join, as the engine positions new players without regard to
+	-- registered respawn callbacks.
+	core.register_on_prejoinplayer (function (name, _)
+		local pos = mcl_biome_dispatch.next_respawn_position (nil)
+		core.settings:set_pos ("static_spawnpoint", pos)
+	end)
+
+	core.register_on_joinplayer (function (player)
+		local pos = player:get_pos ()
+		local meta = player:get_meta ()
+		if vector.equals (pos, LIMBO_POSITION)
+			or meta:get_int ("mcl_biome_dispatch:in_spawn_limbo", 0) == 1 then
+			meta:set_int ("mcl_biome_dispatch:in_spawn_limbo", 1)
+			local pos = mcl_biome_dispatch.next_respawn_position (player)
+			player:set_pos (pos)
+		end
+	end)
+end
+
+------------------------------------------------------------------------
+-- Portals & respawning mechanics.
+------------------------------------------------------------------------
+
+local mathmin = math.min
+-- local mathmax = math.max
+
+local players_in_limbo = {}
+
+-- Players that are teleporting to an ungenerated area are held in a
+-- ``limbo'' between dimensions until such time as their destination
+-- is completely regenerated.  A progress formspec is also displayed
+-- during this period.
+
+local limbo_formspec = [[
+formspec_version[6]
+size[15,8]
+position[0.5,0.5]
+allow_close[false]
+hypertext[0,3;15,4;_;<center><big>%s</big></center>]
+image[4,5;7,0.1;(blank.png^[resize:100x1^[fill:100x1:#525252)%s%s]
+bgcolor[;true;]
+background[-10,-10;0,0;mcl_biome_dispatch_transition_bkg.png;true]
+]]
+
+local function limbo_cancel (player, limbo, no_teleport)
+	if not no_teleport then
+		player:set_pos (limbo.src_pos)
+	end
+	players_in_limbo[player] = nil
+	core.close_formspec (player:get_player_name (),
+			     "mcl_biome_dispatch:limbo_formspec")
+end
+
+local function limbo_callback (progress, player, limbo_in)
+	local n_regen = progress.n_regenerated
+	local total_regen = progress.total_regen
+	local n_emerged = progress.n_emerged
+	local total_emerge = progress.total_emerge
+	local limbo = players_in_limbo[player]
+	if limbo ~= limbo_in then
+		return false
+	end
+
+	if n_regen == total_regen and n_emerged == total_emerge then
+		limbo.callback (player, limbo.data)
+		limbo_cancel (player, limbo, true)
+	else
+		local text = limbo.text
+		local progress_load
+			= mathmin (100, floor (n_emerged / total_emerge * 100))
+		local progress_regen
+			= mathmin (100, floor (n_regen / total_regen * 100))
+
+		if progress_load ~= limbo.last_progress_load
+			or progress_regen ~= limbo.last_progress_regen then
+			local pload = progress_load > 0
+				and string.format ("^[fill:%dx1:#9c9c9c", progress_load)
+				or ""
+			local pregen = progress_regen > 0
+				and string.format ("^[fill:%dx1:#458b00", progress_regen)
+				or ""
+			local pmax, pmin
+			if progress_regen > progress_load then
+				pmax = pregen
+				pmin = pload
+			else
+				pmax = pload
+				pmin = pregen
+			end
+			local formspec = string.format (limbo_formspec, text,
+							pmax, pmin)
+			core.show_formspec (player:get_player_name (),
+					    "mcl_biome_dispatch:limbo_formspec",
+					    formspec)
+			limbo.last_progress_load = progress_load
+			limbo.last_progress_regen = progress_regen
+		end
+	end
+end
+
+local function limbo_restore (player, limbo)
+	player:set_pos (LIMBO_POSITION)
+	local v1 = limbo.v1
+	local v2 = limbo.v2
+	mcl_levelgen.generate_area (v1.x, v1.y, v1.z, v2.x, v2.y, v2.z,
+				    limbo_callback, player, limbo)
+end
+
+core.register_on_leaveplayer (function (player)
+	if players_in_limbo[player] then
+		limbo_cancel (player, players_in_limbo[player])
+	end
+end)
+
+core.register_on_shutdown (function ()
+	for player, limbo in pairs (players_in_limbo) do
+		limbo_cancel (player, limbo)
+	end
+end)
+
+local function stupid_emerge_teleport (_, _, calls_remaining, param)
+	if calls_remaining == 0 and param[2]:is_valid () then
+		param[1] (param[2], param[3])
+	end
+end
+
+function mcl_biome_dispatch.emerged_teleport_prepare (player, v1, v2, msg, callback, data)
+	if not levelgen_enabled then
+		core.emerge_area (v1, v2, stupid_emerge_teleport,
+				  {callback, player, data,})
+		return player:get_pos ()
+	end
+	if players_in_limbo[player] then
+		limbo_cancel (player, players_in_limbo[player])
+	end
+	local limbo_data = {
+		v1 = v1,
+		v2 = v2,
+		src_pos = player:get_pos (),
+		msg = msg or S ("Loading terrain"),
+		callback = callback,
+		data = data,
+	}
+	players_in_limbo[player] = limbo_data
+	local escaped = core.formspec_escape (limbo_data.msg)
+	limbo_data.text = core.hypertext_escape (escaped)
+	limbo_restore (player, limbo_data, nil)
+	return LIMBO_POSITION
+end
+
+function mcl_biome_dispatch.teleport_with_emerge (player, v1, v2, msg, callback, data)
+	local limbo_pos
+		= mcl_biome_dispatch.emerged_teleport_prepare (player, v1, v2,
+							       msg, callback, data)
+	player:set_pos (limbo_pos)
+end
+
+function mcl_biome_dispatch.in_limbo (player)
+	return players_in_limbo[player] ~= nil
+end
+
+function mcl_biome_dispatch.is_limbo_pos (v)
+	return vector.equals (v, LIMBO_POSITION)
+end
+
+function mcl_biome_dispatch.get_end_portal_pos ()
+	if not levelgen_enabled then
+		return mcl_vars.mg_end_exit_portal_pos
+	end
+
+	local dim = get_dimension ("mcl_levelgen:end")
+	local surface, _
+		= mcl_levelgen.map_index_heightmap (dim, 0, 0, true)
+	if not surface then
+		return mcl_vars.mg_end_exit_portal_pos
+	end
+	return vector.new (0, surface - dim.y_offset - 1, 0)
 end

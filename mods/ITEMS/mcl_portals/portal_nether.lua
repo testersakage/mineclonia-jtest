@@ -452,8 +452,8 @@ end
 
 -- Scan emerged area and build a portal at a suitable spot. If no suitable spot
 -- is found, then it will build the portal at a random location.
-local function portal_emerge_area(_, _, calls_remaining, param)
-	if param.done_flag or calls_remaining ~= 0 then
+local function portal_emerge_area (player, param)
+	if param.done_flag then
 		return
 	end
 	local portal = param.portal
@@ -467,8 +467,10 @@ local function portal_emerge_area(_, _, calls_remaining, param)
 
 	-- Since there is a significant delay until the callback is run, we do
 	-- another check if the player is still standing in the portal.
-	if not in_portal(obj) then
+	if not in_portal(obj) and not mcl_biome_dispatch.in_limbo (obj) then
 		portal_cooloff[obj] = nil
+	elseif mcl_biome_dispatch.in_limbo (obj) then
+		portal_cooloff[obj] = true
 	end
 
 	local function finalize(obj, pos, param2, bad_pos)
@@ -569,13 +571,16 @@ local function teleport(obj)
 		local param2 = node.param2 ---@diagnostic disable-line: need-check-nil
 		local y_min = search_y_min[dim]
 		local y_max = search_y_max[dim]
-		local minpos = vector.new(target.x - 16, y_min, target.z - 16)
-		local maxpos = vector.new(target.x + 16, y_max, target.z + 16)
-		core.emerge_area(minpos, maxpos, portal_emerge_area, {
+		local minpos = vector.new(target.x - 64, y_min, target.z - 64)
+		local maxpos = vector.new(target.x + 64, y_max, target.z + 64)
+		local msg = dim == "nether" and S ("Entering the Nether")
+			or S ("Leaving the Nether")
+		mcl_biome_dispatch.teleport_with_emerge (obj, minpos, maxpos, msg,
+							 portal_emerge_area, {
 			obj = obj,
 			param2 = param2,
-			minpos = minpos,
-			maxpos = maxpos,
+			minpos = vector.offset (minpos, 48, 0, 48),
+			maxpos = vector.offset (maxpos, -48, 0, -48),
 			portal = portal,
 			dim = dim,
 			target = target,

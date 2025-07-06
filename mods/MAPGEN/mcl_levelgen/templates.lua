@@ -903,7 +903,7 @@ function mcl_levelgen.generate_jigsaw (rng, x, y, z, rotation, start_pool,
 			z_center + max_radius,
 		}
 		if level_min and level_height then
-			bbox_max[2] = mathmax (bbox_max[2], level_min) 
+			bbox_max[2] = mathmax (bbox_max[2], level_min)
 			bbox_max[5] = mathmin (bbox_max[5], level_min + level_height - 1)
 			if bbox_max[2] > bbox_max[5] then
 				return {}
