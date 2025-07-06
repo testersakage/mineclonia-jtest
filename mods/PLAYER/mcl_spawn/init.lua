@@ -1,7 +1,7 @@
 mcl_spawn = {}
 
 local S = core.get_translator(core.get_current_modname())
-local start_pos = core.setting_get_pos("static_spawnpoint") or vector.new(0, 0 ,0)
+local start_pos = mcl_biome_dispatch.get_spawn_point_2d ()
 
 -- Bed spawning offsets
 local node_search_list =
@@ -66,8 +66,11 @@ local function good_for_respawn(pos, player)
 end
 
 
-function mcl_spawn.get_world_spawn_pos()
-	return start_pos
+function mcl_spawn.get_world_spawn_pos (player)
+	if mcl_biome_dispatch.use_detailed_spawning_mechanics () then
+		return mcl_biome_dispatch.next_respawn_position (player), 0
+	end
+	return start_pos, false
 end
 
 -- Returns a spawn position of player.
@@ -84,7 +87,7 @@ function mcl_spawn.get_bed_spawn_pos(player)
 		end
 	end
 	if not spawn or spawn == "" then
-		spawn = mcl_spawn.get_world_spawn_pos()
+		spawn = mcl_spawn.get_world_spawn_pos (player)
 		custom_spawn = false
 	end
 	return spawn, custom_spawn
@@ -164,7 +167,7 @@ function mcl_spawn.get_player_spawn_pos(player)
 						core.log("warning","could not get level of players respawn anchor, sending him back to spawn!")
 						player:get_meta():set_string("mcl_beds:spawn", "")
 						core.chat_send_player(player:get_player_name(), S("Couldn't get level of your respawn anchor!"))
-						return mcl_spawn.get_world_spawn_pos(), false
+						return mcl_spawn.get_world_spawn_pos(player), false
 					elseif charge_level ~= 1 then
 						core.set_node(checkpos, {name="mcl_beds:respawn_anchor_charged_".. charge_level-1})
 						return checkpos, true
@@ -175,7 +178,7 @@ function mcl_spawn.get_player_spawn_pos(player)
 				else
 					player:get_meta():set_string("mcl_beds:spawn", "")
 					core.chat_send_player(player:get_player_name(), S("Your spawn bed was missing or blocked, and you had no charged respawn anchor!"))
-					return mcl_spawn.get_world_spawn_pos(), false
+					return mcl_spawn.get_world_spawn_pos(player), false
 				end
 			end
 		end
@@ -200,12 +203,12 @@ function mcl_spawn.get_player_spawn_pos(player)
 		end
 		-- We here if we didn't find suitable place for respawn
 	end
-	return mcl_spawn.get_world_spawn_pos(), false
+	return mcl_spawn.get_world_spawn_pos (player)
 end
 
 function mcl_spawn.spawn(player)
-	local pos, in_bed = mcl_spawn.get_player_spawn_pos(player)
-	if in_bed then
+	local pos, override = mcl_spawn.get_player_spawn_pos(player)
+	if override then
 		player:set_pos(pos)
 		return true
 	end

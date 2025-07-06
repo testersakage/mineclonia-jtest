@@ -152,7 +152,7 @@ local ZERO_VECTOR = vector.zero ()
 function dragon:restore_portal ()
 	local struct = mcl_structures.registered_structures["end_exit_portal_open"]
 	local pr = PseudoRandom (core.get_mapgen_setting("seed"))
-	local podium = mcl_vars.mg_end_exit_portal_pos
+	local podium = mcl_biome_dispatch.get_end_portal_pos ()
 
 	mcl_portals.spawn_gateway_portal ()
 	mcl_structures.place_structure (podium, struct, pr, -1)
@@ -927,17 +927,18 @@ end
 ------------------------------------------------------------------------
 
 local hashpos = mcl_mobs.gwp_longhash
+local levelgen_enabled = mcl_levelgen.levelgen_enabled
 
 local function find_end_surface_position (x, z, elevation)
 	local end_min = mcl_vars.mg_end_platform_pos.y + 10
 	local end_max = mcl_vars.mg_end_max_official
-	local node = vector.new (math.floor (x - 0.5), end_max,
-				 math.floor (z - 0.5))
+	local node = vector.new (math.floor (x + 0.5), end_max,
+				 math.floor (z + 0.5))
 
 	while node.y > end_min do
 		node.y = node.y - 1
-		local node = core.get_node (node)
-		local def = core.registered_nodes[node]
+		local node_data = core.get_node (node)
+		local def = core.registered_nodes[node_data.name]
 
 		if def and def.walkable then
 			node.y = node.y + 1 + elevation
@@ -948,6 +949,7 @@ local function find_end_surface_position (x, z, elevation)
 	node.y = end_min + elevation
 	return node
 end
+mobs_mc.find_end_surface_position = find_end_surface_position
 
 local posn_neighbors = {
 	[1] = {

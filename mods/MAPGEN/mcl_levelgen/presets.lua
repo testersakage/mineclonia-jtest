@@ -18,7 +18,7 @@ local level_preset_template = {
 	default_block = "mcl_core:stone",
 	default_fluid = "mcl_core:water_source",
 	surface_rule = nil, -- As yet unused.
-	spawn_target = nil, -- As yet unused.
+	spawn_target = {},
 	sea_level = nil,
 	disable_mob_generation = nil, -- XXX: should this be implemented?
 	aquifers_enabled = nil,
@@ -1552,6 +1552,7 @@ local function post_process (final_density)
 end
 
 local lshift = bit.lshift
+local band = bit.band
 local function toblock (x)
 	return lshift (x, 2)
 end
@@ -1757,7 +1758,10 @@ local function initialize_noise_biomes (preset, large_biomes, amplified, get_lut
 				      t, v, c, e, d, w, pv)
 	end
 
-	preset.biome_coordinates = function (self, x, y, z)
+	local function sample (x, y, z)
+		x = band (x, -4)
+		y = band (y, -4)
+		z = band (z, -4)
 		local t = temperature_stripped (x, y, z)
 		local v = vegetation_stripped (x, y, z)
 		local c = continents_stripped (x, y, z)
@@ -1775,6 +1779,10 @@ local function initialize_noise_biomes (preset, large_biomes, amplified, get_lut
 		}
 	end
 
+	preset.biome_coordinates = function (self, x, y, z)
+		return sample (x, y, z)
+	end
+
 	local all_biomes, seen = {}, {}
 
 	for _, node in ipairs (nodes) do
@@ -1786,6 +1794,18 @@ local function initialize_noise_biomes (preset, large_biomes, amplified, get_lut
 
 	preset.generated_biomes = function (self)
 		return all_biomes
+	end
+
+	local biome_spawn_position = mcl_levelgen.biome_spawn_position
+	if #preset.spawn_target > 0 then
+		local spawn_target = preset.spawn_target
+		preset.find_spawn_position = function (self)
+			return biome_spawn_position (spawn_target, 0, sample)
+		end
+	else
+		preset.find_spawn_position = function (self)
+			return 0, 0
+		end
 	end
 end
 
@@ -1923,6 +1943,9 @@ end
 
 -- Overworld preset functions.
 
+local ALL_VALUES = { -1.0, 1.0, }
+local ZERO = { 0.0, 0.0, }
+
 local overworld_preset_template = table.merge (level_preset_template, {
 	min_y = -64,
 	height = 384,
@@ -1933,6 +1956,26 @@ local overworld_preset_template = table.merge (level_preset_template, {
 	noise_cell_height = toblock (2),
 	aquifers_enabled = true,
 	ore_veins_enabled = true,
+	spawn_target = {
+		{
+			ALL_VALUES,
+			ALL_VALUES,
+			{ -0.11, 1.0, },
+			ALL_VALUES,
+			ZERO,
+			{ -1.0, -0.16, },
+			ZERO,
+		},
+		{
+			ALL_VALUES,
+			ALL_VALUES,
+			{ -0.11, 1.0, },
+			ALL_VALUES,
+			ZERO,
+			{ 0.16, 1.0, },
+			ZERO,
+		},
+	},
 })
 
 function overworld_preset_template:index_biomes_block (x, y, z)
@@ -2101,7 +2144,7 @@ local function initialize_end_biomes (preset)
 	preset.index_biomes_begin = function (self, wx, wz, xorigin, zorigin)
 	end
 	preset.biome_debug_string = function (self, x, y, z)
-		return "No data"
+		return string.format ("E: %.3f", erosion_stripped (x, y, z))
 	end
 	local all_biomes = {
 		"TheEnd",
@@ -2110,8 +2153,11 @@ local function initialize_end_biomes (preset)
 		"SmallEndIslands",
 		"EndBarrens",
 	}
-	preset.generated_biomes = function ()
+	preset.generated_biomes = function (_)
 		return all_biomes
+	end
+	preset.find_spawn_position = function (_)
+		return 0, 0
 	end
 
 	preset.index_biomes_cached = preset.index_biomes
