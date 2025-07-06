@@ -47,9 +47,9 @@ function mcl_levelgen.initialize_dimensions (seed)
 		dim.y_max = desc.y_global + preset.height - 1
 
 		-- Difference between y_global and the preset's y_min;
-		-- i.e., Y + DESC.y_global translates a global height
+		-- i.e., Y + DESC.y_offset translates a global height
 		-- into the level's coordinate system, while Y_LEVEL -
-		-- DESC.y_global restores it to the original.
+		-- DESC.y_offset restores it to the original.
 		dim.y_offset = preset.min_y - desc.y_global
 		dim.preset = preset
 		dim.id = id

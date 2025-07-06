@@ -209,7 +209,7 @@ else
 end
 mcl_vars.mg_end_max_official = mcl_vars.mg_end_min + minecraft_height_limit
 mcl_vars.mg_end_max = mcl_vars.mg_overworld_min - 2000
-mcl_vars.mg_end_platform_pos = { x = 100, y = mcl_vars.mg_end_min + 64, z = 0 }
+mcl_vars.mg_end_platform_pos = { x = 100, y = mcl_vars.mg_end_min + 48, z = 0 }
 mcl_vars.mg_end_exit_portal_pos = vector.new(0, mcl_vars.mg_end_min + 71, 0)
 
 -- Realm barrier used to safely separate the End from the void below the Overworld

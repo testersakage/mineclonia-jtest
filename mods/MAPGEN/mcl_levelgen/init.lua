@@ -1,9 +1,13 @@
 local prefix = "."
+local floor = math.floor
 
 local function init_chunksize ()
 	if not core.get_mapgen_chunksize then
 		local cs = tonumber (core.get_mapgen_setting ("chunksize")) or 5
 		core.ipc_set ("mcl_levelgen:mt_chunksize", vector.new (cs, cs, cs))
+		local origin = floor (cs / 2)
+		core.ipc_set ("mcl_levelgen:mt_chunk_origin",
+			      vector.new (origin, origin, origin))
 	else
 		local cs = core.get_mapgen_chunksize ()
 		if cs.x ~= cs.z then
@@ -13,7 +17,6 @@ local function init_chunksize ()
 			error ("Invalid chunk size")
 		end
 
-		local floor = math.floor
 		local DESIRED_Y_SIZE = floor (384 / 16)
 		local DESIRED_Y_BASE = floor (-128 / 16)
 		cs.y = DESIRED_Y_SIZE
@@ -24,7 +27,10 @@ local function init_chunksize ()
 				      -floor (cs.z / 2))
 		core.set_mapgen_setting ("chunk_origin", v:to_string (), true)
 		core.ipc_set ("mcl_levelgen:mt_chunksize", cs)
+		core.ipc_set ("mcl_levelgen:mt_chunk_origin", v)
 	end
+	core.ipc_set ("mcl_levelgen:mt_chunk_limit",
+		      core.get_mapgen_setting ("mapgen_limit"))
 end
 
 if core and not core.get_mod_storage then
@@ -44,6 +50,10 @@ mcl_levelgen.lighting_disabled = false
 
 mcl_levelgen.mt_chunksize
 	= core and core.ipc_get ("mcl_levelgen:mt_chunksize")
+mcl_levelgen.mt_chunk_origin
+	= core and core.ipc_get ("mcl_levelgen:mt_chunk_origin")
+mcl_levelgen.mt_chunk_limit
+	= core and core.ipc_get ("mcl_levelgen:mt_chunk_limit")
 
 dofile (prefix .. "/util.lua")
 dofile (prefix .. "/random.lua")

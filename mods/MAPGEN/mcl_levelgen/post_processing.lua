@@ -3,10 +3,33 @@ local ipos1 = mcl_levelgen.ipos1
 local ipos2 = mcl_levelgen.ipos2
 local insert = table.insert
 
+local function get_generation_extents (mt_chunksize, center, limit)
+	assert (center.x == center.z)
+	assert (mt_chunksize.x == mt_chunksize.z)
+	local mapgen_limit = limit or core.get_mapgen_setting ("mapgen_limit")
+	local max_block = math.floor (mapgen_limit / 16) - 1 -- Overgeneration.
+	local cnt_to_max_block = max_block - center.x + 1
+	local max_chunk = math.floor (cnt_to_max_block / mt_chunksize.x)
+	local max = center.x + max_chunk * mt_chunksize.x - 1
+
+	local min_block = -max_block
+	local min_start = center.x - 1
+	local cnt_to_min_block = min_start - min_block + 1
+	local min_chunk = math.floor (cnt_to_min_block / mt_chunksize.x)
+	local min = min_start - min_chunk * mt_chunksize.x + 1
+
+	return max, min
+end
+
 local S = core.get_translator ("mcl_levelgen")
 local mt_chunksize = mcl_levelgen.mt_chunksize
+local mt_chunk_origin = mcl_levelgen.mt_chunk_origin
+local mt_chunk_limit = mcl_levelgen.mt_chunk_limit
 local chunksize = mt_chunksize.x * 16
 local lighting_disabled = mcl_levelgen.lighting_disabled
+local maxblock, minblock = get_generation_extents (mt_chunksize,
+						   mt_chunk_origin,
+						   mt_chunk_limit)
 
 --------------------------------------------------------------------------
 -- Level post-processing.
@@ -307,14 +330,14 @@ local function save_section (hash, sdata)
 			    core.compress (data, "zstd"))
 end
 
-local SECTION_EVICTION_DELAY = 120
+-- local SECTION_EVICTION_DELAY = 120
 
 local function manage_sections (dtime)
 	for hash, dtime in pairs (section_access_times) do
 		local t = section_access_times[hash]
 		section_access_times[hash] = t + dtime
 
-		if t > SECTION_EVICTION_DELAY then
+		if t > 120 then
 			save_section (hash, loaded_mb_sections[hash])
 		end
 	end
@@ -425,6 +448,8 @@ end
 --------------------------------------------------------------------------
 -- Min-heap implementation.  TODO: merge this with pathfinding.lua.
 --------------------------------------------------------------------------
+
+do
 
 local function shift_up (self, node, idx)
 	local priority = node.priority
@@ -553,13 +578,17 @@ local function new_mintree ()
 	return tbl
 end
 
+mcl_levelgen.mintree_meta = mintree_meta
+mcl_levelgen.new_mintree = new_mintree
+end
+
 --------------------------------------------------------------------------
 -- Regeneration scheduling.
 --------------------------------------------------------------------------
 
 local shutdown_complete = false
 
-local feature_placement_queue = new_mintree ()
+local feature_placement_queue = mcl_levelgen.new_mintree ()
 local mb_records = {}
 
 function mcl_levelgen.get_feature_placement_queue ()
@@ -716,21 +745,54 @@ end
 local n_surroundings = #surroundings
 local n_all_surroundings = #all_surroundings
 
+local function in_generation_range (bx, bz)
+	return bx >= minblock and bz >= minblock
+		and bx <= maxblock and bz <= maxblock
+end
+
+local function context_range (x, z, y1, y2)
+	local x1 = mathmax (x - REQUIRED_CONTEXT_XZ, minblock)
+	local y1 = mathmax (y1 - REQUIRED_CONTEXT_Y, 0)
+	local z1 = mathmax (z - REQUIRED_CONTEXT_XZ, minblock)
+	local x2 = mathmin (x + REQUIRED_CONTEXT_XZ, maxblock)
+	local y2 = mathmin (y2 + REQUIRED_CONTEXT_Y, current_namespace_height - 1)
+	local z2 = mathmin (z + REQUIRED_CONTEXT_XZ, maxblock)
+	return x1, y1, z1, x2, y2, z2
+end
+
+local function area_context_range (x1, z1, y1, x2, z2, y2)
+	local x1 = mathmax (x1 - REQUIRED_CONTEXT_XZ, minblock)
+	local y1 = mathmax (y1 - REQUIRED_CONTEXT_Y, 0)
+	local z1 = mathmax (z1 - REQUIRED_CONTEXT_XZ, minblock)
+	local x2 = mathmin (x2 + REQUIRED_CONTEXT_XZ, maxblock)
+	local y2 = mathmin (y2 + REQUIRED_CONTEXT_Y, current_namespace_height - 1)
+	local z2 = mathmin (z2 + REQUIRED_CONTEXT_XZ, maxblock)
+	return x1, y1, z1, x2, y2, z2
+end
+
+local function context_iterator_xzy (iter_func, x, z, y1, y2)
+	local x1, y1, z1, x2, y2, z2
+		= context_range (x, z, y1, y2)
+	return iter_func (x1, z1, y1, x2, z2, y2)
+end
+
+local function context_iterator (iter_func, x, z, y1, y2)
+	return iter_func (context_range (x, z, y1, y2))
+end
+
+local function area_context_iterator (iter_func, x1, z1, y1, x2, z2, y2)
+	return iter_func (area_context_range (x1, z1, y1, x2, z2, y2))
+end
+
 local function vertical_context_generated (x, y, z)
 	if y >= current_namespace_height or y < 0 then
 		return true
 	end
-	-- for x = x - REQUIRED_CONTEXT_XZ - 1, x + REQUIRED_CONTEXT_XZ + 1 do
-	-- 	for z = z - REQUIRED_CONTEXT_XZ - 1, z + REQUIRED_CONTEXT_XZ + 1 do
-	-- 		if local_mapblock_state (x, y, z) == MBS_UNKNOWN then
-	-- 			return false
-	-- 		end
-	-- 	end
-	-- end
 	for i = 1, n_all_surroundings, 2 do
 		local dx = all_surroundings[i]
 		local dz = all_surroundings[i + 1]
-		if local_mapblock_state (x + dx, y, z + dz) == MBS_UNKNOWN then
+		if in_generation_range (x + dx, z + dz)
+			and local_mapblock_state (x + dx, y, z + dz) == MBS_UNKNOWN then
 			return false
 		end
 	end
@@ -740,7 +802,11 @@ end
 local function adequate_context_exists_p (x, y, z, curstate)
 	for x = x - REQUIRED_CONTEXT_XZ, x + REQUIRED_CONTEXT_XZ do
 		for z = z - REQUIRED_CONTEXT_XZ, z + REQUIRED_CONTEXT_XZ do
-			if local_mapblock_state (x, y, z) < MBS_PROTO_CHUNK then
+			-- Note that MapBlocks in excess of the
+			-- configured generation limit mustn't be
+			-- considered here.
+			if in_generation_range (x, z)
+				and local_mapblock_state (x, y, z) < MBS_PROTO_CHUNK then
 				return false
 			end
 		end
@@ -758,7 +824,8 @@ local function adequate_context_exists_p (x, y, z, curstate)
 	for i = 1, n_surroundings, 2 do
 		local x = x + surroundings[i]
 		local z = z + surroundings[i + 1]
-		if local_mapblock_state (x, y, z) == MBS_UNKNOWN then
+		if in_generation_range (x, z)
+			and local_mapblock_state (x, y, z) == MBS_UNKNOWN then
 			return false
 		end
 	end
@@ -797,28 +864,22 @@ local function queue_mapblock_run (x, y_start, y_end, z, d, supplemental,
 	     x, y_start, y_end, z, tostring (supplemental))
 
 	-- Lock surrounding MapBlocks.
-	local context_start = mathmax (y_start - REQUIRED_CONTEXT_Y, 0)
-	local context_end = mathmin (y_end + REQUIRED_CONTEXT_Y,
-				     current_namespace_height - 1)
-	for x = x - REQUIRED_CONTEXT_XZ, x + REQUIRED_CONTEXT_XZ do
-		for z = z - REQUIRED_CONTEXT_XZ, z + REQUIRED_CONTEXT_XZ do
-			for y = context_start, context_end do
-				local rec = mb_records[hashmapblock (x, y + y_bottom, z)]
-				assert (not rec or rec == run)
-				local state = local_mapblock_state (x, y, z)
-				if state == MBS_PROTO_CHUNK then
-					local_set_mapblock_state (x, y, z, MBS_LOCKED)
-					-- record_whohasit (x, y, z, run)
-				elseif state == MBS_GENERATED then
-					local_set_mapblock_state (x, y, z, MBS_LOCKED_GENERATED)
-					-- record_whohasit (x, y, z, run)
-				else
-					-- dbg ("MapBlock conflict: ", x, y, z,
-					--        dump (run),
-					--        dump (whohasit (x, y, z)))
-					assert (false)
-				end
-			end
+
+	for x, z, y in context_iterator_xzy (ipos1, x, z, y_start, y_end) do
+		local rec = mb_records[hashmapblock (x, y + y_bottom, z)]
+		assert (not rec or rec == run)
+		local state = local_mapblock_state (x, y, z)
+		if state == MBS_PROTO_CHUNK then
+			local_set_mapblock_state (x, y, z, MBS_LOCKED)
+			-- record_whohasit (x, y, z, run)
+		elseif state == MBS_GENERATED then
+			local_set_mapblock_state (x, y, z, MBS_LOCKED_GENERATED)
+			-- record_whohasit (x, y, z, run)
+		else
+			-- dbg ("MapBlock conflict: ", x, y, z,
+			--        dump (run),
+			--        dump (whohasit (x, y, z)))
+			assert (false)
 		end
 	end
 
@@ -982,6 +1043,7 @@ local apply_heightmap_modifications
 local schedule_regeneration_for_unlock
 local apply_feature_context_requisitions
 local run_notification_handlers
+local report_mbs_generation
 
 local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies,
 				 features_requesting_additional_context,
@@ -1022,15 +1084,13 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 	dbg ("Completed MapBlock run: X: %d, Y: %d - %d, Z: %d",
 	     run.x, run.y1, run.y2, run.z)
 
-	for x, y, z in ipos1 (run.x - REQUIRED_CONTEXT_XZ, y_min,
-			      run.z - REQUIRED_CONTEXT_XZ,
-			      run.x + REQUIRED_CONTEXT_XZ, y_max,
-			      run.z + REQUIRED_CONTEXT_XZ) do
+	for x, y, z in context_iterator (ipos1, run.x, run.z, y_min, y_max) do
 		if (x == run.x and y >= run.y1 and y <= run.y2 and z == run.z)
 			and not supplemental then
 			local state = mapblock_state (x, y, z)
 			assert (state == MBS_REGENERATING)
 			set_mapblock_state (x, y, z, MBS_GENERATED)
+			report_mbs_generation (x, y, z)
 		else
 			local state = mapblock_state (x, y, z)
 			if state == MBS_LOCKED then
@@ -1095,14 +1155,7 @@ end
 local function resume_mapblock_run (run)
 	switch_to_namespace (run.data_namespace)
 	local run_hash = run_hash (run)
-	local ymin = mathmax (0, run.y1 - REQUIRED_CONTEXT_Y)
-	local ymax = mathmin (run.y2 + REQUIRED_CONTEXT_Y,
-			      current_namespace_height - 1)
-
-	for x, y, z in ipos1 (run.x - REQUIRED_CONTEXT_XZ, ymin,
-			      run.z - REQUIRED_CONTEXT_XZ,
-			      run.x + REQUIRED_CONTEXT_XZ, ymax,
-			      run.z + REQUIRED_CONTEXT_XZ) do
+	for x, y, z in context_iterator (ipos1, run.x, run.z, run.y1, run.y2) do
 		local state = mapblock_state (x, y, z)
 		assert (state == MBS_PROTO_CHUNK or state == MBS_GENERATED)
 
@@ -1142,14 +1195,7 @@ local function post_mapblock_run (run)
 	v1.y = mathmax (v1.y, current_namespace.y_global)
 	v2.y = mathmin (v2.y, current_namespace.y_global_top)
 
-	local ymax = current_namespace_height - 1
-	local y_min = mathmax (run.y1 - REQUIRED_CONTEXT_Y, 0)
-	local y_max = mathmin (run.y2 + REQUIRED_CONTEXT_Y, ymax)
-
-	for x, y, z in ipos2 (run.x - REQUIRED_CONTEXT_XZ, y_min,
-			      run.z - REQUIRED_CONTEXT_XZ,
-			      run.x + REQUIRED_CONTEXT_XZ, y_max,
-			      run.z + REQUIRED_CONTEXT_XZ) do
+	for x, y, z in context_iterator (ipos1, run.x, run.z, run.y1, run.y2) do
 		-- Verify that the context of the run is consistent,
 		-- and abandon it if it has since been unloaded.
 		local state = mapblock_state (x, y, z)
@@ -1217,12 +1263,11 @@ function schedule_regeneration_for_emerge (bx, bx1, by, by1, bz, bz1)
 	mbs_cache_min_y = 0
 	mbs_cache_min_z = bz - REQUIRED_CONTEXT_XZ - 3
 	clear_mbs_cache (mbs_cache_width)
-	for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ - 1,
-				 by,
-				 bz - REQUIRED_CONTEXT_XZ - 1,
-				 bx1 + REQUIRED_CONTEXT_XZ + 1,
-				 by,
-				 bz1 + REQUIRED_CONTEXT_XZ + 1) do
+	-- BY1 is intentionally disregarded as
+	-- attempt_feature_placement will test the entirety of the
+	-- column provided.
+	for bx, _, bz in area_context_iterator (ipos2, bx - 1, bz - 1, 0,
+						bx1 + 1, bz1 + 1, 0) do
 		check_supplemental_generation (bx, bz)
 		attempt_feature_placement (bx, bz)
 	end
@@ -1234,12 +1279,8 @@ function schedule_regeneration_for_unlock (bx, bz)
 	mbs_cache_min_y = 0
 	mbs_cache_min_z = bz - REQUIRED_CONTEXT_XZ - 3
 	clear_mbs_cache (mbs_cache_width)
-	for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ - 1,
-				 0,
-				 bz - REQUIRED_CONTEXT_XZ - 1,
-				 bx + REQUIRED_CONTEXT_XZ + 1,
-				 0,
-				 bz + REQUIRED_CONTEXT_XZ + 1) do
+	for bx, _, bz in area_context_iterator (ipos2, bx - 1, bz - 1, 0,
+						bx + 1, bz + 1, 0) do
 		check_supplemental_generation (bx, bz)
 		attempt_feature_placement (bx, bz)
 	end
@@ -1300,7 +1341,7 @@ local function restore_feature_placement_queue ()
 	if sdata ~= nil and sdata ~= "" then
 		local queue = core.deserialize (sdata)
 		if queue then
-			setmetatable (queue, mintree_meta)
+			setmetatable (queue, mcl_levelgen.mintree_meta)
 
 			if queue.size > 0 then
 				local blurb = "[mcl_levelgen]: Resuming %d feature placement task(s)"
@@ -1369,13 +1410,7 @@ function mcl_levelgen.is_regeneration_possible (dim, x, y, z)
 	local bz = arshift (z, 4)
 	local old_namespace, rc = current_namespace_id, false
 	switch_to_namespace (dim.data_namespace)
-	for bx, by, bz in ipos2 (bx - REQUIRED_CONTEXT_XZ,
-				 mathmax (0, by - REQUIRED_CONTEXT_Y),
-				 bz - REQUIRED_CONTEXT_XZ,
-				 bx + REQUIRED_CONTEXT_XZ,
-				 mathmin (by + REQUIRED_CONTEXT_Y,
-					  current_namespace_height - 1),
-				 bz + REQUIRED_CONTEXT_XZ) do
+	for bx, by, bz in context_iterator (ipos2, bx, bz, by, by) do
 		if mapblock_state (bx, by, bz) < MBS_GENERATED then
 			rc = true
 			break
@@ -1495,7 +1530,6 @@ local function load_heightmap (id)
 		return tem
 	end
 
-	-- print ("Loading heightmap " .. id)
 	local data = storage:get_string ("heightmap" .. id)
 	if data == "" then
 		error (string.format ("Could not satisfy request for heightmap %d; Level is corrupt", id))
@@ -1818,50 +1852,63 @@ local function copy_heightmap_segment (run, dst, wg, dx, dz, structure_masks)
 	local x = 16 + dx * 16
 	local z = (HEIGHTMAP_SIZE - (2 + dz)) * 16
 
-	-- Transform heightmap coordinates.
-	local id = mapblock_heightmap (run.x + dx, run.z + dz, wg)
-	local heightmap = load_heightmap (id)
-	assert (run.x + dx >= heightmap.x)
-	assert (run.z + dz >= heightmap.z)
-	local cs = heightmap.chunksize
-	local run_x = (run.x + dx) * 16
-	local origin_x = run_x - (heightmap.x * 16)
-	local run_z = (run.z + dz) * 16
-	local origin_z = cs - (run_z - (heightmap.z * 16)) - 16
+	if in_generation_range (run.x + dx, run.z + dz) then
+		-- Transform heightmap coordinates.
+		local id = mapblock_heightmap (run.x + dx, run.z + dz, wg)
+		local heightmap = load_heightmap (id)
+		assert (run.x + dx >= heightmap.x)
+		assert (run.z + dz >= heightmap.z)
+		local cs = heightmap.chunksize
+		local run_x = (run.x + dx) * 16
+		local origin_x = run_x - (heightmap.x * 16)
+		local run_z = (run.z + dz) * 16
+		local origin_z = cs - (run_z - (heightmap.z * 16)) - 16
 
-	-- Write transformed data into the destination heightmap.
-	assert (origin_x >= 0 and origin_z >= 0
-		and origin_x < chunksize
-		and origin_z < chunksize)
-	local idx_dst = x * HEIGHTMAP_SIZE_NODES + z + 1
-	local idx_src = origin_x * cs + origin_z + 1
-	local src = heightmap.data
+		-- Write transformed data into the destination heightmap.
+		assert (origin_x >= 0 and origin_z >= 0
+			and origin_x < chunksize
+			and origin_z < chunksize)
+		local idx_dst = x * HEIGHTMAP_SIZE_NODES + z + 1
+		local idx_src = origin_x * cs + origin_z + 1
+		local src = heightmap.data
 
-	for x1 = 1, 16 do
-		for i = 0, 15 do
-			assert (src[idx_src + i])
-			dst[idx_dst + i] = src[idx_src + i]
+		for x1 = 1, 16 do
+			for i = 0, 15 do
+				assert (src[idx_src + i])
+				dst[idx_dst + i] = src[idx_src + i]
+			end
+
+			idx_dst = idx_dst + HEIGHTMAP_SIZE_NODES
+			idx_src = idx_src + cs
 		end
 
-		idx_dst = idx_dst + HEIGHTMAP_SIZE_NODES
-		idx_src = idx_src + cs
-	end
+		-- Load any structure masks that intersect the run.
+		if structure_masks then
+			local y_min = current_namespace.y_min
+			scratch[1] = run_x
+			scratch[2] = ((run.y1 - REQUIRED_CONTEXT_Y) * 16) + y_min
+			scratch[3] = -run_z - 16
+			scratch[4] = run_x + 15
+			scratch[5] = ((run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15) + y_min
+			scratch[6] = -run_z - 1
 
-	-- Load any structure masks that intersect the run.
-	if structure_masks then
-		local y_min = current_namespace.y_min
-		scratch[1] = run_x
-		scratch[2] = ((run.y1 - REQUIRED_CONTEXT_Y) * 16) + y_min
-		scratch[3] = -run_z - 16
-		scratch[4] = run_x + 15
-		scratch[5] = ((run.y2 + REQUIRED_CONTEXT_Y) * 16 + 15) + y_min
-		scratch[6] = -run_z - 1
-
-		for _, mask in ipairs (heightmap.structure_masks) do
-			if AABB_intersect_p (mask, scratch)
-				and indexof (structure_masks, mask) == -1 then
-				insert (structure_masks, mask)
+			for _, mask in ipairs (heightmap.structure_masks) do
+				if AABB_intersect_p (mask, scratch)
+					and indexof (structure_masks, mask) == -1 then
+					insert (structure_masks, mask)
+				end
 			end
+		end
+	else
+		-- Construct an empty heightmap if this MapBlock is
+		-- outside the Minetest map.
+		local idx_dst = x * HEIGHTMAP_SIZE_NODES + z + 1
+		for x1 = 1, 16 do
+			for i = 0, 15 do
+				dst[idx_dst + i] = 0
+			end
+
+			idx_dst = idx_dst + HEIGHTMAP_SIZE_NODES
 		end
 	end
 end
@@ -1921,6 +1968,11 @@ local function restore_heightmap_segment (run, src, dx, dz)
 	-- Transform output coordinates.
 	local x = 16 + dx * 16
 	local z = (HEIGHTMAP_SIZE - (2 + dz)) * 16
+
+	-- Reject out of bounds heightmaps.
+	if not in_generation_range (run.x + dx, run.z + dz) then
+		return
+	end
 
 	-- Transform heightmap coordinates.
 	local id = mapblock_heightmap (run.x + dx, run.z + dz, false)
@@ -1992,6 +2044,31 @@ function apply_heightmap_modifications (run, result)
 	restore_heightmap_segment (run, result, 1, 1)
 end
 
+local function global_index_heightmap (heightmap, node_x, node_z)
+	local cs = heightmap.chunksize
+	local x = node_x - heightmap.x * 16
+	local z = node_z - heightmap.z * 16
+	local index = x * chunksize + (cs - z - 1) + 1
+	local surface, motion_blocking, flags
+		= unpack_augmented_height_map (heightmap.data[index])
+	return surface, motion_blocking, flags
+end
+
+function mcl_levelgen.map_index_heightmap (dim, x, z, generation_only)
+	local namespace = current_namespace_id
+	switch_to_namespace (dim.data_namespace)
+	local bx = arshift (x, 4)
+	local bz = arshift (z, 4)
+	local id = mapblock_heightmap (bx, bz, generation_only)
+	if id == 0 then
+		switch_to_namespace (namespace)
+		return nil
+	end
+	local heightmap = load_heightmap (id)
+	switch_to_namespace (namespace)
+	return global_index_heightmap (heightmap, x, z)
+end
+
 ------------------------------------------------------------------------
 -- Biome provisioning.
 ------------------------------------------------------------------------
@@ -2005,17 +2082,9 @@ local get_biome_meta = mcl_levelgen.get_biome_meta
 
 function biome_data_for_run (run, result)
 	local data = {}
-	local y_max = current_namespace_height - 1
-	local x1 = run.x - REQUIRED_CONTEXT_XZ
-	local z1 = run.z - REQUIRED_CONTEXT_XZ
-	local y1 = mathmax (run.y1 - REQUIRED_CONTEXT_Y, 0)
-	local y2 = mathmin (run.y2 + REQUIRED_CONTEXT_Y, y_max)
 	local y_bottom = current_namespace.y_bottom
 
-	for x, z, y in ipos2 (x1, z1, y1,
-			      x1 + 1 + REQUIRED_CONTEXT_XZ,
-			      z1 + 1 + REQUIRED_CONTEXT_XZ,
-			      y2) do
+	for x, z, y in context_iterator_xzy (ipos2, run.x, run.z, run.y1, run.y2) do
 		local hash = hashmapblock (x, y, z)
 		data[hash] = get_biome_meta (x, y + y_bottom, z)
 		if not data[hash] then
@@ -2079,12 +2148,7 @@ local template
 	= "ID: %d; X: %d, Y: %d, Z: %d; CS: %d\nWORLD_SURFACE: %s%3d MOTION_BLOCKING: %s%3d\nStructure at position: %s (%d)"
 
 local function debug_index_heightmap (heightmap, node_x, node_z)
-	local cs = heightmap.chunksize
-	local x = node_x - heightmap.x * 16
-	local z = node_z - heightmap.z * 16
-	local surface, motion_blocking, flags
-		= unpack_augmented_height_map (heightmap.data[x * chunksize + (cs - z - 1) + 1])
-	return surface, motion_blocking, flags
+	return global_index_heightmap (heightmap, node_x, node_z)
 end
 
 local function debug_index_structuremask (heightmap, x, y, z)
@@ -2488,13 +2552,197 @@ function core.is_protected (pos, name)
 		local bz = floor (z / 16)
 		if is_generated (dim, bx, by, bz) then
 			return old_is_protected (pos, name)
-		elseif name and name ~= "" then
-			core.chat_send_player (name, S ("You cannot modify the position at @1, which is not yet generated",
-							vector.to_string (pos)))
 		end
 		return true
 	end
 	return old_is_protected (pos, name)
+end
+
+------------------------------------------------------------------------
+-- Level generation callbacks.
+------------------------------------------------------------------------
+
+local area_generator_cbs = {}
+local EMERGE_ERRORED = core.EMERGE_ERRORED
+local EMERGE_CANCELLED = core.EMERGE_CANCELLED
+
+local function emerge_progress_cb (blockpos, action, calls_remaining, param)
+	if action == EMERGE_ERRORED or action == EMERGE_CANCELLED then
+		-- Attempt to emerge this area again.
+		core.emerge_area (vector.multiply (blockpos, 16),
+				  vector.multiply (blockpos, 16),
+				  emerge_progress_cb, param)
+	else
+		local progress = param.progress
+		progress.n_emerged = progress.n_emerged + 1
+		param.cb_progress (progress, param.data1, param.data2)
+	end
+end
+
+local ipos_afg = mcl_levelgen.make_ipos_iterator ()
+
+local function area_fully_regenerated_p (desc)
+	for x, y, z in ipos_afg (desc.bx1, desc.by1, desc.bz1,
+				 desc.bx2, desc.by2, desc.bz2) do
+		local state = mapblock_state (x, y, z)
+		if state < MBS_GENERATED and state ~= MBS_LOCKED_GENERATED then
+			return false
+		end
+	end
+	return true
+end
+
+function mcl_levelgen.is_area_fully_regenerated (dim, x1, y1, z1, x2, y2, z2)
+	local namespace = current_namespace_id
+	switch_to_namespace (dim.data_namespace)
+	local bx1 = mathmax (arshift (x1, 4), minblock)
+	local bx2 = mathmin (arshift (x2, 4), maxblock)
+	local bz1 = mathmax (arshift (z1, 4), minblock)
+	local bz2 = mathmin (arshift (z2, 4), maxblock)
+	local by1 = mathmax (arshift (y1 - dim.y_global, 4), 0)
+	local by2 = mathmin (arshift (y2 - dim.y_global, 4),
+			     current_namespace_height - 1)
+	for x, y, z in ipos_afg (bx1, by1, bz1, bx2, by2, bz2) do
+		local state = mapblock_state (x, y, z)
+		if state < MBS_GENERATED and state ~= MBS_LOCKED_GENERATED then
+			switch_to_namespace (namespace)
+			return false
+		end
+	end
+	switch_to_namespace (namespace)
+	return true
+end
+
+local function do_nothing ()
+end
+
+function report_mbs_generation (bx, by, bz)
+	local i1 = 1
+	for i = 1, #area_generator_cbs do
+		local desc = area_generator_cbs[i]
+		if desc.namespace == current_namespace
+			and bx >= desc.bx1
+			and bz >= desc.bz1
+			and by >= desc.by1
+			and bx <= desc.bx2
+			and by <= desc.by2
+			and bz <= desc.bz2 then
+			local progress = desc.progress
+			progress.n_regenerated = progress.n_regenerated + 1
+			desc.cb_progress (progress, desc.data1, desc.data2)
+
+			if progress.n_regenerated >= progress.total_regen
+			-- Also remove entries if all MapBlocks in
+			-- their areas have been regenerated, so as to
+			-- provide for operations extending across
+			-- multiple levels.
+				or (progress.n_dimensions > 1
+				    and area_fully_regenerated_p (desc)) then
+				do_nothing ()
+			else
+				area_generator_cbs[i1] = desc
+				i1 = i1 + 1
+			end
+		else
+			area_generator_cbs[i1] = desc
+			i1 = i1 + 1
+		end
+	end
+	for i = i1, #area_generator_cbs do
+		area_generator_cbs[i] = nil
+	end
+end
+
+local function generate_area_1 (dim, progress, x1, y1, z1, x2, y2, z2,
+				cb_progress, data1, data2)
+	local bx1 = mathmax (arshift (x1, 4), minblock)
+	local bx2 = mathmin (arshift (x2, 4), maxblock)
+	local bz1 = mathmax (arshift (z1, 4), minblock)
+	local bz2 = mathmin (arshift (z2, 4), maxblock)
+	local by1 = arshift (y1, 4)
+	local by2 = arshift (y2, 4)
+	local dx, dy, dz = bx2 - bx1 + 1, by2 - by1 + 1, bz2 - bz1 + 1
+	local total_regen = dx * dy * dz
+	local n_regenerated = 0
+
+	switch_to_namespace (dim.data_namespace)
+	for x, z, y in ipos1 (bx1, bz1, by1, bx2, bz2, by2) do
+		local state = mapblock_state (x, y, z)
+		if state == MBS_GENERATED
+			or state == MBS_LOCKED_GENERATED then
+			n_regenerated = n_regenerated + 1
+		end
+	end
+
+	local cx1, cy1, cz1, cx2, cy2, cz2
+		= area_context_range (bx1 - 1, bz1 - 1, by1 - 1,
+				      bx2 + 1, bz2 + 1, by2 + 1)
+
+	v1.x = cx1 * 16
+	v1.y = cy1 * 16 + dim.y_global
+	v1.z = cz1 * 16
+	v2.x = cx2 * 16 + 15
+	v2.y = cy2 * 16 + 15 + dim.y_global
+	v2.z = cz2 * 16 + 15
+	local dcx, dcy, dcz
+		= cx2 - cx1 + 1, cy2 - cy1 + 1, cz2 - cz1 + 1
+
+	local desc = {
+		bx1 = bx1,
+		by1 = by1,
+		bz1 = bz1,
+		bx2 = bx2,
+		by2 = by2,
+		bz2 = bz2,
+		cx1 = cx1,
+		cy1 = cy1,
+		cz1 = cz1,
+		cx2 = cx2,
+		cy2 = cy2,
+		cz2 = cz2,
+		cb_progress = cb_progress,
+		data1 = data1,
+		data2 = data2,
+		progress = progress,
+		namespace = current_namespace,
+	}
+	progress.total_regen = progress.total_regen + total_regen
+	progress.n_regenerated = progress.n_regenerated + n_regenerated
+	progress.total_emerge = progress.total_emerge + dcx * dcz * dcy
+	core.emerge_area (v1, v2, emerge_progress_cb, desc)
+
+	if total_regen > n_regenerated then
+		insert (area_generator_cbs, desc)
+	end
+end
+
+-- Generate each MapBlock between X1, Y1, Z1, and X2, Y2, Z2, invoking
+-- CB_PROGRESS with the approximate progress of the emerge operation
+-- and that of MapBlock regeneration in the provided area as a table
+-- of integer values.  All MapBlocks necessary for each MapBlock in
+-- the supplied area to be regenerated will be emerged, excepting
+-- those beyond the world border; MapBlock regeneration where it is
+-- impeded by the world border will also be dispensed with.
+
+function mcl_levelgen.generate_area (x1, y1, z1, x2, y2, z2, cb_progress,
+				     data1, data2)
+	local progress = {
+		total_regen = 0,
+		n_regenerated = 0,
+		total_emerge = 0,
+		n_emerged = 0,
+		n_dimensions = 0,
+	}
+	local namespace = current_namespace
+	for y1, y2, ystart, yend, dim in dims_intersecting (y1, y2) do
+		local y1 = y1 - dim.y_global
+		local y2 = y2 - dim.y_global
+		generate_area_1 (dim, progress, x1, y1, z1, x2, y2, z2,
+				 cb_progress, data1, data2)
+		progress.n_dimensions = progress.n_dimensions + 1
+	end
+	switch_to_namespace (namespace)
+	cb_progress (progress, data1, data2)
 end
 
 ------------------------------------------------------------------------
