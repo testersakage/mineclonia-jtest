@@ -2,7 +2,8 @@ local prefix = "."
 local floor = math.floor
 
 local function init_chunksize ()
-	if not core.get_mapgen_chunksize then
+	if not core.get_mapgen_chunksize
+		or not mcl_vars.enable_mcl_levelgen then
 		local cs = tonumber (core.get_mapgen_setting ("chunksize")) or 5
 		core.ipc_set ("mcl_levelgen:mt_chunksize", vector.new (cs, cs, cs))
 		local origin = floor (cs / 2)
