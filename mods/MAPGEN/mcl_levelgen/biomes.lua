@@ -350,6 +350,28 @@ local function pack_extents_1 (extents)
 	}
 end
 
+local function pack1_quantize (extents)
+	local min = quantize (extents[1])
+	local max = quantize (extents[2])
+	assert (min <= 32767 and min >= -32768)
+	assert (max <= 32767 and max >= -32768)
+	return bor (lshift (min, 16), max + 32768)
+end
+
+local function pack_extents_quantize (extents)
+	return {
+		pack1_quantize (extents[1]),
+		pack1_quantize (extents[2]),
+		pack1_quantize (extents[3]),
+		pack1_quantize (extents[4]),
+		pack1_quantize (extents[5]),
+		pack1_quantize (extents[6]),
+		pack1_quantize (extents[7]),
+	}
+end
+
+mcl_levelgen.pack_extents_quantize = pack_extents_quantize
+
 local function pack_extents (rtree)
 	local new_extents = pack_extents_1 (rtree.extents)
 	if rtree.children then
@@ -6965,4 +6987,69 @@ function mcl_levelgen.get_biomes_chebyshev (preset, x, y, z, r)
 		end
 	end
 	return biomes
+end
+
+-- https://old.reddit.com/r/technicalminecraft/comments/10cn3dv/how_is_world_spawn_determined/
+-- https://maven.fabricmc.net/docs/yarn-1.20.4+build.1/net/minecraft/world/biome/source/util/MultiNoiseUtil.MultiNoiseSampler.html#findBestSpawnPosition()
+-- Which appears to call methods in:
+-- https://maven.fabricmc.net/docs/yarn-1.20.4+build.1/net/minecraft/world/biome/source/util/MultiNoiseUtil.FittestPositionFinder.html
+
+local mathsin = math.sin
+local mathcos = math.cos
+local mathmin = math.min
+
+local function spawn_distance (a, targets)
+	-- Minecraft disregards depth.
+	local depth = a[5]
+	a[5] = 0
+	local distance = distance_total (targets[1], a)
+	for i = 2, #targets do
+		local d = distance_total (targets[i], a)
+		distance = mathmin (distance, d)
+	end
+	a[5] = depth
+	return distance
+end
+
+local TWO_PI = math.pi * 2
+
+local function find_fittest (in_dist, x, y, z, spawn_target,
+			     dist_max, dist_increment, sample)
+	local cur_dist = dist_increment
+	local angle = 0.0
+	local x1, z1 = x, z
+
+	while cur_dist <= dist_max do
+		local x = rtz (x + mathsin (angle) * cur_dist)
+		local z = rtz (z + mathcos (angle) * cur_dist)
+		local extents = sample (x, y, z)
+		local dist = spawn_distance (extents, spawn_target)
+
+		if dist < in_dist then
+			in_dist = dist
+			x1 = x
+			z1 = z
+		end
+
+		angle = angle + dist_increment / cur_dist
+		if angle > TWO_PI then
+			angle = 0.0
+			cur_dist = cur_dist + dist_increment
+		end
+	end
+	return in_dist, x1, z1
+end
+
+function mcl_levelgen.biome_spawn_position (spawn_targets, y, sample)
+	local x, z = 0, 0
+	local packed = {}
+	for i, target in ipairs (spawn_targets) do
+		packed[i] = pack_extents_quantize (target)
+	end
+	local in_dist = spawn_distance (sample (x, y, z), packed)
+	in_dist, x, z = find_fittest (in_dist, x, y, z, packed,
+				      2048.0, 512.0, sample)
+	in_dist, x, z = find_fittest (in_dist, x, y, z, packed,
+				      512.0, 32.0, sample)
+	return x, z, in_dist
 end
