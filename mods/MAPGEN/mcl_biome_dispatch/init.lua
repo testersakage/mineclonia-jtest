@@ -1,4 +1,5 @@
 local ipairs = ipairs
+local pairs = pairs
 local S = core.get_translator (core.get_current_modname ())
 
 mcl_biome_dispatch = {}
@@ -814,4 +815,56 @@ function mcl_biome_dispatch.get_end_portal_pos ()
 		return mcl_vars.mg_end_exit_portal_pos
 	end
 	return vector.new (0, surface - dim.y_offset - 1, 0)
+end
+
+------------------------------------------------------------------------
+-- Miscellaneous provisioning tasks.
+------------------------------------------------------------------------
+
+local overworld_structures
+
+local function get_overworld_structure_level ()
+	if overworld_structures then
+		return overworld_structures
+	end
+	local dim = get_dimension ("mcl_levelgen:overworld")
+	local level = mcl_levelgen.make_structure_level (dim.preset)
+	overworld_structures = level
+	return level
+end
+
+local band = bit.band
+local arshift = bit.arshift
+
+local function struct_unhash (hash)
+	local x = arshift (hash, 13) - 4096
+	local z = band (hash, 0xfff) - 4096
+	return x, z
+end
+
+local insert = table.insert
+
+function mcl_biome_dispatch.get_stronghold_positions ()
+	if levelgen_enabled then
+		local level = get_overworld_structure_level ()
+		local starts = level.stronghold_starts["mcl_levelgen:strongholds"]
+		if not starts then
+			return {}
+		end
+		local list = {}
+		for hash, value in pairs (starts) do
+			if value then
+				local cx, cz = struct_unhash (hash)
+				local v = vector.new (cx * 16 + 2, 0, -(cz * 16 + 2) - 1)
+				insert (list, v)
+			end
+		end
+		return list
+	end
+
+	local shrine = mcl_structures.registered_structures["end_shrine"]
+	if not shrine then
+		return {}
+	end
+	return shrine.static_pos
 end
