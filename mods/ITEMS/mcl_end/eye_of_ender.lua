@@ -79,7 +79,7 @@ local function throw_eye(itemstack, user)
 	if user == nil then return end
 	local origin = user:get_pos()
 	origin.y = origin.y + 1.5
-	local strongholds = mcl_structures.registered_structures["end_shrine"].static_pos
+	local strongholds = mcl_biome_dispatch.get_stronghold_positions ()
 	local dim = mcl_worlds.pos_to_dimension(origin)
 	local is_creative = core.is_creative_enabled(user:get_player_name())
 
