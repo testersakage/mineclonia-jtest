@@ -1,27 +1,28 @@
 local S = core.get_translator(core.get_current_modname())
 local storage = mcl_portals.storage
+local portal_y = mcl_vars.mg_end_min + 75
 
 local gateway_positions = {
-	{x = 96, y = -26925, z = 0},
-	{x = 91, y = -26925, z = 29},
-	{x = 77, y = -26925, z = 56},
-	{x = 56, y = -26925, z = 77},
-	{x = 29, y = -26925, z = 91},
-	{x = 0, y = -26925, z = 96},
-	{x = -29, y = -26925, z = 91},
-	{x = -56, y = -26925, z = 77},
-	{x = -77, y = -26925, z = 56},
-	{x = -91, y = -26925, z = 29},
-	{x = -96, y = -26925, z = 0},
-	{x = -91, y = -26925, z = -29},
-	{x = -77, y = -26925, z = -56},
-	{x = -56, y = -26925, z = -77},
-	{x = -29, y = -26925, z = -91},
-	{x = 0, y = -26925, z = -96},
-	{x = 29, y = -26925, z = -91},
-	{x = 56, y = -26925, z = -77},
-	{x = 77, y = -26925, z = -56},
-	{x = 91, y = -26925, z = -29},
+	{x = 96, y = portal_y, z = 0},
+	{x = 91, y = portal_y, z = 29},
+	{x = 77, y = portal_y, z = 56},
+	{x = 56, y = portal_y, z = 77},
+	{x = 29, y = portal_y, z = 91},
+	{x = 0, y = portal_y, z = 96},
+	{x = -29, y = portal_y, z = 91},
+	{x = -56, y = portal_y, z = 77},
+	{x = -77, y = portal_y, z = 56},
+	{x = -91, y = portal_y, z = 29},
+	{x = -96, y = portal_y, z = 0},
+	{x = -91, y = portal_y, z = -29},
+	{x = -77, y = portal_y, z = -56},
+	{x = -56, y = portal_y, z = -77},
+	{x = -29, y = portal_y, z = -91},
+	{x = 0, y = portal_y, z = -96},
+	{x = 29, y = portal_y, z = -91},
+	{x = 56, y = portal_y, z = -77},
+	{x = 77, y = portal_y, z = -56},
+	{x = 91, y = portal_y, z = -29},
 }
 
 local path_gateway_portal = core.get_modpath("mcl_structures").."/schematics/mcl_structures_end_gateway_portal.mts"
@@ -76,25 +77,41 @@ local function teleport(pos, obj)
 	local dest_portal
 	local dest_str = meta:get_string("mcl_portals:gateway_destination")
 	local pos_str = core.pos_to_string(pos)
+	local levelgen_enabled = mcl_levelgen.levelgen_enabled
 	if dest_str == "" then
-		dest_portal = vector.multiply(vector.direction(vector.new(0, pos.y, 0), pos), math.random(768, 1024))
-		dest_portal.y = -26970
-		spawn_gateway_portal(dest_portal, pos_str)
+		dest_portal = vector.multiply(vector.direction(vector.new(0, pos.y, 0), pos), math.random(1024, 1167))
+		dest_portal.y = mcl_vars.mg_end_min + 75
+		if not levelgen_enabled then
+			spawn_gateway_portal(dest_portal, pos_str)
+		end
 		meta:set_string("mcl_portals:gateway_destination", core.pos_to_string(dest_portal))
 	else
 		dest_portal = core.string_to_pos(dest_str)
 	end
-	local minp = vector.subtract(dest_portal, vector.new(5, 40, 5))
-	local maxp = vector.add(dest_portal, vector.new(5, 10, 5))
-	preparing[pos_str] = true
-	core.emerge_area(minp, maxp, function(_, _, calls_remaining)
-		if calls_remaining < 1 then
-			if obj and obj:is_player() or obj:get_luaentity() then
-				obj:set_pos(find_destination_pos(minp, maxp) or vector.add(dest_portal, vector.new(0, 3.5, 0)))
+
+	if not levelgen_enabled then
+		local minp = vector.subtract(dest_portal, vector.new(5, 40, 5))
+		local maxp = vector.add(dest_portal, vector.new(5, 10, 5))
+		preparing[pos_str] = true
+		core.emerge_area(minp, maxp, function(_, _, calls_remaining)
+			if calls_remaining < 1 then
+				if obj and obj:is_player() or obj:get_luaentity() then
+					obj:set_pos(find_destination_pos(minp, maxp) or vector.add(dest_portal, vector.new(0, 3.5, 0)))
+				end
+				preparing[pos_str] = false
 			end
-			preparing[pos_str] = false
-		end
-	end)
+		end)
+	elseif obj:is_player () then
+		local minp = vector.subtract (dest_portal, vector.new (64, 64, 64))
+		local maxp = vector.add (dest_portal, vector.new(64, 64, 64))
+		local minp_search = vector.subtract(dest_portal, vector.new(5, 40, 5))
+		local maxp_search = vector.add(dest_portal, vector.new(5, 10, 5))
+		mcl_biome_dispatch.teleport_with_emerge (obj, minp, maxp, nil, function (_, _)
+			spawn_gateway_portal (dest_portal, pos_str)
+			obj:set_pos(find_destination_pos(minp_search, maxp_search)
+				    or vector.add(dest_portal, vector.new(0, 3.5, 0)))
+		end)
+	end
 end
 
 core.register_abm({

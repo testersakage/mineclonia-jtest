@@ -305,8 +305,6 @@ function mcl_levelgen.get_biome_meta (bx, by, bz)
 	return str
 end
 
-local v = vector.new (0, 0, 0)
-
 local function save_biome_index (pos, bx, by, bz, index)
 	-- Saving biome data into an unloaded mapblock's metadata
 	-- within a register_on_generated callback triggers a Minetest
