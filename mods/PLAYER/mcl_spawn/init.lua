@@ -167,7 +167,7 @@ function mcl_spawn.get_player_spawn_pos(player)
 						core.log("warning","could not get level of players respawn anchor, sending him back to spawn!")
 						player:get_meta():set_string("mcl_beds:spawn", "")
 						core.chat_send_player(player:get_player_name(), S("Couldn't get level of your respawn anchor!"))
-						return mcl_spawn.get_world_spawn_pos(player), false
+						return mcl_spawn.get_world_spawn_pos(player)
 					elseif charge_level ~= 1 then
 						core.set_node(checkpos, {name="mcl_beds:respawn_anchor_charged_".. charge_level-1})
 						return checkpos, true
@@ -178,7 +178,7 @@ function mcl_spawn.get_player_spawn_pos(player)
 				else
 					player:get_meta():set_string("mcl_beds:spawn", "")
 					core.chat_send_player(player:get_player_name(), S("Your spawn bed was missing or blocked, and you had no charged respawn anchor!"))
-					return mcl_spawn.get_world_spawn_pos(player), false
+					return mcl_spawn.get_world_spawn_pos(player)
 				end
 			end
 		end
