@@ -156,7 +156,15 @@ function tropical_fish:on_rightclick (clicker)
 		if clicker:set_wielded_item("mcl_buckets:bucket_tropical_fish") then
 			local it = clicker:get_wielded_item()
 			local m = it:get_meta()
-			m:set_string("properties",core.serialize(self.object:get_properties()))
+			m:set_string("properties",core.serialize({
+				nametag = self:get_nametag (),
+				_default_mesh = self._default_mesh,
+				_default_texture = self._default_texture,
+				_base_color = self._base_color,
+				_pattern = self._pattern,
+				_pattern_color = self._pattern_color,
+				_type = self._type,
+			}))
 			clicker:set_wielded_item(it)
 			self:safe_remove()
 		end

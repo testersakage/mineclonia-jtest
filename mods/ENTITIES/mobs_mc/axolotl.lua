@@ -68,7 +68,10 @@ local axolotl = {
 			if clicker:set_wielded_item("mcl_buckets:bucket_axolotl") then
 				local it = clicker:get_wielded_item()
 				local m = it:get_meta()
-				m:set_string("properties",core.serialize(self.object:get_properties()))
+				m:set_string("properties",core.serialize ({
+					nametag = self:get_nametag (),
+					base_texture = self.base_texture,
+				}))
 				clicker:set_wielded_item(it)
 				self:safe_remove()
 			end
