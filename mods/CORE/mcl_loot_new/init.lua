@@ -219,13 +219,21 @@ core.register_chatcommand("items", {
     end
 })
 
-local function place_chest_with_lootmeta(pos, loot_table, seed)
-    core.set_node(pos, {name="mcl_chests:chest_small"})
-    local meta = core.get_meta(pos)
+function mcl_loot_new.set_lootmeta(meta, loot_table, seed)
     meta:set_string("loot_table", loot_table)
     -- Lua API doc says that `get_int`/`set_int` uses a system-dependent size (usually 32 bits)
     -- so we use a string instead
     meta:set_string("loot_table_seed", tostring(seed))
+end
+
+function mcl_loot_new.generate_set_lootmeta(meta, loot_table, pr)
+    mcl_loot_new.set_lootmeta(meta, loot_table, pr:next() + 2147483648)
+end
+
+local function place_chest_with_lootmeta(pos, loot_table, seed)
+    core.set_node(pos, {name="mcl_chests:chest_small"})
+    local meta = core.get_meta(pos)
+    mcl_loot_new.set_lootmeta(meta, loot_table, seed)
 end
 
 core.register_chatcommand("lootmeta", {

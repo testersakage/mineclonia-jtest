@@ -206,8 +206,7 @@ local function set_container_loot(applied_meta, pr)
 		if meta_kv.mcl_structures_loot_table ~= nil then
 			local meta = core.get_meta(pos)
 			meta:set_string("mcl_structures_loot_table", "")
-			meta:set_string("loot_table", meta_kv.mcl_structures_loot_table)
-			meta:set_string("loot_table_seed", tostring(pr:next() + 2147483648))
+			mcl_loot_new.generate_set_lootmeta(meta, meta_kv.mcl_structures_loot_table, pr)
 		end
 	end
 end

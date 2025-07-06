@@ -36,6 +36,8 @@ function item_modifier.apply_item_function(itemstack, func, context, pr)
         local only_compatible = func.only_compatible == nil and true or func.only_compatible
         core.debug("ENCHANT STATE: " .. pr:get_state())
         return mcl_enchanting.enchant_uniform_randomly_from(itemstack, resolve_enchantments_specifier(func.options), only_compatible, pr)
+    elseif function_type == "lua_function" then
+        return func.value(itemstack, context, pr)
     else
         error("Invalid loot function: " .. function_type)
     end

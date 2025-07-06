@@ -22,6 +22,9 @@ mcl_loot_new.register_loot_table("test_loot", {
 })
 
 dofile(filepath.."shipwreck_treasure.lua")
+dofile(filepath.."shipwreck_supply.lua")
+dofile(filepath.."shipwreck_map.lua")
+dofile(filepath.."buried_treasure.lua")
 dofile(filepath.."ruined_portal.lua")
 
 

@@ -6,7 +6,7 @@
     - [x] Augment schematics with loot information
     - Transfer all structures with loot to new system
         - [x] ruined portal
-        - [ ] shipwreck
+        - [x] shipwreck
         - [ ] ocean_temple
         - [ ] desert_temple
         - [ ] jungle_temple
