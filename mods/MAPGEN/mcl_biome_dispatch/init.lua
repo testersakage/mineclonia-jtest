@@ -640,20 +640,9 @@ if mcl_biome_dispatch.use_detailed_spawning_mechanics () then
 	-- Override static_spawnpoint before players are permitted to
 	-- join, as the engine positions new players without regard to
 	-- registered respawn callbacks.
-	core.register_on_prejoinplayer (function (name, _)
-		local pos = mcl_biome_dispatch.next_respawn_position (nil)
-		core.settings:set_pos ("static_spawnpoint", pos)
-	end)
-
-	core.register_on_joinplayer (function (player)
-		local pos = player:get_pos ()
-		local meta = player:get_meta ()
-		if vector.equals (pos, LIMBO_POSITION)
-			or meta:get_int ("mcl_biome_dispatch:in_spawn_limbo", 0) == 1 then
-			meta:set_int ("mcl_biome_dispatch:in_spawn_limbo", 1)
-			local pos = mcl_biome_dispatch.next_respawn_position (player)
-			player:set_pos (pos)
-		end
+	core.register_on_newplayer (function (player)
+		local pos = mcl_biome_dispatch.next_respawn_position (player)
+		player:set_pos (pos)
 	end)
 end
 
