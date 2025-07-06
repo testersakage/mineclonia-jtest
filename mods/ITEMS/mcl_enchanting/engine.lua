@@ -378,7 +378,7 @@ function mcl_enchanting.get_random_enchantment_from(itemstack, enchantments, wei
 	local possible = {}
 
 	for _, enchantment in ipairs(enchantments) do
-		local can_enchant, _, _, primary = mcl_enchanting.can_enchant(itemstack, enchantment, 1)
+		local can_enchant, _, _, _ = mcl_enchanting.can_enchant(itemstack, enchantment, 1)
 
 		if (not only_compatible or can_enchant) then
 			local enchantment_def = mcl_enchanting.enchantments[enchantment]

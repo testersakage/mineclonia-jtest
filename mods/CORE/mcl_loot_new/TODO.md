@@ -3,6 +3,24 @@
 - Implement predicates
 - Implement luck
 - Make structures spawn containers using new loot system
+    - [x] Augment schematics with loot information
+    - Transfer all structures with loot to new system
+        - [x] ruined portal
+        - [ ] shipwreck
+        - [ ] ocean_temple
+        - [ ] desert_temple
+        - [ ] jungle_temple
+        - [ ] cold_ocean_ruins
+        - [ ] warm_ocean_ruins
+        - [ ] igloo
+        - [ ] woodland_cabin
+        - [ ] pillager_outpost
+        - [ ] end_shipwreck
+        - [ ] end_boat
+        - [ ] small_end_city
+        - [ ] ancient_hermitage
+        - [ ] desert_well
+        - [ ] nether_bulwark
 - Make mob drops follow new loot system
 - Make piglin barters follow new loot system
 - (maybe) Make some node drops follow new loot system if it doesn't impact performance
@@ -10,4 +28,8 @@
 - Make archaeology (sus nodes) follow new loot system
 - Make mob armour follow new loot system
 - Make vaults follow new loot system
+- Add loot table checking
+- (maybe) Add structure meta checking
+- Add legacy API
+- Document new API
 - Delete old loot system

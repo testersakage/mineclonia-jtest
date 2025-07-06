@@ -383,7 +383,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		-- Spawn loot in metadata table of chest if loot exists
 		core.debug(dump(pos), dump(oldnode), dump(oldmetadata), tostring(digger))
 		mcl_loot_new.materialise_container_loot_in_metadata_table(pos, digger, oldmetadata)
-		
+
 		drop_items_chest_inner(pos, oldnode, oldmetadata, digger)
 	end
 
@@ -581,7 +581,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				-- won't open if there is no space from the top
 				return false
 			end
-			
+
 			-- Spawn loot in chest if exists
 			mcl_loot_new.materialise_container_loot(pos, clicker)
 

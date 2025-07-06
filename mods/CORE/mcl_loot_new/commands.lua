@@ -16,7 +16,7 @@ local function execute_loot_command(target_options, source_options, player_name)
         if player == nil then
             return false, "Player not online: " .. tostring(player_name)
         end
-        
+
         local player_inv = player:get_inventory({type="player", name=player_name})
         for _, itemstack in ipairs(loot) do
             player_inv:add_item("main", itemstack)
@@ -62,7 +62,7 @@ core.register_chatcommand("loot", {
                 if new_coord == nil then
                     return false, "You must specify a " .. coord_key .. " coordinate for the container block"
                 end
-                new_coord_parsed = tonumber(new_coord)
+                local new_coord_parsed = tonumber(new_coord)
                 if new_coord_parsed == nil then
                     return false, "Invalid value for " .. coord_key .. " coordinate: " .. tostring(new_coord)
                 end
@@ -86,7 +86,7 @@ core.register_chatcommand("loot", {
         local source_options
         if source_command == "loot" then
             local loot_table = words()
-            if loot_table == nil then 
+            if loot_table == nil then
                 return false, "You must specify a loot table to source loot from"
             end
             if not mcl_loot_new.loot_table_exists(loot_table) then

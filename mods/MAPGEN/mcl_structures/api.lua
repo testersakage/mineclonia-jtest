@@ -68,7 +68,7 @@ local function resolve_coordinates(coord, pos, rotation, size)
 	elseif rotation == "90" then
 		return vector.add(pos, vector.new(z, y, size.x-1 - x))
 	elseif rotation == "180" then
-		return vector.add(pos, vector.new(size.x-1 -x, y, size.z-1 - z)) 
+		return vector.add(pos, vector.new(size.x-1 -x, y, size.z-1 - z))
 	elseif rotation == "270" then
 		return vector.add(pos, vector.new(size.z-1 - z, y, x))
 	else
@@ -359,13 +359,14 @@ function mcl_structures.place_structure(pos, def, pr, blockseed, _)
 end
 
 function mcl_structures.register_structure(name,def,nospawn) --nospawn means it will be placed by another (non-nospawn) structure that contains it's structblock i.e. it will not be placed by mapgen directly
-	if not def.filenames then
-		if def.loot then
-			core.debug("NO FILENAME BUT LOOT: " .. name)
-		else
-			core.debug("NO FILENAME: " .. name)
-		end
-	end
+	--if not def.filenames then
+	--	if def.loot then
+	--		core.debug("NO FILENAME BUT LOOT: " .. name)
+	--	else
+	--		core.debug("NO FILENAME: " .. name)
+	--	end
+	--end
+	if def.loot then core.debug(name) end
 	if mcl_structures.is_disabled(name) then return end
 	local flags = "place_center_x, place_center_z, force_placement"
 	if def.flags then flags = def.flags end

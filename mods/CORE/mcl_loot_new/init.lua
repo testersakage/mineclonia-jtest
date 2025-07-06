@@ -241,7 +241,7 @@ core.register_chatcommand("lootmeta", {
             if new_coord == nil then
                 return false, "You must specify a " .. coord_key .. " coordinate for the chest"
             end
-            new_coord_parsed = tonumber(new_coord)
+            local new_coord_parsed = tonumber(new_coord)
             if new_coord_parsed == nil then
                 return false, "Invalid value for " .. coord_key .. " coordinate: " .. tostring(new_coord)
             end
@@ -280,7 +280,7 @@ core.register_chatcommand("showmeta", {
             if new_coord == nil then
                 return false, "You must specify a " .. coord_key .. " coordinate for the chest"
             end
-            new_coord_parsed = tonumber(new_coord)
+            local new_coord_parsed = tonumber(new_coord)
             if new_coord_parsed == nil then
                 return false, "Invalid value for " .. coord_key .. " coordinate: " .. tostring(new_coord)
             end
@@ -300,7 +300,7 @@ core.register_chatcommand("metaprocess", {
     privs = {debug = true},
     func = function(name, param)
         local slash_pos = param:find("/")
-        
+
         local filename = param:sub(1, slash_pos-1)
         local data = param:sub(slash_pos+1)
 

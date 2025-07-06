@@ -25,7 +25,7 @@ function item_modifier.apply_item_function(itemstack, func, context, pr)
     if not mcl_loot_new.predicate.check_all_conditions(func.conditions or {}, context, pr) then
         return itemstack
     end
-    
+
     local function_type = func["function"]
     if function_type == "set_count" then
         local new_count = mcl_loot_new.number.evaluate_integer_provider(func.count, context, pr) + (func.add and itemstack:get_count() or 0)
