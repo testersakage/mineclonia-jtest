@@ -349,6 +349,11 @@ core.register_abm({
 	chance = 4,
 	action = function(pos, node)
 
+		-- XXX: support spreading vertically attached vines.
+		if node.param2 < 2 then
+			return
+		end
+
 		-- Add vines below pos (if empty)
 		local function spread_down(_, target, _, node)
 			if math.random(1, 2) == 1 then
