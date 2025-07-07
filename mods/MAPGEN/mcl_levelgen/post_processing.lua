@@ -1076,15 +1076,12 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 
 	-- Unlock all MapBlocks that were locked for the duration of
 	-- this run.
-	local y_min = mathmax (run.y1 - REQUIRED_CONTEXT_Y, 0)
-	local y_max = mathmin (run.y2 + REQUIRED_CONTEXT_Y,
-			       current_namespace_height - 1)
 	local supplemental = run.supplemental
 
 	dbg ("Completed MapBlock run: X: %d, Y: %d - %d, Z: %d",
 	     run.x, run.y1, run.y2, run.z)
 
-	for x, y, z in context_iterator (ipos1, run.x, run.z, y_min, y_max) do
+	for x, y, z in context_iterator (ipos1, run.x, run.z, run.y1, run.y2) do
 		if (x == run.x and y >= run.y1 and y <= run.y2 and z == run.z)
 			and not supplemental then
 			local state = mapblock_state (x, y, z)
