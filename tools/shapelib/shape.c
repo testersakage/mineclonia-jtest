@@ -14,9 +14,37 @@
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
 
+#define REGION_DISPLACEMENT(rgn)					\
+  REGION_DISPLACEMENT_XYZ ((rgn)->x_size, (rgn)->y_size, (rgn)->z_size)
+
+#define REGION_DISPLACEMENT_XYZ(x, y, z)	\
+  next_power_of_two (MAX (x, MAX (y, z)))
+
 
 
 /* Shape initialization.  */
+
+/* Return the exponent of the next power of two greater than or equal
+   to N if N is no greater than MAX_EDGES_PER_AXIS, or -1 upon
+   overflow.  */
+
+static int
+next_power_of_two (n)
+     int n;
+{
+  int i;
+
+  if (n <= MAX_EDGES_PER_AXIS)
+    {
+      for (i = 1; i < 32; ++i)
+	{
+	  if ((1 << i) >= n)
+	    return i;
+	}
+    }
+
+  return -1;
+}
 
 /* Initialize the region REGION.  This must be called before REGION
    becomes the source or destination of any region operation.  */
@@ -26,13 +54,19 @@ region_init (region)
      struct cuboid_region *region;
 {
   region->solids = NULL;
+  region->x_edges = NULL;
+  region->y_edges = NULL;
+  region->z_edges = NULL;
   region->x_size = 0;
   region->y_size = 0;
   region->z_size = 0;
   region->b_size = 0;
+  region->b_disp = 0;
 }
 
-/* Release resources allocated in the region REGION.  */
+/* Release resources allocated in the region REGION.  REGION must not
+   have been initialized by `region_init_from_AABB'.  A region that
+   has been released remains a valid and completely empty region.  */
 
 void
 region_release (region)
@@ -41,10 +75,16 @@ region_release (region)
   if (region->solids)
     free (region->solids);
   region->solids = NULL;
+  if (region->x_edges)
+    free (region->x_edges);
+  region->x_edges = NULL;
+  region->y_edges = NULL;
+  region->z_edges = NULL;
   region->x_size = 0;
   region->y_size = 0;
   region->z_size = 0;
   region->b_size = 0;
+  region->b_disp = 0;
 }
 
 static int
@@ -68,6 +108,41 @@ resize_solids (region, size)
   return 0;
 }
 
+static int
+allocate_edges (edges, size, x_size, y_size, z_size)
+     UNIT_TYPE **edges;
+     int *size;
+     int x_size;
+     int y_size;
+     int z_size;
+{
+  int size_bytes = ((x_size + y_size + z_size)
+		    * sizeof **edges);
+  UNIT_TYPE *new_edges = malloc (size_bytes);
+
+  if (new_edges)
+    {
+      *edges = new_edges;
+      *size = size_bytes;
+      return 0;
+    }
+
+  return 1;
+}
+
+#define XINDEX(x, base, disp)			\
+  (((x) - (base)) << ((disp) + (disp)))
+#define YINDEX(y, base, disp)			\
+  (((y) - (base)) << (disp))
+#define ZINDEX(z, base, disp) ((z) - (base))
+
+#define IS_OCCUPIED_P(rgn, idx)					\
+  (((rgn)->solids[(idx) / UINT_BITS]				\
+    & (1 << ((idx) % UINT_BITS))) != 0)				\
+
+#define MARK_OCCUPIED(rgn, idx)						\
+  ((rgn)->solids[(idx) / UINT_BITS] |= (1 << ((idx) % UINT_BITS)))	\
+
 /* Copy the region SRC into DST.  Value is 1 on failure.  */
 
 int
@@ -76,21 +151,68 @@ region_copy (dst, src)
      struct cuboid_region *src;
 {
   int total_size;
+  int displacement = REGION_DISPLACEMENT (src);
+  UNIT_TYPE *new_edges;
+  int size;
 
-  if (resize_solids (dst, BITSET_SIZE (src->x_size,
-				       src->y_size,
-				       src->z_size)))
+  assert (displacement != -1);
+  if (allocate_edges (&new_edges, &size, src->x_size,
+		      src->y_size, src->z_size))
     return 1;
+  else if (resize_solids (dst, BITSET_SIZE (displacement,
+					    src->x_size,
+					    src->y_size,
+					    src->z_size)))
+    {
+      free (new_edges);
+      return 1;
+    }
+  else
+    {
+      if (dst->x_edges)
+	free (dst->x_edges);
+      dst->x_edges = new_edges;
+      dst->y_edges = new_edges + src->x_size;
+      dst->z_edges = dst->y_edges + src->y_size;
+      dst->x_size = src->x_size;
+      dst->y_size = src->y_size;
+      dst->z_size = src->z_size;
+      dst->b_disp = displacement;
 
-  dst->x_size = src->x_size;
-  dst->y_size = src->y_size;
-  dst->z_size = src->z_size;
-  total_size = dst->b_size * sizeof *dst->solids;
-  memcpy (dst->solids, src->solids, total_size);
-  memcpy (dst->x_edges, src->x_edges, sizeof src->x_edges);
-  memcpy (dst->y_edges, src->y_edges, sizeof src->y_edges);
-  memcpy (dst->z_edges, src->z_edges, sizeof src->z_edges);
-  return 0;
+      if (dst->b_size == src->b_size)
+	{
+	  assert (dst->b_disp == src->b_disp);
+	  total_size = dst->b_size * sizeof *dst->solids;
+	  memcpy (dst->solids, src->solids, total_size);
+	}
+      else
+	{
+	  int x, y, z, disp_src = src->b_disp;
+
+	  for (x = 0; x < src->x_size; ++x)
+	    {
+	      int x_base = XINDEX (x, 0, displacement);
+	      int x_base_src = XINDEX (x, 0, disp_src);
+
+	      for (y = 0; y < src->y_size; ++y)
+		{
+		  int y_base = x_base + YINDEX (y, 0, displacement);
+		  int y_base_src = x_base_src + YINDEX (y, 0, disp_src);
+
+		  for (z = 0; z < src->z_size; ++z)
+		    {
+		      int index = y_base + ZINDEX (z, 0, displacement);
+		      int index_src = y_base_src + ZINDEX (z, 0, disp_src);
+		      if (IS_OCCUPIED_P (src, index_src))
+			MARK_OCCUPIED (dst, index);
+		    }
+		}
+	    }
+	}
+
+      memcpy (dst->x_edges, src->x_edges, size);
+      return 0;
+    }
 }
 
 
@@ -162,21 +284,10 @@ bisect (edges, nmemb, value)
   return NULL;
 }
 
-#define XINDEX(x, base)				\
-  (((x) - (base)) * EDGES_PER_AXIS * EDGES_PER_AXIS)
-#define YINDEX(y, base)				\
-  (((y) - (base)) * EDGES_PER_AXIS)
-#define ZINDEX(z, base) ((z) - (base))
-
-#define IS_OCCUPIED_P(rgn, idx)					\
-  (((rgn)->solids[(idx) / UINT_BITS]				\
-    & (1 << ((idx) % UINT_BITS))) != 0)				\
-
-#define MARK_OCCUPIED(rgn, idx)						\
-  ((rgn)->solids[(idx) / UINT_BITS] |= (1 << ((idx) % UINT_BITS)))	\
-
 /* Decompose an array of N_AABBS bounding boxes into a cuboid region
-   structure.  Value is 1 on failure.  */
+   structure.  Value is 1 on failure (after which REGION is not
+   guaranteed to remain valid otherwise than for another call to this
+   function or region_free).  */
 
 int
 decompose_AABBs (region, aabbs, n_aabbs)
@@ -187,6 +298,7 @@ decompose_AABBs (region, aabbs, n_aabbs)
   UNIT_TYPE *x_edges;
   UNIT_TYPE *y_edges;
   UNIT_TYPE *z_edges;
+  UNIT_TYPE *edges;
   int i, x_count, y_count, z_count;
   AABB *aabb = aabbs;
 
@@ -212,22 +324,39 @@ decompose_AABBs (region, aabbs, n_aabbs)
   y_count = edge_sort (y_edges, i);
   z_count = edge_sort (z_edges, i);
 
-  if (x_count > EDGES_PER_AXIS
-      || y_count > EDGES_PER_AXIS
-      || z_count > EDGES_PER_AXIS)
+  if (x_count > MAX_EDGES_PER_AXIS
+      || y_count > MAX_EDGES_PER_AXIS
+      || z_count > MAX_EDGES_PER_AXIS)
     return 1;
 
   /* Copy these into the region.  */
-  memcpy (&region->x_edges, x_edges, x_count * sizeof (*x_edges));
-  memcpy (&region->y_edges, y_edges, y_count * sizeof (*y_edges));
-  memcpy (&region->z_edges, z_edges, z_count * sizeof (*z_edges));
   region->x_size = x_count;
   region->y_size = y_count;
   region->z_size = z_count;
 
-  /* Allocate or resize solids array.  */
-  if (resize_solids (region, BITSET_SIZE (x_count, y_count, z_count)))
+  if (allocate_edges (&edges, &i, x_count, y_count,
+		      z_count))
     return 1;
+
+  if (region->x_edges)
+    free (region->x_edges);
+
+  region->x_edges = edges;
+  region->y_edges = region->x_edges + region->x_size;
+  region->z_edges = region->y_edges + region->y_size;
+  memcpy (region->x_edges, x_edges, x_count * sizeof (*x_edges));
+  memcpy (region->y_edges, y_edges, y_count * sizeof (*y_edges));
+  memcpy (region->z_edges, z_edges, z_count * sizeof (*z_edges));
+
+  /* Allocate or resize solids array.  */
+  region->b_disp = REGION_DISPLACEMENT (region);
+  if (region->b_disp == -1
+      || resize_solids (region, BITSET_SIZE (region->b_disp, x_count,
+					     y_count, z_count)))
+    {
+      free (edges);
+      return 1;
+    }
 
   /* Mark AABBs.  */
   aabb = aabbs;
@@ -240,6 +369,7 @@ decompose_AABBs (region, aabbs, n_aabbs)
       UNIT_TYPE *y2 = bisect (region->y_edges, y_count, aabb->y2);
       UNIT_TYPE *z2 = bisect (region->z_edges, z_count, aabb->z2);
       UNIT_TYPE *x, *y, *z;
+      int disp = region->b_disp;
 
       assert (*x1 == aabb->x1 && *y1 == aabb->y1 && *z1 == aabb->z1
 	      && *x2 == aabb->x2 && *y2 == aabb->y2 && *z2 == aabb->z2
@@ -253,9 +383,9 @@ decompose_AABBs (region, aabbs, n_aabbs)
 	    {
 	      for (z = z1; z < z2; ++z)
 		{
-		  int index = (XINDEX (x, region->x_edges)
-			       + YINDEX (y, region->y_edges)
-			       + ZINDEX (z, region->z_edges));
+		  int index = (XINDEX (x, region->x_edges, disp)
+			       + YINDEX (y, region->y_edges, disp)
+			       + ZINDEX (z, region->z_edges, disp));
 		  MARK_OCCUPIED (region, index);
 		}
 	    }
@@ -270,7 +400,7 @@ decompose_AABBs (region, aabbs, n_aabbs)
 
 /* Shape operations.  */
 
-static int
+static void
 merge_edge_list (l, r, l_size, r_size, output, output_size)
      UNIT_TYPE *l;
      UNIT_TYPE *r;
@@ -289,10 +419,7 @@ merge_edge_list (l, r, l_size, r_size, output, output_size)
       UNIT_TYPE *l_old = l;
       UNIT_TYPE *r_old = r;
 
-      if (size != EDGES_PER_AXIS)
-	output[size++] = next;
-      else
-	return 1;
+      output[size++] = next;
 
       if (l != l_max && (r_old == r_max || *l_old <= *r_old))
 	l++;
@@ -310,7 +437,7 @@ merge_edge_list (l, r, l_size, r_size, output, output_size)
     }
 
   *output_size = size;
-  return 0;
+  return;
 }
 
 /* Return the values that should provide the left and right hand
@@ -372,8 +499,8 @@ get_dominating_values (l_dom, r_dom, l, r, l_base, r_base, l_max, r_max)
 		: (UNREACHABLE, 0)))))))
 
 /* Apply the boolean operation OP to the regions L and R, producing a
-   new region in NEW, which should already have been cleared.  Value
-   is non-zero on failure.  */
+   new region in NEW, which should already be initialized.  Value is
+   non-zero on failure.  */
 
 int
 region_op (new, l, r, op)
@@ -385,9 +512,8 @@ region_op (new, l, r, op)
   int status = 0;
   UNIT_TYPE *lx = l->x_edges, *ly = l->y_edges, *lz = l->z_edges;
   UNIT_TYPE *rx = r->x_edges, *ry = r->y_edges, *rz = r->z_edges;
-  UNIT_TYPE *x = new->x_edges, *y = new->y_edges, *z = new->z_edges;
-  int l_on, r_on;
-  UNIT_TYPE *lx_max, *rx_max;
+  int l_on, r_on, disp;
+  UNIT_TYPE *lx_max, *rx_max, *x, *y, *z;
 #ifndef NDEBUG
   UNIT_TYPE x_next;
 #endif /* !NDEBUG */
@@ -408,21 +534,46 @@ region_op (new, l, r, op)
       goto clear;
     }
 
-  /* Merge edge lists.  */
-  status |= merge_edge_list (lx, rx, l->x_size, r->x_size, x,
-			     &new->x_size);
-  status |= merge_edge_list (ly, ry, l->y_size, r->y_size, y,
-			     &new->y_size);
-  status |= merge_edge_list (lz, rz, l->z_size, r->z_size, z,
-			     &new->z_size);
-  if (status)
-    return status;
+  /* Merge edge lists; the size of the resultant list is not available
+     but guaranteed to be within the sum of L's and R's.  */
+  {
+    UNIT_TYPE *edges;
+    int x_size, y_size, z_size;
 
-  /* Allocate or resize solids array.  */
-  if (resize_solids (new, BITSET_SIZE (new->x_size,
-				       new->y_size,
-				       new->z_size)))
-    return 1;
+    x_size = l->x_size + r->x_size;
+    y_size = l->y_size + r->y_size;
+    z_size = l->z_size + r->z_size;
+    if (allocate_edges (&edges, &status, x_size, y_size,
+			z_size))
+      return 1;
+
+    x = edges;
+    y = edges + x_size;
+    z = edges + y_size + x_size;
+    merge_edge_list (lx, rx, l->x_size, r->x_size, x, &x_size);
+    merge_edge_list (ly, ry, l->y_size, r->y_size, y, &y_size);
+    merge_edge_list (lz, rz, l->z_size, r->z_size, z, &z_size);
+
+    /* Allocate or resize solids array.  */
+    disp = REGION_DISPLACEMENT_XYZ (x_size, y_size, z_size);
+    if (disp == -1
+	|| resize_solids (new, BITSET_SIZE (disp, x_size, y_size, z_size)))
+      {
+	free (edges);
+	return 1;
+      }
+
+    /* Commit to this operation.  */
+    if (new->x_edges)
+      free (new->x_edges);
+    new->x_size = x_size;
+    new->y_size = y_size;
+    new->z_size = z_size;
+    new->x_edges = x;
+    new->y_edges = y;
+    new->z_edges = z;
+    new->b_disp = disp;
+  }
 
   /* Apply the boolean operation to every cuboid in the old and new
      regions.  Every vertex in the combined list is also the origin of
@@ -464,10 +615,10 @@ region_op (new, l, r, op)
       get_dominating_values (&lx_dom, &rx_dom, lx, rx, l->x_edges,
 			     r->x_edges, lx_max, rx_max);
       if (lx_dom)
-	lx_index = XINDEX (lx_dom, l->x_edges);
+	lx_index = XINDEX (lx_dom, l->x_edges, l->b_disp);
       if (rx_dom)
-	rx_index = XINDEX (rx_dom, r->x_edges);
-      x_index = XINDEX (x, new->x_edges);
+	rx_index = XINDEX (rx_dom, r->x_edges, r->b_disp);
+      x_index = XINDEX (x, new->x_edges, disp);
       assert (x < new->x_edges + new->x_size && x_next == *x);
 
       while (ly != ly_max || ry != ry_max)
@@ -490,10 +641,10 @@ region_op (new, l, r, op)
 	  get_dominating_values (&ly_dom, &ry_dom, ly, ry, l->y_edges,
 				 r->y_edges, ly_max, ry_max);
 	  if (ly_dom)
-	    ly_index = YINDEX (ly_dom, l->y_edges);
+	    ly_index = YINDEX (ly_dom, l->y_edges, l->b_disp);
 	  if (ry_dom)
-	    ry_index = YINDEX (ry_dom, r->y_edges);
-	  y_index = YINDEX (y, new->y_edges);
+	    ry_index = YINDEX (ry_dom, r->y_edges, r->b_disp);
+	  y_index = YINDEX (y, new->y_edges, disp);
 	  assert (y < new->y_edges + new->y_size && y_next == *y);
 
 	  while (lz != lz_max || rz != rz_max)
@@ -508,10 +659,10 @@ region_op (new, l, r, op)
 	      get_dominating_values (&lz_dom, &rz_dom, lz, rz, l->z_edges,
 				     r->z_edges, lz_max, rz_max);
 	      if (lz_dom)
-		lz_index = ZINDEX (lz_dom, l->z_edges);
+		lz_index = ZINDEX (lz_dom, l->z_edges, l->b_disp);
 	      if (rz_dom)
-		rz_index = ZINDEX (rz_dom, r->z_edges);
-	      z_index = ZINDEX (z, new->z_edges);
+		rz_index = ZINDEX (rz_dom, r->z_edges, r->b_disp);
+	      z_index = ZINDEX (z, new->z_edges, disp);
 	      assert (z < new->z_edges + new->z_size && z_next == *z);
 
 	      l_on = (lx_dom && ly_dom && lz_dom
@@ -583,15 +734,8 @@ region_op (new, l, r, op)
  clear:
   /* One of the operands is empty and the operation is such that the
      output must be cleared.  */
-  if (!resize_solids (new, 0, 0, 0))
-    {
-      new->x_size = 0;
-      new->y_size = 0;
-      new->z_size = 0;
-      return 0;
-    }
-
-  return 1;
+  region_release (new);
+  return 0;
 }
 
 /* Return whether (X, Y, Z) constitutes the origin of an AABB in
@@ -607,12 +751,13 @@ region_is_AABB (region, x, y, z)
   UNIT_TYPE *px = bisect (region->x_edges, region->x_size, x);
   UNIT_TYPE *py = bisect (region->y_edges, region->y_size, y);
   UNIT_TYPE *pz = bisect (region->z_edges, region->z_size, z);
+  int disp = region->b_disp;
 
   return (px && py && pz
 	  && (*px == x && *py == y && *pz == z)
-	  && IS_OCCUPIED_P (region, (XINDEX (px, region->x_edges)
-				     + YINDEX (py, region->y_edges)
-				     + ZINDEX (pz, region->z_edges))));
+	  && IS_OCCUPIED_P (region, (XINDEX (px, region->x_edges, disp)
+				     + YINDEX (py, region->y_edges, disp)
+				     + ZINDEX (pz, region->z_edges, disp))));
 }
 
 /* Return whether the boolean operation OP evaluates to true for
@@ -662,9 +807,9 @@ region_evaluate (l, r, op)
       get_dominating_values (&lx_dom, &rx_dom, lx, rx, l->x_edges,
 			     r->x_edges, lx_max, rx_max);
       if (lx_dom)
-	lx_index = XINDEX (lx_dom, l->x_edges);
+	lx_index = XINDEX (lx_dom, l->x_edges, l->b_disp);
       if (rx_dom)
-	rx_index = XINDEX (rx_dom, r->x_edges);
+	rx_index = XINDEX (rx_dom, r->x_edges, r->b_disp);
 
       while (ly != ly_max || ry != ry_max)
 	{
@@ -679,9 +824,9 @@ region_evaluate (l, r, op)
 	  get_dominating_values (&ly_dom, &ry_dom, ly, ry, l->y_edges,
 				 r->y_edges, ly_max, ry_max);
 	  if (ly_dom)
-	    ly_index = YINDEX (ly_dom, l->y_edges);
+	    ly_index = YINDEX (ly_dom, l->y_edges, l->b_disp);
 	  if (ry_dom)
-	    ry_index = YINDEX (ry_dom, r->y_edges);
+	    ry_index = YINDEX (ry_dom, r->y_edges, r->b_disp);
 
 	  while (lz != lz_max || rz != rz_max)
 	    {
@@ -693,9 +838,9 @@ region_evaluate (l, r, op)
 	      get_dominating_values (&lz_dom, &rz_dom, lz, rz, l->z_edges,
 				     r->z_edges, lz_max, rz_max);
 	      if (lz_dom)
-		lz_index = ZINDEX (lz_dom, l->z_edges);
+		lz_index = ZINDEX (lz_dom, l->z_edges, l->b_disp);
 	      if (rz_dom)
-		rz_index = ZINDEX (rz_dom, r->z_edges);
+		rz_index = ZINDEX (rz_dom, r->z_edges, r->b_disp);
 
 	      l_on = (lx_dom && ly_dom && lz_dom
 		      && IS_OCCUPIED_P (l, lx_index + ly_index + lz_index));
@@ -772,18 +917,19 @@ any_occupied_p (region)
   UNIT_TYPE *x_max = region->x_edges + region->x_size;
   UNIT_TYPE *y_max = region->y_edges + region->y_size;
   UNIT_TYPE *z_max = region->z_edges + region->z_size;
+  int disp = region->b_disp;
 
   for (x = region->x_edges; x < x_max; ++x)
     {
-      int x_index = XINDEX (x, region->x_edges);
+      int x_index = XINDEX (x, region->x_edges, disp);
 
       for (y = region->y_edges; y < y_max; ++y)
 	{
-	  int y_index = YINDEX (y, region->y_edges);
+	  int y_index = YINDEX (y, region->y_edges, disp);
 
 	  for (z = region->z_edges; z < z_max; ++z)
 	    {
-	      int z_index = YINDEX (z, region->z_edges);
+	      int z_index = YINDEX (z, region->z_edges, disp);
 
 	      if (IS_OCCUPIED_P (region, x_index + y_index + z_index))
 		return 1;
@@ -925,17 +1071,17 @@ find_cuboid (region, part, cuboid, explored)
      IndexRegion *explored;
 {
   UNIT_TYPE *x, *y, *z;
-  int xindex, yindex, zindex;
+  int xindex, yindex, zindex, disp = region->b_disp;
 
   for (x = part->x1; x < part->x2; ++x)
     {
-      xindex = XINDEX (x, region->x_edges);
+      xindex = XINDEX (x, region->x_edges, disp);
       for (y = part->y1; y < part->y2; ++y)
 	{
-	  yindex = YINDEX (y, region->y_edges);
+	  yindex = YINDEX (y, region->y_edges, disp);
 	  for (z = part->z1; z < part->z2; ++z)
 	    {
-	      zindex = ZINDEX (z, region->z_edges);
+	      zindex = ZINDEX (z, region->z_edges, disp);
 
 	      if (IS_OCCUPIED_P (region, xindex + yindex + zindex))
 		/* (X Y Z) constitutes the origin of a cuboid.
@@ -960,11 +1106,12 @@ find_cuboid (region, part, cuboid, explored)
   cuboid->z1 = z;
 
   {
+    int disp = region->b_disp;
     UNIT_TYPE *x_end, *y_end, *z_end;
 
     for (x_end = x + 1; x_end < part->x2; ++x_end)
       {
-	xindex = XINDEX (x_end, region->x_edges);
+	xindex = XINDEX (x_end, region->x_edges, disp);
 	if (!IS_OCCUPIED_P (region, xindex + yindex + zindex))
 	  break;
       }
@@ -976,10 +1123,10 @@ find_cuboid (region, part, cuboid, explored)
       {
 	UNIT_TYPE *x_test;
 
-	yindex = YINDEX (y_end, region->y_edges);
+	yindex = YINDEX (y_end, region->y_edges, disp);
 	for (x_test = x; x_test < x_end; ++x_test)
 	  {
-	    xindex = XINDEX (x_test, region->x_edges);
+	    xindex = XINDEX (x_test, region->x_edges, disp);
 	    if (!IS_OCCUPIED_P (region, xindex + yindex + zindex))
 	      goto y_set;
 	  }
@@ -993,16 +1140,16 @@ find_cuboid (region, part, cuboid, explored)
       {
 	UNIT_TYPE *y_test;
 
-	zindex = ZINDEX (z_end, region->z_edges);
+	zindex = ZINDEX (z_end, region->z_edges, disp);
 	for (y_test = y; y_test < y_end; ++y_test)
 	  {
 	    UNIT_TYPE *x_test;
 
-	    yindex = YINDEX (y_test, region->y_edges);
+	    yindex = YINDEX (y_test, region->y_edges, disp);
 
 	    for (x_test = x; x_test < x_end; ++x_test)
 	      {
-		xindex = XINDEX (x_test, region->x_edges);
+		xindex = XINDEX (x_test, region->x_edges, disp);
 		if (!IS_OCCUPIED_P (region, xindex + yindex + zindex))
 		  goto z_set;
 	      }
@@ -1162,19 +1309,19 @@ edge_redundant_p (region, edge, base, other_0, other_0_end,
      int index_scale_1;
 {
   int x_pos = (edge - base);
-  int idx = x_pos * index_scale;
+  int idx = x_pos << index_scale;
   UNIT_TYPE *p0;
 
   for (p0 = other_0; p0 != other_0_end; ++p0)
     {
       int y_pos = p0 - other_0;
-      int idx_1 = y_pos * index_scale_0;
+      int idx_1 = y_pos << index_scale_0;
       UNIT_TYPE *p1;
 
       for (p1 = other_1; p1 != other_1_end; ++p1)
 	{
 	  int z_pos = p1 - other_1;
-	  int idx_2 = z_pos * index_scale_1;
+	  int idx_2 = z_pos << index_scale_1;
 	  int index = idx + idx_1 + idx_2;
 	  int state = IS_OCCUPIED_P (region, index);
 	  int prev_state = 0;
@@ -1185,7 +1332,7 @@ edge_redundant_p (region, edge, base, other_0, other_0_end,
 	     must be identical to the status of the said vertex.  */
 	  if (x_pos)
 	    {
-	      int index_prev = (idx - index_scale) + idx_1 + idx_2;
+	      int index_prev = (idx - (1 << index_scale)) + idx_1 + idx_2;
 	      assert (index_prev >= 0);
 	      prev_state = IS_OCCUPIED_P (region, index_prev);
 	    }
@@ -1198,26 +1345,34 @@ edge_redundant_p (region, edge, base, other_0, other_0_end,
   return 1;
 }
 
-#define Z_SCALE 1
-#define Y_SCALE (EDGES_PER_AXIS)
-#define X_SCALE ((EDGES_PER_AXIS) * (EDGES_PER_AXIS))
+#define Z_SCALE(rgn) 0
+#define Y_SCALE(rgn) ((rgn)->b_disp)
+#define X_SCALE(rgn) ((rgn)->b_disp + (rgn)->b_disp)
 
 /* Optimize a region REGION, storing the result in DEST.  A redundant
    edge is an edge along one axis whose presence does not affect the
    values of any intersecting axes.  Proceed by creating a new region
-   in DEST without the redundant edges in SRC.  */
+   in DEST without the redundant edges in SRC.  Value is 0 upon
+   success, and 1 otherwise (in which event REGION's contents remain
+   intact).  */
 
 int
 region_simplify (dest, region)
      struct cuboid_region *RESTRICT dest;
      struct cuboid_region *region;
 {
-  UNIT_TYPE *dx = dest->x_edges;
-  UNIT_TYPE *dy = dest->y_edges;
-  UNIT_TYPE *dz = dest->z_edges;
   UNIT_TYPE *x = region->x_edges;
   UNIT_TYPE *y = region->y_edges;
   UNIT_TYPE *z = region->z_edges;
+  UNIT_TYPE *dx, *dy, *dz, *edges;
+  int disp;
+
+  if (allocate_edges (&edges, &disp, region->x_size,
+		      region->y_size, region->z_size))
+    return 1;
+  dx = edges;
+  dy = dx + region->x_size;
+  dz = dy + region->y_size;
 
   for (; x < region->x_edges + region->x_size; ++x)
     {
@@ -1227,7 +1382,9 @@ region_simplify (dest, region)
 			    region->y_edges + region->y_size,
 			    region->z_edges,
 			    region->z_edges + region->z_size,
-			    X_SCALE, Y_SCALE, Z_SCALE))
+			    X_SCALE (region),
+			    Y_SCALE (region),
+			    Z_SCALE (region)))
 	continue;
       *dx++ = *x;
     }
@@ -1240,7 +1397,8 @@ region_simplify (dest, region)
 			    region->x_edges + region->x_size,
 			    region->z_edges,
 			    region->z_edges + region->z_size,
-			    Y_SCALE, X_SCALE, Z_SCALE))
+			    Y_SCALE (region), X_SCALE (region),
+			    Z_SCALE (region)))
 	continue;
       *dy++ = *y;
     }
@@ -1253,46 +1411,70 @@ region_simplify (dest, region)
 			    region->x_edges + region->x_size,
 			    region->y_edges,
 			    region->y_edges + region->y_size,
-			    Z_SCALE, X_SCALE, Y_SCALE))
+			    Z_SCALE (region),
+			    X_SCALE (region),
+			    Y_SCALE (region)))
 	continue;
       *dz++ = *z;
     }
 
-  /* Initialize the destination shape.  */
+  {
+    int x_size, y_size, z_size;
+    UNIT_TYPE *y_edges, *z_edges;
+    /* Initialize the destination shape.  */
 
-  dest->x_size = (dx - dest->x_edges);
-  dest->y_size = (dy - dest->y_edges);
-  dest->z_size = (dz - dest->z_edges);
+    x_size = (dx - edges);
+    y_edges = (edges + region->x_size);
+    y_size = (dy - y_edges);
+    z_edges = (edges + region->x_size + region->y_size);
+    z_size = (dz - z_edges);
+    disp = REGION_DISPLACEMENT_XYZ (x_size, y_size, z_size);
 
-  /* Allocate or resize solids array.  */
-  if (resize_solids (dest, BITSET_SIZE (dest->x_size,
-					dest->y_size,
-					dest->z_size)))
-    return 1;
+    /* Allocate or resize the solids array.  */
+    if (disp == -1
+	|| resize_solids (dest, BITSET_SIZE (disp, x_size,
+					     y_size, z_size)))
+      {
+	if (edges)
+	  free (edges);
+	return 1;
+      }
+
+    /* Commit to this operation.  */
+    if (dest->x_edges)
+      free (dest->x_edges);
+    dest->b_disp = disp;
+    dest->x_size = x_size;
+    dest->y_size = y_size;
+    dest->z_size = z_size;
+    dest->x_edges = edges;
+    dest->y_edges = y_edges;
+    dest->z_edges = z_edges;
+  }
 
   for (x = dest->x_edges; x < dx; ++x)
     {
       UNIT_TYPE *src_x = bisect (region->x_edges, region->x_size, *x);
       int x_index, dx_index;
       assert (src_x && *src_x == *x);
-      x_index = XINDEX (src_x, region->x_edges);
-      dx_index = XINDEX (x, dest->x_edges);
+      x_index = XINDEX (src_x, region->x_edges, region->b_disp);
+      dx_index = XINDEX (x, dest->x_edges, disp);
 
       for (y = dest->y_edges; y < dy; ++y)
 	{
 	  UNIT_TYPE *src_y = bisect (region->y_edges, region->y_size, *y);
 	  int y_index, dy_index;
 	  assert (src_y && *src_y == *y);
-	  y_index = YINDEX (src_y, region->y_edges);
-	  dy_index = YINDEX (y, dest->y_edges);
+	  y_index = YINDEX (src_y, region->y_edges, region->b_disp);
+	  dy_index = YINDEX (y, dest->y_edges, disp);
 
 	  for (z = dest->z_edges; z < dz; ++z)
 	    {
 	      UNIT_TYPE *src_z = bisect (region->z_edges, region->z_size, *z);
 	      int z_index, dz_index, index, d_index;
 	      assert (src_z && *src_z == *z);
-	      z_index = ZINDEX (src_z, region->z_edges);
-	      dz_index = ZINDEX (z, dest->z_edges);
+	      z_index = ZINDEX (src_z, region->z_edges, region->disp);
+	      dz_index = ZINDEX (z, dest->z_edges, disp);
 	      index = z_index + y_index + x_index;
 	      d_index = dz_index + dy_index + dx_index;
 
@@ -1313,7 +1495,7 @@ region_simplify (dest, region)
 
 /* Bitmask indicating that two values exist on each axis the first of
    which is solid.  */
-static unsigned int aabb_index[BITSET_SIZE (2, 2, 2)] = {
+static unsigned int aabb_index[BITSET_SIZE (1, 2, 2, 2)] = {
   0x1,
 };
 
@@ -1324,14 +1506,18 @@ region_init_from_AABB (region, aabb)
 {
   assert (AABB_VALID_P (aabb));
   region->solids = aabb_index;
-  region->b_size = BITSET_SIZE (2, 2, 2);
+  region->b_disp = 1;
+  region->b_size = BITSET_SIZE (1, 2, 2, 2);
   region->x_size = 2;
   region->y_size = 2;
   region->z_size = 2;
+  region->x_edges = region->static_edges;
   region->x_edges[0] = aabb->x1;
   region->x_edges[1] = aabb->x2;
+  region->y_edges = region->x_edges + 2;
   region->y_edges[0] = aabb->y1;
   region->y_edges[1] = aabb->y2;
+  region->z_edges = region->y_edges + 2;
   region->z_edges[0] = aabb->z1;
   region->z_edges[1] = aabb->z2;
   assert (IS_OCCUPIED_P (region, 0));
@@ -1386,9 +1572,10 @@ region_union (dest, region, aabb)
 
 /* Region cross-sections (a.k.a. faces).  */
 
-/* Create a region in REGION consisting exclusively of the values
-   along one axis NORMAL_AXIS at POS, spanning POS to -POS on the same
-   axis.  */
+/* Create a region in FACE consisting exclusively of the values along
+   one axis NORMAL_AXIS at POS, spanning POS to -POS on the same axis.
+   Value is 0 upon success, and 1 otherwise (in which event FACE's
+   contents remain intact).  */
 
 int
 region_select_face (face, region, normal_axis, pos)
@@ -1402,8 +1589,10 @@ region_select_face (face, region, normal_axis, pos)
   UNIT_TYPE *basis, *basis_other;
   int m_index, a_index, b_index;
   int a_size, b_size;
-  UNIT_TYPE *out_a, *out_b;
-  int m_index_1, m_index_2;
+  UNIT_TYPE **out_a, **out_b;
+  int m_index_1, m_index_2, disp;
+  int face_x_size, face_y_size, face_z_size;
+  UNIT_TYPE *edges;
 
   switch (normal_axis)
     {
@@ -1414,11 +1603,11 @@ region_select_face (face, region, normal_axis, pos)
       m_end = m + region->x_size;
       a_end = a + region->y_size;
       b_end = b + region->z_size;
-      m_index = EDGES_PER_AXIS * EDGES_PER_AXIS;
-      a_index = EDGES_PER_AXIS;
-      b_index = 1;
-      out_a = face->y_edges;
-      out_b = face->z_edges;
+      m_index = X_SCALE (region);
+      a_index = Y_SCALE (region);
+      b_index = Z_SCALE (region);
+      out_a = &face->y_edges;
+      out_b = &face->z_edges;
       break;
 
     case AXIS_Y:
@@ -1428,11 +1617,11 @@ region_select_face (face, region, normal_axis, pos)
       m_end = m + region->y_size;
       a_end = a + region->x_size;
       b_end = b + region->z_size;
-      m_index = EDGES_PER_AXIS;
-      a_index = EDGES_PER_AXIS * EDGES_PER_AXIS;
-      b_index = 1;
-      out_a = face->x_edges;
-      out_b = face->z_edges;
+      m_index = Y_SCALE (region);
+      a_index = X_SCALE (region);
+      b_index = Z_SCALE (region);
+      out_a = &face->x_edges;
+      out_b = &face->z_edges;
       break;
 
     case AXIS_Z:
@@ -1442,17 +1631,20 @@ region_select_face (face, region, normal_axis, pos)
       m_end = m + region->z_size;
       a_end = a + region->x_size;
       b_end = b + region->y_size;
-      m_index = 1;
-      a_index = EDGES_PER_AXIS * EDGES_PER_AXIS;
-      b_index = EDGES_PER_AXIS;
-      out_a = face->x_edges;
-      out_b = face->y_edges;
+      m_index = Z_SCALE (region);
+      a_index = Y_SCALE (region);
+      b_index = X_SCALE (region);
+      out_a = &face->x_edges;
+      out_b = &face->y_edges;
       break;
+
+    default:
+      UNREACHABLE;
     }
 
   /* Number of edges along the other two axes.  */
-  a_size = 0;
-  b_size = 0;
+  a_size = a_end - a + 1;
+  b_size = b_end - b + 1;
 
   /* Locate a value along M matching POS.  */
   basis = bisect (m, m_end - m, pos);
@@ -1466,88 +1658,132 @@ region_select_face (face, region, normal_axis, pos)
   basis_other = ((*basis == pos && basis != m)
 		 ? basis - 1 : basis);
 
-  /* Iterate over A and B, the remaining axes.  */
-
-  {
-    UNIT_TYPE *a1, *b1;
-    m_index_1 = (basis - m) * m_index;
-    m_index_2 = (basis_other - m) * m_index;
-
-    for (a1 = a; a1 < a_end; ++a1)
-      out_a[a_size++] = *a1;
-
-    for (b1 = b; b1 < b_end; ++b1)
-      out_b[b_size++] = *b1;
-  }
+  m_index_1 = (basis - m) << m_index;
+  m_index_2 = (basis_other - m) << m_index;
 
  fill_region:
-
   if (!a_size || !b_size)
     {
-      face->x_size = 0;
-      face->y_size = 0;
-      face->z_size = 0;
+      region_release (face);
       return 0;
     }
 
   switch (normal_axis)
     {
     case AXIS_X:
-      face->y_size = a_size;
-      face->z_size = b_size;
+      face_y_size = a_size;
+      face_z_size = b_size;
 
-      /* Initialize face->x_axis with pos and -pos.  */
-      face->x_size = 2;
-      face->x_edges[0] = MIN (pos, -pos);
-      face->x_edges[1] = MAX (pos, -pos);
+      /* Initialize face's x axis with pos and -pos.  */
+      face_x_size = 2;
       break;
 
     case AXIS_Y:
-      face->x_size = a_size;
-      face->z_size = b_size;
+      face_x_size = a_size;
+      face_z_size = b_size;
 
-      /* Initialize face->y_axis with pos and -pos.  */
-      face->y_size = 2;
-      face->y_edges[0] = MIN (pos, -pos);
-      face->y_edges[1] = MAX (pos, -pos);
+      /* Initialize face's y axis with pos and -pos.  */
+      face_y_size = 2;
       break;
 
     case AXIS_Z:
-      face->x_size = a_size;
-      face->y_size = b_size;
+      face_x_size = a_size;
+      face_y_size = b_size;
 
-      /* Initialize face->z_axis with pos and -pos.  */
-      face->z_size = 2;
-      face->z_edges[0] = MIN (pos, -pos);
-      face->z_edges[1] = MAX (pos, -pos);
+      /* Initialize the face's z axis with pos and -pos.  */
+      face_z_size = 2;
       break;
 
     default:
       UNREACHABLE;
     }
 
-  /* Mark everything along the lesser edge solid.  */
-  if (resize_solids (face, BITSET_SIZE (face->x_size,
-					face->y_size,
-					face->z_size)))
+  if (allocate_edges (&edges, &disp, face_x_size, face_y_size,
+		      face_z_size))
     return 1;
+
+  disp = REGION_DISPLACEMENT_XYZ (face_x_size, face_y_size,
+				  face_z_size);
+  /* Mark everything along the lesser edge solid.  */
+  if (disp == -1
+      || resize_solids (face, BITSET_SIZE (disp, face_x_size,
+					   face_y_size,
+					   face_z_size)))
+    {
+      free (edges);
+      return 1;
+    }
   else
     {
-      int a1, b1;
+      int a1, b1, face_a_disp, face_b_disp;
+
+      /* Commit to this operation.  */
+
+      if (face->x_edges)
+	free (face->x_edges);
+
+      face->b_disp = disp;
+      face->x_edges = edges;
+      face->y_edges = edges + face_x_size;
+      face->z_edges = edges + face_x_size + face_y_size;
+      face->x_size = face_x_size;
+      face->y_size = face_y_size;
+      face->z_size = face_z_size;
+
+      {
+	UNIT_TYPE *a1, *b1;
+	int i;
+
+	/* Copy values from A and B, the perpendicular axes.  */
+	for (a1 = a, i = 0; a1 < a_end; ++a1)
+	  (*out_a)[i++] = *a1;
+
+	for (b1 = b, i = 0; b1 < b_end; ++b1)
+	  (*out_b)[i++] = *b1;
+      }
+
+      switch (normal_axis)
+	{
+	case AXIS_X:
+	  face->x_edges[0] = MIN (pos, -pos);
+	  face->x_edges[1] = MAX (pos, -pos);
+	  face_a_disp = Y_SCALE (face);
+	  face_b_disp = Z_SCALE (face);
+	  break;
+
+	case AXIS_Y:
+	  face->y_edges[0] = MIN (pos, -pos);
+	  face->y_edges[1] = MAX (pos, -pos);
+	  face_a_disp = X_SCALE (face);
+	  face_b_disp = Z_SCALE (face);
+	  break;
+
+	case AXIS_Z:
+	  face->z_edges[0] = MIN (pos, -pos);
+	  face->z_edges[1] = MAX (pos, -pos);
+	  face_a_disp = Y_SCALE (face);
+	  face_b_disp = X_SCALE (face);
+	  break;
+
+	default:
+	  UNREACHABLE;
+	}
 
       for (b1 = 0; b1 < b_size; ++b1)
 	{
-	  int b_index_1 = b1 * b_index;
+	  int b_index_1 = b1 << b_index;
+	  int b_index_2 = b1 << face_b_disp;
 
 	  for (a1 = 0; a1 < a_size; ++a1)
 	    {
-	      int a_index_1 = a1 * a_index;
+	      int a_index_1 = a1 << a_index;
+	      int a_index_2 = a1 << face_a_disp;
 
 	      if (IS_OCCUPIED_P (region, (m_index_1 + a_index_1
 					  + b_index_1))
 		  || IS_OCCUPIED_P (region, (m_index_2 + a_index_1
 					     + b_index_1)))
-		MARK_OCCUPIED (face, a_index_1 + b_index_1);
+		MARK_OCCUPIED (face, b_index_2 + a_index_2);
 	    }
 	}
       return 0;

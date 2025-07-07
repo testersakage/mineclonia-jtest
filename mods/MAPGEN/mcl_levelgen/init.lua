@@ -1,6 +1,31 @@
 local prefix = "."
 local floor = math.floor
 
+local do_report_consing, last = false
+
+local function print_consing ()
+	collectgarbage ("collect")
+	local val = collectgarbage ("count")
+	if last then
+		local new = floor ((val - last) / 1024 + 0.5)
+		last = val
+		if new >= 0 then
+			return floor (val / 1024 + 0.5) .. " MB (+ " .. new .. ")"
+		else
+			return floor (val / 1024 + 0.5) .. " MB (- " .. -new .. ")"
+		end
+	else
+		last = val
+		return floor (val / 1024 + 0.5) .. " MB"
+	end
+end
+
+local function report_consing (msg)
+	if do_report_consing then
+		print (msg .. ": " .. print_consing ())
+	end
+end
+
 local function init_chunksize ()
 	if not core.get_mapgen_chunksize
 		or not mcl_vars.enable_mcl_levelgen then
@@ -45,6 +70,7 @@ elseif core then
 end
 
 mcl_levelgen = { prefix = prefix, }
+mcl_levelgen.report_consing = report_consing
 mcl_levelgen.md5 = dofile (prefix .. "/md5.lua")
 mcl_levelgen.sha = dofile (prefix .. "/sha2.lua")
 mcl_levelgen.lighting_disabled = false
