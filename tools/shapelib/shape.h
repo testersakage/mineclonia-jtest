@@ -1,29 +1,43 @@
-#define CHAR_BITS	8
-#define UNIT_TYPE	double
-#define EDGES_PER_AXIS	256
-#define E		1.0e-7
-#define UINT_BITS	32
-#define BITSET_SIZE(x, y, z)					\
-  ((((((x * EDGES_PER_AXIS - 1) + y - 1) * EDGES_PER_AXIS) + z)	\
-    + UINT_BITS - 1) / UINT_BITS)
+#define CHAR_BITS		8
+#define UNIT_TYPE		double
+#define MAX_EDGES_PER_AXIS	1023 /* 2^10 - 1.  */
+#define E			1.0e-7
+#define UINT_BITS		32
+#define BITSET_SIZE(disp, x, y, z)				\
+  ((((((x) << ((disp) + (disp)))				\
+     + ((y) << (disp)) + (z)) + UINT_BITS - 1) / UINT_BITS))
+
+#if __STDC_VERSION__ >= 199901L
+#define RESTRICT restrict
+#else /* __STDC_VERSION__ < 199901L */
+#define RESTRICT
+#endif /* __STDC_VERSION__ < 199901L */
 
 struct cuboid_region
 {
   /* Bitset recording vertex occupancy by AABBs.  */
   unsigned int *solids;
 
-  /* Arrays of sorted edges along each axis.  */
-  UNIT_TYPE x_edges[EDGES_PER_AXIS];
-  UNIT_TYPE y_edges[EDGES_PER_AXIS];
-  UNIT_TYPE z_edges[EDGES_PER_AXIS];
+  /* Arrays of sorted edges along each axis.  Only X_EDGES points to a
+     region of allocated memory; Y_EDGES and Z_EDGES are simply
+     pointers to values at appropriate offsets from X_EDGES.  */
+  UNIT_TYPE *x_edges;
+  UNIT_TYPE *y_edges;
+  UNIT_TYPE *z_edges;
 
   /* Number of elements occupied in those three arrays.  */
   int x_size;
   int y_size;
   int z_size;
 
-  /* Size of bitset previously allocated.  */
-  int b_size;
+  /* Size of bitset previously allocated, and the number of bits by
+     which each component of a coordinate must be shifted to produce
+     an index into the SOLIDS bitset.  */
+  int b_size, b_disp;
+
+  /* An array of six elements meant to hold statically allocated
+     edges.  */
+  UNIT_TYPE static_edges[6];
 };
 
 struct AABB
@@ -45,12 +59,6 @@ typedef struct AABB AABB;
 #else /* !__STDC__ */
 #define PROTO(proto) ()
 #endif /* __STDC__ */
-
-#if __STDC_VERSION__ >= 199901L
-#define RESTRICT restrict
-#else /* __STDC_VERSION__ < 199901L */
-#define RESTRICT
-#endif /* __STDC_VERSION__ < 199901L */
 
 #if 4 < __GNUC__ + (5 <= __GNUC_MINOR__) && !defined __clang__
 #define UNREACHABLE (__builtin_unreachable ())
