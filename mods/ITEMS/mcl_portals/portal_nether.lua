@@ -397,6 +397,11 @@ local function finalize_teleport(obj, pos, old_param2, new_param2)
 		core.sound_play("mcl_portals_teleport", {pos = pos, gain = 0.5, max_hear_distance = 1}, true)
 		mcl_worlds.dimension_change(obj)
 		core.log("action", "[mcl_portal] " .. obj:get_player_name() .. " teleported to " .. tostring(pos))
+
+		local _, dim = mcl_worlds.y_to_layer (pos.y)
+		if dim == "nether" then
+			awards.unlock (obj:get_player_name(), "mcl:theNether")
+		end
 	else
 		local l = obj:get_luaentity()
 		if l and l.is_mob then
