@@ -1510,10 +1510,21 @@ local function initialize_noises (preset)
 		return noise
 	end
 
-	for key, template in pairs (standard_noise_templates) do
-		local noise = create_noise (key, template)
-		preset.noises[key] = noise
-	end
+	local metatable = {
+		__index = function (tbl, key)
+			local value = rawget (tbl, key)
+			if value then
+				return value
+			end
+
+			local template = standard_noise_templates[key]
+			assert (template, "Noise template is not defined: " .. key)
+			local noise = create_noise (key, template)
+			tbl[key] = noise
+			return noise
+		end
+	}
+	setmetatable (preset.noises, metatable)
 end
 
 local seed_from_ull = mcl_levelgen.seed_from_ull

@@ -624,8 +624,7 @@ local function generate_spawn_area ()
 	local v1 = vector.offset (spawn_pos, -spawn_radius,
 				  dim.y_global, -spawn_radius)
 	local v2 = vector.offset (spawn_pos, spawn_radius,
-				  dim.y_global + dim.y_max,
-				  spawn_radius)
+				  dim.y_max, spawn_radius)
 	core.log ("action", string.format ("Generating world spawn from (%d,%d,%d) to (%d,%d,%d)",
 					   v1.x, v1.y, v1.z, v2.x, v2.y, v2.z))
 	mcl_levelgen.generate_area (v1.x, v1.y, v1.z, v2.x, v2.y, v2.z,
