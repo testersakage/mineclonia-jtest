@@ -24,7 +24,7 @@ end
 local region_class = {}
 region_class.__index = region_class
 
-local EDGES_PER_AXIS = 256
+local MAX_EDGES_PER_AXIS = 1023 -- 2 ^ 10 - 1.
 local WORD_BITS = 32
 
 local function push (list, seen, value)
@@ -37,11 +37,32 @@ end
 
 local floor = math.floor
 local mathmax = math.max
+local lshift = bit.lshift
 
-local function bitset_size (x, y, z)
-	local value = ((x * EDGES_PER_AXIS - 1 + y - 1) * EDGES_PER_AXIS) + z
-	return mathmax (0, floor ((value + WORD_BITS - 1) / WORD_BITS) + 1)
+local function next_power_of_two (n)
+	if n <= MAX_EDGES_PER_AXIS then
+		for i = 1, 31 do
+			if lshift (1, i) >= n then
+				return i
+			end
+		end
+	end
+	return -1
 end
+
+local function bitset_size (disp, x, y, z)
+	return floor ((lshift (x, disp + disp)
+		       + lshift (y, disp) + z
+		       + WORD_BITS - 1) / WORD_BITS)
+end
+
+local function region_displacement_xyz (x, y, z)
+	return next_power_of_two (mathmax (x, y, z))
+end
+
+-- local function region_displacement (rgn)
+-- 	return region_displacement_xyz (rgn.x_size, rgn.y_size, rgn.z_size)
+-- end
 
 local function bisect (edges, nmemb, value)
 	local low, high, mid = 0, nmemb - 1
@@ -68,18 +89,18 @@ local band = bit.band
 local lshift = bit.lshift
 local bor = bit.bor
 
-local function mark_occupied (region, x, y, z)
-	local index = ((x * EDGES_PER_AXIS) + y)
-		* EDGES_PER_AXIS + z
+local function mark_occupied (region, disp, x, y, z)
+	local index = lshift (x, disp + disp)
+		+ lshift (y, disp) + z
 	local idx = floor ((index / WORD_BITS)) + 1
 	local off = band (index, WORD_BITS - 1)
 	local mask = lshift (1, off)
 	region.solids[idx] = bor (region.solids[idx], mask)
 end
 
-local function is_occupied_p (region, x, y, z)
-	local index = ((x * EDGES_PER_AXIS) + y)
-		* EDGES_PER_AXIS + z
+local function is_occupied_p (region, disp, x, y, z)
+	local index = lshift (x, disp + disp)
+		+ lshift (y, disp) + z
 	local idx = floor ((index / WORD_BITS)) + 1
 	local off = band (index, WORD_BITS - 1)
 	local mask = lshift (1, off)
@@ -104,13 +125,14 @@ function mcl_util.decompose_AABBs (aabbs)
 	table.sort (y_edges)
 	table.sort (z_edges)
 
-	if #x_edges > EDGES_PER_AXIS
-		or #y_edges > EDGES_PER_AXIS
-		or #z_edges > EDGES_PER_AXIS then
+	if #x_edges > MAX_EDGES_PER_AXIS
+		or #y_edges > MAX_EDGES_PER_AXIS
+		or #z_edges > MAX_EDGES_PER_AXIS then
 		return nil
 	end
 
-	local b_size = bitset_size (#x_edges, #y_edges, #z_edges)
+	local b_disp = region_displacement_xyz (#x_edges, #y_edges, #z_edges)
+	local b_size = bitset_size (b_disp, #x_edges, #y_edges, #z_edges)
 	local region = {
 		x_edges = x_edges,
 		y_edges = y_edges,
@@ -119,6 +141,7 @@ function mcl_util.decompose_AABBs (aabbs)
 		y_size = #y_edges,
 		z_size = #z_edges,
 		b_size = b_size,
+		b_disp = b_disp,
 		solids = {},
 	}
 	setmetatable (region, region_class)
@@ -148,7 +171,8 @@ function mcl_util.decompose_AABBs (aabbs)
 		for x = x1, x2 - 1 do
 			for y = y1, y2 - 1 do
 				for z = z1, z2 - 1 do
-					mark_occupied (region, x - 1, y - 1, z - 1)
+					mark_occupied (region, b_disp, x - 1,
+						       y - 1, z - 1)
 				end
 			end
 		end
@@ -276,14 +300,15 @@ local function region_op (l, r, op)
 	local z_edges = merge_edge_list (l.z_edges, r.z_edges)
 	local x_size, y_size, z_size = #x_edges, #y_edges, #z_edges
 
-	if x_size > EDGES_PER_AXIS
-		or y_size > EDGES_PER_AXIS
-		or z_size > EDGES_PER_AXIS then
+	if x_size > MAX_EDGES_PER_AXIS
+		or y_size > MAX_EDGES_PER_AXIS
+		or z_size > MAX_EDGES_PER_AXIS then
 		return nil
 	end
 
 	-- Allocate the region.
-	local b_size = bitset_size (x_size, y_size, z_size)
+	local b_disp = region_displacement_xyz (x_size, y_size, z_size)
+	local b_size = bitset_size (b_disp, x_size, y_size, z_size)
 
 	local region = {
 		x_edges = x_edges,
@@ -293,6 +318,7 @@ local function region_op (l, r, op)
 		y_size = y_size,
 		z_size = z_size,
 		b_size = b_size,
+		b_disp = b_disp,
 		solids = {},
 	}
 	setmetatable (region, region_class)
@@ -305,6 +331,8 @@ local function region_op (l, r, op)
 
 	local lx_max = l.x_size + 1
 	local rx_max = r.x_size + 1
+	local l_b_disp = l.b_disp
+	local r_b_disp = r.b_disp
 	local lx, rx = 1, 1
 	local x = 0
 
@@ -334,12 +362,14 @@ local function region_op (l, r, op)
 					= get_dominating_values (lz, rz, l.z_edges, r.z_edges,
 								 lz_max, rz_max)
 				local l_on = lx_dom and ly_dom and lz_dom
-					and is_occupied_p (l, lx_dom - 1, ly_dom - 1, lz_dom - 1)
+					and is_occupied_p (l, l_b_disp, lx_dom - 1,
+							   ly_dom - 1, lz_dom - 1)
 				local r_on = rx_dom and ry_dom and rz_dom
-					and is_occupied_p (r, rx_dom - 1, ry_dom - 1, rz_dom - 1)
+					and is_occupied_p (r, r_b_disp, rx_dom - 1,
+							   ry_dom - 1, rz_dom - 1)
 
 				if op (l_on or false, r_on or false) then
-					mark_occupied (region, x, y, z)
+					mark_occupied (region, b_disp, x, y, z)
 				end
 
 				-- Decide which value to increment and
@@ -395,7 +425,8 @@ local function region_is_AABB (region, x, y, z)
 		and region.x_edges[px] == x
 		and region.y_edges[py] == y
 		and region.z_edges[pz] == z
-		and is_occupied_p (region, px - 1, py - 1, pz - 1)
+		and is_occupied_p (region, region.b_disp, px - 1,
+				   py - 1, pz - 1)
 end
 
 region_class.is_AABB = region_is_AABB
@@ -410,6 +441,8 @@ local function region_evaluate (l, r, op)
 
 	local lx_max = l.x_size + 1
 	local rx_max = r.x_size + 1
+	local l_b_disp = l.b_disp
+	local r_b_disp = r.b_disp
 	local lx, rx = 1, 1
 	local x = 0
 
@@ -439,9 +472,11 @@ local function region_evaluate (l, r, op)
 					= get_dominating_values (lz, rz, l.z_edges, r.z_edges,
 								 lz_max, rz_max)
 				local l_on = lx_dom and ly_dom and lz_dom
-					and is_occupied_p (l, lx_dom - 1, ly_dom - 1, lz_dom - 1)
+					and is_occupied_p (l, l_b_disp, lx_dom - 1,
+							   ly_dom - 1, lz_dom - 1)
 				local r_on = rx_dom and ry_dom and rz_dom
-					and is_occupied_p (r, rx_dom - 1, ry_dom - 1, rz_dom - 1)
+					and is_occupied_p (r, r_b_disp, rx_dom - 1,
+							   ry_dom - 1, rz_dom - 1)
 
 				if op (l_on or false, r_on or false) then
 					return true
@@ -504,10 +539,11 @@ function region_class:contains_p (r)
 end
 
 local function any_occupied_p (region)
+	local disp = region.b_disp
 	for x = 0, region.x_size - 1 do
 		for y = 0, region.y_size - 1 do
 			for z = 0, region.z_size - 1 do
-				if is_occupied_p (region, x, y, z) then
+				if is_occupied_p (region, disp, x, y, z) then
 					return true
 				end
 			end
@@ -563,14 +599,19 @@ function queue_class:insert (region)
 	self[last] = region
 end
 
+local function unpack6 (aabb)
+	return aabb[1], aabb[2], aabb[3], aabb[4], aabb[5], aabb[6]
+end
+
 local function find_cuboid (region, part, cuboid, explored)
-	local x1, y1, z1, x2, y2, z2 = unpack (part)
+	local disp = region.b_disp
+	local x1, y1, z1, x2, y2, z2 = unpack6 (part)
 	local identified = false
 	local start_x, start_y, start_z
 	for x = x1, x2 - 1 do
 		for y = y1, y2 - 1 do
 			for z = z1, z2 - 1 do
-				if is_occupied_p (region, x, y, z) then
+				if is_occupied_p (region, disp, x, y, z) then
 					identified = true
 					start_x, start_y, start_z = x, y, z
 					break
@@ -602,7 +643,8 @@ local function find_cuboid (region, part, cuboid, explored)
 
 	local x_end = start_x + 1
 	while x_end < x2 do
-		if not is_occupied_p (region, x_end, start_y, start_z) then
+		if not is_occupied_p (region, disp, x_end,
+				      start_y, start_z) then
 			break
 		end
 		x_end = x_end + 1
@@ -615,7 +657,8 @@ local function find_cuboid (region, part, cuboid, explored)
 	while y_end < y2 do
 		local done = false
 		for x_test = start_x, x_end - 1 do
-			if not is_occupied_p (region, x_test, y_end, start_z) then
+			if not is_occupied_p (region, disp, x_test,
+					      y_end, start_z) then
 				done = true
 				break
 			end
@@ -634,7 +677,8 @@ local function find_cuboid (region, part, cuboid, explored)
 		local done = false
 		for y_test = start_y, y_end - 1 do
 			for x_test = start_x, x_end - 1 do
-				if not is_occupied_p (region, x_test, y_test, z_end) then
+				if not is_occupied_p (region, disp, x_test,
+						      y_test, z_end) then
 					done = true
 					break
 				end
@@ -778,6 +822,7 @@ region_class.walk = region_walk
 
 local function edge_redundant_p (region, edge, other_0_end, other_1_end, is_occupied_p)
 	local x_pos = edge
+	local disp = region.b_disp
 
 	for y_pos = 1, other_0_end do
 		for z_pos = 1, other_1_end do
@@ -791,9 +836,11 @@ local function edge_redundant_p (region, edge, other_0_end, other_1_end, is_occu
 			-- axis must be identical to the status of the
 			-- said vertex.
 
-			state = is_occupied_p (region, x_pos - 1, y_pos - 1, z_pos - 1)
+			state = is_occupied_p (region, disp, x_pos - 1,
+					       y_pos - 1, z_pos - 1)
 			if x_pos > 1 then
-				prev_state = is_occupied_p (region, x_pos - 2, y_pos - 1, z_pos - 1)
+				prev_state = is_occupied_p (region, disp, x_pos - 2,
+							    y_pos - 1, z_pos - 1)
 			end
 
 			if prev_state ~= state then
@@ -805,12 +852,12 @@ local function edge_redundant_p (region, edge, other_0_end, other_1_end, is_occu
 	return true
 end
 
-local function is_occupied_p_yxz (region, y, x, z)
-	return is_occupied_p (region, x, y, z)
+local function is_occupied_p_yxz (region, disp, y, x, z)
+	return is_occupied_p (region, disp, x, y, z)
 end
 
-local function is_occupied_p_zxy (region, z, x, y)
-	return is_occupied_p (region, x, y, z)
+local function is_occupied_p_zxy (region, disp, z, x, y)
+	return is_occupied_p (region, disp, x, y, z)
 end
 
 local function region_simplify (region)
@@ -855,7 +902,8 @@ local function region_simplify (region)
 	new.z_size = #z_edges
 
 	-- Allocate or resize solids array.
-	new.b_size = bitset_size (new.x_size, new.y_size, new.z_size)
+	new.b_disp = region_displacement_xyz (new.x_size, new.y_size, new.z_size)
+	new.b_size = bitset_size (new.b_disp, new.x_size, new.y_size, new.z_size)
 	do
 		local solids = new.solids
 		for i = 1, new.b_size do
@@ -863,15 +911,24 @@ local function region_simplify (region)
 		end
 	end
 
+	local region_b_disp = region.b_disp
+	local disp = new.b_disp
 	for x = 1, #x_edges do
-		local src_x = bisect (region.x_edges, region.x_size, x_edges[x])
+		local src_x = bisect (region.x_edges,
+				      region.x_size, x_edges[x])
 		for y = 1, #y_edges do
-			local src_y = bisect (region.y_edges, region.y_size, y_edges[y])
+			local src_y = bisect (region.y_edges,
+					      region.y_size,
+					      y_edges[y])
 			for z = 1, #z_edges do
-				local src_z = bisect (region.z_edges, region.z_size, z_edges[z])
+				local src_z = bisect (region.z_edges,
+						      region.z_size,
+						      z_edges[z])
 
-				if is_occupied_p (region, src_x - 1, src_y - 1, src_z - 1) then
-					mark_occupied (new, x - 1, y - 1, z - 1)
+				if is_occupied_p (region, region_b_disp,
+						  src_x - 1, src_y - 1, src_z - 1) then
+					mark_occupied (new, disp, x - 1,
+						       y - 1, z - 1)
 				end
 			end
 		end
@@ -890,14 +947,15 @@ local default_solids = {
 	1,
 }
 
-for i = 2, bitset_size (2, 2, 2) do
+for i = 2, bitset_size (1, 2, 2, 2) do
 	default_solids[i] = 0
 end
 
 local function region_init_from_aabb (aabb)
 	local region = {}
 	region.solids = default_solids
-	region.b_size = bitset_size (2, 2, 2)
+	region.b_size = bitset_size (1, 2, 2, 2)
+	region.b_disp = 1
 	region.x_size = 2
 	region.y_size = 2
 	region.z_size = 2
@@ -934,12 +992,12 @@ end
 -- Region cross-sections (a.k.a. faces).
 ------------------------------------------------------------------------
 
-local function mark_occupied_yxz (region, y, x, z)
-	mark_occupied (region, x, y, z)
+local function mark_occupied_yxz (region, disp, y, x, z)
+	mark_occupied (region, disp, x, y, z)
 end
 
-local function mark_occupied_zxy (region, z, x, y)
-	mark_occupied (region, x, y, z)
+local function mark_occupied_zxy (region, disp, z, x, y)
+	mark_occupied (region, disp, x, y, z)
 end
 
 local function region_select_face (region, normal_axis, pos)
@@ -1035,16 +1093,21 @@ local function region_select_face (region, normal_axis, pos)
 
 	local solids = {}
 	new.solids = solids
-	new.b_size = bitset_size (new.x_size, new.y_size, new.z_size)
+	new.b_disp = region_displacement_xyz (new.x_size, new.y_size, new.z_size)
+	new.b_size = bitset_size (new.b_disp, new.x_size, new.y_size, new.z_size)
 	for i = 1, new.b_size do
 		solids[i] = 0
 	end
 
+	local region_disp = new.b_disp
+	local disp = new.b_disp
 	for b1 = 0, b_size - 1 do
 		for a1 = 0, a_size - 1 do
-			if occupancy_test (region, basis - 1, a1, b1)
-				or occupancy_test (region, basis_other - 1, a1, b1) then
-				set_occupied (new, 0, a1, b1)
+			if occupancy_test (region, region_disp,
+					   basis - 1, a1, b1)
+				or occupancy_test (region, region_disp,
+						   basis_other - 1, a1, b1) then
+				set_occupied (new, disp, 0, a1, b1)
 			end
 		end
 	end
