@@ -1444,7 +1444,7 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize, ychunksize)
 	if not gen_node_caches[key] then
 		local cache = {}
 		for i = 1, chunksize * gen.level_height * chunksize do
-			cache[i] = 0.0
+			cache[i] = 0
 		end
 		gen_node_caches[key] = cache
 	end
