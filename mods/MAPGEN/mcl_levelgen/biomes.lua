@@ -2365,7 +2365,7 @@ mcl_levelgen.register_biome ("DeepColdOcean", {
 			"mcl_levelgen:freeze_top_layer",
 		},
 	},
-	has_precipitation = false,
+	has_precipitation = true,
 	temperature = 0.500000,
 	grass_palette_index = 0,
 	groups = {
