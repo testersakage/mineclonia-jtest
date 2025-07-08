@@ -5,7 +5,7 @@ core.register_node("mcl_powder_snow:powder_snow", {
 	_doc_items_longdesc = S("This is a block of snow thats extra fluffy, this means players can sink in it"),
 	_doc_items_hidden = false,
 	tiles = {"powder_snow.png"},
-	groups = {shovely=2, snow_cover=1, not_in_creative_inventory = 1, disable_suffocation = 1},
+	groups = {shovely=2, snow_cover=1, not_in_creative_inventory = 1, disable_suffocation = 1,no_spawning_inside = 1,},
 	sounds = mcl_sounds.node_sound_snow_defaults(),
 	post_effect_color = "#CFD7DBFF",
 	walkable = false,
