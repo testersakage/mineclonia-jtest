@@ -743,9 +743,9 @@ function mcl_util.get_pos_p2(pos, for_trees)
 		local biome = mcl_levelgen.get_biome (pos, true)
 		local biomedef = mcl_levelgen.registered_biomes[biome]
 		if not for_trees then
-			return biomedef.grass_palette_index or 0
+			return (biomedef and biomedef.grass_palette_index) or 0
 		else
-			return biomedef.leaves_palette_index or 0
+			return (biomedef and biomedef.leaves_palette_index) or 0
 		end
 	end
 end

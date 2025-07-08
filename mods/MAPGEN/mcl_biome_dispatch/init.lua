@@ -1,6 +1,6 @@
 local ipairs = ipairs
 local pairs = pairs
-local S = core.get_translator (core.get_current_modname ())
+local S, PS = core.get_translator (core.get_current_modname ())
 
 mcl_biome_dispatch = {}
 
@@ -855,4 +855,118 @@ function mcl_biome_dispatch.get_stronghold_positions ()
 		return {}
 	end
 	return shrine.static_pos
+end
+
+local function locate_structure (taskinfo)
+	local dim = mcl_levelgen.get_dimension (taskinfo.dim)
+	assert (dim)
+	mcl_levelgen.initialize_terrain (dim)
+	local x, y, z
+		= mcl_levelgen.locate_structure_placement (dim.terrain, taskinfo.x,
+							   taskinfo.y, taskinfo.z,
+							   taskinfo.sid,
+							   taskinfo.range)
+	return x, y, z
+end
+
+local pending_locate_tasks = {}
+local outstanding_locate_task = false
+
+local function dispatch_locate_task (taskinfo)
+	local dim = get_dimension (taskinfo.dim)
+	local callback = taskinfo.callback
+	local cb_data = taskinfo.cb_data
+
+	taskinfo.callback = nil
+	taskinfo.cb_data = nil
+	-- Owch!!!  Interested parties should investigate eliminating
+	-- this closure.
+	core.handle_async (locate_structure, function (x, y, z)
+		if x then
+			local v = vector.new (x, y - dim.y_offset, -z - 1)
+			callback (v, cb_data)
+		else
+			callback (nil, cb_data)
+		end
+
+		outstanding_locate_task = false
+		local n = #pending_locate_tasks
+		if n > 0 then
+			local taskinfo = pending_locate_tasks[1]
+			for i = 2, n do
+				pending_locate_tasks[i - 1]
+					= pending_locate_tasks[i]
+			end
+			pending_locate_tasks[n] = nil
+			dispatch_locate_task (taskinfo)
+		end
+	end, taskinfo)
+end
+
+function mcl_biome_dispatch.locate_structure_near (pos, sid, range_chebyshev, callback, cb_data)
+	if not levelgen_enabled then
+		callback (nil, cb_data)
+		return
+	end
+	local x, y, z, dim = conv_pos_raw (pos)
+	if not dim then
+		callback (nil, cb_data)
+	else
+		local taskinfo = {
+			x = x,
+			y = y,
+			z = z,
+			range = range_chebyshev,
+			sid = sid,
+			dim = dim.id,
+			callback = callback,
+			cb_data = cb_data,
+		}
+		if not outstanding_locate_task then
+			dispatch_locate_task (taskinfo)
+			outstanding_locate_task = true
+		else
+			taskinfo.callback = callback
+			taskinfo.cb_data = cb_data
+			insert (pending_locate_tasks, taskinfo)
+		end
+	end
+end
+
+------------------------------------------------------------------------
+-- Chat commands.
+------------------------------------------------------------------------
+
+if levelgen_enabled then
+	core.register_chatcommand ("locate", {
+		params = "locate [structure | biome] [id]",
+		description = S ("Locate a structure or a biome identified by ID in the current dimension."),
+		privs = { maphack = true, },
+		func = function (name, param)
+			local command, id = unpack (param:split (" "))
+			if command == "structure" then
+				if type (id) ~= "string" then
+					core.chat_send_player (name, S ("`/locate structure' requires a structure id"))
+				end
+				local player = core.get_player_by_name (name)
+				if player then
+					local pos = player:get_pos ()
+					mcl_biome_dispatch.locate_structure_near (pos, id, 96, function (v, _)
+						if v then
+							local dist = floor (vector.distance (v, pos) + 0.5)
+							local blurb = PS ("The nearest structure of type @1 is located at (@2,@3,@4) (@5 block away)",
+									  "The nearest structure of type @1 is located at (@2,@3,@4) (@5 blocks away)",
+									  dist, id, v.x, v.y, v.z, dist)
+							core.chat_send_player (name, blurb)
+						else
+							local blurb = S ("No structure of type @1 exists near your position", id)
+							core.chat_send_player (name, blurb)
+						end
+					end)
+				end
+			elseif command == "biome" then
+				core.chat_send_player (name, S ("Sorry!  `/locate biome' is not yet implemented"))
+			end
+		end,
+	})
 end
