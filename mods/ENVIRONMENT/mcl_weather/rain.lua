@@ -284,7 +284,7 @@ if mcl_weather.reg_weathers.rain == nil then
 		max_duration = 1200,
 		transitions = {
 			[65] = "none",
-			[70] = "snow",
+			[70] = "rain",
 			[100] = "thunder",
 		}
 	}

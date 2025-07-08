@@ -30,7 +30,6 @@ mcl_weather.reg_weathers["none"] = {
 	light_factor = nil,
 	transitions = {
 		[50] = "rain",
-		[100] = "snow",
 	},
 	clear = function() end,
 }
@@ -218,7 +217,7 @@ core.register_privilege("weather_manager", {
 
 -- Weather command definition. Set
 core.register_chatcommand("weather", {
-	params = "(clear | rain | snow | thunder) [<duration>]",
+	params = "(clear | rain | thunder) [<duration>]",
 	description = S("Changes the weather to the specified parameter."),
 	privs = {weather_manager = true},
 	func = function(name, param)
@@ -250,7 +249,7 @@ core.register_chatcommand("weather", {
 		if success then
 			return true
 		else
-			return false, S("Error: Invalid weather specified. Use “clear”, “rain”, “snow” or “thunder”.")
+			return false, S("Error: Invalid weather specified. Use “clear”, “rain”, or “thunder”.")
 		end
 	end
 })
@@ -283,6 +282,11 @@ end
 
 local function load_weather()
 	local weather = storage:get_string("mcl_weather_state")
+	-- Previous versions of Mineclonia had a redundant snow state
+	-- that would not produce rain in non-snowy biomes.
+	if weather == "snow" then
+		weather = "rain"
+	end
 	if weather and weather ~= "" then
 		mcl_weather.state = weather
 		mcl_weather.end_time = storage:get_int("mcl_weather_end_time")
