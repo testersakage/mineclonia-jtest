@@ -114,6 +114,33 @@ function build_random_spread_chunk_test (spacing, separation, spread_method)
 	end
 end
 
+function build_random_spread_locator_test (spacing, separation, spread_method)
+	local function distribute_triangular (rng, n)
+		return rtz ((rng:next_within (n) + rng:next_within (n)) / 2)
+	end
+	local function distribute_linear (rng, n)
+		return rng:next_within (n)
+	end
+	assert (spacing > separation, "Separation cannot be satisfied by spacing")
+
+	local distribute = distribute_linear
+	if spread_method == "triangular" then
+		distribute = distribute_triangular
+	end
+
+	local rng = default_rng
+	return function (level, salt, region_x, region_z)
+		local level_seed = level.level_seed
+		-- The level is divided into SPACING sized regions and
+		-- select a random chunk within that is at least
+		-- SEPARATION removed from adjacent regions.
+		set_region_seed (rng, level_seed, region_x, region_z, salt)
+		local cx1 = distribute (rng, spacing - separation)
+		local cz1 = distribute (rng, spacing - separation)
+		return (region_x * spacing + cx1), (region_z * spacing + cz1)
+	end
+end
+
 if false then
 	local l = build_random_spread_chunk_test (32, 8, "linear")
 	local level_seed = ull (0, 0)
@@ -278,7 +305,10 @@ function mcl_levelgen.build_random_spread_placement (frequency, reduction,
 				or frequency_reducer_default,
 		chunk_test = build_random_spread_chunk_test (spacing, separation,
 							     spread_type),
+		locator_test = build_random_spread_locator_test (spacing, separation,
+								 spread_type),
 		locate_offset = locate_offset or { 0, 0, 0, },
+		spacing = spacing,
 		exclusion_zone = exclusion_zone,
 		salt = assert (salt),
 	}
@@ -625,8 +655,8 @@ local structure_rng = mcl_levelgen.jvm_random (ull (0, 0), ull (0, 0))
 local function do_nothing ()
 end
 
-local function get_structure_starts (level, terrain, cx, cz, cb, data)
-	for _, set in ipairs (level.structure_sets) do
+local function get_structure_starts (level, terrain, cx, cz, cb, data, structure_sets)
+	for _, set in ipairs (structure_sets or level.structure_sets) do
 		local structures = set.structures
 		local total_weight = set.total_weight
 		local n_structures = #structures
@@ -779,7 +809,7 @@ function mcl_levelgen.prepare_structures (level, terrain, x, z)
 				starts[hash] = record
 				get_structure_starts (level, terrain, x, z,
 						      insert_structure_start,
-						      local_starts)
+						      local_starts, nil)
 				starts_created = starts_created + 1
 			else
 				-- Relink to the start of the list.
@@ -2257,4 +2287,145 @@ function mcl_levelgen.jigsaw_create_start (self, level, terrain, rng, cx, cz)
 	return create_structure_start (self, pieces)
 end
 
+end
+
+------------------------------------------------------------------------
+-- External structure placement interface.
+------------------------------------------------------------------------
+
+local function compare_grid_size (a, b)
+	return a.placement.spacing < b.placement.spacing
+end
+
+local dir, dist, progress
+
+local function chebyshev_iterator ()
+	if dist == 0 then
+		if dir == 1 then
+			return nil
+		end
+		dir = 1
+		return 0, 0
+	elseif dir == nil then
+		local p1
+		p1, progress = progress, progress + 1
+		if p1 == dist then
+			dir = 1
+			progress = -dist
+		end
+		return -dist, p1
+	elseif dir == 1 then
+		local p1
+		p1, progress = progress, progress + 1
+		if p1 == dist then
+			dir = 2
+			progress = -dist + 1
+		end
+		return dist, p1
+	elseif dir == 2 then
+		local p1
+		p1, progress = progress, progress + 1
+		if p1 == dist - 1 then
+			dir = 3
+			progress = -dist + 1
+		end
+		return p1, -dist
+	elseif dir == 3 then
+		local p1
+		p1, progress = progress, progress + 1
+		if p1 == dist then
+			return nil
+		end
+		return p1, dist
+	end
+	assert (false)
+end
+
+local function positions_at_distance_chebyshev (d)
+	dir = nil
+	dist = d
+	progress = -dist
+	return chebyshev_iterator
+end
+
+local bbox_center = mcl_levelgen.bbox_center
+local candidates
+
+local function insert_structure_candidate (start, _, _, _, id)
+	if start.structure == id then
+		local x, y, z = bbox_center (start.bbox)
+		insert (candidates, {x, y, z,})
+	end
+end
+
+function mcl_levelgen.locate_structure_placement (terrain, x, y, z, id, grid_limit_xz)
+	local level = terrain.structures
+	-- First, attempt to locate structure sets containing ID in
+	-- the level.
+
+	local target_sets = {}
+	for _, set in ipairs (level.structure_sets) do
+		for _, structure in ipairs (set.structures) do
+			if structure.structure.name == id
+			-- TODO: non-random-spread structures.
+				and set.placement.spacing
+				and set.placement.locator_test then
+				insert (target_sets, set)
+				break
+			end
+		end
+	end
+	if #target_sets == 0 then
+		return nil
+	end
+
+	-- Sort TARGET_SETS by grid size.
+	table.sort (target_sets, compare_grid_size)
+
+	local cx = floor (x / 16)
+	local cz = floor (z / 16)
+	local nearest, d_nearest = nil, huge
+	local nearest_rgn_absolute = huge
+	for _, set in ipairs (target_sets) do
+		local placement = set.placement
+		local spacing = placement.spacing
+		local region_x = floor (cx / placement.spacing)
+		local region_z = floor (cz / placement.spacing)
+
+		for i = 0, grid_limit_xz do
+			if i * spacing > (nearest_rgn_absolute + 8) then
+				break
+			end
+			local just_this_set = {set,}
+			candidates = {}
+			for dx, dz in positions_at_distance_chebyshev (i) do
+				local rx = region_x + dx
+				local rz = region_z + dz
+				local scx, scz = placement.locator_test (level, placement.salt, rx, rz)
+
+				if scx and scz then
+					-- This will conduct detailed placement tests.
+					get_structure_starts (level, terrain, scx, scz,
+							      insert_structure_candidate,
+							      id, just_this_set)
+				end
+			end
+			for _, candidate in ipairs (candidates) do
+				local dx = mathabs (candidate[1] - x)
+				local dy = mathabs (candidate[2] - y)
+				local dz = mathabs (candidate[3] - z)
+				local d_sqr = dx * dx + dy * dy + dz * dz
+				if d_sqr < d_nearest then
+					nearest = candidate
+					nearest_rgn_absolute
+						= mathmin (nearest_rgn_absolute, i * spacing)
+				end
+			end
+			candidates = nil
+		end
+	end
+	if nearest then
+		return nearest[1], nearest[2], nearest[3]
+	end
+	return nil
 end

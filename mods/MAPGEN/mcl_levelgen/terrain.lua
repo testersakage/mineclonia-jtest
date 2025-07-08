@@ -772,6 +772,18 @@ local function update_structuremask (x, y, z, structuremask,
 	return elem
 end
 
+function terrain_generator:init_gen_node_caches (chunksize, level_height)
+	local key = level_size_key (chunksize, level_height)
+	if not gen_node_caches[key] then
+		local cache = {}
+		for i = 1, chunksize * level_height * chunksize do
+			cache[i] = 0
+		end
+		gen_node_caches[key] = cache
+	end
+	return gen_node_caches[key]
+end
+
 function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_index, biomes)
 	local y_min = self.y_min
 	local chunksize = self.chunksize
@@ -806,7 +818,7 @@ function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_i
 	-- Table of nodes produced for this horizontal section of the
 	-- level.  Also reused to store beardifier influences if need
 	-- be.
-	local gn = gen_node_caches[level_size_key (chunksize, level_height)]
+	local gn = self:init_gen_node_caches (chunksize, level_height)
 	mcl_levelgen.beardify (self.structures, self, gn, index, x, z)
 
 	-- Reset the temporary heightmap.
@@ -1439,16 +1451,6 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize, ychunksize)
 		gen.vein_ridged = wrapnext (preset.vein_ridged)
 		gen.vein_gap = wrapnext (preset.vein_gap)
 	end
-
-	local key = level_size_key (chunksize, gen.level_height)
-	if not gen_node_caches[key] then
-		local cache = {}
-		for i = 1, chunksize * gen.level_height * chunksize do
-			cache[i] = 0
-		end
-		gen_node_caches[key] = cache
-	end
-
 	return gen
 end
 

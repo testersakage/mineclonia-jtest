@@ -2567,10 +2567,15 @@ local EMERGE_CANCELLED = core.EMERGE_CANCELLED
 
 local function emerge_progress_cb (blockpos, action, calls_remaining, param)
 	if action == EMERGE_ERRORED or action == EMERGE_CANCELLED then
-		-- Attempt to emerge this area again.
-		core.emerge_area (vector.multiply (blockpos, 16),
-				  vector.multiply (blockpos, 16),
-				  emerge_progress_cb, param)
+		-- Attempt to emerge this area again.  This must be
+		-- performed in the next globalstep; otherwise, if an
+		-- async error arrives, a deadlock is liable to result
+		-- during shutdown.  See
+		-- https://github.com/luanti-org/luanti/issues/15419.
+		core.after (0, core.emerge_area,
+			    vector.multiply (blockpos, 16),
+			    vector.multiply (blockpos, 16),
+			    emerge_progress_cb, param)
 	else
 		local progress = param.progress
 		progress.n_emerged = progress.n_emerged + 1

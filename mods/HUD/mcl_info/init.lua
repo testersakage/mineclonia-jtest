@@ -189,6 +189,9 @@ mcl_info.register_debug_field("Biome",{
 		if mcl_levelgen.levelgen_enabled then
 			local biome = mcl_levelgen.get_biome (pos)
 			local biome_sampled = mcl_levelgen.get_biome (pos, true, true)
+			if not biome_sampled then
+				return "<No data>"
+			end
 			if biome then
 				return biome .. " / " .. biome_sampled
 			else
