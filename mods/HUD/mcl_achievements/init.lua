@@ -618,3 +618,55 @@ awards.register_achievement("mcl:zombie_doctor", {
 	type = "Advancement",
 	group = "Overworld",
 })
+
+if mcl_levelgen.levelgen_enabled then
+	-- Level generator-only advancements.
+
+	awards.register_achievement ("mcl:a_terrible_fortress", {
+		title = S ("A Terrible Fortress"),
+		description = S ("Break your way into a Nether Fortress"),
+		icon = core.inventorycube ("mcl_nether_nether_brick.png"),
+		type = "Advancement",
+		group = "Nether",
+		trigger = {
+			type = "structure",
+			structure = "mcl_levelgen:nether_fortress",
+		},
+	})
+
+	awards.register_achievement ("mcl:eye_spy", {
+		title = S ("Eye Spy"),
+		description = S ("Follow an Eye of Ender"),
+		icon = "mcl_end_ender_eye.png",
+		type = "Advancement",
+		group = "Overworld",
+		trigger = {
+			type = "structure",
+			structure = "mcl_levelgen:stronghold",
+		},
+	})
+
+	awards.register_achievement ("mcl:the_city_at_the_end_of_the_game", {
+		title = S ("The City at the End of the Game"),
+		description = S ("Go on in, what could happen?"),
+		icon = core.inventorycube ("mcl_end_purpur_block.png"),
+		type = "Advancement",
+		group = "Nether",
+		trigger = {
+			type = "structure",
+			structure = "mcl_end:end_city",
+		},
+	})
+
+	awards.register_achievement ("mcl:those_were_the_days", {
+		title = S ("Those Were The Days"),
+		description = S ("Enter a Bastion Remnant"),
+		icon = core.inventorycube ("mcl_blackstone_top.png"),
+		type = "Advancement",
+		group = "Nether",
+		trigger = {
+			type = "structure",
+			structure = "mcl_levelgen:bastion_remnant",
+		},
+	})
+end
