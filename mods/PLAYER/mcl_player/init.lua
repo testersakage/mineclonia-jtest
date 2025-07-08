@@ -253,7 +253,7 @@ core.register_globalstep (function (dtime)
 		old_gametime = gametime
 		for player in mcl_util.connected_players () do
 			local pos = player:get_pos ()
-			mcl_worlds.tick_chunk_inhabited_time (pos, increment_by)
+			mcl_worlds.tick_chunk_inhabited_time (pos, player, increment_by)
 		end
 end)
 
