@@ -13,11 +13,14 @@ local function force_detach(player)
 		entity.driver = nil
 	end
 
-	player:set_detach()
-	mcl_player.players[player].attached = false
-	player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-	mcl_player.player_set_animation(player, "stand" , 30)
-	player:set_properties({visual_size = {x = 1, y = 1} })
+	-- Otherwise this player might already have left.
+	if mcl_player.players[player] then
+		player:set_detach()
+		mcl_player.players[player].attached = false
+		player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+		mcl_player.player_set_animation(player, "stand" , 30)
+		player:set_properties({visual_size = {x = 1, y = 1} })
+	end
 end
 
 core.register_on_shutdown(function()
