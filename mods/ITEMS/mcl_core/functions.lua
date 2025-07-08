@@ -182,7 +182,7 @@ function mcl_core.get_grass_palette_index(pos)
 	if mcl_levelgen.levelgen_enabled then
 		local biome = mcl_levelgen.get_biome (pos, true)
 		local biome_data = mcl_levelgen.registered_biomes[biome]
-		return biome_data.grass_palette_index
+		return (biome_data and biome_data.grass_palette_index) or 0
 	else
 		local biome_data = core.get_biome_data(pos)
 		if biome_data then
