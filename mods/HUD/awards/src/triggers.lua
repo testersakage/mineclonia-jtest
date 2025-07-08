@@ -149,3 +149,42 @@ core.register_on_item_eat(function(_, _, itemstack, player, _)
 	itemname = core.registered_aliases[itemname] or itemname
 	awards.notify_eat(player, itemname)
 end)
+
+awards.register_trigger ("structure", {
+	type = "custom",
+	progress = "",
+	auto_description = {
+		S ("Enter one of the titular structures"),
+		S ("Enter one of the titular structures"),
+	},
+	on_register = function (self, award)
+		table.insert (self.on, {
+			name = award.name,
+			structure = assert (award.trigger.structure),
+		})
+	end,
+})
+
+local function test_player_structures (dtime)
+	local get_structures_at = mcl_levelgen.get_structures_at
+
+	for player in mcl_util.connected_players () do
+		for _, trigger in ipairs (awards.on.structure) do
+			if type (trigger) == "table" then
+				local structure = trigger.structure
+				local pos = mcl_util.get_nodepos (player:get_pos ())
+				for _, entry in pairs (get_structures_at (pos, false)) do
+					if entry.data == structure then
+						awards.unlock (player:get_player_name (),
+							       trigger.name)
+						break
+					end
+				end
+			end
+		end
+	end
+end
+
+if mcl_levelgen.levelgen_enabled then
+	core.register_globalstep (test_player_structures)
+end
