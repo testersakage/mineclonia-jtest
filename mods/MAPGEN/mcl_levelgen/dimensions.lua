@@ -91,7 +91,14 @@ Global maximum layer: %d]],
 	end
 end
 
-function mcl_levelgen.initialize_terrain ()
+function mcl_levelgen.initialize_terrain (dim)
+	if dim then
+		dim.terrain = mcl_levelgen.make_terrain_generator (dim.preset,
+								   chunksize,
+								   ychunksize)
+		return
+	end
+
 	for _, dim in ipairs (dimensions_sorted) do
 		dim.terrain = mcl_levelgen.make_terrain_generator (dim.preset,
 								   chunksize,

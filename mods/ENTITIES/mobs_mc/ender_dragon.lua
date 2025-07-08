@@ -927,7 +927,6 @@ end
 ------------------------------------------------------------------------
 
 local hashpos = mcl_mobs.gwp_longhash
-local levelgen_enabled = mcl_levelgen.levelgen_enabled
 
 local function find_end_surface_position (x, z, elevation)
 	local end_min = mcl_vars.mg_end_platform_pos.y + 10
