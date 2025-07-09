@@ -377,8 +377,6 @@ local function manage_sections (dtime)
 			if not feature_placement_queue_saved then
 				feature_placement_queue_saved = true
 				save_feature_placement_queue (true)
-				storage:set_string ("mbs_journal_checkpoint",
-						    journal_checkpoint ())
 			end
 			save_section (hash, loaded_mb_sections[hash])
 		end
@@ -386,7 +384,6 @@ local function manage_sections (dtime)
 end
 
 local function save_sections ()
-	storage:set_string ("mbs_journal_checkpoint", journal_checkpoint ())
 	for hash, section in pairs (loaded_mb_sections) do
 		save_section (hash, section)
 	end
@@ -459,7 +456,6 @@ do
 
 		local data = assert (journals[sid], "Journal for section " .. sid .. " is not open")
 		local f = data[1]
-		maybe_checkpoint (data)
 		f:close ()
 		journals[sid] = nil
 
