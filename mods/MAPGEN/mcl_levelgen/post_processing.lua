@@ -22,14 +22,20 @@ local function get_generation_extents (mt_chunksize, center, limit)
 end
 
 local S = core.get_translator ("mcl_levelgen")
+local maxblock, minblock
 local mt_chunksize = mcl_levelgen.mt_chunksize
-local mt_chunk_origin = mcl_levelgen.mt_chunk_origin
-local mt_chunk_limit = mcl_levelgen.mt_chunk_limit
 local chunksize = mt_chunksize.x * 16
 local lighting_disabled = mcl_levelgen.lighting_disabled
-local maxblock, minblock = get_generation_extents (mt_chunksize,
-						   mt_chunk_origin,
-						   mt_chunk_limit)
+local server_map_save_interval
+	= (core.settings:get ("server_map_save_interval") or 5.3)
+
+do
+	local mt_chunk_origin = mcl_levelgen.mt_chunk_origin
+	local mt_chunk_limit = mcl_levelgen.mt_chunk_limit
+	maxblock, minblock = get_generation_extents (mt_chunksize,
+						     mt_chunk_origin,
+						     mt_chunk_limit)
+end
 
 --------------------------------------------------------------------------
 -- Level post-processing.
@@ -81,6 +87,10 @@ local mathmin = math.min
 local mathmax = math.max
 
 local function dbg (...)
+	-- print (string.format (...))
+end
+
+local function dbgjournal (...)
 	-- print (string.format (...))
 end
 
@@ -240,28 +250,36 @@ local function reset_loaded_section (section)
 	end
 end
 
+local open_section_journal
+
 local function load_section (sx, sz)
 	local hash = section_hash (current_namespace_id, sx, sz)
 	local section = loaded_mb_sections[hash]
 	if not loaded_mb_sections[hash] then
 		local str = storage:get_string ("mbs," .. hash)
 		if not str or str == "" then
+			dbgjournal ("Creating section %d", hash)
 			section = create_section (hash)
 			loaded_mb_sections[hash] = section
+			sections_loaded[hash] = true
 		else
 			local data = core.decompress (str, "zstd")
 			section = loadstring (data) ()
 			loaded_mb_sections[hash] = section
+			dbgjournal ("Loading section %d", hash)
 
 			-- If this is the first occasion on which the
 			-- section has been loaded in this session,
 			-- revert instances of MBS_LOCKED and
 			-- MBS_REGENERATING into MBS_PROTO_CHUNK.
 			if not sections_loaded[hash] then
+				dbgjournal ("  -> Resetting section %d", hash)
 				reset_loaded_section (section)
 				sections_loaded[hash] = true
 			end
 		end
+		section_access_times[hash] = 0
+		open_section_journal (hash)
 	end
 	return section
 end
@@ -322,40 +340,344 @@ end
 -- 				       section[section_index])
 -- end
 
+local close_section_journal
+
 local function save_section (hash, sdata)
-	loaded_mb_sections[hash] = false
+	dbgjournal ("Saving section %d", hash)
+	loaded_mb_sections[hash] = nil
 	section_access_times[hash] = nil
-	local data = "return {" .. table.concat (sdata, ",") .. "}"
-	storage:set_string ("mbs," .. hash,
-			    core.compress (data, "zstd"))
+	local str = "return {" .. table.concat (sdata, ",") .. "}"
+	local data = core.compress (str, "zstd")
+	storage:set_string ("mbs," .. hash, data)
+	close_section_journal (hash)
 end
 
--- local SECTION_EVICTION_DELAY = 120
+-- local SECTION_EVICTION_DELAY = 30
+-- local MAX_JOURNAL_SIZE = 4193404
+
+local journal_size
+local save_feature_placement_queue
+local journal_checkpoint
 
 local function manage_sections (dtime)
-	for hash, dtime in pairs (section_access_times) do
-		local t = section_access_times[hash]
+	local feature_placement_queue_saved = false
+	for hash, t in pairs (section_access_times) do
 		section_access_times[hash] = t + dtime
 
-		if t > 120 then
+		if t > 30
+		-- TODO: maintain multiple versions of a section's
+		-- journal which may become ready to be remove at
+		-- different times.
+		-- or journal_size (hash) > 4193404
+		then
+			-- Since a journal is about to be closed, save
+			-- the feature placement queue (which may hold
+			-- entries that would otherwise be restored
+			-- from the journal) to disk.
+			if not feature_placement_queue_saved then
+				feature_placement_queue_saved = true
+				save_feature_placement_queue (true)
+				storage:set_string ("mbs_journal_checkpoint",
+						    journal_checkpoint ())
+			end
 			save_section (hash, loaded_mb_sections[hash])
 		end
 	end
 end
 
 local function save_sections ()
-	for hash, _ in pairs (loaded_mb_sections) do
-		save_section (hash, loaded_mb_sections[hash])
+	storage:set_string ("mbs_journal_checkpoint", journal_checkpoint ())
+	for hash, section in pairs (loaded_mb_sections) do
+		save_section (hash, section)
 	end
 end
+mcl_levelgen.save_sections = save_sections
 
 if not mcl_levelgen.load_feature_environment then
 	core.register_globalstep (manage_sections)
 	core.register_on_shutdown (save_sections)
 end
 
-local blurb = "An existing MapBlock (%d) was reported to post_process_mapchunk: X: %d, Y: %d, Z: %d (src = %s, %s)"
-local fmt = "MapBlock %d,%d,%d (%d) was likely overwritten by the generation of the region between %s and %s"
+--------------------------------------------------------------------------
+-- MapBlock tag journaling.
+--------------------------------------------------------------------------
+
+local function hashmapblock (x, y, z)
+	return (y + 2048) * 16777216
+		+ (x + 2048) * 4096
+		+ (z + 2048)
+end
+
+mcl_levelgen.hashmapblock = hashmapblock
+
+local set_mapblock_heightmap
+
+do
+	local worldpath = core.get_worldpath ()
+	local journal_dir = worldpath .. "/journals/"
+	local journals = {}
+	local journal_generations = {}
+	local feature_placement_queue_journal = journal_dir .. "featurequeue"
+	local suppress_journaling = false
+	local last_checkpoint = nil
+	local last_checkpoint_counter = 0
+	local current_checkpoint = nil
+
+	core.mkdir (journal_dir)
+
+	function open_section_journal (sid)
+		if suppress_journaling then
+			return false
+		end
+		local f = assert (io.open (journal_dir .. sid, "a"))
+		f:setvbuf ("no") -- It's "no" rather than _IONBF apparently.
+		journals[sid] = { f, nil, }
+	end
+
+	local function maybe_checkpoint (data)
+		local f = data[1]
+		if data[2] ~= current_checkpoint then
+			assert (current_checkpoint)
+			f:write ("chk=" .. current_checkpoint .. "\n")
+			data[2] = current_checkpoint
+		end
+	end
+
+	local function deferred_deletion_cb (sid, generation)
+		-- Don't remove a journal if it has been opened again.
+		if not journals[sid]
+			and generation == journal_generations[sid] then
+			dbgjournal ("Removing journal %d", sid)
+			assert (os.remove (journal_dir .. sid))
+		end
+	end
+
+	function close_section_journal (sid)
+		if suppress_journaling then
+			return false
+		end
+
+		local data = assert (journals[sid], "Journal for section " .. sid .. " is not open")
+		local f = data[1]
+		maybe_checkpoint (data)
+		f:close ()
+		journals[sid] = nil
+
+		-- Only remove this journal once it is certain that
+		-- all the data within has been written to the mod
+		-- storage database (where it becomes the database
+		-- engine's responsibility).
+		local generation = journal_generations[sid] or 0
+		journal_generations[sid] = generation + 1
+		core.after (server_map_save_interval + 1,
+			    deferred_deletion_cb, sid,
+			    generation + 1)
+	end
+
+	function mcl_levelgen.journal_append (bx, by, bz, value)
+		if suppress_journaling then
+			return false
+		end
+
+		local sx, sz = section (bx, bz)
+		local sid = section_hash (current_namespace_id, sx, sz)
+		local ix = band (bx - 128, 0xff)
+		local iy = band (by, 0x1f)
+		local iz = band (bz - 128, 0xff)
+		local index = bor (lshift (bor (lshift (ix, 8), iz), 5), iy)
+		local data = assert (journals[sid])
+		maybe_checkpoint (data)
+		local f = data[1]
+		f:write (index .. "," .. value .. "\n")
+		section_access_times[sid] = 0
+	end
+
+	local function checkpoint_string ()
+		local time = os.time ()
+		if time == last_checkpoint then
+			last_checkpoint_counter = last_checkpoint_counter + 1
+			return time .. "," .. last_checkpoint_counter
+		else
+			last_checkpoint_counter = 1
+			last_checkpoint = time
+			return time .. "," .. last_checkpoint_counter
+		end
+	end
+
+	function mcl_levelgen.journal_checkpoint ()
+		current_checkpoint = checkpoint_string ()
+		return current_checkpoint
+	end
+
+	function journal_size (sid)
+		if suppress_journaling then
+			return 0
+		end
+
+		local f = assert (journals[sid])[1]
+		return f:seek ("cur")
+	end
+
+	local function unsection (sx, sz)
+		return lshift (sx, SSHIFT) + 128, lshift (sz, SSHIFT) + 128
+	end
+
+	local function section_unhash (id)
+		local chunk = band (id, 0x3ff)
+		return rshift (chunk, 5) - 9, band (chunk, 0x1f) - 9
+	end
+
+	local function restore_journal (sid, blocks_generated)
+		local data_namespace = rshift (sid, 10)
+		switch_to_namespace (data_namespace)
+		local file = journal_dir .. sid
+		local sx, sz = section_unhash (sid)
+		local bx, bz = unsection (sx, sz)
+		local checkpoint = storage:get_string ("mbs_journal_checkpoint")
+		local chk_a, chk_b = unpack (checkpoint:split (","))
+		chk_a = tonumber (chk_a) or 0
+		chk_b = tonumber (chk_b) or 0
+		local any = false
+		-- Restoring the journal will restore MapBlock states
+		-- but not the separately managed feature placement
+		-- queue, whose contents must be reconstructed from
+		-- the previously-persisted feature placement queue
+		-- and by reprocessing MapBlocks that were journaled
+		-- as proto-chunks.  Pains must be taken to guarantee
+		-- that the feature placement queue which is restored
+		-- contains all MapBlocks which are not currently
+		-- journaled; this is realized by saving the feature
+		-- placement queue to disk (rather than to mod
+		-- storage) whenever a section is unloaded.
+		local recovered_states, current_states = {}, {}
+		local lines_valid = {}
+		for line in io.lines (file) do
+			if line:sub (1, 4) == "chk=" then
+				local checkpoint_b = line:sub (5)
+				local chk1_a, chk1_b = unpack (checkpoint_b:split (","))
+				chk1_a = tonumber (chk1_a)
+				chk1_b = tonumber (chk1_b)
+
+				if chk1_a > chk_a or (chk1_a == chk_a and chk1_b > chk_b) then
+					break
+				end
+			else
+				insert (lines_valid, line)
+				local id, str = unpack (line:split (","))
+				local number = tonumber (id)
+				assert (number)
+				local by = band (id, 0x1f)
+				local bz = bz + band (rshift (id, 5), 0xff)
+				local bx = bx + band (rshift (id, 13), 0xff)
+				local mbhash = hashmapblock (bx, by, bz)
+				do
+					local sx_1, sz_1 = section (bx, bz)
+					assert (sx_1 == sx and sz_1 == sz)
+				end
+
+				if str:sub (1, 10) == "heightmap=" then
+					local heightmap = tonumber (str:sub (11))
+					assert (heightmap)
+					set_mapblock_heightmap (bx, bz, heightmap)
+					local blurb
+						= "[mcl_levelgen]: Heightmap is not accessible after level corruption: %d"
+					if storage:get_string ("heightmap" .. heightmap) == "" then
+						core.log ("error", string.format (blurb, heightmap))
+						set_mapblock_heightmap (bx, by, bz, 0)
+					end
+				else
+					local state = tonumber (str)
+					assert (state == MBS_PROTO_CHUNK
+						or state == MBS_GENERATED, str)
+					if not current_states[mbhash] then
+						current_states[mbhash]
+							= mapblock_state (bx, by, bz, state)
+					end
+					set_mapblock_state (bx, by, bz, state)
+					recovered_states[mbhash] = state
+				end
+			end
+		end
+		-- Remove elements from the file that are invalid.
+		local valid_lines = table.concat (lines_valid, "\n") .. "\n"
+		assert (core.safe_file_write (file, valid_lines))
+		switch_to_namespace (nil)
+
+		for hash, state in pairs (recovered_states) do
+			if current_states[hash] ~= state then
+				if state == MBS_PROTO_CHUNK or state == MBS_GENERATED then
+					local list = blocks_generated[data_namespace]
+					if not list then
+						list = {}
+						blocks_generated[data_namespace] = list
+					end
+					insert (list, hash)
+				end
+				any = true
+			end
+		end
+		return any
+	end
+
+	local function delete_journal (sid)
+		dbgjournal ("Deleting empty journal %d", sid)
+		assert (os.remove (journal_dir .. sid))
+	end
+
+	function mcl_levelgen.restore_journals (blocks_generated)
+		local journals = core.get_dir_list (journal_dir, false)
+		local any_journals = false
+		for _, journal in ipairs (journals) do
+			local sid = tonumber (journal)
+			if sid then
+				if restore_journal (sid, blocks_generated) then
+					local blurb
+						= "[mcl_levelgen]: Restored metadata of section %d from journal"
+					core.log ("action", string.format (blurb, sid))
+					any_journals = true
+				else
+					delete_journal (sid)
+				end
+			end
+		end
+
+		return any_journals
+	end
+
+	function mcl_levelgen.write_feature_placement_queue (qdata)
+		return core.safe_file_write (feature_placement_queue_journal, qdata)
+	end
+
+	function mcl_levelgen.delete_feature_placement_queue ()
+		os.remove (feature_placement_queue_journal)
+	end
+
+	function mcl_levelgen.decode_feature_placement_queue ()
+		local f, _ = io.open (feature_placement_queue_journal)
+		if f then
+			local data = f:read ("*all")
+			local str = core.decompress (data, "zstd")
+			f:close ()
+			return str
+		end
+		return nil
+	end
+
+	function mcl_levelgen.suppress_journaling (suppress)
+		if not suppress then
+			mcl_levelgen.save_sections ()
+		end
+		suppress_journaling = suppress
+	end
+end
+
+local journal_append = mcl_levelgen.journal_append
+journal_checkpoint = mcl_levelgen.journal_checkpoint
+
+--------------------------------------------------------------------------
+-- MapBlock tag initialization.
+--------------------------------------------------------------------------
+
 local save_gen_data
 local run_structure_notifications
 local attempt_feature_placement
@@ -382,6 +704,18 @@ local function post_process_mapchunk_in_dim (minp, maxp, dim)
 	assert (by >= 0 and by <= current_namespace_height - 1)
 	assert (by1 >= 0 and by1 >= by and by1 <= current_namespace_height - 1)
 
+	-- As the engine saves mod storage before the map database,
+	-- there is still a chance that the database engine will
+	-- succeed in writing mod storage prior to the map if Minetest
+	-- is aborted between the two processes in AsyncRunStep.
+	-- Happily, this should be insignificant in view of the other
+	-- circumstances where inopportune termination can cause the
+	-- journaling system to fail.
+	storage:set_string ("mbs_journal_checkpoint", journal_checkpoint ())
+
+	local fmt
+		= "MapBlock %d,%d,%d (%d) was likely overwritten by the generation of the region between %s and %s"
+
 	-- Verify that no locked or generated mapblocks have been
 	-- overwritten by overgeneration.
 	for x, y, z in ipos1 (bx, by, bz, bx1, by1, bz1) do
@@ -397,6 +731,9 @@ local function post_process_mapchunk_in_dim (minp, maxp, dim)
 		end
 	end
 
+	local blurb
+		= "An existing MapBlock (%d) was reported to post_process_mapchunk: X: %d, Y: %d, Z: %d (src = %s, %s)"
+
 	for x, y, z in ipos1 (bx, by, bz, bx1, by1, bz1) do
 		local current = mapblock_state (x, y, z)
 		-- local hash = mcl_levelgen.hashmapblock (x, y, z)
@@ -406,6 +743,7 @@ local function post_process_mapchunk_in_dim (minp, maxp, dim)
 		-- processed by this loop.
 		if current == MBS_UNKNOWN then
 			set_mapblock_state (x, y, z, MBS_PROTO_CHUNK)
+			journal_append (x, y, z, MBS_PROTO_CHUNK)
 			assert (mapblock_state (x, y, z) == MBS_PROTO_CHUNK)
 		else
 			core.log ("warning", string.format (blurb, current, x, y, z,
@@ -595,14 +933,6 @@ function mcl_levelgen.get_feature_placement_queue ()
 	return feature_placement_queue
 end
 
-local function hashmapblock (x, y, z)
-	return (y + 2048) * 16777216
-		+ (x + 2048) * 4096
-		+ (z + 2048)
-end
-
-mcl_levelgen.hashmapblock = hashmapblock
-
 local function getmapblock (x, y, z)
 	local hash = hashmapblock (x, y, z)
 	local value = mb_records[hash]
@@ -641,7 +971,7 @@ local player_block_positions = {}
 local n_player_block_positions
 
 local function dist_to_nearest_player (x, y, z)
-	local d = huge
+	local d = 4096 * 4096 * 4096
 	local n = n_player_block_positions
 	local p = player_block_positions
 	local y = y + current_namespace.y_bottom
@@ -655,7 +985,14 @@ local function dist_to_nearest_player (x, y, z)
 	return d
 end
 
+local is_initializing = false
+
 local function refresh_player_block_positions ()
+	if is_initializing then
+		player_block_positions = {}
+		n_player_block_positions = 0
+		return
+	end
 	player_block_positions = {}
 	for player in mcl_util.connected_players () do
 		local pos = mcl_util.get_nodepos (player:get_pos ())
@@ -1081,12 +1418,15 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 	dbg ("Completed MapBlock run: X: %d, Y: %d - %d, Z: %d",
 	     run.x, run.y1, run.y2, run.z)
 
+	storage:set_string ("mbs_journal_checkpoint", journal_checkpoint ())
+
 	for x, y, z in context_iterator (ipos1, run.x, run.z, run.y1, run.y2) do
 		if (x == run.x and y >= run.y1 and y <= run.y2 and z == run.z)
 			and not supplemental then
 			local state = mapblock_state (x, y, z)
 			assert (state == MBS_REGENERATING)
 			set_mapblock_state (x, y, z, MBS_GENERATED)
+			journal_append (x, y, z, MBS_GENERATED)
 			report_mbs_generation (x, y, z)
 		else
 			local state = mapblock_state (x, y, z)
@@ -1172,6 +1512,22 @@ local function resume_mapblock_run (run)
 	switch_to_namespace (nil)
 end
 
+local function mapblock_run_recoverable_p (run)
+	for x, y, z in context_iterator (ipos1, run.x, run.z, run.y1, run.y2) do
+		local state = mapblock_state (x, y, z)
+
+		if state ~= MBS_PROTO_CHUNK
+			and (state ~= MBS_GENERATED
+			     -- XXX: supplemental runs may execute twice.
+			     or (not run.supplemental
+				 and x == run.x and z == run.z
+				 and y >= run.y1 and y <= run.y2)) then
+			return false
+		end
+	end
+	return true
+end
+
 local construct_heightmaps_for_run
 local biome_data_for_run
 local structure_features_for_run
@@ -1203,6 +1559,11 @@ local function post_mapblock_run (run)
 			dbg (blurb, x, y, z, state)
 			assert (false)
 		end
+
+		-- Bump its ttl.
+		local sx, sz = section (x, z)
+		local hash = section_hash (current_namespace_id, sx, sz)
+		section_access_times[hash] = 0
 	end
 
 	local heightmap, wg_heightmap, structure_masks
@@ -1242,6 +1603,7 @@ function require_regeneration (current, x, y, z)
 		mbs_cache_min_z = z - REQUIRED_CONTEXT_XZ - 3
 		clear_mbs_cache (mbs_cache_width)
 
+		journal_append (x, y, z, MBS_PROTO_CHUNK)
 		set_mapblock_state (x, y, z, MBS_PROTO_CHUNK)
 		attempt_feature_placement (x, z)
 	end
@@ -1307,36 +1669,156 @@ end
 
 local additional_ctx_requisitions = {}
 
-local function save_feature_placement_queue ()
-	-- Cancel every run that is currently in progress by
-	-- returning it to the feature placement queue.
-	for hash, run in pairs (mb_records) do
-		if not feature_placement_queue:contains (run) then
-			-- This run must have existed
-			-- previously.  Assign it its old
-			-- priority.
-			assert (run and run.priority)
-			feature_placement_queue:enqueue (run, run.priority)
+function save_feature_placement_queue (journal_p)
+	if not journal_p then
+		-- Cancel every run that is currently in progress by
+		-- returning it to the feature placement queue.
+		for hash, run in pairs (mb_records) do
+			if not feature_placement_queue:contains (run) then
+				-- This run must have existed
+				-- previously.  Assign it its old
+				-- priority.
+				assert (run and run.priority)
+				feature_placement_queue:enqueue (run, run.priority)
+			end
 		end
+		mb_records = {}
+
+		local sdata = core.serialize (feature_placement_queue)
+		storage:set_string ("feature_placement_queue", sdata)
+
+		local sdata = core.serialize (additional_ctx_requisitions)
+		storage:set_string ("additional_ctx_requisitions", sdata)
+
+		-- At this point, the state of the level generator has
+		-- been saved to disk and any extant tasks which might
+		-- still complete should be disregarded.  Delete any
+		-- feature placement queue journal that may exist.
+		mcl_levelgen.delete_feature_placement_queue ()
+		shutdown_complete = true
+	else
+		local new_mb_records = {}
+		for _, run in pairs (mb_records) do
+			if not feature_placement_queue:contains (run) then
+				insert (new_mb_records, run)
+			end
+		end
+		local sdata = core.serialize ({
+			mb_records = new_mb_records,
+			feature_placement_queue = feature_placement_queue,
+			additional_ctx_requisitions = additional_ctx_requisitions,
+		})
+		local data = core.compress (sdata, "zstd")
+		mcl_levelgen.write_feature_placement_queue (data)
 	end
-	mb_records = {}
+end
+mcl_levelgen.save_feature_placement_queue = save_feature_placement_queue
 
-	local sdata = core.serialize (feature_placement_queue)
-	storage:set_string ("feature_placement_queue", sdata)
-
-	local sdata = core.serialize (additional_ctx_requisitions)
-	storage:set_string ("additional_ctx_requisitions", sdata)
-
-	-- At this point, the state of the level generator has
-	-- been saved to disk and any extant tasks which might
-	-- still complete should be disregarded.
-	shutdown_complete = true
+local function unhashmapblock (hash)
+	local y = floor (hash / 16777216) - 2048
+	local x = floor (hash / 4096 % 4096) - 2048
+	local z = hash % 4096 - 2048
+	return x, y, z
 end
 
 local function restore_feature_placement_queue ()
-	local sdata = storage:get_string ("feature_placement_queue")
-	if sdata ~= nil and sdata ~= "" then
-		local queue = core.deserialize (sdata)
+	local blocks_generated = {}
+	mcl_levelgen.suppress_journaling (true)
+	is_initializing = true
+
+	local str = mcl_levelgen.decode_feature_placement_queue ()
+	local tbl = nil
+	if str then
+		tbl = core.deserialize (str)
+		setmetatable (tbl.feature_placement_queue,
+			      mcl_levelgen.mintree_meta)
+		for _, run in ipairs (tbl.mb_records) do
+			tbl.feature_placement_queue:enqueue (run, run.priority)
+		end
+		additional_ctx_requisitions = tbl.additional_ctx_requisitions
+	end
+
+	if mcl_levelgen.restore_journals (blocks_generated) then
+		refresh_player_block_positions ()
+		-- The feature placement queue must be restored from
+		-- journaled data rather than mod storage.  Moreover,
+		-- modifications that are journaled may not be
+		-- reflected in the feature placement queue, and hence
+		-- protochunks and generated chunks whose state is
+		-- restored from the journal must also be
+		-- re-evaluated.
+
+		for namespace, list in pairs (blocks_generated) do
+			local rows_checked_proto = {}
+			local rows_checked_generated = {}
+			switch_to_namespace (namespace)
+			for _, block in ipairs (list) do
+				local x, y, z = unhashmapblock (block)
+				-- print (x, y, z)
+				local row = (x + 2048) * 4096 + z + 2048
+				local state = mapblock_state (x, y, z)
+				-- A new protochunk should be subject
+				-- to a feature placement attempt,
+				-- while a transition to a generated
+				-- state should see mapblocks in the
+				-- vicinity evaluated.
+				if state == MBS_PROTO_CHUNK and not rows_checked_proto[row] then
+					mbs_cache_min_x = x - REQUIRED_CONTEXT_XZ - 3
+					mbs_cache_min_y = 0
+					mbs_cache_min_z = z - REQUIRED_CONTEXT_XZ - 3
+					clear_mbs_cache (mbs_cache_width)
+					rows_checked_proto[row] = true
+					attempt_feature_placement (x, z)
+				elseif state == MBS_GENERATED and not rows_checked_generated[row] then
+					rows_checked_generated[row] = true
+					schedule_regeneration_for_unlock (x, z)
+				end
+			end
+			switch_to_namespace (nil)
+		end
+
+		-- Only items in the queue that were not locked by the
+		-- preceding loop should be restored.
+		if tbl then
+			local queue = tbl.feature_placement_queue
+			for _, item in ipairs (queue) do
+				for i = 1, queue.size do
+					local run = queue.heap[i]
+					if mapblock_run_recoverable_p (run) then
+						resume_mapblock_run (run)
+						feature_placement_queue:enqueue (run, run.priority)
+					end
+				end
+			end
+		end
+		core.log ("action", string.format ("[mcl_levelgen]: Restored %d feature placement tasks",
+						   feature_placement_queue.size))
+
+		-- Commit all modifications that may have been applied
+		-- from the journal to mod storage, save the modified
+		-- feature placement queue to a journal file, and
+		-- delete the remaining journal files.
+		mcl_levelgen.save_sections ()
+		save_feature_placement_queue (true)
+	else
+		-- If there is a newer journaled feature placement
+		-- queue, restore it despite the absence of a journal,
+		-- as this feature placement queue should be newer.
+
+		local queue = tbl and tbl.feature_placement_queue
+
+		if not queue then
+			local sdata = storage:get_string ("feature_placement_queue")
+			if sdata ~= nil and sdata ~= "" then
+				queue = core.deserialize (sdata)
+			end
+
+			local sdata = storage:get_string ("additional_ctx_requisitions")
+			if sdata ~= nil and sdata ~= "" then
+				additional_ctx_requisitions = core.deserialize (sdata)
+			end
+		end
+
 		if queue then
 			setmetatable (queue, mcl_levelgen.mintree_meta)
 
@@ -1352,10 +1834,8 @@ local function restore_feature_placement_queue ()
 		end
 	end
 
-	local sdata = storage:get_string ("additional_ctx_requisitions")
-	if sdata ~= nil and sdata ~= "" then
+	if additional_ctx_requisitions then
 		local n = 0
-		local additional_ctx_requisitions = core.deserialize (sdata)
 		for k, req in pairs (additional_ctx_requisitions) do
 			switch_to_namespace (req.data_namespace)
 			v1.x = (req.x - REQUIRED_CONTEXT_XZ - 1) * 16
@@ -1377,11 +1857,15 @@ local function restore_feature_placement_queue ()
 			core.log ("action", string.format (blurb, n))
 		end
 	end
+	is_initializing = false
+	mcl_levelgen.suppress_journaling (false)
 end
 
 if not mcl_levelgen.load_feature_environment then
 	core.register_globalstep (schedule_regeneration)
-	core.register_on_shutdown (save_feature_placement_queue)
+	core.register_on_shutdown (function ()
+		save_feature_placement_queue (false)
+	end)
 	core.register_on_mods_loaded (restore_feature_placement_queue)
 end
 
@@ -1574,7 +2058,7 @@ local function mapblock_heightmap (x, z, worldgen)
 	end
 end
 
-local function set_mapblock_heightmap (x, z, id)
+function set_mapblock_heightmap (x, z, id)
 	local w1 = lshift (band (id, 0xf), 3)
 	local w2 = lshift (band (rshift (id, 4), 0xf), 3)
 	local w3 = lshift (band (rshift (id, 8), 0xf), 3)
@@ -1726,6 +2210,8 @@ function save_gen_data (bx, bx1, by, by1, bz, bz1, chunksize)
 						structure_masks = structure_masks,
 					}
 					heightmap_ttl[id] = HEIGHTMAP_TTL
+					storage:set_string ("mbs_journal_checkpoint",
+							    journal_checkpoint ())
 					write_heightmap (id + 1, bx, by, bz, chunksize, data_wg, nil)
 					loaded_heightmaps[id + 1] = {
 						x = bx,
@@ -1736,6 +2222,7 @@ function save_gen_data (bx, bx1, by, by1, bz, bz1, chunksize)
 					}
 					heightmap_ttl[id + 1] = HEIGHTMAP_TTL
 				end
+				journal_append (x, 0, z, "heightmap=" .. id)
 				set_mapblock_heightmap (x, z, id)
 			elseif structuremask
 				and indexof (assigned, heightmap) == -1 then
