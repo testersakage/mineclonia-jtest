@@ -213,7 +213,7 @@ end
 core.register_privilege ("no_regional_difficulty", {
 	description = "Exempt players from increasing the regional difficulty of chunks they inhabit",
 	give_to_singleplayer = false,
-	give_to_admin = true,
+	give_to_admin = false,
 })
 
 ------------------------------------------------------------------------
