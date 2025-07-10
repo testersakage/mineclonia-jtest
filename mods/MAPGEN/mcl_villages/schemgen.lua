@@ -504,7 +504,7 @@ local village_cartographer = {
 			weight = 15,
 		},
 		{
-			itemstring = mcl_compass.stereotype,
+			itemstring = "mcl_compass:compass",
 			weight = 5,
 		},
 		{
