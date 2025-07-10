@@ -3,21 +3,22 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_crafting_table x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-07-10 08:34+0000\n"
+"Last-Translator: bright <bright@noreply.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_crafting_table/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 msgid "Crafting"
 msgstr "制作"
 
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 
 msgid "Recipe book"
 msgstr "配方书"
@@ -36,4 +37,3 @@ msgstr "工作台是一种方块，能让你使用一个3×3的合成方格，�
 
 msgid "Rightclick the crafting table to access the 3×3 crafting grid."
 msgstr "右键点击工作台以打开3×3的合成方格。"
-
