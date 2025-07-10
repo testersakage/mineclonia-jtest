@@ -467,13 +467,12 @@ end
 local function place_belltower (piece, rng, x1, z1, x2, z2)
 	local start = current_structure_start ()
 	local spawn = start.bell_spawn
+	local x = floor (spawn[1] + 0.5)
+	local z = floor (spawn[3] + 0.5)
 	if spawn and piece == spawn[4]
-		and spawn[1] >= x1
-		and spawn[1] <= x2
-		and spawn[3] >= z1
-		and spawn[3] <= z2 then
+		and x >= x1 and x <= x2	and z >= z1 and z <= z2 then
 		notify_generated ("mcl_villages:spawn_iron_golem",
-				  spawn[1], spawn[2], spawn[3], {
+				  x, floor (spawn[2] + 0.5), z, {
 			spawn[1], spawn[2], spawn[3],
 		})
 		return
