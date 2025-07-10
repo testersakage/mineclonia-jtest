@@ -364,12 +364,7 @@ local function manage_sections (dtime)
 	for hash, t in pairs (section_access_times) do
 		section_access_times[hash] = t + dtime
 
-		if t > 30
-		-- TODO: maintain multiple versions of a section's
-		-- journal which may become ready to be remove at
-		-- different times.
-		-- or journal_size (hash) > 4193404
-		then
+		if t > 30 or journal_size (hash) > 4193404 then
 			-- Since a journal is about to be closed, save
 			-- the feature placement queue (which may hold
 			-- entries that would otherwise be restored
@@ -398,6 +393,8 @@ end
 --------------------------------------------------------------------------
 -- MapBlock tag journaling.
 --------------------------------------------------------------------------
+
+local huge = math.huge
 
 local function hashmapblock (x, y, z)
 	return (y + 2048) * 16777216
@@ -441,12 +438,9 @@ do
 	end
 
 	local function deferred_deletion_cb (sid, generation)
-		-- Don't remove a journal if it has been opened again.
-		if not journals[sid]
-			and generation == journal_generations[sid] then
-			dbgjournal ("Removing journal %d", sid)
-			assert (os.remove (journal_dir .. sid))
-		end
+		dbgjournal ("Removing journal %d_%d", sid, generation)
+		assert (os.remove (string.format ("%s%d_%d", journal_dir,
+						  sid, generation)))
 	end
 
 	function close_section_journal (sid)
@@ -459,15 +453,17 @@ do
 		f:close ()
 		journals[sid] = nil
 
-		-- Only remove this journal once it is certain that
-		-- all the data within has been written to the mod
-		-- storage database (where it becomes the database
-		-- engine's responsibility).
+		-- Assign a version number to the contents of this
+		-- journal and delete it once it is no longer
+		-- required.
 		local generation = journal_generations[sid] or 0
-		journal_generations[sid] = generation + 1
+		assert (os.rename (journal_dir .. sid,
+				   string.format ("%s%d_%d", journal_dir,
+						  sid, generation)))
+		dbgjournal ("  %d -> %d_%d", sid, sid, generation)
+		journal_generations[sid] = (generation + 1) % 0x100000000
 		core.after (server_map_save_interval + 1,
-			    deferred_deletion_cb, sid,
-			    generation + 1)
+			    deferred_deletion_cb, sid, generation)
 	end
 
 	function mcl_levelgen.journal_append (bx, by, bz, value)
@@ -523,17 +519,19 @@ do
 		return rshift (chunk, 5) - 9, band (chunk, 0x1f) - 9
 	end
 
-	local function restore_journal (sid, blocks_generated)
+	local function restore_journal (sid, generation, current_states)
 		local data_namespace = rshift (sid, 10)
 		switch_to_namespace (data_namespace)
-		local file = journal_dir .. sid
+		local file = generation
+			and string.format ("%s%d_%d", journal_dir,
+					   sid, generation)
+			or journal_dir .. sid
 		local sx, sz = section_unhash (sid)
 		local bx, bz = unsection (sx, sz)
 		local checkpoint = storage:get_string ("mbs_journal_checkpoint")
 		local chk_a, chk_b = unpack (checkpoint:split (","))
 		chk_a = tonumber (chk_a) or 0
 		chk_b = tonumber (chk_b) or 0
-		local any = false
 		-- Restoring the journal will restore MapBlock states
 		-- but not the separately managed feature placement
 		-- queue, whose contents must be reconstructed from
@@ -545,7 +543,7 @@ do
 		-- journaled; this is realized by saving the feature
 		-- placement queue to disk (rather than to mod
 		-- storage) whenever a section is unloaded.
-		local recovered_states, current_states = {}, {}
+		local recovered_states = {}
 		local lines_valid = {}
 		for line in io.lines (file) do
 			if line:sub (1, 4) == "chk=" then
@@ -557,11 +555,11 @@ do
 				if chk1_a > chk_a or (chk1_a == chk_a and chk1_b > chk_b) then
 					break
 				end
-			else
+			elseif #line > 0 then
 				insert (lines_valid, line)
 				local id, str = unpack (line:split (","))
 				local number = tonumber (id)
-				assert (number)
+				assert (number, line)
 				local by = band (id, 0x1f)
 				local bz = bz + band (rshift (id, 5), 0xff)
 				local bx = bx + band (rshift (id, 13), 0xff)
@@ -598,42 +596,153 @@ do
 		local valid_lines = table.concat (lines_valid, "\n") .. "\n"
 		assert (core.safe_file_write (file, valid_lines))
 		switch_to_namespace (nil)
-
-		for hash, state in pairs (recovered_states) do
-			if current_states[hash] ~= state then
-				if state == MBS_PROTO_CHUNK or state == MBS_GENERATED then
-					local list = blocks_generated[data_namespace]
-					if not list then
-						list = {}
-						blocks_generated[data_namespace] = list
-					end
-					insert (list, hash)
-				end
-				any = true
-			end
-		end
-		return any
+		return recovered_states
 	end
 
-	local function delete_journal (sid)
-		dbgjournal ("Deleting empty journal %d", sid)
-		assert (os.remove (journal_dir .. sid))
+	local function delete_journal (sid, generation)
+		if not generation then
+			dbgjournal ("Deleting empty journal %d", sid)
+			assert (os.remove (journal_dir .. sid))
+		else
+			dbgjournal ("Deleting empty journal %d_%d", sid, generation)
+			assert (os.remove (string.format ("%s%d_%d", journal_dir,
+							  sid, generation)))
+		end
+	end
+
+	local function parse_journal_name (sid)
+		local sid_1, generation = sid:match ("(%d+)_(%d+)")
+		if sid_1 and generation then
+			return tonumber (sid_1), tonumber (generation)
+		end
+		return tonumber (sid), nil
+	end
+
+	local function sort_by_sid_then_generation (a, b)
+		if a[2] < b[2] then
+			return true
+		elseif a[2] > b[2] then
+			return false
+		else
+			return (a[3] or huge) < (b[3] or huge)
+		end
 	end
 
 	function mcl_levelgen.restore_journals (blocks_generated)
 		local journals = core.get_dir_list (journal_dir, false)
 		local any_journals = false
+		local to_load = {}
 		for _, journal in ipairs (journals) do
-			local sid = tonumber (journal)
+			local sid, generation = parse_journal_name (journal)
 			if sid then
-				if restore_journal (sid, blocks_generated) then
-					local blurb
-						= "[mcl_levelgen]: Restored metadata of section %d from journal"
-					core.log ("action", string.format (blurb, sid))
-					any_journals = true
-				else
-					delete_journal (sid)
+				insert (to_load, { journal, sid, generation, })
+			end
+		end
+
+		table.sort (to_load, sort_by_sid_then_generation)
+
+		local lastsid, recovered_states, current_states = nil, {}, {}
+		for i = 1, #to_load + 1 do
+			local journal_table = to_load[i]
+
+			-- At the end of the list or switching to a
+			-- different set of journals?
+			if lastsid and (not journal_table
+					or journal_table[2] ~= lastsid) then
+				local sid = lastsid
+				-- Versions of the same journal must
+				-- be considered as a single unit.
+				local seen = {}
+				local data_namespace = rshift (sid, 10)
+				local list = blocks_generated[data_namespace]
+				if not list then
+					list = {}
+					blocks_generated[data_namespace] = list
 				end
+
+				-- Only consider the recentest journal
+				-- to have affected any provided
+				-- mapblock.
+				local any_restored = false
+				for j = #recovered_states, 1, -1 do
+					local tbl = recovered_states[j]
+					local recoveries = tbl[2]
+					local generation = tbl[1] >= 0 and tbl[1] or nil
+					local any = false
+
+					for hash, state in pairs (recoveries) do
+						if not seen[hash] or seen[hash] == generation then
+							seen[hash] = generation
+							if current_states[hash] ~= state then
+								if state == MBS_PROTO_CHUNK
+									or state == MBS_GENERATED then
+									insert (list, hash)
+									any = true
+								end
+							end
+						end
+					end
+
+					-- This journal yielded no values.
+					if not any then
+						delete_journal (sid, generation)
+					else
+						any_restored = true
+						if not generation then
+							generation = journal_generations[sid] or 0
+							journal_generations[sid] = generation + 1
+							assert (os.rename (journal_dir .. sid,
+									   string.format ("%s%d_%d", journal_dir,
+											  sid, generation)))
+							dbgjournal ("  %d -> %d_%d", sid, sid, generation)
+						end
+
+						-- Delete this version
+						-- after the next
+						-- `server_map_save_interval'.
+						dbgjournal ("Deferring deletion of journal %d_%d",
+							    sid, generation)
+						core.after (server_map_save_interval + 1,
+							    deferred_deletion_cb,
+							    sid,
+							    generation)
+					end
+				end
+
+				recovered_states = {}
+				current_states = {}
+
+				if any_restored then
+					local blurb = "[mcl_levelgen]: Restored section %d's metadata from %d journal(s)"
+					core.log ("action", string.format (blurb, sid, #to_load))
+					any_journals = true
+				end
+			end
+
+			if journal_table then
+				local sid = journal_table[2]
+				local generation = journal_table[3]
+				lastsid = sid
+				if generation then
+					dbgjournal ("Loading journal %d_%d", sid, generation)
+				else
+					dbgjournal ("Loading journal %d", sid)
+				end
+
+				-- Update the monotonically
+				-- incrementing generation ID counter.
+				if generation then
+					local gen_max = journal_generations[sid] or 0
+					journal_generations[sid] = mathmax (gen_max,
+									    generation + 1)
+				end
+
+				local local_recovered_states
+					= restore_journal (sid, generation, current_states)
+				insert (recovered_states, {
+					generation or -1,
+					local_recovered_states,
+				})
 			end
 		end
 
@@ -824,7 +933,7 @@ local function shift_down (self, node, idx)
 		local leftnode = heap[left]
 		local rightnode = heap[right]
 		local lp, rp = leftnode.priority
-		rp = rightnode and rightnode.priority or math.huge
+		rp = rightnode and rightnode.priority or huge
 
 		if lp < rp then
 			if lp >= priority then
@@ -942,7 +1051,6 @@ end
 
 local REQUIRED_CONTEXT_Y = mcl_levelgen.REQUIRED_CONTEXT_Y
 local REQUIRED_CONTEXT_XZ = mcl_levelgen.REQUIRED_CONTEXT_XZ
-local huge = math.huge
 
 -- XXX: `compare_block_status' is surprisingly expensive; therefore
 -- the criteria applied in deciding whether to skip a mapblock is
