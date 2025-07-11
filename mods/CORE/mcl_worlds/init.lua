@@ -157,7 +157,7 @@ function mcl_worlds.get_cloud_parameters()
 	elseif mg_name == "singlenode" then
 		-- mcl_levelgen enabled.  Layer 197.
 		return {
-			height = 261,
+			height = 133,
 			speed = {x=-2, z=0},
 			thickness = 4,
 			color = "#FFF0FEF",
