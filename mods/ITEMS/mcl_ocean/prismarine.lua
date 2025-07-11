@@ -7,6 +7,7 @@ core.register_node("mcl_ocean:sea_lantern", {
 	_doc_items_longdesc = S("Sea lanterns are decorative light sources which look great underwater but can be placed anywhere."),
 	paramtype2 = "facedir",
 	is_ground_content = false,
+	paramtype = "light",
 	light_source = core.LIGHT_MAX,
 	drop = {
 		max_items = 1,
