@@ -22,14 +22,14 @@ msgstr "Скрытое достижение разблокировано: @1"
 msgid "Advancement Unlocked: @1"
 msgstr "Разблокировано достижение: @1"
 
-msgid "Hidden Advancement Made!"
-msgstr "Получено скрытое достижение!"
+msgid "Hidden Advancement Unlocked!"
+msgstr ""
 
-msgid "Goal Completed!"
-msgstr "Цель выполнена!"
+msgid "Goal Reached!"
+msgstr ""
 
-msgid "Challenge Completed!"
-msgstr "Испытание выполнено!"
+msgid "Challenge Complete!"
+msgstr ""
 
 msgid "Advancement Made!"
 msgstr "Получено достижение!"

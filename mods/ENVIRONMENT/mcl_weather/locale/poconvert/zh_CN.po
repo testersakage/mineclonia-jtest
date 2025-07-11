@@ -31,8 +31,8 @@ msgstr "错误：参数无效。"
 msgid "Error: Duration can't be less than 1 second."
 msgstr "错误：持续时间不能少于1秒。"
 
-msgid "Error: Invalid weather specified. Use “clear”, “rain”, “snow” or “thunder”."
-msgstr "错误：指定的天气无效。请使用 “晴朗”“下雨”“下雪” 或 “打雷”。"
+msgid "Error: Invalid weather specified. Use “clear”, “rain”, or “thunder”."
+msgstr ""
 
 msgid "Toggles between clear weather and weather with downfall (randomly rain, thunderstorm or snow)"
 msgstr "在晴朗天气和有降水（随机为降雨、雷暴或降雪）的天气之间切换"

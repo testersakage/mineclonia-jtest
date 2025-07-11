@@ -2,9 +2,9 @@
 @1 has made the advancement @2=@1 concluiu a conquista @2
 Hidden Advancement Unlocked: @1=Conquista Oculta Desbloqueada: @1
 Advancement Unlocked: @1=Conquista Desbloqueada: @1
-Hidden Advancement Made!=Conquista Oculta Concluída!
-Goal Completed!=Objetivo Concluído!
-Challenge Completed!=Desafio Concluído!
+Hidden Advancement Unlocked!=
+Goal Reached!=
+Challenge Complete!=
 Advancement Made!=Conquista Concluída!
 [c|clear|disable|enable]=[c|limpar|desabilitar|habilitar]
 Show, clear, disable or enable your advancements=Mostrar, limpar, desabilitar ou habilitar suas conquistas

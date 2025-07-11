@@ -22,14 +22,14 @@ msgstr "Dolt framsteg upplåst: @1"
 msgid "Advancement Unlocked: @1"
 msgstr "Framsteg upplåst: @1"
 
-msgid "Hidden Advancement Made!"
-msgstr "Dolt framsteg utfört!"
+msgid "Hidden Advancement Unlocked!"
+msgstr ""
 
-msgid "Goal Completed!"
-msgstr "Mål avklarat!"
+msgid "Goal Reached!"
+msgstr ""
 
-msgid "Challenge Completed!"
-msgstr "Utmaning avklarad!"
+msgid "Challenge Complete!"
+msgstr ""
 
 msgid "Advancement Made!"
 msgstr "Framsteg avklarat!"

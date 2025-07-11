@@ -31,8 +31,8 @@ msgstr "Fehler: Ungültige Parameter."
 msgid "Error: Duration can't be less than 1 second."
 msgstr "Fehler: Dauer darf nicht weniger als 1 Sekunde sein."
 
-msgid "Error: Invalid weather specified. Use “clear”, “rain”, “snow” or “thunder”."
-msgstr "Fehler. Ungültiges Wetter. Benutzen Sie „clear“ (klar), „rain“ (Regen), „snow“ (Schnee) oder „thunder“ (Gewittersturm)."
+msgid "Error: Invalid weather specified. Use “clear”, “rain”, or “thunder”."
+msgstr ""
 
 msgid "Toggles between clear weather and weather with downfall (randomly rain, thunderstorm or snow)"
 msgstr "Wechselt das Wetter zwischem klaren Wetter und Wetter mit Niederschlag (zufällig Regen, Gewittersturm oder Schnee)"

@@ -1,6 +1,6 @@
 # textdomain: mcl_hoppers
 Hopper=漏斗
-Inventory=背包
+Inventory=库存
 5 inventory slots=5个物品栏位
 Collects items from above, moves items to container below=从上方收集物品，将物品转移至下方的容器中
 Can be disabled with redstone power=可通过红石能量禁用

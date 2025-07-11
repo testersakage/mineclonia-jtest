@@ -1,6 +1,6 @@
 # textdomain: mcl_chests
 Chest=箱子
-Inventory=背包
+Inventory=库存
 Large Chest=大型箱子
 To access its inventory, rightclick it. When broken, the items will drop out.=要打开它的物品栏，右键点击它就行。当它被破坏时，里面的物品会掉落出来。
 Chests are containers which provide 27 inventory slots. Chests can be turned into large chests with double the capacity by placing two chests next to each other.=箱子是能提供27个物品栏格子的容器。通过将两个箱子彼此相邻放置，箱子可以变成容量翻倍的大箱子。

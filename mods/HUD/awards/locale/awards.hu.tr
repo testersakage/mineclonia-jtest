@@ -2,9 +2,9 @@
 @1 has made the advancement @2=
 Hidden Advancement Unlocked: @1=
 Advancement Unlocked: @1=
-Hidden Advancement Made!=
-Goal Completed!=Cél elérve!
-Challenge Completed!=Küldetés teljesítve!
+Hidden Advancement Unlocked!=
+Goal Reached!=
+Challenge Complete!=
 Advancement Made!=Mérföldkő teljesítve!
 [c|clear|disable|enable]=[c (mutat)|clear (töröl)|disable (kikapcs)|enable (bekapcs)]
 Show, clear, disable or enable your advancements=

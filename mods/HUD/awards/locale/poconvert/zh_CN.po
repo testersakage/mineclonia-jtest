@@ -22,14 +22,14 @@ msgstr "解锁的隐藏进度：@1"
 msgid "Advancement Unlocked: @1"
 msgstr "进度已解锁：@1"
 
-msgid "Hidden Advancement Made!"
-msgstr "已完成隐藏进度！"
+msgid "Hidden Advancement Unlocked!"
+msgstr ""
 
-msgid "Goal Completed!"
-msgstr "达成目标！"
+msgid "Goal Reached!"
+msgstr ""
 
-msgid "Challenge Completed!"
-msgstr "完成挑战！"
+msgid "Challenge Complete!"
+msgstr ""
 
 msgid "Advancement Made!"
 msgstr "完成进度！"

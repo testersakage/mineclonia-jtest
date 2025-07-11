@@ -1,6 +1,6 @@
 # textdomain: mcl_dispensers
 Dispenser=发射器
-Inventory=背包
+Inventory=库存
 9 inventory slots=9个物品栏位
 Launches item when powered by redstone power=在由红石能量驱动时发射物品
 A dispenser is a block which acts as a redstone component which, when powered with redstone power, dispenses an item. It has a container with 9 inventory slots.=发射器是一种作为红石元件的方块，当有红石能量驱动时，它会发射出一个物品。它带有一个有9个物品栏位的容器。

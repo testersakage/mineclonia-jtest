@@ -22,14 +22,14 @@ msgstr "Pencapaian Tersembunyi Terbuka: @1"
 msgid "Advancement Unlocked: @1"
 msgstr "Pencapaian Terbuka: @1"
 
-msgid "Hidden Advancement Made!"
-msgstr "Pencapaian Tersembunyi Didapat!"
+msgid "Hidden Advancement Unlocked!"
+msgstr ""
 
-msgid "Goal Completed!"
-msgstr "Tujuan Selesai!"
+msgid "Goal Reached!"
+msgstr ""
 
-msgid "Challenge Completed!"
-msgstr "Tantangan Selesai!"
+msgid "Challenge Complete!"
+msgstr ""
 
 msgid "Advancement Made!"
 msgstr "Pencapaian Telah Dibuat!"

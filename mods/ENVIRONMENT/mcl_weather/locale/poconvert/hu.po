@@ -31,8 +31,8 @@ msgstr "Hiba: érvénytelen paraméter."
 msgid "Error: Duration can't be less than 1 second."
 msgstr "Hiba: az időtartam nem lehet 1 másodpercnél rövidebb."
 
-msgid "Error: Invalid weather specified. Use “clear”, “rain”, “snow” or “thunder”."
-msgstr "Hiba: ismeretlen időjárás. Ezeket használhatod: \"clear\" (tiszta), \"rain\" (eső), \"snow\" (havazás), \"thunder\" (vihar)."
+msgid "Error: Invalid weather specified. Use “clear”, “rain”, or “thunder”."
+msgstr ""
 
 msgid "Toggles between clear weather and weather with downfall (randomly rain, thunderstorm or snow)"
 msgstr "Váltogat a tiszta idő és a csapadék között (véletlenszerűen eső, vihar vagy hó)"

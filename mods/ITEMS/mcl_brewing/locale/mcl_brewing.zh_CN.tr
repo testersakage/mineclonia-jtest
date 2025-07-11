@@ -1,6 +1,6 @@
 # textdomain: mcl_brewing
 Brewing Stand=酿造台
-Inventory=背包
+Inventory=库存
 To use a brewing stand, rightclick it.=要使用酿造台，右键点击它就行。
 To brew, you need blaze powder as fuel, a brewing material and at least 1 glass bottle filled with a liquid.=要进行酿造，你需要烈焰粉作为燃料、一种酿造材料以及至少1个装满液体的玻璃瓶。
 Place the blaze powder in the left slot, the brewing material in the middle slot and 1-3 bottles in the remaining slots.=把烈焰粉放在左边的槽位里，将酿造材料放在中间的槽位里，把1到3个瓶子放在剩下的槽位中。

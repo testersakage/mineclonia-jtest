@@ -2,9 +2,9 @@
 @1 has made the advancement @2=@1 telah membuat pencapaian @2
 Hidden Advancement Unlocked: @1=Pencapaian Tersembunyi Terbuka: @1
 Advancement Unlocked: @1=Pencapaian Terbuka: @1
-Hidden Advancement Made!=Pencapaian Tersembunyi Didapat!
-Goal Completed!=Tujuan Selesai!
-Challenge Completed!=Tantangan Selesai!
+Hidden Advancement Unlocked!=
+Goal Reached!=
+Challenge Complete!=
 Advancement Made!=Pencapaian Telah Dibuat!
 [c|clear|disable|enable]=[c|clear (Hapus)|disable (Nonaktifkan)|enable (Aktifkan)]
 Show, clear, disable or enable your advancements=Tampilkan, bersihkan, matikan atau nyalakan pencapaianmu

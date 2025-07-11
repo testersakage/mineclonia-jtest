@@ -22,14 +22,14 @@ msgstr "Conquista Oculta Desbloqueada: @1"
 msgid "Advancement Unlocked: @1"
 msgstr "Conquista Desbloqueada: @1"
 
-msgid "Hidden Advancement Made!"
-msgstr "Conquista Oculta Concluída!"
+msgid "Hidden Advancement Unlocked!"
+msgstr ""
 
-msgid "Goal Completed!"
-msgstr "Objetivo Concluído!"
+msgid "Goal Reached!"
+msgstr ""
 
-msgid "Challenge Completed!"
-msgstr "Desafio Concluído!"
+msgid "Challenge Complete!"
+msgstr ""
 
 msgid "Advancement Made!"
 msgstr "Conquista Concluída!"

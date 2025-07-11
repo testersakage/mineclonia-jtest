@@ -22,14 +22,14 @@ msgstr ""
 msgid "Advancement Unlocked: @1"
 msgstr ""
 
-msgid "Hidden Advancement Made!"
+msgid "Hidden Advancement Unlocked!"
 msgstr ""
 
-msgid "Goal Completed!"
-msgstr "Cél elérve!"
+msgid "Goal Reached!"
+msgstr ""
 
-msgid "Challenge Completed!"
-msgstr "Küldetés teljesítve!"
+msgid "Challenge Complete!"
+msgstr ""
 
 msgid "Advancement Made!"
 msgstr "Mérföldkő teljesítve!"

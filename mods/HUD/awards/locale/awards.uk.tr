@@ -2,9 +2,9 @@
 @1 has made the advancement @2=@1 отримав досягнення @2
 Hidden Advancement Unlocked: @1=Приховане Досягнення Розблоковано: @1
 Advancement Unlocked: @1=Досягнення Розблоковано: @1
-Hidden Advancement Made!=Приховане Досягнення Отримано!
-Goal Completed!=Мету Виконано!
-Challenge Completed!=Випробування Пройдено!
+Hidden Advancement Unlocked!=
+Goal Reached!=
+Challenge Complete!=
 Advancement Made!=Досягнення Отримано!
 [c|clear|disable|enable]=[c|clear|disable|enable]
 Show, clear, disable or enable your advancements=Показати, очистити, вимкнути або увімкнути досягнення

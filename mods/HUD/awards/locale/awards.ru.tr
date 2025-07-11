@@ -2,9 +2,9 @@
 @1 has made the advancement @2=@1 получил(а) достижение «@2»
 Hidden Advancement Unlocked: @1=Скрытое достижение разблокировано: @1
 Advancement Unlocked: @1=Разблокировано достижение: @1
-Hidden Advancement Made!=Получено скрытое достижение!
-Goal Completed!=Цель выполнена!
-Challenge Completed!=Испытание выполнено!
+Hidden Advancement Unlocked!=
+Goal Reached!=
+Challenge Complete!=
 Advancement Made!=Получено достижение!
 [c|clear|disable|enable]=[c|clear — очистить|disable — отключить|enable — включить]
 Show, clear, disable or enable your advancements=Показать, очистить, отключить или включить ваши достижения

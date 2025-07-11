@@ -31,8 +31,8 @@ msgstr "Fejl: Ugyldige parametre."
 msgid "Error: Duration can't be less than 1 second."
 msgstr "Fejl: Vargihed kan ikke være under 1 sekund."
 
-msgid "Error: Invalid weather specified. Use “clear”, “rain”, “snow” or “thunder”."
-msgstr "Fejl: Ugyldigt vejr angivet. Brug \"clear\",\"rain\",\"snow\" eller \"thunder\"."
+msgid "Error: Invalid weather specified. Use “clear”, “rain”, or “thunder”."
+msgstr ""
 
 msgid "Toggles between clear weather and weather with downfall (randomly rain, thunderstorm or snow)"
 msgstr "Skifter mellem klart vejr og vejr med nedbør (tilfældigt enten regn, tordenstorm eller sne)"
