@@ -3626,14 +3626,14 @@ end
 
 function villager:claim_home (home)
 	if mcl_villages.insert_poi (home, BED_POI) then
-		self._home = home
+		self._home = vector.copy (home)
 		return true
 	end
 end
 
 function villager:claim_bell (bell)
 	if acquire_bell (bell) then
-		self._bell = bell
+		self._bell = vector.copy (bell)
 		return true
 	end
 end
