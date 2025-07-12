@@ -857,16 +857,37 @@ function mcl_biome_dispatch.get_stronghold_positions ()
 	return shrine.static_pos
 end
 
-local function locate_structure (taskinfo)
+local function locate_structure_or_biome (taskinfo)
 	local dim = mcl_levelgen.get_dimension (taskinfo.dim)
 	assert (dim)
 	mcl_levelgen.initialize_terrain (dim)
-	local x, y, z
-		= mcl_levelgen.locate_structure_placement (dim.terrain, taskinfo.x,
-							   taskinfo.y, taskinfo.z,
-							   taskinfo.sid,
-							   taskinfo.range)
-	return x, y, z
+	if taskinfo.sid then
+		local x, y, z
+			= mcl_levelgen.locate_structure_placement (dim.terrain, taskinfo.x,
+								   taskinfo.y, taskinfo.z,
+								   taskinfo.sid,
+								   taskinfo.range)
+		return x, y, z
+	else
+		assert (taskinfo.biome_tags)
+		local ok, list, _
+			= pcall (mcl_levelgen.build_biome_list, taskinfo.biome_tags)
+		if ok and #list >= 1 then
+			local predicate = mcl_levelgen.make_biome_test (list)
+			local x, y, z
+				= mcl_levelgen.locate_biome_spirally (dim.preset,
+								      taskinfo.x,
+								      taskinfo.y,
+								      taskinfo.z,
+								      taskinfo.range,
+								      taskinfo.hres,
+								      taskinfo.vres,
+								      predicate, nil)
+			return x, y, z
+		else
+			return nil, nil, nil
+		end
+	end
 end
 
 local pending_locate_tasks = {}
@@ -881,7 +902,7 @@ local function dispatch_locate_task (taskinfo)
 	taskinfo.cb_data = nil
 	-- Owch!!!  Interested parties should investigate eliminating
 	-- this closure.
-	core.handle_async (locate_structure, function (x, y, z)
+	core.handle_async (locate_structure_or_biome, function (x, y, z)
 		if x then
 			local v = vector.new (x, y - dim.y_offset, -z - 1)
 			callback (v, cb_data)
@@ -913,11 +934,51 @@ function mcl_biome_dispatch.locate_structure_near (pos, sid, range_chebyshev, ca
 		callback (nil, cb_data)
 	else
 		local taskinfo = {
-			x = x,
-			y = y,
-			z = z,
+			x = floor (x + 0.5),
+			y = floor (y + 0.5),
+			z = floor (z + 0.5),
 			range = range_chebyshev,
 			sid = sid,
+			dim = dim.id,
+			callback = callback,
+			cb_data = cb_data,
+		}
+		if not outstanding_locate_task then
+			dispatch_locate_task (taskinfo)
+			outstanding_locate_task = true
+		else
+			taskinfo.callback = callback
+			taskinfo.cb_data = cb_data
+			insert (pending_locate_tasks, taskinfo)
+		end
+	end
+end
+
+function mcl_biome_dispatch.locate_biome_near (pos, tags, range, hres, vres,
+					       callback, cb_data)
+	if not levelgen_enabled then
+		local list = mcl_biome_dispatch.build_biome_list (tags)
+		if #list == 0 then
+			callback (nil, cb_data)
+		else
+			local k = floor (hres / range) + 1
+			callback (findbiome.find_biome (pos, tags, k * k), cb_data)
+		end
+		return
+	end
+
+	local x, y, z, dim = conv_pos_raw (pos)
+	if not dim then
+		callback (nil, cb_data)
+	else
+		local taskinfo = {
+			x = floor (x + 0.5),
+			y = floor (y + 0.5),
+			z = floor (z + 0.5),
+			range = range,
+			hres = hres,
+			vres = vres,
+			biome_tags = tags,
 			dim = dim.id,
 			callback = callback,
 			cb_data = cb_data,
@@ -946,7 +1007,8 @@ if levelgen_enabled then
 			local command, id = unpack (param:split (" "))
 			if command == "structure" then
 				if type (id) ~= "string" then
-					core.chat_send_player (name, S ("`/locate structure' requires a structure id"))
+					core.chat_send_player (name, S ("`/locate structure' requires a structure ID"))
+					return
 				end
 				local player = core.get_player_by_name (name)
 				if player then
@@ -965,7 +1027,26 @@ if levelgen_enabled then
 					end)
 				end
 			elseif command == "biome" then
-				core.chat_send_player (name, S ("Sorry!  `/locate biome' is not yet implemented"))
+				if type (id) ~= "string" then
+					core.chat_send_player (name, S ("`/locate structure' requires a biome ID or a tag prefixed with `#'"))
+					return
+				end
+				local player = core.get_player_by_name (name)
+				if player then
+					local pos = player:get_pos ()
+					mcl_biome_dispatch.locate_biome_near (pos, { id, }, 6400, 32, 64, function (v, _)
+						if v then
+							local dist = floor (vector.distance (v, pos) + 0.5)
+							local blurb = PS ("The nearest biome matching @1 is located at (@2,@3,@4) (@5 block away)",
+									  "The nearest biome matching @1 is located at (@2,@3,@4) (@5 blocks away)",
+									  dist, id, v.x, v.y, v.z, dist)
+							core.chat_send_player (name, blurb)
+						else
+							local blurb = S ("No biome matching @1 exists near your position", id)
+							core.chat_send_player (name, blurb)
+						end
+					end)
+				end
 			end
 		end,
 	})
