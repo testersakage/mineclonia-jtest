@@ -16,6 +16,7 @@ globals = {
 	"mcl_lightning",
 	"biomeinfo",
 	"controls",
+	"findbiome",
 	"flowlib",
 	"awards",
 	"mobs_mc",
