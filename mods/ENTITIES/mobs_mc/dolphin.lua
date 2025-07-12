@@ -74,6 +74,7 @@ local dolphin = {
 	damage = 2.5,
 	attack_type = "melee",
 	_moisture = 120,
+	_waiting_for_treasure_position = false,
 }
 
 ------------------------------------------------------------------------
@@ -89,6 +90,11 @@ function dolphin:on_rightclick (clicker)
 		end
 		-- TODO: bone meal particles.
 		self._fed = true
+		self._treasure_position = nil
+		if not self._waiting_for_treasure_position then
+			local self_pos = self.object:get_pos ()
+			self:find_treasure (self_pos)
+		end
 	end
 end
 
@@ -321,18 +327,47 @@ local function dolphin_swim_with_player (self, self_pos, dtime)
 	end
 end
 
+local function is_still_valid (self)
+	return self.object:is_valid ()
+		and self._waiting_for_treasure_position
+end
+
+local function find_treasure_cb (v, self)
+	if is_still_valid (self) then
+		self._treasure_position = v
+		self._waiting_for_treasure_position = false
+	end
+	return false
+end
+
+local dolphin_treasures = {
+	"mcl_levelgen:ocean_ruin_cold",
+	"mcl_levelgen:ocean_ruin_warm",
+	"mcl_levelgen:shipwreck",
+	"mcl_levelgen:shipwreck_beached",
+}
+
 function dolphin:find_treasure (self_pos)
 	-- XXX: it's not currently possible actually to locate
 	-- structures, just the chests.
-	local p1 = vector.offset (self_pos, -64, -16, -64)
-	local p2 = vector.offset (self_pos, 64, math.min (1, self_pos.y+16), 64)
-	local chests = core.find_nodes_in_area (p1, p2, {"mcl_chests:chest_small"})
-	if chests and #chests > 0 then
-		table.sort(chests, function(a, b)
-			return vector.distance (self_pos, a)
-				< vector.distance (self_pos, b)
-		end)
-		return chests[1]
+	if not mcl_levelgen.levelgen_enabled then
+		local p1 = vector.offset (self_pos, -64, -16, -64)
+		local p2 = vector.offset (self_pos, 64, math.min (1, self_pos.y+16), 64)
+		local chests = core.find_nodes_in_area (p1, p2, {"mcl_chests:chest_small"})
+		if chests and #chests > 0 then
+			table.sort (chests, function(a, b)
+				return vector.distance (self_pos, a)
+					< vector.distance (self_pos, b)
+			end)
+			self._waiting_for_treasure_position = false
+			self._treasure_position = chests[1]
+		end
+	else
+		assert (not self._waiting_for_treasure_position)
+		self._waiting_for_treasure_position = true
+		mcl_biome_dispatch.locate_structure_near (self_pos, dolphin_treasures,
+							  16, find_treasure_cb, self,
+							  is_still_valid)
 	end
 	return nil
 end
@@ -409,15 +444,27 @@ local function dolphin_seek_treasure (self, self_pos, dtime)
 		end
 		return true
 	elseif self._fed and self.breath > 5 then
-		local target = self:find_treasure (self_pos)
-		if not target then
+		if self._waiting_for_treasure_position then
+			return false
+		elseif not self._treasure_position then
 			self._fed = false
 			return false
+		else
+			self:gopath (self._treasure_position, 1.3)
+			self._seeking_treasure = self._treasure_position
+			self._waiting_for_treasure_position = false
+			self._treasure_position = nil
+			return "_seeking_treasure"
 		end
-		self:gopath (target, 1.3)
-		self._seeking_treasure = target
-		return "seeking_treasure"
 	end
+	return false
+end
+
+function dolphin:get_staticdata_table ()
+	local tbl = mob_class.get_staticdata_table (self)
+	tbl._waiting_for_treasure_position = nil
+	tbl._treasure_position = nil
+	return tbl
 end
 
 local function manhattan3d (v1, v2)
