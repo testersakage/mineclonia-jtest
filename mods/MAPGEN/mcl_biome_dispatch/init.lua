@@ -957,12 +957,12 @@ end
 function mcl_biome_dispatch.locate_biome_near (pos, tags, range, hres, vres,
 					       callback, cb_data)
 	if not levelgen_enabled then
-		local list = mcl_biome_dispatch.build_biome_list (tags)
-		if #list == 0 then
+		local ok, list, _ = pcall (mcl_biome_dispatch.build_biome_list, tags)
+		if not ok or #list == 0 then
 			callback (nil, cb_data)
 		else
-			local k = floor (hres / range) + 1
-			callback (findbiome.find_biome (pos, tags, k * k), cb_data)
+			local k = floor (range / hres) + 1
+			callback (findbiome.find_biome (pos, list, hres, k * k), cb_data)
 		end
 		return
 	end
@@ -998,56 +998,54 @@ end
 -- Chat commands.
 ------------------------------------------------------------------------
 
-if levelgen_enabled then
-	core.register_chatcommand ("locate", {
-		params = "locate [structure | biome] [id]",
-		description = S ("Locate a structure or a biome identified by ID in the current dimension."),
-		privs = { maphack = true, },
-		func = function (name, param)
-			local command, id = unpack (param:split (" "))
-			if command == "structure" then
-				if type (id) ~= "string" then
-					core.chat_send_player (name, S ("`/locate structure' requires a structure ID"))
-					return
-				end
-				local player = core.get_player_by_name (name)
-				if player then
-					local pos = player:get_pos ()
-					mcl_biome_dispatch.locate_structure_near (pos, id, 96, function (v, _)
-						if v then
-							local dist = floor (vector.distance (v, pos) + 0.5)
-							local blurb = PS ("The nearest structure of type @1 is located at (@2,@3,@4) (@5 block away)",
-									  "The nearest structure of type @1 is located at (@2,@3,@4) (@5 blocks away)",
-									  dist, id, v.x, v.y, v.z, dist)
-							core.chat_send_player (name, blurb)
-						else
-							local blurb = S ("No structure of type @1 exists near your position", id)
-							core.chat_send_player (name, blurb)
-						end
-					end)
-				end
-			elseif command == "biome" then
-				if type (id) ~= "string" then
-					core.chat_send_player (name, S ("`/locate structure' requires a biome ID or a tag prefixed with `#'"))
-					return
-				end
-				local player = core.get_player_by_name (name)
-				if player then
-					local pos = player:get_pos ()
-					mcl_biome_dispatch.locate_biome_near (pos, { id, }, 6400, 32, 64, function (v, _)
-						if v then
-							local dist = floor (vector.distance (v, pos) + 0.5)
-							local blurb = PS ("The nearest biome matching @1 is located at (@2,@3,@4) (@5 block away)",
-									  "The nearest biome matching @1 is located at (@2,@3,@4) (@5 blocks away)",
-									  dist, id, v.x, v.y, v.z, dist)
-							core.chat_send_player (name, blurb)
-						else
-							local blurb = S ("No biome matching @1 exists near your position", id)
-							core.chat_send_player (name, blurb)
-						end
-					end)
-				end
+core.register_chatcommand ("locate", {
+	params = "locate [structure | biome] [id]",
+	description = S ("Locate a structure or a biome identified by ID in the current dimension."),
+	privs = { maphack = true, },
+	func = function (name, param)
+		local command, id = unpack (param:split (" "))
+		if command == "structure" then
+			if type (id) ~= "string" then
+				core.chat_send_player (name, S ("`/locate structure' requires a structure ID"))
+				return
 			end
-		end,
-	})
-end
+			local player = core.get_player_by_name (name)
+			if player then
+				local pos = player:get_pos ()
+				mcl_biome_dispatch.locate_structure_near (pos, id, 96, function (v, _)
+					if v then
+						local dist = floor (vector.distance (v, pos) + 0.5)
+						local blurb = PS ("The nearest structure of type @1 is located at (@2,@3,@4) (@5 block away)",
+								  "The nearest structure of type @1 is located at (@2,@3,@4) (@5 blocks away)",
+								  dist, id, v.x, v.y, v.z, dist)
+						core.chat_send_player (name, blurb)
+					else
+						local blurb = S ("No structure of type @1 exists near your position", id)
+						core.chat_send_player (name, blurb)
+					end
+				end)
+			end
+		elseif command == "biome" then
+			if type (id) ~= "string" then
+				core.chat_send_player (name, S ("`/locate structure' requires a biome ID or a tag prefixed with `#'"))
+				return
+			end
+			local player = core.get_player_by_name (name)
+			if player then
+				local pos = player:get_pos ()
+				mcl_biome_dispatch.locate_biome_near (pos, { id, }, 6400, 32, 64, function (v, _)
+					if v then
+						local dist = floor (vector.distance (v, pos) + 0.5)
+						local blurb = PS ("The nearest biome matching @1 is located at (@2,@3,@4) (@5 block away)",
+								  "The nearest biome matching @1 is located at (@2,@3,@4) (@5 blocks away)",
+								  dist, id, v.x, v.y, v.z, dist)
+						core.chat_send_player (name, blurb)
+					else
+						local blurb = S ("No biome matching @1 exists near your position", id)
+						core.chat_send_player (name, blurb)
+					end
+				end)
+			end
+		end
+	end,
+})
