@@ -861,11 +861,11 @@ local function locate_structure_or_biome (taskinfo)
 	local dim = mcl_levelgen.get_dimension (taskinfo.dim)
 	assert (dim)
 	mcl_levelgen.initialize_terrain (dim)
-	if taskinfo.sid then
+	if taskinfo.sids then
 		local x, y, z
 			= mcl_levelgen.locate_structure_placement (dim.terrain, taskinfo.x,
 								   taskinfo.y, taskinfo.z,
-								   taskinfo.sid,
+								   taskinfo.sids,
 								   taskinfo.range)
 		return x, y, z
 	else
@@ -912,19 +912,27 @@ local function dispatch_locate_task (taskinfo)
 
 		outstanding_locate_task = false
 		local n = #pending_locate_tasks
-		if n > 0 then
+		while n > 0 and not outstanding_locate_task do
 			local taskinfo = pending_locate_tasks[1]
 			for i = 2, n do
 				pending_locate_tasks[i - 1]
 					= pending_locate_tasks[i]
 			end
 			pending_locate_tasks[n] = nil
-			dispatch_locate_task (taskinfo)
+
+			if not taskinfo.retain_p
+				or taskinfo.retain_p (cb_data) then
+				dispatch_locate_task (taskinfo)
+				outstanding_locate_task = true
+			end
+
+			n = n - 1
 		end
 	end, taskinfo)
 end
 
-function mcl_biome_dispatch.locate_structure_near (pos, sid, range_chebyshev, callback, cb_data)
+function mcl_biome_dispatch.locate_structure_near (pos, sid_or_sids, range_chebyshev,
+						   callback, cb_data, retain_p)
 	if not levelgen_enabled then
 		callback (nil, cb_data)
 		return
@@ -938,9 +946,10 @@ function mcl_biome_dispatch.locate_structure_near (pos, sid, range_chebyshev, ca
 			y = floor (y + 0.5),
 			z = floor (z + 0.5),
 			range = range_chebyshev,
-			sid = sid,
+			sids = sid_or_sids,
 			dim = dim.id,
 			callback = callback,
+			retain_p = retain_p,
 			cb_data = cb_data,
 		}
 		if not outstanding_locate_task then
@@ -1023,6 +1032,8 @@ core.register_chatcommand ("locate", {
 						local blurb = S ("No structure of type @1 exists near your position", id)
 						core.chat_send_player (name, blurb)
 					end
+				end, function (_)
+					return player:is_valid ()
 				end)
 			end
 		elseif command == "biome" then
