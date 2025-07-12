@@ -7091,9 +7091,10 @@ function mcl_levelgen.locate_biome_spirally (preset, x, y, z, radius, horiz_inte
 		local z = dz * horiz_interval + z
 		local qz = toquart (z)
 
+		preset:index_biomes_begin (1, 1, qx, qz)
 		for _, y in ipairs (search_ys) do
 			local qy = toquart (y)
-			local biome = preset:index_biomes (qx, qy, qz)
+			local biome = preset:index_biomes_cached (qx, qy, qz)
 			if predicate (biome, data) then
 				return x, y, z
 			end
