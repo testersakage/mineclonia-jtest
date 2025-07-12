@@ -2351,22 +2351,27 @@ end
 local bbox_center = mcl_levelgen.bbox_center
 local candidates
 
-local function insert_structure_candidate (start, _, _, _, id)
-	if start.structure == id then
+local function insert_structure_candidate (start, _, _, _, ids)
+	if indexof (ids, start.structure) then
 		local x, y, z = bbox_center (start.bbox)
 		insert (candidates, {x, y, z,})
 	end
 end
 
-function mcl_levelgen.locate_structure_placement (terrain, x, y, z, id, grid_limit_xz)
+function mcl_levelgen.locate_structure_placement (terrain, x, y, z, id_or_ids, grid_limit_xz)
 	local level = terrain.structures
-	-- First, attempt to locate structure sets containing ID in
-	-- the level.
+
+	-- First, attempt to locate structure sets containing any of
+	-- ID_OR_IDS in the level.
+
+	if type (id_or_ids) == "string" then
+		id_or_ids = { id_or_ids, }
+	end
 
 	local target_sets = {}
 	for _, set in ipairs (level.structure_sets) do
 		for _, structure in ipairs (set.structures) do
-			if structure.structure.name == id
+			if indexof (id_or_ids, structure.structure.name) ~= -1
 			-- TODO: non-random-spread structures.
 				and set.placement.spacing
 				and set.placement.locator_test then
@@ -2407,7 +2412,7 @@ function mcl_levelgen.locate_structure_placement (terrain, x, y, z, id, grid_lim
 					-- This will conduct detailed placement tests.
 					get_structure_starts (level, terrain, scx, scz,
 							      insert_structure_candidate,
-							      id, just_this_set)
+							      id_or_ids, just_this_set)
 				end
 			end
 			for _, candidate in ipairs (candidates) do
