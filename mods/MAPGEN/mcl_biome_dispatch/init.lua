@@ -1007,9 +1007,12 @@ end
 -- Chat commands.
 ------------------------------------------------------------------------
 
+local mathsqrt = math.sqrt
+local huge = math.huge
+
 core.register_chatcommand ("locate", {
-	params = "locate [structure | biome] [id]",
-	description = S ("Locate a structure or a biome identified by ID in the current dimension."),
+	params = "locate [structure | biome | poi] <ID>",
+	description = S ("Locate a structure, biome, or point of interest identified by ID in the current dimension."),
 	privs = { maphack = true, },
 	func = function (name, param)
 		local command, id = unpack (param:split (" "))
@@ -1057,6 +1060,51 @@ core.register_chatcommand ("locate", {
 					end
 				end)
 			end
+		elseif command == "poi" then
+			if type (id) ~= "string" then
+				core.chat_send_player (name, S ("`/locate poi' requires an identifier designating a valid point of interest"))
+				return
+			elseif not mcl_villages.registered_pois[id]  then
+				core.chat_send_player (name, S ("@1 does not identify a valid point of interest", id))
+				return
+			end
+			local player = core.get_player_by_name (name)
+			if player then
+				local pos = player:get_pos ()
+				local v1 = vector.offset (pos, -3000, -3000, -3000)
+				local v2 = vector.offset (pos, 3000, 3000, 3000)
+
+				local pois = mcl_villages.get_pois_in_by_nodepos (v1, v2)
+				local distmax = huge
+				local poi_nearest = nil
+				for _, poi in ipairs (pois) do
+					if poi.data == id then
+						local v = poi.min
+						local dx = v.x - pos.x
+						local dy = v.y - pos.y
+						local dz = v.z - pos.z
+						local d = (dx * dx) + (dy * dy) + (dz * dz)
+						if d < distmax then
+							poi_nearest = v
+							distmax = d
+						end
+					end
+				end
+
+				if not poi_nearest then
+					local blurb = S ("No point of interest named @1 exists near your position", id)
+					core.chat_send_player (name, blurb)
+				else
+					local v = poi_nearest
+					local dist = floor (mathsqrt (distmax) + 0.5)
+					local blurb = PS ("The nearest point of interest named @1 is located at (@2,@3,@4) (@5 block away)",
+							  "The nearest point of interest named @1 is located at (@2,@3,@4) (@5 blocks away)",
+							  dist, id, v.x, v.y, v.z, dist)
+					core.chat_send_player (name, blurb)
+				end
+			end
+		else
+			core.chat_send_player (name, S ("Usage: /locate [structure | biome | poi] <ID>"))
 		end
 	end,
 })
