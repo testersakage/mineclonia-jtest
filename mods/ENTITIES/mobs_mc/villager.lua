@@ -3537,7 +3537,7 @@ function villager:claim_poi (target, node)
 		}))
 	else
 		if mcl_villages.insert_poi (target, profession.poi) then
-			self._job_site = target
+			self._job_site = vector.copy (target)
 			self._wander_time = 0
 			self:happy_villager_effect ()
 			self:set_profession (profession.name)
