@@ -70,3 +70,54 @@ mcl_levelgen.make_ipos_iterator = make_ipos_iterator
 mcl_levelgen.ipos1 = make_ipos_iterator ()
 mcl_levelgen.ipos2 = make_ipos_iterator ()
 mcl_levelgen.ipos3 = make_ipos_iterator ()
+
+local floor = math.floor
+
+local function make_spiral_iterator ()
+	local x
+	local z
+	local segment_no
+	local segment_iteration
+	local segment_cnt
+	local segment_size
+
+	local function spiral_iterate ()
+		local no = (4 + segment_no) % 4
+
+		if no == 0 then
+			x = x + 1
+		elseif no == 1 then
+			z = z + 1
+		elseif no == 2 then
+			x = x - 1
+		elseif no == 3 then
+			z = z - 1
+		end
+
+		if segment_iteration >= segment_size then
+			if segment_no >= segment_cnt then
+				return nil, nil
+			end
+
+			segment_no = segment_no + 1
+			segment_iteration = 0
+			segment_size = floor (segment_no / 2) + 1
+		end
+		segment_iteration = segment_iteration + 1
+		return x, z
+	end
+
+	return function (ix, iz, radius)
+		x = ix
+		z = iz + 1
+		segment_no = -1
+		segment_cnt = radius * 4
+		segment_iteration = 0
+		segment_size = 0
+		return spiral_iterate
+	end
+end
+
+mcl_levelgen.ispiral1 = make_spiral_iterator ()
+mcl_levelgen.ispiral2 = make_spiral_iterator ()
+mcl_levelgen.ispiral3 = make_spiral_iterator ()

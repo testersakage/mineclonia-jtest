@@ -7053,3 +7053,149 @@ function mcl_levelgen.biome_spawn_position (spawn_targets, y, sample)
 				      512.0, 32.0, sample)
 	return x, z, in_dist
 end
+
+local function vertical_search_positions (center, interval, y_min, y_max)
+	local dist_min = center - y_min + 1
+	local dist_max = y_max - center + 1
+	local r = mathmax (floor (dist_min / interval),
+			   floor (dist_max / interval))
+	local list = { center, }
+
+	for i = 1, r do
+		local kbelow = center - i * interval
+		local kabove = center + i * interval
+
+		if kbelow >= y_min then
+			insert (list, kbelow)
+		end
+		if kabove <= y_max then
+			insert (list, kabove)
+		end
+	end
+	return list
+end
+
+local ispiral1 = mcl_levelgen.ispiral1
+
+function mcl_levelgen.locate_biome_spirally (preset, x, y, z, radius, horiz_interval,
+					     vert_interval, predicate, data)
+	local r = floor (radius / horiz_interval)
+	local search_ys
+	-- NOTE: Minecraft's /locate command apparently forgoes the
+	-- -64 layer.
+		= vertical_search_positions (y, vert_interval, preset.min_y + 1,
+					     preset.min_y + preset.height - 1)
+	for dx, dz in ispiral1 (0, 0, r) do
+		local x = dx * horiz_interval + x
+		local qx = toquart (x)
+		local z = dz * horiz_interval + z
+		local qz = toquart (z)
+
+		for _, y in ipairs (search_ys) do
+			local qy = toquart (y)
+			local biome = preset:index_biomes (qx, qy, qz)
+			if predicate (biome, data) then
+				return x, y, z
+			end
+		end
+	end
+	return nil
+end
+
+------------------------------------------------------------------------
+-- Biome utilities.  These duplicate functions in mcl_biome_dispatch,
+-- but are defined here so that they may be available in async
+-- environments.
+------------------------------------------------------------------------
+
+local test_dispatchers = {
+	[0] = function ()
+		return function ()
+			return false
+		end
+	end,
+	function (a)
+		return function (biome)
+			return biome == a
+		end
+	end,
+	function (a, b)
+		return function (biome)
+			return biome == a or biome == b
+		end
+	end,
+	function (a, b, c)
+		return function (biome)
+			return biome == a
+				or biome == b
+				or biome == c
+		end
+	end,
+	function (a, b, c, d)
+		return function (biome)
+			return biome == a
+				or biome == b
+				or biome == c
+				or biome == d
+		end
+	end,
+	function (a, b, c, d, e)
+		return function (biome)
+			return biome == a
+				or biome == b
+				or biome == c
+				or biome == d
+				or biome == e
+		end
+	end,
+	function (a, b, c, d, e, f)
+		return function (biome)
+			return biome == a
+				or biome == b
+				or biome == c
+				or biome == d
+				or biome == e
+				or biome == f
+		end
+	end,
+	function (a, b, c, d, e, f, g)
+		return function (biome)
+			return biome == a
+				or biome == b
+				or biome == c
+				or biome == d
+				or biome == e
+				or biome == f
+				or biome == g
+		end
+	end,
+	function (a, b, c, d, e, f, g, h)
+		return function (biome)
+			return biome == a
+				or biome == b
+				or biome == c
+				or biome == d
+				or biome == e
+				or biome == f
+				or biome == g
+				or biome == h
+		end
+	end,
+}
+
+local function test_dispatcher_generic (...)
+	local args = {...}
+	return function (biome)
+		for _, biome1 in ipairs (args) do
+			if biome == biome1 then
+				return true
+			end
+		end
+		return false
+	end
+end
+
+function mcl_levelgen.make_biome_test (ids_or_tags)
+	local list = mcl_levelgen.build_biome_list (ids_or_tags)
+	return (test_dispatchers[#list] or test_dispatcher_generic) (unpack (list))
+end
