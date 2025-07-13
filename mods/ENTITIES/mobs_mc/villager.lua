@@ -3770,11 +3770,13 @@ local function generate_wander_to (poi_field, activity_name, time_field, time_li
 			end
 
 			local status = self:poll_navigation_state (self_pos, dtime)
-			if phase == 1 and status == "arrived" then
+			if phase == 0 and status == "arrived" then
 				local dir = vector.direction (self_pos, poi)
 				local target
 					= self:target_in_direction (self_pos, 15, 7, dir, math.pi / 2)
-				self:session_navigate (target, 0.5, 0.0)
+				if target then
+					self:session_navigate (target, 0.5, 0.0)
+				end
 			end
 			self[activity_name] = 0
 			return true
