@@ -141,4 +141,8 @@ function mcl_levelgen.get_structures_at (_, _)
 	return empty
 end
 
+function mcl_levelgen.is_protected_chunk (_)
+	return false
+end
+
 end
