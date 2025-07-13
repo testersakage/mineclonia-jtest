@@ -90,10 +90,14 @@ if mcl_weather.allow_abm then
 		min_y = mcl_vars.mg_overworld_min,
 		action = function(pos, node)
 			local abovehalf = vector.offset(pos,0,0.5,0)
-			if (mcl_weather.state ~= "rain" and mcl_weather.state ~= "thunder" and mcl_weather.state ~= "snow")
-			or not mcl_weather.has_snow(abovehalf)
-			or node.name == "mcl_core:snowblock" then
-				return end
+			if (mcl_weather.state ~= "rain"
+			    and mcl_weather.state ~= "thunder"
+			    and mcl_weather.state ~= "snow")
+				or not mcl_weather.has_snow(abovehalf)
+				or mcl_levelgen.is_protected_chunk (pos)
+				or node.name == "mcl_core:snowblock" then
+				return
+			end
 			local above = vector.offset(pos,0,1,0)
 			local above_node = core.get_node(above)
 			if above_node.name == "air" and mcl_weather.is_outdoor(pos) then
@@ -123,7 +127,10 @@ if mcl_weather.allow_abm then
 		interval = 56.0,
 		chance = 1,
 		action = function(pos)
-			if mcl_weather.snow.init_done and mcl_weather.is_outdoor(pos) and mcl_weather.has_snow(pos) then
+			if mcl_weather.state == "rain"
+				and mcl_weather.is_outdoor (pos)
+				and mcl_weather.has_snow (pos)
+				and not mcl_levelgen.is_protected_chunk (pos) then
 				mcl_cauldrons.add_level(pos, 1, "powder_snow")
 			end
 		end
