@@ -248,7 +248,11 @@ if mcl_weather.allow_abm then
 		interval = 56.0,
 		chance = 1,
 		action = function(pos)
-			if mcl_weather.rain.raining and mcl_weather.is_outdoor(pos) and mcl_weather.has_rain(pos) then
+			if mcl_weather.rain.raining
+				and mcl_weather.is_outdoor (pos)
+				and mcl_weather.has_rain (pos)
+				and not mcl_weather.has_snow (pos)
+				and not mcl_levelgen.is_protected_chunk (pos) then
 				mcl_cauldrons.add_level(pos, 1, "water")
 			end
 		end
@@ -261,7 +265,10 @@ if mcl_weather.allow_abm then
 		interval = 22.0,
 		chance = 3,
 		action = function(pos, node)
-			if mcl_weather.rain.raining and mcl_weather.is_outdoor(pos) and mcl_weather.has_rain(pos) then
+			if mcl_weather.rain.raining
+				and mcl_weather.is_outdoor (pos)
+				and mcl_weather.has_rain (pos)
+				and not mcl_levelgen.is_protected_chunk (pos) then
 				if node.name == "mcl_farming:soil" then
 					core.set_node(pos, {name="mcl_farming:soil_wet"})
 				end
