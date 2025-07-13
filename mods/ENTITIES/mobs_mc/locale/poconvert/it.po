@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-07-13 11:04+0000\n"
+"Last-Translator: cuche <cuche@noreply.codeberg.org>\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 msgid "Axolotl"
 msgstr "Axolotl"
@@ -23,7 +24,7 @@ msgid "Blaze"
 msgstr "Blaze"
 
 msgid "Chicken"
-msgstr "Gallina"
+msgstr "Pollo"
 
 msgid "Cod"
 msgstr "Merluzzo"
@@ -56,7 +57,7 @@ msgid "Ghast"
 msgstr "Ghast"
 
 msgid "Ghast Fireball"
-msgstr ""
+msgstr "Proiettile di Ghast"
 
 msgid "Guardian"
 msgstr "Guardiano"
@@ -74,7 +75,7 @@ msgid "Zoglin"
 msgstr "Zoglin"
 
 msgid "Sneak to dismount"
-msgstr ""
+msgstr "Accovacciati per scendere"
 
 msgid "Horse"
 msgstr "Cavallo"
@@ -116,7 +117,7 @@ msgid "Piglin Brute"
 msgstr "Piglin bruto"
 
 msgid "Zombie Piglin"
-msgstr ""
+msgstr "Piglin zombie"
 
 msgid "Zombified Piglin"
 msgstr "Piglin zombificato"
@@ -131,7 +132,7 @@ msgid "Rabbit"
 msgstr "Coniglio"
 
 msgid "Killer Bunny"
-msgstr ""
+msgstr "Coniglio assassino"
 
 msgid "Salmon"
 msgstr "Salmone"
@@ -155,22 +156,22 @@ msgid "Wither Skeleton"
 msgstr "Scheletro wither"
 
 msgid "Slime - big"
-msgstr ""
+msgstr "Slime grande"
 
 msgid "Slime - small"
-msgstr ""
+msgstr "Slime medio"
 
 msgid "Slime - tiny"
-msgstr ""
+msgstr "Slime piccolo"
 
 msgid "Magma Cube - big"
-msgstr ""
+msgstr "Cubo di Magma grande"
 
 msgid "Magma Cube - small"
-msgstr ""
+msgstr "Cubo di magma medio"
 
 msgid "Magma Cube - tiny"
-msgstr ""
+msgstr "Cubo di Magma piccolo"
 
 msgid "Magma Cube"
 msgstr "Cubo di magma"
@@ -179,7 +180,7 @@ msgid "Slime"
 msgstr "Slime"
 
 msgid "Snow Golem"
-msgstr ""
+msgstr "Golem di neve"
 
 msgid "Spider"
 msgstr "Ragno"
@@ -209,61 +210,61 @@ msgid "Villager"
 msgstr "Villico"
 
 msgid "Armorer"
-msgstr ""
+msgstr "Corazzaio"
 
 msgid "Butcher"
-msgstr ""
+msgstr "Macellaio"
 
 msgid "Cartographer"
-msgstr ""
+msgstr "Cartografo"
 
 msgid "Cleric"
-msgstr ""
+msgstr "Chierico"
 
 msgid "Farmer"
-msgstr ""
+msgstr "Agricoltore"
 
 msgid "Fisherman"
-msgstr ""
+msgstr "Pescatore"
 
 msgid "Fletcher"
-msgstr ""
+msgstr "Fabbricante di frecce"
 
 msgid "Leatherworker"
-msgstr ""
+msgstr "Cuoiaio"
 
 msgid "Librarian"
 msgstr "Bibliotecario"
 
 msgid "Mason"
-msgstr ""
+msgstr "Muratore"
 
 msgid "Shepherd"
-msgstr ""
+msgstr "Pastore"
 
 msgid "Toolsmith"
-msgstr ""
+msgstr "Fabbro di attrezzi"
 
 msgid "Weaponsmith"
-msgstr ""
+msgstr "Armaiolo"
 
 msgid "Nitwit"
-msgstr ""
+msgstr "Fesso"
 
 msgid "Novice"
-msgstr ""
+msgstr "Novizio"
 
 msgid "Apprentice"
-msgstr ""
+msgstr "Apprendista"
 
 msgid "Journeyman"
-msgstr ""
+msgstr "Qualificato"
 
 msgid "Expert"
-msgstr ""
+msgstr "Esperto"
 
 msgid "Master"
-msgstr ""
+msgstr "Maestro"
 
 msgid "Evoker"
 msgstr "Evocatore"
@@ -278,10 +279,10 @@ msgid "Zombie Villager"
 msgstr "Villico zombi"
 
 msgid "Wandering Trader"
-msgstr ""
+msgstr "Mercante ambulante"
 
 msgid "Trader Llama"
-msgstr ""
+msgstr "Lama del mercante"
 
 msgid "Witch"
 msgstr "Strega"
@@ -296,11 +297,10 @@ msgid "Zombie"
 msgstr "Zombi"
 
 msgid "Baby Zombie"
-msgstr ""
+msgstr "Zombi piccolo"
 
 msgid "Husk"
 msgstr "Zombi secco"
 
 msgid "Baby Husk"
-msgstr ""
-
+msgstr "Zombi secco piccolo"
