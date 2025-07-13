@@ -42,6 +42,7 @@ local plains_village_template = {
 		load_schematic ("new_villages/fishery_levelgen"),
 		load_schematic ("new_villages/fletcher"),
 		load_schematic ("new_villages/leather_worker"),
+		load_schematic ("new_villages/library"),
 		load_schematic ("new_villages/mason"),
 		load_schematic ("new_villages/mill"),
 		load_schematic ("new_villages/toolsmith"),
@@ -51,6 +52,8 @@ local plains_village_template = {
 		load_schematic ("new_villages/house_1_bed"),
 		load_schematic ("new_villages/house_2_bed"),
 		load_schematic ("new_villages/house_3_bed"),
+		load_schematic ("new_villages/house_3_bed"),
+		load_schematic ("new_villages/house_4_bed"),
 		load_schematic ("new_villages/house_4_bed"),
 	},
 	street_decor = {
@@ -87,6 +90,7 @@ local desert_village_template = {
 		load_schematic ("new_villages/fishery_levelgen"),
 		load_schematic ("new_villages/fletcher"),
 		load_schematic ("new_villages/leather_worker"),
+		load_schematic ("new_villages/library"),
 		load_schematic ("new_villages/mason"),
 		load_schematic ("new_villages/mill"),
 		load_schematic ("new_villages/toolsmith"),
@@ -96,6 +100,8 @@ local desert_village_template = {
 		load_schematic ("new_villages/house_1_bed"),
 		load_schematic ("new_villages/house_2_bed"),
 		load_schematic ("new_villages/house_3_bed"),
+		load_schematic ("new_villages/house_3_bed"),
+		load_schematic ("new_villages/house_4_bed"),
 		load_schematic ("new_villages/house_4_bed"),
 	},
 	street_decor = {
@@ -132,6 +138,7 @@ local snowy_village_template = {
 		load_schematic ("new_villages/fishery_levelgen"),
 		load_schematic ("new_villages/fletcher"),
 		load_schematic ("new_villages/leather_worker"),
+		load_schematic ("new_villages/library"),
 		load_schematic ("new_villages/mason"),
 		load_schematic ("new_villages/mill"),
 		load_schematic ("new_villages/toolsmith"),
@@ -141,6 +148,8 @@ local snowy_village_template = {
 		load_schematic ("new_villages/house_1_bed"),
 		load_schematic ("new_villages/house_2_bed"),
 		load_schematic ("new_villages/house_3_bed"),
+		load_schematic ("new_villages/house_3_bed"),
+		load_schematic ("new_villages/house_4_bed"),
 		load_schematic ("new_villages/house_4_bed"),
 	},
 	street_decor = {
@@ -178,6 +187,7 @@ local savannah_village_template = {
 		load_schematic ("new_villages/fishery_levelgen"),
 		load_schematic ("new_villages/fletcher"),
 		load_schematic ("new_villages/leather_worker"),
+		load_schematic ("new_villages/library"),
 		load_schematic ("new_villages/mason"),
 		load_schematic ("new_villages/mill"),
 		load_schematic ("new_villages/toolsmith"),
@@ -187,6 +197,8 @@ local savannah_village_template = {
 		load_schematic ("new_villages/house_1_bed"),
 		load_schematic ("new_villages/house_2_bed"),
 		load_schematic ("new_villages/house_3_bed"),
+		load_schematic ("new_villages/house_3_bed"),
+		load_schematic ("new_villages/house_4_bed"),
 		load_schematic ("new_villages/house_4_bed"),
 	},
 	street_decor = {
@@ -224,6 +236,7 @@ local taiga_village_template = {
 		load_schematic ("new_villages/fishery_levelgen"),
 		load_schematic ("new_villages/fletcher"),
 		load_schematic ("new_villages/leather_worker"),
+		load_schematic ("new_villages/library"),
 		load_schematic ("new_villages/mason"),
 		load_schematic ("new_villages/mill"),
 		load_schematic ("new_villages/toolsmith"),
@@ -233,6 +246,8 @@ local taiga_village_template = {
 		load_schematic ("new_villages/house_1_bed"),
 		load_schematic ("new_villages/house_2_bed"),
 		load_schematic ("new_villages/house_3_bed"),
+		load_schematic ("new_villages/house_3_bed"),
+		load_schematic ("new_villages/house_4_bed"),
 		load_schematic ("new_villages/house_4_bed"),
 	},
 	street_decor = {
@@ -881,6 +896,7 @@ local function fit_decor_to_position (templates, terrain, rotation,
 						      "world_surface_wg")
 	end
 	if pile or not any_collisions_2d (pieces, piece.bbox, path) then
+		piece.decor_parent = path
 		insert (pieces, piece)
 	end
 end
@@ -892,6 +908,12 @@ local function dist_max_2d (bbox, x, z)
 	local dx = mathmax (0, bbox[1] - x, x - bbox[4])
 	local dz = mathmax (0, bbox[3] - z, z - bbox[6])
 	return mathmax (dx, dz)
+end
+
+local any_collisions_matching_2d = mcl_levelgen.any_collisions_matching_2d
+
+local function is_not_parent_or_parent_decor (piece, parent)
+	return piece ~= parent and piece.decor_parent ~= parent
 end
 
 local function build_path (templates, terrain, parent, pieces, exit, rotation,
@@ -918,9 +940,9 @@ local function build_path (templates, terrain, parent, pieces, exit, rotation,
 		village_type = village_type,
 	}
 
-	if any_collisions_2d (pieces, path.bbox, parent)
-		or dist_max_2d (path.bbox, village_center_x,
-				village_center_z) > 100 then
+	if any_collisions_matching_2d (pieces, path.bbox,
+				       is_not_parent_or_parent_decor,
+				       parent) then
 		return false
 	end
 	insert (pieces, path)
@@ -979,7 +1001,7 @@ local function build_path (templates, terrain, parent, pieces, exit, rotation,
 	end
 
 	-- Extend the path forward or make a turn.
-	if depth <= 8 then
+	if depth <= 9 then
 		local path_idx = 0
 		if rng:next_integer () < 0.9 then
 			-- Attempt to turn left or right.
@@ -1074,6 +1096,9 @@ local function assign_golem (belltower, belltower_piece)
 	return { bell_x, bell_y, bell_z, belltower_piece, }
 end
 
+local ull = mcl_levelgen.ull
+local village_rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+
 local function assemble_village (self, level, terrain, rng, x, z)
 	-- Note: rotation only affects the village meeting point
 	-- structure.
@@ -1110,16 +1135,17 @@ local function assemble_village (self, level, terrain, rng, x, z)
 		or self.processors
 	beds_to_assign = {}
 	pois_to_assign = {}
+	village_rng:reseed (rng:next_long ())
 	local belltower, belltower_piece
 		= village_start (templates, terrain, x + dx, z + dz,
-				 pieces, rotation, zombie, rng)
+				 pieces, rotation, zombie, village_rng)
 	local start = mcl_levelgen.create_structure_start (self, pieces)
-	start.crops = assemble_crops (village_type, rng)
+	start.crops = assemble_crops (village_type, village_rng)
 	start.type = village_type
 	start.is_zombie = zombie
 	local assigned_pois
 	start.villager_assignments, start.bell, assigned_pois
-		= assign_villagers (rng, belltower.bell,
+		= assign_villagers (village_rng, belltower.bell,
 				    belltower_piece,
 				    beds_to_assign,
 				    pois_to_assign)

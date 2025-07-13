@@ -1108,6 +1108,17 @@ function mcl_levelgen.any_collisions_2d (pieces, bbox, parent)
 	return false
 end
 
+function mcl_levelgen.any_collisions_matching_2d (pieces, bbox, predicate, data)
+	for _, piece in ipairs (pieces) do
+		if intersect_2d_p (piece.bbox, bbox[1], bbox[3],
+				   bbox[4], bbox[6])
+			and predicate (piece, data) then
+			return true
+		end
+	end
+	return false
+end
+
 ------------------------------------------------------------------------
 -- Beardification.
 ------------------------------------------------------------------------
@@ -2352,7 +2363,7 @@ local bbox_center = mcl_levelgen.bbox_center
 local candidates
 
 local function insert_structure_candidate (start, _, _, _, ids)
-	if indexof (ids, start.structure) then
+	if indexof (ids, start.structure) ~= -1 then
 		local x, y, z = bbox_center (start.bbox)
 		insert (candidates, {x, y, z,})
 	end
