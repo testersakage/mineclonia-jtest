@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_inventory x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-07-13 12:04+0000\n"
+"PO-Revision-Date: 2025-07-13 17:32+0000\n"
 "Last-Translator: matteobin <matteobin@noreply.codeberg.org>\n"
 "Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_inventory/it/>\n"
@@ -15,64 +15,65 @@ msgstr ""
 "X-Generator: Weblate 5.12.2\n"
 
 msgid "Auto (use scroll bar if client >= 5.11)"
-msgstr "Automatico (barra di scorrimento con client >= 5.11)"
+msgstr "Automatico (barra di scorrimento se >= 5.11)"
 
 msgid "Off  (use paging buttons, faster)"
-msgstr ""
+msgstr "Spento  (usa i tasti di paginazione, veloce)"
 
 msgid "On   (more MC like, slower)"
-msgstr ""
+msgstr "Acceso   (come MC, lento)"
 
 msgid "Enable scrollable creative inventory"
-msgstr ""
+msgstr "Abilita lo scorrimento nell'inventario creativa"
 
 msgid "Building Blocks"
-msgstr "Blocchi da Costruzione"
+msgstr "Blocchi da costruzione"
 
 msgid "Decoration Blocks"
-msgstr "Blocchi Decorativi"
+msgstr "Blocchi decorativi"
 
 msgid "Redstone"
-msgstr "Pietrarossa"
+msgstr "Redstone"
 
 msgid "Transportation"
-msgstr ""
+msgstr "Trasporti"
 
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Miscellanea"
 
 msgid "Search Items"
-msgstr ""
+msgstr "Cerca oggetti"
 
 msgid "Foodstuffs"
-msgstr ""
+msgstr "Cibo"
 
 msgid "Tools"
-msgstr ""
+msgstr "Strumenti"
 
 msgid "Combat"
-msgstr ""
+msgstr "Combattimento"
 
 msgid "Mobs"
-msgstr ""
+msgstr "Creature"
 
 msgid "Brewing"
 msgstr ""
 
 msgid "Materials"
-msgstr ""
+msgstr "Materiali"
 
 msgid "Survival Inventory"
-msgstr ""
+msgstr "Inventario sopravvivenza"
 
 msgid "Not in Creative Inventory"
-msgstr ""
+msgstr "Non nell'inventario creativa"
 
 msgid "Switch stack size"
 msgstr ""
 
+#, fuzzy
 msgid "@1 / @2"
-msgstr ""
+msgstr "@1 / @2"
 
 msgid "Very large inventory displays may be slow when scrolling, especially on Luanti versions before 5.11.\n"
 "Therefore the creative inventory display can be split into pages with prev/next page buttons.\n"
@@ -84,7 +85,7 @@ msgid "Recipe book"
 msgstr "Libro delle ricette"
 
 msgid "Help"
-msgstr ""
+msgstr "Aiuto"
 
 msgid "Advancements"
 msgstr "Progressi"
@@ -96,10 +97,10 @@ msgid "Return to player inventory"
 msgstr ""
 
 msgid "Crafting table out of range!"
-msgstr ""
+msgstr "Banco da lavoro fuori portata!"
 
 msgid "Crafting"
-msgstr "Assemblaggio"
+msgstr "Fabbricazione"
 
 msgid "Fill Craft Grid"
-msgstr ""
+msgstr "Riempi la griglia per costruire"
