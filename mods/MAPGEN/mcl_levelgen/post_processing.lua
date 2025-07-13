@@ -3132,18 +3132,24 @@ local old_is_protected = core.is_protected
 local conv_pos_dimension = mcl_levelgen.conv_pos_dimension
 local is_generated = mcl_levelgen.is_generated
 
+function mcl_levelgen.is_protected_chunk (pos)
+	local x, y, z, dim = conv_pos_dimension (pos)
+	if dim then
+		local bx = floor (x / 16)
+		local by = floor (y / 16)
+		local bz = floor (z / 16)
+		if is_generated (dim, bx, by, bz) then
+			return false
+		end
+		return true
+	end
+	return false
+end
+
 function core.is_protected (pos, name)
 	if pos then
-		local x, y, z, dim = conv_pos_dimension (pos)
-		if dim then
-			local bx = floor (x / 16)
-			local by = floor (y / 16)
-			local bz = floor (z / 16)
-			if is_generated (dim, bx, by, bz) then
-				return old_is_protected (pos, name)
-			end
-			return true
-		end
+		return mcl_levelgen.is_protected_chunk (pos)
+			or old_is_protected (pos, name)
 	end
 	return old_is_protected (pos, name)
 end
