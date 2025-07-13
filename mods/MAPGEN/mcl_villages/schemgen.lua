@@ -688,7 +688,7 @@ local village_plains_house = {
 			itemstring = "mcl_flowers:poppy",
 		},
 		{
-			itemstring = "mcl_farming:potato",
+			itemstring = "mcl_farming:potato_item",
 			amount_min = 1,
 			amount_max = 7,
 			weight = 10,
@@ -831,7 +831,7 @@ local village_snowy_house = {
 				weight = 4,
 			},
 			{
-				itemstring = "mcl_farming:potato",
+				itemstring = "mcl_farming:potato_item",
 				amount_min = 1,
 				amount_max = 7,
 				weight = 10,
@@ -894,7 +894,7 @@ local village_taiga_house = {
 			weight = 2,
 		},
 		{
-			itemstring = "mcl_farming:potato",
+			itemstring = "mcl_farming:potato_item",
 			amount_min = 1,
 			amount_max = 7,
 			weight = 10,
