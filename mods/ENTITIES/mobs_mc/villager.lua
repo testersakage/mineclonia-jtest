@@ -215,7 +215,7 @@ function villager_base:mob_activate (staticdata, dtime)
 	if not rawget (self, "_reputation") then
 		self._reputation = {}
 	end
-	if not self._trades then
+	if not rawget (self, "_trades") then
 		self._trades = {}
 	else
 		for _, trade in pairs (self._trades) do
@@ -6683,7 +6683,6 @@ function villager:post_load_staticdata ()
 		or self._profession == "unemployed"
 		or self._profession == "tool_smith"
 		or self._profession == "weapon_smith"
-		or self._id
 
 	if is_old_villager then
 		if self._profession == "unemployed" then
