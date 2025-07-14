@@ -1003,6 +1003,28 @@ function mcl_biome_dispatch.locate_biome_near (pos, tags, range, hres, vres,
 	end
 end
 
+function mcl_biome_dispatch.list_registered_structures ()
+	if not levelgen_enabled then
+		return {}
+	end
+	local structs = core.ipc_get ("mcl_biome_dispatch:registered_structures")
+	return structs or {}
+end
+
+function mcl_biome_dispatch.list_registered_biomes_and_groups ()
+	if not levelgen_enabled then
+		return {}
+	end
+	local biomes_and_groups
+		= core.ipc_get ("mcl_biome_dispatch:registered_biomes_and_groups")
+	return biomes_and_groups or {}
+end
+
+if levelgen_enabled then
+	local modpath = core.get_modpath (core.get_current_modname ())
+	core.register_async_dofile (modpath .. "/async_init.lua")
+end
+
 ------------------------------------------------------------------------
 -- Chat commands.
 ------------------------------------------------------------------------
@@ -1011,14 +1033,17 @@ local mathsqrt = math.sqrt
 local huge = math.huge
 
 core.register_chatcommand ("locate", {
-	params = "locate [structure | biome | poi] <ID>",
+	params = "[structure | biome | poi] <ID>",
 	description = S ("Locate a structure, biome, or point of interest identified by ID in the current dimension."),
 	privs = { maphack = true, },
 	func = function (name, param)
 		local command, id = unpack (param:split (" "))
 		if command == "structure" then
 			if type (id) ~= "string" then
-				core.chat_send_player (name, S ("`/locate structure' requires a structure ID"))
+				core.chat_send_player (name, S ([[/locate structure requires a structure ID.
+These structures are available: ]]))
+				local tbl = mcl_biome_dispatch.list_registered_structures ()
+				core.chat_send_player (name, table.concat (tbl, ", "))
 				return
 			end
 			local player = core.get_player_by_name (name)
@@ -1041,7 +1066,10 @@ core.register_chatcommand ("locate", {
 			end
 		elseif command == "biome" then
 			if type (id) ~= "string" then
-				core.chat_send_player (name, S ("`/locate structure' requires a biome ID or a tag prefixed with `#'"))
+				core.chat_send_player (name, S ([[/locate biome requires a biome ID or a tag prefixed with `#'.
+These biomes and tags are available: ]]))
+				local tbl = mcl_biome_dispatch.list_registered_biomes_and_groups ()
+				core.chat_send_player (name, table.concat (tbl, ", "))
 				return
 			end
 			local player = core.get_player_by_name (name)
@@ -1062,7 +1090,13 @@ core.register_chatcommand ("locate", {
 			end
 		elseif command == "poi" then
 			if type (id) ~= "string" then
-				core.chat_send_player (name, S ("`/locate poi' requires an identifier designating a valid point of interest"))
+				core.chat_send_player (name, S ([[/locate poi requires an identifier designating a valid point of interest.
+These points of interest are available: ]]))
+				local tbl = {}
+				for name, _ in pairs (mcl_villages.registered_pois) do
+					insert (tbl, name)
+				end
+				core.chat_send_player (name, table.concat (tbl, ", "))
 				return
 			elseif not mcl_villages.registered_pois[id]  then
 				core.chat_send_player (name, S ("@1 does not identify a valid point of interest", id))
