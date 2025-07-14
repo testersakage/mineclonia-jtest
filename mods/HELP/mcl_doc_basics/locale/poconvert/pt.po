@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-07-14 04:57+0000\n"
+"Last-Translator: YuukiHisashi <yuukihisashi@noreply.codeberg.org>\n"
+"Language-Team: Portuguese <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_doc_basics/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 msgid "Advanced usage"
 msgstr ""
@@ -20,55 +21,67 @@ msgid "Advanced information which may be nice to know, but is not crucial to gam
 msgstr ""
 
 msgid "Creative Mode"
-msgstr ""
+msgstr "Modo Criativo"
 
 msgid "Enabling Creative Mode in MineClonia applies the following changes:"
-msgstr ""
+msgstr "Habilitar o Modo Criativo no MineClonia aplica as seguintes mudanças:"
 
 msgid "• You keep the things you've placed"
-msgstr ""
+msgstr "• Você mantém as coisas que colocou"
 
 msgid "• Creative inventory is available to obtain most items easily"
 msgstr ""
+"• Inventário Criativo está disponível para obter a maioria dos itens "
+"fácilmente"
 
 msgid "• Hand breaks all default blocks instantly"
-msgstr ""
+msgstr "• A mão quebra todos os blocos de fábrica instantaneamente"
 
 msgid "• Greatly increased hand pointing range"
 msgstr ""
 
 msgid "• Mined blocks don't drop items"
-msgstr ""
+msgstr "• Blocos quebrados não deixam itens"
 
 msgid "• Items don't get used up"
-msgstr ""
+msgstr "• Itens não são utilizados"
 
 msgid "• Tools don't wear off"
-msgstr ""
+msgstr "• Ferramentas não se desgastam"
 
 msgid "• You can eat food whenever you want"
-msgstr ""
+msgstr "• Você pode comer quando quiser"
 
 msgid "• You can always use the minimap (including radar mode)"
-msgstr ""
+msgstr "• Você sempre pode usar o minimapa (incluindo o modo radar)"
 
 msgid "Damage is not affected by Creative Mode, it needs to be disabled separately."
 msgstr ""
+"Dano não é afetado pelo Modo Criativo, precisa ser desabilitado "
+"separadamente."
 
 msgid "Console"
 msgstr ""
 
 msgid "With [F10] you can open and close the console. The main use of the console is to show the chat log and enter chat messages or server commands."
 msgstr ""
+"Com [F10] você pode abrir e fechar o console. O uso principal do console é "
+"mostrar o histórico de chat e inserir mensagens ou comandos de servidor."
 
 msgid "Using the chat or server command key also opens the console, but it is smaller and will be closed after you sent a message."
 msgstr ""
+"Usar a tecla de comando do chat ou do servidor também abre o console, mas é "
+"menor e será fechado após enviar uma mensagem."
 
 msgid "Use the chat to communicate with other players. This requires you to have the “shout” privilege."
 msgstr ""
+"Use o chat para se comunicar com outros jogadores. Isso requer que você "
+"tenha o privilégio \"shout\"."
 
 msgid "Just type in the message and hit [Enter]. Public chat messages can not begin with “/”."
 msgstr ""
+"Apenas digite a mensagem e aperte [Enter]. Mensagens públicas não podem "
+"iniciar com \"/\"."
 
 msgid "You can send private messages: Say “/msg <player> <message>” in chat to send “<message>” which can only be seen by <player>."
 msgstr ""
@@ -1404,4 +1417,3 @@ msgstr ""
 
 msgid "MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Luanti however, that can be installed from the main menu content browser."
 msgstr ""
-
