@@ -35,6 +35,7 @@ local function init_chunksize ()
 		core.ipc_set ("mcl_levelgen:mt_chunk_origin",
 			      vector.new (origin, origin, origin))
 	else
+		local old_setting = core.get_mapgen_setting ("chunksize")
 		local cs = core.get_mapgen_chunksize ()
 		if cs.x ~= cs.z then
 			local blurb = "Chunk size must be symmetrical along the X axis: "
@@ -48,7 +49,16 @@ local function init_chunksize ()
 		cs.y = DESIRED_Y_SIZE
 		core.set_mapgen_setting ("chunksize", vector.to_string (cs), true)
 
-		local cs = core.get_mapgen_chunksize ()
+		local cs_new = core.get_mapgen_chunksize ()
+		-- Verify that the adjustment above has not reset
+		-- chunksize to 1, which is the case when minetest has
+		-- not been modified to support non-cubic chunksizes.
+		if not vector.equals (cs_new, cs) then
+			core.set_mapgen_setting ("chunksize", old_setting, true)
+			cs = core.get_mapgen_chunksize ()
+		else
+			cs = cs_new
+		end
 		local v = vector.new (-floor (cs.x / 2), DESIRED_Y_BASE,
 				      -floor (cs.z / 2))
 		core.set_mapgen_setting ("chunk_origin", v:to_string (), true)
