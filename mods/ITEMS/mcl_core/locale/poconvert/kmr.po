@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-07-14 11:13+0000\n"
+"PO-Revision-Date: 2025-07-14 12:36+0000\n"
 "Last-Translator: Killercat103 <killercat103@noreply.codeberg.org>\n"
 "Language-Team: Kurdish (Northern) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_core/kmr/>\n"
@@ -15,19 +15,19 @@ msgstr ""
 "X-Generator: Weblate 5.12.2\n"
 
 msgid "Stick"
-msgstr ""
+msgstr "Ço"
 
 msgid "Sticks are a very versatile crafting material; used in countless crafting recipes."
 msgstr ""
 
 msgid "Paper"
-msgstr ""
+msgstr "Kaxez"
 
 msgid "Paper is used to craft books and maps."
 msgstr ""
 
 msgid "Coal"
-msgstr ""
+msgstr "Komir"
 
 msgid "“Coal” refers to coal lumps obtained by digging coal ore which can be found underground. Coal is your standard furnace fuel, but it can also be used to make torches, coal blocks and a few other things."
 msgstr ""
@@ -51,7 +51,7 @@ msgid "Gold nuggets are very small pieces of molten gold; the main purpose is to
 msgstr ""
 
 msgid "Diamond"
-msgstr ""
+msgstr "Elmas"
 
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr ""
@@ -75,7 +75,7 @@ msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr ""
 
 msgid "Emerald"
-msgstr ""
+msgstr "Zimrûd"
 
 msgid "Emeralds are used in villager trades as currency."
 msgstr ""
@@ -87,7 +87,7 @@ msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr ""
 
 msgid "Brick"
-msgstr ""
+msgstr "Xişt"
 
 msgid "Bricks are used to craft brick blocks."
 msgstr ""
@@ -111,7 +111,7 @@ msgid "Bowls are mainly used to hold tasty soups."
 msgstr ""
 
 msgid "Apple"
-msgstr ""
+msgstr "Sêv"
 
 msgid "Apples are food items which can be eaten."
 msgstr ""
