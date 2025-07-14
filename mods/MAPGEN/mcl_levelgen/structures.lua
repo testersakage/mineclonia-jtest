@@ -336,6 +336,12 @@ local function struct_hash (cx, cz)
 	return bor (lshift (x, 13), z)
 end
 
+local function struct_unhash (hash)
+	local x = arshift (hash, 13) - 4096
+	local z = band (hash, 0xfff) - 4096
+	return x, z
+end
+
 local tostringull = mcl_levelgen.tostringull
 
 if core and core.get_mod_storage then
@@ -2369,6 +2375,25 @@ local function insert_structure_candidate (start, _, _, _, ids)
 	end
 end
 
+local sort_src_x
+local sort_src_z
+
+local function compare_distance_to_src (a, b)
+	local dist_a, dist_b
+	local x, z = sort_src_x, sort_src_z
+	do
+		local dx, dz = a[1] * 16 - x, a[2] * 16 - z
+		local d = dx * dx + dz * dz
+		dist_a = d
+	end
+	do
+		local dx, dz = b[1] * 16 - x, b[2] * 16 - z
+		local d = dx * dx + dz * dz
+		dist_b = d
+	end
+	return dist_a < dist_b
+end
+
 function mcl_levelgen.locate_structure_placement (terrain, x, y, z, id_or_ids, grid_limit_xz)
 	local level = terrain.structures
 
@@ -2380,28 +2405,75 @@ function mcl_levelgen.locate_structure_placement (terrain, x, y, z, id_or_ids, g
 	end
 
 	local target_sets = {}
+	local target_stronghold_sets = {}
 	for _, set in ipairs (level.structure_sets) do
 		for _, structure in ipairs (set.structures) do
-			if indexof (id_or_ids, structure.structure.name) ~= -1
-			-- TODO: non-random-spread structures.
-				and set.placement.spacing
-				and set.placement.locator_test then
-				insert (target_sets, set)
+			if indexof (id_or_ids, structure.structure.name) ~= -1 then
+				if set.placement.spacing
+					and set.placement.locator_test then
+					insert (target_sets, set)
+				elseif level.stronghold_starts[set.placement.id] then
+					insert (target_stronghold_sets, set)
+				end
 				break
 			end
 		end
 	end
-	if #target_sets == 0 then
+	if #target_sets == 0 and #target_stronghold_sets == 0 then
 		return nil
+	end
+
+	local nearest, d_nearest = nil, huge
+	local nearest_rgn_absolute = huge
+
+	-- Initially structures with concentric ring placement.
+	local cx = floor (x / 16)
+	local cz = floor (z / 16)
+	for _, set in ipairs (target_stronghold_sets) do
+		local positions_by_distance = {}
+
+		for hash, _ in pairs (level.stronghold_starts[set.placement.id]) do
+			local cx, cz = struct_unhash (hash)
+			insert (positions_by_distance, {cx, cz,})
+		end
+
+		sort_src_x = x
+		sort_src_z = z
+		table.sort (positions_by_distance, compare_distance_to_src)
+
+		for _, pos in ipairs (positions_by_distance) do
+			candidates = {}
+			local just_this_set = {set,}
+			local cx1, cz1 = pos[1], pos[2]
+
+			if not nearest
+				or mathmax (mathabs (cx1 - floor (nearest[1] / 16)),
+					    mathabs (cz1 - floor (nearest[3] / 16))) < 16 then
+				get_structure_starts (level, terrain, cx1, cz1,
+						      insert_structure_candidate,
+						      id_or_ids, just_this_set)
+				for _, candidate in ipairs (candidates) do
+					local dx = mathabs (candidate[1] - x)
+					local dy = mathabs (candidate[2] - y)
+					local dz = mathabs (candidate[3] - z)
+					local d_sqr = dx * dx + dy * dy + dz * dz
+					if d_sqr < d_nearest then
+						d_nearest = d_sqr
+						nearest = candidate
+						nearest_rgn_absolute
+							= mathmin (nearest_rgn_absolute,
+								   mathmax (mathabs (cx - cx1),
+									    mathabs (cz - cz1)))
+					end
+				end
+				candidates = nil
+			end
+		end
 	end
 
 	-- Sort TARGET_SETS by grid size.
 	table.sort (target_sets, compare_grid_size)
 
-	local cx = floor (x / 16)
-	local cz = floor (z / 16)
-	local nearest, d_nearest = nil, huge
-	local nearest_rgn_absolute = huge
 	for _, set in ipairs (target_sets) do
 		local placement = set.placement
 		local spacing = placement.spacing
@@ -2432,6 +2504,7 @@ function mcl_levelgen.locate_structure_placement (terrain, x, y, z, id_or_ids, g
 				local dz = mathabs (candidate[3] - z)
 				local d_sqr = dx * dx + dy * dy + dz * dz
 				if d_sqr < d_nearest then
+					d_nearest = d_sqr
 					nearest = candidate
 					nearest_rgn_absolute
 						= mathmin (nearest_rgn_absolute, i * spacing)
