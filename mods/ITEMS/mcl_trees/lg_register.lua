@@ -1301,6 +1301,7 @@ local huge = math.huge
 local cid_vine = core.get_content_id ("mcl_core:vine")
 local replaceable_by_trees = {
 	"air",
+	"group:glow_lichen",
 	"group:leaves",
 	"group:seagrass",
 	"group:water",
@@ -1320,7 +1321,6 @@ local replaceable_by_trees = {
 	"mcl_lush_caves:hanging_roots",
 	-- TODO:
 	-- "mcl_flowers:pitcher_plant",
-	-- "mcl_levelgen:glow_lichen",
 }
 mcl_trees.replaceable_by_trees = replaceable_by_trees
 
