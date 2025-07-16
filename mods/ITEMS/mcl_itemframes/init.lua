@@ -120,7 +120,7 @@ local function update_entity(pos)
 	if core.get_meta(pos):get_int("_mcl_item_rotation") == nil then
 		core.get_meta(pos):set_int("_mcl_item_rotation", 0)
 	end
-	l:set_item_rotation(core.get_meta(pos):get_int("_mcl_item_rotation"))
+	l.object:set_yaw(core.get_meta(pos):get_int("_mcl_item_rotation"))
 	return l
 end
 mcl_itemframes.update_entity = update_entity
@@ -209,10 +209,6 @@ function mcl_itemframes.tpl_entity:set_item(itemstack, pos)
 		wield_item = self._item,
 		visual_size = {x = base_props.visual_size.x / ws.x, y = base_props.visual_size.y / ws.y},
 	}, def.object_properties or {}))
-end
-
-function mcl_itemframes.tpl_entity:set_item_rotaion(yaw)
-	self.object:set_yaw(yaw)
 end
 
 function mcl_itemframes.tpl_entity:get_staticdata()
