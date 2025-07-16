@@ -436,7 +436,7 @@ core.register_node("mcl_brewing:stand_000", table.merge(tpl_brewing_stand, {
 	_doc_items_longdesc = S("The stand allows you to brew potions!"),
 	_doc_items_create_entry = true,
 	_doc_items_usagehelp = doc_string,
-	groups = {pickaxey = 1, brewitem = 1, container = 1, brewing_stand = 1,
+	groups = {handy=1, pickaxey = 1, brewitem = 1, container = 1, brewing_stand = 1,
 			pathfinder_partial = 2,},
 }))
 core.register_node("mcl_brewing:stand_100", table.merge(tpl_brewing_stand, {
