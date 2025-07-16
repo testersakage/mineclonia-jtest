@@ -240,7 +240,6 @@ local function basalt_pillar_place (_, x, y, z, cfg, rng)
 				for y = y, level_min, -1 do
 					if y < min_y then
 						request_additional_context (0, 32)
-						print ("requesting further context: ", x, -z - 1)
 						return false
 					elseif not is_air (x + dx, y, z + dz) then
 						push_block (x + dx, y, z + dz)
