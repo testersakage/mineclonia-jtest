@@ -67,7 +67,7 @@ end
 local function rotate_entity(pos)
 	local l = find_entity(pos)
 	if l then
-		l:set_rotation(vector.add(vector.zero(), vector.new(0.25 * math.pi, 0, 0)))
+		l.object:set_rotation(vector.add(l.object:get_rotation(), vector.new(0.25 * math.pi, 0, 0)))
 	end
 	return l
 end
