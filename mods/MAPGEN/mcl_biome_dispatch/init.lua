@@ -578,8 +578,8 @@ function mcl_biome_dispatch.next_respawn_position (player)
 
 	for i = 1, m do
 		state = mcl_util.lcg_next (a, c, m, state)
-		local dx = floor (state / diameter) - diameter
-		local dz = state % diameter - diameter
+		local dx = floor (state / diameter) - spawn_radius
+		local dz = state % diameter - spawn_radius
 
 		v.x = spawn_pos.x + dx
 		v.z = spawn_pos.z + dz
