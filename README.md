@@ -27,6 +27,8 @@ Version: 0.116.1
 * No hamburgers (but villagers follow dropped food as in Minecraft)
 * No renamed mobs (e.g. Creepers remain Creepers, not Stalkers)
 * Overhauled mob pathfinding, physics, and AI
+* Custom Lua map generator featuring terrain and biomes that closely
+  comport to Minecraft and which is compatible with Minecraft seeds
 
 ### Gameplay
 You start in a randomly-generated world made entirely of cubes. You can explore
@@ -204,8 +206,9 @@ Technical differences from Minecraft:
   Minecraft, but it is still very large)
 * Still incomplete and buggy
 * Blocks, items, enemies and other features are missing
-* Structure replacements - these small variants of Minecraft structures serve as
-  replacements until we can get large structures working:
+* Structure replacements - these small variants of Minecraft
+  structures serve as replacements (unless you enable Mineclonia's
+  custom Lua map generator) until we can get large structures working:
     * Woodland Cabin (Mansion)
     * Nether Outpost (Fortress)
     * Ocean Temple (Monument)
