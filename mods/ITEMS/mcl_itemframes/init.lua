@@ -68,8 +68,8 @@ end
 local function rotate_entity(pos)
 	local l = find_entity(pos)
 	if l then
-		l.object:set_yaw(l.object:get_yaw() + (0.25 * math.pi))
-		core.get_meta(pos):set_int("_mcl_item_rotation", l.object:get_yaw())
+		l.object:set_rotation(vector.add(l.object:get_rotation() , vector.new(0, 0, 0.25 * math.pi)))
+		core.get_meta(pos):set_int("_mcl_item_rotation", l.object:get_rotation.().z)
 	end
 end
 
