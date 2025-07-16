@@ -210,7 +210,7 @@ function mcl_itemframes.tpl_entity:set_item(itemstack, pos)
 	}, def.object_properties or {}))
 end
 
-local function mcl_itemframes.tpl_entity:set_rotaion(yaw)
+function mcl_itemframes.tpl_entity:set_rotaion(yaw)
 	self.object:set_yaw(yaw)
 end
 
