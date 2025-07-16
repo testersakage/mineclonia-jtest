@@ -73,8 +73,6 @@ local function rotate_entity(pos)
 	end
 end
 
-
-
 local function find_or_create_entity(pos)
 	local l = find_entity(pos)
 	if not l then
@@ -119,7 +117,10 @@ local function update_entity(pos)
 		return
 	end
 	l:set_item(itemstack, pos)
-	l:set_rotation(core.get_meta(pos):get_int("_mcl_item_rotation"))
+	if core.get_meta(pos):get_int("_mcl_item_rotation") == nil then
+		core.get_meta(pos):set_int("_mcl_item_rotation", 0)
+	end
+	l:set_item_rotation(core.get_meta(pos):get_int("_mcl_item_rotation"))
 	return l
 end
 mcl_itemframes.update_entity = update_entity
@@ -210,7 +211,7 @@ function mcl_itemframes.tpl_entity:set_item(itemstack, pos)
 	}, def.object_properties or {}))
 end
 
-function mcl_itemframes.tpl_entity:set_rotaion(yaw)
+function mcl_itemframes.tpl_entity:set_item_rotaion(yaw)
 	self.object:set_yaw(yaw)
 end
 
