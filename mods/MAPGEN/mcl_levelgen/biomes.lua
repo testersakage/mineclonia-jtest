@@ -6998,7 +6998,10 @@ local mathsin = math.sin
 local mathcos = math.cos
 local mathmin = math.min
 
-local function spawn_distance (a, targets)
+local SPAWN_MALUS_START = 2500 * 2500
+local SPAWN_PENALTY_VALUE = 10000 * 10000
+
+local function spawn_distance (a, targets, x, z)
 	-- Minecraft disregards depth.
 	local depth = a[5]
 	a[5] = 0
@@ -7008,7 +7011,12 @@ local function spawn_distance (a, targets)
 		distance = mathmin (distance, d)
 	end
 	a[5] = depth
-	return distance
+
+	-- Minecraft applies a penalty as the spawn position drifts
+	-- further away from 0, 0.
+	local d_scaled = (x * x + z * z) / SPAWN_MALUS_START
+	local d_origin = rtz (d_scaled * d_scaled * SPAWN_PENALTY_VALUE)
+	return distance + d_origin 
 end
 
 local TWO_PI = math.pi * 2
@@ -7023,7 +7031,7 @@ local function find_fittest (in_dist, x, y, z, spawn_target,
 		local x = rtz (x + mathsin (angle) * cur_dist)
 		local z = rtz (z + mathcos (angle) * cur_dist)
 		local extents = sample (x, y, z)
-		local dist = spawn_distance (extents, spawn_target)
+		local dist = spawn_distance (extents, spawn_target, x, z)
 
 		if dist < in_dist then
 			in_dist = dist
@@ -7046,7 +7054,7 @@ function mcl_levelgen.biome_spawn_position (spawn_targets, y, sample)
 	for i, target in ipairs (spawn_targets) do
 		packed[i] = pack_extents_quantize (target)
 	end
-	local in_dist = spawn_distance (sample (x, y, z), packed)
+	local in_dist = spawn_distance (sample (x, y, z), packed, x, z)
 	in_dist, x, z = find_fittest (in_dist, x, y, z, packed,
 				      2048.0, 512.0, sample)
 	in_dist, x, z = find_fittest (in_dist, x, y, z, packed,
