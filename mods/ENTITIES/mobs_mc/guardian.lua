@@ -403,7 +403,7 @@ end
 
 mcl_mobs.register_spawner (guardian_spawner)
 mcl_mobs.suppress_spawning_in_structure ("mcl_levelgen:ocean_monument",
-					 "underground_structures")
+					 "underground_water_creature")
 mcl_mobs.suppress_spawning_in_structure ("mcl_levelgen:ocean_monument",
 					 "axolotls")
 
