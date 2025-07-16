@@ -71,6 +71,7 @@ local axolotl = {
 				m:set_string("properties",core.serialize ({
 					nametag = self:get_nametag (),
 					base_texture = self.base_texture,
+					texture_selected = self.texture_selected,
 				}))
 				clicker:set_wielded_item(it)
 				self:safe_remove()
