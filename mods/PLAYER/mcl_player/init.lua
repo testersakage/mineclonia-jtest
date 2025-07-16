@@ -258,7 +258,11 @@ core.register_globalstep (function (dtime)
 end)
 
 function mcl_player.set_inventory_formspec (player, formspec, priority)
-	local formspecs = mcl_player.players[player].inventory_formspecs
+	local playerdata = mcl_player.players[player]
+	if not playerdata then -- The player has already left.
+		return
+	end
+	local formspecs = playerdata.inventory_formspecs
 	formspecs[priority] = formspec
 	local best, priority
 
