@@ -1340,7 +1340,7 @@ end
 -- Biome position randomization.
 ------------------------------------------------------------------------
 
--- Simple LCJ.
+-- Simple LCG.
 local MULTIPLIER = ull (0x5851f42d, 0x4c957f2d)
 local INCREMENT = ull (0x14057b7e, 0xf767814f)
 
