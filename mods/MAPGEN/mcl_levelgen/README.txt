@@ -37,3 +37,7 @@ consulted.
 All documentary sources which contributed to one component of the
 level generator are referenced in the commentary of the file
 implementing the component at issue.
+
+No effort whatever has been expended towards replicating the
+generation of structures which are derived from Mojang-copyrighted
+schematics/templates.
