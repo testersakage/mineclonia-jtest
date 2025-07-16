@@ -121,12 +121,9 @@ local function update_entity(pos)
 		return
 	end
 	l:set_item(itemstack, pos)
-	if core.get_meta(pos):get_int("_mcl_item_rotation") == nil then
-		core.get_meta(pos):set_int("_mcl_item_rotation", 0)
-	end
-	l.object:set_rotation(vector.new(core.get_meta(pos):get_int("_mcl_item_rotation_x"), \
-	                                 core.get_meta(pos):get_int("_mcl_item_rotation_y"), \
-	                                 core.get_meta(pos):get_int("_mcl_item_rotation_z")))
+	l.object:set_rotation(vector.new(core.get_meta(pos):get_int("_mcl_item_rotation_x") or 0, \
+	                                 core.get_meta(pos):get_int("_mcl_item_rotation_y") or 0, \
+	                                 core.get_meta(pos):get_int("_mcl_item_rotation_z") or 0))
 	return l
 end
 mcl_itemframes.update_entity = update_entity
