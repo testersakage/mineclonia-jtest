@@ -69,7 +69,6 @@ local function rotate_entity(pos)
 	if l then
 		l.object:set_rotation(vector.add(l.object:get_rotation(), vector.new(0.25 * math.pi, 0, 0)))
 	end
-	return l
 end
 
 local function find_or_create_entity(pos)
