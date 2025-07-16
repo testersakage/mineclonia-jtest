@@ -73,7 +73,7 @@ local function rotate_entity(pos)
 	end
 end
 
-local function set_rotaion(pos, yaw)
+local function set_item_rotaion(pos, yaw)
 	local l = find_entity(pos)
 	if l then
 		l.object:set_yaw(yaw)
@@ -124,7 +124,7 @@ local function update_entity(pos)
 		return
 	end
 	l:set_item(itemstack, pos)
-	set_rotation(pos, core.get_meta(pos):get_int("_mcl_item_rotation"))
+	set_item_rotation(pos, core.get_meta(pos):get_int("_mcl_item_rotation"))
 	return l
 end
 mcl_itemframes.update_entity = update_entity
