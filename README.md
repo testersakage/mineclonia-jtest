@@ -146,6 +146,7 @@ The following main features are available:
 * Water and lava
 * Weather
 * 28 biomes + 5 Nether Biomes
+* 68 biomes (5 End, 5 Nether, and 58 Overworld) if the custom Lua map generator is enabled.
 * The Nether, a fiery underworld in another dimension
 * Redstone circuits (partially)
 * Minecarts (partial)
