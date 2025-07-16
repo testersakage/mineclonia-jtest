@@ -120,7 +120,7 @@ local function update_entity(pos)
 	if core.get_meta(pos):get_int("_mcl_item_rotation") == nil then
 		core.get_meta(pos):set_int("_mcl_item_rotation", 0)
 	end
-	l.object:set_yaw(core.get_meta(pos):get_int("_mcl_item_rotation"))
+	l.object:set_rotation(vector.new(0, 0, core.get_meta(pos):get_int("_mcl_item_rotation")))
 	return l
 end
 mcl_itemframes.update_entity = update_entity
