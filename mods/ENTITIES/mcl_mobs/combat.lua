@@ -518,12 +518,8 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 end
 
 function mob_class:custom_attack ()
-	-- Punch player (or what player is attached to)
-	local attached = self.attack:get_attach ()
+	-- Punch target.
 	local attack = self.attack
-	if attached then
-		attack = attached
-	end
 	local wielditem = self:get_wielditem ()
 	local damage = {
 		full_punch_interval = 1.0,

@@ -2,6 +2,7 @@ local mob_class = mcl_mobs.mob_class
 
 local function force_detach(player)
 	if not player or not player:get_pos() or not player:is_player() then return end
+	mcl_player.set_inventory_formspec (player, nil, 100)
 
 	local attached_to = player:get_attach()
 	if not attached_to then
