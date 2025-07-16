@@ -188,6 +188,9 @@ function mcl_itemframes.tpl_entity:set_item(itemstack, pos)
 	local dir = core.wallmounted_to_dir(core.get_node(pos).param2)
 	self.object:set_pos(vector.add(self._itemframe_pos, dir * 0.42))
 	self.object:set_rotation(vector.dir_to_rotation(dir))
+	core.get_meta(pos):set_int("_mcl_item_rotation_x", vector.dir_to_rotation(dir).x)
+	core.get_meta(pos):set_int("_mcl_item_rotation_y", vector.dir_to_rotation(dir).y)
+	core.get_meta(pos):set_int("_mcl_item_rotation_z", vector.dir_to_rotation(dir).z)
 
 	if self._map_id then
 		local unran_callback = true
