@@ -124,6 +124,7 @@ function mcl_itemframes.tpl_node.on_rightclick(pos, _, clicker, ostack, _)
 	local inv = core.get_meta(pos):get_inventory()
 	if not inv:get_stack("main", 1):is_empty() then
 		rotate_entity(pos)
+		return ostack
 	end
 	local name = clicker:get_player_name()
 	if core.is_protected(pos, name) then
