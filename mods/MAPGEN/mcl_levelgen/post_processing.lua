@@ -2829,8 +2829,8 @@ local function get_structure_string (self_pos)
 	return table.concat (strs)
 end
 
-local function hud_text (player)
-	local self_pos = mcl_util.get_nodepos (player:get_pos ())
+local function hud_text (pos)
+	local self_pos = pos
 	local x = floor (self_pos.x / 16)
 	local y = floor (self_pos.y / 16)
 	local z = floor (self_pos.z / 16)
@@ -2847,7 +2847,11 @@ local function hud_text (player)
 	local tbl = {}
 	for z1 = 12, -11, -1 do
 		for x1 = -11, 12 do
-			table.insert (tbl, get_status_string (x + x1, y, z + z1))
+			if x1 == 0 and z1 == 0 then
+				table.insert (tbl, "* ")
+			else
+				table.insert (tbl, get_status_string (x + x1, y, z + z1))
+			end
 		end
 		table.insert (tbl, "\n")
 	end
@@ -2880,6 +2884,7 @@ end
 
 local function init_hud (player)
 	if not huds[player] then
+		local pos = mcl_util.get_nodepos (player:get_pos ())
 		local meta = player:get_meta ()
 		meta:set_int ("mcl_levelgen:debug_hud_enabled", 1)
 		huds[player] = player:hud_add ({
@@ -2888,7 +2893,7 @@ local function init_hud (player)
 				x = 1,
 				y = -1,
 			},
-			text = core.colorize ("#808080", hud_text (player)),
+			text = core.colorize ("#808080", hud_text (pos)),
 			style = 5,
 			position = {x = 0.0073, y = 0.889},
 		})
@@ -2907,8 +2912,9 @@ end
 local function update_hud (player)
 	local hud = huds[player]
 	if hud then
+		local pos = mcl_util.get_nodepos (player:get_pos ())
 		player:hud_change (hud, "text",
-				   core.colorize ("#808080", hud_text (player)))
+				   core.colorize ("#808080", hud_text (pos)))
 	end
 end
 
@@ -3162,6 +3168,23 @@ local area_generator_cbs = {}
 local EMERGE_ERRORED = core.EMERGE_ERRORED
 local EMERGE_CANCELLED = core.EMERGE_CANCELLED
 
+local function get_containing_mapchunk (x, z, max)
+	local origin = mcl_levelgen.mt_chunk_origin
+	local chunksize = mcl_levelgen.mt_chunksize
+	local x1, z1 = x - origin.x, z - origin.z
+
+	if not max then
+		x = floor (x1 / chunksize.x) * chunksize.x
+		z = floor (z1 / chunksize.z) * chunksize.z
+	else
+		x = floor (x1 / chunksize.x) * chunksize.x
+			+ chunksize.x - 1
+		z = floor (z1 / chunksize.z) * chunksize.z
+			+ chunksize.z - 1
+	end
+	return x, z
+end
+
 local function emerge_progress_cb (blockpos, action, calls_remaining, param)
 	if action == EMERGE_ERRORED or action == EMERGE_CANCELLED then
 		-- Attempt to emerge this area again.  This must be
@@ -3169,14 +3192,17 @@ local function emerge_progress_cb (blockpos, action, calls_remaining, param)
 		-- async error arrives, a deadlock is liable to result
 		-- during shutdown.  See
 		-- https://github.com/luanti-org/luanti/issues/15419.
-		core.after (0, core.emerge_area,
-			    vector.multiply (blockpos, 16),
-			    vector.multiply (blockpos, 16),
+		local v = vector.multiply (blockpos, 16)
+		core.after (0, core.emerge_area, v, v,
 			    emerge_progress_cb, param)
 	else
-		local progress = param.progress
-		progress.n_emerged = progress.n_emerged + 1
-		param.cb_progress (progress, param.data1, param.data2)
+		local hash = hashmapblock (blockpos.x, blockpos.y, blockpos.z)
+		if not param.emerged[hash] then
+			local progress = param.progress
+			param.emerged[hash] = true
+			progress.n_emerged = progress.n_emerged + 1
+			param.cb_progress (progress, param.data1, param.data2)
+		end
 	end
 end
 
@@ -3231,6 +3257,7 @@ function report_mbs_generation (bx, by, bz)
 			local progress = desc.progress
 			progress.n_regenerated = progress.n_regenerated + 1
 			desc.cb_progress (progress, desc.data1, desc.data2)
+			-- print (hud_text (desc.center))
 
 			if progress.n_regenerated >= progress.total_regen
 			-- Also remove entries if all MapBlocks in
@@ -3278,6 +3305,8 @@ local function generate_area_1 (dim, progress, x1, y1, z1, x2, y2, z2,
 	local cx1, cy1, cz1, cx2, cy2, cz2
 		= area_context_range (bx1 - 1, bz1 - 1, by1 - 1,
 				      bx2 + 1, bz2 + 1, by2 + 1)
+	cx1, cz1 = get_containing_mapchunk (cx1, cz1, false)
+	cx2, cz2 = get_containing_mapchunk (cx2, cz2, true)
 
 	v1.x = cx1 * 16
 	v1.y = cy1 * 16 + dim.y_global
@@ -3296,11 +3325,12 @@ local function generate_area_1 (dim, progress, x1, y1, z1, x2, y2, z2,
 		by2 = by2,
 		bz2 = bz2,
 		cx1 = cx1,
-		cy1 = cy1,
+		cy1 = cy1 + dim.y_global_block,
 		cz1 = cz1,
 		cx2 = cx2,
-		cy2 = cy2,
+		cy2 = cy2 + dim.y_global_block,
 		cz2 = cz2,
+		emerged = {},
 		cb_progress = cb_progress,
 		data1 = data1,
 		data2 = data2,
