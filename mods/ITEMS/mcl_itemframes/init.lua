@@ -35,7 +35,9 @@ mcl_itemframes.tpl_node = {
 	sounds = mcl_sounds.node_sound_defaults(),
 	node_placement_prediction = "",
 	_mcl_hardness = 0.5,
-	_mcl_item_rotation = 0,
+	_mcl_item_rotation_x = 0,
+	_mcl_item_rotation_y = 0,
+	_mcl_item_rotation_z = 0,
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 	allow_metadata_inventory_move = function() return 0 end,
 	allow_metadata_inventory_put = function() return 0 end,
@@ -69,7 +71,9 @@ local function rotate_entity(pos)
 	local l = find_entity(pos)
 	if l then
 		l.object:set_rotation(vector.add(l.object:get_rotation(), vector.new(0, 0, 0.25 * math.pi)))
-		core.get_meta(pos):set_int("_mcl_item_rotation", l.object:get_rotation().z)
+		core.get_meta(pos):set_int("_mcl_item_rotation_x", l.object:get_rotation().x)
+		core.get_meta(pos):set_int("_mcl_item_rotation_y", l.object:get_rotation().y)
+		core.get_meta(pos):set_int("_mcl_item_rotation_z", l.object:get_rotation().z)
 	end
 end
 
@@ -120,7 +124,9 @@ local function update_entity(pos)
 	if core.get_meta(pos):get_int("_mcl_item_rotation") == nil then
 		core.get_meta(pos):set_int("_mcl_item_rotation", 0)
 	end
-	l.object:set_rotation(vector.new(0, 0, core.get_meta(pos):get_int("_mcl_item_rotation")))
+	l.object:set_rotation(vector.new(core.get_meta(pos):get_int("_mcl_item_rotation_x"), \
+	                                 core.get_meta(pos):get_int("_mcl_item_rotation_y"), \
+	                                 core.get_meta(pos):get_int("_mcl_item_rotation_z")))
 	return l
 end
 mcl_itemframes.update_entity = update_entity
