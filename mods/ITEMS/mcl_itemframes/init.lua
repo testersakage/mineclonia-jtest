@@ -64,6 +64,14 @@ local function find_entity(pos)
 	end
 end
 
+local function rotate_entity(pos)
+	local l = find_entity(pos)
+	if l then
+		l:set_rotation(vector.add(l:get_rotation(), vector.new(0.25 * math.pi, 0, 0)))
+	end
+	return l
+end
+
 local function find_or_create_entity(pos)
 	local l = find_entity(pos)
 	if not l then
@@ -114,6 +122,10 @@ mcl_itemframes.update_entity = update_entity
 
 -- Node functions
 function mcl_itemframes.tpl_node.on_rightclick(pos, _, clicker, ostack, _)
+	local inv = core.get_meta(pos):get_inventory()
+	if not inv:get_stack("main", 1):is_empty() then
+		rotate_entity(pos)
+	end
 	local name = clicker:get_player_name()
 	if core.is_protected(pos, name) then
 		core.record_protection_violation(pos, name)
@@ -124,7 +136,6 @@ function mcl_itemframes.tpl_node.on_rightclick(pos, _, clicker, ostack, _)
 	local nmeta = core.get_meta(pos)
 	nmeta:set_string("infotext", imeta:get_string("name"))
 	local itemstack = pstack:take_item()
-	local inv = core.get_meta(pos):get_inventory()
 	drop_item(pos)
 	inv:set_stack("main", 1, itemstack)
 	update_entity(pos)
