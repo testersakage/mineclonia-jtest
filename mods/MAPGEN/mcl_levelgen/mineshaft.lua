@@ -1486,11 +1486,11 @@ local mineshaft_mesa_biomes = {
 }
 
 mcl_levelgen.modify_biome_groups (mineshaft_biomes, {
-	has_structure_mineshaft = true,
+	has_mineshaft = true,
 })
 
 mcl_levelgen.modify_biome_groups (mineshaft_mesa_biomes, {
-	has_structure_mineshaft_mesa = true,
+	has_mineshaft_mesa = true,
 })
 
 mcl_levelgen.modify_biome_groups ({"DeepDark",}, {
@@ -1501,7 +1501,7 @@ mcl_levelgen.register_structure ("mcl_levelgen:mineshaft", {
 	step = mcl_levelgen.UNDERGROUND_STRUCTURES,
 	create_start = mineshaft_create_start,
 	terrain_adaptation = "none",
-	biomes = mcl_levelgen.build_biome_list ({"#has_structure_mineshaft",}),
+	biomes = mcl_levelgen.build_biome_list ({"#has_mineshaft",}),
 	is_mesa = false,
 })
 
@@ -1509,7 +1509,7 @@ mcl_levelgen.register_structure ("mcl_levelgen:mineshaft_mesa", {
 	step = mcl_levelgen.UNDERGROUND_STRUCTURES,
 	create_start = mineshaft_create_start,
 	terrain_adaptation = "none",
-	biomes = mcl_levelgen.build_biome_list ({"#has_structure_mineshaft_mesa",}),
+	biomes = mcl_levelgen.build_biome_list ({"#has_mineshaft_mesa",}),
 	is_mesa = true,
 })
 
