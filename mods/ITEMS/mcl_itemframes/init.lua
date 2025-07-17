@@ -35,7 +35,6 @@ mcl_itemframes.tpl_node = {
 	sounds = mcl_sounds.node_sound_defaults(),
 	node_placement_prediction = "",
 	_mcl_hardness = 0.5,
-	_mcl_item_rotation = 0,
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 	allow_metadata_inventory_move = function() return 0 end,
 	allow_metadata_inventory_put = function() return 0 end,
@@ -101,7 +100,7 @@ local function rotate_entity(pos, rot)
 	local is_map = (get_map_id(itemstack) and 1 or 0)
 	if l then
 		l.object:set_rotation(vector.add(l.object:get_rotation(), vector.new(0, 0, 0.25 * math.pi * (rot or 1) * (is_map + 1))))
-		meta:set_int("_mcl_item_rotation", meta:get_int("_mcl_item_rotation") + (rot == nil and 1 or 0) % 8)
+		meta:set_int("mcl_item_rotation", meta:get_int("mcl_item_rotation") + (rot == nil and 1 or 0) % 8)
 	end
 end
 
@@ -121,7 +120,7 @@ local function update_entity(pos)
 		return
 	end
 	l:set_item(itemstack, pos)
-	rotate_entity(pos, meta:get_int("_mcl_item_rotation"))
+	rotate_entity(pos, meta:get_int("mcl_item_rotation"))
 	return l
 end
 mcl_itemframes.update_entity = update_entity
