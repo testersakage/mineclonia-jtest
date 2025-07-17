@@ -100,8 +100,8 @@ local function rotate_entity(pos, rot)
 	local itemstack = meta:get_inventory():get_stack("main", 1)
 	local is_map = (get_map_id(itemstack) and 1 or 0)
 	if l then
-		l.object:set_rotation(vector.add(l.object:get_rotation(), vector.new(0, 0, 0.25 * math.pi * ((rot ~= nil) or 1) * (is_map + 1))))
-		meta:set_int("_mcl_item_rotation", meta:get_int("_mcl_item_rotation") + 1 % 8)
+		l.object:set_rotation(vector.add(l.object:get_rotation(), vector.new(0, 0, 0.25 * math.pi * (rot or 1) * (is_map + 1))))
+		meta:set_int("_mcl_item_rotation", meta:get_int("_mcl_item_rotation") + (rot == nil and 1 or 0) % 8)
 	end
 end
 
