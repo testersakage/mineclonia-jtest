@@ -65,15 +65,6 @@ local function find_entity(pos)
 	end
 end
 
-local function rotate_entity(pos, rot)
-	local l = find_entity(pos)
-	local meta = core.get_meta(pos)
-	if l then
-		l.object:set_rotation(vector.add(l.object:get_rotation(), vector.new(0, 0, 0.25 * math.pi * (rot or 1))))
-		meta:set_int("_mcl_item_rotation", meta:get_int("_mcl_item_rotation") + 1 % 8)
-	end
-end
-
 local function find_or_create_entity(pos)
 	local l = find_entity(pos)
 	if not l then
@@ -101,6 +92,17 @@ local function get_map_id(itemstack)
 	local map_id = itemstack:get_meta():get_string("mcl_maps:id")
 	if map_id == "" then map_id = nil end
 	return map_id
+end
+
+local function rotate_entity(pos, rot)
+	local l = find_entity(pos)
+	local meta = core.get_meta(pos)
+	local itemstack = meta:get_inventory():get_stack("main", 1)
+	local is_map = (get_map_id(itemstack) and 1 or 0)
+	if l then
+		l.object:set_rotation(vector.add(l.object:get_rotation(), vector.new(0, 0, 0.25 * math.pi * (rot or 1) * (is_map + 1))))
+		meta:set_int("_mcl_item_rotation", meta:get_int("_mcl_item_rotation") + 1 % 8)
+	end
 end
 
 local function update_entity(pos)
