@@ -35,9 +35,7 @@ mcl_itemframes.tpl_node = {
 	sounds = mcl_sounds.node_sound_defaults(),
 	node_placement_prediction = "",
 	_mcl_hardness = 0.5,
-	_mcl_item_rotation_x = 0,
-	_mcl_item_rotation_y = 0,
-	_mcl_item_rotation_z = 0,
+	_mcl_item_rotation = 0,
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 	allow_metadata_inventory_move = function() return 0 end,
 	allow_metadata_inventory_put = function() return 0 end,
@@ -67,13 +65,12 @@ local function find_entity(pos)
 	end
 end
 
-local function rotate_entity(pos)
+local function rotate_entity(pos, rot)
 	local l = find_entity(pos)
+	local meta = core.get_meta(pos)
 	if l then
-		l.object:set_rotation(vector.add(l.object:get_rotation(), vector.new(0, 0, 0.25 * math.pi)))
-		core.get_meta(pos):set_int("_mcl_item_rotation_x", l.object:get_rotation().x)
-		core.get_meta(pos):set_int("_mcl_item_rotation_y", l.object:get_rotation().y)
-		core.get_meta(pos):set_int("_mcl_item_rotation_z", l.object:get_rotation().z)
+		l.object:set_rotation(vector.add(l.object:get_rotation(), vector.new(0, 0, 0.25 * math.pi * (rot or 1))))
+		meta:set_int("_mcl_item_rotation", meta:get_int("_mcl_item_rotation") + 1 % 8)
 	end
 end
 
@@ -108,7 +105,8 @@ end
 
 local function update_entity(pos)
 	if not pos then return end
-	local inv = core.get_meta(pos):get_inventory()
+	local meta = core.get_meta(pos)
+	local inv = meta:get_inventory()
 	local itemstack = inv:get_stack("main", 1)
 	if not itemstack then
 		remove_entity(pos)
@@ -121,9 +119,7 @@ local function update_entity(pos)
 		return
 	end
 	l:set_item(itemstack, pos)
-	l.object:set_rotation(vector.new(core.get_meta(pos):get_int("_mcl_item_rotation_x"),
-	                                 core.get_meta(pos):get_int("_mcl_item_rotation_y"),
-	                                 core.get_meta(pos):get_int("_mcl_item_rotation_z")))
+	rotate_entity(pos, meta:get_int("_mcl_item_rotation"))
 	return l
 end
 mcl_itemframes.update_entity = update_entity
@@ -188,9 +184,6 @@ function mcl_itemframes.tpl_entity:set_item(itemstack, pos)
 	local dir = core.wallmounted_to_dir(core.get_node(pos).param2)
 	self.object:set_pos(vector.add(self._itemframe_pos, dir * 0.42))
 	self.object:set_rotation(vector.dir_to_rotation(dir))
-	core.get_meta(pos):set_int("_mcl_item_rotation_x", vector.dir_to_rotation(dir).x)
-	core.get_meta(pos):set_int("_mcl_item_rotation_y", vector.dir_to_rotation(dir).y)
-	core.get_meta(pos):set_int("_mcl_item_rotation_z", vector.dir_to_rotation(dir).z)
 
 	if self._map_id then
 		local unran_callback = true
