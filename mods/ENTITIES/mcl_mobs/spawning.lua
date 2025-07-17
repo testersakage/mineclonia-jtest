@@ -1388,6 +1388,7 @@ function mcl_mobs.suppress_spawning_in_structure (structure, category)
 	local data = registered_structure_spawners[structure]
 	if not data[category] then
 		data[category] = {}
+		total_weight[data[category]] = 0
 	end
 end
 
