@@ -22,6 +22,7 @@ local arshift = bit.arshift
 local lshift = bit.lshift
 local band = bit.band
 local bor = bit.bor
+local insert = table.insert
 
 local function toquart (x)
 	return arshift (x, 2)
@@ -573,6 +574,7 @@ extern void free_rtree (struct NoiseSamplerRTree *);
 	local ns = mcl_levelgen.ffi_ns
 	local ct_NoiseNode = ffi.typeof ("struct NoiseNode");
 	local c_coords = ffi.new ("int[7]")
+	local allnodes = {}
 
 	local function ffi_copy_rtree_node (root)
 		local gc_node = ffi.new (ct_NoiseNode)
@@ -583,8 +585,11 @@ extern void free_rtree (struct NoiseSamplerRTree *);
 			for i = 0, M - 1 do
 				local n = #root.children
 				if i < n then
-					gc_node.children[i]
+					local child
 						= ffi_copy_rtree_node (root.children[i + 1])
+					gc_node.children[i] = child
+					-- Inhibit garbage collection of CHILD.
+					insert (allnodes, child)
 				end
 			end
 			gc_node.noise_biome = -1
@@ -598,6 +603,7 @@ extern void free_rtree (struct NoiseSamplerRTree *);
 	local function ffi_create_noise_rtree (rtree)
 		local gc_root = ffi_copy_rtree_node (rtree)
 		local ffi_rtree = ns.build_rtree (gc_root)
+		allnodes = {}
 		ffi.gc (ffi_rtree, ns.free_rtree)
 		return ffi_rtree
 	end
@@ -6972,7 +6978,6 @@ function mcl_levelgen.locate_biome_in_area (preset, x, y, z, radius, rng,
 end
 
 local ipos2 = mcl_levelgen.ipos2
-local insert = table.insert
 
 function mcl_levelgen.get_biomes_chebyshev (preset, x, y, z, r)
 	local qx1 = toquart (x - r)
