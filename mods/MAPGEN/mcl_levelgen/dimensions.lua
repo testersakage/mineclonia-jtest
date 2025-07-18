@@ -205,7 +205,8 @@ mcl_levelgen.register_dimension ("mcl_levelgen:overworld", {
 	y_global = mcl_vars.mg_overworld_min,
 	data_namespace = 0,
 	create_preset = function (self, seed)
-		return mcl_levelgen.make_overworld_preset (seed)
+		local use_large_biomes = mcl_levelgen.use_large_biomes
+		return mcl_levelgen.make_overworld_preset (seed, use_large_biomes)
 	end,
 	no_lighting = false,
 })
