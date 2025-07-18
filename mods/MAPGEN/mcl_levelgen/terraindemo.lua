@@ -4,6 +4,7 @@ dofile ("beardifier_demo.lua")
 
 local floor = math.floor
 local seed = mcl_levelgen.ull (0, 3228473)
+mcl_levelgen.assign_biome_ids ({})
 local level = mcl_levelgen.make_overworld_preset (seed)
 local overworld_terrain
 	= mcl_levelgen.make_terrain_generator (level, 80, 80)

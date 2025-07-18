@@ -84,6 +84,21 @@ mcl_levelgen.report_consing = report_consing
 mcl_levelgen.md5 = dofile (prefix .. "/md5.lua")
 mcl_levelgen.sha = dofile (prefix .. "/sha2.lua")
 mcl_levelgen.lighting_disabled = false
+if core and core.settings then
+	mcl_levelgen.use_ffi
+		= core.settings:get_bool ("mcl_levelgen_use_ffi", false)
+	core.ipc_set ("mcl_levelgen:use_ffi", mcl_levelgen.use_ffi)
+elseif core then
+	mcl_levelgen.use_ffi = core.ipc_get ("mcl_levelgen:use_ffi") or false
+else
+	mcl_levelgen.use_ffi = false
+end
+
+if mcl_levelgen.use_ffi then
+	local ffi = require ("ffi")
+	mcl_levelgen.ffi_ns
+		= ffi.load (mcl_levelgen.prefix .. "/ffi.so", false)
+end
 
 mcl_levelgen.mt_chunksize
 	= core and core.ipc_get ("mcl_levelgen:mt_chunksize")
