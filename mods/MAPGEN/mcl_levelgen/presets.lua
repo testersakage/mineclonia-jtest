@@ -109,28 +109,28 @@ local standard_noise_templates = {
 	},
 	temperature_large = {
 		keyword = "minecraft:temperature_large",
-		num_octaves = -8,
+		num_octaves = -12,
 		octaves = {
 			1.5, 0.0, 1.0, 0.0, 0.0, 0.0,
 		},
 	},
 	vegetation_large = {
 		keyword = "minecraft:vegetation_large",
-		num_octaves = -6,
+		num_octaves = -10,
 		octaves = {
 			1.0, 1.0, 0.0, 0.0, 0.0, 0.0,
 		},
 	},
 	continentalness_large = {
 		keyword = "minecraft:continentalness_large",
-		num_octaves = -7,
+		num_octaves = -11,
 		octaves = {
 			1.0, 1.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0,
 		},
 	},
 	erosion_large = {
-		keyword = "minecraft:erosion",
-		num_octaves = -7,
+		keyword = "minecraft:erosion_large",
+		num_octaves = -11,
 		octaves = {
 			1.0, 1.0, 0.0, 1.0, 1.0,
 		},
@@ -1988,14 +1988,14 @@ end
 
 local construct_overworld_lut = mcl_levelgen.construct_overworld_lut
 
-function mcl_levelgen.make_overworld_preset (seed)
+function mcl_levelgen.make_overworld_preset (seed, large_biomes)
 	local preset = copy_preset (overworld_preset_template)
 	initialize_random (preset, seed)
 	initialize_noises (preset)
 	initialize_density_functions (preset)
-	initialize_noise_biomes (preset, false, false,
+	initialize_noise_biomes (preset, large_biomes, false,
 				 construct_overworld_lut, false)
-	initialize_overworld_generation (preset)
+	initialize_overworld_generation (preset, large_biomes)
 	initialize_overworld_surface_rules (preset)
 	return preset
 end

@@ -79,7 +79,8 @@ local biome_colors = {
 dofile ("init.lua")
 
 local WIDTH, HEIGHT = 1024, 1024
-local seed = mcl_levelgen.ull (0, 3228473)
+local seed = mcl_levelgen.ull (0, 0)
+mcl_levelgen.stringtoull (seed, "9238542514368619060")
 mcl_levelgen.assign_biome_ids ({})
 local level = mcl_levelgen.make_overworld_preset (seed)
 
