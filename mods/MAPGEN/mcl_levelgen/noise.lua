@@ -22,6 +22,18 @@ local gradients = {
 	0, -1, -1,
 }
 
+local ffi, ct_permutations
+
+if mcl_levelgen.use_ffi then
+	ffi = require ("ffi")
+	local c_gradients = ffi.new ("double[49]")
+	for i = 1, #gradients do
+		c_gradients[i] = gradients[i]
+	end
+	gradients = c_gradients
+	ct_permutations = ffi.typeof ("double[257]")
+end
+
 local floor = math.floor
 local band = bit.band
 
@@ -60,7 +72,7 @@ function mcl_levelgen.make_octave (rng)
 	local yoff = rng:next_double () * 256.0
 	local zoff = rng:next_double () * 256.0
 	-- print ("offsets", xoff, yoff, zoff)
-	local permutation = {}
+	local permutation = ffi and ffi.new (ct_permutations) or {}
 
 	for i = 1, 256 do
 		permutation[i] = i - 1
