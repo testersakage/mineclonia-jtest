@@ -42,7 +42,7 @@ msgid "Show, clear, disable or enable your advancements"
 msgstr "Zobrazí, vymaže, zakáže, nebo povolí vaše ocenění"
 
 msgid "All your advancements and statistics have been cleared. You can now start again."
-msgstr ""
+msgstr "Všechna tvá ocenění a statistiky byly vymazány. Můžeš začít znovu."
 
 msgid "You have disabled advancements."
 msgstr ""
