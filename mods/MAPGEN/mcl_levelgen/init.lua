@@ -87,11 +87,17 @@ mcl_levelgen.lighting_disabled = false
 if core and core.settings then
 	mcl_levelgen.use_ffi
 		= core.settings:get_bool ("mcl_levelgen_use_ffi", false)
+	mcl_levelgen.use_large_biomes
+		= core.settings:get_bool ("mcl_levelgen_use_large_biomes", false)
 	core.ipc_set ("mcl_levelgen:use_ffi", mcl_levelgen.use_ffi)
+	core.ipc_set ("mcl_levelgen:use_large_biomes", mcl_levelgen.use_large_biomes)
 elseif core then
 	mcl_levelgen.use_ffi = core.ipc_get ("mcl_levelgen:use_ffi") or false
+	mcl_levelgen.use_large_biomes
+		= core.ipc_get ("mcl_levelgen:use_large_biomes") or false
 else
 	mcl_levelgen.use_ffi = false
+	mcl_levelgen.use_large_biomes = false
 end
 
 if mcl_levelgen.use_ffi then
