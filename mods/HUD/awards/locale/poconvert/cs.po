@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-07-18 08:02+0000\n"
+"PO-Revision-Date: 2025-07-18 10:21+0000\n"
 "Last-Translator: adoksnaj <adoksnaj@noreply.codeberg.org>\n"
 "Language-Team: Czech <https://translate.codeberg.org/projects/mineclonia/"
 "awards/cs/>\n"
@@ -57,130 +57,130 @@ msgid "Show details of an advancement"
 msgstr "Zobrazit podrobnosti ocenění"
 
 msgid "Advancement not found."
-msgstr "Ocenění nenalezeno"
+msgstr "Ocenění nenalezeno."
 
 msgid "<name>"
 msgstr ""
 
 msgid "Get the advancement statistics for the given player or yourself"
-msgstr ""
+msgstr "Získejte statistiky ocenění pro daného hráče nebo pro sebe"
 
 msgid "Error: No advancements available."
-msgstr ""
+msgstr "Chyba: Žádná ocenění nejsou dostupná."
 
 msgid "OK"
-msgstr ""
+msgstr "Budiž"
 
 msgid "(Hidden Advancement)"
 msgstr ""
 
 msgid "Unlock this advancement to find out what it is."
-msgstr ""
+msgstr "Odemkni toto ocenení abys zjistil, co zde je."
 
 msgid "@1 (unlocked)"
-msgstr ""
+msgstr "@1 (odemčeno)"
 
 msgid "You've disabled advancements. Type /awards enable to reenable."
-msgstr ""
+msgstr "Zakázal jsi ocenění. Napiš /awards enable pro povolení."
 
 msgid "Error: No advancement available."
-msgstr ""
+msgstr "Chyba: Žádné ocenění nenalezeno."
 
 msgid "You have not unlocked any advancement."
-msgstr ""
+msgstr "Zatím jsi neodemknul žádné ocenění."
 
 msgid "@1’s advancement:"
-msgstr ""
+msgstr "Ocenění hráče @1 :"
 
 msgid "@1/@2 chat messages"
-msgstr ""
+msgstr "Sourkomé zprávy @1/@2"
 
 msgid "Send a chat message"
-msgstr ""
+msgstr "Poslat soukromou zprávu"
 
 msgid "Chat @1 times"
-msgstr ""
+msgstr "Napsal @1 krát"
 
 msgid "@1/@2 joins"
-msgstr ""
+msgstr "@1/@2 se připojil"
 
 msgid "Join once"
-msgstr ""
+msgstr "Se připojil jednou"
 
 msgid "Join @1 times"
-msgstr ""
+msgstr "Se připojil @1krát"
 
 msgid "@1/@2 deaths"
-msgstr ""
+msgstr "@1/@2 úmrtí"
 
 msgid "Die once of @1"
-msgstr ""
+msgstr "Zemřel jednou z @1"
 
 msgid "Die @1 times of @2"
-msgstr ""
+msgstr "Zemřel @1 z @2"
 
 msgid "Die @1 times."
-msgstr ""
+msgstr "Zemřel @1."
 
 msgid "Mine @1 times"
-msgstr ""
+msgstr "Těžil @1krát"
 
 msgid "@1/@2 dug"
-msgstr ""
+msgstr "@1/@2 kopal"
 
 msgid "Mine: @1"
-msgstr ""
+msgstr "Vykopal: @1"
 
 msgid "Mine: @1×@2"
-msgstr ""
+msgstr "Vykopal: @1×@2"
 
 msgid "Mine @1 block."
-msgstr ""
+msgstr "Vykopal @1 blok."
 
 msgid "Mine @1 blocks."
-msgstr ""
+msgstr "Vykopej @1 bloků."
 
 msgid "@1/@2 placed"
-msgstr ""
+msgstr "@1/@2 umístěno"
 
 msgid "Place: @1"
-msgstr ""
+msgstr "Umísti: @1"
 
 msgid "Place: @1×@2"
-msgstr ""
+msgstr "Umístěno: @1×@2"
 
 msgid "Place @1 block."
-msgstr ""
+msgstr "Umísti @1 blok."
 
 msgid "Place @1 blocks."
-msgstr ""
+msgstr "Umísti @1 bloků."
 
 msgid "@1/@2 crafted"
-msgstr ""
+msgstr "@1/@2 vycraftěno"
 
 msgid "Craft: @1"
-msgstr ""
+msgstr "Vycrafti: @1"
 
 msgid "Craft: @1×@2"
-msgstr ""
+msgstr "Vycrafti: @1×@2"
 
 msgid "Craft @1 item"
-msgstr ""
+msgstr "Vycrafti @1 item"
 
 msgid "Craft @1 items."
-msgstr ""
+msgstr "Vycrafti @1 itemů."
 
 msgid "@1/@2 eaten"
-msgstr ""
+msgstr "@1/@2 snědeno"
 
 msgid "Eat @1"
-msgstr ""
+msgstr "Sněz @1"
 
 msgid "Eat @1×@2"
-msgstr ""
+msgstr "Sněž @1×@2"
 
 msgid "Eat @1 item"
-msgstr ""
+msgstr "Sněz @1 item"
 
 msgid "Eat @1 items."
-msgstr ""
+msgstr "Sněz @1 itemů."
