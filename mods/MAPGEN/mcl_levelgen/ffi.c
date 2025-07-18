@@ -77,13 +77,13 @@ pick_grid_positions_1 (int *distbuf, int rx, int ry, int rz)
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
-static int
+static long long
 distance_to_value_sqr (int range, int value)
 {
   int dmax = value - (range & 0xffff) + 32768;
   int dmin = (((range >> 16) & 0xffff)
 	      | ((0 - ((range & 0x800000000) >> 31)) & 0xffff0000)) - value;
-  int m;
+  long long m;
 
   /* For consistency with Minecraft, this comparison function treats
      the upper bounds of these ranges as inclusive values.  */
