@@ -1444,7 +1444,7 @@ function attempt_feature_placement (x, z)
 	end
 end
 
-local REGENERATION_QUOTA_US = 8000
+local REGENERATION_QUOTA_US = 15000
 
 if mcl_levelgen.load_feature_environment then
 	-- This global variable holds the last VM to be supplied to
@@ -1691,8 +1691,6 @@ local function post_mapblock_run (run)
 	switch_to_namespace (nil)
 end
 
-local timer = 0
-
 local check_supplemental_generation
 
 function require_regeneration (current, x, y, z)
@@ -1750,12 +1748,6 @@ function schedule_regeneration_for_unlock (bx, bz)
 end
 
 local function schedule_regeneration (dtime)
-	timer = timer + dtime
-	if timer < 0.10 then
-		return
-	end
-	timer = 0
-
 	local start_time = core.get_us_time ()
 	repeat
 		if feature_placement_queue:empty () then
