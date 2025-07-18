@@ -48,7 +48,7 @@ msgid "You have disabled advancements."
 msgstr "Zakázal jsi ocenění."
 
 msgid "You have enabled advancements."
-msgstr ""
+msgstr "Povolil jsi ocenění."
 
 msgid "<advancement ID>"
 msgstr ""
