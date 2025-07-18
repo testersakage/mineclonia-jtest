@@ -4,7 +4,6 @@
 
 mcl_levelgen.verbose = false
 
-
 -- Constants required by level generator scripts.
 mcl_levelgen.REQUIRED_CONTEXT_Y = 2
 mcl_levelgen.REQUIRED_CONTEXT_XZ = 1
@@ -80,6 +79,15 @@ elseif core.get_mod_storage then
 	core.ipc_set ("mcl_levelgen:biome_id_assignments", assignments)
 	core.register_mapgen_script (mcl_levelgen.prefix .. "/init.lua")
 	dofile (mcl_levelgen.prefix .. "/post_processing.lua")
+	-- Start a second async environment to reduce the probability
+	-- that another async environment will be instantiated while
+	-- the game is executing, which is apt to block the server
+	-- environment for a substantial length of time.
+	core.after (1, function ()
+		core.handle_async (function () core.ipc_poll ("", 1200) end,
+				   function () end)
+		core.handle_async (function () end, function () end)
+	end)
 end
 
 if core and not core.get_player_by_name then

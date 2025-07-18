@@ -1570,7 +1570,6 @@ end
 
 local toquart = mcl_levelgen.toquart
 local index_biome_lut = mcl_levelgen.index_biome_lut
-local index_biome_lut_naively = mcl_levelgen.index_biome_lut_naively
 
 local quantize = mcl_levelgen.quantize
 
@@ -1742,18 +1741,6 @@ local function initialize_noise_biomes (preset, large_biomes, amplified, get_lut
 		local d = depth_cached (x, y, z)
 		local r = ridges_cached (x, y, z)
 		return index_biome_lut (biome_lut, t, v, c, e, d, r)
-	end
-
-	-- For purposes of engineering only.
-	preset.index_biomes_naively = function (self, qx, qy, qz)
-		local x, y, z = toblock (qx), toblock (qy), toblock (qz)
-		return index_biome_lut_naively (nodes,
-						temperature_stripped (x, y, z),
-						vegetation_stripped (x, y, z),
-						continents_stripped (x, y, z),
-						erosion_stripped (x, y, z),
-						depth_stripped (x, y, z),
-						ridges_stripped (x, y, z))
 	end
 
 	preset.biome_debug_string = function (self, x, y, z)
