@@ -2,10 +2,8 @@
 -- Feature generation environment registration.
 --------------------------------------------------------------------------
 
-print ("* Initializing async environment")
-
 if core.global_exists ("jit") then
-	jit.opt.start ("maxmcode=33554432", "maxtrace=100000",
+	jit.opt.start ("maxmcode=16777216", "maxtrace=100000",
 		       "loopunroll=35", "maxside=1000")
 end
 

@@ -462,18 +462,6 @@ local function get_pressure (x, y, z, level_closest, lava_closest,
 	return 2.0
 end
 
-local distbuf = { 0, 0, 0, 0, 0, 0 }
-for i = 1, 12 do
-	distbuf[#distbuf] = 0
-end
-
-local dist_closest = 1
-local dist_average = 2
-local dist_furthest = 3
-local pos_closest = 4
-local pos_average = 5
-local pos_furthest = 6
-
 local offsets = {
 	0,
 	-1,
@@ -512,6 +500,41 @@ local offsets = {
 	1,
 	1,
 }
+
+local distbuf
+local aquifer
+local DB_HUGE
+
+if mcl_levelgen.use_ffi then
+	local ffi = require ("ffi")
+	aquifer = mcl_levelgen.ffi_ns
+	ffi.cdef ([[
+extern void pick_grid_positions_1 (int *, int, int, int);
+]])
+	-- "If no initializers are given, the object is filled with
+	-- zero bytes."
+	distbuf = ffi.new ("int[19]")
+	DB_HUGE = ffi.cast ("int", 0x7fffffff)
+	local c_offsets = ffi.new ("int[37]")
+	for i = 1, 36 do
+		c_offsets[i] = offsets[i]
+	end
+	offsets = c_offsets
+else
+	distbuf = { 0, 0, 0, 0, 0, 0 }
+	for i = 1, 12 do
+		distbuf[#distbuf] = 0
+	end
+	DB_HUGE = huge
+	aquifer = nil
+end
+
+local dist_closest = 1
+local dist_average = 2
+local dist_furthest = 3
+local pos_closest = 4
+local pos_average = 5
+local pos_furthest = 6
 
 local function fix_distances (distbuf, pos, dx, dy, dz)
 	local d = dx * dx + dy * dy + dz * dz
@@ -565,14 +588,19 @@ local function pick_grid_positions (distbuf, rx, ry, rz)
 		j = j + 1
 	end
 
-	-- Extract the array bounds check from the loop below.  The
-	-- loop body is practically never reached, as each condition
-	-- in fix_distances but the first encountered by the jit winds
-	-- up returning to its prologue.
+	if aquifer then
+		aquifer.pick_grid_positions_1 (distbuf, rx, ry, rz)
+	else
+		-- Extract the array bounds check from the loop below.
+		-- The loop body is practically never reached, as each
+		-- condition in fix_distances but the first
+		-- encountered by the jit winds up returning to its
+		-- prologue.
 
-	for j = 7, 18 do
-		local lx, ly, lz = unhash (distbuf[j])
-		fix_distances (distbuf, distbuf[j], lx - rx, ly - ry, lz - rz)
+		for j = 7, 18 do
+			local lx, ly, lz = unhash (distbuf[j])
+			fix_distances (distbuf, distbuf[j], lx - rx, ly - ry, lz - rz)
+		end
 	end
 end
 
@@ -589,9 +617,9 @@ function localized_aquifer.get_node (_, x, y, z, density)
 		return cid_lava_source, 0
 	else
 		local distbuf = distbuf
-		distbuf[dist_closest] = huge
-		distbuf[dist_average] = huge
-		distbuf[dist_furthest] = huge
+		distbuf[dist_closest] = DB_HUGE
+		distbuf[dist_average] = DB_HUGE
+		distbuf[dist_furthest] = DB_HUGE
 
 		-- Select the three closest positions out of 2x3x2
 		-- random positions selected from around the center of

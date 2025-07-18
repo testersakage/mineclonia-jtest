@@ -80,6 +80,7 @@ dofile ("init.lua")
 
 local WIDTH, HEIGHT = 1024, 1024
 local seed = mcl_levelgen.ull (0, 3228473)
+mcl_levelgen.assign_biome_ids ({})
 local level = mcl_levelgen.make_overworld_preset (seed)
 
 local next_color = 35
@@ -108,22 +109,34 @@ local function alloc_color (biome)
 	return char
 end
 
-print ("/* XPM */")
-print ("static char *map[] = {")
+local print_xpm = true
 
-local rows = {}
-local floor = math.floor
+if print_xpm then
+	print ("/* XPM */")
+	print ("static char *map[] = {")
 
-for z = floor (-WIDTH / 2), floor (WIDTH / 2) do
-	local row = {}
-	for x = floor (-WIDTH / 2), floor (WIDTH / 2) do
-		local sample = level:index_biomes (x, 16, z)
-		table.insert (row, alloc_color (sample))
+	local rows = {}
+	local floor = math.floor
+
+	for z = floor (-WIDTH / 2), floor (WIDTH / 2) do
+		local row = {}
+		for x = floor (-WIDTH / 2), floor (WIDTH / 2) do
+			local sample = level:index_biomes (x, 64, z)
+			table.insert (row, alloc_color (sample))
+		end
+		table.insert (rows, "\"" .. table.concat (row) .. "\",")
 	end
-	table.insert (rows, "\"" .. table.concat (row) .. "\",")
-end
 
-print (string.format ("\"%d %d %d 1\",", WIDTH, HEIGHT, n_colors))
-print (table.concat (colordefs, "\n"))
-print (table.concat (rows, "\n"))
-print ("\n}\n")
+	print (string.format ("\"%d %d %d 1\",", WIDTH, HEIGHT, n_colors))
+	print (table.concat (colordefs, "\n"))
+	print (table.concat (rows, "\n"))
+	print ("\n}\n")
+else
+	local floor = math.floor
+	for z = floor (-WIDTH / 2), floor (WIDTH / 2) do
+		for x = floor (-WIDTH / 2), floor (WIDTH / 2) do
+			local sample = level:index_biomes (x, 64, z)
+			print (x, 64, z, sample)
+		end
+	end
+end

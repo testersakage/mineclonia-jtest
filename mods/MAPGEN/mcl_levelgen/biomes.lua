@@ -181,16 +181,16 @@ local abs = math.abs
 -- 	value = nil,
 -- }
 
-local function avg_extents (extents)
+local function avg_distance (extents)
 	local x = 0
 
-	x = x + rtz ((temperature (extents)[1] + temperature (extents)[2]) / 2)
-	x = x + rtz ((humidity (extents)[1] + humidity (extents)[2]) / 2)
-	x = x + rtz ((continentalness (extents)[1] + continentalness (extents)[2]) / 2)
-	x = x + rtz ((erosion (extents)[1] + erosion (extents)[2]) / 2)
-	x = x + rtz ((depth (extents)[1] + depth (extents)[2]) / 2)
-	x = x + rtz ((weirdness (extents)[1] + weirdness (extents)[2]) / 2)
-	x = x + rtz ((offset (extents)[1] + offset (extents)[2]) / 2)
+	x = x + abs (rtz ((temperature (extents)[1] + temperature (extents)[2]) / 2))
+	x = x + abs (rtz ((humidity (extents)[1] + humidity (extents)[2]) / 2))
+	x = x + abs (rtz ((continentalness (extents)[1] + continentalness (extents)[2]) / 2))
+	x = x + abs (rtz ((erosion (extents)[1] + erosion (extents)[2]) / 2))
+	x = x + abs (rtz ((depth (extents)[1] + depth (extents)[2]) / 2))
+	x = x + abs (rtz ((weirdness (extents)[1] + weirdness (extents)[2]) / 2))
+	x = x + abs (rtz ((offset (extents)[1] + offset (extents)[2]) / 2))
 	return x
 end
 
@@ -263,14 +263,12 @@ local function sort_by_dim (nodes, first_dim, ignore_sign)
 			local x = (i + first_dim - 2) % NDIM + 1
 			local range_a = a.extents[x]
 			local range_b = b.extents[x]
-			local center_a = (range_a[1] + range_a[2]) / 2
-			local center_b = (range_b[1] + range_b[2]) / 2
+			local center_a = rtz ((range_a[1] + range_a[2]) / 2)
+			local center_b = rtz ((range_b[1] + range_b[2]) / 2)
 			if ignore_sign then
 				center_a = abs (center_a)
-				center_b = abs (center_a)
+				center_b = abs (center_b)
 			end
-			center_a = rtz (center_a)
-			center_b = rtz (center_b)
 			if center_a < center_b then
 				return true
 			elseif center_a > center_b then
@@ -291,12 +289,13 @@ local function logm (x)
 	return log (x) / LOG_M
 end
 
-local function construct_subtree (nodes)
+local function construct_subtrees (nodes)
 	local children, subtrees = {}, {}
 	-- children_of_subtree is such that the value returned will
 	-- never hold more than M subtrees.
 	local children_per_subtree
 		= floor (pow (M, floor (logm (#nodes - 0.01))))
+	-- print (children_per_subtree, #nodes)
 
 	for _, node in ipairs (nodes) do
 		local n = #children
@@ -395,13 +394,16 @@ end
 local function build_rtree_internal (nodes)
 	if #nodes == 0 then
 		error ("A bucket must contain children")
+	elseif #nodes == 1 then
+		return nodes[1]
 	elseif #nodes <= M then
-		-- Sort nodes by value range.
+		-- Sort nodes by distance from origin.
 		table.sort (nodes, function (a, b)
-			return avg_extents (a.extents)
-				< avg_extents (b.extents)
+			return avg_distance (a.extents)
+				< avg_distance (b.extents)
 		end)
 		return {
+			sorting = -1,
 			extents = compute_extents (nodes),
 			children = nodes,
 		}
@@ -415,7 +417,7 @@ local function build_rtree_internal (nodes)
 
 		for firstdim = 1, NDIM do
 			sort_by_dim (nodes, firstdim, false)
-			local subtrees = construct_subtree (nodes)
+			local subtrees = construct_subtrees (nodes)
 			local cost = subtree_cost (subtrees)
 			if not best_cost or cost < best_cost then
 				dimid = firstdim
@@ -425,19 +427,16 @@ local function build_rtree_internal (nodes)
 		end
 
 		-- Order subtrees by distance from the origin.
-		sort_by_dim (nodes, dimid, true)
+		sort_by_dim (children, dimid, true)
 
 		-- Recurse into subtrees, also dividing them if need
 		-- be.
 		local realchildren = {}
 		for i, child in ipairs (children) do
-			if #child.children <= M then
-				realchildren[i] = child
-			else
-				realchildren[i] = build_rtree_internal (child.children)
-			end
+			realchildren[i] = build_rtree_internal (child.children)
 		end
 		return {
+			sorting = dimid,
 			extents = compute_extents (realchildren),
 			children = realchildren,
 		}
@@ -445,7 +444,12 @@ local function build_rtree_internal (nodes)
 end
 
 local function build_rtree (nodes)
-	return pack_extents (build_rtree_internal (nodes))
+	local original = build_rtree_internal (nodes)
+	if mcl_levelgen.verbose then
+		verbose_print ("** Biome tree and bucket sorting strategies:")
+		mcl_levelgen.print_rtree (original, 0)
+	end
+	return pack_extents (original)
 end
 
 local function distance_to_value (range, value)
@@ -476,55 +480,148 @@ end
 mcl_levelgen.biome_distance_total = distance_total
 
 local huge = math.huge
-local push = table.insert
 
-local function pop (n, v, pdl)
-	if n == 0 then
-		local v = pdl[#pdl]
-		local n = #v
-		pdl[#pdl] = nil
-		return n - 1, v, v[n]
-	end
-	return n - 1, v, v[n]
-end
-
-local searchpdl, scratch = {}, {}
-
-local function rtree_index_closest (coords, tree)
-	local distance = huge
-	local searchpdl = searchpdl
-	local ref = scratch
-
-	-- Optimize the very frequent case where the previous result
-	-- is closer to COORDS than all others.
-	local leaf = tree.last_result
-	if leaf then
-		distance = distance_total (leaf.extents, coords)
-	end
-
-	local n, v = 0, nil
-	ref[1] = tree
-	push (searchpdl, ref)
-	while #searchpdl > 0 or n > 0 do
-		local tem
-		n, v, tem = pop (n, v, searchpdl)
-		local d = distance_total (tem.extents, coords)
-
-		if d < distance then
-			--- d must be less than distance if it
-			--- contains any constitutents of which the
-			--- same holds true.
-			if not tem.value then
-				local children = tem.children
-				push (searchpdl, children)
-			else
-				leaf = tem
-				distance = d
-			end
+local function rtree_index_1 (coords, leaf, distance, tree)
+	local children = tree.children
+	for i = 1, #children do
+		local node = children[i]
+		--- d must be less than distance if it contains any
+		--- constitutents of which the same holds true.
+		local d = distance_total (node.extents, coords)
+		local value = node.value
+		if d < distance and value then
+			leaf = node
+			distance = d
+		elseif d < distance then
+			leaf, distance = rtree_index_1 (coords, leaf,
+							distance, node)
 		end
 	end
-	tree.last_result = leaf
 	return leaf, distance
+end
+
+local function rtree_index_closest (coords, tree)
+	local leaf, distance = nil, huge
+	if tree.last_result then
+		leaf = tree.last_result
+		distance = distance_total (leaf.extents, coords)
+	end
+	leaf = rtree_index_1 (coords, leaf, distance, tree)
+	tree.last_result = leaf
+	return leaf.value
+end
+
+local function fmt_extents (extents)
+	return string.format ("[[%d-%d], [%d-%d], [%d-%d], [%d-%d], [%d-%d], [%d-%d], %d]",
+			      temperature (extents)[1],
+			      temperature (extents)[2],
+			      humidity (extents)[1],
+			      humidity (extents)[2],
+			      continentalness (extents)[1],
+			      continentalness (extents)[2],
+			      erosion (extents)[1],
+			      erosion (extents)[2],
+			      depth (extents)[1],
+			      depth (extents)[2],
+			      weirdness (extents)[1],
+			      weirdness (extents)[2],
+			      offset (extents)[1])
+end
+
+function mcl_levelgen.print_rtree (rtree, depth)
+	if rtree.children then
+		print (string.rep (' ', depth) .. "+<" .. rtree.sorting .. "> "
+		       .. fmt_extents (rtree.extents))
+		for _, child in ipairs (rtree.children) do
+			mcl_levelgen.print_rtree (child, depth + 1)
+		end
+	else
+		print (string.rep (' ', depth) .. " " .. rtree.value .. " "
+		       .. fmt_extents (rtree.extents))
+	end
+end
+
+------------------------------------------------------------------------
+-- FFI biome R-Trees.
+------------------------------------------------------------------------
+
+local biome_name_to_id_map = {}
+local biome_id_to_name_map = {}
+
+local use_ffi = mcl_levelgen.use_ffi
+
+if use_ffi then
+	local ffi = require ("ffi")
+	ffi.cdef (string.format ([[
+struct NoiseNode
+{
+  struct NoiseNode *children[%d];
+  int noise_biome;
+  int extents[7];
+};
+
+struct NoiseSamplerRTree
+{
+  struct NoiseNode *last_result;
+  struct NoiseNode *root;
+};
+
+extern int rtree_index_closest (struct NoiseSamplerRTree *, int[7]);
+extern struct NoiseSamplerRTree *build_rtree (struct NoiseNode *);
+extern void free_rtree (struct NoiseSamplerRTree *);
+]], M))
+	local ns = mcl_levelgen.ffi_ns
+	local ct_NoiseNode = ffi.typeof ("struct NoiseNode");
+	local c_coords = ffi.new ("int[7]")
+
+	local function ffi_copy_rtree_node (root)
+		local gc_node = ffi.new (ct_NoiseNode)
+		if root.value then
+			gc_node.noise_biome
+				= biome_name_to_id_map[root.value]
+		else
+			for i = 0, M - 1 do
+				local n = #root.children
+				if i < n then
+					gc_node.children[i]
+						= ffi_copy_rtree_node (root.children[i + 1])
+				end
+			end
+			gc_node.noise_biome = -1
+		end
+		for i = 0, NDIM - 1 do
+			gc_node.extents[i] = root.extents[i + 1]
+		end
+		return gc_node
+	end
+
+	local function ffi_create_noise_rtree (rtree)
+		local gc_root = ffi_copy_rtree_node (rtree)
+		local ffi_rtree = ns.build_rtree (gc_root)
+		ffi.gc (ffi_rtree, ns.free_rtree)
+		return ffi_rtree
+	end
+
+	local old_build_rtree = build_rtree
+	-- local old_rtree_index_closest = rtree_index_closest
+
+	function build_rtree (nodes)
+		local lua_rtree = old_build_rtree (nodes)
+		local gc_tree = ffi_create_noise_rtree (lua_rtree)
+		return gc_tree
+	end
+
+	function rtree_index_closest (coords, tree)
+		c_coords[0] = coords[1]
+		c_coords[1] = coords[2]
+		c_coords[2] = coords[3]
+		c_coords[3] = coords[4]
+		c_coords[4] = coords[5]
+		c_coords[5] = coords[6]
+		c_coords[6] = coords[7]
+		local id = ns.rtree_index_closest (tree, c_coords)
+		return biome_id_to_name_map[id]
+	end
 end
 
 ------------------------------------------------------------------------
@@ -919,12 +1016,6 @@ local function register_medium_pv_biomes_for_climate_grade (nodes, i, j,
 				range_select (COAST_CONTINENTALNESS,
 					      NEAR_INLAND_CONTINENTALNESS),
 				erosion_grades[4], weirdness,
-				0.0)
-	register_surface_biome (nodes, plain_or_badlands,
-				temp_range, humidity_range,
-				range_select (MID_INLAND_CONTINENTALNESS,
-					      FAR_INLAND_CONTINENTALNESS),
-				erosion_grades[3], weirdness,
 				0.0)
 	register_surface_biome (nodes, plain_or_badlands,
 				temp_range, humidity_range,
@@ -1557,24 +1648,8 @@ function mcl_levelgen.index_biome_lut (tree, temperature, humidity,
 	local coords = quantize_index (temperature, humidity,
 				       continentalness, erosion,
 				       depth, weirdness)
-	local value, distance = rtree_index_closest (coords, tree)
-	return value.value, value, distance
-end
-
-function mcl_levelgen.index_biome_lut_naively (nodes, temperature, humidity,
-					       continentalness,
-					       erosion, depth, weirdness)
-	local coords = {
-		quantize (temperature),
-		quantize (humidity),
-		quantize (continentalness),
-		quantize (erosion),
-		quantize (depth),
-		quantize (weirdness),
-		0.0,
-	}
-	local value, distance = rtree_index_silly (coords, nodes)
-	return value.value, value, distance
+	local value = rtree_index_closest (coords, tree)
+	return value
 end
 
 ------------------------------------------------------------------------
@@ -6572,73 +6647,6 @@ mcl_levelgen.modify_biome_groups ({ "#is_deep_ocean", }, {
 	is_deep_ocean = true,
 })
 
-if false then
-	local overworld_lut, nodes = mcl_levelgen.construct_overworld_lut ()
-	local rng = mcl_levelgen.xoroshiro (mcl_levelgen.ull (6273, 1148590027),
-					    mcl_levelgen.ull (1492000, 955372124))
-	local index_silly = rtree_index_silly
-
-	local function rtree_contains_child (rtree, node)
-		if rtree == node then
-			return true
-		elseif rtree.children then
-			for _, child in pairs (rtree.children) do
-				if rtree_contains_child (child, node) then
-					return true
-				end
-			end
-		end
-		return false
-	end
-
-	for i = 1, 10000 do
-		local temperature = rng:next_double ()
-		local humidity = rng:next_double ()
-		local continentalness = rng:next_double ()
-		local erosion = rng:next_double ()
-		local weirdness = rng:next_double ()
-		local coords = {
-			quantize (temperature),
-			quantize (humidity),
-			quantize (continentalness),
-			quantize (erosion),
-			0.0,
-			quantize (weirdness),
-			0.0,
-		}
-		local value = rtree_index_closest (coords, overworld_lut)
-		local silly = index_silly (coords, nodes)
-		assert (rtree_contains_child (overworld_lut, silly))
-
-		-- For consistency with Minecraft, this comparison
-		-- function treats the upper bounds of these ranges as
-		-- inclusive values by default.  Conversely this
-		-- produces false positives when validating the biome
-		-- system.
-		function distance_to_value (range, value)
-			local dmax = value - band (range, 0xffff) + 32768
-			local dmin = arshift (range, 16) - value
-			return dmax >= 0 and dmax + 1 or max (dmin, 0)
-		end
-
-		if silly.value ~= value.value then
-			print ("Mismatch: " .. silly.value .. " != " .. value.value)
-			if dump then
-				print (dump ({ coords = coords,
-					       d_silly = distance_total (silly.extents, coords),
-					       d_value = distance_total (value.extents, coords),
-					       coords_silly = silly.extents,
-					       coords_value = value.extents, }))
-			end
-			-- This only ever signifies two erroneous
-			-- situations, namely: either the lookup tree
-			-- or lookup procedure is invalid, or the node
-			-- contains duplicate entries.
-			assert (false, "Inconsistencies in biome search table")
-		end
-	end
-end
-
 ------------------------------------------------------------------------
 -- Biome ID assignment and post-processing.
 ------------------------------------------------------------------------
@@ -6677,8 +6685,6 @@ if false then
 end
 
 local mathmax = math.max
-local biome_name_to_id_map = {}
-local biome_id_to_name_map = {}
 local registered_biomes_id = {}
 local biome_id_callbacks = {}
 
@@ -7016,7 +7022,7 @@ local function spawn_distance (a, targets, x, z)
 	-- further away from 0, 0.
 	local d_scaled = (x * x + z * z) / SPAWN_MALUS_START
 	local d_origin = rtz (d_scaled * d_scaled * SPAWN_PENALTY_VALUE)
-	return distance + d_origin 
+	return distance + d_origin
 end
 
 local TWO_PI = math.pi * 2
