@@ -57,7 +57,7 @@ msgid "Show details of an advancement"
 msgstr "Zobrazit podrobnosti ocenění"
 
 msgid "Advancement not found."
-msgstr ""
+msgstr "Ocenění nenalezeno"
 
 msgid "<name>"
 msgstr ""
