@@ -3,42 +3,43 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-07-18 07:56+0000\n"
+"Last-Translator: cuche <cuche@noreply.codeberg.org>\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_achievements/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 msgid "Benchmarking"
-msgstr "Banco di Prova"
+msgstr "Banco di prova"
 
 msgid "Craft a crafting table from 4 wooden planks."
 msgstr "Assembla un banco da lavoro da 4 assi di legno."
 
 msgid "Time to Mine!"
-msgstr "A Scavare!"
+msgstr "A scavare!"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
 msgstr "Usa assi e bastoni per assemblare un piccone."
 
 msgid "Hot Topic"
-msgstr "Tema Scottante"
+msgstr "Tema scottante"
 
 msgid "Use 8 cobblestones to craft a furnace."
 msgstr "Assembla una fornace con otto blocchi di pietre."
 
 msgid "Time to Farm!"
-msgstr "A Zappare!"
+msgstr "A zappare!"
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
 msgstr "Usa assi e bastoni per assemblare una zappa."
 
 msgid "Bake Bread"
-msgstr "Il Pane Quotidiano"
+msgstr "Il pane quotidiano"
 
 msgid "Use wheat to craft a bread."
 msgstr "Trasforma il grano in pane."
@@ -50,7 +51,7 @@ msgid "Craft a cake using wheat, sugar, milk and an egg."
 msgstr "Produci una torta utilizzando: grano, zucchero, latte ed uova."
 
 msgid "Getting an Upgrade"
-msgstr "Salto Di Qualità"
+msgstr "Salto di qualità"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
 msgstr "Assembla un piccone migliore."
@@ -94,7 +95,7 @@ msgstr "Raccogli del cuoio dal pavimento.\n"
 "Suggerimento: Le mucche ed alcuni altri animali hanno una probabilità di rilasciare del cuoio, quando vengono uccisi."
 
 msgid "Getting Wood"
-msgstr "Duro Come il Legno"
+msgstr "Duro come il legno"
 
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
@@ -141,9 +142,12 @@ msgstr "Pesce Delizioso"
 msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
 msgstr ""
+"Raccogli qualsiasi tipo di pesce cotto dopo averlo cucinato in una fornace, "
+"affumicatore o fuoco da campo.\n"
+"Suggerimento: Usa una canna da pesca per pescare un pesce e cuocilo."
 
 msgid "On A Rail"
-msgstr "Su un Binario"
+msgstr "Su un binario"
 
 msgid "Travel by minecart for at least 1000 meters from your starting point in a single ride."
 msgstr "Viaggia su un carrello da miniera per almeno 1000 metri dal punto di partenza in un solo giro."
@@ -189,7 +193,7 @@ msgid "Use a Totem of Undying to cheat death."
 msgstr "Usa un Totem dell'Immortalità per sfuggire alla morte."
 
 msgid "Sweet Dreams"
-msgstr "Sogni d'Oro"
+msgstr "Sogni d'oro"
 
 msgid "Sleep in a bed to change your respawn point."
 msgstr "Dormi in un letto per cambiare il tuo punto di generazione."
@@ -201,7 +205,7 @@ msgid "Charge a Respawn Anchor to the maximum."
 msgstr "Carica un'Ancora della Generazione al massimo."
 
 msgid "What A Deal!"
-msgstr "Un Uomo Chiamato Contratto"
+msgstr "Un Uomo Chiamato Contratto!"
 
 msgid "Successfully trade with a Villager."
 msgstr "Completa uno scambio con un Villico."
@@ -231,7 +235,7 @@ msgid "Kill the ender dragon. Good Luck!"
 msgstr "Uccidi l'Enderdrago. Buona fortuna!"
 
 msgid "Fishy Business"
-msgstr "Grazie Per Tutto il Pesce"
+msgstr "Grazie per tutto il pesce"
 
 msgid "Catch a fish.\n"
 "Hint: Catch a fish, salmon, clownfish, or pufferfish."
@@ -277,7 +281,7 @@ msgid "Use a fully powered beacon."
 msgstr "Alimenta al massimo un faro."
 
 msgid "The End... Again..."
-msgstr "A Volte Ritornano"
+msgstr "A volte... ritornano..."
 
 msgid "Respawn the Ender Dragon."
 msgstr "Evoca nuovamente l'Enderdrago."
@@ -383,4 +387,3 @@ msgstr "Esilio Volontario"
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr "Uccidi il capitano di un'incursione. Forse, per il momento, ti conviene stare alla larga dai villaggi locali..."
-

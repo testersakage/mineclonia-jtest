@@ -1,0 +1,39 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mcl_cocoas x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-07-13 01:12+0000\n"
+"Last-Translator: hezemisverydumb <hezemisverydumb@noreply.codeberg.org>\n"
+"Language-Team: Kazakh <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_cocoas/kk/>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+msgid "Cocoa pods grow on the side of jungle trees in 3 stages."
+msgstr "Какао бүршіктері джунгли ағаштарында 3 кезеңде өседі."
+
+msgid "Premature Cocoa Pod"
+msgstr ""
+
+msgid "Medium Cocoa Pod"
+msgstr ""
+
+msgid "Mature Cocoa Pod"
+msgstr ""
+
+msgid "Cocoa Beans"
+msgstr ""
+
+msgid "Grows at the side of jungle trees"
+msgstr ""
+
+msgid "Cocoa beans can be used to plant cocoa, bake cookies or craft brown dye."
+msgstr ""
+
+msgid "Right click on the side of a jungle tree trunk (Jungle Wood) to plant a young cocoa."
+msgstr ""

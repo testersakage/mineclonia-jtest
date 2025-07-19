@@ -1,0 +1,42 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain findbiome x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-07-18 10:21+0000\n"
+"Last-Translator: adoksnaj <adoksnaj@noreply.codeberg.org>\n"
+"Language-Team: Czech <https://translate.codeberg.org/projects/mineclonia/"
+"findbiome/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+msgid "Wait until all mods have loaded!"
+msgstr "Počkejte než se načtou všechny mody!"
+
+msgid "Find and teleport to biome"
+msgstr ""
+
+msgid "<biome>"
+msgstr ""
+
+msgid "No player."
+msgstr ""
+
+msgid "Biome found at @1."
+msgstr ""
+
+msgid "No biome found!"
+msgstr ""
+
+msgid "Biome does not exist!"
+msgstr ""
+
+msgid "List all biomes"
+msgstr ""
+
+msgid "No biomes."
+msgstr ""

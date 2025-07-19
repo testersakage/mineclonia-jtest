@@ -3,73 +3,76 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_candles x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-07-17 16:15+0000\n"
+"Last-Translator: alien06 <alien06@noreply.codeberg.org>\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_candles/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 msgid "A candle is a block that emits light when lit with a flint and steel. It comes in the sixteen dye colors. Up to four of the same color of candle can be placed in one block space, which affects the amount of light produced."
 msgstr ""
+"La candela è un blocco che emette luce, se accesa con l'acciarino. È "
+"disponibile in sedici colori. In un blocco possono essere posizionate fino a "
+"quattro candele dello stesso colore, aumentandone la luce."
 
 msgid "Candle"
-msgstr ""
+msgstr "Candela"
 
 msgid "Lit Candle"
-msgstr ""
+msgstr "Candela accesa"
 
 msgid "Cake"
-msgstr ""
+msgstr "Torta"
 
 msgid "Black Candle"
-msgstr ""
+msgstr "Candela nera"
 
 msgid "Blue Candle"
-msgstr ""
+msgstr "Candela blu"
 
 msgid "Brown Candle"
-msgstr ""
+msgstr "Candela marrone"
 
 msgid "Cyan Candle"
-msgstr ""
+msgstr "Candela ciano"
 
 msgid "Green Candle"
-msgstr ""
+msgstr "Candela verde"
 
 msgid "Grey Candle"
-msgstr ""
+msgstr "Candela grigia"
 
 msgid "Light Blue Candle"
-msgstr ""
+msgstr "Candela azzurra"
 
 msgid "Light Grey Candle"
-msgstr ""
+msgstr "Candela grigio chiaro"
 
 msgid "Lime Candle"
-msgstr ""
+msgstr "Candela lime"
 
 msgid "Magenta Candle"
-msgstr ""
+msgstr "Candela magenta"
 
 msgid "Orange Candle"
-msgstr ""
+msgstr "Candela arancione"
 
 msgid "Pink Candle"
-msgstr ""
+msgstr "Candela rosa"
 
 msgid "Purple Candle"
-msgstr ""
+msgstr "Candela viola"
 
 msgid "Red Candle"
-msgstr ""
+msgstr "Candela rossa"
 
 msgid "White Candle"
-msgstr ""
+msgstr "Candela bianca"
 
 msgid "Yellow Candle"
-msgstr ""
-
+msgstr "Candela gialla"

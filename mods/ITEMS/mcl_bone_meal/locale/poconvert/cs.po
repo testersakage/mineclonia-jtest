@@ -1,0 +1,27 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mcl_bone_meal x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-07-18 10:21+0000\n"
+"Last-Translator: adoksnaj <adoksnaj@noreply.codeberg.org>\n"
+"Language-Team: Czech <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_bone_meal/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+msgid "Bone Meal"
+msgstr "Kostní moučka"
+
+msgid "Speeds up plant growth"
+msgstr ""
+
+msgid "Bone meal is a white dye and also useful as a fertilizer to speed up the growth of many plants."
+msgstr ""
+
+msgid "Rightclick a sheep to turn its wool white. Rightclick a plant to speed up its growth. Note that not all plants can be fertilized like this. When you rightclick a grass block, tall grass and flowers will grow all over the place."
+msgstr ""

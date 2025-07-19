@@ -1,0 +1,57 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mcl_skins x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-07-18 10:21+0000\n"
+"Last-Translator: adoksnaj <adoksnaj@noreply.codeberg.org>\n"
+"Language-Team: Czech <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_skins/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+msgid "Templates"
+msgstr "Šablony"
+
+msgid "Arm size"
+msgstr ""
+
+msgid "Bases"
+msgstr ""
+
+msgid "Footwears"
+msgstr ""
+
+msgid "Eyes"
+msgstr ""
+
+msgid "Mouths"
+msgstr ""
+
+msgid "Bottoms"
+msgstr ""
+
+msgid "Tops"
+msgstr ""
+
+msgid "Hairs"
+msgstr ""
+
+msgid "Headwears"
+msgstr ""
+
+msgid "Skins"
+msgstr ""
+
+msgid "Open skin configuration screen."
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "Select player skin"
+msgstr ""

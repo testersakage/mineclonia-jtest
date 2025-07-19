@@ -1,0 +1,30 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mcl_raids x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-07-13 01:11+0000\n"
+"Last-Translator: hezemisverydumb <hezemisverydumb@noreply.codeberg.org>\n"
+"Language-Team: Kazakh <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_raids/kk/>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+msgid "Ominous Banner"
+msgstr "Жаман ту"
+
+msgid "Raid (@1 of @2)"
+msgstr ""
+
+msgid "Raid"
+msgstr ""
+
+msgid "Raid (defeat)"
+msgstr ""
+
+msgid "Raid (victory)"
+msgstr ""
