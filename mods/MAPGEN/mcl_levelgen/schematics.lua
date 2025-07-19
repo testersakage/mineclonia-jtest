@@ -179,6 +179,12 @@ end
 -- end
 
 function mcl_levelgen.wall_update_processor ()
+	if not mcl_levelgen.is_levelgen_environment then
+		return function (x, y, z, rng, cid_existing, param2_existing,
+				 cid, param2)
+			return cid, param2
+		end
+	end
 	local wall_p = mcl_levelgen.wall_p
 	local notify_generated = mcl_levelgen.notify_generated
 	if mcl_levelgen.load_feature_environment then
