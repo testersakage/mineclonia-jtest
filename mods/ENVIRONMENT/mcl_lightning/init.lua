@@ -94,6 +94,14 @@ local function choose_pos(pos)
 	return pos, pos2
 end
 
+local is_mushroom_islands
+
+core.register_on_mods_loaded (function ()
+	is_mushroom_islands = mcl_biome_dispatch.make_biome_test ({
+		"MushroomIslands",
+	})
+end)
+
 function mcl_lightning.strike_func(pos, pos2, objects, for_trap)
 	local particle_pos = vector.offset(pos2, 0, (mcl_lightning.size / 2) + 0.5, 0)
 	local particle_size = mcl_lightning.size * 10
@@ -164,7 +172,9 @@ function mcl_lightning.strike_func(pos, pos2, objects, for_trap)
 			local difficulty = mcl_worlds.get_regional_difficulty (pos2)
 			local random = rng:next (0, 26000) / 26000
 			if random <= difficulty * 0.01 then
-				if for_trap then
+				local nodepos = mcl_util.get_nodepos (pos2)
+				local name = mcl_biome_dispatch.get_biome_name (nodepos)
+				if for_trap or is_mushroom_islands (name) then
 					return
 				end
 
