@@ -261,7 +261,7 @@ Almost all blocks can be built (or placed). Building is very simple and has no d
 To build your wielded block, point at a block in the world and right-click. If this is not possible because the pointed block has a special right-click action, hold down the sneak key before right-clicking.=Per posizionare il blocco che state impugnando, puntate ad un blocco nel mondo e cliccate col pulsante destro. Se ciò non è possibile perché il blocco puntato ha una azione speciale legata al pulsante destro, tenete premuto il tasto per strisciare prima di cliccare col pulsante destro.
 Blocks can almost always be built at pointable blocks. One exception are blocks attached to the floor; these can only be built on the floor.=I blocchi possono essere piazzati quasi sempre sui blocchi puntabili. Una eccezione sono i blocchi attaccati al pavimento; questi possono essere costruiti solo sul pavimento.
 Normally, blocks are built in front of the pointed side of the pointed block. A few blocks are different: When you try to build at them, they are replaced.=Normalmente, i blocchi vengono posizionati di fronte al lato puntato del blocco puntato. Pochi blocchi sono differenti: quando tentate di costruirci, vengono rimpiazzati.
-Crafting=Assemblaggio
+Crafting=Fabbricazione
 Crafting is the task of combining several items to form a new item.=L'assemblaggio è l'azione di combinare diversi oggetti per formarne uno nuovo.
 To craft something, you need one or more items, a crafting grid (C) and a crafting recipe. A crafting grid is like a normal inventory which can also be used for crafting. Items need to be put in a certain pattern into the crafting grid. Next to the crafting grid is an output slot (O). Here the result will appear when you placed items correctly. This is just a preview, not the actual item.=
 The crafting grid you have inside your inventory is 2x2, limiting the amount of potential recipes you can craft. To craft recipes that require a 3x3 grid you will need a crafting table.=
@@ -309,7 +309,7 @@ Saturation decreases by doing things which exhaust you (highest exhaustion first
 • Jumping=
 • Mining a block=
 Other actions, like walking, do not exaust you.=
-Mobs=
+Mobs=Creature
 Mobs are the living beings in the world. This includes animals and monsters.=
 Mobs appear randomly throughout the world. This is called “spawning”. Each mob kind appears on particular block types at a given light level. The height also plays a role. Peaceful mobs tend to spawn at daylight while hostile ones prefer darkness. Most mobs can spawn on any solid block but some mobs only spawn on particular blocks (like grass blocks).=
 Like players, mobs have hit points and sometimes armor points, too (which means you need better weapons to deal any damage at all). Also like players, hostile mobs can attack directly or at a distance. Mobs may drop random items after they die.=
@@ -382,8 +382,8 @@ Swimming in a liquid is fairly straightforward: The usual direction keys for bas
 The physics for swimming and diving in a liquid are:=Le regole fisiche per nuotare e immergersi in un liquido sono:
 • The higher the viscosity, the slower you move=• Maggiore è la viscosità, più lentamente vi muoverete
 • If you rest, you'll slowly sink=• Se vi riposate, affonderete lentamente
-• There is no fall damage for falling into a liquid as such=• Non c'è nessun ferimento da caduta alla caduta in un liquido in quanto tale
-• If you fall into a liquid, you will be slowed down on impact (but don't stop instantly). Your impact depth is determined by your speed and the liquid viscosity. For a safe high drop into a liquid, make sure there is enough liquid above the ground, otherwise you might hit the ground and take fall damage=• Se cadete in un liquido, verrete rallentat* all'impatto (ma non vi fermerete immediatamente). La profondità del vostro impatto è determinata dalla vostra velocità e dalla viscosità del liquido. Per un tuffo sicuro in un liquido da grande altezza, assicuratevi che ci sia abbastanza liquido sopra il terreno, altrimenti potreste colpire il terreno e subire il ferimento da caduta
+• There is no fall damage for falling into a liquid as such=• Precipitare in un liquido non provoca danni da caduta
+• If you fall into a liquid, you will be slowed down on impact (but don't stop instantly). Your impact depth is determined by your speed and the liquid viscosity. For a safe high drop into a liquid, make sure there is enough liquid above the ground, otherwise you might hit the ground and take fall damage=• Se precipiti in un liquido, la velocità diminuirà ma non ti fermerai all'impatto. Quanto scenderai in profondità dipende dalla tua velocità e dalla viscosità del liquido in questione. Per tuffarsi da una grande altezza in sicurezza, assicurarsi che il liquido sia abbastanza profondo, altrimenti potresti colpire il fondo e subire il danno da caduta
 Liquids are often not pointable. But some special items are able to point all liquids.=Spesso i liquidi non sono puntabili. Ma alcuni oggetti speciali possono puntare tutti i liquidi.
 Light=Luce
 As the world is entirely block-based, so is the light in the world. Each block has its own brightness. The brightness of a block is expressed in a “light level” which ranges from 0 (total darkness) to 15 (as bright as the sun).=Essendo il mondo completamente basato su blocchi, lo è anche la luce nel mondo. Ogni blocco ha la propria luminosità. La luminosità di un blocco è espressa in un “livello di luce” che va da 0 (oscurità completa) a 15 (luminoso quanto il sole).

@@ -1,5 +1,5 @@
 # textdomain: mcl_weather
-Enable dust particles in the nether=
+Enable dust particles in the nether=Attiva il pulviscolo nel Nether
 Gives ability to control weather=Abilita il controllo meteorologico
 Changes the weather to the specified parameter.=Cambia le condizioni meteorologiche al parametro specificato.
 Error: No weather specified.=Errore: Nessuna condizione meteorologica specificata.

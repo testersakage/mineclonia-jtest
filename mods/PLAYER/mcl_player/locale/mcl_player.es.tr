@@ -1,6 +1,6 @@
 # textdomain: mcl_player
-Graphics=
-HUD=
+Graphics=Gráficos
+HUD=HUD
 Inventory=
 Misc=
 Adapt UI for a better experience on touchscreen devices=

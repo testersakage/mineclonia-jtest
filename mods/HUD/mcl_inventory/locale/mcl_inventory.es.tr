@@ -1,5 +1,5 @@
 # textdomain: mcl_inventory
-Auto (use scroll bar if client >@= 5.11)=
+Auto (use scroll bar if client >@= 5.11)=Automático (usar barra de desplazamiento si el cliente es >@= 5.11)
 Off  (use paging buttons, faster)=
 On   (more MC like, slower)=
 Enable scrollable creative inventory=
@@ -27,4 +27,4 @@ Player settings=Ajustes del jugador
 Return to player inventory=Volver al inventario del jugador
 Crafting table out of range!=¡Mesa de trabajo fuera de alcance!
 Crafting=Fabricación
-Fill Craft Grid=Llenar la cuadrícula de fabricación
+Fill Craft Grid=Rellenar rejilla de fabricación

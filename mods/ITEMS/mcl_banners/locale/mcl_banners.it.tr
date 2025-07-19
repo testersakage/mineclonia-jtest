@@ -1,6 +1,6 @@
 # textdomain: mcl_banners
-And one additional layer=
-And @1 additional layers=
+And one additional layer=Aggiungi un livello
+And @1 additional layers=E @1 livelli aggiuntivi
 Banner=Stendardo
 Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns by placing it with a dye in the loom, or with lots of dyes in crafting table.=
 Emblazoned banners can be emblazoned again to combine patterns. Up to @1 patterns can be layered on a banner. To wash off a banner's top-most layer, use it on a cauldron with water.=
