@@ -601,3 +601,11 @@ awards.register_achievement("mcl:voluntary_exile", {
 	group = "Adventure",
 	secret = true,
 })
+
+awards.register_achievement("mcl:zombie_doctor", {
+	title = S("Zombie Doctor"),
+	description = S("Use a golden apple on a zombie villager under the Weakness effect; the advancement is granted when the zombie villager converts into a villager."),
+	icon = "mcl_core_apple_golden.png",
+	type = "Advancement",
+	group = "Overworld",
+})
