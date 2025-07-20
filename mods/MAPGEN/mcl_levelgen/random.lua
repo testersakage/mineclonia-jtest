@@ -7,6 +7,7 @@ end
 ------------------------------------------------------------------------
 
 local UINT_MAX = 4294967295
+local tonumber = tonumber
 
 local function ull (hi, lo)
 	return { lo, hi, }
@@ -335,11 +336,19 @@ local function stringtoull (x, str)
 end
 
 if detect_luajit () then
+	local str = [[
+	local bxor = bit.bxor
+	local band = bit.band
+	local bnot = bit.bnot
+	local bor = bit.bor
 	local rshift = bit.rshift
-	local arshift = bit.arshift
+	local lshift = bit.lshift
 	local rol = bit.rol
+	local arshift = bit.arshift
+	local UINT_MAX = 4294967295
+	local tonumber = tonumber
 
-	function mulull (a, m)
+	local function mulull (a, m)
 		local a_lo, a_hi = a[1], a[2]
 
 		-- Long multiplication of two 32 bit operands into a
@@ -360,7 +369,7 @@ if detect_luajit () then
 		return tonumber (excess)
 	end
 
-	function addull (a, b)
+	local function addull (a, b)
 		local along = 0x100000000ull * a[2] + a[1]
 		local blong = 0x100000000ull * b[2] + b[1]
 		local value = along + blong
@@ -368,7 +377,7 @@ if detect_luajit () then
 		a[2] = tonumber (rshift (value, 32))
 	end
 
-	function addkull (a, k)
+	local function addkull (a, k)
 		local along = 0x100000000ull * a[2] + a[1]
 		local value = along + k
 		a[1] = tonumber (band (value, 0xffffffffull))
@@ -377,43 +386,49 @@ if detect_luajit () then
 
 	-- Avoid expensive normalization by performing unsigned
 	-- arithmetic.
-	function andull (a, b)
+	local function andull (a, b)
 		a[1] = tonumber (band (a[1] * 1ull, b[1] * 1ull))
 		a[2] = tonumber (band (a[2] * 1ull, b[2] * 1ull))
 	end
 
-	function xorull (a, b)
+	local function xorull (a, b)
 		a[1] = tonumber (bxor (a[1] * 1ull, b[1] * 1ull))
 		a[2] = tonumber (bxor (a[2] * 1ull, b[2] * 1ull))
 	end
 
-	function rotlull (a, k)
+	local function rotlull (a, k)
 		local along = 0x100000000ull * a[2] + a[1]
 		local value = rol (along, k)
 		a[1] = tonumber (band (value, 0xffffffffull))
 		a[2] = tonumber (rshift (value, 32ull))
 	end
 
-	function shrull (a, k)
+	local function shrull (a, k)
 		local along = 0x100000000ull * a[2] + a[1]
 		local value = rshift (along, k)
 		a[1] = tonumber (band (value, 0xffffffffull))
 		a[2] = tonumber (rshift (value, 32ull))
 	end
 
-	function ashrull (a, k)
+	local function ashrull (a, k)
 		local along = 0x100000000ull * a[2] + a[1]
 		local value = arshift (along, k)
 		a[1] = tonumber (band (value, 0xffffffffull))
 		a[2] = tonumber (rshift (value, 32ull))
 	end
 
-	function shlull (a, k)
+	local function shlull (a, k)
 		local along = 0x100000000ull * a[2] + a[1]
 		local value = lshift (along, k)
 		a[1] = tonumber (band (value, 0xffffffffull))
 		a[2] = tonumber (rshift (value, 32ull))
 	end
+	return mulull, addull, addkull, andull, xorull,
+		rotlull, shrull, ashrull, shlull
+]]
+	local fn = loadstring (str)
+	mulull, addull, addkull, andull, xorull,
+		rotlull, shrull, ashrull, shlull = fn ()
 end
 
 local function mul2ull (a, b)
@@ -794,8 +809,13 @@ local function seed_from_position (seed, x, y, z)
 end
 
 if true and detect_luajit () then
+	local str = [[
 	local rshift = bit.rshift
 	local arshift = bit.arshift
+	local lshift = bit.lshift
+	local bxor = bit.bxor
+	local band = bit.band
+	local tonumber = tonumber
 
 	local function lj_seed_from_position (seed, x, y, z)
 		local x, y, z = x * 1ll * 1ull, y * 1ll * 1ull, z * 1ll * 1ull
@@ -806,7 +826,10 @@ if true and detect_luajit () then
 		seed[1] = tonumber (band (value, 0xffffffff))
 		seed[2] = tonumber (rshift (value, 32))
 	end
-
+	return lj_seed_from_position
+]]
+	local fn = loadstring (str)
+	local lj_seed_from_position = fn ()
 	if true then
 		math.randomseed (0)
 		for i = 1, 100 do
@@ -1170,7 +1193,7 @@ function mcl_levelgen.jvm_random (seed)
 			while (n - m + (y - 1)) >= 0x7fffffff do
 				n = fn (31)
 				m = n % y
-			end 
+			end
 			return m
 		end,
 		next_boolean = function (self)
@@ -1358,7 +1381,11 @@ local function lcj_next (seed, increment)
 end
 
 if detect_luajit () then
-	function lcj_next (seed, increment)
+	local str = [[
+	local band = bit.band
+	local rshift = bit.rshift
+	local tonumber = tonumber
+	local function lcj_next (seed, increment)
 		local cseed = 0x100000000ull * seed[2] + seed[1]
 		local increment
 			= 0x100000000ull * increment[2] + increment[1]
@@ -1368,6 +1395,10 @@ if detect_luajit () then
 		seed[1] = tonumber (band (cseed, 0xffffffff))
 		seed[2] = tonumber (rshift (cseed, 32))
 	end
+	return lcj_next
+]]
+	local fn = loadstring (str)
+	lcj_next = fn ()
 end
 
 mcl_levelgen.lcj_next = lcj_next
@@ -1567,6 +1598,5 @@ if true then
 	assert (lcg:next_within (5000) == 838)
 	assert (lcg:next_within (5000) == 4832)
 	assert (lcg:next_within (5000) == 3972)
-	assert (lcg:next_within (5000) == 253)	
+	assert (lcg:next_within (5000) == 253)
 end
-
