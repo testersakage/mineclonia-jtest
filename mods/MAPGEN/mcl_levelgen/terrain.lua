@@ -229,14 +229,14 @@ local interpolator = table.merge (density_function, {
 	--   Values produced by interpolating all pairs of values
 	--   along the Z axis at the current X-axis row and Y-axis
 	--   column.
+	--
+	--   The final value of the trilinear process illustrated
+	--   above; interpolation is conducted in the noise sampling
+	--   loop.  If nil, return the value of `input'.
 	data = {},
 
 	-- Input function whose value to interpolate.
 	input = nil,
-
-	-- Value to return; interpolation is conducted in the noise
-	-- sampling loop.  If nil, return the value of `input'.
-	value = nil,
 })
 
 function interpolator:create_noise_arrays (n_cells_y, n_cells_xz)
@@ -245,7 +245,6 @@ function interpolator:create_noise_arrays (n_cells_y, n_cells_xz)
 
 	self.noises_here = t1
 	self.noises_next = t2
-	self.value = false
 
 	for i = 1, n_cells_xz + 1 do
 		local t3, t4 = {}, {}
@@ -260,6 +259,7 @@ function interpolator:create_noise_arrays (n_cells_y, n_cells_xz)
 	for i = 1, 8 + 4 + 2 do
 		tdata[i] = 0.0
 	end
+	tdata[15] = nil -- Value.
 	self.data = tdata
 end
 
@@ -293,7 +293,7 @@ end
 -- for interpolating within cells in this region.  Y must be relative
 -- to the Y_BASE which was supplied to `fill_noise_slice'
 
-function interpolator:cache_yz_values (y, z)
+local function interpolator_cache_yz_values (self, y, z)
 	local here, there = self.noises_here, self.noises_next
 	local herez2 = here[z + 2]
 	local herez1 = here[z + 1]
@@ -319,6 +319,7 @@ function interpolator:cache_yz_values (y, z)
 	data[xyz001] = herez2[y + 1]
 	data[xyz000] = herez1[y + 1]
 end
+interpolator.cache_yz_values = interpolator_cache_yz_values
 
 local function lerp1d (u, s1, s2)
 	return (s2 - s1) * u + s1
@@ -328,7 +329,7 @@ end
 -- considered along the X and Z axes by PROGRESS on the Y axis, and
 -- cache the products in `self.xz00', `xz10', `xz01', and `xz11'.
 
-function interpolator:y_interpolate (progress)
+local function interpolator_y_interpolate (data, progress)
 	local xyz000 = 1
 	local xyz001 = 2
 	local xyz010 = 3
@@ -341,43 +342,60 @@ function interpolator:y_interpolate (progress)
 	local xz01 = 10
 	local xz10 = 11
 	local xz11 = 12
-	local data = self.data
 
 	data[xz11] = lerp1d (progress, data[xyz101], data[xyz111])
 	data[xz10] = lerp1d (progress, data[xyz100], data[xyz110])
 	data[xz01] = lerp1d (progress, data[xyz001], data[xyz011])
 	data[xz00] = lerp1d (progress, data[xyz000], data[xyz010])
 end
+interpolator.y_interpolate = interpolator_y_interpolate
 
 -- Likewise, but along the X axis.
 
-function interpolator:x_interpolate (progress)
+local function interpolator_x_interpolate (data, progress)
 	local xz00 = 9
 	local xz01 = 10
 	local xz10 = 11
 	local xz11 = 12
 	local z0 = 13
 	local z1 = 14
-	local data = self.data
 
 	data[z1] = lerp1d (progress, data[xz01], data[xz11])
 	data[z0] = lerp1d (progress, data[xz00], data[xz10])
 end
+interpolator.x_interpolate = interpolator_x_interpolate
 
 -- Complete interpolation.
 
-function interpolator:z_interpolate (progress)
+local function interpolator_z_interpolate (data, progress)
 	local z0 = 13
 	local z1 = 14
-	local data = self.data
-	self.value = lerp1d (progress, data[z0], data[z1])
+	local value = 15
+	data[value] = lerp1d (progress, data[z0], data[z1])
 end
 
 function interpolator:__call (x, y, z, blender)
-	if self.value then
-		return self.value
+	local data = self.data
+	local value = 15
+	if data[value] then
+		return data[value]
 	else
 		return self.input (x, y, z, blender)
+	end
+end
+
+function interpolator:petrify_internal (visited)
+	self.saved_max_value = self.input:max_value ()
+	self.saved_min_value = self.input:min_value ()
+	local input = self.input:petrify_and_clone (visited)
+	local data = self.data
+	local value = 15
+	return function (x, y, z, blender)
+		if data[value] then
+			return data[value]
+		else
+			return input (x, y, z, blender)
+		end
 	end
 end
 
@@ -574,25 +592,25 @@ end
 
 local function interpolator_update (self, y, z)
 	for _, interpolator in ipairs (self.interpolators) do
-		interpolator:cache_yz_values (y, z)
+		interpolator_cache_yz_values (interpolator, y, z)
 	end
 end
 
 local function interpolator_update_y (self, progress)
-	for _, interpolator in ipairs (self.interpolators) do
-		interpolator:y_interpolate (progress)
+	for _, data in ipairs (self.interpolator_data) do
+		interpolator_y_interpolate (data, progress)
 	end
 end
 
 local function interpolator_update_x (self, progress)
-	for _, interpolator in ipairs (self.interpolators) do
-		interpolator:x_interpolate (progress)
+	for _, data in ipairs (self.interpolator_data) do
+		interpolator_x_interpolate (data, progress)
 	end
 end
 
 local function interpolator_update_z (self, progress)
-	for _, interpolator in ipairs (self.interpolators) do
-		interpolator:z_interpolate (progress)
+	for _, data in ipairs (self.interpolator_data) do
+		interpolator_z_interpolate (data, progress)
 	end
 end
 
@@ -616,9 +634,9 @@ local function exchange_slices (self)
 end
 
 local function reset_interpolators (self)
-	local interpolators = self.interpolators
-	for _, interpolator in ipairs (interpolators) do
-		interpolator.value = false
+	local value = 15
+	for _, data in ipairs (self.interpolator_data) do
+		data[value] = nil
 	end
 
 	local caches = self.caches_to_clear
@@ -1344,6 +1362,7 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize, ychunksize)
 	local markers = {}
 
 	gen.interpolators = {}
+	gen.interpolator_data = {}
 	gen.flat_caches = {}
 	gen.caches_to_clear = {}
 
@@ -1366,6 +1385,7 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize, ychunksize)
 				table.insert (gen.interpolators, fn)
 				fn:create_noise_arrays (gen.n_cells_y,
 							gen.n_cells_xz)
+				table.insert (gen.interpolator_data, fn.data)
 			elseif func.name == "flat_cache" then
 				fn = table.merge (flat_cache, {
 					input = func,
@@ -1401,7 +1421,6 @@ function mcl_levelgen.make_terrain_generator (preset, chunksize, ychunksize)
 		= preset.final_density:wrap (instantiate_marker_fns,
 					     mcl_levelgen.identity)
 	gen.final_density = final_density:petrify ()
-
 
 	local function wrapnext (noise)
 		return noise:wrap_internal (instantiate_marker_fns,
