@@ -274,6 +274,7 @@ function zombie_villager:do_custom (dtime)
 					local villager = villager_obj:get_luaentity ()
 					villager:record_gossip (self._curer, "major_positive", 20)
 					villager:record_gossip (self._curer, "minor_positive", 25)
+					awards.unlock(self._curer, "mcl:zombie_doctor")
 				end
 				return false
 			end
