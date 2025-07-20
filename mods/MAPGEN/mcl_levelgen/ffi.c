@@ -13,12 +13,18 @@
 static void
 unhash (unsigned int hash, int *lx, int *ly, int *lz)
 {
+#ifndef __GNUC__
   *lx = ((hash & 0x3ff)
 	 | ((0 - ((hash & 0x200) >> 9)) & ~0x3ff));
   *ly = (((hash >> 10) & 0x3ff)
 	 | ((0 - ((hash & 0x80000) >> 19)) & ~0x3ff));
   *lz = (((hash >> 20) & 0x3ff)
 	 | ((0 - ((hash & 0x20000000) >> 29)) & ~0x3ff));
+#else /* __GNUC__ */
+  *lx = (int) (hash << 22) >> 22;
+  *ly = (int) (hash << 12) >> 22;
+  *lz = (int) (hash << 2) >> 22;
+#endif /* __GNUC__ */
 }
 
 #define dist_closest 1
