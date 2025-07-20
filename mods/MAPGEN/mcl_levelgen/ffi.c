@@ -81,8 +81,12 @@ static long long
 distance_to_value_sqr (int range, int value)
 {
   int dmax = value - (range & 0xffff) + 32768;
+#ifndef __GNUC__
   int dmin = (((range >> 16) & 0xffff)
 	      | ((0 - ((range & 0x800000000) >> 31)) & 0xffff0000)) - value;
+#else /* __GNUC__ */
+  int dmin = (range >> 16) - value;
+#endif /* __GNUC__ */  
   long long m;
 
   /* For consistency with Minecraft, this comparison function treats
