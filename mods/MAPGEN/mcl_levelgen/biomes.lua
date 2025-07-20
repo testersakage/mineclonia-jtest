@@ -6878,6 +6878,13 @@ function mcl_levelgen.munge_biome_coords (seed, x, y, z)
 end
 
 if mcl_levelgen.detect_luajit () then
+	local str = [[
+	local tonumber = tonumber
+	local rshift = bit.rshift
+	local arshift = bit.arshift
+	local lshift = bit.lshift
+	local band = bit.band
+
 	local function lcj_next (seed, increment)
 		return seed * (seed * 0x5851f42d4c957f2dll
 			       + 0x14057b7ef767814fll)
@@ -6902,7 +6909,7 @@ if mcl_levelgen.detect_luajit () then
 	-- 	-- end
 	-- end
 
-	function munge_distance (seed, tqx, tqy, tqz, tpx, tpy, tpz)
+	local function munge_distance (seed, tqx, tqy, tqz, tpx, tpy, tpz)
 		local seed = 0x100000000ll * seed[2] + seed[1]
 		local increment = seed
 		seed = lcj_next (seed, tqx * 1ll)
@@ -6933,6 +6940,10 @@ if mcl_levelgen.detect_luajit () then
 	-- 	assert (y1 == y2)
 	-- 	assert (z1 == z2)
 	-- end
+	return munge_distance
+]]
+	local fn = loadstring (str)
+	munge_distance = fn ()
 end
 
 -- Convert a level seed SEED into a biome seed and return the result.
