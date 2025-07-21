@@ -8,12 +8,15 @@ local band = bit.band
 local bor = bit.bor
 
 local portable_schematics = {}
+local portable_schematics_loaded = false
 mcl_levelgen.portable_schematics = portable_schematics
 
 local cid_ignore = core and core.CONTENT_IGNORE or 5000
 
 function mcl_levelgen.register_portable_schematic (id, specifier, normalize_yprob)
-	if portable_schematics[id] then
+	if portable_schematics_loaded then
+		error ("register_portable_schematic mustn't be called after mods have been loaded")
+	elseif portable_schematics[id] then
 		error ("Schematic already registered: " .. id)
 	end
 	-- Is this schematic already valid?
@@ -35,7 +38,13 @@ function mcl_levelgen.register_portable_schematic (id, specifier, normalize_ypro
 		end
 	end
 	portable_schematics[id] = data
-	core.ipc_set ("mcl_levelgen:portable_schematics", portable_schematics)
+end
+
+if core.register_on_mods_loaded and core.get_player_by_name then
+	core.register_on_mods_loaded (function ()
+		portable_schematics_loaded = true
+		core.ipc_set ("mcl_levelgen:portable_schematics", portable_schematics)
+	end)
 end
 
 local function encode_schem_data (cid, param2, probability, force_place)
