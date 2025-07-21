@@ -40,7 +40,7 @@ function mcl_levelgen.register_portable_schematic (id, specifier, normalize_ypro
 	portable_schematics[id] = data
 end
 
-if core.register_on_mods_loaded and core.get_player_by_name then
+if core and core.register_on_mods_loaded and core.get_player_by_name then
 	core.register_on_mods_loaded (function ()
 		portable_schematics_loaded = true
 		core.ipc_set ("mcl_levelgen:portable_schematics", portable_schematics)
