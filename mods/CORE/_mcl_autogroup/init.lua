@@ -121,14 +121,17 @@ local function convert_mtg_groups(nname)
 	local hardness = core.registered_nodes[nname]._mcl_hardness
 
 	if not hardness then --if _mcl_hardness is defined the node is clearly intended for mcl specifically, don't mess with the groups in that case
+		-- mtg group `level` indicates tool tier needed to dig the node
+		local level = 2 * (groups.level or 1) - 1
+		groups.level = nil
 		for mtg, mcl in pairs(groups_mtg2mcl) do
 			local g_mtg = core.get_item_group(nname, mtg)
 			local g_mcl = core.get_item_group(nname, mcl.group)
 			if g_mtg > 0 and g_mcl == 0 then
-				groups[mcl.group] = g_mtg
+				groups[mcl.group] = level
 				groups[mtg] = nil
-
-				hardness = math.max(hardness or 0, g_mtg * mcl.hardness)
+				-- mtg dig group value indicates hardness
+				hardness = math.max(hardness or 0, (4 - g_mtg) * mcl.hardness)
 			end
 		end
 	end
