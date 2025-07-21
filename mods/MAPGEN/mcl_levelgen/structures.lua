@@ -437,6 +437,7 @@ function mcl_levelgen.generate_stronghold_positions (preset, parms)
 	local spread = parms.spread
 	local preferred_biomes = parms.preferred_biomes
 	local rng = mcl_levelgen.jvm_random (preset.seed)
+	local biome_rng = mcl_levelgen.jvm_random (ull (0, 0))
 	local angle = rng:next_double () * pi * 2
 	local completed_spread = 0
 	local triangle_counter = 0
@@ -451,7 +452,7 @@ function mcl_levelgen.generate_stronghold_positions (preset, parms)
 			= dist_triangle + dist_randomized
 		local cx = round (mathcos (angle) * dist_scaled)
 		local cz = round (mathsin (angle) * dist_scaled)
-		local biome_rng = rng:fork ()
+		rng:fork_into (biome_rng)
 
 		-- First attempt to locate a preferred biome within
 		-- range.
