@@ -895,6 +895,10 @@ function mcl_levelgen.xoroshiro_function (seedlo, seedhi)
 	return getlong
 end
 
+local function unpack2 (x)
+	return x[1], x[2]
+end
+
 function mcl_levelgen.xoroshiro (seedlo, seedhi)
 	local seedlo = { seedlo[1], seedlo[2], }
 	local seedhi = { seedhi[1], seedhi[2], }
@@ -932,14 +936,31 @@ function mcl_levelgen.xoroshiro (seedlo, seedhi)
 		end,
 		next_double = next_double,
 		fork = function (self)
-			local lo1, hi1 = unpack (fn ())
-			local lo2, hi2 = unpack (fn ())
+			local lo1, hi1 = unpack2 (fn ())
+			local lo2, hi2 = unpack2 (fn ())
 			return mcl_levelgen.xoroshiro (ull (hi1, lo1),
 						       ull (hi2, lo2))
 		end,
+		fork_into = function (self, other)
+			local lo1, hi1 = unpack2 (fn ())
+			local lo2, hi2 = unpack2 (fn ())
+			local data = other.reseeding_data
+			local hi_seed = data[6]
+			local lo_seed = data[5]
+			if zeroull (lo_seed) and zeroull (hi_seed) then
+				lo_seed[2], lo_seed[1] = 0x9e3779b9, 0x7f4a7c15
+				hi_seed[2], hi_seed[1] = 1779033703, 4089235721
+			else
+				lo_seed[1] = lo1
+				lo_seed[2] = hi1
+				hi_seed[1] = lo2
+				hi_seed[2] = hi2
+			end
+			other:reset_gaussian ()
+		end,
 		fork_positional = function (self)
-			local lo1, hi1 = unpack (fn ())
-			local lo2, hi2 = unpack (fn ())
+			local lo1, hi1 = unpack2 (fn ())
+			local lo2, hi2 = unpack2 (fn ())
 
 			local function factory (pos_or_string)
 				if type (pos_or_string) == "string" then
@@ -1018,19 +1039,17 @@ function mcl_levelgen.xoroshiro (seedlo, seedhi)
 			seedlo, seedhi,
 		},
 		reseed = function (self, ull)
-			local data = self.reseeding_data
-			local lo_seed = data[5]
-			local hi_seed = data[6]
-			seed_from_ull (lo_seed, hi_seed, ull)
-			mix64 (lo_seed)
-			mix64 (hi_seed)
-			if zeroull (lo_seed) and zeroull (hi_seed) then
+			seed_from_ull (seedlo, seedhi, ull)
+			mix64 (seedlo)
+			mix64 (seedhi)
+			if zeroull (seedlo) and zeroull (seedhi) then
 				seedlo[2], seedlo[1] = 0x9e3779b9, 0x7f4a7c15
-				hi_seed[2], hi_seed[1] = 1779033703, 4089235721
+				seedhi[2], seedhi[1] = 1779033703, 4089235721
 			end
 			reset_gaussian ()
 		end,
 		next_gaussian = next_gaussian,
+		reset_gaussian = reset_gaussian,
 	}, seedlo, seedhi
 end
 
@@ -1102,6 +1121,24 @@ if false then
 	print ((rng:next_within (255)))
 	print ((rng:next_within (254)))
 	print ((rng:next_within (253)))
+end
+
+if true then
+	local source
+		= mcl_levelgen.xoroshiro (ull (0, 1000), ull (0, 1000))
+	local source_1
+		= mcl_levelgen.xoroshiro (ull (0, 1000), ull (0, 1000))
+	local other = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+
+	for i = 1, 100 do
+		local fork = source:fork ()
+		source_1:fork_into (other)
+
+		for i = 1, 1000 do
+			local a, b = fork:next_integer (3000), other:next_integer (3000)
+			assert (a == b)
+		end
+	end
 end
 
 ------------------------------------------------------------------------
@@ -1206,6 +1243,9 @@ function mcl_levelgen.jvm_random (seed)
 		fork = function (self)
 			return mcl_levelgen.jvm_random (self:next_long ())
 		end,
+		fork_into = function (self, other)
+			other:reseed (self:next_long ())
+		end,
 		fork_positional = function (self)
 			local seed = self:next_long ()
 			seed = ull (seed[2], seed[1])
@@ -1266,7 +1306,7 @@ function mcl_levelgen.jvm_random (seed)
 			false, seed_storage,
 		},
 		reseed = function (self, seed)
-			local storage = self.reseeding_data[2]
+			local storage = seed_storage
 			storage[1] = seed[1]
 			storage[2] = seed[2]
 			xorull (storage, MULTIPLIER)
@@ -1274,6 +1314,7 @@ function mcl_levelgen.jvm_random (seed)
 			reset_gaussian ()
 		end,
 		next_gaussian = next_gaussian,
+		reset_gaussian = reset_gaussian,
 	}, seed_storage
 end
 
@@ -1308,6 +1349,23 @@ if true then
 	assert (tostringull (x:next_long ()) == "12852779243211759225")
 end
 
+if true then
+	local source
+		= mcl_levelgen.jvm_random (ull (0, 1000))
+	local source_1
+		= mcl_levelgen.jvm_random (ull (0, 1000))
+	local other = mcl_levelgen.jvm_random (ull (0, 0))
+
+	for i = 1, 100 do
+		local fork = source:fork ()
+		source_1:fork_into (other)
+
+		for i = 1, 1000 do
+			local a, b = fork:next_integer (3000), other:next_integer (3000)
+			assert (a == b)
+		end
+	end
+end
 
 if false then
 	local x = mcl_levelgen.jvm_random (extull (-44753374))
