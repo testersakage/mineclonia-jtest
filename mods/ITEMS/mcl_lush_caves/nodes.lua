@@ -288,17 +288,22 @@ core.register_craftitem("mcl_lush_caves:glow_berry", {
 		local vine = "mcl_lush_caves:cave_vines"
 
 		local node = core.get_node(pointed_thing.under)
-		local different_vine = core.get_item_group(node.name, "vinelike_node") == 2 and node.name ~= vine
-		if different_vine then return end
+
+		if core.get_item_group(node.name, "vinelike_node") == 2
+		and node.name ~= vine then return end
+
+		local age = node.param2 + 1
+		if node.name ~= vine then age = 0 end
 
 		core.place_node(pointed_thing.under, {name=vine}, placer)
 
+		-- Grow berry if lucky
 		if math.random() <= 0.11 then
 			vine = "mcl_lush_caves:cave_vines_lit"
 		end
-		-- Inherit param2 and grow berry if lucky
+
 		core.swap_node(vector.offset(pointed_thing.under,0,-1,0),
-			{name=vine, param2=node.param2+1})
+			{name=vine, param2=age})
 
 		core.sound_play(core.registered_nodes[vine].sounds.place, {pos=pointed_thing.above, gain=1}, true)
 		if not core.is_creative_enabled(placer:get_player_name()) then
