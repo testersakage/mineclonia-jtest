@@ -3530,6 +3530,7 @@ function villager:acquire_job_site (self_pos, dtime)
 				local hash = hash_pos (target)
 				self:abandon_for (hash, 60)
 			end
+			self._provisional_job_site = nil
 			self._acquiring_job_site = nil
 			return false
 		end
@@ -3541,6 +3542,7 @@ function villager:acquire_job_site (self_pos, dtime)
 			self:abandon_for (hash, 60)
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
+			self._provisional_job_site = nil
 			self._acquiring_job_site = false
 			return false
 		end
@@ -3571,6 +3573,11 @@ function villager:acquire_job_site (self_pos, dtime)
 				self._acquiring_job_site = 60.0
 				return "_acquiring_job_site"
 			end
+		elseif target and vector.distance (self_pos, target) < 2.0 then
+			remove_provisional_poi (target)
+			self:claim_poi (target, nil)
+			self._provisional_job_site = nil
+			return nil
 		end
 
 		return false
