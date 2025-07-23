@@ -113,6 +113,9 @@ if mcl_hunger.active then
 	end
 
 	function mcl_hunger.stop_poison(player)
+		if mcl_potions.has_effect(player, "poison") then
+			mcl_potions.clear_effect(player, "poison")
+		end
 		if not mcl_hunger.active then
 			return
 		end
