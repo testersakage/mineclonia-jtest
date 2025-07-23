@@ -141,6 +141,7 @@ function build_random_spread_locator_test (spacing, separation, spread_method)
 	end
 end
 
+-- luacheck: push ignore 511
 if false then
 	local l = build_random_spread_chunk_test (32, 8, "linear")
 	local level_seed = ull (0, 0)
@@ -153,6 +154,7 @@ if false then
 		end
 	end
 end
+-- luacheck: pop
 
 -- Frequency reduction methods.
 
@@ -164,6 +166,7 @@ local function frequency_reducer_default (level_seed, salt, cx, cz,
 	return default_rng:next_float () < frequency
 end
 
+-- luacheck: push ignore 511
 if false then
 	local level_seed = ull (0, 0)
 	mcl_levelgen.stringtoull (level_seed, "44877572094875933")
@@ -175,6 +178,7 @@ if false then
 		end
 	end
 end
+-- luacheck: pop
 
 local rshift = bit.rshift
 local arshift = bit.arshift
@@ -197,6 +201,7 @@ local function frequency_reducer_type_1 (level_seed, salt, cx, cz, frequency)
 	return default_rng:next_within (floor (1.0 / frequency)) == 0
 end
 
+-- luacheck: push ignore 511
 if false then
 	local level_seed = ull (0, 0)
 	mcl_levelgen.stringtoull (level_seed, "44877572094875933")
@@ -209,6 +214,7 @@ if false then
 		end
 	end
 end
+-- luacheck: pop
 
 local function frequency_reducer_type_2 (level_seed, salt, cx, cz, frequency)
 	-- https://minecraft.wiki/w/Structure_set
@@ -220,6 +226,7 @@ local function frequency_reducer_type_2 (level_seed, salt, cx, cz, frequency)
 	return default_rng:next_float () < frequency
 end
 
+-- luacheck: push ignore 511
 if false then
 	local level_seed = ull (0, 0)
 	mcl_levelgen.stringtoull (level_seed, "44877572094875933")
@@ -232,12 +239,14 @@ if false then
 		end
 	end
 end
+-- luacheck: pop
 
 local function frequency_reducer_type_3 (level_seed, salt, cx, cz, frequency)
 	set_carver_seed (default_rng, level_seed, cx, cz)
 	return default_rng:next_float () < frequency
 end
 
+-- luacheck: push ignore 511
 if false then
 	local level_seed = ull (0, 0)
 	mcl_levelgen.stringtoull (level_seed, "44877572094875933")
@@ -250,6 +259,7 @@ if false then
 		end
 	end
 end
+-- luacheck: pop
 
 local frequency_reducers = {
 	default = frequency_reducer_default,

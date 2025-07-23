@@ -1392,7 +1392,7 @@ function surface_system:initialize (preset)
 		local mincid = 50
 		function getcid (name)
 			if name == preset.default_block then
-				return 3	
+				return 3
 			end
 			mincid = mincid + 1
 			return mincid - 1
@@ -1467,6 +1467,8 @@ local abs = math.abs
 local ceil = math.ceil
 local decode_node = mcl_levelgen.decode_node
 local pack_height_map = mcl_levelgen.pack_height_map
+
+-- luacheck: push ignore 581
 
 local function build_bryce_formations (self, x, z, dx, dz, surface_y, heightmap,
 				       nodes, chunksize)
@@ -1657,6 +1659,8 @@ local function build_icebergs (self, preliminary_surface, biome, nodes,
 		end
 	end
 end
+
+-- luacheck: pop
 
 function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunksize, biomes)
 	steep_chunksize = chunksize

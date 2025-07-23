@@ -1291,25 +1291,6 @@ local function get_spaghetti_2d_function (registry, noises)
 	local modulated = cube (add (biased_elevation, thickness_modulator))
 	local value = max (add (map2, mul (const (0.083), thickness_modulator)),
 			   modulated)
-	if false then
-		print ("SPAGHETTI_2D value min, max: ", value:min_value (),
-		       value:max_value ())
-		print ("SPAGHETTI_2D add min, max: ", value.arg1:min_value (),
-		       value.arg1:max_value ())
-		print ("SPAGHETTI_2D modulated min, max: ", modulated:min_value (),
-		       modulated:max_value ())
-		print ("SPAGHETTI_2D map2 min, max: ", map2:min_value (),
-		       map2:max_value ())
-		local tem = value.arg1.arg2
-		print ("SPAGHETTI_2D mul min, max: ", tem:min_value (),
-		       tem:max_value ())
-		print ("SPAGHETTI_2D mod input min, max: ",
-		       modulated.input:min_value (),
-		       modulated.input:max_value ())
-		print ("SPAGHETTI_2D biased elevation min, max: ",
-		       biased_elevation:min_value (),
-		       biased_elevation:max_value ())
-	end
 	return clamp (value, -1.0, 1.0)
 end
 
