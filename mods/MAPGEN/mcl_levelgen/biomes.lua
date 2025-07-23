@@ -6672,6 +6672,7 @@ local BIOME_SELECTOR_NOISE
 	= mcl_levelgen.make_simplex_noise (rng, { 0, })
 mcl_levelgen.BIOME_SELECTOR_NOISE = BIOME_SELECTOR_NOISE
 
+-- luacheck: push ignore 511
 if false then
 	for x = -256, 255 do
 		for z = -256, 255 do
@@ -6689,6 +6690,7 @@ if false then
 		end
 	end
 end
+--luacheck: pop
 
 local mathmax = math.max
 local registered_biomes_id = {}

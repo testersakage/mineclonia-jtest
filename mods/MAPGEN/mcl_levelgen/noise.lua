@@ -267,6 +267,7 @@ function mcl_levelgen.make_noise (rng, first_octave, amplitudes, fork_noise)
 	return tbl
 end
 
+-- luacheck: push ignore 211 311 511
 local WIDTH = 100
 local HEIGHT = 100
 
@@ -334,6 +335,7 @@ if false then
 		end
 	end
 end
+-- luacheck: pop
 
 ------------------------------------------------------------------------
 -- Minecraft-style simplex noise.
@@ -600,6 +602,7 @@ function mcl_levelgen.make_simplex_noise (rng, in_octaves)
 	return tbl
 end
 
+-- luacheck: push ignore 511
 if false then
 	local seed = mcl_levelgen.ull (0, 585454123)
 	local rng = mcl_levelgen.jvm_random (seed)
@@ -622,6 +625,7 @@ if false then
 		end
 	end
 end
+-- luacheck: pop
 
 -- https://maven.fabricmc.net/docs/yarn-1.20.4+build.1/net/minecraft/util/math/noise/DoublePerlinNoiseSampler.html
 ------------------------------------------------------------------------
@@ -685,6 +689,7 @@ function mcl_levelgen.make_normal_noise (rng, first_octave, amplitudes, fork_noi
 	return tbl
 end
 
+-- luacheck: push ignore 511
 if false then
 	-- Test modern noise.
 
@@ -741,3 +746,4 @@ if false then
 		end
 	end
 end
+-- luacheck: pop
