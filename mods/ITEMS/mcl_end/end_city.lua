@@ -52,7 +52,7 @@ local end_city_loot = {
 				itemstring = "mcl_mobitems:iron_horse_armor",
 			},
 			{
-				itemstring = "mcl_mobitems:golden_horse_armor",
+				itemstring = "mcl_mobitems:gold_horse_armor",
 			},
 			{
 				itemstring = "mcl_mobitems:diamond_horse_armor",
