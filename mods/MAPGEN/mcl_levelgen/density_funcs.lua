@@ -24,9 +24,11 @@ if not table.copy then
 		return copy(value)
 	end
 
+	-- luacheck: push ignore 122
 	function table.copy(value)
 		return table_copy(value, false)
 	end
+	-- luacheck: pop
 end
 
 if not table.merge then
@@ -402,6 +404,7 @@ function mcl_levelgen.make_blended_noise_from_parms (rng, xz_scale, y_scale, xz_
 						    smear_scale_multiplier)
 end
 
+-- luacheck: push ignore 511
 if false then
 	local noise = mcl_levelgen.make_blended_noise_from_parms (nil, 80.0, 0.25, 160.0, 0.125, 8.0)
 	print ("Max value: " .. noise:max_value ());
@@ -415,6 +418,7 @@ if false then
 	end
 	print (math.floor ((os.clock () - time) * 1000 + 0.5) .. " ms")
 end
+-- luacheck: pop
 
 ------------------------------------------------------------------------
 -- Predefined noise sampler.
@@ -803,7 +807,9 @@ function binop:fill (array, n, provider, provider_data)
 		for i = 0, n - 1 do
 			local idx = i + 1
 			local v1 = array[idx]
+			-- luacheck: push ignore 581
 			if not (v1 < min_2) then
+			-- luacheck: pop
 				local val = self.arg2 (provider (i, provider_data))
 				v1 = mathmin (v1, val)
 				array[idx] = v1
@@ -814,7 +820,9 @@ function binop:fill (array, n, provider, provider_data)
 		for i = 0, n - 1 do
 			local idx = i + 1
 			local v1 = array[idx]
+			-- luacheck: push ignore 581
 			if not (v1 > max_2) then
+			-- luacheck: pop
 				local val = self.arg2 (provider (i, provider_data))
 				v1 = mathmax (v1, val)
 				array[idx] = v1
@@ -987,6 +995,7 @@ function mcl_levelgen.make_end_island_func (seed)
 	return make_density_function (values)
 end
 
+-- luacheck: push ignore 511
 if false then
 	local seed = mcl_levelgen.ull (77209, 94883)
 	local func = mcl_levelgen.make_end_island_func (seed)
@@ -997,6 +1006,7 @@ if false then
 		end
 	end
 end
+-- luacheck: pop
 
 ------------------------------------------------------------------------
 -- minecraft:weird_scaled_sampler
@@ -2019,6 +2029,7 @@ function mcl_levelgen.make_spline (coordinate, points)
 	return make_density_function (values)
 end
 
+-- luacheck: push ignore 511
 if false then
 	local ull = mcl_levelgen.ull
 	local rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
@@ -2064,6 +2075,7 @@ if false then
 		end
 	end
 end
+-- luacheck: pop
 
 -- "\([[:alnum:]]+\)":.*??\(-?[[:digit:]\.]+\)\b
 -- \1 = \2
