@@ -867,20 +867,24 @@ local function collect_unique_chunks (level)
 	return chunks, players, chunk_data
 end
 
--- Map of level to chunk count from which to derive a number of mobs
--- which, if exceeded by overfulfillment of the mob caps, will induce
--- reloaded mobs immediately to despawn.
-local spawn_border_chunks = {
-	overworld = 0,
-	nether = 0,
-	["end"] = 0,
-}
+local function collect_all_unique_chunks ()
+	local chunks = {}
+	local n_chunks = 0
 
-local current_mob_caps = {
-	overworld = nil,
-	nether = nil,
-	["end"] = nil,
-}
+	chunks["overworld"] = { collect_unique_chunks ("overworld") }
+	n_chunks = n_chunks + #chunks.overworld[1]
+	chunks["nether"] = { collect_unique_chunks ("nether") }
+	n_chunks = n_chunks + #chunks.nether[1]
+	chunks["end"] = { collect_unique_chunks ("end") }
+	n_chunks = n_chunks + #chunks["end"][1]
+	return chunks, n_chunks
+end
+
+-- Chunk count from which to derive a number of mobs which, if
+-- exceeded by overfulfillment of the mob caps, will induce reloaded
+-- mobs immediately to despawn.
+local spawn_border_chunks
+local current_mob_caps = {}
 
 core.register_chatcommand("mobstats",{
 	privs = { debug = true },
@@ -915,7 +919,7 @@ core.register_chatcommand("mobstats",{
 				return
 			end
 
-			local n_chunks = #collect_unique_chunks (level)
+			local _, n_chunks = collect_all_unique_chunks ()
 			for category, data in pairs (mcl_mobs.spawn_categories) do
 				local global_max
 					= math.floor ((n_chunks * data.chunk_mob_cap)
@@ -932,7 +936,7 @@ core.register_chatcommand("mobstats",{
 				dump (mob_caps), "\n",
 				"Chunk count: ", tostring (n_chunks), "\n",
 				"Mob cap overfulfillment theshold: ",
-				tostring (spawn_border_chunks[level]), "\n",
+				tostring (spawn_border_chunks), "\n",
 				"No. active mobs in total: ",
 				tostring (count_mobs_total ()), "\n"
 			}))
@@ -975,7 +979,7 @@ function mob_class:check_despawn_on_activation (self_pos)
 		end
 
 		-- Mobs loaded before mob caps were first initialized.
-		local global = current_mob_caps[level]
+		local global = current_mob_caps
 		if not global then
 			core.log ("warning", self.name .. " was loaded before spawning "
 				  .. "was initialized.")
@@ -984,7 +988,7 @@ function mob_class:check_despawn_on_activation (self_pos)
 
 		local active = mcl_mobs.active_mobs_by_category[category]
 		if active and active > global[category] then
-			local border = spawn_border_chunks[level]
+			local border = spawn_border_chunks
 			local buffer
 				= math.floor ((caps.chunk_mob_cap * border)
 					* MOB_CAP_RECIPROCAL)
@@ -1270,24 +1274,23 @@ local function spawn_a_pack (pos, players, category, scratch0,
 	end
 end
 
-function mcl_mobs.spawn_cycle (level, spawn_animals)
+local function unpack3 (x)
+	return x[1], x[2], x[3]
+end
+
+function mcl_mobs.spawn_cycle (level, chunks, n_chunks, spawn_animals)
 	local scratch0 = vector.zero ()
 
 	-- Collect a list of chunks to evaluate for purposes of
 	-- spawning.
-	local chunks, players, chunk_data = collect_unique_chunks (level)
+	local chunks, players, chunk_data = unpack3 (chunks[level])
 	local mobs_spawned = {}
 
 	-- Shuffle the list of chunks to be evaluated.
 	table.shuffle (chunks)
 
 	local test_pos = vector.zero ()
-	local n_chunks_orig = #chunks
-
-	-- Calculate the number of chunks bordering this list of
-	-- chunks as if it were a single rectangle.
-	spawn_border_chunks[level]
-		= (math.floor (math.sqrt (n_chunks_orig)) + 1) * 4
+	local n_chunks_orig = n_chunks
 
 	-- Divide the number of chunks to be evaluated by the number
 	-- of eligible categories.
@@ -1295,14 +1298,9 @@ function mcl_mobs.spawn_cycle (level, spawn_animals)
 	if not spawn_animals then
 		num_categories = NUM_MONSTER_CATEGORIES
 	end
-	local n_chunks = math.ceil (n_chunks_orig / num_categories)
 
 	-- Calculate mob caps and cache them in current_mob_caps.
-	local caps = current_mob_caps[level]
-	if not caps then
-		caps = {}
-		current_mob_caps[level] = caps
-	end
+	local caps = current_mob_caps
 
 	for category, data in pairs (spawn_categories) do
 		local mob_cap = data.chunk_mob_cap
@@ -1319,6 +1317,7 @@ function mcl_mobs.spawn_cycle (level, spawn_animals)
 		caps[category] = global_max
 	end
 
+	local n_chunks = math.ceil (#chunks / num_categories)
 	for i = 1, n_chunks do
 		local chunk = chunks[i]
 		local x = math.floor (chunk / 4096) - 2048
@@ -1554,7 +1553,7 @@ function default_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 	local spawn_placement = self.spawn_placement
 	if spawn_placement == "misc" then
 		-- Just test that the position is loaded.
-		return core.get_node_or_nil (node_pos) ~= nil
+		return core.compare_block_status (node_pos, "active")
 	elseif spawn_placement == "ground" then
 		local node_below = self:get_node (node_cache, -1, node_pos)
 		if core.get_item_group (node_below.name, "opaque") == 0
@@ -1688,19 +1687,26 @@ local passive_spawn_timer = 0
 core.register_globalstep (function (dtime)
 	spawn_timer = spawn_timer - dtime
 	passive_spawn_timer = passive_spawn_timer - dtime
+	local chunks, n_chunks = collect_all_unique_chunks ()
+
+	-- Calculate the number of chunks bordering this list of
+	-- chunks as if it were a single rectangle.
+	spawn_border_chunks
+		= (math.floor (math.sqrt (n_chunks)) + 1) * 4
+
 	if spawn_timer <= 0 then
 		-- local time = core.get_us_time ()
-		mcl_mobs.spawn_cycle ("overworld", false)
-		mcl_mobs.spawn_cycle ("nether", false)
-		mcl_mobs.spawn_cycle ("end", false)
+		mcl_mobs.spawn_cycle ("overworld", chunks, n_chunks, false)
+		mcl_mobs.spawn_cycle ("nether", chunks, n_chunks, false)
+		mcl_mobs.spawn_cycle ("end", chunks, n_chunks, false)
 		-- local time = core.get_us_time () - time
 		-- print (time / 1000 .. " ms")
 		spawn_timer = 0.05
 	end
 	if passive_spawn_timer <= 0 then
-		mcl_mobs.spawn_cycle ("overworld", true)
-		mcl_mobs.spawn_cycle ("nether", true)
-		mcl_mobs.spawn_cycle ("end", true)
+		mcl_mobs.spawn_cycle ("overworld", chunks, n_chunks, true)
+		mcl_mobs.spawn_cycle ("nether", chunks, n_chunks, true)
+		mcl_mobs.spawn_cycle ("end", chunks, n_chunks, true)
 		passive_spawn_timer = 10.0
 	end
 end)
