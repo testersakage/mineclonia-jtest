@@ -942,7 +942,9 @@ local function build_path (templates, terrain, parent, pieces, exit, rotation,
 
 	if any_collisions_matching_2d (pieces, path.bbox,
 				       is_not_parent_or_parent_decor,
-				       parent) then
+				       parent)
+		or dist_max_2d (path.bbox, village_center_x,
+				village_center_z) > 140 then
 		return false
 	end
 	insert (pieces, path)
