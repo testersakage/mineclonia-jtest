@@ -29,6 +29,7 @@ local md5 = {
 }
 
 -- bit lib implementions
+-- luacheck: push ignore 211 311
 
 local char, byte, format, rep, sub =
   string.char, string.byte, string.format, string.rep, string.sub
@@ -425,3 +426,5 @@ function md5.sumhexa(s)
 end
 
 return md5
+
+-- luacheck: pop

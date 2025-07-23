@@ -1100,6 +1100,7 @@ if true then
 	assert (abs (x:next_gaussian () - -0.26174819256398935) < D)
 end
 
+-- luacheck: push ignore 511
 if false then
 	local source = mcl_levelgen.xoroshiro (ull (0, 1000), ull (0, 1000))
 	print (tostringull (source:next_long ()))
@@ -1140,6 +1141,7 @@ if true then
 		end
 	end
 end
+-- luacheck: pop
 
 ------------------------------------------------------------------------
 -- Minecraft-compatible JVM LCG.
@@ -1367,6 +1369,7 @@ if true then
 	end
 end
 
+-- luacheck: push ignore 511
 if false then
 	local x = mcl_levelgen.jvm_random (extull (-44753374))
 	print (x:next_integer (32))
@@ -1416,6 +1419,7 @@ if false then
 	print (factory ("sticking it to microsoft"):next_integer ())
 	print (factory ("========================"):next_integer ())
 end
+-- luacheck: pop
 
 ------------------------------------------------------------------------
 -- Biome position randomization.
@@ -1461,6 +1465,7 @@ end
 
 mcl_levelgen.lcj_next = lcj_next
 
+-- luacheck: push ignore 511
 if true then
 	local seed = ull (99012, 99374)
 	local incr = ull (339487593, 444335790)
@@ -1499,6 +1504,7 @@ if true then
 	lcj_next (seed1, incr)
 	test (tostringull (seed1), "14919993831747797192")
 end
+-- luacheck: pop
 
 local function biomeseedull (dst, seed)
 	local lo, hi = seed[1], seed[2]
