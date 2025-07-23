@@ -375,9 +375,11 @@ function mcl_levelgen.overworld_surface_rule (preset, limit_surface,
 	local deepslate_gradient = vertical_gradient (preset, "minecraft:deepslate",
 						      0, 8)
 	table.insert (sequences, if_true (deepslate_gradient, deepslate))
+	-- luacheck: push ignore 511
 	if false then
 		local test = mcl_levelgen.above_preliminary_surface_cond ()
 		return if_true (test, dirt)
+	-- luacheck: pop
 	else
 		return mcl_levelgen.sequence_rule (sequences)
 	end
