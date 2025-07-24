@@ -149,17 +149,19 @@ core.register_node("mcl_lush_caves:dripleaf_small", {
 	after_dig_node = dig_adjacent,
 	_on_bone_meal = function (_, _, _, pos)
 		local base = vector.offset(pos,0,-1,0)
-		local dir = core.get_node(pos).param2
-		core.swap_node(pos, {name="mcl_lush_caves:dripleaf_big_stem", param2=dir})
+		local node = core.get_node(pos)
+		local dir = node.param2
 		core.swap_node(base, {name="mcl_lush_caves:dripleaf_big_stem", param2=dir})
-		local i = 1
-		while i < math.random(1,4) do
+		core.swap_node(pos, {name="mcl_lush_caves:dripleaf_big_stem", param2=dir})
+		local i = 0
+		while i < math.random(0,3) do
 			local p = vector.offset(pos,0,i,0)
-			if core.get_node(p).name ~= "air" then break end
+			if core.get_node(p).name ~= "air"
+				and core.get_item_group(node.name, "dripleaf") ~= 1 then break end
 			core.swap_node(p, {name="mcl_lush_caves:dripleaf_big_stem", param2=dir})
 			i = i + 1
 		end
-		core.swap_node(vector.new(pos.x, i+1, pos.z), {name="mcl_lush_caves:dripleaf_big", param2=dir})
+		core.swap_node(vector.new(pos.x, pos.y+i, pos.z), {name="mcl_lush_caves:dripleaf_big", param2=dir})
 	end,
 	floodable = true,
 	on_flood = dripleaf_leaf_flood,
