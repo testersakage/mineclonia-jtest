@@ -194,6 +194,7 @@ core.register_node("mcl_lush_caves:dripleaf_big_stem", {
 		local top = mcl_util.traverse_tower_group(pos, 1, "dripleaf")
 		mcl_lush_caves.grow_big_dripleaf(top)
 	end,
+	walkable = false,
 	floodable = true,
 	on_flood = dripleaf_stem_flood,
 })
