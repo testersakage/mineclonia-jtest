@@ -30,7 +30,7 @@ function mcl_lush_caves.grow_big_dripleaf(pos)
 	}, true)
 end
 
-function dig_adjacent(pos)
+local function dig_adjacent(pos)
 	core.after(0.05, function ()
 		local above = vector.offset(pos,0,1,0)
 		if core.get_item_group(core.get_node(above).name, "dripleaf") == 1 then
@@ -43,6 +43,48 @@ function dig_adjacent(pos)
 	end)
 end
 
+local v = vector.zero ()
+
+local function dripleaf_stem_flood (pos, oldnode, new_node)
+	v.x = pos.x
+	v.y = pos.y - 1
+	v.z = pos.z
+	if core.get_item_group (new_node.name, "lava") > 0 then
+		return mcl_core.basic_flood (pos, oldnode, new_node)
+	else
+		local node = core.get_node (v)
+		if node.name == oldnode.name then
+			-- Permit flooding if this is not the
+			-- bottommost node in a column.
+			return mcl_core.basic_flood (pos, oldnode, new_node)
+		else
+			-- Otherwise forbid flooding as a substitute
+			-- for true waterlogging.
+			return true
+		end
+	end
+end
+
+local function dripleaf_leaf_flood (pos, oldnode, new_node)
+	v.x = pos.x
+	v.y = pos.y - 1
+	v.z = pos.z
+	if core.get_item_group (new_node.name, "lava") > 0 then
+		return mcl_core.basic_flood (pos, oldnode, new_node)
+	else
+		local node = core.get_node (v)
+		if core.get_item_group (node, "dripleaf") == 1 then
+			-- Permit flooding if this is not the
+			-- bottommost node in a column.
+			return mcl_core.basic_flood (pos, oldnode, new_node)
+		else
+			-- Otherwise forbid flooding as a substitute
+			-- for true waterlogging.
+			return true
+		end
+	end
+end
+
 --
 -- Small Dripleaf
 --
@@ -50,8 +92,8 @@ end
 core.register_node("mcl_lush_caves:dripleaf_small_stem", {
 	groups = {
 		shearsy=1, handy=1, plant=1,
-		dig_by_piston=1, dig_by_water=1, destroy_by_lava_flow=1,
-		dripleaf=1, not_in_creative_inventory=1
+		dig_by_piston=1, dripleaf=1,
+		not_in_creative_inventory=1
 	},
 	drawtype = "mesh",
 	paramtype = "light",
@@ -63,6 +105,8 @@ core.register_node("mcl_lush_caves:dripleaf_small_stem", {
 	drop = "",
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	after_dig_node = dig_adjacent,
+	floodable = true,
+	on_flood = dripleaf_stem_flood,
 })
 
 core.register_node("mcl_lush_caves:dripleaf_small", {
@@ -72,8 +116,7 @@ core.register_node("mcl_lush_caves:dripleaf_small", {
 	_doc_items_longdesc = S("Small Dripleaf"),
 	groups = {
 		shearsy=1, handy=1, plant=1, compostability = 30,
-		dig_by_piston=1, dig_by_water=1, destroy_by_lava_flow=1,
-		dripleaf=1
+		dig_by_piston=1, dripleaf=1,
 	},
 	drawtype = "mesh",
 	paramtype = "light",
@@ -118,6 +161,8 @@ core.register_node("mcl_lush_caves:dripleaf_small", {
 		end
 		core.swap_node(vector.new(pos.x, i+1, pos.z), {name="mcl_lush_caves:dripleaf_big", param2=dir})
 	end,
+	floodable = true,
+	on_flood = dripleaf_leaf_flood,
 })
 
 --
@@ -127,8 +172,8 @@ core.register_node("mcl_lush_caves:dripleaf_small", {
 core.register_node("mcl_lush_caves:dripleaf_big_stem", {
 	groups = {
 		shearsy=1, handy=1, plant=1,
-		dig_by_piston=1, dig_by_water=1, destroy_by_lava_flow=1,
-		dripleaf=1, not_in_creative_inventory=1
+		dig_by_piston=1, dripleaf=1,
+		not_in_creative_inventory=1,
 	},
 	drawtype = "mesh",
 	paramtype = "light",
@@ -146,7 +191,9 @@ core.register_node("mcl_lush_caves:dripleaf_big_stem", {
 	_on_bone_meal = function (_, _, _, pos)
 		local top = mcl_util.traverse_tower_group(pos, 1, "dripleaf")
 		mcl_lush_caves.grow_big_dripleaf(top)
-	end
+	end,
+	floodable = true,
+	on_flood = dripleaf_stem_flood,
 })
 
 local dripleaf_big = {
@@ -156,8 +203,7 @@ local dripleaf_big = {
 	_doc_items_longdesc = S("Big Dripleaf"),
 	groups = {
 		shearsy=1, handy=1, plant=1, compostability = 65,
-		dig_by_piston=1, dig_by_water=1, destroy_by_lava_flow=1,
-		pathfinder_partial = 2, dripleaf=1
+		dig_by_piston=1, pathfinder_partial = 2, dripleaf=1
 	},
 	drawtype = "mesh",
 	paramtype = "light",
@@ -195,6 +241,8 @@ local dripleaf_big = {
 	_on_bone_meal = function (_, _, _, pos)
 		mcl_lush_caves.grow_big_dripleaf(pos)
 	end,
+	floodable = true,
+	on_flood = dripleaf_leaf_flood,
 }
 
 local dripleaf_big_tipped_half = table.merge(dripleaf_big, {
