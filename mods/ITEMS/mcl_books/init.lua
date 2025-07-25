@@ -377,3 +377,5 @@ core.register_craft({
 		{ "group:wood",     "group:wood",     "group:wood" },
 	}
 })
+
+dofile(core.get_modpath(core.get_current_modname()).."/chiseled_bookshelf.lua")
