@@ -1,7 +1,5 @@
 -- chiseled_bookshelf.lua
 local S = core.get_translator(core.get_current_modname())
-local F = core.formspec_escape
-local C = core.colorize
 
 local drop_content = mcl_util.drop_items_from_meta_container("main")
 
@@ -160,8 +158,8 @@ local function use_slot(pos, itemstack, sextant, player)
 	return nil, changed
 end
 
--- function toBits from https://stackoverflow.com/a/9080080, licensed CC-BY-SA-3.0-only
-function toBits(num,bits)
+-- function to_bits from https://stackoverflow.com/a/9080080, licensed CC-BY-SA-3.0-only
+function to_bits(num,bits)
 	-- returns a table of bits, most significant first.
 	bits = bits or math.max(1, select(2, math.frexp(num)))
 	local t = {} -- will contain the bits
@@ -203,7 +201,7 @@ local function on_chiseled_bookshelf_rightclick(pos, node, clicker, itemstack, p
 	local pname = clicker:get_player_name()
 	local hitpos = core.pointed_thing_to_face_pos(clicker, pointed_thing)
 	local facing = direction[node.param2 + 1] -- param2 is zero-indexed but the table is not
-	core.log("info","Used " .. itemstack:get_name() .. " " .. itemstack:get_count() .." on chiseled shelf (facing " .. facing .. " at pos " .. tostring(pos) .. " at click-pos " .. core.pos_to_string(hitpos))
+	core.log("info", pname .. " used " .. itemstack:get_name() .. " " .. itemstack:get_count() .." on chiseled shelf (facing " .. facing .. " at pos " .. tostring(pos) .. " at click-pos " .. core.pos_to_string(hitpos))
 	local clicked = get_clicked_side(pos,hitpos)
 	if clicked ~= facing then
 		core.log("warning","Chiseled Bookshelf does not face that direction!")
@@ -247,7 +245,6 @@ end
 
 local function on_hopper_in(pos, to_pos)
 	local meta = core.get_meta(to_pos)
-	local node = core.get_node(to_pos)
 	local sinv = core.get_inventory({type="node", pos = pos})
 	local dinv = core.get_inventory({type="node", pos = to_pos})
 	local src_slot,_ = mcl_util.get_eligible_transfer_item_slot(sinv, "main", dinv, "main", is_allowed_itemstack)
@@ -266,7 +263,7 @@ local function on_hopper_in(pos, to_pos)
 		local src_stack = sinv:get_stack("main",src_slot)
 		if dinv:set_stack("main",dst_slot,src_stack:take_item()) then
 			sinv:set_stack("main",src_slot,src_stack)
-			mcl_redstone._notify_observer_neighbors(uppos)
+			mcl_redstone._notify_observer_neighbors(to_pos)
 		end
 		-- for redstone comparator
 		meta:set_float("last_slot_used", dst_slot)
@@ -342,7 +339,7 @@ core.register_node("mcl_books:chiseled_bookshelf", table.merge(basedef, {
 -- This is the dirty trick to show the different books in different slots: use a unique node
 -- per possible book configuration.
 for i = 0, (2^6-1) do
-	local bits = table.concat(toBits(i,6))
+	local bits = table.concat(to_bits(i,6))
 	local front_tile = "[combine:16x16:0,0=mcl_books_chiseled_bookshelf_empty.png"
 	for i = 1, 6 do
 		-- too lazy for bitshifting
