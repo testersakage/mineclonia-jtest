@@ -462,8 +462,10 @@ end
 
 function dolphin:get_staticdata_table ()
 	local tbl = mob_class.get_staticdata_table (self)
-	tbl._waiting_for_treasure_position = nil
-	tbl._treasure_position = nil
+	if tbl then
+		tbl._waiting_for_treasure_position = nil
+		tbl._treasure_position = nil
+	end
 	return tbl
 end
 
