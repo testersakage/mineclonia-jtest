@@ -146,8 +146,8 @@ local function get_offset_beached (y, template, rng)
 end
 
 local create_structure_start = mcl_levelgen.create_structure_start
-local lowest_corner_from_chunk_origin
-	= mcl_levelgen.lowest_corner_from_chunk_origin
+local lowest_corner_from_point
+	= mcl_levelgen.lowest_corner_from_point
 
 local PIVOT_X = 0
 local PIVOT_Z = 5
@@ -167,11 +167,11 @@ local function shipwreck_create_start (self, level, terrain, rng, cx, cz)
 		local bbox = piece.bbox
 
 		if is_beached then
-			local min_y = lowest_corner_from_chunk_origin (terrain,
-								       bbox[1], bbox[3],
-								       bbox[4] - bbox[1],
-								       bbox[6] - bbox[3],
-								       is_not_air)
+			local min_y = lowest_corner_from_point (terrain,
+								bbox[1], bbox[3],
+								bbox[4] - bbox[1],
+								bbox[6] - bbox[3],
+								is_not_air)
 			y = get_offset_beached (min_y, template, rng)
 		else
 			y = terrain:area_average_height (bbox[1], bbox[3],
