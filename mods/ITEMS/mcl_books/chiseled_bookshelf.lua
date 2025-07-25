@@ -238,7 +238,7 @@ local function on_hopper_out(uppos, pos)
 	end
 	if sucked then
 		redraw_bookshelf(core.get_node(uppos),uppos)
-		mcl_redstone._notify_observer_neighbors(uppos)
+		mcl_redstone._notify_observer_neighbours(uppos)
 	end
 	return sucked
 end
@@ -263,7 +263,7 @@ local function on_hopper_in(pos, to_pos)
 		local src_stack = sinv:get_stack("main",src_slot)
 		if dinv:set_stack("main",dst_slot,src_stack:take_item()) then
 			sinv:set_stack("main",src_slot,src_stack)
-			mcl_redstone._notify_observer_neighbors(to_pos)
+			mcl_redstone._notify_observer_neighbours(to_pos)
 		end
 		-- for redstone comparator
 		meta:set_float("last_slot_used", dst_slot)
