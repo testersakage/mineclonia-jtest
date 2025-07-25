@@ -39,6 +39,15 @@ mcl_tools.register_set("copper", {
         tool_capabilities = {
             full_punch_interval = 1.25,
             damage_groups = { fleshy = 9 }
-        }
+        },
+    },
+    ["hoe"] = {
+        description = S("Copper Hoe"),
+        inventory_image = "mcl_copper_tool_hoe.png",
+        tool_capabilities = {
+            full_punch_interval = 0.5,
+            damage_groups = { fleshy = 1, },
+        },
     }
+
 })
