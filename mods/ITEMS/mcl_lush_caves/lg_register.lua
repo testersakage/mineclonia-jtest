@@ -167,25 +167,33 @@ mcl_levelgen.register_placed_feature ("mcl_lush_caves:cave_vines", {
 
 -- "mcl_lush_caves:lush_caves_clay",
 
+local param2_rng = overworld.factory ("mcl_lush_caves:dripleaf_param2")
+local dripleaf_param2_rng = param2_rng:fork_positional ():create_reseedable ()
+
 local cid_small_dripleaf = core.get_content_id ("mcl_lush_caves:dripleaf_small")
 local cid_small_dripleaf_stem = core.get_content_id ("mcl_lush_caves:dripleaf_small_stem")
 local cid_big_dripleaf = core.get_content_id ("mcl_lush_caves:dripleaf_big")
 local cid_big_dripleaf_stem = core.get_content_id ("mcl_lush_caves:dripleaf_big_stem")
 
-function small_dripleaf_content (x, y, z, rng)
-	return cid_small_dripleaf, rng:next_within (4)
+local function dripleaf_param2_at_pos (x, z)
+	dripleaf_param2_rng:reseed_positional (x, 0, z)
+	return dripleaf_param2_rng:next_within (4)
 end
 
-function small_dripleaf_stem (x, y, z, rng)
-	return cid_small_dripleaf_stem, 0
+local function small_dripleaf_content (x, y, z, rng)
+	return cid_small_dripleaf, dripleaf_param2_at_pos (x, z)
 end
 
-function big_dripleaf_content (x, y, z, rng)
-	return cid_big_dripleaf, rng:next_within (4)
+local function small_dripleaf_stem (x, y, z, rng)
+	return cid_small_dripleaf_stem, dripleaf_param2_at_pos (x, z)
 end
 
-function big_dripleaf_stem (x, y, z, rng)
-	return cid_big_dripleaf_stem, 0
+local function big_dripleaf_content (x, y, z, rng)
+	return cid_big_dripleaf, dripleaf_param2_at_pos (x, z)
+end
+
+local function big_dripleaf_stem (x, y, z, rng)
+	return cid_big_dripleaf_stem, dripleaf_param2_at_pos (x, z)
 end
 
 mcl_levelgen.register_configured_feature ("mcl_lush_caves:solitary_small_dripleaf", {
