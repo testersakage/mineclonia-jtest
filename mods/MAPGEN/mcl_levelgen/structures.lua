@@ -1611,15 +1611,20 @@ function mcl_levelgen.current_structure_piece ()
 	return current_structure_piece
 end
 
-function mcl_levelgen.lowest_corner_from_chunk_origin (terrain, cx, cz, dx, dz)
-	local x1 = cx * 16
-	local z1 = cz * 16
-
+function mcl_levelgen.lowest_corner_from_point (terrain, x1, z1, dx, dz)
 	local h1 = terrain:get_one_height (x1, z1, is_not_air)
 	local h2 = terrain:get_one_height (x1, z1 + dz, is_not_air)
 	local h3 = terrain:get_one_height (x1 + dx, z1, is_not_air)
 	local h4 = terrain:get_one_height (x1 + dx, z1 + dz, is_not_air)
 	return mathmin (h1, h2, h3, h4) - 1
+end
+
+local lowest_corner_from_point = mcl_levelgen.lowest_corner_from_point
+
+function mcl_levelgen.lowest_corner_from_chunk_origin (terrain, cx, cz, dx, dz)
+	local x1 = cx * 16
+	local z1 = cz * 16
+	return lowest_corner_from_point (terrain, x1, z1, dx, dz)
 end
 
 function mcl_levelgen.height_of_lowest_corner_including_center (terrain, cx, cz, rotation)
