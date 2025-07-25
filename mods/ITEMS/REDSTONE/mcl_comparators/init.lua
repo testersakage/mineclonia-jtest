@@ -101,6 +101,11 @@ local function measure_jukebox(pos)
 	return def and def.comparator_signal or 0
 end
 
+local function measure_chiseled_bookshelf(pos)
+	local meta = core.get_meta(pos)
+	return math.floor(meta:get_float("last_slot_used") or 0)
+end
+
 local measure_double_chest_left = measure_double_chest("left")
 local measure_double_chest_right = measure_double_chest("right")
 local measure_furnace = measure_complex_inventory({"fuel", "src", "dst"})
@@ -134,6 +139,7 @@ local measure_tab = {
 	["mcl_smoker:smoker"] = measure_furnace,
 	["mcl_jukebox:jukebox"] = measure_jukebox,
 	["mcl_lectern:lectern_with_book"] = measure_lectern,
+	["mcl_books:chiseled_bookshelf"] = measure_chiseled_bookshelf,
 	--[[ initalized using after_mods_loaded
 	["mcl_beds:respawn_anchor"] = measure_constant(comparator_signal),
 	["mcl_beds:respawn_anchor_charged_xxx"] = measure_constant(comparator_signal),
