@@ -2330,56 +2330,8 @@ local function compare_grid_size (a, b)
 	return a.placement.spacing < b.placement.spacing
 end
 
-local dir, dist, progress
-
-local function chebyshev_iterator ()
-	if dist == 0 then
-		if dir == 1 then
-			return nil
-		end
-		dir = 1
-		return 0, 0
-	elseif dir == nil then
-		local p1
-		p1, progress = progress, progress + 1
-		if p1 == dist then
-			dir = 1
-			progress = -dist
-		end
-		return -dist, p1
-	elseif dir == 1 then
-		local p1
-		p1, progress = progress, progress + 1
-		if p1 == dist then
-			dir = 2
-			progress = -dist + 1
-		end
-		return dist, p1
-	elseif dir == 2 then
-		local p1
-		p1, progress = progress, progress + 1
-		if p1 == dist - 1 then
-			dir = 3
-			progress = -dist + 1
-		end
-		return p1, -dist
-	elseif dir == 3 then
-		local p1
-		p1, progress = progress, progress + 1
-		if p1 == dist then
-			return nil
-		end
-		return p1, dist
-	end
-	assert (false)
-end
-
-local function positions_at_distance_chebyshev (d)
-	dir = nil
-	dist = d
-	progress = -dist
-	return chebyshev_iterator
-end
+local positions_at_distance_chebyshev
+	= mcl_levelgen.positions_at_distance_chebyshev
 
 local bbox_center = mcl_levelgen.bbox_center
 local candidates
