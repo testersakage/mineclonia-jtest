@@ -1057,7 +1057,7 @@ mcl_mobs.registered_spawners = registered_spawners
 local spawn_categories = {
 	["monster"] = {
 		chunk_mob_cap = 70,
-		min_chunk_mob_cap = 45,
+		min_chunk_mob_cap = 16,
 		is_friendly = false,
 		is_animal = false,
 	},
@@ -1069,7 +1069,7 @@ local spawn_categories = {
 	},
 	["ambient"] = {
 		chunk_mob_cap = 15,
-		min_chunk_mob_cap = 15,
+		min_chunk_mob_cap = 5,
 		is_friendly = true,
 		is_animal = false,
 	},
