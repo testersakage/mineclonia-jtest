@@ -1,7 +1,7 @@
 -- chiseled_bookshelf.lua
 local S = core.get_translator(core.get_current_modname())
 
-local drop_content = mcl_util.drop_items_from_meta_container("main")
+local drop_content = mcl_util.drop_items_from_meta_container()
 
 -- order of these matters, because they match 4dir node facing directions.
 local direction = {
