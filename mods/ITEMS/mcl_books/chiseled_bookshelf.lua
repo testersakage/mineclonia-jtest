@@ -190,6 +190,19 @@ local function redraw_bookshelf(node,pos)
 	local newnode = {name = "mcl_books:chiseled_bookshelf_" .. bitstr, param2 = node.param2}
 	-- We do not need to copy meta; it is copied just fine!
 	core.swap_node(pos, newnode)
+	local infotext = ""
+	for i = 1, 6 do
+		local stack = inv:get_stack("main", i)
+		-- This string still has weird escape characters from mcl_enchanting,
+		-- but they are thankfully not rendered by the infotext hud
+		local stack_str = stack:get_description():gsub("\n"," ")
+		local stack_count = stack:get_count()
+		if stack_count > 1 then
+			stack_str = stack_str + " " + stack_count
+		end
+		infotext = infotext .. i .. ": " .. stack_str .. "\n"
+	end
+	meta:set_string("infotext", infotext)
 end
 
 local function on_chiseled_bookshelf_rightclick(pos, node, clicker, itemstack, pointed_thing)
