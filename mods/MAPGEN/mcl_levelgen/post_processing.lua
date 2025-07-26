@@ -25,7 +25,6 @@ local S = core.get_translator ("mcl_levelgen")
 local maxblock, minblock
 local mt_chunksize = mcl_levelgen.mt_chunksize
 local chunksize = mt_chunksize.x * 16
-local lighting_disabled = mcl_levelgen.lighting_disabled
 local server_map_save_interval
 	= (core.settings:get ("server_map_save_interval") or 5.3)
 
@@ -123,13 +122,12 @@ local current_namespace_height = nil
 local current_namespace = nil
 local max_data_namespace = 0
 
-local for_each_dimension = mcl_levelgen.for_each_dimension
-
 -- Build a list of namespaces from currently registered dimensions.
 
 if not mcl_levelgen.load_feature_environment then
 
 core.register_on_mods_loaded (function ()
+	local for_each_dimension = mcl_levelgen.for_each_dimension
 	for _, dim in for_each_dimension () do
 		local namespace = {
 			-- MapBlock extents of the level this
@@ -912,7 +910,7 @@ local function shift_up (self, node, idx)
 	end
 
 	-- idx is now the proper depth of this node in the tree.
-	self.heap[idx] = node
+	heap[idx] = node
 	node.idx = idx
 end
 
@@ -976,7 +974,6 @@ local function mintree_dequeue (self, item)
 		shift_down (self, heap[1], 1)
 	end
 	n.idx = nil
-	n.penalized = nil
 	return n
 end
 
@@ -1067,18 +1064,26 @@ local function nearest_power_of_2 (x)
 	return k, m
 end
 
-local chunk_check_size
-	= mt_chunksize.x + (REQUIRED_CONTEXT_XZ + 1) * 2
-local base_cache_size = mathmax (6, chunk_check_size)
+local base_cache_size
+
+do
+	local chunk_check_size
+		= mt_chunksize.x + (REQUIRED_CONTEXT_XZ + 1) * 2
+	base_cache_size = mathmax (6, chunk_check_size)
+end
 
 local player_block_positions = {}
 local n_player_block_positions
+local position_requested_by_area_generator_p
 
 local function dist_to_nearest_player (x, y, z)
 	local d = 4096 * 4096 * 4096
 	local n = n_player_block_positions
 	local p = player_block_positions
 	local y = y + current_namespace.y_bottom
+	if position_requested_by_area_generator_p (x, z) then
+		return 0
+	end
 	for i = 1, n, 3 do
 		local x1, y1, z1 = p[i], p[i + 1], p[i + 2]
 		local dx = x - x1
@@ -1111,10 +1116,14 @@ local function refresh_player_block_positions ()
 end
 
 local mbs_cache = { }
-local mbs_cache_width, mbs_cache_shift_base
-	= nearest_power_of_2 ((base_cache_size
-			       + REQUIRED_CONTEXT_XZ + 1) * 2 + 1)
-local mbs_cache_shift_x = mbs_cache_shift_base + HEIGHT_SHIFT
+local mbs_cache_width, mbs_cache_shift_x
+do
+	local mbs_cache_shift_base
+	mbs_cache_width, mbs_cache_shift_base
+		= nearest_power_of_2 ((base_cache_size
+				       + REQUIRED_CONTEXT_XZ + 1) * 2 + 1)
+	mbs_cache_shift_x = mbs_cache_shift_base + HEIGHT_SHIFT
+end
 
 local mbs_cache_min_x
 local mbs_cache_min_y
@@ -1340,10 +1349,11 @@ local function queue_mapblock_run (x, y_start, y_end, z, d, supplemental,
 end
 
 local function maybe_reprioritize (d, x, y, z)
-	local hash = hashmapblock (x, y, z)
+	local y_bottom = current_namespace.y_bottom
+	local hash = hashmapblock (x, y + y_bottom, z)
 	local value = mb_records[hash]
 
-	if value and value.idx and not value.penalized then
+	if value and value.idx then
 		-- Increase the priority if appropriate.
 		if d + 16 < value.priority then
 			dbg ("Reprioritizing X: %d, Y: %d - %d, Z: %d from %d -> %d",
@@ -1407,8 +1417,6 @@ function attempt_feature_placement (x, z)
 		else
 			cnt_below = 0
 		end
-
-		maybe_reprioritize (d, x, y, z)
 	end
 
 	if #runs > 0 then
@@ -1554,6 +1562,7 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 	end
 
 	-- local time = core.get_us_time ()
+	local lighting_disabled = mcl_levelgen.lighting_disabled
 	for _, rgn in ipairs (relight_queue) do
 		v1.x, v1.y, v1.z = rgn[1], rgn[2], rgn[3]
 		v2.x, v2.y, v2.z = rgn[4], rgn[5], rgn[6]
@@ -1749,12 +1758,39 @@ function schedule_regeneration_for_unlock (bx, bz)
 	end
 end
 
+local reprioritization_dist = 1
+local positions_at_distance_chebyshev = mcl_levelgen.positions_at_distance_chebyshev
+local dimension_at_layer = mcl_levelgen.dimension_at_layer
+
 local function schedule_regeneration (dtime)
 	timer = timer + dtime
 	if timer < 0.10 then
 		return
 	end
 	timer = 0
+
+	-- Update priorities of MapBlocks that are nearer to a player
+	-- than when they were first generated.
+	reprioritization_dist = (reprioritization_dist % 5) + 1
+	refresh_player_block_positions ()
+	for i = 1, n_player_block_positions, 3 do
+		local bx = player_block_positions[i]
+		local by = player_block_positions[i + 1]
+		local bz = player_block_positions[i + 2]
+		local dim = dimension_at_layer (by * 16)
+
+		if dim then
+			switch_to_namespace (dim.data_namespace)
+			for dx, dz in positions_at_distance_chebyshev (reprioritization_dist) do
+				for by = 0, current_namespace_height - 1 do
+					local bx, bz = bx + dx, bz + dz
+					local d = dist_to_nearest_player (bx, by, bz)
+					maybe_reprioritize (d, bx, by, bz)
+				end
+			end
+			switch_to_namespace (nil)
+		end
+	end
 
 	local start_time = core.get_us_time ()
 	repeat
@@ -1766,9 +1802,6 @@ local function schedule_regeneration (dtime)
 		local run = feature_placement_queue:dequeue ()
 		post_mapblock_run (run)
 	until core.get_us_time () - start_time >= REGENERATION_QUOTA_US
-
-	-- block_status_cache.loaded = {}
-	-- ncalls = 0
 end
 
 local additional_ctx_requisitions = {}
@@ -2855,7 +2888,7 @@ local function hud_text (pos)
 		end
 		table.insert (tbl, "\n")
 	end
-	table.insert (tbl, string.format ("You: %d, %d, %d, %s (%s / %d, %d, %d)\n", x, y, z,
+	table.insert (tbl, string.format ("You: %d, %d, %d, %s(%s / %d, %d, %d)\n", x, y, z,
 					  get_status_string (x, y, z), dim.id,
 					  level_pos.x, level_pos.y, level_pos.z))
 	local biomestr
@@ -3167,6 +3200,17 @@ end
 local area_generator_cbs = {}
 local EMERGE_ERRORED = core.EMERGE_ERRORED
 local EMERGE_CANCELLED = core.EMERGE_CANCELLED
+
+function position_requested_by_area_generator_p (bx, bz)
+	for _, desc in ipairs (area_generator_cbs) do
+		if desc.namespace == current_namespace
+			and bx >= desc.bx1 and bz >= desc.bz1
+			and bx <= desc.bx2 and bz <= desc.bz2 then
+			return true
+		end
+	end
+	return false
+end
 
 local function get_containing_mapchunk (x, z, max)
 	local origin = mcl_levelgen.mt_chunk_origin
