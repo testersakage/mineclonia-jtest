@@ -498,12 +498,15 @@ local function has_space_for_tree (x, y, z, cfg)
 	local allowed_water = cfg.allowed_vertical_water_for_tree
 	for i = 0, required_space - 1 do
 		local cid, _ = get_block (x, y + i, z)
-		if not leaf_air_or_non_walkable_p (cid)
+		local is_water = false
+		if cid == cid_water_source
+			or cid == cid_water_flowing then
+			is_water = true
+		end
+		if (not leaf_air_or_non_walkable_p (cid) or is_water)
 		-- Permit the first ALLOWED_WATER blocks to be water
 		-- and permit azalea trees to replace leaves.
-			and (i >= allowed_water
-			     or (cid ~= cid_water_source
-				 and cid ~= cid_water_flowing)) then
+			and (i >= allowed_water or not is_water) then
 			local str = string.format (blurb1, x, y + i, z,
 						   core.get_name_from_content_id (cid))
 			core.log ("info", str)
