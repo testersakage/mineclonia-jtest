@@ -102,6 +102,7 @@ local dragon_piece = {
 		use_texture_alpha = false,
 	},
 	_hittable_by_projectile = true,
+	fire_resistant = true,
 }
 
 function dragon_piece:on_step (dtime)

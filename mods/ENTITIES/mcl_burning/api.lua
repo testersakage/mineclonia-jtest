@@ -99,7 +99,7 @@ function mcl_burning.set_on_fire(obj, burn_time)
 	end
 
 	local luaentity = obj:get_luaentity()
-	if luaentity and (luaentity.fire_resistant or not luaentity.is_mob) then
+	if luaentity and luaentity.fire_resistant then
 		return
 	end
 
