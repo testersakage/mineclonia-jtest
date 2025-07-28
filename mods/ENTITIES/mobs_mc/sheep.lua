@@ -277,9 +277,7 @@ local function sheep_graze (self, self_pos, dtime)
 					end
 				end
 			end
-			if mob_griefing then
-				self._node_destroyed = true
-			end
+			self._node_destroyed = true
 
 			if consumed then
 				if self.child then
