@@ -252,9 +252,6 @@ end
 local scale_chance = mcl_mobs.scale_chance
 
 local function sheep_graze (self, self_pos, dtime)
-	if not mob_griefing then
-		return false
-	end
 	local base_chance = self.child and 50 or 1000
 	if self._grazing then
 		self._grazing = self._grazing - dtime
@@ -264,19 +261,25 @@ local function sheep_graze (self, self_pos, dtime)
 			local node = core.get_node (self_pos)
 			local consumed = false
 			if node.name == "mcl_flowers:tallgrass" then
-				core.remove_node (self_pos)
+				if mob_griefing then
+					core.remove_node (self_pos)
+				end
 				consumed = true
 			else
 				local offset = vector.offset (self_pos, 0, -1, 0)
 				local below = core.get_node (offset)
 				if below.name == "mcl_core:dirt_with_grass" then
-					core.set_node (offset, {
-						name = "mcl_core:dirt",
-					})
-					consumed = true
+					if mob_griefing then
+						core.set_node (offset, {
+							name = "mcl_core:dirt",
+						})
+						consumed = true
+					end
 				end
 			end
-			self._node_destroyed = true
+			if mob_griefing then
+				self._node_destroyed = true
+			end
 
 			if consumed then
 				if self.child then
