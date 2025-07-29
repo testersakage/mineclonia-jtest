@@ -10,7 +10,7 @@ local direction = {
 	"north",
 	"east"
 }
--- we do not need up/down directions on a bookshelf.
+-- Books cannot stored on up/down faces.
 
 local colors = {
 	"blue",
@@ -26,14 +26,13 @@ local side = "mcl_books_chiseled_bookshelf_side.png"
 
 local function shuffleTable(t)
 	local n = #t
-	for i = n, 2, -1 do  -- Loop from the last element down to the second
-		local j = math.random(i) -- Select a random index between 1 and i (inclusive)
-		t[i], t[j] = t[j], t[i] -- Swap the element at the current index with the element at the random index
+	for i = n, 2, -1 do
+		local j = math.random(i)
+		t[i], t[j] = t[j], t[i]
 	end
 end
 
--- shuffle the colors at every load time, for fun.
-math.randomseed(os.time())
+-- For fun. Do not math.randomseed(os.time()) here because is in mcl_init.
 shuffleTable(colors)
 
 local function on_blast(pos)
@@ -42,7 +41,6 @@ local function on_blast(pos)
 	core.remove_node(pos)
 end
 
--- Simple protection checking functions
 local function protection_check_move(pos, _, _, _, _, count, player)
 	local name = player:get_player_name()
 	if core.is_protected(pos, name) then
@@ -109,11 +107,6 @@ local function get_surface_sixth(nodepos,facing,hitpos)
 end
 
 local function is_allowed_itemstack(itemstack, src_inv, src_list, dst_inv, dst_list)
-	-- all params after itemstack are passed by mcl_util.get_eligible_transfer_item_slot [only?]
-	--core.log("warning","is_allowed_itemstack called with src_inv " .. tostring(src_inv))
-	--if src_inv ~= nil then
-		-- called from get_eligible_transfer_item_slot, so use our own logic to find the first slot.
-	-- only group:book or enchanted books
 	if not (core.get_item_group(itemstack:get_name(), "book") ~= 0 or itemstack:get_name() == "mcl_enchanting:book_enchanted") then
 		return false
 	end
@@ -121,7 +114,6 @@ local function is_allowed_itemstack(itemstack, src_inv, src_list, dst_inv, dst_l
 end
 
 local function use_slot(pos, itemstack, sextant, player)
-	-- return the remainder of itemstack
 	local meta = core.get_meta(pos)
 	local inv = meta:get_inventory()
 	local target_slot = inv:get_stack("main",sextant)
@@ -152,7 +144,7 @@ local function use_slot(pos, itemstack, sextant, player)
 			changed = true
 			return itemstack, changed
 		end
-		-- we were not able to remove something from the stack
+		-- removed nothing
 		return nil, changed
 	end
 	return nil, changed
@@ -188,7 +180,7 @@ local function redraw_bookshelf(node,pos)
 	local inv = meta:get_inventory()
 	local bitstr = get_bitstring(inv)
 	local newnode = {name = "mcl_books:chiseled_bookshelf_" .. bitstr, param2 = node.param2}
-	-- We do not need to copy meta; it is copied just fine!
+	-- no need to copy meta; it is preserved
 	core.swap_node(pos, newnode)
 	local infotext = ""
 	for i = 1, 6 do
@@ -206,10 +198,9 @@ local function redraw_bookshelf(node,pos)
 end
 
 local function on_chiseled_bookshelf_rightclick(pos, node, clicker, itemstack, pointed_thing)
-	-- pointed_thing, not needed here
 	-- only players are allowed to place items
 	if not clicker:is_player() then
-		return nil
+		return
 	end
 	local pname = clicker:get_player_name()
 	local hitpos = core.pointed_thing_to_face_pos(clicker, pointed_thing)
@@ -218,10 +209,12 @@ local function on_chiseled_bookshelf_rightclick(pos, node, clicker, itemstack, p
 	local clicked = get_clicked_side(pos,hitpos)
 	if clicked ~= facing then
 		core.log("warning","Chiseled Bookshelf does not face that direction!")
-		return nil
+		return
 	end
 	local sextant = get_surface_sixth(pos,facing,hitpos)
-	-- sextant is one-indexed, starting in upper left and going right and then starting again at the lower left
+	-- sextant is one-indexed, in this order:
+	-- 1 2 3
+	-- 4 5 6
 	local remainder, changed = use_slot(pos, itemstack, sextant, clicker)
 	if changed then
 		mcl_redstone._notify_observer_neighbours(pos)
@@ -232,8 +225,6 @@ local function on_chiseled_bookshelf_rightclick(pos, node, clicker, itemstack, p
 		return remainder
 	end
 	mcl_redstone.update_comparators(pos)
-	-- return nil means do not change the inventory stack of the player
-	return nil
 end
 
 local function on_hopper_out(uppos, pos)
@@ -242,7 +233,7 @@ local function on_hopper_out(uppos, pos)
 	local old_bitstr = get_bitstring(inv)
 	local sucked = mcl_util.move_item_container(uppos, pos,"main",-1)
 	local new_bitstr = get_bitstring(inv)
-	-- set last_slot_used for redstone comparator
+	-- for redstone comparator
 	for i = 1, 6 do
 		if string.sub(old_bitstr, i, i) ~= string.sub(new_bitstr, i, i) then
 			meta:set_float("last_slot_used", i)
@@ -318,6 +309,7 @@ local basedef = {
 		redraw_bookshelf(core.get_node(pos),pos)
 	end,
 	-- these do not trigger, probably because we do not use a formspec
+	-- but keep them in case anything else uses them
 	allow_metadata_inventory_move = protection_check_move,
 	allow_metadata_inventory_take = protection_check_put_take,
 	allow_metadata_inventory_put = protection_check_put_take,
@@ -336,13 +328,12 @@ local basedef = {
 	after_dig_node = drop_content,
 	on_blast = on_blast,
 	on_rightclick = on_chiseled_bookshelf_rightclick,
-	--on_destruct = close_forms,
 	_on_hopper_out = on_hopper_out,
 	_on_hopper_in = on_hopper_in,
 }
 
 -- by setting the main node tiles to the full image, the rendered inventory_image will look
--- nice, with books in it. The after_place_node will draw it wih correct inventory.
+-- nice, with books in it. The after_place_node will draw it with correct inventory.
 core.register_node("mcl_books:chiseled_bookshelf", table.merge(basedef, {
 	tiles = { top, top, side, side, side, "mcl_books_chiseled_bookshelf_full.png" },
 	groups = basegroups,
@@ -355,7 +346,7 @@ for i = 0, (2^6-1) do
 	local bits = table.concat(to_bits(i,6))
 	local front_tile = "[combine:16x16:0,0=mcl_books_chiseled_bookshelf_empty.png"
 	for i = 1, 6 do
-		-- too lazy for bitshifting
+		-- TODO: would bitshifting be more efficient?
 		if tonumber(string.sub(bits, i, i)) == 1 then
 			local x = (math.fmod(i-1,3)*5)+1
 			local y = (math.floor(i/4)*8)+1
