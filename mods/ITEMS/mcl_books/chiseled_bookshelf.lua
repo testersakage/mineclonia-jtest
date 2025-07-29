@@ -2,6 +2,7 @@
 local S = core.get_translator(core.get_current_modname())
 
 local drop_content = mcl_util.drop_items_from_meta_container()
+local infotext_verbose = core.settings:get_bool("mcl_chiseled_bookshelf_infotext_verbose", false)
 
 -- order of these matters, because they match 4dir node facing directions.
 local direction = {
@@ -192,7 +193,12 @@ local function redraw_bookshelf(node,pos)
 		if stack_count > 1 then
 			stack_str = stack_str + " " + stack_count
 		end
-		infotext = infotext .. i .. ": " .. stack_str .. "\n"
+      if infotext_verbose then
+         infotext = infotext .. i .. ": "
+      end
+		if stack_count > 0 or infotext_verbose then
+			infotext = infotext .. stack_str .. "\n"
+		end
 	end
 	meta:set_string("infotext", infotext)
 end
