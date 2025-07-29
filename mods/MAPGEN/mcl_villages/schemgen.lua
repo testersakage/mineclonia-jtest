@@ -823,55 +823,53 @@ local village_snowy_house = {
 	stacks_max = 8,
 	items = {
 		{
-			{
-				itemstring = "mcl_core:blue_ice",
-			},
-			{
-				itemstring = "mcl_core:snowblock",
-				weight = 4,
-			},
-			{
-				itemstring = "mcl_farming:potato_item",
-				amount_min = 1,
-				amount_max = 7,
-				weight = 10,
-			},
-			{
-				itemstring = "mcl_farming:bread",
-				amount_min = 1,
-				amount_max = 4,
-				weight = 10,
-			},
-			{
-				itemstring = "mcl_farming:beetroot_seeds",
-				amount_min = 1,
-				amount_max = 5,
-				weight = 10,
-			},
-			{
-				itemstring = "mcl_farming:beetroot_soup",
-			},
-			{
-				itemstring = "mcl_furnaces:furnace",
-			},
-			{
-				itemstring = "mcl_core:emerald",
-				amount_min = 1,
-				amount_max = 4,
-				weight = 2,
-			},
-			{
-				itemstring = "mcl_throwing:snowball",
-				amount_min = 1,
-				amount_max = 7,
-				weight = 10,
-			},
-			{
-				itemstring = "mcl_core:coal_lump",
-				amount_min = 1,
-				amount_max = 4,
-				weight = 5,
-			},
+			itemstring = "mcl_core:blue_ice",
+		},
+		{
+			itemstring = "mcl_core:snowblock",
+			weight = 4,
+		},
+		{
+			itemstring = "mcl_farming:potato_item",
+			amount_min = 1,
+			amount_max = 7,
+			weight = 10,
+		},
+		{
+			itemstring = "mcl_farming:bread",
+			amount_min = 1,
+			amount_max = 4,
+			weight = 10,
+		},
+		{
+			itemstring = "mcl_farming:beetroot_seeds",
+			amount_min = 1,
+			amount_max = 5,
+			weight = 10,
+		},
+		{
+			itemstring = "mcl_farming:beetroot_soup",
+		},
+		{
+			itemstring = "mcl_furnaces:furnace",
+		},
+		{
+			itemstring = "mcl_core:emerald",
+			amount_min = 1,
+			amount_max = 4,
+			weight = 2,
+		},
+		{
+			itemstring = "mcl_throwing:snowball",
+			amount_min = 1,
+			amount_max = 7,
+			weight = 10,
+		},
+		{
+			itemstring = "mcl_core:coal_lump",
+			amount_min = 1,
+			amount_max = 4,
+			weight = 5,
 		},
 	},
 }
