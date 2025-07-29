@@ -273,8 +273,8 @@ local function sheep_graze (self, self_pos, dtime)
 						core.set_node (offset, {
 							name = "mcl_core:dirt",
 						})
-						consumed = true
 					end
+					consumed = true
 				end
 			end
 			self._node_destroyed = true
