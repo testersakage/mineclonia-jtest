@@ -137,8 +137,12 @@ local function end_spike_place_1 (preset, spike, r, run_min_y, run_max_y)
 	end
 
 	-- Fire & bedrock.
-	set_block (cx, height + 1, cz, cid_eternal_fire, 0)
-	set_block (cx, height, cz, cid_bedrock, 0)
+	if height + 1 >= run_min_y and height + 1 <= run_max_y then
+		set_block (cx, height + 1, cz, cid_eternal_fire, 0)
+	end
+	if height >= run_min_y and height <= run_max_y then
+		set_block (cx, height, cz, cid_bedrock, 0)
+	end
 
 	-- End Crystal.
 	local minp = run_minp
@@ -157,8 +161,8 @@ local function end_spike_place (_, x, y, z, cfg, rng)
 	local preset = mcl_levelgen.placement_level
 	local spikes = #cfg.spikes > 0 and cfg.spikes
 		or get_spikes (preset)
-	local run_min_y = mcl_levelgen.placement_run_minp.y
-	local run_max_y = mcl_levelgen.placement_run_maxp.y
+	local run_min_y = run_minp.y
+	local run_max_y = run_maxp.y
 
 	for _, spike in ipairs (spikes) do
 		local cx, cz = spike.center_x, spike.center_z
