@@ -145,10 +145,15 @@ function mcl_burning.set_on_fire(obj, burn_time)
 	size = vector.multiply(size, vector.new(1.1, 1.2, 1.1))
 	size = vector.divide(size, obj:get_properties().visual_size)
 
-	local fire_entity = core.add_entity(obj:get_pos(), "mcl_burning:fire")
-	if fire_entity and fire_entity:get_pos() then
-		fire_entity:set_properties({visual_size = size})
-		fire_entity:set_attach(obj, "", vector.new(0, size.y * 5, 0), vector.new(0, 0, 0))
+	-- SIZE may be Inf if visual_size is zero.
+	if math.abs (size.x) ~= math.huge
+		and math.abs (size.y) ~= math.huge
+		and math.abs (size.z) ~= math.huge then
+		local fire_entity = core.add_entity(obj:get_pos(), "mcl_burning:fire")
+		if fire_entity and fire_entity:get_pos() then
+			fire_entity:set_properties({visual_size = size})
+			fire_entity:set_attach(obj, "", vector.new(0, size.y * 5, 0), vector.new(0, 0, 0))
+		end
 	end
 
 	if obj:is_player() then
