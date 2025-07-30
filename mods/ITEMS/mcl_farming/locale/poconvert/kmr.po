@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_farming x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-07-21 11:08+0000\n"
+"Last-Translator: Killercat103 <killercat103@noreply.codeberg.org>\n"
+"Language-Team: Kurdish (Northern) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_farming/kmr/>\n"
 "Language: kmr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 msgid "Beetroot Seeds"
 msgstr ""
@@ -44,7 +45,7 @@ msgid "A mature beetroot plant is a farming plant which is ready to be harvested
 msgstr ""
 
 msgid "Beetroot"
-msgstr ""
+msgstr "Pincar"
 
 msgid "Beetroots are both used as food item and a dye ingredient. Pigs like beetroots, too."
 msgstr ""
@@ -227,7 +228,7 @@ msgid "To carve a face into the pumpkin, use the shears on the side you want to 
 msgstr ""
 
 msgid "Pumpkin"
-msgstr ""
+msgstr "Kulind"
 
 msgid "A pumpkin can be worn as a helmet. Pumpkins grow from pumpkin stems, which in turn grow from pumpkin seeds."
 msgstr ""
@@ -284,7 +285,7 @@ msgid "Mature Wheat Plant"
 msgstr ""
 
 msgid "Wheat"
-msgstr ""
+msgstr "Genim"
 
 msgid "Wheat is used in crafting. Some animals like wheat."
 msgstr ""
@@ -296,7 +297,7 @@ msgid "Cookie"
 msgstr ""
 
 msgid "Bread"
-msgstr ""
+msgstr "Nan"
 
 msgid "Hay Bale"
 msgstr ""
@@ -321,4 +322,3 @@ msgid "\n"
 "		They won't grow any further.\n"
 "	"
 msgstr ""
-
