@@ -106,7 +106,7 @@ end
 function chicken:do_custom (dtime)
 	-- Chickens mounted by a baby zombie never proceed to lay eggs
 	-- again.
-	if not self._is_chicken_jockey then
+	if not self._is_chicken_jockey and not self.child then
 		self.egg_timer = (self.egg_timer or math.random(300, 600)) - dtime
 		if self.egg_timer > 0 then
 			return
