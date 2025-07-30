@@ -8,7 +8,7 @@ mcl_armor.register_set({
                 legs = S("Copper Leggings"),
                 feet = S("Copper Boots"),
         },
-        durability = 121,
+        durability = 176,
         enchantability = 25,
         points = {
                 head = 2,
