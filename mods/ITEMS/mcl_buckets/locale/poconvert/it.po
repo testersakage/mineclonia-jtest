@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_buckets x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-07-27 09:40+0000\n"
+"Last-Translator: cuche <cuche@noreply.codeberg.org>\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_buckets/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 msgid "Empty Bucket"
 msgstr "Secchio vuoto"
@@ -21,12 +22,14 @@ msgstr "Un secchio può essere utilizzato per raccogliere e versare liquidi."
 
 msgid "Punch a liquid source to collect it. You can then use the filled bucket to place the liquid somewhere else."
 msgstr ""
+"Clicca col destro su una sorgente di liquido per raccoglierlo. Puoi usare il "
+"secchio pieno per riposizionare il liquido da un'altra parte."
 
 msgid "Collects liquids"
-msgstr ""
+msgstr "Raccoglie i liquidi"
 
 msgid "Bucket of Axolotl"
-msgstr "Secchio con assolotto"
+msgstr "Secchio con axolotl"
 
 msgid "Bucket of Cod"
 msgstr "Secchio con merluzzo"
@@ -39,73 +42,88 @@ msgstr "Secchio con pesce tropicale"
 
 msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
 msgstr ""
+"Posizionalo per svuotare il secchio con dentro un merluzzo. Ottienilo "
+"facendo clic col destro su un merluzzo con un secchio d'acqua."
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr ""
+"Posizionalo per svuotare il secchio con dentro un salmone. Ottienilo facendo "
+"clic col destro su un salmone con un secchio d'acqua."
 
 msgid "Place it to empty the bucket and place a Tropical Fish. Obtain by right clicking on a Tropical Fish with a bucket of water."
 msgstr ""
+"Posizionalo per svuotare il secchio con dentro un pesce tropicale. Ottienilo "
+"facendo clic col destro su un pesce tropicale con un secchio d'acqua."
 
 msgid "Place it to empty the bucket and place an Axolotl. Obtain by right clicking on an Axolotl with a bucket of water."
 msgstr ""
+"Posizionalo per svuotare il secchio con dentro un axolotl. Ottienilo facendo "
+"clic col destro su un axolotl con un secchio d'acqua."
 
 msgid "Places a water source and a Cod."
-msgstr ""
+msgstr "Posiziona una sorgente d'acqua ed un merluzzo."
 
 msgid "Places a water source and a Salmon."
-msgstr ""
+msgstr "Posiziona una sorgente d'acqua ed un salmone."
 
 msgid "Places a water source and a Tropical Fish."
-msgstr ""
+msgstr "Posiziona una sorgente d'acqua ed un pesce tropicale."
 
 msgid "Places a water source and an Axolotl."
-msgstr ""
+msgstr "Posiziona una sorgente d'acqua ed un axolotl."
 
 msgid "This bucket is filled with water and a Cod."
-msgstr ""
+msgstr "Questo secchio contiene acqua ed un merluzzo."
 
 msgid "This bucket is filled with water and a Salmon."
-msgstr ""
+msgstr "Questo secchio contiene acqua ed un salmone."
 
 msgid "This bucket is filled with water and a Tropical Fish."
-msgstr ""
+msgstr "Questo secchio contiene acqua ed un pesce tropicale."
 
 msgid "This bucket is filled with water and an Axolotl."
-msgstr ""
+msgstr "Questo secchio contiene acqua ed un axolotl."
 
 msgid "Lava Bucket"
 msgstr "Secchio di lava"
 
 msgid "A bucket can be used to collect and release liquids. This one is filled with hot lava, safely contained inside. Use with caution."
 msgstr ""
+"Un secchio può essere utilizzato per raccogliere e versare liquidi. Questo è "
+"pieno di lava bollente, trasportabile in sicurezza. Usalo con attenzione."
 
 msgid "Get in a safe distance and place the bucket to empty it and create a lava source at this spot. Don't burn yourself!"
 msgstr ""
+"Mettiti in una posizione sicura e posiziona il secchio per svuotarlo e "
+"creare una sorgente di lava. Occhio a non prendere fuoco!"
 
 msgid "Places a lava source"
-msgstr ""
+msgstr "Posiziona una sorgente di lava"
 
 msgid "Water Bucket"
 msgstr "Secchio d'acqua"
 
 msgid "A bucket can be used to collect and release liquids. This one is filled with water."
 msgstr ""
+"Un secchio può essere utilizzato per raccogliere e versare liquidi. Questo è "
+"pieno di acqua."
 
 msgid "Place it to empty the bucket and create a water source."
-msgstr ""
+msgstr "Posizionalo per svuotarlo e creare una sorgente d'acqua."
 
 msgid "Places a water source"
-msgstr ""
+msgstr "Posiziona una sorgente d'acqua"
 
 msgid "River Water Bucket"
 msgstr "Secchio d'acqua del fiume"
 
 msgid "A bucket can be used to collect and release liquids. This one is filled with river water."
 msgstr ""
+"Un secchio può essere utilizzato per raccogliere e versare liquidi. Questo è "
+"pieno di acqua del fiume."
 
 msgid "Place it to empty the bucket and create a river water source."
-msgstr ""
+msgstr "Posizionalo per svuotarlo e creare una sorgente di acqua del fiume."
 
 msgid "Places a river water source"
-msgstr ""
-
+msgstr "Posiziona una sorgente d'acqua del fiume"
