@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mcl_buckets x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-07-28 15:09+0000\n"
+"Last-Translator: josuigoa <josuigoa@noreply.codeberg.org>\n"
+"Language-Team: Basque <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_buckets/eu/>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+msgid "Empty Bucket"
+msgstr "Kubo hutsa"
+
+msgid "A bucket can be used to collect and release liquids."
+msgstr "Likidoak biltzeko eta askatzeko kuboa erabil daiteke."
+
+msgid "Punch a liquid source to collect it. You can then use the filled bucket to place the liquid somewhere else."
+msgstr ""
+"Likido-iturri bat jotzen du biltzeko. Gero, ontzi betea erabil dezakezu "
+"likidoa beste leku batean jartzeko."
+
+msgid "Collects liquids"
+msgstr "Likidoak biltzen ditu"
+
+msgid "Bucket of Axolotl"
+msgstr "Ajolotedun kuboa"
+
+msgid "Bucket of Cod"
+msgstr "Bakailaoa duen kuboa"
+
+msgid "Bucket of Salmon"
+msgstr "Izokindun kuboa"
+
+msgid "Bucket of Tropical Fish"
+msgstr "Arrain tropikala duen kuboa"
+
+msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
+msgstr ""
+"Jarri ontzia husteko eta bakailao bat jartzeko. Lortu ezazu bakailao baten "
+"gainean zuzen klik eginez ur-ontzi batekin."
+
+msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
+msgstr ""
+"Jarri ontzia husteko eta izokin bat jartzeko. Lortu ezazu ur ontzi batekin "
+"izokin baten gainean zuzen klik eginez."
+
+msgid "Place it to empty the bucket and place a Tropical Fish. Obtain by right clicking on a Tropical Fish with a bucket of water."
+msgstr ""
+"Jarri ontzia husteko eta arrain tropikal bat jartzeko. Lortu ezazu ur ontzi "
+"batekin Arrain Tropikal baten gainean zuzen klik eginez."
+
+msgid "Place it to empty the bucket and place an Axolotl. Obtain by right clicking on an Axolotl with a bucket of water."
+msgstr ""
+"Jarri ontzia husteko eta Ajolote bat jartzeko. Lor ezazu ur ontzi batekin "
+"Ajolote baten gainean zuzen klik eginez."
+
+msgid "Places a water source and a Cod."
+msgstr "Jarri ur-iturri bat eta bakailao bat."
+
+msgid "Places a water source and a Salmon."
+msgstr "Jarri ur-iturri bat eta izokin bat."
+
+msgid "Places a water source and a Tropical Fish."
+msgstr "Jarri ur iturri bat eta arrain tropikal bat."
+
+msgid "Places a water source and an Axolotl."
+msgstr "Jarri ur iturri bat eta Ajolote bat."
+
+msgid "This bucket is filled with water and a Cod."
+msgstr "Kubo hau urez eta bakailaoz beteta dago."
+
+msgid "This bucket is filled with water and a Salmon."
+msgstr "Ontzi hau urez eta izokinez beteta dago."
+
+msgid "This bucket is filled with water and a Tropical Fish."
+msgstr "Kubo hau urez eta Arrain Tropikalez beteta dago."
+
+msgid "This bucket is filled with water and an Axolotl."
+msgstr "Ontzi hau urez eta Ajolote batez beteta dago."
+
+msgid "Lava Bucket"
+msgstr "Labadun kuboa"
+
+msgid "A bucket can be used to collect and release liquids. This one is filled with hot lava, safely contained inside. Use with caution."
+msgstr ""
+"Likidoak biltzeko eta askatzeko kuboa erabil daiteke. Barruan modu seguruan "
+"dagoen laba beroz beteta dago. Kontuz erabili."
+
+msgid "Get in a safe distance and place the bucket to empty it and create a lava source at this spot. Don't burn yourself!"
+msgstr ""
+"Urrundu distantzia seguru batera eta jarri kuboa husteko eta sortu laba "
+"iturri bat leku honetan. Ez erre!"
+
+msgid "Places a lava source"
+msgstr "Jarri laba-iturri bat"
+
+msgid "Water Bucket"
+msgstr "Urez betetako kuboa"
+
+msgid "A bucket can be used to collect and release liquids. This one is filled with water."
+msgstr ""
+"Likidoak biltzeko eta askatzeko kuboa erabil daiteke. Hau urez beteta dago."
+
+msgid "Place it to empty the bucket and create a water source."
+msgstr "Jarri ontzia hustu eta ur-iturri bat sortzeko."
+
+msgid "Places a water source"
+msgstr "Jarri ur-iturri bat"
+
+msgid "River Water Bucket"
+msgstr "Ibaiko ur-ontzia"
+
+msgid "A bucket can be used to collect and release liquids. This one is filled with river water."
+msgstr ""
+"Likidoak biltzeko eta askatzeko kuboa erabil daiteke. Hau ibai-urez beteta "
+"dago."
+
+msgid "Place it to empty the bucket and create a river water source."
+msgstr "Jarri ontzia husteko eta ibaiko ur-iturri bat sortzeko."
+
+msgid "Places a river water source"
+msgstr "Jarri ibaiko ur-iturri bat"

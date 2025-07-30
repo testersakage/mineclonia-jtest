@@ -1,0 +1,306 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-07-28 15:09+0000\n"
+"Last-Translator: josuigoa <josuigoa@noreply.codeberg.org>\n"
+"Language-Team: Basque <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/eu/>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+msgid "Axolotl"
+msgstr "Axolotea"
+
+msgid "Bat"
+msgstr "Saguzarra"
+
+msgid "Blaze"
+msgstr "Sutzarra"
+
+msgid "Chicken"
+msgstr "Oilaskoa"
+
+msgid "Cod"
+msgstr "Bakailaoa"
+
+msgid "Cow"
+msgstr "Behia"
+
+msgid "Mooshroom"
+msgstr "Perretxiko-behia"
+
+msgid "Creeper"
+msgstr "Creeper"
+
+msgid "Charged Creeper"
+msgstr "Creeper Kargatua"
+
+msgid "Dolphin"
+msgstr "Izurdea"
+
+msgid "Ender Dragon"
+msgstr "Ender Dragoia"
+
+msgid "Enderman"
+msgstr "Enderman"
+
+msgid "Endermite"
+msgstr "Endermitea"
+
+msgid "Ghast"
+msgstr "Ghast"
+
+msgid "Ghast Fireball"
+msgstr "Ghast-aren Su-bola"
+
+msgid "Guardian"
+msgstr "Zaindaria"
+
+msgid "Elder Guardian"
+msgstr "Zaindari Zaharra"
+
+msgid "Hoglin"
+msgstr "Hoglina"
+
+msgid "Baby Hoglin"
+msgstr "Hoglin Kumea"
+
+msgid "Zoglin"
+msgstr "Zoglina"
+
+msgid "Sneak to dismount"
+msgstr "Isilka-tekla jaisteko"
+
+msgid "Horse"
+msgstr "Zaldia"
+
+msgid "Skeleton Horse"
+msgstr "Eskeleto-zaldia"
+
+msgid "Zombie Horse"
+msgstr "Zonbi zaldia"
+
+msgid "Donkey"
+msgstr "Astoa"
+
+msgid "Mule"
+msgstr "Mandoa"
+
+msgid "Iron Golem"
+msgstr "Burdinazko Golem-a"
+
+msgid "Llama"
+msgstr "Llama"
+
+msgid "Ocelot"
+msgstr "Ozelotea"
+
+msgid "Cat"
+msgstr "Katua"
+
+msgid "Parrot"
+msgstr "Loroa"
+
+msgid "Pig"
+msgstr "Txerria"
+
+msgid "Piglin"
+msgstr "Piglin"
+
+msgid "Piglin Brute"
+msgstr "Piglin Latza"
+
+msgid "Zombie Piglin"
+msgstr "Piglin Zonbia"
+
+msgid "Zombified Piglin"
+msgstr "Piglin Zonbifikatua"
+
+msgid "Pillager"
+msgstr "Arpilatzailea"
+
+msgid "Polar Bear"
+msgstr "Hartz Polarra"
+
+msgid "Rabbit"
+msgstr "Untxia"
+
+msgid "Killer Bunny"
+msgstr "Untxi Hiltzailea"
+
+msgid "Salmon"
+msgstr "Izokina"
+
+msgid "Sheep"
+msgstr "Ardia"
+
+msgid "Shulker"
+msgstr "Shulkerra"
+
+msgid "Silverfish"
+msgstr "Zilar-arraina"
+
+msgid "Skeleton"
+msgstr "Eskeletoa"
+
+msgid "Stray"
+msgstr "Eskeleto glaziala"
+
+msgid "Wither Skeleton"
+msgstr "Wither-en Eskeletoa"
+
+msgid "Slime - big"
+msgstr "Likatia - handia"
+
+msgid "Slime - small"
+msgstr "Likatia - ertaina"
+
+msgid "Slime - tiny"
+msgstr "Likatia - txikia"
+
+msgid "Magma Cube - big"
+msgstr "Magma kuboa - handia"
+
+msgid "Magma Cube - small"
+msgstr "Magma kuboa - ertaina"
+
+msgid "Magma Cube - tiny"
+msgstr "Magma kuboa - txikia"
+
+msgid "Magma Cube"
+msgstr "Magma kuboa"
+
+msgid "Slime"
+msgstr "Likatia"
+
+msgid "Snow Golem"
+msgstr "Elurrezko Panpina"
+
+msgid "Spider"
+msgstr "Armiarma"
+
+msgid "Cave Spider"
+msgstr "Haitzuloko armiarma"
+
+msgid "Squid"
+msgstr "Txibia"
+
+msgid "Glow Squid"
+msgstr "Txibia Distiratsua"
+
+msgid "Strider"
+msgstr "Zangokaria"
+
+msgid "Baby Strider"
+msgstr "Zangokari Kumea"
+
+msgid "Tropical Fish"
+msgstr "Arrain Tropikala"
+
+msgid "Vex"
+msgstr "Arima"
+
+msgid "Villager"
+msgstr "Herritarra"
+
+msgid "Armorer"
+msgstr "Armadura-errementaria"
+
+msgid "Butcher"
+msgstr "Harakina"
+
+msgid "Cartographer"
+msgstr "Kartografoa"
+
+msgid "Cleric"
+msgstr "Apaiza"
+
+msgid "Farmer"
+msgstr "Baserritarra"
+
+msgid "Fisherman"
+msgstr "Arrantzalea"
+
+msgid "Fletcher"
+msgstr "Gezi-artisaua"
+
+msgid "Leatherworker"
+msgstr "Larru-saltzailea"
+
+msgid "Librarian"
+msgstr "Liburuzaina"
+
+msgid "Mason"
+msgstr "Igeltseroa"
+
+msgid "Shepherd"
+msgstr "Artzaina"
+
+msgid "Toolsmith"
+msgstr "Tresna-errementaria"
+
+msgid "Weaponsmith"
+msgstr "Arma-errementaria"
+
+msgid "Nitwit"
+msgstr "Inozoa"
+
+msgid "Novice"
+msgstr "Hasiberria"
+
+msgid "Apprentice"
+msgstr "Aprendiza"
+
+msgid "Journeyman"
+msgstr "Langilea"
+
+msgid "Expert"
+msgstr "Aditua"
+
+msgid "Master"
+msgstr "Maisua"
+
+msgid "Evoker"
+msgstr "Inbokatzailea"
+
+msgid "Illusioner"
+msgstr "Ilusionista"
+
+msgid "Vindicator"
+msgstr "Erasotzailea"
+
+msgid "Zombie Villager"
+msgstr "Herritar Zonbia"
+
+msgid "Wandering Trader"
+msgstr "Saltzaile ibiltaria"
+
+msgid "Trader Llama"
+msgstr "Llama ibiltaria"
+
+msgid "Witch"
+msgstr "Sorgina"
+
+msgid "Wither"
+msgstr "Wither"
+
+msgid "Wolf"
+msgstr "Otsoa"
+
+msgid "Zombie"
+msgstr "Zonbia"
+
+msgid "Baby Zombie"
+msgstr "Zonbi Umea"
+
+msgid "Husk"
+msgstr "Zonbie Momifikatua"
+
+msgid "Baby Husk"
+msgstr "Zonbie Ume Momifikatua"

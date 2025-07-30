@@ -1,0 +1,53 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mcl_itemframes x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-07-28 15:09+0000\n"
+"Last-Translator: josuigoa <josuigoa@noreply.codeberg.org>\n"
+"Language-Team: Basque <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_itemframes/eu/>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+msgid "Item Frame"
+msgstr "Item Egitura"
+
+msgid "Can hold an item"
+msgstr "Item bat jar dezakezu"
+
+msgid "Item frames are decorative blocks in which items can be placed."
+msgstr "Egiturak bloke apaingarriak dira, eta bertan itemak jar daitezke."
+
+msgid "Just place any item on the item frame. Use the item frame again to retrieve the item."
+msgstr ""
+"Besterik gabe, jarri edozein item markoan. Egin klik markoan berriro itema "
+"berreskuratzeko."
+
+msgid "Glow Item Frame"
+msgstr "Egitura distiratsua"
+
+msgid "Can hold an item and glows"
+msgstr "Item bat jar dezakezu eta distira egiten du"
+
+msgid "Invisible Item Frame"
+msgstr "Egitura Ikusezina"
+
+msgid "Can hold an item but is invisible"
+msgstr "Item bat jar dezakezu baina ikusezina da"
+
+msgid "Invisible Glow Item Frame"
+msgstr "Egitura Ikusezin Distiratsua"
+
+msgid "Can hold an item and glows but is invisible"
+msgstr "Item bat jar dezakezu eta distira egiten du baina ikusezina da"
+
+msgid "Glow and Behold!"
+msgstr "Ideia bikaina!"
+
+msgid "Craft a glow item frame."
+msgstr "Egin marko distiratsu bat."

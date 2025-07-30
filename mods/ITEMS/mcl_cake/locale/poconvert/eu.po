@@ -1,0 +1,54 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mcl_cake x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-07-28 15:09+0000\n"
+"Last-Translator: josuigoa <josuigoa@noreply.codeberg.org>\n"
+"Language-Team: Basque <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_cake/eu/>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+msgid "Cake"
+msgstr "Tarta"
+
+msgid "With 7 tasty slices!"
+msgstr "7 xerra zoragarrirekin!"
+
+msgid "Hunger points: +@1 per slice"
+msgstr "Gose-puntuak: + @1 xerra bakoitzeko"
+
+msgid "Cakes can be placed and eaten to restore hunger points. A cake has 7 slices. Each slice restores 2 hunger points and 0.4 saturation points. Cakes will be destroyed when dug or when the block below them is broken."
+msgstr ""
+"Pastelak gose-puntuak berrezartzeko jarri eta jan daitezke. Pastel batek 7 "
+"zati ditu. Zati bakoitzak 2 gose-puntu eta 0.4 asetasun-puntu berrezartzen "
+"ditu. Pastelak suntsitu egingo dira zulatzen direnean edo haien azpiko "
+"blokea hausten denean."
+
+msgid "Place the cake anywhere, then rightclick it to eat a single slice. You can't eat from the cake when your hunger bar is full."
+msgstr ""
+"Jarri pastela edonon, gero egin eskuin-klik zati bakar bat jateko. Ezin duzu "
+"pasteletik jan zure gose-barra beteta dagoenean."
+
+msgid "Cake (6 Slices Left)"
+msgstr "Tarta (6 zati geratzen dira)"
+
+msgid "Cake (5 Slices Left)"
+msgstr "Tarta (5 zati geratzen dira)"
+
+msgid "Cake (4 Slices Left)"
+msgstr "Tarta (4 zati geratzen dira)"
+
+msgid "Cake (3 Slices Left)"
+msgstr "Tarta (3 zati geratzen dira)"
+
+msgid "Cake (2 Slices Left)"
+msgstr "Tarta (2 zati geratzen dira)"
+
+msgid "Cake (1 Slice Left)"
+msgstr "Tarta (zati 1 geratzen da)"

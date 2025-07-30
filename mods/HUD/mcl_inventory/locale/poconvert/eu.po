@@ -1,0 +1,112 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mcl_inventory x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-07-28 15:09+0000\n"
+"Last-Translator: josuigoa <josuigoa@noreply.codeberg.org>\n"
+"Language-Team: Basque <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_inventory/eu/>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
+
+msgid "Auto (use scroll bar if client >= 5.11)"
+msgstr "Auto (erabili korritze-barra bezeroaren bertsioa >= 5.11 bada)"
+
+msgid "Off  (use paging buttons, faster)"
+msgstr "Off (erabili orriztatze-botoiak, azkarragoa)"
+
+msgid "On   (more MC like, slower)"
+msgstr "On (MC-en antzekoagoa, motelagoa)"
+
+msgid "Enable scrollable creative inventory"
+msgstr "Gaitu korritzea sorkuntza-inbentarioko barran"
+
+msgid "Building Blocks"
+msgstr "Eraikuntza-blokeak"
+
+msgid "Decoration Blocks"
+msgstr "Dekorazio-blokeak"
+
+msgid "Redstone"
+msgstr "Harrigorri"
+
+msgid "Transportation"
+msgstr "Garraioa"
+
+msgid "Miscellaneous"
+msgstr "Denetarik"
+
+msgid "Search Items"
+msgstr "Itemak bilatu"
+
+msgid "Foodstuffs"
+msgstr "Janariak eta edariak"
+
+msgid "Tools"
+msgstr "Tresnak"
+
+msgid "Combat"
+msgstr "Borroka"
+
+msgid "Mobs"
+msgstr "Izakiak"
+
+msgid "Brewing"
+msgstr "Alkimia"
+
+msgid "Materials"
+msgstr "Materialak"
+
+msgid "Survival Inventory"
+msgstr "Biziraupenaren inbentarioa"
+
+msgid "Not in Creative Inventory"
+msgstr "Ez dago sormen-inbentarioan"
+
+msgid "Switch stack size"
+msgstr "Item kopurua pila bakoitzeko aldatzea"
+
+msgid "@1 / @2"
+msgstr "@1 / @2"
+
+msgid "Very large inventory displays may be slow when scrolling, especially on Luanti versions before 5.11.\n"
+"Therefore the creative inventory display can be split into pages with prev/next page buttons.\n"
+"Mineclonia defaults to use scrolling unless an older Luanti version is detected.\n"
+"This setting allows you to override that heuristic."
+msgstr ""
+"Inbentario handien bistaratzea motela izan daiteke korritzean, bereziki "
+"Luantiren 5.11 aurreko bertsioetan.\n"
+"Hortaz, sormen-inbentarioaren bistaratzea orrietan banatu da, aurrekoa/"
+"hurrengoa botoiekin.\n"
+"Minecloniak defektuz korritzea erabiliko du, 5.11 baino bertsio bat aurkitu "
+"ezean.\n"
+"Ezarpen honekin baieztapen hori aldatu daiteke."
+
+msgid "Recipe book"
+msgstr "Errezeta-liburua"
+
+msgid "Help"
+msgstr "Laguntza"
+
+msgid "Advancements"
+msgstr "Aurrerapenak"
+
+msgid "Player settings"
+msgstr "Jokalariaren doikuntzak"
+
+msgid "Return to player inventory"
+msgstr "Itzuli jokalariaren inbentariora"
+
+msgid "Crafting table out of range!"
+msgstr "Lan-mahaia ez dago eskura!"
+
+msgid "Crafting"
+msgstr "Artisautza"
+
+msgid "Fill Craft Grid"
+msgstr "Bete Artisautza Sareta"
