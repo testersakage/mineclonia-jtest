@@ -491,6 +491,7 @@ mcl_mobs.arrow_class = {
 				uv = uv * vector.length (self.object:get_velocity ())
 				self.object:set_velocity (uv)
 				self.owner_id = tostring (puncher)
+				self._shooter = puncher
 			end
 		end
 		return true

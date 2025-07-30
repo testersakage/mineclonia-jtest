@@ -34,8 +34,8 @@ local ghast = {
 	attack_type = "null",
 	visual_size = {x=12, y=12},
 	sounds = {
-		shoot_attack = "mobs_mc_ghast_shot",
-		attack = "mobs_mc_ghast_shot",
+		shoot_attack = "mobs_fireball",
+		attack = "mobs_fireball",
 		random = {name="mobs_eerie", gain=3},
 		death = {name="mobs_mc_ghast_dying", gain=2},
 		damage = "mobs_mc_ghast_hurt",
@@ -161,7 +161,7 @@ end
 
 local function ghast_maybe_discharge (self, self_pos, dtime)
 	if self.attack then
-		local target_pos = self.attack:get_pos ()
+		local target_pos = mcl_util.target_eye_pos (self.attack)
 		local distance = vector.distance (target_pos, self_pos)
 
 		if distance < 64 then
@@ -178,6 +178,19 @@ local function ghast_maybe_discharge (self, self_pos, dtime)
 			end
 		elseif self._charge_time > 0 then
 			self._charge_time = math.max (self._charge_time - dtime, 0)
+		end
+	end
+end
+
+function ghast:on_die (pos, mcl_reason)
+	if mcl_reason and mcl_reason.direct then
+		local luaentity = mcl_reason.direct:get_luaentity ()
+		if luaentity.name == "mobs_mc:fireball" then
+			local source = mcl_reason.source
+			if source and source:is_player () then
+				awards.unlock (source:get_player_name (),
+					       "mcl:return_to_sender")
+			end
 		end
 	end
 end

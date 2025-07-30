@@ -602,6 +602,15 @@ awards.register_achievement("mcl:voluntary_exile", {
 	secret = true,
 })
 
+awards.register_achievement ("mcl:return_to_sender", {
+	title = S ("Return to Sender"),
+	description = S ("Destroy a Ghast with a Fireball"),
+	icon = "mcl_fire_fire_charge.png",
+	type = "Advancement",
+	group = "Nether",
+	reward_xp = 50,
+})
+
 awards.register_achievement("mcl:zombie_doctor", {
 	title = S("Zombie Doctor"),
 	description = S("Use a golden apple on a zombie villager under the Weakness effect; the advancement is granted when the zombie villager converts into a villager."),
