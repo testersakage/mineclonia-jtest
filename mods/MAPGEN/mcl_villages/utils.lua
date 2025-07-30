@@ -125,6 +125,7 @@ function mcl_villages.fill_chest(pos, pr)
 				{ itemstring = "mcl_core:obsidian", weight = 5, amount_min = 3, amount_max = 7 },
 				{ itemstring = "mcl_core:sapling", weight = 5, amount_min = 3, amount_max = 7 },
 				{ itemstring = "mcl_mobitems:saddle", weight = 3 },
+				{ itemstring = "mcl_mobitems:copper_horse_armor", weight = 1 },
 				{ itemstring = "mcl_mobitems:iron_horse_armor", weight = 1 },
 				{ itemstring = "mcl_mobitems:gold_horse_armor", weight = 1 },
 				{ itemstring = "mcl_mobitems:diamond_horse_armor", weight = 1 },
