@@ -672,11 +672,6 @@ local indexof = table.indexof
 function mcl_levelgen.build_in_biome ()
 	local last_biome, last_result = nil, nil
 	return function (x, y, z, rng)
-		if y < mcl_levelgen.placement_run_minp.y
-			or y > mcl_levelgen.placement_run_maxp.y then
-			return nil
-		end
-
 		local biome = index_biome (x, y, z)
 		local current_feature = mcl_levelgen.current_placed_feature
 		local current_step = mcl_levelgen.current_step
