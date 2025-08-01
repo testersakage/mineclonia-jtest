@@ -17,7 +17,8 @@ if core.global_exists ("jit") then
 		       -- can be unrolled and compiled but the
 		       -- fix_distances loop in pick_grid_positions is
 		       -- not.
-		       "loopunroll=35", "maxside=1000")
+		       "loopunroll=35", "maxside=8000", "maxsnap=1000",
+		       "maxrecord=8000")
 	-- require ("jit.dump").start ("+birxmT", "server_perf.txt")
 	-- local profile = require ("jit.p")
 	-- profile.start ("fv")
