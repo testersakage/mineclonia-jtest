@@ -157,8 +157,8 @@ local function carve (self, x, y, z, width, height, bypass_p)
 	-- WIDTH * 2.0) * 2 around X, Y, Z, intersects with this
 	-- MapChunk.
 
-	local radius = 16 + width * 2.0
 	do
+		local radius = 16 + width * 2.0
 		if not ((x - radius) <= (chunk_x + chunksize)
 			and chunk_x <= (x + radius)
 			and (z - radius) <= (chunk_z + chunksize)

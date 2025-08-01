@@ -388,6 +388,7 @@ function interpolator:petrify_internal (visited)
 	self.saved_max_value = self.input:max_value ()
 	self.saved_min_value = self.input:min_value ()
 	local input = self.input:petrify_and_clone (visited)
+	self.input = input
 	local data = self.data
 	local value = 15
 	return function (x, y, z, blender)
@@ -608,10 +609,95 @@ local function interpolator_update_x (self, progress)
 	end
 end
 
-local function interpolator_update_z (self, progress)
+local function generic_interpolator_update_z (self, progress)
 	for _, data in ipairs (self.interpolator_data) do
 		interpolator_z_interpolate (data, progress)
 	end
+end
+
+local function interpolator_update_z_1 (self, progress)
+	local data = self.interpolator_data
+	interpolator_z_interpolate (data[1], progress)
+end
+
+local function interpolator_update_z_2 (self, progress)
+	local data = self.interpolator_data
+	interpolator_z_interpolate (data[1], progress)
+	interpolator_z_interpolate (data[2], progress)
+end
+
+local function interpolator_update_z_3 (self, progress)
+	local data = self.interpolator_data
+	interpolator_z_interpolate (data[1], progress)
+	interpolator_z_interpolate (data[2], progress)
+	interpolator_z_interpolate (data[3], progress)
+end
+
+local function interpolator_update_z_4 (self, progress)
+	local data = self.interpolator_data
+	interpolator_z_interpolate (data[1], progress)
+	interpolator_z_interpolate (data[2], progress)
+	interpolator_z_interpolate (data[3], progress)
+	interpolator_z_interpolate (data[4], progress)
+end
+
+local function interpolator_update_z_5 (self, progress)
+	local data = self.interpolator_data
+	interpolator_z_interpolate (data[1], progress)
+	interpolator_z_interpolate (data[2], progress)
+	interpolator_z_interpolate (data[3], progress)
+	interpolator_z_interpolate (data[4], progress)
+	interpolator_z_interpolate (data[5], progress)
+end
+
+local function interpolator_update_z_6 (self, progress)
+	local data = self.interpolator_data
+	interpolator_z_interpolate (data[1], progress)
+	interpolator_z_interpolate (data[2], progress)
+	interpolator_z_interpolate (data[3], progress)
+	interpolator_z_interpolate (data[4], progress)
+	interpolator_z_interpolate (data[5], progress)
+	interpolator_z_interpolate (data[6], progress)
+end
+
+local function interpolator_update_z_7 (self, progress)
+	local data = self.interpolator_data
+	interpolator_z_interpolate (data[1], progress)
+	interpolator_z_interpolate (data[2], progress)
+	interpolator_z_interpolate (data[3], progress)
+	interpolator_z_interpolate (data[4], progress)
+	interpolator_z_interpolate (data[5], progress)
+	interpolator_z_interpolate (data[6], progress)
+	interpolator_z_interpolate (data[7], progress)
+end
+
+local function interpolator_update_z_8 (self, progress)
+	local data = self.interpolator_data
+	interpolator_z_interpolate (data[1], progress)
+	interpolator_z_interpolate (data[2], progress)
+	interpolator_z_interpolate (data[3], progress)
+	interpolator_z_interpolate (data[4], progress)
+	interpolator_z_interpolate (data[5], progress)
+	interpolator_z_interpolate (data[6], progress)
+	interpolator_z_interpolate (data[7], progress)
+	interpolator_z_interpolate (data[8], progress)
+end
+
+local interpolator_z_functions = {
+	interpolator_update_z_1,
+	interpolator_update_z_2,
+	interpolator_update_z_3,
+	interpolator_update_z_4,
+	interpolator_update_z_5,
+	interpolator_update_z_6,
+	interpolator_update_z_7,
+	interpolator_update_z_8,
+}
+
+local function select_interpolator_z_function (self)
+	local data = self.interpolator_data
+	return interpolator_z_functions[#data]
+		or generic_interpolator_update_z
 end
 
 local function prepare_interpolation (self, origin_x, origin_z, x_cell,
@@ -854,6 +940,8 @@ function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_i
 	prepare_interpolation (self, x, z, x_cell, z_cell, y_bottom,
 			       horiz_cells, y_total)
 	local veins = self.preset.ore_veins_enabled
+	local interpolator_update_z
+		= select_interpolator_z_function (self)
 
 	-- Height map holding height levels at horizontal positions.
 	local map_wg = self.heightmap_wg
@@ -1007,6 +1095,7 @@ local function get_one_height_or_column (self, x, z, predicate, arg)
 	local progress_z = (z % cell_width) / cell_width
 	local final_density = self.final_density
 	local cid_default_block = self.cid_default_block
+	local interpolator_update_z = generic_interpolator_update_z
 
 	local veins = self.preset.ore_veins_enabled
 	for y = y_total - 1, 0, -1 do
@@ -1116,6 +1205,7 @@ local function map_area_height_1 (self, value, x1_proper, z1_proper, x2_proper,
 	prepare_interpolation (self, x_chunk, z_chunk, cell_base_x, z_cell,
 			       y_bottom, horiz_cells, y_total)
 	local final_density = self.final_density
+	local interpolator_update_z = generic_interpolator_update_z
 
 	-- TODO: rearrange interpolation order to iterate over each
 	-- column exactly once if it can be established that such an
