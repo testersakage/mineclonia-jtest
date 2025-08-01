@@ -347,9 +347,9 @@ function ARROW_ENTITY:set_stuck (node_pos, node, self_node)
 	selfobj:set_acceleration(vector.new(0, 0, 0))
 	core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self_pos, max_hear_distance=16}, true)
 
+	local self_node_pos = mcl_util.get_nodepos (self_pos)
 	if not self_node then
-		local self_node_pos = vector.round(vector.copy(self_pos))
-		self_node = core.get_node(self_node_pos)
+		self_node = core.get_node (self_node_pos)
 	end
 	local def = core.registered_nodes[self_node.name]
 	if (def and def._on_arrow_hit) then   -- Entities: Button, Candle etc.
