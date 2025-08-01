@@ -138,7 +138,8 @@ local function player_shoot_arrow (player, power, is_critical)
 	if not arrow_itemstring then
 		return false
 	end
-	local playerpos = mcl_bows.add_bow_height(player:get_pos())
+	local playerpos = mcl_util.target_eye_pos (player)
+	playerpos.y = playerpos.y - 0.1
 	local dir = player:get_look_dir()
 	local yaw = player:get_look_horizontal()
 
