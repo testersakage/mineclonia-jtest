@@ -171,13 +171,13 @@ local function register_sea_pickle (ontop, parent)
 				}
 			},
 			sounds = sounds_coral_plant,
-			drop = canonical .. " "..s,
+			drop = "mcl_ocean:sea_pickle_1_dead_brain_coral_block" .. " "..s,
 			node_placement_prediction = "",
 			node_dig_prediction = parent,
 			after_dig_node = function(pos)
 				local node = core.get_node(pos)
 				if core.get_item_group(node.name, "sea_pickle") == 0 then
-					core.set_node(pos, {name="mcl_ocean:"..ontop})
+					core.set_node(pos, {name=parent})
 				end
 			end,
 			on_place = on_place,
@@ -206,13 +206,13 @@ local function register_sea_pickle (ontop, parent)
 			inventory_image = img_off,
 			wield_image = img_off,
 			sounds = sounds_coral_plant,
-			drop = canonical .. " "..s,
+			drop = "mcl_ocean:sea_pickle_1_dead_brain_coral_block" .. " "..s,
 			node_placement_prediction = "",
 			node_dig_prediction = parent,
 			after_dig_node = function(pos)
 				local node = core.get_node(pos)
 				if core.get_item_group(node.name, "sea_pickle") == 0 then
-					core.set_node(pos, {name="mcl_ocean:"..ontop})
+					core.set_node(pos, {name=parent})
 				end
 			end,
 			_mcl_sea_pickle_on = "mcl_ocean:sea_pickle_"..s.."_"..ontop,
