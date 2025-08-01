@@ -2,6 +2,7 @@ local S = core.get_translator(core.get_current_modname())
 
 local mod_doc = core.get_modpath("doc")
 local sea_pickles = {}
+local sea_pickles_off = {}
 
 local function sea_pickle_on_place(itemstack, placer, pointed_thing, level)
 	if level == nil then level=1 end
@@ -37,7 +38,7 @@ local function sea_pickle_on_place(itemstack, placer, pointed_thing, level)
 		if submerged then
 			node_under.name = sea_pickles[node_under.name]
 		else
-			node_under.name = sea_pickles[node_under.name] .. "_off"
+			node_under.name = sea_pickles_off[node_under.name]
 		end
 		while level > 1 do
 			level = level - 1
@@ -72,6 +73,7 @@ end
 local function register_sea_pickle (ontop, parent)
 	local sounds_coral_plant = mcl_sounds.node_sound_leaves_defaults({footstep = mcl_sounds.node_sound_dirt_defaults().footstep})
 	local canonical = "mcl_ocean:sea_pickle_1_"..ontop
+	local canonical_off = "mcl_ocean:sea_pickle_1_off_"..ontop
 	local light_strength = { 6, 9, 12, core.LIGHT_MAX }
 
 	for s=1,4 do
@@ -229,6 +231,7 @@ local function register_sea_pickle (ontop, parent)
 		end
 	end
 	sea_pickles[parent] = canonical
+	sea_pickles_off[parent] = canonical_off
 end
 
 for _, coral in ipairs (mcl_ocean.corals) do
