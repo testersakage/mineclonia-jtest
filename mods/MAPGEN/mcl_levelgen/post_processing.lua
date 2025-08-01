@@ -2487,8 +2487,7 @@ local function copy_heightmap_segment (run, dst, wg, dx, dz, structure_masks)
 
 		-- Write transformed data into the destination heightmap.
 		assert (origin_x >= 0 and origin_z >= 0
-			and origin_x < chunksize
-			and origin_z < chunksize)
+			and origin_x < cs and origin_z < cs)
 		local idx_dst = x * HEIGHTMAP_SIZE_NODES + z + 1
 		local idx_src = origin_x * cs + origin_z + 1
 		local src = heightmap.data
