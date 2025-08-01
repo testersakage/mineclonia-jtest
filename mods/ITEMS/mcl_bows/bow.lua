@@ -1,7 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
 
-mcl_bows = {}
-
 -- local arrows = {
 -- 	["mcl_bows:arrow"] = "mcl_bows:arrow_entity",
 -- }
@@ -39,8 +37,14 @@ function mcl_bows.shoot_arrow(arrow_item, pos, dir, yaw, shooter, power, damage,
 	if power == nil then
 		power = 1.0
 	end
+	local inaccuracy = nil
+	if type(shooter) == "string" then -- Assume to be dispenser.
+		inaccuracy = 6
+		shooter = nil
+	end
 	local speed = power * BOW_MAX_SPEED
 	local mob_shooter = shooter and not shooter:is_player ()
+	local player_shooter = shooter and shooter:is_player ()
 
 	if damage == nil then
 		if mob_shooter then
@@ -67,14 +71,7 @@ function mcl_bows.shoot_arrow(arrow_item, pos, dir, yaw, shooter, power, damage,
 			mcl_burning.set_on_fire(obj, math.huge)
 		end
 	end
-	-- Randomize accuracy by difficulty.
-	if mob_shooter then
-		local f = 14 - mcl_vars.difficulty * 4
-		dir = vector.copy (dir)
-		dir.x = dir.x + mcl_util.dist_triangular (0, 0.0172275 * f)
-		dir.y = dir.y + mcl_util.dist_triangular (0, 0.0172275 * f)
-		dir.z = dir.z + mcl_util.dist_triangular (0, 0.0172275 * f)
-	end
+	dir = mcl_bows.add_inaccuracy(dir, player_shooter and 1 or inaccuracy)
 	obj:set_velocity({x=dir.x*speed, y=dir.y*speed, z=dir.z*speed})
 	obj:set_acceleration({x=0, y=-GRAVITY, z=0})
 	obj:set_yaw(yaw-math.pi/2)
@@ -90,10 +87,10 @@ function mcl_bows.shoot_arrow(arrow_item, pos, dir, yaw, shooter, power, damage,
 	local soundparam = {object=shooter, pos=not shooter and pos or nil, max_hear_distance=32}
 	core.sound_play("mcl_bows_bow_shoot", soundparam, true)
 	if shooter and shooter:is_player() then
-		if obj:get_luaentity().player == "" then
-			obj:get_luaentity().player = shooter
+		if le.player == "" then
+			le.player = shooter
 		end
-		obj:get_luaentity().node = shooter:get_inventory():get_stack("main", 1):get_name()
+		le.node = shooter:get_inventory():get_stack("main", 1):get_name()
 	end
 	return obj
 end
