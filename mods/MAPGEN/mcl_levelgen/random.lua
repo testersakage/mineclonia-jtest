@@ -335,6 +335,20 @@ local function stringtoull (x, str)
 	return true
 end
 
+local function mul2ull (a, b)
+	local lo, hi = a[1], a[2]
+	mulull (a, b[1])
+	a[1], lo = lo, a[1]
+	a[2], hi = hi, a[2]
+	mulull (a, b[2])
+	shlull (a, 32)
+	lo, b[1] = b[1], lo
+	hi, b[2] = b[2], hi
+	addull (a, b)
+	b[1] = lo
+	b[2] = hi
+end
+
 if detect_luajit () then
 	local str = [[
 	local bxor = bit.bxor
@@ -423,26 +437,20 @@ if detect_luajit () then
 		a[1] = tonumber (band (value, 0xffffffffull))
 		a[2] = tonumber (rshift (value, 32ull))
 	end
+
+	local function mul2ull (a, b)
+		local along = 0x100000000ull * a[2] + a[1]
+		local blong = 0x100000000ull * b[2] + b[1]
+		local value = along * blong
+		a[1] = tonumber (band (value, 0xffffffffull))
+		a[2] = tonumber (rshift (value, 32))
+	end
 	return mulull, addull, addkull, andull, xorull,
-		rotlull, shrull, ashrull, shlull
+		rotlull, shrull, ashrull, shlull, mul2ull
 ]]
 	local fn = loadstring (str)
 	mulull, addull, addkull, andull, xorull,
-		rotlull, shrull, ashrull, shlull = fn ()
-end
-
-local function mul2ull (a, b)
-	local lo, hi = a[1], a[2]
-	mulull (a, b[1])
-	a[1], lo = lo, a[1]
-	a[2], hi = hi, a[2]
-	mulull (a, b[2])
-	shlull (a, 32)
-	lo, b[1] = b[1], lo
-	hi, b[2] = b[2], hi
-	addull (a, b)
-	b[1] = lo
-	b[2] = hi
+		rotlull, shrull, ashrull, shlull, mul2ull = fn ()
 end
 
 -- Tests.

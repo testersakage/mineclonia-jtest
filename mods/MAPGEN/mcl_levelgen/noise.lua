@@ -268,8 +268,8 @@ function mcl_levelgen.make_noise (rng, first_octave, amplitudes, fork_noise)
 end
 
 -- luacheck: push ignore 211 311 511
-local WIDTH = 100
-local HEIGHT = 100
+local WIDTH = 1000
+local HEIGHT = 1000
 
 if false then
 	-- Test octaves.
@@ -359,6 +359,9 @@ local function vertex_contribution_3d (ghash, x, y, z, r2)
 	return k * k * k * k * dotproduct (ghash, x, y, z)
 end
 
+local rshift = bit.rshift
+local ceil = math.ceil
+
 function mcl_levelgen.simplex_octave (rng)
 	local xoff = rng:next_double () * 256.0
 	local yoff = rng:next_double () * 256.0
@@ -396,16 +399,9 @@ function mcl_levelgen.simplex_octave (rng)
 		local celly = yskew - unskew
 		local intx = x - cellx
 		local inty = y - celly
-		local xfirst, yfirst
-
-		if intx > inty then
-			xfirst = 1
-			yfirst = 0
-		else
-			yfirst = 1
-			xfirst = 0
-		end
-
+		local sign = rshift (ceil (intx - inty) - 1, 31)
+		local xfirst = 1 - sign
+		local yfirst = sign
 		local v1x, v1y = intx - xfirst + G2,
 			inty - yfirst + G2
 		local v2x, v2y = intx - 1.0 + G2 * 2,
