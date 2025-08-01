@@ -64,10 +64,10 @@ function shoot_arrow_crossbow_1(arrow_item, pos, dir, yaw, shooter, speed, damag
 	le._collectable = collectable
 	le._itemstring = arrow_item
 	if shooter and shooter:is_player() then
-		if obj:get_luaentity().player == "" then
-			obj:get_luaentity().player = shooter
+		if le.player == "" then
+			le.player = shooter
 		end
-		obj:get_luaentity().node = shooter:get_inventory():get_stack("main", 1):get_name()
+		le.node = shooter:get_inventory():get_stack("main", 1):get_name()
 	end
 	return obj
 end
@@ -79,8 +79,9 @@ end
 function mcl_bows.shoot_arrow_crossbow (arrow_item, pos, dir, yaw, shooter, speed, damage, is_critical, crossbow_stack, collectable)
 	local has_multishot_enchantment
 		= crossbow_stack and mcl_enchanting.has_enchantment (crossbow_stack, "multishot")
-	local soundparam = {object=shooter, pos=not shooter and pos or nil, max_hear_distance=32}
-	core.sound_play({name="mcl_bows_crossbow_shoot", gain=0.15}, soundparam, true)
+	core.sound_play({name="mcl_bows_crossbow_shoot", gain=0.035}, {pos=pos, max_hear_distance=32}, true)
+	local inaccuracy = (shooter and shooter:is_player() and 1) or nil -- No dispenser; that use mcl_bows.shoot_arrow
+	dir = mcl_bows.add_inaccuracy(dir, inaccuracy)
 	if has_multishot_enchantment then
 		-- calculate rotation by 10 degrees 'left' and 'right' of facing direction
 		local pitch = get_pitch (dir)

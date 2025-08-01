@@ -57,7 +57,7 @@ S("Arrows might get stuck on solid blocks and can be retrieved again. They are a
 		-- Shoot arrow
 		local shootpos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 		local yaw = math.atan2(dropdir.z, dropdir.x) + YAW_OFFSET
-		mcl_bows.shoot_arrow (itemstack:get_name(), shootpos, dropdir, yaw, nil, 0.366666)
+		mcl_bows.shoot_arrow (itemstack:get_name(), shootpos, dropdir, yaw, "mcl_dispensers:dispenser", 0.366666)
 	end,
 })
 
@@ -122,6 +122,21 @@ local function damage_particles(pos, is_critical)
 			texture = "mcl_particles_crit.png^[colorize:#bc7a57:127",
 		})
 	end
+end
+
+-- Add inaccuracy to a _direction_ vector (before speed is applied).
+-- Player has an inaccuracy of 1, dispenser 6, mobs varies by difficulty (input nil)
+-- The distribution will form a bell shape, loosely speaking.
+function mcl_bows.add_inaccuracy(dir, inaccuracy)
+	if not inaccuracy then
+		inaccuracy = 14 - mcl_vars.difficulty * 4 -- 1/Easy = 10, 2/Normal = 6, 3/Hard = 2
+	end
+	if inaccuracy == 0 then return dir end
+	dir = vector.copy(dir)
+	dir.x = dir.x + mcl_util.dist_triangular(0, 0.0172275 * inaccuracy)
+	dir.y = dir.y + mcl_util.dist_triangular(0, 0.0172275 * inaccuracy)
+	dir.z = dir.z + mcl_util.dist_triangular(0, 0.0172275 * inaccuracy)
+	return dir
 end
 
 function ARROW_ENTITY:get_last_pos()

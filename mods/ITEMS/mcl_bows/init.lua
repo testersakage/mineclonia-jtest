@@ -1,3 +1,5 @@
+mcl_bows = {}
+
 --Bow
 dofile(core.get_modpath("mcl_bows") .. "/arrow.lua")
 dofile(core.get_modpath("mcl_bows") .. "/bow.lua")
