@@ -29,22 +29,27 @@ local function verbose_print (...)
 	end
 end
 
-local cid_air, cid_water_source, cid_lava_source
+local cid_air, cid_water_source, cid_lava_source, cid_nether_lava_source
 if core and core.get_content_id then
 	cid_air = core.CONTENT_AIR
 	if core.register_on_mods_loaded then
 		core.register_on_mods_loaded (function ()
 			cid_water_source = core.get_content_id ("mcl_core:water_source")
 			cid_lava_source = core.get_content_id ("mcl_core:lava_source")
+			cid_nether_lava_source
+				= core.get_content_id ("mcl_nether:nether_lava_source")
 		end)
 	else
 		cid_water_source = core.get_content_id ("mcl_core:water_source")
 		cid_lava_source = core.get_content_id ("mcl_core:lava_source")
+		cid_nether_lava_source
+			= core.get_content_id ("mcl_nether:nether_lava_source")
 	end
 else
 	cid_air = 0
 	cid_water_source = 1
 	cid_lava_source = 4
+	cid_nether_lava_source = 4
 end
 
 local X = 1
@@ -327,8 +332,8 @@ local function assemble_stone_depth_check (val, cond, map_surface_depth)
 					    cond.secondary_depth_range)
 	end
 -- 	str = str .. "\n" .. [[
--- if ctx[X] == -914 and ctx[Y] == 12 + 64 and ctx[Z] == -1251 then
--- 	print (ctx, ctx[STONE_DEPTH_ABOVE])
+-- if ctx[X] == -977 and ctx[Y] == 32 and ctx[Z] == -314 then
+-- 	print (ctx, ctx[STONE_DEPTH_BELOW], ctx[SURFACE_DEPTH])
 -- end
 -- ]]
 	return str
@@ -1717,7 +1722,8 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 					solid_blocks_from_air = 0
 					liquid_top = -huge
 				elseif node == cid_water_source
-					or node == cid_lava_source then
+					or node == cid_lava_source
+					or node == cid_nether_lava_source then
 					if liquid_top == -huge then
 						liquid_top = y + 1
 					end
@@ -1731,7 +1737,8 @@ function surface_system:post_process (terrain, x, y, z, nodes, heightmap, chunks
 							-- If this node is not a solid,
 							if not (node ~= cid_air
 								and node ~= cid_water_source
-								and node ~= cid_lava_source) then
+								and node ~= cid_lava_source
+								and node ~= cid_nether_lava_source) then
 								-- designate the node above the "surface below."
 								cave_ceiling_pos = ty + 1
 								break
