@@ -71,10 +71,10 @@ local ARROW_ENTITY={
 		mesh = "mcl_bows_arrow.obj",
 		visual_size = {x=-1, y=1},
 		textures = {"mcl_bows_arrow.png"},
-		collisionbox = {-0.19, -0.125, -0.19, 0.19, 0.125, 0.19},
+		collisionbox = {-0.01, -0.01, -0.01, 0.01, 0.01, 0.01},
 		collide_with_objects = false,
 	},
-
+	_fire_collisionbox = {-0.19, -0.125, -0.39, 0.19, 0.125, -0.01},
 	fire_damage_resistant = true,
 	_lastpos={},
 	_startpos=nil,
@@ -86,10 +86,11 @@ local ARROW_ENTITY={
 	_stuckrechecktimer=nil,-- An additional timer for periodically re-checking the stuck status of an arrow
 	_stuckin=nil,	--Position of node in which arrow is stuck.
 	_shooter=nil,	-- ObjectRef of player or mob who shot it.
+	_left_shooter = false,
 	_is_arrow = true,
 	_in_player = false,
 	_blocked = nil, -- Name of last player who deflected this arrow with a shield.
-	_partical_id=nil,
+	_particle_id=nil,
 	_ignored=nil,
 }
 
@@ -155,13 +156,10 @@ end
 
 -- Multiply x and z velocity by given factor.
 function ARROW_ENTITY:multiply_xz_velocity (factor)
-	local vel = vector.copy(self.object:get_velocity())
-	if math.abs(vel.x) >= 0.001 then
-		vel.x = vel.x * factor
-	end
-	if math.abs(vel.z) >= 0.001 then
-		vel.z = vel.z * factor
-	end
+	local vel = self.object:get_velocity ()
+	vel.x = vel.x * factor
+	vel.z = vel.z * factor
+	vel.y = vel.y * factor
 	self.object:set_velocity(vel)
 end
 
@@ -209,23 +207,20 @@ function ARROW_ENTITY:calculate_damage (v)
 end
 
 function ARROW_ENTITY:do_particle()
-	if not self._is_critical or self._partical_id then return end
-	self._partical_id = core.add_particlespawner({
-		amount = ARROW_LIFETIME * 50,
+	if not self._is_critical or self._particle_id then return end
+	self._particle_id = core.add_particlespawner({
+		amount = ARROW_LIFETIME * 15,
 		time = ARROW_LIFETIME,
-		minpos = vector.new(0,0,0),
-		maxpos = vector.new(0,0,0),
-		minvel = vector.new(-0.1,-0.1,-0.1),
-		maxvel = vector.new(0.1,0.1,0.1),
-		minexptime = 0.5,
-		maxexptime = 0.5,
-		minsize = 2,
-		maxsize = 2,
+		pos = vector.new (0.5, 0, 0),
+		vel = vector.new (6.0, 0.0, 0.0),
+		alpha_tween = {	1.0, 0.0, },
+		exptime = 0.25,
+		size = 2,
 		attached = self.object,
-		collisiondetection = false,
+		collisiondetection = true,
+		collision_removal = true,
 		vertical = false,
 		texture = "mobs_mc_arrow_particle.png",
-		glow = 1,
 	})
 end
 
@@ -249,9 +244,9 @@ end
 
 -- Remove critical partical effects.
 function ARROW_ENTITY:stop_particle()
-	if not self._partical_id then return end
-	core.delete_particlespawner(self._partical_id)
-	self._partical_id = nil
+	if not self._particle_id then return end
+	core.delete_particlespawner(self._particle_id)
+	self._particle_id = nil
 end
 
 -- Remove particle effect, clear most object fields, extinguish fire (optional), and optionally set remaining life.
@@ -296,6 +291,7 @@ function ARROW_ENTITY:on_hit_player(obj, _, ray_hit)
 		local damage = self:calculate_damage(vec)
 		mcl_shields.add_wear(obj, damage, stack)
 		self._blocked = obj:get_player_name()
+		self:arrow_knockback (obj, damage)
 		self.object:set_velocity(vector.multiply(vec, -0.15))
 		-- Intersection point can be in the past or future.
 		self.object:set_pos(ray_hit.intersection_point or mcl_bows.add_bow_height(obj:get_pos()))
@@ -333,51 +329,77 @@ function ARROW_ENTITY:on_hit_player(obj, _, ray_hit)
 	return "stop"
 end
 
-function ARROW_ENTITY:set_stuck (node_pos, node, self_node)
+local STUCK_COLLISIONBOX = {
+	-0.25, -0.25, -0.25,
+	0.25, 0.25, 0.25,
+}
+
+function ARROW_ENTITY:update_collisionbox ()
+	-- When stuck, slightly expand the collisionbox to prevent
+	-- this arrow from being rendered as completely unlit.
+	if self._stuck then
+		self.object:set_properties ({
+			collisionbox = STUCK_COLLISIONBOX,
+		})
+	else
+		self.object:set_properties ({
+			collisionbox = ARROW_ENTITY.initial_properties.collisionbox,
+		})
+	end
+end
+
+function ARROW_ENTITY:set_stuck (new_pos, node)
 	local selfobj = self.object
 	local self_pos = selfobj:get_pos()
 	self:cut_off(STUCK_ARROW_TIMEOUT, "keep fire")
 	self._stuck = true
+	self._is_critical = false
 	self._dragtime = 0
 	self._stuckrechecktimer = 0
 	self._piercing = 0
 	self._ignored = nil
-	if not self._stuckin then self._stuckin = node_pos end
+	if not self._stuckin then
+		self._stuckin = core.get_nodepos (new_pos)
+	end
 	selfobj:set_velocity(vector.new(0, 0, 0))
 	selfobj:set_acceleration(vector.new(0, 0, 0))
 	core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self_pos, max_hear_distance=16}, true)
 
-	local self_node_pos = mcl_util.get_nodepos (self_pos)
-	if not self_node then
-		self_node = core.get_node (self_node_pos)
-	end
-	local def = core.registered_nodes[self_node.name]
+	local new_pos = mcl_util.get_nodepos (new_pos)
+	local new_node = core.get_node (new_pos)
+	local def = core.registered_nodes[new_node.name]
 	if (def and def._on_arrow_hit) then   -- Entities: Button, Candle etc.
-		def._on_arrow_hit(self_node_pos, self)
+		def._on_arrow_hit(new_pos, self)
 	else                                  -- Nodes: TNT, Campfire, Target etc.
 		def = core.registered_nodes[node.name]
 		if (def and def._on_arrow_hit) then
 			def._on_arrow_hit(self._stuckin, self)
 		end
 	end
+	self:update_collisionbox ()
 
 	return "stop"
 end
 
 -- Hit a non-liquid node.  Either arrow could be stopped by engine or on its way to target.
-function ARROW_ENTITY:on_solid_hit (node_pos, node)
+function ARROW_ENTITY:on_solid_hit (node_pos, node, collisiondata)
 	if not node then
 		node = core.get_node(node_pos)
 	end
 	if node.name == "air" or node.name == "ignore" then return end
-	return self:set_stuck(node_pos, node)
+	local dir = vector.normalize (collisiondata.old_vel)
+	local movement = vector.multiply (dir, 0.15)
+	local pos = vector.add (collisiondata.new_pos, movement)
+	self.object:move_to (pos)
+	local collision_node = core.get_node (collisiondata.collision_pos)
+	return self:set_stuck (collisiondata.new_pos, collision_node)
 end
 
 function ARROW_ENTITY:on_liquid_passthrough (node, def) ---@diagnostic disable-line: unused-local
 	-- Slow down arrow in liquids. 8 water blocks shall kill most horizontal velocity.
 	-- Water visco = 1, Lava visco = 7, but mc lava seems to not slowdown arrows a lot?
 	--local v = def.liquid_viscosity or 0
-	self:multiply_xz_velocity(LIQUID_RATE)
+	self:multiply_xz_velocity (LIQUID_RATE)
 end
 
 -- Handle "arrow hitting things".  Return "stop" if arrow is stopped by this thing.
@@ -388,8 +410,8 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 	if ray_hit.type == "object" then
 		local obj = ray_hit.ref
 		if obj:is_valid() and obj:get_hp() > 0
-		and ( obj ~= self._shooter or not vector.equals(self:get_last_pos(), self._startpos) )
-		and table.indexof(ignored, obj) == -1 then
+			and (obj ~= self._shooter or self._left_shooter)
+			and table.indexof(ignored, obj) == -1 then
 			if obj:is_player() then
 				result = self:on_hit_player(obj, obj:get_luaentity(), ray_hit)
 			else
@@ -419,9 +441,9 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 		end
 	elseif ray_hit.type == "node" then
 		local hit_node_pos = core.get_pointed_thing_position(ray_hit)
-		local hit_node_str = hit_node_pos.x .. "," .. hit_node_pos.y .. "," .. hit_node_pos.z
-		if table.indexof(ignored, hit_node_str) == -1 then
-			local hit_node =  core.get_node(hit_node_pos)
+		local hit_node_hash = core.hash_node_position (hit_node_pos)
+		if table.indexof(ignored, hit_node_hash) == -1 then
+			local hit_node = core.get_node (hit_node_pos)
 			local def = core.registered_nodes[hit_node.name or ""]
 			-- Set fire when passing through lava or fire, or put out fire when passing through water.
 			if core.get_item_group(hit_node.name, "set_on_fire") > 0 then
@@ -432,11 +454,15 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 
 			if def and def.liquidtype ~= "none" then
 				result = self:on_liquid_passthrough(hit_node, def)
-			elseif def then
+			elseif def and def.walkable then
 				self._stuckin = hit_node_pos
-				result = self:on_solid_hit(hit_node_pos, hit_node, def)
+				result = self:on_solid_hit (hit_node_pos, hit_node, {
+					old_vel = self.object:get_velocity (),
+					new_pos = ray_hit.intersection_point or self.object:get_pos (),
+					collision_pos = hit_node_pos,
+			})
 			end
-			table.insert(ignored, hit_node_str)
+			table.insert(ignored, hit_node_hash)
 		end
 	end
 	if not self._ignored and #ignored > 0 then
@@ -445,7 +471,26 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 	return result
 end
 
-function ARROW_ENTITY:on_step(dtime)
+function ARROW_ENTITY:find_first_collision (moveresult)
+	local first_collision
+	local max_len = -math.huge
+
+	for _, collision in ipairs (moveresult.collisions) do
+		local len = vector.length (collision.old_velocity)
+		if max_len < len then
+			first_collision = collision
+			max_len = len
+		end
+	end
+	if first_collision then
+		return first_collision.old_velocity,
+			first_collision.new_pos,
+			first_collision.node_pos
+	end
+	return nil
+end
+
+function ARROW_ENTITY:on_step(dtime, moveresult)
 	local selfobj = self.object
 	local self_pos = selfobj:get_pos()
 	if not self_pos then return end
@@ -476,47 +521,34 @@ function ARROW_ENTITY:on_step(dtime)
 	end
 
 	local result = nil
+	local shooter_located = false
 	-- Raycasting movement during dtime to handle lava, water, and hits.
 	for ray_hit in core.raycast(last_pos, self_pos, true, true) do
+		if self._shooter and ray_hit.ref == self._shooter then
+			shooter_located = true
+		end
 		result = self:on_intersect(ray_hit)
 		if result == "stop" or result == "break" then break end
+	end
+	if not shooter_located then
+		self._left_shooter = true
 	end
 
 	-- Put out fire if exposed to rain, or if burning expires.
 	mcl_burning.tick(selfobj, dtime, self)
 
-	-- Check if arrow has stopped moving in one axis, which probably means it hit something.
-	-- This detection is a bit clunky, but MT does not offer a direct collision detection. :-(
+	-- Look for colliding nodes within moveresult.
 	if result ~= "stop" then
-		local vel = selfobj:get_velocity()
-		local no_x, no_z, no_y = math.abs(vel.x) < 0.0001, math.abs(vel.z) < 0.0001, math.abs(vel.y) < 0.00001
-		if no_x or no_z or no_y then
-			local dir
-			if math.abs(vel.y) < 0.00001 then
-				if last_pos.y < self_pos.y then
-					dir = vector.new(0, 1, 0)
-				else
-					dir = vector.new(0, -1, 0)
-				end
-			else
-				dir = core.facedir_to_dir(core.dir_to_facedir(core.yaw_to_dir(selfobj:get_yaw()-YAW_OFFSET)))
-			end
-			local dpos = vector.round(vector.copy(self_pos))
-			local stuck_pos = vector.add(dpos, dir)
-			local stuck_node = core.get_node(stuck_pos)
-			self._stuckin = stuck_pos
-			result = self:on_solid_hit(stuck_pos, stuck_node)
-			if result ~= "stop" then -- Arrow is stuck at air or other non-stopping block.
-				local self_node_pos = vector.round(vector.copy(self_pos))
-				local self_node = core.get_node(self_node_pos)
-				if ( self_node.name ~= "air" and self_node.name ~= "ignore" )
-				or ( no_x and no_y and no_z ) then
-					self:set_stuck(stuck_pos, stuck_node, self_node)
-					return
-				end
-			else
-				return
-			end
+		local old_vel, new_pos, collision_pos
+			= self:find_first_collision (moveresult)
+		if collision_pos then
+			self._stuckin = collision_pos
+			local stuck_node = core.get_node (collision_pos)
+			self:on_solid_hit (collision_pos, stuck_node, {
+				old_vel = old_vel,
+				new_pos = new_pos,
+				collision_pos = collision_pos,
+			})
 		end
 	end
 
@@ -527,7 +559,13 @@ function ARROW_ENTITY:on_step(dtime)
 		local predict = vector.add(self_pos, vector.multiply(vector.copy(vel), 0.05))
 		for ray_hit in core.raycast(self_pos, predict, true, true) do
 			if ray_hit.type == "node" then
-				break -- Hit a node, stop prediction and defer to next step.
+				local hit_node_pos
+					= core.get_pointed_thing_position (ray_hit)
+				local hit_node = core.get_node (hit_node_pos)
+				local def = core.registered_nodes[hit_node.name]
+				if def and def.walkable then
+					break -- Hit a node, stop prediction and defer to next step.
+				end
 			end
 			result = self:on_intersect(ray_hit) -- Hit mob or player.
 			if result == "stop" then break end
@@ -580,6 +618,7 @@ function ARROW_ENTITY:step_on_stuck(last_pos, dtime)
 			self._dragtime = 0
 			self._is_critical = false
 			self.object:set_acceleration({x=0, y=-GRAVITY, z=0})
+			self:update_collisionbox ()
 		end
 	end
 end
@@ -650,9 +689,8 @@ function ARROW_ENTITY:on_activate(staticdata)
 				self._shooter = shooter
 			end
 		end
-		self:do_particle()
-	else
-		core.after(0, function() self:do_particle() end) -- Runs almost immediately for singleplayer.
+		self:update_collisionbox ()
+		self:do_particle ()
 	end
 	self.object:set_armor_groups({ immortal = 1 })
 end
