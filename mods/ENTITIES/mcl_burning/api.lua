@@ -26,7 +26,13 @@ function mcl_burning.get_collisionbox(obj, smaller, storage)
 		local box = cache[smaller and 2 or 1]
 		return box[1], box[2]
 	else
-		local box = obj:get_properties().collisionbox
+		local entity = obj:get_luaentity ()
+		local box
+		if entity and entity._fire_collisionbox then
+			box = entity._fire_collisionbox
+		else
+			box = obj:get_properties().collisionbox
+		end
 		local minp, maxp = vector.new(box[1], box[2], box[3]), vector.new(box[4], box[5], box[6])
 		local s_vec = vector.new(0.1, 0.1, 0.1)
 		local s_minp = vector.add(minp, s_vec)
