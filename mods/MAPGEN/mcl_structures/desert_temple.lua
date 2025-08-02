@@ -97,7 +97,7 @@ mcl_structures.register_structure("desert_temple",{
 			stacks_min = 1,
 			stacks_max = 1,
 			items = {
-				{ itemstring = "mcl_pottery_sherds:archer", weight = 21, },
+				{ itemstring = "mcl_pottery_sherds:archer", weight = 1, },
 				{ itemstring = "mcl_core:emerald", weight = 1 },
 				{ itemstring = "mcl_mobitems:gunpowder", weight = 1 },
 				{ itemstring = "mcl_pottery_sherds:miner", weight = 1, },
