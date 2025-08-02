@@ -68,7 +68,7 @@ local ARROW_ENTITY={
 		physical = true,
 		pointable = false,
 		visual = "mesh",
-		mesh = "mcl_bows_arrow.obj",
+		mesh = "mcl_bows_arrow.b3d",
 		visual_size = {x=-1, y=1},
 		textures = {"mcl_bows_arrow.png"},
 		collisionbox = {-0.01, -0.01, -0.01, 0.01, 0.01, 0.01},
@@ -92,18 +92,26 @@ local ARROW_ENTITY={
 	_blocked = nil, -- Name of last player who deflected this arrow with a shield.
 	_particle_id=nil,
 	_ignored=nil,
+	_animtime = 0.0,
 }
 
 -- Drop arrow as item at pos
 local function spawn_item(self, pos)
 	if not core.is_creative_enabled("") then
 		local itemstring = "mcl_bows:arrow"
-		if self._itemstring and core.registered_items[self._itemstring] then
-			itemstring = self._itemstring
+		if self._itemstring then
+			local stack = ItemStack (self.itemstring)
+			if stack:get_definition () then
+				itemstring = self._itemstring
+			end
 		end
 		local item = core.add_item(pos, itemstring)
-		item:set_velocity(vector.new(0, 0, 0))
-		item:set_yaw(self.object:get_yaw())
+		if item then
+			local luaentity = item:get_luaentity ()
+			item:set_velocity(vector.new(0, 0, 0))
+			item:set_yaw(self.object:get_yaw())
+			luaentity._insta_collect = true
+		end
 	end
 end
 
@@ -363,7 +371,10 @@ function ARROW_ENTITY:set_stuck (new_pos, node)
 	end
 	selfobj:set_velocity(vector.new(0, 0, 0))
 	selfobj:set_acceleration(vector.new(0, 0, 0))
-	core.sound_play({name="mcl_bows_hit_other", gain=0.3}, {pos=self_pos, max_hear_distance=16}, true)
+	core.sound_play({name = "mcl_bows_hit_other",gain=0.6,},
+		{pos=self_pos, max_hear_distance=16}, true)
+	selfobj:set_animation ({x = 10, y = 60,}, 210, 1.0, false)
+	self._animtime = 0.0
 
 	local new_pos = mcl_util.get_nodepos (new_pos)
 	local new_node = core.get_node (new_pos)
@@ -591,6 +602,11 @@ function ARROW_ENTITY:step_on_stuck(last_pos, dtime)
 		self._stuckrechecktimer = timer
 		return
 	end
+	local t = self._animtime or 0.0
+	self._animtime = t + dtime
+	if t + dtime >= 0.30 then
+		self.object:set_animation ({x = 0, y = 0,})
+	end
 	self._stuckrechecktimer = 0
 
 	local self_pos = self.object:get_pos()
@@ -617,6 +633,7 @@ function ARROW_ENTITY:step_on_stuck(last_pos, dtime)
 			self._lifetime = 0
 			self._dragtime = 0
 			self._is_critical = false
+			self.object:set_animation ({x = 0, y = 0,})
 			self.object:set_acceleration({x=0, y=-GRAVITY, z=0})
 			self:update_collisionbox ()
 		end
