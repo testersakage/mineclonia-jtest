@@ -330,10 +330,10 @@ local function player_chest_close(player)
 end
 
 -- This is a helper function to register both chests and trapped chests. Trapped chests will make use of the additional parameters
-local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tiles_table, hidden, redstone,
+local function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help, tiles_table, hidden, redstone,
 							  on_rightclick_addendum, on_rightclick_addendum_left, on_rightclick_addendum_right, drop,
 							  canonical_basename)
-	-- START OF register_chest FUNCTION BODY
+	-- START OF mcl_chests.register_chest FUNCTION BODY
 	if not drop then
 		drop = "mcl_chests:" .. basename
 	else
@@ -951,12 +951,12 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		doc.add_entry_alias("nodes", small_name, "nodes", "mcl_chests:" .. basename .. "_right")
 	end
 
-	-- END OF register_chest FUNCTION BODY
+	-- END OF mcl_chests.register_chest FUNCTION BODY
 end
 
 local chestusage = S("To access its inventory, rightclick it. When broken, the items will drop out.")
 
-register_chest("chest",
+mcl_chests.register_chest("chest",
 	S("Chest"),
 	S("Chests are containers which provide 27 inventory slots. Chests can be turned into large chests with double the capacity by placing two chests next to each other."),
 	chestusage,
@@ -976,7 +976,7 @@ local traptiles = {
 	double = tiles_chest_trapped_double,
 }
 
-register_chest("trapped_chest",
+mcl_chests.register_chest("trapped_chest",
 	S("Trapped Chest"),
 	S("A trapped chest is a container which provides 27 inventory slots. When it is opened, it sends a redstone signal to its adjacent blocks as long it stays open. Trapped chests can be turned into large trapped chests with double the capacity by placing two trapped chests next to each other."),
 	chestusage,
@@ -1019,7 +1019,7 @@ register_chest("trapped_chest",
 	end
 )
 
-register_chest("trapped_chest_on",
+mcl_chests.register_chest("trapped_chest_on",
 	nil, nil, nil, nil, traptiles, true,
 	{
 		connects_to = function(node, dir) return true end,
