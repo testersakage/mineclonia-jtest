@@ -330,19 +330,17 @@ local function player_chest_close(player)
 end
 
 -- This is a helper function to register both chests and trapped chests. Trapped chests will make use of the additional parameters
-function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help, tiles_table, hidden, redstone,
-							  on_rightclick_addendum, on_rightclick_addendum_left, on_rightclick_addendum_right, drop,
-							  canonical_basename)
+function mcl_chests.register_chest(def)
 	-- START OF mcl_chests.register_chest FUNCTION BODY
-	if not drop then
-		drop = "mcl_chests:" .. basename
+	if not def.drop then
+		def.drop = def.basename
 	else
-		drop = "mcl_chests:" .. drop
+		def.drop = def.drop
 	end
 	-- The basename of the "canonical" version of the node, if set (e.g.: trapped_chest_on → trapped_chest).
 	-- Used to get a shared formspec ID and to swap the node back to the canonical version in on_construct.
-	if not canonical_basename then
-		canonical_basename = basename
+	if not def.canonical_basename then
+		def.canonical_basename = def.basename
 	end
 
 	local function double_chest_add_item(top_inv, bottom_inv, listname, stack)
@@ -403,17 +401,17 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 		return stack:get_count() - leftover:get_count()
 	end
 
-	local small_name = "mcl_chests:" .. basename .. "_small"
-	local small_textures = tiles_table.small
-	local left_name = "mcl_chests:" .. basename .. "_left"
-	local left_textures = tiles_table.double
+	local small_name = def.basename .. "_small"
+	local small_textures = def.tiles_table.small
+	local left_name = def.basename .. "_left"
+	local left_textures = def.tiles_table.double
 
-	core.register_node("mcl_chests:" .. basename, {
-		description = desc,
-		_tt_help = tt_help,
-		_doc_items_longdesc = longdesc,
-		_doc_items_usagehelp = usagehelp,
-		_doc_items_hidden = hidden,
+	core.register_node(def.basename, {
+		description = def.desc,
+		_tt_help = def.tt_help,
+		_doc_items_longdesc = def.long_desc,
+		_doc_items_usagehelp = def.usage_help,
+		_doc_items_hidden = def.hidden,
 		drawtype = "mesh",
 		mesh = "mcl_chests_chest.b3d",
 		tiles = small_textures,
@@ -439,16 +437,16 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 
 	local function close_forms(canonical_basename, pos)
 		for pl in mcl_util.connected_players(pos, 30) do
-			core.close_formspec(pl:get_player_name(), "mcl_chests:" .. canonical_basename .. "_" .. pos.x .. "_" .. pos.y .. "_" .. pos.z)
+			core.close_formspec(pl:get_player_name(), canonical_basename .. "_" .. pos.x .. "_" .. pos.y .. "_" .. pos.z)
 		end
 	end
 
 	core.register_node(small_name, {
-		description = desc,
-		_tt_help = tt_help,
-		_doc_items_longdesc = longdesc,
-		_doc_items_usagehelp = usagehelp,
-		_doc_items_hidden = hidden,
+		description = def.desc,
+		_tt_help = def.tt_help,
+		_doc_items_longdesc = def.long_desc,
+		_doc_items_usagehelp = def.usage_help,
+		_doc_items_hidden = def.hidden,
 		drawtype = animate_chests and "nodebox" or "mesh",
 		mesh = not animate_chests and "mcl_chests_chest.obj" or nil,
 		node_box = animate_chests and {
@@ -471,8 +469,8 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 		_chest_entity_animation_type = "chest",
 		paramtype = "light",
 		paramtype2 = "facedir",
-		drop = drop,
-		_mcl_baseitem = "mcl_chests:"..basename,
+		drop = def.drop,
+		_mcl_baseitem = def.basename,
 		groups = {
 			handy = 1,
 			axey = 1,
@@ -505,23 +503,23 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 			inv:set_size("input", 1)
 			-- END OF LISTRING WORKAROUND
 			if core.get_node(mcl_util.get_double_container_neighbor_pos(pos, param2, "right")).name ==
-				"mcl_chests:" .. canonical_basename .. "_small" then
-				core.swap_node(pos, { name = "mcl_chests:" .. canonical_basename .. "_right", param2 = param2 })
+				def.canonical_basename .. "_small" then
+				core.swap_node(pos, { name = def.canonical_basename .. "_right", param2 = param2 })
 				local p = mcl_util.get_double_container_neighbor_pos(pos, param2, "right")
-				core.swap_node(p, { name = "mcl_chests:" .. canonical_basename .. "_left", param2 = param2 })
-				create_entity(p, "mcl_chests:" .. canonical_basename .. "_left", left_textures, param2, true,
+				core.swap_node(p, { name = def.canonical_basename .. "_left", param2 = param2 })
+				create_entity(p, def.canonical_basename .. "_left", left_textures, param2, true,
 					"default_chest",
 					"mcl_chests_chest", "chest")
 			elseif core.get_node(mcl_util.get_double_container_neighbor_pos(pos, param2, "left")).name ==
-				"mcl_chests:" .. canonical_basename .. "_small" then
-				core.swap_node(pos, { name = "mcl_chests:" .. canonical_basename .. "_left", param2 = param2 })
-				create_entity(pos, "mcl_chests:" .. canonical_basename .. "_left", left_textures, param2, true,
+				def.canonical_basename .. "_small" then
+				core.swap_node(pos, { name = def.canonical_basename .. "_left", param2 = param2 })
+				create_entity(pos, def.canonical_basename .. "_left", left_textures, param2, true,
 					"default_chest",
 					"mcl_chests_chest", "chest")
 				local p = mcl_util.get_double_container_neighbor_pos(pos, param2, "left")
-				core.swap_node(p, { name = "mcl_chests:" .. canonical_basename .. "_right", param2 = param2 })
+				core.swap_node(p, { name = def.canonical_basename .. "_right", param2 = param2 })
 			else
-				core.swap_node(pos, { name = "mcl_chests:" .. canonical_basename .. "_small", param2 = param2 })
+				core.swap_node(pos, { name = def.canonical_basename .. "_small", param2 = param2 })
 				create_entity(pos, small_name, small_textures, param2, false, "default_chest", "mcl_chests_chest",
 					"chest")
 			end
@@ -568,7 +566,7 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 			end
 
 			core.show_formspec(clicker:get_player_name(),
-				sf("mcl_chests:%s_%s_%s_%s", canonical_basename, pos.x, pos.y, pos.z),
+				sf("mcl_chests:%s_%s_%s_%s", def.canonical_basename, pos.x, pos.y, pos.z),
 				table.concat({
 					"formspec_version[4]",
 					"size[11.75,10.425]",
@@ -587,8 +585,8 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 				})
 			)
 
-			if on_rightclick_addendum then
-				on_rightclick_addendum(pos, node, clicker)
+			if def.on_rightclick_addendum then
+				def.on_rightclick_addendum(pos, node, clicker)
 			end
 
 			player_chest_open(clicker, pos, small_name, small_textures, node.param2, false, "default_chest",
@@ -596,9 +594,9 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 		end,
 
 		on_destruct = function(pos)
-			close_forms(canonical_basename, pos)
+			close_forms(def.canonical_basename, pos)
 		end,
-		_mcl_redstone = redstone,
+		_mcl_redstone = def.redstone,
 		on_rotate = simple_rotate,
 	})
 
@@ -616,7 +614,7 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 		_chest_entity_animation_type = "chest",
 		paramtype = "light",
 		paramtype2 = "facedir",
-		_mcl_baseitem = "mcl_chests:"..basename,
+		_mcl_baseitem = def.basename,
 		groups = {
 			handy = 1,
 			axey = 1,
@@ -631,15 +629,15 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 			features_cannot_replace
 				= basename == "chest" and 1 or 0,
 		},
-		drop = drop,
+		drop = def.drop,
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_wood_defaults(),
 		on_construct = function(pos)
 			local n = core.get_node(pos)
 			local param2 = n.param2
 			local p = mcl_util.get_double_container_neighbor_pos(pos, param2, "left")
-			if not p or core.get_node(p).name ~= "mcl_chests:" .. canonical_basename .. "_right" then
-				n.name = "mcl_chests:" .. canonical_basename .. "_small"
+			if not p or core.get_node(p).name ~= def.canonical_basename .. "_right" then
+				n.name = def.canonical_basename .. "_small"
 				core.swap_node(pos, n)
 			end
 			create_entity(pos, left_name, left_textures, param2, true, "default_chest", "mcl_chests_chest", "chest")
@@ -653,14 +651,14 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 				return
 			end
 
-			close_forms(canonical_basename, pos)
+			close_forms(def.canonical_basename, pos)
 
 			local param2 = n.param2
 			local p = mcl_util.get_double_container_neighbor_pos(pos, param2, "left")
-			if not p or core.get_node(p).name ~= "mcl_chests:" .. basename .. "_right" then
+			if not p or core.get_node(p).name ~= def.basename .. "_right" then
 				return
 			end
-			close_forms(canonical_basename, p)
+			close_forms(def.canonical_basename, p)
 
 			core.swap_node(p, { name = small_name, param2 = param2 })
 			create_entity(p, small_name, small_textures, param2, false, "default_chest", "mcl_chests_chest", "chest")
@@ -738,7 +736,7 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 			end
 
 			core.show_formspec(clicker:get_player_name(),
-				sf("mcl_chests:%s_%s_%s_%s", canonical_basename, pos.x, pos.y, pos.z),
+				sf("mcl_chests:%s_%s_%s_%s", def.canonical_basename, pos.x, pos.y, pos.z),
 				table.concat({
 					"formspec_version[4]",
 					"size[11.75,14.15]",
@@ -766,22 +764,22 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 				})
 			)
 
-			if on_rightclick_addendum_left then
-				on_rightclick_addendum_left(pos, node, clicker)
+			if def.on_rightclick_addendum_left then
+				def.on_rightclick_addendum_left(pos, node, clicker)
 			end
 
 			player_chest_open(clicker, pos, left_name, left_textures, node.param2, true, "default_chest",
 				"mcl_chests_chest")
 		end,
-		_mcl_redstone = redstone,
+		_mcl_redstone = def.redstone,
 		on_rotate = no_rotate,
 	})
 
-	core.register_node("mcl_chests:" .. basename .. "_right", {
+	core.register_node(def.basename .. "_right", {
 		drawtype = "nodebox",
 		paramtype = "light",
 		paramtype2 = "facedir",
-		_mcl_baseitem = "mcl_chests:"..basename,
+		_mcl_baseitem = def.basename,
 		node_box = {
 			type = "fixed",
 			fixed = { -0.5, -0.5, -0.4375, 0.4375, 0.375, 0.4375 },
@@ -801,15 +799,15 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 			features_cannot_replace
 				= basename == "chest" and 1 or 0,
 		},
-		drop = drop,
+		drop = def.drop,
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_wood_defaults(),
 		on_construct = function(pos)
 			local n = core.get_node(pos)
 			local param2 = n.param2
 			local p = mcl_util.get_double_container_neighbor_pos(pos, param2, "right")
-			if not p or core.get_node(p).name ~= "mcl_chests:" .. canonical_basename .. "_left" then
-				n.name = "mcl_chests:" .. canonical_basename .. "_small"
+			if not p or core.get_node(p).name ~= def.canonical_basename .. "_left" then
+				n.name = def.canonical_basename .. "_small"
 				core.swap_node(pos, n)
 			end
 		end,
@@ -822,14 +820,14 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 				return
 			end
 
-			close_forms(canonical_basename, pos)
+			close_forms(def.canonical_basename, pos)
 
 			local param2 = n.param2
 			local p = mcl_util.get_double_container_neighbor_pos(pos, param2, "right")
-			if not p or core.get_node(p).name ~= "mcl_chests:" .. basename .. "_left" then
+			if not p or core.get_node(p).name ~= def.basename .. "_left" then
 				return
 			end
-			close_forms(canonical_basename, p)
+			close_forms(def.canonical_basename, p)
 
 			core.swap_node(p, { name = small_name, param2 = param2 })
 			create_entity(p, small_name, small_textures, param2, false, "default_chest", "mcl_chests_chest", "chest")
@@ -907,7 +905,7 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 			end
 
 			core.show_formspec(clicker:get_player_name(),
-				sf("mcl_chests:%s_%s_%s_%s", canonical_basename, pos.x, pos.y, pos.z),
+				sf("mcl_chests:%s_%s_%s_%s", def.canonical_basename, pos.x, pos.y, pos.z),
 				table.concat({
 					"formspec_version[4]",
 					"size[11.75,14.15]",
@@ -935,20 +933,20 @@ function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help,
 				})
 			)
 
-			if on_rightclick_addendum_right then
-				on_rightclick_addendum_right(pos, node, clicker)
+			if def.on_rightclick_addendum_right then
+				def.on_rightclick_addendum_right(pos, node, clicker)
 			end
 
 			player_chest_open(clicker, pos_other, left_name, left_textures, node.param2, true, "default_chest",
 				"mcl_chests_chest")
 		end,
-		_mcl_redstone = redstone,
+		_mcl_redstone = def.redstone,
 		on_rotate = no_rotate,
 	})
 
 	if mod_doc then
-		doc.add_entry_alias("nodes", small_name, "nodes", "mcl_chests:" .. basename .. "_left")
-		doc.add_entry_alias("nodes", small_name, "nodes", "mcl_chests:" .. basename .. "_right")
+		doc.add_entry_alias("nodes", small_name, "nodes", def.basename .. "_left")
+		doc.add_entry_alias("nodes", small_name, "nodes", def.basename .. "_right")
 	end
 
 	-- END OF mcl_chests.register_chest FUNCTION BODY
@@ -956,44 +954,46 @@ end
 
 local chestusage = S("To access its inventory, rightclick it. When broken, the items will drop out.")
 
-mcl_chests.register_chest("chest",
-	S("Chest"),
-	S("Chests are containers which provide 27 inventory slots. Chests can be turned into large chests with double the capacity by placing two chests next to each other."),
-	chestusage,
-	S("27 inventory slots") .. "\n" .. S("Can be combined to a large chest"),
-	{
+mcl_chests.register_chest({
+	basename = "mcl_chests:chest",
+	desc = S("Chest"),
+	long_desc = S("Chests are containers which provide 27 inventory slots. Chests can be turned into large chests with double the capacity by placing two chests next to each other."),
+	usage_help = chestusage,
+	tt_help = S("27 inventory slots") .. "\n" .. S("Can be combined to a large chest"),
+	tiles_table = {
 		small = tiles_chest_normal_small,
 		double = tiles_chest_normal_double,
 		inv = { "default_chest_top.png", "mcl_chests_chest_bottom.png",
 			"mcl_chests_chest_right.png", "mcl_chests_chest_left.png",
 			"mcl_chests_chest_back.png", "default_chest_front.png" },
 	},
-	false
-)
+	hidden = false
+})
 
 local traptiles = {
 	small = tiles_chest_trapped_small,
 	double = tiles_chest_trapped_double,
 }
 
-mcl_chests.register_chest("trapped_chest",
-	S("Trapped Chest"),
-	S("A trapped chest is a container which provides 27 inventory slots. When it is opened, it sends a redstone signal to its adjacent blocks as long it stays open. Trapped chests can be turned into large trapped chests with double the capacity by placing two trapped chests next to each other."),
-	chestusage,
-	S("27 inventory slots") ..
+mcl_chests.register_chest({
+	basename = "mcl_chests:trapped_chest",
+	desc = S("Trapped Chest"),
+	long_desc = S("A trapped chest is a container which provides 27 inventory slots. When it is opened, it sends a redstone signal to its adjacent blocks as long it stays open. Trapped chests can be turned into large trapped chests with double the capacity by placing two trapped chests next to each other."),
+	usage_help = chestusage,
+	tt_help = S("27 inventory slots") ..
 	"\n" .. S("Can be combined to a large chest") .. "\n" .. S("Emits a redstone signal when opened"),
-	traptiles,
-	nil,
-	{
+	tiles_table = traptiles,
+	hidden = nil,
+	redstone = {
 		connects_to = function(node, dir) return true end,
 	},
-	function(pos, node, _)
+	on_rightclick_addendum = function(pos, node, _)
 		mcl_redstone.swap_node(pos, {name="mcl_chests:trapped_chest_on_small", param2 = node.param2})
 		if animate_chests then
 			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_small", {"mcl_chests_trapped.png"}, node.param2, false, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_small")
 		end
 	end,
-	function(pos, node, _)
+	on_rightclick_addendum_left = function(pos, node, _)
 		local meta = core.get_meta(pos)
 		meta:set_int("players", 1)
 
@@ -1006,7 +1006,7 @@ mcl_chests.register_chest("trapped_chest",
 		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
 		mcl_redstone.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
 	end,
-	function(pos, node, _)
+	on_rightclick_addendum_right = function(pos, node, _)
 		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
 
 		mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
@@ -1017,21 +1017,29 @@ mcl_chests.register_chest("trapped_chest",
 				"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_left")
 		end
 	end
-)
+})
 
-mcl_chests.register_chest("trapped_chest_on",
-	nil, nil, nil, nil, traptiles, true,
-	{
+mcl_chests.register_chest({
+	basename = "mcl_chests:trapped_chest_on",
+	desc = nil,
+	long_desc = nil,
+	usage_help = nil,
+	tt_help = nil,
+	tiles_table = traptiles,
+	hidden = true,
+	redstone = {
 		connects_to = function(node, dir) return true end,
 		-- TODO: Trapped chests should return a power level equal to
 		-- the number of players accessing the chest. Just return 15
 		-- until that has been implemented.
 		get_power = function(node, dir) return 15, dir.y < 0 end,
 	},
-	nil, nil, nil,
-	"trapped_chest",
-	"trapped_chest"
-)
+	on_rightclick_addendum = nil,
+	on_rightclick_addendum_left = nil,
+	on_rightclick_addendum_right = nil,
+	drop = "mcl_chests:trapped_chest",
+	canonical_basename = "mcl_chests:trapped_chest"
+})
 
 -- Disable chest when it has been closed
 core.register_on_player_receive_fields(function(player, formname, fields)
