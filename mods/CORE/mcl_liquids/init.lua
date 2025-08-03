@@ -6,7 +6,7 @@ liquids seen in Minecraft.
 local S = core.get_translator(core.get_current_modname())
 
 
-if not core.settings:get_bool('mcl_liquid_enable', false) then
+if not core.settings:get_bool('mcl_liquids_enable', false) then
 	mcl_liquid = {
 		register_liquid = function(def)
 		end
@@ -22,13 +22,13 @@ end
 -- If set to false, liquids do not flow until they activated.
 local is_running = true
 
-local MAIN_TICK_DEFAULT = tonumber(core.settings:get('mcl_liquid_seconds_per_tick')) or 0.025
-
-local UPDATE_LIMIT = tonumber(core.settings:get('mcl_liquid_update_limit')) or 10000
+local STEP_INTERVAL = (not core.is_singleplayer() and 0.01) or tonumber(core.settings:get('dedicated_server_step')) or 0.09
+local UPDATE_SPEED_DEFAULT = tonumber(core.settings:get('mcl_liquids_update_speed')) or 1.0
+local UPDATE_LIMIT = (tonumber(core.settings:get('mcl_liquids_max_updates_per_second')) or 100000) * STEP_INTERVAL
 
 -- The main tick speed. Changing that tick affects all liquids
 -- proportionally.
-local main_tick = MAIN_TICK_DEFAULT
+local update_speed = UPDATE_SPEED_DEFAULT
 
 -- A list of registered liquids
 local registered_liquids = {}
@@ -43,13 +43,6 @@ local core_remove_node = core.remove_node
 local resume_counter = 1
 
 local batch_update_cnt = 0
-
-local fourdirs = {
-	vector.new(-1, 0, 0),
-	vector.new(1, 0, 0),
-	vector.new(0, 0, -1),
-	vector.new(0, 0, 1),
-}
 
 local flowable_tab = {}
 
@@ -807,7 +800,6 @@ local function register_liquid(def)
 							local belowind = a:index(x, y - 1, z)
 							local belowcid = data[belowind]
 							local belowp2 = param2_data[belowind]
-							local allow_float_into_air = cid == C_SOURCE
 
 							local function check_neigh(x2, z2)
 								local neighind = a:index(x2, y, z2)
@@ -861,7 +853,7 @@ local function register_liquid(def)
 
 
 	local function tick()
-		tick_dtime = tick_dtime + main_tick
+		tick_dtime = tick_dtime + STEP_INTERVAL * update_speed
 
 		-- If the TICKS is smaller than Luanti default tick we do
 		-- multiple steps per tick.
@@ -937,9 +929,17 @@ local function liquid_update(pos)
 	end
 end
 
+local timer = 0
 core.register_globalstep(function(dtime)
-	if is_running then
+	if not is_running then
+		timer = 0
+		return
+	end
+
+	timer = timer + dtime
+	while timer > STEP_INTERVAL do
 		liquid_tick()
+		timer = timer - STEP_INTERVAL
 	end
 end)
 
@@ -970,7 +970,7 @@ core.register_chatcommand('liquid', {
 })
 
 core.register_chatcommand('liquid_tick', {
-	params = '<seconds> | default | get',
+	params = '<factor> | default | get',
 	description =
 		S('This command sets the time passed between Luanti ticks.')..' '..
 		S('If this value is larger than the actual tick, liquids become faster than specified.'),
@@ -978,19 +978,19 @@ core.register_chatcommand('liquid_tick', {
 
 	func = function(name, param)
 		if param == 'default' then
-			main_tick = MAIN_TICK_DEFAULT
+			update_speed = UPDATE_SPEED_DEFAULT
 			return true
 		elseif param == 'get' then
-			return true, ''..main_tick
+			return true, tostring(update_speed)
 		else
-			local new_tick = tonumber(param)
-			if new_tick == nil then
+			local new_speed = tonumber(param)
+			if new_speed == nil then
 				return false
-			elseif new_tick >= 0.0 then
-				main_tick = new_tick
+			elseif new_speed >= 0.0 then
+				update_speed = new_speed
 				return true
 			else
-				return false, 'Invalid tick interval: '..param..''
+				return false, 'Invalid speed factor: '..param
 			end
 		end
 	end
