@@ -330,7 +330,7 @@ local function player_chest_close(player)
 end
 
 -- This is a helper function to register both chests and trapped chests. Trapped chests will make use of the additional parameters
-local function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help, tiles_table, hidden, redstone,
+function mcl_chests.register_chest(basename, desc, longdesc, usagehelp, tt_help, tiles_table, hidden, redstone,
 							  on_rightclick_addendum, on_rightclick_addendum_left, on_rightclick_addendum_right, drop,
 							  canonical_basename)
 	-- START OF mcl_chests.register_chest FUNCTION BODY
