@@ -26,6 +26,9 @@ local STEP_INTERVAL = (not core.is_singleplayer() and 0.01) or tonumber(core.set
 local UPDATE_SPEED_DEFAULT = tonumber(core.settings:get('mcl_liquids_update_speed')) or 1.0
 local UPDATE_LIMIT = (tonumber(core.settings:get('mcl_liquids_max_updates_per_second')) or 100000) * STEP_INTERVAL
 
+
+local PATH_FIND_DIST = 5
+
 -- The main tick speed. Changing that tick affects all liquids
 -- proportionally.
 local update_speed = UPDATE_SPEED_DEFAULT
@@ -101,6 +104,28 @@ local function register_liquid(def)
 	for i = 0, 9 do
 		level_tb[i+1] = math.round(math.floor(i * (FLOW_DISTANCE+1) / 8) * 8 / (FLOW_DISTANCE+1))
 	end
+
+
+	-- This table checks if a node is floodable
+	local floodable_tab = {}
+
+	local function init_floodable_tab()
+		floodable_tab['air'] = true
+		floodable_tab[NAME_FLOWING] = true
+		floodable_tab[NAME_SOURCE] = true
+
+		for name, ndef in pairs(core.registered_nodes) do
+
+			if core.get_item_group(name, "dig_by_water") ~= 0 then
+				floodable_tab[name] = true
+			end
+
+			if ndef.floodable then
+				floodable_tab[name] = true
+			end
+		end
+	end
+
 
 	----------------------------------------------------------------------
 	-- Variables for processing a burst of iterations
@@ -289,19 +314,14 @@ local function register_liquid(def)
 		end
 	end
 
-	local function is_floodable(n)
-		-- This function tests if the node is floodable in theory. For the final
-		-- decisions, other factors are in play as well.
-		if n.name == 'air' or n.name == NAME_SOURCE or n.name == NAME_FLOWING then
-			return true
-		else
-			local ndef = core.registered_nodes[n.name]
-			if ndef and ndef.floodable then
-				return true
-			end
-		end
-		return false
+	-- This function tests if the node is floodable in theory. For the final
+	-- decisions, other factors are in play as well.
+	-- Example: Source nodes pretend to be floodable, but when it comes to the
+	-- flooding, the action is skipped.
+	local function is_pretend_floodable(n)
+		return floodable_tab[n.name] or false
 	end
+
 
 	local pf_step_pos = vector.zero()
 
@@ -330,8 +350,8 @@ local function register_liquid(def)
 			end
 
 			local l1 = get_liquid_level(n1)
-			local f1 = is_floodable(n1)
-			local f2 = is_floodable(n2)
+			local f1 = is_pretend_floodable(n1)
+			local f2 = is_pretend_floodable(n2)
 
 			if f1 and f2 then
 				pf_found[#pf_found+1] = hpos_next
@@ -397,7 +417,7 @@ local function register_liquid(def)
 		pf_pmap[h] = orig_level
 		local level = orig_level
 
-		for i = 1, 4 do
+		for i = 1, PATH_FIND_DIST do
 			-- Decrease the liquid level.
 			level = level_tb[level]
 			if level == 0 then
@@ -478,7 +498,8 @@ local function register_liquid(def)
 		local cnt_flood = 0
 		local m = rmap_read(lt_map, p)
 		if m and m == lt_new_level then
-			if is_floodable(n) then
+			if is_pretend_floodable(n) then
+				-- Pretend floodable counts as target reached
 				cnt_flood = 1
 
 				if lt_new_level > (l or 0) then
@@ -567,38 +588,6 @@ local function register_liquid(def)
 		l121 = get_liquid_level(n121)
 
 
-		if n111.name == NAME_SOURCE then
-			-- Source nodes spread directly without path finding.
-
-			local next_level = level_tb[l111]
-
-			if is_floodable(n101) and (l101 or 0) < next_level then
-				update_next({pos=p101})
-				set_node(p101, make_liquid('down'))
-			end
-
-			if is_floodable(n011) and (l011 or 0) < next_level then
-				update_next({pos=p011})
-				set_node(p011, make_liquid(next_level))
-			end
-
-			if is_floodable(n211) and (l211 or 0) < next_level then
-				update_next({pos=p211})
-				set_node(p211, make_liquid(next_level))
-			end
-
-			if is_floodable(n110) and (l110 or 0) < next_level then
-				update_next({pos=p110})
-				set_node(p110, make_liquid(next_level))
-			end
-
-			if is_floodable(n112) and (l112 or 0) < next_level then
-				update_next({pos=p112})
-				set_node(p112, make_liquid(next_level))
-			end
-
-			return
-		end
 
 
 		-- calculate the liquid level that is supported here.
@@ -637,28 +626,23 @@ local function register_liquid(def)
 				-- The current node is on its terminal level
 				-- This means it is ready to spread.
 
-				-- Get the next level from a table
-				lt_new_level = level_tb[support_level]
 
 				local d101 = core.registered_nodes[n101.name]
 
-				if n101.name == NAME_SOURCE and n111.name ~= NAME_SOURCE then
-					-- the current node is on top of a source node. No more flowing here.
-					-- With the exception that when the current node is a source node as
-					-- well.
-				elseif
-						n101.name == 'air'        or
-						n101.name == NAME_FLOWING or
-						(d101 and d101.floodable) then
-
+				if is_pretend_floodable(n101) then
 					if not l101 or l101 < 8 then
 						-- turn the liquid below into down-flowing
 						update_next({pos=p101})
 						set_node(p101, make_liquid('down'))
-					else
-						-- The liquid already flows down
 					end
-				elseif lt_new_level and lt_new_level > 0 then
+				end
+
+				-- Get the next level from a table
+				lt_new_level = level_tb[support_level]
+
+				if (n111.name == NAME_SOURCE or not is_pretend_floodable(n101))
+						and lt_new_level and lt_new_level > 0 then
+
 					local is_new_map = false
 					if not lt_map then
 						-- Make a new map if there is none.
@@ -781,6 +765,8 @@ local function register_liquid(def)
 		'This hack does no longer work ('..NAME_SOURCE..')')
 		assert(core.registered_nodes[NAME_FLOWING].liquidtype == 'flowing',
 		'This hack does no longer work ('..NAME_FLOWING..')')
+
+		init_floodable_tab()
 	end)
 
 	local C_FLOWING = core.get_content_id(NAME_FLOWING)
