@@ -10,6 +10,7 @@ local S = core.get_translator(MODNAME)
 
 if not core.settings:get_bool('mcl_liquids_enable', false) then
 	mcl_liquids = {
+		liquids_enabled = false,
 		register_liquid = function(def)
 		end
 	}
@@ -21,7 +22,10 @@ end
 -- Variables that are the same for all liquids
 --------------------------------------------------------------------------------
 
-local STEP_INTERVAL = (not core.is_singleplayer() and 0.01) or tonumber(core.settings:get('dedicated_server_step')) or 0.09
+-- This is the initial state of the liquid transformation mod.
+-- If set to false, liquids do not flow until they activated.
+local STEP_INTERVAL = (not core.is_singleplayer() and 0.01)
+	or tonumber(core.settings:get('dedicated_server_step')) or 0.05
 local UPDATE_SPEED_DEFAULT = tonumber(core.settings:get('mcl_liquids_update_speed')) or 1.0
 local UPDATE_LIMIT = (tonumber(core.settings:get('mcl_liquids_max_updates_per_second')) or 100000) * STEP_INTERVAL
 
@@ -368,6 +372,32 @@ local function register_liquid(def)
 		end
 	end
 
+	local arshift = bit.arshift
+	local is_node_generated = function (_) return true end
+	local get_node_raw = core.get_node_raw
+
+	if mcl_vars.enable_mcl_levelgen then
+		core.register_on_mods_loaded (function ()
+			local dimension_at_layer = mcl_levelgen.dimension_at_layer
+			local is_generated = mcl_levelgen.is_generated
+			function is_node_generated (x, y, z)
+				local dim = dimension_at_layer (y)
+				return not dim or is_generated (dim, arshift (x, 4),
+								arshift (y - dim.y_global, 4),
+								arshift (z, 4))
+			end
+			local default_get_node_raw = core.get_node_raw
+			function get_node_raw (x, y, z)
+				if is_node_generated (x, y, z) then
+					local cid, param1, param2, pos_ok
+						= default_get_node_raw (x, y, z)
+					return cid, param1, param2, pos_ok
+				else
+					return nil
+				end
+			end
+		end)
+	end
 
 	--[[
 	This function creates a new liquid node.
@@ -674,8 +704,6 @@ local function register_liquid(def)
 		g_l121 = get_liquid_level(g_id121, g_par121)
 
 
-
-
 		-- calculate the liquid level that is supported here.
 		local support_level = 1
 
@@ -783,6 +811,14 @@ local function register_liquid(def)
 		update_next(x, y, z)
 	end
 
+	local function liquid_update_raw (poshash)
+		if update_next_set[poshash] == nil then
+			update_next_set[poshash] = {
+				pos = core.get_position_from_hash (poshash),
+			}
+		end
+	end
+
 	local function fix_ndef(ndef_name)
 		local ndef = core.registered_nodes[ndef_name]
 		local groups = table.copy(ndef.groups or {})
@@ -868,7 +904,7 @@ local function register_liquid(def)
 		--------------------------------------------------
 
 		-- Could spread down
-		local id101, _, p101 = core.get_node_raw (x, y-1, z)
+		local id101, _, p101 = get_node_raw (x, y-1, z)
 		if floodable_tab[id101] then return true end
 		local l101 = get_liquid_level (id101, p101)
 		if l101 and l101 < 8 then return true end
@@ -876,25 +912,25 @@ local function register_liquid(def)
 		local next_level = level_tab[8]
 
 		-- Could spread to x-1
-		local id011, _, p011 = core.get_node_raw (x-1, y, z)
+		local id011, _, p011 = get_node_raw (x-1, y, z)
 		if floodable_tab[id011] then return true end
 		local l011 = get_liquid_level (id011, p011)
 		if l011 and l011 < next_level then return true end
 
 		-- Could spread to x+1
-		local id211, _, p211 = core.get_node_raw (x+1, y, z)
+		local id211, _, p211 = get_node_raw (x+1, y, z)
 		if floodable_tab[id211] then return true end
 		local l211 = get_liquid_level (id211, p211)
 		if l211 and l211 < next_level then return true end
 
 		-- Could spread to z-1
-		local id110, _, p110 = core.get_node_raw (x, y, z-1)
+		local id110, _, p110 = get_node_raw (x, y, z-1)
 		if floodable_tab[id110] then return true end
 		local l110 = get_liquid_level (id110, p110)
 		if l110 and l110 < next_level then return true end
 
 		-- Could spread to z+1
-		local id112, _, p112 = core.get_node_raw (x, y, z+1)
+		local id112, _, p112 = get_node_raw (x, y, z+1)
 		if floodable_tab[id112] then return true end
 		local l112 = get_liquid_level (id112, p112)
 		if l112 and l112 < next_level then return true end
@@ -902,14 +938,26 @@ local function register_liquid(def)
 		return false
 	end
 
+	local band = bit.band
+
 	core.register_lbm({
 		label = "Continue the liquids",
 		name = make_lbm_name(NAME_SOURCE),
 		nodenames = {NAME_SOURCE},
 		run_at_every_load = true,
 		bulk_action = function(pos_list, dtime_s)
-			local minpos = pos_list[1]:divide(16):floor():multiply(16)
-			local maxpos = minpos:add(15)
+			local pos = pos_list[1]
+			local minpos = vector.new (band (pos.x, -16),
+						   band (pos.y, -16),
+						   band (pos.z, -16))
+			local maxpos = minpos:add (15)
+
+			if not is_node_generated (minpos.x, minpos.y, minpos.z) then
+				-- MapBlocks that have not yet been
+				-- regenerated must not be subject to
+				-- reflow processing.
+				return false
+			end
 
 			-- load neighbouring mapblocks to avoid ignore nodes
 			core.load_area(minpos:subtract(1), maxpos:add(1))
@@ -959,12 +1007,12 @@ local function register_liquid(def)
 		--------------------------------------------------
 
 		-- Could spread down
-		local id101, _, p101 = core.get_node_raw (x, y-1, z)
+		local id101, _, p101 = get_node_raw (x, y-1, z)
 		if floodable_tab[id101] then return true end
 		local l101 = get_liquid_level (id101, p101)
 		if l101 and l101 < 8 then return true end
 
-		local id111, _, p111 = core.get_node_raw (x, y, z)
+		local id111, _, p111 = get_node_raw (x, y, z)
 		local l111 = get_liquid_level (id111, p111)
 		if not l111 then
 			-- TODO handle corrupted liquid node
@@ -974,25 +1022,25 @@ local function register_liquid(def)
 		local next_level = level_tab[l111] or 0
 
 		-- Could spread to x-1
-		local id011, _, p011 = core.get_node_raw (x-1, y, z)
+		local id011, _, p011 = get_node_raw (x-1, y, z)
 		if floodable_tab[id011] then return true end
 		local l011 = get_liquid_level (id011, p011)
 		if l011 and l011 < next_level then return true end
 
 		-- Could spread to x+1
-		local id211, _, p211 = core.get_node_raw (x+1, y, z)
+		local id211, _, p211 = get_node_raw (x+1, y, z)
 		if floodable_tab[id211] then return true end
 		local l211 = get_liquid_level (id211, p211)
 		if l211 and l211 < next_level then return true end
 
 		-- Could spread to z-1
-		local id110, _, p110 = core.get_node_raw (x, y, z-1)
+		local id110, _, p110 = get_node_raw (x, y, z-1)
 		if floodable_tab[id110] then return true end
 		local l110 = get_liquid_level (id110, p110)
 		if l110 and l110 < next_level then return true end
 
 		-- Could spread to z+1
-		local id112, _, p112 = core.get_node_raw (x, y, z+1)
+		local id112, _, p112 = get_node_raw (x, y, z+1)
 		if floodable_tab[id112] then return true end
 		local l112 = get_liquid_level (id112, p112)
 		if l112 and l112 < next_level then return true end
@@ -1024,7 +1072,7 @@ local function register_liquid(def)
 
 
 		-- Check for support from above
-		local id121, _, p121 = core.get_node_raw (x, y+1, z)
+		local id121, _, p121 = get_node_raw (x, y+1, z)
 		local l121 = get_liquid_level (id121, p121)
 		if l121 and l121 > 0 then return false end
 
@@ -1041,18 +1089,19 @@ local function register_liquid(def)
 		bulk_action = function(pos_list, dtime_s)
 			local minpos = pos_list[1]:divide(16):floor():multiply(16)
 			local maxpos = minpos:add(15)
+			if is_node_generated (minpos.x, minpos.y, minpos.z) then
+				-- load neighbouring mapblocks to avoid ignore nodes
+				core.load_area(minpos:subtract(1), maxpos:add(1))
 
-			-- load neighbouring mapblocks to avoid ignore nodes
-			core.load_area(minpos:subtract(1), maxpos:add(1))
+				for i = 1, #pos_list do
+					local pos = pos_list[i]
+					local x = pos.x
+					local y = pos.y
+					local z = pos.z
 
-			for i = 1, #pos_list do
-				local pos = pos_list[i]
-				local x = pos.x
-				local y = pos.y
-				local z = pos.z
-
-				if does_fl_need_update(x, y, z) then
-					update_next(x, y, z)
+					if does_fl_need_update(x, y, z) then
+						update_next(x, y, z)
+					end
 				end
 			end
 		 end,
@@ -1142,6 +1191,9 @@ local function register_liquid(def)
 	registered_liquids[#registered_liquids+1] = {
 		tick = liquid_tick,
 		update = liquid_update,
+		update_raw = liquid_update_raw,
+		cid_source = C_SOURCE,
+		cid_flowing = C_FLOWING,
 	}
 end
 
@@ -1174,7 +1226,7 @@ core.register_globalstep(function(dtime)
 
 	timer = timer + dtime
 	while timer > STEP_INTERVAL do
-		liquid_tick()
+		liquid_tick ()
 		timer = timer - STEP_INTERVAL
 	end
 end)
@@ -1289,5 +1341,7 @@ end
 
 -- Export the liquid API functions
 mcl_liquids = {
-	register_liquid = register_liquid
+	liquids_enabled = true,
+	register_liquid = register_liquid,
+	registered_liquids = registered_liquids,
 }

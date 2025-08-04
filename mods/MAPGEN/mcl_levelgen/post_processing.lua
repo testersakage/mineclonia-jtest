@@ -1494,10 +1494,61 @@ local schedule_regeneration_for_unlock
 local apply_feature_context_requisitions
 local run_notification_handlers
 local report_mbs_generation
+local run_execution_cb
 
-local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies,
-				 features_requesting_additional_context,
-				 c_above, c_below)
+do
+
+local registered_liquids = core.global_exists ("mcl_liquids")
+	and mcl_liquids.registered_liquids
+local custom_liquids_enabled = mcl_levelgen.custom_liquids_enabled
+
+local function get_registered_liquid (cid)
+	for _, liquid in ipairs (registered_liquids) do
+		if liquid.cid_source == cid or liquid.cid_flowing == cid then
+			return liquid
+		end
+	end
+	return nil
+end
+
+local function find_gen_notify (gen_notifies, name)
+	for _, notify in ipairs (gen_notifies) do
+		if notify.name == name then
+			return notify
+		end
+	end
+	return nil
+end
+
+local function do_liquid_updates (vm, run, gen_notifies)
+	if not custom_liquids_enabled then
+		vm:update_liquids ()
+	else
+		local liquid_list
+			= find_gen_notify (gen_notifies,
+					   "mcl_levelgen:custom_liquid_list")
+		if not liquid_list then
+			return
+		end
+		for liquidtype, poses in pairs (liquid_list.data) do
+			local def = get_registered_liquid (liquidtype)
+			if not def then
+				assert (def, ("Liquid for type "
+					      .. core.get_name_from_content_id (liquidtype)
+					      .. " is not defined"))
+			end
+			local liquid_update_raw = def.update_raw
+
+			for _, pos in ipairs (poses) do
+				liquid_update_raw (pos)
+			end
+		end
+	end
+end
+
+function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies,
+			   features_requesting_additional_context,
+			   c_above, c_below)
 	if shutdown_complete then
 		vm:close ()
 		return
@@ -1515,9 +1566,7 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 		return
 	end
 	mb_records[run_hash] = nil
-
-	-- local clock = core.get_us_time ()
-	vm:update_liquids ()
+	do_liquid_updates (vm, run, gen_notifies)
 	vm:write_to_map (false)
 	-- 5.13.0 only API.
 	if vm.close then
@@ -1577,6 +1626,8 @@ local function run_execution_cb (vm, run, heightmap, relight_queue, gen_notifies
 					    c_above, c_below)
 	schedule_regeneration_for_unlock (run.x, run.z)
 	switch_to_namespace (nil)
+end
+
 end
 
 -- local function cancel_mapblock_run (run, y_min, y_max)
@@ -3073,12 +3124,15 @@ end
 function run_notification_handlers (gen_notifies)
 	for _, notify in ipairs (gen_notifies) do
 		local name = notify.name
-		local handler = registered_notification_handlers[name]
-		if not handler and not warned[name] then
-			warned[name] = true
-			core.log ("warning", "Invoking unknown feature generation handler: " .. name)
-		elseif handler then
-			handler (notify.name, notify.data)
+		-- These values are processed before vm:write_to_map.
+		if name ~= "mcl_levelgen:custom_liquid_list" then
+			local handler = registered_notification_handlers[name]
+			if not handler and not warned[name] then
+				warned[name] = true
+				core.log ("warning", "Invoking unknown feature generation handler: " .. name)
+			elseif handler then
+				handler (notify.name, notify.data)
+			end
 		end
 	end
 end
