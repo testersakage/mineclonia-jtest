@@ -363,7 +363,7 @@ local function register_liquid(def)
 	end
 
 	-- This function searches the nearest slopes within a maximum path distance
-	-- of 5 nodes.
+	-- of 4 nodes.
 	-- If any node was 'ignore' then this function returns nil.
 	local function path_find(pos, slope_dist)
 		local orig_level = get_liquid_level(get_node(pos))
@@ -395,7 +395,7 @@ local function register_liquid(def)
 		pf_pmap[h] = orig_level
 		local level = orig_level
 
-		for i = 1, 5 do
+		for i = 1, 4 do
 			-- Decrease the liquid level.
 			level = level_tb[level]
 			if level == 0 then
@@ -563,6 +563,41 @@ local function register_liquid(def)
 		l101 = get_liquid_level(n101)
 		l121 = get_liquid_level(n121)
 
+
+		if n111.name == NAME_SOURCE then
+			-- Source nodes spread directly without path finding.
+
+			local next_level = level_tb[l111]
+
+			if is_floodable(n101) and (l101 or 0) < next_level then
+				update_next({pos=p101})
+				set_node(p101, make_liquid('down'))
+			end
+
+			if is_floodable(n011) and (l011 or 0) < next_level then
+				update_next({pos=p011})
+				set_node(p011, make_liquid(next_level))
+			end
+
+			if is_floodable(n211) and (l211 or 0) < next_level then
+				update_next({pos=p211})
+				set_node(p211, make_liquid(next_level))
+			end
+
+			if is_floodable(n110) and (l110 or 0) < next_level then
+				update_next({pos=p110})
+				set_node(p110, make_liquid(next_level))
+			end
+
+			if is_floodable(n112) and (l112 or 0) < next_level then
+				update_next({pos=p112})
+				set_node(p112, make_liquid(next_level))
+			end
+
+			return
+		end
+
+
 		-- calculate the liquid level that is supported here.
 		local support_level = 1
 
@@ -681,9 +716,6 @@ local function register_liquid(def)
 		update_next({pos = p})
 	end
 
-	core.register_on_placenode(liquid_update)
-	core.register_on_dignode(liquid_update)
-
 	local function fix_ndef(ndef_name)
 		local ndef = core.registered_nodes[ndef_name]
 		local groups = table.copy(ndef.groups or {})
@@ -711,18 +743,6 @@ local function register_liquid(def)
 			paramtype2 = "flowingliquid",
 			groups = groups,
 			liquid_move_physics = liquid_move_physics,
-			on_construct = function(pos)
-				liquid_update(pos)
-				if on_construct then
-					on_construct(pos)
-				end
-			end,
-			after_destruct = function(pos)
-				liquid_update(pos)
-				if after_destruct then
-					after_destruct(pos)
-				end
-			end,
 		}, {'liquidtype'})
 
 	end
