@@ -128,7 +128,7 @@ mcl_bonus_chest.bonus_loot = {
 }
 
 function mcl_bonus_chest.place_chest(pos, loot, pr)
-	local pr = pr or PseudoRandom(core.hash_node_position(pos) + core.get_mapgen_setting("seed"))
+	local pr = pr or PcgRandom(core.hash_node_position(pos) + core.get_mapgen_setting("seed"))
 	local loot = loot or mcl_bonus_chest.bonus_loot
 	local pp = core.find_nodes_in_area_under_air(vector.offset(pos, -5,-3,-5), vector.offset(pos, 5,3,5), {"mcl_core:dirt_with_grass", "mcl_core:stone", "group:solid"})
 	if pp and #pp > 0 then

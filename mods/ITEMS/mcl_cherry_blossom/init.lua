@@ -77,7 +77,7 @@ core.register_abm({
 	chance = 2,
 	action = function(pos)
 		if core.get_node(vector.offset(pos, 0, -1, 0)).name ~= "air" then return end
-		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10)) -- make particles change direction every 10 minutes
+		local pr = PcgRandom(math.ceil(os.time() / 60 / 10)) -- make particles change direction every 10 minutes
 		local v = vector.new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
 		v.y = pr:next(-9, -4) / 10
 		for pl in mcl_util.connected_players(pos, PARTICLE_DISTANCE) do

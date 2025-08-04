@@ -366,7 +366,7 @@ end
 local function dungeons_nodes(minp, maxp, blockseed)
 	local ymin, ymax = math.max(min_y, minp.y),  math.min(max_y, maxp.y)
 	if ymax < ymin then return false end
-	local pr = PseudoRandom(blockseed)
+	local pr = PcgRandom(blockseed)
 	for _ = 1, attempts do
 		local dim = dungeonsizes[pr:next(1, #dungeonsizes)]
 		if ymin <= ymax - dim.y - 1 then

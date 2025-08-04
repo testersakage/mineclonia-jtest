@@ -5777,7 +5777,7 @@ end
 if deco_id_chorus_plant or deco_ids_trees then
 	mcl_mapgen_core.register_generator("chorus_grow", nil, function(minp, maxp, blockseed)
 		local gennotify = core.get_mapgen_object("gennotify")
-		local pr = PseudoRandom(blockseed + 14)
+		local pr = PcgRandom(blockseed + 14)
 		if not (maxp.y < mcl_vars.mg_overworld_min or minp.y > mcl_vars.mg_overworld_max) then
 			local biomemap = core.get_mapgen_object("biomemap")
 			-- get_mapgen_object returns nil with lua mapgens

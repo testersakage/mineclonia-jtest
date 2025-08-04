@@ -277,7 +277,7 @@ end
 -- Work out which end points should be connected
 -- works from the outside of the village in
 function mcl_villages.paths_new(blockseed, biome_name)
-	local pr = PseudoRandom(blockseed)
+	local pr = PcgRandom(blockseed)
 	local pathends = path_ends["block_" .. blockseed]
 
 	if pathends == nil then

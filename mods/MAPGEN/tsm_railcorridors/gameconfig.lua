@@ -35,7 +35,7 @@ end
 
 -- Fallback function. Returns a random treasure. This function is called for chests
 -- only if the Treasurer mod is not found.
--- pr: A PseudoRandom object
+-- pr: A PcgRandom object
 function tsm_railcorridors.get_default_treasure(_)
 	-- UNUSED IN MINECLONE 2!
 end

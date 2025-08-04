@@ -7,7 +7,7 @@ function mcl_bamboo.random(pos)
 end
 
 function mcl_bamboo.check_structure(pos)
-	local pr = PseudoRandom(core.hash_node_position(pos))
+	local pr = PcgRandom(core.hash_node_position(pos))
 	local max_height = pr:next(12,16)
 	local bottom = mcl_util.traverse_tower_group(pos,-1,"bamboo_tree")
 	local top,h = mcl_util.traverse_tower_group(bottom,1,"bamboo_tree")
@@ -50,7 +50,7 @@ function mcl_bamboo.check_structure(pos)
 end
 
 function mcl_bamboo.grow(pos)
-	local pr = PseudoRandom(core.hash_node_position(pos))
+	local pr = PcgRandom(core.hash_node_position(pos))
 	local max_height = pr:next(12,16)
 	local bottom = mcl_util.traverse_tower_group(pos,-1,"bamboo_tree")
 	local top,h = mcl_util.traverse_tower_group(bottom,1,"bamboo_tree")

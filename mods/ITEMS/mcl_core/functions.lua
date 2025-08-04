@@ -175,7 +175,7 @@ core.register_abm({
 	end,
 })
 
-local grass_spread_randomizer = PseudoRandom(core.get_mapgen_setting("seed"))
+local grass_spread_randomizer = PcgRandom(core.get_mapgen_setting("seed"))
 
 function mcl_core.get_grass_palette_index(pos)
 	local biome_data = core.get_biome_data(pos)

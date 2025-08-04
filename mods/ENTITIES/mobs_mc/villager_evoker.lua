@@ -13,7 +13,7 @@ local is_valid = mcl_util.is_valid_objectref
 --################### EVOKER
 --###################
 
-local pr = PseudoRandom (os.time () * 666)
+local pr = PcgRandom (os.time () * 666)
 
 local evoker = table.merge (illager, {
 	description = S("Evoker"),

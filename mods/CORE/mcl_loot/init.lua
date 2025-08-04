@@ -29,7 +29,7 @@ Parameters:
 		{ -- more tables like above, one table per item stack }
 	}
 }
-* pr: PseudoRandom object used for the randomness
+* pr: PcgRandom object used for the randomness
 
 How weight works: The probability of a single item stack being selected is weight/total_weight, with
 total_weight being the sum of all weight values in the items table. If you leave out the weight for
@@ -72,7 +72,7 @@ function mcl_loot.get_loot(loot_definitions, pr)
 				end
 
 				if item.wear_min and item.wear_max then
-					-- Sadly, PseudoRandom only allows very narrow ranges, so we set wear in steps of 10
+					-- Sadly, PcgRandom only allows very narrow ranges, so we set wear in steps of 10
 					local wear_min = math.floor(item.wear_min / 10)
 					local wear_max = math.floor(item.wear_max / 10)
 
@@ -98,7 +98,7 @@ Repeat mcl_loot.get_loot multiple times for various loot_definitions.
 Useful for filling chests.
 
 * multi_loot_definitions: Table of loot_definitions (see mcl_loot.get_loot)
-* pr: PseudoRandom object used for the randomness
+* pr: PcgRandom object used for the randomness
 
 Returns: Table of ItemStacks ]]
 function mcl_loot.get_multi_loot(multi_loot_definitions, pr)

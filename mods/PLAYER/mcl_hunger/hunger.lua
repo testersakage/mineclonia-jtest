@@ -72,7 +72,7 @@ function mcl_hunger.reset_bars_poison_hunger(player)
 	end
 end
 
-local poisonrandomizer = PseudoRandom(os.time())
+local poisonrandomizer = PcgRandom(os.time())
 
 function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poison, exhaust, poisonchance)
 	return function(itemstack, user)

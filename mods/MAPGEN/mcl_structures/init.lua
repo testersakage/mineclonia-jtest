@@ -133,7 +133,7 @@ core.register_chatcommand("spawnstruct", {
 		pos = vector.round(pos)
 		local dir = core.yaw_to_dir(player:get_look_horizontal())
 		local rot = dir_to_rotation(dir)
-		local pr = PseudoRandom(pos.x+pos.y+pos.z)
+		local pr = PcgRandom(pos.x+pos.y+pos.z)
 		local errord = false
 		local message = S("Structure placed.")
 		if param == "dungeon" and mcl_dungeons and mcl_dungeons.spawn_dungeon then

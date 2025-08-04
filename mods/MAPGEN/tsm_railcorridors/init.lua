@@ -108,13 +108,13 @@ local pr, pr_carts, pr_deco, webperlin_major, webperlin_minor
 
 local function InitRandomizer(seed)
 	-- Mostly used for corridor gen.
-	pr = PseudoRandom(seed)
+	pr = PcgRandom(seed)
 	-- Dirt room decorations
-	pr_deco = PseudoRandom(seed+25)
+	pr_deco = PcgRandom(seed+25)
 	-- Separate randomizer for carts because spawning carts is very timing-dependent
-	pr_carts = PseudoRandom(seed-654)
+	pr_carts = PcgRandom(seed-654)
 	-- Chest contents randomizer
-	--pr_treasures = PseudoRandom(seed+777)
+	--pr_treasures = PcgRandom(seed+777)
 	-- Used for cobweb generation, both noises have to reach a high value for cobwebs to appear
 	webperlin_major = PerlinNoise(934, 3, 0.6, 500)
 	webperlin_minor = PerlinNoise(834, 3, 0.6, 50)

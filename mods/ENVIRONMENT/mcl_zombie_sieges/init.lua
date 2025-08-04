@@ -34,7 +34,7 @@ mcl_events.register_event("zombie_siege",{
 		local r = {}
 
 		local t = core.get_timeofday()
-		local pr = PseudoRandom(core.get_day_count())
+		local pr = PcgRandom(core.get_day_count())
 		local rnd = pr:next(1,10)
 
 		if t < 0.04 and rnd == 1 then

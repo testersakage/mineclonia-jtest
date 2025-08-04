@@ -30,7 +30,7 @@ end, function(minp,maxp,blockseed)
 		return
 	end
 	local nn = core.find_nodes_in_area_under_air(minp,maxp,{"mcl_end:end_stone"})
-	local pr = PseudoRandom(blockseed)
+	local pr = PcgRandom(blockseed)
 	table.shuffle(nn)
 	if nn and #nn > 0 then
 		for i=1,pr:next(1,math.min(5,#nn)) do

@@ -233,7 +233,7 @@ function mcl_portals.end_teleport(obj, pos)
 		-- Teleport to the End at a fixed position.
 		-- The destination is built by mcl_structures.
 		core.load_area(vector.subtract(mcl_vars.mg_end_platform_pos, 8), vector.add(mcl_vars.mg_end_platform_pos, 8))
-		mcl_structures.place_structure(mcl_vars.mg_end_platform_pos, mcl_structures.registered_structures["end_spawn_obsidian_platform"], PseudoRandom(core.get_mapgen_setting("seed")),-1)
+		mcl_structures.place_structure(mcl_vars.mg_end_platform_pos, mcl_structures.registered_structures["end_spawn_obsidian_platform"], PcgRandom(core.get_mapgen_setting("seed")),-1)
 		teleport_object(obj, vector.offset(mcl_vars.mg_end_platform_pos, 0, 1, 0), dim)
 	end
 end
