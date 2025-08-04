@@ -1,7 +1,7 @@
 --License for code WTFPL and otherwise stated in readmes
 
 local S = core.get_translator("mobs_mc")
-local pr = PseudoRandom (os.time () *10)
+local pr = PcgRandom (os.time () *10)
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 

@@ -445,7 +445,7 @@ end
 
 --- ABM ---
 local seed = core.get_mapgen_setting("seed")
-local pr = PseudoRandom(seed)
+local pr = PcgRandom(seed)
 core.register_abm({
 	label = "Chorus plant growth",
 	nodenames = { "mcl_end:chorus_flower" },

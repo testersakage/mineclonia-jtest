@@ -8,7 +8,7 @@ mcl_charges.register_charge("wind_charge", S("Wind Charge"), {
 	hit_mob = mcl_mobs.get_arrow_damage_func(6, "fireball"),
 	hit_node = function(self, pos, node)
 		mcl_charges.wind_burst(pos, damage_radius)
-		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10)) -- make particles change direction every 10 minutes
+		local pr = PcgRandom(math.ceil(os.time() / 60 / 10)) -- make particles change direction every 10 minutes
 		local v = vector.new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
 		v.y = pr:next(-9, -4) / 10
 		core.add_particlespawner(table.merge(mcl_charges.wind_burst_spawner, {
@@ -42,7 +42,7 @@ mcl_charges.register_charge("wind_charge", S("Wind Charge"), {
 	end,
 	hit_player_alt = function(_, pos)
 		mcl_charges.wind_burst(pos, damage_radius)
-		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10))
+		local pr = PcgRandom(math.ceil(os.time() / 60 / 10))
 		local v = vector.new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
 		v.y = pr:next(-9, -4) / 10
 		core.add_particlespawner(table.merge(mcl_charges.wind_burst_spawner, {
@@ -55,7 +55,7 @@ mcl_charges.register_charge("wind_charge", S("Wind Charge"), {
 	end,
 	hit_mob_alt = function(_, pos)
 		mcl_charges.wind_burst(pos, damage_radius)
-		local pr = PseudoRandom(math.ceil(os.time() / 60 / 10))
+		local pr = PcgRandom(math.ceil(os.time() / 60 / 10))
 		local v = vector.new(pr:next(-2, 2)/10, 0, pr:next(-2, 2)/10)
 		v.y = pr:next(-9, -4) / 10
 		core.add_particlespawner(table.merge(mcl_charges.wind_burst_spawner, {

@@ -83,7 +83,7 @@ local function spawn_crystal(pos)
 		crystal_explode(crystal)
 	end
 	local portal_pos = vector.add(portal_center, vector.new(0, -1, 0))
-	mcl_structures.place_structure(portal_pos,mcl_structures.registered_structures["end_exit_portal"],PseudoRandom(core.get_mapgen_setting("seed")),-1)
+	mcl_structures.place_structure(portal_pos,mcl_structures.registered_structures["end_exit_portal"],PcgRandom(core.get_mapgen_setting("seed")),-1)
 end
 
 core.register_entity("mcl_end:crystal", {

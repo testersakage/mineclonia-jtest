@@ -30,7 +30,7 @@ local function build_a_settlement(minp, maxp, blockseed)
 		return
 	end
 
-	local pr = PseudoRandom(blockseed)
+	local pr = PcgRandom(blockseed)
 
 	local settlement_info, grid = mcl_villages.create_site_plan_new(minp, maxp, pr)
 
@@ -67,7 +67,7 @@ if mg_name ~= "singlenode" or generate_in_singlenode then
 		if village_chance == 0 then
 			return
 		end
-		local pr = PseudoRandom(blockseed)
+		local pr = PcgRandom(blockseed)
 		if pr:next(1, village_chance) == 1 then
 			local big_minp = vector.offset(minp, -16, -16, -16)
 			local big_maxp = vector.offset(maxp, 16, 16, 16)

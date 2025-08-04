@@ -174,7 +174,7 @@ end
 -- Below the bedrock, generate air/void
 local function world_structure(vm, data, data2, emin, emax, area, minp, maxp, blockseed) ---@diagnostic disable-line: unused-local
 	local lvm_used = false
-	local pr = PseudoRandom(blockseed)
+	local pr = PcgRandom(blockseed)
 
 	-- The Void below the Nether:
 	lvm_used = set_layers(data, area, c_void         , nil, mcl_vars.mapgen_edge_min                     , mcl_vars.mg_nether_min                     -1, minp, maxp, lvm_used, pr)

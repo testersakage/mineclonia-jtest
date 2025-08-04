@@ -25,7 +25,7 @@ local function init_strongholds()
 	if (mg_name == "singlenode" and not generate_in_singlenode) then
 		return {}
 	end
-	local pr = PseudoRandom(seed)
+	local pr = PcgRandom(seed)
 	for s=1, #stronghold_rings do
 		local ring = stronghold_rings[s]
 
