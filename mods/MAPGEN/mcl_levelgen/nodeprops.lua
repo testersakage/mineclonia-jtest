@@ -247,6 +247,7 @@ local is_cid_buildable_to = {}
 local is_cid_frosted_ice = {}
 local is_cid_opaque = {}
 local is_cid_wall = {}
+local is_cid_floodable = {}
 local double_plant_tops = {}
 local paramtype2 = {}
 local mathmin = math.min
@@ -288,6 +289,8 @@ local function initialize_nodeprops ()
 	cid_crimson_fungus = core.get_content_id ("mcl_crimson:crimson_fungus")
 	cid_warped_fungus = core.get_content_id ("mcl_crimson:warped_fungus")
 	cid_nether_sprouts = core.get_content_id ("mcl_crimson:nether_sprouts")
+
+	is_cid_floodable[cid_air] = true
 
 	for i = 1, 8 do
 		local cid
@@ -385,6 +388,9 @@ local function initialize_nodeprops ()
 		end
 		if def.groups.wall and def.groups.wall >= 1 then
 			is_cid_wall[cid] = true
+		end
+		if def.floodable then
+			is_cid_floodable[cid] = true
 		end
 		paramtype2[cid] = def.paramtype2
 	end
@@ -1168,6 +1174,10 @@ function mcl_levelgen.count_adjoining_non_air (x, y, z)
 	return cnt, cnt_x, cnt_z
 end
 
+function mcl_levelgen.floodable_p (cid)
+	return is_cid_floodable[cid]
+end
+
 --------------------------------------------------------------------------
 -- Utility functions.
 --------------------------------------------------------------------------
@@ -1263,6 +1273,33 @@ function mcl_levelgen.just_one_neighboring_p (x, y, z, predicate)
 	end
 	return cnt_neighbors == 1
 end
+
+--------------------------------------------------------------------------
+-- Lua liquid transformation support.
+-- XXX: derive this from mcl_liquid.registered_liquids.
+--------------------------------------------------------------------------
+
+function mcl_levelgen.id_fluid_cid (cid)
+	if cid == cid_water_source or cid == cid_water_flowing then
+		return cid_water_flowing
+	elseif cid == cid_lava_source or cid == cid_lava_flowing then
+		return cid_lava_flowing
+	elseif cid == cid_nether_lava_source
+		or cid == cid_nether_lava_flowing then
+		return cid_nether_lava_flowing
+	else
+		return nil
+	end
+end
+
+mcl_levelgen.all_fluids = {
+	cid_water_flowing,
+	cid_water_source,
+	cid_lava_flowing,
+	cid_lava_source,
+	cid_nether_lava_flowing,
+	cid_nether_lava_source,
+}
 
 --------------------------------------------------------------------------
 -- Late initialization.

@@ -89,15 +89,22 @@ if core and core.settings then
 		= core.settings:get_bool ("mcl_levelgen_use_ffi", false)
 	mcl_levelgen.use_large_biomes
 		= core.settings:get_bool ("mcl_levelgen_use_large_biomes", false)
+	mcl_levelgen.custom_liquids_enabled
+		= core.settings:get_bool ("mcl_liquids_enable", false)
 	core.ipc_set ("mcl_levelgen:use_ffi", mcl_levelgen.use_ffi)
 	core.ipc_set ("mcl_levelgen:use_large_biomes", mcl_levelgen.use_large_biomes)
+	core.ipc_set ("mcl_levelgen:custom_liquids_enabled",
+		      mcl_levelgen.custom_liquids_enabled)
 elseif core then
 	mcl_levelgen.use_ffi = core.ipc_get ("mcl_levelgen:use_ffi") or false
 	mcl_levelgen.use_large_biomes
 		= core.ipc_get ("mcl_levelgen:use_large_biomes") or false
+	mcl_levelgen.custom_liquids_enabled
+		= core.ipc_get ("mcl_levelgen:custom_liquids_enabled") or false
 else
 	mcl_levelgen.use_ffi = false
 	mcl_levelgen.use_large_biomes = false
+	mcl_levelgen.custom_liquids_enabled = false
 end
 
 if mcl_levelgen.use_ffi then

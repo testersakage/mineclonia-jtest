@@ -8,6 +8,7 @@ local S = core.get_translator(core.get_current_modname())
 
 if not core.settings:get_bool('mcl_liquids_enable', false) then
 	mcl_liquid = {
+		liquids_enabled = false,
 		register_liquid = function(def)
 		end
 	}
@@ -22,7 +23,8 @@ end
 -- If set to false, liquids do not flow until they activated.
 local is_running = true
 
-local STEP_INTERVAL = (not core.is_singleplayer() and 0.01) or tonumber(core.settings:get('dedicated_server_step')) or 0.09
+local STEP_INTERVAL = (not core.is_singleplayer() and 0.01)
+	or tonumber(core.settings:get('dedicated_server_step')) or 0.05
 local UPDATE_SPEED_DEFAULT = tonumber(core.settings:get('mcl_liquids_update_speed')) or 1.0
 local UPDATE_LIMIT = (tonumber(core.settings:get('mcl_liquids_max_updates_per_second')) or 100000) * STEP_INTERVAL
 
@@ -51,8 +53,8 @@ local flowable_tab = {}
 
 core.register_on_mods_loaded(function()
 	flowable_tab[core.CONTENT_AIR] = true
-	for name, _ in pairs(core.registered_nodes) do
-		if core.get_item_group(name, "dig_by_water") ~= 0 then
+	for name, def in pairs(core.registered_nodes) do
+		if def.floodable then
 			flowable_tab[core.get_content_id(name)] = true
 		end
 	end
@@ -265,15 +267,41 @@ local function register_liquid(def)
 		end
 	end
 
+	local get_node_or_nil = core.get_node_or_nil
+	local levelgen_enabled = mcl_vars.enable_mcl_levelgen
+	local arshift = bit.arshift
+	local is_node_generated
+
+	core.register_on_mods_loaded (function ()
+		local dimension_at_layer = mcl_levelgen.dimension_at_layer
+		local is_generated = mcl_levelgen.is_generated
+		function is_node_generated (v)
+			local dim = dimension_at_layer (v.y)
+			return not dim or is_generated (dim, arshift (v.x, 4),
+							arshift (v.y - dim.y_global, 4),
+							arshift (v.z, 4))
+		end
+	end)
+
+	local function get_node_table (pos)
+		if not levelgen_enabled or is_node_generated (pos) then
+			local tbl = get_node_or_nil (pos)
+			return tbl or false
+		end
+		return false
+	end
+
 	local function get_node(pos)
-		-- This function is the just the cached version of the `core.get_node()`
+		-- This function is the just a caching version of
+		-- `core.get_node()` which takes level regeneration
+		-- into account.
 		local h = core.hash_node_position(pos)
 		local node = read_nodes_cache[h]
 
-		if node then
+		if node ~= nil then
 			return node
 		else
-			node = core.get_node_or_nil(pos)
+			node = get_node_table (pos)
 			read_nodes_cache[h] = node
 			return node
 		end
@@ -700,6 +728,14 @@ local function register_liquid(def)
 		update_next({pos = p})
 	end
 
+	local function liquid_update_raw (poshash)
+		if update_next_set[poshash] == nil then
+			update_next_set[poshash] = {
+				pos = core.get_position_from_hash (poshash),
+			}
+		end
+	end
+
 	local function fix_ndef(ndef_name)
 		local ndef = core.registered_nodes[ndef_name]
 		local groups = table.copy(ndef.groups or {})
@@ -769,7 +805,8 @@ local function register_liquid(def)
 	-- Liquid can flow into a node if it is flowable or the corresponding
 	-- flowing liquid with a lower liquid level.
 	local function can_flow_into(cid, param2, max_level)
-		return flowable_tab[cid] or (cid == C_FLOWING and param2 < max_level)
+		return flowable_tab[cid]
+			or (cid == C_FLOWING and param2 < max_level)
 	end
 
 	local function check_neigh(x2, y, z2, max_level)
@@ -777,17 +814,30 @@ local function register_liquid(def)
 		return neighcid and can_flow_into(neighcid, neighp2, max_level)
 	end
 
+	local band = bit.band
+
 	core.register_lbm({
 		label = "Continue the liquids",
 		name = modname..":resume_liquid_source_"..resume_counter,
 		nodenames = {NAME_SOURCE, NAME_FLOWING},
 		run_at_every_load = true,
 		bulk_action = function(pos_list, dtime_s)
-			local minpos = pos_list[1]:divide(16):floor():multiply(16)
-			local maxpos = minpos:add(15)
+			local pos = pos_list[1]
+			local minpos = vector.new (band (pos.x, -16),
+						   band (pos.y, -16),
+						   band (pos.z, -16))
+			local maxpos = minpos:add (15)
+
+			if levelgen_enabled
+				and not is_node_generated (pos) then
+				-- MapBlocks that have not yet been
+				-- regenerated must not be subject to
+				-- reflow processing.
+				return false
+			end
 
 			-- Load neighbouring mapblocks to avoid ignore nodes
-			core.load_area(minpos:subtract(1), core.load_area(maxpos:add(1)))
+			core.load_area (minpos:subtract (1), maxpos:add (1))
 
 			for i = 1, #pos_list do
 				local pos = pos_list[i]
@@ -893,6 +943,9 @@ local function register_liquid(def)
 	registered_liquids[#registered_liquids+1] = {
 		tick = tick,
 		update = liquid_update,
+		update_raw = liquid_update_raw,
+		cid_source = C_SOURCE,
+		cid_flowing = C_FLOWING,
 	}
 end
 
@@ -927,7 +980,7 @@ core.register_globalstep(function(dtime)
 
 	timer = timer + dtime
 	while timer > STEP_INTERVAL do
-		liquid_tick()
+		liquid_tick ()
 		timer = timer - STEP_INTERVAL
 	end
 end)
@@ -1042,5 +1095,7 @@ end
 
 -- Export the liquid API functions
 mcl_liquid = {
-	register_liquid = register_liquid
+	liquids_enabled = true,
+	register_liquid = register_liquid,
+	registered_liquids = registered_liquids,
 }

@@ -130,6 +130,7 @@ globals = {
 	"mcl_lanterns",
 	"mcl_lectern",
 	"mcl_lightning_rods",
+	"mcl_liquid",
 	"mcl_loom",
 	"mcl_loot",
 	"mcl_mangrove",
