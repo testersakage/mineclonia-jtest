@@ -405,6 +405,8 @@ local function convert_minetest_position (x, y, z)
 	return x, y + y_offset, -z - 1
 end
 
+local custom_liquids_enabled = mcl_levelgen.custom_liquids_enabled
+
 function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap,
 					p_structure_masks, p_structure_features,
 					p_biomes, p_y_offset, p_level_min,
@@ -458,6 +460,9 @@ function mcl_levelgen.process_features (p_vm, p_run, p_heightmap, p_wg_heightmap
 	-- local clock = core.get_us_time ()
 	-- mcl_levelgen.test_structuremask ()
 	mcl_levelgen.process_features_1 ()
+	if custom_liquids_enabled then
+		mcl_levelgen.scan_fluids ()
+	end
 	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
 	if vm_modified then
 		vm:set_data (cids)
@@ -818,6 +823,79 @@ function mcl_levelgen.request_additional_context (yabove, ybelow)
 		= mathmax (context_expansion_above, yabove)
 	context_expansion_below
 		= mathmax (context_expansion_below, ybelow)
+end
+
+------------------------------------------------------------------------
+-- Lua fluid transformation support.
+------------------------------------------------------------------------
+
+local ipos3 = mcl_levelgen.ipos3
+
+local function longhash (x, y, z)
+	return (32768 + z) * 65536 * 65536 + (32768 + y) * 65536
+		+ (32768 + x)
+end
+
+local floodable_p = mcl_levelgen.floodable_p
+
+local function neighbor_floodable_p (z, y, x, height, cid_flowing)
+	local idx = area:index (x, y, z)
+	local cid, param2 = cids[idx], param2s[idx]
+	return floodable_p (cid)
+		or (cid == cid_flowing and param2 < height)
+end
+
+function mcl_levelgen.scan_fluids ()
+	local id_fluid_cid = mcl_levelgen.id_fluid_cid
+	local all_fluids = mcl_levelgen.all_fluids
+	local ymax = mcl_levelgen.placement_level_height - 1
+	local list = {}
+
+	for _, cid in ipairs (all_fluids) do
+		list[cid] = {}
+	end
+
+	local min, max = vm:get_emerged_area ()
+	local min_x = min.x
+	local min_y = min.y
+	local min_z = min.z
+	local max_x = max.x
+	local max_y = max.y
+	local max_z = max.z
+	-- local clock = core.get_us_time ()
+
+	-- XXX: insufficient context is available to placement runs to
+	-- update liquid flows which are obstructed by the borders of
+	-- a locked region.
+
+	for z, y, x in ipos3 (min_z, min_y, min_x, max_z, max_y, max_x) do
+		local index = area:index (x, y, z)
+		local cid, param2 = cids[index], param2s[index]
+		local cid_flowing = id_fluid_cid (cid)
+
+		if cid_flowing then
+			local height = cid ~= cid_flowing and 8 or param2
+			if (y > min_y and neighbor_floodable_p (z, y - 1, x,
+								param2, cid_flowing))
+				or (z < max_z and neighbor_floodable_p (z + 1, y, x, height,
+									cid_flowing))
+				or (z > min_z and neighbor_floodable_p (z - 1, y, x, height,
+									cid_flowing))
+				or (x > min_x and neighbor_floodable_p (z, y, x + 1, height,
+									cid_flowing))
+				or (x < max_x and neighbor_floodable_p (z, y, x - 1, height,
+									cid_flowing)) then
+				insert (list[cid], longhash (x, y, z))
+			end
+		end
+	end
+	-- print ((core.get_us_time () - clock) / 1000)
+
+	insert (gen_notifies, {
+		name = "mcl_levelgen:custom_liquid_list",
+		data = list,
+		append = false,
+	})
 end
 
 ------------------------------------------------------------------------
