@@ -144,6 +144,8 @@ local function register_liquid(def)
 	----------------------------------------------------------------------
 
 	-- variables for the positions
+	-- NOTE: The vectors must not be recycled because the references might be
+	-- used in the next iteration.
 	local p111 -- center
 	local p011 -- left
 	local p211 -- right
@@ -517,6 +519,7 @@ local function register_liquid(def)
 			return
 		end
 
+		-- calculate the position of the neighbors
 		p011 = vector.offset(p111, -1,  0,  0)
 		p211 = vector.offset(p111,  1,  0,  0)
 		p101 = vector.offset(p111,  0, -1,  0)
