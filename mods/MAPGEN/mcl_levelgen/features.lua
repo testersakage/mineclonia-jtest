@@ -848,7 +848,6 @@ end
 function mcl_levelgen.scan_fluids ()
 	local id_fluid_cid = mcl_levelgen.id_fluid_cid
 	local all_fluids = mcl_levelgen.all_fluids
-	local ymax = mcl_levelgen.placement_level_height - 1
 	local list = {}
 
 	for _, cid in ipairs (all_fluids) do
