@@ -980,7 +980,7 @@ function mob_class:check_despawn_on_activation (self_pos)
 
 		-- Mobs loaded before mob caps were first initialized.
 		local global = current_mob_caps
-		if not global then
+		if not global or not spawn_border_chunks then
 			core.log ("warning", self.name .. " was loaded before spawning "
 				  .. "was initialized.")
 			return false

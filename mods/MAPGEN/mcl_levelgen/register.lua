@@ -153,4 +153,8 @@ function mcl_levelgen.is_protected_chunk (_)
 	return false
 end
 
+function mcl_levelgen.get_dimension (_)
+	return nil
+end
+
 end
