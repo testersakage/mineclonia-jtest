@@ -44,6 +44,23 @@ mcl_structures.register_structure("end_exit_portal",{
 		end)
 	end
 })
+
+mcl_structures.register_structure("end_exit_portal_deferred",{
+	static_pos = { mcl_vars.mg_end_exit_portal_pos },
+	filenames = {
+		modpath.."/schematics/mcl_structures_end_exit_portal.mts"
+	},
+	after_place = function(pos, _, _, blockseed)
+		local p1 = vector.offset(pos,-16,-16,-16)
+		local p2 = vector.offset(pos,16,21,16)
+		core.emerge_area(p1,p2,function(_, _, calls_remaining)
+			if calls_remaining > 0 then return end
+			mcl_util.bulk_swap_node(core.find_nodes_in_area(p1,p2,{"mcl_portals:portal_end"}),{name="air"})
+			core.fix_light(p1,p2)
+		end)
+	end
+})
+
 mcl_structures.register_structure("end_exit_portal_open",{
 	filenames = {
 		modpath.."/schematics/mcl_structures_end_exit_portal.mts"
