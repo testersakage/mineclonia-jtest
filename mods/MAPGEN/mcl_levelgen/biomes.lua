@@ -1676,6 +1676,7 @@ function mcl_levelgen.construct_nether_lut ()
 		construct_biome ("BasaltDeltas", {-0.5, -0.5,}, ZERO,
 				 ZERO, ZERO, ZERO, ZERO, 0.175),
 	}
+	print_biome_report ("Nether", nodes)
 	return build_rtree (table.copy (nodes)), nodes
 end
 
