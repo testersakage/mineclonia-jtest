@@ -777,47 +777,35 @@ local function register_liquid(def)
 		return neighcid and can_flow_into(neighcid, neighp2, max_level)
 	end
 
-	local band = bit.band
-
 	core.register_lbm({
 		label = "Continue the liquids",
 		name = modname..":resume_liquid_source_"..resume_counter,
 		nodenames = {NAME_SOURCE, NAME_FLOWING},
 		run_at_every_load = true,
 		bulk_action = function(pos_list, dtime_s)
+			local minpos = pos_list[1]:divide(16):floor():multiply(16)
+			local maxpos = minpos:add(15)
+
 			-- Load neighbouring mapblocks to avoid ignore nodes
-			local pos = pos_list[1]
-			local minpos = vector.new (band(pos.x, -16),
-						   band(pos.y, -16),
-						   band(pos.z, -16))
-			local maxpos = minpos:add (15)
+			core.load_area(minpos:subtract(1), core.load_area(maxpos:add(1)))
 
-			local v = vector.new ()
-			local minx = minpos.x
-			local miny = minpos.y
-			local minz = minpos.z
-			local maxx = maxpos.x
-			local maxy = maxpos.y
-			local maxz = maxpos.z
-			for z = minz, maxz do
-				for y = miny, maxy do
-					for x = minx, maxx do
-						local cid, param2 = core.get_node_raw (x, y, z)
-						if cid == C_SOURCE or cid == C_FLOWING then
-							local max_level = param2 - 1
-							local belowcid, belowp2	= core.get_node_raw (x, y - 1, z)
+			for i = 1, #pos_list do
+				local pos = pos_list[i]
+				local x = pos.x
+				local y = pos.y
+				local z = pos.z
 
-							if (belowcid and can_flow_into (belowcid, belowp2, 8))  or
-									check_neigh(x - 1, y, z - 1, max_level) or
-									check_neigh(x - 1, y, z + 1, max_level) or
-									check_neigh(x + 1, y, z - 1, max_level) or
-									check_neigh(x + 1, y, z + 1, max_level) then
-								v.x = x
-								v.y = y
-								v.z = z
-								liquid_update (v)
-							end
-						end
+				local cid, param2 = core.get_node_raw (x, y, z)
+				if cid == C_SOURCE or cid == C_FLOWING then
+					local max_level = cid == C_SOURCE and 7 or param2 - 1
+					local belowcid, belowp2	= core.get_node_raw (x, y - 1, z)
+
+					if (belowcid and can_flow_into (belowcid, belowp2, 8))  or
+							check_neigh(x - 1, y, z - 1, max_level) or
+							check_neigh(x - 1, y, z + 1, max_level) or
+							check_neigh(x + 1, y, z - 1, max_level) or
+							check_neigh(x + 1, y, z + 1, max_level) then
+						liquid_update (pos)
 					end
 				end
 			end
