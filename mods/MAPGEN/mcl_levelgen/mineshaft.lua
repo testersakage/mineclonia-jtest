@@ -954,6 +954,10 @@ local function create_chest (self, rng, x, y, z)
 	if cid ~= cid_air then
 		return nil
 	end
+	local cid_below, _ = get_block (x, y - 1, z)
+	if cid_below == cid_air then
+		return nil
+	end
 	mineshaft_set_block (x, y, z, cid_rail, 0)
 	notify_generated ("mcl_levelgen:minecart_chest_constructor", x, y, z, {
 		x = x,
