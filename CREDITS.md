@@ -11,13 +11,11 @@
 * davedevils
 
 ## Active Contributors
-* codiac
 * Brama Udi
 * ellesheepy
 * Jürgen Rühle
 * kno10
 * Po Lu
-* goblin_mode
 * Lars Müller
 * the-real-herowl
 * nooneatall
@@ -27,6 +25,7 @@
 * Miguel_PL
 * Mikita Wiśniewski
 * WillConker
+* DragonWrangler1
 
 ## Previous Contributors
 * Lizzy Fleckenstein
@@ -54,7 +53,6 @@
 * ChrisPHP
 * 3raven
 * ShadowRoi
-* DragonWrangler1
 * amino
 * teknomunk
 * laireia
@@ -66,6 +64,8 @@
 * zitanyang
 * Code-Sploit
 * Rootyjr
+* codiac
+* goblin_mode
 
 ## Original Mod Authors
 * Wuzzy
@@ -172,7 +172,6 @@
 * milklikecomputer
 * CodePoet2005
 * real_mineplayer
-
 * 3raven
 * Ame-chan-angel
 * Benny

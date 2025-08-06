@@ -13,13 +13,11 @@ return {
 		"davedevils",
 	}},
 	{S("Active Contributors"), 0xF84355, {
-		"codiac",
 		"Brama Udi",
 		"ellesheepy",
 		"Jürgen Rühle",
 		"kno10",
 		"Po Lu",
-		"goblin_mode",
 		"Lars Müller",
 		"the-real-herowl",
 		"nooneatall",
@@ -29,6 +27,7 @@ return {
 		"Miguel_PL",
 		"Mikita Wiśniewski",
 		"WillConker",
+		"DragonWrangler1",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",
@@ -56,7 +55,6 @@ return {
 		"ChrisPHP",
 		"3raven",
 		"ShadowRoi",
-		"DragonWrangler1",
 		"amino",
 		"teknomunk",
 		"laireia",
@@ -68,6 +66,8 @@ return {
 		"zitanyang",
 		"Code-Sploit",
 		"Rootyjr",
+		"codiac",
+		"goblin_mode",
 	}},
 	{S("Original Mod Authors"), 0xA60014, {
 		"Wuzzy",
