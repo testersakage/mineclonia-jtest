@@ -56,7 +56,9 @@ function mcl_walls.update_wall(pos)
 	-- Torches or walkable nodes above the wall
 	local upnode = core.get_node({x = pos.x, y = pos.y+1, z = pos.z})
 	if sum == 5 or sum == 10 then
-		if (connectable(upnode.name)) or (core.get_item_group(upnode.name, "torch") == 1) then
+		if (connectable(upnode.name))
+			or (core.get_item_group(upnode.name, "fence") == 1)
+			or (core.get_item_group(upnode.name, "torch") == 1) then
 			sum = sum + 11
 		end
 	end
