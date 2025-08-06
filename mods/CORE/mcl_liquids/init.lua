@@ -772,6 +772,13 @@ local function register_liquid(def)
 		return flowable_tab[cid] or (cid == C_FLOWING and param2 < max_level)
 	end
 
+	local function check_neigh(x2, y, z2, max_level)
+		local neighcid, neighp2 = core.get_node_raw(x2, y, z2)
+		return neighcid and can_flow_into(neighcid, neighp2, max_level)
+	end
+
+	local band = bit.band
+
 	core.register_lbm({
 		label = "Continue the liquids",
 		name = modname..":resume_liquid_source_"..resume_counter,
@@ -779,45 +786,36 @@ local function register_liquid(def)
 		run_at_every_load = true,
 		bulk_action = function(pos_list, dtime_s)
 			-- Load neighbouring mapblocks to avoid ignore nodes
-			local minpos = pos_list[1]:divide(16):floor():multiply(16)
-			local maxpos = minpos:add(15)
-			local vm = core.get_voxel_manip()
-			local emin, emax = vm:read_from_map(minpos:subtract(1), maxpos:add(1))
-			local a = VoxelArea:new{MinEdge = emin, MaxEdge = emax}
-			local data = vm:get_data()
-			local param2_data = vm:get_param2_data()
+			local pos = pos_list[1]
+			local minpos = vector.new (band(pos.x, -16),
+						   band(pos.y, -16),
+						   band(pos.z, -16))
+			local maxpos = minpos:add (15)
 
+			local v = vector.new ()
 			local minx = minpos.x
 			local miny = minpos.y
 			local minz = minpos.z
 			local maxx = maxpos.x
 			local maxy = maxpos.y
 			local maxz = maxpos.z
-			for x = minx, maxx do
+			for z = minz, maxz do
 				for y = miny, maxy do
-					for z = minz, maxz do
-						local ind = a:index(x, y, z)
-						local cid = data[ind]
+					for x = minx, maxx do
+						local cid, param2 = core.get_node_raw (x, y, z)
 						if cid == C_SOURCE or cid == C_FLOWING then
-							local max_level = param2_data[ind] - 1
-							local belowind = a:index(x, y - 1, z)
-							local belowcid = data[belowind]
-							local belowp2 = param2_data[belowind]
+							local max_level = param2 - 1
+							local belowcid, belowp2	= core.get_node_raw (x, y - 1, z)
 
-							local function check_neigh(x2, z2)
-								local neighind = a:index(x2, y, z2)
-								local neighcid = data[neighind]
-								local neighp2 = param2_data[neighind]
-
-								return can_flow_into(neighcid, neighp2, max_level)
-							end
-
-							if can_flow_into(belowcid, belowp2, 8) or
-									check_neigh(x - 1, z - 1) or
-									check_neigh(x - 1, z + 1) or
-									check_neigh(x + 1, z - 1) or
-									check_neigh(x + 1, z + 1) then
-								liquid_update(vector.new(x, y, z))
+							if (belowcid and can_flow_into (belowcid, belowp2, 8))  or
+									check_neigh(x - 1, y, z - 1, max_level) or
+									check_neigh(x - 1, y, z + 1, max_level) or
+									check_neigh(x + 1, y, z - 1, max_level) or
+									check_neigh(x + 1, y, z + 1, max_level) then
+								v.x = x
+								v.y = y
+								v.z = z
+								liquid_update (v)
 							end
 						end
 					end
