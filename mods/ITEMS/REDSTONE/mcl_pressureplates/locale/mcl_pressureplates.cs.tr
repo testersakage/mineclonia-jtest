@@ -1,7 +1,7 @@
 # textdomain: mcl_pressureplates
 Provides redstone power when pushed=Po stisknutí vyzařuje redstone signál
-Pushable by players, mobs and objects=
-Pushable by players and mobs=
+Pushable by players, mobs and objects=Stisknutelný hráči, předměty i příšerami,
+Pushable by players and mobs=Stisknutelný hráči a příšerami
 Pushable by mobs=
 Pushable by players=
 Stone Pressure Plate=

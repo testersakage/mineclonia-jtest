@@ -1,7 +1,7 @@
 # textdomain: mcl_furnaces
 Inventory=Inventář
-Recipe book=
-Furnace=
+Recipe book=Kniha receptů
+Furnace=Pec
 Uses fuel to smelt or cook items=
 Furnaces cook or smelt several items, using a furnace fuel, into something else.=
 Use the furnace to open the furnace menu.=

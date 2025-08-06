@@ -1,10 +1,10 @@
 # textdomain: mcl_doors
 This door is a 2-block high barrier which can be opened or closed by hand or by redstone power.=Tyto dveře jsou dva bloky vysoká zábrana která může být otevřena ručně, nebo redstone signálem.
-This door is a 2-block high barrier which can only be opened by redstone power, not by hand.=
-To open or close this door, send a redstone signal to its bottom half.=
+This door is a 2-block high barrier which can only be opened by redstone power, not by hand.=Tyto dveře jsou bariérou vysokou 2 bloky, kterou lze otevřít pouze pomocí redstonoe signálu, nikoli ručně.
+To open or close this door, send a redstone signal to its bottom half.=Pro otevření, nebo zavření dvěři přiveďte redstone signál k jejich spodní polovině.
 To open or close this door, rightclick it or send a redstone signal to its bottom half.=
 Openable by redstone power=
-Openable by players and redstone power=
+Openable by players and redstone power=Otevíratelné hráčem, nebo redstone signálem
 Trapdoors are horizontal barriers which can be opened or closed and climbed like a ladder when open. They occupy the upper or lower part of a block, depending on how they have been placed. This trapdoor can only be opened or closed by redstone power.=
 Trapdoors are horizontal barriers which can be opened or closed and climbed like a ladder when open. They occupy the upper or lower part of a block, depending on how they have been placed. This trapdoor can be opened or closed by hand or redstone power.=
 To open or close this trapdoor, rightclick it or send a redstone signal to it.=

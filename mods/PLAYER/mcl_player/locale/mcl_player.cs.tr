@@ -1,6 +1,6 @@
 # textdomain: mcl_player
 Graphics=Grafika
-HUD=
+HUD=HUD
 Inventory=Inventář
 Misc=
 Adapt UI for a better experience on touchscreen devices=

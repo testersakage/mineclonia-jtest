@@ -1,7 +1,7 @@
 # textdomain: mcl_boats
 Sneak to dismount=Plížením sesedni
 Boats are used to travel on the surface of water.=Loďky jsou určeny pro plavbu po vodě.
-Rightclick on a water source to place the boat. Rightclick the boat to enter it. Use [Left] and [Right] to steer, [Forwards] to speed up and [Backwards] to slow down or move backwards. Use [Sneak] to leave the boat, punch the boat to make it drop as an item.=
+Rightclick on a water source to place the boat. Rightclick the boat to enter it. Use [Left] and [Right] to steer, [Forwards] to speed up and [Backwards] to slow down or move backwards. Use [Sneak] to leave the boat, punch the boat to make it drop as an item.=Kliknutím pravým tlačítkem myši na vodní zdroj umístíte loď. Kliknutím pravým tlačítkem myši na loď do ní nastoupíte. Pomocí kláves [Vlevo] a [Vpravo] můžete kormidlovat, klávesou [Vpřed] zrychlit a klávesou [Vzad] zpomalit nebo se vrátit zpět. Pomocí [Plížit se] můžete opustit člun, úderem do člunu jej zničíte a vypadne jako předmět.
 Boat=
 Water vehicle=
 Chest Boats are used to travel on the surface of water. And transport goods=

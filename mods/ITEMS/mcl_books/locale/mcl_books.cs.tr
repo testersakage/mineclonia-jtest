@@ -1,7 +1,7 @@
 # textdomain: mcl_books
 Book=Kniha
-Books are used to make bookshelves and book and quills.=
-“@1”=
+Books are used to make bookshelves and book and quills.=Knihy se používají k výrobě knihoven a knih k psaní.
+“@1”=“@1”
 Copy of “@1”=
 Copy of Copy of “@1”=
 Tattered Book=

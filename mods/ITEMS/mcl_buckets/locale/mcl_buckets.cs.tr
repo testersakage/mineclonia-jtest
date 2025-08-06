@@ -1,7 +1,7 @@
 # textdomain: mcl_buckets
 Empty Bucket=Prázdný kyblík
-A bucket can be used to collect and release liquids.=
-Punch a liquid source to collect it. You can then use the filled bucket to place the liquid somewhere else.=
+A bucket can be used to collect and release liquids.=Kbelík může být použit pro nabírání a vylévání tekutin.
+Punch a liquid source to collect it. You can then use the filled bucket to place the liquid somewhere else.=Použijte na zdroj tekutiny abyste ji nabrali. Můžete pak použít plný kyblík k opětovnému umístění tekutiny jinam.
 Collects liquids=
 Bucket of Axolotl=
 Bucket of Cod=

@@ -2,8 +2,8 @@
 # mod title
 # mod strings
 Wait until all mods have loaded!=Počkejte než se načtou všechny mody!
-Find and teleport to biome=
-<biome>=
+Find and teleport to biome=Najde biom a teleportuje do něj
+<biome>=<biom>
 No player.=
 Biome found at @1.=
 No biome found!=

@@ -1,7 +1,7 @@
 # textdomain: mcl_walls
 A piece of wall. It cannot be jumped over with a simple jump. When multiple of these are placed to next to each other, they will automatically build a nice wall structure.=Kus zdi. Nelze ho přeskočit jednoduchým skokem. Když je více kusů umístěno vedle sebe, automaticky vytvoří pěknou strukturu zdi.
-Cobblestone Wall=
-Mossy Cobblestone Wall=
+Cobblestone Wall=Dlážděná zeď
+Mossy Cobblestone Wall=dlážděná zeď s mechem
 Andesite Wall=
 Granite Wall=
 Diorite Wall=

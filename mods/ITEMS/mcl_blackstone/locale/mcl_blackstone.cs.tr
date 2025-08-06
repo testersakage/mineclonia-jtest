@@ -1,7 +1,7 @@
 # textdomain: mcl_blackstone
 Blackstone=Černit
-Gilded Blackstone=
-Nether Gold Ore=
+Gilded Blackstone=Zlacený Černit
+Nether Gold Ore=Pekelná zlatá ruda
 Polished Basalt=
 Basalt=
 Smooth Basalt=
@@ -19,7 +19,7 @@ Polished Blackstone Slab=
 Polished Blackstone Brick Stairs=
 Polished Blackstone Brick Slab=
 Soul Torch=
-Torches are light sources which can be placed at the side or on the top of most blocks.=
+Torches are light sources which can be placed at the side or on the top of most blocks.=Louče jsou zdroje světla které mohou být umístěny po bocích, nebo na vrchních stranách bloků.
 Blackstone Wall=
 Polished Blackstone Wall=
 Polished Blackstone Brick Wall=

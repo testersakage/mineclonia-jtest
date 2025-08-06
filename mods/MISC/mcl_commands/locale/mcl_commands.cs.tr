@@ -1,7 +1,7 @@
 # textdomain: mcl_commands
 List bans=Seznam zákazů
-Ban list: @1=
-Players can't be killed right now, damage has been disabled.=
+Ban list: @1=Seznam BANů: @1
+Players can't be killed right now, damage has been disabled.=Hráče nyní nelze zabít, poškození bylo zakázáno.
 Player @1 does not exist.=
 You are already dead=
 @1 is already dead=

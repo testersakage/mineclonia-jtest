@@ -13,6 +13,12 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Small Dripleaf"
+msgstr ""
+
+msgid "Big Dripleaf"
+msgstr ""
+
 msgid "Azalea Plant"
 msgstr "Plante azalée"
 

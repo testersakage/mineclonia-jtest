@@ -1,7 +1,7 @@
 # textdomain: mcl_itemframes
 Item Frame=Rám na předměty
-Can hold an item=
-Item frames are decorative blocks in which items can be placed.=
+Can hold an item=Může obsahovat předmět
+Item frames are decorative blocks in which items can be placed.=Rámečky jsou ozdobné bloky, do kterých lze umístit předměty.
 Just place any item on the item frame. Use the item frame again to retrieve the item.=
 Glow Item Frame=
 Can hold an item and glows=

@@ -1,5 +1,5 @@
 # textdomain: mcl_inventory
-Auto (use scroll bar if client >@= 5.11)=
+Auto (use scroll bar if client >@= 5.11)=Automatisch (nutze Scrollbar falls Client >@=5.11)
 Off  (use paging buttons, faster)=
 On   (more MC like, slower)=
 Enable scrollable creative inventory=

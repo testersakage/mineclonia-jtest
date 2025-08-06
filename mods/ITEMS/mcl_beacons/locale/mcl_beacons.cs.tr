@@ -1,7 +1,7 @@
 # textdomain: mcl_beacons
 Unavailable=Nedostupné
-Active=
-Beacon=
+Active=Aktivní
+Beacon=Maják
 Primary Power:=
 Secondary Power:=
 Swiftness=

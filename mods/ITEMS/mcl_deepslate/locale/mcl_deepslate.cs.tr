@@ -1,7 +1,7 @@
 # textdomain: mcl_deepslate
-Deepslate=
-Deepslate is a stone type found deep underground in the Overworld that functions similar to regular stone but is harder than the stone.=
-Infested Deepslate=
+Deepslate=deepslate
+Deepslate is a stone type found deep underground in the Overworld that functions similar to regular stone but is harder than the stone.=Deepslate je typ kamene, který se nachází hluboko pod zemí v Overworldu a funguje podobně jako běžný kámen, ale je tvrdší než kámen.
+Infested Deepslate=Zamořený deepslate
 Reinforced Deepslate=
 Reinforced deepslate is a very hard block undestructable by even wither explosions. It is unobtainable in survival mode.=
 Deepslate Coal Ore=

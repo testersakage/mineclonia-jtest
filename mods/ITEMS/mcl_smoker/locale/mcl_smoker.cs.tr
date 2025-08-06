@@ -1,7 +1,7 @@
 # textdomain: mcl_smoker
 Smoker=Udírna
-Cooks food faster than furnace=
-Smokers cook several items, mainly raw foods, into cooked foods, but twice as fast as a normal furnace.=
+Cooks food faster than furnace=Peče jídlo rychleji než pec
+Smokers cook several items, mainly raw foods, into cooked foods, but twice as fast as a normal furnace.=V udírnách se vaří různé věci, především potraviny, ale dvakrát rychleji než v normální peci.
 Use the smoker to open the furnace menu.=
 Place a furnace fuel in the lower slot and the source material in the upper slot.=
 The smoker will slowly use its fuel to smelt the item.=

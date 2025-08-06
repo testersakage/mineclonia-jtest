@@ -1,7 +1,7 @@
 # textdomain: mcl_fire
 Fire Charge=Ohnivý výboj
-Dispenser projectile=
-Fire charges are primarily projectiles which can be launched from dispensers, they will fly in a straight line and burst into a fire on impact. Alternatively, they can be used to ignite fires directly.=
+Dispenser projectile=Projektil dávkovače
+Fire charges are primarily projectiles which can be launched from dispensers, they will fly in a straight line and burst into a fire on impact. Alternatively, they can be used to ignite fires directly.=Ohnivé nálože jsou především projektily, které lze vypustit z dávkovačů, letí v přímém směru a při dopadu se rozhoří. Případně je lze použít k přímému zapálení ohně.
 Put the fire charge into a dispenser and supply it with redstone power to launch it. To ignite a fire directly, simply place the fire charge on the ground, which uses it up.=
 Starts fires and ignites blocks=
 Flint and Steel=

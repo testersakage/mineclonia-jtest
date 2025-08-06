@@ -34,9 +34,6 @@ msgstr "Sfida completata!"
 msgid "Advancement Made!"
 msgstr "Progresso Realizzato!"
 
-msgid "[c|clear|disable|enable]"
-msgstr "[c|svuota|disabilita|abilita]"
-
 msgid "Show, clear, disable or enable your advancements"
 msgstr "Mostra, cancella, disabilita o abilita i tuoi progressi"
 

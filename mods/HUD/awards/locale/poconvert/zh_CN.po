@@ -34,9 +34,6 @@ msgstr "完成挑战！"
 msgid "Advancement Made!"
 msgstr "完成进度！"
 
-msgid "[c|clear|disable|enable]"
-msgstr "[c|clear|disable|enable]"
-
 msgid "Show, clear, disable or enable your advancements"
 msgstr "显示、清除、禁用或启用进度"
 

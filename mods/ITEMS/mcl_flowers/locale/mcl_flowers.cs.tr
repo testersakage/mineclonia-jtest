@@ -1,7 +1,7 @@
 # textdomain: mcl_flowers
 This is a small flower. Small flowers are mainly used for dye production and can also be potted.=Malá rostliny. Tyto rostliny jsou obvykle používány na výrobu varviv, nebo je lze zasadit do květináče.
-It can only be placed on a block on which it would also survive.=
-@1 (Top Part)=
+It can only be placed on a block on which it would also survive.=Lze ji umístit pouze na blok, na kterém by také přežila.
+@1 (Top Part)=@1 (Nejvyšší část)
 Poppy=
 Dandelion=
 Oxeye Daisy=

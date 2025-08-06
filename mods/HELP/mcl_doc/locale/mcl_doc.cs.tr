@@ -1,7 +1,7 @@
 # textdomain: mcl_doc
 Water can flow into this block and cause it to drop as an item.=Do tohoto bloku může natéct voda a způsobit, že vypadne jako předmět.
 This block can be turned into dirt with a hoe.=Tento blok může být přetvořen na hlíu pomocí motyky.
-This block can be turned into farmland with a hoe.=
+This block can be turned into farmland with a hoe.=Tento blok může být přetvořen na ornici pomocí motyky.
 This block can be turned into grass path with a shovel.=
 This block acts as a soil for all saplings.=
 This block acts as a soil for some saplings.=
@@ -61,7 +61,7 @@ This block drops itself when mined by shears.=
 This blocks drops the following when mined by shears: @1=
 , =
 Painfully slow=Bolestně pomalý
-Very slow=
+Very slow=Velmi pomalu
 Slow=
 Fast=
 Very fast=

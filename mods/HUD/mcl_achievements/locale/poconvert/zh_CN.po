@@ -384,3 +384,9 @@ msgstr "自愿流亡"
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr "击杀一名劫掠队长。或许可以考虑暂时远离当地的村庄……"
 
+msgid "Zombie Doctor"
+msgstr ""
+
+msgid "Use a golden apple on a zombie villager under the Weakness effect; the advancement is granted when the zombie villager converts into a villager."
+msgstr ""
+

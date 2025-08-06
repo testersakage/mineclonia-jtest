@@ -1,4 +1,4 @@
 # textdomain: mcl_hunger
 Food=Jídlo
-Saturation=
-Exhaust.=
+Saturation=Saturace
+Exhaust.=Únava.

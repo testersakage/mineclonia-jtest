@@ -34,9 +34,6 @@ msgstr ""
 msgid "Advancement Made!"
 msgstr "Conquista Concluída!"
 
-msgid "[c|clear|disable|enable]"
-msgstr "[c|limpar|desabilitar|habilitar]"
-
 msgid "Show, clear, disable or enable your advancements"
 msgstr "Mostrar, limpar, desabilitar ou habilitar suas conquistas"
 

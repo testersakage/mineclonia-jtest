@@ -34,9 +34,6 @@ msgstr ""
 msgid "Advancement Made!"
 msgstr "Досягнення Отримано!"
 
-msgid "[c|clear|disable|enable]"
-msgstr "[c|clear|disable|enable]"
-
 msgid "Show, clear, disable or enable your advancements"
 msgstr "Показати, очистити, вимкнути або увімкнути досягнення"
 

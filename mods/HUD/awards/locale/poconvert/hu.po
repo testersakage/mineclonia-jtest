@@ -34,9 +34,6 @@ msgstr ""
 msgid "Advancement Made!"
 msgstr "Mérföldkő teljesítve!"
 
-msgid "[c|clear|disable|enable]"
-msgstr "[c (mutat)|clear (töröl)|disable (kikapcs)|enable (bekapcs)]"
-
 msgid "Show, clear, disable or enable your advancements"
 msgstr ""
 

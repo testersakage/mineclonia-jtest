@@ -384,3 +384,9 @@ msgstr "Önkéntes száműzetés"
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr "Öld meg a rablók vezérét. Talán fontold meg, hogy egyelőre távol maradsz a helyi falvaktól..."
 
+msgid "Zombie Doctor"
+msgstr ""
+
+msgid "Use a golden apple on a zombie villager under the Weakness effect; the advancement is granted when the zombie villager converts into a villager."
+msgstr ""
+

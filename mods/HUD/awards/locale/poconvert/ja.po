@@ -34,9 +34,6 @@ msgstr ""
 msgid "Advancement Made!"
 msgstr "進捗 更新！"
 
-msgid "[c|clear|disable|enable]"
-msgstr "[c|クリア|無効化|有効化]"
-
 msgid "Show, clear, disable or enable your advancements"
 msgstr ""
 

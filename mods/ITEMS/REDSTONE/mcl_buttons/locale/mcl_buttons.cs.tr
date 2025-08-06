@@ -1,7 +1,7 @@
 # textdomain: mcl_buttons
 Provides redstone power when pushed=Po stisknutí vyzařuje redstone signál
-Push duration: @1s=
-Pushable by arrow=
+Push duration: @1s=Doba trvání stisku: @1s
+Pushable by arrow=Stisknutelný šípem
 Use the button to push it.=
 Stone Button=
 A stone button is a redstone component made out of stone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second.=

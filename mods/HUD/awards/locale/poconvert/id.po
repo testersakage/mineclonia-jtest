@@ -34,9 +34,6 @@ msgstr ""
 msgid "Advancement Made!"
 msgstr "Pencapaian Telah Dibuat!"
 
-msgid "[c|clear|disable|enable]"
-msgstr "[c|clear (Hapus)|disable (Nonaktifkan)|enable (Aktifkan)]"
-
 msgid "Show, clear, disable or enable your advancements"
 msgstr "Tampilkan, bersihkan, matikan atau nyalakan pencapaianmu"
 

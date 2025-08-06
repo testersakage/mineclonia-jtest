@@ -1,7 +1,7 @@
 # textdomain: mcl_minecarts
 Sneak-click to remove=odeber pomocí plížení a kliknutí
 Minecart=Vozík
-Vehicle for fast travel on rails=
+Vehicle for fast travel on rails=Vozidlo pro rychlé cestování po kolejích
 Minecarts can be used for a quick transportion on rails.=
 Minecarts only ride on rails and always follow the tracks. At a T-junction with no straight way ahead, they turn left. The speed is affected by the rail type.=
 You can place the minecart on rails. Right-click it to enter it. Punch it to get it moving.=

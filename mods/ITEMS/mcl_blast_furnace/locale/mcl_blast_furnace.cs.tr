@@ -1,7 +1,7 @@
 # textdomain: mcl_blast_furnace
 Blast Furnace=Kovářská pec
-Smelts ores faster than furnace=
-Blast Furnaces smelt several items, mainly ores and armor, using a furnace fuel, but twice as fast as a normal furnace.=
+Smelts ores faster than furnace=Taví rudy rychleji než pec
+Blast Furnaces smelt several items, mainly ores and armor, using a furnace fuel, but twice as fast as a normal furnace.=Vysoká pec může tavit jen některé předměty, hlavně rudy a brnění, za použití pailva, ale dvakrát rychleji než běžná pec.
 Use the blast furnace to open the furnace menu.=
 Place a furnace fuel in the lower slot and the source material in the upper slot.=
 The blast furnace will slowly use its fuel to smelt the item.=
