@@ -411,7 +411,7 @@ breadthwise without interruption.
 
 Function: mcl_levelgen.is_bottom_face_sturdy (X, Y, Z, AXIS, DIR)
 
-Return whether the face of the collision box of the blcok at X, Y - 1,
+Return whether the face of the collision box of the block at X, Y - 1,
 Z which faces upwards is sturdy.
 
 Function: mcl_levelgen.facedir_to_wallmounted (AXIS, DIR)
@@ -734,7 +734,7 @@ in LO and its high 64 bits HI, all ull values.
 
 Function: mcl_levelgen.mix64 (DST)
 
-Apply David Strafford's Mix13 bit mixer to DST, a ull value.  In some
+Apply David Stafford's Mix13 bit mixer to DST, a ull value.  In some
 contexts, Minecraft transforms the output of
 `mcl_levelgen.seed_from_ull' with this bit mixer before it is employed
 to seed a Xoroshiro128++ PRNG.
@@ -1271,4 +1271,535 @@ a PRNG and yields the number of coordinates to produce on each layer.
 
 STRUCTURES
 
-XXX: Implement structures and document structure registration APIs.
+A structure is a system which alters the composition of terrain in
+that which may be a broad area around its (Minecraft) chunk of origin
+deterministically and as terrain is generated, before any features are
+placed.  Structures are assigned to "structure sets", which are
+collections of structures connected to a "structure placement", which
+defines rules and criteria that govern the selection of such chunks of
+origin.  Internally, a structure, when generated at a chunk of origin,
+is expected to produce a "structure start" composed of a list of
+"structure pieces", which are assigned bounding boxes that may extend
+up to eight Minecraft chunks from this origin, and a function which is
+invoked in the emerge environment whenever a (Minecraft) chunk
+intersecting with its bounding box is generated; such a structure
+piece may also define "terrain adaptations", which enables it to exert
+influence on the density values of terrain sampled from the vicinity
+of its bounding box, which is a subtler manner of terraforming.
+
+Most of the level access facilities which are available to features
+\(`index_heightmap', `index_biome', &c.) are also available to
+structure piece functions; other of these functions accept calling
+conventions which accept additional information in comparison to their
+equivalents in the feature generation environment.  By contrast, no
+terrain or heightmap information is available during the generation of
+structure starts, but the programmer is provided with access to the
+terrain generator itself and facilities to derive terrain height
+values and contents directly from noise, so that structure pieces may
+be correctly placed in a manner which is informed by the shape of the
+terrain.
+
+
+STRUCTURE REGISTRATION FUNCTIONS
+
+Function: mcl_levelgen.register_structure (KEYWORD, DEF)
+
+Register a structure identified by the keyword KEYWORD; by convention,
+such a keyword is to be prefixed by a namespace identifying the mod
+defining the structure, e.g. `mod_name:structure'.  DEF must be a
+table of the form:
+
+{
+	create_start = function (SELF, LEVEL, TERRAIN, RNG, CX, CZ) ... end,
+
+Function invoked to create a structure start when this structure is
+selected from a structure pool of which CX, CZ is a chunk of origin.
+LEVEL is a structure level object, which includes diverse metadata and
+the preset of the level which is being generated (see STRUCTURE LEVEL
+INTERFACE).  TERRAIN is a reference to the terrain generator (see
+TERRAIN GENERATOR INTERFACE).  CX and CZ are chunk coordinates; that
+is to say, multiplied by 16, they yield the position of the
+northwesternmost column of this chunk.  RNG is a pseudo-random number
+generator that is unique to this structure start, pool, and chunk.
+
+Value must be a nil (indicating generation failure) or a structure
+start, created by `mcl_levelgen.create_structure_start', which see.
+
+	step = <structure generation step>,
+
+The priority with which structure pieces produced from this structure
+will execute.  Pieces created for structures in an earlier step will
+be placed ahead of structures in subsequent steps; may be one of the
+following values:
+
+    - mcl_levelgen.RAW_GENERATION = 1
+    - mcl_levelgen.LAKES = 2
+    - mcl_levelgen.LOCAL_MODIFICATIONS = 3
+    - mcl_levelgen.UNDERGROUND_STRUCTURES = 4
+    - mcl_levelgen.SURFACE_STRUCTURES = 5
+    - mcl_levelgen.STRONGHOLDS = 6
+    - mcl_levelgen.UNDERGROUND_ORES = 7
+    - mcl_levelgen.UNDERGROUND_DECORATION = 8
+    - mcl_levelgen.FLUID_SPRINGS = 9
+    - mcl_levelgen.VEGETAL_DECORATION = 10
+    - mcl_levelgen.TOP_LAYER_MODIFICATION = 11
+
+	terrain_adaptation = <terrain adaptation type>,
+
+A string defining what manner of influence, if any, to exert upon
+terrain adjacent to structure pieces produced from this structure
+start by default; structure pieces may exempt themselves from terrain
+adaptation by defining `no_terrain_adaptation = true'.  These values
+are supported:
+
+    - "none": Do not exert any influence on adjacent terrain.
+
+    - "beard_thin": Slightly increase the density of the terrain
+      beneath the base of a structure piece's bounding box and reduce
+      the density within and above the same, in a twelve block radius
+      around the bounding box.
+
+    - "beard_box": Slightly increase the density of the terrain
+      beneath a structure piece's bounding box and reduce the density
+      within and above the same, in a twelve block radius around the
+      bounding box.
+
+    - "bury": Significantly raise the density of all terrain within a
+      12-block radius around the base of a structure piece's bounding
+      box.
+
+    - "encapsulate": Significantly raise the density of all terrain
+      within a 12-block radius around a structure piece's bounding
+      box.
+
+	biomes = <list of biomes>,
+
+A list of biomes in which this structure may generate.  It is not
+relevant till `mcl_levelgen.structure_biome_test' is invoked.
+
+}
+
+This function is completely inert within the main Lua environment.
+Therefore, invoking this function within the main Lua environment is
+pointless and harmless in equal measure.
+
+Function: mcl_levelgen.register_structure_set (KEYWORD, TBL)
+
+Register a structure set identified by KEYWORD, which is as in
+`register_structure'.  TBL must be a table of the form:
+
+{
+	structures = {
+		"my_mod:my_structure",
+		{
+			structure = "my_mod:my_structure",
+			weight = 1,
+		},
+		...
+	},
+
+An optionally weighted array of structures which will be selected from
+whenever this structure set is detected to have its chunk of origin
+somewhere during the process of level generation.  Each value may be a
+string, a structure ID, which is implied to have been assigned a
+weight of 1.  Alternatively, it may be a table where the structure ID
+and the weight are separately specified, as above.  If a structure
+which is selected from this array fails to generate, it is eliminated
+from consideration and another is selected, till none remain or one
+successfully generates.
+
+    	placement = <structure placement>,
+
+A structure placement defining criteria for whether a chunk is a chunk
+of origin to this structure set.
+
+}
+
+Function: mcl_levelgen.build_random_spread_placement (FREQUENCY, REDUCTION,
+	  					      SPACING, SEPARATION,
+						      SALT, SPREAD_TYPE,
+						      LOCATE_OFFSET,
+						      EXCLUSION_ZONE)
+
+Create a "random spread" structure placement, which arranges to place
+a structure set at randomized offsets from points in a grid of chunks
+SPACING chunks apart.
+
+FREQUENCY is a value between 1.0 and 0.0 defining the probability of
+a structure set's originating from any particular point in the said
+grid.
+
+REDUCTION is a string representing the specific algorithm that is
+utilized to enforce FREQUENCY.  It should be set to "default" unless
+your object is consistency with Minecraft structures which define
+other values.
+
+SPACING is the size, in chunks, of one element in the grid, and
+therefore the distance between two adjacent points in the grid.
+
+SEPARATION is a value between 0 and (SPACING - 1) which excludes
+chunks of origin from an equivalent region near the outer edges of
+squares in the grid; this serves to enforce a minimum margin between
+structures in the same set.
+
+SALT is a number between 0 and 4294967295 which affects the
+randomization of the structure generation process.  Each structure
+pool should ideally be defined with a unique salt.
+
+SPREAD_TYPE is a string, either "linear" or "triangular", representing
+the random distribution of offsets from points in the grid.
+
+LOCATE_OFFSET is an unused value that should be an array of three
+numbers { X, Y, Z, } which is present only in the interests of
+consistency with Minecraft.
+
+EXCLUSION_ZONE is nil or an array of { STRUCTURE_SET, DISTANCE, },
+which will prevent chunks of origin from being selected if another
+structure of type STRUCTURE_SET is present within DISTANCE chunks.  It
+is the bounden duty of the programmer to avoid cycles between
+different structure sets' EXCLUSION_ZONES.
+
+
+STRUCTURE START AND PIECE GENERATION
+
+Function: mcl_levelgen.structure_biome_test (LEVEL, STRUCTURE_DEF, X, Y, Z)
+
+Return whether or not the position at X, Y, Z is within a biome in
+which the structure whose definition table is provided as
+STRUCTURE_DEF (i.e., the SELF parameter to a structure definition's
+`generate_start' method) is defined to generate.  LEVEL must be the
+structure level object which was provided to STRUCTURE_DEF's
+`generate_start' method.
+
+Conventionally, a `generate_start' method will select a suitable
+position with regard to data obtained from the terrain generator and
+biome system around which the generated structure should be considered
+to revolve, test that position by means of this function, and punt
+without producing any structure pieces if it should return false.
+
+Function: mcl_levelgen.create_structure_start (STRUCTURE_DEF, PIECES)
+
+Create a structure start for the structure whose definition table is
+provided as STRUCTURE_DEF from an array of structure pieces PIECES.
+Each structure piece must be a table with the following fields, of
+which `place' and `bbox' are mandatory.
+
+{
+	place = function (SELF, LEVEL, TERRAIN, RNG, X1, Z1, X2, Z2) ... end,
+
+Execute alterations to terrain within the extents of the Minecraft
+chunk between (X1, Z1) and (X2, Z2) (inclusive).  LEVEL is the
+structure level object pertaining to this structure piece, TERRAIN is
+the terrain generator which is being exercised, and RNG is a
+random-number generator that is unique to the combination of the
+structure to which structure piece belongs and the chunk in which it
+is generating; an implication which must be emphasized is that the
+sequence in which structure pieces appear in structure starts is
+significant and must be maintained across different game sessions and
+emerge environments.
+
+All terrain within the provided chunk and level is accessible and
+writable by means of the level access functions defined in the section
+"LEVEL ACCESS FUNCTIONS" or below.  In the interests of maintaining
+determinism across configurations of varying chunksizes, no terrain
+beyond this limit is available.  Furthermore, PRNG-informed decisions
+whose consequences extend beyond a single chunk ought to be decided at
+the time structure starts are generated, not when structure pieces are
+actually placed.
+
+	bbox = { X1, Y1, Z1, X2, Y2, Z2, },
+
+A bounding box whose horizontal extents must encompass all terrain
+this structure piece is interested in modifying, whose extents, as a
+whole, will be recorded as the extents of this structure piece for
+purposes of advancements and spawning, and which will provide the
+extents of this structure piece as regarded by the terrain generator
+when it applies terrain adaptations.  Behavior is undefined if `place'
+should attempt to alter terrain beyond this limit; neither is it
+defined whether `place' will be called with Minecraft chunk
+coordinates which do not intersect this bounding box.
+
+	ground_offset = <ground offset>,
+
+An offset from `bbox''s Y1 which will be regarded as the elevation of
+this bounding box's base for purposes of terrain adaptation, or nil.
+
+	reduced_terrain_adaptation = { CX, CY, CZ, AMPLITUDE, },
+
+If non-nil, an array of a position CX, CY, CZ, and an amplitude
+AMPLITUDE, which define a single point that will be considered this
+structure piece's base position by a reduced manner of terrain
+adaptation which is enabled if this field is non-nil.  AMPLITUDE
+supplies the intensity of this variety of terrain adaptation.
+
+	no_terrain_adaptation = false,
+
+If non-nil, the terrain generator will disregard this structure piece
+in applying terrain adjustments, whatever may have been the value of
+its structure's `terrain_adaptation' option.
+
+}
+
+
+TERRAIN GENERATOR INTERFACE
+
+A terrain generator is a table with much internal metadata and state
+exporting several methods to structure generator routines, which are
+documented in this section.  `get_one_height' and `get_one_column', as
+they sample noise on each call, are not fast, and require anywhere
+from 1.5 to 10 milliseconds to execute, subject to hardware
+performance.  They should be the exclusive province of `create_start'
+methods, which are called infrequently enough and are subject to
+sufficient caching of their results that any overhead these methods
+incur may be dismissed.
+
+Function: terrain_generator:get_one_height (X, Z, IS_SOLID)
+
+Return a number one greater than that which would be the first solid
+node at the column at X, Z, with solidity decided by the predicate
+IS_SOLID, a function accepting two values CID and PARAM2 and yielding
+a boolean.
+
+If IS_SOLID is nil, define solidity by terrain density at each
+position evaluated; for reasons of performance, such a call will not
+account for the presence of solid nodes produced by barriers between
+aquifer systems of disparate types at disparate elevations.
+
+Behavior is undefined if this function is invoked within a structure
+piece's `place' method.
+
+Function: terrain_generator:get_one_column (X, Z, COLUMN_DATA)
+
+Generate the terrain of one column at X, Z, without applying terrain
+adjustments or surface systems, and store the result as integer values
+in COLUMN_DATA, at indices computed by adding one to the vertical
+distance between each block and the minimum Y level of the level.
+Each element of the array may be unpacked into a content ID and param2
+value by means of `mcl_levelgen.decode_node'.
+
+Behavior is undefined if this function is invoked within a structure
+piece's `place' method.
+
+Function: mcl_levelgen.decode_node (NODE)
+
+Extract two values CID and PARAM2 from an integer NODE in a terrain
+generator's internal encoding, which, inter alia, appears in the
+COLUMN_DATA supplied to `terrain_generator:get_one_column'.
+
+Function: terrain_generator:area_min_height (X1, Z1, X2, Z2, IS_SOLID)
+
+Compute the minimum elevation of the area between X1, Z1, X2, Z2.
+IS_SOLID is as in `terrain_generator:get_one_height'.  This function
+tends to complete in 10 to 20 milliseconds, subject to hardware
+performance and a number of other considerations.  Value is -math.huge
+if the area is completely vacant.
+
+Behavior is undefined if this function is invoked within a structure
+piece's `place' method.
+
+Function: terrain_generator:area_average_height (X1, Z1, X2, Z2, IS_SOLID)
+
+Compute the mean elevation of the area between X1, Z1, X2, Z2.
+IS_SOLID is as in `terrain_generator:get_one_height'.  This function
+tends to complete in 10 to 20 milliseconds, subject to hardware
+performance and a number of other considerations.  Value is -math.huge
+if the area is completely vacant.
+
+Behavior is undefined if this function is invoked within a structure
+piece's `place' method.
+
+
+STRUCTURE LEVEL INTERFACE
+
+A structure level object (provided to many methods and functions as
+LEVEL) is a table of mostly internal significance.  One field,
+`preset', is more generally useful, as it provides the preset of the
+level in which a structure pool, start, or piece is generating, as the
+case may be.
+
+Access to a structure preset notably enables a programmer to sample
+biome data irrespective of the availability of generated biome data or
+terrain.
+
+Function: preset:index_biomes_block (X, Y, Z)
+
+Return a string identifying the biome which would generate at the
+position X, Y, Z.  Be advised that this is not always the same biome
+which mcl_levelgen.index_biome would return for the provided position;
+to obtain the latter biome value, the provided coordinates must first
+be munged, but this is not yet available to mods and is not
+significant during structure start generation.  By the same token,
+this biome may differ markedly from the biome actually at X, Y, Z, if
+that position has already been generated under a different biome
+configuration (such as one defined by a previous or newer version of
+the level generator).
+
+
+STRUCTURE LEVEL ACCESS FACILITIES
+
+Virtually all of the level access facilities which are available in
+the feature generator environment (see "LEVEL ACCESS FACILITIES") are
+available to the `place' methods of structure pieces.  Facilities
+absent include those which relate to heightmap modifications, and most
+variables within the `mcl_levelgen' table itself, which do not exist
+because they are redundant when the entire vertical expanse of the
+chunk being generated is always available to structure piece placement
+functions, and `fix_lighting', which is redundant because lighting
+information is not computed till terrain and therefore structures have
+been generated.  The calling convention of
+`mcl_levelgen.notify_generated' differs between the two environments.
+
+Function: mcl_levelgen.notify_generated (NAME, X, Y, Z, DATA, APPEND)
+
+Report a generation notification as in the feature generation
+environment, unless the position at X, Y, Z, would not actually be
+produced.  This proviso is meant to prevent notification handlers from
+being executed when a structure reports a notification for a generated
+block or other adornment at a position which is accessible, but does
+not exist within the MapChunk actually being generated by Luanti.
+
+
+SCHEMATIC STRUCTURE PIECES
+
+The standard interface for placing schematics in a level,
+`mcl_levelgen.place_schematic', is likewise available when placing
+structure pieces.  The tedious and repetitious routine of generating
+structures defined solely by schematics and perhaps a list of
+processors is obviated by schematic structure pieces, which may be
+created by the following function:
+
+Function: mcl_levelgen.make_schematic_piece (SCHEMATIC_ID, X, Y, Z,
+					     ROTATION, RNG, CENTER,
+					     FORCE_PLACE, PROCESSORS,
+					     PLACEMENT_SENTINEL,
+					     GROUND_OFFSET)
+
+Create and return a structure piece (an element of an array to be
+supplied to `create_structure_start') which places the portable
+schematic identified by SCHEMATIC_ID at X, Y, Z, with the rotation
+ROTATION, and certain other parameters, CENTER and FORCE_PLACE, which
+are no otherwise than in `mcl_levelgen.place_schematic'.  RNG is a
+pseudo-random number generator which must be provided if ROTATION is
+"random", and is otherwise unused.  PROCESSORS is a list of schematic
+processor functions which are installed when the schematic is placed.
+PLACEMENT_SENTINEL is nil, or a function to be invoked with a
+pseudo-random number generator and four values X1, Z1, X2, Z2 defining
+the extents of a Minecraft chunk after this schematic is placed there.
+
+
+STRUCTURE TEMPLATES
+
+The structure generation subsystem also implements and supports a more
+sophisticated type of schematic called the structure template, which
+is capable of recording node metadata, and certain types of function
+blocks controlling connections between discrete pieces of larger
+structures composed of multiple templates (jigsaw blocks) or
+representing actions to be taken upon generation of the positions
+where they stand (structure data blocks).  Not unnaturally, they also
+support a system of template processor functions which is somewhat
+extended (if compatible with) as against the structure processor
+systems introduced in the preceding sections.
+
+Creating structure templates is as in Minecraft; refer to:
+https://minecraft.wiki/w/Structure_Block.
+
+Function: mcl_levelgen.read_structure_template (NAME)
+
+Load and return a structure template from the file by the name NAME,
+or return nil and an error message if the file could not be read or
+the template is invalid or corrupt.
+
+Function: mcl_levelgen.place_template (TEMPLATE, X, Y, Z, PX, PZ,
+	  			       OPTIONS, MIRRORING, ROTATION, RNG)
+
+Place the template TEMPLATE at X, Y, Z, rotated by ROTATION (as in
+`place_schematic', with the exception of the value "random" not being
+accepted) around the pivot point PX, PZ (which is relative to the
+northwest corner of the unrotated template), and with its unrotated
+contents mirrored along the Z axis prior to rotation if MIRRORING is
+the string "left_right" or along the X axis if MIRRORING is the string
+"front_back", executing all data block handlers in response to data
+blocks which intersect the chunk now being placed.
+
+Function: mcl_levelgen.make_template_piece_with_pivot (TEMPLATE, X, Y, Z, PX, PZ,
+						       MIRRORING, ROTATION, RNG,
+						       OPTIONS, PROCESSORS,
+						       GROUND_OFFSET)
+
+Create and return a structure piece which will place the template
+TEMPLATE at X, Y, Z, rotated by ROTATION around the pivot point PX, PZ
+\(as in `place_template'), and mirrored and rotated as directed by
+MIRRORING and ROTATION.  All template processors in the array
+PROCESSORS will be installed when TEMPLATE is placed.  GROUND_OFFSET
+is as in all other structure pieces.
+
+RNG is significant if PROCESSORS contains any template processor
+augmented with a `structure_preprocess' method.
+
+Function: mcl_levelgen.make_template_piece (TEMPLATE, X, Y, Z,
+					    MIRRORING, ROTATION, RNG,
+					    OPTIONS, PROCESSORS,
+					    GROUND_OFFSET, BBOX)
+
+Create and return a structure piece just as with
+`make_template_piece_with_pivot', but with a pivot point always fixed
+to 0, 0.
+
+Function: mcl_levelgen.template_transform (TEMPLATE, X, Y, Z, PX, PZ,
+	  				   MIRRORING, ROTATION)
+
+Transform the position X, Y, Z, relative to the northwest corner of a
+template (the TEMPLATE parameter is as yet unused), and return the
+position, relative to the position provided to `place_template', where
+a block at the first position would be situated after being
+transformed by MIRRORING and ROTATION around the pivot point PX and
+PZ.
+
+Function: mcl_levelgen.get_template_bounding_box (TEMPLATE, X, Y, Z, PX, PZ,
+	  				   	  MIRRORING, ROTATION)
+
+Return the bounding box (as an array of six integers { X1, Y1, Z1, X2,
+Y2, Z2, }) of a template TEMPLATE placed at X, Y, Z and transformed by
+ROTATION and MIRRORING around the pivot point PX, PZ.
+
+
+TEMPLATE PROCESSORS
+
+The structure template piece extends the traditional structure
+processor system by accepting tables whose `__call' metamethods are
+defined to a more standard structure processor in their place.  These
+tables may provide one field, `structure_preprocess', which is invoked
+before a structure template piece is placed, to decide information
+which must be uniform across multiple placement attempts.  There also
+exist some functions which afford template processors control over
+metadata copying or node constructor execution performed by the
+template system.
+
+Function: <structure preprocessor function> (RNG, TEMPLATE)
+
+Return a key and a value to be recorded into a store which will be
+consistent across all invocations of template processors when placing
+the template piece for which this function is being invoked, or nil,
+to record no data at all.  RNG is a random number unique to this
+structure piece, and TEMPLATE is the structure template this piece is
+to place.
+
+Function: mcl_levelgen.get_preprocessor_metadata (KEY)
+
+When invoked within a template processor being placed by a template
+structure piece, return any metadata recorded by a template processor
+identified by key KEY, or nil if none should exist.
+
+Function: mcl_levelgen.suppress_constructors (X, Y, Z)
+
+Arrange not to invoke any node constructors for any node that might be
+generate by the template currently being placed at the position X, Y,
+Z.  Mostly of assistance in manipulating chests from within template
+processors, as their constructors erase existing inventories, and will
+be executed after any generation notifications issued by template
+processors themselves.
+
+
+TEMPLATE POOLS AND JIGSAW STRUCTURES
+
+XXX: document template pools, data blocks, and jigsaw blocks.
