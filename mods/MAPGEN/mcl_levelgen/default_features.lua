@@ -3786,7 +3786,7 @@ mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_grass", {
 	radius = uniform_height (2, 6),
 	content = function (x, y, z, rng)
 		local above, _ = get_block (x, y + 1, z, rng)
-		if not solid_p (above) or above == cid_water_source then
+		if not solid_p (above) and above ~= cid_water_source then
 			return cid_grass, 0
 		else
 			return cid_dirt, 0
