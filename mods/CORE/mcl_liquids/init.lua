@@ -626,9 +626,6 @@ local function register_liquid(def)
 				-- The current node is on its terminal level
 				-- This means it is ready to spread.
 
-
-				local d101 = core.registered_nodes[n101.name]
-
 				if is_pretend_floodable(n101) then
 					if not l101 or l101 < 8 then
 						-- turn the liquid below into down-flowing
@@ -715,9 +712,6 @@ local function register_liquid(def)
 			groups["liquid_flowing"] = 1
 			drawtype                = "flowingliquid"
 		end
-
-		local on_construct = ndef.on_construct
-		local after_destruct = ndef.after_destruct
 
 		local liquid_move_physics = ndef.liquid_move_physics
 		if liquid_move_physics == nil then
