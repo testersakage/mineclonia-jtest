@@ -1290,7 +1290,7 @@ of its bounding box, which is a subtler manner of terraforming.
 Most of the level access facilities which are available to features
 \(`index_heightmap', `index_biome', &c.) are also available to
 structure piece functions; other of these functions accept calling
-conventions which accept additional information in comparison to their
+conventions which carry additional information not present in their
 equivalents in the feature generation environment.  By contrast, no
 terrain or heightmap information is available during the generation of
 structure starts, but the programmer is provided with access to the
