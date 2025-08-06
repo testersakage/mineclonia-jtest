@@ -83,19 +83,19 @@ msgid "Burning time: @1"
 msgstr "Brennzeit: @1"
 
 msgid "Usages"
-msgstr ""
+msgstr "Verwendungen"
 
 msgid "Recipes"
-msgstr ""
+msgstr "Rezepte"
 
 msgid "Recipe is too big to be displayed (@1×@2)"
 msgstr "Rezept ist zu groß für die Anzeige (@1×@2)"
 
 msgid "Shapeless"
-msgstr ""
+msgstr "Formlos"
 
 msgid "Cooking"
-msgstr ""
+msgstr "Kochen"
 
 msgid "Increase window size"
 msgstr "Fenster vergrößern"

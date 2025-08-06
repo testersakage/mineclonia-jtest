@@ -62,10 +62,10 @@ msgid "Cornflower"
 msgstr "Bleuet"
 
 msgid "Wildflowers"
-msgstr ""
+msgstr "Fleurs sauvages"
 
 msgid "Pink Petals"
-msgstr ""
+msgstr "Pétales roses"
 
 msgid "Pink Petals are ground decoration of cherry grove biomes"
 msgstr ""

@@ -14,10 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Wait until all mods have loaded!"
-msgstr ""
-
-msgid "Not supported. The “biomeinfo” mod is required for v6 mapgen support!"
-msgstr ""
+msgstr "Attendi il caricamento di tutte le mod!"
 
 msgid "Find and teleport to biome"
 msgstr "Trova e teletrasportati al bioma"
@@ -26,20 +23,20 @@ msgid "<biome>"
 msgstr "<bioma>"
 
 msgid "No player."
-msgstr ""
+msgstr "Nessun giocatore."
 
 msgid "Biome found at @1."
-msgstr ""
+msgstr "Bioma trovato a @1."
 
 msgid "No biome found!"
-msgstr ""
+msgstr "Nessun bioma trovato!"
 
 msgid "Biome does not exist!"
-msgstr ""
+msgstr "Bioma inesistente!"
 
 msgid "List all biomes"
-msgstr ""
+msgstr "Lista dei biomi"
 
 msgid "No biomes."
-msgstr ""
+msgstr "Nessun bioma."
 

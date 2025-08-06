@@ -13,6 +13,7 @@ local wolf = {
 	description = S("Wolf"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	can_despawn = true,
 	hp_min = 8,
 	hp_max = 8,
@@ -20,7 +21,7 @@ local wolf = {
 	xp_max = 3,
 	passive = false,
 	spawn_in_group = 8,
-	collisionbox = {-0.3, -0.01, -0.3, 0.3, 0.84, 0.3},
+	collisionbox = {-0.3, 0.0, -0.3, 0.3, 0.85, 0.3},
 	visual = "mesh",
 	mesh = "mobs_mc_wolf.b3d",
 	_child_mesh = "mobs_mc_baby_wolf.b3d",
@@ -984,6 +985,92 @@ for biome, spawndef in pairs (biome_spawn_configurations) do
 end
 
 mcl_mobs.register_egg ("mobs_mc:wolf", S("Wolf"), "#d7d3d3", "#ceaf96", 0)
+
+------------------------------------------------------------------------
+-- Wolf spawning.
+------------------------------------------------------------------------
+
+local wolf_spawner_taiga = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:wolf",
+	weight = 8,
+	pack_min = 4,
+	pack_max = 4,
+	biomes = {
+		"ColdTaiga",
+		"ColdTaiga_beach",
+		"ColdTaiga_beach_water",
+		"MegaTaiga",
+		"MegaSpruceTaiga",
+	},
+})
+
+function wolf_spawner_taiga:test_supporting_node (node)
+	return core.get_item_group (node.name, "grass_block") > 0
+		or node.name == "mcl_core:snowblock"
+		or node.name == "mcl_core:coarse_dirt"
+		or node.name == "mcl_core:podzol"
+end
+
+function wolf_spawner_taiga:prepare_to_spawn (pack_size, center)
+	local biome = core.get_biome_data (center)
+	local variant
+		= (biome and variant_by_biome[biome.biome]) or "pale"
+	return {
+		_wolf_variant = variant,
+	}
+end
+
+local wolf_spawner_jungle = table.merge (wolf_spawner_taiga, {
+	pack_min = 2,
+	pack_max = 4,
+	biomes = {
+		"Jungle",
+		"JungleEdge",
+		"BambooJungle",
+	},
+})
+
+local wolf_spawner_savannah_mesa = table.merge (wolf_spawner_taiga, {
+	pack_min = 4,
+	pack_max = 8,
+	biomes = {
+		"SavannaM",
+		"Savanna",
+		"Mesa",
+		"MesaPlateauF",
+		"MesaPlateauFM",
+		"MesaBryce",
+	},
+})
+
+local wolf_spawner_forest = table.merge (wolf_spawner_taiga, {
+	weight = 5,
+	pack_min = 4,
+	pack_max = 4,
+	biomes = {
+		"Forest",
+		"Forest_beach",
+	},
+})
+
+local wolf_spawner_icy = table.merge (wolf_spawner_taiga, {
+	-- TODO: remove this once Grove biomes are
+	-- available.  For the present, it remains
+	-- the only means of obtaining snowy wolves.
+	weight = 1,
+	pack_min = 1,
+	pack_max = 1,
+	biomes = {
+		"IcePlains",
+		"IcePlainsSpikes",
+	},
+})
+
+mcl_mobs.register_spawner (wolf_spawner_taiga)
+mcl_mobs.register_spawner (wolf_spawner_jungle)
+mcl_mobs.register_spawner (wolf_spawner_savannah_mesa)
+mcl_mobs.register_spawner (wolf_spawner_forest)
+mcl_mobs.register_spawner (wolf_spawner_icy)
 
 ------------------------------------------------------------------------
 -- Legacy tamed Wolf (``dog'').

@@ -17,7 +17,7 @@ msgid "Empty Bucket"
 msgstr "Secchio vuoto"
 
 msgid "A bucket can be used to collect and release liquids."
-msgstr ""
+msgstr "Un secchio può essere utilizzato per raccogliere e versare liquidi."
 
 msgid "Punch a liquid source to collect it. You can then use the filled bucket to place the liquid somewhere else."
 msgstr ""

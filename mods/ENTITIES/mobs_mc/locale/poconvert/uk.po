@@ -17,19 +17,19 @@ msgid "Axolotl"
 msgstr ""
 
 msgid "Bat"
-msgstr ""
+msgstr "Кажан"
 
 msgid "Blaze"
 msgstr ""
 
 msgid "Chicken"
-msgstr ""
+msgstr "Курка"
 
 msgid "Cod"
 msgstr ""
 
 msgid "Cow"
-msgstr ""
+msgstr "Корова"
 
 msgid "Mooshroom"
 msgstr ""
@@ -41,7 +41,7 @@ msgid "Charged Creeper"
 msgstr ""
 
 msgid "Dolphin"
-msgstr ""
+msgstr "Дельфін"
 
 msgid "Ender Dragon"
 msgstr ""
@@ -77,7 +77,7 @@ msgid "Sneak to dismount"
 msgstr ""
 
 msgid "Horse"
-msgstr ""
+msgstr "Кінь"
 
 msgid "Skeleton Horse"
 msgstr ""
@@ -86,13 +86,13 @@ msgid "Zombie Horse"
 msgstr ""
 
 msgid "Donkey"
-msgstr ""
+msgstr "Віслюк"
 
 msgid "Mule"
-msgstr ""
+msgstr "Мул"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Залізний голем"
 
 msgid "Llama"
 msgstr ""
@@ -101,16 +101,16 @@ msgid "Ocelot"
 msgstr ""
 
 msgid "Cat"
-msgstr ""
+msgstr "Кіт"
 
 msgid "Parrot"
-msgstr ""
+msgstr "Папуга"
 
 msgid "Pig"
-msgstr ""
+msgstr "Свиня"
 
 msgid "Piglin"
-msgstr ""
+msgstr "Піґлін"
 
 msgid "Piglin Brute"
 msgstr ""
@@ -125,7 +125,7 @@ msgid "Pillager"
 msgstr ""
 
 msgid "Polar Bear"
-msgstr ""
+msgstr "Білий ведмідь"
 
 msgid "Rabbit"
 msgstr ""
@@ -182,7 +182,7 @@ msgid "Snow Golem"
 msgstr ""
 
 msgid "Spider"
-msgstr ""
+msgstr "Павук"
 
 msgid "Cave Spider"
 msgstr ""
@@ -206,7 +206,7 @@ msgid "Vex"
 msgstr ""
 
 msgid "Villager"
-msgstr ""
+msgstr "Селянин"
 
 msgid "Armorer"
 msgstr ""
@@ -233,7 +233,7 @@ msgid "Leatherworker"
 msgstr ""
 
 msgid "Librarian"
-msgstr ""
+msgstr "Бібліотекар"
 
 msgid "Mason"
 msgstr ""
@@ -290,7 +290,7 @@ msgid "Wither"
 msgstr ""
 
 msgid "Wolf"
-msgstr ""
+msgstr "Вовк"
 
 msgid "Zombie"
 msgstr ""

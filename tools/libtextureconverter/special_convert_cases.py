@@ -1,4 +1,5 @@
 import os
+import shlex
 from .utils import target_dir, colorize, colorize_alpha
 import shutil
 import csv
@@ -136,7 +137,7 @@ def convert_armor_textures(
                       str(APXSIZE *
                           2) +
                       " xc:none \\( " +
-                      layer_1 +
+                      shlex.quote(layer_1) +
                       " -scale " +
                       str(APXSIZE *
                           4) +
@@ -152,7 +153,7 @@ def convert_armor_textures(
                       "x" +
                       str(APXSIZE) +
                       "+0+0 \\) -composite -channel A -fx \"(a > 0.0) ? 1.0 : 0.0\" " +
-                      helmet)
+                      shlex.quote(helmet))
 
 
 
@@ -294,25 +295,25 @@ def convert_chest_textures(
             right = cdir + "/" + c[6]
             back = cdir + "/" + c[7]
             # Top
-            os.system("convert " + chest_file + " \
-\\( -clone 0 -crop " + str(CHPX) + "x" + str(CHPX) + "+" + str(CHPX) + "+0 \\) -geometry +0+0 -composite -extent " + str(CHPX) + "x" + str(CHPX) + " " + top)
+            os.system("convert " + shlex.quote(chest_file) + " \
+\\( -clone 0 -crop " + str(CHPX) + "x" + str(CHPX) + "+" + str(CHPX) + "+0 \\) -geometry +0+0 -composite -extent " + str(CHPX) + "x" + str(CHPX) + " " + shlex.quote(top))
             # Bottom
-            os.system("convert " + chest_file + " \
-\\( -clone 0 -crop " + str(CHPX) + "x" + str(CHPX) + "+" + str(CHPX * 2) + "+" + str(CHPX + LIDPX) + " \\) -geometry +0+0 -composite -extent " + str(CHPX) + "x" + str(CHPX) + " " + bottom)
+            os.system("convert " + shlex.quote(chest_file) + " \
+\\( -clone 0 -crop " + str(CHPX) + "x" + str(CHPX) + "+" + str(CHPX * 2) + "+" + str(CHPX + LIDPX) + " \\) -geometry +0+0 -composite -extent " + str(CHPX) + "x" + str(CHPX) + " " + shlex.quote(bottom))
             # Front
-            os.system("convert " + chest_file + " \
+            os.system("convert " + shlex.quote(chest_file) + " \
 \\( -clone 0 -crop " + str(CHPX) + "x" + str(LIDPX) + "+" + str(CHPX) + "+" + str(CHPX) + " \\) -geometry +0+0 -composite \
 \\( -clone 0 -crop " + str(CHPX) + "x" + str(LIDLOW) + "+" + str(CHPX) + "+" + str(CHPX * 2 + LIDPX) + " \\) -geometry +0+" + str(LIDPX - PPX) + " -composite \
--extent " + str(CHPX) + "x" + str(CHPX) + " " + front)
+-extent " + str(CHPX) + "x" + str(CHPX) + " " + shlex.quote(front))
             # TODO: Add lock
 
             # Left, right back (use same texture, we're lazy
             files = [left, right, back]
             for f in files:
-                os.system("convert " + chest_file + " \
+                os.system("convert " + shlex.quote(chest_file) + " \
 \\( -clone 0 -crop " + str(CHPX) + "x" + str(LIDPX) + "+" + str(0) + "+" + str(CHPX) + " \\) -geometry +0+0 -composite \
 \\( -clone 0 -crop " + str(CHPX) + "x" + str(LIDLOW) + "+" + str(0) + "+" + str(CHPX * 2 + LIDPX) + " \\) -geometry +0+" + str(LIDPX - PPX) + " -composite \
--extent " + str(CHPX) + "x" + str(CHPX) + " " + f)
+-extent " + str(CHPX) + "x" + str(CHPX) + " " + shlex.quote(f))
 
     # Double chests
 
@@ -350,19 +351,19 @@ def convert_chest_textures(
             top = cdir + "/" + c[3]
             side = cdir + "/" + c[4]
             # Top
-            os.system("convert " + chest_file + " \
-\\( -clone 0 -crop " + str(CHPX2) + "x" + str(CHPX) + "+" + str(CHPX) + "+0 \\) -geometry +0+0 -composite -extent " + str(CHPX2) + "x" + str(CHPX) + " " + top)
+            os.system("convert " + shlex.quote(chest_file) + " \
+\\( -clone 0 -crop " + str(CHPX2) + "x" + str(CHPX) + "+" + str(CHPX) + "+0 \\) -geometry +0+0 -composite -extent " + str(CHPX2) + "x" + str(CHPX) + " " + shlex.quote(top))
             # Front
             # TODO: Add lock
-            os.system("convert " + chest_file + " \
+            os.system("convert " + shlex.quote(chest_file) + " \
 \\( -clone 0 -crop " + str(CHPX2) + "x" + str(LIDPX) + "+" + str(CHPX) + "+" + str(CHPX) + " \\) -geometry +0+0 -composite \
 \\( -clone 0 -crop " + str(CHPX2) + "x" + str(LIDLOW) + "+" + str(CHPX) + "+" + str(CHPX * 2 + LIDPX) + " \\) -geometry +0+" + str(LIDPX - PPX) + " -composite \
--extent " + str(CHPX2) + "x" + str(CHPX) + " " + front)
+-extent " + str(CHPX2) + "x" + str(CHPX) + " " + shlex.quote(front))
             # Side
-            os.system("convert " + chest_file + " \
+            os.system("convert " + shlex.quote(chest_file) + " \
 \\( -clone 0 -crop " + str(CHPX) + "x" + str(LIDPX) + "+" + str(0) + "+" + str(CHPX) + " \\) -geometry +0+0 -composite \
 \\( -clone 0 -crop " + str(CHPX) + "x" + str(LIDLOW) + "+" + str(0) + "+" + str(CHPX * 2 + LIDPX) + " \\) -geometry +0+" + str(LIDPX - PPX) + " -composite \
--extent " + str(CHPX) + "x" + str(CHPX) + " " + side)
+-extent " + str(CHPX) + "x" + str(CHPX) + " " + shlex.quote(side))
 
 # Generate railway crossings and t-junctions
 
@@ -402,40 +403,40 @@ def convert_rail_textures(
     for r in rails:
         os.system(
             "composite -compose Dst_Over " +
-            tex_dir +
+            shlex.quote(tex_dir +
             "/block/" +
-            r[0] +
+            r[0]) +
             " " +
-            tex_dir +
+            shlex.quote(tex_dir +
             "/block/" +
-            r[1] +
+            r[1]) +
             " " +
-            target_dir(
+            shlex.quote(target_dir(
                 "/mods/ENTITIES/mcl_minecarts/textures",
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
                 mineclone2_path) +
             "/" +
-            r[2])
-        os.system("convert " + tex_dir + "/block/" +
-                  r[0] + " -rotate 90 " + tempfile1.name)
+            r[2]))
+        os.system("convert " + shlex.quote(tex_dir + "/block/" +
+                  r[0]) + " -rotate 90 " + shlex.quote(tempfile1.name))
         os.system(
             "composite -compose Dst_Over " +
-            tempfile1.name +
+            shlex.quote(tempfile1.name) +
             " " +
-            tex_dir +
+            shlex.quote(tex_dir +
             "/block/" +
-            r[0] +
+            r[0]) +
             " " +
-            target_dir(
+            shlex.quote(target_dir(
                 "/mods/ENTITIES/mcl_minecarts/textures",
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
                 mineclone2_path) +
             "/" +
-            r[3])
+            r[3]))
 
 # Convert banner overlays
 
@@ -507,9 +508,9 @@ def convert_banner_overlays(
                 mineclone2_path) + "/" + "mcl_banners_" + o + ".png"
             os.system(
                 "convert " +
-                orig +
+                shlex.quote(orig) +
                 " -transparent-color white -background black -alpha remove -alpha copy -channel RGB -white-threshold 0 " +
-                dest)
+                shlex.quote(dest))
 
 # Convert grass and related textures
 
@@ -774,35 +775,44 @@ def convert_grass_textures(
             output_dir_name,
             mineclone2_path) + "/mcl_core_palette_grass.png"
         os.system("convert -size 16x16 canvas:transparent " +
-                  grass_palette_file)
+                  shlex.quote(grass_palette_file))
+
+        dirt_grass_shadow_file = target_dir(
+            "/textures",
+            make_texture_pack,
+            output_dir,
+            output_dir_name,
+            mineclone2_path) + "/mcl_dirt_grass_shadow.png"
+        os.system("convert -size 16x16 canvas:transparent " +
+                  shlex.quote(dirt_grass_shadow_file))
 
         for i, color in enumerate(grass_colors):
             if color[0][0] == "#":
                 os.system("convert -size 1x1 xc:\"" +
-                          color[0] + "\" " + tempfile1.name + ".png")
+                          color[0] + "\" " + shlex.quote(tempfile1.name) + ".png")
             else:
-                os.system("convert " + GRASS + " -crop 1x1+" +
-                          color[0] + " " + tempfile1.name + ".png")
+                os.system("convert " + shlex.quote(GRASS) + " -crop 1x1+" +
+                          color[0] + " " + shlex.quote(tempfile1.name) + ".png")
 
             if len(color) > 1:
                 os.system(
                     "convert " +
-                    tempfile1.name +
-                    ".png \\( -size 1x1 xc:\"" +
+                    shlex.quote(tempfile1.name +
+                    ".png") + " \\( -size 1x1 xc:\"" +
                     color[1] +
                     "\" \\) -compose blend -define compose:args=50,50 -composite " +
-                    tempfile1.name +
-                    ".png")
+                    shlex.quote(tempfile1.name +
+                    ".png"))
 
             os.system("convert " +
-                      grass_palette_file +
+                      shlex.quote(grass_palette_file) +
                       " \\( " +
-                      tempfile1.name +
-                      ".png -geometry +" +
+                      shlex.quote(tempfile1.name +
+                      ".png") + " -geometry +" +
                       str(i %
                           16) +
                       "+" +
                       str(int(i /
                               16)) +
                       " \\) -composite " +
-                      grass_palette_file)
+                      shlex.quote(grass_palette_file))

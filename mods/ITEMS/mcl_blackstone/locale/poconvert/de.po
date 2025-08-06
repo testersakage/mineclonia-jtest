@@ -64,11 +64,11 @@ msgstr "Polierte Schwarzstein Treppe"
 msgid "Polished Blackstone Slab"
 msgstr "Polierte Schwarzstein Stufe"
 
-msgid "Blackstone Brick Stairs"
-msgstr "Schwarzstein-Ziegelsteintreppe"
+msgid "Polished Blackstone Brick Stairs"
+msgstr "Polierte Schwarzsteinziegeltreppe"
 
-msgid "Blackstone Brick Slab"
-msgstr "Schwarzstein-Ziegelsteinplatte"
+msgid "Polished Blackstone Brick Slab"
+msgstr "Polierte Schwarzsteinziegelplatte"
 
 msgid "Soul Torch"
 msgstr "Seelenfakel"
@@ -78,4 +78,10 @@ msgstr "Fackeln sind Lichtquellen, die an der Seite oder der Oberseite der meist
 
 msgid "Blackstone Wall"
 msgstr "Schwarzsteinmauer"
+
+msgid "Polished Blackstone Wall"
+msgstr "Polierte Schwarzsteinwand"
+
+msgid "Polished Blackstone Brick Wall"
+msgstr "Polierte Schwarzsteinziegelwand"
 

@@ -103,7 +103,7 @@ core.register_node("mcl_fire:fire", {
 		end
 	end,
 	_pathfinding_class = "DAMAGE_FIRE",
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 core.register_node("mcl_fire:eternal_fire", {
@@ -144,7 +144,7 @@ core.register_node("mcl_fire:eternal_fire", {
 	sounds = {},
 	drop = "",
 	_pathfinding_class = "DAMAGE_FIRE",
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 --

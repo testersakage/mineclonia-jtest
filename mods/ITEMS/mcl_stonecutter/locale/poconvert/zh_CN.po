@@ -16,8 +16,11 @@ msgstr ""
 msgid "Stonecutter"
 msgstr "切石机"
 
+msgid "Fill Craft Grid"
+msgstr ""
+
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 
 msgid "Stone Cutter"
 msgstr "石材切割机"

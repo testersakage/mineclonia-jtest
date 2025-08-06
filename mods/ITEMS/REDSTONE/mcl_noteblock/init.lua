@@ -185,7 +185,6 @@ core.register_node("mcl_noteblock:noteblock", {
 			}
 		end,
 	},
-	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_burntime = 15,
 })

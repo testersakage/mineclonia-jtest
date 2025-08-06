@@ -138,10 +138,10 @@ msgstr "Получите слиток железа из печи.\n"
 msgid "Delicious Fish"
 msgstr "Вкусная рыбка"
 
-msgid "Take a cooked fish from a furnace.\n"
+msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
-msgstr "Приготовьте рыбу в печи.\n"
-"Подсказка: Поймайте рыбу удочкой и приготовьте её в печи."
+msgstr "Возьмите любую приготовленную рыбу после готовки в печи, коптильне, на костре или костре душ.\n"
+"Подсказка: поймайте рыбу с помощью удочки и приготовьте её в печи."
 
 msgid "On A Rail"
 msgstr "Стук колёс"

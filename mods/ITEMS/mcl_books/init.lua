@@ -30,6 +30,9 @@ local function make_description(itemstack)
 	local title = m:get_string("title")
 	local author = m:get_string("author")
 	local generation = m:get_int("generation")
+	if author == "" then
+		return
+	end
 
 	local desc
 	if generation == 0 then
@@ -334,7 +337,6 @@ core.register_node("mcl_books:bookshelf", {
 	},
 	drop = "mcl_books:book 3",
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	_mcl_blast_resistance = 1.5,
 	_mcl_hardness = 1.5,
 	_mcl_silk_touch_drop = true,
 	_mcl_burntime = 15,

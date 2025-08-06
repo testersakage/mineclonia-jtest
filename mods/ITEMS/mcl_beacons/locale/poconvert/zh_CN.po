@@ -47,5 +47,5 @@ msgid "Regeneration"
 msgstr "再生"
 
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 

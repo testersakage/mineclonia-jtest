@@ -32,5 +32,5 @@ msgid "Read the help entries on the other redstone components to learn how redst
 msgstr "Lisez les entrées d'aide sur les autres composants Redstone pour savoir comment les composants Redstone interagissent."
 
 msgid "Redstone Dust"
-msgstr ""
+msgstr "Poudre de redstone"
 

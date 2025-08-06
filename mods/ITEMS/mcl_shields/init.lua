@@ -389,6 +389,27 @@ local function handle_blocking(player)
 		return
 	end
 
+	local pointed_thing = mcl_util.get_pointed_thing(player, true)
+	local wielded_stack = player:get_wielded_item()
+	if pointed_thing and pointed_thing.type == "node" then
+		local pointed_node = core.get_node(pointed_thing.under)
+		if core.get_item_group(pointed_node.name, "container") > 1
+		or is_rmb_conflicting_node(pointed_node.name)
+		or is_node_stack(wielded_stack)
+		then
+			return
+		end
+	end
+	if pointed_thing and pointed_thing.type == "object" then
+		local ent = pointed_thing.ref:get_luaentity()
+		if ent then
+			local def = core.registered_entities[ent.name]
+			if def.on_rightclick and not def._unplaceable_by_default then
+				return
+			end
+		end
+	end
+
 	local shield_in_offhand = mcl_shields.wielding_shield(player, 1)
 	local shield_in_hand = mcl_shields.wielding_shield(player)
 	local not_blocking = player_shield.blocking == 0
@@ -411,20 +432,8 @@ local function handle_blocking(player)
 			end
 		end
 	elseif shield_in_offhand then
-		local pointed_thing = mcl_util.get_pointed_thing(player, true)
-		local wielded_stack = player:get_wielded_item()
 		local offhand_can_block = (core.get_item_group(wielded_item(player), "bow") ~= 1
 		and core.get_item_group(wielded_item(player), "crossbow") ~= 1)
-
-		if pointed_thing and pointed_thing.type == "node" then
-			local pointed_node = core.get_node(pointed_thing.under)
-			if core.get_item_group(pointed_node.name, "container") > 1
-			or is_rmb_conflicting_node(pointed_node.name)
-			or is_node_stack(wielded_stack)
-			then
-				return
-			end
-		end
 
 		if not offhand_can_block then
 			return
@@ -594,6 +603,7 @@ for colorkey, colortab in pairs(mcl_banners.colors) do
 		sound = {breaks = "default_tool_breaks"},
 		_repair_material = "group:wood",
 		wield_scale = vector.new(2, 2, 2),
+		_placement_class = "shield",
 		_shield_color_key = colorkey,
 		_mcl_wieldview_item = "",
 		_mcl_generate_description = mcl_banners.update_description,

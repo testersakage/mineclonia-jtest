@@ -64,11 +64,11 @@ msgstr "拋光黑石階梯"
 msgid "Polished Blackstone Slab"
 msgstr "拋光黑石半磚"
 
-msgid "Blackstone Brick Stairs"
-msgstr "黑石磚階梯"
+msgid "Polished Blackstone Brick Stairs"
+msgstr ""
 
-msgid "Blackstone Brick Slab"
-msgstr "黑石磚台階"
+msgid "Polished Blackstone Brick Slab"
+msgstr ""
 
 msgid "Soul Torch"
 msgstr "靈魂火把"
@@ -78,4 +78,10 @@ msgstr "火把會發光，可以壁掛也可以置地。"
 
 msgid "Blackstone Wall"
 msgstr "黑石牆"
+
+msgid "Polished Blackstone Wall"
+msgstr ""
+
+msgid "Polished Blackstone Brick Wall"
+msgstr ""
 

@@ -17,7 +17,7 @@ msgid "Repair & Disenchant"
 msgstr "修复与祛魔"
 
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 
 msgid "Grindstone"
 msgstr "砂轮"

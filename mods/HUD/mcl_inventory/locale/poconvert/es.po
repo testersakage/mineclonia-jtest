@@ -13,6 +13,18 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Auto (use scroll bar if client >= 5.11)"
+msgstr "Automático (usar barra de desplazamiento si el cliente es >= 5.11)"
+
+msgid "Off  (use paging buttons, faster)"
+msgstr ""
+
+msgid "On   (more MC like, slower)"
+msgstr ""
+
+msgid "Enable scrollable creative inventory"
+msgstr ""
+
 msgid "Building Blocks"
 msgstr "Bloques de construcción"
 
@@ -61,6 +73,12 @@ msgstr "Cambiar la cantidad de ítems por pila"
 msgid "@1 / @2"
 msgstr "@1 / @2"
 
+msgid "Very large inventory displays may be slow when scrolling, especially on Luanti versions before 5.11.\n"
+"Therefore the creative inventory display can be split into pages with prev/next page buttons.\n"
+"Mineclonia defaults to use scrolling unless an older Luanti version is detected.\n"
+"This setting allows you to override that heuristic."
+msgstr ""
+
 msgid "Recipe book"
 msgstr "Libro de recetas"
 
@@ -71,10 +89,10 @@ msgid "Advancements"
 msgstr "Progresos"
 
 msgid "Player settings"
-msgstr ""
+msgstr "Ajustes del jugador"
 
 msgid "Return to player inventory"
-msgstr ""
+msgstr "Volver al inventario del jugador"
 
 msgid "Crafting table out of range!"
 msgstr "¡Mesa de trabajo fuera de alcance!"
@@ -83,5 +101,5 @@ msgid "Crafting"
 msgstr "Fabricación"
 
 msgid "Fill Craft Grid"
-msgstr "Llenar la cuadrícula de fabricación"
+msgstr "Rellenar rejilla de fabricación"
 

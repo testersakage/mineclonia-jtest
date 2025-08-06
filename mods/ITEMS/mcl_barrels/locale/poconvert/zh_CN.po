@@ -17,7 +17,7 @@ msgid "Barrel"
 msgstr "桶"
 
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 
 msgid "27 inventory slots"
 msgstr "27个背包储存格"

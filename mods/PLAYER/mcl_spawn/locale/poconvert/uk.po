@@ -17,7 +17,7 @@ msgid "Respawn position cleared!"
 msgstr ""
 
 msgid "New respawn position set!"
-msgstr ""
+msgstr "Встановлено нову точку відродження!"
 
 msgid "Couldn't get level of your respawn anchor!"
 msgstr ""

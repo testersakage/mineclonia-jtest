@@ -35,7 +35,6 @@ mcl_itemframes.tpl_node = {
 	sounds = mcl_sounds.node_sound_defaults(),
 	node_placement_prediction = "",
 	_mcl_hardness = 0.5,
-	_mcl_blast_resistance = 0.5,
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 	allow_metadata_inventory_move = function() return 0 end,
 	allow_metadata_inventory_put = function() return 0 end,
@@ -94,9 +93,21 @@ local function get_map_id(itemstack)
 	return map_id
 end
 
+local function rotate_entity(pos, rot)
+	local l = find_entity(pos)
+	local meta = core.get_meta(pos)
+	local itemstack = meta:get_inventory():get_stack("main", 1)
+	local is_map = (get_map_id(itemstack) and 1 or 0)
+	if l then
+		l.object:set_rotation(vector.add(l.object:get_rotation(), vector.new(0, 0, 0.25 * math.pi * (rot or 1) * (is_map + 1))))
+		meta:set_int("mcl_item_rotation", meta:get_int("mcl_item_rotation") + (rot == nil and 1 or 0) % 8)
+	end
+end
+
 local function update_entity(pos)
 	if not pos then return end
-	local inv = core.get_meta(pos):get_inventory()
+	local meta = core.get_meta(pos)
+	local inv = meta:get_inventory()
 	local itemstack = inv:get_stack("main", 1)
 	if not itemstack then
 		remove_entity(pos)
@@ -109,12 +120,18 @@ local function update_entity(pos)
 		return
 	end
 	l:set_item(itemstack, pos)
+	rotate_entity(pos, meta:get_int("mcl_item_rotation"))
 	return l
 end
 mcl_itemframes.update_entity = update_entity
 
 -- Node functions
 function mcl_itemframes.tpl_node.on_rightclick(pos, _, clicker, ostack, _)
+	local inv = core.get_meta(pos):get_inventory()
+	if not inv:get_stack("main", 1):is_empty() then
+		rotate_entity(pos)
+		return ostack
+	end
 	local name = clicker:get_player_name()
 	if core.is_protected(pos, name) then
 		core.record_protection_violation(pos, name)
@@ -125,7 +142,6 @@ function mcl_itemframes.tpl_node.on_rightclick(pos, _, clicker, ostack, _)
 	local nmeta = core.get_meta(pos)
 	nmeta:set_string("infotext", imeta:get_string("name"))
 	local itemstack = pstack:take_item()
-	local inv = core.get_meta(pos):get_inventory()
 	drop_item(pos)
 	inv:set_stack("main", 1, itemstack)
 	update_entity(pos)

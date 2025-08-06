@@ -9,7 +9,7 @@ doc.add_category("basics", {
 	name = S("Basics"),
 	description = S("Everything you need to know to get started with playing"),
 	sorting = "custom",
-	sorting_data = {"quick_start", "controls", "point", "items", "inventory", "hotbar", "tools", "weapons", "nodes", "mine", "build", "craft", "cook", "hunger", "mobs", "animals", "minimap", "cam", "sneak", "players", "liquids", "light", "groups", "glossary", "minetest"},
+	sorting_data = {"quick_start", "controls", "point", "items", "inventory", "hotbar", "tools", "weapons", "nodes", "mine", "build", "craft", "cook", "hunger", "mobs", "animals", "minimap", "cam", "sneak", "players", "liquids", "light", "groups", "glossary", "luanti"},
 	build_formspec = doc.entry_builders.text_and_gallery,
 })
 
@@ -589,14 +589,14 @@ S("• Protection: Mechanism to own areas of the world, which only allows the ow
 
 S("Technical terms:").."\n"..
 S("• Luanti: This game engine").."\n"..
-S("• Minetest Game: A game for Luanti by the Minetest developers").."\n"..
+S("• Minetest Game: A game for Luanti by the Luanti developers").."\n"..
 S("• Game: A complete playing experience to be used in Luanti; such as a game or sandbox or similar").."\n"..
 S("• Mod: A single subsystem which adds or modifies functionality; is the basic building block of games and can be used to further enhance or modify them").."\n"..
 S("• Privilege: Allows a player to do something").."\n"..
 S("• Node: Other word for “block”")
 }})
 
-doc.add_entry("basics", "minetest", {
+doc.add_entry("basics", "luanti", {
 	name = S("Luanti"),
 	data = {
 		text =
@@ -606,6 +606,6 @@ S("A core feature of Luanti is the built-in modding capability, which all games 
 
 S("Luanti can be played alone or online together with multiple players. Online play will work out of the box with any mods, with no need for additional software as they are entirely provided by the server.").."\n\n"..
 
-S("MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser.")
+S("MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Luanti however, that can be installed from the main menu content browser.")
 }})
 

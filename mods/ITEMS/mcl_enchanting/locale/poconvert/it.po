@@ -23,256 +23,256 @@ msgid "Channeling"
 msgstr "Canalizzazione"
 
 msgid "Channels a bolt of lightning toward a target. Works only during thunderstorms and if target is unobstructed with opaque blocks."
-msgstr ""
+msgstr "Canalizza un fulmine sul bersaglio colpito. Funziona solo durante i temporali e se il bersaglio non ha blocchi opachi sopra di sé."
 
 msgid "Curse of Vanishing"
-msgstr ""
+msgstr "Maledizione della scomparsa"
 
 msgid "Item destroyed on death."
-msgstr ""
+msgstr "Distrugge l'oggetto quando muori."
 
 msgid "Depth Strider"
-msgstr ""
+msgstr "Passo anfibio"
 
 msgid "Increases underwater movement speed."
-msgstr ""
+msgstr "Aumenta la velocità di movimento sotto acqua."
 
 msgid "Efficiency"
-msgstr ""
+msgstr "Efficienza"
 
 msgid "Increases mining speed."
-msgstr ""
+msgstr "Aumenta la velocità di scavo."
 
 msgid "Fire Aspect"
-msgstr ""
+msgstr "Aspetto di fuoco"
 
 msgid "Sets target on fire."
-msgstr ""
+msgstr "Da' fuoco al bersaglio."
 
 msgid "Flame"
-msgstr ""
+msgstr "Fiamma"
 
 msgid "Arrows set target on fire."
-msgstr ""
+msgstr "Le frecce danno fuoco al bersaglio."
 
 msgid "Fortune"
-msgstr ""
+msgstr "Fortuna"
 
 msgid "Increases certain block drops."
-msgstr ""
+msgstr "Aumenta il drop di alcuni blocchi."
 
 msgid "Frost Walker"
-msgstr ""
+msgstr "Passo gelato"
 
 msgid "Turns water beneath the player into frosted ice and prevents the damage from magma blocks."
-msgstr ""
+msgstr "Trasforma l'acqua ai piedi del giocatore in ghiaccio e annulla il danno dei blocchi di magma."
 
 msgid "Impaling"
-msgstr ""
+msgstr "Impalamento"
 
 msgid "Trident deals additional damage to ocean mobs."
-msgstr ""
+msgstr "Il tridente infligge maggior danno verso i mob marini."
 
 msgid "Infinity"
-msgstr ""
+msgstr "Infinità"
 
 msgid "Shooting consumes no regular arrows."
-msgstr ""
+msgstr "Spara frecce normali senza consumarle."
 
 msgid "Knockback"
-msgstr ""
+msgstr "Contraccolpo"
 
 msgid "Increases knockback."
-msgstr ""
+msgstr "Aumenta il contraccolpo."
 
 msgid "Looting"
-msgstr ""
+msgstr "Saccheggio"
 
 msgid "Increases mob loot."
-msgstr ""
+msgstr "Aumenta i drop dei mob."
 
 msgid "Loyalty"
-msgstr ""
+msgstr "Lealtà"
 
 msgid "Trident returns after being thrown. Higher levels reduce return time."
-msgstr ""
+msgstr "Il tridente ritorna in mano dopo essere lanciato. Più è alto il livello e più è basso il tempo di ritorno."
 
 msgid "Luck of the Sea"
-msgstr ""
+msgstr "Fortuna del mare"
 
 msgid "Increases rate of good loot (enchanting books, etc.)"
-msgstr ""
+msgstr "Aumenta le probabilità di trovare tesori pescando"
 
 msgid "Lure"
-msgstr ""
+msgstr "Esca"
 
 msgid "Decreases time until rod catches something."
-msgstr ""
+msgstr "Riduce il tempo di abbocco dell'amo."
 
 msgid "Mending"
-msgstr ""
+msgstr "Ripristino"
 
 msgid "Repair the item while gaining XP orbs."
-msgstr ""
+msgstr "Ripara l'oggetto raccogliendo sfere d'esperienza."
 
 msgid "Multishot"
-msgstr ""
+msgstr "Tiro multiplo"
 
 msgid "Shoot 3 arrows at the cost of one."
-msgstr ""
+msgstr "Spara 3 frecce contemporaneamente al costo di una."
 
 msgid "Piercing"
-msgstr ""
+msgstr "Perforazione"
 
 msgid "Arrows passes through multiple objects."
-msgstr ""
+msgstr "Le frecce possono trapassare più bersagli."
 
 msgid "Power"
-msgstr ""
+msgstr "Potenza"
 
 msgid "Increases arrow damage."
-msgstr ""
+msgstr "Aumenta il danno delle frecce."
 
 msgid "Punch"
-msgstr ""
+msgstr "Impatto"
 
 msgid "Increases arrow knockback."
-msgstr ""
+msgstr "Aumenta il contraccolpo delle frecce."
 
 msgid "Quick Charge"
-msgstr ""
+msgstr "Carica rapida"
 
 msgid "Decreases crossbow charging time."
-msgstr ""
+msgstr "Riduce il tempo di ricarica della balestra."
 
 msgid "Respiration"
-msgstr ""
+msgstr "Respirazione"
 
 msgid "Extends underwater breathing time."
-msgstr ""
+msgstr "Aumenta il tempo di respirazione sott'acqua."
 
 msgid "Riptide"
-msgstr ""
+msgstr "Risacca"
 
 msgid "Trident launches player with itself when thrown. Works only in water or rain."
-msgstr ""
+msgstr "Il tridente trascina il giocatore con sé quando lanciato. Funziona solo nell'acqua o sotto la pioggia."
 
 msgid "Sharpness"
-msgstr ""
+msgstr "Affilatezza"
 
 msgid "Increases damage."
-msgstr ""
+msgstr "Aumenta il danno."
 
 msgid "Silk Touch"
-msgstr ""
+msgstr "Tocco di velluto"
 
 msgid "Mined blocks drop themselves."
-msgstr ""
+msgstr "Gli oggetti scavati droppano sé stessi."
 
 msgid "Smite"
-msgstr ""
+msgstr "Anatema"
 
 msgid "Increases damage to undead mobs."
-msgstr ""
+msgstr "Aumenta il danno contro i mob non-morti."
 
 msgid "Soul Speed"
-msgstr ""
+msgstr "Velocità delle anime"
 
 msgid "Increases walking speed on soul sand."
-msgstr ""
+msgstr "Aumenta la velocità quando si cammina sulla sabbia delle anime."
 
 msgid "Sweeping Edge"
-msgstr ""
+msgstr "Lama sferzante"
 
 msgid "Increases sweeping attack damage."
-msgstr ""
+msgstr "Aumenta il danno dell'attacco sferzante."
 
 msgid "Unbreaking"
-msgstr ""
+msgstr "Indistruttibilità"
 
 msgid "Increases item durability."
-msgstr ""
+msgstr "Aumenta la durata dell'oggetto."
 
 msgid "Density"
-msgstr ""
+msgstr "Densità"
 
 msgid "Increases mace damage when falling."
-msgstr ""
+msgstr "Aumenta il danno della mazza in caduta."
 
 msgid "Breach"
-msgstr ""
+msgstr "Breccia"
 
 msgid "Reduces target's armor effectiveness."
-msgstr ""
+msgstr "Riduce l'efficacia dell'armatura del bersaglio."
 
 msgid "Wind Burst"
-msgstr ""
+msgstr "Colpo di vento"
 
 msgid "Emits a burst of wind from a mace smash attack."
-msgstr ""
+msgstr "La mazza emette una potente ventata quando si attacca dall'alto."
 
 msgid "Unknown Enchantment"
-msgstr ""
+msgstr "Incantesimo sconosciuto"
 
 msgid "Inventory"
 msgstr "Inventario"
 
 msgid "@1 Enchantment Levels"
-msgstr ""
+msgstr "@1 livelli di incantamento"
 
 msgid "Level requirement: @1"
-msgstr ""
+msgstr "Livello richiesto: @1"
 
 msgid "@1 Lapis Lazuli"
-msgstr ""
+msgstr "@1 lapislazzuli"
 
 msgid "Enchant an item"
-msgstr ""
+msgstr "Incanta un oggetto"
 
 msgid "<player> <enchantment> [<level>]"
-msgstr ""
+msgstr "<giocatore> <incantesimo> [<livello>]"
 
 msgid "Usage: /enchant <player> <enchantment> [<level>]"
-msgstr ""
+msgstr "Uso: /enchant <giocatore> <incantesimo> [<livello>]"
 
 msgid "Player '@1' cannot be found."
-msgstr ""
+msgstr "Giocatore '@1' non trovato."
 
 msgid "There is no such enchantment '@1'."
-msgstr ""
+msgstr "Non esiste l'incantesimo '@1'."
 
 msgid "The target doesn't hold an item."
-msgstr ""
+msgstr "Il bersaglio non ha in mano oggetti."
 
 msgid "The selected enchantment can't be added to the target item."
-msgstr ""
+msgstr "L'incantesimo scelto non può essere aggiunto all'oggetto in mano al bersaglio."
 
 msgid "'@1' is not a valid number"
-msgstr ""
+msgstr "'@1' non è un numero valido"
 
 msgid "The number you have entered (@1) is too big, it must be at most @2."
-msgstr ""
+msgstr "Il valore inserito (@1) è troppo grande, deve essere al massimo @2."
 
 msgid "The number you have entered (@1) is too small, it must be at least @2."
-msgstr ""
+msgstr "Il valore inserito è troppo piccolo (@1), deve essere almeno @2."
 
 msgid "@1 can't be combined with @2."
-msgstr ""
+msgstr "@1 non può essere combinato con @2."
 
 msgid "Enchanting succeded."
-msgstr ""
+msgstr "Incantamento completato."
 
 msgid "Forcefully enchant an item"
-msgstr ""
+msgstr "Incanta forzatamente un oggetto"
 
 msgid "Usage: /forceenchant <player> <enchantment> [<level>]"
-msgstr ""
+msgstr "Uso: /forceenchant <giocatore> <incantesimo> [<livello>]"
 
 msgid "The target item is not enchantable."
-msgstr ""
+msgstr "L'oggetto del bersaglio non può essere incantato."
 
 msgid "'@1' is not a valid number."
-msgstr ""
+msgstr "'@1' non è un numero valido."
 
 msgid "Enchanted Book"
 msgstr "Libro incantato"
@@ -281,29 +281,29 @@ msgid "Enchanting Table"
 msgstr "Tavolo per incantesimi"
 
 msgid "Spend experience, and lapis to enchant various items."
-msgstr ""
+msgstr "Consuma livelli di esperienza e lapislazzuli per incantare vari oggetti."
 
 msgid "Enchanting Tables will let you enchant armors, tools, weapons, and books with various abilities. But, at the cost of some experience, and lapis lazuli."
-msgstr ""
+msgstr "I tavoli per incantesimi permettono di incantare armature, attrezzi, armi e libri con varie abilità; al costo di alcuni livelli di esperienza e lapislazzuli."
 
 msgid "Rightclick the Enchanting Table to open the enchanting menu."
-msgstr ""
+msgstr "Fai clic col tasto destro sul Tavolo per incantesimi per aprire il menu degli incantesimi."
 
 msgid "Place a tool, armor, weapon or book into the top left slot, and then place 1-3 Lapis Lazuli in the slot to the right."
-msgstr ""
+msgstr "Posiziona uno strumento, armatura, arma o libro nello slot di sinistra, e da 1 a 3 lapislazzuli nello slot di destra."
 
 msgid "After placing your items in the slots, the enchanting options will be shown. Hover over the options to read what is available to you."
-msgstr ""
+msgstr "Dopo aver posizionato gli oggetti negli slot, le scelte di incantesimi saranno disponibili. Posiziona il puntatore su ciascuna di esse per scoprire quali sono disponibili."
 
 msgid "These options are randomized, and dependent on experience level; but the enchantment strength can be increased."
-msgstr ""
+msgstr "Le scelte sono casuali e dipendono dal livello di esperienza, ma la forza d'incantamento può essere aumentata."
 
 msgid "To increase the enchantment strength, place bookshelves around the enchanting table. However, you will need to keep 1 air node between the table, & the bookshelves to empower the enchanting table."
-msgstr ""
+msgstr "Per aumentare la forza di incantamento, posiziona delle librerie intorno al Tavolo per incantesimi. Tieni conto che è necessario almeno un nodo di aria fra il Tavolo e la libreria per potenziare il primo."
 
 msgid "After finally selecting your enchantment; left-click on the selection, and you will see both the lapis lazuli and your experience levels consumed. And, an enchanted item left in its place."
-msgstr ""
+msgstr "Dopo aver scelto l'incantesimo fai clic per selezionarlo, i lapislazzuli e livelli di esperienza verranno consumati. L'oggetto riceverà l'incantesimo."
 
 msgid "Enchant"
-msgstr ""
+msgstr "Incanta"
 

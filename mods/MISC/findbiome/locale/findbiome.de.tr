@@ -1,8 +1,7 @@
 # textdomain: findbiome
 # mod title
 # mod strings
-Wait until all mods have loaded!=
-Not supported. The “biomeinfo” mod is required for v6 mapgen support!=
+Wait until all mods have loaded!=Warte bis alle Mods geladen sind.
 Find and teleport to biome=Ein Biom finden und hinteleportieren
 <biome>=<Biom>
 No player.=Kein Spieler.

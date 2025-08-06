@@ -14,20 +14,20 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "[<gamemode>] [<player>]"
-msgstr ""
+msgstr "[<modalità>] [<giocante>]"
 
 msgid "Change gamemode (survival/creative/0/1/s/c) for yourself or player"
-msgstr ""
+msgstr "Cambia modalità di gioco (survival/creative/0/1/s/c) per te o unə giocante"
 
 msgid "Player not online"
-msgstr ""
+msgstr "Giocante non connessə"
 
 msgid "Failed to set gamemode @1 for player @2"
-msgstr ""
+msgstr "Errore nell'impostare la modalità di gioco @1 per lə giocante @2"
 
 msgid "Player @1 is still in creative mode because world is in creative mode"
-msgstr ""
+msgstr "Lə giocante @1 è ancora in creativa in quanto anche il mondo lo è"
 
 msgid "Gamemode for player @1: @2"
-msgstr ""
+msgstr "Modalità di gioco per lə giocante @1: @2"
 

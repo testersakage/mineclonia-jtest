@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Arrow"
-msgstr ""
+msgstr "Стріла"
 
 msgid "Ammunition"
-msgstr ""
+msgstr "Боєприпаси"
 
 msgid "Damage from bow: 1-10"
 msgstr ""
@@ -53,14 +53,14 @@ msgid "The speed and damage of the arrow increases the longer you charge. The re
 msgstr ""
 
 msgid "Crossbow"
-msgstr ""
+msgstr "Арбалет"
 
 msgid "Crossbows are ranged weapons to shoot arrows at your foes."
 msgstr ""
 
 msgid "To use the crossbow, you first need to have at least one arrow anywhere in your inventory (unless in Creative Mode). Hold down the right mouse button (or zoom key) to charge, release to load an arrow into the chamber, then to shoot press left mouse."
-msgstr ""
+msgstr "Щоб скористатися арбалетом, вам спочатку потрібно мати принаймні одну стрілу в будь-якому місці вашого інвентарю (якщо ви не перебуваєте у творчому режимі). Утримуйте праву кнопку миші (або клавішу масштабування), щоб зарядити арбалет, відпустіть її, щоб вставити стрілу в патронник, а щоб вистрілити, натисніть ліву кнопку миші."
 
 msgid "To use the crossbow, you first need to have at least one arrow anywhere in your inventory (unless in Creative Mode). Hold down the right mouse button to charge, release to load an arrow into the chamber, then to shoot press left mouse."
-msgstr ""
+msgstr "Щоб скористатися арбалетом, вам спочатку потрібно мати принаймні одну стрілу в будь-якому місці вашого інвентарю (якщо ви не перебуваєте у творчому режимі). Утримуйте праву кнопку миші (або клавішу масштабування), щоб зарядити арбалет, відпустіть її, щоб вставити стрілу в патронник, а щоб вистрілити, натисніть ліву кнопку миші."
 

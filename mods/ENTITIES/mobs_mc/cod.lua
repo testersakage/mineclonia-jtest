@@ -14,6 +14,7 @@ local cod = {
 	description = S("Cod"),
 	type = "animal",
 	spawn_class = "water_ambient",
+	_spawn_category = "water_ambient",
 	can_despawn = true,
 	passive = true,
 	hp_min = 3,
@@ -116,3 +117,21 @@ mcl_mobs.spawn_setup ({
 
 --spawn egg
 mcl_mobs.register_egg("mobs_mc:cod", S("Cod"), "#c1a76a", "#e5c48b", 0)
+
+------------------------------------------------------------------------
+-- Modern Cod spawning.
+------------------------------------------------------------------------
+
+local cod_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
+	name = "mobs_mc:cod",
+	biomes = mobs_mc.overworld_biomes,
+	weight = 10,
+	pack_min = 3,
+	pack_max = 6,
+})
+
+function cod_spawner:init_group (list, sdata)
+	mob_class.school_init_group (list)
+end
+
+mcl_mobs.register_spawner (cod_spawner)

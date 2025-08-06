@@ -108,20 +108,12 @@ mcl_armor.trims = {
 		["flow"]      = {
 			readable_name = "Flow", dupe_item = "mcl_mobitems:breeze_rod"
 		}
-	},
-	colors			= {
-		["amethyst"]  = "#8246a5",
-		["gold"] 	  = "#ce9627",
-		["emerald"]   = "#1b9958",
-		["copper"] 	  = "#c36447",
-		["diamond"]   = "#5faed8",
-		["iron"] 	  = "#938e88",
-		["lapis"] 	  = "#1c306b",
-		["netherite"] = "#302a26",
-		["quartz"] 	  = "#c9bcb9",
-		["redstone"]  = "#af2c23"
 	}
 }
+
+-- Hold the players attached head entity
+-- example: mcl_armor.head_entity[player:get_player_name()] = entity
+mcl_armor.head_entity = {}
 
 local modpath = core.get_modpath("mcl_armor")
 

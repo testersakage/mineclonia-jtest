@@ -1,3 +1,46 @@
+local function chech_valid_nodes(name)
+	local valid_nodes = {
+		"mcl_core:barrier",
+		"mcl_core:ice",
+		"mcl_end:chorus_flower",
+		"mcl_end:chorus_flower_dead",
+		"mcl_mobspawners:spawner",
+		"mcl_nether:soul_sand"
+	}
+	local valid_groups = {"glass", "opaque", "solid"}
+
+	for _, n in pairs(valid_nodes) do
+		if n == name then return true end
+	end
+
+	for _, g in pairs(valid_groups) do
+		if core.get_item_group(name, g) ~= 0 then return true end
+	end
+
+	return false
+end
+
+local function check_wdir1_exceptions(name, facedir)
+	local valid_nodes = {
+		"mcl_end:dragon_egg",
+		"mcl_portals:end_portal_frame_eye"
+	}
+	local valid_groups = {"anvil", "fence", "pane", "slab_top", "wall"}
+
+	for _, n in pairs(valid_nodes) do
+		if n == name then return true end
+	end
+
+	for _, g in pairs(valid_groups) do
+		if core.get_item_group(name, g) ~= 0 then return true end
+	end
+
+	if core.get_item_group(name, "stairs") == 1 and core.facedir_to_dir(facedir).y ~= 0 then
+		return true
+	end
+
+	return false
+end
 -- Check if placement at given node is allowed
 local function check_placement_allowed(node, wdir)
 	-- Torch placement rules: Disallow placement on some nodes. General rule: Solid, opaque, full cube collision box nodes are allowed.
@@ -11,28 +54,25 @@ local function check_placement_allowed(node, wdir)
 
 	-- Special forbidden nodes:
 	-- * Piston, sticky piston
-	local def = core.registered_nodes[node.name]
-	if not def then
-		return false
-	-- No ceiling torches
-	elseif wdir == 0 then
-		return false
-	elseif not def.buildable_to then
-		if node.name ~= "mcl_core:ice" and node.name ~= "mcl_nether:soul_sand" and node.name ~= "mcl_mobspawners:spawner" and node.name ~= "mcl_core:barrier" and node.name ~= "mcl_end:chorus_flower" and node.name ~= "mcl_end:chorus_flower_dead" and (not def.groups.glass) and
-				((not def.groups.solid) or (not def.groups.opaque)) then
+	local name = node.name
+	local defs = core.registered_nodes[name]
 
-			-- Only allow top placement on these nodes
-			if node.name == "mcl_end:dragon_egg" or node.name == "mcl_portals:end_portal_frame_eye" or def.groups.fence == 1 or def.groups.wall or def.groups.slab_top == 1 or def.groups.anvil or def.groups.pane or (def.groups.stair == 1 and core.facedir_to_dir(node.param2).y ~= 0) then
-				if wdir ~= 1 then
-					return false
-				end
-			else
-				return false
+	if not defs or core.get_item_group(name, "piston") >= 1 then
+		return false
+	end
+
+	if wdir == 0 then
+		return false
+	elseif not defs.buildable_to then
+		if not chech_valid_nodes(name) then
+			if wdir == 1 then
+				return check_wdir1_exceptions(name, node.param2)
 			end
-		elseif core.get_item_group(node.name, "piston") >= 1 then
-			return false
+		else
+			return true
 		end
 	end
+
 	return true
 end
 

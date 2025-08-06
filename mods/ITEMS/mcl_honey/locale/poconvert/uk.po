@@ -17,7 +17,7 @@ msgid "Honeycomb"
 msgstr ""
 
 msgid "Used to craft beehives and protect copper blocks from further oxidation."
-msgstr ""
+msgstr "Використовується для виготовлення бджолиних вуликів та захисту мідних блоків від подальшого окислення."
 
 msgid "Use on copper blocks to prevent further oxidation."
 msgstr ""

@@ -11,6 +11,7 @@ local villager_verbose
 	= core.settings:get_bool ("villager_verbose", false)
 local villager_debug
 	= core.settings:get_bool ("villager_debug", false)
+local scale_chance = mcl_mobs.scale_chance
 
 mobs_mc.jobsites = {}
 
@@ -27,6 +28,7 @@ local WIELD_POSITION = vector.copy ({
 local villager_base = {
 	type = "npc",
 	spawn_class = "passive",
+	_spawn_category = "misc",
 	passive = true,
 	hp_min = 20,
 	hp_max = 20,
@@ -213,7 +215,7 @@ function villager_base:mob_activate (staticdata, dtime)
 	if not rawget (self, "_reputation") then
 		self._reputation = {}
 	end
-	if not self._trades then
+	if not rawget (self, "_trades") then
 		self._trades = {}
 	else
 		for _, trade in pairs (self._trades) do
@@ -1267,6 +1269,50 @@ function villager:happy_villager_effect ()
 	core.add_particlespawner (particlespawner)
 end
 
+function villager:terrified_villager_effect ()
+	local cbox = self.collisionbox
+	local particlespawner = {
+		time = 1.5,
+		amount = 12,
+		pos = {
+			min = {
+				x = cbox[1] - 0.1,
+				y = cbox[5] - 0.1,
+				z = cbox[3] - 0.1,
+			},
+			max = {
+				x = cbox[4] + 0.1,
+				y = cbox[5] + 0.1,
+				z = cbox[6] + 0.1,
+			},
+		},
+		exptime = {
+			min = 0.9,
+			max = 1.5,
+		},
+		size = {
+			max = 2.8,
+			min = 1.8,
+		},
+		texpool = {
+			"mobs_mc_wolf_splash_0.png",
+			"mobs_mc_wolf_splash_1.png",
+			"mobs_mc_wolf_splash_2.png",
+			"mobs_mc_wolf_splash_3.png",
+		},
+		vel = {
+			min = vector.new (-1.0, 1.7, -1.0),
+			max = vector.new (1.0, 1.7, 1.0),
+		},
+		acc = {
+			min = vector.new (0, -9.81, 0),
+			max = vector.new (0, -9.81, 0),
+		},
+		attached = self.object,
+	}
+	core.add_particlespawner (particlespawner)
+end
+
 function villager:on_grown ()
 	if self._sleeping_pose then
 		self.collisionbox = {
@@ -1427,6 +1473,10 @@ local villager_trades = {
 			{ { "mcl_core:emerald", 2, 2, "mcl_bows:arrow", 5, 5 }, { "mcl_potions:leaping_arrow", 5, 5 }, 12, 30 },
 			{ { "mcl_core:emerald", 2, 2, "mcl_bows:arrow", 5, 5 }, { "mcl_potions:poison_arrow", 5, 5 }, 12, 30 },
 			{ { "mcl_core:emerald", 2, 2, "mcl_bows:arrow", 5, 5 }, { "mcl_potions:regeneration_arrow", 5, 5 }, 12, 30 },
+			{ { "mcl_core:emerald", 2, 2, "mcl_bows:arrow", 5, 5 }, { "mcl_potions:strength_arrow", 5, 5 }, 12, 30 },
+			{ { "mcl_core:emerald", 2, 2, "mcl_bows:arrow", 5, 5 }, { "mcl_potions:weakness_arrow", 5, 5 }, 12, 30 },
+			--FIXME: { { "mcl_core:emerald", 2, 2, "mcl_bows:arrow", 5, 5 }, { "mcl_potions:slow_falling_arrow", 5, 5 }, 12, 30 },
+			--FIXME: { { "mcl_core:emerald", 2, 2, "mcl_bows:arrow", 5, 5 }, { "mcl_potions:turtle_master_arrow", 5, 5 }, 12, 30 },
 			{ { "mcl_core:emerald", 2, 2, "mcl_bows:arrow", 5, 5 }, { "mcl_potions:invisibility_arrow", 5, 5 }, 12, 30 },
 			{ { "mcl_core:emerald", 2, 2, "mcl_bows:arrow", 5, 5 }, { "mcl_potions:water_breathing_arrow", 5, 5 }, 12, 30 },
 			{ { "mcl_core:emerald", 2, 2, "mcl_bows:arrow", 5, 5 }, { "mcl_potions:fire_resistance_arrow", 5, 5 }, 12, 30 },
@@ -2733,6 +2783,14 @@ local function sense_nearby_hideout (self, self_pos)
 	return nearby, persist
 end
 
+local function sense_nearby_raid_hideout (self, self_pos)
+	local nearby
+		= core.find_node_near (self_pos, 24, {"group:bed_bottom"}, true)
+		or self._home
+	local persist = 2.0 + pr:next (0, 40) / 40
+	return nearby, persist
+end
+
 local function sense_free_beds (self, self_pos)
 	local nodes = self:run_sensor (self_pos, "nearby_beds")
 	local sites = {}
@@ -3060,6 +3118,11 @@ local function sense_nearby_visible_heroes (self, self_pos)
 	return players, persist
 end
 
+local function sense_active_raid (self, self_pos)
+	local persist = 0.75 + pr:next (0, 10) / 20
+	return mcl_raids.find_active_raid (self_pos), persist
+end
+
 function villager:run_sensor (self_pos, name)
 	local result = nil
 	local persist = 0
@@ -3074,6 +3137,8 @@ function villager:run_sensor (self_pos, name)
 		result, persist = sense_nearby_beds (self, self_pos)
 	elseif name == "nearby_hideout" then
 		result, persist = sense_nearby_hideout (self, self_pos)
+	elseif name == "nearby_raid_hideout" then
+		result, persist = sense_nearby_raid_hideout (self, self_pos)
 	elseif name == "free_beds" then
 		result = sense_free_beds (self, self_pos)
 	elseif name == "nearby_bells" then
@@ -3112,6 +3177,8 @@ function villager:run_sensor (self_pos, name)
 		result, persist = sense_nearby_visible_players (self, self_pos)
 	elseif name == "nearby_visible_heroes" then
 		result, persist = sense_nearby_visible_heroes (self, self_pos)
+	elseif name == "active_raid" then
+		result, persist = sense_active_raid (self, self_pos)
 	end
 	self._sensing[name] = {
 		persist, result,
@@ -3203,28 +3270,28 @@ function villager:desires_golem (gmt)
 end
 
 function villager:summon_golem (self_pos)
-	local aa = vector.offset (self_pos, -8, -6, -8)
-	local bb = vector.offset (self_pos, 8, 6, 8)
+	local aa = vector.offset (self_pos, -8, -5, -8)
+	local bb = vector.offset (self_pos, 8, 5, 8)
 	local nn = core.find_nodes_in_area_under_air (aa, bb, {
-		"group:solid", "group:water",
+		"group:solid", "group:water"
 	})
 	table.shuffle (nn)
 	for _, n in pairs (nn) do
-		local c1 = vector.offset (n, 0, 1, 0)
-		local c2 = vector.offset (n, 0, 3, 0)
-		local up = core.find_nodes_in_area (c1, c2, {"air"})
-		local lim = vector.offset (n, 0, -1, 0)
-		local down = core.find_nodes_in_area (n, lim, {"group:water"})
-		local floor_is_water
-			= core.get_item_group (core.get_node (n).name, "water") ~= 0
-		if floor_is_water and down and #down == 1
-			or not floor_is_water and up and #up >= 3 then
-			local spawnpos
-				= floor_is_water
-					and vector.offset (n, 0, -0.5, 0)
-					or vector.offset (n, 0, 0.5, 0)
+		local half = 1/2
+		local air = core.find_nodes_in_area(
+			vector.offset(n, -half, 1, -half),
+			vector.offset(n, half, 3, half),
+			{"air"}
+		)
+		local required_air = 2*3*2
+		local nb = core.get_node(vector.offset(n,0,-1,0))
+		local nb_solid = core.get_item_group(nb.name, "solid") == 1
+		if #air >= required_air and nb_solid then
+			local spawnpos = vector.offset(n,-0.5,0.5,-0.5)
+			if core.get_item_group(core.get_node(n).name, "water") ~= 0 then
+				spawnpos = vector.offset(spawnpos,0,-1,0)
+			end
 			local golem = core.add_entity (spawnpos, "mobs_mc:iron_golem")
-
 			if golem then
 				return true
 			end
@@ -3467,6 +3534,7 @@ function villager:acquire_job_site (self_pos, dtime)
 				local hash = hash_pos (target)
 				self:abandon_for (hash, 60)
 			end
+			self._provisional_job_site = nil
 			self._acquiring_job_site = nil
 			return false
 		end
@@ -3478,6 +3546,7 @@ function villager:acquire_job_site (self_pos, dtime)
 			self:abandon_for (hash, 60)
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
+			self._provisional_job_site = nil
 			self._acquiring_job_site = false
 			return false
 		end
@@ -3508,6 +3577,11 @@ function villager:acquire_job_site (self_pos, dtime)
 				self._acquiring_job_site = 60.0
 				return "_acquiring_job_site"
 			end
+		elseif target and vector.distance (self_pos, target) < 2.0 then
+			remove_provisional_poi (target)
+			self:claim_poi (target, nil)
+			self._provisional_job_site = nil
+			return nil
 		end
 
 		return false
@@ -5587,28 +5661,121 @@ function villager:begin_lovemaking (object, dtime)
 	return false
 end
 
--- TODO: rewrite raids to vary by difficulty and to utilize the
--- village mechanics defined here and by mcl_villages.
-
 function villager:answer_raid (self_pos, dtime)
+	if self:check_timer ("answer_raid", 1.0)
+		and self._special_schedule ~= "PANIC" then
+		local raid = self:run_sensor (self_pos, "active_raid")
+		if raid then
+			local new_schedule
+			if raid.status ~= "ongoing"
+				or mcl_raids.is_wave_active (raid) then
+				new_schedule = "RAID"
+			else
+				new_schedule = "PRE_RAID"
+			end
+			if new_schedule ~= self._special_schedule then
+				self._special_schedule = new_schedule
+				self._interaction_target = nil
+				self._breed_target = nil
+				self:replace_activity (nil)
+			end
+		end
+	end
+end
+
+function villager:reset_raid (self_pos, dtime)
+	if not self:run_sensor (self_pos, "active_raid") then
+		self._special_schedule = nil
+	end
 end
 
 function villager:ring_bell (self_pos, dtime)
+	local chance = scale_chance (95, dtime)
+	if self._bell and pr:next (1, chance) == 1 then
+		local distance
+			= vector.distance (self_pos, self._bell)
+		-- 3.0 in Minecraft...
+		if distance < 6.0 then
+			local node = core.get_node (self._bell)
+			if node.name == "mcl_bells:bell" then
+				mcl_bells.ring_once (self._bell)
+			end
+		end
+	end
 end
 
 function villager:visit_bell_for_raid (self_pos, dtime)
+	if self._visiting_bell_for_raid then
+		local job_site = self._bell
+		if job_site and self:do_navigate (self_pos, dtime, job_site,
+						0.75, true, 6.0) then
+			return true
+		end
+		self._visiting_bell_for_raid = false
+		return false
+	elseif not self._pacing_around_poi
+		and self._bell
+		and manhattan3d (self, self_pos, self._bell) >= 10
+		and pr:next (1, 6) == 1
+		and self:do_navigate (self_pos, dtime, self._bell,
+			0.75, false, 6.0) then
+		self._visiting_bell_for_raid = true
+		return "_visiting_bell_for_raid"
+	end
 end
 
-function villager:run_around_village (self_pos, dtime)
+-- Frantically run about in the near vicinity.
+villager.run_around_village
+	= generate_pace_around_village ("_run_around_village", 0.75, 2, 2, true)
+
+-- TODO: launch fireworks after moving into the open.
+
+function villager:raid_was_defeated (self_pos)
+	local raid = self:run_sensor (self_pos, "active_raid")
+	return raid and raid.status == "victory"
 end
 
-function villager:pace_disconsolate (self_pos, dtime)
-end
-
-function villager:pace_triumphant (self_pos, dtime)
-end
+villager.pace_triumphant
+	= generate_pace_around_village ("_pace_triumphant", 0.55, 10, 7, true,
+				        villager.raid_was_defeated)
 
 function villager:locate_cover_fast (self_pos, dtime)
+	if self._moving_to_cover_fast then
+		local hideout = self._moving_to_cover_fast
+		local continue, _, dist
+			= self:do_navigate (self_pos, dtime, hideout, 0.7, true)
+		if continue then
+			return true
+		end
+
+		if dist <= 2.0 then
+			local t = self._time_passed_by_cover + dtime
+			self._time_passed_by_cover = t
+
+			if t >= 15 then
+				self._moving_to_cover_fast = nil
+				return false
+			end
+		elseif self:check_timer ("hideout_resume", 0.5) then
+			-- Attempt to return to the hideout.
+			self:do_navigate (self_pos, dtime, hideout, 0.7, false)
+		end
+
+		return true
+	else
+		local raid = self:run_sensor (self_pos, "active_raid")
+		if raid and raid.status == "ongoing" then
+			local hideout = self:run_sensor (self_pos, "nearby_hideout")
+			if hideout and self:do_navigate (self_pos, dtime,
+						hideout, 0.7, false) then
+				self._moving_to_cover_fast = hideout
+				self._time_passed_by_cover = 0.0
+				return "_moving_to_cover_fast"
+			end
+		end
+
+		return false
+	end
 end
 
 villager.wander_to_bell
@@ -5782,16 +5949,17 @@ end
 
 local function get_schedule_items_before_raid (self, list)
 	table.insert (list, { 10, self.clear_wielditem, false, })
-	table.insert (list, { 3, self.ring_bell, true, })
-	table.insert (list, { 4, self.visit_bell_for_raid, true, })
-	table.insert (list, { 4, self.run_around_village, true, })
+	table.insert (list, { 11, self.ring_bell, false, })
+	table.insert (list, { 99, self.reset_raid, false, })
+	table.insert (list, { 0, self.visit_bell_for_raid, true, })
+	table.insert (list, { 0, self.run_around_village, true, })
 end
 
 local function get_schedule_items_during_raid (self, list)
 	table.insert (list, { 10, self.clear_wielditem, false, })
-	table.insert (list, { 0, self.pace_disconsolate, true, })
+	table.insert (list, { 99, self.reset_raid, false, })
 	table.insert (list, { 0, self.pace_triumphant, true, })
-	table.insert (list, { 2, self.locate_cover_fast, true, })
+	table.insert (list, { 1, self.locate_cover_fast, true, })
 end
 
 local function get_schedule_items_bell_rang (self, list)
@@ -6021,6 +6189,14 @@ function villager:ai_step (dtime)
 		self._hero_cooldown = t
 	end
 
+	local chance = scale_chance (100, dtime)
+	if pr:next (1, chance) == 1 then
+		local raid = self:run_sensor (self_pos, "active_raid")
+		if raid and raid.status == "ongoing" then
+			self:terrified_villager_effect ()
+		end
+	end
+
 	self._near_map_boundaries = nil
 	self:tick_retry (dtime)
 	self:decay_gossips ()
@@ -6139,6 +6315,11 @@ function villager:init_ai ()
 	self._visiting_job_site = nil
 	self._interacting_with = nil
 	self._visiting_bell = nil
+	self._visiting_bell_for_raid = nil
+	self._moving_to_cover = nil
+	self._moving_to_cover_fast = nil
+	self._pace_triumphant = nil
+	self._run_around_village = nil
 	self._pacing_around_poi = nil
 	self._socializing_at_bell = nil
 	self._avoiding_hostile = nil
@@ -6513,7 +6694,6 @@ function villager:post_load_staticdata ()
 		or self._profession == "unemployed"
 		or self._profession == "tool_smith"
 		or self._profession == "weapon_smith"
-		or self._id
 
 	if is_old_villager then
 		if self._profession == "unemployed" then

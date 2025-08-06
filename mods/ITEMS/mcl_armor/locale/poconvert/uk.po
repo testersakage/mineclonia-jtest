@@ -116,7 +116,7 @@ msgid "Chainmail Boots"
 msgstr ""
 
 msgid "Iron Helmet"
-msgstr ""
+msgstr "Залізний шолом"
 
 msgid "Iron Chestplate"
 msgstr ""
@@ -125,7 +125,7 @@ msgid "Iron Leggings"
 msgstr ""
 
 msgid "Iron Boots"
-msgstr ""
+msgstr "Залізні чоботи"
 
 msgid "Diamond Helmet"
 msgstr ""
@@ -152,25 +152,25 @@ msgid "Netherite Boots"
 msgstr ""
 
 msgid "Projectile Protection"
-msgstr ""
+msgstr "Захист від снарядів"
 
 msgid "Reduces projectile damage."
-msgstr ""
+msgstr "Зменшує пошкодження від снарядів."
 
 msgid "Blast Protection"
-msgstr ""
+msgstr "Вибухостійкість"
 
 msgid "Reduces explosion damage and knockback."
-msgstr ""
+msgstr "Зменшує пошкодження від вибуху та віддачу."
 
 msgid "Fire Protection"
-msgstr ""
+msgstr "Вогнестійкість"
 
 msgid "Reduces fire damage."
-msgstr ""
+msgstr "Зменшує пошкодження від вогню."
 
 msgid "Protection"
-msgstr ""
+msgstr "Захист"
 
 msgid "Reduces most types of damage by 4% for each level."
 msgstr ""
@@ -191,7 +191,7 @@ msgid "Curse of Binding"
 msgstr ""
 
 msgid "Item cannot be removed from armor slots except due to death, breaking or in Creative Mode."
-msgstr ""
+msgstr "Предмет не може бути вилучений зі слотів броні, окрім як через смерть, поломку або у творчому режимі."
 
 msgid "Thorns"
 msgstr ""
@@ -209,10 +209,10 @@ msgid "Applies to:"
 msgstr ""
 
 msgid "Armor"
-msgstr ""
+msgstr "Броня"
 
 msgid "Ingredients:"
-msgstr ""
+msgstr "Інгредієнти:"
 
 msgid "Ingot & Crystals"
 msgstr ""

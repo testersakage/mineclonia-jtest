@@ -58,12 +58,13 @@ local sheep = {
 	description = S("Sheep"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	passive = true,
 	hp_min = 8,
 	hp_max = 8,
 	xp_min = 1,
 	xp_max = 3,
-	collisionbox = {-0.45, -0.01, -0.45, 0.45, 1.29, 0.45},
+	collisionbox = {-0.45, 0.0, -0.45, 0.45, 1.3, 0.45},
 	head_swivel = "head.control",
 	bone_eye_height = 3.3,
 	head_eye_height = 1.235,
@@ -251,9 +252,6 @@ end
 local scale_chance = mcl_mobs.scale_chance
 
 local function sheep_graze (self, self_pos, dtime)
-	if not mob_griefing then
-		return false
-	end
 	local base_chance = self.child and 50 or 1000
 	if self._grazing then
 		self._grazing = self._grazing - dtime
@@ -263,15 +261,19 @@ local function sheep_graze (self, self_pos, dtime)
 			local node = core.get_node (self_pos)
 			local consumed = false
 			if node.name == "mcl_flowers:tallgrass" then
-				core.remove_node (self_pos)
+				if mob_griefing then
+					core.remove_node (self_pos)
+				end
 				consumed = true
 			else
 				local offset = vector.offset (self_pos, 0, -1, 0)
 				local below = core.get_node (offset)
 				if below.name == "mcl_core:dirt_with_grass" then
-					core.set_node (offset, {
-						name = "mcl_core:dirt",
-					})
+					if mob_griefing then
+						core.set_node (offset, {
+							name = "mcl_core:dirt",
+						})
+					end
 					consumed = true
 				end
 			end
@@ -383,3 +385,14 @@ mcl_mobs.spawn_setup ({
 })
 
 mcl_mobs.register_egg ("mobs_mc:sheep", S("Sheep"), "#e7e7e7", "#ffb5b5", 0)
+
+------------------------------------------------------------------------
+-- Modern Sheep spawning.
+------------------------------------------------------------------------
+
+local sheep_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:sheep",
+	biomes = mobs_mc.farm_animal_biomes,
+	weight = 12,
+})
+mcl_mobs.register_spawner (sheep_spawner)

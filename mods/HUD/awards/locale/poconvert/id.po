@@ -14,22 +14,22 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "@1 has made the advancement @2"
-msgstr ""
+msgstr "@1 telah membuat pencapaian @2"
 
 msgid "Hidden Advancement Unlocked: @1"
-msgstr ""
+msgstr "Pencapaian Tersembunyi Terbuka: @1"
 
 msgid "Advancement Unlocked: @1"
+msgstr "Pencapaian Terbuka: @1"
+
+msgid "Hidden Advancement Unlocked!"
 msgstr ""
 
-msgid "Hidden Advancement Made!"
+msgid "Goal Reached!"
 msgstr ""
 
-msgid "Goal Completed!"
-msgstr "Tujuan Selesai!"
-
-msgid "Challenge Completed!"
-msgstr "Tantangan Selesai!"
+msgid "Challenge Complete!"
+msgstr ""
 
 msgid "Advancement Made!"
 msgstr "Pencapaian Telah Dibuat!"
@@ -38,58 +38,58 @@ msgid "[c|clear|disable|enable]"
 msgstr "[c|clear (Hapus)|disable (Nonaktifkan)|enable (Aktifkan)]"
 
 msgid "Show, clear, disable or enable your advancements"
-msgstr ""
+msgstr "Tampilkan, bersihkan, matikan atau nyalakan pencapaianmu"
 
 msgid "All your advancements and statistics have been cleared. You can now start again."
-msgstr ""
+msgstr "Semua pencapaian dan statistik telah dibersihkan. Sekarang kamu bisa memulai lagi."
 
 msgid "You have disabled advancements."
-msgstr ""
+msgstr "Kamu mematikan pencapaian."
 
 msgid "You have enabled advancements."
-msgstr ""
+msgstr "Kamu menyalakan pencapaian."
 
 msgid "<advancement ID>"
-msgstr ""
+msgstr "<advancement ID>"
 
 msgid "Show details of an advancement"
-msgstr ""
+msgstr "Menampilkan detail dari pencapaian"
 
 msgid "Advancement not found."
-msgstr ""
+msgstr "Pencapaian tidak ditemukan."
 
 msgid "<name>"
 msgstr "<Nama>"
 
 msgid "Get the advancement statistics for the given player or yourself"
-msgstr ""
+msgstr "Dapatkan statistik pencapaian untuk pemain yang ditentukan atau kamu sendiri"
 
 msgid "Error: No advancements available."
-msgstr ""
+msgstr "Galat: Tidak ada pencapaian tersedia."
 
 msgid "OK"
 msgstr "Oke"
 
 msgid "(Hidden Advancement)"
-msgstr ""
+msgstr "(Pencapaian Tersembunyi)"
 
 msgid "Unlock this advancement to find out what it is."
-msgstr ""
+msgstr "Buka pencapaian ini untuk mengetahuinya."
 
 msgid "@1 (unlocked)"
 msgstr "@1 (Terbuka)"
 
 msgid "You've disabled advancements. Type /awards enable to reenable."
-msgstr ""
+msgstr "Kamu mematikan pencapaian. Ketik /awards enable untuk menyalakan kembali."
 
 msgid "Error: No advancement available."
-msgstr ""
+msgstr "Galat: Tidak ada pencapaian tersedia."
 
 msgid "You have not unlocked any advancement."
-msgstr ""
+msgstr "Kamu belum membuka pencapaian apapun."
 
 msgid "@1’s advancement:"
-msgstr ""
+msgstr "Pencapaian @1:"
 
 msgid "@1/@2 chat messages"
 msgstr "@1 / @2 Pesan Obrolan"

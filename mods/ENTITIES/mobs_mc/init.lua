@@ -16,6 +16,7 @@ mobs_mc.water_level = tonumber(core.settings:get("water_level")) or 0
 -- Load mobs in the right order.
 local path = core.get_modpath ("mobs_mc")
 local files = {
+	"spawning.lua",
 	"axolotl.lua",
 	"bat.lua",
 	"blaze.lua",

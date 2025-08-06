@@ -22,14 +22,14 @@ msgstr ""
 msgid "Advancement Unlocked: @1"
 msgstr ""
 
-msgid "Hidden Advancement Made!"
+msgid "Hidden Advancement Unlocked!"
 msgstr ""
 
-msgid "Goal Completed!"
-msgstr "目標達成！"
+msgid "Goal Reached!"
+msgstr ""
 
-msgid "Challenge Completed!"
-msgstr "チャレンジ達成！"
+msgid "Challenge Complete!"
+msgstr ""
 
 msgid "Advancement Made!"
 msgstr "進捗 更新！"

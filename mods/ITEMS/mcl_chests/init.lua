@@ -486,16 +486,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		on_construct = function(pos)
 			local param2 = core.get_node(pos).param2
 			local meta = core.get_meta(pos)
-			--[[ This is a workaround for Minetest issue 5894
-			<https://github.com/minetest/minetest/issues/5894>.
-			Apparently if we don't do this, large chests initially don't work when
-			placed at chunk borders, and some chests randomly don't work after
-			placing. ]]
-			-- FIXME: Remove this workaround when the bug has been fixed.
-			-- BEGIN OF WORKAROUND --
-			meta:set_string("workaround", "ignore_me")
-			meta:set_string("workaround", "") -- Done to keep metadata clean
-			-- END OF WORKAROUND --
 			local inv = meta:get_inventory()
 			inv:set_size("main", 9 * 3)
 			--[[ The "input" list is *another* workaround (hahahaha!) around the fact that Minetest
@@ -558,7 +548,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				" takes stuff from chest at " .. core.pos_to_string(pos))
 			mcl_redstone.update_comparators(pos)
 		end,
-		_mcl_blast_resistance = 2.5,
 		_mcl_hardness = 2.5,
 
 		on_rightclick = function(pos, node, clicker)
@@ -673,6 +662,10 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		allow_metadata_inventory_move = protection_check_move,
 		allow_metadata_inventory_take = protection_check_put_take,
 		allow_metadata_inventory_put = function(pos, listname, _, stack, player)
+			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "left")
+			if core.get_item_group(core.get_node(other_pos).name, "double_chest") == 0 then
+				return 0
+			end
 			local name = player:get_player_name()
 			if core.is_protected(pos, name) then
 				core.record_protection_violation(pos, name)
@@ -680,20 +673,8 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 				-- BEGIN OF LISTRING WORKAROUND
 			elseif listname == "input" then
 				local inv = core.get_inventory({ type = "node", pos = pos })
-				local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "left")
 				local other_inv = core.get_inventory({ type = "node", pos = other_pos })
 				return limit_put(stack, inv, other_inv)
-				--[[if inv:room_for_item("main", stack) then
-					return -1
-				else
-
-					if other_inv:room_for_item("main", stack) then
-						return -1
-					else
-						return 0
-					end
-				end]]
-				--
 				-- END OF LISTRING WORKAROUND
 			else
 				return stack:get_count()
@@ -727,7 +708,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			mcl_redstone.update_comparators(pos)
 			mcl_redstone.update_comparators(other_pos)
 		end,
-		_mcl_blast_resistance = 2.5,
 		_mcl_hardness = 2.5,
 
 		on_rightclick = function(pos, node, clicker)
@@ -849,24 +829,18 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		allow_metadata_inventory_move = protection_check_move,
 		allow_metadata_inventory_take = protection_check_put_take,
 		allow_metadata_inventory_put = function(pos, listname, _, stack, player)
+			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "right")
+			if core.get_item_group(core.get_node(other_pos).name, "double_chest") == 0 then
+				return 0
+			end
 			local name = player:get_player_name()
 			if core.is_protected(pos, name) then
 				core.record_protection_violation(pos, name)
 				return 0
 				-- BEGIN OF LISTRING WORKAROUND
 			elseif listname == "input" then
-				local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "right")
 				local other_inv = core.get_inventory({ type = "node", pos = other_pos })
 				local inv = core.get_inventory({ type = "node", pos = pos })
-				--[[if other_inv:room_for_item("main", stack) then
-					return -1
-				else
-					if inv:room_for_item("main", stack) then
-						return -1
-					else
-						return 0
-					end
-				end--]]
 				return limit_put(stack, other_inv, inv)
 				-- END OF LISTRING WORKAROUND
 			else
@@ -901,7 +875,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			mcl_redstone.update_comparators(pos)
 			mcl_redstone.update_comparators(other_pos)
 		end,
-		_mcl_blast_resistance = 2.5,
 		_mcl_hardness = 2.5,
 
 		on_rightclick = function(pos, node, clicker)
@@ -984,12 +957,6 @@ register_chest("chest",
 		inv = { "default_chest_top.png", "mcl_chests_chest_bottom.png",
 			"mcl_chests_chest_right.png", "mcl_chests_chest_left.png",
 			"mcl_chests_chest_back.png", "default_chest_front.png" },
-		--[[left = {"default_chest_top_big.png", "default_chest_top_big.png",
-		"mcl_chests_chest_right.png", "mcl_chests_chest_left.png",
-		"default_chest_side_big.png^[transformFX", "default_chest_front_big.png"},
-		right = {"default_chest_top_big.png^[transformFX", "default_chest_top_big.png^[transformFX",
-		"mcl_chests_chest_right.png", "mcl_chests_chest_left.png",
-		"default_chest_side_big.png", "default_chest_front_big.png^[transformFX"},]] --
 	},
 	false
 )
@@ -1146,9 +1113,6 @@ core.register_node("mcl_chests:ender_chest_small", {
 	_chest_entity_mesh = "mcl_chests_chest",
 	_chest_entity_animation_type = "chest",
 	use_texture_alpha = "clip",
-	--[[{"mcl_chests_ender_chest_top.png", "mcl_chests_ender_chest_bottom.png",
-		"mcl_chests_ender_chest_right.png", "mcl_chests_ender_chest_left.png",
-		"mcl_chests_ender_chest_back.png", "mcl_chests_ender_chest_front.png"},]]--
 	-- Note: The “container” group is missing here because the ender chest does not
 	-- have an inventory on its own
 	groups = {

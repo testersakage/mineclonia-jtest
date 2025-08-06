@@ -1,116 +1,190 @@
 local S = core.get_translator("mcl_bamboo")
 local SCAFFOLD_HEIGHT_LIMIT = 320
 
-mcl_bamboo.bamboo_itemstrings = {
-	"mcl_bamboo:bamboo",
-	"mcl_bamboo:bamboo_1",
-	"mcl_bamboo:bamboo_2",
-	"mcl_bamboo:bamboo_3",
-}
+function mcl_bamboo.random(pos)
+	local pr = PcgRandom(core.hash_node_position(pos))
+	return pr:next(1,4)
+end
 
-local boxes = {
-	{-0.175, -0.5, -0.195, 0.05, 0.5, 0.030},
-	{-0.05, -0.5, 0.285, -0.275, 0.5, 0.06},
-	{0.25, -0.5, 0.325, 0.025, 0.5, 0.100},
-	{-0.125, -0.5, 0.125, -0.3125, 0.5, 0.3125},
-}
+function mcl_bamboo.check_structure(pos)
+	local pr = PseudoRandom(core.hash_node_position(pos))
+	local max_height = pr:next(12,16)
+	local bottom = mcl_util.traverse_tower_group(pos,-1,"bamboo_tree")
+	local top,h = mcl_util.traverse_tower_group(bottom,1,"bamboo_tree")
+	local basenode = core.get_node(bottom)
+	local basegroup = core.get_item_group(basenode.name, "bamboo_tree")
+	local nn = core.find_nodes_in_area(
+		bottom,
+		vector.offset(bottom,0,max_height,0),
+		{"group:bamboo_tree"}
+	)
+
+	-- Check growing in size
+	if h > 1 and basegroup < 2 then
+		if math.random() < 0.5 then
+			core.bulk_set_node(nn, {name="mcl_bamboo:bamboo_small", param2=basenode.param2})
+		else
+			core.bulk_set_node(nn, {name="mcl_bamboo:bamboo_big", param2=basenode.param2})
+		end
+	end
+
+	-- Update basegroup after size changes
+	basenode = core.get_node(bottom)
+	basegroup = core.get_item_group(basenode.name, "bamboo_tree")
+
+	-- Check growing in leaf
+	if basegroup == 1 then return end
+	local size = basegroup == 2 and "small" or "big"
+	local leaf_bamboo = "mcl_bamboo:bamboo_"..size.."_leafsmall"
+	core.bulk_set_node(nn, {name="mcl_bamboo:bamboo_"..size, param2=basenode.param2})
+	if h > 3 then
+		core.set_node(top, {name="mcl_bamboo:bamboo_"..size.."_leafbig", param2=basenode.param2})
+		core.set_node(vector.offset(top,0,-1,0), {name="mcl_bamboo:bamboo_"..size.."_leafbig", param2=basenode.param2})
+		core.set_node(vector.offset(top,0,-2,0), {name=leaf_bamboo, param2=basenode.param2})
+	elseif h > 2 then
+		core.set_node(top, {name=leaf_bamboo, param2=basenode.param2})
+		core.set_node(vector.offset(top,0,-1,0), {name=leaf_bamboo, param2=basenode.param2})
+	elseif h > 1 then
+		core.set_node(top, {name=leaf_bamboo, param2=basenode.param2})
+	end
+end
 
 function mcl_bamboo.grow(pos)
 	local pr = PseudoRandom(core.hash_node_position(pos))
 	local max_height = pr:next(12,16)
-	local bottom = mcl_util.traverse_tower(pos,-1)
-	local top,h = mcl_util.traverse_tower(bottom,1)
-	if h < max_height then
-		local n = core.get_node(pos)
+	local bottom = mcl_util.traverse_tower_group(pos,-1,"bamboo_tree")
+	local top,h = mcl_util.traverse_tower_group(bottom,1,"bamboo_tree")
+
+	local light = core.get_node_light(vector.offset(top,0,1,0)) or 0
+	if h < max_height and light >= 9 then
 		if core.get_node(vector.offset(top,0,1,0)).name ~= "air" then return end
-		core.set_node(vector.offset(top,0,1,0),n)
+		core.set_node(vector.offset(top,0,1,0), {name=core.get_node(bottom).name})
+		mcl_bamboo.check_structure(pos)
 	end
 end
 
 local bamboo_def = {
 	description = S("Bamboo"),
-	tiles = {"mcl_bamboo_bamboo_bottom.png", "mcl_bamboo_bamboo_bottom.png", "mcl_bamboo_bamboo.png"},
-	drawtype = "nodebox",
+	tiles = {"mcl_bamboo_bamboo.png"},
+	drawtype = "mesh",
+	mesh = "mcl_bamboo_shoot.obj",
 	paramtype = "light",
 	paramtype2 = "4dir",
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{-6.4/16, -0.5, -6.4/16, 6.4/16, 0.25, 6.4/16}
+		}
+	},
 	use_texture_alpha = "clip",
-	groups = {handy = 1, axey = 1, swordy_bamboo = 1, choppy = 1, dig_by_piston = 1, plant = 1, non_mycelium_plant = 1, flammable = 3, bamboo = 1, bamboo_tree = 1, vinelike_node = 1, unsticky = 1, pathfinder_partial = 2,},
+	groups = {
+		handy=1, axey=1, swordy_bamboo=1, choppy=1,
+		dig_by_piston=1, plant=1, non_mycelium_plant=1, flammable=3,
+		bamboo=1, bamboo_tree=1, vinelike_node=1, unsticky=1,
+		pathfinder_partial=2
+	},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	drop = "mcl_bamboo:bamboo",
-	inventory_image = "mcl_bamboo_bamboo_shoot.png",
-	wield_image = "mcl_bamboo_bamboo_shoot.png",
+	inventory_image = "mcl_bamboo_bamboo_inv.png",
+	wield_image = "mcl_bamboo_bamboo_inv.png",
 	_mcl_burntime = 2.5,
 	_mcl_blast_resistance = 1,
-	_mcl_hardness = 1.5,
+	_mcl_hardness = 1,
 	node_placement_prediction = "",
 	on_place = mcl_util.generate_on_place_plant_function(function(pos)
 		local node_below = core.get_node(vector.offset(pos,0,-1,0))
 		local bamboo_below = core.get_item_group(node_below.name, "bamboo_tree") > 0
-		return (core.get_item_group(node_below.name, "soil_bamboo") > 0 or bamboo_below),(bamboo_below and node_below.param2 or math.random(0,3))
+		local result = core.get_item_group(node_below.name, "soil_bamboo") > 0 or bamboo_below
+		local param2 = bamboo_below and node_below.param2 or mcl_bamboo.random(pos)
+		return result, param2
 	end),
-	after_place_node  = function(pos)
-		local node = core.get_node(pos)
+	after_place_node = function (pos)
 		local node_below = core.get_node(vector.offset(pos,0,-1,0))
-		if core.get_item_group(node_below.name, "bamboo_tree") > 0 then
-			node = node_below
+		local bamboo_below = core.get_item_group(node_below.name, "bamboo_tree") > 0
+		if bamboo_below then
+			core.swap_node(pos, {name=node_below.name})
+			mcl_bamboo.check_structure(pos)
 		else
-			node.name = mcl_bamboo.bamboo_itemstrings[math.random(#mcl_bamboo.bamboo_itemstrings)]
+			core.set_node(pos, {name="mcl_bamboo:bamboo_shoot", param2=mcl_bamboo.random(pos)})
 		end
-		core.swap_node(pos,node)
 	end,
 	_on_bone_meal = function(_, _, _, pos)
 		return mcl_bamboo.grow(pos)
 	end,
 }
 
-for i,it in pairs(mcl_bamboo.bamboo_itemstrings) do
-	local d = table.copy(bamboo_def)
-	if it ~= "mcl_bamboo:bamboo" then
-		table.update(d, {groups = table.merge(bamboo_def.groups, {not_in_creative_inventory = 1})})
-	end
-	table.update(d,{
-		node_box = {
-			type = "fixed",
-			fixed = {
-				boxes[i],
-			}
-		},
-		collision_box = {
-			type = "fixed",
-			fixed = {
-				boxes[i],
-			}
-		},
-		selection_box = {
-			type = "fixed",
-			fixed = {
-				boxes[i],
-			}
-		},
-	})
-	core.register_node(it,d)
-end
+local cbox_small = {
+	type = "fixed",
+	fixed = {
+		{0.1875, -0.5, -0.3125, 0.3125, 0.5, -0.1875}
+	}
+}
+local cbox_big = {
+	type = "fixed",
+	fixed = {
+		{0.1575, -0.5, -0.3425, 0.3425, 0.5, -0.1575}
+	}
+}
+
+core.register_node("mcl_bamboo:bamboo_shoot", table.merge_deep(bamboo_def, {
+	collision_box = {
+		type = "fixed",
+		fixed = {{0,0,0,0,0,0}}
+	},
+	groups = {not_in_creative_inventory=1},
+}))
+core.register_node("mcl_bamboo:bamboo_small", table.merge_deep(bamboo_def, {
+	mesh = "mcl_bamboo_small.obj",
+	tiles = {"mcl_bamboo_bamboo.png", "blank.png"},
+	groups = {bamboo_tree=2},
+	selection_box = cbox_small,
+	collision_box = cbox_small,
+}))
+core.register_node("mcl_bamboo:bamboo_small_leafsmall", table.merge_deep(bamboo_def, {
+	mesh = "mcl_bamboo_small.obj",
+	tiles = {"mcl_bamboo_bamboo.png", "mcl_bamboo_leaf_small.png"},
+	groups = {not_in_creative_inventory=1, bamboo_tree=2},
+	selection_box = cbox_small,
+	collision_box = cbox_small,
+}))
+core.register_node("mcl_bamboo:bamboo_small_leafbig", table.merge_deep(bamboo_def, {
+	mesh = "mcl_bamboo_small.obj",
+	tiles = {"mcl_bamboo_bamboo.png", "mcl_bamboo_leaf_big.png"},
+	groups = {not_in_creative_inventory=1, bamboo_tree=2},
+	selection_box = cbox_small,
+	collision_box = cbox_small,
+}))
+core.register_node("mcl_bamboo:bamboo_big", table.merge_deep(bamboo_def, {
+	mesh = "mcl_bamboo_big.obj",
+	tiles = {"mcl_bamboo_bamboo.png", "blank.png"},
+	groups = {not_in_creative_inventory=1, bamboo_tree=3},
+	selection_box = cbox_big,
+	collision_box = cbox_big,
+}))
+core.register_node("mcl_bamboo:bamboo_big_leafsmall", table.merge_deep(bamboo_def, {
+	mesh = "mcl_bamboo_big.obj",
+	tiles = {"mcl_bamboo_bamboo.png", "mcl_bamboo_leaf_small.png"},
+	groups = {not_in_creative_inventory=1, bamboo_tree=3},
+	selection_box = cbox_big,
+	collision_box = cbox_big,
+}))
+core.register_node("mcl_bamboo:bamboo_big_leafbig", table.merge_deep(bamboo_def, {
+	mesh = "mcl_bamboo_big.obj",
+	tiles = {"mcl_bamboo_bamboo.png", "mcl_bamboo_leaf_big.png"},
+	groups = {not_in_creative_inventory=1, bamboo_tree=3},
+	selection_box = cbox_big,
+	collision_box = cbox_big,
+}))
+core.register_alias("mcl_bamboo:bamboo", "mcl_bamboo:bamboo_small")
+core.register_alias("mcl_bamboo:bamboo_1", "mcl_bamboo:bamboo_small")
+core.register_alias("mcl_bamboo:bamboo_2", "mcl_bamboo:bamboo_small")
+core.register_alias("mcl_bamboo:bamboo_3", "mcl_bamboo:bamboo_small")
 
 mcl_flowerpots.register_potted_flower("mcl_bamboo:bamboo", {
 	name = "bamboo",
 	desc = S("Bamboo Plant"),
 	image = "mcl_bamboo_flower_pot.png",
 })
-
-local bamboo_top = table.copy(bamboo_def)
-table.update(bamboo_top,{
-	groups = {not_in_creative_inventory = 1, handy = 1, axey = 1, choppy = 1, flammable = 3, vinelike_node = 1, unsticky = 1},
-	nodebox = nil,
-	selection_box = nil,
-	collision_box = nil,
-	drawtype = "plantlike",
-	tiles = {"mcl_bamboo_endcap.png"},
-	on_place = nil,
-	_on_bone_meal = nil,
-})
-
-core.register_node("mcl_bamboo:bamboo_endcap", bamboo_top)
-
 
 core.register_node("mcl_bamboo:bamboo_mosaic",  {
 	description = S("Bamboo Mosaic Plank"),
@@ -187,7 +261,6 @@ core.register_node("mcl_bamboo:scaffolding", {
 	node_placement_prediction = "",
 	groups = { handy=1, axey=1, flammable=3, deco_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, falling_node = 1, stack_falling = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_mcl_burntime = 2.5,
 	on_place = function(itemstack, placer, ptd)

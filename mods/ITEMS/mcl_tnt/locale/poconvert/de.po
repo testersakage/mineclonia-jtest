@@ -26,7 +26,7 @@ msgid "Ignited by tools, explosions, fire, lava, redstone power"
 msgstr "Anzündbar von Werkzeugen, Explosionen, Feuer, Redstoneeergie"
 
 msgid "Explosion power: @1"
-msgstr ""
+msgstr "Explosionsstärke: @1"
 
 msgid "Place the TNT and ignite it with one of the methods above. Quickly get in safe distance. The TNT will start to be affected by gravity and explodes in 4 seconds."
 msgstr "Platizeren sie das TNT und zünden Sie es mit einer der obigen Methoden an. Begeben Sie sich rasch in eine sichere Entfernung. Das TNT wird anfangen, von der Schwerkraft beeinflusst zu sein und explodiert in 4 Sekunden."

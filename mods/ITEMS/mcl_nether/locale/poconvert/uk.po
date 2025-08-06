@@ -161,7 +161,7 @@ msgid "Diamond Equipment"
 msgstr ""
 
 msgid "Ingredients:"
-msgstr ""
+msgstr "Інгредієнти:"
 
 msgid "Nether Lava Source"
 msgstr ""

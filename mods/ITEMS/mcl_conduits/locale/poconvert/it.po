@@ -17,5 +17,5 @@ msgid "Conduit"
 msgstr "Condotto"
 
 msgid "A conduit provides certain status effects to nearby players much like a beacon but under water"
-msgstr ""
+msgstr "Un condotto fornisce alcuni effetti di stato ai giocatori vicini, come i fari ma sott'acqua"
 

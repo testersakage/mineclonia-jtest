@@ -14,173 +14,173 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "@1 has made the advancement @2"
-msgstr ""
+msgstr "@1 отримав досягнення @2"
 
 msgid "Hidden Advancement Unlocked: @1"
-msgstr ""
+msgstr "Приховане Досягнення Розблоковано: @1"
 
 msgid "Advancement Unlocked: @1"
+msgstr "Досягнення Розблоковано: @1"
+
+msgid "Hidden Advancement Unlocked!"
 msgstr ""
 
-msgid "Hidden Advancement Made!"
+msgid "Goal Reached!"
 msgstr ""
 
-msgid "Goal Completed!"
-msgstr ""
-
-msgid "Challenge Completed!"
+msgid "Challenge Complete!"
 msgstr ""
 
 msgid "Advancement Made!"
-msgstr ""
+msgstr "Досягнення Отримано!"
 
 msgid "[c|clear|disable|enable]"
-msgstr ""
+msgstr "[c|clear|disable|enable]"
 
 msgid "Show, clear, disable or enable your advancements"
-msgstr ""
+msgstr "Показати, очистити, вимкнути або увімкнути досягнення"
 
 msgid "All your advancements and statistics have been cleared. You can now start again."
-msgstr ""
+msgstr "Всі Ваші досягнення та статистика очищені. Зараз можете починати знову."
 
 msgid "You have disabled advancements."
-msgstr ""
+msgstr "Ви вимкнули досягнення."
 
 msgid "You have enabled advancements."
-msgstr ""
+msgstr "Ви увімкнули досягнення."
 
 msgid "<advancement ID>"
-msgstr ""
+msgstr "<ІД досягнення>"
 
 msgid "Show details of an advancement"
-msgstr ""
+msgstr "Показати деталі досягнення"
 
 msgid "Advancement not found."
-msgstr ""
+msgstr "Досягнення не знайдено."
 
 msgid "<name>"
-msgstr ""
+msgstr "<назва>"
 
 msgid "Get the advancement statistics for the given player or yourself"
-msgstr ""
+msgstr "Отримати статистику досягнень конкретного гравця або себе"
 
 msgid "Error: No advancements available."
-msgstr ""
+msgstr "Помилка: Не знайдено досягнень."
 
 msgid "OK"
-msgstr ""
+msgstr "Гаразд"
 
 msgid "(Hidden Advancement)"
-msgstr ""
+msgstr "(Приховане Досягнення)"
 
 msgid "Unlock this advancement to find out what it is."
-msgstr ""
+msgstr "Розблокуйте це досягнення, щоб дізнатися, що це."
 
 msgid "@1 (unlocked)"
-msgstr ""
+msgstr "@1 (розблоковано)"
 
 msgid "You've disabled advancements. Type /awards enable to reenable."
-msgstr ""
+msgstr "Ви вимкнули досягнення. Напишіть /awards enable, щоб увімкнути знову."
 
 msgid "Error: No advancement available."
-msgstr ""
+msgstr "Помилка: Немає доступних досягнень."
 
 msgid "You have not unlocked any advancement."
-msgstr ""
+msgstr "Ви не розблокували жодного досягнення."
 
 msgid "@1’s advancement:"
-msgstr ""
+msgstr "Досягнення @1:"
 
 msgid "@1/@2 chat messages"
-msgstr ""
+msgstr "@1/@2 повідомлень у чаті"
 
 msgid "Send a chat message"
-msgstr ""
+msgstr "Надішліть повідомлення у чат"
 
 msgid "Chat @1 times"
-msgstr ""
+msgstr "Поговоріть @1 разів"
 
 msgid "@1/@2 joins"
-msgstr ""
+msgstr "@1/@2 приєднань"
 
 msgid "Join once"
-msgstr ""
+msgstr "Приєднайтеся один раз"
 
 msgid "Join @1 times"
-msgstr ""
+msgstr "Приєднайтеся @1 разів"
 
 msgid "@1/@2 deaths"
-msgstr ""
+msgstr "@1/@2 смертей"
 
 msgid "Die once of @1"
-msgstr ""
+msgstr "Помріть один раз від @1"
 
 msgid "Die @1 times of @2"
-msgstr ""
+msgstr "Помріть @1 разів від @2"
 
 msgid "Die @1 times."
-msgstr ""
+msgstr "Помріть @1 разів."
 
 msgid "Mine @1 times"
-msgstr ""
+msgstr "Викопайте @1 разів"
 
 msgid "@1/@2 dug"
-msgstr ""
+msgstr "@1/@2 викопано"
 
 msgid "Mine: @1"
-msgstr ""
+msgstr "Викопайте: @1"
 
 msgid "Mine: @1×@2"
-msgstr ""
+msgstr "Викопайте: @1×@2"
 
 msgid "Mine @1 block."
-msgstr ""
+msgstr "Викопайте @1 блок."
 
 msgid "Mine @1 blocks."
-msgstr ""
+msgstr "Викопайте @1 блоків."
 
 msgid "@1/@2 placed"
-msgstr ""
+msgstr "@1/@2 розміщено"
 
 msgid "Place: @1"
-msgstr ""
+msgstr "Розмістіть: @1"
 
 msgid "Place: @1×@2"
-msgstr ""
+msgstr "Розмістіть: @1×@2"
 
 msgid "Place @1 block."
-msgstr ""
+msgstr "Розмістіть @1 блок."
 
 msgid "Place @1 blocks."
-msgstr ""
+msgstr "Розмістіть @1 блоків."
 
 msgid "@1/@2 crafted"
-msgstr ""
+msgstr "@1/@2 змайстровано"
 
 msgid "Craft: @1"
-msgstr ""
+msgstr "Змайструйте: @1"
 
 msgid "Craft: @1×@2"
-msgstr ""
+msgstr "Змайструйте: @1×@2"
 
 msgid "Craft @1 item"
-msgstr ""
+msgstr "Змайструйте @1 предмет"
 
 msgid "Craft @1 items."
-msgstr ""
+msgstr "Змайструйте @1 предметів."
 
 msgid "@1/@2 eaten"
-msgstr ""
+msgstr "@1/@2 з'їдено"
 
 msgid "Eat @1"
-msgstr ""
+msgstr "З'їжте @1"
 
 msgid "Eat @1×@2"
-msgstr ""
+msgstr "З'їжте @1×@2"
 
 msgid "Eat @1 item"
-msgstr ""
+msgstr "З'їжте @1 предмет"
 
 msgid "Eat @1 items."
-msgstr ""
+msgstr "З'їжте @1 предметів."
 

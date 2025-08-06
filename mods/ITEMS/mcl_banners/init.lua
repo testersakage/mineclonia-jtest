@@ -150,7 +150,7 @@ dofile(modpath.."/patterncraft.lua")
 local base_color_ratio = 255
 
 local standing_banner_entity_offset = vector.new(0, -0.499, 0)
-local hanging_banner_entity_offset = vector.new(0, -1.5, 0)
+local hanging_banner_entity_offset = vector.new(0, -0.64, 0)
 
 local function rotation_level_to_yaw(rotation_level)
 	return (rotation_level * (math.pi/8)) + math.pi
@@ -388,7 +388,6 @@ core.register_node("mcl_banners:standing_banner", {
 		respawn_banner_entity(pos, node)
 	end,
 	_mcl_hardness = 1,
-	_mcl_blast_resistance = 1,
 	_mcl_baseitem = get_banner_stack,
 	on_rotate = function(pos, node, _, mode)
 		if mode == screwdriver.ROTATE_FACE then
@@ -438,7 +437,6 @@ core.register_node("mcl_banners:hanging_banner", {
 	on_destruct = on_destruct_hanging_banner,
 	on_punch = respawn_banner_entity,
 	_mcl_hardness = 1,
-	_mcl_blast_resistance = 1,
 	_mcl_baseitem = get_banner_stack,
 	on_rotate = function(pos, node, _, mode)
 		if mode ~= screwdriver.ROTATE_FACE then return false end
@@ -637,7 +635,8 @@ local entity_standing = {
 	end,
 	on_activate = function(self, staticdata)
 		self:_set_banner_node()
-		if core.get_item_group(core.get_node(self._node_pos).name, "banner") <= 0 then
+		if core.get_item_group(core.get_node(self._node_pos).name, "banner") <= 0
+			and self.name ~= "mcl_raids:ominous_banner" then
 			core.log("warning", "[mcl_banners] Orphan banner entity found at "..core.pos_to_string(self.object:get_pos(), 0).." removing it.")
 			self.object:remove()
 			return
@@ -679,7 +678,6 @@ core.register_entity("mcl_banners:standing_banner", entity_standing)
 
 core.register_entity("mcl_banners:hanging_banner", table.merge(entity_standing, {
 	initial_properties = table.merge(entity_standing.initial_properties, {
-		visual_size = { x=2.499, y=2.28 },
 		mesh = "amc_banner_hanging.b3d"
 	}),
 	_set_banner_node = function(self)

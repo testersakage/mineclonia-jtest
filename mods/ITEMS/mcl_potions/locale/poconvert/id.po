@@ -343,7 +343,7 @@ msgstr ""
 msgid "A throwable potion that will shatter on impact, where it creates a magic cloud that lingers around for a while. Any player or mob inside the cloud will receive the potion's effect or set of effects, possibly repeatedly."
 msgstr ""
 
-msgid "Use the “Punch” key to throw it."
+msgid "Use the “Place” key to throw it."
 msgstr ""
 
 msgid "Use the “Place” key to drink it."

@@ -17,7 +17,7 @@ msgid "Crafting"
 msgstr "制作"
 
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 
 msgid "Recipe book"
 msgstr "配方书"

@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Outdated Client version detected!"
-msgstr ""
+msgstr "Rilevata versione client non aggiornata!"
 
 msgid "Do not show again"
-msgstr ""
+msgstr "Non mostrare di nuovo"
 
 msgid "Leave Server"
 msgstr ""

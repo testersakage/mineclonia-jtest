@@ -138,7 +138,7 @@ for s=1,4 do
 		tiles = { "mcl_ocean_"..ontop..".png" },
 		special_tiles = {
 			{
-			image = "mcl_ocean_sea_pickle_"..s.."_anim.png",
+			name = "mcl_ocean_sea_pickle_"..s.."_anim.png",
 			animation = {type="vertical_frames", aspect_w=16, aspect_h=16, length=1.7},
 			}
 		},
@@ -171,7 +171,6 @@ for s=1,4 do
 		_mcl_sea_pickle_next = next_on,
 		_mcl_baseitem = "mcl_ocean:sea_pickle_1_dead_brain_coral_block",
 		_mcl_hardness = 0,
-		_mcl_blast_resistance = 0,
 		_mcl_cooking_output = cookoutput,
 		_on_bone_meal = on_bone_meal,
 	})
@@ -206,7 +205,6 @@ for s=1,4 do
 		_mcl_sea_pickle_next = next_off,
 		_mcl_baseitem = "mcl_ocean:sea_pickle_1_dead_brain_coral_block",
 		_mcl_hardness = 0,
-		_mcl_blast_resistance = 0,
 	})
 
 	if mod_doc then

@@ -47,5 +47,5 @@ msgid "Regeneration"
 msgstr ""
 
 msgid "Inventory"
-msgstr ""
+msgstr "Inventário"
 

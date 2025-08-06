@@ -343,8 +343,8 @@ msgstr "Sin efecto"
 msgid "A throwable potion that will shatter on impact, where it creates a magic cloud that lingers around for a while. Any player or mob inside the cloud will receive the potion's effect or set of effects, possibly repeatedly."
 msgstr "Una poción arrojadiza que se rompe al impactar, donde crea una nube mágica que permanece por un tiempo. Cualquier jugador o criatura que se encuentre dentro de la nube recibirá el efecto o conjunto de efectos de la poción, posiblemente de forma repetida."
 
-msgid "Use the “Punch” key to throw it."
-msgstr "Usa la tecla \"Atacar\" para lanzarla."
+msgid "Use the “Place” key to throw it."
+msgstr ""
 
 msgid "Use the “Place” key to drink it."
 msgstr "Use la tecla \"Colocar\" para beberla."

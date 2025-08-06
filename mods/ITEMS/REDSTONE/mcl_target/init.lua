@@ -7,7 +7,6 @@ function mcl_target.hit(pos, _)
 end
 
 local commdef = {
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	_mcl_redstone = {
 		connects_to = function() return true end

@@ -64,10 +64,10 @@ msgstr ""
 msgid "Polished Blackstone Slab"
 msgstr ""
 
-msgid "Blackstone Brick Stairs"
+msgid "Polished Blackstone Brick Stairs"
 msgstr ""
 
-msgid "Blackstone Brick Slab"
+msgid "Polished Blackstone Brick Slab"
 msgstr ""
 
 msgid "Soul Torch"
@@ -77,5 +77,11 @@ msgid "Torches are light sources which can be placed at the side or on the top o
 msgstr "A fáklya egy fényforrás, amelyet a legtöbb blokk oldalára vagy tetejére rögzíthetsz."
 
 msgid "Blackstone Wall"
+msgstr ""
+
+msgid "Polished Blackstone Wall"
+msgstr ""
+
+msgid "Polished Blackstone Brick Wall"
 msgstr ""
 

@@ -101,7 +101,6 @@ for _,root in pairs(propagule_water_nodes) do
 			core.set_node(pos, {name=root})
 		end,
 		_mcl_hardness = 0,
-		_mcl_blast_resistance = 0,
 		_mcl_silk_touch_drop = true,
 		_mcl_baseitem = "mcl_mangrove:propagule",
 	})
@@ -129,7 +128,6 @@ core.register_node("mcl_mangrove:mangrove_roots", {
 	drop = "mcl_mangrove:mangrove_roots",
 	_mcl_shears_drop = true,
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0.7,
 	_mcl_hardness = 0.7,
 	_mcl_burntime = 15,
 	_mcl_silk_touch_drop = true,
@@ -179,7 +177,6 @@ core.register_node("mcl_mangrove:propagule", {
 		meta:set_int("stage", 0)
 	end,
 	node_placement_prediction = "",
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_on_bone_meal = function(_, _, _, pos, node)
 		return mcl_trees.grow_tree(pos, node)
@@ -211,7 +208,6 @@ core.register_node("mcl_mangrove:hanging_propagule_1", {
 			destroy_by_lava_flow = 1, compostability = 30
 		},
 	paramtype = "light",
-	paramtype2 = "",
 	on_rotate = false,
 	walkable = false,
 	drop = "mcl_mangrove:propagule",
@@ -331,7 +327,6 @@ core.register_node("mcl_mangrove:mangrove_mud_roots", {
 	},
 	groups = {handy=1, shovely=1, axey=1, soil_fungus=1, building_block=1},
 	sounds = mcl_sounds.node_sound_sand_defaults(),
-	_mcl_blast_resistance = 0.7,
 	_mcl_hardness = 0.7,
 })
 

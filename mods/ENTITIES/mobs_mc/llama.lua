@@ -13,6 +13,7 @@ local llama = table.merge (horse, {
 	description = S("Llama"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	passive = false,
 	attack_type = "ranged",
 	ranged_interval_min = 4.0,
@@ -32,7 +33,7 @@ local llama = table.merge (horse, {
 	hp_max = 30,
 	xp_min = 1,
 	xp_max = 3,
-	collisionbox = {-0.45, -0.01, -0.45, 0.45, 1.86, 0.45},
+	collisionbox = {-0.45, 0.0, -0.45, 0.45, 1.87, 0.45},
 	visual_size = { x = 1, y = 1, },
 	visual = "mesh",
 	mesh = "mobs_mc_llama.b3d",
@@ -517,6 +518,38 @@ mcl_mobs.spawn_setup ({
 })
 
 mcl_mobs.register_egg ("mobs_mc:llama", S("Llama"), "#c09e7d", "#995f40", 0)
+
+------------------------------------------------------------------------
+-- Modern Llama spawning.
+------------------------------------------------------------------------
+
+local llama_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:llama",
+	weight = 5,
+	pack_min = 4,
+	pack_max = 6,
+	biomes = {
+		"ExtremeHills",
+		"ExtremeHills_beach",
+		"ExtremeHillsM",
+	},
+})
+
+local llama_spawner_savannah = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:llama",
+	weight = 8,
+	pack_min = 4,
+	pack_max = 4,
+	biomes = {
+		"Savanna",
+		"SavannaM",
+		"Savanna_beach",
+		"Savanna_ocean",
+	},
+})
+
+mcl_mobs.register_spawner (llama_spawner)
+mcl_mobs.register_spawner (llama_spawner_savannah)
 
 ------------------------------------------------------------------------
 -- Llama spit entity.

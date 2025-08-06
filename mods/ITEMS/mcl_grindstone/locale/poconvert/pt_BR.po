@@ -17,7 +17,7 @@ msgid "Repair & Disenchant"
 msgstr ""
 
 msgid "Inventory"
-msgstr ""
+msgstr "Inventário"
 
 msgid "Grindstone"
 msgstr ""

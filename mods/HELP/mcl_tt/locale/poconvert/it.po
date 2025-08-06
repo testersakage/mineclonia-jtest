@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Unlimited uses"
-msgstr ""
+msgstr "Usi infiniti"
 
 msgid "Painfully slow"
-msgstr "Dolorosamente lento"
+msgstr "Lentissimo"
 
 msgid "Very slow"
 msgstr "Molto lento"
@@ -26,128 +26,128 @@ msgid "Slow"
 msgstr "Lento"
 
 msgid "Fast"
-msgstr ""
+msgstr "Veloce"
 
 msgid "Very fast"
-msgstr ""
+msgstr "Molto veloce"
 
 msgid "Extremely fast"
-msgstr ""
+msgstr "Velocissimo"
 
 msgid "Instantaneous"
-msgstr ""
+msgstr "Istantaneo"
 
 msgid "Mining speed: @1"
-msgstr ""
+msgstr "Velocità di scavo: @1"
 
 msgid "Block breaking strength: @1"
-msgstr ""
+msgstr "Forza distruzione blocco: @1"
 
 msgid "Damage: @1"
-msgstr ""
+msgstr "Danno: @1"
 
 msgid "Full punch interval: @1s"
-msgstr ""
+msgstr "Intervallo pugno: @1s"
 
 msgid "Food item"
-msgstr ""
+msgstr "Cibo"
 
 msgid "+@1 food points"
-msgstr ""
+msgstr "+@1 punti cibo"
 
 msgid "Contact damage: @1 per second"
-msgstr ""
+msgstr "Danno al contatto: @1 al secondo"
 
 msgid "Contact healing: @1 per second"
-msgstr ""
+msgstr "Cura al contatto: @1 al secondo"
 
 msgid "Drowning damage: @1"
-msgstr ""
+msgstr "Danno affogamento: @1"
 
 msgid "Fall damage: +@1%"
-msgstr ""
+msgstr "Danno da caduta: +@1%"
 
 msgid "No fall damage"
-msgstr ""
+msgstr "Nessun danno da caduta"
 
 msgid "Fall damage: @1%"
-msgstr ""
+msgstr "Danno da caduta: @1%"
 
 msgid "No jumping"
-msgstr ""
+msgstr "Niente salto"
 
 msgid "No swimming upwards"
-msgstr ""
+msgstr "Niente nuota in alto"
 
 msgid "No rising"
-msgstr ""
+msgstr "Niente crescita"
 
 msgid "Climbable (only downwards)"
-msgstr ""
+msgstr "Scalabile (verso il basso)"
 
 msgid "Climbable"
-msgstr ""
+msgstr "Scalabile"
 
 msgid "Slippery"
-msgstr ""
+msgstr "Scivoloso"
 
 msgid "Bouncy (@1%)"
-msgstr ""
+msgstr "Rimbalzo (@1%)"
 
 msgid "Luminance: @1"
-msgstr ""
+msgstr "Luminosità: @1"
 
 msgid "@1 uses"
-msgstr ""
+msgstr "@1 usi"
 
 msgid "Durability: @1"
-msgstr ""
+msgstr "Durabilità: @1"
 
 msgid "Head armor"
-msgstr ""
+msgstr "Armatura testa"
 
 msgid "Torso armor"
-msgstr ""
+msgstr "Armatura torso"
 
 msgid "Legs armor"
-msgstr ""
+msgstr "Armatura gambe"
 
 msgid "Feet armor"
-msgstr ""
+msgstr "Armatura piedi"
 
 msgid "Armor points: @1"
-msgstr ""
+msgstr "Punti armatura: @1"
 
 msgid "Armor durability: @1"
-msgstr ""
+msgstr "Durabilità armatura: @1"
 
 msgid "Protection: @1%"
-msgstr ""
+msgstr "Protezione: @1%"
 
 msgid "Hunger points: +@1"
-msgstr ""
+msgstr "Punti fame: +@1"
 
 msgid "Saturation points: +@1"
-msgstr ""
+msgstr "Punti sazietà: +@1"
 
 msgid "Deals damage when falling"
-msgstr ""
+msgstr "Fa danno quando cade"
 
 msgid "Grows on grass blocks or dirt"
-msgstr ""
+msgstr "Cresce sui blocchi d'erba o di terra"
 
 msgid "Grows on grass blocks, podzol, dirt or coarse dirt"
-msgstr ""
+msgstr "Cresce sui blocchi d'erba, di podzol, di terra o di terra brulla"
 
 msgid "Flammable"
-msgstr ""
+msgstr "Infiammabile"
 
 msgid "Zombie view range: -50%"
-msgstr ""
+msgstr "Campo visivo zombi: -50%"
 
 msgid "Skeleton view range: -50%"
-msgstr ""
+msgstr "Campo visivo scheletro: -50%"
 
 msgid "Creeper view range: -50%"
-msgstr ""
+msgstr "Campo visivo creeper: -50%"
 

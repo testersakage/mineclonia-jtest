@@ -253,12 +253,16 @@ core.register_globalstep (function (dtime)
 		old_gametime = gametime
 		for player in mcl_util.connected_players () do
 			local pos = player:get_pos ()
-			mcl_worlds.tick_chunk_inhabited_time (pos, increment_by)
+			mcl_worlds.tick_chunk_inhabited_time (pos, player, increment_by)
 		end
 end)
 
 function mcl_player.set_inventory_formspec (player, formspec, priority)
-	local formspecs = mcl_player.players[player].inventory_formspecs
+	local playerdata = mcl_player.players[player]
+	if not playerdata then -- The player has already left.
+		return
+	end
+	local formspecs = playerdata.inventory_formspecs
 	formspecs[priority] = formspec
 	local best, priority
 

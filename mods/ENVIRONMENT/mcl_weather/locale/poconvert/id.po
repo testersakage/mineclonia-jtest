@@ -31,7 +31,7 @@ msgstr ""
 msgid "Error: Duration can't be less than 1 second."
 msgstr ""
 
-msgid "Error: Invalid weather specified. Use “clear”, “rain”, “snow” or “thunder”."
+msgid "Error: Invalid weather specified. Use “clear”, “rain”, or “thunder”."
 msgstr ""
 
 msgid "Toggles between clear weather and weather with downfall (randomly rain, thunderstorm or snow)"

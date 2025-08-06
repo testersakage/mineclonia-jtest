@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Cake"
-msgstr ""
+msgstr "Торт"
 
 msgid "With 7 tasty slices!"
-msgstr ""
+msgstr "З 7 смачних шматочків!"
 
 msgid "Hunger points: +@1 per slice"
 msgstr ""
@@ -29,20 +29,20 @@ msgid "Place the cake anywhere, then rightclick it to eat a single slice. You ca
 msgstr ""
 
 msgid "Cake (6 Slices Left)"
-msgstr ""
+msgstr "Торт (залишилося 6 шматочків)"
 
 msgid "Cake (5 Slices Left)"
-msgstr ""
+msgstr "Торт (залишилося 5 шматочків)"
 
 msgid "Cake (4 Slices Left)"
-msgstr ""
+msgstr "Торт (залишилося 4 шматочки)"
 
 msgid "Cake (3 Slices Left)"
-msgstr ""
+msgstr "Торт (залишилося 3 шматочки)"
 
 msgid "Cake (2 Slices Left)"
-msgstr ""
+msgstr "Торт (залишилося 2 шматочки)"
 
 msgid "Cake (1 Slice Left)"
-msgstr ""
+msgstr "Торт (залишився 1 шматочок)"
 

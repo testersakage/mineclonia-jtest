@@ -37,6 +37,8 @@ Items can have these fields:
   If you don't do this, anvils will fail at properly restoring the description
   when their custom name gets cleared at an anvil. See `mcl_banners` for an
   example.
+* `_mcl_armor_trim_color`: _colorstring_ used to determine the color that will be
+  applied during armor trimming when used in the smithing table.
 * `_mcl_burntime`: _number_ that determines, in ticks, the amount of time an item
   burns when used in furnaces, blast furnaces and smokers. Examples can be found
   in `mcl_core/craftitems.lua`.
@@ -79,7 +81,7 @@ All nodes can have these fields:
 * `_mcl_hardness`: Hardness of the block, ranges from 0 to infinity (represented
   by -1). Determines digging times. Default: 0
 * `_mcl_blast_resistance`: How well this block blocks and resists explosions.
-  Default: 0
+  Default: The value of `_mcl_hardness`
 * `_mcl_falling_node_alternative`: If set to an itemstring, the node will turn
   into this node before it starts to fall.
 * `_mcl_after_falling(pos)`: Called after a falling node finished falling and
@@ -184,6 +186,7 @@ The following APIs may be subject to change in future. You could already use
 these APIs but there will probably be breaking changes in the future, or the API
 is not as fleshed out as it should be. Use at your own risk!
 
+* `mcl_potions`
 * Panes (like glass panes and iron bars): `ITEMS/xpanes`
 * `_on_ignite` callback: `ITEMS/mcl_fire`
 * Farming: `ITEMS/mcl_farming`

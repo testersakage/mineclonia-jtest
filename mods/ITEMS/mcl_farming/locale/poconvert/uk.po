@@ -53,7 +53,7 @@ msgid "Hold it in your hand and right-click to eat it. Rightclick an animal to f
 msgstr ""
 
 msgid "Beetroot Soup"
-msgstr ""
+msgstr "Борщ"
 
 msgid "Beetroot soup is a food item."
 msgstr ""
@@ -77,7 +77,7 @@ msgid "Mature carrot plants are ready to be harvested for carrots. They won't gr
 msgstr ""
 
 msgid "Carrot"
-msgstr ""
+msgstr "Морква"
 
 msgid "Carrots can be eaten and planted. Pigs and rabbits like carrots."
 msgstr ""
@@ -170,7 +170,7 @@ msgid "Mature potato plants are ready to be harvested for potatoes. They won't g
 msgstr ""
 
 msgid "Potato"
-msgstr ""
+msgstr "Картопля"
 
 msgid "Potatoes are food items which can be eaten, cooked in the furnace and planted. Pigs like potatoes."
 msgstr ""
@@ -284,7 +284,7 @@ msgid "Mature Wheat Plant"
 msgstr ""
 
 msgid "Wheat"
-msgstr ""
+msgstr "Пшениця"
 
 msgid "Wheat is used in crafting. Some animals like wheat."
 msgstr ""
@@ -293,7 +293,7 @@ msgid "Use the “Place” key on an animal to try to feed it wheat."
 msgstr ""
 
 msgid "Cookie"
-msgstr ""
+msgstr "Печиво"
 
 msgid "Bread"
 msgstr ""

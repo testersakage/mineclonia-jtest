@@ -22,6 +22,7 @@ local snow_golem = {
 	description = S("Snow Golem"),
 	type = "npc",
 	spawn_class = "passive",
+	_spawn_category = "misc",
 	passive = true,
 	hp_min = 4,
 	hp_max = 4,

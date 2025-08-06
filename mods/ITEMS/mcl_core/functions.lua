@@ -659,6 +659,23 @@ function mcl_core.make_dirtpath(itemstack, placer, pointed_thing)
 	return itemstack,true
 end
 
+
+function mcl_core.bottle_dirt(itemstack, placer, pointed_thing)
+	local def = itemstack:get_definition()
+	if def._mcl_cauldrons_liquid then
+		local node = core.get_node(pointed_thing.under)
+		itemstack = mcl_potions.set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_mud:mud", node.param2) or itemstack
+		return itemstack
+	end
+end
+
+function mcl_core.get_bottle_place_on_water(bottle)
+	return function(itemstack, placer, pointed_thing)
+		return mcl_inventory.give_and_take(placer, itemstack, bottle, "give")
+	end
+end
+
+
 function mcl_core.bone_meal_grass(_, _, pointed_thing)
 	local flowers_table_plains = {
 		"mcl_flowers:dandelion",

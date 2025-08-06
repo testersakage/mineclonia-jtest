@@ -992,7 +992,7 @@ msgid "Water"
 msgstr "Вода"
 
 msgid "Water is abundant in oceans and also appears in a few springs in the ground. You can swim easily in water, but you need to catch your breath from time to time."
-msgstr "Вода изобилует в океанах и также встречается в виде ключей под землёй."
+msgstr "Вода в изобилии содержится в океанах, а также в нескольких источниках под землей. Вы можете легко плавать в воде, но время от времени вам нужно переводить дыхание."
 
 msgid "Water interacts with lava in various ways:"
 msgstr "Вода взаимодействует с лавой по-разному:"

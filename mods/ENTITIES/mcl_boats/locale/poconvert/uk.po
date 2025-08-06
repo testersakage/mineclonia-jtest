@@ -23,7 +23,7 @@ msgid "Rightclick on a water source to place the boat. Rightclick the boat to en
 msgstr ""
 
 msgid "Boat"
-msgstr ""
+msgstr "човен"
 
 msgid "Water vehicle"
 msgstr ""

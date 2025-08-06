@@ -23,7 +23,7 @@ msgid "Recipe book"
 msgstr "Libro de recetas"
 
 msgid "Fill Craft Grid"
-msgstr "Llenar la cuadrícula de fabricación"
+msgstr "Rellenar rejilla de fabricación"
 
 msgid "Crafting Table"
 msgstr "Mesa de trabajo"

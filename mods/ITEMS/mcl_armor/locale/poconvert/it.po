@@ -32,64 +32,64 @@ msgid "Leather Boots"
 msgstr "Stivali di cuoio"
 
 msgid "Colorize a piece of leather armor, or wash it"
-msgstr ""
+msgstr "Colora o lava un pezzo di armatura di pelle"
 
 msgid "Not leather armor."
-msgstr ""
+msgstr "Non è armatura di pelle."
 
 msgid "Washed."
-msgstr ""
+msgstr "Lavato."
 
 msgid "Done: @1"
-msgstr ""
+msgstr "Fatto: @1"
 
 msgid "Player isn't online"
-msgstr ""
+msgstr "Giocatore non connesso"
 
 msgid "Bolt Armor Trim"
-msgstr ""
+msgstr "Ornamento stile bullone"
 
 msgid "Coast Armor Trim"
-msgstr ""
+msgstr "Ornamento stile costiero"
 
 msgid "Dune Armor Trim"
-msgstr ""
+msgstr "Ornamento stile duna"
 
 msgid "Eye Armor Trim"
-msgstr ""
+msgstr "Ornamento stile occhio"
 
 msgid "Flow Armor Trim"
-msgstr ""
+msgstr "Ornamento stile flusso"
 
 msgid "Rib Armor Trim"
-msgstr ""
+msgstr "Ornamento stile costole"
 
 msgid "Sentry Armor Trim"
-msgstr ""
+msgstr "Ornamento stile sentinella"
 
 msgid "Silence Armor Trim"
-msgstr ""
+msgstr "Ornamento stile silenzio"
 
 msgid "Snout Armor Trim"
-msgstr ""
+msgstr "Ornamento stile grugno"
 
 msgid "Spire Armor Trim"
-msgstr ""
+msgstr "Ornamento stile guglie"
 
 msgid "Tide Armor Trim"
-msgstr ""
+msgstr "Ornamento stile marea"
 
 msgid "Vex Armor Trim"
-msgstr ""
+msgstr "Ornamento stile vessante"
 
 msgid "Ward Armor Trim"
-msgstr ""
+msgstr "Ornamento stile sorvegliante"
 
 msgid "Wayfinder Armor Trim"
-msgstr ""
+msgstr "Ornamento stile ricognitore"
 
 msgid "Wild Armor Trim"
-msgstr ""
+msgstr "Ornamento stile selvaggio"
 
 msgid "Golden Helmet"
 msgstr "Elmo d'oro"
@@ -155,65 +155,65 @@ msgid "Projectile Protection"
 msgstr "Protezione dai proiettili"
 
 msgid "Reduces projectile damage."
-msgstr ""
+msgstr "Riduce il danno dei proiettili."
 
 msgid "Blast Protection"
 msgstr "Protezione dalle esplosioni"
 
 msgid "Reduces explosion damage and knockback."
-msgstr ""
+msgstr "Riduce il danno delle esplosioni e dei contraccolpi."
 
 msgid "Fire Protection"
 msgstr "Protezione dal fuoco"
 
 msgid "Reduces fire damage."
-msgstr ""
+msgstr "Riduce il danno da fuoco."
 
 msgid "Protection"
 msgstr "Protezione"
 
 msgid "Reduces most types of damage by 4% for each level."
-msgstr ""
+msgstr "Riduce la maggior parte dei danni del 4% per ogni livello."
 
 msgid "Feather Falling"
 msgstr "Atterraggio morbido"
 
 msgid "Reduces fall damage."
-msgstr ""
+msgstr "Riduce il danno da caduta."
 
 msgid "Aqua Affinity"
 msgstr "Affinità all'acqua"
 
 msgid "Increases underwater mining speed."
-msgstr ""
+msgstr "Aumenta la velocità di scavo sott'acqua."
 
 msgid "Curse of Binding"
 msgstr "Maledizione del legame"
 
 msgid "Item cannot be removed from armor slots except due to death, breaking or in Creative Mode."
-msgstr ""
+msgstr "L'oggetto non può essere rimosso dallo slot armatura a meno che si rompa, tu non muoia o in modalità creativa."
 
 msgid "Thorns"
 msgstr "Spine"
 
 msgid "Reflects some of the damage taken when hit, at the cost of reducing durability with each proc."
-msgstr ""
+msgstr "Riflette parte del danno ricevuto quando si viene colpiti, a costo di ridurre la durata dell'equipaggiamento."
 
 msgid "Elytra"
-msgstr "Elitre"
+msgstr "Elitra"
 
 msgid "Smithing Template"
-msgstr ""
+msgstr "Schema di forgiatura"
 
 msgid "Applies to:"
-msgstr ""
+msgstr "Si applica a:"
 
 msgid "Armor"
 msgstr "Armatura"
 
 msgid "Ingredients:"
-msgstr ""
+msgstr "Ingredienti:"
 
 msgid "Ingot & Crystals"
-msgstr ""
+msgstr "Lingotti e cristalli"
 

@@ -17,7 +17,7 @@ msgid "Target"
 msgstr "Bersaglio"
 
 msgid "A target is a block that provides a temporary redstone charge when hit by a projectile."
-msgstr "Un bersaglio è un blocco che fornisce una carica di pietrarossa temporanea quando viene colpito da un proiettile."
+msgstr "Un bersaglio è un blocco che dà una breve scarica pietrarossa quando viene colpito da un proiettile."
 
 msgid "Throw a projectile on the target to activate it."
 msgstr "Lancia un proiettile sul bersaglio per attivarlo."

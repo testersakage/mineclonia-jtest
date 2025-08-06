@@ -22,14 +22,14 @@ msgstr ""
 msgid "Advancement Unlocked: @1"
 msgstr "Progrès débloqué : @1"
 
-msgid "Hidden Advancement Made!"
+msgid "Hidden Advancement Unlocked!"
 msgstr ""
 
-msgid "Goal Completed!"
-msgstr "Objectif atteint !"
+msgid "Goal Reached!"
+msgstr ""
 
-msgid "Challenge Completed!"
-msgstr "Défi accompli !"
+msgid "Challenge Complete!"
+msgstr ""
 
 msgid "Advancement Made!"
 msgstr "Progrès réalisé !"

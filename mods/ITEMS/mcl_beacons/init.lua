@@ -434,7 +434,7 @@ core.register_node("mcl_beacons:beacon_beam", {
 	light_source = core.LIGHT_MAX,
 	walkable = false,
 	groups = {not_in_creative_inventory=1},
-	_mcl_blast_resistance = 1200,
+	_mcl_hardness = 1200,
 	paramtype2 = "color",
 	palette = "mcl_dyes_palette.png",
 	buildable_to = true,

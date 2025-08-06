@@ -83,19 +83,19 @@ msgid "Burning time: @1"
 msgstr "Tempo de queima: @1"
 
 msgid "Usages"
-msgstr ""
+msgstr "Usos"
 
 msgid "Recipes"
-msgstr ""
+msgstr "Receitas"
 
 msgid "Recipe is too big to be displayed (@1×@2)"
 msgstr "Receita é muito grande para ser mostrada (@1x@2)"
 
 msgid "Shapeless"
-msgstr ""
+msgstr "Sem forma"
 
 msgid "Cooking"
-msgstr ""
+msgstr "Cozinhando"
 
 msgid "Increase window size"
 msgstr "Aumentar tamanho da janela"
@@ -113,7 +113,7 @@ msgid "Previous page"
 msgstr "Página anterior"
 
 msgid "Next page"
-msgstr "Página posterior"
+msgstr "Próxima Página"
 
 msgid "No item to show"
 msgstr "Nenhum item para mostrar"
@@ -122,11 +122,11 @@ msgid "Collect items to reveal more recipes"
 msgstr "Colete itens para revelar mais receitas"
 
 msgid "This item can be repaired at an anvil with: @1."
-msgstr ""
+msgstr "Esse item pode ser consertado em uma bigorna com: @1."
 
 msgid "This item can be repaired at an anvil with any wooden planks."
-msgstr ""
+msgstr "Esse item pode ser consertado em uma bigorna com quaisquer tábuas de madeira."
 
 msgid "This item can be repaired at an anvil with any item in the “@1” group."
-msgstr ""
+msgstr "Esse item pode ser consertado em uma bigorna com qualquer item no grupo @1."
 

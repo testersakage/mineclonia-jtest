@@ -17,13 +17,13 @@ msgid "Firework Rocket"
 msgstr "Razzo Pirotecnico"
 
 msgid "@1s power left. Not using rocket."
-msgstr ""
+msgstr "@1s di forza rimasta (senza razzi)."
 
 msgid "Elytra not deployed. Jump while falling down to deploy."
-msgstr ""
+msgstr "Elitra non dispiegata. Salta mentre cadi per aprirla."
 
 msgid "Elytra not equipped."
-msgstr ""
+msgstr "Elitra non equipaggiata."
 
 msgid "Flight Duration: @1s"
 msgstr ""

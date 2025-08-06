@@ -62,13 +62,13 @@ msgid "Cornflower"
 msgstr "Aciano"
 
 msgid "Wildflowers"
-msgstr ""
+msgstr "Florecillas silvestres"
 
 msgid "Pink Petals"
-msgstr ""
+msgstr "Pétalos rosas"
 
 msgid "Pink Petals are ground decoration of cherry grove biomes"
-msgstr ""
+msgstr "Los pétalos rosas son la decoración del suelo de los biomas de cerezos"
 
 msgid "Peony"
 msgstr "Peonía"

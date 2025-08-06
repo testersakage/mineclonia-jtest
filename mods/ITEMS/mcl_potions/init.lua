@@ -21,8 +21,8 @@ mcl_potions.II_FACTOR = mcl_potions.POTENT_FACTOR -- TODO remove at some point
 mcl_potions.DURATION_PLUS = mcl_potions.DURATION * mcl_potions.PLUS_FACTOR -- TODO remove at some point
 mcl_potions.DURATION_2 = mcl_potions.DURATION / mcl_potions.II_FACTOR -- TODO remove at some point
 
-mcl_potions.SPLASH_FACTOR = 0.75
 mcl_potions.LINGERING_FACTOR = 0.25
+mcl_potions.TIPPED_FACTOR = 0.125
 
 dofile(modpath .. "/functions.lua")
 dofile(modpath .. "/commands.lua")
@@ -82,59 +82,14 @@ core.register_craftitem("mcl_potions:glass_bottle", {
 	groups = {brewitem=1, empty_bottle = 1},
 	liquids_pointable = true,
 	on_place = function(itemstack, placer, pointed_thing)
-		if pointed_thing.type == "node" then
-			local node = core.get_node(pointed_thing.under)
-			local def = core.registered_nodes[node.name]
+		local node = core.get_node(pointed_thing.under)
+		local def = core.registered_nodes[node.name]
 
-			-- Try to fill glass bottle with water
-			local get_water = false
-			--local from_liquid_source = false
-			local river_water = false
-			local cauldron_group = core.get_item_group(node.name, "cauldron_water")
-			if def and def.groups and def.groups.water and def.liquidtype == "source" then
-				-- Water source
-				get_water = true
-				--from_liquid_source = true
-				river_water = node.name == "mclx_core:river_water_source"
-			-- Or reduce water level of cauldron by 1
-			elseif cauldron_group > 0 then
-				local pname = placer:get_player_name()
-				if core.is_protected(pointed_thing.under, pname) then
-					core.record_protection_violation(pointed_thing.under, pname)
-					return itemstack
-				end
-				get_water = true
-				river_water = cauldron_group == 2
-				mcl_cauldrons.add_level(pointed_thing.under, -1)
-			end
-			if get_water then
-				local water_bottle
-				if river_water then
-					water_bottle = ItemStack("mcl_potions:river_water")
-				else
-					water_bottle = ItemStack("mcl_potions:water")
-				end
-				-- Replace with water bottle, if possible, otherwise
-				-- place the water potion at a place where's space
-				local inv = placer:get_inventory()
-				core.sound_play("mcl_potions_bottle_fill", {pos=pointed_thing.under, gain=0.5, max_hear_range=16}, true)
-				if core.is_creative_enabled(placer:get_player_name()) then
-					-- Don't replace empty bottle in creative for convenience reasons
-					if not inv:contains_item("main", water_bottle) then
-						inv:add_item("main", water_bottle)
-					end
-				elseif itemstack:get_count() == 1 then
-					return water_bottle
-				else
-					if inv:room_for_item("main", water_bottle) then
-						inv:add_item("main", water_bottle)
-					else
-						core.add_item(placer:get_pos(), water_bottle)
-					end
-					itemstack:take_item()
-				end
-			end
+		if def and def._on_bottle_place then
+			local r = def._on_bottle_place(itemstack, placer, pointed_thing)
+			if r then return r end
 		end
+
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
 		return itemstack
@@ -152,32 +107,12 @@ core.register_craft( {
 -- Template function for creating images of filled potions
 -- - colorstring must be a ColorString of form “#RRGGBB”, e.g. “#0000FF” for blue.
 -- - opacity is optional opacity from 0-255 (default: 127)
-local function potion_image(colorstring, opacity)
-	if not opacity then
-		opacity = 127
-	end
-	return "mcl_potions_potion_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_potion_bottle.png"
-end
-
-
-
--- Cauldron fill up rules:
--- Adding any water increases the water level by 1, preserving the current water type
-local cauldron_levels = {
-	["mcl_core:water_source"] = {"", "_1", "_2", "_3"},
-	["mclx_core:river_water_source"] = {"", "_1r", "_2r", "_3r"},
-}
-local fill_cauldron = function(cauldron, water_type)
-	local base = "mcl_cauldrons:cauldron"
-	for index = 1, #cauldron_levels[water_type] do
-		if cauldron == (base .. cauldron_levels[water_type][index]) and index ~= #cauldron_levels[water_type] then
-			return base .. cauldron_levels[water_type][index + 1]
-		end
-	end
+local function potion_image(colorstring)
+	return "mcl_potions_potion_overlay.png^[multiply:"..colorstring.."^mcl_potions_potion_bottle.png"
 end
 
 -- function to set node and empty water bottle (used for cauldrons and mud)
-local function set_node_empty_bottle(itemstack, placer, pointed_thing, newitemstring, old_param2)
+function mcl_potions.set_node_empty_bottle(itemstack, placer, pointed_thing, newitemstring, old_param2)
 	local pname = placer:get_player_name()
 	if core.is_protected(pointed_thing.under, pname) then
 		core.record_protection_violation(pointed_thing.under, pname)
@@ -192,9 +127,8 @@ local function set_node_empty_bottle(itemstack, placer, pointed_thing, newitemst
 
 	if core.is_creative_enabled(placer:get_player_name()) then
 		return itemstack
-	else
-		return "mcl_potions:glass_bottle"
 	end
+	return ItemStack("mcl_potions:glass_bottle")
 end
 
 -- used for water bottles and river water bottles
@@ -216,36 +150,16 @@ end
 
 local function water_bottle_on_place(itemstack, placer, pointed_thing)
 	if pointed_thing.type == "node" then
-
-		local node = core.get_node(pointed_thing.under)
-
-		local cauldron = nil
-		if itemstack:get_name() == "mcl_potions:water" then -- regular water
-			cauldron = fill_cauldron(node.name, "mcl_core:water_source")
-		elseif itemstack:get_name() == "mcl_potions:river_water" then -- river water
-			cauldron = fill_cauldron(node.name, "mclx_core:river_water_source")
-		end
-
-		local candle_group = core.get_item_group(node.name, "lit_candles")
-
-		if cauldron then
-			set_node_empty_bottle(itemstack, placer, pointed_thing, cauldron)
-			return ItemStack("mcl_potions:glass_bottle")
-		elseif node.name == "mcl_core:dirt" or node.name == "mcl_core:coarse_dirt" then
-			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_mud:mud")
-		elseif candle_group > 0 then
-			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_" .. candle_group, node.param2)
-			core.sound_play("fire_extinguish_flame", {gain = 0.1, max_hear_distance = 16, pos = pointed_thing.under}, true)
-		elseif node.name == "mcl_candles:candle_cake_lit" then
-			set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_cake", node.param2)
-			core.sound_play("fire_extinguish_flame", {gain = 0.1, max_hear_distance = 16, pos = pointed_thing.under}, true)
-		end
-
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
+
+		local def = core.registered_nodes[core.get_node(pointed_thing.under).name]
+		if def and def._on_bottle_place then
+			local r = def._on_bottle_place(itemstack, placer, pointed_thing)
+			if r then return r end
+		end
+
 	end
-
-
 	-- Drink the water by default
 	return core.do_item_eat(0, "mcl_potions:glass_bottle", itemstack, placer, pointed_thing)
 end
@@ -258,12 +172,22 @@ core.register_craftitem("mcl_potions:water", {
 	_doc_items_longdesc = S("Water bottles can be used to fill cauldrons. Drinking water has no effect."),
 	_doc_items_usagehelp = S("Use the “Place” key to drink. Place this item on a cauldron to pour the water into the cauldron."),
 	stack_max = 1,
-	inventory_image = potion_image("#0022FF"),
-	wield_image = potion_image("#0022FF"),
+	inventory_image = potion_image("#8091ff"),
+	wield_image = potion_image("#8091ff"),
 	groups = {brewitem=1, food=3, can_eat_when_full=1, water_bottle=1},
 	on_place = water_bottle_on_place,
 	_on_dispense = dispense_water_bottle,
+	_placement_def = {
+		inherit = "victuals",
+		["mcl_core:dirt"] = "default",
+		["mcl_core:coarse_dirt"] = "default",
+		["mcl_lush_caves:rooted_dirt"] = "default",
+		["mcl_cauldrons:cauldron"] = "default",
+		["mcl_cauldrons:cauldron_1"] = "default",
+		["mcl_cauldrons:cauldron_2"] = "default",
+	},
 	_dispense_into_walkable = true,
+	_mcl_cauldrons_liquid = "water",
 	on_secondary_use = core.item_eat(0, "mcl_potions:glass_bottle"),
 })
 
@@ -275,17 +199,18 @@ core.register_craftitem("mcl_potions:river_water", {
 	_doc_items_usagehelp = S("Use the “Place” key to drink. Place this item on a cauldron to pour the river water into the cauldron."),
 
 	stack_max = 1,
-	inventory_image = potion_image("#0044FF"),
-	wield_image = potion_image("#0044FF"),
+	inventory_image = potion_image("#80a3ff"),
+	wield_image = potion_image("#80a3ff"),
 	groups = {brewitem=1, food=3, can_eat_when_full=1, water_bottle=1},
 	on_place = water_bottle_on_place,
 	_on_dispense = dispense_water_bottle,
 	_dispense_into_walkable = true,
+	_mcl_cauldrons_liquid = "river_water",
 	on_secondary_use = core.item_eat(0, "mcl_potions:glass_bottle"),
 
 })
 
-mcl_potions.register_splash("water", S("Splash Water Bottle"), "#0022FF", {
+mcl_potions.register_splash("water", S("Splash Water Bottle"), "#8091ff", {
 	tt=S("Extinguishes fire and hurts some mobs"),
 	longdesc=S("A throwable water bottle that will shatter on impact, where it extinguishes nearby fire and hurts mobs that are vulnerable to water."),
 	no_effect=true,
@@ -296,7 +221,7 @@ mcl_potions.register_splash("water", S("Splash Water Bottle"), "#0022FF", {
 	end,
 	effect=1
 })
-mcl_potions.register_lingering("water", S("Lingering Water Bottle"), "#0022FF", {
+mcl_potions.register_lingering("water", S("Lingering Water Bottle"), "#80a3ff", {
 	tt=S("Extinguishes fire and hurts some mobs"),
 	longdesc=S("A throwable water bottle that will shatter on impact, where it creates a cloud of water vapor that lingers on the ground for a while. This cloud extinguishes fire and hurts mobs that are vulnerable to water."),
 	base_potion = "mcl_potions:water",
@@ -371,6 +296,18 @@ local function complete_output_table (input, out_table, copy)
 end
 
 core.register_on_mods_loaded (function ()
+	local splash_table = {}
+	local lingering_table = {}
+	for potion, def in pairs(potions) do
+		if def.has_splash then
+			splash_table[potion] = potion.."_splash"
+			if def.has_lingering then
+				lingering_table[potion.."_splash"] = potion.."_lingering"
+			end
+		end
+	end
+	mcl_potions.register_table_modifier("mcl_mobitems:gunpowder", splash_table)
+	mcl_potions.register_table_modifier("mcl_potions:dragon_breath", lingering_table)
 	local copy = {}
 	for k, v in pairs (output_table) do
 		complete_output_table (k, v, copy)
@@ -516,18 +453,6 @@ local function fill_inversion_table() -- autofills with splash and lingering inv
 end
 core.register_on_mods_loaded(fill_inversion_table)
 
-local splash_table = {}
-local lingering_table = {}
-for potion, def in pairs(potions) do
-	if def.has_splash then
-		splash_table[potion] = potion.."_splash"
-		if def.has_lingering then
-			lingering_table[potion.."_splash"] = potion.."_lingering"
-		end
-	end
-end
-mcl_potions.register_table_modifier("mcl_mobitems:gunpowder", splash_table)
-mcl_potions.register_table_modifier("mcl_potions:dragon_breath", lingering_table)
 
 
 local meta_mod_table = { }

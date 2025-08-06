@@ -35,7 +35,7 @@ msgid "The result will be placed into the output slot at the right side."
 msgstr "冶煉成果會輸出到右邊的輸出槽。"
 
 msgid "Use the recipe book to see what ores you can smelt, what you can use as fuel and how long it will burn."
-msgstr ""
+msgstr "配方書會說明那些礦物和方塊可以冶煉，那些可以用作燃料，以及能燒多久。"
 
 msgid "Burning Blast Furnace"
 msgstr "高爐（運作中）"

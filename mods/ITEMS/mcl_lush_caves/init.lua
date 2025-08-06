@@ -22,6 +22,7 @@ end
 
 dofile(modpath.."/nodes.lua")
 dofile(modpath.."/crafting.lua")
+dofile(modpath.."/dripleaf.lua")
 
 core.register_abm({
 	label = "Spore Blossom Particles",
@@ -181,21 +182,21 @@ core.register_abm({
 	interval = 180,
 	chance = 5,
 	action = function(pos, node)
-		local pd1 = vector.offset(pos,0,-1,0)
-		local pd2 = vector.offset(pos,0,-2,0)
-		node.name = "mcl_lush_caves:cave_vines"
-		if  math.random(5) == 1 then
-			node.name="mcl_lush_caves:cave_vines_lit"
-		end
-		if core.get_node(pd1).name == "air" and core.get_node(pd2).name == "air" then
-			core.swap_node(pd1,node)
-		else
-			core.swap_node(pos,{name="mcl_lush_caves:cave_vines_lit"})
+		local tip = mcl_util.traverse_tower(pos, -1)
+		local max_vines_age = 25
+		if vector.equals(pos, tip) then
+			if node.param2 < max_vines_age then
+				node.name = "mcl_lush_caves:cave_vines"
+				if math.random() <= 0.11 then
+					node.name = "mcl_lush_caves:cave_vines_lit"
+				end
+				mcl_crimson.grow_vines(pos, 1, node.name, -1, max_vines_age)
+			end
 		end
 	end
 })
 
-local lushcaves = { "LushCaves", "LushCaves_underground", "LushCaves_ocean", "LushCaves_deep_ocean"}
+local lushcaves = { "LushCaves", "LushCaves_underground", "LushCaves_ocean" }
 
 mcl_structures.register_structure("clay_pool",{
 	place_on = {"group:material_stone","mcl_core:gravel","mcl_lush_caves:moss","mcl_core:clay"},

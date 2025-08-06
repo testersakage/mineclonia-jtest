@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Cherry Bark"
-msgstr ""
+msgstr "Вишнева кора"
 
 msgid "Cherry Bark Slab"
 msgstr ""
@@ -23,7 +23,7 @@ msgid "Cherry Bark Stairs"
 msgstr ""
 
 msgid "Cherry Boat"
-msgstr ""
+msgstr "Вишневий човен"
 
 msgid "Cherry Button"
 msgstr ""

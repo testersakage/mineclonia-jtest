@@ -23,7 +23,7 @@ msgid "Mangrove Propagule"
 msgstr "Propagulo di mangrovia"
 
 msgid "Needs soil and light to grow"
-msgstr ""
+msgstr "Ha bisogno di terra e luce per crescere"
 
 msgid "When placed on soil (such as dirt) and exposed to light, an propagule will grow into an mangrove after some time."
 msgstr ""

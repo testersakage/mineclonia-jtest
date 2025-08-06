@@ -421,6 +421,10 @@ function mob_class:check_jockey_status ()
 end
 
 function mob_class:on_deactivate (removal)
+	if self.raidmob then
+		mcl_raids.unload_raidmob (self, removal)
+	end
+
 	if self.jockey_vehicle then
 		-- Dismount the jockey if this mob is to be
 		-- permanantly removed, and otherwise, save its
@@ -454,6 +458,17 @@ function mob_class:on_deactivate (removal)
 		self._jockey_staticdata = staticdata
 		self._jockey_staticdata.name = entity.name
 		self._jockey_rider = nil
+	end
+
+	if self._activated then
+		self:remove_for_spawning ()
+	end
+
+	if self.particlespawners then
+		for player in mcl_util.connected_players () do
+			local name = player:get_player_name ()
+			self:remove_particlespawners (name)
+		end
 	end
 end
 
@@ -751,8 +766,8 @@ local function has_strayed (self_pos, last_wp, next_wp)
 	local norm = vector.normalize (vec)
 	local closest = vector.multiply (norm, proj)
 	closest.x = clamp (closest.x, 0, vec.x)
-	closest.y = clamp (closest.y, 0, vec.x)
-	closest.z = clamp (closest.z, 0, vec.x)
+	closest.y = clamp (closest.y, 0, vec.y)
+	closest.z = clamp (closest.z, 0, vec.z)
 	local dx = closest.x - pos.x
 	local dy = closest.y - pos.y
 	local dz = closest.z - pos.z

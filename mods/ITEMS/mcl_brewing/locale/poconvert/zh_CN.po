@@ -17,7 +17,7 @@ msgid "Brewing Stand"
 msgstr "酿造台"
 
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 
 msgid "To use a brewing stand, rightclick it."
 msgstr "要使用酿造台，右键点击它就行。"

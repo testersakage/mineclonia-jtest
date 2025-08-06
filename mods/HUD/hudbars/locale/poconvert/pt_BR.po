@@ -17,8 +17,8 @@ msgid "@1: @2/@3"
 msgstr ""
 
 msgid "Health"
-msgstr ""
+msgstr "Vida"
 
 msgid "Breath"
-msgstr ""
+msgstr "Fôlego"
 

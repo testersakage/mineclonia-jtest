@@ -18,7 +18,6 @@ core.register_node("mcl_core:bone_block", {
 	groups = {pickaxey = 1, building_block = 1, material_stone = 1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_rotate = on_rotate,
-	_mcl_blast_resistance = 2,
 	_mcl_hardness = 2,
 	_mcl_crafting_output = {single = {output = "mcl_bone_meal:bone_meal 9"}}
 })
@@ -50,7 +49,6 @@ core.register_node("mcl_core:slimeblock", {
 		place = {name = "slimenodes_place", gain = 0.6},
 		footstep = {name = "slimenodes_step", gain = 0.3},
 	},
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_mcl_pistons_sticky = function(node, node_to, direction)
 		return node_to.name ~= "mcl_honey:honey_block"
@@ -75,7 +73,6 @@ core.register_node("mcl_core:cobweb", {
 	drop = "mcl_mobitems:string",
 	_mcl_shears_drop = true,
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 4,
 	_mcl_hardness = 4,
 })
 
@@ -114,7 +111,6 @@ core.register_node("mcl_core:deadbush", {
 		type = "fixed",
 		fixed = {-5 / 16, -8 / 16, -5 / 16, 5 / 16, 1 / 16, 5 / 16},
 	},
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_mcl_burntime = 5
 })
@@ -292,6 +288,5 @@ core.register_node("mcl_core:void", {
 	end,
 	drop = "",
 	-- Infinite blast resistance; it should never be destroyed by explosions
-	_mcl_blast_resistance = -1,
 	_mcl_hardness = -1,
 })

@@ -272,3 +272,41 @@ mcl_player.register_on_visual_change(mcl_inventory.update_inventory_formspec)
 mcl_gamemode.register_on_gamemode_change(function(p, old_gm, gm) ---@diagnostic disable-line: unused-local
 	set_inventory(p)
 end)
+
+-- Handles replacing the item wielded in an interaction with another item
+--
+-- Replaces the wielded stack with the reward stack if the wielded stack is
+-- empty after the interaction, and otherwise tries to add the reward stack into
+-- the player's inventory and drops it at the player's position if there is no
+-- room.
+--
+-- Creative behavior specifies how to handle creative mode for this interaction:
+-- "nothing": neither give nor take any items
+-- "give": don't take item from wielded stack, but give reward
+-- "give_new": like "give", but only give reward, if it isn't already in player's inventory (default)
+-- "both": give and take item like in non creative mode
+
+function mcl_inventory.give_and_take(player, wield_stack, reward_stack, creative_behavior)
+	if not player then return nil end
+	local creative = core.is_creative_enabled(player:get_player_name())
+	creative_behavior = creative_behavior or "give_new"
+	if creative and creative_behavior == "nothing" then
+		return wield_stack
+	end
+	if not creative or creative_behavior == "both" then
+		wield_stack:take_item()
+	end
+	local inv = player:get_inventory()
+	local contains = inv:contains_item("main", reward_stack, true)
+	if not creative or creative_behavior ~= "give_new" or not contains then
+		if wield_stack:is_empty() then
+			return reward_stack
+		elseif inv:room_for_item("main", reward_stack) then
+			inv:add_item("main", reward_stack)
+			return wield_stack
+		else
+			core.add_item(player:get_pos(), reward_stack)
+			return wield_stack
+		end
+	end
+end

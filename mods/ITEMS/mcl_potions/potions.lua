@@ -4,11 +4,8 @@ mcl_potions.registered_potions = {}
 -- shorthand
 local registered_potions = mcl_potions.registered_potions
 
-local function potion_image(colorstring, opacity)
-	if not opacity then
-		opacity = 127
-	end
-	return "mcl_potions_potion_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_potion_bottle.png"
+local function potion_image(colorstring)
+	return "mcl_potions_potion_overlay.png^[multiply:"..colorstring.."^mcl_potions_potion_bottle.png"
 end
 
 local how_to_drink = S("Use the “Place” key to drink it.")
@@ -29,25 +26,26 @@ local potion_intro = S("Drinking a potion gives you a particular effect or set o
 -- ██║░░░░░╚█████╔╝░░░██║░░░██║╚█████╔╝██║░╚███║██████╔╝
 -- ╚═╝░░░░░░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
 
-local function generate_get_all_virtual_items_func(itemname, pdef)
+local function generate_get_all_virtual_items_func(itemname, pdef, nocreative)
 	return function()
-		local output = {brew = {}}
+		local category = nocreative and "nici" or "brew"
+		local list = {}
 		if pdef.has_potent then
 			local stack = ItemStack(itemname)
 			local potency = pdef._default_potent_level - 1
 			stack:get_meta():set_int("mcl_potions:potion_potent", potency)
 			tt.reload_itemstack_description(stack)
-			table.insert(output.brew, stack:to_string())
+			table.insert(list, stack:to_string())
 		end
 		if pdef.has_plus then
 			local stack = ItemStack(itemname)
 			local extend = pdef._default_extend_level
 			stack:get_meta():set_int("mcl_potions:potion_plus", extend)
 			tt.reload_itemstack_description(stack)
-			table.insert(output.brew, stack:to_string())
+			table.insert(list, stack:to_string())
 		end
 
-		return output
+		return {[category] = list}
 	end
 end
 
@@ -71,7 +69,7 @@ local function generate_on_use(vanish, effects, _, on_use, custom_effect)
 		for name, details in pairs(effects) do
 			ef_level = mcl_potions.level_from_details (details, potency)
 			dur = mcl_potions.duration_from_details (details, potency,
-								 plus, 1.0)
+								 plus)
 			mcl_potions.give_effect_by_level(name, user, ef_level, dur)
 		end
 
@@ -104,7 +102,7 @@ function mcl_potions.consume_potion (mob, id, potency, plus)
 	for name, details in pairs (def._effect_list) do
 	ef_level = mcl_potions.level_from_details (details, potency)
 	dur = mcl_potions.duration_from_details (details, potency,
-						 plus, 1.0)
+						 plus)
 	mcl_potions.give_effect_by_level (name, mob, ef_level, dur)
 	end
 	if def.custom_effect then
@@ -182,7 +180,7 @@ function mcl_potions.register_potion(def)
 		pdef._doc_items_usagehelp = how_to_drink
 	end
 	pdef.stack_max = def.stack_max or 1
-	local color = def.color or "#0000FF"
+	local color = def.color or "#FF00FF"
 	pdef.inventory_image = def.image or potion_image(color)
 	pdef.wield_image = pdef.inventory_image
 	pdef.groups = def.groups or {brewitem=1, food=3, can_eat_when_full=1,
@@ -233,12 +231,13 @@ function mcl_potions.register_potion(def)
 	local internal_def = table.copy(pdef)
 	local itemname = modname .. ":" .. name
 
-	pdef._get_all_virtual_items = generate_get_all_virtual_items_func(itemname, pdef)
+	pdef._get_all_virtual_items = generate_get_all_virtual_items_func(itemname, pdef, def.nocreative)
 	core.register_craftitem (itemname, pdef)
 
 	if def.has_splash or def.has_splash == nil then
 		local splash_desc = S("Splash @1", pdef.description)
 		local sdef = {}
+		sdef._id_override = def._id_override
 		sdef._tt = def._tt
 		sdef._dynamic_tt = def._dynamic_tt
 		sdef._longdesc = def._longdesc
@@ -253,7 +252,7 @@ function mcl_potions.register_potion(def)
 		sdef.custom_effect = def.custom_effect
 		sdef.on_splash = def.custom_splash_effect
 		sdef.base_potion = itemname
-		sdef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_splash", sdef)
+		sdef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_splash", sdef, def.nocreative)
 		if not def._effect_list then sdef.instant = true end
 		mcl_potions.register_splash(name, splash_desc, color, sdef)
 		internal_def.has_splash = true
@@ -262,6 +261,7 @@ function mcl_potions.register_potion(def)
 	if def.has_lingering or def.has_lingering == nil then
 		local ling_desc = S("Lingering @1", pdef.description)
 		local ldef = {}
+		ldef._id_override = def._id_override
 		ldef._tt = def._tt
 		ldef._dynamic_tt = def._dynamic_tt
 		ldef._longdesc = def._longdesc
@@ -277,7 +277,7 @@ function mcl_potions.register_potion(def)
 		ldef.on_splash = def.custom_splash_effect
 		ldef.while_lingering = def.custom_linger_effect
 		ldef.base_potion = itemname
-		ldef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_lingering", ldef)
+		ldef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_lingering", ldef, def.nocreative)
 		if not def._effect_list then ldef.instant = true end
 		mcl_potions.register_lingering(name, ling_desc, color, ldef)
 		internal_def.has_lingering = true
@@ -295,6 +295,7 @@ function mcl_potions.register_potion(def)
 			arr_desc = S("Strange Tipped Arrow")
 		end
 		local adef = {}
+		adef._id_override = def._id_override
 		adef._tt = def._tt
 		adef._dynamic_tt = def._dynamic_tt
 		adef._longdesc = def._longdesc
@@ -306,7 +307,7 @@ function mcl_potions.register_potion(def)
 		adef._default_potent_level = pdef._default_potent_level
 		adef._default_extend_level = pdef._default_extend_level
 		adef.custom_effect = def.custom_effect
-		adef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_arrow", adef)
+		adef._get_all_virtual_items = generate_get_all_virtual_items_func("mcl_potions:" .. name .. "_arrow", adef, def.nocreative)
 		if not def._effect_list then adef.instant = true end
 		mcl_potions.register_arrow(name, arr_desc, color, adef)
 		internal_def.has_arrow = true
@@ -362,7 +363,7 @@ mcl_potions.register_potion({
 	desc_prefix = S("Awkward"),
 	_tt = S("No effect"),
 	_longdesc = S("Has an awkward taste and is used for brewing potions."),
-	color = "#0000FF",
+	color = "#8091ff",
 })
 
 mcl_potions.register_potion({
@@ -370,7 +371,7 @@ mcl_potions.register_potion({
 	desc_prefix = S("Mundane"),
 	_tt = S("No effect"),
 	_longdesc = S("Has a terrible taste and is not really useful for brewing potions."),
-	color = "#0000FF",
+	color = "#8091ff",
 })
 
 mcl_potions.register_potion({
@@ -378,7 +379,7 @@ mcl_potions.register_potion({
 	desc_prefix = S("Thick"),
 	_tt = S("No effect"),
 	_longdesc = S("Has a bitter taste and is not really useful for brewing potions."),
-	color = "#0000FF",
+	color = "#8091ff",
 })
 
 mcl_potions.register_potion({
@@ -388,7 +389,7 @@ mcl_potions.register_potion({
 		return S("+@1 HP", 4 * level)
 	end,
 	_longdesc = S("Instantly heals."),
-	color = "#F82423",
+	color = "#f6493a",
 	uses_level = true,
 	has_arrow = true,
 	custom_effect = function(object, level, _, user)
@@ -403,7 +404,7 @@ mcl_potions.register_potion({
 		return S("-@1 HP", 6 * level)
 	end,
 	_longdesc = S("Instantly deals damage."),
-	color = "#A9656A",
+	color = "#a07669",
 	uses_level = true,
 	has_arrow = true,
 	custom_effect = function(object, level, _, user)
@@ -416,7 +417,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Night Vision"),
 	_tt = nil,
 	_longdesc = S("Increases the perceived brightness of light under a dark sky."),
-	color = "#C2FF66",
+	color = "#c8f356",
 	_effect_list = {
 		night_vision = {},
 	},
@@ -428,7 +429,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Swiftness"),
 	_tt = nil,
 	_longdesc = S("Increases walking speed."),
-	color = "#33EBFF",
+	color = "#5ae9fe",
 	_effect_list = {
 		swiftness = {},
 	},
@@ -440,7 +441,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Slowness"),
 	_tt = nil,
 	_longdesc = S("Decreases walking speed."),
-	color = "#8BAFE0",
+	color = "#8bb3de",
 	_effect_list = {
 		slowness = {dur=mcl_potions.DURATION_INV,
 			-- Slowness IV should last 20 seconds.
@@ -456,7 +457,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Leaping"),
 	_tt = nil,
 	_longdesc = S("Increases jump strength."),
-	color = "#FDFF84",
+	color = "#fafd8e",
 	_effect_list = {
 		leaping = {},
 	},
@@ -468,7 +469,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Decay"),
 	_tt = nil,
 	_longdesc = S("Applies the withering effect which deals damage at a regular interval and can kill."),
-	color = "#736156",
+	color = "#6d5c50",
 	_effect_list = {
 		withering = {dur=mcl_potions.DURATION_POISON},
 	},
@@ -480,7 +481,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Poison"),
 	_tt = nil,
 	_longdesc = S("Applies the poison effect which deals damage at a regular interval."),
-	color = "#87A363",
+	color = "#86a25b",
 	_effect_list = {
 		poison = {dur=mcl_potions.DURATION_POISON},
 	},
@@ -492,7 +493,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Regeneration"),
 	_tt = nil,
 	_longdesc = S("Regenerates health over time."),
-	color = "#CD5CAB",
+	color = "#cb54ba",
 	_effect_list = {
 		regeneration = {dur=mcl_potions.DURATION_POISON},
 	},
@@ -504,7 +505,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Invisibility"),
 	_tt = nil,
 	_longdesc = S("Grants invisibility."),
-	color = "#F6F6F6",
+	color = "#f7fdfc",
 	_effect_list = {
 		invisibility = {},
 	},
@@ -516,7 +517,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Water Breathing"),
 	_tt = nil,
 	_longdesc = S("Grants limitless breath underwater."),
-	color = "#98DAC0",
+	color = "#98dac1",
 	_effect_list = {
 		water_breathing = {},
 	},
@@ -528,7 +529,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Fire Resistance"),
 	_tt = nil,
 	_longdesc = S("Grants immunity to damage from heat sources like fire."),
-	color = "#FF9900",
+	color = "#fd970e",
 	_effect_list = {
 		fire_resistance = {},
 	},
@@ -540,7 +541,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Strength"),
 	_tt = nil,
 	_longdesc = S("Increases attack power."),
-	color = "#FFC700",
+	color = "#f8c800",
 	_effect_list = {
 		strength = {},
 	},
@@ -552,7 +553,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Weakness"),
 	_tt = nil,
 	_longdesc = S("Decreases attack power."),
-	color = "#484D48",
+	color = "#4a4e49",
 	_effect_list = {
 		weakness = {},
 	},
@@ -564,7 +565,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Slow Falling"),
 	_tt = nil,
 	_longdesc = S("Instead of falling, you descend gracefully."),
-	color = "#F3CFB9",
+	color = "#eed1ba",
 	_effect_list = {
 		slow_falling = {},
 	},
@@ -576,7 +577,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of the Turtle Master"),
 	_tt = nil,
 	_longdesc = S("Decreases damage taken at the cost of speed."),
-	color = "#255235",
+	color = "#8473dd",
 	_effect_list = {
 		resistance = {
 			level = 3,
@@ -596,7 +597,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Luck"),
 	_tt = nil,
 	_longdesc = S("Increases luck."),
-	color = "#59C106",
+	color = "#59c500",
 	_effect_list = {
 		luck = {},
 	},
@@ -608,11 +609,12 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Bad Luck"),
 	_tt = nil,
 	_longdesc = S("Decreases luck."),
-	color = "#C0A44D",
+	color = "#c9aa56",
 	_effect_list = {
 		bad_luck = {},
 	},
 	has_arrow = true,
+	nocreative = true,
 })
 
 mcl_potions.register_potion({
@@ -636,7 +638,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Infestation"),
 	_tt = nil,
 	_longdesc = S("Causes 1-3 silverfish to spawn with a 5% chance when damaged. It not applies to silverfishes."),
-	color = "#8C9B8C",
+	color = "#899b8a",
 	_effect_list = {infested = {}},
 	has_arrow = true
 })
@@ -646,7 +648,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Oozing"),
 	_tt = nil,
 	_longdesc = S("Causes 2 medium slimes to spawn on death. It not applies to slimes."),
-	color = "#99FFA3",
+	color = "#a5fda9",
 	_effect_list = {oozing = {}},
 	has_arrow = true
 })
@@ -656,7 +658,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Weaving"),
 	_tt = nil,
 	_longdesc = S("Causes 2-3 cobwebs to appear on death. Also increases walking speed when crossing cobwebs."),
-	color = "#78695A",
+	color = "#75675a",
 	_effect_list = {weaving = {}},
 	has_arrow = true,
 })
@@ -666,7 +668,7 @@ mcl_potions.register_potion({
 	desc_suffix = S("of Wind Charging"),
 	_tt = nil,
 	_longdesc = S("Causes A wind burst on death."),
-	color = "#BDC9FF",
+	color = "#bcc8ff",
 	_effect_list = {wind_charged = {}},
 	has_arrow = true,
 })
@@ -714,14 +716,14 @@ local compat = "mcl_potions:compat_potion"
 local compat_arrow = "mcl_potions:compat_arrow"
 local compat_def = {
 	description = S("Unknown Potion") .. "\n" .. core.colorize("#ff0", S("Right-click to identify")),
-	image = "mcl_potions_potion_overlay.png^[colorize:#00F:127^mcl_potions_potion_bottle.png^mcl_unknown.png",
+	inventory_image = "mcl_potions_potion_overlay.png^[colorize:#00F:127^mcl_potions_potion_bottle.png^mcl_unknown.png",
 	groups = {not_in_creative_inventory = 1},
 	on_secondary_use = replace_legacy_potion,
 	on_place = replace_legacy_potion,
 }
 local compat_arrow_def = {
 	description = S("Unknown Tipped Arrow") .. "\n" .. core.colorize("#ff0", S("Right-click to identify")),
-	image = "mcl_bows_arrow_inv.png^(mcl_potions_arrow_inv.png^[colorize:#FFF:100)^mcl_unknown.png",
+	inventory_image = "mcl_bows_arrow_inv.png^(mcl_potions_arrow_inv.png^[colorize:#FFF:100)^mcl_unknown.png",
 	groups = {not_in_creative_inventory = 1},
 	on_secondary_use = replace_legacy_potion,
 	on_place = replace_legacy_potion,

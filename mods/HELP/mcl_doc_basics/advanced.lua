@@ -177,7 +177,7 @@ doc.add_entry("advanced", "settings", {
 	name = S("Settings"),
 	data = {
 		text =
-S("There is a large variety of settings to configure Minetest. Pretty much every aspect can be changed that way.").."\n\n"..
+S("There is a large variety of settings to configure Luanti. Pretty much every aspect can be changed that way.").."\n\n"..
 
 S("These are a few of the most important gameplay settings:").."\n\n"..
 
@@ -196,12 +196,12 @@ S("You may want to check out these online resources related to Luanti:").."\n\n"
 S("Official homepage of Luanti: <https://luanti.org/>").."\n"..
 S("The main place to find the most recent version of Luanti.").."\n\n"..
 
-S("Community wiki: <https://wiki.core.net/>").."\n"..
-S("A community-based documentation website for Luanti. Anyone with an account can edit it! It also features a documentation of Minetest Game.").."\n\n"..
+S("Luanti Documentation: <https://docs.luanti.org/>").."\n"..
+S("A official documentation website for Luanti.").."\n\n"..
 
 S("Web forums: <https://forum.luanti.org/>").."\n"..
 S("A web-based discussion platform where you can discuss everything related to Luanti. This is also a place where player-made mods and games are published and discussed. The discussions are mainly in English, but there is also space for discussion in other languages.").."\n\n"..
 
-S("Chat: <irc://irc.freenode.net#minetest>").."\n"..
-S("A generic Internet Relay Chat channel for everything related to Luanti where people can meet to discuss in real-time. If you do not understand IRC, see the Community Wiki for help.")
+S("Chat: <irc://irc.libera.chat/#luanti>").."\n"..
+S("A generic Internet Relay Chat channel for everything related to Luanti where people can meet to discuss in real-time. If you do not understand IRC, see the Luanti Documentation for help.")
 }})

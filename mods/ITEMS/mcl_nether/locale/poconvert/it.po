@@ -152,16 +152,16 @@ msgid "Netherite Upgrade Template"
 msgstr "Miglioramento di netherite"
 
 msgid "Smithing Template"
-msgstr ""
+msgstr "Schema di forgiatura"
 
 msgid "Applies to:"
-msgstr ""
+msgstr "Si applica a:"
 
 msgid "Diamond Equipment"
 msgstr ""
 
 msgid "Ingredients:"
-msgstr ""
+msgstr "Ingredienti:"
 
 msgid "Nether Lava Source"
 msgstr ""

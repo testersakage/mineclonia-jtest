@@ -87,7 +87,8 @@ function mcl_bows.shoot_arrow(arrow_item, pos, dir, yaw, shooter, power, damage,
 	le._knockback = knockback
 	le._collectable = collectable
 	le._itemstring = arrow_item
-	core.sound_play("mcl_bows_bow_shoot", {pos=pos, max_hear_distance=32}, true)
+	local soundparam = {object=shooter, pos=not shooter and pos or nil, max_hear_distance=32}
+	core.sound_play("mcl_bows_bow_shoot", soundparam, true)
 	if shooter and shooter:is_player() then
 		if obj:get_luaentity().player == "" then
 			obj:get_luaentity().player = shooter

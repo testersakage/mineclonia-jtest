@@ -14,6 +14,7 @@ local salmon = {
 	description = S("Salmon"),
 	type = "animal",
 	spawn_class = "water_ambient",
+	_spawn_category = "water_ambient",
 	can_despawn = true,
 	passive = true,
 	hp_min = 3,
@@ -109,3 +110,21 @@ mcl_mobs.spawn_setup({
 
 --spawn egg
 mcl_mobs.register_egg("mobs_mc:salmon", S("Salmon"), "#a00f10", "#0e8474", 0)
+
+------------------------------------------------------------------------
+-- Modern Salmon spawning.
+------------------------------------------------------------------------
+
+local salmon_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
+	name = "mobs_mc:salmon",
+	biomes = mobs_mc.overworld_biomes,
+	weight = 15,
+	pack_min = 1,
+	pack_max = 5,
+})
+
+function salmon_spawner:init_group (list, sdata)
+	mob_class.school_init_group (list)
+end
+
+mcl_mobs.register_spawner (salmon_spawner)

@@ -116,6 +116,9 @@ mobs_spawn (Spawn mobs naturally) bool true
 # This setting is only read at startup.
 only_peaceful_mobs (Spawn only peaceful mobs) bool false
 
+# If enabled, use old spawning mechanics.
+mobs_spawn_old (Use old spawning mechanics) bool false
+
 # Allow mobs to spawn in protected areas.
 # This does not affect mob spawners.
 mobs_spawn_protected (Spawn mobs in protected areas) bool false

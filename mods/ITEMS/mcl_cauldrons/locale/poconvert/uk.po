@@ -17,7 +17,7 @@ msgid "Cauldron"
 msgstr ""
 
 msgid "Stores water"
-msgstr ""
+msgstr "Зберігає воду"
 
 msgid "Cauldrons are used to store water and slowly fill up under rain."
 msgstr ""

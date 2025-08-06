@@ -154,6 +154,7 @@ end
 local function generate_setting_fragment(player, name, def, fs)
 	local raw_value = mcl_player.get_player_setting(player, name)
 	local value = raw_value == nil and def.ui_default or raw_value
+	local tt_ref = name
 	local b_size = fs.mobile and 0.5 or 0.25
 	local b_size_2 = b_size / 2
 	local padding = fs.mobile and 0.125 or 0
@@ -168,27 +169,27 @@ local function generate_setting_fragment(player, name, def, fs)
 			S("Revert to default"), "]"
 		)
 	end
-	if def.long_desc then
-		fs:add(
-			"tooltip[",
-			name, ";",
-			F(def.long_desc), "]"
-		)
-	end
 	if def.type == "boolean" then
-		local x_off = fs.mobile and 0.5 or 0
 		fs:add(
-			"checkbox[", 1 + x_off, ",", y, ";",
+			"checkbox[", 1, ",", y, ";",
 			name, ";",
 			F(C(setting_name_color, def.short_desc)), ";",
 			value, "]"
 		)
 		y = y + 0.5
 	elseif def.type == "enum" then
+		-- add tooltip to area instead of dropdown to also show it on
+		-- the label and additionally prevent the tooltip obscuring the
+		-- options when using the mouse to select one
+		tt_ref = ("%f,%f;%f,%f"):format(1, y-0.1, 9.3, 0.5)
 		local selected
 		fs:add(
 			"label[1,", y, ";", F(C(setting_name_color, def.short_desc)), "]",
-			"dropdown[1,", y + 0.175, ";8,0.3;",
+			-- Ugly workaround: override any area tooltips when
+			-- mousing over the dropdown options by a hopefully
+			-- unobtrusive tooltip
+			"tooltip[", name, "; ]",
+			"dropdown[1,", y + 0.175, ";9.3,0.3;",
 			name, ";"
 		)
 
@@ -217,6 +218,8 @@ local function generate_setting_fragment(player, name, def, fs)
 		y = y + 0.85
 	elseif def.type == "slider" then
 		local sb_height = fs.mobile and 0.5 or 0.25
+		-- add tooltip to area to display it not only on the slider itself
+		tt_ref = ("%f,%f;%f,%f"):format(1, y-0.1, 9.3, 0.25 + sb_height)
 		local count = #def.options
 		local selected
 		fs:add(
@@ -249,6 +252,13 @@ local function generate_setting_fragment(player, name, def, fs)
 			"scrollbar[1,", y + 0.175, ";4,", sb_height, ";horizontal;", name, ";", selected, "]"
 		)
 		y = y + 0.6 + sb_height
+	end
+	if def.long_desc then
+		fs:add(
+			"tooltip[",
+			tt_ref, ";",
+			F(def.long_desc), "]"
+		)
 	end
 
 	fs.y = y + padding

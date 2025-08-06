@@ -23,47 +23,47 @@ msgid "Budding Amethyst"
 msgstr "Ametista gemmante"
 
 msgid "The Budding Amethyst can grow amethyst"
-msgstr ""
+msgstr "L'ametista gemmante è in grado di crescere gli aggregati di ametista"
 
 msgid "Amethyst Shard"
 msgstr "Scheggia di ametista"
 
 msgid "An amethyst shard is a crystalline mineral."
-msgstr ""
+msgstr "Una scheggia di ametista è un minerale cristallino."
 
 msgid "Calcite"
 msgstr "Calcite"
 
 msgid "Calcite can be found as part of amethyst geodes."
-msgstr ""
+msgstr "La calcite fa parte dei geodi di ametista."
 
 msgid "Tinted Glass"
 msgstr "Vetro oscurato"
 
 msgid "Tinted Glass is a type of glass which blocks lights while it is visually transparent."
-msgstr ""
+msgstr "Il vetro oscurato è un tipo di vetro che blocca la luce pur rimanendo trasparente."
 
 msgid "Small Amethyst Bud"
 msgstr "Gemma di ametista piccola"
 
 msgid "Small Amethyst Bud is the first growth of amethyst bud."
-msgstr ""
+msgstr "Una Gemma di ametista piccola è la prima fase di crescita dell'aggregato di ametista."
 
 msgid "Medium Amethyst Bud"
 msgstr "Gemma di ametista media"
 
 msgid "Medium Amethyst Bud is the second growth of amethyst bud."
-msgstr ""
+msgstr "Una Gemma di ametista media è la seconda fase di crescita dell'aggregato di ametista."
 
 msgid "Large Amethyst Bud"
 msgstr "Gemma di ametista grande"
 
 msgid "Large Amethyst Bud is the third growth of amethyst bud."
-msgstr ""
+msgstr "Una Gemma di ametista grande è la terza fase di crescita dell'aggregato di ametista."
 
 msgid "Amethyst Cluster"
 msgstr "Aggregato di ametista"
 
 msgid "Amethyst Cluster is the final growth of amethyst bud."
-msgstr ""
+msgstr "Un aggregato di ametista è la fase definitiva di crescita."
 

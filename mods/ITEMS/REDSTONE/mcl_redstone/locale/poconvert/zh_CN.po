@@ -32,5 +32,5 @@ msgid "Read the help entries on the other redstone components to learn how redst
 msgstr "阅读其他红石组件的帮助条目，以了解红石组件是如何相互作用的。"
 
 msgid "Redstone Dust"
-msgstr ""
+msgstr "红石粉"
 

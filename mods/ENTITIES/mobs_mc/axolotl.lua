@@ -10,6 +10,7 @@ local axolotl = {
 	description = S("Axolotl"),
 	type = "animal",
 	spawn_class = "water",
+	_spawn_category = "axolotl",
 	can_despawn = true,
 	passive = false,
 	passive_towards_players = true,
@@ -22,7 +23,15 @@ local axolotl = {
 	head_eye_height = -0.5,
 	horizontal_head_height = 0,
 	curiosity = 10,
-	head_yaw="z",
+	head_yaw = "z",
+	-- This field only exists for compatibility with Luanti <5.10
+	-- clients.  See:
+	-- https://github.com/luanti-org/luanti/issues/15692 &
+	-- company.
+	_head_axis_scale = {
+		vec = vector.new (-1.0, -1.0, 1.0),
+		absolute = true,
+	},
 	armor = 100,
 	rotate = 180,
 	spawn_in_group_min = 1,
@@ -59,7 +68,11 @@ local axolotl = {
 			if clicker:set_wielded_item("mcl_buckets:bucket_axolotl") then
 				local it = clicker:get_wielded_item()
 				local m = it:get_meta()
-				m:set_string("properties",core.serialize(self.object:get_properties()))
+				m:set_string("properties",core.serialize ({
+					nametag = self:get_nametag (),
+					base_texture = self.base_texture,
+					texture_selected = self.texture_selected,
+				}))
 				clicker:set_wielded_item(it)
 				self:safe_remove()
 			end
@@ -261,6 +274,14 @@ function axolotl:ai_step (dtime)
 	end
 end
 
+function axolotl:mob_activate (staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
+	self:update_tag ()
+	return true
+end
+
 axolotl.ai_functions = {
 	axolotl_regenerate,
 	mob_class.check_breeding,
@@ -300,6 +321,38 @@ mcl_mobs.spawn_setup ({
 		"LushCaves_underground",
 	},
 })
+
+------------------------------------------------------------------------
+-- Modern Axolotl spawning.
+------------------------------------------------------------------------
+
+local default_spawner = mcl_mobs.default_spawner
+
+local axolotl_spawner = {
+	name = "mobs_mc:axolotl",
+	spawn_category = "axolotl",
+	spawn_placement = "aquatic",
+	pack_min = 4,
+	pack_max = 6,
+	weight = 10,
+	biomes = {
+		"LushCaves_underground",
+		"LushCaves",
+	},
+}
+
+function axolotl_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+	if default_spawner.test_spawn_position (self, spawn_pos, node_pos,
+						sdata, node_cache) then
+		local block = self:get_node (node_cache, -1, node_pos)
+		if block.name == "mcl_core:clay" then
+			return true
+		end
+	end
+	return false
+end
+
+mcl_mobs.register_spawner (axolotl_spawner)
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:axolotl", S("Axolotl"), "#e890bf", "#b83D7e", 0)

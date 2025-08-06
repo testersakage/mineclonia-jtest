@@ -59,56 +59,31 @@ function mcl_weather.snow.clear()
 	mcl_weather.remove_all_spawners()
 end
 
+local function make_weather_for_player(player)
+	mcl_weather.rain.remove_sound(player)
+	mcl_weather.snow.add_player(player)
+	mcl_weather.snow.set_sky_box()
+end
+mcl_weather.snow.make_weather_for_player = make_weather_for_player
+
+function mcl_weather.snow.make_weather()
+	for player in mcl_util.connected_players() do
+		local pos = player:get_pos()
+		if mcl_weather.has_snow(pos) then
+			make_weather_for_player(player)
+		end
+	end
+end
+
+function mcl_weather.snow.step(_)
+	mcl_weather.snow.make_weather()
+end
+
 function mcl_weather.snow.add_player(player)
 	for i=1,2 do
 		psdef.texture="weather_pack_snow_snowflake"..i..".png"
 		mcl_weather.add_spawner_player(player,"snow"..i,psdef)
 	end
-end
-
-local timer = 0
-core.register_globalstep(function(dtime)
-	if mcl_weather.state ~= "snow" then
-		return false
-	end
-
-	timer = timer + dtime;
-	if timer >= 0.5 then
-		timer = 0
-	else
-		return
-	end
-
-	if mcl_weather.snow.init_done == false then
-		mcl_weather.snow.set_sky_box()
-		mcl_weather.snow.init_done = true
-	end
-
-	for player in mcl_util.connected_players() do
-		if mcl_weather.is_underwater(player) or not mcl_weather.has_snow(player:get_pos()) then
-			mcl_weather.remove_spawners_player(player)
-			mcl_weather.set_sky_box_clear(player)
-		else
-			mcl_weather.snow.add_player(player)
-			mcl_weather.snow.set_sky_box()
-		end
-	end
-end)
-
--- register snow weather
-if mcl_weather.reg_weathers.snow == nil then
-	mcl_weather.reg_weathers.snow = {
-		clear = mcl_weather.snow.clear,
-		light_factor = 0.6,
-		-- 10min - 20min
-		min_duration = 600,
-		max_duration = 1200,
-		transitions = {
-			[65] = "none",
-			[80] = "rain",
-			[100] = "thunder",
-		}
-	}
 end
 
 if mcl_weather.allow_abm then

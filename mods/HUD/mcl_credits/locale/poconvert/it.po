@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "A faithful Open Source clone of Minecraft"
-msgstr "Un clone Open Source fedele di Minecraft"
+msgstr "Un clone software libero fedele di Minecraft"
 
 msgid "Sneak to skip"
 msgstr "Accovacciarsi per ignorare"
@@ -23,35 +23,35 @@ msgid "Jump to speed up (additionally sprint)"
 msgstr "Salta per velocizzare (inoltre puoi anche scattare)"
 
 msgid "Show the Mineclonia end credits"
-msgstr ""
+msgstr "Mostra i titoli di coda di Mineclonia"
 
 msgid "Creators of Mineclonia"
-msgstr ""
+msgstr "Creanti di Mineclonia"
 
 msgid "Creator of MineClone 2"
-msgstr ""
+msgstr "Creante di MineClone 2"
 
 msgid "Creator of MineClone"
-msgstr ""
+msgstr "Creante di MineClone"
 
 msgid "Active Contributors"
-msgstr ""
+msgstr "Contribuenti attivɜ"
 
 msgid "Previous Contributors"
-msgstr ""
+msgstr "Contribuenti precedenti"
 
 msgid "Original Mod Authors"
-msgstr ""
+msgstr "Creanti delle mod originali"
 
 msgid "3D Models"
-msgstr ""
+msgstr "Modelli 3D"
 
 msgid "Textures and menu images"
-msgstr ""
+msgstr "Immagini del menù e texture"
 
 msgid "Translations"
-msgstr ""
+msgstr "Traduzioni"
 
 msgid "Special thanks"
-msgstr ""
+msgstr "Ringraziamenti speciali"
 

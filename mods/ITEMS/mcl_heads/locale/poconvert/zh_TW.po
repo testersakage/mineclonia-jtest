@@ -43,3 +43,15 @@ msgstr "凋零骷髏頭"
 msgid "A wither skeleton skull is a small decorative block which resembles the skull of a wither skeleton. It can also be worn as a helmet for fun, but does not offer any protection."
 msgstr "凋零骷髏頭是一個小的裝飾塊，類似於凋零骷髏的頭部。它也可以作為頭盔戴著玩，但不提供任何保護。"
 
+msgid "Piglin Head"
+msgstr ""
+
+msgid "A piglin head is a small decorative block which resembles the head of a piglin. It can also be worn as a helmet, which reduces the detection range of piglins by 50%."
+msgstr ""
+
+msgid "Dragon Head"
+msgstr ""
+
+msgid "A dragon head is a decorative block which resembles the head of a dragon. It can also be worn as a helmet."
+msgstr ""
+

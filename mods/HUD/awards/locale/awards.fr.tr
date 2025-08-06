@@ -2,9 +2,9 @@
 @1 has made the advancement @2=@1 a réalisé le progrès @2
 Hidden Advancement Unlocked: @1=
 Advancement Unlocked: @1=Progrès débloqué : @1
-Hidden Advancement Made!=
-Goal Completed!=Objectif atteint !
-Challenge Completed!=Défi accompli !
+Hidden Advancement Unlocked!=
+Goal Reached!=
+Challenge Complete!=
 Advancement Made!=Progrès réalisé !
 [c|clear|disable|enable]=[c|clear|disable|enable]
 Show, clear, disable or enable your advancements=Afficher, effacer, désactiver ou activer vos progrès

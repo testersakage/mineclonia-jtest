@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "No help entry for this item could be found."
-msgstr ""
+msgstr "Немає запису, який би міг підійти до цього предмету."
 
 msgid "No help entry for this block could be found."
 msgstr ""
@@ -50,7 +50,7 @@ msgid "This is a player."
 msgstr ""
 
 msgid "OK"
-msgstr ""
+msgstr "Гаразд"
 
 msgid "Lookup Tool"
 msgstr ""

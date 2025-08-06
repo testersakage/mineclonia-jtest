@@ -3,7 +3,7 @@
 local S = awards.translator
 
 core.register_chatcommand("awards", {
-	params = S("[c|clear|disable|enable]"),
+	params = "[c|clear|disable|enable]",
 	description = S("Show, clear, disable or enable your advancements"),
 	func = function(name, param)
 		if param == "clear" then

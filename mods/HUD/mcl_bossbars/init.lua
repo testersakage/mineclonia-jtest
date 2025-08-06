@@ -85,7 +85,7 @@ end
 
 function mcl_bossbars.update_bar(id, def, priority)
 	local old = mcl_bossbars.static[id]
-	old.color = get_color_info(def.color or old.raw_color, def.percentage or old.percentage)
+	old.color, old.image = get_color_info(def.color or old.raw_color, def.percentage or old.percentage)
 	old.text = def.text or old.text
 	old.priority = priority or old.priority
 end

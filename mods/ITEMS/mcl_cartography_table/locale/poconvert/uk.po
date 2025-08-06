@@ -17,7 +17,7 @@ msgid "Cartography Table"
 msgstr ""
 
 msgid "Used to create or copy maps"
-msgstr ""
+msgstr "Використовується для створення або копіювання мап"
 
 msgid "Is used to create or copy maps for use.."
 msgstr ""

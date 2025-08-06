@@ -215,7 +215,7 @@ msgid "Unknown Enchantment"
 msgstr ""
 
 msgid "Inventory"
-msgstr ""
+msgstr "Інвентар"
 
 msgid "@1 Enchantment Levels"
 msgstr ""

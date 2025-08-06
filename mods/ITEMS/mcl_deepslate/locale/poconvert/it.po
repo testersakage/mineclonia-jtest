@@ -47,7 +47,7 @@ msgid "Deepslate Lapis Lazuli Ore"
 msgstr "Minerale di lapislazzuli in ardesia oscura"
 
 msgid "Deepslate Redstone Ore"
-msgstr "Minerale di redstone in ardesia oscura"
+msgstr "Minerale di pietrarossa in ardesia oscura"
 
 msgid "Lit Deepslate Redstone Ore"
 msgstr ""

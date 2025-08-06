@@ -17,19 +17,19 @@ msgid "@1 has made the advancement @2"
 msgstr "@1 получил(а) достижение «@2»"
 
 msgid "Hidden Advancement Unlocked: @1"
-msgstr ""
+msgstr "Скрытое достижение разблокировано: @1"
 
 msgid "Advancement Unlocked: @1"
 msgstr "Разблокировано достижение: @1"
 
-msgid "Hidden Advancement Made!"
-msgstr ""
+msgid "Hidden Advancement Unlocked!"
+msgstr "Скрытое Достижение Разблокировано!"
 
-msgid "Goal Completed!"
-msgstr "Цель выполнена!"
+msgid "Goal Reached!"
+msgstr "Цель Достигнута!"
 
-msgid "Challenge Completed!"
-msgstr "Испытание выполнено!"
+msgid "Challenge Complete!"
+msgstr "Задача Выполнена!"
 
 msgid "Advancement Made!"
 msgstr "Получено достижение!"
@@ -50,7 +50,7 @@ msgid "You have enabled advancements."
 msgstr "У вас включены достижения."
 
 msgid "<advancement ID>"
-msgstr "<advancement ID>"
+msgstr "<ID достижения>"
 
 msgid "Show details of an advancement"
 msgstr "Показать подробности достижения"
@@ -71,7 +71,7 @@ msgid "OK"
 msgstr "ОК"
 
 msgid "(Hidden Advancement)"
-msgstr ""
+msgstr "(Скрытое достижение)"
 
 msgid "Unlock this advancement to find out what it is."
 msgstr "Разблокируйте это достижение, чтобы узнать о нём."

@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "This is a piece of equippable armor which reduces the amount of damage you receive."
-msgstr ""
+msgstr "Esta é uma peça equipável de armadura que reduz a quantia de dano recebida."
 
 msgid "To equip it, put it on the corresponding armor slot in your inventory menu."
-msgstr ""
+msgstr "Para equipar, ponha-a no espaço correspondente a armadura em seu inventário."
 
 msgid "Leather Cap"
 msgstr "Chapéu de Couro"
@@ -44,7 +44,7 @@ msgid "Done: @1"
 msgstr ""
 
 msgid "Player isn't online"
-msgstr ""
+msgstr "Jogador não está online"
 
 msgid "Bolt Armor Trim"
 msgstr ""

@@ -20,7 +20,7 @@ msgid "Campfires have multiple uses, including keeping bees happy, cooking raw m
 msgstr ""
 
 msgid "Campfire"
-msgstr ""
+msgstr "Багаття"
 
 msgid "Soul Campfire"
 msgstr ""

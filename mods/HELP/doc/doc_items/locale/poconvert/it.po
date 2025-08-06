@@ -32,34 +32,34 @@ msgid "This block's rotation is affected by the way you place it: Place it on th
 msgstr ""
 
 msgid "Hand"
-msgstr ""
+msgstr "Mano"
 
 msgid "Air"
-msgstr ""
+msgstr "Aria"
 
 msgid "Yes"
-msgstr ""
+msgstr "Si"
 
 msgid "No"
-msgstr ""
+msgstr "No"
 
 msgid ", "
-msgstr ""
+msgstr ", "
 
 msgid "Unknown item (@1)"
-msgstr ""
+msgstr "Oggetto sconosciuto (@1)"
 
 msgid "unknown"
-msgstr ""
+msgstr "sconosciuto"
 
 msgid "1 second"
-msgstr ""
+msgstr "1 secondo"
 
 msgid "@1 seconds"
-msgstr ""
+msgstr "@1 secondi"
 
 msgid "• @1: @2"
-msgstr ""
+msgstr "• @1: @2"
 
 msgid "• @1, rating @2: @3 s - @4 s"
 msgstr ""
@@ -89,7 +89,7 @@ msgid "This is a melee weapon which deals damage by punching."
 msgstr ""
 
 msgid "Maximum damage per hit:"
-msgstr ""
+msgstr "Massimo danno per colpo:"
 
 msgid "• @1: @2 HP"
 msgstr ""
@@ -371,7 +371,7 @@ msgid "Durability: @1 uses"
 msgstr ""
 
 msgid "Durability: @1"
-msgstr ""
+msgstr "Durabilità: @1"
 
 msgid "Miscellaneous items"
 msgstr ""
@@ -380,7 +380,7 @@ msgid "Item reference of items which are neither blocks, tools or weapons (esp. 
 msgstr ""
 
 msgid "Mobs"
-msgstr ""
+msgstr "Creature"
 
 msgid "Different Mobs"
 msgstr ""

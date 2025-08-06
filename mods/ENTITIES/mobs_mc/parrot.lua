@@ -14,6 +14,7 @@ local parrot = {
 	description = S("Parrot"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	passive = true,
 	pathfinding = 1,
 	hp_min = 6,
@@ -25,7 +26,7 @@ local parrot = {
 	horizontal_head_height=0,
 	head_eye_height = 0.54,
 	curiosity = 10,
-	collisionbox = {-0.25, -0.01, -0.25, 0.25, 0.89, 0.25},
+	collisionbox = {-0.25, 0, -0.25, 0.25, 0.9, 0.25},
 	visual = "mesh",
 	mesh = "mobs_mc_parrot.b3d",
 	textures = {
@@ -365,3 +366,29 @@ mcl_mobs.spawn_setup({
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:parrot", S("Parrot"), "#0da70a", "#ff0000", 0)
+
+------------------------------------------------------------------------
+-- Modern Parrot spawning.
+-----------------------------------------------------------------------
+
+local parrot_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:parrot",
+	weight = 40,
+	pack_min = 1,
+	pack_max = 2,
+	biomes = {
+		"Jungle",
+		"JungleEdgeM",
+		"JungleM",
+		"JungleEdge",
+		"BambooJungle",
+	},
+})
+
+function parrot_spawner:test_supporting_node (node)
+	return  core.get_item_group (node.name, "grass_block") > 0
+		or core.get_item_group (node.name, "leaves") > 0
+		or core.get_item_group (node.name, "tree") > 0
+end
+
+mcl_mobs.register_spawner (parrot_spawner)

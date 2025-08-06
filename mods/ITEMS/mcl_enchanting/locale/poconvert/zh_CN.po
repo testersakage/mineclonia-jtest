@@ -215,7 +215,7 @@ msgid "Unknown Enchantment"
 msgstr "未知的附魔"
 
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 
 msgid "@1 Enchantment Levels"
 msgstr "@1级魔法"

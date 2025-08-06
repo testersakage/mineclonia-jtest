@@ -5,4 +5,4 @@ A redstone trail can be in two states: Powered or not powered. A powered redston
 Redstone power can be received from various redstone components, such as a block of redstone or a button. Redstone power is used to activate numerous mechanisms, such as redstone lamps or pistons.=El poder de Redstone se puede recibir de varios componentes de redstone, como un bloque de redstone o un botón. El poder de Redstone se utiliza para activar numerosos mecanismos, como las lámparas de redstone o los pistones.
 Place redstone on the ground to build a redstone trail. The trails will connect to each other automatically and it can also go over hills.=Coloque redstone en el suelo para construir un sendero de redstone. Los senderos se conectarán entre sí de forma automática y también pueden pasar por colinas.
 Read the help entries on the other redstone components to learn how redstone components interact.=Lea las entradas de ayuda en los otros componentes de redstone para aprender cómo interactúan los componentes de redstone.
-Redstone Dust=
+Redstone Dust=Polvo de redstone

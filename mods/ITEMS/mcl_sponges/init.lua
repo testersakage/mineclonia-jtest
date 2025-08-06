@@ -66,7 +66,6 @@ core.register_node("mcl_sponges:sponge", {
 		end
 		return core.item_place_node(itemstack, placer, pointed_thing)
 	end,
-	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
 })
 
@@ -124,7 +123,6 @@ core.register_node("mcl_sponges:sponge_wet", {
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	groups = {handy=1, hoey=1, building_block=1},
 	on_place = place_wet_sponge,
-	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
 	_mcl_cooking_output = "mcl_sponges:sponge",
 	_mcl_cooking_replacements = {{"mcl_buckets:bucket_empty", "mcl_buckets:bucket_water"}}
@@ -140,7 +138,6 @@ core.register_node("mcl_sponges:sponge_wet_river_water", {
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	groups = {handy=1, building_block=1},
 	on_place = place_wet_sponge,
-	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
 	_mcl_cooking_output = "mcl_sponges:sponge",
 	_mcl_cooking_replacements = {{"mcl_buckets:bucket_empty", "mcl_buckets:bucket_river_water"}}

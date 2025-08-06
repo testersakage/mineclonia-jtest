@@ -6,6 +6,8 @@
 local S = core.get_translator("mobs_mc")
 local mobs_griefing = core.settings:get_bool("mobs_griefing", true)
 local mob_class = mcl_mobs.mob_class
+local only_peaceful_mobs
+	= core.settings:get_bool ("only_peaceful_mobs", false)
 
 --###################
 --################### GHAST
@@ -15,6 +17,8 @@ local ghast = {
 	description = S("Ghast"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
+	glow = 3,
 	hp_min = 10,
 	hp_max = 10,
 	xp_min = 5,
@@ -70,6 +74,7 @@ local ghast = {
 	makes_footstep_sound = false,
 	instant_death = true,
 	fire_resistant = true,
+	fire_damage = 0,
 	lava_damage = 0,
 	does_not_prevent_sleep = true,
 	_projectile_gravity = false,
@@ -236,6 +241,47 @@ mcl_mobs.spawn_setup ({
 
 -- spawn eggs
 mcl_mobs.register_egg ("mobs_mc:ghast", S("Ghast"), "#f9f9f9", "#bcbcbc", 0)
+
+------------------------------------------------------------------------
+-- Modern Ghast spawning.
+------------------------------------------------------------------------
+
+local monster_spawner = mobs_mc.monster_spawner
+
+local ghast_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:ghast",
+	spawn_category = "monster",
+	pack_min = 4,
+	pack_max = 4,
+	biomes = {
+		"Nether",
+		"SoulsandValley",
+	},
+	weight = 50,
+	max_light = 15,
+	max_artificial_light = 15,
+})
+
+function ghast_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+	return mcl_vars.difficulty > 0
+		and not only_peaceful_mobs
+		and math.random (20) == 1
+		and monster_spawner.test_spawn_position (self, spawn_pos,
+							 node_pos, sdata,
+							 node_cache)
+end
+
+local ghast_spawner_basalt_delta = table.merge (ghast_spawner, {
+	pack_min = 1,
+	pack_max = 1,
+	biomes = {
+		"BasaltDelta",
+	},
+	weight = 40,
+})
+
+mcl_mobs.register_spawner (ghast_spawner)
+mcl_mobs.register_spawner (ghast_spawner_basalt_delta)
 
 ------------------------------------------------------------------------
 -- Big Fireball.

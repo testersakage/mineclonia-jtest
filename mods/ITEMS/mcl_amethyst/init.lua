@@ -13,7 +13,6 @@ core.register_node("mcl_amethyst:amethyst_block",{
 	groups = {pickaxey = 1, building_block = 1},
 	sounds = sounds,
 	_mcl_hardness = 1.5,
-	_mcl_blast_resistance = 1.5,
 })
 
 core.register_node("mcl_amethyst:budding_amethyst_block",{
@@ -29,7 +28,6 @@ core.register_node("mcl_amethyst:budding_amethyst_block",{
 	},
 	sounds = sounds,
 	_mcl_hardness = 1.5,
-	_mcl_blast_resistance = 1.5,
 })
 
 core.register_craftitem("mcl_amethyst:amethyst_shard",{
@@ -37,6 +35,7 @@ core.register_craftitem("mcl_amethyst:amethyst_shard",{
 	_doc_items_longdesc = S("An amethyst shard is a crystalline mineral."),
 	inventory_image = "mcl_amethyst_amethyst_shard.png",
 	groups = {craftitem = 1},
+	_mcl_armor_trim_color = "#8246a5",
 	_mcl_crafting_output = {square2 = {output = "mcl_amethyst:amethyst_block"}}
 })
 
@@ -48,7 +47,6 @@ core.register_node("mcl_amethyst:calcite",{
 	groups = {pickaxey = 1, building_block = 1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_hardness = 0.75,
-	_mcl_blast_resistance = 0.75,
 })
 
 -- Tinted Glass
@@ -57,7 +55,6 @@ core.register_node("mcl_amethyst:tinted_glass",{
 	_doc_items_longdesc = S("Tinted Glass is a type of glass which blocks lights while it is visually transparent."),
 	tiles = {"mcl_amethyst_tinted_glass.png"},
 	_mcl_hardness = 0.3,
-	_mcl_blast_resistance = 0.3,
 	drawtype = "glasslike",
 	use_texture_alpha = "blend",
 	sunlight_propagates = false,
@@ -121,7 +118,6 @@ for size, def in pairs(bud_def) do
 		},
 		sounds = sounds,
 		_mcl_hardness = 1.5,
-		_mcl_blast_resistance = 1.5,
 		_mcl_silk_touch_drop = true,
 	}))
 end
@@ -164,7 +160,6 @@ core.register_node("mcl_amethyst:amethyst_cluster",{
 		fixed = { -4.8/16, -8/16, -4.8/16, 4.8/16, 3.9/16, 4.8/16 },
 	},
 	_mcl_hardness = 1.5,
-	_mcl_blast_resistance = 1.5,
 	_mcl_silk_touch_drop = true,
 })
 

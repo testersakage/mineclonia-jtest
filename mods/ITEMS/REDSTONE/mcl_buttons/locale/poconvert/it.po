@@ -14,13 +14,13 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Provides redstone power when pushed"
-msgstr "Fornisce la corrente di pietrarossa quando viene premuto"
+msgstr "Fornisce la corrente pietrarossa quando viene premuta"
 
 msgid "Push duration: @1s"
 msgstr "Durata di pressione: @1s"
 
 msgid "Pushable by arrow"
-msgstr ""
+msgstr "Può essere premuto con una freccia"
 
 msgid "Use the button to push it."
 msgstr "Utilizzare il pulsante per premerlo."
@@ -29,11 +29,11 @@ msgid "Stone Button"
 msgstr "Pulsante di pietra"
 
 msgid "A stone button is a redstone component made out of stone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second."
-msgstr ""
+msgstr "Il pulsante di pietra è un oggetto di pietrarossa e pietra che fornisce corrente pietrarossa. Quando viene premuto, alimenta gli oggetti di pietrarossa adiacenti per 1 secondo."
 
 msgid "Polished Blackstone Button"
 msgstr "Pulsante di pietranera levigata"
 
 msgid "A polished blackstone button is a redstone component made out of polished blackstone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second."
-msgstr ""
+msgstr "Il pulsante di pietranera levigata è un oggetto di pietrarossa e pietranera levigata che fornisce corrente pietrarossa. Quando viene premuto, alimenta gli oggetti di pietrarossa adiacenti per 1 secondo."
 

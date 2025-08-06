@@ -79,7 +79,7 @@ core.register_abm({
 	neighbors = {"group:soil_sapling","group:soil_bamboo"},
 	interval = 15,
 	chance = 10,
-	action = function(pos,node)
+	action = function(pos)
 		mcl_bamboo.grow(pos)
 	end,
 })

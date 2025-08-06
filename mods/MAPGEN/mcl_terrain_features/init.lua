@@ -366,7 +366,7 @@ mcl_structures.register_structure("powder_snow_trap", {
 		octaves = 4,
 		persist = 0.67,
 	},
-	biomes = {"IcePlainsSpikes, ColdTaiga, ColdTaiga_beach, IcePlains"},
+	biomes = {"IcePlainsSpikes", "ColdTaiga", "ColdTaiga_beach", "IcePlains"},
 	y_min = 1,
 	y_max = mcl_vars.mg_overworld_max,
 	terrain_feature = true,
@@ -458,6 +458,11 @@ local function generate_dripstone(pos, max_length, direction)
 		vm:write_to_map(true)
 end
 
+--turn off jit for the generate_dripstone as it is known to create issues with ARM devices:
+-- https://github.com/luanti-org/luanti/issues/15983
+-- https://codeberg.org/mineclonia/mineclonia/issues/2989
+if core.global_exists("jit") then jit.off(generate_dripstone) end
+
 mcl_structures.register_structure("large_dripstone_stalagtite", {
 	place_on = {"group:stone"},
 	spawn_by = "air",
@@ -502,6 +507,10 @@ mcl_structures.register_structure("large_dripstone_stalagmite", {
 				break
 			end
 			empty_air_length = empty_air_length + 1
+		end
+
+		if core.get_item_group(core.get_node(vector.offset(pos, 0, empty_air_length, 0)).name, "solid") then
+			return false
 		end
 
 		generate_dripstone(pos, math.min(20, empty_air_length * mcl_util.float_random(0.4, 0.8)), 1)

@@ -11,6 +11,7 @@ local polar_bear = {
 	description = S("Polar Bear"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	runaway = true,
 	passive = false,
 	retaliates = true,
@@ -19,7 +20,7 @@ local polar_bear = {
 	xp_min = 1,
 	xp_max = 3,
         breath_max = -1,
-	collisionbox = {-0.7, -0.01, -0.7, 0.7, 1.39, 0.7},
+	collisionbox = {-0.7, 0.0, -0.7, 0.7, 1.4, 0.7},
 	visual = "mesh",
 	mesh = "mobs_mc_polarbear.b3d",
 	textures = {
@@ -240,6 +241,7 @@ function polar_bear:should_attack (object)
 			end
 		end
 		return self._child_nearby
+			and self:attack_player_allowed (object)
 	end
 	return false
 end
@@ -294,3 +296,37 @@ mcl_mobs.spawn_setup ({
 
 -- spawn egg
 mcl_mobs.register_egg("mobs_mc:polar_bear", S("Polar Bear"), "#f2f2f2", "#959590", 0)
+
+------------------------------------------------------------------------
+-- Modern Polar Bear spawning.
+------------------------------------------------------------------------
+
+local default_spawner = mcl_mobs.default_spawner
+
+local polar_bear_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:polar_bear",
+	biomes = {
+		"ColdTaiga",
+		"IcePlainsSpikes",
+		"IcePlains",
+	},
+	pack_min = 1,
+	pack_max = 2,
+	weight = 1,
+})
+
+function polar_bear_spawner:spawn (spawn_pos, idx, sdata, pack_size)
+	if idx == 2 then
+		sdata = {
+			child = true,
+		}
+	end
+	return default_spawner.spawn (self, spawn_pos, idx, sdata, pack_size)
+end
+
+function polar_bear_spawner:test_supporting_node (node)
+	return core.get_item_group (node.name, "grass_block") > 0
+		or node.name == "mcl_core:snow/block"
+end
+
+mcl_mobs.register_spawner (polar_bear_spawner)

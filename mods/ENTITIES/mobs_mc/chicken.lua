@@ -11,12 +11,13 @@ local chicken = {
 	description = S("Chicken"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	passive = true,
 	hp_min = 4,
 	hp_max = 4,
 	xp_min = 1,
 	xp_max = 3,
-	collisionbox = {-0.2, -0.01, -0.2, 0.2, 0.69, 0.2},
+	collisionbox = {-0.2, 0.0, -0.2, 0.2, 0.7, 0.2},
 	runaway = true,
 	floats = 1,
 	head_swivel = "head.control",
@@ -105,7 +106,7 @@ end
 function chicken:do_custom (dtime)
 	-- Chickens mounted by a baby zombie never proceed to lay eggs
 	-- again.
-	if not self._is_chicken_jockey then
+	if not self._is_chicken_jockey and not self.child then
 		self.egg_timer = (self.egg_timer or math.random(300, 600)) - dtime
 		if self.egg_timer > 0 then
 			return
@@ -211,6 +212,30 @@ mcl_mobs.spawn_setup({
 	},
 	chance = 100,
 })
+
+------------------------------------------------------------------------
+-- Modern Chicken spawning.
+------------------------------------------------------------------------
+
+local chicken_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:chicken",
+	biomes = mobs_mc.farm_animal_biomes,
+	weight = 10,
+})
+
+local chicken_spawner_jungle = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:chicken",
+	biomes = {
+		"Jungle",
+		"JungleM",
+		"JungleEdge",
+		"JungleEdgeM",
+	},
+	weight = 10,
+})
+
+mcl_mobs.register_spawner (chicken_spawner)
+mcl_mobs.register_spawner (chicken_spawner_jungle)
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:chicken", S("Chicken"), "#a1a1a1", "#ff0000", 0)

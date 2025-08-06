@@ -174,8 +174,7 @@ end)
 mcl_compass.registered_compasses = {}
 function mcl_compass.register_compass(name, def)
 	mcl_compass.registered_compasses[name] = def
-	core.register_craftitem(":mcl_compass:"..(def.name or name), table.merge(def.overrides or {}, {
-		stack_max = 1,
+	core.register_craftitem(":mcl_compass:"..(def.name or name), table.merge({}, def.overrides or {}, {
 		groups = table.merge({tool = 1, disable_repair = 1, compass = 1}, def.overrides.groups)
 	}))
 	if def.name_fmt then

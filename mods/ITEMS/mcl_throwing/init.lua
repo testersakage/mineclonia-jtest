@@ -53,8 +53,9 @@ function mcl_throwing.get_player_throw_function(_, velocity)
 	return func
 end
 
-function mcl_throwing.dispense_function(stack, dispenserpos, _, _, dropdir)
+function mcl_throwing.dispense_function(stack, dispenserpos, _, dropnode, dropdir)
 	-- Launch throwable item
+	if core.get_item_group(dropnode.name, "solid") ~= 0 then return stack end
 	local shootpos = vector.add(dispenserpos, vector.multiply(dropdir, 0.51))
 	mcl_throwing.throw(stack:get_name(), shootpos, dropdir)
 end

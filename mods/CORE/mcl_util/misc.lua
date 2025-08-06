@@ -112,3 +112,21 @@ function mcl_util.calculate_knockback (velocity, factor, resistance, standing, x
 	v.y = standing and (math.min (0.4 * 20, velocity.y / 2.0 + factor * 10)) or velocity.y
 	return v
 end
+
+function mcl_util.return_itemstack_if_alive(player, itemstack)
+	if player:get_hp() <= 0 then
+		return ItemStack()
+	end
+	return itemstack
+end
+
+-- Attribution: https://gist.github.com/jrus/3197011
+local pr = PcgRandom (os.time ())
+
+function mcl_util.generate_uuid ()
+    local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+    return string.gsub (template, '[xy]', function (c)
+        local v = (c == 'x') and pr:next (0, 0xf) or pr:next (8, 0xb)
+        return string.format ('%x', v)
+    end)
+end

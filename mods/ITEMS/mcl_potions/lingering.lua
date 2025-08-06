@@ -2,11 +2,8 @@ local S = core.get_translator(core.get_current_modname())
 
 local mod_target = core.get_modpath("mcl_target")
 
-local function lingering_image(colorstring, opacity)
-	if not opacity then
-		opacity = 127
-	end
-	return "mcl_potions_potion_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_lingering_bottle.png"
+local function lingering_image(colorstring)
+	return "mcl_potions_splash_overlay.png^[multiply:"..colorstring.."^mcl_potions_lingering_bottle.png"
 end
 
 local lingering_effects_at = {}
@@ -174,7 +171,8 @@ end)
 
 
 function mcl_potions.register_lingering(name, descr, color, def)
-	local id = "mcl_potions:"..name.."_lingering"
+	local id = def._id_override or "mcl_potions:"..name
+	id = id.."_lingering"
 	local longdesc = def._longdesc
 	if not def.no_effect then
 		longdesc = S("A throwable potion that will shatter on impact, where it creates a magic cloud that lingers around for a while. Any player or mob inside the cloud will receive the potion's effect or set of effects, possibly repeatedly.")
@@ -187,6 +185,9 @@ function mcl_potions.register_lingering(name, descr, color, def)
 	if def.nocreative then groups.not_in_creative_inventory = 1 end
 
 	local function on_use(item, placer, pointed_thing)
+		local rc = mcl_util.call_on_rightclick(item, placer, pointed_thing)
+		if rc then return rc end
+
 		local velocity = 12
 		local dir = placer:get_look_dir();
 		local pos = placer:get_pos();
@@ -210,7 +211,7 @@ function mcl_potions.register_lingering(name, descr, color, def)
 		_dynamic_tt = def._dynamic_tt,
 		_mcl_filter_description = mcl_potions.filter_potion_description,
 		_doc_items_longdesc = longdesc,
-		_doc_items_usagehelp = S("Use the “Punch” key to throw it."),
+		_doc_items_usagehelp = S("Use the “Place” key to throw it."),
 		stack_max = def.stack_max,
 		_effect_list = def._effect_list,
 		uses_level = def.uses_level,

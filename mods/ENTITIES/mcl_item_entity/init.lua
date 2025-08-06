@@ -45,6 +45,8 @@ mcl_item_entity.register_pickup_achievement("mcl_core:crying_obsidian", "mcl:who
 mcl_item_entity.register_pickup_achievement("mcl_nether:ancient_debris", "mcl:hiddenInTheDepths")
 mcl_item_entity.register_pickup_achievement("mcl_end:dragon_egg", "mcl:PickUpDragonEgg")
 mcl_item_entity.register_pickup_achievement("mcl_armor:elytra", "mcl:skysTheLimit")
+mcl_item_entity.register_pickup_achievement("mcl_fishing:fish_cooked", "mcl:cookFish")
+mcl_item_entity.register_pickup_achievement("mcl_fishing:salmon_cooked", "mcl:cookFish")
 
 local enabled_damage = core.settings:get_bool("enable_damage")
 local online_players
@@ -95,13 +97,13 @@ end)
 -- (very ugly)
 local function get_drops(drop, toolname, param2, paramtype2)
 	local tmp_node_name = "mcl_item_entity:TMP_NODE"
-	core.registered_nodes[tmp_node_name] = {
+	rawset(core.registered_nodes, tmp_node_name, {
 		name = tmp_node_name,
 		drop = drop,
 		paramtype2 = paramtype2
-	}
+	})
 	local drops = core.get_node_drops({name = tmp_node_name, param2 = param2}, toolname)
-	core.registered_nodes[tmp_node_name] = nil
+	rawset(core.registered_nodes, tmp_node_name, nil)
 	return drops
 end
 

@@ -83,7 +83,7 @@ msgid "Polished Deepslate Slab"
 msgstr "Losa de pizarra profunda pulida"
 
 msgid "Polished Deepslate Wall"
-msgstr "Pared de pizarra profunda pulida"
+msgstr "Muro de pizarra profunda pulida"
 
 msgid "Deepslate Bricks"
 msgstr "Ladrillos de pizarra profunda"
@@ -98,7 +98,7 @@ msgid "Deepslate Brick Slab"
 msgstr "Losa de ladrillos de pizarra profunda"
 
 msgid "Deepslate Brick Wall"
-msgstr "Pared de ladrillos de pizarra profunda"
+msgstr "Muro de ladrillos de pizarra profunda"
 
 msgid "Cracked Deepslate Bricks"
 msgstr "Ladrillos de pizarra profunda agrietados"
@@ -170,7 +170,7 @@ msgid "Polished Tuff Slab"
 msgstr "Losa de toba pulida"
 
 msgid "Polished Tuff Wall"
-msgstr "Pared de toba pulida"
+msgstr "Muro de toba pulida"
 
 msgid "Tuff Bricks"
 msgstr "Ladrillos de toba"

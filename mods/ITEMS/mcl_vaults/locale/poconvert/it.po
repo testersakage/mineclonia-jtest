@@ -17,10 +17,10 @@ msgid "Vault"
 msgstr "Cassaforte"
 
 msgid "Ejects loot when opened with the key"
-msgstr ""
+msgstr "Espelle il bottino quando aperta con la chiave"
 
 msgid "A vault ejects loot when opened with the right key. It can only be opened once by each player."
-msgstr ""
+msgstr "Una cassaforte espelle il bottino quando aperta con la chiave giusta. Può essere aperta solo una volta per giocante."
 
 msgid "Trial Key"
 msgstr "Chiave della sfida"
@@ -29,5 +29,5 @@ msgid "Ominous Trial Key"
 msgstr "Chiave della sfida infausta"
 
 msgid "Ominous Vault"
-msgstr ""
+msgstr "Cassaforte minacciosa"
 

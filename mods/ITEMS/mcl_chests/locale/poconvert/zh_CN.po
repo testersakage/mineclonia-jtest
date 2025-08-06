@@ -17,7 +17,7 @@ msgid "Chest"
 msgstr "箱子"
 
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 
 msgid "Large Chest"
 msgstr "大型箱子"

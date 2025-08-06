@@ -225,7 +225,7 @@ awards.register_achievement("mcl:acquireIron", {
 })
 awards.register_achievement("mcl:cookFish", {
 	title = S("Delicious Fish"),
-	description = S("Take a cooked fish from a furnace.\nHint: Use a fishing rod to catch a fish and cook it in a furnace."),
+	description = S("Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\nHint: Use a fishing rod to catch a fish and cook it in a furnace."),
 	icon = "mcl_fishing_fish_cooked.png",
 	type = "Advancement",
 	group = "Husbandry",
@@ -600,4 +600,12 @@ awards.register_achievement("mcl:voluntary_exile", {
 	type = "Advancement",
 	group = "Adventure",
 	secret = true,
+})
+
+awards.register_achievement("mcl:zombie_doctor", {
+	title = S("Zombie Doctor"),
+	description = S("Use a golden apple on a zombie villager under the Weakness effect; the advancement is granted when the zombie villager converts into a villager."),
+	icon = "mcl_core_apple_golden.png",
+	type = "Advancement",
+	group = "Overworld",
 })

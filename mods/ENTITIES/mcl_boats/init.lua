@@ -509,6 +509,10 @@ function boat:set_yaw (yaw)
 	self.object:set_yaw (yaw)
 end
 
+function boat:max_delta_movement ()
+	return 56.0
+end
+
 -- Register one entity for all boat types
 core.register_entity("mcl_boats:boat", boat)
 

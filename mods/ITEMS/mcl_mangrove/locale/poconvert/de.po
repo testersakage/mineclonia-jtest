@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Mangrove Roots"
-msgstr ""
+msgstr "Mangrovenwurzeln"
 
 msgid "Mangrove roots are decorative blocks that form as part of mangrove trees."
 msgstr ""

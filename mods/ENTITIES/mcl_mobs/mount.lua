@@ -2,6 +2,7 @@ local mob_class = mcl_mobs.mob_class
 
 local function force_detach(player)
 	if not player or not player:get_pos() or not player:is_player() then return end
+	mcl_player.set_inventory_formspec (player, nil, 100)
 
 	local attached_to = player:get_attach()
 	if not attached_to then
@@ -13,11 +14,14 @@ local function force_detach(player)
 		entity.driver = nil
 	end
 
-	player:set_detach()
-	mcl_player.players[player].attached = false
-	player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-	mcl_player.player_set_animation(player, "stand" , 30)
-	player:set_properties({visual_size = {x = 1, y = 1} })
+	-- Otherwise this player might already have left.
+	if mcl_player.players[player] then
+		player:set_detach()
+		mcl_player.players[player].attached = false
+		player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+		mcl_player.player_set_animation(player, "stand" , 30)
+		player:set_properties({visual_size = {x = 1, y = 1} })
+	end
 end
 
 core.register_on_shutdown(function()
@@ -173,6 +177,8 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 	end
 
 	if self._csm_driving then
+		local self_pos = self.object:get_pos ()
+		local vel = self.object:get_velocity ()
 		-- Driving is the responsibility of the client.
 		self:halt_in_tracks (false, true)
 
@@ -180,7 +186,7 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 		-- the client-specified course and send a movement
 		-- correction message if so.
 		mcl_serverplayer.maybe_correct_course (self.driver, self.object,
-						moveresult, dtime)
+					moveresult, dtime, self_pos, vel)
 		-- Configure a suitable animation.
 		local v = self.object:get_velocity ()
 		local speed = math.sqrt (v.x * v.x + v.z * v.z)
@@ -303,6 +309,10 @@ function mob_class:detach_client_driver (player)
 	end
 end
 
+function mob_class:max_delta_movement ()
+	return self.movement_speed * 5.0
+end
+
 function mob_class:set_touching_ground (touching_ground)
 	if touching_ground then
 		self.object:set_properties ({
@@ -345,3 +355,4 @@ function mob_class:remove_status_effect (id)
 		end
 	end
 end
+

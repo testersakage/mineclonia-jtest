@@ -2,6 +2,10 @@ local S = core.get_translator(core.get_current_modname())
 
 local PISTON_MAXIMUM_PUSH = 12
 
+-- Detaches block from sticky piston when piston is powered with a short pulse
+local ONE_TICK_DETACH = core.settings:get_bool("mcl_redstone_sticky_pistons_one_tick_detach", true)
+local activation_time_tab = {}
+
 -- Remove pusher of piston.
 -- To be used when piston was destroyed or dug.
 local function piston_remove_pusher(pos, oldnode)
@@ -87,11 +91,11 @@ local function piston_on(pos, node)
 	end
 end
 
-local function piston_off(pos, node)
+local function piston_off(pos, node, detach)
 	local pistonspec = core.registered_nodes[node.name]._piston_spec
 	core.swap_node(pos, {param2 = node.param2, name = pistonspec.offname})
 	piston_remove_pusher(pos, node)
-	if not pistonspec.sticky then
+	if not pistonspec.sticky or detach then
 		return
 	end
 
@@ -175,8 +179,12 @@ local commdef = {
 	paramtype2 = "facedir",
 	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
+	after_destruct = function(pos, oldnode)
+		if ONE_TICK_DETACH then
+			activation_time_tab[core.hash_node_position(pos)] = nil
+		end
+	end,
 }
 
 local normaldef = table.merge(commdef, {
@@ -193,9 +201,20 @@ local offdef = {
 		update = function(pos, node)
 			local dir = -core.facedir_to_dir(node.param2)
 			if powered_facing_dir(pos, dir) then
+
+				if ONE_TICK_DETACH then
+					local frontnode = core.get_node(vector.add(pos, dir))
+					local frontdef  = core.registered_nodes[frontnode.name]
+					local h         = core.hash_node_position(pos)
+					-- Only detach if we pushed a block when extending
+					activation_time_tab[h] = frontdef and not frontdef.buildable_to and mcl_redstone._get_current_tick() or nil
+				end
+
 				mcl_redstone.after(1, function()
 					if core.get_node(pos).name == node.name then
 						piston_on(pos, node)
+						-- Needed because piston_on sets piston node without triggering on_construct/after_destruct.
+						mcl_redstone._notify_observer_neighbours(pos)
 					end
 				end)
 			end
@@ -217,9 +236,20 @@ local ondef = {
 		update = function(pos, node)
 			local dir = -core.facedir_to_dir(node.param2)
 			if not powered_facing_dir(pos, dir) then
+
+				local detach = false
+				if ONE_TICK_DETACH then
+					local on_time = activation_time_tab[core.hash_node_position(pos)]
+					if on_time ~= nil and (mcl_redstone._get_current_tick() - on_time) <= 1 then
+						detach = true
+					end
+				end
+
 				mcl_redstone.after(1, function()
 					if core.get_node(pos).name == node.name then
-						piston_off(pos, node)
+						piston_off(pos, node, detach)
+						-- Needed because piston_off sets piston node without triggering on_construct/after_destruct.
+						mcl_redstone._notify_observer_neighbours(pos)
 					end
 				end)
 			end
@@ -238,7 +268,6 @@ local pusherdef = {
 	node_box = piston_pusher_box,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	groups = {handy=1, pickaxey=1, not_in_creative_inventory = 1, unmovable_by_piston = 1},
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	on_rotate = false,
 	_mcl_redstone = {

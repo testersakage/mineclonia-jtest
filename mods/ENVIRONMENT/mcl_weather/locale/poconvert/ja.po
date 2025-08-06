@@ -31,8 +31,8 @@ msgstr "エラー：パラメータが無効です。"
 msgid "Error: Duration can't be less than 1 second."
 msgstr "エラー：持続時間は1秒以下にはできません。"
 
-msgid "Error: Invalid weather specified. Use “clear”, “rain”, “snow” or “thunder”."
-msgstr "エラー：指定した天候が無効です。「晴天」、「降雨」、「降雪」、「雷雨」のいずれかを使用してください。"
+msgid "Error: Invalid weather specified. Use “clear”, “rain”, or “thunder”."
+msgstr ""
 
 msgid "Toggles between clear weather and weather with downfall (randomly rain, thunderstorm or snow)"
 msgstr "晴天と荒天（ランダムに降雨・雷雨・降雪）を切替"

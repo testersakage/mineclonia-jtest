@@ -16,3 +16,15 @@ msgstr ""
 msgid "Ominous Banner"
 msgstr "Зловещий флаг"
 
+msgid "Raid (@1 of @2)"
+msgstr "Набег (@1 из @2)"
+
+msgid "Raid"
+msgstr "Набег"
+
+msgid "Raid (defeat)"
+msgstr "Набег (поражение)"
+
+msgid "Raid (victory)"
+msgstr "Набег (победа)"
+

@@ -122,7 +122,7 @@ msgid "This item is dropped by dead squids. Squid ink can be used to as an ingre
 msgstr ""
 
 msgid "String"
-msgstr ""
+msgstr "Нитка"
 
 msgid "Strings are used in crafting."
 msgstr ""

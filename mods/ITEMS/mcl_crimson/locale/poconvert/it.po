@@ -17,7 +17,7 @@ msgid "Warped Fungus"
 msgstr "Fungo distorto"
 
 msgid "Warped fungus is a mushroom found in the nether's warped forest."
-msgstr ""
+msgstr "Il fungo distorto è un fungo che si trova nella foresta distorta del Nether."
 
 msgid "Twisting Vines"
 msgstr "Rampicante attorcigliato"
@@ -44,7 +44,7 @@ msgid "Crimson Fungus"
 msgstr "Fungo cremisi"
 
 msgid "Crimson fungus is a mushroom found in the nether's crimson forest."
-msgstr ""
+msgstr "Il fungo cremisi è un fungo che si trova nella foresta cremisi del Nether."
 
 msgid "Crimson Roots"
 msgstr "Radici cremisi"
@@ -107,22 +107,22 @@ msgid "Stripped Warped Log"
 msgstr "Tronco distorto scortecciato"
 
 msgid "The stripped trunk of an Crimson tree."
-msgstr ""
+msgstr "Il tronco scorticato di un albero cremisi."
 
 msgid "The stripped trunk of an Warped tree."
-msgstr ""
+msgstr "Il tronco scorticato di un albero distorto."
 
 msgid "The stripped wood of an Crimson tree."
-msgstr ""
+msgstr "Il legno scorticato di un albero cremisi."
 
 msgid "The stripped wood of an Warped tree."
-msgstr ""
+msgstr "Il legno scorticato di un albero distorto."
 
 msgid "The trunk of a Crimson tree."
-msgstr ""
+msgstr "Il tronco di un albero cremisi."
 
 msgid "The trunk of a Warped tree."
-msgstr ""
+msgstr "Il tronco di un albero distorto."
 
 msgid "Warped Bark"
 msgstr "Corteccia distorta"

@@ -53,6 +53,10 @@ mcl_tools.commondefs = {
 		longdesc = S("Swords are great in melee combat, as they are fast, deal high damage and can endure countless battles. Swords can also be used to cut down a few particular blocks, such as cobwebs."),
 		groups = { sword = 1, weapon = 1 },
 		diggroups = { swordy = {}, swordy_cobweb = {}, swordy_bamboo = {} },
+		_mcl_diggroups = {
+			swordy_cobweb = { speed = 15, level = 1, uses = 238 },
+			swordy_bamboo = { speed = 45, level = 1, uses = 238 },
+		},
 		craft_shapes = {
 			{
 				{ "material" },
@@ -124,14 +128,10 @@ end
 local function get_tool_diggroups(materialdefs, toolname)
 	local diggroups = mcl_tools.commondefs[toolname].diggroups
 
-	for groupname, diggroup in pairs(diggroups) do
+	for _, diggroup in pairs(diggroups) do
 		diggroup.speed = materialdefs.speed
 		diggroup.level = materialdefs.level
 		diggroup.uses = toolname == "sword" and materialdefs.uses / 2 or materialdefs.uses
-		if groupname == "swordy_bamboo" then
-			diggroup.speed = 45
-			diggroup.level = 1
-		end
 	end
 
 	return diggroups
@@ -165,10 +165,12 @@ local function register_tool(setname, materialdefs, toolname, tooldefs, override
 	overrides = table.copy(overrides or {})
 	local tcs_overrides = overrides.tool_capabilities or {}
 	overrides.tool_capabilities = nil
+	local _mcl_diggroups = table.merge(get_tool_diggroups(materialdefs, toolname),
+		commondefs._mcl_diggroups)
 	local tooldefs = table.merge({
 		_doc_items_longdesc = commondefs.longdesc,
 		_doc_items_usagehelp = commondefs.usagehelp,
-		_mcl_diggroups = get_tool_diggroups(materialdefs, toolname),
+		_mcl_diggroups = _mcl_diggroups,
 		_mcl_toollike_wield = true,
 		_repair_material = materialdefs.material,
 		groups = table.merge(commondefs.groups, materialdefs.groups, { offhand_item = 1 }),
@@ -269,7 +271,7 @@ core.register_tool("mcl_tools:shears", {
 	sound = { breaks = "default_tool_breaks" },
 	_mcl_toollike_wield = true,
 	_mcl_diggroups = {
-		shearsy = { speed = 1.5, level = 1, uses = 238 },
+		shearsy = { speed = 15, level = 1, uses = 238 },
 		shearsy_wool = { speed = 5, level = 1, uses = 238 },
 		shearsy_cobweb = { speed = 15, level = 1, uses = 238 }
 	},

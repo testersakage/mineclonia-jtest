@@ -61,9 +61,13 @@ function mcl_util.detach_object(obj, change_pos, callback)
 	obj:set_detach()
 	obj:set_properties({visual_size = get_visual_size(obj)})
 	if obj:is_player() then
-		mcl_player.players[obj].attached = nil
-		obj:set_eye_offset(vector.zero(), vector.zero())
-		mcl_player.player_set_animation(obj, "stand", 30)
+		-- It is possible for this table to be nil when
+		-- invoked from an on_leaveplayer callback.
+		if mcl_player.players[obj] then
+			mcl_player.players[obj].attached = nil
+			obj:set_eye_offset(vector.zero(), vector.zero())
+			mcl_player.player_set_animation(obj, "stand", 30)
+		end
 	else
 		obj:get_luaentity()._old_visual_size = nil
 	end
@@ -155,6 +159,7 @@ local function close_enough(a, b)
 end
 
 local function props_changed(props, oldprops)
+	local props = props or {}
 	if not oldprops then return true, props end
 	local changed = false
 	local p = {}

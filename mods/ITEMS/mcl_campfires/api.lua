@@ -152,7 +152,6 @@ function mcl_campfires.register_campfire(name, def)
 			type = 'fixed',
 			fixed = {-.5, -.5, -.5, .5, -.05, .5},
 		},
-		_mcl_blast_resistance = 2,
 		_mcl_hardness = 2,
 		after_dig_node = function(pos, _, _, digger)
 			campfire_drops(pos, digger, def.drops, name.."_lit")
@@ -241,7 +240,6 @@ function mcl_campfires.register_campfire(name, def)
 			type = "fixed",
 			fixed = {-.5, -.5, -.5, .5, -.05, .5},
 		},
-		_mcl_blast_resistance = 2,
 		_mcl_hardness = 2,
 		on_blast = on_blast,
 		after_dig_node = function(pos, _, _, digger)

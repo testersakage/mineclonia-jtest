@@ -90,7 +90,7 @@ msgid "Bookshelf"
 msgstr "Estante de Livros"
 
 msgid "Inventory"
-msgstr ""
+msgstr "Inventário"
 
 msgid "Bookshelves are used for decoration."
 msgstr "Estante de livros são utilizadas para decoração."

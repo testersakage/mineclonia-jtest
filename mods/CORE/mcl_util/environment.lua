@@ -461,15 +461,16 @@ function mcl_util.get_pointed_thing(player, objects, liquid, ignore)
 	local pos2 = vector.add(pos, look_dir)
 	local ray = core.raycast(pos, pos2, objects, liquid)
 
-	if ignore then
-		for pointed_thing in ray do
-			if (type(ignore) == "table" and table.indexof(ignore, core.get_node(pointed_thing.under).name) == -1 ) or
-			(type(ignore) == "function" and not ignore(pointed_thing)) then
+	for pointed_thing in ray do
+		if pointed_thing.ref ~= player then
+			if not ignore or
+				(type(ignore) == "table" and table.indexof(ignore, core.get_node(pointed_thing.under).name) == -1) or
+				(type(ignore) == "function" and not ignore(pointed_thing))
+			then
 				return pointed_thing
 			end
 		end
 	end
-	return ray:next()
 end
 
 ---Return a function to use in `on_place`.
@@ -743,6 +744,20 @@ function mcl_util.traverse_tower(pos, dir, callback)
 	local node = core.get_node(pos)
 	local i = 0
 	while core.get_node(pos).name == node.name do
+		if callback and callback(pos, dir, node) then
+			return pos,i,true
+		end
+		i = i + 1
+		pos = vector.offset(pos, 0, dir, 0)
+	end
+	return vector.offset(pos, 0, -dir, 0), i
+end
+
+function mcl_util.traverse_tower_group(pos, dir, group, callback)
+	local node = core.get_node(pos)
+	local nodegroup = core.get_item_group(node.name, group)
+	local i = 0
+	while core.get_item_group(core.get_node(pos).name, group) == nodegroup do
 		if callback and callback(pos, dir, node) then
 			return pos,i,true
 		end

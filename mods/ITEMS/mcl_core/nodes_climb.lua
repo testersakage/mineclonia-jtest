@@ -31,7 +31,7 @@ core.register_node("mcl_core:ladder", {
 		type = "wallmounted",
 		wall_side = { -0.5, -0.5, -0.5, -7/16, 0.5, 0.5 },
 	},
-	groups = {handy=1,axey=1, attached_node=1, deco_block=1, dig_by_piston=1, unsticky = 1},
+	groups = {handy=1,axey=1, attached_node=1, deco_block=1, dig_by_piston=1, unsticky = 1, pathfinder_partial = 1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	node_placement_prediction = "",
 	-- Restrict placement of ladders
@@ -74,7 +74,6 @@ core.register_node("mcl_core:ladder", {
 		return itemstack
 	end,
 
-	_mcl_blast_resistance = 0.4,
 	_mcl_hardness = 0.4,
 	_mcl_burntime = 15,
 	on_rotate = rotate_climbable,
@@ -144,7 +143,6 @@ core.register_node("mcl_core:vine", {
 
 	-- If dug, also dig a “dependant” vine below it.
 	-- A vine is dependant if it hangs from this node and has no supporting block.
-	_mcl_blast_resistance = 0.2,
 	_mcl_hardness = 0.2,
 	on_rotate = false,
 })

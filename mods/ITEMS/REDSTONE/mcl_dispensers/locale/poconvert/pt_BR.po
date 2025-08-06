@@ -17,7 +17,7 @@ msgid "Dispenser"
 msgstr ""
 
 msgid "Inventory"
-msgstr ""
+msgstr "Inventário"
 
 msgid "9 inventory slots"
 msgstr ""

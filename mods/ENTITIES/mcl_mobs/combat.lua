@@ -153,6 +153,7 @@ function mob_class:receive_damage (mcl_reason, damage)
 		end
 	end
 	self:check_for_death (mcl_reason, damage)
+	self._inactivity_timer = 0
 	return true
 end
 
@@ -187,7 +188,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 	-- punch interval
 	local weapon = hitter and mcl_util.get_wielditem (hitter)
-	local punch_interval = 1.4
+	local punch_interval = 0.5
 
 	-- exhaust attacker
 	if is_player then
@@ -230,10 +231,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	if damage <= -1 then
 		self.health = self.health - damage
 		return
-	end
-
-	if tool_capabilities then
-		punch_interval = tool_capabilities.full_punch_interval or 1.4
 	end
 
 	-- To enable our custom health handling ("health" property) we use the
@@ -521,12 +518,8 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 end
 
 function mob_class:custom_attack ()
-	-- Punch player (or what player is attached to)
-	local attached = self.attack:get_attach ()
+	-- Punch target.
 	local attack = self.attack
-	if attached then
-		attack = attached
-	end
 	local wielditem = self:get_wielditem ()
 	local damage = {
 		full_punch_interval = 1.0,

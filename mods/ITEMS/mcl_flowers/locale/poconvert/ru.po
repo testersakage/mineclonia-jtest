@@ -62,13 +62,13 @@ msgid "Cornflower"
 msgstr "Василёк"
 
 msgid "Wildflowers"
-msgstr ""
+msgstr "Полевые цветы"
 
 msgid "Pink Petals"
-msgstr ""
+msgstr "Розовые лепестки"
 
 msgid "Pink Petals are ground decoration of cherry grove biomes"
-msgstr ""
+msgstr "Розовые лепестки украшают почву в биомах вишнёвых рощ"
 
 msgid "Peony"
 msgstr "Пион"

@@ -158,7 +158,12 @@ function mcl_structures.spawn_mobs(mob, spawnon, p1 ,p2 ,_ ,n , water)
 		if not peaceful and i <= n then
 			local pos = vector.offset(node,0,1,0)
 			if pos then
-				core.add_entity(vector.offset(pos,0,-0.5,0),mob)
+				local sdata = core.serialize ({_structure_generation_spawn = true,})
+				local obj = core.add_entity(vector.offset(pos,0,-0.5,0),mob, sdata)
+				if obj then
+					local entity = obj:get_luaentity ()
+					entity.persistent = true
+				end
 			end
 		end
 		core.get_meta(node):set_string("spawnblock","yes")

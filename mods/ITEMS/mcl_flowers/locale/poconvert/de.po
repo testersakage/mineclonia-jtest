@@ -62,13 +62,13 @@ msgid "Cornflower"
 msgstr "Kornblume"
 
 msgid "Wildflowers"
-msgstr ""
+msgstr "Wildblumen"
 
 msgid "Pink Petals"
-msgstr ""
+msgstr "Rosa Blütenblätter"
 
 msgid "Pink Petals are ground decoration of cherry grove biomes"
-msgstr ""
+msgstr "Rose Blütenblätter sind Bodendekoration von Kirschhain-Biomen"
 
 msgid "Peony"
 msgstr "Pfingstrose"

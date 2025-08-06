@@ -53,7 +53,6 @@ end
 
 local tpl_candle = {
 	_doc_items_longdesc = S("A candle is a block that emits light when lit with a flint and steel. It comes in the sixteen dye colors. Up to four of the same color of candle can be placed in one block space, which affects the amount of light produced."),
-	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
 	_on_dye_place = function(pos, color)
 		local node = core.get_node(pos)
@@ -362,6 +361,14 @@ core.register_node("mcl_candles:candle_cake_lit", table.merge(tpl_cake, {
 		local node = core.get_node(pos)
 		node.name = "mcl_candles:candle_cake"
 		core.swap_node(pos, node)
+	end,
+	_on_bottle_place = function(itemstack, placer, pointed_thing)
+		local def = itemstack:get_definition()
+		if def._mcl_cauldrons_liquid then
+			local node = core.get_node(pointed_thing.under)
+			mcl_potions.set_node_empty_bottle(itemstack, placer, pointed_thing, "mcl_candles:candle_cake", node.param2)
+			core.sound_play("fire_extinguish_flame", {gain = 0.1, max_hear_distance = 16, pos = pointed_thing.under}, true)
+		end
 	end,
 	light_source = 3,
 	groups = table.merge(tpl_cake.groups, {lit_cake = 1}),

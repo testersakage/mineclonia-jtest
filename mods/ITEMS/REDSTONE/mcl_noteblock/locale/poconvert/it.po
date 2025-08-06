@@ -17,10 +17,10 @@ msgid "Note Block"
 msgstr "Blocco sonoro"
 
 msgid "Plays a musical note when powered by redstone power"
-msgstr "Suona una nota musicale quando attivato dalla corrente di pietrarossa"
+msgstr "Suona una nota musicale quando attivato dalla corrente pietrarossa"
 
 msgid "A note block is a musical block which plays one of many musical notes and different intruments when it is punched or supplied with redstone power."
-msgstr "Un blocco sonoro è un blocco musicale che suona una di tante note musicali e strumenti diversi quando viene colpito od alimentato con la corrente di pietrarossa."
+msgstr "Un blocco sonoro suona un nota musicale col timbro di uno strumento, quando viene colpito o alimentato con la corrente pietrarossa."
 
 msgid "Use the note block to choose the next musical note (there are 25 semitones, or 2 octaves). The intrument played depends on the material of the block below the note block:"
 msgstr ""
@@ -41,13 +41,13 @@ msgid "• Block of Gold: Bell"
 msgstr ""
 
 msgid "• Clay: Flute"
-msgstr ""
+msgstr "• Argilla: flauto"
 
 msgid "• Packed Ice: Chime"
 msgstr ""
 
 msgid "• Wool: Guitar"
-msgstr ""
+msgstr "• Lana: chitarra"
 
 msgid "• Bone Block: Xylophne"
 msgstr ""
@@ -71,7 +71,7 @@ msgid "• Glowstone: Electric piano"
 msgstr ""
 
 msgid "• Anything else: Piano"
-msgstr ""
+msgstr "• Tutto il resto: pianoforte"
 
 msgid "The note block will only play a note when it is below air, otherwise, it stays silent."
 msgstr ""

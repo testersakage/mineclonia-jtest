@@ -17,7 +17,7 @@ msgid "Dripstone block"
 msgstr "Blocco di speleotema"
 
 msgid "Dripstone is type of stone that allows stalagmites and stalagtites to grow on it"
-msgstr ""
+msgstr "Lo speleotema è un tipo di pietra su cui possono crescere stalattiti e stalagmiti"
 
 msgid "Pointed dripstone"
 msgstr "Speleotema appuntito"

@@ -4,6 +4,23 @@ local C = core.colorize
 
 local show_nici = core.settings:get_bool("mcl_creative_show_nici_tab", false)
 
+mcl_player.register_player_setting("mcl_inventory:scroll_on_creative_inventory", {
+	type = "enum",
+	options = {
+		{ name = "auto", description = S("Auto (use scroll bar if client >= 5.11)") },
+		{ name = "false", description = S("Off  (use paging buttons, faster)") },
+		{ name = "true", description = S("On   (more MC like, slower)") },
+	},
+	section = "Inventory",
+	short_desc = S("Enable scrollable creative inventory"),
+	long_desc = S([[Very large inventory displays may be slow when scrolling, especially on Luanti versions before 5.11.
+Therefore the creative inventory display can be split into pages with prev/next page buttons.
+Mineclonia defaults to use scrolling unless an older Luanti version is detected.
+This setting allows you to override that heuristic.]]),
+	ui_default = "auto",
+	on_change = mcl_inventory.set_creative_formspec
+})
+
 -- Prepare player info table
 local players = {}
 
@@ -122,7 +139,9 @@ core.register_on_mods_loaded(function()
 			for category, list in pairs(def._get_all_virtual_items()) do
 				for _, virtual_item in pairs(list) do
 					table.insert(inventory_lists[category], virtual_item)
-					table.insert(inventory_lists["all"], virtual_item)
+					if category ~= "nici" then
+						table.insert(inventory_lists["all"], virtual_item)
+					end
 				end
 			end
 		end
@@ -147,6 +166,9 @@ local function set_inv_search(filter, player)
 	local playername = player:get_player_name()
 	local inv = core.get_inventory({ type = "detached", name = "creative_" .. playername })
 	local creative_list = {}
+	filter = filter:gsub("%s+", " ")
+	filter = string.lower(filter)
+	filter = string.trim(filter)
 	local lang = core.get_player_information(playername).lang_code
 	for name, def in pairs(core.registered_items) do
 		if (not def.groups.not_in_creative_inventory or def.groups.not_in_creative_inventory == 0)
@@ -166,9 +188,11 @@ local function set_inv_search(filter, player)
 
 		if def._get_all_virtual_items then
 			for category, list in pairs(def._get_all_virtual_items()) do
-				for _, virtual_item in pairs(list) do
-					if filter_item (virtual_item, core.strip_colors(ItemStack(virtual_item):get_description()), lang, filter) then
-						table.insert(creative_list, virtual_item)
+				if category ~= "nici" then
+					for _, virtual_item in pairs(list) do
+						if filter_item (virtual_item, core.strip_colors(ItemStack(virtual_item):get_description()), lang, filter) then
+							table.insert(creative_list, virtual_item)
+						end
 					end
 				end
 			end
@@ -497,43 +521,39 @@ function mcl_inventory.set_creative_formspec(player)
 			"listring[current_player;offhand]"..
 			"listring[current_player;main]"
 	else
-
-		--local nb_lines = math.ceil(inv_size / 9)
-		-- Creative inventory slots
-		main_list = table.concat({
-			mcl_formspec.get_itemslot_bg_v4(0.375, 0.875, 9, 5),
-
-			-- TODO: Enable this code once the performance issues caused by long lists of items
-			-- are fixed in luanti and all supported versions.
-			-- see: https://codeberg.org/mineclonia/mineclonia/issues/2740
-
-			-- DO NOT Reenable this code without verifying that the performance issues are fixed
-			-- in all supported luanti versions.
-			-- Since the underlying issue has been around for a long time
-			-- ( https://github.com/luanti-org/luanti/issues/6905 ) extra care should be
-			-- taken to verify that it is indeed fixed before.
-			-- Even without particularly notable issues you can see very clear drops in FPS
-			-- and peaks in draw calls in the (F5) debugging graphs in luanti.
-			-- See the codeberg issue above for more details.
-
-			-- To enable this code uncomment the next part and remove the rest of the formspec
-			-- (The list and the paging buttons)
-			-- Also uncomment the "local nb_lines = .." line above.
-
-
-			--"scroll_container[0.375,0.875;11.575,6;scroll;vertical;1.25]",
-			--"list[detached:creative_" .. playername .. ";main;0,0;9," .. nb_lines .. ";]",
-			--"scroll_container_end[]",
-			--"scrollbaroptions[min=0;max=" .. math.max(nb_lines - 5, 0) .. ";smallstep=1;largestep=1;arrows=hide]",
-			--"scrollbar[11.75,0.825;0.75,6.1;vertical;scroll;0]"
-
-			"list[detached:creative_" .. playername .. ";main;0.375,0.875;9,5;" .. tostring(start_i) .. "]",
-
-			-- Page buttons
-			"label[11.65,4.33;" .. F(S("@1 / @2", pagenum, pagemax)) .. "]",
-			"image_button[11.575,4.58;1.1,1.1;crafting_creative_prev.png^[transformR270;creative_prev;]",
-			"image_button[11.575,5.83;1.1,1.1;crafting_creative_next.png^[transformR270;creative_next;]",
-		})
+		local scroll_setting = mcl_player.get_player_setting(player, "mcl_inventory:scroll_on_creative_inventory", "auto")
+		local scroll = scroll_setting == "true"
+		if scroll_setting == "auto" then
+			--[[
+				Lunati 5.11 has been reported as performant
+				enough to allow enabling the scrolling creative
+				inventory by default. This corresponds to
+				protocol version 47+. When Luanti 5.11+ is
+				required for Mineclonia servers then the
+				hardcoded 47 (and most of this comment) can be
+				replaced by core.protocol_versions["5.11.0"]
+			]]
+			scroll = core.get_player_information(playername).protocol_version >= 47
+		end
+		if scroll then
+			local nb_lines = math.ceil(inv_size / 9)
+			main_list = table.concat({
+				mcl_formspec.get_itemslot_bg_v4(0.375, 0.875, 9, 5),
+				"scroll_container[0.375,0.875;11.575,6;scroll;vertical;1.25]",
+				"list[detached:creative_", playername, ";main;0,0;9,", nb_lines, ";]",
+				"scroll_container_end[]",
+				"scrollbaroptions[min=0;max=", math.max(nb_lines - 5, 0), ";smallstep=1;largestep=1;arrows=hide]",
+				"scrollbar[11.75,0.825;0.75,6.1;vertical;scroll;0]"
+			})
+		else
+			main_list = table.concat({
+				mcl_formspec.get_itemslot_bg_v4(0.375, 0.875, 9, 5),
+				"list[detached:creative_", playername, ";main;0.375,0.875;9,5;", start_i, "]",
+				"label[11.65,4.33;", F(S("@1 / @2", pagenum, pagemax)), "]",
+				"image_button[11.575,4.58;1.1,1.1;crafting_creative_prev.png^[transformR270;creative_prev;]",
+				"image_button[11.575,5.83;1.1,1.1;crafting_creative_next.png^[transformR270;creative_next;]",
+			})
+		end
 	end
 
 	local function tab(current_tab, this_tab)
@@ -711,7 +731,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 		set_inv_page("all", player)
 		page = "nix"
 	elseif fields.search and not fields.creative_next and not fields.creative_prev then
-		set_inv_search(string.lower(fields.search), player)
+		set_inv_search(fields.search, player)
 		page = "nix"
 	elseif fields.__switch_stack then
 		local switch = 1

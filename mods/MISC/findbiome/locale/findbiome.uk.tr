@@ -1,13 +1,12 @@
 # textdomain: findbiome
 # mod title
 # mod strings
-Wait until all mods have loaded!=
-Not supported. The “biomeinfo” mod is required for v6 mapgen support!=
-Find and teleport to biome=
-<biome>=
-No player.=
-Biome found at @1.=
-No biome found!=
-Biome does not exist!=
-List all biomes=
-No biomes.=
+Wait until all mods have loaded!=Зачекайте, поки всі моди завантажаться!
+Find and teleport to biome=Знайти і переміститись до біому
+<biome>=<біом>
+No player.=Немає гравця.
+Biome found at @1.=Біом знайдено за координатами @1.
+No biome found!=Біом не знайдено!
+Biome does not exist!=Біому не існує!
+List all biomes=Список всіх біомів
+No biomes.=Немає біомів.

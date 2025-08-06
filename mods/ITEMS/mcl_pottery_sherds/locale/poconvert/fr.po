@@ -26,71 +26,71 @@ msgid "Specially decorated pots can be crafted using pottery sherds"
 msgstr "Des vases spécialement décorés peuvent être fabriqués à partir de tessons de poterie"
 
 msgid "Angler Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de pêcheur"
 
 msgid "Archer Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie d'archer"
 
 msgid "Arms Up Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de figure"
 
 msgid "Blade Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de lame"
 
 msgid "Brewer Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie d'alchimiste"
 
 msgid "Burn Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de feu"
 
 msgid "Danger Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de danger"
 
 msgid "Explorer Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie d'explorateur"
 
 msgid "Flow Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de tourbillon"
 
 msgid "Friend Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie d'ami"
 
 msgid "Guster Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de rafaleur"
 
 msgid "Heart Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de cœur"
 
 msgid "Heartbreak Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de cœur brisé"
 
 msgid "Howl Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de loup"
 
 msgid "Miner Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de mineur"
 
 msgid "Mourner Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de pleureur"
 
 msgid "Plenty Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de richesse"
 
 msgid "Prize Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de joyau"
 
 msgid "Scrape Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de hache"
 
 msgid "Sheaf Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie d'épis"
 
 msgid "Shelter Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie d'abri"
 
 msgid "Skull Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de crâne"
 
 msgid "Snort Pottery Sherd"
-msgstr ""
+msgstr "Tesson de poterie de renifleur"
 

@@ -23,7 +23,7 @@ msgid "Lit Candle"
 msgstr ""
 
 msgid "Cake"
-msgstr ""
+msgstr "Торт"
 
 msgid "Black Candle"
 msgstr ""

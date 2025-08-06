@@ -6,6 +6,7 @@ local tropical_fish = {
 	description = S("Tropical Fish"),
 	type = "animal",
 	spawn_class = "water_ambient",
+	_spawn_category = "water_ambient",
 	can_despawn = true,
 	passive = true,
 	hp_min = 3,
@@ -101,40 +102,36 @@ local pattern_colors = {
 }
 
 function tropical_fish:update_textures ()
-	if not self._type then
-		self._type = "a"
-		if math.random(2) == 1 then
-			self.object:set_properties({})
-			self._type="b"
-		end
-		self._base_color = base_colors[math.random(#base_colors)]
-		self._pattern_color = pattern_colors[math.random(#pattern_colors)]
-		self._pattern = table.concat ({
-			"extra_mobs_tropical_fish_pattern_",
-			self._type,
-			"_",
-			math.random(6),
-			".png",
-		})
+	self._type = self._type or (math.random(2) == 1 and "b" or "a")
+	if self._type == "b" then
+		self.object:set_properties({})
 	end
 
-	if not self._default_texture then
-		self._default_mesh = table.concat ({
-			"extra_mobs_tropical_fish_",
-			self._type,
-			".b3d",
-		})
-		self._default_texture = table.concat ({
-			"(extra_mobs_tropical_fish_",
-			self._type,
-			".png^[colorize:",
-			self._base_color,
-			":127)^(",
-			self._pattern,
-			"^[colorize:",
-			self._pattern_color..")",
-		})
-	end
+	self._base_color = self._base_color or base_colors[math.random(#base_colors)]
+	self._pattern_color = self._pattern_color or pattern_colors[math.random(#pattern_colors)]
+	self._pattern = self._pattern or table.concat ({
+		"extra_mobs_tropical_fish_pattern_",
+		self._type,
+		"_",
+		math.random(6),
+		".png",
+	})
+
+	self._default_mesh = self._default_mesh or table.concat ({
+		"extra_mobs_tropical_fish_",
+		self._type,
+		".b3d",
+	})
+	self._default_texture = self._default_texture or table.concat ({
+		"(extra_mobs_tropical_fish_",
+		self._type,
+		".png^[colorize:",
+		self._base_color,
+		":127)^(",
+		self._pattern,
+		"^[colorize:",
+		self._pattern_color..")",
+	})
 
 	self.base_texture = {
 		self._default_texture,
@@ -159,12 +156,28 @@ function tropical_fish:on_rightclick (clicker)
 		if clicker:set_wielded_item("mcl_buckets:bucket_tropical_fish") then
 			local it = clicker:get_wielded_item()
 			local m = it:get_meta()
-			m:set_string("properties",core.serialize(self.object:get_properties()))
+			m:set_string("properties",core.serialize({
+				nametag = self:get_nametag (),
+				_default_mesh = self._default_mesh,
+				_default_texture = self._default_texture,
+				_base_color = self._base_color,
+				_pattern = self._pattern,
+				_pattern_color = self._pattern_color,
+				_type = self._type,
+			}))
 			clicker:set_wielded_item(it)
 			self:safe_remove()
 		end
 		awards.unlock(clicker:get_player_name(), "mcl:tacticalFishing")
 	end
+end
+
+function tropical_fish:mob_activate (staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
+	self:update_tag ()
+	return true
 end
 
 ------------------------------------------------------------------------
@@ -255,3 +268,46 @@ mcl_mobs.spawn_setup({
 
 --spawn egg
 mcl_mobs.register_egg("mobs_mc:tropical_fish", S("Tropical Fish"), "#ef6915", "#fff9ef", 0)
+
+------------------------------------------------------------------------
+-- Modern Tropical Fish spawning.
+------------------------------------------------------------------------
+
+local tropical_fish_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
+	name = "mobs_mc:tropical_fish",
+	biomes = {
+		"JungleEdgeM_ocean",
+		"Jungle_deep_ocean",
+		"BambooJungle_ocean",
+		"Savanna_ocean",
+		"MesaPlateauF_ocean",
+		"Savanna_deep_ocean",
+		"JungleEdgeM_deep_ocean",
+		"SunflowerPlains_deep_ocean",
+		"Mesa_ocean",
+		"JungleEdge_deep_ocean",
+		"SavannaM_deep_ocean",
+		"Desert_deep_ocean",
+		"Mesa_deep_ocean",
+		"MesaPlateauFM_ocean",
+		"JungleM_deep_ocean",
+		"SavannaM_ocean",
+		"MesaPlateauF_deep_ocean",
+		"MesaBryce_deep_ocean",
+		"JungleEdge_ocean",
+		"MesaBryce_ocean",
+		"Jungle_ocean",
+		"MesaPlateauFM_deep_ocean",
+		"Desert_ocean",
+		"JungleM_ocean",
+	},
+	weight = 25,
+	pack_min = 8,
+	pack_max = 8,
+})
+
+function tropical_fish_spawner:init_group (list, sdata)
+	mob_class.school_init_group (list)
+end
+
+mcl_mobs.register_spawner (tropical_fish_spawner)

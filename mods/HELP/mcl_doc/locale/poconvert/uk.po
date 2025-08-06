@@ -116,16 +116,16 @@ msgid "Diamond Pickaxe"
 msgstr ""
 
 msgid "Iron Pickaxe"
-msgstr ""
+msgstr "Залізне кайло"
 
 msgid "Stone Pickaxe"
-msgstr ""
+msgstr "Кам'яне кайло"
 
 msgid "Golden Pickaxe"
 msgstr ""
 
 msgid "Wooden Pickaxe"
-msgstr ""
+msgstr "Дерев'яне кайло"
 
 msgid "Diamond Axe"
 msgstr ""

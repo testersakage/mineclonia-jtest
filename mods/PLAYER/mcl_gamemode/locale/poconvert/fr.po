@@ -20,7 +20,7 @@ msgid "Change gamemode (survival/creative/0/1/s/c) for yourself or player"
 msgstr "Change le mode de jeu (survie/créatif/0/1/s/c) pour vous-même ou un autre joueur"
 
 msgid "Player not online"
-msgstr "Le joueur n'est pas en ligne"
+msgstr "Joueur non-connecté"
 
 msgid "Failed to set gamemode @1 for player @2"
 msgstr "Échec de la configuration du mode de jeu @1 pour le joueur @2"

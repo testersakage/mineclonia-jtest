@@ -349,7 +349,8 @@ function mcl_beds.on_rightclick(pos, player, is_top)
 		core.remove_node(pos)
 		core.remove_node(string.sub(node.name, -4) == "_top" and vector.subtract(pos, dir) or vector.add(pos, dir))
 		mcl_explosions.explode(pos, 5, {fire = true})
-		return
+		return mcl_util.return_itemstack_if_alive(player)
+		-- returning the old itemstack here would result in it still being in hand *after* death
 	end
 	local name = player:get_player_name()
 	local ppos = player:get_pos()

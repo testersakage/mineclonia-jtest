@@ -53,11 +53,12 @@ msgid "Hold it in the hand, then rightclick to read the current notes and edit t
 msgstr "将它拿在手中，然后右键点击可阅读当前笔记并进行编辑。你可以随意多次编辑文本。你也可以在书上签名，这样它就变成了一本已写好的书，能进行堆叠，但不能再被编辑了。"
 
 msgid "A book can hold up to @1 characters. The title length is limited to @2 characters."
-msgstr ""
+msgstr "一本书最多可容纳 @1个字母。标题长度限制为 @2个字母。"
 
 msgid "Text is @1 characters too long for one book.\n"
 "It will be capped at @2 characters."
-msgstr ""
+msgstr "对于一本书来说，@1 个字母太长。\n"
+"上限为 @2个字母。"
 
 msgid "Enter book title:"
 msgstr "输入书名："
@@ -90,7 +91,7 @@ msgid "Bookshelf"
 msgstr "书架"
 
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 
 msgid "Bookshelves are used for decoration."
 msgstr "书架用于装饰。"

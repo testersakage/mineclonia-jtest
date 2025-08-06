@@ -1,6 +1,9 @@
 local modname = core.get_current_modname()
 local S = core.get_translator(modname)
 local modpath = core.get_modpath(modname)
+
+mcl_crimson = {}
+
 -- Warped and Crimson fungus
 -- by debiankaios
 -- adapted for mcl2 by cora
@@ -84,25 +87,11 @@ end
 local max_vines_age = 25
 local grow_vines_direction = {[1] = 1, [2] = -1}
 
-function set_vines_age(pos, node)
-	local dir = grow_vines_direction[core.get_item_group(node.name, "vinelike_node")]
-	local vpos, i = mcl_util.traverse_tower(pos, -dir)
-	for i = 1, i do
-		core.swap_node(vpos, { name = node.name, param2 = i })
-		vpos = vector.offset(vpos, 0, dir, 0)
-	end
-	return i
-end
-
-function get_vines_age(pos)
-	local node = core.get_node(pos)
-	return node.param2 > 0 and node.param2 or set_vines_age(pos, node)
-end
-
-function grow_vines(pos, amount, vine, dir, max_age)
+function mcl_crimson.grow_vines(pos, amount, vine, dir, max_age)
 	dir = dir or grow_vines_direction[core.get_item_group(vine, "vinelike_node")] or 1
-	local tip, i = mcl_util.traverse_tower(pos, dir)
-	local age = get_vines_age(pos) + i -1
+	local tip = mcl_util.traverse_tower(pos, dir)
+	local node_tip = core.get_node(tip)
+	local age = node_tip.param2
 	amount = math.min(amount, max_age and max_age - age or amount)
 	for i=1, amount do
 		local p = vector.offset(tip,0,dir*i,0)
@@ -271,7 +260,7 @@ core.register_node("mcl_crimson:warped_fungus", {
 			return generate_fungus_tree(pos, "warped")
 		end
 	end,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 mcl_flowerpots.register_potted_flower("mcl_crimson:warped_fungus", {
@@ -293,9 +282,9 @@ local call_on_place = function(itemstack, placer, pointed_thing)
 	if mcl_util.check_position_protection(pos, placer) then return itemstack end
 
 	if node.name == idef.name then
-		if grow_vines(pointed_thing.under, 1, node.name) == 0 then return end
+		if mcl_crimson.grow_vines(pointed_thing.under, 1, node.name) == 0 then return end
 	elseif grow_dir == dir and core.get_item_group(node.name, "solid") ~= 0 then
-		core.item_place_node(itemstack, placer, pointed_thing, 1)
+		core.item_place_node(itemstack, placer, pointed_thing, 0)
 	else
 		return itemstack
 	end
@@ -319,7 +308,6 @@ local function register_vines(name, def, extra_groups)
 		paramtype = "light",
 		walkable = false,
 		climbable = true,
-		buildable_to = true,
 		groups = groups,
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		node_placement_prediction = "",
@@ -340,10 +328,24 @@ local function register_vines(name, def, extra_groups)
 			name,
 			name,
 		},
-		_mcl_blast_resistance = 0.2,
-		_mcl_hardness = 0.2,
+		_mcl_hardness = 0,
 		_on_bone_meal = function(_, _, _, pos)
-			grow_vines(pos, math.random(1, 3), name, nil, max_vines_age)
+			mcl_crimson.grow_vines(pos, math.random(1, 3), name, nil, max_vines_age)
+		end,
+		_mcl_on_rightclick_optional = function (pos, node, clicker, itemstack)
+			local item_name = clicker:get_wielded_item():get_name()
+			local shears = core.get_item_group(item_name, "shears") > 0
+			local dir = grow_vines_direction[core.get_item_group(
+				node.name, "vinelike_node")] or 1
+			local tip = mcl_util.traverse_tower(pos, dir)
+
+			if shears and vector.equals(pos, tip) then
+				core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+				local wear = mcl_autogroup.get_wear(item_name, "shearsy")
+				itemstack:add_wear(wear)
+				node.param2 = 25
+				core.swap_node(pos,node)
+			end
 		end
 	}, def or {}))
 end
@@ -391,7 +393,7 @@ core.register_node("mcl_crimson:nether_sprouts", {
 	drop = "",
 	_mcl_shears_drop = true,
 	_mcl_silk_touch_drop = false,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 core.register_node("mcl_crimson:warped_roots", {
@@ -414,7 +416,7 @@ core.register_node("mcl_crimson:warped_roots", {
 	},
 	node_placement_prediction = "",
 	_mcl_silk_touch_drop = false,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 mcl_flowerpots.register_potted_flower("mcl_crimson:warped_roots", {
@@ -463,7 +465,6 @@ core.register_node("mcl_crimson:warped_nylium", {
 	groups = {pickaxey=1, soil_fungus=1, building_block=1, material_stone=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	_mcl_hardness = 0.4,
-	_mcl_blast_resistance = 0.4,
 	_mcl_silk_touch_drop = true,
 	_on_bone_meal = on_bone_meal,
 })
@@ -496,7 +497,7 @@ core.register_node("mcl_crimson:crimson_fungus", {
 			return generate_fungus_tree(pos, "crimson")
 		end
 	end,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 mcl_flowerpots.register_potted_flower("mcl_crimson:crimson_fungus", {
@@ -525,7 +526,7 @@ core.register_node("mcl_crimson:crimson_roots", {
 	},
 	node_placement_prediction = "",
 	_mcl_silk_touch_drop = false,
-	_mcl_blast_resistance = 0,
+	_mcl_hardness = 0,
 })
 
 mcl_flowerpots.register_potted_flower("mcl_crimson:crimson_roots", {
@@ -548,7 +549,6 @@ core.register_node("mcl_crimson:crimson_nylium", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	drop = "mcl_nether:netherrack",
 	_mcl_hardness = 0.4,
-	_mcl_blast_resistance = 0.4,
 	_mcl_silk_touch_drop = true,
 	_on_bone_meal = on_bone_meal,
 })
@@ -574,7 +574,7 @@ core.register_abm({
 	chance = 4,
 	action = function(pos, node)
 		if grow_vines_direction[core.get_item_group(node.name, "vinelike_node")] and node.param2 < max_vines_age then
-			grow_vines(pos, 1, node.name, nil, max_vines_age)
+			mcl_crimson.grow_vines(pos, 1, node.name, nil, max_vines_age)
 		end
 	end
 })

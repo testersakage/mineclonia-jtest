@@ -82,7 +82,6 @@ core.register_node("mcl_lush_caves:moss", {
 	tiles = {"mcl_lush_caves_moss_block.png"},
 	groups = {handy=1, hoey=2, dirt=1, soil=1, soil_bamboo=1, soil_sapling=2, soil_sugarcane=1, soil_fungus=1, enderman_takable=1, building_block=1, grass_block_no_snow=1, compostability=65, dig_by_piston=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
-	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
 	_on_bone_meal = mcl_lush_caves.bone_meal_moss,
 })
@@ -106,7 +105,6 @@ core.register_node("mcl_lush_caves:moss_carpet", {
 		},
 	},
 	_mcl_hardness = 0.1,
-	_mcl_blast_resistance = 0.1,
 })
 core.register_craft({
 	output = "mcl_lush_caves:moss_carpet 3",
@@ -145,8 +143,7 @@ core.register_node("mcl_lush_caves:hanging_roots", {
 	},
 	groups = {handy=1, plant=1, flammable=2, fire_encouragement=30, fire_flammability=60, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, compostability=30, attached_node=4, deco_block=1},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0,
-	_mcl_blast_hardness = 0,
+	_mcl_hardness = 0,
 	drop = "",
 	_mcl_shears_drop = true,
 })
@@ -158,8 +155,6 @@ core.register_node("mcl_lush_caves:cave_vines", {
 	_doc_items_longdesc = S("Cave vines are decorative blocks growing from the ceiling of lush caves."),
 	_doc_items_hidden = false,
 	paramtype = "light",
-	--paramtype2 = "meshoptions",
-	--place_param2 = 3,
 	sunlight_propagates = true,
 	walkable = false,
 	climbable = true,
@@ -170,18 +165,35 @@ core.register_node("mcl_lush_caves:cave_vines", {
 	selection_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}
+			{-7/16, -0.5, -7/16, 7/16, 0.5, 7/16}
 		},
 	},
-	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, deco_block=1},
+	groups = {
+		handy=1, plant=1, vinelike_node=2,
+		dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1,
+		deco_block=1, not_in_creative_inventory=1
+	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0,
-	_mcl_blast_hardness = 0,
+	_mcl_hardness = 0,
 	drop = "",
-	_on_bone_meal = function(_, _, _, pos)
-		core.set_node(pos,{name="mcl_lush_caves:cave_vines_lit"})
+	_on_bone_meal = function(_, _, _, pos, node)
+		core.set_node(pos,{name="mcl_lush_caves:cave_vines_lit",
+			param2=node.param2})
 		return true
 	end,
+	_mcl_on_rightclick_optional = function (pos, node, clicker, itemstack)
+		local item_name = clicker:get_wielded_item():get_name()
+		local shears = core.get_item_group(item_name, "shears") > 0
+		local tip = mcl_util.traverse_tower(pos, -1)
+
+		if shears and vector.equals(pos, tip) then
+			core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+			local wear = mcl_autogroup.get_wear(item_name, "shearsy")
+			itemstack:add_wear(wear)
+			node.param2 = 25
+			core.swap_node(pos,node)
+		end
+	end
 })
 
 core.register_node("mcl_lush_caves:cave_vines_lit", {
@@ -191,8 +203,6 @@ core.register_node("mcl_lush_caves:cave_vines_lit", {
 	_doc_items_longdesc = S("Lit cave vines are light emitting decorative blocks growing from the ceiling of lush caves."),
 	_doc_items_hidden = false,
 	paramtype = "light",
-	--paramtype2 = "meshoptions",
-	--place_param2 = 3,
 	sunlight_propagates = true,
 	walkable = false,
 	climbable = true,
@@ -204,18 +214,22 @@ core.register_node("mcl_lush_caves:cave_vines_lit", {
 	selection_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}
+			{-7/16, -0.5, -7/16, 7/16, 0.5, 7/16}
 		},
 	},
-	groups = {handy=1, plant=1, vinelike_node=2, dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1, deco_block=1},
+	groups = {
+		handy=1, plant=1, vinelike_node=2,
+		dig_by_water=1, destroy_by_lava_flow=1, dig_by_piston=1,
+		deco_block=1, not_in_creative_inventory=1
+	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	_mcl_blast_resistance = 0,
-	_mcl_blast_hardness = 1,
+	_mcl_hardness = 0,
 	_mcl_shears_drop = true,
 	drop = "mcl_lush_caves:glow_berry",
-	on_rightclick = function(pos)
+	on_rightclick = function(pos, node)
 		core.add_item(pos,"mcl_lush_caves:glow_berry")
-		core.set_node(pos,{name="mcl_lush_caves:cave_vines"})
+		core.set_node(pos,{name="mcl_lush_caves:cave_vines",
+			param2=node.param2})
 	end,
 })
 
@@ -226,8 +240,8 @@ core.register_node("mcl_lush_caves:rooted_dirt", {
 	tiles = {"mcl_lush_caves_rooted_dirt.png"},
 	groups = {handy=1, shovely=1, dirt=1, soil_fungus=1, building_block=1, path_creation_possible=1, converts_to_moss=1, cultivatable=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
+	_on_bottle_place = mcl_core.bottle_dirt,
 	_on_bone_meal = function(_, _, _, pos, _)
 		local under = vector.offset(pos, 0, -1, 0)
 		if core.get_node(under).name == "air" then
@@ -271,17 +285,26 @@ core.register_craftitem("mcl_lush_caves:glow_berry", {
 
 		if mcl_util.check_position_protection(pointed_thing.above, placer) then return end
 
-		local node = core.get_node(pointed_thing.under)
-		if core.get_item_group(node.name, "solid") == 0 then return end
+		local vine = "mcl_lush_caves:cave_vines"
 
-		local vine
-		if math.random() < 0.11 then
-			vine = "mcl_lush_caves:cave_vines_lit"
-		else
-			vine = "mcl_lush_caves:cave_vines"
-		end
+		local node = core.get_node(pointed_thing.under)
+
+		if core.get_item_group(node.name, "vinelike_node") == 2
+		and node.name ~= vine then return end
+
+		local age = node.param2 + 1
+		if node.name ~= vine then age = 0 end
 
 		core.place_node(pointed_thing.under, {name=vine}, placer)
+
+		-- Grow berry if lucky
+		if math.random() <= 0.11 then
+			vine = "mcl_lush_caves:cave_vines_lit"
+		end
+
+		core.swap_node(vector.offset(pointed_thing.under,0,-1,0),
+			{name=vine, param2=age})
+
 		core.sound_play(core.registered_nodes[vine].sounds.place, {pos=pointed_thing.above, gain=1}, true)
 		if not core.is_creative_enabled(placer:get_player_name()) then
 			itemstack:take_item(1)
@@ -330,18 +353,17 @@ core.register_node("mcl_lush_caves:spore_blossom", {
 	description = S("Spore blossom"),
 	_doc_items_longdesc = S("Spore blossoms are a type of flower found in lush caves."),
 	_doc_items_hidden = false,
-	tiles = {"mcl_lush_caves_spore_blossom.png"},
-	inventory_image = "mcl_lush_caves_spore_blossom.png",
-	wield_image = "mcl_lush_caves_spore_blossom.png",
-	drawtype = "plantlike",
+	tiles = {"mcl_lush_caves_spore_blossom_base.png", "mcl_lush_caves_spore_blossom.png"},
+	drawtype = "mesh",
+	mesh = "mcl_lush_caves_spore_blossom.obj",
+	use_texture_alpha = "clip",
 	paramtype = "light",
-	groups = {handy = 1, plant = 1, deco_block = 1},
+	groups = {handy = 1, plant = 1, deco_block = 1, attached_node = 4},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	selection_box = {
 		type = "fixed",
-		fixed = {{ -3/16, -2/16, -3/16, 3/16, 8/16, 3/16 }},
+		fixed = {-0.375, 0.3125, -0.375, 0.375, 0.5, 0.375},
 	},
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	node_placement_prediction = "",
 	on_place = mcl_util.generate_on_place_plant_function(function(place_pos)
@@ -380,7 +402,6 @@ local tpl_azalea = {
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	paramtype = "light",
 	sunlight_propagates = true,
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_mcl_burntime = 5,
 	use_texture_alpha = "clip",

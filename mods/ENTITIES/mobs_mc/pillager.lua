@@ -1,3 +1,5 @@
+local only_peaceful_mobs
+	= core.settings:get_bool ("only_peaceful_mobs", false)
 local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local posing_humanoid = mcl_mobs.posing_humanoid
@@ -6,6 +8,7 @@ local illager = mobs_mc.illager
 local pillager = table.merge (illager, table.merge (posing_humanoid, {
 	description = S("Pillager"),
 	type = "monster",
+	_spawn_category = "monster",
 	spawn_class = "hostile",
 	hp_min = 24,
 	hp_max = 24,
@@ -123,7 +126,22 @@ end
 function pillager:apply_raid_buffs (stage)
 	illager.apply_raid_buffs (self, stage)
 
-	-- TODO: pillager raid buffs.
+	local raid = self:_get_active_raid ()
+	if mcl_raids.should_enchant (raid) then
+		local wielditem = self:get_wielditem ()
+		local name = wielditem:get_name ()
+		if name ~= "mcl_bows:crossbow"
+			and name ~= "mcl_bows:crossbow_enchanted" then
+			return
+		end
+		if stage > 5 then -- Max number of stages on Normal difficulty.
+			mcl_enchanting.enchant (wielditem, "quick_charge", 2)
+		elseif stage > 3 then -- Max number of stages on Easy difficulty.
+			mcl_enchanting.enchant (wielditem, "quick_charge", 1)
+		end
+		mcl_enchanting.enchant (wielditem, "multishot", 1)
+		self:set_wielditem (wielditem)
+	end
 end
 
 function pillager:drop_custom (looting_level)
@@ -172,7 +190,7 @@ function pillager:get_leftarm_with_pitch ()
 			pitch = math.atan2 (dy, xz_mag)
 		end
 	end
-	return vector.new (math.rad (90) + pitch, math.rad (20), 0)
+	return vector.new (math.rad (-90) + pitch, math.rad (20), 0)
 end
 
 pillager._arm_poses = {
@@ -183,7 +201,8 @@ pillager._arm_poses = {
 		},
 		["arm.left"] = {
 			nil,
-			vector.new (90, 20, 0),
+			vector.new (-90, 20, 0),
+			vector.new (1, 1, 1),
 		},
 	},
 	crossbow_1 = {
@@ -193,7 +212,8 @@ pillager._arm_poses = {
 		},
 		["arm.left"] = {
 			nil,
-			vector.new (70, 40, 0),
+			vector.new (-110, 40, 0),
+			vector.new (1, 1, 1),
 		},
 	},
 	crossbow_2 = {
@@ -244,6 +264,7 @@ function pillager:shoot_arrow (pos, dir)
 	end
 	mcl_bows.shoot_arrow_crossbow ("mcl_bows:arrow", pos, dir, self:get_yaw (),
 				       self.object, 32.0, nil, true, wielditem, false)
+	self._time_inactive = 0.0
 end
 
 ------------------------------------------------------------------------
@@ -317,7 +338,7 @@ local function spawn_patrolman (nodepos, as_leader)
 end
 
 core.register_globalstep (function (dtime)
-	if mcl_vars.difficulty == 0 or not mobs_spawn then
+	if mcl_vars.difficulty == 0 or not mobs_spawn or only_peaceful_mobs then
 		return
 	end
 	next_spawn_attempt = next_spawn_attempt - dtime

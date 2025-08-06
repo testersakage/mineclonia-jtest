@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Azalea Plant"
-msgstr ""
+msgstr "Azalee"
 
 msgid "Flowering Azalea Plant"
 msgstr ""

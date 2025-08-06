@@ -13,6 +13,18 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Auto (use scroll bar if client >= 5.11)"
+msgstr ""
+
+msgid "Off  (use paging buttons, faster)"
+msgstr ""
+
+msgid "On   (more MC like, slower)"
+msgstr ""
+
+msgid "Enable scrollable creative inventory"
+msgstr ""
+
 msgid "Building Blocks"
 msgstr "建築方塊"
 
@@ -59,6 +71,12 @@ msgid "Switch stack size"
 msgstr ""
 
 msgid "@1 / @2"
+msgstr ""
+
+msgid "Very large inventory displays may be slow when scrolling, especially on Luanti versions before 5.11.\n"
+"Therefore the creative inventory display can be split into pages with prev/next page buttons.\n"
+"Mineclonia defaults to use scrolling unless an older Luanti version is detected.\n"
+"This setting allows you to override that heuristic."
 msgstr ""
 
 msgid "Recipe book"

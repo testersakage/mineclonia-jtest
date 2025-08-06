@@ -16,6 +16,9 @@ msgstr ""
 msgid "Stonecutter"
 msgstr "Tagliapietre"
 
+msgid "Fill Craft Grid"
+msgstr "Riempi la griglia per costruire"
+
 msgid "Inventory"
 msgstr "Inventario"
 
@@ -23,7 +26,7 @@ msgid "Stone Cutter"
 msgstr "Tagliapietre"
 
 msgid "Used to cut stone like materials."
-msgstr ""
+msgstr "Utilizzato per tagliare materiali simili alla pietra."
 
 msgid "Stonecutters are used to create stairs and slabs from stone like materials. It is also the jobsite for the Stone Mason Villager."
 msgstr "I tagliapietre vengono utilizzati per fabbricare scale e lastre da dei materiali pietrosi. È anche la stazione di lavoro del villico muratore."

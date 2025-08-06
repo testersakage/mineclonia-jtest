@@ -90,7 +90,7 @@ msgid "Bookshelf"
 msgstr ""
 
 msgid "Inventory"
-msgstr ""
+msgstr "Інвентар"
 
 msgid "Bookshelves are used for decoration."
 msgstr ""

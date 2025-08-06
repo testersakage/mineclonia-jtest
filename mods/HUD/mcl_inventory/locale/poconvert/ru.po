@@ -13,6 +13,18 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Auto (use scroll bar if client >= 5.11)"
+msgstr "Авто (полоса прокрутки, если клиент >= 5.11)"
+
+msgid "Off  (use paging buttons, faster)"
+msgstr "Выкл.  (постраничные кнопки, быстрее)"
+
+msgid "On   (more MC like, slower)"
+msgstr "Вкл. (как в MC, медленнее)"
+
+msgid "Enable scrollable creative inventory"
+msgstr "Включить прокрутку в творческом инвентаре"
+
 msgid "Building Blocks"
 msgstr "Строительные блоки"
 
@@ -61,6 +73,15 @@ msgstr "Изменить размер стака"
 msgid "@1 / @2"
 msgstr "@1 / @2"
 
+msgid "Very large inventory displays may be slow when scrolling, especially on Luanti versions before 5.11.\n"
+"Therefore the creative inventory display can be split into pages with prev/next page buttons.\n"
+"Mineclonia defaults to use scrolling unless an older Luanti version is detected.\n"
+"This setting allows you to override that heuristic."
+msgstr "Отображение большого инвентаря может быть медленным, особенно на Luanti версии ниже 5.11.\n"
+"Поэтому творческий инвентарь можно отобразить с разделением на страницы с кнопками переключения вперёд/назад.\n"
+"Mineclonia по умолчанию использует прокрутку, если не обнаружена старая версия Luanti.\n"
+"Эта настройка позволяет переопределить это поведение."
+
 msgid "Recipe book"
 msgstr "Книга рецептов"
 
@@ -71,10 +92,10 @@ msgid "Advancements"
 msgstr "Достижения"
 
 msgid "Player settings"
-msgstr ""
+msgstr "Настройки игрока"
 
 msgid "Return to player inventory"
-msgstr ""
+msgstr "Вернуться в инвентарь игрока"
 
 msgid "Crafting table out of range!"
 msgstr "Верстак вне достижения!"

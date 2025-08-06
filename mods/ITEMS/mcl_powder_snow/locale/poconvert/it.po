@@ -17,7 +17,7 @@ msgid "Powder Snow"
 msgstr "Neve polverosa"
 
 msgid "This is a block of snow thats extra fluffy, this means players can sink in it"
-msgstr ""
+msgstr "Blocco di neve extrasoffice, in cui i giocatori possono sprofondare"
 
 msgid "Powder Snow Bucket"
 msgstr ""

@@ -26,58 +26,58 @@ msgid "Collects liquids"
 msgstr "Zbiera płyny"
 
 msgid "Bucket of Axolotl"
-msgstr ""
+msgstr "Wiadro z aksolotlem"
 
 msgid "Bucket of Cod"
-msgstr ""
+msgstr "Wiadro z dorszem"
 
 msgid "Bucket of Salmon"
-msgstr ""
+msgstr "Wiadro z łososiem"
 
 msgid "Bucket of Tropical Fish"
-msgstr ""
+msgstr "Wiadro z rybą tropikalną"
 
 msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
-msgstr ""
+msgstr "Umieść je aby opróżnić wiadro i wypuścić dorsza. Można go zdobyć, klikając prawym przyciskiem myszy na wiadro z dorszem."
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
-msgstr ""
+msgstr "Umieść je aby opróżnić wiadro i wypuścić łososia. Można go zdobyć, klikając prawym przyciskiem myszy na wiadro z łososiem."
 
 msgid "Place it to empty the bucket and place a Tropical Fish. Obtain by right clicking on a Tropical Fish with a bucket of water."
-msgstr ""
+msgstr "Umieść je aby opróżnić wiadro i wypuścić rybę tropikalną. Można go zdobyć, klikając prawym przyciskiem myszy na wiadro z rybą tropikalną."
 
 msgid "Place it to empty the bucket and place an Axolotl. Obtain by right clicking on an Axolotl with a bucket of water."
-msgstr ""
+msgstr "Umieść je aby opróżnić wiadro i wypuścić aksolotla. Można go zdobyć, klikając prawym przyciskiem myszy na wiadro z aksolotlem."
 
 msgid "Places a water source and a Cod."
-msgstr ""
+msgstr "Umieszcza źródło wody i dorsza."
 
 msgid "Places a water source and a Salmon."
-msgstr ""
+msgstr "Umieszcza źródło wody i łososia."
 
 msgid "Places a water source and a Tropical Fish."
-msgstr ""
+msgstr "Umieszcza źródło wody i rybę tropikalną."
 
 msgid "Places a water source and an Axolotl."
-msgstr ""
+msgstr "Umieszcza źródło wody i aksolotla."
 
 msgid "This bucket is filled with water and a Cod."
-msgstr ""
+msgstr "To wiadro jest wypełnione wodą i zawiera dorsza."
 
 msgid "This bucket is filled with water and a Salmon."
-msgstr ""
+msgstr "To wiadro jest wypełnione wodą i zawiera łososia."
 
 msgid "This bucket is filled with water and a Tropical Fish."
-msgstr ""
+msgstr "To wiadro jest wypełnione wodą i zawiera rybę tropikalną."
 
 msgid "This bucket is filled with water and an Axolotl."
-msgstr ""
+msgstr "To wiadro jest wypełnione wodą i zawiera aksolotla."
 
 msgid "Lava Bucket"
 msgstr "Wiadro lawy"
 
 msgid "A bucket can be used to collect and release liquids. This one is filled with hot lava, safely contained inside. Use with caution."
-msgstr " Wiadro może być użyte do zbierania i wylewania płynów. To jest wypełnione lawą, bezpiecznie przechowywaną w środku. Używać z rozwagą."
+msgstr "Wiadro może być użyte do zbierania i wylewania płynów. To jest wypełnione gorącą lawą, bezpiecznie przechowywaną w środku. Używaj ostrożnie."
 
 msgid "Get in a safe distance and place the bucket to empty it and create a lava source at this spot. Don't burn yourself!"
 msgstr "Odejdź na bezpieczną odległość i umieść wiadro aby je opróżnić i utworzyć źródło lawy w danym miejscu. Nie poparz się!"
@@ -101,7 +101,7 @@ msgid "River Water Bucket"
 msgstr "Wiadro wody rzecznej"
 
 msgid "A bucket can be used to collect and release liquids. This one is filled with river water."
-msgstr " Wiadro może być użyte do zbierania i wylewania płynów. To jest wypełnione wodą rzeczną."
+msgstr "Wiadro może być użyte do zbierania i wylewania płynów. To jest wypełnione wodą rzeczną."
 
 msgid "Place it to empty the bucket and create a river water source."
 msgstr "Umieść je aby opróżnić wiadro i utworzyć źródło wody rzecznej."

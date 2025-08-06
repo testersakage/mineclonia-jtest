@@ -2,7 +2,7 @@ local S = core.get_translator(core.get_current_modname())
 
 -- Template rail function
 local function register_rail(itemstring, tiles, def_extras, creative)
-	local groups = {handy=1,pickaxey=1, attached_node=1,rail=1,connect_to_raillike=core.raillike_group("rail"),transport=1}
+	local groups = {handy=1,pickaxey=1, attached_node=1,rail=1,connect_to_raillike=core.raillike_group("rail"),transport=1, no_spawning_inside=1}
 	if creative == false then
 		groups.not_in_creative_inventory = 1
 	end
@@ -20,7 +20,6 @@ local function register_rail(itemstring, tiles, def_extras, creative)
 		},
 		groups = groups,
 		sounds = mcl_sounds.node_sound_metal_defaults(),
-		_mcl_blast_resistance = 0.7,
 		_mcl_hardness = 0.7,
 		after_destruct = function(pos)
 			-- Scan for minecarts in this pos and force them to execute their "floating" check.

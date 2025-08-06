@@ -17,7 +17,7 @@ msgid "Daylight Sensor"
 msgstr "Sensore di luce diurna"
 
 msgid "Provides redstone power when in sunlight"
-msgstr "Fornisce la corrente di pietrarossa quando è alla luce del sole"
+msgstr "Fornisce la corrente pietrarossa se esposto al sole"
 
 msgid "Can be inverted"
 msgstr "Può essere invertito"

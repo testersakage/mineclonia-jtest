@@ -17,7 +17,7 @@ msgid "Hopper"
 msgstr "漏斗"
 
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 
 msgid "5 inventory slots"
 msgstr "5个物品栏位"

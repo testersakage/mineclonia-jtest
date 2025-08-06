@@ -21,7 +21,6 @@ else
 end
 
 dofile(modpath.."/api.lua")
-dofile(modpath.."/ores.lua")
 
 local mg_name = core.get_mapgen_setting("mg_name")
 local enable_mt_dungeons = core.settings:get_bool("mcl_enable_mt_dungeons",false)

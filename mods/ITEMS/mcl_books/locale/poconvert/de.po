@@ -53,11 +53,12 @@ msgid "Hold it in the hand, then rightclick to read the current notes and edit t
 msgstr "Halten Sie es in der Hand, dann rechtsklicken Sie, um die Notizen zu sehen und zu ändern. Sie können den Text beliebig ändern. Sie können das Buch auch signieren und in ein geschriebenes Buch verwandeln, das gestapelt, aber nicht mehr geändert werden kann."
 
 msgid "A book can hold up to @1 characters. The title length is limited to @2 characters."
-msgstr ""
+msgstr "Ein Buch kann bis zu @1 Zeichen beinhalten. Die Titellänge ist auf @2 Zeichen begrenzt."
 
 msgid "Text is @1 characters too long for one book.\n"
 "It will be capped at @2 characters."
-msgstr ""
+msgstr "Der Text ist @1 Zeichen zu lang für ein Buch.\n"
+"Er wird bei @2 Zeichen abgeschnitten."
 
 msgid "Enter book title:"
 msgstr "Buchtitel eingeben:"

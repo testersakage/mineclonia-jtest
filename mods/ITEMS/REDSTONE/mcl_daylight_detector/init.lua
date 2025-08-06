@@ -39,7 +39,6 @@ local commdef = {
 		end
 		mcl_redstone.swap_node(pos, {name = toggle_inverted[node.name], param2 = node.param2})
 	end,
-	_mcl_blast_resistance = 0.2,
 	_mcl_hardness = 0.2,
 	_mcl_redstone = {
 		connects_to = function(node, dir)

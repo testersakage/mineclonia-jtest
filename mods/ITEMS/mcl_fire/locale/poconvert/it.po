@@ -29,10 +29,10 @@ msgid "Starts fires and ignites blocks"
 msgstr ""
 
 msgid "Flint and Steel"
-msgstr ""
+msgstr "Acciarino"
 
 msgid "Flint and steel is a tool to start fires and ignite blocks."
-msgstr ""
+msgstr "L'acciarino è uno strumento per dare fuoco ai blocchi."
 
 msgid "Rightclick the surface of a block to attempt to light a fire in front of it or ignite the block. A few blocks have an unique reaction when ignited."
 msgstr ""

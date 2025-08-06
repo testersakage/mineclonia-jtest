@@ -17,7 +17,7 @@ msgid "Barrel"
 msgstr "Barril"
 
 msgid "Inventory"
-msgstr ""
+msgstr "Inventário"
 
 msgid "27 inventory slots"
 msgstr "27 espaços de inventário"

@@ -1,6 +1,6 @@
-mcl_redstone.tick_speed = tonumber(minetest.settings:get("mcl_redstone_update_tick")) or 0.1
-local MAX_EVENTS = tonumber(minetest.settings:get("mcl_redstone_max_events")) or 65535
-local TIME_BUDGET = math.max(0.01, mcl_redstone.tick_speed * (tonumber(minetest.settings:get("mcl_redstone_time_budget")) or 0.2))
+mcl_redstone.tick_speed = tonumber(core.settings:get("mcl_redstone_update_tick")) or 0.1
+local MAX_EVENTS = tonumber(core.settings:get("mcl_redstone_max_events")) or 65535
+local TIME_BUDGET = math.max(0.01, mcl_redstone.tick_speed * (tonumber(core.settings:get("mcl_redstone_time_budget")) or 0.2))
 local EXPERIMENTAL_USE_ORDERED_EVENT_QUEUE = core.settings:get_bool("mcl_redstone_ordered_event_queue", false)
 
 mcl_redstone.is_tick_frozen = false
@@ -60,6 +60,10 @@ function mcl_redstone._abort_pending_update(pos)
 	update_event_tab[h] = nil
 end
 
+function mcl_redstone._get_current_tick()
+	return current_tick
+end
+
 local function handle_update_event(event)
 	local h = core.hash_node_position(event.pos)
 	if update_event_tab[h] ~= event then
@@ -73,6 +77,7 @@ local function handle_update_event(event)
 	end
 	core.swap_node(event.pos, event.node)
 	mcl_redstone._update_neighbours(event.pos, event.oldnode, event.node)
+	mcl_redstone._notify_observer_neighbours(event.pos)
 end
 
 local function handle_event(event)

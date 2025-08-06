@@ -19,7 +19,7 @@ tt.register_snippet(function(itemstring, toolcaps, _)
 	local mining_caps = ""
 	local attack_caps = ""
 
-	for _, v in pairs(toolcaps.groupcaps) do
+	for _, v in pairs(toolcaps.groupcaps or {}) do
 		caplines = caplines + 1
 
 		local max_level = v.maxlevel or 1
@@ -29,7 +29,7 @@ tt.register_snippet(function(itemstring, toolcaps, _)
 			local dur_str
 			local real_uses = base_uses * math.pow(3, max_level)
 
-			if weapon then real_uses = toolcaps.punch_attack_uses end
+			if weapon and toolcaps.punch_attack_uses then real_uses = toolcaps.punch_attack_uses end
 
 			if real_uses < 65535 then
 				dur_str = S("@1 uses", real_uses)

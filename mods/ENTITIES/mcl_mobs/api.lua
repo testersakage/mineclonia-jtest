@@ -156,10 +156,11 @@ function mob_class:get_staticdata_table ()
 	tmp._stuck_in = nil
 	tmp._liquidtype = nil
 	tmp._last_liquidtype = nil
+	tmp._reloaded = true
 
 	-- Remove physics factors that are not persistent and revert
 	-- fields that were modified and disapply them.
-	tmp._physics_factors = table.copy (self._physics_factors)
+	tmp._physics_factors = table.copy (self._physics_factors or {})
 	for field, factors in pairs (tmp._physics_factors) do
 		tmp[field] = factors.base
 
@@ -298,10 +299,31 @@ function mob_class:post_load_staticdata ()
 		self:restore_physics_factors ()
 	end
 
+	-- Remove invalid entries in doors_to_close. See
+	-- https://codeberg.org/mineclonia/mineclonia/issues/3286 for more
+	-- information.
+	if self.doors_to_close then
+		local newtable = {}
+		for _, v in pairs(self.doors_to_close) do
+			if v.x then
+				table.insert(newtable, v)
+			else
+				core.log("error", "Found invalid doors to close in mob, removing to prevent crash")
+			end
+		end
+		self.doors_to_close = newtable
+	end
+
 	-- Erase timers.
 	self._timers = {}
 	if not self.texture_mods then
 		self.texture_mods = {}
+	end
+
+	-- Enroll this mob in any active raid to which it might
+	-- belong.
+	if self.raidmob then
+		mcl_raids.load_raidmob (self)
 	end
 end
 
@@ -314,7 +336,6 @@ function mob_class:mob_activate (staticdata, dtime)
 
 	if staticdata then
 		local tmp = core.deserialize(staticdata)
-
 		if tmp then
 			for _,stat in pairs(tmp) do
 				self[_] = stat
@@ -425,6 +446,8 @@ function mob_class:mob_activate (staticdata, dtime)
 	self:display_wielditem (false)
 	self:display_wielditem (true)
 
+	mcl_armor.head_entity_equip(self.object)
+
 	if type (self._armor_texture_slots) == "number" then
 		self._armor_texture_slots = {
 			[self._armor_texture_slots] = {
@@ -462,6 +485,21 @@ function mob_class:mob_activate (staticdata, dtime)
 		def.after_activate(self, staticdata, def, dtime)
 	end
 	self:remove_texture_mod ("^[colorize:#d42222:175")
+
+	-- Record this mob's presence for spawning.
+	if not self.persistent or self.tamed then
+		-- Under unknown circumstances, it is possible for a
+		-- mob to be created by spawning routines before it is
+		-- activated and mob caps are updated.  Mob caps are
+		-- adjusted and _activated is set by the mob spawning
+		-- process in these situations, after which it is
+		-- essential to avoid doubly incrementing them.
+		if not self._activated then
+			if self:announce_for_spawning () then
+				return false
+			end
+		end
+	end
 	return true
 end
 
@@ -494,7 +532,10 @@ function mob_class:on_step (dtime, moveresult)
 		end
 	end
 
-	if self:check_despawn (pos, dtime) then return true end
+	if self:check_despawn (pos, dtime)
+		or self:update_mob_caps () then
+		return true
+	end
 
 	-- Objects which are attached and those which are not physical
 	-- don't receive moveresults.  Create a placeholder object to
@@ -570,7 +611,12 @@ function mob_class:on_step (dtime, moveresult)
 		self:movement_step (dtime, moveresult)
 		self:motion_step (phys_dtime, moveresult, pos)
 	else
-		self:drive ("walk", "stand", false, dtime, moveresult)
+		-- At times damage is applied and kills this mob
+		-- (removing its driver) between `should_drive' and
+		-- the call to `drive' itself.
+		if self.driver then
+			self:drive ("walk", "stand", false, dtime, moveresult)
+		end
 	end
 
 	self:post_motion_step (pos, dtime, moveresult)

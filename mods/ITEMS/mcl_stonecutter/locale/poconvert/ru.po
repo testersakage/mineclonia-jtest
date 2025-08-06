@@ -16,6 +16,9 @@ msgstr ""
 msgid "Stonecutter"
 msgstr "Камнерез"
 
+msgid "Fill Craft Grid"
+msgstr "Заполнить сетку крафта"
+
 msgid "Inventory"
 msgstr "Инвентарь"
 

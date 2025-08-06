@@ -15,6 +15,7 @@ local shulker = {
 	description = S("Shulker"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	persist_in_peaceful = true,
 	attack_type = "null",
 	passive = false,
@@ -451,6 +452,14 @@ local Z_AXIS = vector.new (0, 0, 1)
 local Y_AXIS = vector.new (0, 1, 0)
 local HEAD_POS = vector.new (0, 0.25213, 0)
 
+-- N.B.: this identity transform only exists to circumvent an engine
+-- bug.
+local SHULKER_HEAD_SCALE = {
+	vec = vector.new (1, 1, 1),
+	absolute = true,
+}
+local TWO_HUNDERED_AND_SEVENTY_DEG = math.rad (270)
+
 function shulker:shulker_look_at (self_pos, target_pos)
 	local face_dir = shulker_open_direction[self._face]
 	local axis = face_dir.z ~= 0 and Y_AXIS or Z_AXIS
@@ -459,7 +468,8 @@ function shulker:shulker_look_at (self_pos, target_pos)
 	local dir = vector.subtract (target_pos, self_pos)
 	local proj_orth = vector.dot (orthogonal, dir)
 	local proj_opposite = vector.dot (opposite, dir)
-	local yaw = math.atan2 (proj_orth, proj_opposite) - math.pi / 2
+	local yaw = math.atan2 (proj_orth, proj_opposite)
+		- TWO_HUNDERED_AND_SEVENTY_DEG
 	local rot = vector.new (0, yaw, 0)
 
 	if self.object.set_bone_override then
@@ -473,6 +483,7 @@ function shulker:shulker_look_at (self_pos, target_pos)
 			       absolute = true,
 			       interpolation = 0.2,
 		       },
+		       scale = SHULKER_HEAD_SCALE,
 		})
 	else
 		rot.y = math.deg (rot.y)

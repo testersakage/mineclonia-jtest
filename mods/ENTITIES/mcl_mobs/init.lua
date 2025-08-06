@@ -15,7 +15,7 @@ if env and not mcl_mobs.get_node_raw then
 	local get_node = core.get_node
 	local i = 1
 	while true do
-		local name, upvalue = debug.getupvalue (get_node, i)
+		local name, upvalue = env.debug.getupvalue (get_node, i)
 		if not name then
 			break
 		end
@@ -216,11 +216,16 @@ mcl_mobs.mob_class = {
 	_persistent_physics_factors = {},
 	_old_head_swivel_vector = vector.zero (),
 	_old_head_swivel_pos = vector.zero (),
+	_head_axis_scale = nil,
+
+	-- Field consulted by new spawning routines.
+	_spawn_category = "misc",
 
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
 
 	--internal variables
+	_inactivity_timer = 0,
 	standing_in = "ignore",
 	standing_on = "ignore",
 	opinion_sound_cooloff = 7, -- used to prevent sound spam of particular sound types
@@ -235,6 +240,7 @@ mcl_mobs.mob_class = {
 	_water_current = vector.zero (),
 	_liquidtype = nil,
 	_last_liquidtype = nil,
+	raidmob = false,
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = core.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"
@@ -250,6 +256,8 @@ function mcl_mobs.node_ok(pos, fallback)
 end
 
 --api and helpers
+-- -- profiler
+-- dofile (path .. "/profiler.lua")
 -- effects: sounds and particles mostly
 dofile(path .. "/effects.lua")
 -- physics: involuntary mob movement - particularly falling and death
@@ -432,6 +440,7 @@ function mcl_mobs.register_mob(name, def)
 			return false, true, {}
 		end,
 		on_activate = function(self, staticdata, dtime)
+			self._id = "id_"..core.sha1(core.get_gametime()..core.pos_to_string(self.object:get_pos())..tostring(math.random()))
 			return self:mob_activate (staticdata, dtime)
 		end,
 		_spawner = def._spawner,
@@ -484,6 +493,7 @@ mcl_mobs.arrow_class = {
 				self.owner_id = tostring (puncher)
 			end
 		end
+		return true
 	end,
 }
 

@@ -7,13 +7,14 @@ local pig = {
 	description = S("Pig"),
 	type = "animal",
 	spawn_class = "passive",
+	_spawn_category = "creature",
 	runaway = true,
 	passive = true,
 	hp_min = 10,
 	hp_max = 10,
 	xp_min = 1,
 	xp_max = 3,
-	collisionbox = {-0.45, -0.01, -0.45, 0.45, 0.865, 0.45},
+	collisionbox = {-0.45, 0.0, -0.45, 0.45, 0.865, 0.45},
 	visual = "mesh",
 	mesh = "mobs_mc_pig.b3d",
 	textures = {{
@@ -41,7 +42,7 @@ local pig = {
 	sounds = {
 		random = {name="mobs_pig", gain=0.5},
 		death = {name="mobs_pig_angry", gain=0.75},
-		damage = {name="mobs_pig_angry", gain=0.75},
+		damage = {name="mobs_pig", gain=0.5},
 		eat = "mobs_mc_animal_eat_generic",
 		distance = 16,
 	},
@@ -267,3 +268,14 @@ mcl_mobs.spawn_setup({
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:pig", S("Pig"), "#f0a5a2", "#db635f", 0)
+
+------------------------------------------------------------------------
+-- Modern Pig spawning.
+------------------------------------------------------------------------
+
+local pig_spawner = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:pig",
+	biomes = mobs_mc.farm_animal_biomes,
+	weight = 10,
+})
+mcl_mobs.register_spawner (pig_spawner)

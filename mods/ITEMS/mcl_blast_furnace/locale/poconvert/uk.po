@@ -14,13 +14,13 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Blast Furnace"
-msgstr ""
+msgstr "Доменна піч"
 
 msgid "Smelts ores faster than furnace"
-msgstr ""
+msgstr "Виплавляє руду швидше, ніж звичайна піч"
 
 msgid "Blast Furnaces smelt several items, mainly ores and armor, using a furnace fuel, but twice as fast as a normal furnace."
-msgstr ""
+msgstr "Доменні печі виплавляли деякі предмети, в основному руди та обладунки, використовуючи пічне паливо, але вдвічі швидше, ніж звичайні печі."
 
 msgid "Use the blast furnace to open the furnace menu."
 msgstr ""

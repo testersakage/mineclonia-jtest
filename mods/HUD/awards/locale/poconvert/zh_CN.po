@@ -17,18 +17,18 @@ msgid "@1 has made the advancement @2"
 msgstr "@1已完成@2进度"
 
 msgid "Hidden Advancement Unlocked: @1"
-msgstr ""
+msgstr "解锁的隐藏进度：@1"
 
 msgid "Advancement Unlocked: @1"
 msgstr "进度已解锁：@1"
 
-msgid "Hidden Advancement Made!"
-msgstr ""
+msgid "Hidden Advancement Unlocked!"
+msgstr "已解锁隐藏进度！"
 
-msgid "Goal Completed!"
+msgid "Goal Reached!"
 msgstr "达成目标！"
 
-msgid "Challenge Completed!"
+msgid "Challenge Complete!"
 msgstr "完成挑战！"
 
 msgid "Advancement Made!"
@@ -62,7 +62,7 @@ msgid "<name>"
 msgstr "<name>"
 
 msgid "Get the advancement statistics for the given player or yourself"
-msgstr "获取指定玩家或本人的成就统计数据"
+msgstr "获取指定玩家或本人的进度统计数据"
 
 msgid "Error: No advancements available."
 msgstr "错误：无可用进度。"
@@ -71,25 +71,25 @@ msgid "OK"
 msgstr "OK"
 
 msgid "(Hidden Advancement)"
-msgstr ""
+msgstr "（隐藏进度）"
 
 msgid "Unlock this advancement to find out what it is."
-msgstr "解锁该成就，以了解具体内容。"
+msgstr "解锁该进度，以了解具体内容。"
 
 msgid "@1 (unlocked)"
 msgstr "@1 (已解锁)"
 
 msgid "You've disabled advancements. Type /awards enable to reenable."
-msgstr "你已禁用成就系统。输入 /awards 以重新启用。"
+msgstr "你已禁用进度系统。输入 /awards 以重新启用。"
 
 msgid "Error: No advancement available."
-msgstr "错误：无可用成就。"
+msgstr "错误：无可用进度。"
 
 msgid "You have not unlocked any advancement."
-msgstr "未解锁任何成就。"
+msgstr "未解锁任何进度。"
 
 msgid "@1’s advancement:"
-msgstr "@1的成就："
+msgstr "@1的进度："
 
 msgid "@1/@2 chat messages"
 msgstr "@1/@2 聊天信息"

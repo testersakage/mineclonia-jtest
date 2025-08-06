@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Used for crafting decorated pots"
-msgstr ""
+msgstr "Utilizzato per costruire vasi decorati"
 
 msgid "Decorated Pot"
 msgstr "Vaso decorato"

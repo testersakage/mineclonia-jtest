@@ -20,10 +20,10 @@ msgid "Sticks are a very versatile crafting material; used in countless crafting
 msgstr ""
 
 msgid "Paper"
-msgstr ""
+msgstr "Папір"
 
 msgid "Paper is used to craft books and maps."
-msgstr ""
+msgstr "Папір використовується для виготовлення книг та мап."
 
 msgid "Coal"
 msgstr ""
@@ -50,7 +50,7 @@ msgid "Gold nuggets are very small pieces of molten gold; the main purpose is to
 msgstr ""
 
 msgid "Diamond"
-msgstr ""
+msgstr "Діамант"
 
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr ""
@@ -74,7 +74,7 @@ msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr ""
 
 msgid "Emerald"
-msgstr ""
+msgstr "Смарагд"
 
 msgid "Emeralds are used in villager trades as currency."
 msgstr ""
@@ -98,7 +98,7 @@ msgid "Flint is a raw material."
 msgstr ""
 
 msgid "Sugar"
-msgstr ""
+msgstr "Цукор"
 
 msgid "Sugar comes from sugar canes and is used to make sweet foods."
 msgstr ""
@@ -110,10 +110,10 @@ msgid "Bowls are mainly used to hold tasty soups."
 msgstr ""
 
 msgid "Apple"
-msgstr ""
+msgstr "Яблуко"
 
 msgid "Apples are food items which can be eaten."
-msgstr ""
+msgstr "Яблука - це продукти харчування, які можна їсти."
 
 msgid "Golden Apple"
 msgstr ""
@@ -758,10 +758,10 @@ msgid "This block consists of a couple of loose stones and can't support itself.
 msgstr ""
 
 msgid "Sand"
-msgstr ""
+msgstr "Пісок"
 
 msgid "Sand is found in large quantities at beaches and deserts."
-msgstr ""
+msgstr "Пісок у великих кількостях зустрічається на пляжах та в пустелях."
 
 msgid "Sandstone"
 msgstr ""
@@ -788,7 +788,7 @@ msgid "Smooth sandstone is compressed sand and is a rather soft kind of stone."
 msgstr ""
 
 msgid "Red Sand"
-msgstr ""
+msgstr "Червоний пісок"
 
 msgid "Red sand is found in large quantities in mesa biomes."
 msgstr ""
@@ -818,10 +818,10 @@ msgid "Smooth red sandstone is a decorative building block."
 msgstr ""
 
 msgid "Clay"
-msgstr ""
+msgstr "Глина"
 
 msgid "Clay is a versatile kind of earth commonly found at beaches underwater."
-msgstr ""
+msgstr "Глина - це універсальний вид землі, який часто зустрічається на пляжах під водою."
 
 msgid "Brick Block"
 msgstr ""
@@ -926,13 +926,13 @@ msgid "This block can only be placed on full solid blocks and on another top sno
 msgstr ""
 
 msgid "Snow"
-msgstr ""
+msgstr "Сніг"
 
 msgid "This is a full block of snow. Snow of this thickness is usually found in areas of extreme cold."
 msgstr ""
 
 msgid "Cactus"
-msgstr ""
+msgstr "Кактус"
 
 msgid "Grows on sand"
 msgstr ""
@@ -959,22 +959,22 @@ msgid "Sugar canes can only be placed top of other sugar canes and on top of blo
 msgstr ""
 
 msgid "Ladder"
-msgstr ""
+msgstr "Драбина"
 
 msgid "A piece of ladder which allows you to climb vertically. Ladders can only be placed on the side of solid blocks and not on glass, leaves, ice, slabs, glowstone, nor sea lanterns."
 msgstr ""
 
 msgid "Vines"
-msgstr ""
+msgstr "Лози"
 
 msgid "Vines are climbable blocks which can be placed on the sides of solid full-cube blocks. Vines slowly grow and spread."
-msgstr ""
+msgstr "Лози - це блоки, на які можна підніматися, та які можна розмістити на сторонах суцільних повнокубових блоків. Лози повільно ростуть і поширюються."
 
 msgid "Glass"
-msgstr ""
+msgstr "Стекло"
 
 msgid "A decorative and mostly transparent block."
-msgstr ""
+msgstr "Декоративний і здебільшого прозорий блок."
 
 msgid "Stained glass is a decorative and mostly transparent block which comes in various different colors."
 msgstr ""
@@ -989,13 +989,13 @@ msgid "Water Source"
 msgstr ""
 
 msgid "Water"
-msgstr ""
+msgstr "Вода"
 
 msgid "Water is abundant in oceans and also appears in a few springs in the ground. You can swim easily in water, but you need to catch your breath from time to time."
-msgstr ""
+msgstr "Води багато в океанах, а також у кількох джерелах у землі. У воді можна легко плавати, але час від часу потрібно переводити подих."
 
 msgid "Water interacts with lava in various ways:"
-msgstr ""
+msgstr "Вода взаємодіє з лавою різними способами:"
 
 msgid "• When water is directly above or horizontally next to a lava source, the lava turns into obsidian."
 msgstr ""
@@ -1049,19 +1049,19 @@ msgid "Cobwebs can be walked through, but significantly slow you down."
 msgstr ""
 
 msgid "Dead Bush"
-msgstr ""
+msgstr "Мертвий кущ"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr ""
 
 msgid "Barrier"
-msgstr ""
+msgstr "Бар'єр"
 
 msgid "Barriers are invisible walkable blocks. They are used to create boundaries of adventure maps and the like. Monsters and animals won't appear on barriers, and fences do not connect to barriers. Other blocks can be built on barriers like on any other block."
 msgstr ""
 
 msgid "When you hold a barrier in hand, you reveal all placed barriers in a short distance around you."
-msgstr ""
+msgstr "Коли ви тримаєте бар'єр у руці, ви виявляєте всі встановлені бар'єри на невеликій відстані навколо себе."
 
 msgid "Realm Barrier"
 msgstr ""
@@ -1076,7 +1076,7 @@ msgid "When you hold a light in hand, you reveal all placed lights in a short di
 msgstr ""
 
 msgid "Void"
-msgstr ""
+msgstr "Порожнеча"
 
 msgid "Stone Stairs"
 msgstr ""

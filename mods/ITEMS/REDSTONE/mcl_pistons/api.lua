@@ -51,10 +51,12 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 			nn = core.get_node(np)
 		end
 
+		-- Abort if trying to push an unmovable block. The piston itself counts as unmovable.
 		local def = core.registered_nodes[nn.name]
 		if core.get_item_group(nn.name, "unmovable_by_piston") == 1
 			or (not inv_nodes_movable and core.get_item_group(nn.name, "container") ~= 0)
-			or not def then
+			or not def
+			or vector.equals(piston_pos, np) then
 			return
 		end
 
@@ -83,19 +85,13 @@ function mcl_pistons.push(pos, movedir, maximum, player_name, piston_pos)
 						offset_node = core.get_node(offset_pos)
 						is_connected = def._mcl_pistons_sticky(nn, offset_node, dir)
 
+						-- Only insert connected node if it is movable and can stick to current node.
+						-- The piston itself counts as unmovable.
 						if is_connected and core.get_item_group(offset_node.name, "unsticky") == 0
 							and core.get_item_group(offset_node.name, "unmovable_by_piston") == 0
-							and (inv_nodes_movable or core.get_item_group(offset_node.name, "container") == 0) then
-
-							-- Only insert as connected if node isn't the piston itself
-							if vector.equals(piston_pos, offset_pos) then
-								if not vector.equals(movedir, dir) then
-									-- Don't allow pushing if chain of sticky blocks loops back and connects to the piston, e.g. from the side
-									return
-								end
-							else
-								table.insert(connected, offset_pos)
-							end
+							and (inv_nodes_movable or core.get_item_group(offset_node.name, "container") == 0)
+							and not vector.equals(piston_pos, offset_pos) then
+							table.insert(connected, offset_pos)
 						end
 					end
 				end

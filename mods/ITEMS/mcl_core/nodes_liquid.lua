@@ -15,12 +15,12 @@ core.register_node("mcl_core:water_flowing", {
 	tiles = {"default_water_flowing_animated.png^[verticalframe:64:0"},
 	special_tiles = {
 		{
-			image="default_water_flowing_animated.png",
+			name = "default_water_flowing_animated.png",
 			backface_culling=false,
 			animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=4.0}
 		},
 		{
-			image="default_water_flowing_animated.png",
+			name = "default_water_flowing_animated.png",
 			backface_culling=false,
 			animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=4.0}
 		},
@@ -45,6 +45,7 @@ core.register_node("mcl_core:water_flowing", {
 	post_effect_color = {a=60, r=0x03, g=0x3C, b=0x5C},
 	groups = { liquid_flowing=1, water=3, liquid=3, puts_out_fire=1, not_in_creative_inventory=1, freezes=1, melt_around=1, dig_by_piston=1, unsticky = 1},
 	_pathfinding_class = "WATER",
+	_on_bottle_place = mcl_core.get_bottle_place_on_water("mcl_potions:water"),
 	_mcl_blast_resistance = 100,
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
 	_mcl_hardness = -1,
@@ -68,7 +69,7 @@ S("• When water is directly below lava, the water turns into stone."),
 	special_tiles = {
 		-- New-style water source material (mostly unused)
 		{
-			name="default_water_source_animated.png",
+			name = "default_water_source_animated.png",
 			animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=5.0},
 			backface_culling = false,
 		}
@@ -91,6 +92,7 @@ S("• When water is directly below lava, the water turns into stone."),
 	post_effect_color = {a=60, r=0x03, g=0x3C, b=0x5C},
 	groups = { liquid_source=1, water=3, liquid=3, puts_out_fire=1, freezes=1, not_in_creative_inventory=1, dig_by_piston=1, unsticky = 1},
 	_pathfinding_class = "WATER",
+	_on_bottle_place = mcl_core.get_bottle_place_on_water("mcl_potions:water"),
 	_mcl_blast_resistance = 100,
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
 	_mcl_hardness = -1,
@@ -105,12 +107,12 @@ core.register_node("mcl_core:lava_flowing", {
 	tiles = {"default_lava_flowing_animated.png^[verticalframe:64:0"},
 	special_tiles = {
 		{
-			image="default_lava_flowing_animated.png",
+			name = "default_lava_flowing_animated.png",
 			backface_culling=false,
 			animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=6.6}
 		},
 		{
-			image="default_lava_flowing_animated.png",
+			name = "default_lava_flowing_animated.png",
 			backface_culling=false,
 			animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=6.6}
 		},

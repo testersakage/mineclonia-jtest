@@ -26,79 +26,79 @@ msgid "Channels a bolt of lightning toward a target. Works only during thunderst
 msgstr ""
 
 msgid "Curse of Vanishing"
-msgstr ""
+msgstr "Maldição do Desaparecimento"
 
 msgid "Item destroyed on death."
-msgstr ""
+msgstr "Item é destruído ao morrer."
 
 msgid "Depth Strider"
-msgstr ""
+msgstr "Passos Profundos"
 
 msgid "Increases underwater movement speed."
-msgstr ""
+msgstr "Aumenta a velocidade de movimentação submersa."
 
 msgid "Efficiency"
-msgstr ""
+msgstr "Eficiência"
 
 msgid "Increases mining speed."
-msgstr ""
+msgstr "Aumenta a velocidade de mineração."
 
 msgid "Fire Aspect"
-msgstr ""
+msgstr "Aspecto Flamejante"
 
 msgid "Sets target on fire."
-msgstr ""
+msgstr "Põe fogo no alvo."
 
 msgid "Flame"
-msgstr ""
+msgstr "Chama"
 
 msgid "Arrows set target on fire."
-msgstr ""
+msgstr "Flechas incendeiam o alvo."
 
 msgid "Fortune"
-msgstr ""
+msgstr "Fortuna"
 
 msgid "Increases certain block drops."
-msgstr ""
+msgstr "Aumenta a queda de alguns blocos."
 
 msgid "Frost Walker"
-msgstr ""
+msgstr "Passos Congelantes"
 
 msgid "Turns water beneath the player into frosted ice and prevents the damage from magma blocks."
-msgstr ""
+msgstr "Transforma água abaixo do jogador em gelo e previne dano de blocos de magma."
 
 msgid "Impaling"
-msgstr ""
+msgstr "Empalamento"
 
 msgid "Trident deals additional damage to ocean mobs."
-msgstr ""
+msgstr "Tridente dá dano adicional em monstros do Oceano."
 
 msgid "Infinity"
-msgstr ""
+msgstr "Infinidade"
 
 msgid "Shooting consumes no regular arrows."
-msgstr ""
+msgstr "Atirar não consome flechas."
 
 msgid "Knockback"
-msgstr ""
+msgstr "Repulsão"
 
 msgid "Increases knockback."
-msgstr ""
+msgstr "Aumenta a repulsão."
 
 msgid "Looting"
-msgstr ""
+msgstr "Saque"
 
 msgid "Increases mob loot."
-msgstr ""
+msgstr "Aumenta o saque dos mobs."
 
 msgid "Loyalty"
-msgstr ""
+msgstr "Lealdade"
 
 msgid "Trident returns after being thrown. Higher levels reduce return time."
-msgstr ""
+msgstr "Tridente retorna após ser atirado. Níveis mais altos reduzem o tempo de retorno."
 
 msgid "Luck of the Sea"
-msgstr ""
+msgstr "Sorte do Mar"
 
 msgid "Increases rate of good loot (enchanting books, etc.)"
 msgstr ""
@@ -215,7 +215,7 @@ msgid "Unknown Enchantment"
 msgstr ""
 
 msgid "Inventory"
-msgstr ""
+msgstr "Inventário"
 
 msgid "@1 Enchantment Levels"
 msgstr ""

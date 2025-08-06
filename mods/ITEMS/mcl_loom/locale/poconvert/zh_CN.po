@@ -17,7 +17,7 @@ msgid "Loom"
 msgstr "织布机"
 
 msgid "Inventory"
-msgstr "背包"
+msgstr "库存"
 
 msgid "Used to create banner designs"
 msgstr "用于创建旗帜图案"

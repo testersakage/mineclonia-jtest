@@ -15,6 +15,7 @@ local skeleton = table.merge (posing_humanoid, {
 	description = S("Skeleton"),
 	type = "monster",
 	spawn_class = "hostile",
+	_spawn_category = "monster",
 	hp_min = 20,
 	hp_max = 20,
 	xp_min = 6,
@@ -73,9 +74,9 @@ local skeleton = table.merge (posing_humanoid, {
 		},
 		{
 			name = "mcl_heads:skeleton",
-			chance = 200, -- 0.5% chance
-			min = 1,
-			max = 1,
+			chance = 1,
+			min = 0,
+			max = 0,
 			mob_head = true,
 		},
 	},
@@ -153,7 +154,8 @@ local skeleton_poses = {
 mcl_mobs.define_composite_pose (skeleton_poses, "jockey", {
 	["leg.right"] = {
 		nil,
-		vector.new (-115, 0, -90),
+		vector.new (115, 0, 90),
+		vector.new (1, 1, 1),
 	},
 	["leg.left"] = {
 		nil,
@@ -413,3 +415,71 @@ mcl_mobs.spawn_setup ({
 
 mcl_mobs.register_egg ("mobs_mc:skeleton", S("Skeleton"), "#c1c1c1", "#494949", 0)
 mcl_mobs.register_egg ("mobs_mc:stray", S("Stray"), "#5f7476", "#dae8e7", 0)
+
+------------------------------------------------------------------------
+-- Modern Skeleton + Stray spawning.
+------------------------------------------------------------------------
+
+local skeleton_biomes = {}
+local cold_biomes = {
+	"ColdTaiga",
+	"IcePlainsSpikes",
+	"IcePlains",
+	"ExtremeHills+_snowtop",
+}
+
+for _, biome in pairs (mobs_mc.monster_biomes) do
+	if table.indexof (cold_biomes, biome) == -1 then
+		table.insert (skeleton_biomes, biome)
+	end
+end
+
+local skeleton_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:skeleton",
+	weight = 100,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = skeleton_biomes,
+})
+
+local skeleton_spawner_soul_sand_valley = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:skeleton",
+	weight = 20,
+	pack_max = 5,
+	pack_min = 5,
+	biomes = {
+		"SoulsandValley",
+	},
+	max_light = 15,
+	max_artificial_light = 15,
+})
+
+local skeleton_spawner_cold = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:skeleton",
+	weight = 20,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = cold_biomes,
+})
+
+local stray_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:stray",
+	weight = 80,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = cold_biomes,
+})
+
+local monster_spawner = mobs_mc.monster_spawner
+
+function stray_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+	return mcl_weather.is_outdoor (node_pos)
+		and monster_spawner.test_spawn_position (self, spawn_pos,
+							 node_pos, sdata,
+							 node_cache)
+end
+
+mcl_mobs.register_spawner (skeleton_spawner)
+mcl_mobs.register_spawner (skeleton_spawner_soul_sand_valley)
+mcl_mobs.register_spawner (skeleton_spawner_cold)
+mcl_mobs.register_spawner (stray_spawner)

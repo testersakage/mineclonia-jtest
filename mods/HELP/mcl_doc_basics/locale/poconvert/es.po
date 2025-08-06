@@ -317,10 +317,10 @@ msgid "You can view your current position in the debug screen (open with [F5])."
 msgstr "Puede ver su posición actual en la pantalla de depuración (abrir con [F5])."
 
 msgid "Settings"
-msgstr "Configuración"
+msgstr "Ajustes"
 
-msgid "There is a large variety of settings to configure Minetest. Pretty much every aspect can be changed that way."
-msgstr "Existe una gran variedad de opciones para configurar Minetest. De esta manera, se pueden modificar prácticamente todos los aspectos."
+msgid "There is a large variety of settings to configure Luanti. Pretty much every aspect can be changed that way."
+msgstr ""
 
 msgid "These are a few of the most important gameplay settings:"
 msgstr "Estos son algunos de los ajustes más importantes del juego:"
@@ -335,7 +335,7 @@ msgid "• PvP (enable_pvp): Short for “Player vs Player”. If enabled, playe
 msgstr "• JcJ (enable_pvp): abreviatura de “Jugador contra Jugador”. Si está habilitado, los jugadores pueden causarse daño entre sí"
 
 msgid "For a full list of all available settings, use the “All Settings” dialog in the main menu."
-msgstr "Para obtener una lista completa de todas las configuraciones disponibles, utilice el cuadro de diálogo “Todas las configuraciones” en el menú principal."
+msgstr "Para obtener una lista completa de todas los ajustes disponibles, utilice el cuadro de diálogo “Todos las ajustes” en el menú principal."
 
 msgid "Online help"
 msgstr "Ayuda en línea"
@@ -349,11 +349,11 @@ msgstr "Página oficial de Luanti: <https://luanti.org/>"
 msgid "The main place to find the most recent version of Luanti."
 msgstr "El lugar principal para encontrar la versión más reciente de Luanti."
 
-msgid "Community wiki: <https://wiki.minetest.net/>"
-msgstr "Wiki de la comunidad: <https://wiki.minetest.net/>"
+msgid "Luanti Documentation: <https://docs.luanti.org/>"
+msgstr ""
 
-msgid "A community-based documentation website for Luanti. Anyone with an account can edit it! It also features a documentation of Minetest Game."
-msgstr "Un sitio web de documentación comunitaria para Luanti. ¡Cualquiera con una cuenta puede editarlo! También incluye documentación de Minetest Game."
+msgid "A official documentation website for Luanti."
+msgstr ""
 
 msgid "Web forums: <https://forum.luanti.org/>"
 msgstr "Foros web: <https://forum.luanti.org/>"
@@ -361,11 +361,11 @@ msgstr "Foros web: <https://forum.luanti.org/>"
 msgid "A web-based discussion platform where you can discuss everything related to Luanti. This is also a place where player-made mods and games are published and discussed. The discussions are mainly in English, but there is also space for discussion in other languages."
 msgstr "Una plataforma de discusión en línea donde puedes discutir todo lo relacionado con Luanti. También es un lugar donde se publican y discuten mods y juegos creados por los jugadores. Las discusiones son principalmente en inglés, pero también hay espacio para discusiones en otros idiomas."
 
-msgid "Chat: <irc://irc.freenode.net#minetest>"
-msgstr "Chat: <irc://irc.freenode.net#minetest>"
+msgid "Chat: <irc://irc.libera.chat/#luanti>"
+msgstr ""
 
-msgid "A generic Internet Relay Chat channel for everything related to Luanti where people can meet to discuss in real-time. If you do not understand IRC, see the Community Wiki for help."
-msgstr "Un canal genérico de Internet Relay Chat para todo lo relacionado con Luanti donde las personas pueden reunirse para discutir en tiempo real. Si no entiendes el IRC, consulta la Wiki de la comunidad para obtener ayuda."
+msgid "A generic Internet Relay Chat channel for everything related to Luanti where people can meet to discuss in real-time. If you do not understand IRC, see the Luanti Documentation for help."
+msgstr ""
 
 msgid "Basics"
 msgstr "Conceptos básicos"
@@ -1375,8 +1375,8 @@ msgstr "Términos técnicos:"
 msgid "• Luanti: This game engine"
 msgstr "• Luanti: Este motor de juego"
 
-msgid "• Minetest Game: A game for Luanti by the Minetest developers"
-msgstr "• Minetest Game: Un juego para Luanti de los desarrolladores de Minetest"
+msgid "• Minetest Game: A game for Luanti by the Luanti developers"
+msgstr ""
 
 msgid "• Game: A complete playing experience to be used in Luanti; such as a game or sandbox or similar"
 msgstr "• Juego: Una experiencia de juego completa para ser utilizada en Luanti; como un juego o sandbox o similar"
@@ -1402,6 +1402,6 @@ msgstr "Una característica fundamental de Luanti es la capacidad de modificaci�
 msgid "Luanti can be played alone or online together with multiple players. Online play will work out of the box with any mods, with no need for additional software as they are entirely provided by the server."
 msgstr "Luanti se puede jugar solo o en línea con varios jugadores. El juego en línea funciona de inmediato con cualquier mod, sin necesidad de software adicional, ya que todo lo proporciona el servidor."
 
-msgid "MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Minetest however, that can be installed from the main menu content browser."
-msgstr "MineClonia es un juego que se basa en el motor de Luanti y que pretende crear un juego lo más parecido posible a Minecraft. Sin embargo, hay muchos otros juegos para Minetest que se pueden instalar desde el navegador de contenido del menú principal."
+msgid "MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Luanti however, that can be installed from the main menu content browser."
+msgstr ""
 

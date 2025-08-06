@@ -41,7 +41,7 @@ msgid "Commands:"
 msgstr ""
 
 msgid "Help"
-msgstr ""
+msgstr "Aiuto"
 
 msgid "Command Block"
 msgstr "Blocco comandi"

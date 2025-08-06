@@ -25,6 +25,8 @@
 * Ælla Chiana Moskopp
 * Raylight
 * Miguel_PL
+* Mikita Wiśniewski
+* WillConker
 
 ## Previous Contributors
 * Lizzy Fleckenstein
@@ -125,6 +127,7 @@
 * Wbjitscool
 * SmokeyDope
 * pixelzone
+* Miguel P.L
 
 ## Translations
 * Wuzzy

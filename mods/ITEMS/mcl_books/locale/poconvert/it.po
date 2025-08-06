@@ -38,7 +38,7 @@ msgid "Sign"
 msgstr "Cartello"
 
 msgid "Done"
-msgstr ""
+msgstr "Fatto"
 
 msgid "Book and Quill"
 msgstr ""

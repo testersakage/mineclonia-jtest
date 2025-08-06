@@ -36,7 +36,6 @@ core.register_on_joinplayer(function(player)
 		lastPos = player:get_pos(),
 		sprintDistance = 0,
 		fov = 1.0,
-		channel = core.mod_channel_join("mcl_sprint:" .. playerName),
 	}
 end)
 core.register_on_leaveplayer(function(player)

@@ -14,19 +14,19 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Cherry Bark"
-msgstr ""
+msgstr "Kora wiśni"
 
 msgid "Cherry Bark Slab"
-msgstr ""
+msgstr "Płyta z wiśniowej kory"
 
 msgid "Cherry Bark Stairs"
-msgstr ""
+msgstr "Schody z wiśniowej kory"
 
 msgid "Cherry Boat"
-msgstr ""
+msgstr "Wiśniowa łódź"
 
 msgid "Cherry Button"
-msgstr ""
+msgstr "Wiśniowy przycisk"
 
 msgid "Cherry Chest Boat"
 msgstr ""
@@ -74,14 +74,14 @@ msgid "Stripped Cherry Bark"
 msgstr ""
 
 msgid "Stripped Cherry Log"
-msgstr ""
+msgstr "Okorowana kłoda wiśni"
 
 msgid "The stripped trunk of an Cherry tree."
-msgstr ""
+msgstr "Okorowany pień drzewa wiśniowego."
 
 msgid "The stripped wood of an Cherry tree."
-msgstr ""
+msgstr "Okorowane drewno drzewa wiśniowego."
 
 msgid "The trunk of a Cherry tree."
-msgstr ""
+msgstr "Pień drzewa wiśniowego."
 

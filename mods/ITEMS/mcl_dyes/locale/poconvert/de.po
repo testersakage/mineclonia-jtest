@@ -32,7 +32,7 @@ msgid "Cyan Dye"
 msgstr "Türkiser Farbstoff"
 
 msgid "Green Dye"
-msgstr ""
+msgstr "Grüner Farbstoff"
 
 msgid "Grey Dye"
 msgstr "Grauer Farbstoff"
@@ -59,11 +59,11 @@ msgid "Purple Dye"
 msgstr "Violetter Farbstoff"
 
 msgid "Red Dye"
-msgstr ""
+msgstr "Roter Farbstoff"
 
 msgid "White Dye"
 msgstr "Weißer Farbstoff"
 
 msgid "Yellow Dye"
-msgstr ""
+msgstr "Gelbe Farbstoff"
 

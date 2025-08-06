@@ -43,3 +43,15 @@ msgstr "Witherskelettschädel"
 msgid "A wither skeleton skull is a small decorative block which resembles the skull of a wither skeleton. It can also be worn as a helmet for fun, but does not offer any protection."
 msgstr "Ein Witherskelettschädel ist ein kleiner dekorativer Block, der so wie ein Schädel eines Witherskeletts aussieht. Er kann auch als Helm zum Spaß getragen werden, aber er bietet keinerlei Schutz."
 
+msgid "Piglin Head"
+msgstr ""
+
+msgid "A piglin head is a small decorative block which resembles the head of a piglin. It can also be worn as a helmet, which reduces the detection range of piglins by 50%."
+msgstr ""
+
+msgid "Dragon Head"
+msgstr ""
+
+msgid "A dragon head is a decorative block which resembles the head of a dragon. It can also be worn as a helmet."
+msgstr ""
+

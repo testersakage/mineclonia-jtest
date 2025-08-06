@@ -23,118 +23,122 @@ msgid "Time to Mine!"
 msgstr "Hora de Minerar!"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
-msgstr ""
+msgstr "Use uma mesa de trabalho para fazer uma picareta de madeira com gravetos e tábuas de madeira."
 
 msgid "Hot Topic"
 msgstr "Assunto Quente"
 
 msgid "Use 8 cobblestones to craft a furnace."
-msgstr ""
+msgstr "Use 8 pedregulhos para fazer uma fornalha."
 
 msgid "Time to Farm!"
 msgstr "Hora de Plantar!"
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
-msgstr ""
+msgstr "Use uma mesa de trabalho para fazer uma enxada de madeira de tábuas de madeira e gravetos."
 
 msgid "Bake Bread"
 msgstr "Assar Pão"
 
 msgid "Use wheat to craft a bread."
-msgstr ""
+msgstr "Use trigo para fazer um pão."
 
 msgid "The Lie"
 msgstr "A Mentira"
 
 msgid "Craft a cake using wheat, sugar, milk and an egg."
-msgstr ""
+msgstr "Faça um bolo usando trigo, açúcar, leite e ovos."
 
 msgid "Getting an Upgrade"
 msgstr "Aprimorando"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
-msgstr ""
+msgstr "Crie uma picareta de pedra usando gravetos e pedregulhos."
 
 msgid "Time to Strike!"
 msgstr "Hora de Atacar!"
 
 msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
-msgstr ""
+msgstr "Faça uma espada de madeira usando tábuas de madeira e gravetos em uma mesa de trabalho."
 
 msgid "Librarian"
 msgstr "Bibliotecário"
 
 msgid "Craft a bookshelf."
-msgstr ""
+msgstr "Faça uma estante de livros."
 
 msgid "Isn't It Iron Pick"
 msgstr "Ferrou!"
 
 msgid "Craft a iron pickaxe using sticks and iron."
-msgstr ""
+msgstr "Crie uma picareta de ferro usando gravetos e lingotes de ferro."
 
 msgid "DIAMONDS!"
 msgstr "DIAMANTES!"
 
 msgid "Pick up a diamond from the floor."
-msgstr ""
+msgstr "Pegue um diamante do chão."
 
 msgid "Into Fire"
 msgstr "Brincando com o fogo"
 
 msgid "Pick up a blaze rod from the floor."
-msgstr ""
+msgstr "Colete uma vara de blaze do chão."
 
 msgid "Cow Tipper"
 msgstr "Tombador de Vacas"
 
 msgid "Pick up leather from the floor.\n"
 "Hint: Cows and some other animals have a chance to drop leather, when killed."
-msgstr ""
+msgstr "Colete couro do chão.\n"
+"Dica: Vacas e outros animais possuem uma chance de deixar couro quando mortos."
 
 msgid "Getting Wood"
 msgstr "Apanhando Madeira"
 
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
-msgstr ""
+msgstr "Colete madeira do chão.\n"
+"Dica: bata em uma árvore até que ela caia como um item."
 
 msgid "Who is Cutting Onions?"
 msgstr "Quem tá cortando cebola?"
 
 msgid "Pick up a crying obsidian from the floor."
-msgstr ""
+msgstr "Colete uma Obsidiana Chorona do chão."
 
 msgid "Hidden in the Depths"
 msgstr "Adeus, diamantes!"
 
 msgid "Pick up an Ancient Debris from the floor."
-msgstr ""
+msgstr "Colete um Detrito Ancestral do chão."
 
 msgid "The Next Generation"
 msgstr "A nova geração"
 
 msgid "Hold the Dragon Egg.\n"
 "Hint: Pick up the egg from the ground and have it in your inventory."
-msgstr ""
+msgstr "Segure o Ovo de Dragão.\n"
+"Dica: Colete o ovo do chão e tenha-o em seu inventário."
 
 msgid "Sky's the Limit"
 msgstr "Ao infinito... e além!"
 
 msgid "Find the elytra and prepare to fly above and beyond!"
-msgstr ""
+msgstr "Encontre os élitros e prepare-se para voar ao infinito e além!"
 
 msgid "Acquire Hardware"
 msgstr "A Idade do Ferro"
 
 msgid "Take an iron ingot from a furnace's output slot.\n"
 "Hint: To smelt an iron ingot, put a fuel (like coal) and iron ore into a furnace."
-msgstr ""
+msgstr "Obtenha um lingote de ferro do slot de saída da fornalha.\n"
+"Dica: para derreter um lingote de ferro, coloque um combustível (como carvão) e o minério de ferro em uma fornalha."
 
 msgid "Delicious Fish"
 msgstr "Pescaria Produtiva"
 
-msgid "Take a cooked fish from a furnace.\n"
+msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
 msgstr ""
 

@@ -14,77 +14,77 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "This is the help."
-msgstr ""
+msgstr "Це допомога."
 
 msgid "All help entries revealed!"
-msgstr ""
+msgstr "Усі підказки розкрито!"
 
 msgid "All help entries are already revealed."
-msgstr ""
+msgstr "Усі підказки вже розкрито."
 
 msgid "Category list"
-msgstr ""
+msgstr "Список категорій"
 
 msgid "Entry list"
-msgstr ""
+msgstr "Список записів"
 
 msgid "Entry"
-msgstr ""
+msgstr "Запис"
 
 msgid "Error: No help available."
-msgstr ""
+msgstr "Помилка: Немає доступної допомоги."
 
 msgid "No categories have been registered, but they are required to provide help."
-msgstr ""
+msgstr "Немає зареєстрованих категорій, проте вони необхідні для надання допомоги."
 
 msgid "The Documentation System [doc] does not come with help contents on its own, it needs additional mods to add help content. Please make sure such mods are enabled on for this world, and try again."
-msgstr ""
+msgstr "Система документації [doc] не містить власного довідкового контенту, для додавання довідки потрібні додаткові модифікації. Будь ласка, переконайтеся, що такі модифікації ввімкнені для цього світу, і спробуйте знову."
 
 msgid "Recommended mods: doc_basics, doc_items, doc_identifier, doc_encyclopedia."
-msgstr ""
+msgstr "Рекомендовані модифікації: doc_basics, doc_items, doc_identifier, doc_encyclopedia."
 
 msgid "Error: Access denied."
-msgstr ""
+msgstr "Помилка: Доступ заборонено."
 
 msgid "Access to the requested entry has been denied; this entry is secret. You may unlock access by progressing in the game. Figure out on your own how to unlock this entry."
-msgstr ""
+msgstr "Доступ до запитуваного запису заборонено; цей запис є секретним. Ви можете розблокувати доступ, прогресуючи в грі. З'ясуйте самостійно, як розблокувати цей запис."
 
 msgid "Nameless entry (@1)"
-msgstr ""
+msgstr "Безіменний запис (@1)"
 
 msgid "Help > @1"
-msgstr ""
+msgstr "Допомога > @1"
 
 msgid "Currently all entries in this category are hidden from you."
-msgstr ""
+msgstr "Наразі всі записи в цій категорії приховані від вас."
 
 msgid "Unlock new entries by progressing in the game."
-msgstr ""
+msgstr "Розблокуйте нові записи, прогресуючи в грі."
 
 msgid "Number of entries: @1"
-msgstr ""
+msgstr "Кількість записів: @1"
 
 msgid "New entries: @1"
-msgstr ""
+msgstr "Нові записи: @1"
 
 msgid "Hidden entries: @1"
-msgstr ""
+msgstr "Приховані записи: @1"
 
 msgid "Help > @1 > (No Entry)"
-msgstr ""
+msgstr "Допомога > @1 > (Немає Запису)"
 
 msgid "Help > @1 > @2"
-msgstr ""
+msgstr "Допомога > @1 > @2"
 
 msgid "Open a window providing help entries about Minetest and more"
-msgstr ""
+msgstr "Відкрити вікно з довідковими записами про Minetest та інше"
 
 msgid "Help"
 msgstr "Допомога"
 
 msgid "Allows you to reveal all hidden help entries with /help_reveal"
-msgstr ""
+msgstr "Дозволяє розкрити всі приховані записи довідки за допомогою команди /help_reveal"
 
 msgid "Reveal all hidden help entries to you"
-msgstr ""
+msgstr "Розкрити всі приховані записи довідки для вас"
 

@@ -199,13 +199,22 @@ function mcl_worlds.chunk_inhabited_time (pos)
 	return mod_storage:get_float (chunkstring)
 end
 
-function mcl_worlds.tick_chunk_inhabited_time (pos, dtime)
+function mcl_worlds.tick_chunk_inhabited_time (pos, player, dtime)
+	if core.check_player_privs (player, "no_regional_difficulty") then
+		return
+	end
 	local chunk_x = math.floor (round_trunc (pos.x) / 16)
 	local chunk_z = math.floor (round_trunc (pos.z) / 16)
 	local chunkstring = id_dimension (pos.y) .. chunk_x .. "," .. chunk_z
 	local time = mod_storage:get_float (chunkstring) + dtime
 	mod_storage:set_float (chunkstring, time)
 end
+
+core.register_privilege ("no_regional_difficulty", {
+	description = "Exempt players from increasing the regional difficulty of chunks they inhabit",
+	give_to_singleplayer = false,
+	give_to_admin = false,
+})
 
 ------------------------------------------------------------------------
 -- Local difficulty computation.

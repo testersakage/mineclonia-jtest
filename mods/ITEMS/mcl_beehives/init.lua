@@ -46,8 +46,8 @@ local honey_harvest = function(pos, node, player, itemstack)
 		node.name = original_block
 		core.swap_node(pos, node)
 	end
-
-	return itemstack
+	return mcl_util.return_itemstack_if_alive(player, itemstack)
+	-- returning the old itemstack here would result in it still being in hand *after* death
 end
 
 -- Dig Function for Beehives
@@ -92,7 +92,6 @@ core.register_node("mcl_beehives:beehive", {
 	paramtype2 = "facedir",
 	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, beehive = 1, unmovable_by_piston = 1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
 	_mcl_burntime = 15,
 	drop = "",
@@ -113,7 +112,6 @@ for l = 1, 4 do
 		paramtype2 = "facedir",
 		groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, not_in_creative_inventory = 1, beehive = 1, honey_level = l, unmovable_by_piston = 1},
 		sounds = mcl_sounds.node_sound_wood_defaults(),
-		_mcl_blast_resistance = 0.6,
 		_mcl_hardness = 0.6,
 		_mcl_baseitem = "mcl_beehives:beehive",
 		drop = "",
@@ -132,7 +130,6 @@ core.register_node("mcl_beehives:beehive_5", {
 	paramtype2 = "facedir",
 	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, not_in_creative_inventory = 1, beehive = 1, honey_level = 5 },
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
 	_mcl_baseitem = "mcl_beehives:beehive",
 	on_rightclick = honey_harvest,
@@ -152,7 +149,6 @@ core.register_node("mcl_beehives:bee_nest", {
 	paramtype2 = "facedir",
 	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, bee_nest = 1 },
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	_mcl_blast_resistance = 0.3,
 	_mcl_hardness = 0.3,
 	_mcl_burntime = 15,
 	drop = "",
@@ -173,7 +169,6 @@ for i = 1, 4 do
 		paramtype2 = "facedir",
 		groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, not_in_creative_inventory = 1, bee_nest = 1, honey_level = i },
 		sounds = mcl_sounds.node_sound_wood_defaults(),
-		_mcl_blast_resistance = 0.3,
 		_mcl_hardness = 0.3,
 		_mcl_baseitem = "mcl_beehives:bee_nest",
 		drop = "",
@@ -192,7 +187,6 @@ core.register_node("mcl_beehives:bee_nest_5", {
 	paramtype2 = "facedir",
 	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, not_in_creative_inventory = 1, bee_nest = 1, honey_level = 5 },
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	_mcl_blast_resistance = 0.3,
 	_mcl_hardness = 0.3,
 	_mcl_honey_level = 5,
 	_mcl_baseitem = "mcl_beehives:bee_nest",

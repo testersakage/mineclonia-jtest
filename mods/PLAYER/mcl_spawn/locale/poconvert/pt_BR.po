@@ -23,5 +23,5 @@ msgid "Couldn't get level of your respawn anchor!"
 msgstr "Não foi possível nivelar sua âncora de renascimento!"
 
 msgid "Your spawn bed was missing or blocked, and you had no charged respawn anchor!"
-msgstr "Sua cama está faltando ou foi bloqueada, e você não carregou sua âncora de renascimento."
+msgstr "Sua cama foi destruída ou obstruída, e você não possui uma âncora de renascimento carregada!"
 

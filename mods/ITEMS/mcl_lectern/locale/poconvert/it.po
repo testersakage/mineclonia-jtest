@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Done"
-msgstr ""
+msgstr "Fatto"
 
 msgid "Take Book"
-msgstr ""
+msgstr "Prendi il libro"
 
 msgid "Lectern"
 msgstr "Leggio"

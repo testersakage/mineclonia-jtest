@@ -89,7 +89,7 @@ msgid "Milk"
 msgstr "Latte"
 
 msgid "Removes all status effects"
-msgstr ""
+msgstr "Rimuove tutti gli effetti di stato"
 
 msgid "Milk is very refreshing and can be obtained by using a bucket on a cow. Drinking it will remove all status effects, but restores no hunger points."
 msgstr ""
@@ -101,7 +101,7 @@ msgid "Spider Eye"
 msgstr "Occhio di ragno"
 
 msgid "Poisonous"
-msgstr ""
+msgstr "Velenoso"
 
 msgid "Spider eyes are used mainly in crafting. If you're really desperate, you can eat a spider eye, but it will poison you briefly."
 msgstr ""

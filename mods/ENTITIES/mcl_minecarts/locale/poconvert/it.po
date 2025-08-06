@@ -38,7 +38,7 @@ msgid "If it moves over a powered activator rail, you'll get ejected."
 msgstr ""
 
 msgid "Sneak to dismount"
-msgstr "Accovacciarsi per scendere"
+msgstr "Accovacciati per scendere"
 
 msgid "Minecart with Chest"
 msgstr "Vagonetto con baule"

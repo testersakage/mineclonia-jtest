@@ -102,7 +102,7 @@ function mcl_lanterns.register_lantern(name, def)
 	groups.attaches_to_top = 1
 	groups.attaches_to_base = 1
 
-	core.register_node(itemstring_floor, {
+	core.register_node(":"..itemstring_floor, {
 		description = def.description,
 		_doc_items_longdesc = def.longdesc,
 		drawtype = "mesh",
@@ -186,10 +186,9 @@ function mcl_lanterns.register_lantern(name, def)
 		end,
 		on_rotate = false,
 		_mcl_hardness = 3.5,
-		_mcl_blast_resistance = 3.5,
 	})
 
-	core.register_node(itemstring_ceiling, {
+	core.register_node(":"..itemstring_ceiling, {
 		description = def.description,
 		_doc_items_create_entry = false,
 		drawtype = "mesh",
@@ -228,7 +227,6 @@ function mcl_lanterns.register_lantern(name, def)
 		sounds = sounds,
 		on_rotate = false,
 		_mcl_hardness = 3.5,
-		_mcl_blast_resistance = 3.5,
 	})
 end
 

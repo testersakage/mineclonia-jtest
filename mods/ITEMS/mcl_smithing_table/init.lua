@@ -6,19 +6,6 @@ local C = core.colorize
 
 mcl_smithing_table = {}
 
-local smithing_materials = {
-	["mcl_nether:netherite_ingot"] = "netherite",
-	["mcl_core:diamond"] = "diamond",
-	["mcl_core:lapis"] = "lapis",
-	["mcl_amethyst:amethyst_shard"]	= "amethyst",
-	["mcl_redstone:redstone"]= "redstone",
-	["mcl_core:iron_ingot"] = "iron",
-	["mcl_core:gold_ingot"] = "gold",
-	["mcl_copper:copper_ingot"] = "copper",
-	["mcl_core:emerald"] = "emerald",
-	["mcl_nether:quartz"] = "quartz"
-}
-
 ---Function to upgrade diamond tool/armor to netherite tool/armor
 function mcl_smithing_table.upgrade_item(itemstack)
 	local def = itemstack:get_definition()
@@ -96,24 +83,20 @@ local achievement_trims = {
 	["mcl_armor:wayfinder"] = true
 }
 
-function mcl_smithing_table.upgrade_trimmed(itemstack, color_mineral, template)
-	--get information required
-	local material_name = color_mineral:get_name()
-	material_name = smithing_materials[material_name]
-
+function mcl_smithing_table.upgrade_trimmed(itemstack, trim_material, template)
 	local overlay = template:get_name():gsub("mcl_armor:","")
-
 	--trimming process
 	if core.get_item_group(template:get_name(), "smithing_template") > 0 then
-		mcl_armor.trim(itemstack, overlay, material_name)
+		mcl_armor.trim(itemstack, overlay, trim_material)
 		tt.reload_itemstack_description(itemstack)
 	end
 
 	return itemstack
 end
 
-function mcl_smithing_table.is_smithing_mineral(itemname)
-	return smithing_materials[itemname] ~= nil
+function mcl_smithing_table.is_smithing_mineral(itemstack)
+	local color = itemstack:get_definition()._mcl_armor_trim_color
+	return type(color) == "string" and color:match("^#%x%x%x%x%x%x$") ~= nil
 end
 
 local function reset_upgraded_item(pos)
@@ -128,7 +111,7 @@ local function reset_upgraded_item(pos)
 
 	if inv:get_stack("mineral", 1):get_name() == "mcl_nether:netherite_ingot" and upgrade_template_present then
 		upgraded_item = mcl_smithing_table.upgrade_item(inv:get_stack("upgrade_item", 1))
-	elseif template_present and is_armor and not is_trimmed and mcl_smithing_table.is_smithing_mineral(inv:get_stack("mineral", 1):get_name()) then
+	elseif template_present and is_armor and not is_trimmed and mcl_smithing_table.is_smithing_mineral(inv:get_stack("mineral", 1)) then
 		upgraded_item = mcl_smithing_table.upgrade_trimmed(inv:get_stack("upgrade_item", 1),inv:get_stack("mineral", 1),inv:get_stack("template", 1))
 	end
 
@@ -138,7 +121,7 @@ end
 local function sort_stack(stack, _)
 	if core.get_item_group(stack:get_name(), "smithing_template") > 0 or core.get_item_group(stack:get_name(), "upgrade_template") > 0 then
 		return "template"
-	elseif mcl_smithing_table.is_smithing_mineral(stack:get_name()) then
+	elseif mcl_smithing_table.is_smithing_mineral(stack) then
 		return "mineral"
 	elseif (core.get_item_group(stack:get_name(),"armor") > 0
 			or core.get_item_group(stack:get_name(),"tool") > 0
@@ -197,7 +180,7 @@ core.register_node("mcl_smithing_table:table", {
 				r = stack:get_count()
 			end
 		elseif listname == "mineral" then
-			if mcl_smithing_table.is_smithing_mineral(stack:get_name()) then
+			if mcl_smithing_table.is_smithing_mineral(stack) then
 				r= stack:get_count()
 			end
 		elseif listname == "template" then
@@ -294,7 +277,6 @@ core.register_node("mcl_smithing_table:table", {
 		reset_upgraded_item(pos)
 	end,
 
-	_mcl_blast_resistance = 2.5,
 	_mcl_hardness = 2.5,
 	_mcl_burntime = 15
 })

@@ -14,13 +14,13 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Redstone Repeater"
-msgstr "Ripetitore di redstone"
+msgstr "Ripetitore di pietrarossa"
 
 msgid "Redstone Repeater (Delay @1)"
-msgstr ""
+msgstr "Ripetitore di pietrarossa (ritardo @1)"
 
 msgid "Transmits redstone power only in one direction"
-msgstr "Trasmette la corrente di pietrarossa in una sola direzione"
+msgstr "Trasmette la corrente pietrarossa in una sola direzione"
 
 msgid "Delays signal"
 msgstr "Ritarda un segnale"

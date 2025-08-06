@@ -77,10 +77,10 @@ msgid "Play a sound. Arguments: <sound>: name of the sound. <target>: Target."
 msgstr "播放聲音。參數 <sound>：聲音名稱：參數 <target>：目標玩家。"
 
 msgid "Sound name is invalid!"
-msgstr ""
+msgstr "無效的聲音名稱！"
 
 msgid "Target is invalid!!"
-msgstr ""
+msgstr "無效的目標！"
 
 msgid "Only peaceful mobs allowed!"
 msgstr "只允許和平生物！"

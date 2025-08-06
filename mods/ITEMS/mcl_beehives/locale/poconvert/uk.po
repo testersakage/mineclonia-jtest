@@ -14,13 +14,13 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Beehive"
-msgstr ""
+msgstr "Бджолиний вулик"
 
 msgid "Artificial bee nest."
-msgstr ""
+msgstr "Штучне бджолине гніздо."
 
 msgid "Bee Nest"
-msgstr ""
+msgstr "Бджолине гніздо"
 
 msgid "A naturally generating block that houses bees and a tasty treat...if you can get it."
 msgstr ""

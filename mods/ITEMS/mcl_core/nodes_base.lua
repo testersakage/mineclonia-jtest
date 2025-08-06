@@ -40,7 +40,6 @@ core.register_node("mcl_core:stone_with_coal", {
 	groups = {pickaxey=1, building_block=1, material_stone=1, xp=1, blast_furnace_smeltable=1},
 	drop = "mcl_core:coal_lump",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
@@ -54,7 +53,6 @@ core.register_node("mcl_core:stone_with_iron", {
 	groups = {pickaxey=3, building_block=1, material_stone=1, blast_furnace_smeltable=1},
 	drop = "mcl_raw_ores:raw_iron",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
@@ -69,7 +67,6 @@ core.register_node("mcl_core:stone_with_gold", {
 	groups = {pickaxey=4, building_block=1, material_stone=1, blast_furnace_smeltable=1, piglin_protected=1},
 	drop = "mcl_raw_ores:raw_gold",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
@@ -107,7 +104,6 @@ core.register_node("mcl_core:stone_with_redstone", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_punch = redstone_ore_activate,
 	on_walk_over = redstone_ore_activate, -- Uses walkover mod
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = {
@@ -156,7 +152,6 @@ core.register_node("mcl_core:stone_with_redstone_lit", {
 		local nodedef = core.registered_nodes[core.get_node(pos).name]
 		core.swap_node(pos, {name=nodedef._mcl_ore_unlit})
 	end,
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = {"mcl_core:stone_with_redstone"},
 	_mcl_fortune_drop = {
@@ -185,7 +180,6 @@ core.register_node("mcl_core:stone_with_lapis", {
 		}
 	},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
@@ -199,7 +193,6 @@ core.register_node("mcl_core:stone_with_emerald", {
 	groups = {pickaxey=4, building_block=1, material_stone=1, xp=6, blast_furnace_smeltable=1},
 	drop = "mcl_core:emerald",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
@@ -213,7 +206,6 @@ core.register_node("mcl_core:stone_with_diamond", {
 	groups = {pickaxey=4, building_block=1, material_stone=1, xp=4, blast_furnace_smeltable=1},
 	drop = "mcl_core:diamond",
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = mcl_core.fortune_drop_ore,
@@ -380,7 +372,6 @@ core.register_node("mcl_core:dirt_with_grass", {
 		return mcl_core.on_snowable_construct(pos)
 	end,
 	_mcl_snowed = "mcl_core:dirt_with_grass_snow",
-	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
 	_mcl_silk_touch_drop = true,
 	_on_bone_meal = mcl_core.bone_meal_grass,
@@ -405,8 +396,7 @@ core.register_node("mcl_core:grass_path", {
 	sounds = mcl_sounds.node_sound_dirt_defaults({
 		footstep = {name="default_grass_footstep", gain=0.1},
 	}),
-	_mcl_blast_resistance = 0.65,
-	_mcl_hardness = 0.6,
+	_mcl_hardness = 0.65,
 })
 
 core.register_node("mcl_core:mycelium", {
@@ -422,7 +412,6 @@ core.register_node("mcl_core:mycelium", {
 	on_construct = mcl_core.on_snowable_construct,
 	_on_shovel_place = mcl_core.make_dirtpath,
 	_mcl_snowed = "mcl_core:mycelium_snow",
-	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
 	_mcl_silk_touch_drop = true,
 })
@@ -468,7 +457,6 @@ core.register_node("mcl_core:podzol", {
 	on_construct = mcl_core.on_snowable_construct,
 	_on_shovel_place = mcl_core.make_dirtpath,
 	_mcl_snowed = "mcl_core:podzol_snow",
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	_mcl_silk_touch_drop = true,
 })
@@ -482,7 +470,7 @@ core.register_node("mcl_core:dirt", {
 	groups = {handy=1, shovely=1, dirt=1, soil=1, soil_sapling=2, soil_sugarcane=1, soil_bamboo=1, soil_fungus=1, cultivatable=2, enderman_takable=1, building_block=1, converts_to_moss=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_on_shovel_place = mcl_core.make_dirtpath,
-	_mcl_blast_resistance = 0.5,
+	_on_bottle_place = 	mcl_core.bottle_dirt,
 	_mcl_hardness = 0.5,
 })
 
@@ -493,7 +481,7 @@ core.register_node("mcl_core:coarse_dirt", {
 	groups = { handy=1, shovely=1, dirt=3, soil=1, soil_sugarcane=1, soil_bamboo=1, soil_fungus=1, cultivatable=1, enderman_takable=1, building_block=1, soil_sapling=2, converts_to_moss=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_on_shovel_place = mcl_core.make_dirtpath,
-	_mcl_blast_resistance = 0.5,
+	_on_bottle_place = 	mcl_core.bottle_dirt,
 	_mcl_hardness = 0.5,
 })
 
@@ -510,7 +498,6 @@ core.register_node("mcl_core:gravel", {
 		}
 	},
 	sounds = mcl_sounds.node_sound_gravel_defaults(),
-	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = {
@@ -540,7 +527,6 @@ core.register_node("mcl_core:sand", {
 	tiles = {"default_sand.png"},
 	groups = {handy=1,shovely=1, falling_node=1, sand=1, soil_sugarcane=1, soil_bamboo = 1, enderman_takable=1, building_block=1, material_sand=1},
 	sounds = mcl_sounds.node_sound_sand_defaults(),
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	_mcl_cooking_output = "mcl_core:glass",
 	_mcl_crafting_output = {square2 = {output = "mcl_core:sandstone"}}
@@ -553,7 +539,6 @@ core.register_node("mcl_core:sandstone", {
 	tiles = {"mcl_core_sandstone_top.png", "mcl_core_sandstone_bottom.png", "mcl_core_sandstone_normal.png"},
 	groups = {pickaxey=1, sandstone=1, normal_sandstone=1, building_block=1, material_stone=1, stonecuttable = 1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_cooking_output = "mcl_core:sandstonesmooth2",
 	_mcl_crafting_output = {square2 = {output = "mcl_core:sandstonesmooth 4"}}
@@ -578,7 +563,6 @@ core.register_node("mcl_core:sandstonecarved", {
 	is_ground_content = false,
 	groups = {pickaxey=1, sandstone=1, normal_sandstone=1, building_block=1, material_stone=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_core:sandstone" },
 })
@@ -604,7 +588,6 @@ core.register_node("mcl_core:redsand", {
 	tiles = {"mcl_core_red_sand.png"},
 	groups = {handy=1,shovely=1, falling_node=1, sand=1, soil_sugarcane=1, soil_bamboo = 1, enderman_takable=1, building_block=1, material_sand=1},
 	sounds = mcl_sounds.node_sound_sand_defaults(),
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	_mcl_cooking_output = "mcl_core:glass",
 	_mcl_crafting_output = {square2 = {output = "mcl_core:redsandstone"}}
@@ -616,7 +599,6 @@ core.register_node("mcl_core:redsandstone", {
 	tiles = {"mcl_core_red_sandstone_top.png", "mcl_core_red_sandstone_bottom.png", "mcl_core_red_sandstone_normal.png"},
 	groups = {pickaxey=1, sandstone=1, red_sandstone=1, building_block=1, material_stone=1, stonecuttable = 1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_cooking_output = "mcl_core:redsandstonesmooth2",
 	_mcl_crafting_output = {square2 = {output = "mcl_core:redsandstonesmooth 4"}}
@@ -629,7 +611,6 @@ core.register_node("mcl_core:redsandstonesmooth", {
 	is_ground_content = false,
 	groups = {pickaxey=1, sandstone=1, red_sandstone=1, building_block=1, material_stone=1, stonecuttable=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_core:redsandstone" },
 })
@@ -641,7 +622,6 @@ core.register_node("mcl_core:redsandstonecarved", {
 	is_ground_content = false,
 	groups = {pickaxey=1, sandstone=1, red_sandstone=1, building_block=1, material_stone=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_core:redsandstone" },
 })
@@ -653,7 +633,6 @@ core.register_node("mcl_core:redsandstonesmooth2", {
 	is_ground_content = false,
 	groups = {pickaxey=1, sandstone=1, red_sandstone=1, building_block=1, material_stone=1, stonecuttable=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 0.8,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_core:redsandstone" },
 })
@@ -668,7 +647,6 @@ core.register_node("mcl_core:clay", {
 	groups = {handy=1,shovely=1, enderman_takable=1, building_block=1},
 	drop = "mcl_core:clay_lump 4",
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
-	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
 	_mcl_silk_touch_drop = true,
 	_mcl_cooking_output = "mcl_colorblocks:hardened_clay"
@@ -806,7 +784,6 @@ core.register_node("mcl_core:lapisblock", {
 	is_ground_content = false,
 	groups = {pickaxey=3, building_block=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 3,
 	_mcl_hardness = 3,
 	_mcl_crafting_output = {single = {output = "mcl_core:lapis 9"}}
 })
@@ -865,7 +842,6 @@ core.register_node("mcl_core:ice", {
 	after_dig_node = function(pos)
 		mcl_core.melt_ice(pos)
 	end,
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	_mcl_silk_touch_drop = true,
 	_mcl_crafting_output = {square3 = {output = "mcl_core:packed_ice"}}
@@ -878,7 +854,6 @@ core.register_node("mcl_core:packed_ice", {
 	groups = {handy=1,pickaxey=1, slippery=3, building_block=1, ice=1},
 	drop = "",
 	sounds = mcl_sounds.node_sound_ice_defaults(),
-	_mcl_blast_resistance = 0.5,
 	_mcl_hardness = 0.5,
 	_mcl_silk_touch_drop = true,
 })
@@ -942,7 +917,6 @@ for i=0,3 do
 			local timer = core.get_node_timer(pos)
 			timer:start(1.5)
 		end,
-		_mcl_blast_resistance = 0.5,
 		_mcl_hardness = 0.5,
 	})
 
@@ -1062,7 +1036,6 @@ for i=1,8 do
 		on_place = on_place,
 		after_destruct = mcl_core.after_snow_destruct,
 		drop = "mcl_throwing:snowball "..(i+1),
-		_mcl_blast_resistance = 0.1,
 		_mcl_hardness = 0.1,
 		_mcl_silk_touch_drop = {"mcl_core:snow " .. i},
 	})
@@ -1078,7 +1051,6 @@ core.register_node("mcl_core:snowblock", {
 	on_construct = mcl_core.on_snow_construct,
 	after_destruct = mcl_core.after_snow_destruct,
 	drop = "mcl_throwing:snowball 4",
-	_mcl_blast_resistance = 0.1,
 	_mcl_hardness = 0.1,
 	_mcl_silk_touch_drop = true,
 })

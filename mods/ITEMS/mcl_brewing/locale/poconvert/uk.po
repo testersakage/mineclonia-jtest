@@ -17,7 +17,7 @@ msgid "Brewing Stand"
 msgstr ""
 
 msgid "Inventory"
-msgstr ""
+msgstr "Інвентар"
 
 msgid "To use a brewing stand, rightclick it."
 msgstr ""

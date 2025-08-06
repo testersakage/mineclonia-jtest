@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Sneak to dismount"
-msgstr "Accovacciarsi per scendere"
+msgstr "Accovacciati per scendere"
 
 msgid "Boats are used to travel on the surface of water."
-msgstr "Le barche sono utilizzate per viaggiare sulla superfice dell'acqua."
+msgstr "Le barche sono utilizzate per viaggiare sulla superficie dell'acqua."
 
 msgid "Rightclick on a water source to place the boat. Rightclick the boat to enter it. Use [Left] and [Right] to steer, [Forwards] to speed up and [Backwards] to slow down or move backwards. Use [Sneak] to leave the boat, punch the boat to make it drop as an item."
 msgstr "Clicca col tasto destro su una sorgente d'acqua per piazzare la barca. Clicca col tasto destro per entrarci. Utilizza [Sinistra] e [Destra] per governare, [Avanti] per accelerare ed [Indietro] per rallentare od indietreggiare. Utilizza [Accovacciati] per uscire dalla barca, colpiscila per causarne la caduta come elemento."

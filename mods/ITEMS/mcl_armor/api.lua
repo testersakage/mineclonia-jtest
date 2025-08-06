@@ -18,12 +18,58 @@ function mcl_armor.play_equip_sound(stack, obj, pos, unequip)
 	end
 end
 
+function mcl_armor.head_entity_equip(obj)
+	local luaentity = obj:get_luaentity()
+	local entity_name = luaentity and luaentity.name or nil
+	local inv, head
+
+	if entity_name == "mcl_armor_stand:armor_entity"
+		or obj:is_player() then
+		inv = mcl_util.get_inventory(obj, true)
+		head = inv:get_stack("armor", 2)
+	else
+		inv = luaentity.armor_list
+		if not inv then return end
+		head = ItemStack(inv["head"])
+	end
+
+	local def = core.registered_nodes[head:get_name()]
+	if def and def._mcl_armor_entity ~= nil then
+		local entity = core.add_entity(obj:get_pos(), def._mcl_armor_entity)
+		if not entity then return end
+		entity:set_properties({is_visible = true})
+		if obj:is_player() then
+			entity:set_attach(obj, "Head", {x=0, y=4, z=0}, {x=0, y=0, z=0})
+			mcl_armor.head_entity[obj:get_player_name()] = entity
+		else
+			-- TODO: rename all mobs head bone to "Head"
+			local bone = entity_name ~= "mcl_armor_stand:armor_entity" and "Head" or ""
+			local offset = entity_name ~= "mcl_armor_stand:armor_entity" and 4.3 or 14
+			if entity_name ~= "mcl_armor_stand:armor_entity" then
+				-- Make it bigger if it worn by mobs
+				entity:set_properties({visual_size={x=9,y=9,z=9}})
+			end
+			entity:set_attach(obj, bone, {x=0, y=offset, z=0}, {x=0, y=0, z=0})
+			mcl_armor.head_entity[luaentity._id] = entity
+		end
+	end
+end
+
+function mcl_armor.head_entity_unequip(obj)
+	local id = obj:is_player() and obj:get_player_name() or obj:get_luaentity()._id
+	if mcl_armor.head_entity[id] then
+		mcl_armor.head_entity[id]:remove()
+		mcl_armor.head_entity[id] = nil
+	end
+end
+
 function mcl_armor.on_equip(itemstack, obj)
 	local def = itemstack:get_definition()
 	mcl_armor.play_equip_sound(itemstack, obj)
 	if def._on_equip then
 		def._on_equip(obj, itemstack)
 	end
+	mcl_armor.head_entity_equip(obj)
 	mcl_armor.update(obj)
 end
 
@@ -33,6 +79,7 @@ function mcl_armor.on_unequip(itemstack, obj)
 	if def._on_unequip then
 		def._on_unequip(obj, itemstack)
 	end
+	mcl_armor.head_entity_unequip(obj)
 	mcl_armor.update(obj)
 end
 
@@ -330,6 +377,7 @@ function mcl_armor.update(obj)
 							info.view_range_factors[mob_range_mob] = def._mcl_armor_mob_range_factor
 						end
 					end
+
 				end
 				if i == 5 then
 					info.depth_strider_level
@@ -353,7 +401,7 @@ function mcl_armor.update(obj)
 	end
 end
 
-function mcl_armor.trim(itemstack, overlay, color_string)
+function mcl_armor.trim(itemstack, overlay, trim_material)
 	local def = itemstack:get_definition()
 	if not def._mcl_armor_texture and not mcl_armor.trims.blacklisted[itemstack:get_name()] then return end
 	local meta = itemstack:get_meta()
@@ -375,7 +423,7 @@ function mcl_armor.trim(itemstack, overlay, color_string)
 		inv_overlay = "^(boots_trim.png"
 		piece_overlay = piece_overlay .. "_boots"
 	end
-	local color = mcl_armor.trims.colors[color_string]
+	local color = trim_material:get_definition()._mcl_armor_trim_color
 	inv_overlay = inv_overlay .. "^[colorize:" .. color .. ":150)"
 	piece_overlay = piece_overlay .. ".png"
 

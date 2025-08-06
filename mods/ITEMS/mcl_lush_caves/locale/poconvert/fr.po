@@ -26,7 +26,7 @@ msgid "Moss is a green block found in lush caves"
 msgstr "La mousse est un bloc vert que l'on trouve dans les grottes luxuriantes"
 
 msgid "Moss Carpet"
-msgstr ""
+msgstr "Tapis de mousse"
 
 msgid "A moss carpet is a flat variant of the moss block."
 msgstr ""

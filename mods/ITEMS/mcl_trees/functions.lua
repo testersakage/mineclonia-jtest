@@ -1,3 +1,28 @@
+-- Table that holds/caches tree (schematic) dimensions. Indexed by file name.
+local tree_size_cache = {}
+
+-- Returns tree (schematic) size as a vector. Caches result.
+local function get_tree_size(schem_file_name)
+	local size = tree_size_cache[schem_file_name]
+
+	if size == nil then
+		-- Serialize and return schematic as Lua table. Expensive!
+		local schem_lua = loadstring(
+			core.serialize_schematic(schem_file_name, "lua",
+			{ lua_use_comments = false, lua_num_indent_spaces = 0 })
+				.. " return schematic"
+		)()
+
+		if not schem_lua then
+			return nil
+		end
+
+		size = vector.copy(schem_lua.size)
+		tree_size_cache[schem_file_name] = size
+	end
+
+	return size
+end
 
 function mcl_trees.strip_tree(itemstack, placer, pointed_thing)
 	if pointed_thing.type ~= "node" then return end
@@ -78,12 +103,9 @@ end
 
 local function check_schem_growth(pos, file, giant)
 	if file then
-		local schem = loadstring(
-			core.serialize_schematic(file, "lua", { lua_use_comments = false, lua_num_indent_spaces = 0 })
-				.. " return schematic"
-		)()
-		if schem then
-			local h = schem.size.y
+		local size = get_tree_size(file)
+		if size then
+			local h = size.y
 			if giant then
 				return mcl_trees.check_growth_giant(pos, h)
 			else
@@ -123,6 +145,48 @@ local function check_2by2_saps(pos, node)
 				if p.x > ne.x or p.z > ne.z then ne = p end
 			end --find northeasternmost node
 			return {d,xp,zp}, ne
+		end
+	end
+end
+
+-- Wrapper around core.place_schematic in order to update observers
+local function place_tree(place_at, schem)
+	-- Work out bounding box coordinates. +1 in all directions.
+	local size = get_tree_size(schem.file)
+	local x    = place_at.x - math.floor((size.x - 1) / 2)
+	local z    = place_at.z - math.floor((size.z - 1) / 2)
+	local p1   = vector.new(x - 1, place_at.y - 1, z - 1)   -- Note: ground just below tree might not be needed
+	local p2   = vector.new(x    , place_at.y    , z    ) + size
+
+	-- Locate observers
+	local nodes = core.find_nodes_in_area(p1, p2, "group:observer")
+
+	-- Store observed (air) positions
+	local observed_positions = {}
+	for _, pos in pairs(nodes) do
+		local node          = core.get_node(pos)
+		local observed_pos  = mcl_observers.get_front_pos(pos, node)
+		local observed_node = core.get_node(observed_pos)
+		if observed_node.name == "air" then
+			observed_positions[core.hash_node_position(observed_pos)] = observed_pos
+		end
+	end
+
+	-- Place tree
+	core.place_schematic(
+		place_at,
+		schem.file,
+		"random",
+		nil,
+		false,
+		{ place_center_x = true, place_center_y = false, place_center_z = true }
+	)
+
+	-- Notify observers
+	for _, pos in pairs(observed_positions) do
+		local node = core.get_node(pos)
+		if node.name ~= "air" then
+			mcl_redstone._notify_observer_neighbours(pos)
 		end
 	end
 end
@@ -180,14 +244,7 @@ function mcl_trees.grow_tree(pos, node)
 			place_at = vector.subtract(place_at, offset)
 		end
 
-		core.place_schematic(
-			place_at,
-			schem.file,
-			"random",
-			nil,
-			false,
-			{ place_center_x = true, place_center_y = false, place_center_z = true }
-		)
+		place_tree(place_at, schem)
 
 		local after_grow = core.registered_nodes[node.name]._after_grow
 		if after_grow then

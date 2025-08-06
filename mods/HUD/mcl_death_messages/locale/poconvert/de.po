@@ -143,10 +143,10 @@ msgid "@1 was shot by @2 using @3"
 msgstr "@1 wurde von @2 mit @3 erschossen"
 
 msgid "@1 was spitballed by @2"
-msgstr ""
+msgstr "@1 wurde von @2 abgeworfen"
 
 msgid "@1 was spitballed by @2 using @3"
-msgstr ""
+msgstr "@1 wurde von @2 mit @3 abgeworfen"
 
 msgid "@1 was fireballed by @2"
 msgstr "@1 wurde von @2 gefeuerballt"

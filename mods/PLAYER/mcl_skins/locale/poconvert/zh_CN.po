@@ -53,5 +53,5 @@ msgid "Select"
 msgstr "选择"
 
 msgid "Select player skin"
-msgstr ""
+msgstr "选取玩家皮肤"
 

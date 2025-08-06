@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "This is a decorational block."
-msgstr ""
+msgstr "Це декоративний блок."
 
 msgid "This block is a building block for creating various buildings."
-msgstr ""
+msgstr "Цей блок є будівельним матеріалом для створення різних будівель."
 
 msgid "This item is primarily used for crafting other items."
 msgstr ""
@@ -380,7 +380,7 @@ msgid "Item reference of items which are neither blocks, tools or weapons (esp. 
 msgstr ""
 
 msgid "Mobs"
-msgstr ""
+msgstr "Моби"
 
 msgid "Different Mobs"
 msgstr ""

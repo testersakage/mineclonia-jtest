@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "<effect>|heal|list|clear|remove <duration|heal-amount|effect>|INF [<level>] [<factor>] [NOPART]"
-msgstr ""
+msgstr "<effetto>|heal|list|clear|remove <durata|quantità-cura|effetto>|INF [<livello>] [<fattore>] [NOPART]"
 
 msgid "Add a status effect to yourself. Arguments: <effect>: name of status effect. Passing \"list\" as effect name lists available effects. Passing \"heal\" as effect name heals (or harms) by amount designed by the next parameter. Passing \"clear\" as effect name removes all effects. Passing \"remove\" as effect name removes the effect named by the next parameter. <duration>: duration in seconds. Passing \"INF\" as duration makes the effect infinite. (<heal-amount>: amount of healing when the effect is \"heal\", passing a negative value subtracts health. <effect>: name of a status effect to be removed when using \"remove\" as the previous parameter.) <level>: effect power determinant, bigger level results in more powerful effect for effects that depend on the level (no changes for other effects), defaults to 1, pass F to use low-level factor instead. <factor>: effect strength modifier, can mean different things depending on the effect, no changes for effects that do not depend on level/factor. NOPART at the end means no particles will be shown for this effect."
 msgstr ""
@@ -343,7 +343,7 @@ msgstr ""
 msgid "A throwable potion that will shatter on impact, where it creates a magic cloud that lingers around for a while. Any player or mob inside the cloud will receive the potion's effect or set of effects, possibly repeatedly."
 msgstr ""
 
-msgid "Use the “Punch” key to throw it."
+msgid "Use the “Place” key to throw it."
 msgstr ""
 
 msgid "Use the “Place” key to drink it."

@@ -465,7 +465,7 @@ kelp.surface_deftemplate = {
 	--tiles = def.tiles,
 	special_tiles = {
 		{
-		image = "mcl_ocean_kelp_plant.png",
+		name = "mcl_ocean_kelp_plant.png",
 		animation = {type="vertical_frames", aspect_w=16, aspect_h=16, length=2.0},
 		tileable_vertical = true,
 		}
@@ -491,7 +491,6 @@ kelp.surface_deftemplate = {
 	drop = "", -- drops are handled in on_dig
 	--_mcl_falling_node_alternative = is_falling and nodename or nil,
 	_mcl_hardness = 0,
-	_mcl_blast_resistance = 0,
 	_mcl_baseitem = "mcl_ocean:kelp"
 }
 

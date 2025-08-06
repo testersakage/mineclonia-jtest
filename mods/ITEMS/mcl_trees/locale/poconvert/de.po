@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "When placed on soil (such as dirt) and exposed to light, a sapling will grow into a tree after some time."
-msgstr ""
+msgstr "Wenn ein Trieb auf Boden (z.B. Erde) und fällt Licht auf ihn, dann wird er nach einiger zu einem Baum."
 
 msgid "Needs soil and light to grow"
 msgstr ""

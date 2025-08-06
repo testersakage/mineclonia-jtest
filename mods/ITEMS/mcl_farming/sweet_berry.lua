@@ -60,7 +60,6 @@ for i=0, 3 do
 		wield_image = texture,
 		groups = groups,
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
-		_mcl_blast_resistance = 0,
 		_mcl_hardness = 0,
 		_pathfinding_class = "DAMAGE_OTHER",
 		on_rightclick = orc,

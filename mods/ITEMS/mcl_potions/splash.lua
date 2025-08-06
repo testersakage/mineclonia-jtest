@@ -3,16 +3,14 @@ local GRAVITY = tonumber(core.settings:get("movement_gravity"))
 
 local mod_target = core.get_modpath("mcl_target")
 
-local function splash_image(colorstring, opacity)
-	if not opacity then
-		opacity = 127
-	end
-	return "mcl_potions_potion_overlay.png^[colorize:"..colorstring..":"..tostring(opacity).."^mcl_potions_splash_bottle.png"
+local function splash_image(colorstring)
+	return "mcl_potions_splash_overlay.png^[multiply:"..colorstring.."^mcl_potions_splash_bottle.png"
 end
 
 
 function mcl_potions.register_splash(name, descr, color, def)
-	local id = "mcl_potions:"..name.."_splash"
+	local id = def._id_override or "mcl_potions:"..name
+	id = id.."_splash"
 	local longdesc = def._longdesc
 	if not def.no_effect then
 		longdesc = S("A throwable potion that will shatter on impact, where it gives all nearby players and mobs a status effect or a set of status effects.")
@@ -25,6 +23,9 @@ function mcl_potions.register_splash(name, descr, color, def)
 	if def.nocreative then groups.not_in_creative_inventory = 1 end
 
 	local function on_use(item, placer, pointed_thing)
+		local rc = mcl_util.call_on_rightclick(item, placer, pointed_thing)
+		if rc then return rc end
+
 		local dir = placer:get_look_dir()
 		local pos = placer:get_pos()
 		local potency = item:get_meta():get_int("mcl_potions:potion_potent")
@@ -43,7 +44,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 		_dynamic_tt = def._dynamic_tt,
 		_mcl_filter_description = mcl_potions.filter_potion_description,
 		_doc_items_longdesc = longdesc,
-		_doc_items_usagehelp = S("Use the “Punch” key to throw it."),
+		_doc_items_usagehelp = S("Use the “Place” key to throw it."),
 		stack_max = def.stack_max,
 		_effect_list = def._effect_list,
 		uses_level = def.uses_level,
@@ -149,7 +150,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 							local dur
 							for name, details in pairs(def._effect_list) do
 								ef_level = mcl_potions.level_from_details (details, potency)
-								dur = mcl_potions.duration_from_details (details, potency, plus, mcl_potions.SPLASH_FACTOR)
+								dur = mcl_potions.duration_from_details (details, potency, plus)
 								if rad > 0 then
 									mcl_potions.give_effect_by_level(name, obj, ef_level, redux_map[rad]*dur)
 								else
@@ -159,7 +160,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 						end
 
 						if def.custom_effect then
-							local power = (potency+1) * mcl_potions.SPLASH_FACTOR
+							local power = potency + 1
 							local thrower = self._thrower
 							if type (thrower) == "string" then
 								thrower = core.get_player_by_name (thrower)

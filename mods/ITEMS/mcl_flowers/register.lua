@@ -248,7 +248,6 @@ local def_tallgrass = {
 	_mcl_fortune_drop = mcl_flowers.fortune_wheat_seed_drop,
 	node_placement_prediction = "",
 	on_place = mcl_flowers.on_place_flower,
-	_mcl_blast_resistance = 0,
 	_mcl_hardness = 0,
 	_on_bone_meal = mcl_flowers.on_bone_meal,
 }

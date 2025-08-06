@@ -17,7 +17,7 @@ msgid "Hopper"
 msgstr ""
 
 msgid "Inventory"
-msgstr ""
+msgstr "Інвентар"
 
 msgid "5 inventory slots"
 msgstr ""

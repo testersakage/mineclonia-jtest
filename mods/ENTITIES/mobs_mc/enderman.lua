@@ -236,13 +236,14 @@ local psdefs = {{
 local enderman = {
 	description = S("Enderman"),
 	type = "monster",
+	_spawn_category = "monster",
 	spawn_class = "passive",
 	retaliates = true,
 	hp_min = 40,
 	hp_max = 40,
 	xp_min = 5,
 	xp_max = 5,
-	collisionbox = {-0.3, -0.01, -0.3, 0.3, 2.89, 0.3},
+	collisionbox = {-0.3, 0, -0.3, 0.3, 2.9, 0.3},
 	doll_size_override = { x = 0.8, y = 0.8 },
 	visual = "mesh",
 	mesh = "mobs_mc_enderman.b3d",
@@ -293,6 +294,11 @@ local enderman = {
 ------------------------------------------------------------------------
 -- Enderman visuals and mechanics.
 ------------------------------------------------------------------------
+
+function enderman:despawn_allowed ()
+	return (self._taken_node == "" or not self._taken_node)
+		and mob_class.despawn_allowed (self)
+end
 
 function enderman:set_animation (anim, custom_speed)
 	if self.attack then
@@ -472,7 +478,6 @@ local function enderman_grief (self, self_pos, dtime)
 			local dug = core.get_node_or_nil(take_pos)
 			if dug and dug.name == "air" then
 				self._taken_node = node.name
-				self.persistent = true
 				local def = core.registered_nodes[self._taken_node]
 				-- Update animation and texture accordingly (adds visibly carried block)
 				local block_type
@@ -522,23 +527,26 @@ local function enderman_ungrief (self, self_pos, dtime)
 	if pr:next (1, math.max (1, chance)) == 1 then
 		-- Select a random position around self_pos in which
 		-- to attempt to place the carried block.
-		local self_x = math.floor (self_pos.x + 0.05)
-		local self_z = math.floor (self_pos.z + 0.05)
+		local self_x = math.floor (self_pos.x + 0.5)
+		local self_z = math.floor (self_pos.z + 0.5)
 		local place_pos
 		repeat
 			place_pos = {
-				x = math.floor (self_pos.x + 0.5 + pr:next (-2, 2)),
+				x = math.floor (self_pos.x + 0.5 + pr:next (-1, 1)),
 				y = math.floor (self_pos.y + 0.5 + pr:next (0, 2)),
-				z = math.floor (self_pos.z + 0.5 + pr:next (-2, 2)),
+				z = math.floor (self_pos.z + 0.5 + pr:next (-1, 1)),
 			}
 		until place_pos.x ~= self_x or place_pos.z ~= self_z
 
+		local node_below = vector.offset (place_pos, 0, -1, 0)
+
 		-- Also check to see if protected.
 		if core.get_node (place_pos).name == "air"
-			and core.get_item_group(core.get_node(vector.offset(place_pos, 0, -1, 0)).name, "solid") > 0
-			and not core.is_protected (place_pos, "") then
+			and not core.is_protected (place_pos, "")
+		-- and whether the node below is sturdy.
+			and self:is_up_face_sturdy (node_below) then
 			-- ... but only if there's a free space
-			local success = core.place_node(place_pos, {name = self._taken_node})
+			local success = core.place_node (place_pos, {name = self._taken_node})
 			if success then
 				local def = core.registered_nodes[self._taken_node]
 				-- Update animation accordingly (removes visible block)
@@ -801,3 +809,54 @@ mcl_mobs.spawn_setup({
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:enderman", S("Enderman"), "#252525", "#151515", 0)
+
+------------------------------------------------------------------------
+-- Modern Enderman spawning.
+------------------------------------------------------------------------
+
+local enderman_spawner_overworld = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:enderman",
+	spawn_category = "monster",
+	pack_min = 1,
+	pack_max = 4,
+	weight = 1,
+	biomes = mobs_mc.monster_biomes,
+})
+
+local enderman_spawner_nether = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:enderman",
+	spawn_category = "monster",
+	pack_min = 1,
+	pack_max = 4,
+	biomes = {
+		"WarpedForest",
+		"Nether",
+		"BasaltDelta",
+		"SoulsandValley",
+	},
+	weight = 1,
+	max_artificial_light = 15,
+})
+
+local enderman_spawner_end = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:enderman",
+	spawn_category = "monster",
+	pack_min = 4,
+	pack_max = 4,
+	biomes = {
+		"End",
+		"EndBorder",
+		"EndIsland",
+		"EndHighlands",
+		"EndMidlands",
+		"EndBarrens",
+		"EndSmallIslands",
+	},
+	weight = 10,
+	max_artificial_light = 15,
+	max_light = 15,
+})
+
+mcl_mobs.register_spawner (enderman_spawner_overworld)
+mcl_mobs.register_spawner (enderman_spawner_nether)
+mcl_mobs.register_spawner (enderman_spawner_end)

@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Crafting"
-msgstr "Assemblaggio"
+msgstr "Fabbricazione"
 
 msgid "Inventory"
 msgstr "Inventario"
@@ -23,7 +23,7 @@ msgid "Recipe book"
 msgstr "Libro delle ricette"
 
 msgid "Fill Craft Grid"
-msgstr ""
+msgstr "Riempi la griglia per costruire"
 
 msgid "Crafting Table"
 msgstr ""

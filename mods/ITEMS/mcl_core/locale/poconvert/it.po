@@ -95,7 +95,7 @@ msgid "Flint"
 msgstr "Selce"
 
 msgid "Flint is a raw material."
-msgstr ""
+msgstr "La selce è un materiale grezzo."
 
 msgid "Sugar"
 msgstr "Zucchero"
@@ -629,7 +629,7 @@ msgid "This stone contains pure gold, a rare metal."
 msgstr ""
 
 msgid "Redstone Ore"
-msgstr "Minerale di redstone"
+msgstr "Minerale di pietrarossa"
 
 msgid "Redstone ore is commonly found near the bottom of the world. It glows when it is punched or walked upon."
 msgstr ""

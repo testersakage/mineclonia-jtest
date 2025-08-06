@@ -32,7 +32,7 @@ msgid "Use the furnace to open the furnace menu."
 msgstr "使用熔爐可開啟它的介面。"
 
 msgid "Place a furnace fuel in the lower slot and the source material in the upper slot."
-msgstr "將燃料置於下方欄位中，並將原材料置於上方欄位中。"
+msgstr "燃料放在下方，要熔掉的東西放在上方。"
 
 msgid "The furnace will slowly use its fuel to smelt the item."
 msgstr "熔爐會慢慢使用燃料來熔化熔煉物。"

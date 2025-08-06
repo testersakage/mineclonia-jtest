@@ -27,6 +27,8 @@ return {
 		"Ælla Chiana Moskopp",
 		"Raylight",
 		"Miguel_PL",
+		"Mikita Wiśniewski",
+		"WillConker",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",
@@ -127,6 +129,7 @@ return {
 		"Wbjitscool",
 		"SmokeyDope",
 		"pixelzone",
+		"Miguel P.L",
 	}},
 	{S("Translations"), 0xFF9705, {
 		"Wuzzy",

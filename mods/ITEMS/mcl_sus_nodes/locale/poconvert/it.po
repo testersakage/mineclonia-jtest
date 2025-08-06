@@ -17,7 +17,7 @@ msgid "Brush"
 msgstr "Spazzola"
 
 msgid "Brushes are used in archeology to discover hidden items"
-msgstr ""
+msgstr "Le spazzole sono utilizzate in archeologia per scoprire gli oggetti nascosti"
 
 msgid "Use the brush on a suspicious node to uncover its secrets"
 msgstr ""

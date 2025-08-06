@@ -119,7 +119,7 @@ msgid "Squid Ink Sac"
 msgstr "Tintenbeutel"
 
 msgid "This item is dropped by dead squids. Squid ink can be used to as an ingredient to craft book and quill or black dye."
-msgstr ""
+msgstr "Dieser Gegenstand wird von toten Tintenfischen fallen gelassen. Tintenfischtinte kann als Zutat bei der Herstellung von beschreibbaren Büchern oder schwarzem Farbstoff benutzt werden."
 
 msgid "String"
 msgstr "Faden"

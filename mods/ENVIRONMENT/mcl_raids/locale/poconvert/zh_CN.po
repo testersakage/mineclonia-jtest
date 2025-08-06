@@ -16,3 +16,15 @@ msgstr ""
 msgid "Ominous Banner"
 msgstr "灾厄之旗"
 
+msgid "Raid (@1 of @2)"
+msgstr ""
+
+msgid "Raid"
+msgstr ""
+
+msgid "Raid (defeat)"
+msgstr ""
+
+msgid "Raid (victory)"
+msgstr ""
+

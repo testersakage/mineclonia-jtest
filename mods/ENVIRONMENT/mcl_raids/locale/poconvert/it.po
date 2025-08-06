@@ -14,5 +14,17 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Ominous Banner"
-msgstr "Stendardo Minaccioso"
+msgstr "Stendardo minaccioso"
+
+msgid "Raid (@1 of @2)"
+msgstr "Incursione (@1 di @2)"
+
+msgid "Raid"
+msgstr "Incursione"
+
+msgid "Raid (defeat)"
+msgstr "Incursione (sconfitta)"
+
+msgid "Raid (victory)"
+msgstr "Incursione (vittoria)"
 
