@@ -822,6 +822,7 @@ local function register_liquid(def)
 		nodenames = {NAME_SOURCE, NAME_FLOWING},
 		run_at_every_load = true,
 		bulk_action = function(pos_list, dtime_s)
+			-- local clock = core.get_us_time ()
 			local pos = pos_list[1]
 			local minpos = vector.new (band (pos.x, -16),
 						   band (pos.y, -16),
@@ -859,6 +860,7 @@ local function register_liquid(def)
 					end
 				end
 			end
+			-- time = time + (core.get_us_time () - clock)
 		 end,
 	})
 
@@ -871,8 +873,7 @@ local function register_liquid(def)
 			local pos = core.get_position_from_hash(h)
 
 			local old = get_node(pos)
-			if old ~= nil then
-
+			if old then
 				local old_ndef = core.registered_nodes[old.name]
 
 				-- Do the final check to see if the node is still floodable.
@@ -914,9 +915,11 @@ local function register_liquid(def)
 				hmap_clear(read_nodes_cache)
 				hmap_clear(changed_nodes)
 
+				local changed = 0
 				for _, item in pairs(q) do
 					-- Do the flow magic
 					flow_iteration(item)
+					changed = changed + 1
 
 					-- Continue the transformation in the next global step the
 					-- limit has been reached.
@@ -953,7 +956,15 @@ end
 local co_liquid_tick_loop = coroutine.create(function()
 	while true do
 		for i, o in ipairs(registered_liquids) do
-			o.tick()
+			-- Errors must be reported by hand, for the
+			-- engine does not log errors in coroutines,
+			-- which proceed silently to terminate them.
+			local ok, err = pcall (o.tick)
+			if not ok then
+				local blurb
+					= "Error in liquid transformation loop: " .. tostring (err)
+				core.log ("error", blurb)
+			end
 		end
 		-- We yield here because there is nothing left to do in this global step.
 		coroutine.yield()
