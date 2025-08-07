@@ -24,3 +24,12 @@ core.register_node("mcl_nether:nether_lava_flowing", table.merge(core.registered
 doc.add_entry_alias("nodes", "mcl_core:lava_source", "nodes", "mcl_nether:nether_lava_source")
 doc.add_entry_alias("nodes", "mcl_core:lava_source", "nodes", "mcl_nether:nether_lava_flowing")
 
+
+mcl_liquid.register_liquid({
+	name_flowing = "mcl_nether:nether_lava_flowing",
+	name_source  = "mcl_nether:nether_lava_source",
+
+	liquid_tick = 1.0 / 2.0,
+	liquid_range = 7,
+	liquid_renewable = false,
+})

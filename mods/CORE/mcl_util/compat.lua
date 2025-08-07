@@ -81,6 +81,14 @@ if not core.objects_inside_radius then --polyfill for pre minetest 5.9
 	end
 end
 
+if not core.get_node_raw then -- polyfill for pre minetest 5.13
+	function core.get_node_raw(x, y, z)
+		local node = core.get_node(vector.new(x, y, z))
+		local cid = core.get_content_id(node.name)
+		return cid, node.param1, node.param2, cid ~= core.CONTENT_IGNORE
+	end
+end
+
 if not vector.in_area then
 	function vector.in_area(pos, min, max)
 		return (pos.x >= min.x) and (pos.x <= max.x) and

@@ -6,6 +6,7 @@ ignore = {
 	--this is used intentionally in the codebase sometimes
 	"131", --unused global
 	"512", -- Loop can be executed at most once.
+	"542", -- An empty if branch
 }
 globals = {
 	"minetest", "core",

@@ -43,7 +43,7 @@ core.register_node("mcl_core:water_flowing", {
 	liquid_range = 7,
 	waving = 3,
 	post_effect_color = {a=60, r=0x03, g=0x3C, b=0x5C},
-	groups = { water=3, liquid=3, puts_out_fire=1, not_in_creative_inventory=1, freezes=1, melt_around=1, dig_by_piston=1, unsticky = 1},
+	groups = { liquid_flowing=1, water=3, liquid=3, puts_out_fire=1, not_in_creative_inventory=1, freezes=1, melt_around=1, dig_by_piston=1, unsticky = 1},
 	_pathfinding_class = "WATER",
 	_on_bottle_place = mcl_core.get_bottle_place_on_water("mcl_potions:water"),
 	_mcl_blast_resistance = 100,
@@ -90,7 +90,7 @@ S("• When water is directly below lava, the water turns into stone."),
 	liquid_viscosity = WATER_VISC,
 	liquid_range = 7,
 	post_effect_color = {a=60, r=0x03, g=0x3C, b=0x5C},
-	groups = { water=3, liquid=3, puts_out_fire=1, freezes=1, not_in_creative_inventory=1, dig_by_piston=1, unsticky = 1},
+	groups = { liquid_source=1, water=3, liquid=3, puts_out_fire=1, freezes=1, not_in_creative_inventory=1, dig_by_piston=1, unsticky = 1},
 	_pathfinding_class = "WATER",
 	_on_bottle_place = mcl_core.get_bottle_place_on_water("mcl_potions:water"),
 	_mcl_blast_resistance = 100,
@@ -139,7 +139,7 @@ core.register_node("mcl_core:lava_flowing", {
 	liquid_range = 3,
 	damage_per_second = 4*2,
 	post_effect_color = {a=245, r=208, g=73, b=10},
-	groups = { lava=3, liquid=2, destroys_items=1, not_in_creative_inventory=1, dig_by_piston=1, set_on_fire=15, unsticky = 1},
+	groups = { liquid_flowing=1, lava=3, liquid=2, destroys_items=1, not_in_creative_inventory=1, dig_by_piston=1, set_on_fire=15, unsticky = 1},
 	_pathfinding_class = "LAVA",
 	_mcl_blast_resistance = 100,
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
@@ -194,7 +194,7 @@ S("• When lava is directly above water, the water turns into stone."),
 	liquid_range = 3,
 	damage_per_second = 4*2,
 	post_effect_color = {a=245, r=208, g=73, b=10},
-	groups = { lava=3, lava_source=1, liquid=2, destroys_items=1, not_in_creative_inventory=1, dig_by_piston=1, set_on_fire=15, fire_damage=1, unsticky = 1},
+	groups = { liquid_source=1, lava=3, lava_source=1, liquid=2, destroys_items=1, not_in_creative_inventory=1, dig_by_piston=1, set_on_fire=15, fire_damage=1, unsticky = 1},
 	_pathfinding_class = "LAVA",
 	_mcl_blast_resistance = 100,
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
@@ -243,3 +243,24 @@ if core.settings:get("mcl_node_particles") == "full" then
 		end,
 	})
 end
+
+
+mcl_liquid.register_liquid({
+	name_flowing = "mcl_core:water_flowing",
+	name_source = "mcl_core:water_source",
+
+	liquid_tick = 1.0 / 4.0,
+	liquid_range = 7,
+	liquid_renewable = true,
+})
+
+
+mcl_liquid.register_liquid({
+	name_flowing = "mcl_core:lava_flowing",
+	name_source  = "mcl_core:lava_source",
+
+	liquid_tick = 3.0/2.0,
+	liquid_range = 3,
+	liquid_renewable = false,
+})
+
