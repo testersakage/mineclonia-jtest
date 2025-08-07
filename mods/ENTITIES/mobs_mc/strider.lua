@@ -27,7 +27,10 @@ local strider = {
 		fleshy = 90,
 		water_vulnerable = 90,
 	},
-	collisionbox = {-.6, -0.01, -.6, .6, 1.94, .6},
+	collisionbox = {
+		-0.45, -0.01, -0.45,
+		0.45, 1.69, 0.45,
+	},
 	visual = "mesh",
 	mesh = "extra_mobs_strider.b3d",
 	textures = {
