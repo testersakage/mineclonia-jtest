@@ -348,6 +348,7 @@ local function register_liquid(def)
 		end
 	end
 
+	local get_node_raw = core.get_node_raw
 
 	--[[
 	This function returns a requested node from the map. A cache is used for
@@ -365,7 +366,7 @@ local function register_liquid(def)
 		if id then
 			return id, read_nodes_cache_param2[h]
 		else
-			local id, _, param2 = core.get_node_raw(x, y, z)
+			local id, _, param2 = get_node_raw(x, y, z)
 			read_nodes_cache_id[h] = id
 			read_nodes_cache_param2[h] = param2
 			return id, param2
@@ -374,7 +375,6 @@ local function register_liquid(def)
 
 	local arshift = bit.arshift
 	local is_node_generated = function (_) return true end
-	local get_node_raw = core.get_node_raw
 
 	if mcl_vars.enable_mcl_levelgen then
 		core.register_on_mods_loaded (function ()
@@ -387,13 +387,14 @@ local function register_liquid(def)
 								arshift (z, 4))
 			end
 			local default_get_node_raw = core.get_node_raw
+			local cid_ignore = core.CONTENT_IGNORE
 			function get_node_raw (x, y, z)
 				if is_node_generated (x, y, z) then
 					local cid, param1, param2, pos_ok
 						= default_get_node_raw (x, y, z)
 					return cid, param1, param2, pos_ok
 				else
-					return nil
+					return cid_ignore, 0, 0, false
 				end
 			end
 		end)
@@ -1160,10 +1161,11 @@ local function register_liquid(def)
 				hmap_clear(read_nodes_cache_param2)
 				hmap_clear(changed_nodes)
 
-				for hpos, item in pairs(q) do
-					local x, y, z = get_position_from_hash(hpos)
+				local changed = 0
+				for _, item in pairs(q) do
 					-- Do the flow magic
-					flow_iteration(x, y, z, item.map, item.is_sinking)
+					flow_iteration(item)
+					changed = changed + 1
 
 					-- Continue the transformation in the next global step the
 					-- limit has been reached.
@@ -1202,7 +1204,15 @@ local liquid_tick = coroutine.wrap(function()
 	while true do
 		batch_update_cnt = 0
 		for i, o in ipairs(registered_liquids) do
-			o.tick()
+			-- Errors must be reported by hand, for the
+			-- engine does not log errors in coroutines,
+			-- which proceed silently to terminate them.
+			local ok, err = pcall (o.tick)
+			if not ok then
+				local blurb
+					= "Error in liquid transformation loop: " .. tostring (err)
+				core.log ("error", blurb)
+			end
 		end
 		-- We yield here because there is nothing left to do in this global step.
 		coroutine.yield()
