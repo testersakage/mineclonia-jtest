@@ -90,14 +90,10 @@ function mcl_levelgen.read_structure_template (name)
 	if not data then
 		return nil, "Failed to read from file " .. name
 	end
-	local ok, data, err = pcall (core.decompress, data, "zstd")
+	local ok, data = pcall (core.decompress, data, "zstd")
 	if not ok or not data then
-		if not err then
-			return nil, "Failed to decompress file " .. name
-		else
-			return nil, "Failed to decompress file "
-				.. name .. ": " .. err
-		end
+		return nil, "Failed to decompress file "
+			.. name .. ": " .. data
 	end
 	local _
 	ok, data, _ = pcall (core.deserialize, data)
