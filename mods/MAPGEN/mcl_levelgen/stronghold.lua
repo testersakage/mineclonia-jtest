@@ -1645,8 +1645,34 @@ local function portal_room_place (self, level, terrain, rng, x1, z1, x2, z2)
 	fill_area (self, 1.0, 9, 1, 1, 9, 1, 3, cid_lava_source, 0, nil)
 	fill_area (self, 1.0, 4, 1, 9, 6, 1, 11, cid_lava_source, 0, nil)
 
-	-- Steps and supports.
+	-- Iron bars.
 	local dir = self.dir
+
+	do
+		local param2_left = local_facedir_left (dir)
+		local param2_right = local_facedir_right (dir)
+
+		fill_area (self, 1.0, 0, 3, 3, 0, 4, 3, cid_iron_bars, param2_left)
+		fill_area (self, 1.0, 10, 3, 3, 10, 4, 3, cid_iron_bars, param2_right)
+		fill_area (self, 1.0, 0, 3, 5, 0, 4, 5, cid_iron_bars, param2_left)
+		fill_area (self, 1.0, 10, 3, 5, 10, 4, 5, cid_iron_bars, param2_right)
+		fill_area (self, 1.0, 0, 3, 7, 0, 4, 7, cid_iron_bars, param2_left)
+		fill_area (self, 1.0, 10, 3, 7, 10, 4, 7, cid_iron_bars, param2_right)
+		fill_area (self, 1.0, 0, 3, 9, 0, 4, 9, cid_iron_bars, param2_left)
+		fill_area (self, 1.0, 10, 3, 9, 10, 4, 9, cid_iron_bars, param2_right)
+		fill_area (self, 1.0, 0, 3, 11, 0, 4, 11, cid_iron_bars, param2_left)
+		fill_area (self, 1.0, 10, 3, 11, 10, 4, 11, cid_iron_bars, param2_right)
+		fill_area (self, 1.0, 0, 3, 13, 0, 4, 13, cid_iron_bars, param2_left)
+		fill_area (self, 1.0, 10, 3, 13, 10, 4, 13, cid_iron_bars, param2_right)
+
+		local param2_south = reverse_facedirs[dir]
+		fill_area (self, 1.0, 2, 3, 15, 2, 4, 15, cid_iron_bars, param2_south)
+		fill_area (self, 1.0, 4, 3, 15, 4, 4, 15, cid_iron_bars, param2_south)
+		fill_area (self, 1.0, 6, 3, 15, 6, 4, 15, cid_iron_bars, param2_south)
+		fill_area (self, 1.0, 8, 3, 15, 8, 4, 15, cid_iron_bars, param2_south)
+	end
+
+	-- Steps and supports.
 	local param2 = facedirs[dir]
 	fill_area (self, 1.0, 4, 1, 4, 6, 1, 4, cid_stone_brick_stairs, param2)
 	fill_area (self, 1.0, 4, 2, 5, 6, 2, 5, cid_stone_brick_stairs, param2)
