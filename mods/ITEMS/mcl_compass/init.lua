@@ -250,10 +250,11 @@ core.register_craft({
 
 core.register_node("mcl_compass:lodestone",{
 	description=S("Lodestone"),
-	on_rightclick = function(pos, _, _, itemstack)
+	on_rightclick = function(pos, _, clicker, itemstack)
 		if itemstack:get_name() == "mcl_compass:compass_lodestone" or itemstack:get_name() == "mcl_compass:compass" then
 			itemstack:get_meta():set_string("pointsto", core.pos_to_string(pos))
 			itemstack:set_name("mcl_compass:compass_lodestone")
+			awards.unlock(clicker:get_player_name(), "mcl:countryLode")
 		end
 		return itemstack
 	end,
