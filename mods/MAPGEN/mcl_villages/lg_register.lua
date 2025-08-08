@@ -924,6 +924,7 @@ local function build_path (templates, terrain, parent, pieces, exit, rotation,
 	local length = 10
 	local x, z = rotate_exit (rotation, parent.bbox, exit.x, exit.z)
 	local rotation = compose_rotation (rotation, exit.orientation)
+	local is_ersatz_level = terrain.is_ersatz
 
 	-- Create a dirt path extending from the exit in the direction
 	-- appointed.
@@ -988,7 +989,7 @@ local function build_path (templates, terrain, parent, pieces, exit, rotation,
 				dx, dz = rotate (rotation, 0, z1)
 				rotation = random_schematic_rotation (rng)
 			else
-				pile = rng:next_boolean ()
+				pile = not is_ersatz_level and rng:next_boolean ()
 				local dx_mag = pile and 3 or 2
 				if value < 0.9 then
 					dx, dz = rotate (rotation, -1 * dx_mag, z1)
@@ -1317,6 +1318,8 @@ mcl_levelgen.register_structure_set ("mcl_villages:villages", {
 -- Village features.
 ------------------------------------------------------------------------
 
+if not mcl_levelgen.enable_ersatz then
+
 local cid_hay_block = core.get_content_id ("mcl_farming:hay_block")
 local cid_packed_ice = core.get_content_id ("mcl_core:packed_ice")
 local cid_melon = core.get_content_id ("mcl_farming:melon")
@@ -1357,3 +1360,5 @@ mcl_levelgen.register_configured_feature ("mcl_villages:pile_snow", {
 		return cid_snow, 0
 	end,
 })
+
+end

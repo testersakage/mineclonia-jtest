@@ -3,16 +3,14 @@
 ------------------------------------------------------------------------
 
 mcl_levelgen.verbose = false
+mcl_levelgen.enable_ersatz = false
 
 -- Constants required by level generator scripts.
 mcl_levelgen.REQUIRED_CONTEXT_Y = 2
 mcl_levelgen.REQUIRED_CONTEXT_XZ = 1
 
-local ull = mcl_levelgen.ull
-
-if mcl_vars.enable_mcl_levelgen then
-
 local seed
+local ull = mcl_levelgen.ull
 local tostringull = mcl_levelgen.tostringull
 local stringtoull = mcl_levelgen.stringtoull
 
@@ -38,6 +36,8 @@ else
 	seed = core.ipc_get ("mcl_levelgen:level_seed")
 	mcl_levelgen.seed = seed
 end
+
+if mcl_vars.enable_mcl_levelgen then
 
 mcl_levelgen.biome_seed = mcl_levelgen.get_biome_seed (seed)
 mcl_levelgen.levelgen_enabled = true
@@ -94,7 +94,7 @@ if core and not core.get_player_by_name then
 	mcl_levelgen.is_levelgen_environment = true
 	-- Run level generation scripts.
 	for _, script in ipairs (core.ipc_get ("mcl_levelgen:levelgen_scripts")) do
-		dofile (script)
+		dofile (script.script)
 	end
 elseif core then
 	-- Load and register jigsaw blocks.
@@ -124,7 +124,7 @@ else
 -- Define stubs for a number of functions that would otherwise not be
 -- loaded.
 
-mcl_levelgen.seed = ull (0, 0)
+mcl_levelgen.seed = seed
 mcl_levelgen.biome_seed = ull (0, 0)
 mcl_levelgen.levelgen_enabled = false
 
@@ -155,6 +155,12 @@ end
 
 function mcl_levelgen.get_dimension (_)
 	return nil
+end
+
+if core.get_mapgen_setting ("mcl_levelgen_enable_ersatz") == "true" then
+	-- Load the ersatz level generation system.
+	mcl_levelgen.enable_ersatz = true
+	dofile (mcl_levelgen.prefix .. "/ersatz.lua")
 end
 
 end

@@ -1,3 +1,25 @@
+This mod implements a level generator whose object is to reproduce
+Minecraft's terrain and biome system, generating identical worlds from
+identical seeds.  It is enabled by selecting the mapgen "singlenode".
+
+Two flags may be set in map_meta.txt to configure this level generator
+in a structure-specific manner:
+
+1. mcl_levelgen_use_large_biomes = true
+
+Enable ``Large Biomes'' level generation, where the biome noise maps
+are roughly 8x larger than in standard levels.
+
+2. mcl_levelgen_enable_ersatz = true
+
+Enable the generation of select structures when a standard Luanti
+mapgen is enabled.  This option presently requires a modified version
+Luanti/Minetest, available at:
+
+  https://codeberg.org/halon/Minetest
+
+
+
 The question has been raised how this level generator was implemented
 without reference to decompiled Minecraft source code (or other
 encumbered material).  During its implementation, the author was at

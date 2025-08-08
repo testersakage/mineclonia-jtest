@@ -619,7 +619,7 @@ awards.register_achievement("mcl:zombie_doctor", {
 	group = "Overworld",
 })
 
-if mcl_levelgen.levelgen_enabled then
+if mcl_levelgen.levelgen_enabled or mcl_levelgen.enable_ersatz then
 	-- Level generator-only advancements.
 
 	awards.register_achievement ("mcl:a_terrible_fortress", {

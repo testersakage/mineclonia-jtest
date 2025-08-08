@@ -9,16 +9,24 @@ dofile (modpath .. "/common.lua")
 -- Lua models of the built-in map generators.
 ------------------------------------------------------------------------
 
-local name = core.get_mapgen_setting ("mg_name")
+local name
+
+local function set_model ()
+	if name == "v7" then
+		model = mcl_mapgen_models.v7_mapgen_model ()
+	else
+		model = mcl_mapgen_models.ersatz_model ()
+	end
+end
+
+if core and core.get_mod_storage then
+
+name = core.get_mapgen_setting ("mg_name")
 core.ipc_set ("mcl_mapgen_models:mg_name", name)
 
 core.register_on_mods_loaded (function ()
 	core.after (0, function ()
-		if name == "v7" then
-			model = mcl_mapgen_models.v7_mapgen_model ()
-		else
-			model = mcl_mapgen_models.ersatz_model ()
-		end
+		set_model ()
 	end)
 end)
 
@@ -36,10 +44,21 @@ mcl_info.register_debug_field ("Estimated Generation Height", {
 	end,
 })
 
+core.register_mapgen_script (modpath .. "/init.lua")
+
+else
+
+name = core.ipc_get ("mcl_mapgen_models:mg_name")
+
+end
+
 ------------------------------------------------------------------------
 -- Exports.
 ------------------------------------------------------------------------
 
 function mcl_mapgen_models.get_mapgen_model ()
+	if not model then
+		set_model ()
+	end
 	return model
 end

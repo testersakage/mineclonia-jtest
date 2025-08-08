@@ -1415,15 +1415,12 @@ local function mineshaft_create_pieces (self, pieces, level, terrain, rng, x, z)
 		local bbox = bbox_from_pieces (pieces)
 		local x, y, z = bbox_center (bbox)
 		local surface = terrain:get_one_height (x, z, nil)
-		-- print (" Mineshaft center @ " .. x .. "," .. y .. "," .. z)
-		-- print (" Mineshaft surface @ " .. surface)
 		local target_center = sea_level
 		if surface > sea_level then
 			local diff = (surface - sea_level) + 1
 			target_center = rng:next_within (diff) + sea_level
 		end
 		dy = target_center - y
-		-- print (" Mineshaft target height @ " .. target_center)
 		mcl_levelgen.translate_vertically (pieces, dy)
 	else
 		rng.log = false
