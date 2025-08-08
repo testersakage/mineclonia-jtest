@@ -13,7 +13,8 @@ dofile(mcl_villages.modpath.."/pois.lua")
 dofile(mcl_villages.modpath.."/api.lua")
 dofile(mcl_villages.modpath.."/schemgen.lua")
 
-mcl_levelgen.register_levelgen_script (mcl_villages.modpath .. "/lg_register.lua")
+mcl_levelgen.register_levelgen_script (mcl_villages.modpath .. "/lg_register.lua",
+				       true)
 
 --
 -- load settlements on server
@@ -63,7 +64,8 @@ end
 
 -- Disable natural generation in singlenode.
 local mg_name = core.get_mapgen_setting("mg_name")
-if mg_name ~= "singlenode" or generate_in_singlenode then
+if (mg_name ~= "singlenode" or generate_in_singlenode)
+	and not mcl_levelgen.enable_ersatz then
 	mcl_mapgen_core.register_generator("villages", nil, function(minp, maxp, blockseed)
 		if maxp.y < 0 then return end
 

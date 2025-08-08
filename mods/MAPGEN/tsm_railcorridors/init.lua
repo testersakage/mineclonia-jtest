@@ -1,3 +1,7 @@
+if mcl_levelgen.enable_ersatz then
+	return false
+end
+
 tsm_railcorridors = {}
 
 -- Load node names

@@ -831,9 +831,10 @@ local function struct_unhash (hash)
 end
 
 local insert = table.insert
+local enable_ersatz = mcl_levelgen.enable_ersatz
 
 function mcl_biome_dispatch.get_stronghold_positions ()
-	if levelgen_enabled then
+	if levelgen_enabled or enable_ersatz then
 		local level = get_overworld_structure_level ()
 		local starts = level.stronghold_starts["mcl_levelgen:strongholds"]
 		if not starts then

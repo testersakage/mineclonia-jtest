@@ -185,6 +185,6 @@ local function test_player_structures (dtime)
 	end
 end
 
-if mcl_levelgen.levelgen_enabled then
+if mcl_levelgen.levelgen_enabled or mcl_levelgen.enable_ersatz then
 	core.register_globalstep (test_player_structures)
 end

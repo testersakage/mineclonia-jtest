@@ -114,7 +114,7 @@ function mcl_mapgen_models.v7_mapgen_model ()
 				local hselect = height_select:get_2d (pos)
 				local height_alt = terrain_alt:get_2d (pos)
 				local height_base = terrain_base:get_2d (pos)
-				local hselect = mathmax (0, mathmin (hselect, 0))
+				local hselect = mathmax (0.0, mathmin (hselect, 1.0))
 
 				if height_alt > height_base then
 					base_height = height_alt
