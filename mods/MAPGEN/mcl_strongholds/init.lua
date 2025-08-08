@@ -1,3 +1,7 @@
+if mcl_levelgen.enable_ersatz then
+	return
+end
+
 -- Generate strongholds.
 
 local generate_in_singlenode = false

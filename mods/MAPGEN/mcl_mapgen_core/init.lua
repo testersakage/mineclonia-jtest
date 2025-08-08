@@ -41,6 +41,8 @@ if mcl_vars.superflat then
 	mg_flags.caves = false
 	mg_flags.decorations = false
 	core.set_mapgen_setting("mgflat_spflags", "nolakes,nohills", true)
+elseif mcl_levelgen.enable_ersatz then
+	mg_flags.decorations = false
 end
 
 mg_flags.dungeons = enable_mt_dungeons
@@ -247,7 +249,7 @@ local function set_param2_nodes(vm, data, data2, emin, emax, area, minp, maxp, b
 	local lvm_used = false
 	local aream = VoxelArea:new({MinEdge={x=minp.x, y=0, z=minp.z}, MaxEdge={x=maxp.x, y=0, z=maxp.z}})
 	local nodes = core.find_nodes_in_area(minp, maxp, biomecolor_nodes)
-	for _, n in pairs(nodes) do
+	for _, n in ipairs(nodes) do
 		local p_pos = area:index(n.x, n.y, n.z)
 		local p2 = biome_id_p2[biomemap[aream:index(n.x, 0, n.z)]]
 		if p2 then

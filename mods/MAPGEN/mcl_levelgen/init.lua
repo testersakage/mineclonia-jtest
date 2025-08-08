@@ -84,11 +84,11 @@ mcl_levelgen.report_consing = report_consing
 mcl_levelgen.md5 = dofile (prefix .. "/md5.lua")
 mcl_levelgen.sha = dofile (prefix .. "/sha2.lua")
 mcl_levelgen.lighting_disabled = false
-if core and core.settings then
+if core and core.settings and core.get_mapgen_setting then
 	mcl_levelgen.use_ffi
 		= core.settings:get_bool ("mcl_levelgen_use_ffi", false)
 	mcl_levelgen.use_large_biomes
-		= core.settings:get_bool ("mcl_levelgen_use_large_biomes", false)
+		= core.get_mapgen_setting ("mcl_levelgen_use_large_biomes") == "true"
 	core.ipc_set ("mcl_levelgen:use_ffi", mcl_levelgen.use_ffi)
 	core.ipc_set ("mcl_levelgen:use_large_biomes", mcl_levelgen.use_large_biomes)
 elseif core then

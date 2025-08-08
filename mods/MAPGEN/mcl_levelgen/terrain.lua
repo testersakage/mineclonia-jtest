@@ -20,7 +20,9 @@ local ipairs = ipairs
 local toblock = mcl_levelgen.toblock
 local toquart = mcl_levelgen.toquart
 
-local terrain_generator = {}
+local terrain_generator = {
+	is_ersatz = false,
+}
 mcl_levelgen.terrain_generator = terrain_generator
 
 local cid_stone, cid_water_source, cid_lava_source, cid_nether_lava_source, cid_air
@@ -1015,7 +1017,8 @@ function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_i
 	-- local clock = core.get_us_time ()
 	local structure_extents
 		= mcl_levelgen.finish_structures (self.structures, self,
-						  biomes, x, y, z, index, gn)
+						  biomes, x, y, z, y_min,
+						  level_height, index, gn)
 	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
 	structuremask[1] = structure_extents[1]
 	structuremask[2] = mathmax (structure_extents[2], y)

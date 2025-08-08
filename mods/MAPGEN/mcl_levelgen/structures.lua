@@ -945,13 +945,15 @@ local structure_extents = {
 }
 
 function mcl_levelgen.finish_structures (level, terrain, biomes, x, y, z,
+					 effective_level_min, level_height,
 					 index, nodes)
 	chunksize = floor (terrain.chunksize / 16)
 	local refs = level.structure_refs
 	local cx, cz = floor (x / 16), floor (z / 16)
 
 	prepare_structure_placement0 (level, terrain, biomes, index,
-				      x, y, z, nodes)
+				      x, y, z, effective_level_min,
+				      level_height, nodes)
 
 	for i = 1, NUM_GENERATION_STEPS do
 		local structures = registered_structures_by_step[i]
@@ -1228,16 +1230,8 @@ local function apply_terrain_adaptation (pieces, terrain_adaptation,
 	end
 end
 
--- Fill WEIGHTS with beardifier weights from each piece intersecting
--- the MapChunk at X, Y, with reference to structure starts stored in
--- LEVEL.
---
--- WEIGHTS must be initialized to 0.
-
-function mcl_levelgen.beardify (level, terrain, weights, index, x, z)
-	local chunksize = terrain.chunksize
-	local level_height = terrain.level_height
-	local y_min = terrain.y_min
+local function beardify_1 (level, terrain, weights, index, x, z,
+			   level_height, y_min, chunksize)
 	local bbox = {
 		x - 12,
 		y_min,
@@ -1249,6 +1243,7 @@ function mcl_levelgen.beardify (level, terrain, weights, index, x, z)
 	local starts = level.structure_starts
 	local cx, cz = floor (x / 16), floor (z / 16)
 	local chunksize_1 = floor (terrain.chunksize / 16)
+	local any_adaptation = false
 	for cx = cx - 8, cx + chunksize_1 + 7 do
 		for cz = cz - 8, cz + chunksize_1 + 7 do
 			local hash = struct_hash (cx, cz)
@@ -1257,6 +1252,7 @@ function mcl_levelgen.beardify (level, terrain, weights, index, x, z)
 			for _, start in ipairs (local_starts) do
 				if start.terrain_adaptation ~= "none"
 					and AABB_intersect_p (start.bbox, bbox) then
+					any_adaptation = true
 					apply_terrain_adaptation (start.pieces,
 								  start.terrain_adaptation,
 								  weights, index, bbox,
@@ -1266,6 +1262,22 @@ function mcl_levelgen.beardify (level, terrain, weights, index, x, z)
 			end
 		end
 	end
+	return any_adaptation
+end
+mcl_levelgen.beardify_1 = beardify_1
+
+-- Fill WEIGHTS with beardifier weights from each piece intersecting
+-- the MapChunk at X, Y, with reference to structure starts stored in
+-- LEVEL.
+--
+-- WEIGHTS must be initialized to 0.
+
+function mcl_levelgen.beardify (level, terrain, weights, index, x, z)
+	local chunksize = terrain.chunksize
+	local level_height = terrain.level_height
+	local y_min = terrain.y_min
+	beardify_1 (level, terrain, weights, index, x, z,
+		    level_height, y_min, chunksize)
 end
 
 ------------------------------------------------------------------------
@@ -1280,10 +1292,13 @@ local index
 local level_height
 local level_max_y
 local level_min
+local effective_level_min
 local nodes
 
 function prepare_structure_placement0 (level, terrain, p_biomes,
-				       p_index, x, y, z, p_nodes)
+				       p_index, x, y, z,
+				       p_effective_level_min,
+				       p_level_height, p_nodes)
 	biome_seed = terrain.biome_seed
 	biomes = p_biomes
 	heightmap = terrain.heightmap
@@ -1291,9 +1306,10 @@ function prepare_structure_placement0 (level, terrain, p_biomes,
 	index = p_index
 	level_chunksize = terrain.chunksize
 	level_y_chunksize = terrain.chunksize_y
-	level_height = level.preset.height
+	level_height = p_level_height
 	level_min = level.preset.min_y
-	level_max_y = level_min + level_height - 1
+	effective_level_min = p_effective_level_min
+	level_max_y = effective_level_min + level_height - 1
 	nodes = p_nodes
 	nodes_origin_x = x
 	nodes_origin_y = y
@@ -1308,6 +1324,7 @@ function prepare_structure_placement0 (level, terrain, p_biomes,
 	mcl_levelgen.placement_level_min = level_min
 	mcl_levelgen.placement_level_height = level_height
 end
+mcl_levelgen.prepare_structure_placement0 = prepare_structure_placement0
 
 local origin_x
 local origin_z
@@ -1374,7 +1391,8 @@ else
 end
 
 local function block_index (x, y, z)
-	return index (x - nodes_origin_x, y - level_min,
+	return index (x - nodes_origin_x,
+		      y - effective_level_min,
 		      z - nodes_origin_z, level_chunksize,
 		      level_height)
 end
@@ -1393,7 +1411,8 @@ end
 function mcl_levelgen.get_block (x, y, z)
 	if x < origin_x or x >= origin_x + 16
 		or z < origin_z or z >= origin_z + 16
-		or y < level_min or y > level_max_y then
+		or y < effective_level_min
+		or y > level_max_y then
 		return nil
 	end
 
@@ -1410,13 +1429,13 @@ local unpack_height_map = mcl_levelgen.unpack_height_map
 local pack_height_map = mcl_levelgen.pack_height_map
 
 local function find_solid_surface (x, y, z, is_solid)
-	for y = y, level_min, -1 do
+	for y = y, effective_level_min, -1 do
 		if is_solid (get_block_1 (x, y, z)) then
 			return y + 1
 		end
 	end
 
-	return level_min
+	return effective_level_min
 end
 
 local function correct_heightmaps (x, y, z, cid, param2, force)
@@ -1469,7 +1488,7 @@ end
 function mcl_levelgen.set_block (x, y, z, cid, param2)
 	if x < origin_x or x >= origin_x + 16
 		or z < origin_z or z >= origin_z + 16
-		or y < level_min or y > level_max_y then
+		or y < effective_level_min or y > level_max_y then
 		return nil
 	end
 
@@ -1485,7 +1504,7 @@ local set_block = mcl_levelgen.set_block
 function mcl_levelgen.set_block_checked (x, y, z, cid, param2, writable_p)
 	if x < origin_x or x >= origin_x + 16
 		or z < origin_z or z >= origin_z + 16
-		or y < level_min or y > level_max_y then
+		or y < effective_level_min or y > level_max_y then
 		return nil
 	end
 
@@ -1527,8 +1546,8 @@ end
 function mcl_levelgen.index_biome (x, y, z)
 	if x < origin_x or x >= origin_x + 16
 		or z < origin_z or z >= origin_z + 16
-		or y < level_min or y > level_max_y then
-		error ("Heightmap index out of bounds")
+		or y < effective_level_min or y > level_max_y then
+		error ("Biome index out of bounds")
 	end
 	local ix, iy, iz = munge_biome_index (x, y, z, level_min,
 					      nodes_origin_x,
@@ -1895,7 +1914,7 @@ local function copy_to_data (schematic, px, py, pz, rot, force_place)
 	local rng = schematic_rng
 	local have_processors = #active_processors > 0
 
-	local min_y = mathmax (py, level_min)
+	local min_y = mathmax (py, effective_level_min)
 	local max_y = mathmin (py + sy - 1, level_max_y)
 	for y = min_y, max_y do
 		local yprob = yprob[y - min_y + 1].prob
