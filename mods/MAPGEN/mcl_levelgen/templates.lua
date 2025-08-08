@@ -460,7 +460,8 @@ local cid_structure_block_data
 
 if core.register_on_mods_loaded then
 	core.register_on_mods_loaded (function ()
-		if not mcl_levelgen.levelgen_enabled then
+		if not mcl_levelgen.levelgen_enabled
+			and not mcl_levelgen.enable_ersatz then
 			return false
 		end
 		cid_structure_block_data
@@ -692,6 +693,7 @@ local registered_template_pools = {}
 
 function mcl_levelgen.register_template_pool (id, data)
 	if not mcl_levelgen.levelgen_enabled
+		and not mcl_levelgen.enable_ersatz
 	-- XXX: this case would better be provided for by moving the
 	-- definition of mcl_levelgen:empty elsewhere...
 		and id ~= "mcl_levelgen:empty" then

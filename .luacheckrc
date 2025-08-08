@@ -134,6 +134,7 @@ globals = {
 	"mcl_loot",
 	"mcl_mangrove",
 	"mcl_mapgen_core",
+	"mcl_mapgen_models",
 	"mcl_maps",
 	"mcl_meshhand",
 	"mcl_minecarts",

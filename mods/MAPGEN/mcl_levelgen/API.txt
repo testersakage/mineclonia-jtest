@@ -17,13 +17,20 @@ top-level, only within scripts provided to `register_levelgen_script'.
 
 SCRIPT REGISTRATION
 
-Function: mcl_levelgen.register_levelgen_script (SCRIPT)
+Function: mcl_levelgen.register_levelgen_script (SCRIPT, ERSATZ)
 
 Register SCRIPT to execute in every context where structure or feature
 placement is processed; registered scripts are executed in the same
 sequence as they are defined.  All facilities documented after this
 function, unless otherwise stated, are only safe to invoke from within
 such a mapgen script.
+
+If ERSATZ is non-nil, SCRIPT will also be loaded when the structure
+generator is operating in an "ersatz" configuration; that is, when the
+structure generator is operating independently of the terrain
+generator under one of Luanti's built-in map generators.  There is a
+host of restrictions incident to such an environment; refer to the
+section "ERSATZ STRUCTURE GENERATION" before enabling this option.
 
 Function: mcl_levelgen.register_portable_schematic (ID, SPECIFIER,
 	  					    NORMALIZE_YPROB)
@@ -1803,3 +1810,37 @@ processors themselves.
 TEMPLATE POOLS AND JIGSAW STRUCTURES
 
 XXX: document template pools, data blocks, and jigsaw blocks.
+
+
+ERSATZ STRUCTURE GENERATION
+
+It is possible for the structure generator to execute independently of
+the biome, terrain, and feature generators, under one of Luanti's
+built-in map generators.  Such a configuration is referred to by many
+variations of the phrase "ersatz level generation" and is attended by
+a number of limitations.  In particular, presets and terrain generator
+tables are replaced by facsimiles which only export functions which
+sample terrain height and biome data.  Structure piece placement
+functions are not afforded access the whole of a level's vertical
+extents, but only the MapChunk in generation, and heightmap data
+available at that stage is abridged to what is visible within a
+section of level 2 nodes around the MapChunk in generation, which is
+generally sufficient to prevent surface-only features from appearing
+at chunk boundaries.  Feature placement is impossible.  It is as yet
+not possible for the structure generator to execute in the End.
+`terrain_generator:get_one_column' is only available in the Overworld,
+and simply reports stone where the the terrain height at the column
+specified is above the position being sampled and air elsewhere.
+Other terrain generator methods which accept IS_SOLID predicates
+restrict the applicability of such predicates to deciding whether
+liquid bodies, or more specifically water bodies, is solid.
+`preset:index_biomes_block' applies a mapping between classic Luanti
+biomes and the biome names utilized by this level generator which does
+not admit of a distinction between ocean, river, and inland biomes.
+Surface systems are not available, and any terrain which is generated
+by beardification is instead coated in a one-block thin layer of grass
+where the terrain extends above the heightmap.
+
+If these handicaps are acceptable, a level generator script may be
+registered to execute in ersatz generation environments by specifying
+the ERSATZ argument to `mcl_levelgen.register_levelgen_script' (q.v.).

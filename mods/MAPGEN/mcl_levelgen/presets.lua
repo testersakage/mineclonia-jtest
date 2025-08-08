@@ -70,6 +70,7 @@ local level_preset_template = {
 	feature_indices = {},
 	features = {},
 }
+mcl_levelgen.level_preset_template = level_preset_template
 
 -- NormalNoise parameters...
 local standard_noise_templates = {
@@ -508,6 +509,7 @@ local function copy_preset (template)
 	copy.noises = {}
 	return copy
 end
+mcl_levelgen.copy_preset = copy_preset
 
 ------------------------------------------------------------------------
 -- Common density functions.
@@ -1507,6 +1509,7 @@ local function initialize_noises (preset)
 	}
 	setmetatable (preset.noises, metatable)
 end
+mcl_levelgen.initialize_noises = initialize_noises
 
 local seed_from_ull = mcl_levelgen.seed_from_ull
 local mix64 = mcl_levelgen.mix64
@@ -1534,6 +1537,7 @@ local function initialize_random (preset, seed)
 	end
 	preset.factory = rng:fork_positional ()
 end
+mcl_levelgen.initialize_random = initialize_random
 
 local function initialize_density_functions (preset)
 	common_density_functions (preset, preset.registry, preset.noises)

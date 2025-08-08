@@ -11,7 +11,8 @@ local registered_dimensions = {}
 mcl_levelgen.registered_dimensions = registered_dimensions
 
 function mcl_levelgen.register_dimension (level_id, level_callbacks)
-	assert (not registered_dimensions[level_id])
+	-- Permit dimensions to be redefined.
+	-- assert (not registered_dimensions[level_id])
 	registered_dimensions[level_id] = level_callbacks
 end
 
