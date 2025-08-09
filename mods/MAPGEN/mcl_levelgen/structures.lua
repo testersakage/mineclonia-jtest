@@ -1321,7 +1321,7 @@ function prepare_structure_placement0 (level, terrain, p_biomes,
 	structure_extents[5] = -huge
 	structure_extents[6] = -huge
 
-	mcl_levelgen.placement_level_min = level_min
+	mcl_levelgen.placement_level_min = effective_level_min
 	mcl_levelgen.placement_level_height = level_height
 end
 mcl_levelgen.prepare_structure_placement0 = prepare_structure_placement0
