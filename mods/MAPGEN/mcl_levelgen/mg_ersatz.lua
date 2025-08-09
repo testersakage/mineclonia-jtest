@@ -6,7 +6,7 @@
 --  [X] Rudimentary beardificiation.
 --  [X] Recording generated structure pieces.
 --  [X] Re-enabling mcl_mapgen_core.
---  [ ] End island map generator models.
+--  [X] End island map generator models.
 ------------------------------------------------------------------------
 
 mcl_levelgen.initialize_nodeprops_in_async_env ()
@@ -35,6 +35,11 @@ local encode_node = mcl_levelgen.encode_node
 ------------------------------------------------------------------------
 
 local gn = {}
+
+for i = 1, chunksize * ychunksize * chunksize do
+	gn[i] = 0
+end
+
 local heightmap, heightmap_wg = {}, {}
 local cids, param2s = {}, {}
 local biomes = {}
@@ -232,7 +237,7 @@ local function augmented_density (x, y, z, ystart, yend)
 end
 
 local encoded_grass = encode_node (cid_grass_block, 0)
-local encoded_stone = encode_node (cid_stone, 0)
+local encoded_default_block = encode_node (cid_stone, 0)
 local encoded_air = encode_node (cid_air, 0)
 
 local function ersatz_surface_rule (heightmap, x, y, z)
@@ -242,7 +247,7 @@ local function ersatz_surface_rule (heightmap, x, y, z)
 		heightmap[idx] = y
 		return encoded_grass
 	end
-	return encoded_stone
+	return encoded_default_block
 end
 
 local function form_terrain (beard_weights, ystart, ymax, min, max, border)
@@ -306,6 +311,7 @@ local function do_structure_placement (min, max, minp, maxp, y1, y2,
 	local level = terrain.structures
 	terrain.heightmap = heightmap
 	terrain.heightmap_wg = heightmap_wg
+	encoded_default_block = encode_node (terrain.cid_default_block, 0)
 	-- chunksize_y is only consulted by the structure generator to
 	-- establish whether structure pieces or generation
 	-- notifications in fact intersect the region of the chunk

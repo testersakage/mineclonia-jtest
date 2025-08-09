@@ -2288,7 +2288,7 @@ local function jigsaw_create_piece (element, rotation, rng, sx, sy, sz, bbox)
 	local piece = make_template_piece (element.template, sx, sy, sz,
 					   nil, rotation, rng, nil,
 					   element.processors,
-					   element.ground_offset, bbox)
+					   element.ground_level_delta, bbox)
 	piece.element = element
 	piece.no_terrain_adaptation = element.no_terrain_adaptation
 	return piece

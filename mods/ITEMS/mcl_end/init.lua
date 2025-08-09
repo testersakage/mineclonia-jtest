@@ -15,7 +15,7 @@ end
 
 mcl_levelgen.register_levelgen_script (basepath .. "/common.lua")
 mcl_levelgen.register_levelgen_script (basepath .. "/lg_register.lua")
-mcl_levelgen.register_levelgen_script (basepath .. "/end_city.lua")
+mcl_levelgen.register_levelgen_script (basepath .. "/end_city.lua", true)
 dofile (basepath .. "/end_city.lua")
 
 local v = vector.zero ()

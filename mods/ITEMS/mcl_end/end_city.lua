@@ -151,7 +151,11 @@ mcl_levelgen.register_loot_table ("mcl_end:end_ship_loot", end_city_loot)
 -- End City registration.
 ------------------------------------------------------------------------
 
-local end_city_biomes = {
+local is_ersatz = mcl_levelgen.enable_ersatz
+
+local end_city_biomes = is_ersatz and {
+	"TheEnd",
+} or {
 	"EndHighlands",
 	"EndMidlands",
 }
@@ -162,19 +166,21 @@ mcl_levelgen.modify_biome_groups (end_city_biomes, {
 
 local modpath = core.get_modpath ("mcl_end")
 
-local function L (template, weight, processors)
+local function L (template, weight, processors, allow_terrain_adaptation)
 	return {
 		projection = "rigid",
 		template = modpath .. "/templates/" .. template .. ".dat",
 		weight = weight,
 		ground_level_delta = 1,
 		processors = processors or {},
+		no_terrain_adaptation
+			= is_ersatz and not allow_terrain_adaptation or nil,
 	}
 end
 
 mcl_levelgen.register_template_pool ("mcl_end:end_city_starts", {
 	elements = {
-		L ("end_city_base_tower", 1),
+		L ("end_city_base_tower", 1, nil, true),
 	},
 })
 
@@ -274,12 +280,12 @@ local jigsaw_create_start = mcl_levelgen.jigsaw_create_start
 local random_schematic_rotation = mcl_levelgen.random_schematic_rotation
 local height_of_lowest_corner_including_center
 	= mcl_levelgen.height_of_lowest_corner_including_center
-local MINUS_ONE = function (_) return -1 end
+local ZERO = function (_) return 0 end
 
 local function end_city_create_start (self, level, terrain, rng, cx, cz)
 	local rot = random_schematic_rotation (rng)
 	local lowest = height_of_lowest_corner_including_center (terrain, cx, cz, rot)
-	if lowest < 60 then
+	if lowest < 60 or (is_ersatz and (cx * cx + cz * cz) < 1024) then
 		return nil
 	else
 		return jigsaw_create_start (self, level, terrain, rng, cx, cz)
@@ -290,10 +296,10 @@ mcl_levelgen.register_structure ("mcl_end:end_city", {
 	step = mcl_levelgen.SURFACE_STRUCTURES,
 	biomes = mcl_levelgen.build_biome_list ({"#has_end_city",}),
 	create_start = end_city_create_start,
-	terrain_adaptation = "none",
+	terrain_adaptation = is_ersatz and "beard_thin" or "none",
 	max_distance_from_center = 110,
 	size = 25,
-	start_height = MINUS_ONE,
+	start_height = ZERO,
 	project_start_to_heightmap = "world_surface_wg",
 	start_pool = "mcl_end:end_city_starts",
 })
