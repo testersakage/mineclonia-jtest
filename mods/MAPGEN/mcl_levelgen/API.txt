@@ -1833,7 +1833,7 @@ and simply reports stone where the the terrain height at the column
 specified is above the position being sampled and air elsewhere.
 Other terrain generator methods which accept IS_SOLID predicates
 restrict the applicability of such predicates to deciding whether
-liquid bodies, or more specifically water bodies, is solid.
+liquid bodies, or more specifically water bodies, are solid.
 `preset:index_biomes_block' applies a mapping between classic Luanti
 biomes and the biome names utilized by this level generator which does
 not admit of a distinction between ocean, river, and inland biomes.
@@ -1841,6 +1841,19 @@ Surface systems are not available, and any terrain which is generated
 by beardification is instead coated in a one-block thin layer of grass
 where the terrain extends above the heightmap.
 
+Ersatz feature generation may be detected by testing the field
+`is_ersatz' in supplied terrain generator tables (which is set to true
+in such cases), or the variable `mcl_levelgen.enable_ersatz'.
+
+Variable: mcl_levelgen.enable_ersatz
+
+Set to true when ersatz structure generation is enabled, and is false
+or not defined otherwise.
+
 If these handicaps are acceptable, a level generator script may be
 registered to execute in ersatz generation environments by specifying
 the ERSATZ argument to `mcl_levelgen.register_levelgen_script' (q.v.).
+
+A mapgen script loaded in such an environment must also be loaded in
+the main Lua environment (e.g. with `dofile') to be available to
+commands such as `/locate'.
