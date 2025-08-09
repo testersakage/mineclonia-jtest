@@ -537,6 +537,8 @@ local reorientate_coords = mcl_levelgen.reorientate_coords
 local set_block = mcl_levelgen.set_block
 local is_water_air_or_lava = mcl_levelgen.is_water_air_or_lava
 local notify_generated = mcl_levelgen.notify_generated
+local is_ersatz = mcl_levelgen.enable_ersatz
+local index_heightmap = mcl_levelgen.index_heightmap
 
 local function fill_area (piece, x1, y1, z1, x2, y2, z2, cid, param2)
 	local x1, y1, z1 = reorientate_coords (piece, x1, y1, z1)
@@ -553,12 +555,22 @@ local function fill_area (piece, x1, y1, z1, x2, y2, z2, cid, param2)
 end
 
 local function build_foundation_column (x, y, z, level_min)
-	while y > level_min + 1 do
-		if not is_water_air_or_lava (x, y, z) then
-			break
+	if is_ersatz then
+		-- `is_water_air_or_lava (x, y, z)' will prompt
+		-- columns to be truncated when crossing chunk
+		-- boundaries.
+		while y > level_min do
+			set_block (x, y, z, cid_nether_bricks, 0)
+			y = y - 1
 		end
-		set_block (x, y, z, cid_nether_bricks, 0)
-		y = y - 1
+	else
+		while y > level_min + 1 do
+			if not is_water_air_or_lava (x, y, z) then
+				break
+			end
+			set_block (x, y, z, cid_nether_bricks, 0)
+			y = y - 1
+		end
 	end
 end
 
