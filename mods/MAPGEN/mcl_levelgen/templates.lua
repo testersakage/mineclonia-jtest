@@ -867,24 +867,24 @@ function mcl_levelgen.generate_jigsaw (rng, x, y, z, rotation, start_pool,
 			sz = sz - jz
 		end
 
+		local ground_level_delta = start.ground_level_delta
 		local bbox
 		do
 			local x1, y1, z1, x2, y2, z2
 				= get_template_bounding_box (start.template, sx, sy, sz,
 							     0, 0, nil, rotation)
-			local ground_level_delta = start.ground_level_delta
 			bbox = {
-				x1, y1 - ground_level_delta, z1,
-				x2, y2 - ground_level_delta, z2,
+				x1, y1, z1,
+				x2, y2, z2,
 			}
 		end
 
 		local x_center, _, z_center = bbox_center (bbox)
 		if project_start then
 			local projection = project_start (x_center, z_center, arg1, arg2, arg3)
-			sy = sy + projection
-			bbox[2] = bbox[2] + projection
-			bbox[5] = bbox[5] + projection
+			sy = sy + projection - ground_level_delta
+			bbox[2] = bbox[2] + projection - ground_level_delta
+			bbox[5] = bbox[5] + projection - ground_level_delta
 		end
 		if test_spawn_position then
 			if not test_spawn_position (sx, sy, sz,

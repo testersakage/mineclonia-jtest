@@ -157,6 +157,7 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 	min_y = -64,
 	height = 384,
 	sea_level = 64,
+	ersatz_default_height = 65,
 	index_biomes_block = function (self, x, y, z)
 		v.x = x
 		v.z = -z - 1
@@ -234,6 +235,7 @@ local ersatz_preset_template_nether = table.merge (mcl_levelgen.level_preset_tem
 	min_y = 0,
 	height = 128,
 	sea_level = 32,
+	ersatz_default_height = 129,
 	default_block = "mcl_nether:netherrack",
 	default_fluid = "mcl_nether:nether_lava_source",
 	index_biomes_block = function (self, x, y, z)
@@ -279,6 +281,7 @@ local ersatz_preset_template_end = table.merge (mcl_levelgen.level_preset_templa
 	sea_level = 0,
 	default_block = "mcl_end:end_stone",
 	default_fluid = "air",
+	ersatz_default_height = 75,
 	index_biomes_block = function (self, x, y, z)
 		v.x = x
 		v.z = -z - 1
@@ -490,7 +493,6 @@ local mt_chunksize = core.ipc_get ("mcl_levelgen:mt_chunksize")
 local mathmin = math.min
 local floor = math.floor
 local ceil = math.ceil
-local huge = math.huge
 
 local chunksize = mt_chunksize.x * 16
 local ychunksize = mt_chunksize.y * 16
@@ -522,7 +524,7 @@ function ersatz_terrain:get_one_height (x, z, is_solid)
 						       water_solid_p)
 			+ y_offset
 	end
-	return -huge
+	return self.preset.ersatz_default_height
 end
 
 function ersatz_terrain:area_heightmap (x1, z1, x2, z2, heightmap, is_solid)
@@ -542,8 +544,9 @@ function ersatz_terrain:area_heightmap (x1, z1, x2, z2, heightmap, is_solid)
 				+ y_offset
 		end
 	else
+		local default = self.preset.ersatz_default_height
 		for i = 1, total do
-			heightmap[i] = -huge
+			heightmap[i] = default
 		end
 	end
 end
