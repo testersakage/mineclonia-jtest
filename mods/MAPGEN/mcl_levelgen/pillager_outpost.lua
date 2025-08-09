@@ -103,14 +103,24 @@ if not mcl_levelgen.is_levelgen_environment
 						    handle_outpost_mobs)
 	mcl_levelgen.register_notification_handler ("mcl_levelgen:pillager_outpost_loot",
 						    handle_outpost_loot)
-	return
 end
 
 ------------------------------------------------------------------------
 -- Pillager outpost.
 ------------------------------------------------------------------------
 
-local cid_chest_small = core.get_content_id ("mcl_chests:chest_small")
+local cid_chest_small
+
+local function initialize_cids ()
+	cid_chest_small = core.get_content_id ("mcl_chests:chest_small")
+end
+
+if core.register_on_mods_loaded then
+	core.register_on_mods_loaded (initialize_cids)
+else
+	initialize_cids ()
+end
+
 local notify_generated = mcl_levelgen.notify_generated
 local bbox_center = mcl_levelgen.bbox_center
 

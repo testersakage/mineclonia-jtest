@@ -106,8 +106,6 @@ if not mcl_levelgen.is_levelgen_environment then
 			.. schem .. ".mts"
 		mcl_levelgen.register_portable_schematic (name, file, true)
 	end
-
-	return
 end
 
 local schematics_portals = {
@@ -151,9 +149,32 @@ local col4 = {}
 
 local push_schematic_processor = mcl_levelgen.push_schematic_processor
 local pop_schematic_processors = mcl_levelgen.pop_schematic_processors
-local cid_gold_block = core.get_content_id ("mcl_core:goldblock")
-local cid_netherrack = core.get_content_id ("mcl_nether:netherrack")
-local cid_magma_block = core.get_content_id ("mcl_nether:magma")
+
+local function getcid (name)
+	if core and mcl_levelgen.is_levelgen_environment then
+		return core.get_content_id (name)
+	else
+		-- Content IDs are not required outside level
+		-- generation environments.
+		return nil
+	end
+end
+
+local function optional_cid_list (cids_or_groups)
+	-- Content IDs needn't be resolved when not within a level
+	-- generation environment, as structure generators are only
+	-- invoked to compute structure placements for the likes of
+	-- /locate.
+	if core and mcl_levelgen.is_levelgen_environment then
+		return mcl_levelgen.construct_cid_list (cids_or_groups)
+	else
+		return {}
+	end
+end
+
+local cid_gold_block = getcid ("mcl_core:goldblock")
+local cid_netherrack = getcid ("mcl_nether:netherrack")
+local cid_magma_block = getcid ("mcl_nether:magma")
 local cid_air = core.CONTENT_AIR
 
 local function substitute_air_for_gold (x, y, z, rng, cid_existing,
@@ -183,70 +204,70 @@ end
 local mossiness
 
 local cid_obsidian
-	= core.get_content_id ("mcl_core:obsidian")
+	= getcid ("mcl_core:obsidian")
 local cids_stairs
-	= mcl_levelgen.construct_cid_list ({"group:stair",})
+	= optional_cid_list ({"group:stair",})
 local cids_stone_bricks
-	= mcl_levelgen.construct_cid_list ({"group:stonebrick", "mcl_core:stone",})
+	= optional_cid_list ({"group:stonebrick", "mcl_core:stone",})
 local cids_slabs
-	= mcl_levelgen.construct_cid_list ({"group:slab",})
+	= optional_cid_list ({"group:slab",})
 
-local cid_crying_obsidian = core.get_content_id ("mcl_core:crying_obsidian")
+local cid_crying_obsidian = getcid ("mcl_core:crying_obsidian")
 
 local cid_cracked_stone_bricks
-	= core.get_content_id ("mcl_core:stonebrickcracked")
+	= getcid ("mcl_core:stonebrickcracked")
 local cid_mossy_stone_bricks
-	= core.get_content_id ("mcl_core:stonebrickmossy")
+	= getcid ("mcl_core:stonebrickmossy")
 
 local cid_cracked_stone_brick_stairs
-	= core.get_content_id ("mcl_stairs:stair_stonebrickcracked")
+	= getcid ("mcl_stairs:stair_stonebrickcracked")
 local cid_cracked_stone_brick_stairs_outer
-	= core.get_content_id ("mcl_stairs:stair_stonebrickcracked_outer")
+	= getcid ("mcl_stairs:stair_stonebrickcracked_outer")
 local cid_cracked_stone_brick_stairs_inner
-	= core.get_content_id ("mcl_stairs:stair_stonebrickcracked_inner")
+	= getcid ("mcl_stairs:stair_stonebrickcracked_inner")
 local cid_mossy_stone_brick_stairs
-	= core.get_content_id ("mcl_stairs:stair_stonebrickmossy")
+	= getcid ("mcl_stairs:stair_stonebrickmossy")
 local cid_mossy_stone_brick_stairs_outer
-	= core.get_content_id ("mcl_stairs:stair_stonebrickmossy_outer")
+	= getcid ("mcl_stairs:stair_stonebrickmossy_outer")
 local cid_mossy_stone_brick_stairs_inner
-	= core.get_content_id ("mcl_stairs:stair_stonebrickmossy_inner")
+	= getcid ("mcl_stairs:stair_stonebrickmossy_inner")
 
 local cid_cracked_stone_brick_slab
-	= core.get_content_id ("mcl_stairs:slab_stonebrickcracked")
+	= getcid ("mcl_stairs:slab_stonebrickcracked")
 local cid_mossy_stone_brick_slab
-	= core.get_content_id ("mcl_stairs:slab_stonebrickmossy")
+	= getcid ("mcl_stairs:slab_stonebrickmossy")
 local cid_mossy_stone_brick_slab_top
-	= core.get_content_id ("mcl_stairs:slab_stonebrickmossy_top")
+	= getcid ("mcl_stairs:slab_stonebrickmossy_top")
 
 local cidtype = {}
 local cid_matching_mossy_stairs = {}
 local cid_matching_cracked_stairs = {}
 
 -- local cid_blackstone
--- 	= core.get_content_id ("mcl_blackstone:blackstone")
+-- 	= getcid ("mcl_blackstone:blackstone")
 -- local cid_blackstone_slab
--- 	= core.get_content_id ("mcl_slabs:slab_blackstone")
+-- 	= getcid ("mcl_slabs:slab_blackstone")
 -- local cid_blackstone_slab_top
--- 	= core.get_content_id ("mcl_slabs:slab_blackstone_top")
+-- 	= getcid ("mcl_slabs:slab_blackstone_top")
 -- local cid_blackstone_stairs
--- 	= core.get_content_id ("mcl_slabs:stair_blackstone")
+-- 	= getcid ("mcl_slabs:stair_blackstone")
 -- local cid_blackstone_stairs_inner
--- 	= core.get_content_id ("mcl_slabs:stair_blackstone_inner")
+-- 	= getcid ("mcl_slabs:stair_blackstone_inner")
 -- local cid_blackstone_stairs_outer
--- 	= core.get_content_id ("mcl_slabs:stair_blackstone_outer")
+-- 	= getcid ("mcl_slabs:stair_blackstone_outer")
 
 local cid_polished_blackstone
-	= core.get_content_id ("mcl_blackstone:blackstone_polished")
+	= getcid ("mcl_blackstone:blackstone_polished")
 local cid_polished_blackstone_slab
-	= core.get_content_id ("mcl_stairs:slab_blackstone_polished")
+	= getcid ("mcl_stairs:slab_blackstone_polished")
 local cid_polished_blackstone_slab_top
-	= core.get_content_id ("mcl_stairs:slab_blackstone_polished_top")
+	= getcid ("mcl_stairs:slab_blackstone_polished_top")
 local cid_polished_blackstone_stairs
-	= core.get_content_id ("mcl_stairs:stair_blackstone_polished")
+	= getcid ("mcl_stairs:stair_blackstone_polished")
 local cid_polished_blackstone_stairs_inner
-	= core.get_content_id ("mcl_stairs:stair_blackstone_polished_inner")
+	= getcid ("mcl_stairs:stair_blackstone_polished_inner")
 local cid_polished_blackstone_stairs_outer
-	= core.get_content_id ("mcl_stairs:stair_blackstone_polished_outer")
+	= getcid ("mcl_stairs:stair_blackstone_polished_outer")
 
 local blackstone_replacements = {}
 
@@ -358,8 +379,8 @@ local function weather_blocks (x, y, z, rng, cid_existing,
 end
 
 local is_full_block = mcl_levelgen.is_full_block
-local cid_lava_source = core.get_content_id ("mcl_core:lava_source")
-local cid_lava_flowing = core.get_content_id ("mcl_core:lava_flowing")
+local cid_lava_source = getcid ("mcl_core:lava_source")
+local cid_lava_flowing = getcid ("mcl_core:lava_flowing")
 local set_block = mcl_levelgen.set_block
 local get_block = mcl_levelgen.get_block
 
@@ -397,12 +418,12 @@ local function replace_with_blackstone (x, y, z, rng, cid_existing,
 end
 
 local protected_cids
-	= mcl_levelgen.construct_cid_list ({"group:features_cannot_replace",})
+	= optional_cid_list ({"group:features_cannot_replace",})
 local PROTECTED_BLOCKS_PROCESSOR
 	= mcl_levelgen.protected_blocks_processor (protected_cids)
 
 local notify_generated = mcl_levelgen.notify_generated
-local cid_chest_small = core.get_content_id ("mcl_chests:chest_small")
+local cid_chest_small = getcid ("mcl_chests:chest_small")
 
 local function post_ruined_portal_loot (x, y, z, rng, cid_existing,
 					param2_existing, cid, param2)
@@ -453,7 +474,7 @@ local magma_not_replaceable = {
 	"group:features_cannot_replace",
 }
 
-for _, cid in ipairs (mcl_levelgen.construct_cid_list (magma_not_replaceable)) do
+for _, cid in ipairs (optional_cid_list (magma_not_replaceable)) do
 	is_cid_magma_not_replaceable[cid] = true
 end
 
@@ -466,7 +487,7 @@ local function place_hot_block (self, rng, x, y, z)
 end
 
 local is_air = mcl_levelgen.is_air
-local cid_leaves_jungle = core.get_content_id ("mcl_trees:leaves_jungle")
+local cid_leaves_jungle = getcid ("mcl_trees:leaves_jungle")
 local index_biome = mcl_levelgen.index_biome
 local registered_biomes = mcl_levelgen.registered_biomes
 
@@ -574,7 +595,7 @@ local VINES_DIRS = {
 	FACE_DOWN,
 }
 
-local cid_vine = core.get_content_id ("mcl_core:vine")
+local cid_vine = getcid ("mcl_core:vine")
 local ordinal_to_wallmounted = mcl_levelgen.ordinal_to_wallmounted
 local get_sturdy_faces = mcl_levelgen.get_sturdy_faces
 local band = bit.band

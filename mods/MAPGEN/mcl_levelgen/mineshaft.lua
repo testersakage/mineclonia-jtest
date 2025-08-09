@@ -95,8 +95,6 @@ end
 
 mcl_levelgen.register_notification_handler ("mcl_levelgen:mob_spawner_constructor",
 					    mob_spawner_constructor)
-
-return
 end
 
 ------------------------------------------------------------------------
@@ -136,7 +134,11 @@ local function initialize_cids ()
 end
 
 if core then
-	initialize_cids ()
+	if core.register_on_mods_loaded then
+		core.register_on_mods_loaded (initialize_cids)
+	else
+		initialize_cids ()
+	end
 else
 	cid_air = 0
 	cid_water_source = 1
