@@ -482,6 +482,150 @@ core.register_on_shutdown (save_structure_extents)
 end
 
 ------------------------------------------------------------------------
+-- Ersatz terrain generator object.
+------------------------------------------------------------------------
+
+local mt_chunksize = core.ipc_get ("mcl_levelgen:mt_chunksize")
+
+local mathmin = math.min
+local floor = math.floor
+local ceil = math.ceil
+local huge = math.huge
+
+local chunksize = mt_chunksize.x * 16
+local ychunksize = mt_chunksize.y * 16
+local y_offset
+local mapgen_model
+
+local ull = mcl_levelgen.ull
+
+local ersatz_terrain = {
+	chunksize = chunksize,
+	chunksize_y = ychunksize,
+	preset = nil,
+	biome_seed = ull (0, 0),
+	is_ersatz = true,
+}
+mcl_levelgen.ersatz_terrain = ersatz_terrain
+
+local cid_water_source
+
+core.register_on_mods_loaded (function ()
+	cid_water_source = core.get_content_id ("mcl_core:water_source")
+end)
+
+function ersatz_terrain:get_one_height (x, z, is_solid)
+	if mapgen_model then
+		local water_solid_p
+			= is_solid and is_solid (cid_water_source, 0)
+		return mapgen_model.get_column_height (x, -z - 1,
+						       water_solid_p)
+			+ y_offset
+	end
+	return -huge
+end
+
+function ersatz_terrain:area_heightmap (x1, z1, x2, z2, heightmap, is_solid)
+	local w = x2 - x1 + 1
+	local l = z2 - z1 + 1
+	local total = w * l
+
+	if mapgen_model then
+		local water_solid_p
+			= is_solid and is_solid (cid_water_source, 0)
+		local get_column_height = mapgen_model.get_column_height
+		for i = 1, total do
+			local dx = floor ((i - 1) / l)
+			local dz = (i - 1) % l
+			heightmap[i] = get_column_height (dx + x1, -(dz + z1) - 1,
+							  water_solid_p)
+				+ y_offset
+		end
+	else
+		for i = 1, total do
+			heightmap[i] = -huge
+		end
+	end
+end
+
+local tmp_heightmap = {}
+
+function ersatz_terrain:area_min_height (x1, z1, x2, z2, is_solid)
+	local heightmap = tmp_heightmap
+	local total = self:area_heightmap (x1, z1, x2, z2, heightmap,
+					   is_solid)
+	local value = heightmap[1]
+	for i = 2, total do
+		value = mathmin (value, heightmap[i])
+	end
+	return value
+end
+
+local function rtz (n)
+	if n < 0 then
+		return ceil (n)
+	end
+	return floor (n)
+end
+
+function ersatz_terrain:area_average_height (x1, z1, x2, z2, is_solid)
+	local heightmap = tmp_heightmap
+	local total = self:area_heightmap (x1, z1, x2, z2, heightmap,
+					   is_solid)
+	local value = heightmap[1]
+	for i = 2, total do
+		value = value + heightmap[i]
+	end
+	return rtz (value / total)
+end
+
+local cid_air = core.CONTENT_AIR
+local encode_node = mcl_levelgen.encode_node
+
+function ersatz_terrain:get_one_column (x, z, column_data)
+	local preset = self.preset
+	local level_height = preset.height
+	local y_min = preset.min_y
+	local height = self:get_one_height (x, z)
+	local default_block = encode_node (self.cid_default_block, 0)
+	local air = encode_node (cid_air, 0)
+	for i = 1, level_height do
+		if i + y_min >= height then
+			column_data[i] = air
+		else
+			column_data[i] = default_block
+		end
+	end
+	column_data[level_height + 1] = nil
+	return column_data
+end
+
+local structure_levels = {}
+
+local function create_structure_level (dim)
+	structure_levels[dim]
+		= mcl_levelgen.make_structure_level (dim.preset)
+	return structure_levels[dim]
+end
+
+function mcl_levelgen.get_ersatz_terrain (dim)
+	local preset = dim.preset
+	local y_global = dim.y_global
+	y_offset = preset.min_y - y_global
+	if 0 >= y_global and 0 <= y_global + preset.height - 1 then
+		mapgen_model = mcl_mapgen_models.get_mapgen_model ()
+	else
+		mapgen_model = nil
+	end
+	ersatz_terrain.preset = preset
+	ersatz_terrain.cid_default_block
+		= core.get_content_id (preset.default_block)
+	ersatz_terrain.chunksize_y = ychunksize
+	ersatz_terrain.structures = create_structure_level (dim)
+	return ersatz_terrain
+end
+
+------------------------------------------------------------------------
 -- Jigsaw Block registration.
 ------------------------------------------------------------------------
 

@@ -1103,6 +1103,7 @@ end
 
 local ull = mcl_levelgen.ull
 local village_rng = mcl_levelgen.xoroshiro (ull (0, 0), ull (0, 0))
+local is_levelgen_environment = mcl_levelgen.is_levelgen_environment
 
 local function assemble_village (self, level, terrain, rng, x, z)
 	-- Note: rotation only affects the village meeting point
@@ -1154,7 +1155,10 @@ local function assemble_village (self, level, terrain, rng, x, z)
 				    belltower_piece,
 				    beds_to_assign,
 				    pois_to_assign)
-	if not zombie then
+	-- The village generator is liable to be invoked by `/locate'
+	-- within the main environment when ersatz generation is
+	-- enabled.
+	if not zombie and is_levelgen_environment then
 		start.bell_spawn = assign_golem (belltower, belltower_piece)
 		notify_generated_unchecked ("mcl_villages:village_start_available",
 					    assigned_pois, false)

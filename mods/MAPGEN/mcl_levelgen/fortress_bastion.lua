@@ -397,7 +397,6 @@ if not mcl_levelgen.is_levelgen_environment then
 			},
 		},
 	})
-	return
 end
 
 local create_entity = mcl_levelgen.create_entity
@@ -499,9 +498,20 @@ mcl_levelgen.register_data_block_processor ("mcl_levelgen:piglin_melee",
 ------------------------------------------------------------------------
 
 local cid_air = core.CONTENT_AIR
-local cid_nether_bricks = core.get_content_id ("mcl_nether:nether_brick")
+
+local function getcid (name)
+	if core and mcl_levelgen.is_levelgen_environment then
+		return core.get_content_id (name)
+	else
+		-- Content IDs are not required outside level
+		-- generation environments.
+		return nil
+	end
+end
+
+local cid_nether_bricks = getcid ("mcl_nether:nether_brick")
 local cid_nether_brick_stairs
-	= core.get_content_id ("mcl_stairs:stair_nether_brick")
+	= getcid ("mcl_stairs:stair_nether_brick")
 
 local ipos3 = mcl_levelgen.ipos3
 
@@ -538,7 +548,6 @@ local set_block = mcl_levelgen.set_block
 local is_water_air_or_lava = mcl_levelgen.is_water_air_or_lava
 local notify_generated = mcl_levelgen.notify_generated
 local is_ersatz = mcl_levelgen.enable_ersatz
-local index_heightmap = mcl_levelgen.index_heightmap
 
 local function fill_area (piece, x1, y1, z1, x2, y2, z2, cid, param2)
 	local x1, y1, z1 = reorientate_coords (piece, x1, y1, z1)
@@ -884,7 +893,7 @@ end
 -- Bridge piece.
 
 local cid_nether_brick_fence
-	= core.get_content_id ("mcl_fences:nether_brick_fence")
+	= getcid ("mcl_fences:nether_brick_fence")
 
 local function bridge_place (self, level, terrain, rng, x1, z1, x2, z2)
 	-- Structure.
@@ -1124,7 +1133,7 @@ end
 
 -- Bridge platform piece (a.k.a. ``Monster Throne'').
 
-local cid_mob_spawner = core.get_content_id ("mcl_mobspawners:spawner")
+local cid_mob_spawner = getcid ("mcl_mobspawners:spawner")
 
 local function bridge_platform_place (self, level, terrain, rng, x1, z1, x2, z2)
 	fill_area (self, 0, 2, 0, 6, 7, 7, cid_air, 0)
@@ -1199,7 +1208,7 @@ end
 -- Corridor exit piece (a.k.a. ``Lava Well Room'').
 
 local cid_nether_lava_source
-	= core.get_content_id ("mcl_nether:nether_lava_source")
+	= getcid ("mcl_nether:nether_lava_source")
 
 local function corridor_exit_common (self)
 	-- Room and floor.
@@ -1390,7 +1399,7 @@ function essay_corridor_crossing (pieces, x, y, z, dir, depth)
 	return nil
 end
 
-local cid_chest_small = core.get_content_id ("mcl_chests:chest_small")
+local cid_chest_small = getcid ("mcl_chests:chest_small")
 local set_loot_table = mcl_levelgen.set_loot_table
 
 -- Corridor right turn piece.
@@ -1614,9 +1623,9 @@ end
 -- Corridor nether warts piece.
 
 local cid_nether_wart_0
-	= core.get_content_id ("mcl_nether:nether_wart_0")
+	= getcid ("mcl_nether:nether_wart_0")
 local cid_soul_sand
-	= core.get_content_id ("mcl_nether:soul_sand")
+	= getcid ("mcl_nether:soul_sand")
 
 local function corridor_nether_warts_place (self, level, terrain, rng, x1, z1, x2, z2)
 	corridor_exit_common (self)
