@@ -188,7 +188,6 @@ if core and not mcl_levelgen.is_levelgen_environment then
 						    handle_mansion_spawn_mob)
 	mcl_levelgen.register_notification_handler ("mcl_levelgen:mansion_specific_loot",
 						    handle_mansion_specific_loot)
-	return
 end
 
 ------------------------------------------------------------------------
@@ -196,9 +195,11 @@ end
 ------------------------------------------------------------------------
 
 local function getcid (name)
-	if core then
+	if core and mcl_levelgen.is_levelgen_environment then
 		return core.get_content_id (name)
 	else
+		-- Content IDs are not required outside level
+		-- generation environments.
 		return nil
 	end
 end

@@ -15,6 +15,9 @@ dofile(mcl_villages.modpath.."/schemgen.lua")
 
 mcl_levelgen.register_levelgen_script (mcl_villages.modpath .. "/lg_register.lua",
 				       true)
+if mcl_levelgen.enable_ersatz then
+dofile (mcl_villages.modpath .. "/lg_register.lua")
+end
 
 --
 -- load settlements on server

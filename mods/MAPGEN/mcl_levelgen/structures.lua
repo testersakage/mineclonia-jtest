@@ -2176,7 +2176,7 @@ end
 function mcl_levelgen.place_template (template, x, y, z, px, pz, options,
 				      mirroring, rotation, rng)
 	bounds[1] = origin_x
-	bounds[2] = level_min
+	bounds[2] = effective_level_min
 	bounds[3] = origin_z
 	bounds[4] = origin_x + 15
 	bounds[5] = level_max_y

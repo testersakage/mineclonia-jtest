@@ -861,7 +861,11 @@ end
 local function locate_structure_or_biome (taskinfo)
 	local dim = mcl_levelgen.get_dimension (taskinfo.dim)
 	assert (dim)
-	mcl_levelgen.initialize_terrain (dim)
+	if not mcl_levelgen.enable_ersatz then
+		mcl_levelgen.initialize_terrain (dim)
+	else
+		dim.terrain = mcl_levelgen.get_ersatz_terrain (dim)
+	end
 	if taskinfo.sids then
 		local x, y, z
 			= mcl_levelgen.locate_structure_placement (dim.terrain, taskinfo.x,
@@ -901,6 +905,22 @@ local function dispatch_locate_task (taskinfo)
 
 	taskinfo.callback = nil
 	taskinfo.cb_data = nil
+	-- Async execution is impossible in ersatz structure
+	-- generation environments, as core.get_biome_data is not
+	-- available in async environments and cannot be reproduced in
+	-- Lua (see:
+	-- https://irc.luanti.org/luanti/2025-08-09#i_6277165).
+	if enable_ersatz then
+		local x, y, z = locate_structure_or_biome (taskinfo)
+		if x then
+			local v = vector.new (x, y - dim.y_offset, -z - 1)
+			callback (v, cb_data)
+		else
+			callback (nil, cb_data)
+		end
+		outstanding_locate_task = false
+		return
+	end
 	-- Owch!!!  Interested parties should investigate eliminating
 	-- this closure.
 	core.handle_async (locate_structure_or_biome, function (x, y, z)
@@ -934,7 +954,7 @@ end
 
 function mcl_biome_dispatch.locate_structure_near (pos, sid_or_sids, range_chebyshev,
 						   callback, cb_data, retain_p)
-	if not levelgen_enabled then
+	if not levelgen_enabled and not enable_ersatz then
 		callback (nil, cb_data)
 		return
 	end
@@ -954,8 +974,8 @@ function mcl_biome_dispatch.locate_structure_near (pos, sid_or_sids, range_cheby
 			cb_data = cb_data,
 		}
 		if not outstanding_locate_task then
-			dispatch_locate_task (taskinfo)
 			outstanding_locate_task = true
+			dispatch_locate_task (taskinfo)
 		else
 			taskinfo.callback = callback
 			taskinfo.cb_data = cb_data
@@ -994,8 +1014,8 @@ function mcl_biome_dispatch.locate_biome_near (pos, tags, range, hres, vres,
 			cb_data = cb_data,
 		}
 		if not outstanding_locate_task then
-			dispatch_locate_task (taskinfo)
 			outstanding_locate_task = true
+			dispatch_locate_task (taskinfo)
 		else
 			taskinfo.callback = callback
 			taskinfo.cb_data = cb_data
@@ -1005,7 +1025,7 @@ function mcl_biome_dispatch.locate_biome_near (pos, tags, range, hres, vres,
 end
 
 function mcl_biome_dispatch.list_registered_structures ()
-	if not levelgen_enabled then
+	if not levelgen_enabled and not enable_ersatz then
 		return {}
 	end
 	local structs = core.ipc_get ("mcl_biome_dispatch:registered_structures")
@@ -1013,7 +1033,7 @@ function mcl_biome_dispatch.list_registered_structures ()
 end
 
 function mcl_biome_dispatch.list_registered_biomes_and_groups ()
-	if not levelgen_enabled then
+	if not levelgen_enabled and not enable_ersatz then
 		return {}
 	end
 	local biomes_and_groups
@@ -1024,6 +1044,11 @@ end
 if levelgen_enabled then
 	local modpath = core.get_modpath (core.get_current_modname ())
 	core.register_async_dofile (modpath .. "/async_init.lua")
+elseif enable_ersatz then
+	local modpath = core.get_modpath (core.get_current_modname ())
+	core.register_on_mods_loaded (function ()
+		dofile (modpath .. "/async_init.lua")
+	end)
 end
 
 ------------------------------------------------------------------------
