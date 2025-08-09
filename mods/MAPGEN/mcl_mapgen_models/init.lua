@@ -3,6 +3,7 @@ local model = nil
 
 local modpath = core.get_modpath (core.get_current_modname ())
 dofile (modpath .. "/v7.lua")
+dofile (modpath .. "/valleys.lua")
 dofile (modpath .. "/common.lua")
 
 ------------------------------------------------------------------------
@@ -14,6 +15,8 @@ local name
 local function set_model ()
 	if name == "v7" then
 		model = mcl_mapgen_models.v7_mapgen_model ()
+	elseif name == "valleys" then
+		model = mcl_mapgen_models.valleys_mapgen_model ()
 	else
 		model = mcl_mapgen_models.ersatz_model ()
 	end
