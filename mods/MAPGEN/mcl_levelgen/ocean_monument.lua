@@ -23,7 +23,6 @@ end
 if not mcl_levelgen.is_levelgen_environment then
 	mcl_levelgen.register_notification_handler ("mcl_levelgen:monument_elder_guardian",
 						    handle_monument_elder_guardian)
-	return false
 end
 
 -- local cid_magenta_glass
@@ -424,10 +423,20 @@ local function create_monument_base (rng, x, z)
 	return meta_piece
 end
 
-local cid_ice = core.get_content_id ("mcl_core:ice")
-local cid_packed_ice = core.get_content_id ("mcl_core:packed_ice")
-local cid_blue_ice = core.get_content_id ("mcl_core:blue_ice")
-local cid_water_source = core.get_content_id ("mcl_core:water_source")
+local function getcid (name)
+	if core and mcl_levelgen.is_levelgen_environment then
+		return core.get_content_id (name)
+	else
+		-- Content IDs are not required outside level
+		-- generation environments.
+		return nil
+	end
+end
+
+local cid_ice = getcid ("mcl_core:ice")
+local cid_packed_ice = getcid ("mcl_core:packed_ice")
+local cid_blue_ice = getcid ("mcl_core:blue_ice")
+local cid_water_source = getcid ("mcl_core:water_source")
 
 local cid_air = core.CONTENT_AIR
 
@@ -498,19 +507,19 @@ local function set_block_reorientated (piece, x, y, z, cid, param2)
 	set_block (x, y, z, cid, param2)
 end
 
-local cid_prismarine = core.get_content_id ("mcl_ocean:prismarine")
+local cid_prismarine = getcid ("mcl_ocean:prismarine")
 local cid_prismarine_bricks
-	= core.get_content_id ("mcl_ocean:prismarine_brick")
+	= getcid ("mcl_ocean:prismarine_brick")
 local cid_dark_prismarine
-	= core.get_content_id ("mcl_ocean:prismarine_dark")
+	= getcid ("mcl_ocean:prismarine_dark")
 local cid_sea_lantern
-	= core.get_content_id ("mcl_ocean:sea_lantern")
+	= getcid ("mcl_ocean:sea_lantern")
 local px1, pz1, px2, pz2
 
 local function intersect_local_p (self, lx1, lz1, lx2, lz2)
 	local lx1, _, lz1 = reorientate_coords (self, lx1, 0, lz1)
 	local lx2, _, lz2 = reorientate_coords (self, lx2, 0, lz2)
-	local bx1 = mathmin (lx1, lz1)
+	local bx1 = mathmin (lx1, lx2)
 	local bz1 = mathmin (lz1, lz2)
 	local bx2 = mathmax (lx1, lx2)
 	local bz2 = mathmax (lz1, lz2)
@@ -994,7 +1003,7 @@ local intersect_2d_p = mcl_levelgen.intersect_2d_p
 function meta_piece_place (self, level, terrain, rng, x1, z1, x2, z2)
 	sea_level = level.preset.sea_level
 	local bbox = self.bbox
-	px1, pz1, px2, pz2 = x1, z1, x2, z2
+	px1, pz1, px2, pz2 = x1, z1, x2 + 1, z2 + 1
 	fill_water (self, 0, 0, 0, 58, mathmax (sea_level, 64) - bbox[2], 58)
 	place_wing (self, false, 0)
 	place_wing (self, true, 33)
@@ -1051,7 +1060,7 @@ end
 
 -- Central room piece.
 
-local cid_gold_block = core.get_content_id ("mcl_core:goldblock")
+local cid_gold_block = getcid ("mcl_core:goldblock")
 
 local function fill_wall_layer (self, y, cid, param2)
 	for x = 0, 15, 15 do
@@ -1721,7 +1730,7 @@ local function simple_room_top (origin)
 	return band (origin.flags, OPENINGS_EXCEPT_BOTTOM) == 0
 end
 
-local cid_sponge_wet = core.get_content_id ("mcl_sponges:sponge_wet")
+local cid_sponge_wet = getcid ("mcl_sponges:sponge_wet")
 
 local function simple_room_top_place (self, level, terrain, rng, x1, z1, x2, z2)
 	local data = self.data

@@ -42,7 +42,9 @@ mcl_info.register_debug_field ("Estimated Generation Height", {
 			local x = math.floor (pos.x + 0.5)
 			local z = math.floor (pos.z + 0.5)
 			local fn = model.get_column_height
-			return string.format ("y=%d/%d", fn (x, z, false), fn (x, z, true))
+			local biome = model.get_biome_override (x, z) or "N/A"
+			return string.format ("y=%d/%d (%s)", fn (x, z, false), fn (x, z, true),
+					      biome)
 		end
 	end,
 })
