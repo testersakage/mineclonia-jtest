@@ -228,6 +228,10 @@ mcl_structures.register_structure("shipwreck",{
 	}
 })
 
+if mcl_levelgen.enable_ersatz then
+	return false
+end
+
 local spawnon = { "mcl_stairs:slab_prismarine_dark"}
 
 mcl_structures.register_structure("ocean_temple",{
