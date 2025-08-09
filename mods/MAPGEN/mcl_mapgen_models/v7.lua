@@ -119,8 +119,6 @@ function mcl_mapgen_models.v7_mapgen_model ()
 		return rtz (base_height)
 	end
 
-	local band = bit.band
-
 	return {
 		is_ersatz_model = false,
 		get_biome_override = function (x, z)
