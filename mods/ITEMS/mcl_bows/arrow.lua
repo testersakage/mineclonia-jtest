@@ -418,10 +418,12 @@ function ARROW_ENTITY:on_intersect(ray_hit)
 	local selfobj = self.object
 	local result
 	local ignored = self._ignored or {}
+	local attach = self._shooter and self._shooter:get_attach ()
 	if ray_hit.type == "object" then
 		local obj = ray_hit.ref
 		if obj:is_valid() and obj:get_hp() > 0
 			and (obj ~= self._shooter or self._left_shooter)
+			and (obj ~= attach or self._left_shooter)
 			and table.indexof(ignored, obj) == -1 then
 			if obj:is_player() then
 				result = self:on_hit_player(obj, obj:get_luaentity(), ray_hit)
@@ -534,8 +536,10 @@ function ARROW_ENTITY:on_step(dtime, moveresult)
 	local result = nil
 	local shooter_located = false
 	-- Raycasting movement during dtime to handle lava, water, and hits.
+	local attach = self._shooter and self._shooter:get_attach ()
 	for ray_hit in core.raycast(last_pos, self_pos, true, true) do
-		if self._shooter and ray_hit.ref == self._shooter then
+		if (self._shooter and ray_hit.ref == self._shooter)
+			or (attach and ray_hit.ref == attach) then
 			shooter_located = true
 		end
 		result = self:on_intersect(ray_hit)
