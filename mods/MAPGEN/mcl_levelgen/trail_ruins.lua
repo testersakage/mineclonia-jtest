@@ -268,7 +268,7 @@ local function L (template, weight, no_terrain_adaptation)
 		projection = "rigid",
 		template = mcl_levelgen.prefix .. "/templates/" .. template .. ".dat",
 		weight = weight,
-		ground_level_delta = 1,
+		ground_level_delta = 0,
 		no_terrain_adaptation = no_terrain_adaptation,
 		processors = processors or {},
 	}

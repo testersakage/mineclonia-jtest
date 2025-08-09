@@ -1826,8 +1826,7 @@ extents, but only the MapChunk in generation, and heightmap data
 available at that stage is abridged to what is visible within a
 section of level 2 nodes around the MapChunk in generation, which is
 generally sufficient to prevent surface-only features from appearing
-at chunk boundaries.  Feature placement is impossible.  It is as yet
-not possible for the structure generator to execute in the End.
+at chunk boundaries.  Feature placement is impossible.
 `terrain_generator:get_one_column' is only available in the Overworld,
 and simply reports stone where the the terrain height at the column
 specified is above the position being sampled and air elsewhere.
