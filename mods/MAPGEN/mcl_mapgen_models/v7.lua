@@ -97,33 +97,48 @@ function mcl_mapgen_models.v7_mapgen_model ()
 		end
 	end
 
+	local function base_terrain_level ()
+		-- MapgenV7::baseTerrainLevelFromMap (int)
+		local persistence = terrain_persist:get_2d (pos)
+		np_terrain_base.persistence = persistence
+		np_terrain_alt.persistence = persistence
+		local terrain_base = core.get_value_noise (np_terrain_base)
+		local terrain_alt = core.get_value_noise (np_terrain_alt)
+		local hselect = height_select:get_2d (pos)
+		local height_alt = terrain_alt:get_2d (pos)
+		local height_base = terrain_base:get_2d (pos)
+		local hselect = mathmax (0.0, mathmin (hselect, 1.0))
+		local base_height
+
+		if height_alt > height_base then
+			base_height = height_alt
+		else
+			base_height = (height_base * hselect)
+				+ (height_alt * (1.0 - hselect))
+		end
+		return rtz (base_height)
+	end
+
+	local band = bit.band
+
 	return {
 		is_ersatz_model = false,
+		get_biome_override = function (x, z)
+			pos.x = x
+			pos.y = z
+			local base_height = base_terrain_level ()
+			if base_height < sea_level - 4 then
+				if base_height < sea_level - 15 then
+					return "DeepOcean"
+				else
+					return "Ocean"
+				end
+			end
+		end,
 		get_column_height = function (x, z, liquids_solid)
 			pos.x = x
 			pos.y = z
-			local base_height
-
-			-- MapgenV7::baseTerrainLevelFromMap (int)
-			do
-				local persistence = terrain_persist:get_2d (pos)
-				np_terrain_base.persistence = persistence
-				np_terrain_alt.persistence = persistence
-				local terrain_base = core.get_value_noise (np_terrain_base)
-				local terrain_alt = core.get_value_noise (np_terrain_alt)
-				local hselect = height_select:get_2d (pos)
-				local height_alt = terrain_alt:get_2d (pos)
-				local height_base = terrain_base:get_2d (pos)
-				local hselect = mathmax (0.0, mathmin (hselect, 1.0))
-
-				if height_alt > height_base then
-					base_height = height_alt
-				else
-					base_height = (height_base * hselect)
-						+ (height_alt * (1.0 - hselect))
-				end
-				base_height = rtz (base_height)
-			end
+			local base_height = base_terrain_level ()
 
 			-- MapGenV7::getRiverChannelFromMap (int, int, s16)
 			local any_river = false

@@ -27,13 +27,19 @@ local function report_consing (msg)
 end
 
 local function init_chunksize ()
-	if not core.get_mapgen_chunksize
-		or not mcl_vars.enable_mcl_levelgen then
+	if not core.get_mapgen_chunksize then
 		local cs = tonumber (core.get_mapgen_setting ("chunksize")) or 5
 		core.ipc_set ("mcl_levelgen:mt_chunksize", vector.new (cs, cs, cs))
 		local origin = floor (cs / 2)
 		core.ipc_set ("mcl_levelgen:mt_chunk_origin",
 			      vector.new (origin, origin, origin))
+	elseif not mcl_vars.enable_mcl_levelgen then
+		local cs = core.get_mapgen_chunksize ()
+		core.ipc_set ("mcl_levelgen:mt_chunksize", cs)
+		local origin_x, origin_y, origin_z = floor (cs.x / 2),
+			floor (cs.y / 2), floor (cs.z / 2)
+		core.ipc_set ("mcl_levelgen:mt_chunk_origin",
+			      vector.new (origin_x, origin_y, origin_z))
 	else
 		local old_setting = core.get_mapgen_setting ("chunksize")
 		local cs = core.get_mapgen_chunksize ()

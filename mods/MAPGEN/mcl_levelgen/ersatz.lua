@@ -152,6 +152,7 @@ dofile (mcl_levelgen.prefix .. "/dimensions.lua")
 local v = vector.zero ()
 local mg_overworld_min = mcl_vars.mg_overworld_min
 local toblock = mcl_levelgen.toblock
+local mapgen_model
 
 local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_template, {
 	min_y = -64,
@@ -162,6 +163,12 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 		v.x = x
 		v.z = -z - 1
 		v.y = y + 64 + mg_overworld_min
+		if mapgen_model then
+			local override = mapgen_model.get_biome_override (x, z)
+			if override then
+				return override
+			end
+		end
 		local data = core.get_biome_data (v)
 		if data then
 			return ersatz_biome_translations[data.biome] or "Plains"
@@ -175,6 +182,12 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 		v.x = toblock (x)
 		v.z = toblock (-z - 1)
 		v.y = toblock (y) + 64 + mg_overworld_min
+		if mapgen_model then
+			local override = mapgen_model.get_biome_override (v.x, v.z)
+			if override then
+				return override
+			end
+		end
 		local data = core.get_biome_data (v)
 		if data then
 			return ersatz_biome_translations[data.biome] or "Plains"
@@ -186,6 +199,12 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 		v.x = toblock (x)
 		v.z = toblock (-z - 1)
 		v.y = toblock (y) + 64 + mg_overworld_min
+		if mapgen_model then
+			local override = mapgen_model.get_biome_override (v.x, v.z)
+			if override then
+				return override
+			end
+		end
 		local data = core.get_biome_data (v)
 		if data then
 			return ersatz_biome_translations[data.biome] or "Plains"
@@ -201,6 +220,7 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 		"BirchForest",
 		"DarkForest",
 		"DeepDark",
+		"DeepOcean",
 		"Desert",
 		"DripstoneCaves",
 		"ErodedMesa",
@@ -211,6 +231,7 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 		"MangroveSwamp",
 		"Mesa",
 		"MushroomIslands",
+		"Ocean",
 		"OldGrowthBirchForest",
 		"OldGrowthPineTaiga",
 		"OldGrowthSpruceTaiga",
@@ -497,7 +518,6 @@ local ceil = math.ceil
 local chunksize = mt_chunksize.x * 16
 local ychunksize = mt_chunksize.y * 16
 local y_offset
-local mapgen_model
 
 local ull = mcl_levelgen.ull
 
