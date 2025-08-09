@@ -64,7 +64,7 @@ local function L (template, weight)
 		projection = "rigid",
 		template = mcl_levelgen.prefix .. "/templates/" .. template .. ".dat",
 		weight = weight,
-		ground_level_delta = 1,
+		ground_level_delta = 0,
 		processors = bastion_remnant_processors,
 	}
 end
