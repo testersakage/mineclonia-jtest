@@ -1854,7 +1854,7 @@ generator also redundantly to generate structure pieces intersecting
 this one-block margin whenever a chunk is generated.  Configurations
 where the level generator is enabled are not impacted by such issues.
 
-Ersatz feature generation may be detected by testing the field
+Ersatz structure generation may be detected by testing the field
 `is_ersatz' in supplied terrain generator tables (which is set to true
 in such cases), or the variable `mcl_levelgen.enable_ersatz'.
 
