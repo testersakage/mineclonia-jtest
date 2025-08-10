@@ -31,10 +31,6 @@ mcl_levelgen.register_loot_table ("mcl_levelgen:ocean_ruins", {
 	},
 })
 
-if not mcl_levelgen.is_levelgen_environment then
-	return false
-end
-
 local function handle_drowned (rng, data, mirroring, rotation, x, y, z, item)
 	-- TODO: drowned.
 end
@@ -54,39 +50,59 @@ local function L (name)
 	return template
 end
 
-local big_cold_ruins = {
-	L ("ocean_ruins_big_cold_1"),
-	L ("ocean_ruins_big_cold_2"),
-	L ("ocean_ruins_big_cold_3"),
-}
+local big_cold_ruins
+local small_cold_ruins
+local big_warm_ruins
+local small_warm_ruins
 
-local small_cold_ruins = {
-	L ("ocean_ruins_small_cold_1"),
-	L ("ocean_ruins_small_cold_2"),
-	L ("ocean_ruins_small_cold_3"),
-	L ("ocean_ruins_small_cold_4"),
-	L ("ocean_ruins_small_cold_5"),
-	L ("ocean_ruins_small_cold_5"),
-}
+local function init_templates ()
+	big_cold_ruins = {
+		L ("ocean_ruins_big_cold_1"),
+		L ("ocean_ruins_big_cold_2"),
+		L ("ocean_ruins_big_cold_3"),
+	}
+	small_cold_ruins = {
+		L ("ocean_ruins_small_cold_1"),
+		L ("ocean_ruins_small_cold_2"),
+		L ("ocean_ruins_small_cold_3"),
+		L ("ocean_ruins_small_cold_4"),
+		L ("ocean_ruins_small_cold_5"),
+		L ("ocean_ruins_small_cold_5"),
+	}
+	big_warm_ruins = {
+		L ("ocean_ruins_big_warm_1"),
+		L ("ocean_ruins_big_warm_2"),
+		L ("ocean_ruins_big_warm_3"),
+	}
+	small_warm_ruins = {
+		L ("ocean_ruins_small_warm_1"),
+		L ("ocean_ruins_small_warm_2"),
+		L ("ocean_ruins_small_warm_3"),
+	}
+end
 
-local big_warm_ruins = {
-	L ("ocean_ruins_big_warm_1"),
-	L ("ocean_ruins_big_warm_2"),
-	L ("ocean_ruins_big_warm_3"),
-}
+if mcl_levelgen.is_levelgen_environment then
+	init_templates ()
+else
+	core.register_on_mods_loaded (init_templates)
+end
 
-local small_warm_ruins = {
-	L ("ocean_ruins_small_warm_1"),
-	L ("ocean_ruins_small_warm_2"),
-	L ("ocean_ruins_small_warm_3"),
-}
+local function getcid (name)
+	if core and mcl_levelgen.is_levelgen_environment then
+		return core.get_content_id (name)
+	else
+		-- Content IDs are not required outside level
+		-- generation environments.
+		return nil
+	end
+end
 
-local cid_gravel = core.get_content_id ("mcl_core:gravel")
-local cid_sand = core.get_content_id ("mcl_core:sand")
+local cid_gravel = getcid ("mcl_core:gravel")
+local cid_sand = getcid ("mcl_core:sand")
 local cid_suspicious_gravel
-	= core.get_content_id ("mcl_sus_nodes:gravel")
+	= getcid ("mcl_sus_nodes:gravel")
 local cid_suspicious_sand
-	= core.get_content_id ("mcl_sus_nodes:sand")
+	= getcid ("mcl_sus_nodes:sand")
 
 local is_position_walkable = mcl_levelgen.is_position_walkable
 local walkable_p = mcl_levelgen.walkable_p
@@ -122,13 +138,13 @@ local function build_gravel_sand_gravity_processor (loot_type)
 end
 
 local cid_mossy_stone_bricks
-	= core.get_content_id ("mcl_core:stonebrickmossy")
+	= getcid ("mcl_core:stonebrickmossy")
 local cid_cracked_stone_bricks
-	= core.get_content_id ("mcl_core:stonebrickcracked")
+	= getcid ("mcl_core:stonebrickcracked")
 local cid_stone_bricks
-	= core.get_content_id ("mcl_core:stonebrick")
+	= getcid ("mcl_core:stonebrick")
 local cid_chiseled_stone_bricks
-	= core.get_content_id ("mcl_core:stonebrickcarved")
+	= getcid ("mcl_core:stonebrickcarved")
 
 local function decay_processor (x, y, z, rng, cid_existing,
 				param2_existing, cid, param2)
