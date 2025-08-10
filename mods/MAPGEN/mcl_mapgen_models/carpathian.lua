@@ -44,7 +44,7 @@ function mcl_mapgen_models.carpathian_mapgen_model ()
 	local np_mnt_var
 		= core.get_mapgen_setting_noiseparams ("mgcarpathian_np_mnt_var")
 
-	local flags = core.settings:get_flags ("mgcarpathian_spflags")
+	local flags = mcl_mapgen_models.parse_flags ("mgcarpathian_spflags")
 
 	local base_level
 		= tonumber (core.get_mapgen_setting ("mgcarpathian_base_level"))
