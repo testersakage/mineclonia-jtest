@@ -31,7 +31,7 @@ function mcl_mapgen_models.valleys_mapgen_model ()
 		= core.get_mapgen_setting_noiseparams ("mgvalleys_np_valley_depth")
 	local np_valley_profile
 		= core.get_mapgen_setting_noiseparams ("mgvalleys_np_valley_profile")
-	local flags = core.settings:get_flags ("mgvalleys_spflags")
+	local flags = mcl_mapgen_models.parse_flags ("mgvalleys_spflags")
 
 	local mgvalleys_river_depth
 		= tonumber (core.get_mapgen_setting ("mgvalleys_river_depth"))
@@ -94,7 +94,7 @@ function mcl_mapgen_models.valleys_mapgen_model ()
 
 			if est_surface_y < water_level - 20 then
 				return "DeepOcean"
-			elseif est_surface_y < water_level - 8 then
+			elseif est_surface_y < water_level then
 				return "Ocean"
 			end
 			return nil
