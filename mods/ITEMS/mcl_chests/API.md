@@ -44,17 +44,14 @@ mcl_chests.register_chest({
 	overrides = {
 		
 	}
-	
-	--called on right mouse click (optonal)
-	on_open = function(pos, node, clicker),
-	
-	--called on right mouse click (left side of the double chest) (optional)
-	on_open_left = function(pos, node, clicker),
-	
-	--called on right mouse click (right side of the double_chest) (optional)
-	on_open_right = function(pos, node, clicker),
-	
-	--basename of the canonical version of the node (optional)
-	canonical_basename = "modname:custom_chest"
-})
+},
+--called when small chest is right-clicked
+function(node, pos, clicker),
+
+--called when left part of the double chest is right-clicked
+function(node, pos, clicker),
+
+--called when right part of the double chest is right-clicked
+function(node, pos, clicker),
+)
 ```

@@ -330,7 +330,7 @@ local function player_chest_close(player)
 end
 
 -- This is a helper function to register both chests and trapped chests. Trapped chests will make use of the additional parameters
-function mcl_chests.register_chest(def)
+function mcl_chests.register_chest(def, on_open, on_open_left, on_open_right)
 	-- START OF mcl_chests.register_chest FUNCTION BODY
 	if not def.drop then
 		def.drop = def.basename
@@ -584,8 +584,8 @@ function mcl_chests.register_chest(def)
 				})
 			)
 
-			if def.on_open then
-				def.on_open(pos, node, clicker)
+			if on_open then
+				on_open(pos, node, clicker)
 			end
 
 			player_chest_open(clicker, pos, small_name, small_textures, node.param2, false, "default_chest",
@@ -761,8 +761,8 @@ function mcl_chests.register_chest(def)
 				})
 			)
 
-			if def.on_open_left then
-				def.on_open_left(pos, node, clicker)
+			if on_open_left then
+				on_open_left(pos, node, clicker)
 			end
 
 			player_chest_open(clicker, pos, left_name, left_textures, node.param2, true, "default_chest",
@@ -928,8 +928,8 @@ function mcl_chests.register_chest(def)
 				})
 			)
 
-			if def.on_open_right then
-				def.on_open_right(pos, node, clicker)
+			if on_open_right then
+				on_open_right(pos, node, clicker)
 			end
 
 			player_chest_open(clicker, pos_other, left_name, left_textures, node.param2, true, "default_chest",
@@ -983,37 +983,38 @@ mcl_chests.register_chest({
 			connects_to = function(node, dir) return true end,
 		}
 	},
-	on_open = function(pos, node, _)
-		mcl_redstone.swap_node(pos, {name="mcl_chests:trapped_chest_on_small", param2 = node.param2})
-		if animate_chests then
-			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_small", {"mcl_chests_trapped.png"}, node.param2, false, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_small")
-		end
-	end,
-	on_open_left = function(pos, node, _)
-		local meta = core.get_meta(pos)
-		meta:set_int("players", 1)
-
-		mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
-		if animate_chests then
-			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_left", tiles_chest_trapped_double, node.param2, true,
-				"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_left")
-		end
-
-		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
-		mcl_redstone.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
-	end,
-	on_open_right = function(pos, node, _)
-		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
-
-		mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
-		mcl_redstone.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
-		if animate_chests then
-			find_or_create_entity(pos_other, "mcl_chests:trapped_chest_on_left", tiles_chest_trapped_double, node.param2,
-				true,
-				"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_left")
-		end
+},
+function(pos, node, _)
+	mcl_redstone.swap_node(pos, {name="mcl_chests:trapped_chest_on_small", param2 = node.param2})
+	if animate_chests then
+		find_or_create_entity(pos, "mcl_chests:trapped_chest_on_small", {"mcl_chests_trapped.png"}, node.param2, false, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_small")
 	end
-})
+end,
+function(pos, node, _)
+	local meta = core.get_meta(pos)
+	meta:set_int("players", 1)
+
+	mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
+	if animate_chests then
+		find_or_create_entity(pos, "mcl_chests:trapped_chest_on_left", tiles_chest_trapped_double, node.param2, true,
+			"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_left")
+	end
+
+	local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
+	mcl_redstone.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
+end,
+function(pos, node, _)
+	local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
+
+	mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
+	mcl_redstone.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
+	if animate_chests then
+		find_or_create_entity(pos_other, "mcl_chests:trapped_chest_on_left", tiles_chest_trapped_double, node.param2,
+			true,
+			"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_left")
+	end
+end
+)
 
 mcl_chests.register_chest({
 	basename = "mcl_chests:trapped_chest_on",
@@ -1026,7 +1027,8 @@ mcl_chests.register_chest({
 			-- the number of players accessing the chest. Just return 15
 			-- until that has been implemented.
 			get_power = function(node, dir) return 15, dir.y < 0 end,
-		}
+		},
+		drop = "mcl_chests:trapped_chest"
 	},
 	canonical_basename = "mcl_chests:trapped_chest"
 })
