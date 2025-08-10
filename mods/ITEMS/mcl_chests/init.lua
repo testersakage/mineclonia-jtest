@@ -406,7 +406,7 @@ function mcl_chests.register_chest(def)
 	local left_name = def.basename .. "_left"
 	local left_textures = def.tiles_table.double
 
-	core.register_node(def.basename, {
+	core.register_node(def.basename, table.merge({
 		description = def.desc,
 		_tt_help = def.tt_help,
 		_doc_items_longdesc = def.long_desc,
@@ -433,7 +433,7 @@ function mcl_chests.register_chest(def)
 			core.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
 		end,
 		_mcl_burntime = 15
-	})
+	}, def.overrides))
 
 	local function close_forms(canonical_basename, pos)
 		for pl in mcl_util.connected_players(pos, 30) do
@@ -441,7 +441,7 @@ function mcl_chests.register_chest(def)
 		end
 	end
 
-	core.register_node(small_name, {
+	core.register_node(small_name, table.merge({
 		description = def.desc,
 		_tt_help = def.tt_help,
 		_doc_items_longdesc = def.long_desc,
@@ -469,7 +469,6 @@ function mcl_chests.register_chest(def)
 		_chest_entity_animation_type = "chest",
 		paramtype = "light",
 		paramtype2 = "facedir",
-		drop = def.drop,
 		_mcl_baseitem = def.basename,
 		groups = {
 			handy = 1,
@@ -596,11 +595,10 @@ function mcl_chests.register_chest(def)
 		on_destruct = function(pos)
 			close_forms(def.canonical_basename, pos)
 		end,
-		_mcl_redstone = def.redstone,
 		on_rotate = simple_rotate,
-	})
+	}, def.overrides))
 
-	core.register_node(left_name, {
+	core.register_node(left_name, table.merge({
 		drawtype = "nodebox",
 		node_box = {
 			type = "fixed",
@@ -629,7 +627,6 @@ function mcl_chests.register_chest(def)
 			features_cannot_replace
 				= basename == "chest" and 1 or 0,
 		},
-		drop = def.drop,
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_wood_defaults(),
 		on_construct = function(pos)
@@ -771,11 +768,10 @@ function mcl_chests.register_chest(def)
 			player_chest_open(clicker, pos, left_name, left_textures, node.param2, true, "default_chest",
 				"mcl_chests_chest")
 		end,
-		_mcl_redstone = def.redstone,
 		on_rotate = no_rotate,
-	})
+	}, def.overrides))
 
-	core.register_node(def.basename .. "_right", {
+	core.register_node(def.basename .. "_right", table.merge({
 		drawtype = "nodebox",
 		paramtype = "light",
 		paramtype2 = "facedir",
@@ -799,7 +795,6 @@ function mcl_chests.register_chest(def)
 			features_cannot_replace
 				= basename == "chest" and 1 or 0,
 		},
-		drop = def.drop,
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_wood_defaults(),
 		on_construct = function(pos)
@@ -940,9 +935,8 @@ function mcl_chests.register_chest(def)
 			player_chest_open(clicker, pos_other, left_name, left_textures, node.param2, true, "default_chest",
 				"mcl_chests_chest")
 		end,
-		_mcl_redstone = def.redstone,
 		on_rotate = no_rotate,
-	})
+	}, def.overrides))
 
 	if mod_doc then
 		doc.add_entry_alias("nodes", small_name, "nodes", def.basename .. "_left")
@@ -984,8 +978,10 @@ mcl_chests.register_chest({
 	"\n" .. S("Can be combined to a large chest") .. "\n" .. S("Emits a redstone signal when opened"),
 	tiles_table = traptiles,
 	hidden = nil,
-	redstone = {
-		connects_to = function(node, dir) return true end,
+	overrides = {
+		_mcl_redstone = {
+			connects_to = function(node, dir) return true end,
+		}
 	},
 	on_rightclick_addendum = function(pos, node, _)
 		mcl_redstone.swap_node(pos, {name="mcl_chests:trapped_chest_on_small", param2 = node.param2})
@@ -1021,23 +1017,17 @@ mcl_chests.register_chest({
 
 mcl_chests.register_chest({
 	basename = "mcl_chests:trapped_chest_on",
-	desc = nil,
-	long_desc = nil,
-	usage_help = nil,
-	tt_help = nil,
 	tiles_table = traptiles,
 	hidden = true,
-	redstone = {
-		connects_to = function(node, dir) return true end,
-		-- TODO: Trapped chests should return a power level equal to
-		-- the number of players accessing the chest. Just return 15
-		-- until that has been implemented.
-		get_power = function(node, dir) return 15, dir.y < 0 end,
+	overrides = {
+		redstone = {
+			connects_to = function(node, dir) return true end,
+			-- TODO: Trapped chests should return a power level equal to
+			-- the number of players accessing the chest. Just return 15
+			-- until that has been implemented.
+			get_power = function(node, dir) return 15, dir.y < 0 end,
+		}
 	},
-	on_rightclick_addendum = nil,
-	on_rightclick_addendum_left = nil,
-	on_rightclick_addendum_right = nil,
-	drop = "mcl_chests:trapped_chest",
 	canonical_basename = "mcl_chests:trapped_chest"
 })
 
