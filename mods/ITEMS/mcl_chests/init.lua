@@ -584,8 +584,8 @@ function mcl_chests.register_chest(def)
 				})
 			)
 
-			if def.on_rightclick_addendum then
-				def.on_rightclick_addendum(pos, node, clicker)
+			if def.on_open then
+				def.on_open(pos, node, clicker)
 			end
 
 			player_chest_open(clicker, pos, small_name, small_textures, node.param2, false, "default_chest",
@@ -761,8 +761,8 @@ function mcl_chests.register_chest(def)
 				})
 			)
 
-			if def.on_rightclick_addendum_left then
-				def.on_rightclick_addendum_left(pos, node, clicker)
+			if def.on_open_left then
+				def.on_open_left(pos, node, clicker)
 			end
 
 			player_chest_open(clicker, pos, left_name, left_textures, node.param2, true, "default_chest",
@@ -928,8 +928,8 @@ function mcl_chests.register_chest(def)
 				})
 			)
 
-			if def.on_rightclick_addendum_right then
-				def.on_rightclick_addendum_right(pos, node, clicker)
+			if def.on_open_right then
+				def.on_open_right(pos, node, clicker)
 			end
 
 			player_chest_open(clicker, pos_other, left_name, left_textures, node.param2, true, "default_chest",
@@ -983,13 +983,13 @@ mcl_chests.register_chest({
 			connects_to = function(node, dir) return true end,
 		}
 	},
-	on_rightclick_addendum = function(pos, node, _)
+	on_open = function(pos, node, _)
 		mcl_redstone.swap_node(pos, {name="mcl_chests:trapped_chest_on_small", param2 = node.param2})
 		if animate_chests then
 			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_small", {"mcl_chests_trapped.png"}, node.param2, false, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_small")
 		end
 	end,
-	on_rightclick_addendum_left = function(pos, node, _)
+	on_open_left = function(pos, node, _)
 		local meta = core.get_meta(pos)
 		meta:set_int("players", 1)
 
@@ -1002,7 +1002,7 @@ mcl_chests.register_chest({
 		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "left")
 		mcl_redstone.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
 	end,
-	on_rightclick_addendum_right = function(pos, node, _)
+	on_open_right = function(pos, node, _)
 		local pos_other = mcl_util.get_double_container_neighbor_pos(pos, node.param2, "right")
 
 		mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
@@ -1020,7 +1020,7 @@ mcl_chests.register_chest({
 	tiles_table = traptiles,
 	hidden = true,
 	overrides = {
-		redstone = {
+		_mcl_redstone = {
 			connects_to = function(node, dir) return true end,
 			-- TODO: Trapped chests should return a power level equal to
 			-- the number of players accessing the chest. Just return 15

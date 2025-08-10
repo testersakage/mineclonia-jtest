@@ -45,14 +45,14 @@ mcl_chests.register_chest({
 		
 	}
 	
-	--called on right mouse click
-	on_rightclick_addendum = function(pos, node, clicker) (optional),
+	--called on right mouse click (optonal)
+	on_open = function(pos, node, clicker),
 	
 	--called on right mouse click (left side of the double chest) (optional)
-	on_rightclick_addendum_left = function(pos, node, clicker),
+	on_open_left = function(pos, node, clicker),
 	
 	--called on right mouse click (right side of the double_chest) (optional)
-	on_rightclick_addendum_right = function(pos, node, clicker),
+	on_open_right = function(pos, node, clicker),
 	
 	--basename of the canonical version of the node (optional)
 	canonical_basename = "modname:custom_chest"
