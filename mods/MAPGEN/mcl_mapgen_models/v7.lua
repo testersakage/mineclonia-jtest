@@ -37,7 +37,7 @@ function mcl_mapgen_models.v7_mapgen_model ()
 		= core.get_mapgen_setting_noiseparams ("mgv7_np_ridge")
 	local mount_zero_level
 		= tonumber (core.get_mapgen_setting ("mgv7_mount_zero_level"))
-	local flags = core.settings:get_flags ("mgv7_spflags")
+	local flags = mcl_mapgen_models.parse_flags ("mgv7_spflags")
 
 	local terrain_persist = core.get_value_noise (np_terrain_persist)
 	local height_select = core.get_value_noise (np_height_select)
