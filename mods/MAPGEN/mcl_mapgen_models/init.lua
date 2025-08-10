@@ -5,6 +5,7 @@ local modpath = core.get_modpath (core.get_current_modname ())
 dofile (modpath .. "/v7.lua")
 dofile (modpath .. "/valleys.lua")
 dofile (modpath .. "/carpathian.lua")
+dofile (modpath .. "/v5.lua")
 dofile (modpath .. "/common.lua")
 
 ------------------------------------------------------------------------
@@ -20,6 +21,8 @@ local function set_model ()
 		model = mcl_mapgen_models.valleys_mapgen_model ()
 	elseif name == "carpathian" then
 		model = mcl_mapgen_models.carpathian_mapgen_model ()
+	elseif name == "v5" then
+		model = mcl_mapgen_models.v5_mapgen_model ()
 	else
 		model = mcl_mapgen_models.ersatz_model ()
 	end
