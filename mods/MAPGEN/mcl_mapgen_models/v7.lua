@@ -89,6 +89,11 @@ function mcl_mapgen_models.v7_mapgen_model ()
 		end
 	end
 
+	local function v7_sampler_mountains_river (y, pos)
+		return v7_sampler_river (y, pos)
+			and v7_sampler_mountains (y, pos)
+	end
+
 	local function rtz (x)
 		if x < 0 then
 			return ceil (x)
@@ -119,19 +124,39 @@ function mcl_mapgen_models.v7_mapgen_model ()
 		return rtz (base_height)
 	end
 
+	local mount_noise_samples = {
+		0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120,
+	}
+	local ipairs = ipairs
+
 	return {
 		is_ersatz_model = false,
 		get_biome_override = function (x, z)
 			pos.x = x
 			pos.y = z
 			local base_height = base_terrain_level ()
-			if base_height < sea_level - 4 then
+
+			if base_height < sea_level - 2 then
+				local mounthn = mathmax (1.0, mount_height:get_2d (pos))
+				pos.z = z
+
+				local mountn = 0.0
+				for i, y in ipairs (mount_noise_samples) do
+					pos.y = y
+					mountn = mathmax (mountn, mountain:get_3d (pos))
+				end
+
+				local y = mathmax (mountn * mounthn, 0.0)
+					+ mount_zero_level
+				base_height = base_height + y
+
 				if base_height < sea_level - 15 then
 					return "DeepOcean"
-				else
+				elseif base_height < sea_level - 2 then
 					return "Ocean"
 				end
 			end
+			return nil
 		end,
 		get_column_height = function (x, z, liquids_solid)
 			pos.x = x
@@ -157,7 +182,7 @@ function mcl_mapgen_models.v7_mapgen_model ()
 
 			-- MapgenV7::getMountainTerrainFromMap (int, int, s16)
 			local mountmax = -huge
-			if mgv7_mountains and not any_river then
+			if mgv7_mountains then
 				local mounthn = mathmax (1.0, mount_height:get_2d (pos))
 				mountmax = ceil (mounthn / mountain_noise_max)
 					+ ceil (mount_zero_level + mounthn)
@@ -167,9 +192,17 @@ function mcl_mapgen_models.v7_mapgen_model ()
 			local v7_sampler = v7_sampler_default
 			v7_base_height = base_height
 			if mountmax > river_max then
-				v7_sampler = v7_sampler_mountains
+				if any_river then
+					v7_sampler = v7_sampler_mountains_river
+				else
+					v7_sampler = v7_sampler_mountains
+				end
 			elseif any_river then
-				v7_sampler = v7_sampler_river
+				if mgv7_mountains then
+					v7_sampler = v7_sampler_mountains_river
+				else
+					v7_sampler = v7_sampler_river
+				end
 			end
 
 			pos.x = x
