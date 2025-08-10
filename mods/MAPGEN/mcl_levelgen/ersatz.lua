@@ -57,6 +57,8 @@ local overworld_subtypes = {
 	"_deep_underground",
 }
 
+local biome_specific_overrides = {}
+
 local function maybe_map_biome (biome, target)
 	local id = core.get_biome_id (biome)
 	if id then
@@ -125,6 +127,37 @@ local function init_ersatz_biome_translations ()
 			maybe_map_biome (biome .. subtype, target)
 		end
 	end
+
+	local cold_biome_overrides = {
+		["Ocean"] = "ColdOcean",
+		["DeepOcean"] = "DeepColdOcean",
+	}
+	local snowy_biome_overrides = {
+		["Ocean"] = "FrozenOcean",
+		["DeepOcean"] = "DeepFrozenOcean",
+	}
+	local hot_biome_overrides = {
+		["Ocean"] = "WarmOcean",
+		["DeepOcean"] = "LukewarmOcean",
+	}
+	local default_biome_overrides = {
+		["Ocean"] = "Ocean",
+		["DeepOcean"] = "DeepOcean",
+	}
+
+	for biome, def in pairs (core.registered_biomes) do
+		local id = core.get_biome_id (biome)
+		assert (id)
+		if def._mcl_biome_type == "cold" then
+			biome_specific_overrides[id] = cold_biome_overrides
+		elseif def._mcl_biome_type == "hot" then
+			biome_specific_overrides[id] = hot_biome_overrides
+		elseif def._mcl_biome_type == "snowy" then
+			biome_specific_overrides[id] = snowy_biome_overrides
+		else
+			biome_specific_overrides[id] = default_biome_overrides
+		end
+	end
 end
 
 -- Disable decorations; they must be placed after structures in
@@ -164,9 +197,11 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 		v.z = -z - 1
 		v.y = y + 64 + mg_overworld_min
 		if mapgen_model then
-			local override = mapgen_model.get_biome_override (x, z)
+			local override = mapgen_model.get_biome_override (x, -z - 1)
 			if override then
-				return override
+				local data = core.get_biome_data (v)
+				return biome_specific_overrides[data.biome][override]
+					or override
 			end
 		end
 		local data = core.get_biome_data (v)
@@ -183,9 +218,11 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 		v.z = toblock (-z - 1)
 		v.y = toblock (y) + 64 + mg_overworld_min
 		if mapgen_model then
-			local override = mapgen_model.get_biome_override (v.x, v.z)
+			local override = mapgen_model.get_biome_override (x, -z - 1)
 			if override then
-				return override
+				local data = core.get_biome_data (v)
+				return biome_specific_overrides[data.biome][override]
+					or override
 			end
 		end
 		local data = core.get_biome_data (v)
@@ -200,9 +237,11 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 		v.z = toblock (-z - 1)
 		v.y = toblock (y) + 64 + mg_overworld_min
 		if mapgen_model then
-			local override = mapgen_model.get_biome_override (v.x, v.z)
+			local override = mapgen_model.get_biome_override (x, -z - 1)
 			if override then
-				return override
+				local data = core.get_biome_data (v)
+				return biome_specific_overrides[data.biome][override]
+					or override
 			end
 		end
 		local data = core.get_biome_data (v)
@@ -569,6 +608,7 @@ function ersatz_terrain:area_heightmap (x1, z1, x2, z2, heightmap, is_solid)
 			heightmap[i] = default
 		end
 	end
+	return total
 end
 
 local tmp_heightmap = {}
@@ -626,8 +666,10 @@ end
 local structure_levels = {}
 
 local function create_structure_level (dim)
-	structure_levels[dim]
-		= mcl_levelgen.make_structure_level (dim.preset)
+	if not structure_levels[dim] then
+		structure_levels[dim]
+			= mcl_levelgen.make_structure_level (dim.preset)
+	end
 	return structure_levels[dim]
 end
 
