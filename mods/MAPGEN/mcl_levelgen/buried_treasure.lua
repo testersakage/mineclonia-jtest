@@ -49,19 +49,25 @@ mcl_levelgen.register_loot_table ("mcl_levelgen:buried_treasure", {
 })
 
 
-if not mcl_levelgen.is_levelgen_environment then
-	return
+local function getcid (name)
+	if core and mcl_levelgen.is_levelgen_environment then
+		return core.get_content_id (name)
+	else
+		-- Content IDs are not required outside level
+		-- generation environments.
+		return nil
+	end
 end
 
-local cid_chest_small = core.get_content_id ("mcl_chests:chest_small")
+local cid_chest_small = getcid ("mcl_chests:chest_small")
 
-local cid_andesite = core.get_content_id ("mcl_core:andesite")
-local cid_diorite = core.get_content_id ("mcl_core:diorite")
-local cid_granite = core.get_content_id ("mcl_core:granite")
-local cid_sandstone = core.get_content_id ("mcl_core:sandstone")
-local cid_stone = core.get_content_id ("mcl_core:stone")
+local cid_andesite = getcid ("mcl_core:andesite")
+local cid_diorite = getcid ("mcl_core:diorite")
+local cid_granite = getcid ("mcl_core:granite")
+local cid_sandstone = getcid ("mcl_core:sandstone")
+local cid_stone = getcid ("mcl_core:stone")
 
-local cid_sand = core.get_content_id ("mcl_core:sand")
+local cid_sand = getcid ("mcl_core:sand")
 
 local structure_biome_test = mcl_levelgen.structure_biome_test
 local index_heightmap = mcl_levelgen.index_heightmap
@@ -133,10 +139,28 @@ local function buried_treasure_place (self, level, terrain, rng, x1, z1, x2, z2)
 end
 
 local create_structure_start = mcl_levelgen.create_structure_start
+local enable_ersatz = mcl_levelgen.enable_ersatz
+local mathmin = math.min
+
+local function ersatz_is_beach (terrain, x, z, y)
+	local y1 = terrain:get_one_height (x + 10, z + 10)
+	local y2 = terrain:get_one_height (x - 10, z - 10)
+	local y3 = terrain:get_one_height (x + 10, z - 10)
+	local y4 = terrain:get_one_height (x - 10, z + 10)
+	local sea_level = terrain.preset.sea_level
+	return mathmin (y1, y2, y3, y4) < sea_level
+		and y - sea_level > 1 and y - sea_level <= 4
+end
 
 local function buried_treasure_create_start (self, level, terrain, rng, cx, cz)
 	local x, z = cx * 16 + 8, cz * 16 + 8
 	local y = terrain:get_one_height (x, z)
+
+	-- The built-in biome system cannot distinguish between
+	-- beaches and ordinary terrain.
+	if enable_ersatz and not ersatz_is_beach (terrain, x, z, y) then
+		return false
+	end
 
 	if structure_biome_test (level, self, x, y, z) then
 		local pieces = {
@@ -157,7 +181,9 @@ end
 -- Buried Treasure registration.
 ------------------------------------------------------------------------
 
-local buried_treasure_biomes = {
+local buried_treasure_biomes = enable_ersatz and {
+	"#is_overworld",
+} or {
 	"#is_beach",
 }
 
