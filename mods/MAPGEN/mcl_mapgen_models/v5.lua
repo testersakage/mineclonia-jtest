@@ -44,7 +44,7 @@ function mcl_mapgen_models.v5_mapgen_model ()
 	local pos = vector.new ()
 	return {
 		is_ersatz_model = false,
-		get_biome_override = function (x, z, dbg)
+		get_biome_override = function (x, z)
 			pos.x = x
 			pos.y = z
 			local factor = n_factor:get_2d (pos)
