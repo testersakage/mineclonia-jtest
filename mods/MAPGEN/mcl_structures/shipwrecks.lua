@@ -1,3 +1,7 @@
+if mcl_levelgen.enable_ersatz then
+	return false
+end
+
 local modname = core.get_current_modname()
 local modpath = core.get_modpath(modname)
 --local S = core.get_translator(modname)
@@ -227,10 +231,6 @@ mcl_structures.register_structure("shipwreck",{
 		}
 	}
 })
-
-if mcl_levelgen.enable_ersatz then
-	return false
-end
 
 local spawnon = { "mcl_stairs:slab_prismarine_dark"}
 

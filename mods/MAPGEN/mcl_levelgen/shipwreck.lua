@@ -115,10 +115,6 @@ mcl_levelgen.register_loot_table ("mcl_levelgen:shipwreck_supply", {
 	},
 })
 
-if not mcl_levelgen.is_levelgen_environment then
-	return
-end
-
 local function L (name)
 	local file = mcl_levelgen.prefix
 		.. "/templates/" .. name .. ".dat"
@@ -128,13 +124,23 @@ local function L (name)
 	return template
 end
 
-local shipwreck_templates = {
-	L ("shipwreck_full_back_damaged"),
-	L ("shipwreck_full_damaged"),
-	L ("shipwreck_full_normal"),
-	L ("shipwreck_half_back"),
-	L ("shipwreck_half_front"),
-}
+local shipwreck_templates = {}
+
+local function init_templates ()
+	shipwreck_templates = {
+		L ("shipwreck_full_back_damaged"),
+		L ("shipwreck_full_damaged"),
+		L ("shipwreck_full_normal"),
+		L ("shipwreck_half_back"),
+		L ("shipwreck_half_front"),
+	}
+end
+
+if not mcl_levelgen.is_levelgen_environment then
+	core.register_on_mods_loaded (init_templates)
+else
+	init_templates ()
+end
 
 local random_schematic_rotation = mcl_levelgen.random_schematic_rotation
 local structure_biome_test = mcl_levelgen.structure_biome_test
