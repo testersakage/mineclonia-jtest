@@ -48,39 +48,58 @@ if not mcl_levelgen.is_levelgen_environment then
 
 	mcl_levelgen.register_notification_handler ("mcl_levelgen:jungle_temple_loot",
 						    handle_jungle_temple_loot)
-	return
 end
 
 local name = mcl_levelgen.prefix .. "/templates/jungle_temple.dat"
-local template, err = mcl_levelgen.read_structure_template (name)
-if err then
-	error (err)
+local template, WIDTH, LENGTH
+
+local function init_templates ()
+	local err
+	template, err = mcl_levelgen.read_structure_template (name)
+	if err then
+		error (err)
+	end
+	WIDTH = template.width
+	LENGTH = template.length
 end
 
-local WIDTH = template.width
-local LENGTH = template.length
+if not mcl_levelgen.is_levelgen_environment then
+	core.register_on_mods_loaded (init_templates)
+else
+	init_templates ()
+end
+
+local function getcid (name)
+	if mcl_levelgen.is_levelgen_environment then
+		return core.get_content_id (name)
+	else
+		return 0 -- Not nil so as to prevent errors in table
+			 -- initializers.
+	end
+end
+
 local GROUND_OFFSET = 4
 
 local random_schematic_rotation = mcl_levelgen.random_schematic_rotation
 local make_template_piece = mcl_levelgen.make_template_piece
 
 local cid_cobblestone
-	= core.get_content_id ("mcl_core:cobble")
+	= getcid ("mcl_core:cobble")
 local cid_cobblestone_stairs
-	= core.get_content_id ("mcl_stairs:stair_cobble")
+	= getcid ("mcl_stairs:stair_cobble")
 local cid_cobblestone_stairs_inner
-	= core.get_content_id ("mcl_stairs:stair_cobble_inner")
+	= getcid ("mcl_stairs:stair_cobble_inner")
 local cid_cobblestone_stairs_outer
-	= core.get_content_id ("mcl_stairs:stair_cobble_outer")
+	= getcid ("mcl_stairs:stair_cobble_outer")
 
 local cid_mossy_cobblestone
-	= core.get_content_id ("mcl_core:mossycobble")
+	= getcid ("mcl_core:mossycobble")
 local cid_mossy_cobblestone_stairs
-	= core.get_content_id ("mcl_stairs:stair_mossycobble")
+	= getcid ("mcl_stairs:stair_mossycobble")
 local cid_mossy_cobblestone_stairs_inner
-	= core.get_content_id ("mcl_stairs:stair_mossycobble_inner")
+	= getcid ("mcl_stairs:stair_mossycobble_inner")
 local cid_mossy_cobblestone_stairs_outer
-	= core.get_content_id ("mcl_stairs:stair_mossycobble_outer")
+	= getcid ("mcl_stairs:stair_mossycobble_outer")
 
 local replacements = {
 	[cid_cobblestone] = cid_mossy_cobblestone,
@@ -100,7 +119,7 @@ local function jungle_temple_mossify (x, y, z, rng, cid_existing,
 end
 
 local cid_chest_small
-	= core.get_content_id ("mcl_chests:chest_small")
+	= getcid ("mcl_chests:chest_small")
 local mathabs = math.abs
 local notify_generated = mcl_levelgen.notify_generated
 
