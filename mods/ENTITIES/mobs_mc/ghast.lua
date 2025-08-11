@@ -185,7 +185,7 @@ end
 function ghast:on_die (pos, mcl_reason)
 	if mcl_reason and mcl_reason.direct then
 		local luaentity = mcl_reason.direct:get_luaentity ()
-		if luaentity.name == "mobs_mc:fireball" then
+		if luaentity and luaentity.name == "mobs_mc:fireball" then
 			local source = mcl_reason.source
 			if source and source:is_player () then
 				awards.unlock (source:get_player_name (),
