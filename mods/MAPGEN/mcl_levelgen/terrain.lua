@@ -776,7 +776,7 @@ end
 
 local function clear_surface_level_cache (self)
 	local cache = self.surface_level_cache
-	for i, _ in ipairs (cache) do
+	for i, _ in pairs (cache) do
 		cache[i] = nil
 	end
 end
