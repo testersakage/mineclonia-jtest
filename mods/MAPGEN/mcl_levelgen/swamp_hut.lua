@@ -4,10 +4,6 @@ local WIDTH = 7
 local LENGTH = 9
 local HEIGHT = 7
 
-if not mcl_levelgen.is_levelgen_environment then
-	return
-end
-
 ------------------------------------------------------------------------
 -- Swamp Hut.
 -- https://maven.fabricmc.net/docs/yarn-1.20.4+build.1/net/minecraft/structure/SwampHutGenerator.html
@@ -20,22 +16,32 @@ local set_block = mcl_levelgen.set_block
 local mathmin = math.min
 local mathmax = math.max
 
+local function getcid (name)
+	if core and mcl_levelgen.is_levelgen_environment then
+		return core.get_content_id (name)
+	else
+		-- Content IDs are not required outside level
+		-- generation environments.
+		return nil
+	end
+end
+
 local cid_air = core.CONTENT_AIR
-local cid_oak_fence = core.get_content_id ("mcl_fences:oak_fence")
+local cid_oak_fence = getcid ("mcl_fences:oak_fence")
 local cid_potted_red_mushroom
-	= core.get_content_id ("mcl_flowerpots:flower_pot_mushroom_red")
+	= getcid ("mcl_flowerpots:flower_pot_mushroom_red")
 local cid_crafting_table
-	= core.get_content_id ("mcl_crafting_table:crafting_table")
+	= getcid ("mcl_crafting_table:crafting_table")
 local cid_cauldron
-	= core.get_content_id ("mcl_cauldrons:cauldron")
+	= getcid ("mcl_cauldrons:cauldron")
 local cid_spruce_stairs
-	= core.get_content_id ("mcl_stairs:stair_spruce")
+	= getcid ("mcl_stairs:stair_spruce")
 local cid_spruce_stairs_outer
-	= core.get_content_id ("mcl_stairs:stair_spruce_outer")
+	= getcid ("mcl_stairs:stair_spruce_outer")
 local cid_spruce_planks
-	= core.get_content_id ("mcl_trees:wood_spruce")
+	= getcid ("mcl_trees:wood_spruce")
 local cid_oak_log
-	= core.get_content_id ("mcl_trees:tree_oak")
+	= getcid ("mcl_trees:tree_oak")
 
 local function fill_box_rotated (piece, x1, y1, z1, x2, y2, z2, cid, param2)
 	local x1, y1, z1 = reorientate_coords (piece, x1, y1, z1)
