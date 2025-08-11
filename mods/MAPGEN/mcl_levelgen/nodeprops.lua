@@ -25,7 +25,7 @@ local function nodename_matcher(node_or_groupname)
 		end
 	end
 end
--- Minetest allows shorthand box = {...} instead of {{...}}
+-- Luanti allows shorthand box = {...} instead of {{...}}
 local function get_boxes (box_or_boxes)
 	return type (box_or_boxes[1]) == "number" and {box_or_boxes} or box_or_boxes
 end

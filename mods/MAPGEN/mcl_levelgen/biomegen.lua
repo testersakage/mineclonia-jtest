@@ -42,7 +42,7 @@ function mcl_levelgen.generate_biomes (preset, biomes, x, y, z, x1, y1, z1)
 	end
 end
 
--- Likewise, but for a column of Minetest MapBlocks of dimensions W
+-- Likewise, but for a column of Luanti MapBlocks of dimensions W
 -- and H at X, Y, Z (i.e., Minecraft X, Y, -Z - (W - 1) - 1).
 
 function mcl_levelgen.generate_biomes_at_block (preset, biomes, x, y, z, w, h)
@@ -307,7 +307,7 @@ end
 
 local function save_biome_index (pos, bx, by, bz, index)
 	-- Saving biome data into an unloaded mapblock's metadata
-	-- within a register_on_generated callback triggers a Minetest
+	-- within a register_on_generated callback triggers a Luanti
 	-- bug where the mapchunk is liable to be generated twice if
 	-- it has been unloaded since generation.
 	if core.compare_block_status (pos, "loaded") then

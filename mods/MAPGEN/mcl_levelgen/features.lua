@@ -45,7 +45,7 @@ local function feature_w_step (step, feature)
 	return string.format ("%d:%s", step, feature)
 end
 
--- Attribution: Minetest
+-- Attribution: Luanti
 
 local string_find = string.find
 local string_sub = string.sub
@@ -616,7 +616,7 @@ function mcl_levelgen.index_biome (x, y, z)
 	local qx, qy, qz = munge_biome_coords (biome_seed, x, y, z)
 	local org_qx, org_qy, org_qz = qx, qy, qz
 
-	-- Convert this QuartPos into the Minetest coordinate system.
+	-- Convert this QuartPos into the Luanti coordinate system.
 	local dz = qz - toquart (run_min_z)
 	local run_origin = (run.z - REQUIRED_CONTEXT_XZ) * 16
 	qz = toquart (run_origin) + HORIZONTAL_QUARTS_PER_RUN - dz - 1

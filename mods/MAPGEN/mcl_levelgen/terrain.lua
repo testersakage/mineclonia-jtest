@@ -11,7 +11,7 @@
 -- of param2s in the engine's flat array format adequately sized for a
 -- single MapChunk, and the block coordinates of its origin in
 -- Minecraft's coordinate space (where the Z axis is inverted by
--- comparison with Minetest's), may subsequently be provided to
+-- comparison with Luanti's), may subsequently be provided to
 -- level_state:generate, and will be populated with values derived
 -- from noise.
 ------------------------------------------------------------------------
