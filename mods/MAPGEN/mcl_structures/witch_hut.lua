@@ -1,3 +1,7 @@
+if mcl_levelgen.enable_ersatz then
+	return false
+end
+
 local modname = core.get_current_modname()
 local modpath = core.get_modpath(modname)
 
