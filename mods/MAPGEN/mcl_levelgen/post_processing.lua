@@ -68,7 +68,7 @@ end
 -- Feature generation may also be influenced by the products of prior
 -- feature generation, in particular, on alterations to the surface
 -- height they may have produced.  This is problematic because
--- Minetest worlds are also partitioned into MapBlocks vertically, so
+-- Luanti worlds are also partitioned into MapBlocks vertically, so
 -- that heightmap modifications for one phase are not certain to be
 -- conclusive when the next phase commences, which issue is partially
 -- addressed by increasing the height of the periphery required of
@@ -809,7 +809,7 @@ local function post_process_mapchunk_in_dim (minp, maxp, dim)
 
 	-- As the engine saves mod storage before the map database,
 	-- there is still a chance that the database engine will
-	-- succeed in writing mod storage prior to the map if Minetest
+	-- succeed in writing mod storage prior to the map if Luanti
 	-- is aborted between the two processes in AsyncRunStep.
 	-- Happily, this should be insignificant in view of the other
 	-- circumstances where inopportune termination can cause the
@@ -2521,7 +2521,7 @@ local function copy_heightmap_segment (run, dst, wg, dx, dz, structure_masks)
 		end
 	else
 		-- Construct an empty heightmap if this MapBlock is
-		-- outside the Minetest map.
+		-- outside the Luanti map.
 		local idx_dst = x * HEIGHTMAP_SIZE_NODES + z + 1
 		for x1 = 1, 16 do
 			for i = 0, 15 do
@@ -2695,7 +2695,7 @@ end
 
 -- Return a table of every biome data string of a MapBlock in RUN
 -- indexed by MapBlock hash including its context.  Coordinates in
--- this table are expected to be represented in Minetest's standard
+-- this table are expected to be represented in Luanti's standard
 -- coordinate system.
 
 local get_biome_meta = mcl_levelgen.get_biome_meta
