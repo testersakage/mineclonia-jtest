@@ -136,7 +136,7 @@ dofile (prefix .. "/features.lua")
 dofile (prefix .. "/structures.lua")
 dofile (prefix .. "/scripting.lua")
 
--- Is this file being loaded into Minetest?
+-- Is this file being loaded into Luanti?
 if core and core.get_current_modname then
 	dofile (prefix .. "/nodeprops.lua")
 	dofile (prefix .. "/templates.lua")

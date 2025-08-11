@@ -151,8 +151,8 @@ end
 
 local dimension_at_layer = mcl_levelgen.dimension_at_layer
 
--- Convert from Minetest to Minecraft positions and vice versa.
--- Value is nil if there is no dimension at this position.
+-- Convert from Luanti to Minecraft positions and vice versa.  Value
+-- is nil if there is no dimension at this position.
 function mcl_levelgen.conv_pos (v)
 	local dim = dimension_at_layer (v.y)
 
@@ -160,11 +160,11 @@ function mcl_levelgen.conv_pos (v)
 		-- Minecraft's Z axis is inverted such that North is
 		-- -Z.
 		--
-		-- This function converts a Minetest position to the
+		-- This function converts a Luanti position to the
 		-- equivalent that is considered by the level
 		-- generator.  As it is imperative for performance
 		-- that level generator chunks should be aligned with
-		-- Minetest MapBlocks, Minetest positions are further
+		-- Minetest MapBlocks, Luanti positions are further
 		-- offset along the Z axis by a delta of -1.
 		return vector.new (v.x, v.y + dim.y_offset, -v.z - 1), dim
 	end
@@ -178,11 +178,11 @@ function mcl_levelgen.conv_pos_raw (v)
 		-- Minecraft's Z axis is inverted such that North is
 		-- -Z.
 		--
-		-- This function converts a Minetest position to the
+		-- This function converts a Luanti position to the
 		-- equivalent that is considered by the level
 		-- generator.  As it is imperative for performance
 		-- that level generator chunks should be aligned with
-		-- Minetest MapBlocks, Minetest positions are further
+		-- Minetest MapBlocks, Luanti positions are further
 		-- offset along the Z axis by a delta of -1.
 		return v.x, v.y + dim.y_offset, -v.z - 1, dim
 	end
