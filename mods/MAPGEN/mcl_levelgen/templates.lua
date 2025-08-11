@@ -1213,27 +1213,16 @@ local function fit_one_child (pieces, rng, item, queue, create_piece)
 		x = x + parent.x
 		y = y + parent.y
 		z = z + parent.z
-		-- print ("template x, y, z", x, y, z)
 
 		-- Position of target jigsaw block.
 		local x_target, y_target, z_target
 			= x + dx, y + dy, z + dz
-		-- print ("target x, y, z", dx, dy, dz)
-		-- print ("fin", x_target, y_target, z_target)
 
 		-- Decide to which allocation to confine any generated
 		-- structure.  If the target jigsaw block is within
 		-- the parent, it need not be impacted by the presence
 		-- of structures placed beyond its confines.
 
-		-- print (jigsaw.facing, rotation, "|",
-		--        dx, dy, dz,
-		--        parent.x, parent.y, parent.z,
-		--        jigsaw.dx, jigsaw.dy, jigsaw.dz,
-		--        x_target, y_target, z_target,
-		--        "|", unpack (parent.bbox))
-		-- print ("==> " .. jigsaw.metadata.name
-		--        .. "  ->  " .. jigsaw.metadata.target_name)
 		local effective_shape_ref = local_shape
 		if not bbox_contains_p (parent.bbox, x_target,
 					y_target, z_target) then
