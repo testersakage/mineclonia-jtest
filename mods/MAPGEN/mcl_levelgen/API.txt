@@ -529,7 +529,7 @@ that store the result in the first (destination) operand.  By
 convention, these tables are referred to as `ull' values.  (`unsigned
 long long' being generally the 64-bit unsigned integer type provided
 by C compilers, and also the suffix which indicates such values in C
-and Luajit.)
+and LuaJIT.)
 
 Function: mcl_levelgen.tostringull (ULL)
 
@@ -686,8 +686,8 @@ Return a table whose `__call' metamethod may be directly invoked with
 a vector of integer coordinates to derive a new PRNG from a state
 computed at the time the method was invoked and the same position, or
 a string, to do so from a string.  The table also provides another
-method as an optimization, which is documented after the remaining
-PRNG methods.
+method `create_reseedable' as an optimization, which is documented
+after the remaining PRNG methods.
 
 Function: rng:consume (N)
 
@@ -1787,9 +1787,9 @@ Function: <structure preprocessor function> (RNG, TEMPLATE)
 Return a key and a value to be recorded into a store which will be
 consistent across all invocations of template processors when placing
 the template piece for which this function is being invoked, or nil,
-to record no data at all.  RNG is a pseudo-random number unique to
-this structure piece, and TEMPLATE is the structure template this
-piece is to place.
+to record no data at all.  RNG is a pseudo-random number generator
+unique to this structure piece, and TEMPLATE is the structure template
+this piece is to place.
 
 Function: mcl_levelgen.get_preprocessor_metadata (KEY)
 
@@ -2054,7 +2054,8 @@ with those nodes absent.  This is a Luanti bug/misfeature and cannot
 be addressed without substantially complicating the ersatz level
 generator also redundantly to generate structure pieces intersecting
 this one-block margin whenever a chunk is generated.  Configurations
-where the level generator is enabled are not impacted by such issues.
+where the level generator is enabled in earnest are not impacted by
+such issues.
 
 Ersatz structure generation may be detected by testing the field
 `is_ersatz' in supplied terrain generator tables (which is set to true
@@ -2072,3 +2073,72 @@ the ERSATZ argument to `mcl_levelgen.register_levelgen_script' (q.v.).
 A mapgen script loaded in such an environment must also be loaded in
 the main Lua environment (e.g. with `dofile') to be available to
 commands such as `/locate'.
+
+
+PROGRAMMING CONSIDERATIONS
+
+The level generator is engineered to run efficiently on LuaJIT
+2.1-based Lua installations, and likewise, level generator scripts you
+write should also be optimized for such configurations.  To this end,
+there are certain counterproductive Luanti and Lua programming idioms
+which are best avoided:
+
+  - Creating closures (functions) after initialization.  LuaJIT's
+    trace compiler aborts whenever it encounters a bytecode
+    instruction allocating a function, and in consequence any such
+    allocations, and most adjacent code, cannot be compiled.  The
+    compiler may be able to sidestep the closure allocation and
+    compile the surrounding code, but the optimal practice is to avoid
+    allocating functions altogether.  You may provide parameters to
+    callback functions (e.g., those accepted by table.sort) by
+    defining such functions in advance and in a scope which is visible
+    to their uses, and altering upvalues.
+
+    Some Luanti-provided standard library extensions also allocate
+    closures and are best avoided at run-time, such as `table.copy'.
+
+  - Using the built-in vector APIs.  These APIs allocate new tables,
+    which are liable to induce expensive garbage collection if created
+    frequently enough and in the all-too frequent contexts where the
+    compiler cannot sink these allocations.  Always record the
+    components of positions in separate local variables (but be alert
+    not to introduce an excessive number of local variables with
+    unduly persistent lifetimes).
+
+  - Creating numerous local variables of broad scope and hence
+    pessimistically long lifetimes in a function with complex control
+    flow.  This may prevent LuaJIT from joining traces when a branch
+    is taken sufficiently often that it is compiled as a side trace.
+    In such functions, explicitly limit the scope of local variables
+    with do ... end blocks.
+
+  - Calling Luanti APIs.  Particularly, those which are not defined in
+    Lua.  The trace compiler cannot compile calls to functions defined
+    by C/C++ modules, such as Luanti.
+
+  - Not caching functions in upvalues.  It is seldom necessary to
+    reference a function from a table or the global environment, and
+    they should be cached in upvalues wherever possible, to avoid the
+    overhead of a specialized table lookup, which is measurable in
+    some contexts.
+
+Determinism in the level generator should be dilligently maintained,
+not least since completely isolated instances of the level generator
+will be invoked in diverse Lua environments in the expectation that
+they will produce identical output; typically it suffices to obtain
+pseudo-random values exclusively from PRNGs supplied by the level
+generator.  It is not advisable to use Luanti's built-in random number
+generators, and any PRNGs created by the programmer should be seeded
+from values produced by a level generator-supplied PRNG, or derived
+from a preset and position according to this idiom:
+
+  local preset = mcl_levelgen.get_dimension ("mcl_levelgen:overworld").preset
+  local base = preset.factory ("your_mod:unique_identifier")
+  local rng = base:fork_positional ():create_reseedable ()
+
+And invoking:
+
+  rng:reseed_positional (X, Y, Z)
+
+with a position (X, Y, Z) prior to retrieving any random values for
+the same position from RNG.
