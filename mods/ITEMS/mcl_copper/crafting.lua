@@ -155,3 +155,12 @@ for _, x in ipairs(block_exposure_level) do
 		}
 	})
 end
+
+core.register_craft({
+	output = "mcl_copper:copper_torch",
+	recipe = {
+		{ "mcl_copper:copper_nugget" },
+		{ "group:coal"        },
+		{ "mcl_core:stick"    },
+	}
+})
