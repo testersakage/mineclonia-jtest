@@ -1003,7 +1003,7 @@ local intersect_2d_p = mcl_levelgen.intersect_2d_p
 function meta_piece_place (self, level, terrain, rng, x1, z1, x2, z2)
 	sea_level = level.preset.sea_level
 	local bbox = self.bbox
-	px1, pz1, px2, pz2 = x1, z1, x2 + 1, z2 + 1
+	px1, pz1, px2, pz2 = x1, z1, x2, z2
 	fill_water (self, 0, 0, 0, 58, mathmax (sea_level, 64) - bbox[2], 58)
 	place_wing (self, false, 0)
 	place_wing (self, true, 33)
