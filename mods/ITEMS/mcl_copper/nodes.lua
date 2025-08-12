@@ -255,3 +255,20 @@ mcl_stairs.register_stair_and_slab("copper_oxidized_cut", {
 	description_slab = D("Oxidized Cut Copper Slab"),
 	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_oxidized", "mcl_copper:block_oxidized_cut"}, _on_lightning_strike = on_lightning_strike}
 })
+
+mcl_torches.register_torch({
+        name = "copper_torch",
+        description = S("Copper Torch"),
+        doc_items_longdesc = S("Copper Torches are light sources which can be placed at the side or on the top of most blocks."),
+        doc_items_hidden = false,
+        icon = "mcl_copper_torch.png",
+        tiles = {{
+                name = "mcl_copper_torch_animated.png",
+                animation = {type = "vertical_frames", aspect_w = 16, aspect_h = 16, length = 3.3}
+        }},
+        light =  14,
+        groups = {dig_immediate = 3, deco_block = 1},
+        sounds = mcl_sounds.node_sound_wood_defaults(),
+        particles = true,
+        flame_type = 1,
+})
