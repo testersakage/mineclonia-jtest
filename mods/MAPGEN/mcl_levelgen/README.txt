@@ -3,7 +3,7 @@ Minecraft's terrain and biome system, generating identical worlds from
 identical seeds.  It is enabled by selecting the mapgen "singlenode".
 
 Two flags may be set in map_meta.txt to configure this level generator
-in a structure-specific manner:
+in a world-specific manner:
 
 1. mcl_levelgen_use_large_biomes = true
 
