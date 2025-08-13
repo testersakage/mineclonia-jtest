@@ -43,7 +43,7 @@ end
 local heightmap, heightmap_wg = {}, {}
 local cids, param2s = {}, {}
 local biomes = {}
-local biomemap = {}
+local biomemap_old, biomemap = {}
 
 local walkable_p = mcl_levelgen.walkable_p
 local pack_height_map = mcl_levelgen.pack_height_map
@@ -166,6 +166,7 @@ local function build_biomemap_from_mgobject (min, max, minp, maxp, y1, y2)
 	emerged_area_size = maxp.x - minp.x + 1
 	biomemap = core.get_mapgen_object ("biomemap")
 	for i = 1, #biomemap do
+		biomemap_old[i] = biomemap[i]
 		biomemap[i] = ersatz_translate_biome (biomemap[i])
 			or "Plains"
 	end
@@ -239,15 +240,29 @@ end
 local encoded_grass = encode_node (cid_grass_block, 0)
 local encoded_default_block = encode_node (cid_stone, 0)
 local encoded_air = encode_node (cid_air, 0)
+local encoded_top_nodes = {}
 
-local function ersatz_surface_rule (heightmap, x, y, z)
+local function ersatz_surface_rule (heightmap, biome, x, y, z, idx_above)
 	local dz = chunksize - z - 1
 	local idx = dz * chunksize + x + 1
 	if heightmap[idx] <= y then
-		heightmap[idx] = y
-		return encoded_grass
+		-- Don't place grass while terraforming if the node
+		-- above is not air (e.g. a liquid node), even if it
+		-- is below the heightmap.
+		if not idx_above or cids[idx_above] == cid_air then
+			heightmap[idx] = y
+			return encoded_top_nodes[biome]
+				or encoded_grass
+		end
 	end
 	return encoded_default_block
+end
+
+for biome, def in pairs (core.registered_biomes) do
+	local id = core.get_biome_id (biome)
+	local cid_top_node
+		= core.get_content_id (def.node_top or "mcl_core:dirt_with_grass")
+	encoded_top_nodes[id] = encode_node (cid_top_node, 0)
 end
 
 local function form_terrain (beard_weights, ystart, ymax, min, max, border)
@@ -269,6 +284,7 @@ local function form_terrain (beard_weights, ystart, ymax, min, max, border)
 				local old_index = oldz * xw * yw
 					+ oldy * xw + x + border + 1
 				local y_abs = y + miny + border
+				local biome = biomemap_old [z * chunksize + x + 1]
 				if density < 0.8 and not air_water_or_lava_p (cid) then
 					if y > 0 then
 						-- Fix the heightmap.
@@ -282,13 +298,16 @@ local function form_terrain (beard_weights, ystart, ymax, min, max, border)
 						local i_below = index (x, y - 1, z, chunksize, nil)
 						local cid, _ = decode_node (gn[i_below])
 						if cid == cid_dirt then
-							gn[i_below] = ersatz_surface_rule (heightmap, x, y, z)
+							gn[i_below] = ersatz_surface_rule (heightmap, biome,
+											   x, y, z, nil)
 						end
 					end
 					gn[i] = encoded_air
 					cids[old_index], param2s[old_index] = cid_air, 0
 				elseif density > 1.6 and not walkable_p (cid) then
-					local node = ersatz_surface_rule (heightmap, x, y_abs, z)
+					local node = ersatz_surface_rule (heightmap, biome,
+									  x, y_abs, z,
+									  old_index + xw)
 					gn[i] = node
 					cids[old_index], param2s[old_index] = decode_node (node)
 				end
@@ -414,15 +433,19 @@ end)
 -- Structure generation overrides.
 ------------------------------------------------------------------------
 
+local function biomemap_index (x, z)
+	local dx = x - emerged_area_x
+	local dz = (-z - 1) - emerged_area_z
+	local index = dz * emerged_area_size + dx + 1
+	return index
+end
+
 function mcl_levelgen.index_biome (x, y, z)
 	if x < chunk_start_x or x >= chunk_start_x + chunksize
 		or z < chunk_start_z or z >= chunk_start_z + chunksize then
 		return nil
 	end
-	local dx = x - emerged_area_x
-	local dz = (-z - 1) - emerged_area_z
-	local index = dz * emerged_area_size + dx + 1
-	return biomemap[index]
+	return biomemap[biomemap_index (x, z)]
 end
 
 ------------------------------------------------------------------------
