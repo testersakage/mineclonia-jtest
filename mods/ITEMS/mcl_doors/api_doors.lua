@@ -112,12 +112,25 @@ function mcl_doors:register_door(name, def)
 		core.sound_play(door_switching_sound, {pos = pos, gain = 0.5, max_hear_distance = 16}, true)
 	end
 
+	local function swap_door (pos)
+		local node = core.get_node (pos)
+		if node.name:find ("_1") then
+			on_open_close(pos, 1, name.."_t_1", name.."_b_2", name.."_t_2")
+		else
+			on_open_close(pos, 1, name.."_t_2", name.."_b_1", name.."_t_1")
+		end
+	end
+
 	local function open(pos)
-		on_open_close(pos, 1, name.."_t_1", name.."_b_2", name.."_t_2")
+		if not mcl_doors.is_open (pos) then
+			swap_door (pos)
+		end
 	end
 
 	local function close(pos)
-		on_open_close(pos, 1, name.."_t_2", name.."_b_1", name.."_t_1")
+		if mcl_doors.is_open (pos) then
+			swap_door (pos)
+		end
 	end
 
 	local function redstone_connects_to(_, _) return true end
