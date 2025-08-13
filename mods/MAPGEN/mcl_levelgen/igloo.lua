@@ -28,10 +28,6 @@ mcl_levelgen.register_loot_table ("mcl_levelgen:igloo", {
 	},
 })
 
-if not mcl_levelgen.is_levelgen_environment then
-	return false
-end
-
 ------------------------------------------------------------------------
 -- Igloo pieces.
 ------------------------------------------------------------------------
@@ -43,20 +39,35 @@ local name_igloo_middle
 local name_igloo_bottom
 	= mcl_levelgen.prefix .. "/templates/igloo_bottom.dat"
 
-local igloo_top_template, err
-	= mcl_levelgen.read_structure_template (name_igloo_top)
-if err then
-	error (err)
+local igloo_top_template
+local igloo_middle_template
+local igloo_bottom_template
+local shaft_height
+
+local function init_templates ()
+	local err
+	igloo_top_template, err
+		= mcl_levelgen.read_structure_template (name_igloo_top)
+	if err then
+		error (err)
+	end
+	igloo_middle_template, err
+		= mcl_levelgen.read_structure_template (name_igloo_middle)
+	if err then
+		error (err)
+	end
+	shaft_height = igloo_middle_template.height
+	igloo_bottom_template, err
+		= mcl_levelgen.read_structure_template (name_igloo_bottom)
+	if err then
+		error (err)
+	end
 end
-local igloo_middle_template, err
-	= mcl_levelgen.read_structure_template (name_igloo_middle)
-if err then
-	error (err)
-end
-local igloo_bottom_template, err
-	= mcl_levelgen.read_structure_template (name_igloo_bottom)
-if err then
-	error (err)
+
+if mcl_levelgen.is_levelgen_environment then
+	init_templates ()
+else
+	core.register_on_mods_loaded (init_templates)
 end
 
 local igloo_top_shaft_x = 3
@@ -64,7 +75,6 @@ local igloo_top_shaft_z = 6
 
 local igloo_middle_shaft_x = 1
 local igloo_middle_shaft_z = 1
-local shaft_height = igloo_middle_template.height
 
 local igloo_bottom_shaft_x = 3
 local igloo_bottom_shaft_z = 7
