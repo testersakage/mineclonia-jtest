@@ -792,6 +792,20 @@ end
 local get_schematic_size = mcl_levelgen.get_schematic_size
 local lerp1d = mcl_levelgen.lerp1d
 
+local function is_terrain_suitable (terrain, bbox, y_dst)
+	local h1 = terrain:get_one_height (bbox[1], bbox[3], is_not_air)
+	local h2 = terrain:get_one_height (bbox[4], bbox[3], is_not_air)
+	local h3 = terrain:get_one_height (bbox[1], bbox[6], is_not_air)
+	local h4 = terrain:get_one_height (bbox[4], bbox[6], is_not_air)
+
+	if mathmax (h1, h2, h3, h4) - mathmin (h1, h2, h3, h4) > 4
+		or mathmax (h1, h2, h3, h4) - y_dst > 4
+		or y_dst - mathmin (h1, h2, h3, h4) > 4 then
+		return false
+	end
+	return true
+end
+
 local function fit_building_to_position (templates, terrain, pool_type, pieces, rng,
 					 x, y_min, z, target, parent)
 	local list = templates[pool_type]
@@ -822,10 +836,11 @@ local function fit_building_to_position (templates, terrain, pool_type, pieces, 
 
 	local x_dst, z_dst = x - x_target, z - z_target
 	local y_dst = terrain:get_one_height (x_dst, z_dst, is_not_air)
-	local y_diff = y_dst - (y_min + 1)
+	local y_diff = y_dst - y_min
 	if y_diff < -4 then
-		y_dst = floor (lerp1d (mathmin (1.0, y_diff / -8.0),
-				       y_dst, y_min + 1))
+		y_dst = y_min - 4
+	elseif y_diff > 2 then
+		y_dst = y_min + 4
 	end
 	-- (schematic_id, x, y, z, rotation, rng, center, force_place,
 	--  processors, placement_sentinel, ground_offset)
@@ -833,7 +848,11 @@ local function fit_building_to_position (templates, terrain, pool_type, pieces, 
 	bbox[3] = bbox[3] + z_dst
 	bbox[4] = bbox[4] + x_dst
 	bbox[6] = bbox[6] + z_dst
-	if not any_collisions_2d (pieces, bbox, parent) then
+	if not any_collisions_2d (pieces, bbox, parent)
+		-- Verify that the surface on which this building is
+		-- to be positioned is not too unstable to be
+		-- suitable.
+		and is_terrain_suitable (terrain, bbox, y_dst) then
 		local base_y = y_dst - entrance.y
 		local piece = make_schematic_piece (sid, x_dst, base_y,
 						    z_dst, diff, rng, false, true,
