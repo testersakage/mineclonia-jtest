@@ -157,7 +157,7 @@ for _, x in ipairs(block_exposure_level) do
 end
 
 core.register_craft({
-	output = "mcl_copper:copper_torch",
+	output = "mcl_copper:copper_torch 4",
 	recipe = {
 		{ "mcl_copper:copper_nugget" },
 		{ "group:coal"        },
