@@ -110,6 +110,18 @@ mcl_copper.register_decaychain("bar",{
 	},
 })
 
+mcl_copper.register_decaychain("chain",{
+	preserve_group = "preserves_copper",
+	unpreserve_callback = "_on_axe_place",
+	undecay_callback = "_on_axe_place",
+	nodes = { --order is significant
+		"mcl_copper:chain",
+		"mcl_copper:chain_exposed",
+		"mcl_copper:chain_weathered",
+		"mcl_copper:chain_oxidized",
+	},
+})
+
 -- "mcl_copper:block_exposed_cut"
 
 for _,v in pairs({"stair","slab"}) do
