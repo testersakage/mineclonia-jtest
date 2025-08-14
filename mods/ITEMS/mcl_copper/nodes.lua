@@ -223,6 +223,13 @@ for n, desc in pairs(n_desc) do
 		tiles_top = { "mcl_copper_door"..n.."_top.png^[transformFX", "mcl_copper_door"..n.."_top.png" },
 		_mcl_hardness = 3
 	})
+	mcl_lanterns.register_lantern("copper_lantern"..n, {
+        	description = D(desc .. "Copper Lantern"),
+        	longdesc = D(desc .. "Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."),
+        	texture = "mcl_copper_lantern"..n..".png",
+        	texture_inv = "mcl_copper_lantern"..n.."_inv.png",
+        	light_level = core.LIGHT_MAX,
+	})
 	mcl_wip.register_wip_item("mcl_copper:door"..n)
 end
 

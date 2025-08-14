@@ -164,3 +164,12 @@ core.register_craft({
 		{ "mcl_core:stick"    },
 	}
 })
+
+core.register_craft({
+	output = "mcl_lanterns:copper_lantern",
+	recipe = {
+		{ "mcl_copper:nugget", "mcl_copper:nugget",       "mcl_copper:nugget" },
+		{ "mcl_copper:nugget", "mcl_copper:copper_torch", "mcl_copper:nugget" },
+		{ "mcl_copper:nugget", "mcl_copper:nugget",       "mcl_copper:nugget" },
+	},
+})
