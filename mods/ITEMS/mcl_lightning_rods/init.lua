@@ -1,4 +1,5 @@
 local S = core.get_translator("mcl_lightning_rods")
+local D = mcl_util.get_dynamic_translator()
 
 local cbox = {
 	type = "fixed",
@@ -57,30 +58,9 @@ local rod_def = {
 
 core.register_node("mcl_lightning_rods:rod", rod_def)
 
-local rod_def_a = table.copy(rod_def)
+local rod_def_powered = table.copy(rod_def)
 
-rod_def_a.tiles = { "mcl_lightning_rods_rod.png^[brighten" }
-
-rod_def_a.groups.not_in_creative_inventory = 1
-
-rod_def_a._mcl_redstone = {
-	get_power = function(node, dir)
-		return 15
-	end,
-}
-
-rod_def_a.on_timer = function(pos)
-	local node = core.get_node(pos)
-
-	if node.name == "mcl_lightning_rods:rod_powered" then --has not been dug
-		node.name = "mcl_lightning_rods:rod"
-		core.set_node(pos, node)
-	end
-
-	return false
-end
-
-core.register_node("mcl_lightning_rods:rod_powered", rod_def_a)
+core.register_node("mcl_lightning_rods:rod_powered", rod_def_powered)
 
 mcl_lightning.register_on_strike(function(pos, pos2, objects, for_trap)
 	if for_trap then
@@ -100,3 +80,93 @@ mcl_lightning.register_on_strike(function(pos, pos2, objects, for_trap)
 
 	return lr, nil
 end)
+
+-- Exposed Lightning Rod
+rod_def_exposed = table.copy(rod_def)
+rod_def_exposed.description = D("Exposed Lightning Rod")
+rod_def_exposed.tiles = { "mcl_lightning_rods_rod_exposed.png" }
+core.register_node("mcl_lightning_rods:rod_exposed", rod_def_exposed)
+
+rod_def_exposed_powered = table.copy(rod_def_exposed)
+rod_def_exposed_powered.tiles = { "mcl_lightning_rods_rod_exposed.png^[brighten" }
+rod_def_exposed_powered.groups.not_in_creative_inventory = 1
+rod_def_exposed_powered._mcl_redstone = {
+	get_power = function(node, dir)
+		return 15
+	end,
+}
+rod_def_exposed_powered.on_timer = function(pos)
+	local node = core.get_node(pos)
+
+	if node.name == "mcl_lightning_rods:rod_exposed_powered" then --has not been dug
+		node.name = "mcl_lightning_rods:rod_exposed"
+		core.set_node(pos, node)
+	end
+
+	return false
+end
+core.register_node("mcl_lightning_rods:rod_exposed_powered", rod_def_exposed_powered)
+
+-- Weathered Lightning Rod
+rod_def_weathered = table.copy(rod_def)
+rod_def_weathered.description = D("Weathered Lightning Rod")
+rod_def_weathered.tiles = { "mcl_lightning_rods_rod_weathered.png" }
+core.register_node("mcl_lightning_rods:rod_weathered", rod_def_weathered)
+
+rod_def_weathered_powered = table.copy(rod_def_exposed)
+rod_def_weathered_powered.tiles = { "mcl_lightning_rods_rod_weathered.png^[brighten" }
+rod_def_weathered_powered.groups.not_in_creative_inventory = 1
+rod_def_weathered_powered._mcl_redstone = {
+	get_power = function(node, dir)
+		return 15
+	end,
+}
+rod_def_weathered_powered.on_timer = function(pos)
+	local node = core.get_node(pos)
+
+	if node.name == "mcl_lightning_rods:rod_weathered_powered" then --has not been dug
+		node.name = "mcl_lightning_rods:rod_weathered"
+		core.set_node(pos, node)
+	end
+
+	return false
+end
+core.register_node("mcl_lightning_rods:rod_weathered_powered", rod_def_weathered_powered)
+
+-- Oxidized Lightning Rod
+rod_def_oxidized = table.copy(rod_def)
+rod_def_oxidized.description = D("Oxidized Lightning Rod")
+rod_def_oxidized.tiles = { "mcl_lightning_rods_rod_oxidized.png" }
+core.register_node("mcl_lightning_rods:rod_oxidized", rod_def_oxidized)
+
+rod_def_oxidized_powered = table.copy(rod_def_oxidized)
+rod_def_oxidized_powered.tiles = { "mcl_lightning_rods_rod_oxidized.png^[brighten" }
+rod_def_oxidized_powered.groups.not_in_creative_inventory = 1
+rod_def_oxidized_powered._mcl_redstone = {
+	get_power = function(node, dir)
+		return 15
+	end,
+}
+rod_def_oxidized_powered.on_timer = function(pos)
+	local node = core.get_node(pos)
+
+	if node.name == "mcl_lightning_rods:rod_oxidized_powered" then --has not been dug
+		node.name = "mcl_lightning_rods:rod_oxidized"
+		core.set_node(pos, node)
+	end
+
+	return false
+end
+core.register_node("mcl_lightning_rods:rod_oxidized_powered", rod_def_oxidized_powered)
+
+mcl_copper.register_decaychain("lightning_rod",{
+        preserve_group = "preserves_copper",
+        unpreserve_callback = "_on_axe_place",
+        undecay_callback = "_on_axe_place",
+        nodes = { --order is significant
+                "mcl_lightning_rods:rod",
+                "mcl_lightning_rods:rod_exposed",
+                "mcl_lightning_rods:rod_weathered",
+                "mcl_lightning_rods:rod_oxidized",
+        },
+})
