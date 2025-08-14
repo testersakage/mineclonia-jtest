@@ -74,6 +74,42 @@ for _, v in pairs({"", "_open"}) do
 	})
 end
 
+mcl_copper.register_decaychain("lantern_ceiling",{
+	preserve_group = "preserves_copper",
+	unpreserve_callback = "_on_axe_place",
+	undecay_callback = "_on_axe_place",
+	nodes = { --order is significant
+		"mcl_lanterns:copper_lantern_ceiling",
+		"mcl_lanterns:copper_lantern_exposed_ceiling",
+		"mcl_lanterns:copper_lantern_weathered_ceiling",
+		"mcl_lanterns:copper_lantern_weathered_ceiling",
+	},
+})
+
+mcl_copper.register_decaychain("lantern_floor",{
+	preserve_group = "preserves_copper",
+	unpreserve_callback = "_on_axe_place",
+	undecay_callback = "_on_axe_place",
+	nodes = { --order is significant
+		"mcl_lanterns:copper_lantern_floor",
+		"mcl_lanterns:copper_lantern_exposed_floor",
+		"mcl_lanterns:copper_lantern_weathered_floor",
+		"mcl_lanterns:copper_lantern_oxidized_floor",
+	},
+})
+
+mcl_copper.register_decaychain("bar",{
+	preserve_group = "preserves_copper",
+	unpreserve_callback = "_on_axe_place",
+	undecay_callback = "_on_axe_place",
+	nodes = { --order is significant
+		"mcl_panes:copper_bar",
+		"mcl_panes:copper_bar_exposed",
+		"mcl_panes:copper_bar_weathered",
+		"mcl_panes:copper_bar_oxidized",
+	},
+})
+
 -- "mcl_copper:block_exposed_cut"
 
 for _,v in pairs({"stair","slab"}) do
