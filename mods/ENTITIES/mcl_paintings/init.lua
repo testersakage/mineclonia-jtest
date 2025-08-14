@@ -153,15 +153,10 @@ core.register_entity("mcl_paintings:painting", {
 				pos = self.object:get_pos()
 			end
 			if not mcl_util.check_position_protection(pos, puncher) then
-				-- Slightly delay removing the painting so nodes behind it won't be dug (particularly in creative mode)
-				core.after(0.15, function(object)
-					if object and object:get_pos() then
-						object:remove()
-					end
-					if not core.is_creative_enabled(kname) then
-						core.add_item(pos, "mcl_paintings:painting")
-					end
-				end, self.object)
+				self.object:remove()
+				if not minetest.is_creative_enabled(kname) then
+					minetest.add_item(pos, "mcl_paintings:painting")
+				end
 			end
 		end
 	end,
