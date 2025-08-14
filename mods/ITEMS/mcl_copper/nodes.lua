@@ -230,6 +230,7 @@ for n, desc in pairs(n_desc) do
 		texture_inv = "mcl_copper_lantern"..n.."_inv.png",
 		light_level = core.LIGHT_MAX,
 	})
+
 	mcl_wip.register_wip_item("mcl_copper:door"..n)
 end
 
@@ -261,6 +262,62 @@ mcl_stairs.register_stair_and_slab("copper_oxidized_cut", {
 	description_stair = D("Oxidized Cut Copper Stairs"),
 	description_slab = D("Oxidized Cut Copper Slab"),
 	overrides = {_mcl_stonecutter_recipes = {"mcl_copper:block_oxidized", "mcl_copper:block_oxidized_cut"}, _on_lightning_strike = on_lightning_strike}
+})
+
+mcl_panes.register_pane("copper_bar", {
+	description = D("Copper Bars"),
+	_doc_items_longdesc = D("Copper bars neatly connect to their neighbors as you build them."),
+	textures = {"mcl_copper_pane.png","mcl_copper_pane.png","mcl_copper_top.png"},
+	inventory_image = "mcl_copper_pane.png",
+	wield_image = "mcl_copper_pane.png",
+	groups = {pickaxey=1, iron_bars=1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	use_texture_alpha = "clip",
+	recipe = {
+		{"mcl_core:copper_ingot", "mcl_core:copper_ingot", "mcl_core:copper_ingot"},
+		{"mcl_core:copper_ingot", "mcl_core:copper_ingot", "mcl_core:copper_ingot"},
+	},
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
+})
+
+mcl_panes.register_pane("copper_bar_exposed", {
+	description = D("Exposed Copper Bars"),
+	_doc_items_longdesc = D("Exposed Copper bars neatly connect to their neighbors as you build them."),
+	textures = {"mcl_copper_pane_exposed.png","mcl_copper_pane_exposed.png","mcl_copper_top_exposed.png"},
+	inventory_image = "mcl_copper_pane_exposed.png",
+	wield_image = "mcl_copper_pane_exposed.png",
+	groups = {pickaxey=1, iron_bars=1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	use_texture_alpha = "clip",
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
+})
+
+mcl_panes.register_pane("copper_bar_weathered", {
+	description = D("Weathered Copper Bars"),
+	_doc_items_longdesc = D("Weathered Copper bars neatly connect to their neighbors as you build them."),
+	textures = {"mcl_copper_pane_weathered.png","mcl_copper_pane_weathered.png","mcl_copper_top_weathered.png"},
+	inventory_image = "mcl_copper_pane_weathered.png",
+	wield_image = "mcl_copper_pane_weathered.png",
+	groups = {pickaxey=1, iron_bars=1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	use_texture_alpha = "clip",
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
+})
+
+mcl_panes.register_pane("copper_bar_oxidized", {
+	description = D("Oxidized Copper Bars"),
+	_doc_items_longdesc = D("Oxidized Copper bars neatly connect to their neighbors as you build them."),
+	textures = {"mcl_copper_pane_oxidized.png","mcl_copper_pane_oxidized.png","mcl_copper_top_oxidized.png"},
+	inventory_image = "mcl_copper_pane_oxidized.png",
+	wield_image = "mcl_copper_pane_oxidized.png",
+	groups = {pickaxey=1, iron_bars=1},
+	sounds = mcl_sounds.node_sound_metal_defaults(),
+	use_texture_alpha = "clip",
+	_mcl_blast_resistance = 6,
+	_mcl_hardness = 5,
 })
 
 mcl_torches.register_torch({
