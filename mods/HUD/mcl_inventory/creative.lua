@@ -7,9 +7,9 @@ local show_nici = core.settings:get_bool("mcl_creative_show_nici_tab", false)
 mcl_player.register_player_setting("mcl_inventory:scroll_on_creative_inventory", {
 	type = "enum",
 	options = {
-		{ name = "auto", description = S("Auto (use scroll bar if client >= 5.11)") },
-		{ name = "false", description = S("Off  (use paging buttons, faster)") },
-		{ name = "true", description = S("On   (more MC like, slower)") },
+		{ name = "auto", description = S("Auto") },
+		{ name = "false", description = S("Off") },
+		{ name = "true", description = S("On (causes problems on some client versions)") },
 	},
 	section = "Inventory",
 	short_desc = S("Enable scrollable creative inventory"),
@@ -525,15 +525,16 @@ function mcl_inventory.set_creative_formspec(player)
 		local scroll = scroll_setting == "true"
 		if scroll_setting == "auto" then
 			--[[
-				Lunati 5.11 has been reported as performant
-				enough to allow enabling the scrolling creative
-				inventory by default. This corresponds to
-				protocol version 47+. When Luanti 5.11+ is
+				Luanti version <5.11 has serious performance
+				issues with scrollbars.  Luanti 5.13 also
+				introduced a regression which broke the
+				scrollbar completely.  When Luanti 5.11+ is
 				required for Mineclonia servers then the
-				hardcoded 47 (and most of this comment) can be
-				replaced by core.protocol_versions["5.11.0"]
+				hardcoded 47 and 48 can be replaced by
+				core.protocol_versions[<version>].
 			]]
-			scroll = core.get_player_information(playername).protocol_version >= 47
+			local protocol_version = core.get_player_information(playername).protocol_version
+			scroll = 47 <= protocol_version and protocol_version < 49
 		end
 		if scroll then
 			local nb_lines = math.ceil(inv_size / 9)
