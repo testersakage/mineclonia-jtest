@@ -1,0 +1,9 @@
+# textdomain: mcl_buttons
+Provides redstone power when pushed=Harrigorri seinalea igortzen du sakatzen denean
+Push duration: @1s=Pultsuaren iraupena: @1s
+Pushable by arrow=Gezi bidez sakatzekoa
+Use the button to push it.=Botoia sakatzeko erabili.
+Stone Button=Harrizko botoia
+A stone button is a redstone component made out of stone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second.=Harrizko botoi bat harriz egindako harrigorri osagai bat da, eta presio egin daiteke harrigorri energia emateko. Bultza egiten zaionean, ondoko harrigorri osagaiak elikatzen ditu segundo batez.
+Polished Blackstone Button=Harri beltzeko botoi leundua
+A polished blackstone button is a redstone component made out of polished blackstone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second.=Harri beltzeko botoi leundu bat harrigorri osagai bat da. Presioa egiten denean, harrigorri seinalea igortzen du ondoko blokeetara, segundo batez.

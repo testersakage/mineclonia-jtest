@@ -1,0 +1,4 @@
+# textdomain: mcl_redstone_lamp
+Redstone Lamp=Harrigorri lanpara
+Glows when powered by redstone power=Dir-dir egiten du harrigorri bidez aktibatzen denean
+Redstone lamps are simple redstone components which glow brightly (light level @1) when they receive redstone power.=Harrigorri lanparak harrigorri energia jasotzen dutenean distira handia (@1 argi maila) egiten duten harrigorri osagai sinpleak dira.
