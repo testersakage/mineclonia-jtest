@@ -173,3 +173,12 @@ core.register_craft({
 		{ "mcl_copper:nugget", "mcl_copper:nugget",       "mcl_copper:nugget" },
 	},
 })
+
+core.register_craft({
+	output = "mcl_copper:chain",
+	recipe = {
+		{ "mcl_copper:nugget" },
+		{ "mcl_copper:ingot" },
+		{ "mcl_copper:nugget" },
+	}
+})
