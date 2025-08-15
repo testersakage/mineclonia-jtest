@@ -73,6 +73,7 @@ end
 local function destruct_bed(pos, oldnode)
 	local node = oldnode or core.get_node_or_nil(pos)
 	if not node then return end
+	mobs_mc.notify_bed_deleted (pos)
 
 	local pos2, node2, bottom = get_bed_next_node(pos, oldnode)
 
@@ -83,6 +84,7 @@ local function destruct_bed(pos, oldnode)
 	else
 		if node2 and string.sub(node2.name, -7) == "_bottom" then
 			core.remove_node(pos2)
+			mobs_mc.notify_bed_deleted (pos2)
 		end
 	end
 end
@@ -191,6 +193,7 @@ function mcl_beds.register_bed(name, def)
 
 			core.set_node(pos, {name = name .. "_bottom", param2 = dir})
 			core.set_node(botpos, {name = name .. "_top", param2 = dir})
+			mobs_mc.notify_bed_placed (pos)
 
 			if not core.is_creative_enabled(player_name) then
 				itemstack:take_item()
