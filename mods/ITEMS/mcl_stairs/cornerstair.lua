@@ -489,10 +489,10 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 		stairs = {name, name.."_outer", name.."_inner"},
 		after_dig_node = function(pos, oldnode) after_dig_node(pos, oldnode) end,
 		on_place = nil,
-		after_place_node = function(pos, _, _, pointed_thing)
+		after_place_node = function(pos, placer, _, _)
 			local node = core.get_node(pos)
 			local ceiling = false
-			if pointed_thing.under.y > pointed_thing.above.y then
+			if placer and placer:is_player() and placer:get_look_vertical() < 0 then
 				ceiling = true
 				if node.param2 == 0 then node.param2 = 20
 				elseif node.param2 == 1 then node.param2 = 23
