@@ -1126,12 +1126,20 @@ local villager_professions = {
 
 local professions_by_name = {}
 
-local jobsite_groups = {}
+local jobsite_groups, jobsite_names = {}
 for _, profession in pairs (villager_professions) do
 	professions_by_name[profession.name] = profession
 	table.insert (jobsite_groups, profession.group)
 	table.insert (mobs_mc.jobsites, profession.group)
 end
+
+core.register_on_mods_loaded (function ()
+	jobsite_names = mcl_util.construct_node_list (jobsite_groups)
+	for _, profession in ipairs (villager_professions) do
+		profession.group_names
+			= mcl_util.construct_node_list ({profession.group,})
+	end
+end)
 
 local function get_profession (job_site_name)
 	for _, profession in pairs (villager_professions) do
@@ -2585,6 +2593,21 @@ end
 -- Villager AI.
 ------------------------------------------------------------------------
 
+local bed_search_cache
+	= mcl_util.make_node_search_cache ("limit_size", {"group:bed_bottom",})
+local poi_search_cache
+	= mcl_util.make_node_search_cache ("limit_size", jobsite_groups)
+local bell_search_cache
+	= mcl_util.make_node_search_cache ("limit_size", {"mcl_bells:bell",})
+
+function mobs_mc.notify_bed_placed (pos)
+	bed_search_cache:notify_placed (pos)
+end
+
+function mobs_mc.notify_bed_deleted (pos)
+	bed_search_cache:notify_deleted (pos)
+end
+
 local function manhattan3d (self, v1, v2)
 	local v = self:gwp_align_start_pos (v1)
 	local d = math.abs (v.x - v2.x)
@@ -2775,8 +2798,9 @@ local function sense_nearby_jobsites (self, self_pos)
 		and professions_by_name[self._profession]
 	local aa = vector.offset (self_pos, -48, -32, -48)
 	local bb = vector.offset (self_pos, 48, 32, 48)
-	local groups = profession and profession.group or jobsite_groups
-	local result = core.find_nodes_in_area (aa, bb, groups)
+	local names = profession and profession.group_node_names
+		or jobsite_names
+	local result = poi_search_cache:find_nodes_in_area (aa, bb, names)
 	local persist = 2.0 + pr:next (0, 20) / 20
 	return result, persist
 end
@@ -2805,7 +2829,7 @@ local function sense_nearby_beds (self, self_pos)
 	local aa = vector.offset (self_pos, -48, -32, -48)
 	local bb = vector.offset (self_pos, 48, 32, 48)
 	local nodes
-		= core.find_nodes_in_area (aa, bb, {"group:bed_bottom"})
+		= bed_search_cache:find_nodes_in_area (aa, bb)
 	local result = nodes
 	local persist = 2.0 + pr:next (0, 40) / 40
 	return result, persist
@@ -2847,10 +2871,16 @@ local function sense_free_beds (self, self_pos)
 	return sites
 end
 
+local cid_bell
+
+core.register_on_mods_loaded (function ()
+	cid_bell = core.get_content_id ("mcl_bells:bell")
+end)
+
 local function sense_nearby_bells (self, self_pos)
 	local aa = vector.offset (self_pos, -48, -32, -48)
 	local bb = vector.offset (self_pos, 48, 32, 48)
-	local result = core.find_nodes_in_area (aa, bb, {"mcl_bells:bell"})
+	local result = bell_search_cache:find_nodes_in_area (aa, bb, {cid_bell,})
 	local persist = 2.0 + pr:next (0, 20) / 20
 	return result, persist
 end

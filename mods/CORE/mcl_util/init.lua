@@ -27,3 +27,5 @@ dofile(modpath .. "/compat.lua")
 dofile(modpath.."/shape.lua")
 core.register_mapgen_script (modpath .. "/shape.lua")
 core.register_async_dofile (modpath .. "/shape.lua")
+-- Spatial index library.
+dofile (modpath .. "/spatialindex.lua")
