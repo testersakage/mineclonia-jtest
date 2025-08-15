@@ -42,9 +42,6 @@ local core_add_node = core.add_node
 local core_bulk_set_node = core.bulk_set_node
 local core_remove_node = core.remove_node
 
--- This counter is used generate unique names
-local resume_counter = 1
-
 local batch_update_cnt = 0
 
 local flowable_tab = {}
@@ -777,42 +774,49 @@ local function register_liquid(def)
 		return neighcid and can_flow_into(neighcid, neighp2, max_level)
 	end
 
+	local lbm_name = modname..":resume__"
+	lbm_name = lbm_name..string.split(NAME_SOURCE, ":")[2].."__"
+	lbm_name = lbm_name..string.split(NAME_FLOWING, ":")[2]
+
 	core.register_lbm({
 		label = "Continue the liquids",
-		name = modname..":resume_liquid_source_"..resume_counter,
+		name = lbm_name,
 		nodenames = {NAME_SOURCE, NAME_FLOWING},
 		run_at_every_load = true,
 		bulk_action = function(pos_list, dtime_s)
 			local minpos = pos_list[1]:divide(16):floor():multiply(16)
 			local maxpos = minpos:add(15)
 
-			-- Load neighbouring mapblocks to avoid ignore nodes
-			core.load_area(minpos:subtract(1), core.load_area(maxpos:add(1)))
+			-- emerge neighbouring mapblocks to avoid ignore nodes
+			core.emerge_area(minpos:subtract(1), maxpos:add(1),
+			 function (blockpos, action, calls_remaining)
+				 if calls_remaining ~= 0 then
+					 return
+				 end
 
-			for i = 1, #pos_list do
-				local pos = pos_list[i]
-				local x = pos.x
-				local y = pos.y
-				local z = pos.z
+				 for i = 1, #pos_list do
+					 local pos = pos_list[i]
+					 local x = pos.x
+					 local y = pos.y
+					 local z = pos.z
 
-				local cid, param2 = core.get_node_raw (x, y, z)
-				if cid == C_SOURCE or cid == C_FLOWING then
-					local max_level = cid == C_SOURCE and 7 or param2 - 1
-					local belowcid, belowp2	= core.get_node_raw (x, y - 1, z)
+					 local cid, param2 = core.get_node_raw (x, y, z)
+					 if cid == C_SOURCE or cid == C_FLOWING then
+						 local max_level = cid == C_SOURCE and 7 or param2 - 1
+						 local belowcid, belowp2 = core.get_node_raw (x, y - 1, z)
 
-					if (belowcid and can_flow_into (belowcid, belowp2, 8))  or
-							check_neigh(x - 1, y, z - 1, max_level) or
-							check_neigh(x - 1, y, z + 1, max_level) or
-							check_neigh(x + 1, y, z - 1, max_level) or
-							check_neigh(x + 1, y, z + 1, max_level) then
-						liquid_update (pos)
-					end
-				end
-			end
+						 if (belowcid and can_flow_into (belowcid, belowp2, 8))  or
+							 check_neigh(x - 1, y, z - 1, max_level) or
+							 check_neigh(x - 1, y, z + 1, max_level) or
+							 check_neigh(x + 1, y, z - 1, max_level) or
+							 check_neigh(x + 1, y, z + 1, max_level) then
+							 liquid_update (pos)
+						 end
+					 end
+				 end
+			 end)
 		 end,
 	})
-
-	resume_counter = resume_counter + 1
 
 	local tick_dtime = 0.0
 
