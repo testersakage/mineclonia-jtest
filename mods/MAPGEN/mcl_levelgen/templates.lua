@@ -887,8 +887,9 @@ function mcl_levelgen.generate_jigsaw (rng, x, y, z, rotation, start_pool,
 			bbox[5] = bbox[5] + projection - ground_level_delta
 		end
 		if test_spawn_position then
-			if not test_spawn_position (sx, sy, sz,
-						    arg1, arg2, arg3) then
+			local x, _, z = bbox_center (bbox)
+			if not test_spawn_position (x, sy, z, arg1,
+						    arg2, arg3) then
 				return {}
 			end
 		end
