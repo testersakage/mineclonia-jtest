@@ -123,7 +123,6 @@ local function use_slot(pos, itemstack, sextant, player)
 
 	-- always empty the slot if it has something in it.
 	if target_slot and (not target_slot:is_empty()) then
-		local playerinv = player:get_inventory()
 		local ret = nil
 
 		if itemstack:item_fits(target_slot) then
@@ -189,7 +188,6 @@ local function on_chiseled_bookshelf_rightclick(pos, node, clicker, itemstack, p
 	if not clicker:is_player() then
 		return
 	end
-	local pname = clicker:get_player_name()
 	local hitpos = core.pointed_thing_to_face_pos(clicker, pointed_thing)
 	local facing = direction[node.param2 + 1] -- param2 is zero-indexed but the table is not
 	local clicked = get_clicked_side(pos,hitpos)
