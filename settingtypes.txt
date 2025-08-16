@@ -166,9 +166,6 @@ mcl_mob_cap_water_ambient (Mob cap for ambient water mobs) int 20 0 1024
 # Enabling this setting adds an inventory to bookshelves
 mcl_bookshelf_inventories (Bookshelf inventories) bool true
 
-# Use consistent height for infotext for chiseled bookshelf
-mcl_chiseled_bookshelf_infotext_verbose (Chiseled bookshelf show book titles relative to each slot) bool false
-
 # All tameable mobs listen to the "sit" right-click like dogs
 # For some mobs the Sneak button must be pressed:
 # Eg. horses or other mobs with a right-click function
