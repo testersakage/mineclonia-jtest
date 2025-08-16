@@ -853,7 +853,6 @@ function mcl_levelgen.generate_jigsaw (rng, x, y, z, rotation, start_pool,
 				return {}
 			end
 		end
-
 		local sx, sy, sz = x, y, z
 		if start_jigsaw then
 			local jx, jy, jz
@@ -888,7 +887,8 @@ function mcl_levelgen.generate_jigsaw (rng, x, y, z, rotation, start_pool,
 		end
 		if test_spawn_position then
 			local x, _, z = bbox_center (bbox)
-			if not test_spawn_position (x, sy, z, arg1,
+			if not test_spawn_position (x, sy, z,
+						    sx, sy, sz, arg1,
 						    arg2, arg3) then
 				return {}
 			end

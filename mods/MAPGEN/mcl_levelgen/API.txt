@@ -1973,8 +1973,8 @@ Function: mcl_levelgen.jigsaw_create_start (SELF, LEVEL, TERRAIN, RNG, CX, CZ)
 
 Create a jigsaw structure at CX and CZ, which are chunk coordinates,
 from parameters in the structure definition SELF, and return a
-suitable structure start.  SELF must be a table with the following
-elements:
+suitable structure start, or nil if biome placement tests fail.  SELF
+must be a table with the following elements:
 
 {
 	start_pool = START_POOL,
@@ -1983,6 +1983,7 @@ elements:
 	size = SIZE,
 	start_height = function (rng) ... end,
 	start_jigsaw_name = START_JIGSAW_NAME or nil,
+	test_start_position = TEST_START_POSITION,
 }
 
 where START_POOL identifies a template pool from which to select the
@@ -2012,6 +2013,13 @@ origin of the structure.  This template will be rotated by a random
 value around a pivot of 0, 0 (i.e., its untransformed northwest
 corner) irrespective of START_JIGSAW_NAME's Joint Type parameter, if
 applicable.
+
+If TEST_START_POSITION is non-nil, the starting position provided to
+`structure_biome_test' will be the origin of the chunk specified at
+CX, CZ.  Otherwise, it will be the position at the center of the
+provided structure.  This option largely useful for reproducing
+manually coded Minecraft structure placement mechanics with jigsaw
+structures.
 
 
 ERSATZ STRUCTURE GENERATION
