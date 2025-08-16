@@ -274,7 +274,6 @@ local function register_liquid(def)
 
 
 	--[[
-	
 	This function returns the level of a liquid node or nil if it isn't a
 	liquid node.
 
@@ -327,7 +326,7 @@ local function register_liquid(def)
 
 
 	--[[
-	This function returns a requested node from the map. A cache is used for 
+	This function returns a requested node from the map. A cache is used for
 	performance reasons.
 
 	@param x          The x coordinate of the position
@@ -342,7 +341,7 @@ local function register_liquid(def)
 		if id then
 			return id, read_nodes_cache_param2[h]
 		else
-			local id, param1, param2, pos_ok = core.get_node_raw(x, y, z)
+			local id, _, param2 = core.get_node_raw(x, y, z)
 			read_nodes_cache_id[h] = id
 			read_nodes_cache_param2[h] = param2
 			return id, param2
@@ -405,7 +404,7 @@ local function register_liquid(def)
 			local id1, par1 = get_cached_node(px, py, pz)
 
 			-- move one down
-			local id2, par2 = get_cached_node(px, py-1, pz)
+			local id2 = get_cached_node(px, py-1, pz)
 
 			if id1 == C_IGNORE or id2 == C_IGNORE then
 				pf_ok = false
@@ -895,13 +894,14 @@ local function register_liquid(def)
 
 				local old_ndef = ndef_tab[old_id]
 				local pos = vector.new(x, y, z)
+				local node = make_liquid(level)
 
 				if old_ndef.on_flood then
-					if not old_ndef.on_flood(pos, old, node) then
-						core_set_node(pos, make_liquid(level))
+					if not old_ndef.on_flood(pos, core.get_node(pos), node) then
+						core_set_node(pos, node)
 					end
 				else
-					core_set_node(pos, make_liquid(level))
+					core_set_node(pos, node)
 				end
 			end
 		end
