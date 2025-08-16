@@ -2312,8 +2312,13 @@ local function project_start_to_motion_blocking_wg (x, z, level, terrain, _)
 	return height
 end
 
-local function jigsaw_test_generation_position (x, y, z, level, _, structure)
-	return structure_biome_test (level, structure, x, y, z)
+local function jigsaw_test_generation_position (x, y, z, sx, sy, sz, level,
+						_, structure)
+	if not structure.test_start_position then
+		return structure_biome_test (level, structure, x, y, z)
+	else
+		return structure_biome_test (level, structure, sx, sy, sz)
+	end
 end
 
 function mcl_levelgen.jigsaw_create_start (self, level, terrain, rng, cx, cz)

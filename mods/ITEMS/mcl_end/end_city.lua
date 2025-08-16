@@ -302,6 +302,7 @@ mcl_levelgen.register_structure ("mcl_end:end_city", {
 	start_height = ZERO,
 	project_start_to_heightmap = "world_surface_wg",
 	start_pool = "mcl_end:end_city_starts",
+	test_start_position = true,
 })
 
 mcl_levelgen.register_structure_set ("mcl_end:end_cities", {
