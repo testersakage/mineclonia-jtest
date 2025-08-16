@@ -882,45 +882,40 @@ local function register_liquid(def)
 			local minpos = pos_list[1]:divide(16):floor():multiply(16)
 			local maxpos = minpos:add(15)
 
-			-- emerge neighbouring mapblocks to avoid ignore nodes
-			core.emerge_area(minpos:subtract(1), maxpos:add(1),
-			 function (blockpos, action, calls_remaining)
-				 if calls_remaining ~= 0 then
-					 return
-				end
+			-- load neighbouring mapblocks to avoid ignore nodes
+			core.load_area(minpos:subtract(1), maxpos:add(1))
 
-				if #pos_list == 16*16*16 then
-					-- Special case if all nodes are the same liquid
-					local a = minpos:subtract(1)
-					local b = minpos:add(1)
-					for i = 1, #pos_list do
-						local pos = pos_list[i]
-						local x = pos.x
-						local y = pos.y
-						local z = pos.z
+			if #pos_list == 16*16*16 then
+				-- Special case if all nodes are the same liquid
+				local a = minpos:subtract(1)
+				local b = minpos:add(1)
+				for i = 1, #pos_list do
+					local pos = pos_list[i]
+					local x = pos.x
+					local y = pos.y
+					local z = pos.z
 
-						if a.x == x or b.x == x or
-							a.y == y or b.y == y or
-							a.z == z or b.z == z then
-
-							if does_sl_need_update(x, y, z) then
-								liquid_update (x, y, z)
-							end
-						end
-					end
-				else
-					for i = 1, #pos_list do
-						local pos = pos_list[i]
-						local x = pos.x
-						local y = pos.y
-						local z = pos.z
+					if a.x == x or b.x == x or
+						a.y == y or b.y == y or
+						a.z == z or b.z == z then
 
 						if does_sl_need_update(x, y, z) then
 							liquid_update (x, y, z)
 						end
 					end
-				 end
-			 end)
+				end
+			else
+				for i = 1, #pos_list do
+					local pos = pos_list[i]
+					local x = pos.x
+					local y = pos.y
+					local z = pos.z
+
+					if does_sl_need_update(x, y, z) then
+						liquid_update (x, y, z)
+					end
+				end
+			end
 		 end,
 	})
 
@@ -1018,24 +1013,19 @@ local function register_liquid(def)
 			local minpos = pos_list[1]:divide(16):floor():multiply(16)
 			local maxpos = minpos:add(15)
 
-			-- emerge neighbouring mapblocks to avoid ignore nodes
-			core.emerge_area(minpos:subtract(1), maxpos:add(1),
-			 function (blockpos, action, calls_remaining)
-				 if calls_remaining ~= 0 then
-					 return
-				 end
+			-- load neighbouring mapblocks to avoid ignore nodes
+			core.load_area(minpos:subtract(1), maxpos:add(1))
 
-				 for i = 1, #pos_list do
-					local pos = pos_list[i]
-					local x = pos.x
-					local y = pos.y
-					local z = pos.z
+			for i = 1, #pos_list do
+				local pos = pos_list[i]
+				local x = pos.x
+				local y = pos.y
+				local z = pos.z
 
-					if does_fl_need_update(x, y, z) then
-						update_next(x, y, z)
-					end
-				 end
-			 end)
+				if does_fl_need_update(x, y, z) then
+					update_next(x, y, z)
+				end
+			end
 		 end,
 	})
 
