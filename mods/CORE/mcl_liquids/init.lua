@@ -55,7 +55,9 @@ core.register_on_mods_loaded(function()
 	for name, ndef in pairs(core.registered_nodes) do
 		local id = core.get_content_id(name)
 
-		if core.get_item_group(name, "dig_by_water") ~= 0 then
+		if core.get_item_group(name, "dig_by_water") ~= 0 or
+			ndef.floodable
+		then
 			flowable_tab[id] = true
 		end
 
@@ -354,18 +356,20 @@ local function register_liquid(def)
 	--]]
 	local function make_liquid(level)
 		-- This function creates a new liquid node
-		if level >= 8 then
+		if level == 'source' then
+			return {
+				name = NAME_SOURCE,
+				param2 = 0,
+			}
+		elseif level >= 8 then
 			return {
 				name = NAME_FLOWING,
 				param2 = 8,
 			}
-		elseif level == 'source' then
-			return {
-				name = NAME_SOURCE,
-			}
 		elseif level <= 0 then
 			return {
 				name = 'air',
+				param2 = 0,
 			}
 		else
 			return {
@@ -825,25 +829,190 @@ local function register_liquid(def)
 	end)
 
 
-	-- Liquid can flow into a node if it is flowable or the corresponding
-	-- flowing liquid with a lower liquid level.
-	local function can_flow_into(cid, param2, max_level)
-		return flowable_tab[cid] or (cid == C_FLOWING and param2 < max_level)
-	end
+	--[[
+	This function tests if a source liquid needs to be updated.
+	]]
+	local function does_sl_need_update(x, y, z)
 
-	local function check_neigh(x2, y, z2, max_level)
-		local neighcid, neighp2 = core.get_node_raw(x2, y, z2)
-		return neighcid and can_flow_into(neighcid, neighp2, max_level)
-	end
+		--------------------------------------------------
+		-- Check for potential spreading                --
+		--------------------------------------------------
 
-	local lbm_name = modname..":resume__"
-	lbm_name = lbm_name..string.split(NAME_SOURCE, ":")[2].."__"
-	lbm_name = lbm_name..string.split(NAME_FLOWING, ":")[2]
+		-- Could spread down
+		local id101, _, p101 = core.get_node_raw (x, y-1, z)
+		if flowable_tab[id101] then return true end
+		local l101 = get_liquid_level (id101, p101)
+		if l101 and l101 < 8 then return true end
+
+		local next_level = level_tb[8]
+
+		-- Could spread to x-1
+		local id011, _, p011 = core.get_node_raw (x-1, y, z)
+		if flowable_tab[id011] then return true end
+		local l011 = get_liquid_level (id011, p011)
+		if l011 and l011 < next_level then return true end
+
+		-- Could spread to x+1
+		local id211, _, p211 = core.get_node_raw (x+1, y, z)
+		if flowable_tab[id211] then return true end
+		local l211 = get_liquid_level (id211, p211)
+		if l211 and l211 < next_level then return true end
+
+		-- Could spread to z-1
+		local id110, _, p110 = core.get_node_raw (x, y, z-1)
+		if flowable_tab[id110] then return true end
+		local l110 = get_liquid_level (id110, p110)
+		if l110 and l110 < next_level then return true end
+
+		-- Could spread to z+1
+		local id112, _, p112 = core.get_node_raw (x, y, z+1)
+		if flowable_tab[id112] then return true end
+		local l112 = get_liquid_level (id112, p112)
+		if l112 and l112 < next_level then return true end
+
+		return false
+	end
 
 	core.register_lbm({
 		label = "Continue the liquids",
-		name = lbm_name,
-		nodenames = {NAME_SOURCE, NAME_FLOWING},
+		name = modname..":resume__"..string.split(NAME_SOURCE, ":")[2],
+		nodenames = {NAME_SOURCE},
+		run_at_every_load = true,
+		bulk_action = function(pos_list, dtime_s)
+			local minpos = pos_list[1]:divide(16):floor():multiply(16)
+			local maxpos = minpos:add(15)
+
+			-- emerge neighbouring mapblocks to avoid ignore nodes
+			core.emerge_area(minpos:subtract(1), maxpos:add(1),
+			 function (blockpos, action, calls_remaining)
+				 if calls_remaining ~= 0 then
+					 return
+				end
+
+				if #pos_list == 16*16*16 then
+					-- Special case if all nodes are the same liquid
+					local a = minpos:subtract(1)
+					local b = minpos:add(1)
+					for i = 1, #pos_list do
+						local pos = pos_list[i]
+						local x = pos.x
+						local y = pos.y
+						local z = pos.z
+
+						if a.x == x or b.x == x or
+							a.y == y or b.y == y or
+							a.z == z or b.z == z then
+
+							if does_sl_need_update(x, y, z) then
+								liquid_update (x, y, z)
+							end
+						end
+					end
+				else
+					for i = 1, #pos_list do
+						local pos = pos_list[i]
+						local x = pos.x
+						local y = pos.y
+						local z = pos.z
+
+						if does_sl_need_update(x, y, z) then
+							liquid_update (x, y, z)
+						end
+					end
+				 end
+			 end)
+		 end,
+	})
+
+
+	--[[
+	This function tests if a flowing liquid needs to be updated.
+	]]
+	local function does_fl_need_update(x, y, z)
+
+		--------------------------------------------------
+		-- Check for potential spreading                --
+		--------------------------------------------------
+
+		-- Could spread down
+		local id101, _, p101 = core.get_node_raw (x, y-1, z)
+		if flowable_tab[id101] then return true end
+		local l101 = get_liquid_level (id101, p101)
+		if l101 and l101 < 8 then return true end
+
+		local id111, _, p111 = core.get_node_raw (x, y, z)
+		local l111 = get_liquid_level (id111, p111)
+		if not l111 then
+			-- TODO handle corrupted liquid node
+			return false
+		end
+
+		local next_level = level_tb[l111] or 0
+
+		-- Could spread to x-1
+		local id011, _, p011 = core.get_node_raw (x-1, y, z)
+		if flowable_tab[id011] then return true end
+		local l011 = get_liquid_level (id011, p011)
+		if l011 and l011 < next_level then return true end
+
+		-- Could spread to x+1
+		local id211, _, p211 = core.get_node_raw (x+1, y, z)
+		if flowable_tab[id211] then return true end
+		local l211 = get_liquid_level (id211, p211)
+		if l211 and l211 < next_level then return true end
+
+		-- Could spread to z-1
+		local id110, _, p110 = core.get_node_raw (x, y, z-1)
+		if flowable_tab[id110] then return true end
+		local l110 = get_liquid_level (id110, p110)
+		if l110 and l110 < next_level then return true end
+
+		-- Could spread to z+1
+		local id112, _, p112 = core.get_node_raw (x, y, z+1)
+		if flowable_tab[id112] then return true end
+		local l112 = get_liquid_level (id112, p112)
+		if l112 and l112 < next_level then return true end
+
+		--------------------------------------------------
+		-- Check if the liquid could turn into a source --
+		--------------------------------------------------
+		
+		local count_sources = 0
+		if id011 == C_SOURCE then count_sources = count_sources + 1 end
+		if id211 == C_SOURCE then count_sources = count_sources + 1 end
+		if id110 == C_SOURCE then count_sources = count_sources + 1 end
+		if id112 == C_SOURCE then count_sources = count_sources + 1 end
+		if count_sources >= 2 then return true end
+
+
+		--------------------------------------------------
+		-- Check if the liquid level is supported       --
+		--------------------------------------------------
+
+		-- Check for support from x-1
+		if l011 and l011 > l111 then return false end
+		-- Check for support from x+1
+		if l211 and l211 > l111 then return false end
+		-- Check for support from z-1
+		if l110 and l110 > l111 then return false end
+		-- Check for support from z+1
+		if l112 and l112 > l111 then return false end
+
+
+		-- Check for support from above
+		local id121, _, p121 = core.get_node_raw (x, y+1, z)
+		local l121 = get_liquid_level (id121, p121)
+		if l121 and l121 > 0 then return false end
+
+		-- The level is not supported, so we need an update
+		return true
+	end
+
+
+	core.register_lbm({
+		label = "Continue the liquids",
+		name = modname..":resume__"..string.split(NAME_FLOWING, ":")[2],
+		nodenames = {NAME_FLOWING},
 		run_at_every_load = true,
 		bulk_action = function(pos_list, dtime_s)
 			local minpos = pos_list[1]:divide(16):floor():multiply(16)
@@ -857,24 +1026,14 @@ local function register_liquid(def)
 				 end
 
 				 for i = 1, #pos_list do
-					 local pos = pos_list[i]
-					 local x = pos.x
-					 local y = pos.y
-					 local z = pos.z
+					local pos = pos_list[i]
+					local x = pos.x
+					local y = pos.y
+					local z = pos.z
 
-					 local cid, param2 = core.get_node_raw (x, y, z)
-					 if cid == C_SOURCE or cid == C_FLOWING then
-						 local max_level = cid == C_SOURCE and 7 or param2 - 1
-						 local belowcid, belowp2 = core.get_node_raw (x, y - 1, z)
-
-						 if (belowcid and can_flow_into (belowcid, belowp2, 8))  or
-							 check_neigh(x - 1, y, z - 1, max_level) or
-							 check_neigh(x - 1, y, z + 1, max_level) or
-							 check_neigh(x + 1, y, z - 1, max_level) or
-							 check_neigh(x + 1, y, z + 1, max_level) then
-							 liquid_update (x, y, z)
-						 end
-					 end
+					if does_fl_need_update(x, y, z) then
+						update_next(x, y, z)
+					end
 				 end
 			 end)
 		 end,
@@ -968,8 +1127,9 @@ local function register_liquid(def)
 end
 
 -- This function is called once per tick to update all registered liquids.
-local co_liquid_tick_loop = coroutine.create(function()
+local liquid_tick = coroutine.wrap(function()
 	while true do
+		batch_update_cnt = 0
 		for i, o in ipairs(registered_liquids) do
 			o.tick()
 		end
@@ -978,9 +1138,6 @@ local co_liquid_tick_loop = coroutine.create(function()
 	end
 end)
 
-local function liquid_tick()
-	coroutine.resume(co_liquid_tick_loop)
-end
 
 -- This function notifies the registered liquids about a node that has changed.
 local function liquid_update(pos)
