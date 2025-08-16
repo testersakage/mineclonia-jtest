@@ -976,7 +976,7 @@ local function register_liquid(def)
 		--------------------------------------------------
 		-- Check if the liquid could turn into a source --
 		--------------------------------------------------
-		
+
 		local count_sources = 0
 		if id011 == C_SOURCE then count_sources = count_sources + 1 end
 		if id211 == C_SOURCE then count_sources = count_sources + 1 end
