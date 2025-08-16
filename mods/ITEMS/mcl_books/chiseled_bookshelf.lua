@@ -128,7 +128,6 @@ local function use_slot(pos, itemstack, sextant, player)
 	local target_slot = inv:get_stack("main",sextant)
 	-- only 6 slots
 	if sextant < 1 or sextant > 6 then return end
-	core.log("info","Slot " .. sextant .. " currently has " .. tostring(target_slot))
 	if protection_check_put_take(pos, nil, nil, itemstack, player) == 0 then
 		return
 	end
@@ -149,7 +148,7 @@ local function use_slot(pos, itemstack, sextant, player)
 		-- just in case the function did not empty the slot.
 		inv:set_stack("main", sextant, ItemStack(""))
 		meta:set_float("last_slot_used", sextant)
-		core.log("action", player:get_player_name() .. " removes " .. tostring(target_slot) .. " from chiseled bookshelf slot " .. sextant .. " at " .. core.pos_to_string(pos))
+		core.log("action", player:get_player_name() .. " removes " .. target_slot:get_name() .. " from chiseled bookshelf slot " .. sextant .. " at " .. core.pos_to_string(pos))
 
 		return ret
 	end
@@ -158,7 +157,7 @@ local function use_slot(pos, itemstack, sextant, player)
 		-- put item in slot
 		local stack1 = itemstack:take_item()
 		if stack1 and (not stack1:is_empty()) then
-			core.log("action", player:get_player_name() .. " puts " .. tostring(stack1) .. " in chiseled bookshelf slot " .. sextant .. " at " .. core.pos_to_string(pos))
+			core.log("action", player:get_player_name() .. " puts " .. stack1:get_name() .. " in chiseled bookshelf slot " .. sextant .. " at " .. core.pos_to_string(pos))
 			inv:set_stack("main", sextant, stack1)
 			meta:set_float("last_slot_used", sextant)
 			return itemstack
@@ -203,10 +202,8 @@ local function on_chiseled_bookshelf_rightclick(pos, node, clicker, itemstack, p
 	local pname = clicker:get_player_name()
 	local hitpos = core.pointed_thing_to_face_pos(clicker, pointed_thing)
 	local facing = direction[node.param2 + 1] -- param2 is zero-indexed but the table is not
-	core.log("info", pname .. " used " .. itemstack:get_name() .. " " .. itemstack:get_count() .." on chiseled shelf (facing " .. facing .. " at pos " .. tostring(pos) .. " at click-pos " .. core.pos_to_string(hitpos))
 	local clicked = get_clicked_side(pos,hitpos)
 	if clicked ~= facing then
-		core.log("warning","Chiseled Bookshelf does not face that direction!")
 		return
 	end
 	local sextant = get_surface_sixth(pos,facing,hitpos)
@@ -305,15 +302,15 @@ local basedef = {
 	allow_metadata_inventory_put = protection_check_put_take,
 	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
 		core.log("action", player:get_player_name() ..
-			" moves stuff in bookshelf at " .. core.pos_to_string(pos))
+			" moves stuff in chiseled bookshelf at " .. core.pos_to_string(pos))
 	end,
 	on_metadata_inventory_put = function(pos, _, _, _, player)
 		core.log("action", player:get_player_name() ..
-			" moves stuff to bookshelf at " .. core.pos_to_string(pos))
+			" moves stuff to chiseled bookshelf at " .. core.pos_to_string(pos))
 	end,
 	on_metadata_inventory_take = function(pos, _, _, _, player)
 		core.log("action", player:get_player_name() ..
-			" takes stuff from bookshelf at " .. core.pos_to_string(pos))
+			" takes stuff from chiseled bookshelf at " .. core.pos_to_string(pos))
 	end,
 	on_destruct = mcl_util.drop_items_from_meta_container("main"),
 	on_rightclick = on_chiseled_bookshelf_rightclick,
