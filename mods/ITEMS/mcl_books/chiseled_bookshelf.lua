@@ -1,7 +1,6 @@
 -- chiseled_bookshelf.lua
 local S = core.get_translator(core.get_current_modname())
 
-local drop_content = mcl_util.drop_items_from_meta_container()
 local infotext_verbose = core.settings:get_bool("mcl_chiseled_bookshelf_infotext_verbose", false)
 
 -- order of these matters, because they match 4dir node facing directions.
@@ -49,12 +48,6 @@ end
 
 local function get_node_name(bits)
 	return "mcl_books:chiseled_bookshelf" .. (bits == 0 and "" or "_"..bit.tohex(bits, 2))
-end
-
-local function on_blast(pos)
-	local node = core.get_node(pos)
-	drop_content(pos, node)
-	core.remove_node(pos)
 end
 
 local function protection_check_move(pos, _, _, _, _, count, player)
@@ -315,8 +308,7 @@ local basedef = {
 		core.log("action", player:get_player_name() ..
 			" takes stuff from bookshelf at " .. core.pos_to_string(pos))
 	end,
-	after_dig_node = drop_content,
-	on_blast = on_blast,
+	on_destruct = mcl_util.drop_items_from_meta_container("main"),
 	on_rightclick = on_chiseled_bookshelf_rightclick,
 	_on_hopper_out = on_hopper_out,
 	_on_hopper_in = on_hopper_in,
