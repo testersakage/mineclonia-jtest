@@ -14,26 +14,15 @@ local direction = {
 
 local colors = {
 	"blue",
-	"gray",
 	"green",
 	"purple",
-	"yellow",
 	"red",
+	"yellow",
+	"gray",
 }
 
 local top = "mcl_books_chiseled_bookshelf_top.png"
 local side = "mcl_books_chiseled_bookshelf_side.png"
-
-local function shuffleTable(t)
-	local n = #t
-	for i = n, 2, -1 do
-		local j = math.random(i)
-		t[i], t[j] = t[j], t[i]
-	end
-end
-
--- For fun. Do not math.randomseed(os.time()) here because is in mcl_init.
-shuffleTable(colors)
 
 local function get_bits(inv)
 	local bits = 0
