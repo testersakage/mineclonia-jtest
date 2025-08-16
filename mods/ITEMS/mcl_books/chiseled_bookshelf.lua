@@ -126,8 +126,9 @@ local function use_slot(pos, itemstack, sextant, player)
 		local playerinv = player:get_inventory()
 		local ret = nil
 
-		if itemstack:is_empty() then
-			ret = ItemStack(target_slot)
+		if itemstack:item_fits(target_slot) then
+			itemstack:add_item(target_slot)
+			ret = ItemStack(itemstack)
 		else
 			local node = core.get_node(pos)
 			local frontpos = pos:add(-core.fourdir_to_dir(node.param2))
