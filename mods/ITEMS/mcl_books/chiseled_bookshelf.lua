@@ -36,6 +36,21 @@ end
 -- For fun. Do not math.randomseed(os.time()) here because is in mcl_init.
 shuffleTable(colors)
 
+local function get_bits(inv)
+	local bits = 0
+	for i = 1, 6 do
+		local count = inv:get_stack("main", i):get_count()
+		if count >= 1 then
+			bits = bit.bor(bits, bit.lshift(1, i - 1))
+		end
+	end
+	return bits
+end
+
+local function get_node_name(bits)
+	return "mcl_books:chiseled_bookshelf" .. (bits == 0 and "" or "_"..bit.tohex(bits, 2))
+end
+
 local function on_blast(pos)
 	local node = core.get_node(pos)
 	drop_content(pos, node)
@@ -151,36 +166,10 @@ local function use_slot(pos, itemstack, sextant, player)
 	return nil, changed
 end
 
--- function to_bits from https://stackoverflow.com/a/9080080, licensed CC-BY-SA-3.0-only
-function to_bits(num,bits)
-	-- returns a table of bits, most significant first.
-	bits = bits or math.max(1, select(2, math.frexp(num)))
-	local t = {} -- will contain the bits
-	for b = bits, 1, -1 do
-		t[b] = math.fmod(num, 2)
-		num = math.floor((num - t[b]) / 2)
-	end
-	return t
-end
-
-local function get_bitstring(inv)
-	local bitstr = ""
-	for i = 1,6 do
-		local count = inv:get_stack("main",i):get_count()
-		if count > 1 then
-			core.log("warning","How did chiseled_bookshelf slot " .. i .. " end up with " .. count .. " items?")
-			count = 1
-		end
-		bitstr = bitstr .. tostring(count)
-	end
-	return bitstr
-end
-
 local function redraw_bookshelf(node,pos)
 	local meta = core.get_meta(pos)
 	local inv = meta:get_inventory()
-	local bitstr = get_bitstring(inv)
-	local newnode = {name = "mcl_books:chiseled_bookshelf_" .. bitstr, param2 = node.param2}
+	local newnode = {name = get_node_name(get_bits(inv)), param2 = node.param2}
 	-- no need to copy meta; it is preserved
 	core.swap_node(pos, newnode)
 	local infotext = ""
@@ -236,12 +225,12 @@ end
 local function on_hopper_out(uppos, pos)
 	local meta = core.get_meta(uppos)
 	local inv = core.get_inventory({type="node", pos = uppos})
-	local old_bitstr = get_bitstring(inv)
+	local old_bits = get_bits(inv)
 	local sucked = mcl_util.move_item_container(uppos, pos,"main",-1)
-	local new_bitstr = get_bitstring(inv)
+	local new_bits = get_bits(inv)
 	-- for redstone comparator
 	for i = 1, 6 do
-		if string.sub(old_bitstr, i, i) ~= string.sub(new_bitstr, i, i) then
+		if bit.band(old_bits, bit.lshift(1, i - 1)) ~= bit.band(new_bits, bit.lshift(1, i - 1)) then
 			meta:set_float("last_slot_used", i)
 			break
 		end
@@ -312,7 +301,7 @@ local basedef = {
 	after_place_node = function(pos, _, itemstack, _)
 		core.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
 		mcl_redstone._notify_observer_neighbours(pos)
-		redraw_bookshelf(core.get_node(pos),pos)
+		--redraw_bookshelf(core.get_node(pos),pos)
 	end,
 	-- these do not trigger, probably because we do not use a formspec
 	-- but keep them in case anything else uses them
@@ -338,31 +327,23 @@ local basedef = {
 	_on_hopper_in = on_hopper_in,
 }
 
--- by setting the main node tiles to the full image, the rendered inventory_image will look
--- nice, with books in it. The after_place_node will draw it with correct inventory.
-core.register_node("mcl_books:chiseled_bookshelf", table.merge(basedef, {
-	tiles = { top, top, side, side, side, "mcl_books_chiseled_bookshelf_full.png" },
-	groups = basegroups,
-	_mcl_silk_touch_drop = true,
-}))
-
 -- This is the dirty trick to show the different books in different slots: use a unique node
 -- per possible book configuration.
-for i = 0, (2^6-1) do
-	local bits = table.concat(to_bits(i,6))
+for i = 0, 63 do
 	local front_tile = "[combine:16x16:0,0=mcl_books_chiseled_bookshelf_empty.png"
-	for i = 1, 6 do
+	for j = 1, 6 do
 		-- TODO: would bitshifting be more efficient?
-		if tonumber(string.sub(bits, i, i)) == 1 then
-			local x = (math.fmod(i-1,3)*5)+1
-			local y = (math.floor(i/4)*8)+1
-			front_tile = front_tile .. ":" .. x .. "," .. y .. "=" .. "mcl_books_book_" .. colors[i] .. ".png"
+		if bit.band(i, bit.lshift(1, j - 1)) ~= 0 then
+			local x = (math.fmod(j-1,3)*5)+1
+			local y = (math.floor(j/4)*8)+1
+			front_tile = front_tile .. ":" .. x .. "," .. y .. "=" .. "mcl_books_book_" .. colors[j] .. ".png"
 		end
 	end
-	core.register_node("mcl_books:chiseled_bookshelf_" .. bits, table.merge(basedef, {
+	local name = get_node_name(i)
+	core.register_node(name, table.merge(basedef, {
 		tiles = { top, top, side, side, side, front_tile },
 		groups = table.merge(basegroups, {
-			not_in_creative_inventory = 1
+			not_in_creative_inventory = i ~= 0 and 1 or nil
 		}),
 		_mcl_silk_touch_drop = { "mcl_books:chiseled_bookshelf" },
 	}))
