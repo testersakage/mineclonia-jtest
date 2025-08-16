@@ -126,21 +126,32 @@ local function use_slot(pos, itemstack, sextant, player)
 	local meta = core.get_meta(pos)
 	local inv = meta:get_inventory()
 	local target_slot = inv:get_stack("main",sextant)
-	local changed = false
 	-- only 6 slots
 	if sextant < 1 or sextant > 6 then return end
 	core.log("info","Slot " .. sextant .. " currently has " .. tostring(target_slot))
 	if protection_check_put_take(pos, nil, nil, itemstack, player) == 0 then
 		return
 	end
+
 	-- always empty the slot if it has something in it.
 	if target_slot and (not target_slot:is_empty()) then
-		mcl_util.drop_item_stack(player:get_pos(), target_slot)
+		local playerinv = player:get_inventory()
+		local ret = nil
+
+		if itemstack:is_empty() then
+			ret = ItemStack(target_slot)
+		else
+			local node = core.get_node(pos)
+			local frontpos = pos:add(-core.fourdir_to_dir(node.param2))
+			mcl_util.drop_item_stack(frontpos, target_slot)
+		end
+
 		-- just in case the function did not empty the slot.
 		inv:set_stack("main", sextant, ItemStack(""))
 		meta:set_float("last_slot_used", sextant)
 		core.log("action", player:get_player_name() .. " removes " .. tostring(target_slot) .. " from chiseled bookshelf slot " .. sextant .. " at " .. core.pos_to_string(pos))
-		changed = true
+
+		return ret
 	end
 	-- and now remove the item from the player's hand and put it in the slot
 	if (not itemstack:is_empty()) and is_allowed_itemstack(itemstack) then
@@ -150,13 +161,11 @@ local function use_slot(pos, itemstack, sextant, player)
 			core.log("action", player:get_player_name() .. " puts " .. tostring(stack1) .. " in chiseled bookshelf slot " .. sextant .. " at " .. core.pos_to_string(pos))
 			inv:set_stack("main", sextant, stack1)
 			meta:set_float("last_slot_used", sextant)
-			changed = true
-			return itemstack, changed
+			return itemstack
 		end
 		-- removed nothing
-		return nil, changed
+		return nil
 	end
-	return nil, changed
 end
 
 local function redraw_bookshelf(node,pos)
@@ -175,14 +184,15 @@ local function redraw_bookshelf(node,pos)
 		if stack_count > 1 then
 			stack_str = stack_str + " " + stack_count
 		end
-      if infotext_verbose then
-         infotext = infotext .. i .. ": "
-      end
+		if infotext_verbose then
+			infotext = infotext .. i .. ": "
+		end
 		if stack_count > 0 or infotext_verbose then
 			infotext = infotext .. stack_str .. "\n"
 		end
 	end
 	meta:set_string("infotext", infotext)
+	mcl_redstone._notify_observer_neighbours(pos)
 end
 
 local function on_chiseled_bookshelf_rightclick(pos, node, clicker, itemstack, pointed_thing)
@@ -203,10 +213,7 @@ local function on_chiseled_bookshelf_rightclick(pos, node, clicker, itemstack, p
 	-- sextant is one-indexed, in this order:
 	-- 1 2 3
 	-- 4 5 6
-	local remainder, changed = use_slot(pos, itemstack, sextant, clicker)
-	if changed then
-		mcl_redstone._notify_observer_neighbours(pos)
-	end
+	local remainder = use_slot(pos, itemstack, sextant, clicker)
 	core.sound_play(mcl_sounds.node_sound_wood_defaults().dig, {pos = pos, gain=1}, true)
 	redraw_bookshelf(node,pos)
 	if remainder then
