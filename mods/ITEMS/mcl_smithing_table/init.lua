@@ -240,7 +240,8 @@ core.register_node("mcl_smithing_table:table", {
 			-- ToDo: make epic sound
 			core.sound_play("mcl_smithing_table_upgrade", { pos = pos, max_hear_distance = 16 })
 
-			if stack:get_name() == "mcl_farming:hoe_netherite" then
+			if stack:get_name() == "mcl_farming:hoe_netherite"
+			or stack:get_name() == "mcl_farming:hoe_netherite_enchanted" then
 				awards.unlock(player:get_player_name(), "mcl:seriousDedication")
 			elseif mcl_armor.is_trimmed(stack) then
 				local template_name = inv:get_stack("template", 1):get_name()
