@@ -44,20 +44,61 @@ local core_remove_node = core.remove_node
 
 local batch_update_cnt = 0
 
+-- This table checks if a node is floodable
 local flowable_tab = {}
+-- This table contains all the node definitions
+local ndef_tab = {}
+
 
 core.register_on_mods_loaded(function()
 	flowable_tab[core.CONTENT_AIR] = true
-	for name, _ in pairs(core.registered_nodes) do
+	for name, ndef in pairs(core.registered_nodes) do
+		local id = core.get_content_id(name)
+
 		if core.get_item_group(name, "dig_by_water") ~= 0 then
-			flowable_tab[core.get_content_id(name)] = true
+			flowable_tab[id] = true
 		end
+
+		ndef_tab[id] = ndef
 	end
 end)
+
+
+
 
 --------------------------------------------------------------------------------
 -- Top level functions
 --------------------------------------------------------------------------------
+
+
+local function get_position_from_hash(hash)
+	local x = (hash % 65536) - 32768
+	hash = math.floor(hash / 65536)
+	local y = (hash % 65536) - 32768
+	hash = math.floor(hash / 65536)
+	local z = (hash % 65536) - 32768
+	return x, y, z
+end
+
+local function hash_node_position(x, y, z)
+	return (z + 0x8000) * 0x100000000 + (y + 0x8000) * 0x10000 + (x + 0x8000)
+end
+
+
+
+local function hmap_clear(tb)
+	for k, _ in pairs(tb) do
+		tb[k] = nil
+	end
+end
+
+local function arr_clear(tb)
+	for k, _ in ipairs(tb) do
+		tb[k] = nil
+	end
+end
+
+
 
 --[[
 This function applies the transformation mechanic to liquid nodes.
@@ -96,6 +137,14 @@ local function register_liquid(def)
 	assert(TICKS >= 0.0,
 		'The liquid_tick must be in range [0.0 <= x]')
 
+
+	-- Constant node ids
+	local C_FLOWING = core.get_content_id(NAME_FLOWING)
+	local C_SOURCE = core.get_content_id(NAME_SOURCE)
+	local C_IGNORE = core.CONTENT_IGNORE
+	local C_AIR = core.CONTENT_AIR
+
+
 	-- This table is a function that calculates then next lower liquid level.
 	local level_tb = {}
 	for i = 0, 9 do
@@ -107,18 +156,19 @@ local function register_liquid(def)
 	local floodable_tab = {}
 
 	local function init_floodable_tab()
-		floodable_tab['air'] = true
-		floodable_tab[NAME_FLOWING] = true
-		floodable_tab[NAME_SOURCE] = true
+		floodable_tab[C_AIR] = true
+		floodable_tab[C_FLOWING] = true
+		floodable_tab[C_SOURCE] = true
 
 		for name, ndef in pairs(core.registered_nodes) do
 
+			local id = core.get_content_id(name)
 			if core.get_item_group(name, "dig_by_water") ~= 0 then
-				floodable_tab[name] = true
+				floodable_tab[id] = true
 			end
 
 			if ndef.floodable then
-				floodable_tab[name] = true
+				floodable_tab[id] = true
 			end
 		end
 	end
@@ -136,7 +186,8 @@ local function register_liquid(def)
 	-- A list of nodes that have been changed during a burst.
 	local changed_nodes = {}
 	-- A list of nodes that have been red during the burst (caching)
-	local read_nodes_cache = {}
+	local read_nodes_cache_id = {}
+	local read_nodes_cache_param2 = {}
 
 	----------------------------------------------------------------------
 	-- Variables for path finding to the nearest slope
@@ -165,132 +216,146 @@ local function register_liquid(def)
 	-- Variables for one liquid transformation iteration
 	----------------------------------------------------------------------
 
-	-- variables for the positions
-	-- NOTE: The vectors must not be recycled because the references might be
-	-- used in the next iteration.
-	local p111 -- center
-	local p011 -- left
-	local p211 -- right
-	local p101 -- below
-	local p121 -- above
-	local p110 -- in front
-	local p112 -- behind
 
-	-- variables for the nodes
-	local n111
-	local n011
-	local n211
-	local n110
-	local n112
-	local n101
-	local n121
+	local g_x
+	local g_y
+	local g_z
+
+	-- variables for the node ids
+	local g_id111
+	local g_id011
+	local g_id211
+	local g_id110
+	local g_id112
+	local g_id101
+	local g_id121
+	--
+	-- variables for the node param2
+	local g_par111
+	local g_par011
+	local g_par211
+	local g_par110
+	local g_par112
+	local g_par101
+	local g_par121
 
 	-- variables for the liquid level
-	local l111
-	local l011
-	local l211
-	local l110
-	local l112
-	local l101
-	local l121
+	local g_l111
+	local g_l011
+	local g_l211
+	local g_l110
+	local g_l112
+	local g_l101
+	local g_l121
 
 	-- The map that show where the current liquid shall spread to.
-	local lt_map
+	local g_map
 	-- The level of the new node when spreading
-	local lt_new_level
-	-- The node for the new liquid when spreading
-	local lt_new_liquid
+	local g_new_level
 
-	local function vector_add_to(v, x, y, z)
-		v.x = v.x + x
-		v.y = v.y + y
-		v.z = v.z + z
-	end
 
-	local function get_position_from_hash(v, hash)
-		v.x = (hash % 65536) - 32768
-		hash = math.floor(hash / 65536)
-		v.y = (hash % 65536) - 32768
-		hash = math.floor(hash / 65536)
-		v.z = (hash % 65536) - 32768
-	end
+	--[[
 
-	local function update_next(item)
+	Push a position into the queue to be processed next.
 
-		-- This function puts an item into the list that is processed in the next
-		-- iteration.
-		local h = core.hash_node_position(item.pos)
+	@param x          The x coordinate of the position
+	@param y          The y coordinate of the position
+	@param z          The z coordinate of the position
+	@param map        The map that shows where the current liquid shall spread to.
+	@param is_sinking If the liquid is only allowed to sink.
+
+	--]]
+	local function update_next(x, y, z, map, is_sinking)
+		local h = hash_node_position(x, y, z)
 		if update_next_set[h] == nil then
-			update_next_set[h] = item
+			update_next_set[h] = {map = map, is_sinking = is_sinking}
 		end
 	end
 
-	local function get_liquid_level(node)
-		-- This function returns the level of a liquid node or nil if it isn't a
-		-- liquid node
-		if node.name == NAME_SOURCE then
+
+	--[[
+	
+	This function returns the level of a liquid node or nil if it isn't a
+	liquid node.
+
+	@param id         The id of the node
+	@param param2     The param2 of the node
+	@return           The level of the liquid node or nil if it isn't a liquid node.
+	--]]
+	local function get_liquid_level(id, param2)
+		if id == C_SOURCE then
 			return 8
-		elseif node.name == NAME_FLOWING then
-			if bit.band(node.param2, 0x08) ~= 0 then
+		elseif id == C_FLOWING then
+			if bit.band(param2, 0x08) ~= 0 then
 				return 8
 			else
-				return bit.band(node.param2, 0x07)
+				return bit.band(param2, 0x07)
 			end
 		else
 			return nil
 		end
 	end
 
-	local function set_node(pos, node)
-		-- This function puts the new node into a map.
-		-- If there is already a node in that map at the same location, the one
-		-- with the larger level wins. This is important do ensure symmetric flow
-		-- if the underlying structure is symmetric as well. It also prevents weird
-		-- things from happening like half level liquids lingering around.
-		local h = core.hash_node_position(pos)
-		local other = changed_nodes[h]
 
-		if not other then
-			changed_nodes[h] = node
+	--[[
+	This function schedules the update of a liquid related node.
+
+	If there is already a node scheduled to be updated. The node with more liquid
+	wins.
+
+	@param x          The x coordinate of the position
+	@param y          The y coordinate of the position
+	@param z          The z coordinate of the position
+	@param level      The level of the liquid node or 'source' if it is a source node.
+	--]]
+	local function set_liquid_node(x, y, z, level)
+
+		local h = hash_node_position(x, y, z)
+		local other_level = changed_nodes[h]
+
+		if not other_level then
+			changed_nodes[h] = level
+		elseif other_level == 'source' then
+			return
+		elseif level == 'source' then
+			changed_nodes[h] = 'source'
+			return
+		elseif level > other_level then
+			changed_nodes[h] = level
+		end
+	end
+
+
+	--[[
+	This function returns a requested node from the map. A cache is used for 
+	performance reasons.
+
+	@param x          The x coordinate of the position
+	@param y          The y coordinate of the position
+	@param z          The z coordinate of the position
+	@return           The id and param2 of the node
+	--]]
+	local function get_cached_node(x, y, z)
+		local h = hash_node_position(x, y, z)
+		local id = read_nodes_cache_id[h]
+
+		if id then
+			return id, read_nodes_cache_param2[h]
 		else
-			local ln = get_liquid_level(node) or 0
-			local lo = get_liquid_level(other) or 0
-
-			if ln > lo then
-				changed_nodes[h] = node
-			end
+			local id, param1, param2, pos_ok = core.get_node_raw(x, y, z)
+			read_nodes_cache_id[h] = id
+			read_nodes_cache_param2[h] = param2
+			return id, param2
 		end
 	end
 
-	local function get_node(pos)
-		-- This function is the just the cached version of the `core.get_node()`
-		local h = core.hash_node_position(pos)
-		local node = read_nodes_cache[h]
 
-		if node then
-			return node
-		else
-			node = core.get_node_or_nil(pos)
-			read_nodes_cache[h] = node
-			return node
-		end
-	end
-
-	local function hmap_clear(tb)
-		for k, _ in pairs(tb) do
-			tb[k] = nil
-		end
-	end
-
-	local function arr_clear(tb)
-		for k, _ in ipairs(tb) do
-			tb[k] = nil
-		end
-	end
-
+	--[[
+	This function creates a new liquid node.
+	--]]
 	local function make_liquid(level)
 		-- This function creates a new liquid node
-		if level == 8 or level == 'down' then
+		if level >= 8 then
 			return {
 				name = NAME_FLOWING,
 				param2 = 8,
@@ -301,7 +366,7 @@ local function register_liquid(def)
 			}
 		elseif level <= 0 then
 			return {
-				name = 'air'
+				name = 'air',
 			}
 		else
 			return {
@@ -311,16 +376,15 @@ local function register_liquid(def)
 		end
 	end
 
-	-- This function tests if the node is floodable in theory. For the final
-	-- decisions, other factors are in play as well.
-	-- Example: Source nodes pretend to be floodable, but when it comes to the
-	-- flooding, the action is skipped.
-	local function is_pretend_floodable(n)
-		return floodable_tab[n.name] or false
+
+	--[[
+	This function returns true if the node pretends to be floodable.
+	Pretend because source nodes are not floodable, but liquids want to spread there anyway.
+	--]]
+	local function is_pretend_floodable(id)
+		return floodable_tab[id] or false
 	end
 
-
-	local pf_step_pos = vector.zero()
 
 	-- This function checks if the current position has an obstacle or a
 	-- slope.
@@ -331,24 +395,26 @@ local function register_liquid(def)
 	-- `z`     The shift in the z direction
 	-- `level` The level at the new position
 	local function pf_step(hpos, x, y, z, level)
-		get_position_from_hash(pf_step_pos, hpos)
-		vector_add_to(pf_step_pos, x, y, z) -- move one horizontal
-		local hpos_next = core.hash_node_position(pf_step_pos)
+		local px, py, pz =  get_position_from_hash(hpos)
+		px = px + x
+		py = py + y
+		pz = pz + z
+		local hpos_next = hash_node_position(px, py, pz)
 
 		if pf_pmap[hpos_next] == nil then
-			local n1 = get_node(pf_step_pos)
+			local id1, par1 = get_cached_node(px, py, pz)
 
-			vector_add_to(pf_step_pos, 0, -1, 0) -- move one down
-			local n2 = get_node(pf_step_pos)
+			-- move one down
+			local id2, par2 = get_cached_node(px, py-1, pz)
 
-			if not (n1 and n2) then
+			if id1 == C_IGNORE or id2 == C_IGNORE then
 				pf_ok = false
 				return
 			end
 
-			local l1 = get_liquid_level(n1)
-			local f1 = is_pretend_floodable(n1)
-			local f2 = is_pretend_floodable(n2)
+			local l1 = get_liquid_level(id1, par1)
+			local f1 = is_pretend_floodable(id1)
+			local f2 = is_pretend_floodable(id2)
 
 			if f1 and f2 then
 				pf_found[#pf_found+1] = hpos_next
@@ -360,11 +426,12 @@ local function register_liquid(def)
 		end
 	end
 
-	local pf_back_trace_pos = vector.zero()
 	local function pf_back_trace(hpos, x, y, z, level)
-		get_position_from_hash(pf_back_trace_pos, hpos)
-		vector_add_to(pf_back_trace_pos, x, y, z)
-		local hpos_next = core.hash_node_position(pf_back_trace_pos)
+		local px, py, pz = get_position_from_hash(hpos)
+		px = px + x
+		py = py + y
+		pz = pz + z
+		local hpos_next = hash_node_position(px, py, pz)
 
 		local m = pf_pmap[hpos_next]
 		if m and m > level then
@@ -372,23 +439,24 @@ local function register_liquid(def)
 		end
 	end
 
-	local function rmap_read(map, pos)
-		if map == 'DUMMY' then
+	local function rmap_read(map, x, y, z)
+		if not map or map == 'dummy' then
 			return nil
 		end
 
-		local hpos = core.hash_node_position(pos)
+		local hpos = hash_node_position(x, y, z)
 		return map[hpos]
 	end
 
 	-- This function searches the nearest slopes within a maximum path distance
 	-- of 4 nodes.
 	-- If any node was 'ignore' then this function returns nil.
-	local function path_find(pos, slope_dist)
-		local orig_level = get_liquid_level(get_node(pos))
+	local function path_find(x, y, z)
+		local id, param2 = get_cached_node(x, y, z)
+		local orig_level = get_liquid_level(id, param2)
 		if orig_level <= 1 then
 			-- If level of the origin is too small we return a dummy map.
-			return 'DUMMY'
+			return 'dummy'
 		end
 
 		-- initialize the variables.
@@ -397,7 +465,7 @@ local function register_liquid(def)
 		arr_clear(pf_search_list_B)
 		pf_search_list = pf_search_list_A
 
-		local h = core.hash_node_position(pos)
+		local h = hash_node_position(x, y, z)
 		pf_search_list[1] = h
 
 		hmap_clear(pf_pmap)
@@ -491,20 +559,21 @@ local function register_liquid(def)
 		end
 	end
 
-	local function lt_flood(p, n, l)
+	local function lt_flood(x, y, z, id, l)
 		local cnt_flood = 0
-		local m = rmap_read(lt_map, p)
-		if m and m == lt_new_level then
-			if is_pretend_floodable(n) then
+		local m = rmap_read(g_map, x, y, z)
+		if m and m == g_new_level then
+			if is_pretend_floodable(id) then
 				-- Pretend floodable counts as target reached
 				cnt_flood = 1
 
-				if lt_new_level > (l or 0) then
-					update_next({pos=p, map=lt_map})
-					set_node(p, lt_new_liquid)
+				if g_new_level > (l or 0) then
+					update_next(x, y, z, g_map, false)
+					set_liquid_node(x, y, z, g_new_level)
 
-				elseif n111.name == NAME_SOURCE and l and l == 7 then
-					update_next({pos=p, map=lt_map}) -- Give it a chance to renew
+				elseif g_id111 == C_SOURCE and l and l == 7 then
+					-- Give it a chance to renew into a source node
+					update_next(x, y, z)
 				end
 			end
 		end
@@ -517,72 +586,71 @@ local function register_liquid(def)
 		-- The number of *potential* floods are counted. If the count
 		-- remains 0, the map is no longer suitable.
 		local cnt_flood = 0
-		cnt_flood = cnt_flood + lt_flood(p011, n011, l011)
-		cnt_flood = cnt_flood + lt_flood(p211, n211, l211)
-		cnt_flood = cnt_flood + lt_flood(p110, n110, l110)
-		cnt_flood = cnt_flood + lt_flood(p112, n112, l112)
+		cnt_flood = cnt_flood + lt_flood(g_x-1, g_y+0, g_z+0, g_id011, g_l011)
+		cnt_flood = cnt_flood + lt_flood(g_x+1, g_y+0, g_z+0, g_id211, g_l211)
+		cnt_flood = cnt_flood + lt_flood(g_x+0, g_y+0, g_z-1, g_id110, g_l110)
+		cnt_flood = cnt_flood + lt_flood(g_x+0, g_y+0, g_z+1, g_id112, g_l112)
 		return cnt_flood
 	end
 
-	local function flow_iteration(item)
-		-- This is the position of the node to be updated
-		p111 = item.pos
-		-- This is the map that shows to where the liquid should spread.
-		lt_map = item.map
-		-- This tells us if the liquid should just sink without spread.
-		local is_sinking = item.is_sinking
 
-		n111 = get_node(p111)
-		if not n111 then
+	local function flow_iteration(x, y, z, map, is_sinking)
+
+		g_x = x
+		g_y = y
+		g_z = z
+
+		g_map = map or nil
+		is_sinking = is_sinking or false
+
+
+		g_id111, g_par111 = get_cached_node(x + 0, y + 0, z + 0)
+		if g_id111 == C_IGNORE then
 			return
 		end
+		g_id011, g_par011 = get_cached_node(x - 1, y + 0, z + 0)
+		g_id211, g_par211 = get_cached_node(x + 1, y + 0, z + 0)
+		g_id101, g_par101 = get_cached_node(x + 0, y - 1, z + 0)
+		g_id121, g_par121 = get_cached_node(x + 0, y + 1, z + 0)
+		g_id110, g_par110 = get_cached_node(x + 0, y + 0, z - 1)
+		g_id112, g_par112 = get_cached_node(x + 0, y + 0, z + 1)
 
-		-- calculate the position of the neighbors
-		p011 = vector.offset(p111, -1,  0,  0)
-		p211 = vector.offset(p111,  1,  0,  0)
-		p101 = vector.offset(p111,  0, -1,  0)
-		p121 = vector.offset(p111,  0,  1,  0)
-		p110 = vector.offset(p111,  0,  0, -1)
-		p112 = vector.offset(p111,  0,  0,  1)
-
-		n011 = get_node(p011)
-		n211 = get_node(p211)
-		n110 = get_node(p110)
-		n112 = get_node(p112)
-		n101 = get_node(p101)
-		n121 = get_node(p121)
-
-		if not ( n011 and n211 and n110 and n112 and n101 and n121 ) then
+		if g_id011 == C_IGNORE or
+			g_id211 == C_IGNORE or
+			g_id110 == C_IGNORE or
+			g_id112 == C_IGNORE or
+			g_id101 == C_IGNORE or
+			g_id121 == C_IGNORE then
 			return
 		end
 
 		if RENEWABLE then
 			local count_sources = 0
-			if n011.name == NAME_SOURCE then count_sources = count_sources + 1 end
-			if n211.name == NAME_SOURCE then count_sources = count_sources + 1 end
-			if n110.name == NAME_SOURCE then count_sources = count_sources + 1 end
-			if n112.name == NAME_SOURCE then count_sources = count_sources + 1 end
+			if g_id011 == C_SOURCE then count_sources = count_sources + 1 end
+			if g_id211 == C_SOURCE then count_sources = count_sources + 1 end
+			if g_id110 == C_SOURCE then count_sources = count_sources + 1 end
+			if g_id112 == C_SOURCE then count_sources = count_sources + 1 end
 
-			if (n111.name == NAME_FLOWING or n111.name == 'air') and count_sources >= 2 then
+			if (g_id111 == C_FLOWING or g_id111 == C_AIR) and count_sources >= 2 then
 				-- Renew liquid
-				update_next({pos=p111})
-				set_node(p111, { name=NAME_SOURCE })
-				if n011.name ~= NAME_SOURCE then update_next({pos=p011}) end
-				if n211.name ~= NAME_SOURCE then update_next({pos=p211}) end
-				if n110.name ~= NAME_SOURCE then update_next({pos=p110}) end
-				if n112.name ~= NAME_SOURCE then update_next({pos=p112}) end
+				update_next(g_x, g_y, g_z)
+				set_liquid_node(g_x, g_y, g_z, 'source')
+				if g_id011 ~= C_SOURCE then update_next(g_x-1, g_y+0, g_z+0) end
+				if g_id211 ~= C_SOURCE then update_next(g_x+1, g_y+0, g_z+0) end
+				if g_id110 ~= C_SOURCE then update_next(g_x+0, g_y+0, g_z-1) end
+				if g_id112 ~= C_SOURCE then update_next(g_x+0, g_y+0, g_z+1) end
 				return
 			end
 		end
 
 		-- These variables store the level or nil if the node isn't a liquid.
-		l111 = get_liquid_level(n111)
-		l011 = get_liquid_level(n011)
-		l211 = get_liquid_level(n211)
-		l110 = get_liquid_level(n110)
-		l112 = get_liquid_level(n112)
-		l101 = get_liquid_level(n101)
-		l121 = get_liquid_level(n121)
+		g_l111 = get_liquid_level(g_id111, g_par111)
+		g_l011 = get_liquid_level(g_id011, g_par011)
+		g_l211 = get_liquid_level(g_id211, g_par211)
+		g_l110 = get_liquid_level(g_id110, g_par110)
+		g_l112 = get_liquid_level(g_id112, g_par112)
+		g_l101 = get_liquid_level(g_id101, g_par101)
+		g_l121 = get_liquid_level(g_id121, g_par121)
 
 
 
@@ -590,25 +658,25 @@ local function register_liquid(def)
 		-- calculate the liquid level that is supported here.
 		local support_level = 1
 
-		if l121 ~= nil then
+		if g_l121 ~= nil then
 			-- node above is a liquid
 			support_level = 9
-		elseif n111.name == NAME_SOURCE then
+		elseif g_id111 == C_SOURCE then
 			-- the current node is a source
 			support_level = 9
 		else
 			-- the neighboring node on the same Y-plan with the highest level counts
-			if l011 ~= nil and support_level < l011 then
-				support_level = l011
+			if g_l011 ~= nil and support_level < g_l011 then
+				support_level = g_l011
 			end
-			if l211 ~= nil and support_level < l211 then
-				support_level = l211
+			if g_l211 ~= nil and support_level < g_l211 then
+				support_level = g_l211
 			end
-			if l110 ~= nil and support_level < l110 then
-				support_level = l110
+			if g_l110 ~= nil and support_level < g_l110 then
+				support_level = g_l110
 			end
-			if l112 ~= nil and support_level < l112 then
-				support_level = l112
+			if g_l112 ~= nil and support_level < g_l112 then
+				support_level = g_l112
 			end
 		end
 
@@ -617,84 +685,81 @@ local function register_liquid(def)
 		-- If it is higher we will reduce it and if it is lower we increase it.
 		support_level = level_tb[support_level]
 
-		if l111 ~= nil then
+		if g_l111 ~= nil then
 			-- The current node is already a liquid
-			if l111 == support_level and not is_sinking then
+			if g_l111 == support_level and not is_sinking then
 				-- The current node is on its terminal level
 				-- This means it is ready to spread.
 
-				if is_pretend_floodable(n101) then
-					if not l101 or l101 < 8 then
+				if is_pretend_floodable(g_id101) then
+					if not g_l101 or g_l101 < 8 then
 						-- turn the liquid below into down-flowing
-						update_next({pos=p101})
-						set_node(p101, make_liquid('down'))
+						update_next(g_x, g_y-1, g_z)
+						set_liquid_node(g_x, g_y-1, g_z, 8)
 					end
 				end
 
-				-- Get the next level from a table
-				lt_new_level = level_tb[support_level]
 
-				if (n111.name == NAME_SOURCE or not is_pretend_floodable(n101))
-						and lt_new_level and lt_new_level > 0 then
+				-- Get the next level from a table
+				g_new_level = level_tb[support_level]
+
+				if (g_id111 == C_SOURCE or not is_pretend_floodable(g_id101))
+						and g_new_level and g_new_level > 0 then
 
 					local is_new_map = false
-					if not lt_map then
+					if not g_map then
 						-- Make a new map if there is none.
-						lt_map = path_find(p111)
-						if not lt_map then
+						g_map = path_find(g_x, g_y, g_z)
+						if not g_map then
 							return
 						end
 						is_new_map = true
 					end
 
-					lt_new_liquid = make_liquid(lt_new_level)
-
 					if lt_push_horizontal() == 0 and not is_new_map then
 						-- The map might be outdated, try once more with a new map
-						lt_map = path_find(p111)
-						if not lt_map then
+						g_map = path_find(g_x, g_y, g_z)
+						if not g_map then
 							return
 						end
 						lt_push_horizontal()
 					end
 				end
-			elseif l111 > support_level then
+			elseif g_l111 > support_level then
 				-- The liquid level is too high here we need to reduce it.
 
 				if support_level > 0 then
-					update_next({pos=p111, is_sinking=true})
+					update_next(g_x, g_y, g_z, nil, true)
 				end
-				set_node(p111, make_liquid(support_level))
+				set_liquid_node(g_x, g_y, g_z, support_level)
 
 				-- Neighboring nodes might need to be reduced as well
-				if l011 ~= nil then update_next({pos=p011, is_sinking=true}) end
-				if l211 ~= nil then update_next({pos=p211, is_sinking=true}) end
-				if l110 ~= nil then update_next({pos=p110, is_sinking=true}) end
-				if l112 ~= nil then update_next({pos=p112, is_sinking=true}) end
+				if g_l011 ~= nil then update_next(g_x-1, g_y+0, g_z+0, nil, true) end
+				if g_l211 ~= nil then update_next(g_x+1, g_y+0, g_z+0, nil, true) end
+				if g_l110 ~= nil then update_next(g_x+0, g_y+0, g_z-1, nil, true) end
+				if g_l112 ~= nil then update_next(g_x+0, g_y+0, g_z+1, nil, true) end
 
 				-- the node below might need an update as well, but only if the liquid
 				-- has completely gone
-				if support_level == 0 and l101 ~= nil then
-					update_next({pos=p101, is_sinking=true})
+				if support_level == 0 and g_l101 ~= nil then
+					update_next(g_x, g_y-1, g_z, nil, true)
 				end
 			end
 		else
 			-- It seams that the current node is not a liquid at all.
 			-- We update the neighbors because it might have been a liquid
 			-- previously.
-			if l011 ~= nil then update_next({pos=p011}) end
-			if l211 ~= nil then update_next({pos=p211}) end
-			if l110 ~= nil then update_next({pos=p110}) end
-			if l112 ~= nil then update_next({pos=p112}) end
-			if l101 ~= nil then update_next({pos=p101}) end
-			if l121 ~= nil then update_next({pos=p121}) end
+			if g_l011 ~= nil then update_next(g_x-1, g_y+0, g_z+0) end
+			if g_l211 ~= nil then update_next(g_x+1, g_y+0, g_z+0) end
+			if g_l101 ~= nil then update_next(g_x+0, g_y-1, g_z+0) end
+			if g_l121 ~= nil then update_next(g_x+0, g_y+1, g_z+0) end
+			if g_l110 ~= nil then update_next(g_x+0, g_y+0, g_z-1) end
+			if g_l112 ~= nil then update_next(g_x+0, g_y+0, g_z+1) end
 		end
 	end
 
-	local function liquid_update(pos)
-		-- pos might not be a vector or not immutable.
-		local p = vector.copy(pos)
-		update_next({pos = p})
+	local function liquid_update(x, y, z)
+		update_next(x, y, z)
 	end
 
 	local function fix_ndef(ndef_name)
@@ -760,8 +825,6 @@ local function register_liquid(def)
 		init_floodable_tab()
 	end)
 
-	local C_FLOWING = core.get_content_id(NAME_FLOWING)
-	local C_SOURCE = core.get_content_id(NAME_SOURCE)
 
 	-- Liquid can flow into a node if it is flowable or the corresponding
 	-- flowing liquid with a lower liquid level.
@@ -810,7 +873,7 @@ local function register_liquid(def)
 							 check_neigh(x - 1, y, z + 1, max_level) or
 							 check_neigh(x + 1, y, z - 1, max_level) or
 							 check_neigh(x + 1, y, z + 1, max_level) then
-							 liquid_update (pos)
+							 liquid_update (x, y, z)
 						 end
 					 end
 				 end
@@ -820,24 +883,25 @@ local function register_liquid(def)
 
 	local tick_dtime = 0.0
 
+
+	-- This function does the final checks and writes the changed nodes into the
+	-- world.
 	local function write_changed_nodes(changed_nodes)
-		for h, node in pairs(changed_nodes) do
-			local pos = core.get_position_from_hash(h)
+		for h, level in pairs(changed_nodes) do
+			local x, y, z = get_position_from_hash(h)
 
-			local old = get_node(pos)
-			if old ~= nil then
+			local old_id = get_cached_node(x, y, z)
+			if is_pretend_floodable(old_id) then
 
-				local old_ndef = core.registered_nodes[old.name]
+				local old_ndef = ndef_tab[old_id]
+				local pos = vector.new(x, y, z)
 
-				-- Do the final check to see if the node is still floodable.
-				if old.name == 'air' or old.name == NAME_FLOWING or old_ndef.floodable then
-					if old_ndef.on_flood then
-						if not old_ndef.on_flood(pos, old, node) then
-							core_set_node(pos, node)
-						end
-					else
-						core_set_node(pos, node)
+				if old_ndef.on_flood then
+					if not old_ndef.on_flood(pos, old, node) then
+						core_set_node(pos, make_liquid(level))
 					end
+				else
+					core_set_node(pos, make_liquid(level))
 				end
 			end
 		end
@@ -865,12 +929,14 @@ local function register_liquid(def)
 					update_next_set = update_next_set_A
 				end
 
-				hmap_clear(read_nodes_cache)
+				hmap_clear(read_nodes_cache_id)
+				hmap_clear(read_nodes_cache_param2)
 				hmap_clear(changed_nodes)
 
-				for _, item in pairs(q) do
+				for hpos, item in pairs(q) do
+					local x, y, z = get_position_from_hash(hpos)
 					-- Do the flow magic
-					flow_iteration(item)
+					flow_iteration(x, y, z, item.map, item.is_sinking)
 
 					-- Continue the transformation in the next global step the
 					-- limit has been reached.
@@ -879,7 +945,8 @@ local function register_liquid(def)
 						coroutine.yield()
 						-- The nodes might have been changed. We need to clear
 						-- the cache
-						hmap_clear(read_nodes_cache)
+						hmap_clear(read_nodes_cache_id)
+						hmap_clear(read_nodes_cache_param2)
 						batch_update_cnt = 0
 
 					end
@@ -918,7 +985,7 @@ end
 -- This function notifies the registered liquids about a node that has changed.
 local function liquid_update(pos)
 	for i, o in ipairs(registered_liquids) do
-		o.update(pos)
+		o.update(pos.x, pos.y, pos.z)
 	end
 end
 
