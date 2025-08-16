@@ -516,6 +516,7 @@ do
 		local chunk = band (id, 0x3ff)
 		return rshift (chunk, 5) - 9, band (chunk, 0x1f) - 9
 	end
+	mcl_levelgen.section_unhash = section_unhash
 
 	local function restore_journal (sid, generation, current_states)
 		local data_namespace = rshift (sid, 10)
@@ -2006,10 +2007,17 @@ if not mcl_levelgen.load_feature_environment then
 	core.register_on_mods_loaded (restore_feature_placement_queue)
 end
 
+local function update_section_access_times (bx, bz)
+	local sx, sz = section (bx, bz)
+	local hash = section_hash (current_namespace_id, sx, sz)
+	section_access_times[hash] = 0
+end
+
 function mcl_levelgen.is_emerged (dim, bx, by, bz)
 	local old_namespace, rc = current_namespace_id
 	switch_to_namespace (dim.data_namespace)
 	rc = mapblock_state (bx, by, bz) > MBS_UNKNOWN
+	update_section_access_times (bx, bz)
 	switch_to_namespace (old_namespace)
 	return rc
 end
@@ -2018,6 +2026,7 @@ function mcl_levelgen.is_generated (dim, bx, by, bz)
 	local old_namespace, rc = current_namespace_id
 	switch_to_namespace (dim.data_namespace)
 	rc = mapblock_state (bx, by, bz) == MBS_GENERATED
+	update_section_access_times (bx, bz)
 	switch_to_namespace (old_namespace)
 	return rc
 end
@@ -2139,7 +2148,7 @@ end
 
 local loaded_heightmaps = {}
 local heightmap_ttl = {}
-local HEIGHTMAP_TTL = 20
+local HEIGHTMAP_TTL = 60
 
 local function load_heightmap (id)
 	local tem = loaded_heightmaps[id]
@@ -2861,6 +2870,20 @@ local function get_structure_string (self_pos)
 	return table.concat (strs)
 end
 
+local function get_section_string ()
+	local fmt = "   %d (%d/%d,%d): %.2f"
+	local section_unhash = mcl_levelgen.section_unhash
+	local values = {}
+	for section, dtime in pairs (section_access_times) do
+		local sx, sz = section_unhash (section)
+		local id = rshift (section, 10)
+		insert (values, string.format (fmt, section, id, sx, sz, dtime))
+	end
+	table.sort (values)
+	return "Loaded sections: \n"
+		.. table.concat (values, "\n")
+end
+
 local function hud_text (pos)
 	local self_pos = pos
 	local x = floor (self_pos.x / 16)
@@ -2908,8 +2931,9 @@ local function hud_text (pos)
 					  get_heightmap_string (x, z, self_pos, false)))
 	table.insert (tbl, string.format ("Heightmap (Generation time): %s\n",
 					  get_heightmap_string (x, z, self_pos, true)))
-	table.insert (tbl, string.format ("Intersecting structures: %s",
+	table.insert (tbl, string.format ("Intersecting structures: %s\n",
 					  get_structure_string (self_pos)))
+	table.insert (tbl, get_section_string ())
 	switch_to_namespace (namespace)
 	return table.concat (tbl)
 end
