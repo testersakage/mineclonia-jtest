@@ -298,11 +298,6 @@ local basedef = {
 		inv:set_size("main", 6)
 		meta:set_float("last_slot_used", 0)
 	end,
-	after_place_node = function(pos, _, itemstack, _)
-		core.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
-		mcl_redstone._notify_observer_neighbours(pos)
-		--redraw_bookshelf(core.get_node(pos),pos)
-	end,
 	-- these do not trigger, probably because we do not use a formspec
 	-- but keep them in case anything else uses them
 	allow_metadata_inventory_move = protection_check_move,
