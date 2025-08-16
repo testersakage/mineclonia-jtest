@@ -12,15 +12,6 @@ local direction = {
 }
 -- Books cannot stored on up/down faces.
 
-local colors = {
-	"blue",
-	"green",
-	"purple",
-	"red",
-	"yellow",
-	"gray",
-}
-
 local top = "mcl_books_chiseled_bookshelf_top.png"
 local side = "mcl_books_chiseled_bookshelf_side.png"
 
@@ -315,7 +306,7 @@ for i = 0, 63 do
 		if bit.band(i, bit.lshift(1, j - 1)) ~= 0 then
 			local x = (math.fmod(j-1,3)*5)+1
 			local y = (math.floor(j/4)*8)+1
-			front_tile = front_tile .. ":" .. x .. "," .. y .. "=" .. "mcl_books_book_" .. colors[j] .. ".png"
+			front_tile = front_tile .. ":" .. x .. "," .. y .. "=" .. "mcl_books_book_" .. tostring(j - 1) .. ".png"
 		end
 	end
 	local name = get_node_name(i)
