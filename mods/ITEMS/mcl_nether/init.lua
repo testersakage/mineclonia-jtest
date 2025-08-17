@@ -151,7 +151,7 @@ end)
 core.register_node("mcl_nether:soul_sand", {
 	description = S("Soul Sand"),
 	_tt_help = S("Reduces walking speed"),
-	_doc_items_longdesc = S("Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block."),
+	_doc_items_longdesc = S("Soul sand is a block from the Nether. It has a slowing effect when walked on."),
 	tiles = {"mcl_nether_soul_sand.png"},
 	groups = {handy = 1, shovely = 1, building_block = 1, soil_nether_wart = 1, material_sand = 1, soul_block = 1, pathfinder_partial = 2 },
 	collision_box = {
