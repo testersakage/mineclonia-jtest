@@ -3002,6 +3002,65 @@ core.register_on_leaveplayer (function (player)
 	huds[player] = nil
 end)
 
+function mcl_levelgen.async_fix_structure_pieces (playername, name, x, y, z, dim)
+	local dim = mcl_levelgen.get_dimension (dim)
+	assert (dim)
+	mcl_levelgen.initialize_terrain (dim)
+	local sets = { name, }
+	local pieces
+		= mcl_levelgen.fix_structure_pieces (dim.terrain, x, y, z, sets, 1)
+	local piece_data = {}
+	for _, piece in _G.ipairs (pieces) do
+		local bbox = piece.bbox
+		assert (bbox)
+		local x1, y1, z1, x2, y2, z2
+			= bbox[1], bbox[2], bbox[3], bbox[4], bbox[5], bbox[6]
+		z1, z2 = -z2 - 1, -z1 - 1
+		table.insert (piece_data, {
+			      x1,
+			      y1 - dim.y_offset,
+			      z1,
+			      x2,
+			      y2 - dim.y_offset,
+			      z2,
+			      piece.sid,
+		})
+	end
+	return playername, piece_data
+end
+
+function mcl_levelgen.structure_pieces_cb (playername, pieces)
+	save_structure_pieces (pieces)
+	local blurb
+		= S ("@1 structure piece(s) were (re-)inserted into the structure database", #pieces)
+	core.chat_send_player (playername, blurb)
+	mcl_levelgen.outstanding_structure_operation = nil
+end
+
+core.register_chatcommand ("fix_structures", {
+	privs = { debug = true, },
+	description = S ("Regenerate nearby structure pieces for a structure set"),
+	func = function (name, arg)
+		if mcl_levelgen.outstanding_structure_operation then
+			local blurb = S ("The structure database is currently being repaired.  Please wait.")
+			core.chat_send_player (name, blurb)
+			return true
+		end
+		local player = core.get_player_by_name (name)
+		local pos = mcl_util.get_nodepos (player:get_pos ())
+		local x, y, z, dimension = mcl_levelgen.conv_pos_raw (pos)
+		if dimension then
+			mcl_levelgen.outstanding_structure_operation = true
+			core.handle_async (mcl_levelgen.async_fix_structure_pieces,
+					   mcl_levelgen.structure_pieces_cb,
+					   name, arg, x, y, z, dimension.id)
+		else
+			core.chat_send_player (name, S ("No level contains the position @1,@2,@3",
+							pos.x, pos.y, pos.z))
+		end
+	end,
+})
+
 ------------------------------------------------------------------------
 -- Scripting interface.
 ------------------------------------------------------------------------
