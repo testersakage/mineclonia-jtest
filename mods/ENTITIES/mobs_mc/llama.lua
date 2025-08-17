@@ -529,9 +529,7 @@ local llama_spawner = table.merge (mobs_mc.animal_spawner, {
 	pack_min = 4,
 	pack_max = 6,
 	biomes = {
-		"ExtremeHills",
-		"ExtremeHills_beach",
-		"ExtremeHillsM",
+		"#is_hill",
 	},
 })
 
@@ -541,10 +539,7 @@ local llama_spawner_savannah = table.merge (mobs_mc.animal_spawner, {
 	pack_min = 4,
 	pack_max = 4,
 	biomes = {
-		"Savanna",
-		"SavannaM",
-		"Savanna_beach",
-		"Savanna_ocean",
+		"#is_savannah",
 	},
 })
 

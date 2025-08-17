@@ -411,6 +411,16 @@ local witch_spawner = table.merge (mobs_mc.monster_spawner, {
 
 mcl_mobs.register_spawner (witch_spawner)
 
+local witch_spawner_swamp_hut = table.merge (witch_spawner, {
+	weight = 1,
+	biomes = {},
+	structures = {
+		"mcl_levelgen:swamp_hut",
+	},
+})
+
+mcl_mobs.register_spawner (witch_spawner_swamp_hut)
+
 ------------------------------------------------------------------------
 -- Legacy Witch wielditem entity.  This entity is retained to avoid
 -- depositing invalid objects in old worlds.

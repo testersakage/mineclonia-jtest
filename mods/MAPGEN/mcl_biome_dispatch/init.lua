@@ -11,7 +11,16 @@ local get_biome = mcl_levelgen.get_biome
 
 function mcl_biome_dispatch.get_biome_name (v)
 	if levelgen_enabled then
-		return get_biome (v, true) or "TheVoid"
+		return get_biome (v, true)
+	else
+		local data = core.get_biome_data (v)
+		return core.get_biome_name (data.biome)
+	end
+end
+
+function mcl_biome_dispatch.get_biome_name_nosample (v)
+	if levelgen_enabled then
+		return get_biome (v, false)
 	else
 		local data = core.get_biome_data (v)
 		return core.get_biome_name (data.biome)
@@ -129,6 +138,8 @@ local overworld_subtypes = {
 	"_sandlevel",
 	"_snowtop",
 	"_beach_water",
+	"_underground",
+	"_deep_underground",
 }
 
 local function related_list_from_base (bases, subtypes)
@@ -151,6 +162,61 @@ local function related_list_from_base (bases, subtypes)
 	return list
 end
 
+local ocean_subtypes = {
+	"_ocean",
+	"_deep_ocean",
+}
+
+local function approximate_warm_ocean ()
+	local base = {
+		"BambooJungle",
+		"Jungle",
+		"JungleEdge",
+		"JungleEdgeM",
+		"JungleM",
+		"MangroveSwamp",
+		"Mesa",
+		"MesaBryce",
+		"MesaPlateauF",
+		"MesaPlateauFM",
+		"Savanna",
+		"SavannaM",
+		"Swampland",
+	}
+	return related_list_from_base (base, ocean_subtypes)
+end
+
+local function approximate_ocean ()
+	local base = {
+		"BirchForest",
+		"BirchForestM",
+		"Desert",
+		"FlowerForest",
+		"Forest",
+		"MegaSpruceTaiga",
+		"MegaTaiga",
+		"MushroomIsland",
+		"Plains",
+		"RoofedForest",
+		"StoneBeach",
+		"SunflowerPlains",
+		"Taiga",
+	}
+	return related_list_from_base (base, ocean_subtypes)
+end
+
+local function approximate_cold_ocean ()
+	local base = {
+		"ColdTaiga",
+		"ExtremeHills",
+		"ExtremeHills+",
+		"ExtremeHillsM",
+		"IcePlains",
+		"IcePlainsSpikes",
+	}
+	return related_list_from_base (base, ocean_subtypes)
+end
+
 local engine_aliases = nil
 
 local function initialize_engine_aliases ()
@@ -165,30 +231,33 @@ local function initialize_engine_aliases ()
 		Beach = {},
 		BirchForest = related_list_from_base ({"BirchForest", "BirchForestM",},
 						      overworld_subtypes),
-		ColdOcean = {},
-		DeepColdOcean = {},
+		ColdOcean = approximate_cold_ocean (),
+		DarkForest = related_list_from_base ("RoofedForest", overworld_subtypes),
+		DeepColdOcean = approximate_cold_ocean (),
 		DeepFrozenOcean = {},
+		DeepOcean = approximate_ocean (),
+		DeepLukewarmOcean = approximate_warm_ocean (),
 		Desert = related_list_from_base ("Desert", overworld_subtypes),
 		DripstoneCaves = "DripstoneCave",
 		ErodedMesa = related_list_from_base ("MesaBryce", overworld_subtypes),
 		FlowerForest = related_list_from_base ("FlowerForest",
 						       overworld_subtypes),
 		Forest = related_list_from_base ("Forest", overworld_subtypes),
-		FrozenOcean = {},
+		FrozenOcean = approximate_cold_ocean (),
 		FrozenPeaks = {},
 		FrozenRiver = {},
 		Grove = {},
 		IceSpikes = related_list_from_base ("IcePlainsSpikes", overworld_subtypes),
 		JaggedPeaks = {},
 		Jungle = related_list_from_base ({"Jungle", "JungleM",}, overworld_subtypes),
-		LukewarmOcean = {},
+		LukewarmOcean = approximate_warm_ocean (),
 		LushCaves = related_list_from_base ("LushCaves", overworld_subtypes),
 		MangroveSwamp = related_list_from_base ("MangroveSwamp", overworld_subtypes),
 		Meadow = {},
 		MushroomIslands = related_list_from_base ({"MushroomIsland", "MushroomIslandShore",},
 							  overworld_subtypes),
 		NetherWastes = "Nether",
-		Ocean = {},
+		Ocean = approximate_ocean (),
 		OldGrowthBirchForest = {},
 		OldGrowthPineTaiga = related_list_from_base ("MegaTaiga", overworld_subtypes),
 		OldGrowthSpruceTaiga = related_list_from_base ("MegaSpruceTaiga",
@@ -217,21 +286,23 @@ local function initialize_engine_aliases ()
 			"EndBorder",
 			"EndIsland",
 		},
-		WarmOcean = {},
+		WarmOcean = approximate_warm_ocean (),
 		WindsweptForest = {},
 		WindsweptGravellyHills = related_list_from_base ("ExtremeHillsM",
 								 overworld_subtypes),
 		WindsweptHills = related_list_from_base ({"ExtremeHills", "ExtremeHills+",},
 							 overworld_subtypes),
+		WindsweptSavannah = {},
 		WoodedMesa = related_list_from_base ({"MesaPlateauF", "MesaPlateauFM",},
-						     {"_grasstop", "_sandlevel", "_ocean",
-						      "_deep_ocean",}),
+						     overworld_subtypes),
 	}
 	return engine_aliases
 end
 
 -- Return a list of biome names represented by IDS_OR_TAGS, a list of
 -- new-style biome names or tags prefixed with `#'.
+
+local blurb = "No old-style biome exists by this name and no alternatives are available: "
 
 function mcl_biome_dispatch.build_biome_list (ids_or_tags)
 	if type (ids_or_tags) == "string" then
@@ -268,7 +339,7 @@ function mcl_biome_dispatch.build_biome_list (ids_or_tags)
 				end
 			else
 				if not core.registered_biomes[id] then
-					error ("Old-style biome does not exist and is not aliased: " .. id)
+					error (blurb .. id)
 				end
 				if table.indexof (names, id) == -1 then
 					table.insert (names, id)

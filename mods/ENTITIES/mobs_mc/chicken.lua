@@ -240,10 +240,7 @@ local chicken_spawner = table.merge (mobs_mc.animal_spawner, {
 local chicken_spawner_jungle = table.merge (mobs_mc.animal_spawner, {
 	name = "mobs_mc:chicken",
 	biomes = {
-		"Jungle",
-		"JungleM",
-		"JungleEdge",
-		"JungleEdgeM",
+		"#is_jungle",
 	},
 	weight = 10,
 })

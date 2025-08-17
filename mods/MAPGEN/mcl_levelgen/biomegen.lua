@@ -204,31 +204,35 @@ local arshift = bit.arshift
 local floor = math.floor
 local mod_storage = core.get_mod_storage ()
 local v = vector.zero ()
-local conv_pos, seed
+local conv_pos_raw, seed, is_emerged
 local munge_biome_coords = mcl_levelgen.munge_biome_coords
 
 core.register_on_mods_loaded (function ()
 	seed = mcl_levelgen.biome_seed
-	conv_pos = mcl_levelgen.conv_pos
-	assert (seed)
-	assert (conv_pos)
+	conv_pos_raw = mcl_levelgen.conv_pos_raw
+	is_emerged = mcl_levelgen.is_emerged
 end)
 
 local function sample_biome (dim, qx, qy, qz)
 	return dim.preset:index_biomes (qx, qy, qz)
 end
 
+local index_biome_list = mcl_levelgen.index_biome_list
+local lshift = bit.lshift
+local concat = table.concat
+
 function mcl_levelgen.get_biome (pos, allow_sample, always_sample)
 	v.x = floor (pos.x + 0.5)
 	v.y = floor (pos.y + 0.5)
 	v.z = floor (pos.z + 0.5)
-	local mc_pos, dim = conv_pos (v)
-	if not mc_pos then
+	local mc_pos_x, mc_pos_y, mc_pos_z, dim = conv_pos_raw (v)
+	if not mc_pos_x then
 		return nil
 	end
-	local qx, qy, qz = munge_biome_coords (seed, mc_pos.x,
-					       mc_pos.y,
-					       mc_pos.z)
+	local qx, qy, qz = munge_biome_coords (seed,
+					       mc_pos_x,
+					       mc_pos_y,
+					       mc_pos_z)
 	if always_sample then
 		return sample_biome (dim, qx, qy, qz)
 	end
@@ -238,44 +242,44 @@ function mcl_levelgen.get_biome (pos, allow_sample, always_sample)
 	local bx = arshift (qx, 2)
 	local by = arshift (qy, 2)
 	local bz = arshift (qz, 2)
+	local str = ""
 
-	if not allow_sample then
-		-- Do not attempt this if the engine might block to
-		-- obtain metadata for this node.
-		v.x = bx * 16
-		v.y = by * 16
-		v.z = bz * 16
-		if not core.get_node_or_nil (v) then
-			return nil
+	-- Don't attempt to load metadata for a MapBlock that is yet
+	-- to be emerged.
+	if is_emerged (dim, bx, by - dim.y_global_block, bz) then
+		v.x = lshift (bx, 4)
+		v.y = lshift (by, 4)
+		v.z = lshift (bz, 4)
+
+		local meta = core.get_meta (v)
+		str = meta:get_string ("mcl_levelgen:biome_index")
+		if str == "" then
+			-- Biome index was overwritten; load it from
+			-- mod storage.
+			str = mod_storage:get_string (concat ({
+				tostring (bx), ",",
+				tostring (by), ",",
+				tostring (bz),
+			}))
+			if str ~= "" then
+				meta:set_string ("mcl_levelgen:biome_index", str)
+			end
 		end
 	end
 
-	local meta = core.get_meta (v)
-	local str = meta:get_string ("mcl_levelgen:biome_index")
-	if not str or str == "" then
-		-- Biome index was overwritten; load it from mod
-		-- storage.
-		str = mod_storage:get_string (table.concat ({
-			tostring (bx), ",",
-			tostring (by), ",",
-			tostring (bz),
-		}))
-
-		if not str or str == "" then
-			-- The caller absolutely requires a biome, so
-			-- sample.
-			if allow_sample then
-				return sample_biome (dim, qx, qy, -qz - 1)
-			end
+	if str == "" then
+		-- The caller absolutely requires a biome, so sample.
+		if allow_sample then
+			return sample_biome (dim, qx, qy, -qz - 1)
+		else
 			return nil
 		end
-		meta:set_string ("mcl_levelgen:biome_index", str)
 	end
 
 	local qx = band (qx, 3)
 	local qy = band (qy, 3)
 	local qz = band (qz, 3)
-	return mcl_levelgen.index_biome_list (str, qx, qy, qz)
+	return index_biome_list (str, qx, qy, qz)
 end
 
 function mcl_levelgen.get_biome_meta (bx, by, bz)
@@ -308,10 +312,7 @@ local function save_biome_index (pos, bx, by, bz, index)
 	-- within a register_on_generated callback triggers a Minetest
 	-- bug where the mapchunk is liable to be generated twice if
 	-- it has been unloaded since generation.
-	v.x = bx * 16
-	v.z = bz * 16
-	v.y = by * 16
-	if core.compare_block_status (v, "loaded") then
+	if core.compare_block_status (pos, "loaded") then
 		local meta = core.get_meta (pos)
 		meta:set_string ("mcl_levelgen:biome_index", index)
 	else
