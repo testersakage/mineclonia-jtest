@@ -27,7 +27,6 @@ local UPDATE_SPEED_DEFAULT = tonumber(core.settings:get('mcl_liquids_update_spee
 local UPDATE_LIMIT = (tonumber(core.settings:get('mcl_liquids_max_updates_per_second')) or 100000) * STEP_INTERVAL
 
 
-local PATH_FIND_DIST = 5
 
 -- The main tick speed. Changing that tick affects all liquids
 -- proportionally.
@@ -134,6 +133,8 @@ local function register_liquid(def)
 		'The liquid_range must be in range [0 <= x < 8]')
 
 	local RENEWABLE = def.liquid_renewable or false
+
+	local PATH_FIND_DIST = def.liquid_pathfind or 5
 
 	local TICKS = def.liquid_tick or 0.5
 	assert(TICKS >= 0.0,
