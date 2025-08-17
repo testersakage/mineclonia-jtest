@@ -100,7 +100,7 @@ function mcl_vars.get_chunk_number(pos) -- unsigned int
 		 c.x + k_positive
 end
 
-if singlenode then
+if singlenode and core.get_mapgen_setting ("mcl_init_disable_levelgen") ~= "true" then
 	mcl_vars.enable_mcl_levelgen = true
 	mcl_vars.mg_overworld_min = -128
 	mcl_vars.mg_overworld_min_old = -128
