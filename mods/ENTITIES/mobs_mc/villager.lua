@@ -5267,6 +5267,7 @@ function villager:pace_around_bell (self_pos, dtime)
 					return "_pacing_around_bell"
 				end
 			end
+			self._bell_wander_time = 0.0
 		end
 	end
 	return false
