@@ -2,8 +2,8 @@ This mod implements a level generator whose object is to reproduce
 Minecraft's terrain and biome system, generating identical worlds from
 identical seeds.  It is enabled by selecting the mapgen "singlenode".
 
-Two flags may be set in map_meta.txt to configure this level generator
-in a world-specific manner:
+Three flags may be set in map_meta.txt to configure this level
+generator in a world-specific manner:
 
 1. mcl_levelgen_use_large_biomes = true
 
@@ -17,6 +17,11 @@ mapgen is enabled.  This option presently requires a modified version
 Luanti/Minetest, available at:
 
   https://codeberg.org/halon/Minetest
+
+3. mcl_init_disable_levelgen = true
+
+Disable this level generator when the "singlenode" mapgen is active,
+effectively restoring the usual significance of "singlenode".
 
 
 
