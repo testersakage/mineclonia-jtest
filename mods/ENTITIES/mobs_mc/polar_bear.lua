@@ -331,7 +331,7 @@ end
 
 function polar_bear_spawner:test_supporting_node (node)
 	return core.get_item_group (node.name, "grass_block") > 0
-		or node.name == "mcl_core:snow/block"
+		or node.name == "mcl_core:snowblock"
 end
 
 mcl_mobs.register_spawner (polar_bear_spawner)
