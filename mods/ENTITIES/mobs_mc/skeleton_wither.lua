@@ -166,4 +166,19 @@ mcl_mobs.register_mob ("mobs_mc:witherskeleton", wither_skeleton)
 -- Wither Skeleton spawning.
 ------------------------------------------------------------------------
 
+local wither_skeleton_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:witherskeleton",
+	weight = 8,
+	pack_min = 5,
+	pack_max = 5,
+	max_artificial_light = 7,
+	max_light = 7,
+	biomes = {},
+	structures = {
+		"mcl_levelgen:nether_fortress",
+	},
+})
+
+mcl_mobs.register_spawner (wither_skeleton_spawner)
+
 mcl_mobs.register_egg ("mobs_mc:witherskeleton", S("Wither Skeleton"), "#141414", "#474d4d", 0)

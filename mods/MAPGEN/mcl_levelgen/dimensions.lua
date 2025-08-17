@@ -1,6 +1,7 @@
 local ipairs = ipairs
 local mathmax = math.max
 local mathmin = math.min
+local floor = math.floor
 
 ------------------------------------------------------------------------
 -- Dimension registration and initialization.
@@ -42,6 +43,7 @@ function mcl_levelgen.initialize_dimensions (seed)
 
 		-- Extents of level in the global coordinate system.
 		dim.y_global = desc.y_global
+		dim.y_global_block = floor (desc.y_global) / 16
 		dim.y_max = desc.y_global + preset.height - 1
 
 		-- Difference between y_global and the preset's y_min;

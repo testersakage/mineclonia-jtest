@@ -527,71 +527,70 @@ mcl_mobs.register_egg("mobs_mc:glow_squid", S("Glow Squid"), "#095757", "#87f6c0
 -- Modern Squid & Glow Squid spawning.
 ------------------------------------------------------------------------
 
-local squid_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
+local squid_spawner_frozen_ocean = table.merge (mobs_mc.aquatic_animal_spawner, {
 	name = "mobs_mc:squid",
 	spawn_category = "water_creature",
 	biomes = {
-		"RoofedForest_ocean",
-		"JungleEdgeM_ocean",
-		"BirchForestM_ocean",
-		"BirchForest_ocean",
-		"Jungle_deep_ocean",
-		"Savanna_ocean",
-		"MesaPlateauF_ocean",
-		"ExtremeHillsM_deep_ocean",
-		"Savanna_deep_ocean",
-		"SunflowerPlains_ocean",
-		"Swampland_deep_ocean",
-		"Swampland_ocean",
-		"MegaSpruceTaiga_deep_ocean",
-		"ExtremeHillsM_ocean",
-		"JungleEdgeM_deep_ocean",
-		"SunflowerPlains_deep_ocean",
-		"BirchForest_deep_ocean",
-		"Mesa_ocean",
-		"StoneBeach_ocean",
-		"Plains_deep_ocean",
-		"JungleEdge_deep_ocean",
-		"SavannaM_deep_ocean",
-		"Desert_deep_ocean",
-		"Mesa_deep_ocean",
-		"Plains_ocean",
-		"MesaPlateauFM_ocean",
-		"Forest_deep_ocean",
-		"JungleM_deep_ocean",
-		"FlowerForest_deep_ocean",
-		"MushroomIsland_ocean",
-		"MegaTaiga_ocean",
-		"StoneBeach_deep_ocean",
-		"SavannaM_ocean",
-		"MesaPlateauF_deep_ocean",
-		"MesaBryce_deep_ocean",
-		"ExtremeHills+_deep_ocean",
-		"ExtremeHills_ocean",
-		"MushroomIsland_deep_ocean",
-		"Forest_ocean",
-		"MegaTaiga_deep_ocean",
-		"JungleEdge_ocean",
-		"MesaBryce_ocean",
-		"MegaSpruceTaiga_ocean",
-		"ExtremeHills+_ocean",
-		"Jungle_ocean",
-		"RoofedForest_deep_ocean",
-		"FlowerForest_ocean",
-		"ExtremeHills_deep_ocean",
-		"MesaPlateauFM_deep_ocean",
-		"Desert_ocean",
-		"Taiga_ocean",
-		"BirchForestM_deep_ocean",
-		"Taiga_deep_ocean",
-		"JungleM_ocean",
+		"FrozenOcean",
+		"DeepFrozenOcean",
 	},
-	weight = 2,
+	weight = 1,
 	pack_min = 1,
 	pack_max = 4,
 })
 
-mcl_mobs.register_spawner (squid_spawner)
+local squid_spawner_cold_ocean = table.merge (squid_spawner_frozen_ocean, {
+	biomes = {
+		"ColdOcean",
+	},
+	weight = 3,
+	pack_min = 1,
+	pack_max = 4,
+})
+
+local squid_spawner_lukewarm_ocean = table.merge (squid_spawner_frozen_ocean, {
+	biomes = {
+		"LukewarmOcean",
+	},
+	weight = 10,
+	pack_min = 1,
+	pack_max = 2,
+})
+
+local squid_spawner_warm_ocean = table.merge (squid_spawner_frozen_ocean, {
+	biomes = {
+		"WarmOcean",
+	},
+	weight = 10,
+	pack_min = 4,
+	pack_max = 4,
+})
+
+local squid_spawner_deep_lukewarm_ocean = table.merge (squid_spawner_frozen_ocean, {
+	biomes = {
+		"DeepLukewarmOcean",
+	},
+	weight = 8,
+	pack_min = 1,
+	pack_max = 4,
+})
+
+local squid_spawner_ocean = table.merge (squid_spawner_frozen_ocean, {
+	biomes = {
+		"Ocean",
+		"DeepOcean",
+	},
+	weight = 4,
+	pack_min = 1,
+	pack_max = 1,
+})
+
+mcl_mobs.register_spawner (squid_spawner_frozen_ocean)
+mcl_mobs.register_spawner (squid_spawner_cold_ocean)
+mcl_mobs.register_spawner (squid_spawner_lukewarm_ocean)
+mcl_mobs.register_spawner (squid_spawner_warm_ocean)
+mcl_mobs.register_spawner (squid_spawner_deep_lukewarm_ocean)
+mcl_mobs.register_spawner (squid_spawner_ocean)
 
 local default_spawner = mcl_mobs.default_spawner
 

@@ -398,6 +398,10 @@ local cat_default_textures = {
 	"mobs_mc_cat_white.png",
 }
 
+local cat_witch_hut_textures = {
+	"mobs_mc_cat_all_black.png",
+}
+
 local cat_full_moon_textures = {
 	"mobs_mc_cat_all_black.png",
 	"mobs_mc_cat_black.png",
@@ -436,6 +440,7 @@ local cat = table.merge (ocelot, {
 		eat = "mobs_mc_animal_eat_generic",
 		distance = 16,
 	},
+	_spawn_category = "creature",
 	_sitting_on_block_timeout = 0,
 	_sitting_on_bed_timeout = 0,
 	specific_attack = {
@@ -789,9 +794,24 @@ cat.ai_functions = {
 -- Cat visuals.
 ------------------------------------------------------------------------
 
+function cat:any_witch_hut ()
+	if mcl_levelgen.levelgen_enabled then
+		local self_pos = self.object:get_pos ()
+		local pieces = mcl_levelgen.get_structures_at (self_pos, false)
+		for _, piece in pairs (pieces) do
+			if piece.data == "mcl_levelgen:swamp_hut" then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 function cat:update_textures ()
 	local texturelist = cat_default_textures
-	if mcl_moon.get_moon_phase () == 0 then
+	if self:any_witch_hut () then
+		texturelist = cat_witch_hut_textures
+	elseif mcl_moon.get_moon_phase () == 0 then
 		texturelist = cat_full_moon_textures
 	end
 
@@ -1035,6 +1055,20 @@ mcl_mobs.register_egg("mobs_mc:ocelot", S("Ocelot"), "#efde7d", "#564434", 0)
 mcl_mobs.register_egg("mobs_mc:cat", S("Cat"), "#AA8755", "#505438", 0)
 
 ------------------------------------------------------------------------
+-- Modern Cat spawning.
+------------------------------------------------------------------------
+
+local cat_spawner_swamp_hut = table.merge (mobs_mc.animal_spawner, {
+	weight = 1,
+	biomes = {},
+	structures = {
+		"mcl_levelgen:swamp_hut",
+	},
+})
+
+mcl_mobs.register_spawner (cat_spawner_swamp_hut)
+
+------------------------------------------------------------------------
 -- Modern Ocelot spawning.
 ------------------------------------------------------------------------
 
@@ -1045,13 +1079,9 @@ local ocelot_spawner = table.merge (mobs_mc.monster_spawner, {
 	name = "mobs_mc:ocelot",
 	weight = 2,
 	pack_min = 1,
-	pack_max = 1,
+	pack_max = 3,
 	biomes = {
 		"Jungle",
-		"JungleEdgeM",
-		"JungleM",
-		"JungleEdge",
-		"BambooJungle",
 	},
 })
 
@@ -1070,4 +1100,15 @@ function ocelot_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_ca
 							 node_cache)
 end
 
+local ocelot_spawner_bamboo_jungle = table.merge (ocelot_spawner, {
+	name = "mobs_mc:ocelot",
+	weight = 2,
+	pack_min = 1,
+	pack_max = 1,
+	biomes = {
+		"BambooJungle",
+	},
+})
+
 mcl_mobs.register_spawner (ocelot_spawner)
+mcl_mobs.register_spawner (ocelot_spawner_bamboo_jungle)
