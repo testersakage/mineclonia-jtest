@@ -292,6 +292,21 @@ mcl_mobs.register_mob ("mobs_mc:blaze", blaze)
 -- Blaze spawning.
 ------------------------------------------------------------------------
 
+local blaze_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:blaze",
+	weight = 10,
+	pack_min = 2,
+	pack_max = 3,
+	max_artificial_light = 15,
+	max_light = 15,
+	biomes = {},
+	structures = {
+		"mcl_levelgen:nether_fortress",
+	},
+})
+
+mcl_mobs.register_spawner (blaze_spawner)
+
 mcl_mobs.register_egg ("mobs_mc:blaze", S("Blaze"), "#f6b201", "#fff87e", 0)
 
 ------------------------------------------------------------------------

@@ -608,7 +608,7 @@ local magma_cube_spawner = {
 	pack_min = 4,
 	pack_max = 4,
 	biomes = {
-		"Nether",
+		"NetherWastes",
 	},
 }
 
@@ -640,9 +640,20 @@ local magma_cube_spawner_basalt_delta = table.merge (magma_cube_spawner, {
 	pack_min = 2,
 	pack_max = 5,
 	biomes = {
-		"BasaltDelta",
+		"BasaltDeltas",
+	},
+})
+
+local magma_cube_spawner_nether_fortress = table.merge (magma_cube_spawner, {
+	weight = 3,
+	pack_min = 4,
+	pack_max = 4,
+	biomes = {},
+	structures = {
+		"mcl_levelgen:nether_fortress",
 	},
 })
 
 mcl_mobs.register_spawner (magma_cube_spawner)
 mcl_mobs.register_spawner (magma_cube_spawner_basalt_delta)
+mcl_mobs.register_spawner (magma_cube_spawner_nether_fortress)

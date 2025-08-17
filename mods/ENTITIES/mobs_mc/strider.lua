@@ -474,9 +474,9 @@ local strider_spawner = {
 	pack_max = 2,
 	biomes = {
 		"WarpedForest",
-		"Nether",
-		"BasaltDelta",
-		"SoulsandValley",
+		"NetherWastes",
+		"BasaltDeltas",
+		"SoulSandValley",
 	},
 }
 

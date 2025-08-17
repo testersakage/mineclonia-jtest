@@ -909,13 +909,10 @@ mcl_mobs.register_egg ("mobs_mc:zombie", S("Zombie"), "#00afaf", "#799c66", 0)
 ------------------------------------------------------------------------
 
 local non_desert_biomes = {}
-local desert_biomes = {}
 
 for _, biome in pairs (mobs_mc.monster_biomes) do
-	if not biome:find ("Desert") then
+	if biome ~= "Desert" then
 		table.insert (non_desert_biomes, biome)
-	else
-		table.insert (desert_biomes, biome)
 	end
 end
 
@@ -937,7 +934,9 @@ end
 
 local zombie_spawner_desert = table.merge (zombie_spawner, {
 	weight = 19,
-	biomes = desert_biomes,
+	biomes = {
+		"Desert",
+	},
 })
 
 local husk_spawner = table.merge (mobs_mc.monster_spawner, {
@@ -945,7 +944,9 @@ local husk_spawner = table.merge (mobs_mc.monster_spawner, {
 	weight = 80,
 	pack_max = 4,
 	pack_min = 4,
-	biomes = desert_biomes,
+	biomes = {
+		"Desert",
+	},
 })
 
 local monster_spawner = mobs_mc.monster_spawner

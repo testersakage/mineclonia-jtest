@@ -306,9 +306,14 @@ local default_spawner = mcl_mobs.default_spawner
 local polar_bear_spawner = table.merge (mobs_mc.animal_spawner, {
 	name = "mobs_mc:polar_bear",
 	biomes = {
-		"ColdTaiga",
-		"IcePlainsSpikes",
-		"IcePlains",
+		"DeepFrozenOcean",
+		"FrozenOcean",
+		"FrozenPeaks",
+		"FrozenRiver",
+		"IceSpikes",
+		"JaggedPeaks",
+		"SnowyPlains",
+		"SnowySlopes",
 	},
 	pack_min = 1,
 	pack_max = 2,

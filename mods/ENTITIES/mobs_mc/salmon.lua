@@ -117,7 +117,12 @@ mcl_mobs.register_egg("mobs_mc:salmon", S("Salmon"), "#a00f10", "#0e8474", 0)
 
 local salmon_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
 	name = "mobs_mc:salmon",
-	biomes = mobs_mc.overworld_biomes,
+	biomes = {
+		"FrozenOcean",
+		"ColdOcean",
+		"DeepColdOcean",
+		"DeepFrozenOcean",
+	},
 	weight = 15,
 	pack_min = 1,
 	pack_max = 5,
@@ -127,4 +132,13 @@ function salmon_spawner:init_group (list, sdata)
 	mob_class.school_init_group (list)
 end
 
+local salmon_spawner_river = table.merge (salmon_spawner, {
+	weight = 5,
+	biomes = {
+		"River",
+		"FrozenRiver",
+	},
+})
+
 mcl_mobs.register_spawner (salmon_spawner)
+mcl_mobs.register_spawner (salmon_spawner_river)

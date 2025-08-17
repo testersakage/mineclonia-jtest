@@ -422,10 +422,14 @@ mcl_mobs.register_egg ("mobs_mc:stray", S("Stray"), "#5f7476", "#dae8e7", 0)
 
 local skeleton_biomes = {}
 local cold_biomes = {
-	"ColdTaiga",
-	"IcePlainsSpikes",
-	"IcePlains",
-	"ExtremeHills+_snowtop",
+	"DeepFrozenOcean",
+	"FrozenOcean",
+	"FrozenPeaks",
+	"FrozenRiver",
+	"IceSpikes",
+	"JaggedPeaks",
+	"SnowyPlains",
+	"SnowySlopes",
 }
 
 for _, biome in pairs (mobs_mc.monster_biomes) do
@@ -448,7 +452,7 @@ local skeleton_spawner_soul_sand_valley = table.merge (mobs_mc.monster_spawner, 
 	pack_max = 5,
 	pack_min = 5,
 	biomes = {
-		"SoulsandValley",
+		"SoulSandValley",
 	},
 	max_light = 15,
 	max_artificial_light = 15,
@@ -460,6 +464,19 @@ local skeleton_spawner_cold = table.merge (mobs_mc.monster_spawner, {
 	pack_max = 4,
 	pack_min = 4,
 	biomes = cold_biomes,
+})
+
+local skeleton_spawner_nether_fortress = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:skeleton",
+	weight = 2,
+	pack_max = 5,
+	pack_min = 5,
+	biomes = {},
+	structures = {
+		"mcl_levelgen:nether_fortress",
+	},
+	max_light = 7,
+	max_artificial_light = 7,
 })
 
 local stray_spawner = table.merge (mobs_mc.monster_spawner, {
@@ -482,4 +499,5 @@ end
 mcl_mobs.register_spawner (skeleton_spawner)
 mcl_mobs.register_spawner (skeleton_spawner_soul_sand_valley)
 mcl_mobs.register_spawner (skeleton_spawner_cold)
+mcl_mobs.register_spawner (skeleton_spawner_nether_fortress)
 mcl_mobs.register_spawner (stray_spawner)
