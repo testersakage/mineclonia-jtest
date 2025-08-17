@@ -25,11 +25,11 @@ doc.add_entry_alias("nodes", "mcl_core:lava_source", "nodes", "mcl_nether:nether
 doc.add_entry_alias("nodes", "mcl_core:lava_source", "nodes", "mcl_nether:nether_lava_flowing")
 
 
-mcl_liquid.register_liquid({
+mcl_liquids.register_liquid({
 	name_flowing = "mcl_nether:nether_lava_flowing",
 	name_source  = "mcl_nether:nether_lava_source",
 
-	liquid_tick = 1.0 / 2.0,
-	liquid_range = 7,
-	liquid_renewable = false,
+	tick_duration = 1.0 / 2.0,
+	range_spread = 7,
+	renewable = false,
 })

@@ -243,22 +243,22 @@ if core.settings:get("mcl_node_particles") == "full" then
 end
 
 
-mcl_liquid.register_liquid({
+mcl_liquids.register_liquid({
 	name_flowing = "mcl_core:water_flowing",
 	name_source = "mcl_core:water_source",
 
-	liquid_tick = 1.0 / 4.0,
-	liquid_range = 7,
-	liquid_renewable = true,
+	tick_duration = 1.0 / 4.0,
+	range_spread = 7,
+	renewable = true,
 })
 
 
-mcl_liquid.register_liquid({
+mcl_liquids.register_liquid({
 	name_flowing = "mcl_core:lava_flowing",
 	name_source  = "mcl_core:lava_source",
 
-	liquid_tick = 3.0/2.0,
-	liquid_range = 3,
-	liquid_renewable = false,
+	tick_duration = 3.0/2.0,
+	range_spread = 3,
+	renewable = false,
 })
 

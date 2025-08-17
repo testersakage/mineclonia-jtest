@@ -1,32 +1,34 @@
 --[[
 This is a liquid transformation mod that aims to work more similar to the
 liquids seen in Minecraft.
---]]
+]]
 
-local S = core.get_translator(core.get_current_modname())
+
+local MODNAME = core.get_current_modname()
+local S = core.get_translator(MODNAME)
 
 
 if not core.settings:get_bool('mcl_liquids_enable', false) then
-	mcl_liquid = {
+	mcl_liquids = {
 		register_liquid = function(def)
 		end
 	}
 	return
 end
 
+
 --------------------------------------------------------------------------------
 -- Variables that are the same for all liquids
 --------------------------------------------------------------------------------
-
--- This is the initial state of the liquid transformation mod.
--- If set to false, liquids do not flow until they activated.
-local is_running = true
 
 local STEP_INTERVAL = (not core.is_singleplayer() and 0.01) or tonumber(core.settings:get('dedicated_server_step')) or 0.09
 local UPDATE_SPEED_DEFAULT = tonumber(core.settings:get('mcl_liquids_update_speed')) or 1.0
 local UPDATE_LIMIT = (tonumber(core.settings:get('mcl_liquids_max_updates_per_second')) or 100000) * STEP_INTERVAL
 
 
+
+-- If set to false, liquids do not flow until they activated.
+local is_running = true
 
 -- The main tick speed. Changing that tick affects all liquids
 -- proportionally.
@@ -35,29 +37,34 @@ local update_speed = UPDATE_SPEED_DEFAULT
 -- A list of registered liquids
 local registered_liquids = {}
 
+
+-- Count the number of nodes that were updated in a single tick
+local batch_update_cnt = 0
+
+-- This table checks if a node is floodable
+local floodable_tab = {}
+-- This table contains all the node definitions
+local ndef_tab = {}
+
+
 -- Store the original core functions that need to be overridden.
 local core_set_node = core.set_node
 local core_add_node = core.add_node
 local core_bulk_set_node = core.bulk_set_node
 local core_remove_node = core.remove_node
 
-local batch_update_cnt = 0
-
--- This table checks if a node is floodable
-local flowable_tab = {}
--- This table contains all the node definitions
-local ndef_tab = {}
-
 
 core.register_on_mods_loaded(function()
-	flowable_tab[core.CONTENT_AIR] = true
+	-- Initialize global tables
+
+	floodable_tab[core.CONTENT_AIR] = true
 	for name, ndef in pairs(core.registered_nodes) do
 		local id = core.get_content_id(name)
 
 		if core.get_item_group(name, "dig_by_water") ~= 0 or
 			ndef.floodable
 		then
-			flowable_tab[id] = true
+			floodable_tab[id] = true
 		end
 
 		ndef_tab[id] = ndef
@@ -86,7 +93,6 @@ local function hash_node_position(x, y, z)
 end
 
 
-
 local function hmap_clear(tb)
 	for k, _ in pairs(tb) do
 		tb[k] = nil
@@ -104,23 +110,30 @@ end
 --[[
 This function applies the transformation mechanic to liquid nodes.
 
-The `def` is a table consists of the following properties:
-- name_source:
-  The name of the liquid source node, that already exists.
-- name_flowing:
-  The name of the liquid flowing node, that already exists.
-- liquid_range:
-  The range of the liquid. It defaults to 7.
-- liquid_renewable:
-  if true, the liquid will be renewable. It defaults to false.
-- liquid_tick:
-    The time in [seconds] between ticks. Lower values make liquids flow faster.
-    The liquid tick can be be shorter than the Luanti tick. Liquids could
-    therefore transform almost instantly or even instantly when setting this
-    value to 0.0.
---]]
+The `def` is a table of the following format:
+
+{
+	-- The name of the liquid source node, that already exists.
+	name_source = nil,
+	-- The name of the liquid flowing node, that already exists.
+	name_flowing = nil,
+	-- The range of the liquid. It defaults to 7.
+	range_spread = 7,
+	-- The search range for the pathfinding. It defaults to 5.
+	range_path = 5,
+	-- if true, the liquid will be renewable. It defaults to false.
+	renewable = false,
+	-- The time in [seconds] between ticks. Lower values make liquids flow faster.
+	-- The liquid tick can be be shorter than the Luanti tick. Liquids could
+	-- therefore transform almost instantly or even instantly when setting this
+	-- value to 0.0.
+	tick_duration = 0.5,
+}
+]]
 local function register_liquid(def)
-	local modname = minetest.get_current_modname()
+
+	-- Constants for this particular liquid.
+	local LIQUID_MODNAME = core.get_current_modname()
 
 	local NAME_SOURCE = def.name_source
 	assert(NAME_SOURCE, '"name_source" was nil')
@@ -128,17 +141,21 @@ local function register_liquid(def)
 	local NAME_FLOWING = def.name_flowing
 	assert(NAME_FLOWING, '"name_flowing" was nil ')
 
-	local FLOW_DISTANCE = def.liquid_range or 7
-	assert(FLOW_DISTANCE >= 0 and FLOW_DISTANCE < 8,
-		'The liquid_range must be in range [0 <= x < 8]')
+	local RANGE_SPREAD = def.range_spread
+	assert(RANGE_SPREAD, '"range_spread" was nil')
+	assert(RANGE_SPREAD >= 0 and RANGE_SPREAD < 8,
+		'The range_spread must be in range [0 <= x < 8]')
 
-	local RENEWABLE = def.liquid_renewable or false
+	local RANGE_PATH = def.range_path or 5
+	assert(RANGE_PATH >= 0 and RANGE_PATH <= 5,
+		'The range must be in range [0 <= x < 5]')
 
-	local PATH_FIND_DIST = def.liquid_pathfind or 5
+	local RENEWABLE = def.renewable and true or false
 
-	local TICKS = def.liquid_tick or 0.5
-	assert(TICKS >= 0.0,
-		'The liquid_tick must be in range [0.0 <= x]')
+	local TICK_DURATION = def.tick_duration
+	assert(TICK_DURATION, '"tick_duration" was nil')
+	assert(TICK_DURATION >= 0.0,
+		'The tick_duration must be a positive number')
 
 
 	-- Constant node ids
@@ -149,29 +166,29 @@ local function register_liquid(def)
 
 
 	-- This table is a function that calculates then next lower liquid level.
-	local level_tb = {}
+	local level_tab = {}
 	for i = 0, 9 do
-		level_tb[i+1] = math.round(math.floor(i * (FLOW_DISTANCE+1) / 8) * 8 / (FLOW_DISTANCE+1))
+		level_tab[i+1] = math.round(math.floor(i * (RANGE_SPREAD+1) / 8) * 8 / (RANGE_SPREAD+1))
 	end
 
 
 	-- This table checks if a node is floodable
-	local floodable_tab = {}
+	local pretend_floodable_tab = {}
 
 	local function init_floodable_tab()
-		floodable_tab[C_AIR] = true
-		floodable_tab[C_FLOWING] = true
-		floodable_tab[C_SOURCE] = true
+		pretend_floodable_tab[C_AIR] = true
+		pretend_floodable_tab[C_FLOWING] = true
+		pretend_floodable_tab[C_SOURCE] = true
 
 		for name, ndef in pairs(core.registered_nodes) do
 
 			local id = core.get_content_id(name)
 			if core.get_item_group(name, "dig_by_water") ~= 0 then
-				floodable_tab[id] = true
+				pretend_floodable_tab[id] = true
 			end
 
 			if ndef.floodable then
-				floodable_tab[id] = true
+				pretend_floodable_tab[id] = true
 			end
 		end
 	end
@@ -267,7 +284,7 @@ local function register_liquid(def)
 	@param map        The map that shows where the current liquid shall spread to.
 	@param is_sinking If the liquid is only allowed to sink.
 
-	--]]
+	]]
 	local function update_next(x, y, z, map, is_sinking)
 		local h = hash_node_position(x, y, z)
 		if update_next_set[h] == nil then
@@ -283,7 +300,7 @@ local function register_liquid(def)
 	@param id         The id of the node
 	@param param2     The param2 of the node
 	@return           The level of the liquid node or nil if it isn't a liquid node.
-	--]]
+	]]
 	local function get_liquid_level(id, param2)
 		if id == C_SOURCE then
 			return 8
@@ -309,7 +326,7 @@ local function register_liquid(def)
 	@param y          The y coordinate of the position
 	@param z          The z coordinate of the position
 	@param level      The level of the liquid node or 'source' if it is a source node.
-	--]]
+	]]
 	local function set_liquid_node(x, y, z, level)
 
 		local h = hash_node_position(x, y, z)
@@ -336,7 +353,7 @@ local function register_liquid(def)
 	@param y          The y coordinate of the position
 	@param z          The z coordinate of the position
 	@return           The id and param2 of the node
-	--]]
+	]]
 	local function get_cached_node(x, y, z)
 		local h = hash_node_position(x, y, z)
 		local id = read_nodes_cache_id[h]
@@ -354,7 +371,7 @@ local function register_liquid(def)
 
 	--[[
 	This function creates a new liquid node.
-	--]]
+	]]
 	local function make_liquid(level)
 		-- This function creates a new liquid node
 		if level == 'source' then
@@ -384,9 +401,9 @@ local function register_liquid(def)
 	--[[
 	This function returns true if the node pretends to be floodable.
 	Pretend because source nodes are not floodable, but liquids want to spread there anyway.
-	--]]
+	]]
 	local function is_pretend_floodable(id)
-		return floodable_tab[id] or false
+		return pretend_floodable_tab[id] or false
 	end
 
 
@@ -486,9 +503,9 @@ local function register_liquid(def)
 		pf_pmap[h] = orig_level
 		local level = orig_level
 
-		for i = 1, PATH_FIND_DIST do
+		for i = 1, RANGE_PATH do
 			-- Decrease the liquid level.
-			level = level_tb[level]
+			level = level_tab[level]
 			if level == 0 then
 				break
 			end
@@ -687,7 +704,7 @@ local function register_liquid(def)
 		-- subtract 1 so that the level reaches from 0 to 8
 		-- This variable tells us what level the current node should have.
 		-- If it is higher we will reduce it and if it is lower we increase it.
-		support_level = level_tb[support_level]
+		support_level = level_tab[support_level]
 
 		if g_l111 ~= nil then
 			-- The current node is already a liquid
@@ -705,7 +722,7 @@ local function register_liquid(def)
 
 
 				-- Get the next level from a table
-				g_new_level = level_tb[support_level]
+				g_new_level = level_tab[support_level]
 
 				if (g_id111 == C_SOURCE or not is_pretend_floodable(g_id101))
 						and g_new_level and g_new_level > 0 then
@@ -831,6 +848,17 @@ local function register_liquid(def)
 
 
 	--[[
+	This function makes a fitting name for the LBMs
+	]]
+	local function make_lbm_name(node)
+		local arr = string.split(NAME_FLOWING, ":")
+		local lbm = LIQUID_MODNAME .. ":" .. MODNAME
+		lbm = lbm .. "__resume__" .. arr[1] .. "__" .. arr[2]
+		return lbm
+	end
+
+
+	--[[
 	This function tests if a source liquid needs to be updated.
 	]]
 	local function does_sl_need_update(x, y, z)
@@ -841,33 +869,33 @@ local function register_liquid(def)
 
 		-- Could spread down
 		local id101, _, p101 = core.get_node_raw (x, y-1, z)
-		if flowable_tab[id101] then return true end
+		if floodable_tab[id101] then return true end
 		local l101 = get_liquid_level (id101, p101)
 		if l101 and l101 < 8 then return true end
 
-		local next_level = level_tb[8]
+		local next_level = level_tab[8]
 
 		-- Could spread to x-1
 		local id011, _, p011 = core.get_node_raw (x-1, y, z)
-		if flowable_tab[id011] then return true end
+		if floodable_tab[id011] then return true end
 		local l011 = get_liquid_level (id011, p011)
 		if l011 and l011 < next_level then return true end
 
 		-- Could spread to x+1
 		local id211, _, p211 = core.get_node_raw (x+1, y, z)
-		if flowable_tab[id211] then return true end
+		if floodable_tab[id211] then return true end
 		local l211 = get_liquid_level (id211, p211)
 		if l211 and l211 < next_level then return true end
 
 		-- Could spread to z-1
 		local id110, _, p110 = core.get_node_raw (x, y, z-1)
-		if flowable_tab[id110] then return true end
+		if floodable_tab[id110] then return true end
 		local l110 = get_liquid_level (id110, p110)
 		if l110 and l110 < next_level then return true end
 
 		-- Could spread to z+1
 		local id112, _, p112 = core.get_node_raw (x, y, z+1)
-		if flowable_tab[id112] then return true end
+		if floodable_tab[id112] then return true end
 		local l112 = get_liquid_level (id112, p112)
 		if l112 and l112 < next_level then return true end
 
@@ -876,7 +904,7 @@ local function register_liquid(def)
 
 	core.register_lbm({
 		label = "Continue the liquids",
-		name = modname..":resume__"..string.split(NAME_SOURCE, ":")[2],
+		name = make_lbm_name(NAME_SOURCE),
 		nodenames = {NAME_SOURCE},
 		run_at_every_load = true,
 		bulk_action = function(pos_list, dtime_s)
@@ -932,7 +960,7 @@ local function register_liquid(def)
 
 		-- Could spread down
 		local id101, _, p101 = core.get_node_raw (x, y-1, z)
-		if flowable_tab[id101] then return true end
+		if floodable_tab[id101] then return true end
 		local l101 = get_liquid_level (id101, p101)
 		if l101 and l101 < 8 then return true end
 
@@ -943,29 +971,29 @@ local function register_liquid(def)
 			return false
 		end
 
-		local next_level = level_tb[l111] or 0
+		local next_level = level_tab[l111] or 0
 
 		-- Could spread to x-1
 		local id011, _, p011 = core.get_node_raw (x-1, y, z)
-		if flowable_tab[id011] then return true end
+		if floodable_tab[id011] then return true end
 		local l011 = get_liquid_level (id011, p011)
 		if l011 and l011 < next_level then return true end
 
 		-- Could spread to x+1
 		local id211, _, p211 = core.get_node_raw (x+1, y, z)
-		if flowable_tab[id211] then return true end
+		if floodable_tab[id211] then return true end
 		local l211 = get_liquid_level (id211, p211)
 		if l211 and l211 < next_level then return true end
 
 		-- Could spread to z-1
 		local id110, _, p110 = core.get_node_raw (x, y, z-1)
-		if flowable_tab[id110] then return true end
+		if floodable_tab[id110] then return true end
 		local l110 = get_liquid_level (id110, p110)
 		if l110 and l110 < next_level then return true end
 
 		-- Could spread to z+1
 		local id112, _, p112 = core.get_node_raw (x, y, z+1)
-		if flowable_tab[id112] then return true end
+		if floodable_tab[id112] then return true end
 		local l112 = get_liquid_level (id112, p112)
 		if l112 and l112 < next_level then return true end
 
@@ -1007,7 +1035,7 @@ local function register_liquid(def)
 
 	core.register_lbm({
 		label = "Continue the liquids",
-		name = modname..":resume__"..string.split(NAME_FLOWING, ":")[2],
+		name = make_lbm_name(NAME_FLOWING),
 		nodenames = {NAME_FLOWING},
 		run_at_every_load = true,
 		bulk_action = function(pos_list, dtime_s)
@@ -1059,13 +1087,13 @@ local function register_liquid(def)
 
 
 
-	local function tick()
+	local function liquid_tick()
 		tick_dtime = tick_dtime + STEP_INTERVAL * update_speed
 
-		-- If the TICKS is smaller than Luanti default tick we do
+		-- If the TICK_DURATION is smaller than Luanti default tick we do
 		-- multiple steps per tick.
-		while tick_dtime >= TICKS do
-			tick_dtime = tick_dtime - TICKS
+		while tick_dtime >= TICK_DURATION do
+			tick_dtime = tick_dtime - TICK_DURATION
 
 			if next(update_next_set) ~= nil then
 				local q = update_next_set
@@ -1104,7 +1132,7 @@ local function register_liquid(def)
 
 				write_changed_nodes(changed_nodes)
 
-			elseif TICKS == 0.0 then
+			elseif TICK_DURATION == 0.0 then
 				tick_dtime = 0.0
 				break
 			end
@@ -1112,7 +1140,7 @@ local function register_liquid(def)
 	end
 
 	registered_liquids[#registered_liquids+1] = {
-		tick = tick,
+		tick = liquid_tick,
 		update = liquid_update,
 	}
 end
@@ -1260,6 +1288,6 @@ core.remove_node = function(pos)
 end
 
 -- Export the liquid API functions
-mcl_liquid = {
+mcl_liquids = {
 	register_liquid = register_liquid
 }
