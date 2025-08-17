@@ -143,6 +143,9 @@ function mcl_mapgen_models.valleys_mapgen_model ()
 				= ceil (inter_valley_fill_max * slope)
 
 			local column_max_y = rtz (surface_y)
+			if liquids_solid and column_max_y < water_level then
+				column_max_y = water_level
+			end
 			local miny = column_max_y - max_gradient
 			pos.z = z
 			for y = column_max_y + max_gradient, miny, -1 do
