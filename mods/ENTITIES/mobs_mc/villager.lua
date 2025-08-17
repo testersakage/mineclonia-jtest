@@ -2651,7 +2651,7 @@ local function check_bell_occupancy (bell)
 	return meta:get_int ("mcl_villages:bell_users") <= 32
 end
 
-function villager:relinquish_job_site ()
+function villager:relinquish_job_site (reason)
 	if self._job_site then
 		local profession = professions_by_name[self._profession]
 		assert (profession)
@@ -2660,18 +2660,20 @@ function villager:relinquish_job_site ()
 			mcl_villages.remove_poi (poi.id)
 		end
 		self._job_site = nil
+		self:report_lost_poi ("job_site", reason)
 	end
 end
 
 local BED_POI = "mcl_villages:bed"
 
-function villager:relinquish_home ()
+function villager:relinquish_home (reason)
 	if self._home then
 		local poi = mcl_villages.get_poi (self._home)
 		if poi and poi.data == BED_POI then
 			mcl_villages.remove_poi (poi.id)
 		end
 		self._home = nil
+		self:report_lost_poi ("home", reason)
 	end
 end
 
@@ -2682,7 +2684,7 @@ local BELL_POI = "mcl_villages:bell"
 -- bell POI is invalidated and replaced by a new bell, and the said
 -- bell is re-acquired before its disappearance is registered by all
 -- of its users.
-function villager:relinquish_bell ()
+function villager:relinquish_bell (reason)
 	local pos = self._bell
 
 	if not pos then
@@ -2701,6 +2703,7 @@ function villager:relinquish_bell ()
 		end
 	end
 	self._bell = nil
+	self:report_lost_poi ("bell", reason)
 end
 
 local function acquire_bell (pos, limit)
@@ -3189,6 +3192,8 @@ local function sense_active_raid (self, self_pos)
 	return mcl_raids.find_active_raid (self_pos), persist
 end
 
+-- local us_time = 0
+
 function villager:run_sensor (self_pos, name)
 	local result = nil
 	local persist = 0
@@ -3196,11 +3201,15 @@ function villager:run_sensor (self_pos, name)
 	if self._sensing[name] then
 		return self._sensing[name][2]
 	elseif name == "nearby_jobsites" then
+		-- local clock = core.get_us_time ()
 		result, persist = sense_nearby_jobsites (self, self_pos)
+		-- us_time = us_time + (core.get_us_time () - clock)
 	elseif name == "free_jobsites" then
 		result = sense_free_jobsites (self, self_pos)
 	elseif name == "nearby_beds" then
+		-- local clock = core.get_us_time ()
 		result, persist = sense_nearby_beds (self, self_pos)
+		-- us_time = us_time + (core.get_us_time () - clock)
 	elseif name == "nearby_hideout" then
 		result, persist = sense_nearby_hideout (self, self_pos)
 	elseif name == "nearby_raid_hideout" then
@@ -3208,7 +3217,9 @@ function villager:run_sensor (self_pos, name)
 	elseif name == "free_beds" then
 		result = sense_free_beds (self, self_pos)
 	elseif name == "nearby_bells" then
+		-- local clock = core.get_us_time ()
 		result, persist = sense_nearby_bells (self, self_pos)
+		-- us_time = us_time + (core.get_us_time () - clock)
 	elseif name == "free_bells" then
 		result = sense_free_bells (self, self_pos)
 	elseif name == "visible_wanted_items" then
@@ -3251,6 +3262,22 @@ function villager:run_sensor (self_pos, name)
 	}
 	return result
 end
+
+-- local max_10_steps = 0.0
+-- local step_count = 0
+
+-- core.register_globalstep (function (dtime)
+-- 	max_10_steps = math.max (max_10_steps, us_time)
+-- 	us_time = 0.0
+
+-- 	if step_count + 1 > 10 then
+-- 		print (max_10_steps)
+-- 		step_count = 0
+-- 		max_10_steps = 0
+-- 	else
+-- 		step_count = step_count + 1
+-- 	end
+-- end)
 
 function villager:do_navigate (self_pos, dtime, target, bonus,
 				ongoing, tolerance, timeout)
@@ -3426,6 +3453,15 @@ function villager:answer_bell (self_pos, dtime)
 	end
 end
 
+function villager:report_lost_poi (name, reason)
+	local villager_name
+		= core.get_translated_string ("en", self:get_dialog_label ())
+	local blurb = "[mobs_mc]: Villager "
+		.. villager_name .. " lost poi "
+		.. name .. " for reason: " .. (reason or "unspecified")
+	core.log ("action", blurb)
+end
+
 function villager:validate_job_sites ()
 	if self._provisional_job_site then
 		local pos = self._provisional_job_site
@@ -3445,6 +3481,7 @@ function villager:validate_job_sites ()
 		-- A self._profession of nil has been observed in
 		-- certain old villagers with job sites.
 		if not profession or not poi or poi.data ~= profession.poi then
+			self:report_lost_poi ("job_site", "POI destroyed")
 			self._job_site = nil
 			self._sensing["nearby_jobsites"] = nil
 
@@ -3461,6 +3498,7 @@ function villager:validate_job_sites ()
 		local pos = self._home
 		local poi = mcl_villages.get_poi (pos)
 		if not poi or poi.data ~= BED_POI then
+			self:report_lost_poi ("home", "POI destroyed")
 			self._home = nil
 			self._sensing["nearby_beds"] = nil
 		end
@@ -3469,6 +3507,7 @@ function villager:validate_job_sites ()
 		local pos = self._bell
 		local poi = mcl_villages.get_poi (pos)
 		if not poi or poi.data ~= BELL_POI then
+			self:report_lost_poi ("bell", "POI destroyed")
 			self._bell = nil
 			self._sensing["nearby_bells"] = nil
 		end
@@ -3767,7 +3806,7 @@ local function generate_wander_to (poi_field, activity_name, time_field, time_li
 
 			if t > time_limit then
 				if not self:near_map_boundaries () then
-					relinquish_job_site (self)
+					relinquish_job_site (self, "wander timeout")
 				end
 				self[activity_name] = nil
 				self[time_field] = nil
@@ -3789,7 +3828,7 @@ local function generate_wander_to (poi_field, activity_name, time_field, time_li
 
 					if status == "failed" then
 						if not self:near_map_boundaries () then
-							relinquish_job_site (self)
+							relinquish_job_site (self, "wander timeout within near threshold")
 						end
 						self[activity_name] = nil
 						self[time_field] = nil
