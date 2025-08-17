@@ -1937,7 +1937,7 @@ local piglin_spawner = table.merge (mobs_mc.monster_spawner, {
 	pack_min = 4,
 	pack_max = 4,
 	biomes = {
-		"Nether",
+		"NetherWastes",
 	},
 	weight = 15,
 	max_artificial_light = 7,
@@ -1961,10 +1961,10 @@ local zombified_piglin_spawner = table.merge (mobs_mc.monster_spawner, {
 	pack_min = 4,
 	pack_max = 4,
 	biomes = {
-		"Nether",
+		"NetherWastes",
 	},
 	weight = 100,
-	max_artificial_light = 7,
+	max_artificial_light = 11,
 })
 
 local zombified_piglin_spawner_crimson_forest = table.merge (mobs_mc.monster_spawner, {
@@ -1976,10 +1976,24 @@ local zombified_piglin_spawner_crimson_forest = table.merge (mobs_mc.monster_spa
 		"CrimsonForest",
 	},
 	weight = 1,
-	max_artificial_light = 7,
+	max_artificial_light = 11,
+})
+
+local zombified_piglin_spawner_nether_fortress = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:zombified_piglin",
+	weight = 5,
+	pack_min = 4,
+	pack_max = 4,
+	max_light = 11,
+	max_artificial_light = 11,
+	biomes = {},
+	structures = {
+		"mcl_levelgen:nether_fortress",
+	},
 })
 
 mcl_mobs.register_spawner (piglin_spawner)
 mcl_mobs.register_spawner (piglin_spawner_crimson_forest)
 mcl_mobs.register_spawner (zombified_piglin_spawner)
 mcl_mobs.register_spawner (zombified_piglin_spawner_crimson_forest)
+mcl_mobs.register_spawner (zombified_piglin_spawner_nether_fortress)

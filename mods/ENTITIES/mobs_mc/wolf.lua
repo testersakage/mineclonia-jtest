@@ -986,11 +986,7 @@ local wolf_spawner_taiga = table.merge (mobs_mc.animal_spawner, {
 	pack_min = 4,
 	pack_max = 4,
 	biomes = {
-		"ColdTaiga",
-		"ColdTaiga_beach",
-		"ColdTaiga_beach_water",
-		"MegaTaiga",
-		"MegaSpruceTaiga",
+		"#is_taiga",
 	},
 })
 
@@ -1010,26 +1006,28 @@ function wolf_spawner_taiga:prepare_to_spawn (pack_size, center)
 	}
 end
 
-local wolf_spawner_jungle = table.merge (wolf_spawner_taiga, {
+local wolf_spawner_sparse_jungle = table.merge (wolf_spawner_taiga, {
 	pack_min = 2,
 	pack_max = 4,
 	biomes = {
-		"Jungle",
-		"JungleEdge",
-		"BambooJungle",
+		"SparseJungle",
 	},
 })
 
-local wolf_spawner_savannah_mesa = table.merge (wolf_spawner_taiga, {
+local wolf_spawner_savannah = table.merge (wolf_spawner_taiga, {
 	pack_min = 4,
 	pack_max = 8,
 	biomes = {
-		"SavannaM",
-		"Savanna",
-		"Mesa",
-		"MesaPlateauF",
-		"MesaPlateauFM",
-		"MesaBryce",
+		"#is_savannah",
+	},
+})
+
+local wolf_spawner_mesa = table.merge (wolf_spawner_taiga, {
+	weight = 2,
+	pack_min = 4,
+	pack_max = 8,
+	biomes = {
+		"#is_mesa",
 	},
 })
 
@@ -1039,28 +1037,24 @@ local wolf_spawner_forest = table.merge (wolf_spawner_taiga, {
 	pack_max = 4,
 	biomes = {
 		"Forest",
-		"Forest_beach",
 	},
 })
 
-local wolf_spawner_icy = table.merge (wolf_spawner_taiga, {
-	-- TODO: remove this once Grove biomes are
-	-- available.  For the present, it remains
-	-- the only means of obtaining snowy wolves.
+local wolf_spawner_grove = table.merge (wolf_spawner_taiga, {
 	weight = 1,
 	pack_min = 1,
 	pack_max = 1,
 	biomes = {
-		"IcePlains",
-		"IcePlainsSpikes",
+		"Grove",
 	},
 })
 
 mcl_mobs.register_spawner (wolf_spawner_taiga)
-mcl_mobs.register_spawner (wolf_spawner_jungle)
-mcl_mobs.register_spawner (wolf_spawner_savannah_mesa)
+mcl_mobs.register_spawner (wolf_spawner_sparse_jungle)
+mcl_mobs.register_spawner (wolf_spawner_savannah)
+mcl_mobs.register_spawner (wolf_spawner_mesa)
 mcl_mobs.register_spawner (wolf_spawner_forest)
-mcl_mobs.register_spawner (wolf_spawner_icy)
+mcl_mobs.register_spawner (wolf_spawner_grove)
 
 ------------------------------------------------------------------------
 -- Legacy tamed Wolf (``dog'').

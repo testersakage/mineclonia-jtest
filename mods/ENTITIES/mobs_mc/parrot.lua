@@ -377,11 +377,7 @@ local parrot_spawner = table.merge (mobs_mc.animal_spawner, {
 	pack_min = 1,
 	pack_max = 2,
 	biomes = {
-		"Jungle",
-		"JungleEdgeM",
-		"JungleM",
-		"JungleEdge",
-		"BambooJungle",
+		"#is_jungle",
 	},
 })
 

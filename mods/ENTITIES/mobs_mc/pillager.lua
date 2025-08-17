@@ -413,3 +413,19 @@ core.register_chatcommand ("spawn_patrol_now", {
 		next_spawn_attempt = 0
 	end,
 })
+
+local pillager_spawner = table.merge ({
+	name = "mobs_mc:pillager",
+	spawn_category = "monster",
+	pack_min = 1,
+	pack_max = 1,
+	biomes = {},
+	structures = {
+		"mcl_levelgen:pillager_outpost",
+	},
+	weight = 1,
+	max_artificial_light = 7,
+	max_light = 15,
+})
+
+mcl_mobs.register_spawner (pillager_spawner)

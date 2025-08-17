@@ -281,8 +281,7 @@ mcl_mobs.register_spawner (cow_spawner)
 local mooshroom_spawner = table.merge (mobs_mc.animal_spawner, {
 	name = "mobs_mc:mooshroom",
 	biomes = {
-		"MushroomIslandShore",
-		"MushroomIsland",
+		"MushroomIslands",
 	},
 	weight = 8,
 	pack_min = 4,

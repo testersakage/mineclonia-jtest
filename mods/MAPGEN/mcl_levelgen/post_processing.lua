@@ -1347,6 +1347,14 @@ if not mcl_levelgen.load_feature_environment then
 	core.register_on_mods_loaded (restore_feature_placement_queue)
 end
 
+function mcl_levelgen.is_emerged (dim, bx, by, bz)
+	local old_namespace, rc = current_namespace_id
+	switch_to_namespace (dim.data_namespace)
+	rc = mapblock_state (bx, by, bz) > MBS_UNKNOWN
+	switch_to_namespace (current_namespace_id)
+	return rc
+end
+
 ------------------------------------------------------------------------
 -- Supplemental generation.  This facility enables features with
 -- immense vertical context requirements to request execution in an

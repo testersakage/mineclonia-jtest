@@ -273,6 +273,11 @@ mcl_levelgen.modify_biome_groups (pillager_outpost_biomes, {
 })
 
 local structure_biome_test = mcl_levelgen.structure_biome_test
+local bbox_from_pieces = mcl_levelgen.bbox_from_pieces
+
+local function spawn_piece_place (self, level, terrain, rng, x1, z1, x2, z2)
+	-- Nothing here but crickets.
+end
 
 mcl_levelgen.register_structure ("mcl_levelgen:pillager_outpost", {
 	create_start = function (self, level, terrain, rng, cx, cz)
@@ -281,6 +286,22 @@ mcl_levelgen.register_structure ("mcl_levelgen:pillager_outpost", {
 
 		if structure_biome_test (level, self, x, height, z) then
 			local pieces = assemble_pillager_outpost (terrain, x, height, z, rng)
+			-- Create a piece encompassing a 72x52x72 area
+			-- around the center of the structure for
+			-- purposes of spawning.
+			local bbox = bbox_from_pieces (pieces)
+			local cx, cy, cz = bbox_center (bbox)
+			bbox[1] = cx - 35
+			bbox[2] = height - 12
+			bbox[3] = cz - 35
+			bbox[4] = cx + 36
+			bbox[5] = height + 39
+			bbox[6] = cz + 36
+			insert (pieces, {
+				bbox = bbox,
+				place = spawn_piece_place,
+				no_terrain_adaptation = true,
+			})
 			return mcl_levelgen.create_structure_start (self, pieces)
 		end
 		return nil
