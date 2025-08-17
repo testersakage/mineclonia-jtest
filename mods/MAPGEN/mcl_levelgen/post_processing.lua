@@ -3168,7 +3168,14 @@ do
 	local str = storage:get_string ("structure_extents")
 	if str and str ~= "" then
 		local data = core.decompress (str, "zstd")
-		structure_extents:from_string (data)
+		local ok, err = structure_extents:from_string (data)
+		-- Save a copy of the structure extents table for
+		-- further investigation.
+		if not ok then
+			storage:set_string ("backup_structure_extents", str)
+			core.log ("error", "[mcl_levelgen]: Failed to load structure extents: " .. err)
+			core.log ("error", "[mcl_levelgen]: Saved structure extent data has been recorded under the mod storage key \"backup_structure_extents\".")
+		end
 	end
 end
 
