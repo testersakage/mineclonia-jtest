@@ -54,3 +54,15 @@ core.register_node("mclx_core:river_water_flowing", table.merge(water_f, {
 }))
 
 doc.add_entry_alias("nodes", "mclx_core:river_water_source", "nodes", "mclx_core:river_water_flowing")
+
+
+mcl_liquids.register_liquid({
+	name_flowing = "mclx_core:river_water_flowing",
+	name_source = "mclx_core:river_water_source",
+
+	tick_duration = 1.0 / 4.0,
+	range_spread = 2,
+	renewable = false,
+
+})
+
