@@ -2418,7 +2418,7 @@ function mcl_levelgen.locate_structure_placement (terrain, x, y, z, id_or_ids, g
 	local nearest, d_nearest = nil, huge
 	local nearest_rgn_absolute = huge
 
-	-- Initially structures with concentric ring placement.
+	-- Initially consider structures with concentric ring placement.
 	local cx = floor (x / 16)
 	local cz = floor (z / 16)
 	for _, set in ipairs (target_stronghold_sets) do
@@ -2509,4 +2509,59 @@ function mcl_levelgen.locate_structure_placement (terrain, x, y, z, id_or_ids, g
 		return nearest[1], nearest[2], nearest[3]
 	end
 	return nil
+end
+
+local function insert_structure_start (start, _, _, _, _)
+	insert (candidates, start)
+end
+
+function mcl_levelgen.fix_structure_pieces (terrain, x, y, z, sets, grid_limit_xz)
+	local pieces = {}
+	local target_sets = {}
+	local level = terrain.structures
+
+	local cx = floor (x / 16)
+	local cz = floor (z / 16)
+
+	for _, set in ipairs (sets) do
+		local def = registered_structure_sets[set]
+		if def and indexof (level.structure_sets, def) ~= -1 then
+			insert (target_sets, def)
+		end
+	end
+
+	for _, set in ipairs (target_sets) do
+		local placement = set.placement
+		local region_x = floor (cx / placement.spacing)
+		local region_z = floor (cz / placement.spacing)
+
+		if placement.locator_test then
+			for i = 0, grid_limit_xz do
+				local just_this_set = {set,}
+				candidates = {}
+				for dx, dz in positions_at_distance_chebyshev (i) do
+					local rx = region_x + dx
+					local rz = region_z + dz
+					local scx, scz = placement.locator_test (level, placement.salt, rx, rz)
+
+					if scx and scz then
+						-- This will conduct detailed placement tests.
+						get_structure_starts (level, terrain, scx, scz,
+								      insert_structure_start,
+								      nil, just_this_set)
+					end
+				end
+				for _, candidate in ipairs (candidates) do
+					for _, piece in ipairs (candidate.pieces) do
+						insert (pieces, {
+							sid = candidate.structure,
+							bbox = piece.bbox,
+						})
+					end
+				end
+			end
+		end
+	end
+
+	return pieces
 end
