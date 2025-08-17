@@ -851,7 +851,7 @@ local function register_liquid(def)
 	This function makes a fitting name for the LBMs
 	]]
 	local function make_lbm_name(node)
-		local arr = string.split(NAME_FLOWING, ":")
+		local arr = string.split(node, ":")
 		local lbm = LIQUID_MODNAME .. ":" .. MODNAME
 		lbm = lbm .. "__resume__" .. arr[1] .. "__" .. arr[2]
 		return lbm
