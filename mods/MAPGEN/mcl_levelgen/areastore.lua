@@ -23,12 +23,12 @@ for i = 1, 4096 do
 	if str and str ~= "" then
 		local extents = core.decompress (str, "zstd")
 		local ok, err = structure_extents[i]:from_string (extents)
-		if ok then
+		if not ok then
 			local blurb = {
 				"[mcl_levelgen]: Failed to load structure extents for area ",
 				i, ": ", err,
 			}
-			core.log ("error", blurb)
+			core.log ("error", table.concat (blurb))
 		end
 	end
 end
