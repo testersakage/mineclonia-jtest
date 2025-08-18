@@ -781,13 +781,11 @@ cat.ai_functions = {
 ------------------------------------------------------------------------
 
 function cat:any_witch_hut ()
-	if mcl_levelgen.levelgen_enabled then
-		local self_pos = self.object:get_pos ()
-		local pieces = mcl_levelgen.get_structures_at (self_pos, false)
-		for _, piece in pairs (pieces) do
-			if piece.data == "mcl_levelgen:swamp_hut" then
-				return true
-			end
+	local self_pos = self.object:get_pos ()
+	local pieces = mcl_levelgen.get_structures_at (self_pos, false)
+	for _, piece in pairs (pieces) do
+		if piece.data == "mcl_levelgen:swamp_hut" then
+			return true
 		end
 	end
 	return false
