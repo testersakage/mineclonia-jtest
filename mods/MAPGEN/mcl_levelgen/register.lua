@@ -78,6 +78,7 @@ elseif core.get_mod_storage then
 				core.serialize (assignments))
 	core.ipc_set ("mcl_levelgen:biome_id_assignments", assignments)
 	core.register_mapgen_script (mcl_levelgen.prefix .. "/init.lua")
+	dofile (mcl_levelgen.prefix .. "/areastore.lua")
 	dofile (mcl_levelgen.prefix .. "/post_processing.lua")
 	-- Start a second async environment to reduce the probability
 	-- that another async environment will be instantiated while
