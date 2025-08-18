@@ -418,6 +418,8 @@ mcl_levelgen.initialize_dimensions (mcl_levelgen.seed)
 
 if core and core.get_mod_storage then -- Main environment.
 
+dofile (mcl_levelgen.prefix .. "/areastore.lua")
+
 local y_offset = nil
 
 core.set_gen_notify ({ custom = true, }, nil, {
@@ -425,11 +427,9 @@ core.set_gen_notify ({ custom = true, }, nil, {
 	"mcl_levelgen:gen_notifies",
 })
 
-local storage = core.get_mod_storage ()
-
 local registered_notification_handlers = {}
 local warned = {}
-local save_structure_pieces
+local save_structure_pieces = mcl_levelgen.save_structure_pieces
 
 mcl_levelgen.registered_notification_handlers
 	= registered_notification_handlers
@@ -490,65 +490,6 @@ function mcl_levelgen.level_to_minetest_position (x, y, z)
 		return x, y, -z - 1
 	end
 end
-
-local structure_extents = AreaStore ()
-
-do
-	local str = storage:get_string ("structure_extents")
-	if str and str ~= "" then
-		local data = core.decompress (str, "zstd")
-		local ok, err = structure_extents:from_string (data)
-		-- Save a copy of the structure extents table for
-		-- further investigation.
-		if not ok then
-			storage:set_string ("backup_structure_extents", str)
-			core.log ("error", "[mcl_levelgen]: Failed to load structure extents: " .. err)
-			core.log ("error", "[mcl_levelgen]: Saved structure extent data has been recorded under the mod storage key \"backup_structure_extents\".")
-		end
-	end
-end
-
-local v1, v2 = vector.zero (), vector.zero ()
-
-local function unpack6 (aabb)
-	return aabb[1], aabb[2], aabb[3], aabb[4], aabb[5], aabb[6]
-end
-
-function save_structure_pieces (pieces)
-	structure_extents:reserve (#pieces)
-	for _, piece in ipairs (pieces) do
-		local x1, y1, z1, x2, y2, z2 = unpack6 (piece)
-		local sid = piece[7]
-		v1.x, v1.y, v1.z = x1, y1, z1
-		v2.x, v2.y, v2.z = x2, y2, z2
-		local id = structure_extents:insert_area (v1, v2, sid)
-		if not id then
-			local blurb = table.concat ({
-				"[mcl_levelgen]: Failed to record structure piece: ",
-				sid,
-				" spanning ",
-				string.format ("(%d,%d,%d) - (%d,%d,%d)",
-					       x1, y1, z1, x2, y2, z2),
-			})
-			core.log ("error", blurb)
-		end
-	end
-end
-
-local function save_structure_extents ()
-	local str = structure_extents:to_string ()
-	local data = core.compress (str, "zstd")
-	storage:set_string ("structure_extents", data)
-	core.log ("info", ("[mcl_levelgen]: Structure extents occupy "
-			   .. #str .. " bytes (" .. #data .. " bytes compressed)"))
-end
-
-function mcl_levelgen.get_structures_at (pos, include_corners)
-	return structure_extents:get_areas_for_pos (pos, include_corners, true)
-end
-
-core.register_on_shutdown (save_structure_extents)
-
 end
 
 ------------------------------------------------------------------------
