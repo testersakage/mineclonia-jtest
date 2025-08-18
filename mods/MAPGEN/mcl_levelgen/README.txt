@@ -23,6 +23,13 @@ Luanti/Minetest, available at:
 Disable this level generator when the "singlenode" mapgen is active,
 effectively restoring the usual significance of "singlenode".
 
+Mods (such as implement Lua map generators themselves) may also
+request that the original significance of "singlenode" be restored by
+creating a single file in their root directories as
+`mcl_levelgen.conf' with the following directive:
+
+  disable_mcl_levelgen = true
+
 
 
 The question has been raised how this level generator was implemented

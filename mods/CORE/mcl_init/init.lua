@@ -100,7 +100,39 @@ function mcl_vars.get_chunk_number(pos) -- unsigned int
 		 c.x + k_positive
 end
 
-if singlenode and core.get_mapgen_setting ("mcl_init_disable_levelgen") ~= "true" then
+local function read_mcl_levelgen_conf (name)
+	local config = {}
+	for line in io.lines (name) do
+		if line:sub (1, 1) ~= "#" then
+			local split = line:split ("=", true, 1)
+			if #split == 2 then
+				config[split[1]:trim ()] = split[2]:trim ()
+			end
+		end
+	end
+	return config
+end
+
+function mcl_vars.detect_levelgen_inhibiting_mods ()
+	local modnames = core.get_modnames ()
+	for _, mod in ipairs (modnames) do
+		local modpath = core.get_modpath (mod)
+		if modpath then
+			local list = core.get_dir_list (modpath, false)
+			if table.indexof (list, "mcl_levelgen.conf") ~= -1 then
+				local conf = read_mcl_levelgen_conf (modpath .. "/mcl_levelgen.conf")
+				if conf["disable_mcl_levelgen"] == "true" then
+					return true
+				end
+			end
+		end
+	end
+	return false
+end
+
+if singlenode
+	and core.get_mapgen_setting ("mcl_init_disable_levelgen") ~= "true"
+	and not mcl_vars.detect_levelgen_inhibiting_mods () then
 	mcl_vars.enable_mcl_levelgen = true
 	mcl_vars.mg_overworld_min = -128
 	mcl_vars.mg_overworld_min_old = -128
