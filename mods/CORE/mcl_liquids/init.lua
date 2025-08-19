@@ -813,11 +813,8 @@ local function register_liquid(def)
 	end
 
 	local function liquid_update_raw (poshash)
-		if update_next_set[poshash] == nil then
-			update_next_set[poshash] = {
-				pos = core.get_position_from_hash (poshash),
-			}
-		end
+		local px, py, pz = get_position_from_hash (poshash)
+		update_next (px, py, pz)
 	end
 
 	local function fix_ndef(ndef_name)
@@ -1161,11 +1158,10 @@ local function register_liquid(def)
 				hmap_clear(read_nodes_cache_param2)
 				hmap_clear(changed_nodes)
 
-				local changed = 0
-				for _, item in pairs(q) do
+				for hpos, item in pairs(q) do
+					local x, y, z = get_position_from_hash(hpos)
 					-- Do the flow magic
-					flow_iteration(item)
-					changed = changed + 1
+					flow_iteration(x, y, z, item.map, item.is_sinking)
 
 					-- Continue the transformation in the next global step the
 					-- limit has been reached.
