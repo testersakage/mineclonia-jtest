@@ -4,6 +4,8 @@ local ipairs = ipairs
 local rshift = bit.rshift
 local lshift = bit.lshift
 
+local band = bit.band
+
 ------------------------------------------------------------------------
 -- Structure extents AreaStore serialization.
 --
@@ -35,6 +37,12 @@ end
 
 local function get_structure_extents (pos)
 	local x, z = pos.x, pos.z
+	local id = lshift (rshift (x + 32768, 10), 6)
+		+ rshift (z + 32768, 10)
+	return structure_extents[id + 1]
+end
+
+local function get_structure_extents_raw (x, z)
 	local id = lshift (rshift (x + 32768, 10), 6)
 		+ rshift (z + 32768, 10)
 	return structure_extents[id + 1]
@@ -76,21 +84,28 @@ function mcl_levelgen.save_structure_pieces (pieces)
 		local sid = piece[7]
 		v1.x, v1.y, v1.z = x1, y1, z1
 		v2.x, v2.y, v2.z = x2, y2, z2
-		-- XXX: this assumes that no structure piece will
-		-- straddle any of the 1024x1024 areas into which the
-		-- map is divided.
-		local store = get_structure_extents (v1)
-		assert (store ~= nil)
-		local id = store:insert_area (v1, v2, sid)
-		if not id then
-			local blurb = table.concat ({
-				"[mcl_levelgen]: Failed to record structure piece: ",
-				sid,
-				" spanning ",
-				string.format ("(%d,%d,%d) - (%d,%d,%d)",
-					       x1, y1, z1, x2, y2, z2),
-			})
-			core.log ("error", blurb)
+
+		local sx1 = band (v1.x, -1024)
+		local sz1 = band (v1.z, -1024)
+		local sx2 = band (v2.x, -1024)
+		local sz2 = band (v2.z, -1024)
+
+		for sx = sx1, sx2 do
+			for sz = sz1, sz2 do				
+				local store = get_structure_extents_raw (sx, sz)
+				assert (store ~= nil)
+				local id = store:insert_area (v1, v2, sid)
+				if not id then
+					local blurb = table.concat ({
+							"[mcl_levelgen]: Failed to record structure piece: ",
+							sid,
+							" spanning ",
+							string.format ("(%d,%d,%d) - (%d,%d,%d)",
+								       x1, y1, z1, x2, y2, z2),
+					})
+					core.log ("error", blurb)
+				end
+			end
 		end
 	end
 end
