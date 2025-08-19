@@ -313,6 +313,8 @@ function mcl_biome_dispatch.build_biome_list (ids_or_tags)
 
 	if levelgen_enabled then
 		return mcl_levelgen.build_biome_list (ids_or_tags)
+	elseif mcl_vars.superflat then
+		return {"flat",}
 	else
 		local names = {}
 		local engine_aliases = initialize_engine_aliases ()
