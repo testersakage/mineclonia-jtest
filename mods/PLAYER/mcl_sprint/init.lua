@@ -14,6 +14,31 @@ mcl_sprint.SPEED = 1.3
 
 local players = {}
 
+local DOUBLE_TAP_WINDOW = 0.3
+local last_up_press = {}
+
+if controls and controls.register_on_press then
+	controls.register_on_press(function(player, keyname)
+		if keyname ~= "up" then return end
+		local name = player:get_player_name()
+		local now = minetest.get_us_time() / 1e6
+		local last = last_up_press[name] or 0
+		if now - last <= DOUBLE_TAP_WINDOW then
+			-- double-tap detected
+			players[name].doubletapSprint = true
+		end
+		last_up_press[name] = now
+	end)
+
+	controls.register_on_release(function(player, keyname)
+		if keyname == "up" then
+			-- stop double-tap sprint when W released
+			local name = player:get_player_name()
+			players[name].doubletapSprint = false
+		end
+	end)
+end
+
 -- Returns true if the player with the given name is sprinting, false if not.
 -- Returns nil if player does not exist.
 function mcl_sprint.is_sprinting(playername)
@@ -136,7 +161,9 @@ core.register_globalstep(function()
 		if player and not mcl_serverplayer.is_csm_capable (player) then
 			local ctrl = player:get_player_control()
 			--Check if the player should be sprinting
-			if ctrl.aux1 and ctrl.up and not ctrl.sneak then
+			if players[playerName]["clientSprint"]
+			or (ctrl.aux1 and ctrl.up and not ctrl.sneak)
+			or players[playerName].doubletapSprint then
 				players[playerName]["shouldSprint"] = true
 			else
 				players[playerName]["shouldSprint"] = false
