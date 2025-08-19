@@ -91,7 +91,7 @@ function mcl_levelgen.save_structure_pieces (pieces)
 		local sz2 = band (v2.z, -1024)
 
 		for sx = sx1, sx2 do
-			for sz = sz1, sz2 do				
+			for sz = sz1, sz2 do
 				local store = get_structure_extents_raw (sx, sz)
 				assert (store ~= nil)
 				local id = store:insert_area (v1, v2, sid)
