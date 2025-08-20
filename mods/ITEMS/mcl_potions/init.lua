@@ -81,6 +81,11 @@ core.register_craftitem("mcl_potions:glass_bottle", {
 	wield_image = "mcl_potions_potion_bottle.png",
 	groups = {brewitem=1, empty_bottle = 1},
 	liquids_pointable = true,
+	pointabilities = {
+		nodes = {
+			["group:liquid_source"] = true,
+		},
+	},
 	on_place = function(itemstack, placer, pointed_thing)
 		local node = core.get_node(pointed_thing.under)
 		local def = core.registered_nodes[node.name]
