@@ -113,15 +113,20 @@ function mcl_weather.can_see_outdoors(pos)
 	return false
 end
 
+local floor = math.floor
+
 -- checks if player is undewater. This is needed in order to
 -- turn off weather particles generation.
 function mcl_weather.is_underwater(player)
 	local ppos = player:get_pos()
 	local offset = player:get_eye_offset()
-	local player_eye_pos = {x = ppos.x + offset.x,
-				y = ppos.y + offset.y + 1.5,
-				z = ppos.z + offset.z}
-	local node_level = core.get_node_level(player_eye_pos)
+	local player_eye_pos = {
+		x = floor (ppos.x + offset.x + 0.5),
+		y = floor (ppos.y + offset.y + 2.0),
+		z = floor (ppos.z + offset.z + 0.5),
+	}
+	local node_level
+		= mcl_liquids.get_node_level (player_eye_pos)
 	if node_level == 8 or node_level == 7 then
 		return true
 	end

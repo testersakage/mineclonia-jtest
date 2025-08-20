@@ -163,6 +163,31 @@ mcl_serverplayer.movement_arresting_nodes = {
 	},
 }
 
+local INITIAL_EFFECT_CTRL = {
+	dim_lighting = {
+		["nether"] = {
+			ambient_level = 4,
+			range_squeeze = 0,
+		},
+		["overworld"] = {
+			ambient_level = 0,
+			range_squeeze = 35,
+		},
+		["end"] = {
+			ambient_level = 0,
+			range_squeeze = 0,
+		},
+	},
+}
+
+local function get_biome_sky_color (nodepos)
+	return mcl_biome_dispatch.get_sky_color (nodepos)
+end
+
+local function get_biome_fog_color (nodepos)
+	return mcl_biome_dispatch.get_fog_color (nodepos)
+end
+
 function mcl_serverplayer.init_player (client_state, player)
 	local can_sprint = not mcl_hunger.active
 		or mcl_hunger.get_hunger (player) > 6
@@ -204,6 +229,15 @@ function mcl_serverplayer.init_player (client_state, player)
 
 	if client_state.proto >= 1 then
 		mcl_shields.set_blocking (player, 0)
+	end
+	if client_state.proto >= 2 then
+		local node_pos = mcl_util.get_nodepos (player:get_pos ())
+		local initial = table.merge (INITIAL_EFFECT_CTRL, {
+			biome_sky_color = get_biome_sky_color (node_pos),
+			biome_fog_color = get_biome_fog_color (node_pos),
+			weather_state = mcl_weather.state,
+		})
+		mcl_serverplayer.send_effect_ctrl (player, initial)
 	end
 end
 
@@ -551,6 +585,9 @@ function mcl_serverplayer.globalstep (player, dtime)
 	end
 	mcl_serverplayer.update_ammo (state, player, false)
 	mcl_serverplayer.validate_mounting (state, player, dtime)
+	if mcl_serverplayer.is_csm_at_least (player, 2) then
+		mcl_serverplayer.update_skybox (state, player, dtime)
+	end
 end
 
 function mcl_serverplayer.handle_movement_event (player, event)
