@@ -181,8 +181,8 @@ function mcl_weather.rain.make_weather()
 	end
 
 	for player in mcl_util.connected_players() do
-		local pos=player:get_pos()
-		if mcl_weather.is_underwater(player) or not mcl_weather.has_rain(pos) then
+		local pos = mcl_util.get_nodepos (player:get_pos ())
+		if mcl_weather.is_underwater (player) or not mcl_weather.has_rain(pos) then
 			mcl_weather.rain.remove_sound(player)
 			mcl_weather.remove_spawners_player(player)
 			if mcl_worlds.has_weather(pos) then
