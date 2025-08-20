@@ -1,7 +1,10 @@
-local mods_loaded = false
 local NIGHT_VISION_RATIO = 0.45
 
 function mcl_weather.set_sky_box_clear(player, sky, fog)
+	if mcl_serverplayer.is_csm_at_least (player, 2) then
+		return
+	end
+
 	local pos = player:get_pos()
 	if core.get_item_group(core.get_node(vector.new(pos.x,pos.y+1.5,pos.z)).name, "water") ~= 0 then return end
 	local sc = {
@@ -32,6 +35,10 @@ function mcl_weather.set_sky_box_clear(player, sky, fog)
 end
 
 function mcl_weather.set_sky_color(player, def)
+	if mcl_serverplayer.is_csm_at_least (player, 2) then
+		return
+	end
+
 	local pos = player:get_pos()
 	if core.get_item_group(core.get_node(vector.offset(pos, 0, 1.5, 0)).name, "water") ~= 0 then return end
 	player:set_sky({
@@ -109,30 +116,32 @@ mcl_weather.skycolor = {
 
 	-- Wrapper for updating day/night ratio that respects night vision
 	override_day_night_ratio = function(player, ratio)
-		local meta = player:get_meta()
-		local has_night_vision = meta:get_int("night_vision") == 1
-		local has_darkness = meta:get_int("darkness") == 1
-		local is_visited_shepherd = meta:get_int("mcl_shepherd:special") == 1
-		local arg
-		if has_darkness and not is_visited_shepherd then
-			if has_night_vision then arg = 0.1
-			else arg = 0 end
-		else
-			-- Apply night vision only for dark sky
-			local is_dark = core.get_timeofday() > 0.8 or core.get_timeofday() < 0.2 or mcl_weather.state ~= "none"
-			local pos = player:get_pos()
-			local dim = mcl_worlds.pos_to_dimension(pos)
-			if (has_night_vision or is_visited_shepherd) and is_dark and dim ~= "nether" and dim ~= "end" then
-				if ratio == nil then
-					arg = NIGHT_VISION_RATIO
-				else
-					arg = math.max(ratio, NIGHT_VISION_RATIO)
-				end
+		if not mcl_serverplayer.is_csm_at_least (player, 2) then
+			local meta = player:get_meta()
+			local has_night_vision = meta:get_int("night_vision") == 1
+			local has_darkness = meta:get_int("darkness") == 1
+			local is_visited_shepherd = meta:get_int("mcl_shepherd:special") == 1
+			local arg
+			if has_darkness and not is_visited_shepherd then
+				if has_night_vision then arg = 0.1
+				else arg = 0 end
 			else
-				arg = ratio
+				-- Apply night vision only for dark sky
+				local is_dark = core.get_timeofday() > 0.8 or core.get_timeofday() < 0.2 or mcl_weather.state ~= "none"
+				local pos = player:get_pos()
+				local dim = mcl_worlds.pos_to_dimension(pos)
+				if (has_night_vision or is_visited_shepherd) and is_dark and dim ~= "nether" and dim ~= "end" then
+					if ratio == nil then
+						arg = NIGHT_VISION_RATIO
+					else
+						arg = math.max(ratio, NIGHT_VISION_RATIO)
+					end
+				else
+					arg = ratio
+				end
 			end
+			player:override_day_night_ratio(arg)
 		end
-		player:override_day_night_ratio(arg)
 	end,
 
 	-- Update sky color. If players not specified update sky for all players.
@@ -302,12 +311,19 @@ mcl_weather.skycolor = {
 		end,
 
 		-- Simply getter. Ether returns user given players list or get all connected players if none provided
-		get_players = function(players)
-			if players == nil or #players == 0 then
-				if mods_loaded then
-					players = core.get_connected_players()
-				elseif players == nil then
-					players = {}
+		get_players = function(players_in)
+			local players = {}
+			if players_in == nil then
+				for player in mcl_util.connected_players () do
+					if not mcl_serverplayer.is_csm_at_least (player, 2) then
+						table.insert (players, player)
+					end
+				end
+			else
+				for _, player in ipairs (players_in) do
+					if not mcl_serverplayer.is_csm_at_least (player, 2) then
+						table.insert (players, player)
+					end
 				end
 			end
 			return players
@@ -374,8 +390,4 @@ core.register_on_respawnplayer(initsky)
 
 mcl_worlds.register_on_dimension_change(function(player)
 	mcl_weather.skycolor.update_sky_color({player})
-end)
-
-core.register_on_mods_loaded(function()
-	mods_loaded = true
 end)
