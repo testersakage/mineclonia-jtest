@@ -23,8 +23,10 @@ for i = 1, 4096 do
 	structure_extents[i] = AreaStore ()
 	local str = storage:get_string ("structure_extents_" .. i)
 	if str and str ~= "" then
-		local extents = core.decompress (str, "zstd")
-		local ok, err = structure_extents[i]:from_string (extents)
+		local ok, err = pcall (core.decompress, str, "zstd")
+		if ok then
+			ok, err = structure_extents[i]:from_string (err)
+		end
 		if not ok then
 			local blurb = {
 				"[mcl_levelgen]: Failed to load structure extents for area ",
@@ -90,8 +92,8 @@ function mcl_levelgen.save_structure_pieces (pieces)
 		local sx2 = band (v2.x, -1024)
 		local sz2 = band (v2.z, -1024)
 
-		for sx = sx1, sx2 do
-			for sz = sz1, sz2 do
+		for sx = sx1, sx2, 1024 do
+			for sz = sz1, sz2, 1024 do
 				local store = get_structure_extents_raw (sx, sz)
 				assert (store ~= nil)
 				local id = store:insert_area (v1, v2, sid)
