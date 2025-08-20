@@ -12,7 +12,8 @@ if not core.settings:get_bool('mcl_liquids_enable', false) then
 	mcl_liquids = {
 		liquids_enabled = false,
 		register_liquid = function(def)
-		end
+		end,
+		get_node_level = core.get_node_level,
 	}
 	return
 end
@@ -1351,3 +1352,19 @@ mcl_liquids = {
 	register_liquid = register_liquid,
 	registered_liquids = registered_liquids,
 }
+
+local band = bit.band
+local LIQUID_LEVEL_MASK = 0x7
+
+function mcl_liquids.get_node_level (pos)
+	local cid, _, param2
+		= core.get_node_raw (pos.x, pos.y, pos.z)
+	for _, liquid in ipairs (registered_liquids) do
+		if liquid.cid_source == cid then
+			return 8
+		elseif liquid.cid_flowing == cid then
+			return band (param2, LIQUID_LEVEL_MASK)
+		end
+	end
+	return core.get_node_level (pos)
+end

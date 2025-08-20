@@ -62,7 +62,7 @@ mcl_weather.snow.make_weather_for_player = make_weather_for_player
 
 function mcl_weather.snow.make_weather()
 	for player in mcl_util.connected_players() do
-		local pos = player:get_pos()
+		local pos = mcl_util.get_nodepos (player:get_pos ())
 		if mcl_weather.has_snow(pos) then
 			make_weather_for_player(player)
 		end

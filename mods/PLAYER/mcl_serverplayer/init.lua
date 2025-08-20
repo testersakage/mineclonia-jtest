@@ -92,7 +92,7 @@ end)
 -- Modchannel message definitions.
 -----------------------------------------------------------------------
 
-local MAX_PROTO_VERSION = 1
+local MAX_PROTO_VERSION = 2
 
 -- Serverbound messages.
 local SERVERBOUND_HELLO = 'aa'
@@ -131,6 +131,7 @@ local CLIENTBOUND_VEHICLE_CAPABILITIES = 'AO'
 local CLIENTBOUND_KNOCKBACK = 'AP'
 local CLIENTBOUND_OFFHAND_ITEM = 'AQ' -- Protocol version 1.
 local CLIENTBOUND_PLAYER_VITALS = 'AR'
+local CLIENTBOUND_EFFECT_CTRL = 'AS' -- Protocol version 2.
 
 local MAX_PAYLOAD = 65533
 
@@ -268,6 +269,14 @@ function mcl_serverplayer.send_player_vitals (player, hp, hunger, saturation)
 	})
 end
 
+function mcl_serverplayer.send_effect_ctrl (player, tbl)
+	local payload = core.write_json (tbl)
+	assert (#payload <= MAX_PAYLOAD, "oversized ClientboundEffectCtrl")
+	modchannels[player]:send_all (table.concat {
+		CLIENTBOUND_EFFECT_CTRL, payload,
+	})
+end
+
 -----------------------------------------------------------------------
 -- Handshakes.  When a client joins, it is not considered CSM-enabled
 -- till a SERVERBOUND_HELLO packet is received containing the protocol
@@ -337,6 +346,27 @@ local function process_serverbound_hello (player, state, payload)
 				= mcl_serverplayer.handshake_item_defs
 		else
 			serverbound_handshake.item_defs = nil
+		end
+		if proto >= 2 then
+			serverbound_handshake.map_configuration = {
+				{
+					min = mcl_vars.mg_nether_min,
+					max = mcl_vars.mg_nether_max + 128,
+					dim = "nether",
+				},
+				{
+					min = mcl_vars.mg_overworld_min,
+					max = mcl_vars.mg_overworld_max,
+					dim = "overworld",
+				},
+				{
+					min = mcl_vars.mg_end_min,
+					max = mcl_vars.mg_end_max,
+					dim = "end",
+				},
+			}
+		else
+			serverbound_handshake.map_configuration = nil
 		end
 		local payload = core.write_json (serverbound_handshake)
 		if (#payload % MAX_PAYLOAD) == 0 then
@@ -612,3 +642,4 @@ local modpath = core.get_modpath (core.get_current_modname ())
 dofile (modpath .. "/player.lua")
 dofile (modpath .. "/items.lua")
 dofile (modpath .. "/mount.lua")
+dofile (modpath .. "/effects.lua")

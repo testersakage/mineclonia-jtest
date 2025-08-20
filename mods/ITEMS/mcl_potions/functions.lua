@@ -607,19 +607,20 @@ mcl_potions.register_effect({
 	end,
 	on_start = function(object)
 		if object:is_player () then
-		object:get_meta():set_int("night_vision", 1)
-		mcl_weather.skycolor.update_sky_color({object})
+			object:get_meta():set_int("night_vision", 1)
+			mcl_weather.skycolor.update_sky_color({object})
 		end
 	end,
 	on_load = function(object)
 		if object:is_player () then
-		object:get_meta():set_int("night_vision", 1)
-		mcl_weather.skycolor.update_sky_color({object})
+			object:get_meta():set_int("night_vision", 1)
+			mcl_weather.skycolor.update_sky_color({object})
 		end
 	end,
 	on_step = function(_, object)
-		if object:is_player () then
-		mcl_weather.skycolor.update_sky_color({object})
+		if object:is_player ()
+			and not mcl_serverplayer.is_csm_at_least (object, 2) then
+			mcl_weather.skycolor.update_sky_color({object})
 		end
 	end,
 	on_end = function(object)
