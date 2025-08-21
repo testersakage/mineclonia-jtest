@@ -415,7 +415,7 @@ local cat_full_moon_textures = {
 local cat = table.merge (ocelot, {
 	description = S("Cat"),
 	textures = cat_default_textures,
-	can_despawn = false,
+	can_despawn = true,
 	tamed = false,
 	runaway = false,
 	visual_size = { x = 1.75 * 0.8, y = 1.75 * 0.8, },
@@ -433,6 +433,7 @@ local cat = table.merge (ocelot, {
 	specific_attack = {
 		"mobs_mc:rabbit",
 	},
+	_age = 0.0,
 })
 
 ------------------------------------------------------------------------
@@ -757,6 +758,11 @@ function cat:should_continue_to_attack (object)
 		and mob_class.should_continue_to_attack (self, object)
 end
 
+function cat:ai_step (dtime)
+	ocelot.ai_step (self, dtime)
+	self._age = self._age + dtime
+end
+
 cat.ai_functions = {
 	mob_class.check_frightened,
 	mob_class.sit_if_ordered,
@@ -921,6 +927,15 @@ function cat:on_rightclick (clicker)
 		-- independently of taming.
 		self.persistent = true
 	end
+end
+
+------------------------------------------------------------------------
+-- Cat mechanics.
+------------------------------------------------------------------------
+
+function cat:despawn_allowed ()
+	return self._age > 120
+		and mob_class.despawn_allowed (self)
 end
 
 mcl_mobs.register_mob ("mobs_mc:cat", cat)
