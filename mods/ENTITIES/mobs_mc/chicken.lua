@@ -121,6 +121,10 @@ function chicken:do_custom (dtime)
 			max_hear_distance = 16,
 		}, true)
 	end
+	if self._is_chicken_jockey then
+		self.xp_min = 10
+		self.xp_max = 10
+	end
 end
 
 function chicken:despawn_allowed ()
