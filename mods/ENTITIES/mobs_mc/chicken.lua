@@ -123,6 +123,16 @@ function chicken:do_custom (dtime)
 	end
 end
 
+function chicken:despawn_allowed ()
+	local nametag = self.nametag and self.nametag ~= ""
+	if self._is_chicken_jockey then
+		return not nametag and not self.persistent
+			and not self.tamed
+	else
+		return mob_class.despawn_allowed (self)
+	end
+end
+
 ------------------------------------------------------------------------
 -- Chicken visuals.
 ------------------------------------------------------------------------
