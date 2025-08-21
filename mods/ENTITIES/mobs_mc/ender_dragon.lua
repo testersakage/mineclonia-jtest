@@ -152,7 +152,7 @@ local ZERO_VECTOR = vector.zero ()
 function dragon:restore_portal ()
 	local struct = mcl_structures.registered_structures["end_exit_portal_open"]
 	local pr = PcgRandom (core.get_mapgen_setting("seed"))
-	local podium = mcl_vars.mg_end_exit_portal_pos
+	local podium = mcl_biome_dispatch.get_end_portal_pos ()
 
 	mcl_portals.spawn_gateway_portal ()
 	mcl_structures.place_structure (podium, struct, pr, -1)
