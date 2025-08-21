@@ -15,7 +15,7 @@ local player_props_riding = {
 }
 local player_props_sneaking = {
 	collisionbox = { -0.312, 0, -0.312, 0.312, 1.495, 0.312 },
-	eye_height = 1.27,
+	eye_height = 1.495,
 	nametag_color = { r = 225, b = 225, a = 0, g = 225 }
 }
 local player_props_swimming = {
@@ -379,7 +379,12 @@ mcl_player.register_globalstep(function(player)
 			-- sets eye height, and nametag color accordingly
 			mcl_util.set_properties(player, player_props_elytra)
 		elseif walking and (math.abs(velocity.x) > 0.35 or math.abs(velocity.z) > 0.35) then --walking
-			mcl_util.set_properties(player, player_props_normal)
+			if control.sneak then -- sneak-walking
+				mcl_util.set_properties(player, player_props_sneaking)
+			else
+				mcl_util.set_properties(player, player_props_normal)
+			end
+			
 			set_bone_pos(player,"Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, 0))
 			set_bone_pos(player,"Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
 			local no_arm_moving = core.get_item_group(wielded_itemname, "bow") > 0 or
