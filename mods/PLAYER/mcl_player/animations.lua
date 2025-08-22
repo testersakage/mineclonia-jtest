@@ -15,7 +15,7 @@ local player_props_riding = {
 }
 local player_props_sneaking = {
 	collisionbox = { -0.312, 0, -0.312, 0.312, 1.495, 0.312 },
-	eye_height = 1.495,
+	eye_height = 1.27,
 	nametag_color = { r = 225, b = 225, a = 0, g = 225 }
 }
 local player_props_swimming = {
