@@ -1233,7 +1233,7 @@ local v2 = vector.zero ()
 
 local rng
 
-if mcl_levelgen.levelgen_enabled then
+if mcl_levelgen.levelgen_enabled or mcl_levelgen.enable_ersatz then
 	rng = mcl_levelgen.overworld_preset.factory ("mcl_villages:zombie_villager_spawning")
 	rng = rng:fork_positional ():create_reseedable ()
 end
