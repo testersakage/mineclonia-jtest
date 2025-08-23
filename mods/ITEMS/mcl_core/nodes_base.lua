@@ -24,12 +24,7 @@ core.register_node("mcl_core:stone", {
 	_mcl_hardness = 1.5,
 	_mcl_silk_touch_drop = true,
 	_mcl_cooking_output = "mcl_core:stone_smooth",
-	_mcl_crafting_output = {square2 = {output = "mcl_core:stonebrick 4"}},
-	after_dig_node = function(_, _, _, digger)
-		if awards and awards.unlock and digger and digger:is_player() then
-			awards.unlock(digger:get_player_name(), "mcl:stoneAge")
-		end
-	end,
+	_mcl_crafting_output = {square2 = {output = "mcl_core:stonebrick 4"}}
 })
 
 core.register_node("mcl_core:stone_with_coal", {
@@ -808,12 +803,7 @@ core.register_node("mcl_core:obsidian", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	groups = {pickaxey=5, building_block=1, material_stone=1, unmovable_by_piston = 1},
 	_mcl_blast_resistance = 1200,
-	_mcl_hardness = 50,
-	after_dig_node = function(_, _, _, digger)
-		if awards and awards.unlock and digger and digger:is_player() then
-			awards.unlock(digger:get_player_name(), "mcl:obsidian")
-		end
-	end,
+	_mcl_hardness = 50
 })
 
 core.register_node("mcl_core:crying_obsidian", {
