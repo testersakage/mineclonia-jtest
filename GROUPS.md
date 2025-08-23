@@ -233,6 +233,19 @@ These groups are used mostly for informational purposes
 * `supports_mushrooms=1`: Mushrooms can be placend and stay on this node regardless of light level.
 * `supports_mushrooms=2`: Mushrooms stay on this node regardless of light level but can't be placed directly.
 
+* `jigsaw_preserve_meta=1`: Jigsaw and structure blocks will record
+  the metadata of instances of this node in structure templates.
+* `jigsaw_construct=1`: Jigsaw and structure blocks will invoke this
+  node's on_construct callback when it is placed by templates.
+* `nether_ore_target=1`: Node will be replaced by ores in the Nether
+  when mcl_levelgen is enabled.
+* `stone_ore_target=1`: Node will be replaced by stone-based ores in
+  the Overworld when mcl_levelgen is enabled.
+* `deepslate_ore_target=1`: Node will be replaced by deepslate-based
+  ores in the Overworld when mcl_levelgen is enabled.
+* `features_cannot_replace=1`: Structures and features cannot
+  overwrite this node.  (Pertains to mcl_levelgen.)
+
 ## Fake item groups
 These groups put similar items together which should all be treated by the gameplay or the GUI as a single item.
 You should not add custom items to these groups for no good reason, this is likely to cause a ton of conflicts.
