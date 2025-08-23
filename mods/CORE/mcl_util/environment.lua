@@ -542,7 +542,7 @@ function mcl_util.bypass_buildable_to(func)
 		local p2 = vector.add(p, d)
 		local nn = core.get_node(p2).name
 		local def2 = core.registered_nodes[nn]
-		if def2 and not def2.walkable then
+		if def2 and not (def2.walkable or core.get_item_group(nn, "nonsupporting_node")) then
 			return false
 		end
 		return true

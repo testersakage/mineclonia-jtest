@@ -46,7 +46,7 @@ end
 
 local commdef = {
 	drawtype = "nodebox",
-	walkable = true,
+	walkable = false,
 	selection_box = {
 		type = "fixed",
 		fixed = { -8/16, -8/16, -8/16, 8/16, -6/16, 8/16 },
@@ -55,7 +55,7 @@ local commdef = {
 		type = "fixed",
 		fixed = { -8/16, -8/16, -8/16, 8/16, -6/16, 8/16 },
 	},
-	groups = {dig_immediate = 3, dig_by_water = 1, destroy_by_lava_flow = 1, dig_by_piston = 1, unsticky = 1, attached_node = 1},
+	groups = {dig_immediate = 3, dig_by_water = 1, destroy_by_lava_flow = 1, dig_by_piston = 1, unsticky = 1, attached_node = 1, nonsupporting_node = 1},
 	paramtype = "light",
 	paramtype2 = "4dir",
 	sunlight_propagates = false,

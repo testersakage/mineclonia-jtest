@@ -231,6 +231,7 @@ local groups = {
 	unsticky = 1,
 	attached_node = 1,
 	redstone_comparator = 1,
+	nonsupporting_node = 1,
 }
 
 for _, mode in pairs{"comp", "sub"} do

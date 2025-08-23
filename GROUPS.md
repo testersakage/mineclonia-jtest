@@ -60,6 +60,7 @@ Please read <https://minecraft.wiki/w/Breaking> to learn how digging times work 
 * `can_eat_when_full=1`: Only for foodstuffs. This item can be eaten when the user has a full hunger bar
 * `attached_node_facedir=1`: Like `attached_node`, but for facedir nodes
 * `attached_node_wallmounted=1`: Like `attached_node`, but for wallmounted nodes
+* `nonsupporting_node=1`: Attached nodes cannot be attached to this node
 * `supported_node=1`: Like `attached_node`, but can be placed on any nodes that do not have the `drawtype="airlike"` attribute.
 * `supported_node_facedir=1`: Like `supported_node`, but for facedir nodes
 * `supported_node_wallmounted=1`: Like `supported_node`, but for wallmounted nodes
