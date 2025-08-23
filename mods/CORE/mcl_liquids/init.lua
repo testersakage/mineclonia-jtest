@@ -382,7 +382,7 @@ local function register_liquid(def)
 		elseif level >= 8 then
 			return {
 				name = NAME_FLOWING,
-				param2 = 8,
+				param2 = 15,
 			}
 		elseif level <= 0 then
 			return {
