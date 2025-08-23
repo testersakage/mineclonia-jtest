@@ -64,7 +64,7 @@ local function on_scheduled(pos)
 	else
 		mcl_redstone.swap_node(pos, {name = ndef._mcl_observer_on, param2 = node.param2})
 		set_scheduled_update(pos)
-		mcl_redstone.after(1, function() on_scheduled(pos) end)
+		mcl_redstone.after(2, function() on_scheduled(pos) end)
 	end
 
 	-- TODO/NOTE: Could reorder or place in mcl_redstone.swap_node.
@@ -90,7 +90,7 @@ function mcl_observers.observer_activate(pos)
 
 	if not is_update_scheduled(pos) then
 		set_scheduled_update(pos)
-		mcl_redstone.after(1, function() on_scheduled(vector.copy(pos)) end)	-- TODO: vector.copy probably not needed.
+		mcl_redstone.after(2, function() on_scheduled(vector.copy(pos)) end)	-- TODO: vector.copy probably not needed.
 	end
 end
 
@@ -147,7 +147,7 @@ local commdef_off = table.merge(commdef, {
 
 			if not is_update_scheduled(pos) then
 				set_scheduled_update(pos)
-				mcl_redstone.after(1, function() on_scheduled(pos) end)
+				mcl_redstone.after(2, function() on_scheduled(pos) end)
 			end
 		end,
 	}),
