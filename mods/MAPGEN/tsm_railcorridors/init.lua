@@ -9,7 +9,10 @@ local setting
 -- Probability function
 -- TODO: Check if this is correct
 local function P(float)
-	return math.floor(32767 * float)
+	return math.floor (0x100000000 * float) - 0x80000000
+	-- This is a fix for the different behavior of PseudoRandom and PcgRandom
+	-- The range of the values returned by PseudoRandom:next without arguments is 0-32767,
+	-- while that returned by PcgRandom is -0x80000000 to 0x7fffffff.
 end
 
 -- Minimal and maximal value of path length (forks don't look up this value)
