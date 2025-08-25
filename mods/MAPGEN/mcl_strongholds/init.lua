@@ -30,7 +30,7 @@ local function init_strongholds()
 		local ring = stronghold_rings[s]
 
 		-- Get random angle
-		local angle = pr:next()
+		local angle = pr:next(0, 32767)
 		-- Scale angle to 0 .. 2*math.pi
 		angle = (angle / 32767) * (math.pi*2)
 		for _ = 1, ring.amount do
