@@ -208,6 +208,7 @@ globals = {
 	"mcla_generated_translations",
 	"dbg",
 	"mcl_serverplayer",
+	"mcl_liquids",
 }
 
 read_globals = {
