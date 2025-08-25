@@ -141,7 +141,9 @@ local function update_anvil_slots(meta, player)
 	clear_cost(meta)
 	-- Both input slots occupied
 	if (not input1:is_empty() and not input2:is_empty()) then
-		add_cost(meta, mcl_enchanting.get_prior_work_penalty(input1) + mcl_enchanting.get_prior_work_penalty(input2))
+		local p1 = math.pow (2, mcl_enchanting.get_prior_work_penalty (input1)) - 1
+		local p2 = math.pow (2, mcl_enchanting.get_prior_work_penalty (input2)) - 1
+		add_cost(meta, p1 + p2)
 		-- Repair, if tool
 		local def1 = input1:get_definition()
 		local def2 = input2:get_definition()
@@ -163,8 +165,13 @@ local function update_anvil_slots(meta, player)
 		if can_combine then
 			-- Add tool health together plus a small bonus
 			if def1.type == "tool" and def2.type == "tool" then
-				local new_wear = calculate_repair(input1:get_wear(), input2:get_wear(), SAME_TOOL_REPAIR_BOOST)
+				local wear_1 = input1:get_wear()
+				local new_wear
+					= calculate_repair(wear_1, input2:get_wear(), SAME_TOOL_REPAIR_BOOST)
 				input1:set_wear(new_wear)
+				if wear_1 > new_wear then
+					add_cost (meta, 2)
+				end
 
 				local tooldef = input1:get_definition ()
 				if tooldef and tooldef._on_repair then
@@ -213,12 +220,13 @@ local function update_anvil_slots(meta, player)
 				if has_correct_material and tool:get_wear() > 0 then
 					local materials_used = get_consumed_materials(tool, material)
 					local new_wear = calculate_repair(tool:get_wear(), MAX_WEAR, MATERIAL_TOOL_REPAIR_BOOST[materials_used])
-					add_cost(meta, 2)
+					add_cost(meta, materials_used)
 					tool:set_wear(new_wear)
 					if tooldef and tooldef._on_repair then
 						tooldef._on_repair (tool)
 					end
 					name_item = tool
+					mcl_enchanting.add_prior_work_penalty (name_item)
 					new_output = name_item
 				else
 					new_output = ""
@@ -246,24 +254,23 @@ local function update_anvil_slots(meta, player)
 		if core.get_item_group(name_item:get_name(), "no_rename") == 1 then
 			new_output = ""
 		else
-			if new_name == nil then
-				new_name = ""
-			else
-				add_cost(meta, 1)
-			end
+			local anvilmeta = meta
 			local meta = name_item:get_meta()
 			local old_name = meta:get_string("name")
 			-- Limit name length
 			new_name = string.sub(new_name, 1, MAX_NAME_LENGTH)
 			-- Don't rename if names are identical
 			if new_name ~= old_name then
+				add_cost (anvilmeta, 1)
 				-- Save the raw name internally
 				meta:set_string("name", new_name)
 				-- Rename item handled by tt
 				tt.reload_itemstack_description(name_item)
 				new_output = name_item
-			elseif just_rename then
-				new_output = ""
+			else
+				if just_rename then
+					new_output = ""
+				end
 			end
 		end
 	end
