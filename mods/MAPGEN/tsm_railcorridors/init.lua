@@ -9,10 +9,7 @@ local setting
 -- Probability function
 -- TODO: Check if this is correct
 local function P(float)
-	return math.floor (0x100000000 * float) - 0x80000000
-	-- This is a fix for the different behavior of PseudoRandom and PcgRandom
-	-- The range of the values returned by PseudoRandom:next without arguments is 0-32767,
-	-- while that returned by PcgRandom is -0x80000000 to 0x7fffffff.
+	return math.floor(32767 * float)
 end
 
 -- Minimal and maximal value of path length (forks don't look up this value)
@@ -540,7 +537,7 @@ end
 -- segments: Number of segments successfully placed
 local function dig_corridor_section(start_point, segment_vector, segment_count, wood, post, up_or_down_prev)
 	local p = {x=start_point.x, y=start_point.y, z=start_point.z}
-	local torches = pr:next() < probability_torches_in_segment
+	local torches = pr:next(0, 32767) < probability_torches_in_segment
 	local dir = {0, 0}
 	local torchdir = {1, 1}
 	local node_wood = {name=wood}
@@ -666,10 +663,10 @@ local function create_corridor_section(waypoint, axis, sign, up_or_down, up_or_d
 		minseg = 1
 	end
 	if corridor_dug and not up_or_down then
-		if pr:next() < probability_chest then
+		if pr:next(0, 32767) < probability_chest then
 			chestplace = pr:next(minseg, segcount+1)
 		end
-		if tsm_railcorridors.carts and #tsm_railcorridors.carts > 0 and pr:next() < probability_cart then
+		if tsm_railcorridors.carts and #tsm_railcorridors.carts > 0 and pr:next(0, 32767) < probability_cart then
 			cartplace = pr:next(minseg, segcount+1)
 		end
 	end
@@ -861,7 +858,7 @@ local function create_corridor_line(waypoint, axis, sign, length, wood, post, da
 			ud = false
 		end
 		-- Update next up/down status
-		if pr:next() < probability_up_or_down and i~=1 and not udn and not needs_platform then
+		if pr:next(0, 32767) < probability_up_or_down and i~=1 and not udn and not needs_platform then
 			udn = i < length
 		elseif udn and not needs_platform then
 			udn = false
@@ -876,7 +873,7 @@ local function create_corridor_line(waypoint, axis, sign, length, wood, post, da
 		wp, no_spawner = create_corridor_section(wp,a,s, ud, udn, udp, up, wood, post, first_or_final, damage, no_spawner)
 		if wp == false then return end
 		-- Fork in the road? If so, starts 2-3 new corridor lines and terminates the current one.
-		if wp and pr:next() < probability_fork then
+		if wp and pr:next(0, 32767) < probability_fork then
 			-- 75% chance to fork off in 3 directions (making a crossing)
 			-- 25% chance to fork off in 2 directions (making a t-junction)
 			local is_crossing = pr:next(0, 3) < 3
@@ -997,7 +994,7 @@ local function create_corridor_system(main_cave_coords)
 
 	-- Determine if this corridor system is “damaged” (some rails removed) and to which extent
 	local damage = 0
-	if pr:next() < probability_damage then
+	if pr:next(0, 32767) < probability_damage then
 		damage = pr:next(10, 50)
 	end
 
@@ -1119,7 +1116,7 @@ mcl_mapgen_core.register_generator("railcorridors", nil, function(minp, maxp, bl
 	-- We re-init the randomizer for every mapchunk as we start generating in the middle of each mapchunk.
 	-- We can't use the mapgen seed as this would make the algorithm depending on the order the mapchunk generate.
 	InitRandomizer(blockseed)
-	if minp.y < height_max and maxp.y > height_min and pr:next() < probability_railcaves_in_mapchunk then
+	if minp.y < height_max and maxp.y > height_min and pr:next(0, 32767) < probability_railcaves_in_mapchunk then
 		-- Keep some distance from the upper/lower mapchunk limits
 		local buffer = 5
 
