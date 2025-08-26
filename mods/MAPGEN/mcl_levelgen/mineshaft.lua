@@ -905,6 +905,7 @@ local function build_chains_or_pillars (x, y, z)
 					end
 					break
 				end
+				continue_pillars = progress < 20
 			else
 				continue_pillars = false
 			end
@@ -923,6 +924,7 @@ local function build_chains_or_pillars (x, y, z)
 					end
 					break
 				end
+				continue_chains = progress < 50
 			else
 				continue_chains = false
 			end
