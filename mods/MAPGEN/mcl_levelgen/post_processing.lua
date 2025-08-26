@@ -93,6 +93,13 @@ local function dbgjournal (...)
 	-- print (string.format (...))
 end
 
+local dummy_map_backend_enabled_p
+
+do
+	local settings = Settings (core.get_worldpath () .. "/world.mt")
+	dummy_map_backend_enabled_p = settings:get ("backend") == "dummy"
+end
+
 -- Server-side occlusion culling prevents MapBlocks near the player
 -- from being regenerated, but only applies to MapBlocks that are yet
 -- to be emerged.  Therefore it should be harmless just to disable it.
@@ -383,7 +390,8 @@ local function save_sections ()
 end
 mcl_levelgen.save_sections = save_sections
 
-if not mcl_levelgen.load_feature_environment then
+if not mcl_levelgen.load_feature_environment
+	and not dummy_map_backend_enabled_p then
 	core.register_globalstep (manage_sections)
 	core.register_on_shutdown (save_sections)
 end
@@ -418,7 +426,7 @@ do
 	core.mkdir (journal_dir)
 
 	function open_section_journal (sid)
-		if suppress_journaling then
+		if suppress_journaling or dummy_map_backend_enabled_p then
 			return false
 		end
 		local f = assert (io.open (journal_dir .. sid, "a"))
@@ -442,7 +450,7 @@ do
 	end
 
 	function close_section_journal (sid)
-		if suppress_journaling then
+		if suppress_journaling or dummy_map_backend_enabled_p then
 			return false
 		end
 
@@ -465,7 +473,7 @@ do
 	end
 
 	function mcl_levelgen.journal_append (bx, by, bz, value)
-		if suppress_journaling then
+		if suppress_journaling or dummy_map_backend_enabled_p then
 			return false
 		end
 
@@ -500,7 +508,7 @@ do
 	end
 
 	function journal_size (sid)
-		if suppress_journaling then
+		if suppress_journaling or dummy_map_backend_enabled_p then
 			return 0
 		end
 
@@ -628,6 +636,10 @@ do
 	end
 
 	function mcl_levelgen.restore_journals (blocks_generated)
+		if dummy_map_backend_enabled_p then
+			return false
+		end
+
 		local journals = core.get_dir_list (journal_dir, false)
 		local any_journals = false
 		local to_load = {}
