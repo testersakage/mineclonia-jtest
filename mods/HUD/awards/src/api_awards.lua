@@ -138,7 +138,8 @@ function awards.unlock(name, award)
 			text = background,
 			position = {x = 0.5, y = 0.05},
 			offset = {x = 0, y = 138},
-			alignment = {x = 0, y = -1}
+			alignment = {x = 0, y = -1},
+			z_index = 101,
 		})
         local hud_announce
         if awdef.secret == true then
@@ -158,7 +159,8 @@ function awards.unlock(name, award)
 			text = hud_announce,
 			position = {x = 0.5, y = 0.05},
 			offset = {x = 0, y = 45},
-			alignment = {x = 0, y = -1}
+			alignment = {x = 0, y = -1},
+			z_index = 102,
 		})
 		local three = player:hud_add({
 			type = "text",
@@ -168,7 +170,8 @@ function awards.unlock(name, award)
 			text = title,
 			position = {x = 0.5, y = 0.05},
 			offset = {x = 0, y = 100},
-			alignment = {x = 0, y = -1}
+			alignment = {x = 0, y = -1},
+			z_index = 103,
 		})
 		local four = player:hud_add({
 			type = "image",
@@ -177,7 +180,8 @@ function awards.unlock(name, award)
 			text = icon,
 			position = {x = 0.5, y = 0.05},
 			offset = {x = -200.5, y = 126},
-			alignment = {x = 0, y = -1}
+			alignment = {x = 0, y = -1},
+			z_index = 104,
 		})
 		core.after(4, function()
 			local player2 = core.get_player_by_name(name)
