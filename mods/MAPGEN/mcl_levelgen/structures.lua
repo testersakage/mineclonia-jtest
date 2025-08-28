@@ -2172,6 +2172,7 @@ local function construct_block (x, y, z)
 		x, y, z,
 	}, true)
 end
+mcl_levelgen.construct_block = construct_block
 
 function mcl_levelgen.place_template (template, x, y, z, px, pz, options,
 				      mirroring, rotation, rng)
