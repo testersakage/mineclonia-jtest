@@ -1322,3 +1322,36 @@ mcl_levelgen.register_notification_handler ("mcl_villages:spawn_iron_golem",
 
 core.ipc_set ("mcl_villages:material_substitutions",
 	      mcl_villages.material_substitions) -- XXX: typo...
+
+------------------------------------------------------------------------
+-- POI construction LBMs.
+-- Register LBMs to construct certain types of job site blocks that
+-- were not constructed by previous versions of the level generator.
+------------------------------------------------------------------------
+
+if mcl_levelgen.levelgen_enabled or mcl_levelgen.enable_ersatz then
+	core.register_lbm ({
+		label = "Construct generated POIs with formspecs",
+		name = "mcl_villages:construct_pois",
+		nodenames = {
+			"group:brewing_stand",
+			"group:furnace",
+			"mcl_grindstone:grindstone",
+			"mcl_smithing_table:table",
+			"mcl_stonecutter:stonecutter",
+		},
+		run_at_every_load = true,
+		bulk_action = function (pos_list, _)
+			for _, pos in ipairs (pos_list) do
+				local meta = core.get_meta (pos)
+				if meta:get_string ("formspec") == "" then
+					local node = core.get_node (pos)
+					local def = core.registered_nodes[node.name]
+					if def then
+						def.on_construct (pos)
+					end
+				end
+			end
+		end,
+	})
+end
