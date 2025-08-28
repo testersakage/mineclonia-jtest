@@ -420,6 +420,32 @@ local function instantiate_crops_and_chests (x, y, z, rng, cid_existing,
 	return cid, param2
 end
 
+local poi_nodes_with_formspecs
+
+if mcl_levelgen.is_levelgen_environment then
+	poi_nodes_with_formspecs = mcl_levelgen.construct_cid_list ({
+		"group:brewing_stand",
+		"group:furnace",
+		"group:anvil",
+		"mcl_grindstone:grindstone",
+		"mcl_smithing_table:table",
+		"mcl_stonecutter:stonecutter",
+	})
+else
+	poi_nodes_with_formspecs = {}
+end
+
+local indexof = table.indexof
+local construct_block = mcl_levelgen.construct_block
+
+local function construct_pois_with_formspecs (x, y, z, rng, cid_existing,
+					 param2_existing, cid, param2)
+	if indexof (poi_nodes_with_formspecs, cid) ~= -1 then
+		construct_block (x, y, z)
+	end
+	return cid, param2
+end
+
 local function assemble_crops (village_type, rng)
 	local biome = "plains"
 	if village_type == "desert" then
@@ -454,6 +480,7 @@ end
 local default_village_processor_list = {
 	preserve_grass,
 	instantiate_crops_and_chests,
+	construct_pois_with_formspecs,
 }
 
 local function place_villagers (piece, rng, x1, z1, x2, z2)
@@ -582,6 +609,7 @@ end
 local zombie_village_processor_list = {
 	preserve_grass,
 	instantiate_crops_and_chests,
+	construct_pois_with_formspecs,
 	remove_doors_and_lights,
 	replace_nodes,
 }
