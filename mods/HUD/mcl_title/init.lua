@@ -25,9 +25,9 @@ huds_idx.actionbar = {}
 mcl_title = {}
 mcl_title.defaults = { fadein = 10, stay = 70, fadeout = 20 }
 mcl_title.layout = {}
-mcl_title.layout.title = { position = { x = 0.5, y = 0.5 }, alignment = { x = 0, y = -1.3 }, size = 7 }
-mcl_title.layout.subtitle = { position = { x = 0.5, y = 0.5 }, alignment = { x = 0, y = 1.7 }, size = 4 }
-mcl_title.layout.actionbar = { position = { x = 0.5, y = 1 }, alignment = { x = 0, y = 0 }, size = 1 }
+mcl_title.layout.title = { position = { x = 0.5, y = 0.5, z = 0 }, alignment = { x = 0, y = -1.3, z = 0 }, size = 7 }
+mcl_title.layout.subtitle = { position = { x = 0.5, y = 0.5, z = 0 }, alignment = { x = 0, y = 1.7, z = 0 }, size = 4 }
+mcl_title.layout.actionbar = { position = { x = 0.5, y = 1, z = 0 }, alignment = { x = 0, y = 0, z = 0 }, size = 1 }
 
 local function gametick_to_secondes(gametick)
 	if gametick then
@@ -74,7 +74,7 @@ core.register_on_joinplayer(function(player)
 		alignment     = mcl_title.layout.title.alignment,
 		text          = "",
 		style         = no_style,
-		size          = { x = mcl_title.layout.title.size },
+		size          = { x = mcl_title.layout.title.size, y = mcl_title.layout.title.size, z = mcl_title.layout.title.size },
 		number        = hex_color,
 		z_index       = 100,
 	})
@@ -84,7 +84,7 @@ core.register_on_joinplayer(function(player)
 		alignment     = mcl_title.layout.subtitle.alignment,
 		text          = "",
 		style         = no_style,
-		size          = { x = mcl_title.layout.subtitle.size },
+		size          = { x = mcl_title.layout.subtitle.size, y = mcl_title.layout.subtitle.size, z = mcl_title.layout.subtitle.size },
 		number        = hex_color,
 		z_index       = 100,
 	})
@@ -95,7 +95,7 @@ core.register_on_joinplayer(function(player)
 		alignment     = mcl_title.layout.actionbar.alignment,
 		style         = no_style,
 		text          = "",
-		size          = { x = mcl_title.layout.actionbar.size },
+		size          = { x = mcl_title.layout.actionbar.size, y = mcl_title.layout.actionbar.size, z = mcl_title.layout.actionbar.size },
 		number        = hex_color,
 		z_index       = 100,
 	})
