@@ -258,7 +258,7 @@ for _, mode in pairs{"comp", "sub"} do
 			_doc_items_usagehelp = usagehelp,
 			drawtype = "nodebox",
 			tiles = get_tiles(state, mode),
-			walkable = true,
+			walkable = false, -- Workaround until https://github.com/luanti-org/luanti/issues/16432 is resolved
 			selection_box = collision_box,
 			collision_box = collision_box,
 			node_box = {
