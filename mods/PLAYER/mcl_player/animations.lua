@@ -384,7 +384,7 @@ mcl_player.register_globalstep(function(player)
 			else
 				mcl_util.set_properties(player, player_props_normal)
 			end
-			
+
 			set_bone_pos(player,"Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, 0))
 			set_bone_pos(player,"Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
 			local no_arm_moving = core.get_item_group(wielded_itemname, "bow") > 0 or
