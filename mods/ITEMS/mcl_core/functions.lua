@@ -62,28 +62,30 @@ function mcl_core.grow_cactus(pos, _)
 	end
 end
 
-function mcl_core.grow_reeds(pos, _)
-	pos.y = pos.y-1
-	local name = core.get_node(pos).name
+function mcl_core.grow_reeds(pos, amount)
+	local amount = tonumber(amount) or 1
+	local top_pos = mcl_util.traverse_tower(pos, 1)
+	local bot_pos, height = mcl_util.traverse_tower(top_pos, -1)
+	local ground_pos = vector.offset(bot_pos, 0, -1, 0)
+
+	local name = core.get_node(ground_pos).name
 	if core.get_item_group(name, "soil_sugarcane") ~= 0 then
-		if core.find_node_near(pos, 1, {"group:water"}) == nil and core.find_node_near(pos, 1, {"group:frosted_ice"}) == nil then
-			core.remove_node(vector.offset(pos,0,1,0))
-			core.add_item(vector.offset(pos,0,1,0), "mcl_core:reeds")
-			core.check_for_falling(vector.offset(pos,0,2,0))
-			return
+		if core.find_node_near(ground_pos, 1, {"group:water"}) == nil and core.find_node_near(ground_pos, 1, {"group:frosted_ice"}) == nil then
+			core.remove_node(vector.offset(ground_pos,0,1,0))
+			core.add_item(vector.offset(ground_pos,0,1,0), "mcl_core:reeds")
+			core.check_for_falling(vector.offset(ground_pos,0,2,0))
+			return false
 		end
-		pos.y = pos.y+1
-		local height = 0
-		while core.get_node(pos).name == "mcl_core:reeds" and height < 3 do
-			height = height+1
-			pos.y = pos.y+1
+
+		if height >= 3 then return end
+		amount = math.min(amount, 3 - height)
+
+		for i = top_pos.y, top_pos.y + amount do
+			core.set_node(vector.new(pos.x, i, pos.z), {name="mcl_core:reeds"})
 		end
-		if height < 3 then
-			if core.get_node(pos).name == "air" then
-				core.set_node(pos, {name="mcl_core:reeds"})
-			end
-		end
+		return true
 	end
+	return false
 end
 
 -- ABMs and liquid flow.
