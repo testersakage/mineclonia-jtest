@@ -131,6 +131,10 @@ mcl_death_messages = {
 			plain = NS("@1 was poked to death by a sweet berry bush"),
 			assist = NS("@1 was poked to death by a sweet berry bush whilst trying to escape @2"),
 		},
+		freeze = {
+			plain = NS ("@1 froze to death"),
+			assist = NS ("@1 was frozen to death by @2"),
+		},
 		-- Missing snowballs: The Minecraft wiki mentions them but it doesn't seem like they have a dedicated death message in MC
 	},
 }
