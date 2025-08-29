@@ -588,7 +588,11 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 		_doc_items_usagehelp = usagehelp,
 		_mcl_burntime = 60,
 		inventory_image = inventory_image,
-		liquids_pointable = true,
+		pointabilities = {
+			nodes = {
+				["group:water"] = true,
+			},
+		},
 		groups = { boat = 1, transport = 1},
 		stack_max = 1,
 		on_place = function(itemstack, placer, pointed_thing)

@@ -1981,7 +1981,11 @@ core.register_tool ("mcl_mobs:pathfinder_liquid_stick", {
 	inventory_image = "default_stick.png",
 	groups = { testtool = 1, disable_repair = 1,
 		   not_in_creative_inventory = 1, },
-	liquids_pointable = true,
+	pointabilities = {
+		nodes = {
+			["group:water"] = true,
+		},
+	},
 	on_use = print_node_classification,
 	on_place = pathfind_selected_mob,
 })
@@ -1991,7 +1995,11 @@ core.register_tool ("mcl_mobs:pathfinder_edge_stick", {
 	inventory_image = "default_stick.png",
 	groups = { testtool = 1, disable_repair = 1,
 		   not_in_creative_inventory = 1, },
-	liquids_pointable = true,
+	pointabilities = {
+		nodes = {
+			["group:water"] = true,
+		},
+	},
 	on_use = print_node_neighbors,
 })
 

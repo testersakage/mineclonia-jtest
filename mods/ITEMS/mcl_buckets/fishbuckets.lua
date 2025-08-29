@@ -75,7 +75,6 @@ for techname, fishname in pairs(fish_names) do
 		inventory_image = techname .. "_bucket.png",
 		stack_max = 1,
 		groups = {bucket = 1, fish_bucket = 1},
-		liquids_pointable = false,
 		_mcl_buckets_fish = techname,
 		on_place = on_place_fish,
 		on_secondary_use = on_place_fish,

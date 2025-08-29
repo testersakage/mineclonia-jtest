@@ -164,7 +164,6 @@ core.register_tool("doc_identifier:identifier_solid", {
 	range = 10,
 	wield_image = "doc_identifier_identifier.png",
 	inventory_image = "doc_identifier_identifier.png",
-	liquids_pointable = false,
 	on_use = doc_identifier.identify,
 	on_place = doc_identifier.liquid_mode,
 	on_secondary_use = doc_identifier.liquid_mode,
@@ -177,7 +176,11 @@ core.register_tool("doc_identifier:identifier_liquid", {
 	groups = { not_in_creative_inventory = 1, not_in_craft_guide = 1, disable_repair = 1 },
 	wield_image = "doc_identifier_identifier_liquid.png",
 	inventory_image = "doc_identifier_identifier_liquid.png",
-	liquids_pointable = true,
+	pointabilities = {
+		nodes = {
+			["group:water"] = true,
+		},
+	},
 	on_use = doc_identifier.identify,
 	on_place = doc_identifier.solid_mode,
 	on_secondary_use = doc_identifier.solid_mode,

@@ -80,7 +80,6 @@ core.register_craftitem("mcl_potions:glass_bottle", {
 	inventory_image = "mcl_potions_potion_bottle.png",
 	wield_image = "mcl_potions_potion_bottle.png",
 	groups = {brewitem=1, empty_bottle = 1},
-	liquids_pointable = true,
 	pointabilities = {
 		nodes = {
 			["group:liquid_source"] = true,

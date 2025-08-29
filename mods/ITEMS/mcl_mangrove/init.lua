@@ -262,7 +262,11 @@ local wlroots = {
 	use_texture_alpha = "blend",
 	is_ground_content = false,
 	paramtype = "light",
-	liquids_pointable = true,
+	pointabilities = {
+		nodes = {
+			["group:water"] = true,
+		},
+	},
 	drop = "mcl_mangrove:mangrove_roots",
 	groups = {
 		handy = 1, hoey = 1, water=4, liquid=3, puts_out_fire=1, dig_by_piston = 1, deco_block = 1,  not_in_creative_inventory=1 },

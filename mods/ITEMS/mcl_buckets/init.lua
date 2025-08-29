@@ -230,7 +230,6 @@ function mcl_buckets.register_liquid(def)
 		inventory_image = def.inventory_image,
 		stack_max = 1,
 		groups = def.groups,
-		liquids_pointable = false,
 		on_place = on_place_bucket,
 		on_secondary_use = on_place_bucket,
 		_placement_def = "placeable_on_any_thing",
@@ -259,8 +258,6 @@ core.register_craftitem("mcl_buckets:bucket_empty", {
 	_tt_help = S("Collects liquids"),
 	inventory_image = "bucket.png",
 	stack_max = 16,
-	liquids_pointable = false,
-
 	pointabilities = {
 		nodes = {
 			["group:liquid_source"] = true,

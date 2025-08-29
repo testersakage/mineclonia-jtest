@@ -282,7 +282,11 @@ core.register_node("mcl_flowers:waterlily", {
 	use_texture_alpha = "clip",
 	inventory_image = "flowers_waterlily.png",
 	wield_image = "flowers_waterlily.png",
-	liquids_pointable = true,
+	pointabilities = {
+		nodes = {
+			["group:water"] = true,
+		},
+	},
 	sunlight_propagates = true,
 	groups = {
 		deco_block = 1, plant = 1, compostability = 65, destroy_by_lava_flow = 1,
