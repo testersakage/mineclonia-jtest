@@ -154,6 +154,9 @@ core.register_node("mcl_core:reeds", {
 			end
 		end
 	end,
+	_on_bone_meal = function(_, _, _, pos, _)
+		return mcl_core.grow_reeds(pos, 2)
+	end,
 	_mcl_hardness = 0,
 	_mcl_crafting_output = {
 		single = {output = "mcl_core:sugar"},
