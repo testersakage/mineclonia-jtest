@@ -46,7 +46,7 @@ end
 
 local commdef = {
 	drawtype = "nodebox",
-	walkable = true,
+	walkable = false, -- Workaround until https://github.com/luanti-org/luanti/issues/16432 is resolved
 	selection_box = {
 		type = "fixed",
 		fixed = { -8/16, -8/16, -8/16, 8/16, -6/16, 8/16 },
