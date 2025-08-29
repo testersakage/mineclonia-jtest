@@ -15,12 +15,12 @@ core.register_node("mcl_core:water_flowing", {
 	tiles = {"default_water_flowing_animated.png^[verticalframe:64:0"},
 	special_tiles = {
 		{
-			image = "default_water_flowing_animated.png",
+			name = "default_water_flowing_animated.png",
 			backface_culling=false,
 			animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=4.0}
 		},
 		{
-			image = "default_water_flowing_animated.png",
+			name = "default_water_flowing_animated.png",
 			backface_culling=false,
 			animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=4.0}
 		},
@@ -107,12 +107,12 @@ core.register_node("mcl_core:lava_flowing", {
 	tiles = {"default_lava_flowing_animated.png^[verticalframe:64:0"},
 	special_tiles = {
 		{
-			image = "default_lava_flowing_animated.png",
+			name = "default_lava_flowing_animated.png",
 			backface_culling=false,
 			animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=6.6}
 		},
 		{
-			image = "default_lava_flowing_animated.png",
+			name = "default_lava_flowing_animated.png",
 			backface_culling=false,
 			animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=6.6}
 		},
