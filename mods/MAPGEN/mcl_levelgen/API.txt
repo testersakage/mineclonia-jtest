@@ -1,9 +1,9 @@
 The level generator only exposes interfaces for registering features
 and structures, and does not admit of customization by mods in any
 other respect (e.g. terrain presets, surface systems, aquifers, and
-biome placement).  Moreover, it handles positions in Minecraft's
-coordinate system, which chiefly differs from Luanti's in an
-inverted X axis.
+biome placement).  Moreover, it represents positions in Minecraft's
+coordinate system, which chiefly differs from Luanti's in an inverted
+Z axis.
 
 Mod authors must also be aware that structures and features are liable
 to run in any environment--whether async environments, an emerge
