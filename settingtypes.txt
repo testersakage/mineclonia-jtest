@@ -60,8 +60,17 @@ mcl_superflat_classic (Classic superflat map generation) bool false
 # than a certain period may host randomly generated pillager patrols.
 # In addition, there is an increased chance of a mob's spawning with
 # armor or weapons.
-
 mcl_difficulty (Difficulty) enum normal peaceful,easy,normal,hard
+
+# Whether to disable mcl_levelgen (Mineclonia's custom map generator)
+# when the `singlenode' map generator is enabled.
+#
+# Being a mapgen setting, when configured here it will influence all
+# worlds launched from this Luanti installation or with this
+# minetest.conf in effect, unless another value is specified in
+# map_meta.txt.  This option may be configured for individual worlds
+# by editing map_meta.txt.
+mcl_init_disable_levelgen (Disable custom map generator) bool false
 
 [Players]
 # If enabled, players respawn at the bed they clicked instead of normal spawn.
