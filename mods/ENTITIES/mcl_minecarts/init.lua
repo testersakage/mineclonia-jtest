@@ -290,7 +290,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			if self.name == "mcl_minecarts:minecart" then
 				for mob in core.objects_inside_radius(self.object:get_pos(), 1.3) do
 					local entity = mob:get_luaentity()
-					if entity and entity.is_mob then
+					if entity and entity.is_mob and entity.can_enter_vehicle then
 						self._passenger = entity
 						mob:set_attach(self.object, "", passenger_attach_position, vector.zero())
 						break
