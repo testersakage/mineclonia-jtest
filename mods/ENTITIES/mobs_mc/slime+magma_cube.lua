@@ -317,7 +317,7 @@ slime_tiny.drops = {
 	max = 2,},
 }
 slime_tiny.can_enter_vehicle = true,
-slime_small.movement_speed = 4.0
+slime_tiny.movement_speed = 4.0
 slime_tiny.spawn_small_alternative = nil
 slime_tiny.on_die = nil
 slime_tiny.sound_params.gain = slime_small.sound_params.gain / 3
