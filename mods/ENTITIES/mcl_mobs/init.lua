@@ -200,6 +200,7 @@ mcl_mobs.mob_class = {
 		traveling_to_owner = true,
 	},
 	can_open_doors = false,
+	can_enter_vehicle = true,
 	knockback_resistance = 0.0,
 	can_wield_items = false,
 	wielditem_type = nil,

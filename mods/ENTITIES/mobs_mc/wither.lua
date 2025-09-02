@@ -40,6 +40,7 @@ local wither_def = {
 	jump_height = 10,
 	fly = true,
 	makes_footstep_sound = false,
+	can_enter_vehicle = false,
 	can_despawn = false,
 	drops = {
 		{
