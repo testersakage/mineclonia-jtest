@@ -29,7 +29,6 @@ local bat = {
 	passive = true,
 	hp_min = 6,
 	hp_max = 6,
-	rotate = 180,
 	head_eye_height = 0.45,
 	collisionbox = {-0.25, 0.0, -0.25, 0.25, 0.89, 0.25},
 	visual = "mesh",
@@ -37,7 +36,6 @@ local bat = {
 	textures = {
 		{"mobs_mc_bat.png"},
 	},
-	visual_size = {x=2, y=2},
 	sounds = {
 		random = "mobs_mc_bat_idle",
 		damage = "mobs_mc_bat_hurt",
@@ -46,22 +44,12 @@ local bat = {
 	},
 	movement_speed = 14.0,
 	animation = {
-		stand_speed = 80,
+		stand_speed = 60,
 		stand_start = 0,
 		stand_end = 40,
-		walk_speed = 80,
-		walk_start = 0,
-		walk_end = 40,
-		run_speed = 80,
-		run_start = 0,
-		run_end = 40,
-		die_speed = 60,
-		die_start = 80,
-		die_end = 120,
-		die_loop = false,
-		hang_start = 130,
-		hang_end = 135,
-		hang_speed = 4,
+		hang_start = 60,
+		hang_end = 60,
+		hang_speed = 1,
 	},
 	fall_damage = 0,
 	fly = true,
@@ -110,12 +98,12 @@ function bat:motion_step (dtime, moveresult, self_pos)
 		-- whole.
 		if not is_opaque_solid (abovepos) then
 			self._resting = false
-			self:set_animation ("walk")
+			self:set_animation ("stand")
 		else
 			-- Be startled off by players wihin 4 nodes.
 			for player in mcl_util.connected_players (self_pos, 4) do
 				self._resting = false
-				self:set_animation ("walk")
+				self:set_animation ("stand")
 				break
 			end
 		end
