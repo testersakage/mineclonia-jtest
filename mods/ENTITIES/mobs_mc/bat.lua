@@ -66,6 +66,7 @@ local bat = {
 	fall_damage = 0,
 	fly = true,
 	makes_footstep_sound = false,
+	can_enter_vehicle = false,
 	check_light = check_light,
 	gravity_drag = 0.6,
 	_apply_gravity_drag_on_ground = true,

@@ -51,6 +51,7 @@ local dragon = {
 	persistent = true,
 	fire_resistant = true,
 	is_boss = true,
+	can_enter_vehicle = false,
 	_dragon_parts = {},
 	_tick_time = 0.0,
 	_target_yaw = 0.0,
