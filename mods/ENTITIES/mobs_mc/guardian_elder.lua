@@ -18,6 +18,7 @@ local guardian_elder = table.merge (mobs_mc.guardian, {
 	xp_max = 10,
 	breath_max = -1,
 	passive = false,
+	can_enter_vehicle = false,
 	damage = 8,
 	movement_speed = 6.0,
 	_default_laser_delay = 3.0,

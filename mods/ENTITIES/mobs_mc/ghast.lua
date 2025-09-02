@@ -72,6 +72,7 @@ local ghast = {
 	-- True flight.
 	motion_step = mob_class.flying_step,
 	makes_footstep_sound = false,
+	can_enter_vehicle = false,
 	instant_death = true,
 	fire_resistant = true,
 	fire_damage = 0,

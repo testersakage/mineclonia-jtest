@@ -17,6 +17,7 @@ local cod = {
 	_spawn_category = "water_ambient",
 	can_despawn = true,
 	passive = true,
+	can_enter_vehicle = false,
 	hp_min = 3,
 	hp_max = 3,
 	xp_min = 1,

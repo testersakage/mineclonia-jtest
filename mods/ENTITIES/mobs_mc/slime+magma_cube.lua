@@ -228,6 +228,7 @@ local slime_big = {
 	visual = "mesh",
 	mesh = "mobs_mc_slime.b3d",
 	makes_footstep_sound = true,
+	can_enter_vehicle = false,
 	does_not_prevent_sleep = true,
 	sounds = {
 		jump = "green_slime_jump",
@@ -315,6 +316,7 @@ slime_tiny.drops = {
 	min = 0,
 	max = 2,},
 }
+slime_tiny.can_enter_vehicle = true,
 slime_small.movement_speed = 4.0
 slime_tiny.spawn_small_alternative = nil
 slime_tiny.on_die = nil
