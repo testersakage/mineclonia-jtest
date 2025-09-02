@@ -66,6 +66,7 @@ local spider = {
 	},
 	visual_size = {x=1, y=1},
 	makes_footstep_sound = false,
+	can_enter_vehicle = false,
 	sounds = {
 		random = "mobs_mc_spider_random",
 		attack = "mobs_mc_spider_attack",
