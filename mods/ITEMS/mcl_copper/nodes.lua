@@ -11,6 +11,23 @@ local function on_lightning_strike(pos, _, pos2)
 	core.swap_node(pos, node)
 end
 
+local function bulb_connects_to()
+	return true
+end
+
+local function bulb_update(pos, node)
+	local oldpowered = node.param2 ~= 0
+	local powered  = mcl_redstone.get_power(pos) ~= 0
+	local newname = node.name
+	if powered and not oldpowered then
+		newname = core.registered_nodes[node.name]._mcl_copper_bulb_switch_to
+	end
+	return {
+		name = newname,
+		param2 = powered and 1 or 0,
+	}
+end
+
 core.register_node("mcl_copper:stone_with_copper", {
 	description = S("Copper Ore"),
 	_doc_items_longdesc = S("Some copper contained in stone, it is pretty common and can be found below sea level."),
@@ -116,22 +133,6 @@ for n, desc in pairs(n_desc) do
 		_mcl_hardness = 3,
 		_mcl_stonecutter_recipes = { "mcl_copper:block"..n }
 	})
-
-	local function bulb_connects_to(node, dir)
-		return true
-	end
-	local function bulb_update(pos, node)
-		local oldpowered = node.param2 ~= 0
-		local powered  = mcl_redstone.get_power(pos) ~= 0
-		local newname = node.name
-		if powered and not oldpowered then
-			newname = core.registered_nodes[node.name]._mcl_copper_bulb_switch_to
-		end
-		return {
-			name = newname,
-			param2 = powered and 1 or 0,
-		}
-	end
 
 	core.register_node("mcl_copper:bulb"..n.."_on", {
 		description = D(desc .. "Copper Bulb On"),
