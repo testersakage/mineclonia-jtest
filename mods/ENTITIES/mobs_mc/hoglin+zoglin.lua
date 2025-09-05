@@ -40,6 +40,7 @@ local hoglin = {
 		distance = 16,
 	},
 	makes_footstep_sound = true,
+	can_ride_boat = false,
 	movement_speed = 6.0,
 	knockback_resistance = 0.6,
 	damage = 6,
@@ -407,6 +408,7 @@ end
 
 function hoglin:on_grown ()
 	mcl_util.replace_mob (self.object, "mobs_mc:hoglin")
+	self.object:set_detach ()
 end
 
 ------------------------------------------------------------------------
@@ -463,6 +465,7 @@ mcl_mobs.register_mob("mobs_mc:baby_hoglin", table.merge (hoglin, {
 	damage = 0.5,
 	melee_interval = 0.75,
 	_convert_to = "mobs_mc:baby_zoglin",
+	can_ride_boat = true,
 }))
 
 ------------------------------------------------------------------------
@@ -582,6 +585,7 @@ local baby_zoglin = table.merge (hoglin, {
 	reach = 1.0,
 	damage = 0.5,
 	melee_interval = 0.75,
+	can_ride_boat = true,
 	description = S("Zoglin"),
 	fire_resistant = 1,
 	textures = {"extra_mobs_zoglin.png"},
