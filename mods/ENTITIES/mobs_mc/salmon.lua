@@ -54,7 +54,7 @@ local salmon = {
 	runaway_view_range = 8,
 	visual_size = {x=3, y=3},
 	makes_footstep_sound = false,
-	can_enter_vehicle = false,
+	can_ride_boat = false,
 	swims = true,
 	pace_height = 1.0,
 	do_go_pos = mob_class.fish_do_go_pos,
