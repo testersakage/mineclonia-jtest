@@ -148,6 +148,7 @@ local horse = {
 	xp_max = 3,
 	floats = 1,
 	makes_footstep_sound = true,
+	can_ride_boat = false,
 	jump = true,
 	drops = {
 		{
@@ -983,6 +984,8 @@ end
 
 function horse:on_grown ()
 	self:init_attachment_position ()
+	self.can_ride_boat = false
+	self.object:set_detach ()
 end
 
 function horse:on_breed (parent1, parent2)
@@ -1028,6 +1031,7 @@ function horse:on_breed (parent1, parent2)
 		ent_c._naked_texture = child_texture
 		ent_c:set_textures (ent_c.base_texture)
 		ent_c:derive_child_properties (parent1, parent2)
+		ent_c.can_ride_boat = true
 
 		return false
 	end
