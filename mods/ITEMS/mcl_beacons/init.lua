@@ -227,9 +227,7 @@ local function distance_max (a, b)
 	return math.max (dx, dz, -dx, -dz)
 end
 
-local function effect_player(effect, pos, power_level, effect_level,player)
-	local distance = distance_max (player:get_pos(), pos)
-	if distance > (power_level+1)*10 then return end
+local function effect_player (effect, power_level, effect_level,player)
 	mcl_potions.give_effect_by_level (effect, player, effect_level, 16)
 end
 
@@ -251,15 +249,18 @@ local function apply_effects_to_all_players(pos)
 	end
 
 	local beacon_distance = (power_level + 1) * 10
+	local dim = mcl_worlds.pos_to_dimension (pos)
 
 	for player in mcl_util.connected_players () do
-		if distance_max (pos, player:get_pos()) <= beacon_distance then
+		local self_pos = player:get_pos ()
+		if distance_max (pos, self_pos) <= beacon_distance
+			and mcl_worlds.pos_to_dimension (self_pos) == dim then
 			if not clear_obstructed_beam (pos) then
 				if effect_string and effect_string ~= "" then
-					effect_player (effect_string, pos, power_level, effect_level, player)
+					effect_player (effect_string, power_level, effect_level, player)
 				end
 				if secondary and secondary ~= "" and power_level == 4 then
-					effect_player (secondary, pos, power_level, 1, player)
+					effect_player (secondary, power_level, 1, player)
 				end
 			end
 		end
