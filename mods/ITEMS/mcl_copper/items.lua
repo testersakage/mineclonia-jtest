@@ -6,6 +6,7 @@ core.register_craftitem("mcl_copper:copper_ingot", {
 	inventory_image = "mcl_copper_ingot.png",
 	groups = { craftitem = 1 },
 	_mcl_armor_trim_color = "#c36447",
+	_mcl_armor_trim_desc = "Copper",
 	_mcl_crafting_output = {
 		line_tall3 = {output = "mcl_lightning_rods:rod"},
 		square3 = {output = "mcl_copper:block"}

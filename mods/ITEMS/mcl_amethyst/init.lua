@@ -36,6 +36,7 @@ core.register_craftitem("mcl_amethyst:amethyst_shard",{
 	inventory_image = "mcl_amethyst_amethyst_shard.png",
 	groups = {craftitem = 1},
 	_mcl_armor_trim_color = "#8246a5",
+	_mcl_armor_trim_desc = "Amethyst",
 	_mcl_crafting_output = {square2 = {output = "mcl_amethyst:amethyst_block"}}
 })
 
