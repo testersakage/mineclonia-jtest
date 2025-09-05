@@ -38,7 +38,7 @@ local squid = {
 	},
 	visual_size = { x = 3, y = 3 },
 	makes_footstep_sound = false,
-	can_enter_vehicle = false,
+	can_ride_boat = false,
 	movement_speed = 14,
 	breathes_in_water = true,
 	runaway = false,
