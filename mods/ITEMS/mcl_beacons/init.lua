@@ -221,8 +221,14 @@ local function clear_obstructed_beam(pos)
 	return false
 end
 
+local function distance_max (a, b)
+	local dx = b.x - a.x
+	local dz = b.z - a.z
+	return math.max (dx, dz, -dx, -dz)
+end
+
 local function effect_player(effect, pos, power_level, effect_level,player)
-	local distance =  vector.distance(player:get_pos(), pos)
+	local distance = distance_max (player:get_pos(), pos)
 	if distance > (power_level+1)*10 then return end
 	mcl_potions.give_effect_by_level (effect, player, effect_level, 16)
 end
@@ -246,8 +252,8 @@ local function apply_effects_to_all_players(pos)
 
 	local beacon_distance = (power_level + 1) * 10
 
-	for player in mcl_util.connected_players(pos, beacon_distance) do
-		if vector.distance(pos, player:get_pos()) <= beacon_distance then
+	for player in mcl_util.connected_players () do
+		if distance_max (pos, player:get_pos()) <= beacon_distance then
 			if not clear_obstructed_beam (pos) then
 				if effect_string and effect_string ~= "" then
 					effect_player (effect_string, pos, power_level, effect_level, player)
