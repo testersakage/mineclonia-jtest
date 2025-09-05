@@ -34,6 +34,7 @@ local polar_bear = {
 	head_yaw = "z",
 	visual_size = {x=3.0, y=3.0},
 	makes_footstep_sound = true,
+	can_ride_boat = false,
 	_mcl_freeze_damage = 0,
 	damage = 6,
 	reach = 2,
@@ -94,6 +95,7 @@ function polar_bear.spawn_group_member_data (idx)
 	if idx == 2 then
 		return core.serialize ({
 			child = true,
+			can_ride_boat = true,
 		})
 	end
 	return nil
@@ -319,6 +321,7 @@ function polar_bear_spawner:spawn (spawn_pos, idx, sdata, pack_size)
 	if idx == 2 then
 		sdata = {
 			child = true,
+			can_ride_boat = true,
 		}
 	end
 	return default_spawner.spawn (self, spawn_pos, idx, sdata, pack_size)
