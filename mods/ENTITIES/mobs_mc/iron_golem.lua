@@ -39,7 +39,8 @@ local golem = {
 	},
 	visual_size = {x=3, y=3},
 	makes_footstep_sound = true,
-	can_enter_vehicle = false,
+	can_ride_cart = false,
+	can_ride_boat = false,
 	sounds = {
 		damage = "mobs_mc_iron_golem_hurt"
 	},
