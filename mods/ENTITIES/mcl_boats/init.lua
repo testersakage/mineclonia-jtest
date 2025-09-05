@@ -400,7 +400,7 @@ function boat:on_step(dtime, moveresult)
 
 		for obj in core.objects_inside_radius(self.object:get_pos(), 1.3) do
 			local entity = obj:get_luaentity()
-			if entity and entity.is_mob and entity.can_enter_vehicle then
+			if entity and entity.is_mob and entity.can_ride_boat then
 				attach_object(self, obj)
 				break
 			end
