@@ -421,6 +421,14 @@ local cat = table.merge (ocelot, {
 	visual_size = { x = 1.75 * 0.8, y = 1.75 * 0.8, },
 	chase_owner_distance = 10.0,
 	stop_chasing_distance = 5.0,
+	drops = {
+		{
+			name = "mcl_mobitems:string",
+			chance = 1,
+			min = 0,
+			max = 2,
+		},
+	},
 	sounds = {
 		random = "mobs_mc_cat_idle",
 		damage = "mobs_mc_cat_hiss",
