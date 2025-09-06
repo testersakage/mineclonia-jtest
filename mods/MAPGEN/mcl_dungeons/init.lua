@@ -45,7 +45,7 @@ local loottable =
 		stacks_max = 3,
 		items = {
 			{ itemstring = "mcl_mobitems:nametag", weight = 20 },
-			{ itemstring = "mcl_mobitems:saddle", weight = 20 },
+			{ itemstring = "mcl_mobitems:leather", weight = 20, amount_min = 1, amount_max = 5 },
 			{ itemstring = "mcl_jukebox:record_1", weight = 15 },
 			{ itemstring = "mcl_jukebox:record_4", weight = 15 },
 			{ itemstring = "mcl_jukebox:record_5", weight = 3 },

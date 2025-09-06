@@ -67,7 +67,7 @@ mcl_structures.register_structure("desert_temple",{
 				{ itemstring = "mcl_books:book", weight = 20, func = function(stack, pr)
 					mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr)
 				end },
-				{ itemstring = "mcl_mobitems:saddle", weight = 20, },
+				{ itemstring = "mcl_mobitems:leather", weight = 20, amount_min = 1, amount_max = 5 },
 				{ itemstring = "mcl_core:apple_gold", weight = 20, },
 				{ itemstring = "mcl_core:gold_ingot", weight = 15, amount_min = 2, amount_max = 7 },
 				{ itemstring = "mcl_core:iron_ingot", weight = 15, amount_min = 1, amount_max = 5 },

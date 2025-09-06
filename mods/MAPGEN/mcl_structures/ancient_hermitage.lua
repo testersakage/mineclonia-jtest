@@ -53,7 +53,7 @@ mcl_structures.register_structure("ancient_hermitage",{
 
 				--{ itemstring = "mcl_mobitems:LEAD", weight = 2, amount_min = 1, amount_max = 1 },
 				{ itemstring = "mcl_mobitems:nametag", weight = 2, amount_min = 1, amount_max = 3 },
-				{ itemstring = "mcl_mobitems:saddle", weight = 2, amount_min = 1, amount_max = 1 },
+				{ itemstring = "mcl_mobitems:leather", weight = 2, amount_min = 1, amount_max = 5 },
 
 				{ itemstring = "mcl_farming:hoe_diamond", weight = 2, amount_min = 1, amount_max = 1 },
 				{ itemstring = "mcl_mobitems:diamond_horse_armor", weight = 2 },

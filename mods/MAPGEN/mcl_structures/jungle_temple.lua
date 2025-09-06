@@ -27,7 +27,7 @@ mcl_structures.register_structure("jungle_temple",{
 				{ itemstring = "mcl_bamboo:bamboo", weight = 15, amount_min = 1, amount_max=3 },
 				{ itemstring = "mcl_core:iron_ingot", weight = 15, amount_min = 1, amount_max = 5 },
 				{ itemstring = "mcl_core:diamond", weight = 3, amount_min = 1, amount_max = 3 },
-				{ itemstring = "mcl_mobitems:saddle", weight = 3, },
+				{ itemstring = "mcl_mobitems:leather", weight = 3, amount_min = 1, amount_max = 5 },
 				{ itemstring = "mcl_core:emerald", weight = 2, amount_min = 1, amount_max = 3 },
 				{ itemstring = "mcl_books:book", weight = 1, func = function(stack, pr)
 					mcl_enchanting.enchant_uniform_randomly(stack, {"soul_speed"}, pr)
