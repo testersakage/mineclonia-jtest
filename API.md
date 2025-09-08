@@ -39,6 +39,10 @@ Items can have these fields:
   example.
 * `_mcl_armor_trim_color`: _colorstring_ used to determine the color that will be
   applied during armor trimming when used in the smithing table.
+* `_mcl_armor_trim_desc`: _string_ used to describe the material used when trimming
+  armor pieces. This string must be translated in the field definition so that it
+  can be displayed translated in the final item. Examples of this definition can be
+  found in `mcl_amethyst/init.lua` or `_mcl_core/craftitems.lua`.
 * `_mcl_burntime`: _number_ that determines, in ticks, the amount of time an item
   burns when used in furnaces, blast furnaces and smokers. Examples can be found
   in `mcl_core/craftitems.lua`.
