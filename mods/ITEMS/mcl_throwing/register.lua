@@ -193,10 +193,8 @@ local function check_gateway_teleportation (self, pos, lastpos)
 			local node = core.get_node (hitpoint.under)
 			local player = self._thrower
 				and core.get_player_by_name (self._thrower)
-			if node.name == "mcl_portals:portal_gateway" then
-				if player then
-					mcl_portals.gateway_teleport (hitpoint.under, player)
-				end
+			if node.name == "mcl_portals:portal_gateway"
+				and player and mcl_portals.gateway_teleport (hitpoint.under, player) then
 				self.object:remove ()
 				return true
 			end

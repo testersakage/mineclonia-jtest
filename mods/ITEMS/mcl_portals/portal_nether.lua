@@ -385,7 +385,7 @@ end
 local function finalize_teleport(obj, pos, old_param2, new_param2)
 	-- Adjust the player's look direction depending on the relative
 	-- direction of the portals.
-	if obj:is_player() then
+	if obj:is_player() and old_param2 and new_param2 then
 		local new_look = (old_param2 - new_param2 + 2) * math.pi / 2
 		obj:set_look_horizontal(obj:get_look_horizontal() + new_look)
 	end
@@ -455,6 +455,39 @@ local function portal_distance(a, b)
 	return math.max(math.abs(a.x - b.x), math.abs(a.z - b.z))
 end
 
+-- Get the target dimension and coordinate from portal located at position.
+-- Returns (dimension, position).
+local function get_teleport_target(pos)
+	local dim = mcl_worlds.pos_to_dimension(pos)
+	if dim == "overworld" then
+		return "nether", vector.new(overworld_to_nether(pos.x), 0, overworld_to_nether(pos.z)):round()
+	elseif dim == "nether" then
+		return "overworld", vector.new(nether_to_overworld(pos.x), 0, nether_to_overworld(pos.z)):round()
+	end
+end
+
+-- Get portal nearby position in dimension or nil.
+local function get_linked_portal(dim, pos)
+	local portals = get_portals(dim)
+
+	table.sort(portals, function(a, b)
+		return portal_distance(a, pos) < portal_distance(b, pos)
+	end)
+
+	for _, portal in pairs(portals) do
+		if portal_distance(portal, pos) > link_distance[dim] then
+			return
+		end
+
+		-- Check that it is still a portal (not destroyed).
+		if get_portal(portal) then
+			return portal
+		else
+			unregister_portal(portal)
+		end
+	end
+end
+
 -- Scan emerged area and build a portal at a suitable spot. If no suitable spot
 -- is found, then it will build the portal at a random location.
 local function portal_emerge_area (player, param)
@@ -469,6 +502,17 @@ local function portal_emerge_area (player, param)
 	local param2 = param.param2
 	local obj = param.obj
 	local player_name = obj:get_player_name()
+
+	-- Use any portal that has already have been created by a
+	-- previous emerge operation.
+	do
+		local linked_portal = get_linked_portal (dim, target)
+		if linked_portal then
+			core.load_area (linked_portal, linked_portal)
+			finalize_teleport (obj, linked_portal, nil, nil)
+			return
+		end
+	end
 
 	-- Since there is a significant delay until the callback is run, we do
 	-- another check if the player is still standing in the portal.
@@ -521,39 +565,6 @@ local function portal_emerge_area (player, param)
 	teleport_finished(obj)
 end
 
--- Get the target dimension and coordinate from portal located at position.
--- Returns (dimension, position).
-local function get_teleport_target(pos)
-	local dim = mcl_worlds.pos_to_dimension(pos)
-	if dim == "overworld" then
-		return "nether", vector.new(overworld_to_nether(pos.x), 0, overworld_to_nether(pos.z)):round()
-	elseif dim == "nether" then
-		return "overworld", vector.new(nether_to_overworld(pos.x), 0, nether_to_overworld(pos.z)):round()
-	end
-end
-
--- Get portal nearby position in dimension or nil.
-local function get_linked_portal(dim, pos)
-	local portals = get_portals(dim)
-
-	table.sort(portals, function(a, b)
-		return portal_distance(a, pos) < portal_distance(b, pos)
-	end)
-
-	for _, portal in pairs(portals) do
-		if portal_distance(portal, pos) > link_distance[dim] then
-			return
-		end
-
-		-- Check that it is still a portal (not destroyed).
-		if get_portal(portal) then
-			return portal
-		else
-			unregister_portal(portal)
-		end
-	end
-end
-
 local function teleport(obj)
 	local portal, node = in_portal(obj)
 	if not portal or portal_cooloff[obj] then
@@ -564,6 +575,10 @@ local function teleport(obj)
 	if not portals[dim] then
 		return
 	end
+	-- Don't attempt to teleport an attached object.
+	if not mcl_portals.object_teleport_allowed (obj) then
+		return
+	end
 
 	register_portal(portal) -- Register portal if not already registered.
 	portal_cooloff[obj] = true
@@ -572,7 +587,7 @@ local function teleport(obj)
 	if linked_portal then
 		local linked_node = core.get_node(linked_portal)
 		finalize_teleport(obj, linked_portal, node.param2, linked_node.param2) ---@diagnostic disable-line: need-check-nil
-	elseif obj:is_player() then -- Generate portal and teleport.
+	elseif not obj:get_attach () then
 		local param2 = node.param2 ---@diagnostic disable-line: need-check-nil
 		local y_min = search_y_min[dim]
 		local y_max = search_y_max[dim]

@@ -272,51 +272,58 @@ local function end_teleport_entry_cb (player, data)
 	end
 end
 
+local function end_portal_teleport_1 (obj)
+	if not mcl_levelgen.levelgen_enabled then
+		local lua_entity = obj:get_luaentity()
+		if obj:is_player() or lua_entity then
+			local objpos = obj:get_pos()
+			if objpos == nil then
+				return
+			end
+
+			-- Check if object is actually in portal.
+			objpos.y = math.ceil(objpos.y)
+			if core.get_node(objpos).name ~= "mcl_portals:portal_end" then
+				return
+			end
+
+			if obj:is_player() and mcl_player.players[obj].attached == true then --luacheck: ignore 542 (empty if branch)
+				-- do nothing if player is attached to something in portal
+			else
+				mcl_portals.end_teleport(obj, objpos)
+				awards.unlock(obj:get_player_name(), "mcl:enterEndPortal")
+			end
+		end
+	else
+		local pos = obj:get_pos ()
+		local dim = mcl_levelgen.dimension_at_layer (pos.y)
+		if dim.id == "mcl_levelgen:end" then
+			local spawn = obj:is_player ()
+				and mcl_spawn.get_player_spawn_pos (obj)
+				or mcl_spawn.get_world_spawn_pos (obj)
+			if mcl_biome_dispatch.is_limbo_pos (spawn) then
+				obj:set_pos (spawn)
+			else
+				local v1 = vector.offset (spawn, -64, -64, -64)
+				local v2 = vector.offset (spawn, 64, 64, 64)
+				mcl_biome_dispatch.teleport_with_emerge (obj, v1, v2, S ("Leaving the End"),
+									 end_teleport_cb, spawn)
+			end
+		else
+			local v1 = vector.offset (mcl_vars.mg_end_exit_portal_pos,
+						  -128, -128, -128)
+			local v2 = vector.offset (mcl_vars.mg_end_exit_portal_pos,
+						  128, 128, 128)
+			mcl_biome_dispatch.teleport_with_emerge (obj, v1, v2, S ("Entering the End"),
+								 end_teleport_entry_cb)
+		end
+	end
+end
+
 function mcl_portals.end_portal_teleport(pos)
 	for obj in core.objects_inside_radius(pos, 1) do
-		if not mcl_levelgen.levelgen_enabled then
-			local lua_entity = obj:get_luaentity()
-			if obj:is_player() or lua_entity then
-				local objpos = obj:get_pos()
-				if objpos == nil then
-					return
-				end
-
-				-- Check if object is actually in portal.
-				objpos.y = math.ceil(objpos.y)
-				if core.get_node(objpos).name ~= "mcl_portals:portal_end" then
-					return
-				end
-
-				if obj:is_player() and mcl_player.players[obj].attached == true then --luacheck: ignore 542 (empty if branch)
-					-- do nothing if player is attached to something in portal
-				else
-					mcl_portals.end_teleport(obj, objpos)
-					awards.unlock(obj:get_player_name(), "mcl:enterEndPortal")
-				end
-			end
-		elseif obj:is_player () then
-			-- TODO: teleporting non-player entities to/from the End.
-			local pos = obj:get_pos ()
-			local dim = mcl_levelgen.dimension_at_layer (pos.y)
-			if dim.id == "mcl_levelgen:end" then
-				local spawn = mcl_spawn.get_player_spawn_pos (obj)
-				if mcl_biome_dispatch.is_limbo_pos (spawn) then
-					obj:set_pos (spawn)
-				else
-					local v1 = vector.offset (spawn, -64, -64, -64)
-					local v2 = vector.offset (spawn, 64, 64, 64)
-					mcl_biome_dispatch.teleport_with_emerge (obj, v1, v2, S ("Leaving the End"),
-										 end_teleport_cb, spawn)
-				end
-			else
-				local v1 = vector.offset (mcl_vars.mg_end_exit_portal_pos,
-							  -128, -128, -128)
-				local v2 = vector.offset (mcl_vars.mg_end_exit_portal_pos,
-							  128, 128, 128)
-				mcl_biome_dispatch.teleport_with_emerge (obj, v1, v2, S ("Entering the End"),
-									 end_teleport_entry_cb)
-			end
+		if mcl_portals.object_teleport_allowed (obj) then
+			end_portal_teleport_1 (obj)
 		end
 	end
 end
