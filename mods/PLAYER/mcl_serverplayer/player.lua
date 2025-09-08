@@ -236,6 +236,9 @@ function mcl_serverplayer.init_player (client_state, player)
 			biome_sky_color = get_biome_sky_color (node_pos),
 			biome_fog_color = get_biome_fog_color (node_pos),
 			weather_state = mcl_weather.state,
+			moon_texture = client_state.proto >= 3
+				and mcl_moon.get_moon_texture ()
+				or nil,
 		})
 		mcl_serverplayer.send_effect_ctrl (player, initial)
 	end
