@@ -547,7 +547,7 @@ local function respawn_set_pos (player, _)
 	player:set_pos (pos)
 end
 
-function mcl_biome_dispatch.next_respawn_position (player)
+function mcl_biome_dispatch.next_respawn_position (obj)
 	local spawn_pos = mcl_biome_dispatch.get_spawn_point_2d ()
 	local spawn_radius = tonumber (core.settings:get ("mcl_spawn_radius")) or 24
 	local dim = get_dimension ("mcl_levelgen:overworld")
@@ -557,19 +557,14 @@ function mcl_biome_dispatch.next_respawn_position (player)
 	v2.y = dim.y_max
 	if not mcl_levelgen.is_area_fully_regenerated (dim, v1.x, v1.y, v1.z,
 						       v2.x, v2.y, v2.z) then
-		if not player then
+		if not obj then
 			return LIMBO_POSITION
 		end
-		return mcl_biome_dispatch.emerged_teleport_prepare (player,
+		return mcl_biome_dispatch.emerged_teleport_prepare (obj,
 								    v1, v2,
 								    nil,
 								    respawn_set_pos,
 								    nil)
-	end
-
-	if player then
-		local meta = player:get_meta ()
-		meta:set_int ("mcl_biome_dispatch:in_spawn_limbo", 0)
 	end
 
 	local diameter = spawn_radius * 2 + 1
@@ -651,10 +646,11 @@ end
 -- Portals & respawning mechanics.
 ------------------------------------------------------------------------
 
+local insert = table.insert
 local mathmin = math.min
 -- local mathmax = math.max
 
-local players_in_limbo = {}
+local objects_in_limbo = {}
 
 -- Players that are teleporting to an ungenerated area are held in a
 -- ``limbo'' between dimensions until such time as their destination
@@ -672,13 +668,29 @@ bgcolor[;true;]
 background[-10,-10;0,0;mcl_biome_dispatch_transition_bkg.png;true]
 ]]
 
+local limbo_forceloaded
+
+local function toggle_forceload ()
+	if next (objects_in_limbo, nil) then
+		if not limbo_forceloaded then
+			if core.forceload_block (LIMBO_POSITION, true) then
+				limbo_forceloaded = true
+			end
+		end
+	elseif limbo_forceloaded then
+		limbo_forceloaded = false
+		core.forceload_free_block (LIMBO_POSITION)
+	end
+end
+
 local function limbo_cancel (player, limbo, no_teleport)
 	if not no_teleport then
 		player:set_pos (limbo.src_pos)
 	end
-	players_in_limbo[player] = nil
+	objects_in_limbo[player] = nil
 	core.close_formspec (player:get_player_name (),
 			     "mcl_biome_dispatch:limbo_formspec")
+	toggle_forceload ()
 end
 
 local function limbo_callback (progress, player, limbo_in)
@@ -686,7 +698,7 @@ local function limbo_callback (progress, player, limbo_in)
 	local total_regen = progress.total_regen
 	local n_emerged = progress.n_emerged
 	local total_emerge = progress.total_emerge
-	local limbo = players_in_limbo[player]
+	local limbo = objects_in_limbo[player]
 	if limbo ~= limbo_in then
 		return false
 	end
@@ -694,7 +706,7 @@ local function limbo_callback (progress, player, limbo_in)
 	if n_regen == total_regen and n_emerged == total_emerge then
 		limbo.callback (player, limbo.data)
 		limbo_cancel (player, limbo, true)
-	else
+	elseif player:is_player () then
 		local text = limbo.text
 		local progress_load
 			= mathmin (100, floor (n_emerged / total_emerge * 100))
@@ -737,13 +749,13 @@ local function limbo_restore (player, limbo)
 end
 
 core.register_on_leaveplayer (function (player)
-	if players_in_limbo[player] then
-		limbo_cancel (player, players_in_limbo[player])
+	if objects_in_limbo[player] then
+		limbo_cancel (player, objects_in_limbo[player])
 	end
 end)
 
 core.register_on_shutdown (function ()
-	for player, limbo in pairs (players_in_limbo) do
+	for player, limbo in pairs (objects_in_limbo) do
 		limbo_cancel (player, limbo)
 	end
 end)
@@ -760,8 +772,8 @@ function mcl_biome_dispatch.emerged_teleport_prepare (player, v1, v2, msg, callb
 				  {callback, player, data,})
 		return player:get_pos ()
 	end
-	if players_in_limbo[player] then
-		limbo_cancel (player, players_in_limbo[player])
+	if objects_in_limbo[player] then
+		limbo_cancel (player, objects_in_limbo[player])
 	end
 	local limbo_data = {
 		v1 = v1,
@@ -771,22 +783,39 @@ function mcl_biome_dispatch.emerged_teleport_prepare (player, v1, v2, msg, callb
 		callback = callback,
 		data = data,
 	}
-	players_in_limbo[player] = limbo_data
+	objects_in_limbo[player] = limbo_data
 	local escaped = core.formspec_escape (limbo_data.msg)
 	limbo_data.text = core.hypertext_escape (escaped)
 	limbo_restore (player, limbo_data, nil)
+	toggle_forceload ()
 	return LIMBO_POSITION
 end
 
-function mcl_biome_dispatch.teleport_with_emerge (player, v1, v2, msg, callback, data)
+local function collect_attached_players (object, players)
+	for _, object in ipairs (object:get_children ()) do
+		if object:is_player () then
+			insert (players, object)
+		end
+		collect_attached_players (object, players)
+	end
+end
+
+function mcl_biome_dispatch.teleport_with_emerge (object, v1, v2, msg, callback, data)
+	local players = {}
+	collect_attached_players (object, players)
 	local limbo_pos
-		= mcl_biome_dispatch.emerged_teleport_prepare (player, v1, v2,
+		= mcl_biome_dispatch.emerged_teleport_prepare (object, v1, v2,
 							       msg, callback, data)
-	player:set_pos (limbo_pos)
+	object:set_pos (limbo_pos)
+
+	for _, player in ipairs (players) do
+		mcl_biome_dispatch.emerged_teleport_prepare (player, v1, v2, msg,
+							     callback, data)
+	end
 end
 
 function mcl_biome_dispatch.in_limbo (player)
-	return players_in_limbo[player] ~= nil
+	return objects_in_limbo[player] ~= nil
 end
 
 function mcl_biome_dispatch.is_limbo_pos (v)
