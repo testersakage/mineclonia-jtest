@@ -339,7 +339,7 @@ core.register_craftitem("mcl_nether:quartz", {
 	inventory_image = "mcl_nether_quartz.png",
 	groups = { craftitem = 1 },
 	_mcl_armor_trim_color = "#c9bcb9",
-	_mcl_armor_trim_desc = "Quartz",
+	_mcl_armor_trim_desc = S("Quartz Material"),
 	_mcl_crafting_output = {square2 = {output = "mcl_nether:quartz_block"}}
 })
 
@@ -356,7 +356,7 @@ core.register_craftitem("mcl_nether:netherite_ingot", {
 	inventory_image = "mcl_nether_netherite_ingot.png",
 	groups = { craftitem = 1, fire_immune=1, beacon_fuel = 1 },
 	_mcl_armor_trim_color = "#302a26",
-	_mcl_armor_trim_desc = "Netherite",
+	_mcl_armor_trim_desc = S("Netherite Material"),
 	_mcl_crafting_output = {square3 = {output = "mcl_nether:netheriteblock"}}
 })
 
