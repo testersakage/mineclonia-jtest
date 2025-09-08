@@ -66,9 +66,9 @@ local function good_for_respawn(pos, player)
 end
 
 
-function mcl_spawn.get_world_spawn_pos (player)
+function mcl_spawn.get_world_spawn_pos (obj)
 	if mcl_biome_dispatch.use_detailed_spawning_mechanics () then
-		return mcl_biome_dispatch.next_respawn_position (player), 0
+		return mcl_biome_dispatch.next_respawn_position (obj), 0
 	end
 	return start_pos, false
 end

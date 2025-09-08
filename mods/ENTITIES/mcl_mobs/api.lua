@@ -506,6 +506,7 @@ end
 local scale_chance = mcl_mobs.scale_chance
 
 local MAX_PHYSICS_DTIME = 0.075
+local is_limbo_pos = mcl_biome_dispatch.is_limbo_pos
 
 function mob_class:on_step (dtime, moveresult)
 	local pos = self.object:get_pos ()
@@ -534,7 +535,8 @@ function mob_class:on_step (dtime, moveresult)
 
 	if self:check_despawn (pos, dtime)
 		or self:update_mob_caps ()
-		or self:check_proto_chunk (pos, dtime) then
+		or self:check_proto_chunk (pos, dtime)
+		or is_limbo_pos (pos) then
 		return true
 	end
 

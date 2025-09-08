@@ -101,13 +101,14 @@ local function teleport(pos, obj)
 				preparing[pos_str] = false
 			end
 		end)
-	elseif obj:is_player () then
+	elseif not obj:get_attach () then
 		local minp = vector.subtract (dest_portal, vector.new (64, 64, 64))
 		local maxp = vector.add (dest_portal, vector.new(64, 64, 64))
 		local minp_search = vector.subtract(dest_portal, vector.new(5, 40, 5))
 		local maxp_search = vector.add(dest_portal, vector.new(5, 10, 5))
 		mcl_biome_dispatch.teleport_with_emerge (obj, minp, maxp, nil, function (_, _)
 			spawn_gateway_portal (dest_portal, pos_str)
+			-- If obj is attached, this call will produce no effect.
 			obj:set_pos(find_destination_pos(minp_search, maxp_search)
 				    or vector.add(dest_portal, vector.new(0, 3.5, 0)))
 		end)
@@ -122,7 +123,7 @@ core.register_abm({
 	action = function(pos)
 		if preparing[core.pos_to_string(pos)] then return end
 		for obj in core.objects_inside_radius(pos, 1) do
-			if obj:get_hp() > 0 then
+			if mcl_portals.object_teleport_allowed (obj) then
 				local luaentity = obj:get_luaentity()
 				if luaentity and luaentity.name == "mcl_throwing:ender_pearl" then
 					obj:remove()
@@ -135,4 +136,11 @@ core.register_abm({
 	end,
 })
 
-mcl_portals.gateway_teleport = teleport
+function mcl_portals.gateway_teleport (pos, player)
+	if mcl_portals.object_teleport_allowed (player) then
+		teleport (pos, player)
+		return true
+	end
+	return false
+end
+
