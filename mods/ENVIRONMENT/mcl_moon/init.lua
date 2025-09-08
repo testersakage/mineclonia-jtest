@@ -35,6 +35,8 @@ local function get_moon_texture()
 	return "mcl_moon_moon_phases.png^[sheet:"..SHEET_W.."x"..SHEET_H..":"..x..","..y
 end
 
+mcl_moon.get_moon_texture = get_moon_texture
+
 function mcl_moon.get_moon_brightness ()
 	local phase = mcl_moon.get_moon_phase ()
 	return math.abs (phase - 4) / 4
@@ -55,9 +57,19 @@ core.register_globalstep(function(dtime)
 	end
 	core.log("info", "[mcl_moon] New moon phase: "..phase)
 	last_reported_phase = phase
-	local moon_arg = {texture = get_moon_texture()}
+	local texture = get_moon_texture ()
+	local moon_arg = {
+		texture = texture,
+	}
+	local tbl = {
+		moon_texture = texture,
+	}
 	for pl in mcl_util.connected_players() do
-		pl:set_moon(moon_arg)
+		if mcl_serverplayer.is_csm_at_least (pl, 3) then
+			mcl_serverplayer.send_effect_ctrl (pl, tbl)
+		else
+			pl:set_moon(moon_arg)
+		end
 	end
 end)
 
