@@ -58,7 +58,7 @@ core.register_craftitem("mcl_core:diamond", {
 	inventory_image = "default_diamond.png",
 	groups = { craftitem=1, beacon_fuel = 1 },
 	_mcl_armor_trim_color = "#5faed8",
-	_mcl_armor_trim_desc = "Diamond",
+	_mcl_armor_trim_desc = S("Diamond Material"),
 	_mcl_crafting_output = {square3 = {output = "mcl_core:diamondblock"}}
 })
 
@@ -78,7 +78,7 @@ core.register_craftitem("mcl_core:iron_ingot", {
 	inventory_image = "default_steel_ingot.png",
 	groups = { craftitem=1, beacon_fuel = 1 },
 	_mcl_armor_trim_color = "#938e88",
-	_mcl_armor_trim_desc = "Iron",
+	_mcl_armor_trim_desc = S("Iron Material"),
 	_mcl_crafting_output = {
 		single = {output = "mcl_core:iron_nugget 9"},
 		square3 = {output = "mcl_core:ironblock"}
@@ -91,7 +91,7 @@ core.register_craftitem("mcl_core:gold_ingot", {
 	inventory_image = "default_gold_ingot.png",
 	groups = { craftitem=1, beacon_fuel = 1 },
 	_mcl_armor_trim_color = "#ce9627",
-	_mcl_armor_trim_desc = "Gold",
+	_mcl_armor_trim_desc = S("Gold Material"),
 	_mcl_crafting_output = {
 		single = {output = "mcl_core:gold_nugget 9"},
 		square3 = {output = "mcl_core:goldblock"}
@@ -104,7 +104,7 @@ core.register_craftitem("mcl_core:emerald", {
 	inventory_image = "mcl_core_emerald.png",
 	groups = { craftitem=1, beacon_fuel = 1 },
 	_mcl_armor_trim_color = "#1b9958",
-	_mcl_armor_trim_desc = "Emerald",
+	_mcl_armor_trim_desc = S("Emerald Material"),
 	_mcl_crafting_output = {square3 = {output = "mcl_core:emeraldblock"}}
 })
 
@@ -114,7 +114,7 @@ core.register_craftitem("mcl_core:lapis", {
 	inventory_image = "mcl_core_lapis.png",
 	groups = { craftitem=1 },
 	_mcl_armor_trim_color = "#1c306b",
-	_mcl_armor_trim_desc = "Lapis",
+	_mcl_armor_trim_desc = S("Lapis Material"),
 	_mcl_crafting_output = {
 		single = {output = "mcl_dyes:blue"},
 		square3 = {output = "mcl_core:lapisblock"}

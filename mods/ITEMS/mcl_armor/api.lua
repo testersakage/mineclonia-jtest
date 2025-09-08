@@ -1,3 +1,5 @@
+local S = core.get_translator(core.get_current_modname())
+
 function mcl_armor.play_equip_sound(stack, obj, pos, unequip)
 	local def = stack:get_definition()
 	local estr = "equip"
@@ -424,15 +426,14 @@ function mcl_armor.trim(itemstack, overlay, trim_material)
 		piece_overlay = piece_overlay .. "_boots"
 	end
 	local color = trim_material:get_definition()._mcl_armor_trim_color
-	local desc = trim_material:get_definition()._mcl_armor_trim_desc
+
 	inv_overlay = inv_overlay .. "^[colorize:" .. color .. ":150)"
 	piece_overlay = piece_overlay .. ".png"
 
 	piece_overlay = "^(" .. piece_overlay .. "^[colorize:" .. color .. ":150)"
 
 	meta:set_string("mcl_armor:trim_overlay" , piece_overlay) -- set textures to render on the player, will work for clients below 5.8 as well
-	meta:set_string("mcl_armor:trim_mat_color", color)
-	meta:set_string("mcl_armor:trim_mat_desc", desc)
+	meta:set_string("mcl_armor:trim_material", trim_material:get_name())
 	meta:set_string("mcl_armor:inv", inv_overlay) -- make 5.8+ clients display the fancy inv image, older ones will see no change in the *inventory* image
 	meta:set_string("inventory_image", def.inventory_image .. inv_overlay) -- dont use reload_inv_image as it's a one liner in this enviorment
 end
@@ -452,18 +453,20 @@ tt.register_snippet(function(_, _, stack)
 	-- we need to get the part of the overlay image between the overlay begin ( and the trim name end _
 	-- we COULD easily store this info in meta, but that would bloat the meta storage, as the same few values would be stored over and over again on every trimmed item
 	-- this is fine here as this code gets only executed when you put armor and a trim in a smithing table
-	local full_overlay = meta:get_string("mcl_armor:trim_overlay")
-	local trim_mat_color = meta:get_string("mcl_armor:trim_mat_color")
-	local trim_mat_desc = meta:get_string("mcl_armor:trim_mat_desc")
-	local trim_desc = full_overlay:match("%((.-)%_"):gsub("^%l", string.upper) .. " Armor Trim"
-	local upgrade = "Upgrade:\n "
+	local overlay = meta:get_string("mcl_armor:trim_overlay"):match("%((.-)%_")
+	local template_desc = core.strip_colors(ItemStack("mcl_armor:" .. overlay):get_short_description())
+	local trim_material = meta:get_string("mcl_armor:trim_material")
+	local upgrade = S("Upgrade:") .. "\n "
 
-	if trim_mat_color == "" and trim_mat_desc == "" then
-		return upgrade .. trim_desc
+	if trim_material == "" then
+		return upgrade .. template_desc
 	end
 
-	return upgrade .. core.colorize(trim_mat_color, trim_desc) .. "\n " ..
-	core.colorize(trim_mat_color, trim_mat_desc .. " Material")
+	local trim_mat_color = core.registered_items[trim_material]._mcl_armor_trim_color
+	local trim_mat_desc = core.registered_items[trim_material]._mcl_armor_trim_desc
+
+	return upgrade .. core.colorize(trim_mat_color, template_desc) .. "\n " ..
+	core.colorize(trim_mat_color, trim_mat_desc)
 end)
 
 function mcl_armor.is_trimmed(itemstack)
