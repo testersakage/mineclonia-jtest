@@ -115,7 +115,7 @@ core.register_node("mcl_core:deadbush", {
 	_mcl_burntime = 5
 })
 
-mcl_flowerpots.register_potted_flower("mcl_core:deadbush", {
+mcl_flowerpots.register_potted("mcl_core:deadbush", {
 	name = "deadbush",
 	desc = S("Dead Bush"),
 	image = "default_dry_shrub.png",

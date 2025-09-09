@@ -642,7 +642,7 @@ function mcl_trees.register_wood(name, p)
 			image = modname.."_sapling_"..name..".png",
 		},p.potted_sapling or {})
 		def.desc = def.desc or D(rname .. " Sapling")
-		mcl_flowerpots.register_potted_flower("mcl_trees:sapling_"..name, def)
+		mcl_flowerpots.register_potted("mcl_trees:sapling_"..name, def)
 	end
 
 	if p.boat == nil or type(p.boat) == "table" then

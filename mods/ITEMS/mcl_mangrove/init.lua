@@ -228,7 +228,7 @@ core.register_node("mcl_mangrove:hanging_propagule_1", {
 
 
 
-mcl_flowerpots.register_potted_flower("mcl_mangrove:propagule", {
+mcl_flowerpots.register_potted("mcl_mangrove:propagule", {
 	name = "propagule",
 	desc = S("Mangrove Propagule"),
 	image = "mcl_mangrove_propagule.png",

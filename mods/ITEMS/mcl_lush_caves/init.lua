@@ -247,7 +247,6 @@ mcl_mapgen_core.register_generator("lush_caves",nil, function(minp, maxp, blocks
 		core.log("cave at "..core.pos_to_string(pos))
 	end
 end, 99999, true)
---]]
 
 mcl_flowerpots.register_potted_flower("mcl_lush_caves:azalea", {
 	name = "azalea",
@@ -260,3 +259,4 @@ mcl_flowerpots.register_potted_flower("mcl_lush_caves:azalea_flowering", {
 	desc = S("Flowering Azalea Plant"),
 	image = "mcl_lush_caves_azalea_flowering_side.png",
 })
+--]]

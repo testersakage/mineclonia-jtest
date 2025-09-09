@@ -49,7 +49,7 @@ core.register_node("mcl_core:cactus", {
 	_pathfinding_class = "DAMAGE_OTHER",
 })
 
-mcl_flowerpots.register_potted_cube("mcl_core:cactus", {
+mcl_flowerpots.register_potted("mcl_core:cactus", {
 	name = "cactus",
 	desc = S("Cactus"),
 	image = "mcl_flowerpots_cactus.png",

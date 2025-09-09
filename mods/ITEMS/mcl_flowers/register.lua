@@ -266,7 +266,7 @@ core.register_node("mcl_flowers:fern", table.merge(def_tallgrass, {
 	groups = table.merge(def_tallgrass.groups, { compostability = 65 })
 }))
 
-mcl_flowerpots.register_potted_flower("mcl_flowers:fern", {
+mcl_flowerpots.register_potted("mcl_flowers:fern", {
 	name = "fern",
 	desc = S("Fern"),
 	image = "mcl_flowers_fern_inv.png",

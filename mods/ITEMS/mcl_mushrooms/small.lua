@@ -144,13 +144,13 @@ core.register_node("mcl_mushrooms:mushroom_red", {
 	_mcl_hardness = 0,
 })
 
-mcl_flowerpots.register_potted_flower("mcl_mushrooms:mushroom_brown", {
+mcl_flowerpots.register_potted("mcl_mushrooms:mushroom_brown", {
 	name = "mushroom_brown",
 	desc = S("Brown Mushroom"),
 	image = "farming_mushroom_brown.png",
 })
 
-mcl_flowerpots.register_potted_flower("mcl_mushrooms:mushroom_red", {
+mcl_flowerpots.register_potted("mcl_mushrooms:mushroom_red", {
 	name = "mushroom_red",
 	desc = S("Red Mushroom"),
 	image = "farming_mushroom_red.png",

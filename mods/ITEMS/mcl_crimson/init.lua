@@ -263,7 +263,7 @@ core.register_node("mcl_crimson:warped_fungus", {
 	_mcl_hardness = 0,
 })
 
-mcl_flowerpots.register_potted_flower("mcl_crimson:warped_fungus", {
+mcl_flowerpots.register_potted("mcl_crimson:warped_fungus", {
 	name = "warped_fungus",
 	desc = S("Warped Fungus"),
 	image = "farming_warped_fungus.png",
@@ -419,7 +419,7 @@ core.register_node("mcl_crimson:warped_roots", {
 	_mcl_hardness = 0,
 })
 
-mcl_flowerpots.register_potted_flower("mcl_crimson:warped_roots", {
+mcl_flowerpots.register_potted("mcl_crimson:warped_roots", {
 	name = "warped_roots",
 	desc = S("Warped Roots"),
 	image = "warped_roots.png",
@@ -500,7 +500,7 @@ core.register_node("mcl_crimson:crimson_fungus", {
 	_mcl_hardness = 0,
 })
 
-mcl_flowerpots.register_potted_flower("mcl_crimson:crimson_fungus", {
+mcl_flowerpots.register_potted("mcl_crimson:crimson_fungus", {
 	name = "crimson_fungus",
 	desc = S("Crimson Fungus"),
 	image = "farming_crimson_fungus.png",
@@ -529,7 +529,7 @@ core.register_node("mcl_crimson:crimson_roots", {
 	_mcl_hardness = 0,
 })
 
-mcl_flowerpots.register_potted_flower("mcl_crimson:crimson_roots", {
+mcl_flowerpots.register_potted("mcl_crimson:crimson_roots", {
 	name = "crimson_roots",
 	desc = S("Crimson Roots"),
 	image = "crimson_roots.png",
