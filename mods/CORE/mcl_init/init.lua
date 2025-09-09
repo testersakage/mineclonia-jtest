@@ -38,7 +38,8 @@ local singlenode = mg_name == "singlenode"
 
 -- The classic superflat setting is stored in mod storage so it remains
 -- constant after the world has been created.
-if not mod_storage:get("mcl_superflat_classic") then
+local old_mcl_superflat_classic = mod_storage:get ("mcl_superflat_classic")
+if not old_mcl_superflat_classic then
 	local superflat = mg_name == "flat" and core.get_mapgen_setting("mcl_superflat_classic") == "true"
 	mod_storage:set_string("mcl_superflat_classic", superflat and "true" or "false")
 end
@@ -130,8 +131,29 @@ function mcl_vars.detect_levelgen_inhibiting_mods ()
 	return false
 end
 
+-- Detect and return whether this world is a singlenode world created
+-- prior to the introduction of `mcl_levelgen', exempting worlds which
+-- were created with `mcl_levelgen' enabled but before this test was
+-- introduced.
+
+function mcl_vars.is_old_singlenode_world ()
+	local key_2 = mod_storage:get_string ("inhibit_mcl_levelgen")
+	local key_1 = old_mcl_superflat_classic or ""
+	local dir = core.get_worldpath ()
+	local dir_list = core.get_dir_list (dir, true)
+	if (key_2 == "true" or (key_2 == "" and key_1 ~= ""))
+		and table.indexof (dir_list, "journals") == -1 then
+		mod_storage:set_string ("inhibit_mcl_levelgen", "true")
+		return true
+	else
+		mod_storage:set_string ("inhibit_mcl_levelgen", "false")
+		return false
+	end
+end
+
 if singlenode
 	and core.get_mapgen_setting ("mcl_init_disable_levelgen") ~= "true"
+	and not mcl_vars.is_old_singlenode_world ()
 	and not mcl_vars.detect_levelgen_inhibiting_mods () then
 	mcl_vars.enable_mcl_levelgen = true
 	mcl_vars.mg_overworld_min = -128
