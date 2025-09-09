@@ -95,11 +95,14 @@ function mcl_flowerpots.register_potted(name, def)
 	end
 end
 
---Deprecated
+-- Deprecated functions
+
+---Deprecated. Use mcl_flowerpots.register_potted instead. See API.md.
 function mcl_flowerpots.register_potted_flower(name, def)
 	mcl_flowerpots.register_potted(name, def)
 end
 
+---Deprecated. Use mcl_flowerpots.register_potted instead. See API.md.
 function mcl_flowerpots.register_potted_cube(name, def)
 	mcl_flowerpots.register_potted(name, table.merge(def, {
 		mesh = "flowerpot_with_long_cube.obj",
