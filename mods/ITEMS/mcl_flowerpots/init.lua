@@ -2,7 +2,6 @@ local S = core.get_translator(core.get_current_modname())
 local has_doc = core.get_modpath("doc")
 
 mcl_flowerpots = {}
-
 mcl_flowerpots.registered_pots = {}
 
 local pot_box = {
@@ -19,11 +18,8 @@ core.register_node("mcl_flowerpots:flower_pot", {
 	_doc_items_usagehelp = S("Just place a plant on the flower pot. Flower pots can hold small flowers (not higher than 1 block), saplings, ferns, dead bushes, mushrooms and cacti. Rightclick a potted plant to retrieve the plant."),
 	drawtype = "mesh",
 	mesh = "flowerpot.obj",
-	tiles = {
-		"mcl_flowerpots_flowerpot.png",
-	},
+	tiles = {"mcl_flowerpots_flowerpot.png"},
 	use_texture_alpha = "clip",
-	visual_scale = 0.5,
 	wield_image = "mcl_flowerpots_flowerpot_inventory.png",
 	paramtype = "light",
 	sunlight_propagates = true,
@@ -60,18 +56,15 @@ core.register_craft({
 	},
 })
 
-function mcl_flowerpots.register_potted_flower(name, def)
+function mcl_flowerpots.register_potted(name, def)
 	mcl_flowerpots.registered_pots[name] = def.name
 	core.register_node(":mcl_flowerpots:flower_pot_" .. def.name, {
 		description = def.desc .. " " .. S("Flower Pot"),
 		_doc_items_create_entry = false,
 		drawtype = "mesh",
-		mesh = "flowerpot.obj",
-		tiles = {
-			"[combine:32x32:0,0=mcl_flowerpots_flowerpot.png:0,0=" .. def.image,
-		},
+		mesh = def.mesh or "flowerpot.obj",
+		tiles = {"[combine:32x32:0,0=mcl_flowerpots_flowerpot.png:0,0=" .. def.image},
 		use_texture_alpha = "clip",
-		visual_scale = 0.5,
 		paramtype = "light",
 		sunlight_propagates = true,
 		selection_box = pot_box,
@@ -141,4 +134,13 @@ function mcl_flowerpots.register_potted_cube(name, def)
 	if has_doc then
 		doc.add_entry_alias("nodes", "mcl_flowerpots:flower_pot", "nodes", "mcl_flowerpots:flower_pot_" .. def.name)
 	end
+end
+
+--Deprecated
+function mcl_flowerpots.register_potted_flower(name, def)
+	mcl_flowerpots.register_potted(name, def)
+end
+
+function mcl_flowerpots.register_potted_cube(name, def)
+	
 end
