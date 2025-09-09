@@ -58,6 +58,7 @@ core.register_craft({
 
 function mcl_flowerpots.register_potted(name, def)
 	mcl_flowerpots.registered_pots[name] = def.name
+
 	core.register_node(":mcl_flowerpots:flower_pot_" .. def.name, {
 		description = def.desc .. " " .. S("Flower Pot"),
 		_doc_items_create_entry = false,
@@ -93,54 +94,15 @@ function mcl_flowerpots.register_potted(name, def)
 	end
 end
 
-function mcl_flowerpots.register_potted_cube(name, def)
-	mcl_flowerpots.registered_pots[name] = def.name
-	core.register_node(":mcl_flowerpots:flower_pot_" .. def.name, {
-		description = def.desc .. " " .. S("Flower Pot"),
-		_doc_items_create_entry = false,
-		drawtype = "mesh",
-		mesh = "flowerpot_with_long_cube.obj",
-		tiles = {
-			def.image,
-		},
-		use_texture_alpha = "clip",
-		visual_scale = 0.5,
-		paramtype = "light",
-		sunlight_propagates = true,
-		selection_box = pot_box,
-		collision_box = pot_box,
-		is_ground_content = false,
-		groups = { dig_immediate = 3, attached_node = 1, dig_by_piston = 1, not_in_creative_inventory = 1, flower_pot = 2, unsticky = 1},
-		sounds = mcl_sounds.node_sound_stone_defaults(),
-		on_rightclick = function(pos, _, clicker)
-			local player_name = ""
-			if clicker:is_player() then
-				player_name = clicker:get_player_name()
-			end
-			if core.is_protected(pos, player_name) then
-				core.record_protection_violation(pos, player_name)
-				return
-			end
-			core.add_item(vector.offset(pos, 0, 0.5, 0), name)
-			core.set_node(pos, { name = "mcl_flowerpots:flower_pot" })
-		end,
-		drop = {
-			items = {
-				{ items = { "mcl_flowerpots:flower_pot", name } },
-			},
-		},
-	})
-	-- Add entry alias for the Help
-	if has_doc then
-		doc.add_entry_alias("nodes", "mcl_flowerpots:flower_pot", "nodes", "mcl_flowerpots:flower_pot_" .. def.name)
-	end
-end
-
 --Deprecated
 function mcl_flowerpots.register_potted_flower(name, def)
 	mcl_flowerpots.register_potted(name, def)
 end
 
 function mcl_flowerpots.register_potted_cube(name, def)
-	
+	mcl_flowerpots.register_potted(name, table.merge(def, {
+		mesh = "flowerpot_with_long_cube.obj",
+		tiles = {def.image},
+		visual_scale = 0.5
+	}))
 end
