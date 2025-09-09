@@ -247,16 +247,24 @@ mcl_mapgen_core.register_generator("lush_caves",nil, function(minp, maxp, blocks
 		core.log("cave at "..core.pos_to_string(pos))
 	end
 end, 99999, true)
-
-mcl_flowerpots.register_potted_flower("mcl_lush_caves:azalea", {
+--]]
+mcl_flowerpots.register_potted("mcl_lush_caves:azalea", {
 	name = "azalea",
 	desc = S("Azalea Plant"),
-	image = "mcl_lush_caves_azalea_side.png",
+	tiles = {
+		"[combine:32x32:0,0=mcl_lush_caves_azalea_side.png:16,0=mcl_lush_caves_azalea_top.png:"
+		.. "0,0=mcl_flowerpots_flowerpot.png"
+	},
+	mesh = "mcl_lush_caves_flowerpot.obj"
 })
 
-mcl_flowerpots.register_potted_flower("mcl_lush_caves:azalea_flowering", {
+mcl_flowerpots.register_potted("mcl_lush_caves:azalea_flowering", {
 	name = "azalea_flowering",
 	desc = S("Flowering Azalea Plant"),
-	image = "mcl_lush_caves_azalea_flowering_side.png",
+	tiles = {
+		"[combine:32x32:0,0=mcl_lush_caves_azalea_flowering_side.png:" ..
+		"16,0=mcl_lush_caves_azalea_flowering_top.png:0,0=mcl_flowerpots_flowerpot.png"
+	},
+	mesh = "mcl_lush_caves_flowerpot.obj"
 })
---]]
+
