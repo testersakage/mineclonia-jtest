@@ -180,11 +180,12 @@ core.register_alias("mcl_bamboo:bamboo_1", "mcl_bamboo:bamboo_small")
 core.register_alias("mcl_bamboo:bamboo_2", "mcl_bamboo:bamboo_small")
 core.register_alias("mcl_bamboo:bamboo_3", "mcl_bamboo:bamboo_small")
 
---[[mcl_flowerpots.register_potted_flower("mcl_bamboo:bamboo", {
+mcl_flowerpots.register_potted("mcl_bamboo:bamboo_small", {
 	name = "bamboo",
 	desc = S("Bamboo Plant"),
-	image = "mcl_bamboo_flower_pot.png",
-})]]
+	image = "mcl_bamboo_bamboo_fpm.png",
+	mesh = "mcl_bamboo_flowerpot.obj"
+})
 
 core.register_node("mcl_bamboo:bamboo_mosaic",  {
 	description = S("Bamboo Mosaic Plank"),
