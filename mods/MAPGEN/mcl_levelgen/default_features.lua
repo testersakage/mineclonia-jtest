@@ -3787,7 +3787,9 @@ mcl_levelgen.register_configured_feature ("mcl_levelgen:disk_grass", {
 	content = function (x, y, z, rng)
 		local above, _ = get_block (x, y + 1, z, rng)
 		if not solid_p (above) and above ~= cid_water_source then
-			return cid_grass, 0
+			local biome = index_biome (x, y, z)
+			local def = mcl_levelgen.registered_biomes[biome]
+			return cid_grass, def and def.grass_palette_index or 0
 		else
 			return cid_dirt, 0
 		end
