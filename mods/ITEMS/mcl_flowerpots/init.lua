@@ -64,6 +64,7 @@ function mcl_flowerpots.register_potted(name, def)
 		_doc_items_create_entry = false,
 		drawtype = "mesh",
 		mesh = def.mesh or "flowerpot.obj",
+		visual_scale = def.visual_scale,
 		tiles = def.tiles or {"[combine:32x32:0,0=mcl_flowerpots_flowerpot.png:0,0=" .. def.image},
 		use_texture_alpha = "clip",
 		paramtype = "light",
