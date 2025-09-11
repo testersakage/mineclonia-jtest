@@ -442,10 +442,16 @@ mcl_player.register_globalstep(function(player)
 			set_bone_pos(player,"Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, 0))
 			set_bone_pos(player,"Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
 		elseif get_mouse_button(player) and not control.sneak then
+			set_bone_pos(player, "Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, 0))
+			set_bone_pos(player, "Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
+			mcl_util.set_properties(player, player_props_normal)
 			mcl_player.player_set_animation(player, "mine")
 		elseif get_mouse_button(player) and control.sneak then
+			set_bone_pos(player, "Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, player_vel_yaw - yaw))
+			set_bone_pos(player, "Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
+			mcl_util.set_properties(player, player_props_sneaking)
 			mcl_player.player_set_animation(player, "sneak_mine")
-		elseif not control.sneak and head_in_water and is_sprinting then
+		elseif not control.sneak and head_in_water and is_sprinting then -- this code never runs
 			mcl_player.player_set_animation(player, "swim_stand", animation_speed_mod)
 		elseif control.sneak then
 			set_bone_pos(player, "Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, player_vel_yaw - yaw))
