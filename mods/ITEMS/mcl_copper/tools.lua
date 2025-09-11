@@ -7,7 +7,7 @@ mcl_tools.register_set("copper", {
         level = 3,
         speed = 5,
         max_drop_level = 3,
-        groups = { dig_speed_class = 3, enchantability = 5 }
+        groups = { dig_speed_class = 3, enchantability = 13 }
 }, {
     ["pick"] = {
         description = S("Copper Pickaxe"),
