@@ -9,7 +9,7 @@ mcl_armor.register_set({
                 feet = S("Copper Boots"),
         },
         durability = 176,
-        enchantability = 25,
+        enchantability = 8,
         points = {
                 head = 2,
                 torso = 4,
