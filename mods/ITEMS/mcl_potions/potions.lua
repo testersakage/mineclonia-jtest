@@ -1,6 +1,5 @@
-local modname = core.get_current_modname()
-local S = core.get_translator(modname)
-local D = mcl_util.get_dynamic_translator(modname)
+local S = core.get_translator(core.get_current_modname())
+local D = mcl_util.get_dynamic_translator()
 
 mcl_potions.registered_potions = {}
 -- shorthand
@@ -637,7 +636,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "infestation",
-	desc_suffix = S("of Infestation"),
+	desc_suffix = "of Infestation",
 	_tt = nil,
 	_longdesc = S("Causes 1-3 silverfish to spawn with a 5% chance when damaged. It not applies to silverfishes."),
 	color = "#899b8a",
@@ -647,7 +646,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "oozing",
-	desc_suffix = S("of Oozing"),
+	desc_suffix = "of Oozing",
 	_tt = nil,
 	_longdesc = S("Causes 2 medium slimes to spawn on death. It not applies to slimes."),
 	color = "#a5fda9",
@@ -657,7 +656,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "weaving",
-	desc_suffix = S("of Weaving"),
+	desc_suffix = "of Weaving",
 	_tt = nil,
 	_longdesc = S("Causes 2-3 cobwebs to appear on death. Also increases walking speed when crossing cobwebs."),
 	color = "#75675a",
@@ -667,7 +666,7 @@ mcl_potions.register_potion({
 
 mcl_potions.register_potion({
 	name = "wind_charged",
-	desc_suffix = S("of Wind Charging"),
+	desc_suffix = "of Wind Charging",
 	_tt = nil,
 	_longdesc = S("Causes A wind burst on death."),
 	color = "#bcc8ff",
