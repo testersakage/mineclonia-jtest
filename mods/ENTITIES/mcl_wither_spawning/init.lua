@@ -21,7 +21,11 @@ end
 
 local function check_schem(pos, schem)
 	for _, n in pairs(schem) do
-		if core.get_node(vector.add(pos, n)).name ~= n.name then
+		local node = core.get_node(vector.add(pos, n))
+		local valid_name = n.name and node.name == n.name
+		local valid_group = n.group and core.get_item_group(node.name, n.group) ~= 0
+
+		if not (valid_name or valid_group) then
 			return false
 		end
 	end
@@ -61,7 +65,7 @@ local old_on_place = wither_head.on_place
 core.override_item("mcl_heads:wither_skeleton",{
 	on_place = function(itemstack, placer, pointed)
 		local n = core.get_node(vector.offset(pointed.above,0,-1,0))
-		if n and n.name  == "mcl_nether:soul_sand" then
+		if core.get_item_group(n.name, "soul_block") ~= 0 then
 			core.after(0, wither_spawn, pointed.above, placer)
 		end
 		return old_on_place(itemstack, placer, pointed)
