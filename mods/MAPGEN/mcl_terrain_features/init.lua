@@ -401,6 +401,7 @@ mcl_structures.register_structure("powder_snow_trap", {
 
 -- direction is a multiplier to each block's y offset from the starting position, should be either -1 or 1
 local function generate_dripstone(pos, max_length, direction)
+		if pos.y < mcl_vars.mg_bedrock_overworld_max + max_length then return end --prevent poking through the bedrock
 		-- generating relative to some random sub position of the node, so the dripstone column is more asymetrical (aka natural)
 		local x_offset = mcl_util.float_random(-0.2, 0.2)
 		local z_offset = mcl_util.float_random(-0.2, 0.2)
