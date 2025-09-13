@@ -45,6 +45,7 @@ core.register_node("mcl_deepslate:deepslate_reinforced", {
 	on_rotate = screwdriver.rotate_3way,
 	_mcl_blast_resistance = 1200,
 	_mcl_hardness = 55,
+	can_dig = function() return false end
 })
 
 mcl_deepslate.register_deepslate_ore("coal", S("Deepslate Coal Ore"), {_mcl_cooking_output = "mcl_core:coal_lump"})
