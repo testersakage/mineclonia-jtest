@@ -94,6 +94,7 @@ local function init_ersatz_biome_translations ()
 		["JungleEdge"] = "SparseJungle",
 		["JungleEdgeM"] = "SparseJungle",
 		["JungleM"] = "Jungle",
+		["LushCaves"] = "LushCaves",
 		["MangroveSwamp"] = "MangroveSwamp",
 		["MegaSpruceTaiga"] = "OldGrowthSpruceTaiga",
 		["MegaTaiga"] = "OldGrowthPineTaiga",
@@ -440,14 +441,16 @@ function mcl_levelgen.register_notification_handler (name, handler)
 end
 
 local function run_notification_handlers (gen_notifies)
-	for _, notify in ipairs (gen_notifies) do
-		local name = notify.name
-		local handler = registered_notification_handlers[name]
-		if not handler and not warned[name] then
-			warned[name] = true
-			core.log ("warning", "Invoking unknown feature generation handler: " .. name)
-		elseif handler then
-			handler (notify.name, notify.data)
+	if gen_notifies then
+		for _, notify in ipairs (gen_notifies) do
+			local name = notify.name
+			local handler = registered_notification_handlers[name]
+			if not handler and not warned[name] then
+				warned[name] = true
+				core.log ("warning", "Invoking unknown feature generation handler: " .. name)
+			elseif handler then
+				handler (notify.name, notify.data)
+			end
 		end
 	end
 end
@@ -464,6 +467,7 @@ local function post_process_mapchunk_in_dim (minp, maxp, dim)
 end
 
 local dims_intersecting = mcl_levelgen.dims_intersecting
+local temp_min, temp_max = vector.zero (), vector.zero ()
 
 local function post_process_mapchunk (minp, maxp)
 	local generated = false
@@ -472,9 +476,13 @@ local function post_process_mapchunk (minp, maxp)
 			break
 		end
 
-		minp.y = y1
-		maxp.y = y2
-		post_process_mapchunk_in_dim (minp, maxp, dim)
+		temp_min.x = minp.x
+		temp_min.z = minp.z
+		temp_min.y = y1
+		temp_max.x = maxp.x
+		temp_max.z = maxp.z
+		temp_max.y = y2
+		post_process_mapchunk_in_dim (temp_min, temp_max, dim)
 		generated = true
 	end
 end
