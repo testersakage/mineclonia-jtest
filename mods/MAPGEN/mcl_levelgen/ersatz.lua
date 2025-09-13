@@ -58,6 +58,7 @@ local overworld_subtypes = {
 }
 
 local biome_specific_overrides = {}
+biome_specific_overrides[0] = {}
 
 local function maybe_map_biome (biome, target)
 	local id = core.get_biome_id (biome)
