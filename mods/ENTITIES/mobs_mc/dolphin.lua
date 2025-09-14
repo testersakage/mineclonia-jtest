@@ -15,6 +15,7 @@ local dolphin = {
 	spawn_class = "water",
 	_spawn_category = "water_creature",
 	can_despawn = true,
+	can_ride_boat = false,
 	passive = true,
 	hp_min = 10,
 	hp_max = 10,
