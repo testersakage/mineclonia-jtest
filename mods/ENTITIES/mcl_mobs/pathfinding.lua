@@ -387,6 +387,19 @@ function mob_class:gwp_corner_check (context, cbox, pos, self_pos, penalties)
 	return nil
 end
 
+local function vertical_collision_encountered_p (moveresult, pos)
+	for _, collision in ipairs (moveresult.collisions) do
+		if collision.type == "node"
+			and collision.axis == "y"
+			and (collision.new_velocity.y
+			     - collision.old_velocity.y) >= 0
+			and vector.equals (collision.node_pos, pos) then
+			return true
+		end
+	end
+	return false
+end
+
 function mob_class:gwp_start (context)
 	local pos, optional = self:gwp_start_1 (context)
 	local penalties = context.penalties
@@ -415,6 +428,17 @@ function mob_class:gwp_start (context)
 	local pos1 = self:gwp_start_2 (context, cbox, self_pos, is_passable)
 	if pos1 then
 		return pos1
+	end
+
+	-- If this mob is supported by a suspended carpet or analogous
+	-- node which is too thin to be classified as a valid surface
+	-- but which is still capable of supporting objects, accept
+	-- the initial position as-is.
+	local moveresult = self._moveresult
+	if moveresult and moveresult.touching_ground
+		and start_class == "OPEN"
+		and vertical_collision_encountered_p (moveresult, pos) then
+		return pos
 	end
 
 	-- If this mob is stuck inside a fence-like node (by which it
