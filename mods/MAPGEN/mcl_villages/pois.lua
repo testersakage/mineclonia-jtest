@@ -445,7 +445,7 @@ core.register_node ("mcl_villages:demo_poi", {
 	tiles = {"blank.png"},
 	sunlight_propagates = true,
 	is_ground_content = false,
-	groups = {creative_breakable = 1, not_in_creative_inventory = 1, not_solid = 1},
+	groups = {creative_breakable = 1, not_in_creative_inventory = 1, not_solid = 1, wither_immune = 1},
 	on_blast = function () end,
 	drop = "",
 	_mcl_blast_resistance = 36000008,
