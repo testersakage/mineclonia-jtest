@@ -218,8 +218,12 @@ local function mulull (a, m)
 end
 
 local function detect_luajit ()
-	local fn = loadstring ("return 0x1ull")
-	return fn and type (fn ()) == "cdata"
+	local fn = loadstring ([[
+local x = 0x3ull
+x = bit.band (x, 0x1ull)
+return x == 0x1ull
+]])
+	return fn and fn ()
 end
 mcl_levelgen.detect_luajit = detect_luajit
 
