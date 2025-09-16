@@ -266,7 +266,8 @@ local function sheep_graze (self, self_pos, dtime)
 				end
 				consumed = true
 			else
-				local offset = vector.offset (self_pos, 0, -1, 0)
+				local offset = vector.copy (self_pos)
+				offset.y = math.floor (offset.y + 0.5) - 1
 				local below = core.get_node (offset)
 				if below.name == "mcl_core:dirt_with_grass" then
 					if mob_griefing then
@@ -301,7 +302,8 @@ local function sheep_graze (self, self_pos, dtime)
 		if node.name == "mcl_flowers:tallgrass" then
 			node_valid = true
 		else
-			local offset = vector.offset (self_pos, 0, -1, 0)
+			local offset = vector.copy (self_pos)
+			offset.y = math.floor (offset.y + 0.5) - 1
 			local below = core.get_node (offset)
 			if below.name == "mcl_core:dirt_with_grass" then
 				node_valid = true
