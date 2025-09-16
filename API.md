@@ -125,9 +125,10 @@ directory names are relative to `mods/`
 
 ### Map Generation
 
-Mineclonia uses a bespoke Lua level generator which produces terrain
-and structures identical to Minecraft's while retaining support for
-existing Luanti-provided map generators.
+Mineclonia can alternate between using a bespoke Lua level generator
+which produces terrain and structures identical to Minecraft's, and
+generating terrain with existing Luanti-provided map generators and
+their attendant biome and decoration generation facilities.
 
 Decorations are implemented separately for each of the two classes of
 map generators; the terrain feature system for the former is

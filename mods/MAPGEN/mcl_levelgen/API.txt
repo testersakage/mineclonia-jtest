@@ -2130,6 +2130,42 @@ which are best avoided:
     overhead of a specialized table lookup, which is measurable in
     some contexts.
 
+  - Applying modulo, division, or multiplication operations to integer
+    values where bitwise operations would suffice.  On x86_64, LuaJIT
+    does not attempt to detect whether a number value is likely or
+    certain to be an integer, and consequently cannot perform these
+    optimizations automatically, instead producing sub-optimal
+    floating point division, rounding, multiplication, and subtraction
+    operations.
+
+    E.g. when truncating coordinates to the nearest MapBlock/chunk,
+    rather than:
+
+      local chunk_x = x % 16
+
+    you are advised to write:
+
+      local chunk_x = band (x, -16)
+
+    having suitably cached `bit.band' in an upvalue beforehand:
+
+      local band = bit.band
+
+    and likewise when deriving a MapBlock/chunk coordinate from a
+    position:
+
+      local cx = arshift (x, 4) -- `bit.arshift'
+
+    The effect of such optimizations is likely to be slightly less
+    pronounced on ARM systems.
+
+    Beware that providing non-integral values to LuaJIT's bitwise
+    operators is prejudicial to performance and yields results which
+    may vary from machine to machine, and that providing +-Inf or NaN,
+    or values which cannot be represented as signed or unsigned 32-bit
+    integers, yields undefined values.  Both scenarios must be
+    avoided.
+
 Determinism in the level generator should be dilligently maintained,
 not least since completely isolated instances of the level generator
 will be invoked in diverse Lua environments in the expectation that
