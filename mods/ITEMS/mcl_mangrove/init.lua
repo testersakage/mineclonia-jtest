@@ -213,8 +213,8 @@ local function get_hanging_propagules_textures(index)
 	return tiles
 end
 
-local hp_longdesc = S("Suspended mague propagules grow on the underside of mangrove leaves.") ..
-S("They grow in four stages. Using bone meal on a suspended propagule advances it to the next growth stage.") ..
+local hp_longdesc = S("Suspended mague propagules grow on the underside of mangrove leaves.\n") ..
+S("They grow in four stages. Using bone meal on a suspended propagule advances it to the next growth stage.\n") ..
 S("When the propagule reaches the final stage, it drops as an item when broken.")
 
 local function grow_hanging_propagule(pos, node)
@@ -224,8 +224,9 @@ end
 
 for i = 1, 4 do
 	core.register_node("mcl_mangrove:propagule_hanging_" .. i, {
-		_doc_items_create_entry = i == 1,
-		_doc_items_longdesc = i == 1 and hp_longdesc or nil,
+		_doc_items_create_entry = i == 4,
+		_doc_items_entry_name = i == 4 and S("Hanging Mangrove Propagule") or nil,
+		_doc_items_longdesc = i == 4 and hp_longdesc or nil,
 		_mcl_baseitem = "mcl_mangrove:propagule",
 		description = S("Hanging Propagule (Stage @1)", i),
 		paramtype = "light",
@@ -251,8 +252,8 @@ for i = 1, 4 do
 		end
 	})
 
-	if i ~= 1 then
-		doc.add_entry_alias("nodes", "mcl_mangrove:propagule_hanging_1", "nodes", "mcl_mangrove:propagule_hanging_" .. i)
+	if i < 4 then
+		doc.add_entry_alias("nodes", "mcl_mangrove:propagule_hanging_4", "nodes", "mcl_mangrove:propagule_hanging_" .. i)
 	end
 end
 
