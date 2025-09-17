@@ -237,6 +237,7 @@ for i = 1, 4 do
 		drawtype = "mesh",
 		mesh = "mcl_mangrove_hanging_propagule.obj",
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
+		sunlight_propagates = true,
 		selection_box = {
 			type = "fixed", fixed = {-0.125, 0.5, -0.125, 0.125, 0.5 - 0.25 * i, 0.125}
 		},
