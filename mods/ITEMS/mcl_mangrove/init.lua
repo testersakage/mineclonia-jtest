@@ -247,10 +247,10 @@ for i = 1, 4 do
 			dig_immediate = 1, dig_by_water = 1, dig_by_piston = 1, destroy_by_lava_flow = 1,
 			attached_node = 4
 		},
-		_on_bone_meal = function(_, _, _, pos, node)
+		_on_bone_meal = i < 4 and function(_, _, _, pos, node)
 			grow_hanging_propagule(pos, node)
 			return true
-		end
+		end or nil
 	})
 
 	if i < 4 then
