@@ -158,7 +158,8 @@ function mcl_levelgen.get_dimension (_)
 	return nil
 end
 
-if core.get_mapgen_setting ("mcl_levelgen_enable_ersatz") == "true" then
+if core.get_mapgen_setting ("mcl_levelgen_enable_ersatz") == "true"
+	and core.features.generate_decorations_biomes then
 	-- Load the ersatz level generation system.
 	mcl_levelgen.enable_ersatz = true
 	dofile (mcl_levelgen.prefix .. "/ersatz.lua")
