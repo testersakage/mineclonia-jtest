@@ -1,6 +1,8 @@
 local wireflag_tab = mcl_redstone._wireflag_tab
 local opaque_tab = mcl_redstone._solid_opaque_tab
 
+local slab_signals = core.settings:get_bool("mcl_redstone_slab_signals")
+
 -- get_power, update and init callbacks by name
 local get_power_tab = {}
 local update_tab = {}
@@ -222,10 +224,18 @@ local function propagate_wire(clear_nodes, fill_nodes, updates)
 		local power = entry.power
 		local power2 = power - 1
 
+		local nname, on_slab
+		if slab_signals then
+			nname = core.get_node(pos:subtract(vector.new(0, 1, 0))).name
+			on_slab = mcl_redstone._slab_tab[nname] ~= nil
+		end
+
 		updates_[core.hash_node_position(pos)] = pos
 
 		for dir in iterate_wire_neighbours(wireflag_tab[core.get_node(pos).name]) do
-			if not dir.obstruct or not opaque_tab[get_node(pos:add(dir.obstruct)).name] then
+			local downhill = false
+			if slab_signals then downhill = dir.wire.y < 0 and on_slab end
+			if not downhill and (not dir.obstruct or not opaque_tab[get_node(pos:add(dir.obstruct)).name]) then
 				local pos2 = pos:add(dir.wire)
 				local node2 = get_node(pos2)
 				if wireflag_tab[node2.name] and get_power(node2) < power2 then

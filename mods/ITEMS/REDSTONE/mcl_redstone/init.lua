@@ -12,6 +12,9 @@ end
 -- Nodes by name that are opaque.
 mcl_redstone._solid_opaque_tab = {}
 
+-- Nodes by name that are top slabs.
+mcl_redstone._slab_tab = {}
+
 --- Wireflags are numbers with binary representation YYYYXXXX where XXXX
 --- determines if there is a visible connection in each of the four cardinal
 --- directions and YYYY if the respective connection also goes up over the
@@ -28,6 +31,9 @@ core.register_on_mods_loaded(function()
 			mcl_redstone._solid_opaque_tab[name] = 0
 		elseif core.get_item_group(name, "redstone_conductive") == 1 then
 			mcl_redstone._solid_opaque_tab[name] = 0
+		end
+		if core.settings:get_bool("mcl_redstone_slab_signals") and name:match("^.*:slab_.*_top$") then
+			mcl_redstone._slab_tab[name] = 0
 		end
 	end
 end)
