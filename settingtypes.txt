@@ -233,6 +233,11 @@ mcl_redstone_time_budget (Redstone time budget) float 0.2
 # The maximum number of queued redstone events. If exceeded redstone circuits will stop working.
 mcl_redstone_event_max (Maximum queued redstone events) int 65535
 
+# Stops redstone signals from traveling down top slabs similar to Java edition
+# redstone. Does not stop signals from traveling down other transparent blocks,
+# like Bedrock edition redstone.
+mcl_redstone_slab_signals (Signals don't travel down top slabs) bool false
+
 [Liquids]
 # Enables MC-like liquid flowing.
 mcl_liquids_enable (Custom liquid flowing) bool false
