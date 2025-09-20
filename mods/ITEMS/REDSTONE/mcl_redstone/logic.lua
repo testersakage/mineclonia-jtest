@@ -1,7 +1,7 @@
 local wireflag_tab = mcl_redstone._wireflag_tab
 local opaque_tab = mcl_redstone._solid_opaque_tab
 
-local slab_signals = core.settings:get_bool("mcl_redstone_slab_signals")
+local slab_signals = core.settings:get_bool("mcl_redstone_slab_signals", true)
 
 -- get_power, update and init callbacks by name
 local get_power_tab = {}
