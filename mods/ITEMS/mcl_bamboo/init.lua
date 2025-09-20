@@ -71,6 +71,7 @@ mcl_trees.register_wood("bamboo",{
 			selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.25, 0.7},
 		},
 	},
+	hanging_sign = true,
 })
 
 core.register_abm({

@@ -596,7 +596,7 @@ function mcl_trees.register_wood(name, p)
 			_mcl_burntime = 10
 		}, p.sign or {})
 		def.description = def.description or D(rname .. " Sign")
-		mcl_signs.register_sign(name,p.sign_color,def)
+		mcl_signs.register_sign (name, p.sign_color, def)
 		core.register_craft({
 			output = "mcl_signs:wall_sign_"..name.." 3",
 			recipe = {
@@ -604,6 +604,31 @@ function mcl_trees.register_wood(name, p)
 				{"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,"mcl_trees:wood_"..name,},
 				{"","mcl_core:stick",""},
 			}
+		})
+	end
+
+	if p.hanging_sign then
+		local def_hanging = table.merge ({
+			_mcl_burntime = 10,
+		}, type (p.hanging_sign) == "table" and p.hanging_sign or {})
+		def_hanging.description
+			= def_hanging.description or D (rname .. " Hanging Sign")
+		mcl_signs.register_hanging_sign (name, def_hanging)
+		core.register_craft ({
+			output = "mcl_signs:hanging_sign_" .. name .. " 6",
+			recipe = {
+				{"mcl_lanterns:chain","","mcl_lanterns:chain"},
+				{
+					"mcl_trees:stripped_"..name,
+					"mcl_trees:stripped_"..name,
+					"mcl_trees:stripped_"..name,
+				},
+				{
+					"mcl_trees:stripped_"..name,
+					"mcl_trees:stripped_"..name,
+					"mcl_trees:stripped_"..name,
+				},
+			},
 		})
 	end
 
