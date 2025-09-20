@@ -236,7 +236,7 @@ mcl_redstone_event_max (Maximum queued redstone events) int 65535
 # Stops redstone signals from traveling down top slabs similar to Java edition
 # redstone. Does not stop signals from traveling down other transparent blocks,
 # like Bedrock edition redstone.
-mcl_redstone_slab_signals (Signals don't travel down top slabs) bool false
+mcl_redstone_slab_signals (Signals don't travel down top slabs) bool true
 
 [Liquids]
 # Enables MC-like liquid flowing.
