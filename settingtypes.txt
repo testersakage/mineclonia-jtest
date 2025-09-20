@@ -72,6 +72,23 @@ mcl_difficulty (Difficulty) enum normal peaceful,easy,normal,hard
 # by editing map_meta.txt.
 mcl_init_disable_levelgen (Disable custom map generator) bool false
 
+# Whether to enable the new determinsitic structure generator.  This
+# option only takes effect on Luanti 5.14 or later; the structure
+# generator is always enabled (whatever may be the value of this
+# option) when `mcl_levelgen' (see mcl_init_disable_levelgen) is
+# enabled in a singlenode world.
+#
+# When enabled, `/locate' can locate most types of structures, and
+# they generate in larger sizes and with greater fidelity to
+# Minecraft.
+#
+# Being a mapgen setting, when configured here it will influence all
+# worlds launched from this Luanti installation or with this
+# minetest.conf in effect, unless another value is specified in
+# map_meta.txt.  This option may be configured for individual worlds
+# by editing map_meta.txt.
+mcl_levelgen_enable_ersatz (Enable new structure generator) bool true
+
 [Players]
 # If enabled, players respawn at the bed they clicked instead of normal spawn.
 # This setting is only read at startup.

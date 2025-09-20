@@ -61,7 +61,9 @@ function mcl_mapgen_models.valleys_mapgen_model ()
 	local ceil = math.ceil
 
 	local vary_river_depth = flags.vary_river_depth
-	local altitude_chill = flags.altitude_chill
+	local f_altitude_chill = flags.altitude_chill
+	local altitude_chill
+		= tonumber (core.get_mapgen_setting ("mgvalleys_altitude_chill"))
 
 	local pos = vector.new ()
 
@@ -129,7 +131,7 @@ function mcl_mapgen_models.valleys_mapgen_model ()
 
 			if vary_river_depth then
 				local t_heat = core.get_heat (pos)
-				local heat = altitude_chill
+				local heat = f_altitude_chill
 					and t_heat + 5.0 - (base - water_level) * 20.0 / altitude_chill
 					or t_heat
 				local delta = core.get_humidity (pos) - 50.0

@@ -10,13 +10,11 @@ generator in a world-specific manner:
 Enable ``Large Biomes'' level generation, where the biome noise maps
 are roughly 8x larger than in standard levels.
 
-2. mcl_levelgen_enable_ersatz = true
+2. mcl_levelgen_enable_ersatz = false
 
-Enable the generation of select structures when a standard Luanti
-mapgen is enabled.  This option presently requires a modified version
-Luanti/Minetest, available at:
-
-  https://codeberg.org/halon/Minetest
+Disable the generation of most structures when a standard Luanti
+mapgen is enabled.  This option presently takes no effect without a
+build of Minetest 5.14 from September 20th or later.
 
 3. mcl_init_disable_levelgen = true
 
