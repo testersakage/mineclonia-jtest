@@ -96,6 +96,7 @@ All features can be disabled by setting them to false, nil will assume default v
 		object = {},                           -- overrides for the boat item definition
 		entity = {},                           -- overrides for the boat lua entity
 	},
+	hanging_sign = nil or true or { ... },     -- overrides for the hanging sign definition
 })
 ```
 

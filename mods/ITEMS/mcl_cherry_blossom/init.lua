@@ -44,6 +44,7 @@ mcl_trees.register_wood("cherry_blossom",{
 		tile_side = "mcl_cherry_blossom_trapdoor_side.png",
 		wield_image = "mcl_cherry_blossom_trapdoor.png",
 	},
+	hanging_sign = true,
 })
 
 local cherry_particlespawner = {

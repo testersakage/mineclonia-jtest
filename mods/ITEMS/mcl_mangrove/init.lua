@@ -48,6 +48,7 @@ mcl_trees.register_wood("mangrove",{
 		tile_side = "mcl_mangrove_trapdoor_side.png",
 		wield_image = "mcl_mangrove_trapdoor.png",
 	},
+	hanging_sign = true,
 })
 
 local propagule_allowed_nodes = {

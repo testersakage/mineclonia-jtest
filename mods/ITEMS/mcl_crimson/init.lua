@@ -167,6 +167,7 @@ mcl_trees.register_wood("crimson",{
 	pressure_plate = { _mcl_burntime = 0 },
 	stairs = { overrides = { _mcl_burntime = 0 }},
 	slab = { overrides = { _mcl_burntime = 0 }},
+	hanging_sign = {_mcl_burntime = 0, },
 })
 
 mcl_trees.register_wood("warped",{
@@ -230,6 +231,7 @@ mcl_trees.register_wood("warped",{
 	pressure_plate = { _mcl_burntime = 0 },
 	stairs = { overrides = { _mcl_burntime = 0 }},
 	slab = { overrides = { _mcl_burntime = 0 }},
+	hanging_sign = {_mcl_burntime = 0, },
 })
 
 core.register_node("mcl_crimson:warped_fungus", {

@@ -43,6 +43,7 @@ mcl_trees.register_wood("oak",{
 	potted_sapling = {
 		image = "default_sapling.png",
 	},
+	hanging_sign = true,
 })
 
 mcl_trees.register_wood("dark_oak",{
@@ -72,6 +73,7 @@ mcl_trees.register_wood("dark_oak",{
 	potted_sapling = {
 		image = "mcl_core_sapling_big_oak.png",
 	},
+	hanging_sign = true,
 })
 
 mcl_trees.register_wood("jungle",{
@@ -104,6 +106,7 @@ mcl_trees.register_wood("jungle",{
 	potted_sapling = {
 		image = "default_junglesapling.png",
 	},
+	hanging_sign = true,
 })
 
 mcl_trees.register_wood("spruce",{
@@ -142,6 +145,7 @@ mcl_trees.register_wood("spruce",{
 			end
 		end
 	},
+	hanging_sign = true,
 })
 
 mcl_trees.register_wood("acacia",{
@@ -171,6 +175,7 @@ mcl_trees.register_wood("acacia",{
 	potted_sapling = {
 		image = "default_acacia_sapling.png",
 	},
+	hanging_sign = true,
 })
 
 mcl_trees.register_wood("birch",{
@@ -185,4 +190,5 @@ mcl_trees.register_wood("birch",{
 	sapling = {
 		_after_grow=mcl_trees.sapling_add_bee_nest,
 	},
+	hanging_sign = true,
 })

@@ -64,11 +64,15 @@ local function get_signdata(pos)
 		local dir = core.wallmounted_to_dir(node.param2)
 		spos = vector.add(vector.offset(pos,0,-0.25,0),dir * 0.41 )
 		yaw = core.dir_to_yaw(dir)
-	elseif def.paramtype2 == "facedir" then
+	elseif def.paramtype2 == "4dir" then
 		typ = "hanging"
-		local dir = core.facedir_to_dir(node.param2)
-		spos = vector.add(vector.offset(pos,0,-0.45,0),dir * -0.05 )
-		yaw = core.dir_to_yaw(dir)
+		local dir = core.fourdir_to_dir (node.param2)
+		spos = vector.add (vector.offset (pos,0,-0.45,0), dir * -0.075)
+		yaw = core.dir_to_yaw (dir)
+	elseif def.groups.hanging_sign and def.groups.hanging_sign >= 1 then
+		yaw = math.rad(((node.param2 * 1.5 ) + 1 ) % 360)
+		local dir = core.yaw_to_dir(yaw)
+		spos = vector.add(vector.offset(pos,0,-0.45,0),dir * -0.075)
 	else
 		yaw = math.rad(((node.param2 * 1.5 ) + 1 ) % 360)
 		local dir = core.yaw_to_dir(yaw)
@@ -217,6 +221,19 @@ function mcl_signs.generate_texture(data)
 	return texture
 end
 
+local function project_placer_dir (axis, placer_dir)
+	local axis_1 = vector.normalize (vector.new (axis.z, 0, axis.x))
+	local dot = vector.dot (axis_1, placer_dir)
+	return vector.multiply (axis_1, dot ~= 0.0 and dot or 1.0)
+end
+
+local FULL_BLOCK = mcl_util.decompose_AABBs ({
+	{
+		-0.5, -0.5, -0.5,
+		0.5, 0.5, 0.5,
+	},
+})
+
 function sign_tpl.on_place(itemstack, placer, pointed_thing)
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 	if rc then return rc end
@@ -227,8 +244,8 @@ function sign_tpl.on_place(itemstack, placer, pointed_thing)
 
 	local under = pointed_thing.under
 	local node = core.get_node(under)
-	local def = core.registered_nodes[node.name]
-	if not def then return itemstack end
+	local ndef = core.registered_nodes[node.name]
+	if not ndef then return itemstack end
 
 	if mcl_util.call_on_rightclick(itemstack, placer, pointed_thing) then
 		return itemstack
@@ -243,19 +260,52 @@ function sign_tpl.on_place(itemstack, placer, pointed_thing)
 	local def = itemstack:get_definition()
 
 	local pos
-	-- place on wall
-	if wdir ~= 0 and wdir ~= 1 then
-		placestack:set_name("mcl_signs:wall_sign_"..def._mcl_sign_wood)
-		itemstack, pos = core.item_place_node(placestack, placer, pointed_thing, wdir)
-	elseif wdir == 1 then -- standing, not ceiling
-		placestack:set_name("mcl_signs:standing_sign_"..def._mcl_sign_wood)
-		local rot = normalize_rotation(placer:get_look_horizontal() * 180 / math.pi / 1.5)
-		itemstack, pos = core.item_place_node(placestack, placer, pointed_thing,  rot) -- param2 value is degrees / 1.5
-	elseif wdir == 0 then --ceiling, hanging sign
-		placestack:set_name("mcl_signs:hanging_sign_"..def._mcl_sign_wood)
-		itemstack, pos = core.item_place(placestack, placer, pointed_thing, core.dir_to_facedir(vector.direction(placer:get_pos(),pointed_thing.above)))
+	if core.get_item_group (itemstring, "hanging_sign") == 0 then
+		-- place on wall
+		if wdir ~= 0 and wdir ~= 1 then
+			placestack:set_name("mcl_signs:wall_sign_"..def._mcl_sign_wood)
+			itemstack, pos = core.item_place_node(placestack, placer, pointed_thing, wdir)
+		elseif wdir == 1 then -- standing, not ceiling
+			placestack:set_name("mcl_signs:standing_sign_"..def._mcl_sign_wood)
+			local rot = normalize_rotation(placer:get_look_horizontal() * 180 / math.pi / 1.5)
+			itemstack, pos = core.item_place_node(placestack, placer, pointed_thing,  rot) -- param2 value is degrees / 1.5
+		else
+			return itemstack
+		end
 	else
-		return itemstack
+		-- Hanging sign.
+		if wdir == 0 then
+			if not ndef.walkable then
+				return itemstack
+			end
+
+			local boxes = core.get_node_boxes ("collision_box", pointed_thing.under)
+			local shape = mcl_util.decompose_AABBs (boxes)
+			if not shape then
+				return itemstack
+			end
+			local face = shape:select_face ("y", -0.5)
+			if face:equal_p (FULL_BLOCK) then
+				local dir = vector.subtract (above, placer:get_pos ())
+				local fourdir = core.dir_to_fourdir (dir)
+				placestack:set_name ("mcl_signs:hanging_sign_" .. def._mcl_sign_wood)
+				itemstack, pos = core.item_place_node (placestack, placer, pointed_thing,
+								       fourdir)
+			else
+				local rot = normalize_rotation(placer:get_look_horizontal() * 180 / math.pi / 1.5)
+				placestack:set_name ("mcl_signs:hanging_sign_attached_" .. def._mcl_sign_wood)
+				itemstack, pos = core.item_place_node (placestack, placer, pointed_thing, rot)
+			end
+		elseif wdir ~= 1 then
+			local placer_dir = vector.subtract (above, placer:get_pos ())
+			local dir = project_placer_dir (dir, vector.normalize (placer_dir))
+			local fourdir = core.dir_to_fourdir (dir)
+			placestack:set_name ("mcl_signs:hanging_sign_wall_" .. def._mcl_sign_wood)
+			itemstack, pos = core.item_place_node (placestack, placer, pointed_thing,
+							       fourdir)
+		else
+			return itemstack
+		end
 	end
 	mcl_signs.show_formspec(placer, pos)
 	itemstack:set_name(itemstring)
@@ -305,11 +355,96 @@ local sign_wall = table.merge(sign_tpl,{
 local sign_hanging = table.merge(sign_tpl,{
 	mesh = "mcl_signs_sign_hanging.obj",
 	tiles = { "mcl_signs_sign_hanging.png" },
-	paramtype2 = "facedir",
-	use_texture_alpha = "blend",
-	selection_box = { type = "fixed", fixed = {  -0.5, -0.45, -0.05, 0.5, 0.05, 0.05 }},
-	groups = { axey = 1, handy = 2, sign = 1, not_in_creative_inventory = 1 },
+	paramtype2 = "4dir",
+	use_texture_alpha = "clip",
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			-0.4375,
+			-0.5,
+			-0.0625,
+			0.4375,
+			0.125,
+			0.0625,
+		},
+	},
+	groups = {
+		axey = 1, handy = 2, sign = 1, hanging_sign = 1,
+		attached_node = 4,
+	},
 	_mcl_sign_type = "hanging",
+})
+
+local sign_hanging_wall = table.merge(sign_tpl,{
+	mesh = "mcl_signs_sign_hanging_wall.obj",
+	tiles = { "mcl_signs_sign_hanging_wall.png" },
+	paramtype2 = "4dir",
+	use_texture_alpha = "clip",
+	walkable = true,
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{
+				-0.4375,
+				-0.5,
+				-0.0625,
+				0.4375,
+				0.125,
+				0.0625,
+			},
+			{
+				-0.5,
+				0.375,
+				-0.125,
+				0.5,
+				0.5,
+				0.125,
+			},
+		},
+	},
+	collision_box = {
+		type = "fixed",
+		fixed = {
+			{
+				-0.5,
+				0.375,
+				-0.125,
+				0.5,
+				0.5,
+				0.125,
+			},
+		},
+	},
+	groups = {
+		axey = 1, handy = 2,
+		sign = 1, hanging_sign = 1,
+		not_in_creative_inventory = 1,
+	},
+	_mcl_sign_type = "hanging",
+})
+
+local sign_hanging_attached = table.merge (sign_tpl, {
+	mesh = "mcl_signs_sign_hanging_attached.obj",
+	tiles = { "mcl_signs_sign_hanging_wall.png" },
+	paramtype2 = "degrotate",
+	use_texture_alpha = "clip",
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{
+				-0.4375,
+				-0.5,
+				-0.4375,
+				0.4375,
+				0.125,
+				0.4375,
+			},
+		},
+	},
+	groups = {
+		axey = 1, handy = 2, sign = 1, hanging_sign = 1,
+		attached_node = 4, not_in_creative_inventory = 1,
+	},
 })
 
 --Formspec
@@ -420,7 +555,7 @@ end
 
 mcl_signs.old_rotnames = {}
 
-function mcl_signs.register_sign(name,color,def)
+function mcl_signs.register_sign(name, color, def)
 	local newfields = {
 		tiles = { colored_texture("mcl_signs_sign_greyscale.png", color) },
 		inventory_image = colored_texture("default_sign_greyscale.png", color),
@@ -431,11 +566,31 @@ function mcl_signs.register_sign(name,color,def)
 
 	core.register_node(":mcl_signs:standing_sign_"..name, table.merge(sign_tpl, newfields, def or {}))
 	core.register_node(":mcl_signs:wall_sign_"..name,table.merge(sign_wall, newfields, def or {}))
-	core.register_node(":mcl_signs:hanging_sign_"..name,table.merge(sign_hanging, newfields, {
-		tiles = { colored_texture("mcl_signs_sign_hanging.png",color), },
-	},def or {}))
-
 	table.insert(mcl_signs.old_rotnames,"mcl_signs:standing_sign22_5_"..name)
 	table.insert(mcl_signs.old_rotnames,"mcl_signs:standing_sign45_"..name)
 	table.insert(mcl_signs.old_rotnames,"mcl_signs:standing_sign67_5_"..name)
+end
+
+function mcl_signs.register_hanging_sign (name, def)
+	local newfields = {
+		inventory_image = "mcl_signs_hanging_sign_" .. name .. "_item.png",
+		wield_image = "mcl_signs_hanging_sign_" .. name .. "_item.png",
+		drop = "mcl_signs:hanging_sign_" .. name,
+		_mcl_sign_wood = name,
+	}
+	core.register_node(":mcl_signs:hanging_sign_"..name,table.merge(sign_hanging, newfields, {
+		tiles = {
+			"mcl_signs_hanging_sign_" .. name .. ".png",
+		},
+	}, def or {}))
+	core.register_node(":mcl_signs:hanging_sign_wall_"..name,table.merge(sign_hanging_wall, newfields, {
+		tiles = {
+			"mcl_signs_hanging_sign_" .. name .. ".png",
+		},
+	}, def or {}))
+	core.register_node(":mcl_signs:hanging_sign_attached_"..name,table.merge(sign_hanging_attached, newfields, {
+		tiles = {
+			"mcl_signs_hanging_sign_" .. name .. ".png",
+		},
+	}, def or {}))
 end
