@@ -217,10 +217,10 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 	end,
 	index_biomes_cached = function (self, x, y, z)
 		v.x = toblock (x)
-		v.z = toblock (-z - 1)
+		v.z = -toblock (z) - 1
 		v.y = toblock (y) + 64 + mg_overworld_min
 		if mapgen_model then
-			local override = mapgen_model.get_biome_override (x, -z - 1)
+			local override = mapgen_model.get_biome_override (v.x, v.z)
 			if override then
 				local data = core.get_biome_data (v)
 				return biome_specific_overrides[data.biome][override]
@@ -236,10 +236,10 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 	end,
 	index_biomes = function (self, x, y, z)
 		v.x = toblock (x)
-		v.z = toblock (-z - 1)
+		v.z = -toblock (z) - 1
 		v.y = toblock (y) + 64 + mg_overworld_min
 		if mapgen_model then
-			local override = mapgen_model.get_biome_override (x, -z - 1)
+			local override = mapgen_model.get_biome_override (v.x, v.z)
 			if override then
 				local data = core.get_biome_data (v)
 				return biome_specific_overrides[data.biome][override]
@@ -311,14 +311,14 @@ local ersatz_preset_template_nether = table.merge (mcl_levelgen.level_preset_tem
 	end,
 	index_biomes_cached = function (self, x, y, z)
 		v.x = toblock (x)
-		v.z = toblock (-z - 1)
+		v.z = -toblock (z) - 1
 		v.y = toblock (y) + mg_nether_min
 		return ersatz_biome_translations[core.get_biome_data (v).biome]
 			or "NetherWastes"
 	end,
 	index_biomes = function (self, x, y, z)
 		v.x = toblock (x)
-		v.z = toblock (-z - 1)
+		v.z = -toblock (z) - 1
 		v.y = toblock (y) + mg_nether_min
 		return ersatz_biome_translations[core.get_biome_data (v).biome]
 			or "NetherWastes"
@@ -355,14 +355,14 @@ local ersatz_preset_template_end = table.merge (mcl_levelgen.level_preset_templa
 	end,
 	index_biomes_cached = function (self, x, y, z)
 		v.x = toblock (x)
-		v.z = toblock (-z - 1)
+		v.z = -toblock (z) - 1
 		v.y = toblock (y) + mg_end_min
 		return ersatz_biome_translations[core.get_biome_data (v).biome]
 			or "TheEnd"
 	end,
 	index_biomes = function (self, x, y, z)
 		v.x = toblock (x)
-		v.z = toblock (-z - 1)
+		v.z = -toblock (z) - 1
 		v.y = toblock (y) + mg_end_min
 		return ersatz_biome_translations[core.get_biome_data (v).biome]
 			or "TheEnd"

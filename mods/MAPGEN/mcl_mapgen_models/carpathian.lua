@@ -143,9 +143,9 @@ function mcl_mapgen_models.carpathian_mapgen_model ()
 			local mountains = hills + ridged_mountains + step_mountains
 			local est_surface_level = (base_level + mountains + grad) / 4
 
-			if est_surface_level < -24 then
+			if est_surface_level < -20 then
 				return "DeepOcean"
-			elseif est_surface_level < -3 then
+			elseif est_surface_level < -2 then
 				return "Ocean"
 			end
 			return nil
