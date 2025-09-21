@@ -82,8 +82,10 @@ local axolotl = {
 		if self:follow_holding (clicker)
 			and self:feed_tame (clicker, 4, true, false, true) then
 			local item = clicker:get_wielded_item()
-			item:take_item()
-			clicker:set_wielded_item("mcl_buckets:bucket_water")
+			if not core.is_creative_enabled(clicker:get_player_name()) then
+				item:take_item()
+				clicker:set_wielded_item("mcl_buckets:bucket_water")
+			end
 			return
 		end
 	end,
