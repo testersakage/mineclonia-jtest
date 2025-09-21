@@ -207,9 +207,9 @@ Technical differences from Minecraft:
   Minecraft, but it is still very large)
 * Still incomplete and buggy
 * Blocks, items, enemies and other features are missing
-* Structure replacements - these small variants of Minecraft
-  structures serve as replacements (unless you enable Mineclonia's
-  custom Lua map generator) until we can get large structures working:
+* Structure replacements on Luanti <5.14; these small replacement
+  structures are enabled on earlier releases of Luanti on account of
+  technical limitations preventing larger structures from generating:
     * Woodland Cabin (Mansion)
     * Nether Outpost (Fortress)
     * Ocean Temple (Monument)
