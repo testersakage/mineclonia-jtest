@@ -4520,23 +4520,17 @@ local villager_gift_tables = {
 		stacks_max = 5,
 		items = {
 			{
-				itemstring = "mcl_core:iron_ingot",
-				amount_min = 1,
-				amount_max = 3,
-				weight = 2,
+				itemstring = "mcl_armor:helmet_chain"
 			},
 			{
-				itemstring = "mcl_farming:bread",
-				amount_min = 1,
-				amount_max = 4,
-				weight = 4,
+				itemstring = "mcl_armor:chestplate_chain"
 			},
 			{
-				itemstring = "mcl_armor:helmet_iron",
+				itemstring = "mcl_armor:leggings_chain"
 			},
 			{
-				itemstring = "mcl_core:emerald",
-			},
+				itemstring = "mcl_armor:boots_chain"
+			}
 		},
 	},
 	butcher = {
@@ -4544,28 +4538,20 @@ local villager_gift_tables = {
 		stacks_max = 5,
 		items = {
 			{
-				itemstring = "mcl_core:emerald",
+				itemstring = "mcl_mobitems:cooked_chicken"
 			},
 			{
-				itemstring = "mcl_mobitems:porkchop",
-				amount_min = 1,
-				amount_max = 3,
+				itemstring = "mcl_mobitems:cooked_mutton"
 			},
 			{
-				itemstring = "mcl_farming:wheat_item",
-				amount_min = 1,
-				amount_max = 3,
+				itemstring = "mcl_mobitems:cooked_porkchop"
 			},
 			{
-				itemstring = "mcl_mobitems:beef",
-				amount_min = 1,
-				amount_max = 3,
+				itemstring = "mcl_mobitems:cooked_rabbit"
 			},
 			{
-				itemstring = "mcl_mobitems:mutton",
-				amount_min = 1,
-				amount_max = 3,
-			},
+				itemstring = "mcl_mobitems:cooked_beef"
+			}
 		},
 	},
 	cartographer = {
@@ -4583,30 +4569,40 @@ local villager_gift_tables = {
 				amount_min = 1.0,
 				amount_max = 5.0,
 				weight = 15,
-			},
-			{
-				itemstring = mcl_compass.stereotype,
-				weight = 5,
-			},
-			{
-				itemstring = "mcl_farming:bread",
-				weight = 15,
-			},
-			{
-				itemstring = "mcl_core:stick",
-				amount_max = 2.0,
-				amount_min = 1.0,
-				weight = 5,
-			},
+			}
 		},
+	},
+	cleric = {
+		stacks_min = 1,
+		stacks_max = 5,
+		items = {
+			{
+				itemstring = "mcl_core:lapis"
+			},
+			{
+				itemstring = "mcl_redstone:redstone"
+			}
+		}
+	},
+	farmer = {
+		stacks_min = 1,
+		stacks_max = 3,
+		items = {
+			{
+				itemstring = "mcl_farming:bread"
+			},
+			{
+				itemstring = "mcl_farming:cookie"
+			},
+			{
+				itemstring = "mcl_farming:pumpkin_pie"
+			}
+		}
 	},
 	fisherman = {
 		stacks_min = 1,
 		stacks_max = 5,
 		items = {
-			{
-				itemstring = "mcl_core:emerald",
-			},
 			{
 				itemstring = "mcl_fishing:fish_raw",
 				amount_max = 3.0,
@@ -4617,23 +4613,7 @@ local villager_gift_tables = {
 				itemstring = "mcl_fishing:salmon_raw",
 				amount_max = 3.0,
 				amount_min = 1.0,
-			},
-			{
-				itemstring = "mcl_buckets:bucket_water",
-				amount_max = 3.0,
-				amount_min = 1.0,
-			},
-			{
-				itemstring = "mcl_barrels:barrel_closed",
-				amount_max = 3.0,
-				amount_min = 1.0,
-			},
-			{
-				itemstring = "mcl_core:coal_lump",
-				amount_max = 3.0,
-				amount_min = 2.0,
-				weight = 2,
-			},
+			}
 		},
 	},
 	fletcher = {
@@ -4647,66 +4627,71 @@ local villager_gift_tables = {
 				weight = 2,
 			},
 			{
-				itemstring = "mcl_mobitems:feather",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 6,
+				itemstring = "mcl_potions:fire_resistance_arrow"
 			},
 			{
-				itemstring = "mcl_throwing:egg",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 6,
+				itemstring = "mcl_potions:harming_arrow"
 			},
 			{
-				itemstring = "mcl_core:flint",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 6,
+				itemstring = "mcl_potions:healing_arrow"
 			},
 			{
-				itemstring = "mcl_core:stick",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 6,
+				itemstring = "mcl_potions:invisibility_arrow"
 			},
+			{
+				itemstring = "mcl_potions:leaping_arrow"
+			},
+			{
+				itemstring = "mcl_potions:night_vision_arrow"
+			},
+			{
+				itemstring = "mcl_potions:poison_arrow"
+			},
+			{
+				itemstring = "mcl_potions:regeneration_arrow"
+			},
+			{
+				itemstring = "mcl_potions:slowness_arrow"
+			},
+			{
+				itemstring = "mcl_potions:strength_arrow"
+			},
+			{
+				itemstring = "mcl_potions:swiftness_arrow"
+			},
+			{
+				itemstring = "mcl_potions:water_breathing_arrow"
+			},
+			{
+				itemstring = "mcl_potions:weakness_arrow"
+			}
 		},
+	},
+	leatherworker = {
+		stacks_min = 1,
+		stacks_max = 3,
+		items = {
+			{
+				itemstring = "mcl_mobitems:leather"
+			}
+		}
+	},
+	librarian = {
+		stacks_min = 1,
+		stacks_max = 5,
+		items = {
+			{
+				itemstring = "mcl_books:book"
+			}
+		}
 	},
 	mason = {
 		stacks_min = 1,
 		stacks_max = 5,
 		items = {
 			{
-				itemstring = "mcl_core:clay_lump",
-				amount_max = 3.0,
-				amount_min = 1.0,
-			},
-			{
-				itemstring = "mcl_flowerpots:flower_pot",
-			},
-			{
-				itemstring = "mcl_core:stone",
-				weight = 2,
-			},
-			{
-				itemstring = "mcl_core:stonebrick",
-				weight = 2,
-			},
-			{
-				itemstring = "mcl_farming:bread",
-				amount_max = 4.0,
-				amount_min = 1.0,
-				weight = 4,
-			},
-			{
-				itemstring = "mcl_dyes:yellow",
-			},
-			{
-				itemstring = "mcl_core:stone_smooth",
-			},
-			{
-				itemstring = "mcl_core:emerald",
-			},
+				itemstring = "mcl_core:clay"
+			}
 		},
 	},
 	shepherd = {
@@ -4714,35 +4699,53 @@ local villager_gift_tables = {
 		stacks_max = 5,
 		items = {
 			{
-				itemstring = "mcl_wool:white",
-				amount_max = 8.0,
-				amount_min = 1.0,
-				weight = 6,
+				itemstring = "mcl_wool:black"
 			},
 			{
-				itemstring = "mcl_wool:black",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 3,
+				itemstring = "mcl_wool:blue"
 			},
 			{
-				itemstring = "mcl_wool:grey",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 2,
+				itemstring = "mcl_wool:brown"
 			},
 			{
-				itemstring = "mcl_wool:silver",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 2,
+				itemstring = "mcl_wool:cyan"
 			},
 			{
-				itemstring = "mcl_core:emerald",
+				itemstring = "mcl_wool:green"
 			},
 			{
-				itemstring = "mcl_tools:shears",
+				itemstring = "mcl_wool:grey"
 			},
+			{
+				itemstring = "mcl_wool:light_blue"
+			},
+			{
+				itemstring = "mcl_wool:lime"
+			},
+			{
+				itemstring = "mcl_wool:magenta"
+			},
+			{
+				itemstring = "mcl_wool:orange"
+			},
+			{
+				itemstring = "mcl_wool:pink"
+			},
+			{
+				itemstring = "mcl_wool:purple"
+			},
+			{
+				itemstring = "mcl_wool:red"
+			},
+			{
+				itemstring = "mcl_wool:silver"
+			},
+			{
+				itemstring = "mcl_wool:white"
+			},
+			{
+				itemstring = "mcl_wool:yellow"
+			}
 		},
 	},
 	toolsmith = {
@@ -4750,42 +4753,17 @@ local villager_gift_tables = {
 		stacks_max = 8,
 		items = {
 			{
-				itemstring = "mcl_core:diamond",
-				amount_max = 3.0,
-				amount_min = 1.0,
+				itemstring = "mcl_tools:axe_stone"
 			},
 			{
-				itemstring = "mcl_core:iron_ingot",
-				amount_max = 5.0,
-				amount_min = 1.0,
-				weight = 5,
+				itemstring = "mcl_farming:hoe_stone"
 			},
 			{
-				itemstring = "mcl_core:gold_ingot",
-				amount_max = 3.0,
-				amount_min = 1.0,
+				itemstring = "mcl_tools:pick_stone"
 			},
 			{
-				itemstring = "mcl_farming:bread",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 15,
-			},
-			{
-				itemstring = "mcl_tools:pick_iron",
-				weight = 5,
-			},
-			{
-				itemstring = "mcl_core:coal_lump",
-				amount_min = 1.0,
-				amount_max = 3.0,
-			},
-			{
-				itemstring = "mcl_core:stick",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 20,
-			},
+				itemstring = "mcl_tools:shovel_stone"
+			}
 		},
 	},
 	weaponsmith = {
@@ -4793,84 +4771,14 @@ local villager_gift_tables = {
 		stacks_max = 8,
 		items = {
 			{
-				itemstring = "mcl_core:diamond",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 3,
+				itemstring = "mcl_tools:axe_stone"
 			},
 			{
-				itemstring = "mcl_core:iron_ingot",
-				amount_max = 5.0,
-				amount_min = 1.0,
-				weight = 10,
+				itemstring = "mcl_tools:axe_gold"
 			},
 			{
-				itemstring = "mcl_core:gold_ingot",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 5,
-			},
-			{
-				itemstring = "mcl_farming:bread",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 15,
-			},
-			{
-				itemstring = "mcl_core:apple",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 15,
-			},
-			{
-				itemstring = "mcl_tools:pick_iron",
-				weight = 5,
-			},
-			{
-				itemstring = "mcl_tools:sword_iron",
-				weight = 5,
-			},
-			{
-				itemstring = "mcl_armor:chestplate_iron",
-				weight = 5,
-			},
-			{
-				itemstring = "mcl_armor:helmet_iron",
-				weight = 5,
-			},
-			{
-				itemstring = "mcl_armor:leggings_iron",
-				weight = 5,
-			},
-			{
-				itemstring = "mcl_armor:boots_iron",
-				weight = 5,
-			},
-			{
-				itemstring = "mcl_core:obsidian",
-				amount_max = 7.0,
-				amount_min = 3.0,
-				weight = 5,
-			},
-			{
-				itemstring = "mcl_core:oak_sapling",
-				amount_max = 7.0,
-				amount_min = 3.0,
-				weight = 5,
-			},
-			{
-				itemstring = "mcl_mobitems:saddle",
-				weight = 3,
-			},
-			{
-				itemstring = "mcl_mobitems:iron_horse_armor",
-			},
-			{
-				itemstring = "mcl_mobitems:gold_horse_armor",
-			},
-			{
-				itemstring = "mcl_mobitems:diamond_horse_armor",
-			},
+				itemstring = "mcl_tools:axe_iron"
+			}
 		},
 	},
 }
