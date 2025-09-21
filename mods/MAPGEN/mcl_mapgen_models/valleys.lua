@@ -81,7 +81,6 @@ function mcl_mapgen_models.valleys_mapgen_model ()
 			pos.x = x
 			pos.y = z
 
-			local n_slope = inter_valley_slope:get_2d (pos)
 			local n_terrain_height = terrain_height:get_2d (pos)
 			local n_valley = valley_depth:get_2d (pos)
 			local n_valley_profile = valley_profile:get_2d (pos)
@@ -92,7 +91,6 @@ function mcl_mapgen_models.valleys_mapgen_model ()
 			local base = n_terrain_height + valley_d;
 			local valley_h = valley_d * (1.0 - mathexp (-tv * tv))
 			local est_surface_y = base + valley_h
-				+ (inter_valley_fill_max * n_slope * valley_h)
 
 			if est_surface_y < water_level - 20 then
 				return "DeepOcean"
