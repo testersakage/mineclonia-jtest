@@ -12,9 +12,9 @@ are roughly 8x larger than in standard levels.
 
 2. mcl_levelgen_enable_ersatz = false
 
-Disable the generation of most structures when a standard Luanti
-mapgen is enabled.  This option presently takes no effect without a
-build of Minetest 5.14 from September 20th or later.
+When `false', disable the generation of most structures when a
+standard Luanti mapgen is enabled.  This option is meaningless without
+a build of Luanti 5.14 from September 20th 2025 or later.
 
 3. mcl_init_disable_levelgen = true
 
