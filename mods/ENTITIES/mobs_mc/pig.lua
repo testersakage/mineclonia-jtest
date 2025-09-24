@@ -105,10 +105,11 @@ function pig:on_rightclick (clicker)
 	end
 
 	local item = clicker:get_wielded_item()
+	local item_name = item:get_name()
 
 	-- Feed pig
 	if self:follow_holding (clicker) then
-		if item:get_name() ~= "mcl_mobitems:carrot_on_a_stick"
+		if item_name ~= "mcl_mobitems:carrot_on_a_stick"
 			and self:feed_tame(clicker, 4, true, false) then
 			return
 		end
@@ -117,7 +118,7 @@ function pig:on_rightclick (clicker)
 	if self.child then return end
 
 	-- Put saddle on pig
-	if item:get_name() == "mcl_mobitems:saddle" and self.saddle ~= "yes" then
+	if item_name == "mcl_mobitems:saddle" and self.saddle ~= "yes" then
 		self.base_texture = {
 			"mobs_mc_pig.png", -- base
 			"mobs_mc_pig_saddle.png", -- saddle
@@ -143,6 +144,27 @@ function pig:on_rightclick (clicker)
 		end
 		core.sound_play({name = "mcl_armor_equip_leather"}, {gain=0.5, max_hear_distance=8, pos=self.object:get_pos()}, true)
 		return
+	elseif core.get_item_group(item_name, "shears") > 0 and self.saddle == "yes" and not self.driver then
+		self.base_texture = {"mobs_mc_pig.png", "blank.png"}
+		self:set_textures(self.base_texture)
+		self.saddle = "false"
+		self.drops = {
+			{
+				name = "mcl_mobitems:porkchop",
+			 	chance = 1,
+			 	min = 1,
+			 	max = 3
+			}
+		}
+		local pos = self.object:get_pos()
+		core.add_item(pos, ItemStack("mcl_mobitems:saddle"))
+		core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+		core.sound_play("mcl_armor_unequip_leather", {gain = 0.5, max_hear_distance = 8, pos = pos}, true)
+		if not core.is_creative_enabled(clicker:get_player_name()) then
+			local wear = mcl_autogroup.get_wear(item_name, "shearsy")
+			item:add_wear(wear)
+			clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
+		end
 	end
 
 	-- Accelerate pig when right clicked with carrot on a stick.
