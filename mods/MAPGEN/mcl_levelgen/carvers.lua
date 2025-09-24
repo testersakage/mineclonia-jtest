@@ -52,21 +52,29 @@ local chunksize = nil
 local nodes = nil
 local chunk_x = 0
 local chunk_z = 0
+local index = nil
 local level_min = 0
 local level_height = 0
+local effective_level_min = 0
+local effective_level_height = 0
 local surface_system = nil
 local aquifer = nil
 
 local function carver_prepare (cx, cz, aquifer_in, surface_system_in,
-			       chunksize_in, biomes, nodes_in,
+			       chunksize_in, index_in, biomes, nodes_in,
 			       heightmap, level_min_in, level_height_in,
+			       effective_level_min_in,
+			       effective_level_height_in,
 			       terrain)
 	chunk_x = cx
 	chunk_z = cz
 	chunksize = chunksize_in
+	index = index_in
 	nodes = nodes_in
 	level_min = level_min_in
 	level_height = level_height_in
+	effective_level_min = effective_level_min_in
+	effective_level_height = effective_level_height_in
 	surface_system = surface_system_in
 	aquifer = aquifer_in
 
@@ -102,18 +110,8 @@ end
 -- surface rules to the exposed dirt block.  Return whether any dirt
 -- was exposed.
 
--- local root_chunk
-
 local function carve_block (self, x, y, z, dx, dy, dz, dirt_exposed_p)
-	local idx = (dx * level_height + dy) * chunksize + dz + 1
-	-- if dx + chunk_x == 10979 and dz + chunk_z == -5809 then
-	-- 	nodes[idx] = encode_node (core.get_content_id ("mcl_core:glass"), 0)
-	-- 	return true, dirt_exposed_p
-	-- end
-	-- if x == 10966 and y == 15 and z == -5775 then
-	-- 	print ("!!!", unpack (root_chunk))
-	-- end
-
+	local idx = index (dx, dy, dz, chunksize, level_height)
 	local cid, _ = decode_node (nodes[idx])
 	if cid == cid_grass_block or cid == cid_mycelium and dy > 0 then
 		dirt_exposed_p = true
@@ -139,13 +137,10 @@ local function carve_block (self, x, y, z, dx, dy, dz, dirt_exposed_p)
 			end
 		end
 
-		-- TODO: avoid processing the same position twice.
 		nodes[idx] = value
 		return dirt_exposed_p
 	end
 	return dirt_exposed_p
-	-- nodes[idx] = encode_node (cid_air, 0)
-	-- return true, dirt_exposed_p
 end
 
 local mathmax = math.max
@@ -177,9 +172,13 @@ local function carve (self, x, y, z, width, height, bypass_p)
 	local chunk_max_z
 		= mathmin (floor (z + width) - chunk_z, chunksize - 1)
 	local chunk_min_y
-		= mathmax (floor (y - height) - 1 - level_min, 1)
+		= mathmax (floor (y - height) - 1 - effective_level_min,
+			   -- Do not permit carvers to overwrite the
+			   -- bottommost two layers of the level.
+			   level_min - effective_level_min + 1, -1)
 	local chunk_max_y
-		= mathmin (floor (y + height) + 1 - level_min, level_height - 1)
+		= mathmin (floor (y + height) + 1 - effective_level_min,
+			   effective_level_height - 1)
 
 	for x1 = chunk_min_x, chunk_max_x do
 		local absx = x1 + chunk_x
@@ -190,13 +189,9 @@ local function carve (self, x, y, z, width, height, bypass_p)
 			if distx * distx + distz * distz < 1.0 then
 				local dirt_exposed
 				for y1 = chunk_max_y, chunk_min_y + 1, -1 do
-					local absy = y1 + level_min
+					local absy = y1 + effective_level_min
 					local disty = (absy - 0.5 - y) / height
 					if not bypass_p (distx, disty, distz, absy) then
-						-- TODO: avoid
-						-- redundant
-						-- processing of
-						-- carved nodes.
 						dirt_exposed
 							= carve_block (self, absx, absy, absz,
 								       x1, y1, z1, dirt_exposed)
@@ -270,7 +265,6 @@ local function copyull (ull)
 end
 
 local pi = math.pi
--- local prin
 
 local function create_tunnel (self, x, y, z, seed, horiz_radius, vert_radius,
 			      thickness, yaw, pitch, first_seg, length, y_scale,
@@ -282,11 +276,6 @@ local function create_tunnel (self, x, y, z, seed, horiz_radius, vert_radius,
 	local yaw_variance = 0.0
 	local pitch_variance = 0.0
 	local pitch_arrest = steep and 0.92 or 0.7
-
-	-- if (prin) then
-	-- 	print ("  create_tunnel: branch ", branch_point, " steep: ", steep,
-	-- 	       seed, mcl_levelgen.tostringull (seed))
-	-- end
 
 	for i = first_seg, length do
 		local w = 1.5 + mathsin (pi * ((i - 1) / length)) * thickness
@@ -305,9 +294,6 @@ local function create_tunnel (self, x, y, z, seed, horiz_radius, vert_radius,
 		yaw_variance = yaw_variance
 			+ ((rng:next_float () - rng:next_float ())
 				* rng:next_float () * 4.0)
-		-- if prin then
-		-- 	print ("    ", pitch_variance, yaw_variance)
-		-- end
 
 		if i - 1 == branch_point and thickness > 1.0 then
 			local seed1 = copyull (rng:next_long ())
@@ -354,14 +340,10 @@ end
 -- previous call to `carver_prepare'.
 
 function cave_carver:carve (x, z, rng)
-	-- root_chunk = {x, z}
 	local range_in_blocks = 16 * (self.range * 2 - 1)
 	local max1 = rng:next_within (self.max_caves) + 1
 	local max2 = rng:next_within (max1) + 1
 	local cnt_segments = rng:next_within (max2)
-	-- if x / 16 == 684 and z / 16 == -360 then
-	-- 	print ("range", range_in_blocks, "cnt_segs", cnt_segments)
-	-- end
 	local y_sampler = self.y
 	local horiz_sampler = self.horizontal_radius_multiplier
 	local vert_sampler = self.vertical_radius_multiplier
@@ -374,17 +356,10 @@ function cave_carver:carve (x, z, rng)
 		local horiz_radius = horiz_sampler (rng)
 		local vert_radius = vert_sampler (rng)
 		floor_level = floor_sampler (rng)
-		-- if x / 16 == 684 and z / 16 == -360 then
-		-- 	print ("cx, cy, cz", center_x, center_y, center_z)
-		-- 	print ("hr, vr, fl", horiz_radius, vert_radius, floor_level)
-		-- end
 		local cnt_tunnels = 1
 		if rng:next_within (4) == 0 then
 			local room_scale = self.y_scale (rng)
 			local room_size = 1.0 + rng:next_float () * 6.0
-			-- if x / 16 == 684 and z / 16 == -360 then
-			-- 	print ("room", room_scale, room_size)
-			-- end
 			create_room (self, center_x, center_y, center_z,
 				     room_size, room_scale)
 			cnt_tunnels = cnt_tunnels + rng:next_within (4)
@@ -397,16 +372,11 @@ function cave_carver:carve (x, z, rng)
 			local length = range_in_blocks
 				- rng:next_within (floor (range_in_blocks / 4))
 			local seed = rng:next_long ()
-			-- if x / 16 == 684 and z / 16 == -360 then
-			-- 	print ("yaw, pitch", yaw, pitch, thickness, length)
-			-- 	prin = true
-			-- end
 
 			create_tunnel (self, center_x, center_y, center_z,
 				       seed, horiz_radius, vert_radius, thickness,
 				       yaw, pitch, 1, length, self.cave_y_scale,
 				       tunnel_rng)
-			-- prin = false
 		end
 	end
 end
@@ -537,8 +507,6 @@ local function ravine_bypass_p (dx, dy, dz, absy)
 	return (dx * dx + dz * dz) * squeezevec[y] + (dy * dy) / 6.0 >= 1.0
 end
 
--- local prin
-
 local function carve_ravine (self, seed, x, y, z, thickness, yaw, pitch, length, y_scale)
 	local rng = tunnel_rng
 	rng:reseed (seed)
@@ -552,10 +520,6 @@ local function carve_ravine (self, seed, x, y, z, thickness, yaw, pitch, length,
 		end
 		squeezevec[i] = roundf32 (squeeze * squeeze)
 	end
-
-	-- if prin then
-	-- 	print (unpack (squeezevec))
-	-- end
 
 	local pitch_variability = 0.0
 	local yaw_variability = 0.0
@@ -581,17 +545,10 @@ local function carve_ravine (self, seed, x, y, z, thickness, yaw, pitch, length,
 		yaw_variability = yaw_variability
 			+ roundf32 (((rng:next_float () - rng:next_float ())
 					* rng:next_float () * 4.0))
-		-- if prin then
-		-- 	print ("carve_ravine  ", x_radius, y_radius, x, y, z, pitch,
-		-- 	       yaw, pitch_variability, yaw_variability)
-		-- end
 		if rng:next_within (4) ~= 0 then
 			if no_longer_reachable (x, y, z, length - i + 1, thickness) then
 				return
 			end
-			-- if prin then
-			-- 	print ("Thickness", i, thickness, x_radius, y_radius, val)
-			-- end
 			carve (self, x, y, z, x_radius, y_radius,
 			       ravine_bypass_p)
 		end
@@ -599,7 +556,6 @@ local function carve_ravine (self, seed, x, y, z, thickness, yaw, pitch, length,
 end
 
 function ravine_carver:carve (x, z, rng)
-	-- local ox, oz = x, z
 	local range_in_blocks = 16 * (self.range * 2 - 1)
 	local x = x + rng:next_within (16)
 	local y = self.y (rng)
@@ -611,12 +567,6 @@ function ravine_carver:carve (x, z, rng)
 	local dist = floor (range_in_blocks
 			    * roundf32 (self.distance_factor (rng)))
 	local seed = rng:next_long ()
-	-- if ox == 1280 and oz == 6000 then
-	-- 	prin = true
-	-- 	print (x, y, z, yaw, pitch, y_scale, thickness, dist)
-	-- else
-	-- 	prin = false
-	-- end
 	carve_ravine (self, seed, x, y, z, roundf32 (thickness),
 		      roundf32 (yaw), roundf32 (pitch), dist,
 		      roundf32 (y_scale))
@@ -854,7 +804,8 @@ local addkull = mcl_levelgen.addkull
 -- configured for this MapChunk before invoking the carver subsystem.
 
 function mcl_levelgen.carve_terrain (preset, nodes, biomes, heightmap, x, y, z,
-				     chunksize, terrain)
+				     chunksize, index, effective_level_min,
+				     effective_level_height, terrain)
 	if not carvers_initialized then
 		return
 	end
@@ -870,8 +821,9 @@ function mcl_levelgen.carve_terrain (preset, nodes, biomes, heightmap, x, y, z,
 	local seed = copyull (preset.seed)
 
 	carver_prepare (x, z, terrain.aquifer, terrain.surface_system,
-			chunksize, biomes, nodes, heightmap, preset.min_y,
-			preset.height, terrain)
+			chunksize, index, biomes, nodes, heightmap,
+			preset.min_y, preset.height, effective_level_min,
+			effective_level_height, terrain)
 
 	for chunk_x = min_x, max_x, 16 do
 		for chunk_z = min_z, max_z, 16 do

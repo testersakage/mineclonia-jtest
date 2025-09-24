@@ -162,6 +162,10 @@ if core.get_mapgen_setting ("mcl_levelgen_enable_ersatz") == "true"
 	and core.features.generate_decorations_biomes then
 	-- Load the ersatz level generation system.
 	mcl_levelgen.enable_ersatz = true
+	mcl_levelgen.ersatz_enable_carvers = false
+	if core.get_mapgen_setting ("mcl_levelgen_enable_ersatz_carvers") == "true" then
+		mcl_levelgen.ersatz_enable_carvers = true
+	end
 	dofile (mcl_levelgen.prefix .. "/ersatz.lua")
 end
 

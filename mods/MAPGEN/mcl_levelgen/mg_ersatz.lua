@@ -13,6 +13,33 @@ mcl_levelgen.initialize_nodeprops_in_async_env ()
 mcl_levelgen.initialize_portable_schematics ()
 
 ------------------------------------------------------------------------
+-- Ersatz carvers.
+------------------------------------------------------------------------
+
+local ersatz_carvers_loaded = false
+
+if mcl_levelgen.ersatz_enable_carvers then
+
+local function augment_carver (id)
+	local carver = mcl_levelgen.registered_carvers[id]
+	table.insert (carver.replaceable, "group:material_stone")
+	local idx = table.indexof (carver.replaceable, "")
+	if idx ~= -1 then
+		table.remove (carver.replaceable, idx)
+	end
+end
+
+augment_carver ("mcl_levelgen:cave_carver")
+augment_carver ("mcl_levelgen:cave_extra_underground_carver")
+augment_carver ("mcl_levelgen:ravine_carver")
+mcl_levelgen.registered_carvers["mcl_levelgen:nether_cave_carver"] = nil
+
+mcl_levelgen.load_carvers ()
+ersatz_carvers_loaded = true
+
+end
+
+------------------------------------------------------------------------
 -- Ersatz terrain generator.
 ------------------------------------------------------------------------
 
@@ -318,8 +345,8 @@ end
 
 local get_ersatz_terrain = mcl_levelgen.get_ersatz_terrain
 
-local function do_structure_placement (min, max, minp, maxp, y1, y2,
-				       ystart, yend, dim)
+local function do_terrain_modifications (min, max, minp, maxp, y1, y2,
+					 ystart, yend, dim)
 	local xmin = minp.x
 	local zmin = -maxp.z - 1
 	for i = 1, #gn do
@@ -344,6 +371,12 @@ local function do_structure_placement (min, max, minp, maxp, y1, y2,
 		form_terrain (beard_weights, ystart, yend - ystart, min, max, border)
 	end
 	build_heightmap (min, max, minp, maxp, y1, y2, dim.y_global)
+	if ersatz_carvers_loaded then
+		terrain.aquifer:reseat (xmin, ystart, zmin)
+		mcl_levelgen.carve_terrain (dim.preset, gn, biomes, heightmap,
+					    xmin, ystart, zmin, chunksize, index,
+					    ystart, yend - ystart + 1, terrain)
+	end
 	mcl_levelgen.finish_structures (level, terrain, biomes,
 					xmin, ystart, zmin, ystart,
 					yend - ystart + 1, index, gn)
@@ -415,8 +448,8 @@ core.register_on_generated (function (vm, minp, maxp, _)
 
 		build_gn_from_data (min, max, minp, maxp, y1, y2)
 		build_biomemap_from_mgobject (min, max, minp, maxp, y1, y2)
-		do_structure_placement (min, max, minp, maxp, y1, y2,
-					ystart, yend, dim)
+		do_terrain_modifications (min, max, minp, maxp, y1, y2,
+					  ystart, yend, dim)
 		restore_data_from_gn (min, max, minp, maxp, y1, y2)
 		write_gen_notifies (dim, minp, maxp)
 		generated = true
@@ -433,19 +466,21 @@ end)
 -- Structure generation overrides.
 ------------------------------------------------------------------------
 
-local function biomemap_index (x, z)
+local function ersatz_biomemap_index (x, z)
 	local dx = x - emerged_area_x
 	local dz = (-z - 1) - emerged_area_z
 	local index = dz * emerged_area_size + dx + 1
 	return index
 end
 
+mcl_levelgen.ersatz_biomemap_index = ersatz_biomemap_index
+
 function mcl_levelgen.index_biome (x, y, z)
 	if x < chunk_start_x or x >= chunk_start_x + chunksize
 		or z < chunk_start_z or z >= chunk_start_z + chunksize then
 		return nil
 	end
-	return biomemap[biomemap_index (x, z)]
+	return biomemap[ersatz_biomemap_index (x, z)]
 end
 
 ------------------------------------------------------------------------
