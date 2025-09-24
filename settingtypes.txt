@@ -89,6 +89,15 @@ mcl_init_disable_levelgen (Disable custom map generator) bool false
 # by editing map_meta.txt.
 mcl_levelgen_enable_ersatz (Enable new structure generator) bool true
 
+# When `mcl_levelgen_enable_ersatz' is in effect, enable mcl_levelgen's
+# Minecraft-derived carver (cave generator) system in built-in map
+# generators and disable the latter's noise and random-walk cave
+# generators.  This option produces more natural caves at the cost of a
+# slight performance penalty and also mitigates structure generation
+# anomalies produced by built-in carvers overwriting already-generated
+# structures.
+mcl_levelgen_enable_ersatz_carvers (Enable new cave generator) bool false
+
 [Players]
 # If enabled, players respawn at the bed they clicked instead of normal spawn.
 # This setting is only read at startup.

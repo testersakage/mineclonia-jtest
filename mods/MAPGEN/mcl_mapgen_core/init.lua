@@ -50,11 +50,21 @@ mg_flags.dungeons = enable_mt_dungeons
 for _,mg in pairs({"v7","valleys","carpathian","v5","fractal"}) do
 	if mg_name == mg then
 		core.set_mapgen_setting("mg"..mg.."_cavern_threshold", "0.20", true) --large nether caves
-		core.set_mapgen_setting("mg"..mg.."_small_cave_num_min", "0", true) -- more large overworld caves
-		core.set_mapgen_setting("mg"..mg.."_small_cave_num_max", "12", true)
-		core.set_mapgen_setting("mg"..mg.."_large_cave_flooded", "0.1", true)
-		core.set_mapgen_setting("mg"..mg.."_large_cave_num_min", "0", true)
-		core.set_mapgen_setting("mg"..mg.."_large_cave_num_max", "9", true)
+		if not mcl_levelgen.ersatz_enable_carvers then
+			core.set_mapgen_setting("mg"..mg.."_small_cave_num_min", "0", true) -- more large overworld caves
+			core.set_mapgen_setting("mg"..mg.."_small_cave_num_max", "12", true)
+			core.set_mapgen_setting("mg"..mg.."_large_cave_flooded", "0.1", true)
+			core.set_mapgen_setting("mg"..mg.."_large_cave_num_min", "0", true)
+			core.set_mapgen_setting("mg"..mg.."_large_cave_num_max", "9", true)
+		else
+			-- Disable built-in cave generators.
+			core.set_mapgen_setting("mg"..mg.."_small_cave_num_min", "0", true)
+			core.set_mapgen_setting("mg"..mg.."_small_cave_num_max", "0", true)
+			core.set_mapgen_setting("mg"..mg.."_large_cave_flooded", "0", true)
+			core.set_mapgen_setting("mg"..mg.."_large_cave_num_min", "0", true)
+			core.set_mapgen_setting("mg"..mg.."_large_cave_num_max", "0", true)
+			core.set_mapgen_setting("mg"..mg.."_cave_width", "10", true)
+		end
 		mg_flags.caverns = true
 	end
 end

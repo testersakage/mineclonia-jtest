@@ -1002,10 +1002,11 @@ function terrain_generator:generate (x, y, z, cids, param2s, structuremask, vm_i
 	local system = self.surface_system
 	system:post_process (self, x, y, z, gn, map_wg, chunksize, biomes)
 
-	-- local clock = os.clock ()
+	-- local clock = core.get_us_time ()
 	mcl_levelgen.carve_terrain (self.preset, gn, biomes, map_wg,
-				    x, y, z, chunksize, self)
-	-- print (string.format ("%.2f", (os.clock () - clock) * 1000))
+				    x, y, z, chunksize, index,
+				    self.preset.min_y, self.preset.height, self)
+	-- print (string.format ("%.2f", (core.get_us_time () - clock) / 1000))
 
 	-- Regenerate the heightmap (or rather two heightmaps: one
 	-- representing the state of the terrain after surface system

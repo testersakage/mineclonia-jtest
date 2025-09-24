@@ -63,6 +63,8 @@ function mcl_levelgen.create_default_aquifer (preset)
 	return aquifer
 end
 
+mcl_levelgen.aquifer = aquifer
+
 ------------------------------------------------------------------------
 -- Noise-based aquifers.
 -- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/net/minecraft/world/gen/chunk/AquiferSampler.Impl.html

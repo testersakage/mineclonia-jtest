@@ -508,8 +508,11 @@ end
 local mt_chunksize = core.ipc_get ("mcl_levelgen:mt_chunksize")
 
 local mathmin = math.min
+local mathmax = math.max
 local floor = math.floor
 local ceil = math.ceil
+
+local cid_air = core.CONTENT_AIR
 
 local chunksize = mt_chunksize.x * 16
 local ychunksize = mt_chunksize.y * 16
@@ -599,7 +602,6 @@ function ersatz_terrain:area_average_height (x1, z1, x2, z2, is_solid)
 	return rtz (value / total)
 end
 
-local cid_air = core.CONTENT_AIR
 local encode_node = mcl_levelgen.encode_node
 
 function ersatz_terrain:get_one_column (x, z, column_data)
@@ -621,6 +623,7 @@ function ersatz_terrain:get_one_column (x, z, column_data)
 end
 
 local structure_levels = {}
+local aquifers = {}
 
 local function create_structure_level (dim)
 	if not structure_levels[dim] then
@@ -629,6 +632,18 @@ local function create_structure_level (dim)
 	end
 	return structure_levels[dim]
 end
+
+local function create_aquifer (dim, ersatz_terrain)
+	if not aquifers[dim] then
+		-- NOTE: ERSATZ_TERRAIN is not copied.
+		aquifers[dim]
+			= mcl_levelgen.create_ersatz_aquifer (dim.preset,
+							      ersatz_terrain)
+	end
+	return aquifers[dim]
+end
+
+local ersatz_surface_system = {}
 
 function mcl_levelgen.get_ersatz_terrain (dim)
 	local preset = dim.preset
@@ -644,7 +659,155 @@ function mcl_levelgen.get_ersatz_terrain (dim)
 		= core.get_content_id (preset.default_block)
 	ersatz_terrain.chunksize_y = ychunksize
 	ersatz_terrain.structures = create_structure_level (dim)
+	ersatz_terrain.aquifer = create_aquifer (dim, ersatz_terrain)
+	ersatz_terrain.surface_system = ersatz_surface_system
 	return ersatz_terrain
+end
+
+------------------------------------------------------------------------
+-- Ersatz aquifer object.
+------------------------------------------------------------------------
+
+local ersatz_aquifer = table.copy (mcl_levelgen.aquifer)
+
+local SURFACE_SAMPLE_INTERVAL = 8
+local SURFACE_SAMPLE_SHIFT = 3
+local SURFACE_CENTER = floor (SURFACE_SAMPLE_INTERVAL / 2)
+local cache_width = chunksize / SURFACE_SAMPLE_INTERVAL + 2
+assert (cache_width == floor (cache_width))
+
+local arshift = bit.arshift
+local band = bit.band
+
+local origin_x
+local origin_z
+
+local lerp2d = mcl_levelgen.lerp2d
+
+function ersatz_aquifer:reseat (min_x, min_y, min_z)
+	if not mapgen_model then
+		return
+	end
+
+	origin_x = min_x
+	origin_z = min_z
+	local cache = self.surface_height_cache
+	for dx = 0, cache_width do
+		for dz = 0, cache_width do
+			local x = (dx - 1) * SURFACE_SAMPLE_INTERVAL
+				+ SURFACE_CENTER + min_x
+			local z = (dz - 1) * SURFACE_SAMPLE_INTERVAL
+				+ SURFACE_CENTER + min_z
+			local height = mapgen_model.get_column_height (x, -z - 1, false)
+				+ y_offset
+			cache[dx * cache_width + dz + 1] = height
+		end
+	end
+end
+
+local sqrt = math.sqrt
+
+local function aquifer_height (self, gx, gz)
+	return self.surface_height_cache[gx * cache_width + gz + 1]
+end
+
+local function aquifer_floodedness (self, gx, gz)
+	local height = self.surface_height_cache[gx * cache_width + gz + 1]
+	if height <= self.sea_level then
+		return 1.0
+	else
+		return 1.0 - sqrt (mathmin (height - self.sea_level, 8.0) / 8.0)
+	end
+end
+
+local function aquifer_lerp_values (self, gx1, gz1, gx2, gz2, x, z)
+	local x1 = (gx1 - 1) * SURFACE_SAMPLE_INTERVAL + SURFACE_CENTER
+	local z1 = (gz1 - 1) * SURFACE_SAMPLE_INTERVAL + SURFACE_CENTER
+	local x_progress = (x - x1) / SURFACE_SAMPLE_INTERVAL
+	local z_progress = (z - z1) / SURFACE_SAMPLE_INTERVAL
+	return lerp2d (x_progress, z_progress,
+		       aquifer_floodedness (self, gx1, gz1),
+		       aquifer_floodedness (self, gx2, gz1),
+		       aquifer_floodedness (self, gx1, gz2),
+		       aquifer_floodedness (self, gx2, gz2)),
+		lerp2d (x_progress, z_progress,
+			aquifer_height (self, gx1, gz1),
+			aquifer_height (self, gx2, gz1),
+			aquifer_height (self, gx1, gz2),
+			aquifer_height (self, gx2, gz2))
+end
+
+function ersatz_aquifer:get_node (x, y, z, density)
+	local gx1 = arshift (x - origin_x, SURFACE_SAMPLE_SHIFT) + 1
+	local gz1 = arshift (z - origin_z, SURFACE_SAMPLE_SHIFT) + 1
+	local gx2 = band (x - origin_x, SURFACE_SAMPLE_INTERVAL - 1) > SURFACE_CENTER
+		and gx1 + 1 or gx1 - 1
+	local gz2 = band (z - origin_z, SURFACE_SAMPLE_INTERVAL - 1) > SURFACE_CENTER
+		and gz1 + 1 or gz1 - 1
+	local floodedness, height
+		= aquifer_lerp_values (self, mathmin (gx1, gx2),
+				       mathmin (gz1, gz2),
+				       mathmax (gx1, gx2),
+				       mathmax (gz1, gz2),
+				       x - origin_x,
+				       z - origin_z)
+	if y <= self.sea_level then
+		local surface_distance = mathmax (0.0, (height - y) / 45.0)
+		local value = floodedness - surface_distance
+		if value > 0.6 then
+			return self.cid_default_fluid, 0
+		elseif value > 0.45 then
+			return self.cid_default_block, 0
+		end
+	end
+	return cid_air, 0
+end
+
+function mcl_levelgen.create_ersatz_aquifer (preset, terrain_generator)
+	local aquifer = table.copy (ersatz_aquifer)
+	aquifer:initialize (preset)
+	aquifer.surface_height_cache = {}
+	aquifer.terrain = terrain_generator
+	return aquifer
+end
+
+------------------------------------------------------------------------
+-- Ersatz surface system.
+------------------------------------------------------------------------
+
+-- This stub exists only to facilitate replacing exposed dirt blocks
+-- previously covered with grass or mycelium with appropriate
+-- substitutes.
+
+local ersatz_biomes
+
+function ersatz_surface_system:initialize_for_carver (biomes, heightmap,
+						      bx, bz, chunksize,
+						      terrain)
+	ersatz_biomes = biomes
+end
+
+local ersatz_biomemap_index
+local cid_mycelium_encoded
+local cid_grass
+
+core.register_on_mods_loaded (function ()
+	local cid_mycelium = core.get_content_id ("mcl_core:mycelium")
+	cid_grass = core.get_content_id ("mcl_core:dirt_with_grass")
+	cid_mycelium_encoded = encode_node (cid_mycelium, 0)
+end)
+
+local registered_biomes = mcl_levelgen.registered_biomes
+
+function ersatz_surface_system:evaluate_for_carver (x, y, z, submerged)
+	local biome = ersatz_biomes[ersatz_biomemap_index (x, z)]
+	if biome == "MushroomIslands" then
+		return cid_mycelium_encoded
+	else
+		local def = registered_biomes[biome]
+		local param2 = def and def.grass_palette_index or 0
+		return encode_node (cid_grass, param2)
+	end
 end
 
 ------------------------------------------------------------------------
@@ -667,4 +830,5 @@ if core and core.register_mapgen_script then
 end
 if core and not core.get_mod_storage then
 	dofile (mcl_levelgen.prefix .. "/mg_ersatz.lua")
+	ersatz_biomemap_index = mcl_levelgen.ersatz_biomemap_index
 end
