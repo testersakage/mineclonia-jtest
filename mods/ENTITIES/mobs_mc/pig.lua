@@ -157,10 +157,10 @@ function pig:on_rightclick (clicker)
 			}
 		}
 		local pos = self.object:get_pos()
-		core.add_item(pos, ItemStack("mcl_mobitems:saddle"))
 		core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
 		core.sound_play("mcl_armor_unequip_leather", {gain = 0.5, max_hear_distance = 8, pos = pos}, true)
 		if not core.is_creative_enabled(clicker:get_player_name()) then
+			core.add_item(pos, ItemStack("mcl_mobitems:saddle"))
 			local wear = mcl_autogroup.get_wear(item_name, "shearsy")
 			item:add_wear(wear)
 			clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
