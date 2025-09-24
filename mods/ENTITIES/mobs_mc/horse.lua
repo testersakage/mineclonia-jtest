@@ -831,6 +831,9 @@ function horse:on_rightclick (clicker)
 		return
 	end
 
+	local saddle = self._saddle ~= "" and ItemStack(self._saddle)
+	local armor = self._horse_armor_stack ~= "" and ItemStack(self._horse_armor_stack)
+
 	if self.tamed and not self.child and self.owner == clicker:get_player_name() then
 		if not self.driver and clicker:get_player_control().sneak then
 			return
@@ -841,6 +844,23 @@ function horse:on_rightclick (clicker)
 		elseif core.get_item_group(iname, "horse_armor") > 0
 			and can_equip_horse_armor(self.name)
 			and not self.driver and self:set_armor(clicker) then
+			return
+		elseif core.get_item_group(iname, "shears") > 0 and
+			not self.driver and (armor or saddle) then
+			local pos = self.object:get_pos()
+			if armor then
+				self:remove_armor(armor)
+				if not creative then core.add_item(pos, armor) end
+			elseif saddle then
+				self:remove_saddle()
+				if not creative then core.add_item(pos, saddle) end
+			end
+			core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+			if not creative then
+				local wear = mcl_autogroup.get_wear(iname, "shearsy")
+				item:add_wear(wear)
+				clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
+			end
 			return
 		end
 	end
