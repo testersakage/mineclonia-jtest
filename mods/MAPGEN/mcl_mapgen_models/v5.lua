@@ -61,9 +61,9 @@ function mcl_mapgen_models.v5_mapgen_model ()
 			end
 			avg_ground = avg_ground / #ground_samples
 			local h = f * avg_ground + height
-			if h < -8 then
+			if h < -25 then
 				return "DeepOcean"
-			elseif h < -4 then
+			elseif h < -2 then
 				return "Ocean"
 			end
 		end,
