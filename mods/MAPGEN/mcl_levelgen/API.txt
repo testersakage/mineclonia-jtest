@@ -1838,30 +1838,30 @@ Jigsaw Block option: Target Pool
 
 ID of a template pool from which to select a template to generate and
 attach to this jigsaw block after its containing template generates,
-or `mcl_levelgen:empty'.  When generating, this template will be
-oriented so that the jigsaw block within the same identified by this
-jigsaw block's "Target Name" will contact and face this jigsaw block
-\(and if a template should contain multiple jigsaw blocks with
-identical identifiers, they will be selected randomly from the
-template, subject to selection priority, and each will be tested
-against the criteria stated in the remainder of this paragraph); a
-template may be rotated vertically, and if this jigsaw block is facing
-upwards or downwards, the rotation of the target template will either
-be selected randomly or so as to align the rotation of the target
-jigsaw block with this jigsaw block's, contingent on this jigsaw
-block's "Joint Type" option.  If, upon generation, the position of the
-target jigsaw block would exist within the confines of this jigsaw
-block's containing template, the generated template, and all templates
-which subsequently generate from jigsaw blocks defined within the same
-template, must be completely enclosed by this jigsaw block's
-containing template.  Otherwise, the target template must satisfy all
-spatial restrictions imposed by its predecessors, and not intersect
-with any templates already generated, excepting any templates which
-subsequently generate within itself.  If these constraints are not met
-by any combination of possible rotation and eligible jigsaw block, it
-will not be generated, and another eligible target jigsaw block will
-be selected from the template pool till a satisfactory candidate is
-located or the pool is exhausted.
+or `mcl_levelgen:empty'.  When generating, the template so selected
+will be oriented and positioned so that the jigsaw block within the
+said template identified by this jigsaw block's "Target Name" will
+contact and face this jigsaw block (and if a template should contain
+multiple jigsaw blocks with identical identifiers, they will be
+selected randomly from the template, subject to selection priority,
+and each will be tested against the criteria stated in the remainder
+of this paragraph); a template may be rotated vertically, and if this
+jigsaw block is facing upwards or downwards, the rotation of the
+target template will either be selected randomly or so as to align the
+rotation of the target jigsaw block with this jigsaw block's,
+contingent on this jigsaw block's "Joint Type" option.  If, upon
+generation, the position of the target jigsaw block would exist within
+the confines of this jigsaw block's containing template, the generated
+target template, and all templates which subsequently generate from
+jigsaw blocks defined within the same template, must be completely
+enclosed by this jigsaw block's containing template.  Otherwise, the
+target template must satisfy all spatial restrictions imposed by its
+predecessors, and not intersect with any templates already generated,
+excepting any templates which subsequently generate within itself.  If
+these constraints are not met by any combination of possible rotation
+and eligible jigsaw block, it will not be generated, and another
+eligible target jigsaw block will be selected from the template pool
+till a satisfactory candidate is located or the pool is exhausted.
 
 Jigsaw Block option: Name
 
