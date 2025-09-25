@@ -20,19 +20,24 @@ local ersatz_carvers_loaded = false
 
 if mcl_levelgen.ersatz_enable_carvers then
 
-local function augment_carver (id)
+local function augment_overworld_carver (id)
 	local carver = mcl_levelgen.registered_carvers[id]
 	table.insert (carver.replaceable, "group:material_stone")
-	local idx = table.indexof (carver.replaceable, "")
-	if idx ~= -1 then
-		table.remove (carver.replaceable, idx)
-	end
+	table.insert (carver.replaceable, "group:snow_layer")
+	table.insert (carver.replaceable, "mcl_core:clay")
+	table.insert (carver.replaceable, "mcl_core:lava_source")
 end
 
-augment_carver ("mcl_levelgen:cave_carver")
-augment_carver ("mcl_levelgen:cave_extra_underground_carver")
-augment_carver ("mcl_levelgen:ravine_carver")
-mcl_levelgen.registered_carvers["mcl_levelgen:nether_cave_carver"] = nil
+local function augment_nether_carver (id)
+	local carver = mcl_levelgen.registered_carvers[id]
+	table.insert (carver.replaceable, "group:material_stone")
+	table.insert (carver.replaceable, "mcl_nether:nether_lava_source")
+end
+
+augment_overworld_carver ("mcl_levelgen:cave_carver")
+augment_overworld_carver ("mcl_levelgen:cave_extra_underground_carver")
+augment_overworld_carver ("mcl_levelgen:ravine_carver")
+augment_nether_carver ("mcl_levelgen:nether_cave_carver")
 
 mcl_levelgen.load_carvers ()
 ersatz_carvers_loaded = true
