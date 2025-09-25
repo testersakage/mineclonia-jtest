@@ -113,7 +113,7 @@ end
 local function carve_block (self, x, y, z, dx, dy, dz, dirt_exposed_p)
 	local idx = index (dx, dy, dz, chunksize, level_height)
 	local cid, _ = decode_node (nodes[idx])
-	if cid == cid_grass_block or cid == cid_mycelium and dy > 0 then
+	if (cid == cid_grass_block or cid == cid_mycelium) and dy > 0 then
 		dirt_exposed_p = true
 	end
 
@@ -123,7 +123,7 @@ local function carve_block (self, x, y, z, dx, dy, dz, dirt_exposed_p)
 
 	local value = get_block (self, x, y, z)
 	if value then
-		if dy > 0 then
+		if dy > 0 and dirt_exposed_p then
 			local idx = idx - chunksize
 			cid, _ = decode_node (nodes[idx])
 			if cid == cid_dirt then
