@@ -192,7 +192,7 @@ local mapgen_model
 local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_template, {
 	min_y = -64,
 	height = 384,
-	sea_level = 64,
+	sea_level = 65,
 	ersatz_default_height = 65,
 	index_biomes_block = function (self, x, y, z)
 		v.x = x
@@ -289,6 +289,7 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 		"WindsweptHills",
 		"WoodedMesa",
 	},
+	aquifers_enabled = true,
 })
 
 local mg_nether_min = mcl_vars.mg_nether_min
@@ -636,9 +637,10 @@ end
 local function create_aquifer (dim, ersatz_terrain)
 	if not aquifers[dim] then
 		-- NOTE: ERSATZ_TERRAIN is not copied.
-		aquifers[dim]
-			= mcl_levelgen.create_ersatz_aquifer (dim.preset,
-							      ersatz_terrain)
+		local fn = dim.preset.aquifers_enabled
+			and mcl_levelgen.create_ersatz_aquifer
+			or mcl_levelgen.create_placeholder_aquifer
+		aquifers[dim] = fn (dim.preset, ersatz_terrain)
 	end
 	return aquifers[dim]
 end
@@ -768,6 +770,18 @@ function mcl_levelgen.create_ersatz_aquifer (preset, terrain_generator)
 	aquifer:initialize (preset)
 	aquifer.surface_height_cache = {}
 	aquifer.terrain = terrain_generator
+	return aquifer
+end
+
+local placeholder_aquifer = table.copy (mcl_levelgen.aquifer)
+
+function placeholder_aquifer:get_node (x, y, z, density)
+	return cid_air, 0
+end
+
+function mcl_levelgen.create_placeholder_aquifer (preset, _)
+	local aquifer = table.copy (placeholder_aquifer)
+	aquifer:initialize (preset)
 	return aquifer
 end
 
