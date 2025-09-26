@@ -26,6 +26,8 @@ local function augment_overworld_carver (id)
 	table.insert (carver.replaceable, "group:snow_layer")
 	table.insert (carver.replaceable, "mcl_core:clay")
 	table.insert (carver.replaceable, "mcl_core:lava_source")
+	table.insert (carver.replaceable, "mcl_core:snowblock")
+	table.insert (carver.replaceable, "mcl_powder_snow:powder_snow")
 end
 
 local function augment_nether_carver (id)
@@ -59,6 +61,7 @@ local chunksize = mt_chunksize.x * 16
 local ychunksize = mt_chunksize.y * 16
 
 local cid_air = core.CONTENT_AIR
+local cid_ignore = core.CONTENT_IGNORE
 
 local encode_node = mcl_levelgen.encode_node
 
@@ -421,6 +424,75 @@ local function write_gen_notifies (dim, minp, maxp)
 	core.save_gen_notify ("mcl_levelgen:structure_pieces", pieces)
 end
 
+local cid_biome_dust = core.ipc_get ("mcl_biomes:biome_dust_cids")
+
+local is_cid_dustable = {}
+
+for name, def in pairs (core.registered_nodes) do
+	local cid = core.get_content_id (name)
+	is_cid_dustable[cid] = (def.drawtype == "normal"
+				or def.drawtype == "allfaces"
+				or def.drawtype == "allfaces_optional"
+				or def.drawtype == "glasslike"
+				or def.drawtype == "glasslike_framed"
+				or def.drawtype == "glasslike_framed_optional")
+		and def.walkable
+end
+
+local function generate_biome_dust (vm, min, max, minp, maxp)
+	local area = VoxelArea (min, max)
+	local modified = false
+	local initialized = false
+
+	local index = 0
+	for z = minp.z, maxp.z do
+		for x = minp.x, maxp.x do
+			index = index + 1
+			local biome = biomemap_old[index]
+			local cid_dust = cid_biome_dust[biome]
+			if cid_dust then
+				if not initialized then
+					vm:get_data (cids)
+					vm:get_param2_data (param2s)
+					initialized = true
+				end
+				local i = area:index (x, max.y, z)
+				local full_max, y_start = cids[i], nil
+				if full_max == cid_air then
+					y_start = max.y - 1
+				elseif full_max == cid_ignore then
+					i = area:index (x, maxp.y + 1, z)
+					if cids[i] == cid_air then
+						y_start = maxp.y
+					end
+				end
+
+				if y_start then
+					i = area:index (x, y_start, z)
+					local stride = max.x - min.x + 1
+					for y = y_start, minp.y - 1, -1 do
+						if cids[i] ~= cid_air then
+							break
+						end
+						i = i - stride
+					end
+
+					if is_cid_dustable[cids[i]] and cids[i] ~= cid_dust then
+						cids[i + stride] = cid_dust
+						param2s[i + stride] = 0
+						modified = true
+					end
+				end
+			end
+		end
+	end
+
+	if modified then
+		vm:set_data (cids)
+		vm:set_param2_data (param2s)
+	end
+end
+
 local dims_intersecting = mcl_levelgen.dims_intersecting
 core.register_on_generated (function (vm, minp, maxp, _)
 	local min, max = vm:get_emerged_area ()
@@ -463,6 +535,7 @@ core.register_on_generated (function (vm, minp, maxp, _)
 	vm:set_data (cids)
 	vm:set_param2_data (param2s)
 	core.generate_decorations (vm, minp, maxp, true)
+	generate_biome_dust (vm, min, max, minp, maxp)
 	vm:set_lighting ({day = 0, night = 0,}, minp, maxp)
 	vm:calc_lighting (minp, maxp)
 end)

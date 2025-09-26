@@ -354,51 +354,6 @@ mcl_structures.register_structure("lavadelta",{
 	end
 })
 
--- Powder snow traps
-mcl_structures.register_structure("powder_snow_trap", {
-	place_on = {"mcl_core:snowblock", "mcl_core:snow", "group:grass_block_snow"},
-	sidelen = 80,
-	noise_params = {
-		offset = 0.00040,
-		scale = 0.001,
-		spread = {x = 500, y = 500, z = 500},
-		seed = 2137,
-		octaves = 4,
-		persist = 0.67,
-	},
-	biomes = {"IcePlainsSpikes", "ColdTaiga", "ColdTaiga_beach", "IcePlains"},
-	y_min = 1,
-	y_max = mcl_vars.mg_overworld_max,
-	terrain_feature = true,
-	place_func = function(pos)
-		local width  = math.random(6) - 3
-		local length = math.random(6) - 3
-		local depth  = math.random(4)
-
-		local solid_nodes = {}
-		local node_name
-		for i = 0, width do
-			for j = 0, length do
-				for k = 0, depth do
-					node_name = core.get_node(vector.offset(pos, i, k, j)).name
-					if core.get_item_group(node_name, "dirt") > 0
-						or core.get_item_group(node_name, "snow_cover") > 0
-						or core.get_item_group(node_name, "stone") > 0 then
-						table.insert(solid_nodes, vector.offset(pos, i, k, j))
-					end
-				end
-			end
-		end
-
-		if #solid_nodes == 0 then
-			return false
-		end
-
-		core.bulk_set_node(solid_nodes, {name = "mcl_powder_snow:powder_snow"})
-		return true
-	end
-})
-
 -- direction is a multiplier to each block's y offset from the starting position, should be either -1 or 1
 local function generate_dripstone(pos, max_length, direction)
 		if pos.y < mcl_vars.mg_bedrock_overworld_max + max_length then return end --prevent poking through the bedrock
