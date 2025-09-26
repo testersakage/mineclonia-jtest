@@ -248,7 +248,7 @@ local function initialize_engine_aliases ()
 		FrozenOcean = approximate_cold_ocean (),
 		FrozenPeaks = {},
 		FrozenRiver = {},
-		Grove = {},
+		Grove = related_list_from_base ("Grove", overworld_subtypes),
 		IceSpikes = related_list_from_base ("IcePlainsSpikes", overworld_subtypes),
 		JaggedPeaks = {},
 		Jungle = related_list_from_base ({"Jungle", "JungleM",}, overworld_subtypes),

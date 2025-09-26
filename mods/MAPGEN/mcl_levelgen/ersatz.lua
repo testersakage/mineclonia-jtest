@@ -89,6 +89,7 @@ local function init_ersatz_biome_translations ()
 		["ExtremeHillsM"] = "WindsweptGravellyHills",
 		["FlowerForest"] = "FlowerForest",
 		["Forest"] = "Forest",
+		["Grove"] = "Grove",
 		["IcePlains"] = "SnowyPlains",
 		["IcePlainsSpikes"] = "IceSpikes",
 		["Jungle"] = "Jungle",
