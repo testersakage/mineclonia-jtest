@@ -779,7 +779,7 @@ local function register_biomes()
 		},
 	})
 
-	-- Grove
+	-- Grove and SnowySlopes.
 	core.register_biome ({
 		name = "Grove",
 		node_dust = "mcl_core:snow",
@@ -829,6 +829,136 @@ local function register_biomes()
 		_mcl_palette_index = 2,
 	})
 
+	core.register_biome ({
+		name = "SnowySlopes",
+		node_dust = "mcl_core:snow",
+		node_top = "mcl_core:snowblock",
+		depth_top = 1,
+		node_filler = "mcl_core:snowblock",
+		depth_filler = 6,
+		node_riverbed = "mcl_core:gravel",
+		depth_riverbed = 2,
+		node_water_top = "mcl_core:ice",
+		depth_water_top = 1,
+		humidity_point = 88,
+		heat_point = 6,
+		y_min = 54,
+		y_max = 72,
+		_mcl_groups = {
+			is_mountain = true,
+			is_overworld = true,
+		},
+		fog_color = "#c0d8ff",
+		sky_color = "#829fff",
+		_mcl_biome_type = "snowy",
+		_mcl_palette_index = 10,
+	})
+
+	-- Jagged/Stony/Frozen Peaks.
+	core.register_biome ({
+		-- No dust is defined, for biome dust would otherwise
+		-- obscure any packed ice that is generated, the only
+		-- other means of resolving which would be defining
+		-- packed ice with a non-solid drawtype that impact
+		-- performance drastically.
+		name = "FrozenPeaks",
+		node_top = "mcl_core:snowblock",
+		depth_top = 1,
+		node_filler = "mcl_core:snowblock",
+		depth_filler = 6,
+		node_riverbed = "mcl_core:gravel",
+		depth_riverbed = 2,
+		node_water_top = "mcl_core:ice",
+		depth_water_top = 1,
+		humidity_point = 66,
+		heat_point = 6,
+		y_min = 72,
+		y_max = mcl_vars.mg_overworld_max,
+		_mcl_groups = {
+			is_mountain = true,
+			is_overworld = true,
+		},
+		_mcl_fogcolor = "#c0d8ff",
+		_mcl_skycolor = "#859dff",
+		_mcl_biome_type = "snowy",
+		_mcl_palette_index = 2,
+	})
+
+	core.register_biome ({
+		name = "JaggedPeaks",
+		node_dust = "mcl_core:snow",
+		node_top = "mcl_core:stone",
+		depth_top = 1,
+		node_filler = "mcl_core:stone",
+		depth_filler = 1,
+		node_riverbed = "mcl_core:stone",
+		depth_riverbed = 2,
+		node_water_top = "mcl_core:ice",
+		depth_water_top = 1,
+		humidity_point = 88,
+		heat_point = 6,
+		y_min = 72,
+		y_max = mcl_vars.mg_overworld_max,
+		_mcl_groups = {
+			is_mountain = true,
+			is_overworld = true,
+		},
+		_mcl_fogcolor = "#c0d8ff",
+		_mcl_skycolor = "#859dff",
+		_mcl_biome_type = "snowy",
+		_mcl_palette_index = 2,
+	})
+
+	core.register_biome ({
+		name = "StonyPeaks",
+		node_top = "mcl_core:stone",
+		depth_top = 1,
+		node_filler = "mcl_core:stone",
+		depth_filler = 1,
+		node_riverbed = "mcl_core:stone",
+		depth_riverbed = 2,
+		humidity_point = 88,
+		heat_point = 45,
+		weight = 0.25,
+		y_min = 72,
+		y_max = mcl_vars.mg_overworld_max,
+		_mcl_groups = {
+			is_mountain = true,
+			is_overworld = true,
+		},
+		fog_color = "#c0d8ff",
+		sky_color = "#76a8ff",
+		_mcl_biome_type = "medium",
+		_mcl_palette_index = 11,
+	})
+
+	-- Packed ice.
+	core.register_ore ({
+		y_min = 72,
+		y_max = mcl_vars.mg_overworld_max,
+		ore = "mcl_core:packed_ice",
+		ore_type = "sheet",
+		biomes = {
+			"FrozenPeaks",
+		},
+		wherein = {
+			"mcl_core:snowblock",
+		},
+		column_height_min = 100,
+		column_height_max = 100,
+		noise_params = {
+			offset = 0,
+			scale = 1,
+			spread = vector.new (10, 10, 10),
+			seed = 4474,
+			octaves = 3,
+			persist = 1.0,
+			lacunarity = 1,
+			flags = "eased",
+		},
+		noise_threshold = 0.5,
+	})
+
 	-- Powder snow traps.
 	core.register_ore ({
 		y_min = 1,
@@ -838,6 +968,7 @@ local function register_biomes()
 		ore_type = "blob",
 		biomes = {
 			"Grove",
+			"SnowySlopes",
 		},
 		wherein = {
 			"mcl_core:snowblock",
