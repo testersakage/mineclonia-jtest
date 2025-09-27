@@ -112,7 +112,9 @@ local function wither_unstuck (self, xz_exp)
 			local name = core.get_node(npos).name
 			if name ~= "air" then
 				local ndef = core.registered_nodes[name]
-				if ndef and ndef._mcl_hardness and ndef._mcl_hardness >= 0 and ( ndef.can_dig == nil or ndef.can_dig(npos) )then
+				if ndef and ndef._mcl_hardness and ndef._mcl_hardness >= 0 and
+				(ndef.can_dig == nil or ndef.can_dig(npos)) and
+				core.get_item_group(name, "wither_immune") ~= 0 then
 					core.remove_node(npos)
 					local drops = core.get_node_drops(name, "")
 					if drops then
