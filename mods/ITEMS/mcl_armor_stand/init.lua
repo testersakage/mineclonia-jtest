@@ -75,12 +75,35 @@ core.register_node("mcl_armor_stand:armor_stand", {
 	on_destruct = function(pos)
 		drop_inventory(pos)
 	end,
-	on_rightclick = function(pos, node, clicker, itemstack, _)
+	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 		local protname = clicker:get_player_name()
+		local pointed_height = pointed_thing.above.y - pos.y
+		local pointed_fpos = core.pointed_thing_to_face_pos(clicker, pointed_thing).y - pointed_thing.above.y
+		local pointed_piece_index
 
 		if core.is_protected(pos, protname) then
 			core.record_protection_violation(pos, protname)
 			return itemstack
+		end
+
+		if pointed_height == 0 then
+			if pointed_fpos < 0.1875 then
+				pointed_piece_index = mcl_armor.elements.feet.index
+			else
+				pointed_piece_index = mcl_armor.elements.legs.index
+			end
+		elseif pointed_height == 1 then
+			if pointed_fpos <= 0.015 then
+				pointed_piece_index = mcl_armor.elements.torso.index
+			else
+				pointed_piece_index = mcl_armor.elements.head.index
+			end
+		else
+			return
+		end
+
+		if clicker:get_wielded_item():get_name() == "" then
+			return mcl_armor.unequip(get_stand_entity(pos, node).object, pointed_piece_index)
 		end
 
 		return mcl_armor.equip(itemstack, get_stand_entity(pos, node).object, true)
