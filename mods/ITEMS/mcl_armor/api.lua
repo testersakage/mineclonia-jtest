@@ -126,6 +126,23 @@ function mcl_armor.equip(itemstack, obj, swap)
 	return itemstack
 end
 
+function mcl_armor.unequip(obj, armor_index)
+	local inv = mcl_util.get_inventory(obj)
+
+	if not inv or inv:get_size("armor") == 0 then
+		return
+	end
+
+	local stack = inv:get_stack("armor", armor_index)
+
+	if stack and stack:get_name() ~= "" then
+		inv:set_stack("armor", armor_index, "")
+		mcl_armor.on_unequip(stack, obj)
+	end
+
+	return stack
+end
+
 function mcl_armor.equip_on_use(itemstack, player, pointed_thing)
 	if not player or not player:is_player() then
 		return itemstack
