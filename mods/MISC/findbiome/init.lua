@@ -166,9 +166,11 @@ function findbiome.find_biome(pos, biomes, res, checks)
 
 	-- Position search
 	local function search()
+		local model = mcl_mapgen_models.get_mapgen_model ()
 		local attempt = 1
 		while attempt < 3 do
 			for _ = 1, checks do
+				pos.y = model.get_column_height (pos.x, pos.z)
 				local biome_data = core.get_biome_data(pos)
 				-- Sometimes biome_data is nil
 				local biome = biome_data and biome_data.biome

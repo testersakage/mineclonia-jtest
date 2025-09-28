@@ -255,7 +255,7 @@ local function initialize_engine_aliases ()
 		LukewarmOcean = approximate_warm_ocean (),
 		LushCaves = related_list_from_base ("LushCaves", overworld_subtypes),
 		MangroveSwamp = related_list_from_base ("MangroveSwamp", overworld_subtypes),
-		Meadow = {},
+		Meadow = related_list_from_base ("Meadow", overworld_subtypes),
 		MushroomIslands = related_list_from_base ({"MushroomIsland", "MushroomIslandShore",},
 							  overworld_subtypes),
 		NetherWastes = "Nether",
