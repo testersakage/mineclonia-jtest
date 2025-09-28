@@ -9,6 +9,8 @@ Changes are:
 - removal of support for mapgen v6 (which is disabled in Mineclonia)
 - translations taken from Mineclonia's weblate repository
 - silencing luacheck warnings using Mineclonia's .luacheckrc
+- biomes are sampled at the estimated generation altitude(s) of the
+  terrain.
 
 ## Description
 This is a mod to help with mod/game development for Minetest.

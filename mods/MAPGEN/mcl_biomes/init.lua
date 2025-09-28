@@ -757,6 +757,71 @@ local function register_biomes()
 		},
 	})
 
+	-- Meadow.
+	core.register_biome({
+		name = "Meadow",
+		node_top = "mcl_core:dirt_with_grass",
+		depth_top = 1,
+		node_filler = "mcl_core:dirt",
+		depth_filler = 2,
+		node_riverbed = "mcl_core:sand",
+		depth_riverbed = 2,
+		y_min = 3,
+		y_max = mcl_vars.mg_overworld_max,
+		humidity_point = 30,
+		heat_point = 26,
+		_mcl_biome_type = "medium",
+		_mcl_palette_index = 30,
+		_mcl_skycolor = "#7ba4ff",
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_mountain = true,
+			is_overworld = true,
+		},
+	})
+	core.register_biome({
+		name = "Meadow_beach",
+		node_top = "mcl_core:sand",
+		depth_top = 2,
+		node_filler = "mcl_core:sandstone",
+		depth_filler = 2,
+		node_riverbed = "mcl_core:sand",
+		depth_riverbed = 2,
+		y_min = 0,
+		y_max = 2,
+		humidity_point = 30,
+		heat_point = 26,
+		_mcl_biome_type = "medium",
+		_mcl_palette_index = 30,
+		_mcl_skycolor = "#7ba4ff",
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_mountain = true,
+			is_overworld = true,
+		},
+	})
+	core.register_biome({
+		name = "Meadow_ocean",
+		node_top = "mcl_core:sand",
+		depth_top = 1,
+		node_filler = "mcl_core:sand",
+		depth_filler = 3,
+		node_riverbed = "mcl_core:sand",
+		depth_riverbed = 2,
+		y_min = OCEAN_MIN,
+		y_max = -1,
+		humidity_point = 30,
+		heat_point = 26,
+		_mcl_biome_type = "medium",
+		_mcl_palette_index = 30,
+		_mcl_skycolor = ocean_skycolor,
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+		},
+	})
+
 	core.register_biome({
 		name = "CherryGrove",
 		node_top = "mcl_core:dirt_with_grass",
@@ -5021,6 +5086,19 @@ local function register_decorations()
 		rotation = "random",
 		spawn_by = "group:flower",
 	})
+	core.register_decoration({
+		deco_type = "schematic",
+		place_on = {"group:grass_block_no_snow", "mcl_core:dirt"},
+		sidelen = 16,
+		fill_ratio = 0.00002,
+		biomes = {"Meadow",},
+		y_min = 1,
+		y_max = mcl_vars.mg_overworld_max,
+		schematic = mod_mcl_core.."/schematics/mcl_core_birch_bee_nest.mts",
+		flags = "place_center_x, place_center_z",
+		rotation = "random",
+		spawn_by = "group:flower",
+	})
 
 	-- Dark Oak
 	core.register_decoration({
@@ -5374,7 +5452,7 @@ local function register_decorations()
 	local register_doubletall_grass = mcl_biomes.register_doubletall_grass
 
 	register_doubletall_grass(-0.01, 0.03, {"Taiga", "Forest", "FlowerForest", "BirchForest", "BirchForestM", "RoofedForest"})
-	register_doubletall_grass(-0.002, 0.03, {"Plains", "SunflowerPlains", "CherryGrove"})
+	register_doubletall_grass(-0.002, 0.03, {"Plains", "SunflowerPlains", "CherryGrove", "Meadow"})
 	register_doubletall_grass(-0.0005, -0.03, {"Savanna", "SavannaM"})
 
 	-- Large ferns
@@ -5700,7 +5778,7 @@ local function register_decorations()
 	-- Grasses and ferns
 	local grass_forest = {"Plains", "Taiga", "Forest", "FlowerForest", "BirchForest", "BirchForestM", "RoofedForest", "Swampland" }
 	local grass_mpf = {"MesaPlateauF_grasstop"}
-	local grass_plains = {"Plains", "SunflowerPlains", "BambooJungle", "JungleEdge", "JungleEdgeM", "MangroveSwamp", "CherryGrove" }
+	local grass_plains = {"Plains", "SunflowerPlains", "BambooJungle", "JungleEdge", "JungleEdgeM", "MangroveSwamp", "CherryGrove", "Meadow", }
 	local grass_savanna = {"Savanna", "SavannaM"}
 	local grass_sparse = {"ExtremeHills", "ExtremeHills+", "ExtremeHills+_snowtop", "ExtremeHillsM", "Jungle" }
 	local grass_mpfm = {"MesaPlateauFM_grasstop" }
@@ -5989,7 +6067,7 @@ local function register_decorations()
 
 	local register_flower = mcl_biomes.register_flower
 
-	local flower_biomes1 = {"Plains", "SunflowerPlains", "RoofedForest", "Forest", "BirchForest", "BirchForestM", "Taiga", "ColdTaiga", "Jungle", "JungleM", "BambooJungle", "JungleEdge", "JungleEdgeM", "Savanna", "SavannaM", "ExtremeHills", "ExtremeHillsM", "ExtremeHills+", "ExtremeHills+_snowtop", "CherryGrove" }
+	local flower_biomes1 = {"Plains", "SunflowerPlains", "RoofedForest", "Forest", "BirchForest", "BirchForestM", "Taiga", "ColdTaiga", "Jungle", "JungleM", "BambooJungle", "JungleEdge", "JungleEdgeM", "Savanna", "SavannaM", "ExtremeHills", "ExtremeHillsM", "ExtremeHills+", "ExtremeHills+_snowtop", "CherryGrove", "Meadow", }
 
 	register_flower("dandelion", flower_biomes1, 8)
 	register_flower("poppy", flower_biomes1, 9439)
@@ -6002,11 +6080,16 @@ local function register_decorations()
 	register_flower("azure_bluet", flower_biomes2, 800)
 	register_flower("oxeye_daisy", flower_biomes2, 3490)
 
-	register_flower("allium", nil, 0) -- flower Forest only
 	register_flower("blue_orchid", {"Swampland"}, 64500, false)
 
 	register_flower("lily_of_the_valley", nil, 325)
 	register_flower("cornflower", flower_biomes2, 486)
+
+	local flower_biomes3 = {"Meadow",}
+	register_flower ("allium", flower_biomes3, 67229)
+	register_flower ("cornflower", flower_biomes3, 1992)
+	register_flower("azure_bluet", flower_biomes3, 801)
+	register_flower("oxeye_daisy", flower_biomes3, 3497)
 end
 
 -- Decorations in non-Overworld dimensions
