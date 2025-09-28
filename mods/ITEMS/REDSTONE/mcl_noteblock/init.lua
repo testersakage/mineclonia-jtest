@@ -58,10 +58,27 @@ local soundnames_piano = {
 	"mesecons_noteblock_b2",
 }
 
+local function sound_by_head(head_name)
+	-- TODO: Dedicated wither skeleton sounds
+	if head_name == "mcl_heads:creeper" then
+		return "tnt_ignite"
+	elseif head_name == "mcl_heads:dragon" then
+		return "mobs_mc_ender_dragon_shoot"
+	elseif head_name:find("skeleton") then
+		return "mobs_mc_skeleton_random"
+	elseif head_name == "mcl_heads:piglin" then
+		return "mobs_mc_zombiepig_random"
+	elseif head_name == "mcl_heads:zombie" then
+		return "mobs_mc_zombie_growl"
+	end
+end
+
 local function noteblock_play(pos, param2)
 	local block_above_name = core.get_node({x=pos.x, y=pos.y+1, z=pos.z}).name
-	if block_above_name ~= "air" then
-		-- Don't play sound if no air is above
+	if core.get_item_group(block_above_name, "head") ~= 0 then
+		core.sound_play(sound_by_head(block_above_name), {pos = pos, max_hear_distance = 48})
+		return
+	elseif block_above_name ~= "air" then
 		return
 	end
 
