@@ -257,8 +257,12 @@ local function set_param2_nodes(vm, data, data2, emin, emax, area, minp, maxp, b
 	local biomemap = core.get_mapgen_object("biomemap")
 	if not biomemap then return end
 	local lvm_used = false
-	local aream = VoxelArea:new({MinEdge={x=minp.x, y=0, z=minp.z}, MaxEdge={x=maxp.x, y=0, z=maxp.z}})
-	local nodes = core.find_nodes_in_area(minp, maxp, biomecolor_nodes)
+	local aream = VoxelArea (vector.new (minp.x, 0, minp.z),
+				 vector.new (maxp.x, 0, maxp.z))
+	local search_min = vector.new (minp.x, emin.y, minp.z)
+	local search_max = vector.new (maxp.x, emax.y, maxp.z)
+	local nodes = core.find_nodes_in_area (search_min, search_max,
+					       biomecolor_nodes)
 	for _, n in ipairs(nodes) do
 		local p_pos = area:index(n.x, n.y, n.z)
 		local p2 = biome_id_p2[biomemap[aream:index(n.x, 0, n.z)]]

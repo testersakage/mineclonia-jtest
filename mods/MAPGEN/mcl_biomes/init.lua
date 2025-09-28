@@ -180,6 +180,8 @@ local function register_biomes()
 		"MesaPlateauF",
 		"MesaPlateauFM",
 		"MangroveSwamp",
+		"Grove",
+		"Meadow",
 	}
 
 
