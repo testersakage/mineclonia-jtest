@@ -65,7 +65,7 @@ core.register_node("mcl_cake:cake", {
 		end
 		-- Check if we were allowed to eat
 		if node.name == "mcl_cake:cake" or core.is_creative_enabled(clicker:get_player_name()) then
-			core.add_node(pos,{type="node",name="mcl_cake:cake_6",param2=0})
+			mcl_redstone.swap_node(pos, {name = "mcl_cake:cake_6", param2 = 0})
 			core.do_item_eat(2, ItemStack(), ItemStack("mcl_cake:cake"), clicker, {type="nothing"})
 		end
 	end,
@@ -89,7 +89,7 @@ local register_slice = function(level, nodebox, desc)
 			end
 			-- Check if we were allowed to eat
 			if node.name == this or core.is_creative_enabled(clicker:get_player_name()) then
-				core.add_node(pos,{type="node",name=after_eat,param2=0})
+				mcl_redstone.swap_node(pos, {name = after_eat, param2 = 0})
 				core.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack(this), clicker, {type="nothing"})
 			end
 		end
@@ -106,6 +106,7 @@ local register_slice = function(level, nodebox, desc)
 				core.remove_node(pos)
 				core.check_for_falling(pos)
 				core.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack("mcl_cake:cake_1"), clicker, {type="nothing"})
+				mcl_redstone.update_comparators(pos)
 			end
 		end
 	end
