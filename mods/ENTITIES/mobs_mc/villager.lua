@@ -2651,6 +2651,16 @@ local function check_bell_occupancy (bell)
 	return meta:get_int ("mcl_villages:bell_users") <= 32
 end
 
+function villager:post_relinquish_job_site ()
+	-- Reset profession if this villager has not
+	-- yet traded.
+	if self._xp == 0 then
+		self:stop_trading ()
+		self:update_trades ({})
+		self:reset_profession ()
+	end
+end
+
 function villager:relinquish_job_site (reason)
 	if self._job_site then
 		local profession = professions_by_name[self._profession]
@@ -2661,6 +2671,7 @@ function villager:relinquish_job_site (reason)
 		end
 		self._job_site = nil
 		self:report_lost_poi ("job_site", reason)
+		self:post_relinquish_job_site ()
 	end
 end
 
@@ -3484,14 +3495,7 @@ function villager:validate_job_sites ()
 			self:report_lost_poi ("job_site", "POI destroyed")
 			self._job_site = nil
 			self._sensing["nearby_jobsites"] = nil
-
-			-- Reset profession if this villager has not
-			-- yet traded.
-			if self._xp == 0 then
-				self:stop_trading ()
-				self:update_trades ({})
-				self:reset_profession ()
-			end
+			self:post_relinquish_job_site ()
 		end
 	end
 	if self._home then
