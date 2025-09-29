@@ -156,6 +156,9 @@ core.register_lbm ({
 core.register_node ("mcl_levelgen:structure_void", {
 	description = S ("Structure Void"),
 	_tt_help = S ("Enables structures not to replace existing level contents"),
+	_doc_items_usagehelp = S ([[The presence of a structure void block in a structure template indicates to the level generator that the contents of the level at the position it occupies mustn't be replaced while the template is being generated.
+
+Structure Void nodes are normally invisible unless a Structure Void item is wielded, in which event any Structure Void blocks near the wielder will be revealed by particles containing its item image.]]),
 	drawtype = "airlike",
 	inventory_image = "mcl_levelgen_structure_void.png",
 	wield_image = "mcl_levelgen_structure_void.png",
@@ -250,6 +253,25 @@ field_close_on_enter[param2;false]
 local structure_block = {
 	description = S ("Structure Block"),
 	_tt_help = S ("Saves, generates, or records structure data"),
+	_doc_items_usagehelp = S ([[A structure block is an administrative and programmer block which enables existing constructs in a map to be recorded for subsequent reuse by generated structures, and records thereof to be recreated at other positions in various maps.  Structure blocks alternate between several modes of operation, each with a unique formspec that reflects its purpose, and which can be cycled through by a button on the bottom-left corner of each formspec, to wit:
+
+- Load Mode:
+
+  Preview or load a structure identified in the Structure Name field of the formspec as prescribed by the Relative Position, Rotation, and Mirroring options provided in the formspec.  The first invocation of "LOAD" will load and display an outline of the template's destination position and extents with all aforementioned options applied, and subsequent invocations will load the template into the map within those extents.
+
+- Save Mode:
+
+  Record a portion of the map whose extents are specified by the Relative Position and Structure Size fields of the formspec into a structure template identified by the said formspec's Structure Name field and stored as a file with the extension `.dat' within a `templates' subdirectory of the world save directory.
+
+  Optionally, the Relative Position and Structure Size fields may be derived from two or more Structure Corner blocks with identical Structure Name fields placed around the corners or extents of a construct to be recorded, and selecting "Detect Structure Size and Position".
+
+- Corner Mode:
+
+  Mark the extents of a portion of the map to be recorded by another structure block in Save mode with an identical value in its Structure Name field within an 80x80x80 region of this structure block.
+
+  The extents occupied by all matching corners within distance are interpreted as the extents of such a region outset by a single node; a minimum of two such corners is required to establish a structure's position and dimensions.
+
+All coordinates and/or offsets are expected to be stated in Minecraft's coordinate system, which principally differs from Luanti's in the inversion of the Z axis.  When a recorded or loaded, certain blocks and their metadata carry a special significance and are not always reproduced faithfully from a structure template's data.  These include Structure Void blocks, Jigsaw Blocks (only when loaded during jigsaw block expansion), and any structure blocks in an internal Data Mode.]]),
 	groups = {
 		creative_breakable = 1,
 		unmovable_by_piston = 1,
@@ -675,6 +697,7 @@ core.register_node ("mcl_levelgen:structure_block_save", table.merge (structure_
 		not_in_creative_inventory = 1,
 	}),
 	on_rightclick = save_on_rightclick,
+	_doc_items_create_entry = false,
 }))
 
 -- Data structure block.
@@ -719,6 +742,7 @@ core.register_node ("mcl_levelgen:structure_block_data", table.merge (structure_
 		not_in_creative_inventory = 1,
 	}),
 	on_rightclick = data_on_rightclick,
+	_doc_items_create_entry = false,
 }))
 
 cid_structure_block_data
@@ -764,6 +788,7 @@ core.register_node ("mcl_levelgen:structure_block_corner", table.merge (structur
 		not_in_creative_inventory = 1,
 	}),
 	on_rightclick = corner_on_rightclick,
+	_doc_items_create_entry = false,
 }))
 
 -- Formspec interface.
