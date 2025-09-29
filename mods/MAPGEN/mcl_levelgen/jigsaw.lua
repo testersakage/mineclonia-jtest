@@ -1318,6 +1318,18 @@ local function handle_jigsaw_block_formspec (player, formname, fields)
 	if not data then
 		return false
 	elseif formname == "mcl_levelgen:structure_jigsaw_formspec" then
+		-- Although jigsaw blocks do not directly facilitate
+		-- code execution on the server, it is prudent to err
+		-- on the side of caution, lest ill-advised server
+		-- owners should leave templates with exploitable Lua
+		-- code or exposed structure blocks available to
+		-- players.
+		if not core.check_player_privs (player, "server") then
+			core.chat_send_player (player:get_player_name (),
+					       S ("`server' privileges are required to interact with jigsaw blocks"))
+			return false
+		end
+
 		local meta = core.get_meta (data.pos)
 		local save = jigsaw_save_data (meta)
 
