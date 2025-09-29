@@ -110,6 +110,14 @@ local function measure_target(pos)
 	return core.get_node(pos).param2
 end
 
+local function measure_item_frames(pos)
+	local meta = core.get_meta(pos)
+	if meta:get_inventory():get_stack("main", 1):get_name() ~= "" then
+		return meta:get_int("mcl_item_rotation") + 1
+	end
+	return 0
+end
+
 local measure_double_chest_left = measure_double_chest("left")
 local measure_double_chest_right = measure_double_chest("right")
 local measure_furnace = measure_complex_inventory({"fuel", "src", "dst"})
@@ -145,6 +153,10 @@ local measure_tab = {
 	["mcl_lectern:lectern_with_book"] = measure_lectern,
 	["mcl_books:chiseled_bookshelf"] = measure_chiseled_bookshelf,
 	["mcl_target:target_on"] = measure_target,
+	["mcl_itemframes:frame"] = measure_item_frames,
+	["mcl_itemframes:glow_frame"] = measure_item_frames,
+	["mcl_itemframes:invisible_frame"] = measure_item_frames,
+	["mcl_itemframes:invisible_glow_frame"] = measure_item_frames,
 	--[[ initalized using after_mods_loaded
 	["mcl_beds:respawn_anchor"] = measure_constant(comparator_signal),
 	["mcl_beds:respawn_anchor_charged_xxx"] = measure_constant(comparator_signal),
