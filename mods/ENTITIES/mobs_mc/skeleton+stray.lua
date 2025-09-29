@@ -259,16 +259,20 @@ function skeleton:validate_waypoints (waypoints)
 		and self:endangered_by_sunlight ()
 		and not mcl_weather.is_outdoor (self_pos)
 		and #waypoints > 0 then
-		local safe_waypoints = {}
 		local n_waypoints = #waypoints
-		for i = 0, n_waypoints - 1 do
-			local r = n_waypoints - i
+		local first_safe = n_waypoints + 1
+		for r = n_waypoints, 1, -1 do
 			if mcl_weather.is_outdoor (waypoints[r]) then
 				break
 			end
-			table.insert (safe_waypoints, waypoints[r])
+			first_safe = r
 		end
-		self.waypoints = safe_waypoints
+		for i = first_safe, n_waypoints do
+			waypoints[i - first_safe + 1] = waypoints[i]
+		end
+		for i = n_waypoints - first_safe + 2, n_waypoints do
+			waypoints[i] = nil
+		end
 		return
 	end
 
