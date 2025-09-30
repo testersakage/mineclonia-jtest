@@ -44,7 +44,7 @@ local honey_harvest = function(pos, node, player, itemstack)
 		--Once bees exist this branch should spawn them and/or make them aggro
 		if not campfire[1] then mcl_util.deal_damage(player, 10, {type = "mob"}) end
 		node.name = original_block
-		core.swap_node(pos, node)
+		mcl_redstone.swap_node(pos, node)
 	end
 	return mcl_util.return_itemstack_if_alive(player, itemstack)
 	-- returning the old itemstack here would result in it still being in hand *after* death
@@ -95,7 +95,7 @@ core.register_node("mcl_beehives:beehive", {
 		"mcl_beehives_beehive_side.png", "mcl_beehives_beehive_front.png",
 	},
 	paramtype2 = "facedir",
-	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, beehive = 1, unmovable_by_piston = 1},
+	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, beehive = 1, unmovable_by_piston = 1, comparator_signal = 0},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_hardness = 0.6,
 	_mcl_burntime = 15,
@@ -115,7 +115,7 @@ for l = 1, 4 do
 			"mcl_beehives_beehive_side.png", "mcl_beehives_beehive_front.png",
 		},
 		paramtype2 = "facedir",
-		groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, not_in_creative_inventory = 1, beehive = 1, honey_level = l, unmovable_by_piston = 1},
+		groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, not_in_creative_inventory = 1, beehive = 1, honey_level = l, unmovable_by_piston = 1, comparator_signal = l},
 		sounds = mcl_sounds.node_sound_wood_defaults(),
 		_mcl_hardness = 0.6,
 		_mcl_baseitem = "mcl_beehives:beehive",
@@ -133,7 +133,7 @@ core.register_node("mcl_beehives:beehive_5", {
 		"mcl_beehives_beehive_side.png", "mcl_beehives_beehive_front_honey.png",
 	},
 	paramtype2 = "facedir",
-	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, not_in_creative_inventory = 1, beehive = 1, honey_level = 5 },
+	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 5, material_wood = 1, not_in_creative_inventory = 1, beehive = 1, honey_level = 5, comparator_signal = 5 },
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_hardness = 0.6,
 	_mcl_baseitem = "mcl_beehives:beehive",
@@ -152,7 +152,7 @@ core.register_node("mcl_beehives:bee_nest", {
 		"mcl_beehives_bee_nest_side.png", "mcl_beehives_bee_nest_front.png",
 	},
 	paramtype2 = "facedir",
-	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, bee_nest = 1 },
+	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, bee_nest = 1, comparator_signal = 0 },
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_hardness = 0.3,
 	_mcl_burntime = 15,
@@ -172,7 +172,7 @@ for i = 1, 4 do
 			"mcl_beehives_bee_nest_side.png", "mcl_beehives_bee_nest_front.png",
 		},
 		paramtype2 = "facedir",
-		groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, not_in_creative_inventory = 1, bee_nest = 1, honey_level = i },
+		groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, not_in_creative_inventory = 1, bee_nest = 1, honey_level = i, comparator_signal = i },
 		sounds = mcl_sounds.node_sound_wood_defaults(),
 		_mcl_hardness = 0.3,
 		_mcl_baseitem = "mcl_beehives:bee_nest",
@@ -190,7 +190,7 @@ core.register_node("mcl_beehives:bee_nest_5", {
 		"mcl_beehives_bee_nest_side.png", "mcl_beehives_bee_nest_front_honey.png",
 	},
 	paramtype2 = "facedir",
-	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, not_in_creative_inventory = 1, bee_nest = 1, honey_level = 5 },
+	groups = { axey = 1, deco_block = 1, flammable = 0, fire_flammability = 30, not_in_creative_inventory = 1, bee_nest = 1, honey_level = 5, comparator_signal = 5 },
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_hardness = 0.3,
 	_mcl_honey_level = 5,
@@ -228,7 +228,7 @@ core.register_abm({
 			local honey_level = core.get_item_group(node_name, "honey_level")
 			honey_level = math.min(honey_level + (math.random(100) == 100 and 2 or 1), 5)
 			node.name = original_block.."_"..honey_level
-			core.swap_node(pos, node)
+			mcl_redstone.swap_node(pos, node)
 		end
 	end,
 })
