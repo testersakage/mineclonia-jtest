@@ -151,6 +151,14 @@ awards.register_achievement("mcl:buildIronPickaxe", {
 	group = "Overworld",
 })
 
+awards.register_achievement("mcl:bullseye", {
+	title = S("Bullseye"),
+	description = S("Hit the bullseye of a target block from at least 30 blocks away."),
+	icon = "mcl_target_target_side.png",
+	type = "Advancement",
+	group = "Overworld"
+})
+
 -- Item pickup achievements: These are awarded when picking up a certain item.
 -- The achivements are manually given in the mod mcl_item_entity.
 awards.register_achievement("mcl:diamonds", {
