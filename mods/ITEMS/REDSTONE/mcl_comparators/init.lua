@@ -106,14 +106,6 @@ local function measure_chiseled_bookshelf(pos)
 	return math.floor(meta:get_float("last_slot_used") or 0)
 end
 
-local function measure_item_frames(pos)
-	local meta = core.get_meta(pos)
-	if meta:get_inventory():get_stack("main", 1):get_name() ~= "" then
-		return meta:get_int("mcl_item_rotation") + 1
-	end
-	return 0
-end
-
 local function measure_target(pos)
 	return core.get_node(pos).param2
 end
