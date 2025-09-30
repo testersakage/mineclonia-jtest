@@ -152,10 +152,6 @@ local measure_tab = {
 	["mcl_jukebox:jukebox"] = measure_jukebox,
 	["mcl_lectern:lectern_with_book"] = measure_lectern,
 	["mcl_books:chiseled_bookshelf"] = measure_chiseled_bookshelf,
-	["mcl_itemframes:frame"] = measure_item_frames,
-	["mcl_itemframes:glow_frame"] = measure_item_frames,
-	["mcl_itemframes:invisible_frame"] = measure_item_frames,
-	["mcl_itemframes:invisible_glow_frame"] = measure_item_frames,
 	["mcl_target:target_on"] = measure_target,
 	--[[ initalized using after_mods_loaded
 	["mcl_beds:respawn_anchor"] = measure_constant(comparator_signal),
