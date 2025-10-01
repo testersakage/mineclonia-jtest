@@ -19,10 +19,9 @@ local allowed_non_solid_nodes_floor = {
 	"mcl_end:end_rod",
 	"mcl_end:dragon_egg",
 	"mcl_portals:end_portal_frame_eye",
-	"mcl_lanterns:chain"
 }
 
-local allowed_non_solid_groups_floor = {"anvil", "wall", "glass", "fence", "fence_gate", "pane", "slab_top"}
+local allowed_non_solid_groups_floor = {"anvil", "wall", "glass", "fence", "fence_gate", "pane", "slab_top", "chain"}
 
 local allowed_non_solid_nodes_ceiling = {
 	"mcl_core:ice",
@@ -33,10 +32,9 @@ local allowed_non_solid_nodes_ceiling = {
 	"mcl_end:chorus_flower_dead",
 	"mcl_end:end_rod",
 	"mcl_core:grass_path",
-	"mcl_lanterns:chain"
 }
 
-local allowed_non_solid_groups_ceiling = {"anvil", "wall", "glass", "fence", "fence_gate", "soil", "pane", "end_portal_frame"}
+local allowed_non_solid_groups_ceiling = {"anvil", "wall", "glass", "fence", "fence_gate", "soil", "pane", "end_portal_frame", "chain"}
 
 local function check_placement(node, wdir)
 	local nn = node.name
@@ -254,7 +252,7 @@ core.register_node("mcl_lanterns:chain", {
 			{-0.0625, -0.5, -0.0625, 0.0625, 0.5, 0.0625},
 		}
 	},
-	groups = {pickaxey = 1, deco_block = 1},
+	groups = {chain=1, pickaxey=1, deco_block=1},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	on_place = function(itemstack, placer, pointed_thing)
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)

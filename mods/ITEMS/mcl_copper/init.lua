@@ -5,8 +5,6 @@ dofile(path .. "/decaychains.lua")
 dofile(path .. "/nodes.lua")
 dofile(path .. "/items.lua")
 dofile(path .. "/crafting.lua")
-dofile(path .. "/armor.lua")
-dofile(path .. "/tools.lua")
 
 mcl_copper.register_decaychain("copper",{
 	preserve_group = "preserves_copper",
@@ -109,6 +107,18 @@ mcl_copper.register_decaychain("bar",{
 		"mcl_panes:copper_bar_oxidized",
 	},
 })
+
+--mcl_copper.register_decaychain("bar_flat",{
+--	preserve_group = "preserves_copper",
+--	unpreserve_callback = "_on_axe_place",
+--	undecay_callback = "_on_axe_place",
+--	nodes = { --order is significant
+--		"mcl_panes:copper_bar_flat",
+--		"mcl_panes:copper_bar_exposed_flat",
+--		"mcl_panes:copper_bar_weathered_flat",
+--		"mcl_panes:copper_bar_oxidized_flat",
+--	},
+--})
 
 mcl_copper.register_decaychain("chain",{
 	preserve_group = "preserves_copper",

@@ -93,10 +93,10 @@ core.register_craft({
 })
 
 core.register_craft({
-	output = "mcl_copper:trapdoor 2",
+	output = "mcl_copper:trapdoor",
 	recipe = {
-		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
-		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" }
+		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
+		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" }
 	}
 })
 
@@ -166,19 +166,54 @@ core.register_craft({
 })
 
 core.register_craft({
-	output = "mcl_lanterns:copper_lantern",
+	output = "mcl_lanterns:copper_lantern_floor",
 	recipe = {
-		{ "mcl_copper:nugget", "mcl_copper:nugget",       "mcl_copper:nugget" },
-		{ "mcl_copper:nugget", "mcl_copper:copper_torch", "mcl_copper:nugget" },
-		{ "mcl_copper:nugget", "mcl_copper:nugget",       "mcl_copper:nugget" },
+		{ "mcl_copper:copper_nugget", "mcl_copper:copper_nugget", "mcl_copper:copper_nugget" },
+		{ "mcl_copper:copper_nugget", "mcl_copper:copper_torch", "mcl_copper:copper_nugget" },
+		{ "mcl_copper:copper_nugget", "mcl_copper:copper_nugget", "mcl_copper:copper_nugget" },
 	},
 })
 
 core.register_craft({
 	output = "mcl_copper:chain",
 	recipe = {
-		{ "mcl_copper:nugget" },
-		{ "mcl_copper:ingot" },
-		{ "mcl_copper:nugget" },
+		{ "mcl_copper:copper_nugget" },
+		{ "mcl_copper:copper_ingot" },
+		{ "mcl_copper:copper_nugget" },
 	}
 })
+
+core.register_craft({
+	output = "mcl_panes:copper_bar_flat 16",
+	recipe = {
+		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
+		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
+	}
+})
+
+for _, x in pairs(block_exposure_level) do
+	core.register_craft({
+		output = "mcl_lanterns:copper_lantern"..x.."_floor_preserved",
+		recipe = {
+			{ "mcl_lanterns:copper_lantern"..x.."_floor", "mcl_honey:honeycomb" }
+		}
+	})
+end
+
+for _, x in pairs(block_exposure_level) do
+	core.register_craft({
+		output = "mcl_copper:chain"..x.."_preserved",
+		recipe = {
+			{ "mcl_copper:chain"..x, "mcl_honey:honeycomb" }
+		}
+	})
+end
+
+--for _, x in pairs(block_exposure_level) do
+--	core.register_craft({
+--		output = "mcl_panes:copper_bar"..x.."_flat_preserved",
+--		recipe = {
+--			{ "mcl_panes:copper_bar"..x.."_flat", "mcl_honey:honeycomb" }
+--		}
+--	})
+--end

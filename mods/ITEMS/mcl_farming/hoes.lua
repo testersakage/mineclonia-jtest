@@ -78,6 +78,15 @@ mcl_tools.add_to_sets("hoe", hoe_common_defs, {
 			damage_groups = { fleshy = 1, },
 		},
 	},
+	["copper"] = {
+		description = S("Copper Hoe"),
+		inventory_image = "mcl_copper_tool_hoe.png",
+		tool_capabilities = {
+			full_punch_interval = 0.5,
+			damage_groups = { fleshy = 1, },
+		},
+		_mcl_cooking_output = "mcl_copper:copper_nugget"
+	},
 	["iron"] = {
 		description = S("Iron Hoe"),
 		inventory_image = "farming_tool_steelhoe.png",
