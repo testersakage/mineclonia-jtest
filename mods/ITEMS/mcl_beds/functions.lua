@@ -83,7 +83,6 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		-- save respawn position when entering bed
 		if mcl_spawn.set_spawn_pos(player, bed_pos, nil) then
 			core.chat_send_player(name, S("New respawn position set!"))
-			awards.unlock(player:get_player_name(), "mcl:sweetDreams")
 		end
 
 
@@ -192,6 +191,7 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		hud_flags.wielditem = false
 		mcl_player.player_set_animation(player, "lay" , 0)
 		mcl_serverplayer.override_pose (player, mcl_serverplayer.POSE_SLEEPING)
+		awards.unlock(player:get_player_name(), "mcl:sweetDreams")
 	end
 
 	player:hud_set_flags(hud_flags)
