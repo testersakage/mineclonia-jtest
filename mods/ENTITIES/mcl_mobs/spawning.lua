@@ -1142,7 +1142,7 @@ end
 
 local function get_weighted_value (mob_types)
 	local weight = math.random (total_weight[mob_types])
-	for _, spawner in pairs (mob_types) do
+	for _, spawner in ipairs (mob_types) do
 		weight = weight - spawner.weight
 		if weight <= 0 then
 			return spawner
@@ -1375,7 +1375,13 @@ local default_spawner = {
 	pack_max = 4,
 }
 
+local spawners_initialized = false
+
 function mcl_mobs.register_spawner (spawner)
+	if spawners_initialized then
+		error ("mcl_mobs.register_spawner mustn't be called "
+		       .. "after mod initialization")
+	end
 	local spawner = table.merge (default_spawner, spawner)
 	table.insert (registered_spawners, spawner)
 end
@@ -1429,6 +1435,8 @@ core.register_on_mods_loaded (function ()
 			table.insert (list, spawner)
 		end
 	end
+
+	spawners_initialized = true
 	registered_spawners = output
 	mcl_mobs.registered_spawners = registered_spawners
 end)
