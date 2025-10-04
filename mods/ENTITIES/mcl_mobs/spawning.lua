@@ -1199,7 +1199,9 @@ local spawn_proto_chunk_blurb
 	= "[mcl_mobs] Declining to spawn mob %s in proto-chunk at (%d,%d,%d)"
 
 local function test_generation (pos, mob_def)
-	if is_position_completely_generated (pos) then
+	if not core.compare_block_status (pos, "active") then
+		return false
+	elseif is_position_completely_generated (pos) then
 		return true
 	elseif logging then
 		local msg = string.format (spawn_proto_chunk_blurb,
