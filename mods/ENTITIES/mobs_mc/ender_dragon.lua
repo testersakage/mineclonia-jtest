@@ -807,7 +807,7 @@ function dragon:check_walls (cbox)
 				local node = core.get_node (v)
 				if not is_dragon_immune[node.name] and
 					not core.is_protected (v, "") then
-					core.remove_node (v)
+					core.dig_node (v)
 				end
 			end
 		end
