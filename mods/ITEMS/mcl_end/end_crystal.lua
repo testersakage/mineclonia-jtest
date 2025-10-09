@@ -131,7 +131,8 @@ core.register_entity("mcl_end:crystal", {
 	end,
 	_exploded = false,
 	_hittable_by_projectile = true,
-	_mcl_pistons_unmovable = true
+	_mcl_pistons_unmovable = true,
+	_forbid_portal_teleportation = true,
 })
 
 core.register_entity("mcl_end:crystal_beam", {
