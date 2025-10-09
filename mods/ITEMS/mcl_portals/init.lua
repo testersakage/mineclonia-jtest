@@ -22,6 +22,10 @@ function mcl_portals.object_teleport_allowed (obj)
 	if obj:get_attach () or obj:get_hp () <= 0 then
 		return false
 	end
+	local luaentity = obj:get_luaentity ()
+	if luaentity and luaentity._forbid_portal_teleportation then
+		return false
+	end
 
 	-- Do not permit objects to which players are directly or
 	-- indirectly attached to be transported across dimensions.
