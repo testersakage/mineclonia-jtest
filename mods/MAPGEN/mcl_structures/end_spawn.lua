@@ -55,7 +55,7 @@ mcl_structures.register_structure("end_exit_portal_deferred",{
 		local p2 = vector.offset(pos,16,21,16)
 		core.emerge_area(p1,p2,function(_, _, calls_remaining)
 			if calls_remaining > 0 then return end
-			mcl_util.bulk_swap_node(core.find_nodes_in_area(p1,p2,{"mcl_portals:portal_end"}),{name="air"})
+			mcl_util.bulk_swap_node(core.find_nodes_in_area(p1,p2,{"mcl_portals:portal_end", "mcl_torches:torch_wall"}),{name="air"})
 			core.fix_light(p1,p2)
 		end)
 	end
