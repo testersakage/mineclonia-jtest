@@ -34,34 +34,6 @@ mcl_enable_mt_dungeons (Native Luanti dungeons) bool false
 # Note: This setting has no effect on existing worlds.
 mcl_superflat_classic (Classic superflat map generation) bool false
 
-# One of four levels defining the difficulty of gameplay.
-
-# Peaceful: no hostile mobs, excepting shulkers, hoglins, piglins, and
-# the dragon spawn, and nor do spiders or endermen, while players
-# rapidly regenerate health and do not experience hunger.  Mobs will
-# not attack players, even in retaliation.  TNT ceases to inflict
-# damage, and raids cannot be induced.
-#
-# Easy: mobs deal 0.5x their standard values plus one additional
-# health point in damage.  Players experience hunger as usual, but
-# starvation can only damage players to 10 hearts.  Cave spiders
-# cannot inflict poison, nor can Withers the Wither effect.  Villagers
-# are never converted into zombie villagers, and zombies and skeletons
-# never spawn equipped with armor.
-#
-# Normal: mobs deal their standard amounts of damage, and villagers
-# killed by zombies are liable, with a 50% chance, to transform into
-# zombie villagers.  Vindicators are capable of breaking doors.
-#
-# Hard: mobs deal approximately 150% as much damage as on Normal.
-# Starvation can kill, rather than merely reduce the player to half a
-# heart.  Villagers killed by zombies are unconditionally resurrected
-# as zombie villagers.  Chunks that have been inhabited for longer
-# than a certain period may host randomly generated pillager patrols.
-# In addition, there is an increased chance of a mob's spawning with
-# armor or weapons.
-mcl_difficulty (Difficulty) enum normal peaceful,easy,normal,hard
-
 # Whether to use Mineclonia's custom map generator when the `singlenode' map
 # generator is enabled.
 #
@@ -93,6 +65,34 @@ mcl_levelgen_enable_ersatz (Enable new structure generator) bool true
 # anomalies produced by built-in carvers overwriting already-generated
 # structures.
 mcl_levelgen_enable_ersatz_carvers (Enable new cave generator) bool false
+
+# One of four levels defining the difficulty of gameplay.
+#
+# Peaceful: no hostile mobs, excepting shulkers, hoglins, piglins, and
+# the dragon spawn, and nor do spiders or endermen, while players
+# rapidly regenerate health and do not experience hunger.  Mobs will
+# not attack players, even in retaliation.  TNT ceases to inflict
+# damage, and raids cannot be induced.
+#
+# Easy: mobs deal 0.5x their standard values plus one additional
+# health point in damage.  Players experience hunger as usual, but
+# starvation can only damage players to 10 hearts.  Cave spiders
+# cannot inflict poison, nor can Withers the Wither effect.  Villagers
+# are never converted into zombie villagers, and zombies and skeletons
+# never spawn equipped with armor.
+#
+# Normal: mobs deal their standard amounts of damage, and villagers
+# killed by zombies are liable, with a 50% chance, to transform into
+# zombie villagers.  Vindicators are capable of breaking doors.
+#
+# Hard: mobs deal approximately 150% as much damage as on Normal.
+# Starvation can kill, rather than merely reduce the player to half a
+# heart.  Villagers killed by zombies are unconditionally resurrected
+# as zombie villagers.  Chunks that have been inhabited for longer
+# than a certain period may host randomly generated pillager patrols.
+# In addition, there is an increased chance of a mob's spawning with
+# armor or weapons.
+mcl_difficulty (Difficulty) enum normal peaceful,easy,normal,hard
 
 [Players]
 # If enabled, players respawn at the bed they clicked instead of normal spawn.
