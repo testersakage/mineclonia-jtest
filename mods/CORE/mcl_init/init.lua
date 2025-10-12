@@ -83,15 +83,22 @@ if not mapmeta_settings_initialized then
 		end
 		core.set_mapgen_setting("mcl_superflat_classic", tostring(mcl_vars.superflat), true)
 	elseif mg_name == "singlenode" then
+		-- Worlds from the mcl_levelgen dev branch used this mod
+		-- storage to determine if mcl_levelgen should run or not. To
+		-- avoid changing the mapgen on such worlds we read the
+		-- setting.
+		--
+		-- TODO: Remove this one within a couple of months.
+		if mod_storage:get("inhibit_mcl_levelgen") then
+			mcl_vars.enable_mcl_levelgen = not (mod_storage:get("inhibit_mcl_levelgen") == "true")
 		-- If mcl_superflat_classic exists but not
 		-- mapmeta_settings_initialized, then the world was created
 		-- prior the introduction of mcl_levelgen and we disable it.
-		if mod_storage:get("mcl_superflat_classic") then
+		elseif mod_storage:get("mcl_superflat_classic") then
 			mcl_vars.enable_mcl_levelgen = false
-		end
 		-- If the world has a mcl_levelgen prohibiting mod then we
 		-- disable it.
-		if #levelgen_inhibiting_mods > 0 then
+		elseif #levelgen_inhibiting_mods > 0 then
 			mcl_vars.enable_mcl_levelgen = false
 		end
 		core.set_mapgen_setting("mcl_singlenode_mapgen", tostring(mcl_vars.enable_mcl_levelgen), true)
