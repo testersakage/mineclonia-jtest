@@ -55,6 +55,8 @@ mcl_singlenode_mapgen (Custom map generator) bool true
 # minetest.conf in effect, unless another value is specified in
 # map_meta.txt.  This option may be configured for individual worlds
 # by editing map_meta.txt.
+#
+# Note: This setting requires Luanti version 5.14.0 or later.
 mcl_levelgen_enable_ersatz (Enable new structure generator) bool true
 
 # When "mcl_levelgen_enable_ersatz" is in effect, enable mcl_levelgen's
@@ -64,6 +66,8 @@ mcl_levelgen_enable_ersatz (Enable new structure generator) bool true
 # slight performance penalty and also mitigates structure generation
 # anomalies produced by built-in carvers overwriting already-generated
 # structures.
+#
+# Note: This setting requires Luanti version 5.14.0 or later.
 mcl_levelgen_enable_ersatz_carvers (Enable new cave generator) bool false
 
 # One of four levels defining the difficulty of gameplay.
