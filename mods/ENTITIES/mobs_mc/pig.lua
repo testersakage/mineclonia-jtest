@@ -151,9 +151,9 @@ function pig:on_rightclick (clicker)
 		self.drops = {
 			{
 				name = "mcl_mobitems:porkchop",
-			 	chance = 1,
-			 	min = 1,
-			 	max = 3
+				chance = 1,
+				min = 1,
+				max = 3
 			}
 		}
 		local pos = self.object:get_pos()
