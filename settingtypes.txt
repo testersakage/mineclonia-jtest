@@ -62,15 +62,11 @@ mcl_superflat_classic (Classic superflat map generation) bool false
 # armor or weapons.
 mcl_difficulty (Difficulty) enum normal peaceful,easy,normal,hard
 
-# Whether to disable mcl_levelgen (Mineclonia's custom map generator)
-# when the `singlenode' map generator is enabled.
+# Whether to use Mineclonia's custom map generator when the `singlenode' map
+# generator is enabled.
 #
-# Being a mapgen setting, when configured here it will influence all
-# worlds launched from this Luanti installation or with this
-# minetest.conf in effect, unless another value is specified in
-# map_meta.txt.  This option may be configured for individual worlds
-# by editing map_meta.txt.
-mcl_init_disable_levelgen (Disable custom map generator) bool false
+# Note: This setting has no effect on existing worlds.
+mcl_singlenode_mapgen (Custom map generator) bool true
 
 # Whether to enable the new determinsitic structure generator.  This
 # option only takes effect on Luanti 5.14 or later; the structure

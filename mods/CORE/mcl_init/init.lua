@@ -1,3 +1,4 @@
+local S = core.get_translator(core.get_current_modname())
 local mod_storage = core.get_mod_storage()
 local normal_vars_in_singlenode = false
 
@@ -36,14 +37,72 @@ local minecraft_new_height_limit = 384
 
 local singlenode = mg_name == "singlenode"
 
--- The classic superflat setting is stored in mod storage so it remains
--- constant after the world has been created.
-local old_mcl_superflat_classic = mod_storage:get ("mcl_superflat_classic")
-if not old_mcl_superflat_classic then
-	local superflat = mg_name == "flat" and core.get_mapgen_setting("mcl_superflat_classic") == "true"
-	mod_storage:set_string("mcl_superflat_classic", superflat and "true" or "false")
+local function read_mcl_levelgen_conf (name)
+	local config = {}
+	for line in io.lines (name) do
+		if line:sub (1, 1) ~= "#" then
+			local split = line:split ("=", true, 1)
+			if #split == 2 then
+				config[split[1]:trim ()] = split[2]:trim ()
+			end
+		end
+	end
+	return config
 end
-mcl_vars.superflat = mod_storage:get_string("mcl_superflat_classic") == "true"
+
+local function get_levelgen_inhibiting_mods ()
+	local modnames = core.get_modnames ()
+	local inhibiting_mods = {}
+	for _, mod in ipairs (modnames) do
+		local modpath = core.get_modpath (mod)
+		if modpath then
+			local list = core.get_dir_list (modpath, false)
+			if table.indexof (list, "mcl_levelgen.conf") ~= -1 then
+				local conf = read_mcl_levelgen_conf (modpath .. "/mcl_levelgen.conf")
+				if conf["disable_mcl_levelgen"] == "true" then
+					table.insert(inhibiting_mods, mod)
+				end
+			end
+		end
+	end
+	return inhibiting_mods
+end
+
+local levelgen_inhibiting_mods = get_levelgen_inhibiting_mods()
+mcl_vars.enable_mcl_levelgen = singlenode and core.get_mapgen_setting("mcl_singlenode_mapgen") ~= "false"
+mcl_vars.superflat = core.get_mapgen_setting("mcl_superflat_classic") == "true"
+
+local mapmeta_settings_initialized = mod_storage:get_string("mapmeta_settings_initialized") == "true"
+if not mapmeta_settings_initialized then
+	if mg_name == "flat" then
+		-- Previously the mcl_superflat_classic was persisted in mod
+		-- storage, if so initialize it from that instead of the mapgen
+		-- setting.
+		if mod_storage:get("mcl_superflat_classic") then
+			mcl_vars.superflat = mod_storage:get_string("mcl_superflat_classic") == "true"
+		end
+		core.set_mapgen_setting("mcl_superflat_classic", tostring(mcl_vars.superflat), true)
+	elseif mg_name == "singlenode" then
+		-- If mcl_superflat_classic exists but not
+		-- mapmeta_settings_initialized, then the world was created
+		-- prior the introduction of mcl_levelgen and we disable it.
+		if mod_storage:get("mcl_superflat_classic") then
+			mcl_vars.enable_mcl_levelgen = false
+		end
+		-- If the world has a mcl_levelgen prohibiting mod then we
+		-- disable it.
+		if #levelgen_inhibiting_mods > 0 then
+			mcl_vars.enable_mcl_levelgen = false
+		end
+		core.set_mapgen_setting("mcl_singlenode_mapgen", tostring(mcl_vars.enable_mcl_levelgen), true)
+	end
+	mod_storage:set_string("mapmeta_settings_initialized", "true")
+end
+
+if #levelgen_inhibiting_mods > 0 and mcl_vars.enable_mcl_levelgen then
+	error(S("The world has the custom Mineclonia mapgen enabled in combination with mcl_levelgen inhibiting mods. Disable the mods (@1) or update the mcl_singlenode_mapgen setting in @2 to play the world.",
+		table.concat(levelgen_inhibiting_mods, ", "), core.get_worldpath().."/map_meta.txt"))
+end
 
 -- Calculate mapgen_edge_min/mapgen_edge_max
 mcl_vars.chunksize = math.max(1, tonumber(core.get_mapgen_setting("chunksize")) or 5)
@@ -101,61 +160,7 @@ function mcl_vars.get_chunk_number(pos) -- unsigned int
 		 c.x + k_positive
 end
 
-local function read_mcl_levelgen_conf (name)
-	local config = {}
-	for line in io.lines (name) do
-		if line:sub (1, 1) ~= "#" then
-			local split = line:split ("=", true, 1)
-			if #split == 2 then
-				config[split[1]:trim ()] = split[2]:trim ()
-			end
-		end
-	end
-	return config
-end
-
-function mcl_vars.detect_levelgen_inhibiting_mods ()
-	local modnames = core.get_modnames ()
-	for _, mod in ipairs (modnames) do
-		local modpath = core.get_modpath (mod)
-		if modpath then
-			local list = core.get_dir_list (modpath, false)
-			if table.indexof (list, "mcl_levelgen.conf") ~= -1 then
-				local conf = read_mcl_levelgen_conf (modpath .. "/mcl_levelgen.conf")
-				if conf["disable_mcl_levelgen"] == "true" then
-					return true
-				end
-			end
-		end
-	end
-	return false
-end
-
--- Detect and return whether this world is a singlenode world created
--- prior to the introduction of `mcl_levelgen', exempting worlds which
--- were created with `mcl_levelgen' enabled but before this test was
--- introduced.
-
-function mcl_vars.is_old_singlenode_world ()
-	local key_2 = mod_storage:get_string ("inhibit_mcl_levelgen")
-	local key_1 = old_mcl_superflat_classic or ""
-	local dir = core.get_worldpath ()
-	local dir_list = core.get_dir_list (dir, true)
-	if (key_2 == "true" or (key_2 == "" and key_1 ~= ""))
-		and table.indexof (dir_list, "journals") == -1 then
-		mod_storage:set_string ("inhibit_mcl_levelgen", "true")
-		return true
-	else
-		mod_storage:set_string ("inhibit_mcl_levelgen", "false")
-		return false
-	end
-end
-
-if singlenode
-	and core.get_mapgen_setting ("mcl_init_disable_levelgen") ~= "true"
-	and not mcl_vars.is_old_singlenode_world ()
-	and not mcl_vars.detect_levelgen_inhibiting_mods () then
-	mcl_vars.enable_mcl_levelgen = true
+if mcl_vars.enable_mcl_levelgen then
 	mcl_vars.mg_overworld_min = -128
 	mcl_vars.mg_overworld_min_old = -128
 	mcl_vars.mg_overworld_max_official = mcl_vars.mg_overworld_min
