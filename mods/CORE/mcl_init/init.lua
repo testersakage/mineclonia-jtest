@@ -90,7 +90,7 @@ if not mapmeta_settings_initialized then
 		--
 		-- TODO: Remove this one within a couple of months.
 		if mod_storage:get("inhibit_mcl_levelgen") then
-			mcl_vars.enable_mcl_levelgen = not (mod_storage:get("inhibit_mcl_levelgen") == "true")
+			mcl_vars.enable_mcl_levelgen = mod_storage:get("inhibit_mcl_levelgen") ~= "true"
 		-- If mcl_superflat_classic exists but not
 		-- mapmeta_settings_initialized, then the world was created
 		-- prior the introduction of mcl_levelgen and we disable it.
