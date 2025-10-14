@@ -1407,7 +1407,6 @@ local bbox_center = mcl_levelgen.bbox_center
 
 local function mineshaft_create_pieces (self, pieces, level, terrain, rng, x, z)
 	rng:next_double ()
-	rng.log = true
 	local parlor = create_parlor (0, rng, x + 2, z + 2, self.is_mesa)
 	insert (pieces, parlor)
 	insert_parlor_children (rng, pieces, parlor)
@@ -1427,7 +1426,6 @@ local function mineshaft_create_pieces (self, pieces, level, terrain, rng, x, z)
 		dy = target_center - y
 		mcl_levelgen.translate_vertically (pieces, dy)
 	else
-		rng.log = false
 		-- print ("Unified bb: " .. string.format ("(%d,%d,%d) - (%d,%d,%d)",
 		-- 					unpack (bbox_from_pieces (pieces))))
 		dy = mcl_levelgen.shift_into (pieces, sea_level, preset.min_y,
