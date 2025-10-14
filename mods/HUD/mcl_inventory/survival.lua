@@ -179,6 +179,12 @@ mcl_inventory.register_survival_inventory_tab({
 function mcl_inventory.build_survival_formspec(player)
 	local inv = player:get_inventory()
 
+	local surv_craft = inv:get_list("craft")
+
+	if surv_craft ~= nil and #surv_craft > 4 then
+		return nil
+	end
+
 	inv:set_width("craft", 2)
 	inv:set_size("craft", 4)
 
