@@ -35,10 +35,17 @@ mcl_enable_mt_dungeons (Native Luanti dungeons) bool false
 mcl_superflat_classic (Classic superflat map generation) bool false
 
 # Whether to use Mineclonia's custom map generator when the "singlenode" map
-# generator is enabled.
+# generator is enabled. This map generator generates more Minecraft-like
+# terrain but is significantly slower than the builtin ones. At minimum these
+# settings (located under "Mapgen" and "Advanced") are recommended:
+#
+# num_emerge_threads = 4
+# active_block_range = 6
+# max_block_send_distance = 27
+# max_block_generate_distance = 28
 #
 # Note: This setting has no effect on existing worlds.
-mcl_singlenode_mapgen (Custom map generator) bool true
+mcl_singlenode_mapgen (Custom singlenode map generator) bool true
 
 # Whether to enable the new determinsitic structure generator. This
 # option only takes effect on Luanti 5.14 or later; the structure
@@ -269,7 +276,7 @@ mcl_redstone_time_budget (Redstone time budget) float 0.2
 mcl_redstone_event_max (Maximum queued redstone events) int 65535
 
 [Liquids]
-# Enables MC-like liquid flowing.
+# Enables Minecraft-like liquid flowing.
 mcl_liquids_enable (Custom liquid flowing) bool false
 
 # Adjusts liquid update speed by a factor (higher is faster).
