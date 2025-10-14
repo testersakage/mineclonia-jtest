@@ -26,7 +26,7 @@ slight performance penalty and also mitigates structure generation
 anomalies produced by built-in carvers overwriting already-generated
 structures.
 
-4. mcl_init_disable_levelgen = true
+4. mcl_singlenode_mapgen = false
 
 Disable this level generator when the "singlenode" mapgen is active,
 effectively restoring the usual significance of "singlenode".
