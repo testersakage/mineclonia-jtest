@@ -4517,7 +4517,7 @@ end
 local villager_gift_tables = {
 	armorer = {
 		stacks_min = 1,
-		stacks_max = 5,
+		stacks_max = 1,
 		items = {
 			{
 				itemstring = "mcl_armor:helmet_chain"
@@ -4535,7 +4535,7 @@ local villager_gift_tables = {
 	},
 	butcher = {
 		stacks_min = 1,
-		stacks_max = 5,
+		stacks_max = 1,
 		items = {
 			{
 				itemstring = "mcl_mobitems:cooked_chicken"
@@ -4556,25 +4556,19 @@ local villager_gift_tables = {
 	},
 	cartographer = {
 		stacks_min = 1,
-		stacks_max = 5,
+		stacks_max = 1,
 		items = {
 			{
-				itemstring = "mcl_maps:empty_map",
-				amount_min = 1.0,
-				amount_max = 3.0,
-				weight = 10,
+				itemstring = "mcl_maps:empty_map"
 			},
 			{
-				itemstring = "mcl_core:paper",
-				amount_min = 1.0,
-				amount_max = 5.0,
-				weight = 15,
+				itemstring = "mcl_core:paper"
 			}
 		},
 	},
 	cleric = {
 		stacks_min = 1,
-		stacks_max = 5,
+		stacks_max = 1,
 		items = {
 			{
 				itemstring = "mcl_core:lapis"
@@ -4586,7 +4580,7 @@ local villager_gift_tables = {
 	},
 	farmer = {
 		stacks_min = 1,
-		stacks_max = 3,
+		stacks_max = 1,
 		items = {
 			{
 				itemstring = "mcl_farming:bread"
@@ -4601,30 +4595,23 @@ local villager_gift_tables = {
 	},
 	fisherman = {
 		stacks_min = 1,
-		stacks_max = 5,
+		stacks_max = 1,
 		items = {
 			{
-				itemstring = "mcl_fishing:fish_raw",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 2,
+				itemstring = "mcl_fishing:fish_raw"
 			},
 			{
-				itemstring = "mcl_fishing:salmon_raw",
-				amount_max = 3.0,
-				amount_min = 1.0,
+				itemstring = "mcl_fishing:salmon_raw"
 			}
 		},
 	},
 	fletcher = {
 		stacks_min = 1,
-		stacks_max = 5,
+		stacks_max = 1,
 		items = {
 			{
 				itemstring = "mcl_bows:arrow",
-				amount_max = 3.0,
-				amount_min = 1.0,
-				weight = 2,
+				weight = 26,
 			},
 			{
 				itemstring = "mcl_potions:fire_resistance_arrow"
@@ -4669,7 +4656,7 @@ local villager_gift_tables = {
 	},
 	leatherworker = {
 		stacks_min = 1,
-		stacks_max = 3,
+		stacks_max = 1,
 		items = {
 			{
 				itemstring = "mcl_mobitems:leather"
@@ -4678,7 +4665,7 @@ local villager_gift_tables = {
 	},
 	librarian = {
 		stacks_min = 1,
-		stacks_max = 5,
+		stacks_max = 1,
 		items = {
 			{
 				itemstring = "mcl_books:book"
@@ -4687,7 +4674,7 @@ local villager_gift_tables = {
 	},
 	mason = {
 		stacks_min = 1,
-		stacks_max = 5,
+		stacks_max = 1,
 		items = {
 			{
 				itemstring = "mcl_core:clay"
@@ -4696,7 +4683,7 @@ local villager_gift_tables = {
 	},
 	shepherd = {
 		stacks_min = 1,
-		stacks_max = 5,
+		stacks_max = 1,
 		items = {
 			{
 				itemstring = "mcl_wool:black"
@@ -4749,8 +4736,8 @@ local villager_gift_tables = {
 		},
 	},
 	toolsmith = {
-		stacks_min = 3,
-		stacks_max = 8,
+		stacks_min = 1,
+		stacks_max = 1,
 		items = {
 			{
 				itemstring = "mcl_tools:axe_stone"
@@ -4767,8 +4754,8 @@ local villager_gift_tables = {
 		},
 	},
 	weaponsmith = {
-		stacks_min = 3,
-		stacks_max = 8,
+		stacks_min = 1,
+		stacks_max = 1,
 		items = {
 			{
 				itemstring = "mcl_tools:axe_stone"
