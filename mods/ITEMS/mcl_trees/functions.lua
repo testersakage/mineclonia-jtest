@@ -183,7 +183,7 @@ local function place_tree(place_at, schem)
 	)
 
 	for _, pos in pairs(core.find_nodes_in_area(vector.new(p1.x, p1.y,p1.z), vector.new(p2.x, p2.y + size.y, p2.z), {"group:leaves"})) do
-		local biome_p2 = mcl_util.get_pos_p2(pos)
+		local biome_p2 = mcl_util.get_pos_p2(pos, true)
 		local node = core.get_node(pos)
 		node.param2 = math.floor(node.param2 / 32) * 32 + biome_p2
 		core.set_node(pos, node)
