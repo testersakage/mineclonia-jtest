@@ -205,6 +205,23 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
+mcl_inventory.drop_items_from_crafting_grid = function (player)
+	return_fields(player, "craft")
+	return_fields(player, "enchanting_lapis")
+	return_fields(player, "enchanting_item")
+	if not core.is_creative_enabled(player:get_player_name()) then
+		set_inventory(player)
+	end
+end
+
+mcl_damage.register_modifier(function(obj, damage, reason)
+	if obj:is_player() then
+		mcl_inventory.drop_items_from_crafting_grid(obj)
+		core.close_formspec(obj:get_player_name(), "")
+	end
+	return damage
+end, -1001)
+
 core.register_craft_predict(function(itemstack, player, old_craft_grid, inv) ---@diagnostic disable-line: unused-local
 	if not player or not player:get_pos() then return end -- can apparently be called when player has already left !?
 	if inv and inv:get_size("craft") > 4 and not mcl_crafting_table.has_crafting_table(player) then
