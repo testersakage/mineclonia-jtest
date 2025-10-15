@@ -225,9 +225,7 @@ local function world_structure(vm, data, data2, emin, emax, area, minp, maxp, bl
 			lvm_used = set_layers(data, area, c_nether_lava, c_air, mcl_vars.mg_nether_min, mcl_vars.mg_lava_nether_max, minp, maxp, lvm_used, pr)
 		end
 	end
-	local deco = false
-	local ores = false
-	return lvm_used, lvm_used, deco, ores
+	return lvm_used, lvm_used, false, false
 end
 
 
