@@ -44,6 +44,10 @@ mcl_superflat_classic (Classic superflat map generation) bool false
 # max_block_send_distance = 27
 # max_block_generate_distance = 28
 #
+# Note that values of num_emerge_threads greater than 1 will produce
+# map generation artifacts in the Nether and End under the builtin map
+# generators.
+#
 # Note: This setting has no effect on existing worlds.
 mcl_singlenode_mapgen (Custom singlenode map generator) bool true
 
