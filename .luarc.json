@@ -7,6 +7,7 @@
 			"lowercase-global",
 			"redefined-local",
 			"undefined-field",
+			"unbalanced-assignments"
 		]
 	},
 	"diagnostics.globals": [
