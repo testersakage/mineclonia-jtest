@@ -62,8 +62,22 @@ local ychunksize = mt_chunksize.y * 16
 
 local cid_air = core.CONTENT_AIR
 local cid_ignore = core.CONTENT_IGNORE
+local floor = math.floor
 
-local encode_node = mcl_levelgen.encode_node
+local encode_node, decode_node
+
+if core.global_exists ("jit") then
+	encode_node = mcl_levelgen.encode_node
+	decode_node = mcl_levelgen.decode_node
+else
+	function encode_node (cid, param2)
+		return cid * 256 + param2
+	end
+
+	function decode_node (data)
+		return floor (data / 256), data % 256
+	end
+end
 
 ------------------------------------------------------------------------
 -- Ersatz terrain generation.
@@ -128,10 +142,15 @@ local function build_heightmap (min, max, chunkmin, chunkmax, y1, y2, y_global)
 	end
 end
 
-local decode_node = mcl_levelgen.decode_node
 local ipos1 = mcl_levelgen.ipos1
+local build_gn_from_data
+local restore_data_from_gn
 
-local function build_gn_from_data (min, max, minp, maxp, y1, y2)
+if core.global_exists ("jit") then
+	-- Avoid expensive division operations by means of bitwise
+	-- operations.
+
+function build_gn_from_data (min, max, minp, maxp, y1, y2)
 	local ystride = (max.x - min.x + 1)
 	local zstride = (max.y - min.y + 1) * ystride
 	local xdstride = chunksize * ychunksize
@@ -162,7 +181,7 @@ local function build_gn_from_data (min, max, minp, maxp, y1, y2)
 	end
 end
 
-local function restore_data_from_gn (min, max, minp, maxp, y1, y2)
+function restore_data_from_gn (min, max, minp, maxp, y1, y2)
 	local ystride = (max.x - min.x + 1)
 	local zstride = (max.y - min.y + 1) * ystride
 	local xdstride = chunksize * ychunksize
@@ -184,6 +203,68 @@ local function restore_data_from_gn (min, max, minp, maxp, y1, y2)
 		local cid_new, param2_new = decode_node (encoded)
 		cids[idx_src], param2s[idx_src]	= cid_new, param2_new
 	end
+end
+
+else
+	-- But avoid function call overhead on PUC Lua, which cannot
+	-- perform inlining.
+
+function build_gn_from_data (min, max, minp, maxp, y1, y2)
+	local ystride = (max.x - min.x + 1)
+	local zstride = (max.y - min.y + 1) * ystride
+	local xdstride = chunksize * ychunksize
+	local ydstride = chunksize
+	assert (maxp.x - minp.x == chunksize - 1)
+	assert (maxp.y - minp.y == ychunksize - 1)
+	assert (maxp.z - minp.z == chunksize - 1)
+	local border = minp.x - min.x
+	assert (border == max.x - maxp.x)
+	assert (border == minp.y - min.y)
+	assert (border == max.y - maxp.y)
+	assert (border == minp.z - min.z)
+	assert (border == max.z - maxp.z)
+	local ystart = y1 - min.y
+	for x, y, z in ipos1 (minp.x - min.x,
+			      ystart,
+			      minp.z - min.z,
+			      maxp.x - min.x,
+			      y2 - min.y,
+			      maxp.z - min.z) do
+		local idx_src = z * zstride + y * ystride + x + 1
+		local encoded = cids[idx_src] * 256 + param2s[idx_src]
+		local idx_dst = (x - border) * xdstride
+			+ (y - ystart) * ydstride
+			+ ((chunksize - 1) - (z - border))
+			+ 1
+		gn[idx_dst] = encoded
+	end
+end
+
+function restore_data_from_gn (min, max, minp, maxp, y1, y2)
+	local ystride = (max.x - min.x + 1)
+	local zstride = (max.y - min.y + 1) * ystride
+	local xdstride = chunksize * ychunksize
+	local ydstride = chunksize
+	local border = minp.x - min.x
+	local ystart = y1 - min.y
+	for x, y, z in ipos1 (minp.x - min.x,
+			      ystart,
+			      minp.z - min.z,
+			      maxp.x - min.x,
+			      y2 - min.y,
+			      maxp.z - min.z) do
+		local idx_src = z * zstride + y * ystride + x + 1
+		local idx_dst = (x - border) * xdstride
+			+ (y - ystart) * ydstride
+			+ ((chunksize - 1) - (z - border))
+			+ 1
+		local encoded = gn[idx_dst]
+		local cid_new, param2_new
+			= floor (encoded / 256), encoded % 256
+		cids[idx_src], param2s[idx_src]	= cid_new, param2_new
+	end
+end
+
 end
 
 local chunk_start_x
@@ -300,51 +381,68 @@ for biome, def in pairs (core.registered_biomes) do
 	encoded_top_nodes[id] = encode_node (cid_top_node, 0)
 end
 
-local function form_terrain (beard_weights, ystart, ymax, min, max, border)
+local function unpack6 (x)
+	return x[1], x[2], x[3], x[4], x[5], x[6]
+end
+
+local function form_terrain (beard_weights, ystart, ymax, min, max, border, boxes)
 	local heightmap = core.get_mapgen_object ("heightmap")
 	local miny = min.y
 	local minx = min.x
+	local minz = -max.z - 1
 	local xw = max.x - minx + 1
 	local yw = max.y - miny + 1
-	for x, _, z in ipos1 (0, 0, 0, chunksize - 1, 0, chunksize - 1) do
-		for y = ymax, 0, -1 do
-			local i = index (x, y, z, chunksize, nil)
-			local density, bsum = augmented_density (x, y, z, 0, ymax)
-			if mathabs (bsum) > 0.1 then
-				local cid, _ = decode_node (gn[i])
-				local oldz = (chunksize - z - 1 + border)
-				local oldy = (border + y)
-				assert (oldz < xw and oldz > 0)
-				assert (oldy < xw and oldy > 0)
-				local old_index = oldz * xw * yw
-					+ oldy * xw + x + border + 1
-				local y_abs = y + miny + border
-				local biome = biomemap_old [z * chunksize + x + 1]
-				if density < 0.8 and not air_water_or_lava_p (cid) then
-					if y > 0 then
-						-- Fix the heightmap.
-						local dz = chunksize - z - 1
-						local idx = dz * chunksize + x + 1
-						if heightmap[idx] == y_abs then
-							heightmap[idx] = y_abs - 1
-						end
 
-						-- Propagate grass cover to dirt nodes below.
-						local i_below = index (x, y - 1, z, chunksize, nil)
-						local cid, _ = decode_node (gn[i_below])
-						if cid == cid_dirt then
-							gn[i_below] = ersatz_surface_rule (heightmap, biome,
-											   x, y, z, nil)
+	for _, box in ipairs (boxes) do
+		local x1 = mathmax (box[1] - minx - border, 0)
+		local y1 = mathmax (box[2] - ystart, 0)
+		local z1 = mathmax (box[3] - minz - border, 0)
+		local x2 = mathmin (box[4] - minx - border, chunksize - 1)
+		local y2 = mathmin (box[5] - ystart, ymax)
+		local z2 = mathmin (box[6] - minz - border, chunksize - 1)
+		assert (x1 >= 0 and y1 >= 0 and z1 >= 0
+			and x2 < chunksize and y2 <= ymax and z2 < chunksize)
+
+		for x, _, z in ipos1 (x1, 0, z1, x2, 0, z2) do
+			for y = y2, y1, -1 do
+				local i = index (x, y, z, chunksize, nil)
+				local density, bsum = augmented_density (x, y, z, 0, ymax)
+				if mathabs (bsum) > 0.1 then
+					local cid, _ = decode_node (gn[i])
+					local oldz = (chunksize - z - 1 + border)
+					local oldy = (border + y)
+					assert (oldz < xw and oldz > 0)
+					assert (oldy < xw and oldy > 0)
+					local old_index = oldz * xw * yw
+						+ oldy * xw + x + border + 1
+					local y_abs = y + miny + border
+					local biome = biomemap_old [z * chunksize + x + 1]
+					if density < 0.8 and not air_water_or_lava_p (cid) then
+						if y > 0 then
+							-- Fix the heightmap.
+							local dz = chunksize - z - 1
+							local idx = dz * chunksize + x + 1
+							if heightmap[idx] == y_abs then
+								heightmap[idx] = y_abs - 1
+							end
+
+							-- Propagate grass cover to dirt nodes below.
+							local i_below = index (x, y - 1, z, chunksize, nil)
+							local cid, _ = decode_node (gn[i_below])
+							if cid == cid_dirt then
+								gn[i_below] = ersatz_surface_rule (heightmap, biome,
+												   x, y, z, nil)
+							end
 						end
+						gn[i] = encoded_air
+						cids[old_index], param2s[old_index] = cid_air, 0
+					elseif density > 1.6 and not walkable_p (cid) then
+						local node = ersatz_surface_rule (heightmap, biome,
+										  x, y_abs, z,
+										  old_index + xw)
+						gn[i] = node
+						cids[old_index], param2s[old_index] = decode_node (node)
 					end
-					gn[i] = encoded_air
-					cids[old_index], param2s[old_index] = cid_air, 0
-				elseif density > 1.6 and not walkable_p (cid) then
-					local node = ersatz_surface_rule (heightmap, biome,
-									  x, y_abs, z,
-									  old_index + xw)
-					gn[i] = node
-					cids[old_index], param2s[old_index] = decode_node (node)
 				end
 			end
 		end
@@ -373,10 +471,13 @@ local function do_terrain_modifications (min, max, minp, maxp, y1, y2,
 	assert (yend - ystart + 1 <= ychunksize)
 	terrain.chunksize_y = yend - ystart + 1
 	mcl_levelgen.prepare_structures (level, terrain, xmin, zmin)
+	local boxes = {}
 	if mcl_levelgen.beardify_1 (level, terrain, beard_weights, index, xmin,
-				    zmin, yend - ystart + 1, ystart, chunksize) then
+				    zmin, yend - ystart + 1, ystart, chunksize,
+				    boxes) then
 		local border = minp.x - min.x
-		form_terrain (beard_weights, ystart, yend - ystart, min, max, border)
+		form_terrain (beard_weights, ystart, yend - ystart, min, max, border,
+			      boxes)
 	end
 	build_heightmap (min, max, minp, maxp, y1, y2, dim.y_global)
 	if ersatz_carvers_loaded then
@@ -388,10 +489,6 @@ local function do_terrain_modifications (min, max, minp, maxp, y1, y2,
 	mcl_levelgen.finish_structures (level, terrain, biomes,
 					xmin, ystart, zmin, ystart,
 					yend - ystart + 1, index, gn)
-end
-
-local function unpack6 (x)
-	return x[1], x[2], x[3], x[4], x[5], x[6]
 end
 
 local function transform_structure_pieces (pieces, dim, minp, maxp)

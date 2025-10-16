@@ -1230,8 +1230,19 @@ local function apply_terrain_adaptation (pieces, terrain_adaptation,
 	end
 end
 
+local function beardifier_box_intersect_p (a, x1b, y1b, z1b, x2b, y2b, z2b)
+	local x1a, y1a, z1a, x2a, y2a, z2a = unpack6 (a)
+
+	return x1a <= x2b
+		and y1a <= y2b
+		and z1a <= z2b
+		and x2a >= x1b
+		and y2a >= y1b
+		and z2a >= z1b
+end
+
 local function beardify_1 (level, terrain, weights, index, x, z,
-			   level_height, y_min, chunksize)
+			   level_height, y_min, chunksize, boxes)
 	local bbox = {
 		x - 12,
 		y_min,
@@ -1258,6 +1269,36 @@ local function beardify_1 (level, terrain, weights, index, x, z,
 								  weights, index, bbox,
 								  chunksize, level_height,
 								  x, z, y_min)
+					if boxes then
+						local bx1, by1, bz1, bx2, by2, bz2
+							= unpack6 (start.bbox)
+						bx1 = bx1 - 12
+						by1 = by1 - 12
+						bz1 = bz1 - 12
+						bx2 = bx2 + 12
+						by2 = by2 + 12
+						bz2 = bz2 + 12
+						local intersection = false
+						for _, box in ipairs (boxes) do
+							if beardifier_box_intersect_p (box, bx1, by1, bz1,
+										       bx2, by2, bz2) then
+								box[1] = mathmin (box[1], bx1)
+								box[2] = mathmin (box[2], by1)
+								box[3] = mathmin (box[3], bz1)
+								box[4] = mathmax (box[4], bx2)
+								box[5] = mathmax (box[5], by2)
+								box[6] = mathmax (box[6], bz2)
+								intersection = true
+								break
+							end
+						end
+						if not intersection then
+							insert (boxes, {
+								bx1, by1, bz1,
+								bx2, by2, bz2,
+							})
+						end
+					end
 				end
 			end
 		end
@@ -1277,7 +1318,7 @@ function mcl_levelgen.beardify (level, terrain, weights, index, x, z)
 	local level_height = terrain.level_height
 	local y_min = terrain.y_min
 	beardify_1 (level, terrain, weights, index, x, z,
-		    level_height, y_min, chunksize)
+		    level_height, y_min, chunksize, nil)
 end
 
 ------------------------------------------------------------------------
