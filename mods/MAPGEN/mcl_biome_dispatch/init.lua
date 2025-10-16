@@ -857,7 +857,7 @@ local arshift = bit.arshift
 
 local function struct_unhash (hash)
 	local x = arshift (hash, 13) - 4096
-	local z = band (hash, 0xfff) - 4096
+	local z = band (hash, 0x1fff) - 4096
 	return x, z
 end
 
