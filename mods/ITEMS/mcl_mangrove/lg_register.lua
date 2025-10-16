@@ -18,8 +18,14 @@ local cid_mangrove_roots
 	= core.get_content_id ("mcl_mangrove:mangrove_roots")
 local cid_mangrove_propagule
 	= core.get_content_id ("mcl_mangrove:propagule")
-local cid_hanging_mangrove_propagule
-	= core.get_content_id ("mcl_mangrove:hanging_propagule_1")
+local cid_hanging_mangrove_propagule_1
+	= core.get_content_id ("mcl_mangrove:propagule_hanging_1")
+local cid_hanging_mangrove_propagule_2
+	= core.get_content_id ("mcl_mangrove:propagule_hanging_2")
+local cid_hanging_mangrove_propagule_3
+	= core.get_content_id ("mcl_mangrove:propagule_hanging_3")
+local cid_hanging_mangrove_propagule_4
+	= core.get_content_id ("mcl_mangrove:propagule_hanging_4")
 local cid_water_source
 	= core.get_content_id ("mcl_core:water_source")
 local cid_water_logged_roots
@@ -28,7 +34,7 @@ local cid_water_logged_roots
 local mangrove_can_grow_through = mcl_levelgen.construct_cid_list ({
 	"mcl_core:vine",
 	"mcl_lush_caves:moss_carpet",
-	"mcl_mangrove:hanging_propagule_1",
+	"mcl_mangrove:propagule_hanging_1",
 	"mcl_mangrove:mangrove_mud_roots",
 	"mcl_mangrove:mangrove_roots",
 	"mcl_mangrove:propagule",
@@ -40,7 +46,7 @@ local mangrove_can_grow_through = mcl_levelgen.construct_cid_list ({
 local mangrove_roots_can_grow_through = mcl_levelgen.construct_cid_list ({
 	"group:snow_layer",
 	"mcl_lush_caves:moss_carpet",
-	"mcl_mangrove:hanging_propagule_1",
+	"mcl_mangrove:propagule_hanging_1",
 	"mcl_mangrove:mangrove_mud_roots",
 	"mcl_mangrove:mangrove_roots",
 	"mcl_mangrove:propagule",
@@ -113,7 +119,7 @@ mcl_levelgen.register_configured_feature ("mcl_mangrove:mangrove", {
 		mcl_levelgen.build_attach_to_leaves_decoration ({
 			-- TODO: vary age!
 			content = function (_, _, _, _)
-				return cid_hanging_mangrove_propagule, 0
+				return cid_hanging_mangrove_propagule_1, 0
 			end,
 			directions = {
 				{ 0, -1, 0, },
@@ -184,7 +190,7 @@ mcl_levelgen.register_configured_feature ("mcl_mangrove:tall_mangrove", {
 		mcl_levelgen.build_attach_to_leaves_decoration ({
 			-- TODO: vary age!
 			content = function (_, _, _, _)
-				return cid_hanging_mangrove_propagule, 0
+				return cid_hanging_mangrove_propagule_1, 0
 			end,
 			directions = {
 				{ 0, -1, 0, },
