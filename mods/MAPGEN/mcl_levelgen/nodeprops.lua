@@ -258,8 +258,7 @@ local function initialize_nodeprops ()
 	cid_packed_ice = core.get_content_id ("mcl_core:packed_ice")
 	cid_mud = core.get_content_id ("mcl_mud:mud")
 	cid_mangrove_propagule = core.get_content_id ("mcl_mangrove:propagule")
-	cid_hanging_mangrove_propagule
-		= core.get_content_id ("mcl_mangrove:hanging_propagule_1")
+	cid_hanging_mangrove_propagule_1 = core.get_content_id ("mcl_mangrove:propagule_hanging_1")
 	cid_soul_sand = core.get_content_id ("mcl_nether:soul_sand")
 	cid_honey_block = core.get_content_id ("mcl_honey:honey_block")
 	cid_dead_bush = core.get_content_id ("mcl_core:deadbush")
@@ -870,7 +869,7 @@ function mcl_levelgen.is_position_hospitable (cid, x, y, z)
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_soil_bamboo[cid]
 	elseif cid == cid_mangrove_propagule
-		or cid == cid_hanging_mangrove_propagule then
+		or cid == cid_hanging_mangrove_propagule_1 then
 		local cid, _ = get_block (x, y - 1, z)
 		return is_cid_soil_propagule[cid]
 	elseif cid == cid_mushroom_red or cid == cid_mushroom_brown then
