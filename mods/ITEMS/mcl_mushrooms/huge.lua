@@ -13,16 +13,16 @@ local template = {
 local red = table.copy(template)
 red.drop = {
 	items = {
-		{ items = {"mcl_mushrooms:mushroom_red"}, rarity = 2 },
-		{ items = {"mcl_mushrooms:mushroom_red"}, rarity = 2 },
+		{ items = {"mcl_mushrooms:mushroom_red"}, rarity = 9 },
+		{ items = {"mcl_mushrooms:mushroom_red 2"}, rarity = 9 },
 	}
 }
 
 local brown= table.copy(template)
 brown.drop = {
 	items = {
-		{ items = {"mcl_mushrooms:mushroom_brown"}, rarity = 2 },
-		{ items = {"mcl_mushrooms:mushroom_brown"}, rarity = 2 },
+		{ items = {"mcl_mushrooms:mushroom_brown"}, rarity = 9 },
+		{ items = {"mcl_mushrooms:mushroom_brown 2"}, rarity = 9 },
 	}
 }
 
