@@ -238,7 +238,7 @@ function mcl_itemframes.tpl_entity:on_activate(staticdata, dtime_s)
 		end
 		return
 	elseif s then
-		self._itemframe_pos = s.itemframe_pos
+		self._itemframe_pos = vector.copy (s.itemframe_pos)
 		self._itemstack = s.itemstack
 		self._item = s.item
 		self._map_id = s.map_id
