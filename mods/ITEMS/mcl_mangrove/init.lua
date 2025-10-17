@@ -198,16 +198,23 @@ core.register_node("mcl_mangrove:propagule", {
 	end)
 })
 
+local sel_heights = {
+	0.25, 0.125, -0.0625, -0.3125, -0.5
+}
+
 local function get_hanging_propagules_textures(index)
 	local texture = "mcl_mangrove_propagule_hanging.png"
-	local tiles = {"blank.png", "blank.png", "blank.png", "blank.png"}
+	local tiles = {"blank.png", "blank.png", "blank.png", "blank.png", "blank.png"}
 
-	if index < 4 then
+	if index < 5 then
 		for i = 1, index do tiles[i] = texture end
+		if index == 4 then
+			tiles[3] = "blank.png"
+		end
 	else
 		tiles[1] = texture
 		tiles[2] = texture
-		tiles[4] = texture
+		tiles[5] = texture
 	end
 
 	return tiles
@@ -222,24 +229,24 @@ local function grow_hanging_propagule(pos, node)
 	core.swap_node(pos, {name = "mcl_mangrove:propagule_hanging_" .. tonumber(stage) + 1})
 end
 
-for i = 1, 4 do
+for i = 1, 5 do
 	core.register_node("mcl_mangrove:propagule_hanging_" .. i, {
-		_doc_items_create_entry = i == 4,
-		_doc_items_entry_name = i == 4 and S("Hanging Mangrove Propagule") or nil,
-		_doc_items_longdesc = i == 4 and hp_longdesc or nil,
+		_doc_items_create_entry = i == 5,
+		_doc_items_entry_name = i == 5 and S("Hanging Mangrove Propagule") or nil,
+		_doc_items_longdesc = i == 5 and hp_longdesc or nil,
 		_mcl_baseitem = "mcl_mangrove:propagule",
 		description = S("Hanging Propagule (Stage @1)", i),
 		paramtype = "light",
 		on_rotate = false,
 		walkable = false,
-		drop = i == 4 and "mcl_mangrove:propagule" or "",
+		drop = i == 5 and "mcl_mangrove:propagule" or "",
 		use_texture_alpha = "clip",
 		drawtype = "mesh",
 		mesh = "mcl_mangrove_hanging_propagule.obj",
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		sunlight_propagates = true,
 		selection_box = {
-			type = "fixed", fixed = {-0.125, 0.5, -0.125, 0.125, 0.5 - 0.25 * i, 0.125}
+			type = "fixed", fixed = {-0.125, 0.5, -0.125, 0.125, sel_heights[i], 0.125}
 		},
 		tiles = get_hanging_propagules_textures(i),
 		groups = {
@@ -247,25 +254,26 @@ for i = 1, 4 do
 			dig_immediate = 1, dig_by_water = 1, dig_by_piston = 1, destroy_by_lava_flow = 1,
 			attached_node = 4
 		},
-		_on_bone_meal = i < 4 and function(_, _, _, pos, node)
+		_on_bone_meal = i < 5 and function(_, _, _, pos, node)
 			grow_hanging_propagule(pos, node)
 			return true
 		end or nil
 	})
 
-	if i < 4 then
+	if i < 5 then
 		doc.add_entry_alias("nodes", "mcl_mangrove:propagule_hanging_4", "nodes", "mcl_mangrove:propagule_hanging_" .. i)
 	end
 end
 
-core.register_alias("mcl_mangrove:hanging_propagule_1", "mcl_mangrove:propagule_hanging_4")
+core.register_alias("mcl_mangrove:hanging_propagule_1", "mcl_mangrove:propagule_hanging_5")
 
 core.register_abm({
 	label = "Grow hanging mangrove propagule",
 	nodenames = {
 		"mcl_mangrove:propagule_hanging_1",
 		"mcl_mangrove:propagule_hanging_2",
-		"mcl_mangrove:propagule_hanging_3"
+		"mcl_mangrove:propagule_hanging_3",
+		"mcl_mangrove:propagule_hanging_4"
 	},
 	chance = 20,
 	interval = 10,

@@ -26,6 +26,8 @@ local cid_hanging_mangrove_propagule_3
 	= core.get_content_id ("mcl_mangrove:propagule_hanging_3")
 local cid_hanging_mangrove_propagule_4
 	= core.get_content_id ("mcl_mangrove:propagule_hanging_4")
+local cid_hanging_mangrove_propagule_5
+	= core.get_content_id ("mcl_mangrove:propagule_hanging_5")
 local cid_water_source
 	= core.get_content_id ("mcl_core:water_source")
 local cid_water_logged_roots
