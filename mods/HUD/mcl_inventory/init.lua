@@ -217,7 +217,7 @@ end
 mcl_damage.register_modifier(function(obj, damage, reason)
 	if obj:is_player() then
 		mcl_inventory.drop_items_from_crafting_grid(obj)
-		core.close_formspec(obj:get_player_name(), "")
+		core.close_formspec(obj:get_player_name(), "main")
 	end
 	return damage
 end, -1001)
