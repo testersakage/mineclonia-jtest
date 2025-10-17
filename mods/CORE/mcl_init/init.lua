@@ -222,6 +222,7 @@ else
 	mcl_vars.mg_lava = false
 	mcl_vars.mg_lava_overworld_max = mcl_vars.mg_overworld_min
 	mcl_vars.mg_bedrock_is_rough = false
+	mcl_vars.mg_is_classic_superflat = true
 end
 
 -- mg_overworld_min_old is the overworld min value from before map generation

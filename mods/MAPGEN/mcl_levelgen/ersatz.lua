@@ -195,15 +195,25 @@ local mg_overworld_min = mcl_vars.mg_overworld_min
 local toblock = mcl_levelgen.toblock
 local mapgen_model
 
+local ersatz_overworld_min_y = -64
+local ersatz_overworld_sea_level = 65
+local ersatz_overworld_y_offset = -64
+
+if mcl_vars.mg_is_classic_superflat then
+	ersatz_overworld_min_y = mcl_vars.mg_overworld_min
+	ersatz_overworld_sea_level = 7
+	ersatz_overworld_y_offset = 0
+end
+
 local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_template, {
-	min_y = -64,
+	min_y = ersatz_overworld_min_y,
 	height = 384,
-	sea_level = 65,
+	sea_level = ersatz_overworld_sea_level,
 	ersatz_default_height = 65,
 	index_biomes_block = function (self, x, y, z)
 		v.x = x
 		v.z = -z - 1
-		v.y = y + 64 + mg_overworld_min
+		v.y = y - ersatz_overworld_y_offset + mg_overworld_min
 		if mapgen_model then
 			local override = mapgen_model.get_biome_override (x, -z - 1)
 			if override then
@@ -224,7 +234,7 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 	index_biomes_cached = function (self, x, y, z)
 		v.x = toblock (x)
 		v.z = -toblock (z) - 1
-		v.y = toblock (y) + 64 + mg_overworld_min
+		v.y = toblock (y) - ersatz_overworld_y_offset + mg_overworld_min
 		if mapgen_model then
 			local override = mapgen_model.get_biome_override (v.x, v.z)
 			if override then
@@ -243,7 +253,7 @@ local ersatz_preset_template_overworld = table.merge (mcl_levelgen.level_preset_
 	index_biomes = function (self, x, y, z)
 		v.x = toblock (x)
 		v.z = -toblock (z) - 1
-		v.y = toblock (y) + 64 + mg_overworld_min
+		v.y = toblock (y) - ersatz_overworld_y_offset + mg_overworld_min
 		if mapgen_model then
 			local override = mapgen_model.get_biome_override (v.x, v.z)
 			if override then
@@ -657,12 +667,15 @@ local function create_aquifer (dim, ersatz_terrain)
 end
 
 local ersatz_surface_system = {}
+local mg_overworld_min = mcl_vars.mg_overworld_min
+local mg_overworld_max = mcl_vars.mg_overworld_max
 
 function mcl_levelgen.get_ersatz_terrain (dim)
 	local preset = dim.preset
 	local y_global = dim.y_global
 	y_offset = preset.min_y - y_global
-	if 0 >= y_global and 0 <= y_global + preset.height - 1 then
+	if y_global >= mg_overworld_min
+		and y_global <= mg_overworld_max  then
 		mapgen_model = mcl_mapgen_models.get_mapgen_model ()
 	else
 		mapgen_model = nil
