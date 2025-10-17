@@ -3465,12 +3465,14 @@ function villager:answer_bell (self_pos, dtime)
 end
 
 function villager:report_lost_poi (name, reason)
-	local villager_name
-		= core.get_translated_string ("en", self:get_dialog_label ())
-	local blurb = "[mobs_mc]: Villager "
-		.. villager_name .. " lost poi "
-		.. name .. " for reason: " .. (reason or "unspecified")
-	core.log ("action", blurb)
+	if villager_debug then
+		local villager_name
+			= core.get_translated_string ("en", self:get_dialog_label ())
+		local blurb = "[mobs_mc]: Villager "
+			.. villager_name .. " lost poi "
+			.. name .. " for reason: " .. (reason or "unspecified")
+		core.log ("action", blurb)
+	end
 end
 
 function villager:validate_job_sites ()
