@@ -70,7 +70,7 @@ end
 
 local levelgen_inhibiting_mods = get_levelgen_inhibiting_mods()
 mcl_vars.enable_mcl_levelgen = singlenode and core.get_mapgen_setting("mcl_singlenode_mapgen") ~= "false"
-mcl_vars.superflat = core.get_mapgen_setting("mcl_superflat_classic") == "true"
+mcl_vars.superflat = mg_name == "flat" and core.get_mapgen_setting("mcl_superflat_classic") == "true"
 
 local mapmeta_settings_initialized = mod_storage:get_string("mapmeta_settings_initialized") == "true"
 if not mapmeta_settings_initialized then
