@@ -1141,11 +1141,13 @@ local function get_nearest_player (pos, list)
 end
 
 local function get_weighted_value (mob_types)
-	local weight = math.random (total_weight[mob_types])
-	for _, spawner in ipairs (mob_types) do
-		weight = weight - spawner.weight
-		if weight <= 0 then
-			return spawner
+	if total_weight[mob_types] > 0 then
+		local weight = math.random (total_weight[mob_types])
+		for _, spawner in ipairs (mob_types) do
+			weight = weight - spawner.weight
+			if weight <= 0 then
+				return spawner
+			end
 		end
 	end
 	return nil
