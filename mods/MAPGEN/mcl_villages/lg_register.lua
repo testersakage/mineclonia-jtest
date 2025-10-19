@@ -297,6 +297,7 @@ local cid_smooth_sandstone = core.get_content_id ("mcl_core:sandstonesmooth2")
 local function village_path_place (self, level, terrain, rng,
 				   x1, z1, x2, z2)
 	local bbox = self.bbox
+	local village_type = self.village_type
 	for x, _, z in ipos3 (mathmax (bbox[1], x1),
 			      0,
 			      mathmax (bbox[3], z1),
