@@ -65,6 +65,8 @@ local function makelake(pos,size,liquid,placein,border,pr,noair)
 	return true
 end
 
+if not mcl_vars.mg_is_classic_superflat then
+
 local mushrooms = {"mcl_mushrooms:mushroom_brown","mcl_mushrooms:mushroom_red"}
 
 local function get_fallen_tree_schematic(pos,pr)
@@ -148,6 +150,8 @@ mcl_structures.register_structure("fallen_tree",{
 		return core.place_schematic(pos,schem,"random")
 	end
 })
+
+end
 
 mcl_structures.register_structure("lavapool",{
 	place_on = {"group:sand", "group:dirt", "group:stone"},
