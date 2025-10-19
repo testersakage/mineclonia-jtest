@@ -222,7 +222,10 @@ end
 local engine_aliases = nil
 
 local function initialize_engine_aliases ()
-	if engine_aliases then
+	if engine_aliases
+	-- Do not initialize engine_aliases on classic superflat
+	-- worlds.
+		or mcl_vars.superflat then
 		return engine_aliases
 	end
 	engine_aliases = {
@@ -313,8 +316,6 @@ function mcl_biome_dispatch.build_biome_list (ids_or_tags)
 
 	if levelgen_enabled then
 		return mcl_levelgen.build_biome_list (ids_or_tags)
-	elseif mcl_vars.superflat then
-		return {"flat",}
 	else
 		local names = {}
 		local engine_aliases = initialize_engine_aliases ()
@@ -327,6 +328,10 @@ function mcl_biome_dispatch.build_biome_list (ids_or_tags)
 						and table.indexof (names, name) == -1 then
 						table.insert (names, name)
 					end
+				end
+			elseif mcl_vars.superflat then
+				if id == "Plains" then
+					table.insert (names, "flat")
 				end
 			elseif engine_aliases[id] then
 				local aliases = engine_aliases[id]
