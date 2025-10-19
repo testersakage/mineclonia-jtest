@@ -866,6 +866,10 @@ if core and core.register_mapgen_script then
 		dofile (mcl_levelgen.prefix .. "/ersatz_structures.lua")
 		mcl_levelgen.register_levelgen_script ((mcl_levelgen.prefix
 							.. "/ersatz_structures.lua"), true)
+	else
+		dofile (mcl_levelgen.prefix .. "/data_register.lua")
+		mcl_levelgen.register_levelgen_script ((mcl_levelgen.prefix
+							.. "/data_register.lua"), true)
 	end
 end
 if core and not core.get_mod_storage then
