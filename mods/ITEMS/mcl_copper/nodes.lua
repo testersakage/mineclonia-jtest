@@ -16,16 +16,24 @@ local function bulb_connects_to()
 end
 
 local function bulb_update(pos, node)
-	local oldpowered = node.param2 ~= 0
-	local powered  = mcl_redstone.get_power(pos) ~= 0
-	local newname = node.name
-	if powered and not oldpowered then
-		newname = core.registered_nodes[node.name]._mcl_copper_bulb_switch_to
+	local name = node.name
+	local powered = name:find("_powered")
+	local power = mcl_redstone.get_power(pos)
+	local on = core.get_item_group(name, "comparator_signal") == 15
+	if powered then
+		if power == 0 then
+			return {name = node.name:gsub("_powered", ""), param2 = 0}
+		end
+	else
+		if power ~= 0 then
+			if on then
+				return {name = node.name:gsub("_on", "_off_powered")}
+			else
+				return {name = node.name:gsub("_off", "_on_powered")}
+			end
+		end
 	end
-	return {
-		name = newname,
-		param2 = powered and 1 or 0,
-	}
+	return node
 end
 
 core.register_node("mcl_copper:stone_with_copper", {
@@ -137,27 +145,53 @@ for n, desc in pairs(n_desc) do
 	core.register_node("mcl_copper:bulb"..n.."_on", {
 		description = D(desc .. "Copper Bulb On"),
 		_doc_items_longdesc = D(desc .. "Copper Bulb is mostly a decorative block."),
-		tiles = { "mcl_copper"..(n == "" and "_block" or n) .."_bulb_on.png"},
+		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_bulb_on.png"},
 		is_ground_content = false,
 		light_source = bulb_light[n],
-		groups = {pickaxey = 2, building_block = 1, not_in_creative_inventory = 1, redstone_not_conductive = 1, comparator_signal = 15},
+		groups = {pickaxey = 2, not_in_creative_inventory = 1, redstone_not_conductive = 1, comparator_signal = 15},
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
 		drop = "mcl_copper:bulb"..n.."_off",
-		_mcl_copper_bulb_switch_to = "mcl_copper:bulb"..n.."_off",
 		_mcl_redstone = {connects_to = bulb_connects_to, update = bulb_update},
 	})
-	core.register_node("mcl_copper:bulb"..n.."_off", {
-		description = D(desc .. "Copper Bulb"),
+
+	core.register_node("mcl_copper:bulb"..n.."_on_powered", {
+		description = D(desc .. "Copper Bulb Powered On"),
 		_doc_items_longdesc = D(desc .. "Copper Bulb is mostly a decorative block."),
-		tiles = { "mcl_copper"..(n == "" and "_block" or n) .."_bulb_off.png"},
+		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_bulb_on_powered.png"},
 		is_ground_content = false,
-		groups = {pickaxey = 2, building_block = 1, redstone_not_conductive = 1, comparator_signal = 0 },
+		light_source = bulb_light[n],
+		groups = {pickaxey = 2, not_in_creative_inventory = 1, redstone_not_conductive = 1, comparator_signal = 15},
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 3,
-		_mcl_copper_bulb_switch_to = "mcl_copper:bulb"..n.."_on",
+		drop = "mcl_copper:bulb"..n.."_off",
+		_mcl_redstone = {connects_to = bulb_connects_to, update = bulb_update}
+	})
+
+	core.register_node("mcl_copper:bulb"..n.."_off", {
+		description = D(desc .. "Copper Bulb"),
+		_doc_items_longdesc = D(desc .. "Copper Bulb is mostly a decorative block."),
+		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_bulb_off.png"},
+		is_ground_content = false,
+		groups = {pickaxey = 2, building_block = 1, redstone_not_conductive = 1, comparator_signal = 0},
+		sounds = mcl_sounds.node_sound_metal_defaults(),
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 3,
+		_mcl_redstone = {connects_to = bulb_connects_to, update = bulb_update},
+	})
+
+	core.register_node("mcl_copper:bulb"..n.."_off_powered", {
+		description = D(desc .. "Copper Bulb Powered Off"),
+		_doc_items_longdesc = D(desc .. "Copper Bulb is mostly a decorative block."),
+		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_bulb_off_powered.png"},
+		is_ground_content = false,
+		groups = {pickaxey = 2, not_in_creative_inventory = 1, redstone_not_conductive = 1, comparator_signal = 0 },
+		sounds = mcl_sounds.node_sound_metal_defaults(),
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 3,
+		drop = "mcl_copper:bulb"..n.."_off",
 		_mcl_redstone = {connects_to = bulb_connects_to, update = bulb_update},
 	})
 
