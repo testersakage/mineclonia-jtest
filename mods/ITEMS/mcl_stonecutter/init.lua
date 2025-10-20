@@ -139,7 +139,7 @@ local function fill_stonecutter_slots(pos)
 end
 
 core.register_node("mcl_stonecutter:stonecutter", {
-	description = S("Stone Cutter"),
+	description = S("Stonecutter"),
 	_tt_help = S("Used to cut stone like materials."),
 	_doc_items_longdesc = S("Stonecutters are used to create stairs and slabs from stone like materials. It is also the jobsite for the Stone Mason Villager."),
 	tiles = {
