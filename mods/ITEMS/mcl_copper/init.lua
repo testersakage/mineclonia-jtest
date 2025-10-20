@@ -44,6 +44,18 @@ for _, v in pairs({ "on", "off" }) do
 			"mcl_copper:bulb_oxidized_"..v,
 		},
 	})
+
+	mcl_copper.register_decaychain("copper_bulb_"..v .. "_powered",{
+		preserve_group = "preserves_copper",
+		unpreserve_callback = "_on_axe_place",
+		undecay_callback = "_on_axe_place",
+		nodes = { --order is significant
+			"mcl_copper:bulb_"..v.."_powered",
+			"mcl_copper:bulb_exposed_"..v.."_powered",
+			"mcl_copper:bulb_weathered_"..v.."_powered",
+			"mcl_copper:bulb_oxidized_"..v.."_powered",
+		},
+	})
 end
 
 for _, v in pairs({"", "_open"}) do
