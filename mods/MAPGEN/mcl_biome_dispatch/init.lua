@@ -58,7 +58,7 @@ function mcl_biome_dispatch.is_position_arid (biome_name)
 		return not data.has_precipitation
 	else
 		local data = core.registered_biomes[biome_name]
-		return data._mcl_biome_type == "hot"
+		return data and data._mcl_biome_type == "hot"
 	end
 end
 
