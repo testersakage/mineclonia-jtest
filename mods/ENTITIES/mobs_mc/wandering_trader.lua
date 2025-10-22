@@ -466,7 +466,7 @@ local function spawn_wandering_trader ()
 		end
 	end
 	local nplayers = #players_in_overworld
-	if nplayers == 0 then
+	if nplayers == 0 or pr:next (1, 10) ~= 1 then
 		return true
 	end
 	local player = players_in_overworld[pr:next (1, nplayers)]
