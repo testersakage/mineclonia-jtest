@@ -177,11 +177,6 @@ mcl_inventory.register_survival_inventory_tab({
 })]]
 
 function mcl_inventory.build_survival_formspec(player)
-	local inv = player:get_inventory()
-
-	inv:set_width("craft", 2)
-	inv:set_size("craft", 4)
-
 	local tab = player_current_tab[player]
 
 	local tab_def = nil

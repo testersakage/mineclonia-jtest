@@ -49,6 +49,12 @@ local function return_fields(player, name)
 	end
 end
 
+local function return_fields_from_temp_player_inventories(player)
+	return_fields(player, "craft")
+	return_fields(player, "enchanting_lapis")
+	return_fields(player, "enchanting_item")
+end
+
 local function set_inventory(player)
 	if core.is_creative_enabled(player:get_player_name()) then
 		mcl_inventory.set_creative_formspec(player)
@@ -190,18 +196,9 @@ core.register_on_player_receive_fields(function(player, _, fields)
 	elseif fields.__mcl_inventory then
 		mcl_inventory.show_inventory(player)
 		return false
-	end
-end)
-
--- Drop items in craft grid and reset inventory on closing
-core.register_on_player_receive_fields(function(player, formname, fields)
-	if fields.quit then
-		return_fields(player, "craft")
-		return_fields(player, "enchanting_lapis")
-		return_fields(player, "enchanting_item")
-		if not core.is_creative_enabled(player:get_player_name()) and (formname == "" or formname == "main") then
-			set_inventory(player)
-		end
+	elseif fields.quit then
+		-- Drop items from special player inventories on formspec closing
+		return_fields_from_temp_player_inventories(player)
 	end
 end)
 
@@ -219,17 +216,23 @@ end
 
 -- Drop crafting grid items on leaving
 core.register_on_leaveplayer(function(player)
-	return_fields(player, "craft")
-	return_fields(player, "enchanting_lapis")
-	return_fields(player, "enchanting_item")
+	return_fields_from_temp_player_inventories(player)
 end)
 
 core.register_on_joinplayer(function(player)
+	-- Make sure the player's temporary inv lists are empty. Why? Because
+	-- the player might have items remaining from the previous join; this is
+	-- likely when the server has been shutdown and the server didn't clean
+	-- up the player inventories.
+	return_fields_from_temp_player_inventories(player)
+
 	--init inventory
 	local inv = player:get_inventory()
 
 	inv:set_width("main", 9)
 	inv:set_size("main", 36)
+	inv:set_width("craft", 2)
+	inv:set_size("craft", 4)
 	inv:set_size("offhand", 1)
 	inv:set_size("sorter", 1)
 	inv:set_stack("sorter", 1, ItemStack(""))
@@ -240,18 +243,11 @@ core.register_on_joinplayer(function(player)
 	player:hud_set_hotbar_image("mcl_inventory_hotbar.png")
 	player:hud_set_hotbar_selected_image("mcl_inventory_hotbar_selected.png")
 
-	-- In Creative Mode, the initial inventory setup is handled in creative.lua
+	--build survival inventory formspec (this is handled in creative.lua for creative mode)
 	if not core.is_creative_enabled(player:get_player_name()) then
 		set_inventory(player)
 	end
 
-	--[[ Make sure the crafting grid is empty. Why? Because the player might have
-	items remaining in the crafting grid from the previous join; this is likely
-	when the server has been shutdown and the server didn't clean up the player
-	inventories. ]]
-	return_fields(player, "craft")
-	return_fields(player, "enchanting_item")
-	return_fields(player, "enchanting_lapis")
 end)
 
 function mcl_inventory.update_inventory(player)
