@@ -4530,7 +4530,7 @@ local villager_gift_tables = {
 			},
 			{
 				itemstring = "mcl_armor:boots_chain"
-			}
+			},
 		},
 	},
 	butcher = {
@@ -4551,7 +4551,7 @@ local villager_gift_tables = {
 			},
 			{
 				itemstring = "mcl_mobitems:cooked_beef"
-			}
+			},
 		},
 	},
 	cartographer = {
@@ -4563,7 +4563,7 @@ local villager_gift_tables = {
 			},
 			{
 				itemstring = "mcl_core:paper"
-			}
+			},
 		},
 	},
 	cleric = {
@@ -4575,7 +4575,7 @@ local villager_gift_tables = {
 			},
 			{
 				itemstring = "mcl_redstone:redstone"
-			}
+			},
 		}
 	},
 	farmer = {
@@ -4590,7 +4590,7 @@ local villager_gift_tables = {
 			},
 			{
 				itemstring = "mcl_farming:pumpkin_pie"
-			}
+			},
 		}
 	},
 	fisherman = {
@@ -4602,7 +4602,7 @@ local villager_gift_tables = {
 			},
 			{
 				itemstring = "mcl_fishing:salmon_raw"
-			}
+			},
 		},
 	},
 	fletcher = {
@@ -4651,7 +4651,7 @@ local villager_gift_tables = {
 			},
 			{
 				itemstring = "mcl_potions:weakness_arrow"
-			}
+			},
 		},
 	},
 	leatherworker = {
@@ -4660,7 +4660,7 @@ local villager_gift_tables = {
 		items = {
 			{
 				itemstring = "mcl_mobitems:leather"
-			}
+			},
 		}
 	},
 	librarian = {
@@ -4669,7 +4669,7 @@ local villager_gift_tables = {
 		items = {
 			{
 				itemstring = "mcl_books:book"
-			}
+			},
 		}
 	},
 	mason = {
@@ -4678,7 +4678,7 @@ local villager_gift_tables = {
 		items = {
 			{
 				itemstring = "mcl_core:clay"
-			}
+			},
 		},
 	},
 	shepherd = {
@@ -4732,7 +4732,7 @@ local villager_gift_tables = {
 			},
 			{
 				itemstring = "mcl_wool:yellow"
-			}
+			},
 		},
 	},
 	toolsmith = {
@@ -4750,7 +4750,7 @@ local villager_gift_tables = {
 			},
 			{
 				itemstring = "mcl_tools:shovel_stone"
-			}
+			},
 		},
 	},
 	weaponsmith = {
@@ -4765,7 +4765,7 @@ local villager_gift_tables = {
 			},
 			{
 				itemstring = "mcl_tools:axe_iron"
-			}
+			},
 		},
 	},
 }
