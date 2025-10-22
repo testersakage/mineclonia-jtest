@@ -193,6 +193,32 @@ local function disregard_air (x, y, z, rng, cid_existing, param2_existing,
 	return cid, param2
 end
 
+local current_structure_piece = mcl_levelgen.current_structure_piece
+
+local function disregard_air_selectively (x, y, z, rng, cid_existing, param2_existing,
+					  cid, param2)
+	if cid == cid_air then
+		local piece = current_structure_piece ()
+		local dy = piece.structure_y - y
+		if dy == 0 then
+			return nil
+		else
+			local dx = piece.structure_center_x - x
+			local dz = piece.structure_center_z - z
+			local r_width = piece.r_width
+			local r_length = piece.r_length
+			local r_height = piece.r_height
+
+			if (dx * r_width * dx * r_width)
+				+ (dz * r_length * dz * r_length)
+				+ (dy * r_height * dy * r_height) > 1.0 then
+				return nil
+			end
+		end
+	end
+	return cid, param2
+end
+
 local function substitute_magma_for_netherrack (x, y, z, rng, cid_existing,
 						param2_existing, cid, param2)
 	if cid == cid_netherrack and rng:next_float () < 0.07 then
@@ -442,6 +468,8 @@ local function build_processors (self)
 	local i = push_schematic_processor (substitute_air_for_gold)
 	if not self.air_pocket then
 		push_schematic_processor (disregard_air)
+	else
+		push_schematic_processor (disregard_air_selectively)
 	end
 	if not self.cold then
 		push_schematic_processor (substitute_magma_for_netherrack)
@@ -828,6 +856,11 @@ local function ruined_portal_create_start (self, level, terrain, rng, cx, cz)
 				structure_x = bbox[1],
 				structure_y = by,
 				structure_z = bbox[3],
+				structure_center_x = cx,
+				structure_center_z = cz,
+				r_width = 1 / (cx - bbox[1] + 1),
+				r_length = 1 / (cz - bbox[3] + 1),
+				r_height = 1 / (bbox[5] - bbox[2] + 1),
 			},
 		}
 		return create_structure_start (self, pieces)
