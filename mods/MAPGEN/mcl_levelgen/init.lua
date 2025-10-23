@@ -66,9 +66,8 @@ local function init_chunksize ()
 			error ("Invalid chunk size")
 		end
 
-		local DESIRED_Y_SIZE = floor (384 / 16)
-		local DESIRED_Y_BASE = floor (-128 / 16)
-		cs.y = DESIRED_Y_SIZE
+		cs.y = 32 -- So that the MapChunk around sea level
+			  -- extends from -256 to 256.
 		core.set_mapgen_setting ("chunksize", vector.to_string (cs), true)
 
 		local cs_new = core.get_mapgen_chunksize ()
@@ -81,11 +80,12 @@ local function init_chunksize ()
 		else
 			cs = cs_new
 		end
-		local v = vector.new (-floor (cs.x / 2), DESIRED_Y_BASE,
-				      -floor (cs.z / 2))
-		core.set_mapgen_setting ("chunk_origin", v:to_string (), true)
 		core.ipc_set ("mcl_levelgen:mt_chunksize", cs)
-		core.ipc_set ("mcl_levelgen:mt_chunk_origin", v)
+
+		local origin_x, origin_y, origin_z = -floor (cs.x / 2),
+			floor (cs.y / 2), -floor (cs.z / 2)
+		core.ipc_set ("mcl_levelgen:mt_chunk_origin",
+			      vector.new (origin_x, origin_y, origin_z))
 	end
 	core.ipc_set ("mcl_levelgen:mt_chunk_limit",
 		      core.get_mapgen_setting ("mapgen_limit"))
