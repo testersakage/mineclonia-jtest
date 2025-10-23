@@ -3178,9 +3178,10 @@ function structure_features_for_run (run)
 	local features = {}
 
 	if not run.supplemental then
+		local start = current_namespace.y_bottom
 		local x, z = run.x, run.z
 		for y = run.y1, run.y2 do
-			local name = "dg" .. hashmapblock (x, y, z)
+			local name = "dg" .. hashmapblock (x, y + start, z)
 			local deferred_data = storage:get_string (name)
 			if deferred_data and deferred_data ~= "" then
 				local record = core.deserialize (deferred_data)
