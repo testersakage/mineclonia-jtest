@@ -371,10 +371,20 @@ function mcl_enchanting.random(pr, ...)
 	return r
 end
 
+local enchantment_ids = {}
+
+core.register_on_mods_loaded (function ()
+	for key, _ in pairs (mcl_enchanting.enchantments) do
+		table.insert (enchantment_ids, key)
+		table.sort (enchantment_ids)
+	end
+end)
+
 function mcl_enchanting.get_random_enchantment(itemstack, treasure, weighted, exclude, pr)
 	local possible = {}
 
-	for enchantment, enchantment_def in pairs(mcl_enchanting.enchantments) do
+	for _, enchantment in ipairs (enchantment_ids) do
+		local enchantment_def = mcl_enchanting.enchantments[enchantment]
 		local can_enchant, _, _, primary = mcl_enchanting.can_enchant(itemstack, enchantment, 1)
 
 		if can_enchant and (primary or treasure) and (not exclude or table.indexof(exclude, enchantment) == -1) then
