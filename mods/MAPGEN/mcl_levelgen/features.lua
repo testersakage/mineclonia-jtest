@@ -213,7 +213,7 @@ local function merge_feature_precedences (preset)
 				insert (ordered, item)
 				seen[item] = true
 			end
-		end,  feature_dependents)
+		end, feature_dependents)
 	end
 
 	-- Build the sequence list.
@@ -295,17 +295,14 @@ function mcl_levelgen.generate_feature (id, before, biomes, stage)
 	features_generated[stage .. ":" .. id] = true
 
 	for _, biome in ipairs (biomes) do
-		if not biome.features[stage] then
-			biome.features[stage] = { id, }
+		local def = mcl_levelgen.registered_biomes[biome]
+		if not def.features[stage] then
 			return
 		end
 
-		local biome = mcl_levelgen.registered_biomes[biome]
-		local index = table.indexof (biome.features[stage], before)
-		if index == -1 then
-			table.insert (biome.features[stage], id)
-		else
-			table.insert (biome.features[stage], index, id)
+		local index = table.indexof (def.features[stage], before)
+		if index ~= -1 then
+			table.insert (def.features[stage], index, id)
 		end
 	end
 end

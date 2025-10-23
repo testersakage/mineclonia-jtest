@@ -97,6 +97,11 @@ if core and not core.get_player_by_name then
 	for _, script in ipairs (core.ipc_get ("mcl_levelgen:levelgen_scripts")) do
 		dofile (script.script)
 	end
+
+	-- Initialize feature priorities.
+	if mcl_levelgen.load_feature_environment then
+		mcl_levelgen.initialize_biome_features ()
+	end
 elseif core then
 	-- Load and register jigsaw blocks.
 	dofile (mcl_levelgen.prefix .. "/jigsaw.lua")
