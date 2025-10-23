@@ -376,8 +376,8 @@ local enchantment_ids = {}
 core.register_on_mods_loaded (function ()
 	for key, _ in pairs (mcl_enchanting.enchantments) do
 		table.insert (enchantment_ids, key)
-		table.sort (enchantment_ids)
 	end
+	table.sort (enchantment_ids)
 end)
 
 function mcl_enchanting.get_random_enchantment(itemstack, treasure, weighted, exclude, pr)
