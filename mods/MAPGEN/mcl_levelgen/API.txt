@@ -134,9 +134,8 @@ Function: mcl_levelgen.generate_feature (ID, BEFORE, BIOMES, STAGE)
 Generate the placed feature identified by ID before the feature BEFORE
 during the stage STAGE (an integer from 1 to 12) in the provided list
 of biomes BIOMES, and after all biomes generated in preceding stages.
-If BEFORE is not generated in any of these biomes, generate the
-designated feature after all other features heretofore defined to
-generate in the biomes concerned.
+If BEFORE is not generated in one of these biomes, decline to generate
+this feature in the said biome.
 
 ID may only be registered for generation once per stage, and an error
 will be signaled if this requirement is not satisfied.

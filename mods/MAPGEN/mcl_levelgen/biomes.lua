@@ -1703,6 +1703,9 @@ function mcl_levelgen.register_biome (name, def)
 	elseif not def.leaves_palette_index then
 		def.leaves_palette_index = def.grass_palette_index
 	end
+	-- Copy the feature list, or modifications to it may affect
+	-- unintended different biomes.
+	def.features = table.copy (def.features)
 	registered_biomes[name] = def
 end
 
