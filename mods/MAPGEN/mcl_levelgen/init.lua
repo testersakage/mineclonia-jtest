@@ -29,10 +29,32 @@ end
 local function chunksize_already_configured_p ()
 	local mapgen_settings
 		= Settings (core.get_worldpath () .. "/map_meta.txt")
-	if mapgen_settings:get ("chunksize") then
-		return true
+	local existing_option = mapgen_settings:get ("chunksize")
+	-- chunksize may safely be altered.
+	if not existing_option then
+		return false
+	-- If only `chunksize' exists, its value is 5,
+	-- mcl_singlenode_mapgen is not set, and the world directory
+	-- is empty of all known persisted files, this is a likewise a
+	-- world that has just been created from the main menu whose
+	-- chunksize may safely be altered.
+	elseif existing_option == "5" then
+		if mapgen_settings:get ("mcl_singlenode_mapgen") == "true" then
+			return true
+		else
+			local dir = core.get_dir_list (core.get_worldpath (), false)
+			for _, file in ipairs (dir) do
+				if file == "env_meta.txt"
+					or file == "force_loaded.txt"
+					or file == "ipban.txt" then
+					return true
+				end
+			end
+		end
+
+		return false
 	end
-	return false
+	return true
 end
 
 local function init_chunksize ()
