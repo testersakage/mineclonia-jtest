@@ -3,21 +3,26 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-10-02 07:18+0000\n"
+"Last-Translator: N4ta <codeberg@n4ta.anonaddy.me>\n"
+"Language-Team: Portuguese <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_armor/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.13.2\n"
 
 msgid "This is a piece of equippable armor which reduces the amount of damage you receive."
 msgstr ""
+"Esta é uma peça de armadura equipável que reduz a quantidade de dano que "
+"recebe."
 
 msgid "To equip it, put it on the corresponding armor slot in your inventory menu."
 msgstr ""
+"Para a equipar, põe-na no respetivo slot da armadura no teu menu do "
+"inventário."
 
 msgid "Leather Cap"
 msgstr "Barrete de couro"
@@ -32,64 +37,64 @@ msgid "Leather Boots"
 msgstr "Botas de couro"
 
 msgid "Colorize a piece of leather armor, or wash it"
-msgstr ""
+msgstr "Pinta uma peça de armadura de couro, ou lava-a"
 
 msgid "Not leather armor."
-msgstr ""
+msgstr "Não é armadura de couro."
 
 msgid "Washed."
-msgstr ""
+msgstr "Lavada."
 
 msgid "Done: @1"
-msgstr ""
+msgstr "Resultado: @1"
 
 msgid "Player isn't online"
-msgstr ""
+msgstr "O jogador não está online"
 
 msgid "Bolt Armor Trim"
-msgstr ""
+msgstr "Revestimento de Parafuso"
 
 msgid "Coast Armor Trim"
-msgstr ""
+msgstr "Revestimento do Litoral"
 
 msgid "Dune Armor Trim"
-msgstr ""
+msgstr "Revestimento de Duna"
 
 msgid "Eye Armor Trim"
-msgstr ""
+msgstr "Revestimento de Olho"
 
 msgid "Flow Armor Trim"
-msgstr ""
+msgstr "Revestimento de Fluxo"
 
 msgid "Rib Armor Trim"
-msgstr ""
+msgstr "Revestimento de Costelas"
 
 msgid "Sentry Armor Trim"
-msgstr ""
+msgstr "Revestimento de Sentinela"
 
 msgid "Silence Armor Trim"
-msgstr ""
+msgstr "Revestimento de Silêncio"
 
 msgid "Snout Armor Trim"
-msgstr ""
+msgstr "Revestimento de Focinho"
 
 msgid "Spire Armor Trim"
-msgstr ""
+msgstr "Revestimento de Espiral"
 
 msgid "Tide Armor Trim"
-msgstr ""
+msgstr "Revestimento do Mar"
 
 msgid "Vex Armor Trim"
-msgstr ""
+msgstr "Revestimento de Vex"
 
 msgid "Ward Armor Trim"
-msgstr ""
+msgstr "Revestimento das Profundezas"
 
 msgid "Wayfinder Armor Trim"
-msgstr ""
+msgstr "Revestimento do Navegador"
 
 msgid "Wild Armor Trim"
-msgstr ""
+msgstr "Revestimento da Selva"
 
 msgid "Golden Helmet"
 msgstr "Capacete de ouro"
@@ -155,65 +160,67 @@ msgid "Projectile Protection"
 msgstr "Proteção contra projéteis"
 
 msgid "Reduces projectile damage."
-msgstr ""
+msgstr "Reduz dano de projéteis."
 
 msgid "Blast Protection"
 msgstr "Proteção contra explosões"
 
 msgid "Reduces explosion damage and knockback."
-msgstr ""
+msgstr "Reduz dano e recuo de explosões."
 
 msgid "Fire Protection"
 msgstr "Proteção contra o fogo"
 
 msgid "Reduces fire damage."
-msgstr ""
+msgstr "Reduz o dano de fogo."
 
 msgid "Protection"
 msgstr "Proteção"
 
 msgid "Reduces most types of damage by 4% for each level."
-msgstr ""
+msgstr "Reduz a maioria dos tipos de dano por 4% para cada nível."
 
 msgid "Feather Falling"
-msgstr ""
+msgstr "Queda Suave"
 
 msgid "Reduces fall damage."
-msgstr ""
+msgstr "Reduz o dano de queda."
 
 msgid "Aqua Affinity"
 msgstr "Afinidade aquática"
 
 msgid "Increases underwater mining speed."
-msgstr ""
+msgstr "Aumenta a velocidade de mineração subaquática."
 
 msgid "Curse of Binding"
-msgstr ""
+msgstr "Maldição da União"
 
 msgid "Item cannot be removed from armor slots except due to death, breaking or in Creative Mode."
 msgstr ""
+"Item não pode ser removido dos espaços de armadura excepto na morte, quebra "
+"ou no Modo Criativo."
 
 msgid "Thorns"
-msgstr ""
+msgstr "Espinhos"
 
 msgid "Reflects some of the damage taken when hit, at the cost of reducing durability with each proc."
 msgstr ""
+"Reflete parte do dano tomado, à custa de alguma durabilidade em cada uso."
 
 msgid "Elytra"
 msgstr "Élitros"
 
 msgid "Smithing Template"
-msgstr "Molde de ferraria"
+msgstr "Molde de Ferraria"
 
 msgid "Applies to:"
-msgstr ""
+msgstr "Aplica-se a:"
 
 msgid "Armor"
 msgstr "Armadura"
 
 msgid "Ingredients:"
-msgstr ""
+msgstr "Ingredientes:"
 
 msgid "Ingot & Crystals"
-msgstr ""
-
+msgstr "Barras & Cristais"
