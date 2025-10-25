@@ -164,6 +164,10 @@ function mcl_itemframes.tpl_node.on_construct(pos)
 	end
 end
 
+function mcl_itemframes.tpl_node.on_rotate()
+	return false
+end
+
 -- Entity functions
 function mcl_itemframes.tpl_entity:set_item(itemstack, pos)
 	if not itemstack or not itemstack.get_name then
