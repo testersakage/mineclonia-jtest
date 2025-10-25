@@ -149,7 +149,7 @@ function mcl_flowers.register_simple_flower(name, def)
 		_mcl_crafting_output = def._mcl_crafting_output
 	})
 	if def.potted then
-		mcl_flowerpots.register_potted(newname, {
+		mcl_flowerpots.register_potted_flower(newname, {
 			name = name,
 			desc = def.desc,
 			image = def.image,
