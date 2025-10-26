@@ -3,304 +3,304 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-10-06 17:16+0000\n"
+"Last-Translator: N4ta <codeberg@n4ta.anonaddy.me>\n"
+"Language-Team: Portuguese <https://translate.codeberg.org/projects/"
+"mineclonia/mobs_mc/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.13.2\n"
 
 msgid "Axolotl"
-msgstr ""
+msgstr "Axolote"
 
 msgid "Bat"
-msgstr ""
+msgstr "Morcego"
 
 msgid "Blaze"
-msgstr ""
+msgstr "Blaze"
 
 msgid "Chicken"
-msgstr ""
+msgstr "Galinha"
 
 msgid "Cod"
-msgstr ""
+msgstr "Bacalhau"
 
 msgid "Cow"
-msgstr ""
+msgstr "Vaca"
 
 msgid "Mooshroom"
-msgstr ""
+msgstr "Mooshroom"
 
 msgid "Creeper"
-msgstr ""
+msgstr "Creeper"
 
 msgid "Charged Creeper"
-msgstr ""
+msgstr "Creeper Elétrico"
 
 msgid "Dolphin"
-msgstr ""
+msgstr "Golfinho"
 
 msgid "Ender Dragon"
-msgstr ""
+msgstr "Dragão do Fim"
 
 msgid "Enderman"
-msgstr ""
+msgstr "Enderman"
 
 msgid "Endermite"
-msgstr ""
+msgstr "Endermite"
 
 msgid "Ghast"
-msgstr ""
+msgstr "Ghast"
 
 msgid "Ghast Fireball"
-msgstr ""
+msgstr "Bola de Fogo de Ghast"
 
 msgid "Guardian"
-msgstr ""
+msgstr "Guardião"
 
 msgid "Elder Guardian"
-msgstr ""
+msgstr "Guardião-Mestre"
 
 msgid "Hoglin"
-msgstr ""
+msgstr "Hoglin"
 
 msgid "Baby Hoglin"
-msgstr ""
+msgstr "Hoglin Bebé"
 
 msgid "Zoglin"
-msgstr ""
+msgstr "Zoglin"
 
 msgid "Sneak to dismount"
-msgstr ""
+msgstr "Agache para desmontar"
 
 msgid "Horse"
-msgstr ""
+msgstr "Cavalo"
 
 msgid "Skeleton Horse"
-msgstr ""
+msgstr "Cavalo Esqueleto"
 
 msgid "Zombie Horse"
-msgstr ""
+msgstr "Cavalo Zumbi"
 
 msgid "Donkey"
-msgstr ""
+msgstr "Burro"
 
 msgid "Mule"
-msgstr ""
+msgstr "Mula"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Golem de Ferro"
 
 msgid "Llama"
-msgstr ""
+msgstr "Lhama"
 
 msgid "Ocelot"
-msgstr ""
+msgstr "Jaguatirica"
 
 msgid "Cat"
-msgstr ""
+msgstr "Gato"
 
 msgid "Parrot"
-msgstr ""
+msgstr "Papagaio"
 
 msgid "Pig"
-msgstr ""
+msgstr "Porco"
 
 msgid "Piglin"
-msgstr ""
+msgstr "Piglin"
 
 msgid "Piglin Brute"
-msgstr ""
+msgstr "Piglin Bárbaro"
 
 msgid "Zombie Piglin"
-msgstr ""
+msgstr "Piglin Zumbi"
 
 msgid "Zombified Piglin"
-msgstr ""
+msgstr "Piglin-Zumbi"
 
 msgid "Pillager"
-msgstr ""
+msgstr "Saqueador"
 
 msgid "Polar Bear"
-msgstr ""
+msgstr "Urso Polar"
 
 msgid "Rabbit"
-msgstr ""
+msgstr "Coelho"
 
 msgid "Killer Bunny"
-msgstr ""
+msgstr "Coelho Assassino"
 
 msgid "Salmon"
-msgstr ""
+msgstr "Salmão"
 
 msgid "Sheep"
-msgstr ""
+msgstr "Ovelha"
 
 msgid "Shulker"
-msgstr ""
+msgstr "Shulker"
 
 msgid "Silverfish"
-msgstr ""
+msgstr "Bicho da Prata"
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Esqueleto"
 
 msgid "Stray"
-msgstr ""
+msgstr "Errante"
 
 msgid "Wither Skeleton"
-msgstr ""
+msgstr "Esqueleto Wither"
 
 msgid "Slime - big"
-msgstr ""
+msgstr "Slime - grande"
 
 msgid "Slime - small"
-msgstr ""
+msgstr "Slime - médio"
 
 msgid "Slime - tiny"
-msgstr ""
+msgstr "Slime - pequeno"
 
 msgid "Magma Cube - big"
-msgstr ""
+msgstr "Cubo de Magma - grande"
 
 msgid "Magma Cube - small"
-msgstr ""
+msgstr "Cubo de Magma - médio"
 
 msgid "Magma Cube - tiny"
-msgstr ""
+msgstr "Cubo de Magma - pequeno"
 
 msgid "Magma Cube"
-msgstr ""
+msgstr "Cubo de Magma"
 
 msgid "Slime"
-msgstr ""
+msgstr "Slime"
 
 msgid "Snow Golem"
-msgstr ""
+msgstr "Golem de Neve"
 
 msgid "Spider"
-msgstr ""
+msgstr "Aranha"
 
 msgid "Cave Spider"
-msgstr ""
+msgstr "Aranha das Cavernas"
 
 msgid "Squid"
-msgstr ""
+msgstr "Lula"
 
 msgid "Glow Squid"
-msgstr ""
+msgstr "Lula Brilhante"
 
 msgid "Strider"
-msgstr ""
+msgstr "Lavagante"
 
 msgid "Baby Strider"
-msgstr ""
+msgstr "Lavagante Bebé"
 
 msgid "Tropical Fish"
-msgstr ""
+msgstr "Peixe Tropical"
 
 msgid "Vex"
-msgstr ""
+msgstr "Vex"
 
 msgid "Villager"
-msgstr ""
+msgstr "Aldeão"
 
 msgid "Armorer"
-msgstr ""
+msgstr "Armoreiro"
 
 msgid "Butcher"
-msgstr ""
+msgstr "Talhante"
 
 msgid "Cartographer"
-msgstr ""
+msgstr "Cartógrafo"
 
 msgid "Cleric"
-msgstr ""
+msgstr "Clérigo"
 
 msgid "Farmer"
-msgstr ""
+msgstr "Agricultor"
 
 msgid "Fisherman"
-msgstr ""
+msgstr "Pescador"
 
 msgid "Fletcher"
-msgstr ""
+msgstr "Flecheiro"
 
 msgid "Leatherworker"
-msgstr ""
+msgstr "Coureiro"
 
 msgid "Librarian"
-msgstr ""
+msgstr "Bibliotecário"
 
 msgid "Mason"
-msgstr ""
+msgstr "Pedreiro"
 
 msgid "Shepherd"
-msgstr ""
+msgstr "Pastor"
 
 msgid "Toolsmith"
-msgstr ""
+msgstr "Ferramenteiro"
 
 msgid "Weaponsmith"
-msgstr ""
+msgstr "Armeiro"
 
 msgid "Nitwit"
-msgstr ""
+msgstr "Palerma"
 
 msgid "Novice"
-msgstr ""
+msgstr "Novato"
 
 msgid "Apprentice"
-msgstr ""
+msgstr "Aprendiz"
 
 msgid "Journeyman"
-msgstr ""
+msgstr "Qualificado"
 
 msgid "Expert"
-msgstr ""
+msgstr "Experiente"
 
 msgid "Master"
-msgstr ""
+msgstr "Mestre"
 
 msgid "Evoker"
-msgstr ""
+msgstr "Invocador"
 
 msgid "Illusioner"
-msgstr ""
+msgstr "Ilusionista"
 
 msgid "Vindicator"
-msgstr ""
+msgstr "Vingador"
 
 msgid "Zombie Villager"
-msgstr ""
+msgstr "Aldeão Zumbi"
 
 msgid "Wandering Trader"
-msgstr ""
+msgstr "Vendedor Ambulante"
 
 msgid "Trader Llama"
-msgstr ""
+msgstr "Lhama do Vendedor"
 
 msgid "Witch"
-msgstr ""
+msgstr "Bruxa"
 
 msgid "Wither"
-msgstr ""
+msgstr "Wither"
 
 msgid "Wolf"
-msgstr ""
+msgstr "Lobo"
 
 msgid "Zombie"
-msgstr ""
+msgstr "Zumbi"
 
 msgid "Baby Zombie"
-msgstr ""
+msgstr "Zumbi Bebé"
 
 msgid "Husk"
-msgstr ""
+msgstr "Zumbi Múmia"
 
 msgid "Baby Husk"
-msgstr ""
-
+msgstr "Zumbi Bebé Múmia"

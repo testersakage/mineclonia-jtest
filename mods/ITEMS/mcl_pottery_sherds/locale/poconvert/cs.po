@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_pottery_sherds x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-08-23 12:09+0000\n"
+"Last-Translator: adoksnaj <adoksnaj@noreply.codeberg.org>\n"
+"Language-Team: Czech <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_pottery_sherds/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 msgid "Used for crafting decorated pots"
 msgstr "Používá se k výrobě dekorativních květináčů"
@@ -23,74 +24,73 @@ msgid "Pots are decorative blocks."
 msgstr "Květináče jsou dekorativní bloky."
 
 msgid "Specially decorated pots can be crafted using pottery sherds"
-msgstr ""
+msgstr "Speciálně zdobené květináče lze vyrobit pomocí keramických střepů"
 
 msgid "Angler Pottery Sherd"
-msgstr ""
+msgstr "Rybářský keramický střep"
 
 msgid "Archer Pottery Sherd"
-msgstr ""
+msgstr "Lukostřelecký keramický střep"
 
 msgid "Arms Up Pottery Sherd"
-msgstr ""
+msgstr "Keramický střep s rukama nahoře"
 
 msgid "Blade Pottery Sherd"
-msgstr ""
+msgstr "Keramický střep s ostřím"
 
 msgid "Brewer Pottery Sherd"
-msgstr ""
+msgstr "keramický střep s vařičem"
 
 msgid "Burn Pottery Sherd"
-msgstr ""
+msgstr "keramický střep s ohněm"
 
 msgid "Danger Pottery Sherd"
-msgstr ""
+msgstr "Nebezpečný keramický střep"
 
 msgid "Explorer Pottery Sherd"
-msgstr ""
+msgstr "Průzkumnický keramický střep"
 
 msgid "Flow Pottery Sherd"
-msgstr ""
+msgstr "keramický střep s kapalinou"
 
 msgid "Friend Pottery Sherd"
-msgstr ""
+msgstr "přátelský keramický střep"
 
 msgid "Guster Pottery Sherd"
-msgstr ""
+msgstr "vířivý keramický střep"
 
 msgid "Heart Pottery Sherd"
-msgstr ""
+msgstr "keramický střep se srdcem"
 
 msgid "Heartbreak Pottery Sherd"
-msgstr ""
+msgstr "keramický střep se zlomeným srdcem"
 
 msgid "Howl Pottery Sherd"
-msgstr ""
+msgstr "keramický střep s vlkem"
 
 msgid "Miner Pottery Sherd"
-msgstr ""
+msgstr "keramický střep s horníkem"
 
 msgid "Mourner Pottery Sherd"
-msgstr ""
+msgstr "děsivý střep keramiky"
 
 msgid "Plenty Pottery Sherd"
-msgstr ""
+msgstr "keramický střep hojnosti"
 
 msgid "Prize Pottery Sherd"
-msgstr ""
+msgstr "keramický střep s drahokamem"
 
 msgid "Scrape Pottery Sherd"
-msgstr ""
+msgstr "oškrábaný keramický střep"
 
 msgid "Sheaf Pottery Sherd"
-msgstr ""
+msgstr "keramický střep blaha"
 
 msgid "Shelter Pottery Sherd"
-msgstr ""
+msgstr "keramický střep s přístřeškem"
 
 msgid "Skull Pottery Sherd"
-msgstr ""
+msgstr "keramický střep s lebkou"
 
 msgid "Snort Pottery Sherd"
-msgstr ""
-
+msgstr "čichavý keramický střep"

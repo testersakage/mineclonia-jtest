@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-08-13 16:09+0000\n"
+"Last-Translator: cuche <cuche@noreply.codeberg.org>\n"
+"Language-Team: Italian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_copper/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 msgid "Copper Ingot"
 msgstr "Lingotto di Rame"
@@ -23,28 +24,28 @@ msgid "Raw Copper"
 msgstr "Rame grezzo"
 
 msgid "Raw Copper. Mine a Copper Ore to get it."
-msgstr ""
+msgstr "Rame grezzo. Scava del minerale di rame per ottenerlo."
 
 msgid "Block of Copper"
 msgstr "Blocco di rame"
 
 msgid "Block of Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il blocco di rame è principalmente un blocco decorativo."
 
 msgid "Chiseled Copper"
 msgstr "Rame cesellato"
 
 msgid "Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il rame cesellato è principalmente un blocco decorativo."
 
 msgid "Copper Bulb"
 msgstr "Lampada di rame"
 
 msgid "Copper Bulb On"
-msgstr ""
+msgstr "Lampada di rame accesa"
 
 msgid "Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "La Lampada di rame è un blocco decorativo."
 
 msgid "Copper Door"
 msgstr "Porta di rame"
@@ -53,7 +54,7 @@ msgid "Copper Grate"
 msgstr "Grata di rame"
 
 msgid "Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "La grata di rame è un blocco decorativo."
 
 msgid "Copper Trapdoor"
 msgstr "Botola di rame"
@@ -68,13 +69,13 @@ msgid "Cut Copper Stairs"
 msgstr "Scalini di rame inciso"
 
 msgid "Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il rame inciso è un blocco decorativo."
 
 msgid "Exposed Chiseled Copper"
 msgstr "Rame cesellato esposto"
 
 msgid "Exposed Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il Rame cesellato esposto è un blocco decorativo."
 
 msgid "Exposed Copper"
 msgstr "Rame esposto"
@@ -83,10 +84,10 @@ msgid "Exposed Copper Bulb"
 msgstr "Lampada di rame esposto"
 
 msgid "Exposed Copper Bulb On"
-msgstr ""
+msgstr "Lampada di rame esposta accesa"
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "La Lampada di rame esposta è un blocco decorativo."
 
 msgid "Exposed Copper Door"
 msgstr "Porta di rame esposto"
@@ -95,13 +96,13 @@ msgid "Exposed Copper Grate"
 msgstr "Grata di rame esposto"
 
 msgid "Exposed Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "La grata di rame esposto è un blocco decorativo."
 
 msgid "Exposed Copper Trapdoor"
 msgstr "Botola di rame esposto"
 
 msgid "Exposed Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il rame esposto è un blocco decorativo."
 
 msgid "Exposed Cut Copper"
 msgstr "Rame inciso esposto"
@@ -113,13 +114,13 @@ msgid "Exposed Cut Copper Stairs"
 msgstr "Scalini di rame inciso esposto"
 
 msgid "Exposed Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il rame inciso esposto è un blocco decorativo."
 
 msgid "Oxidized Chiseled Copper"
 msgstr "Rame cesellato ossidato"
 
 msgid "Oxidized Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il rame cesellato ossidato è un blocco decorativo."
 
 msgid "Oxidized Copper"
 msgstr "Rame ossidato"
@@ -128,10 +129,10 @@ msgid "Oxidized Copper Bulb"
 msgstr "Lampada di rame ossidato"
 
 msgid "Oxidized Copper Bulb On"
-msgstr ""
+msgstr "Lampada di rame ossidato accessa"
 
 msgid "Oxidized Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "La lampada di rame ossidato è un blocco decorativo."
 
 msgid "Oxidized Copper Door"
 msgstr "Porta di rame ossidato"
@@ -140,13 +141,13 @@ msgid "Oxidized Copper Grate"
 msgstr "Grata di rame ossidato"
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "La grata di rame ossidato è un blocco decorativo."
 
 msgid "Oxidized Copper Trapdoor"
 msgstr "Botola di rame ossidato"
 
 msgid "Oxidized Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il rame ossidato è un blocco decorativo."
 
 msgid "Oxidized Cut Copper"
 msgstr "Rame inciso ossidato"
@@ -158,7 +159,7 @@ msgid "Oxidized Cut Copper Stairs"
 msgstr "Scalini di rame inciso ossidato"
 
 msgid "Oxidized Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il rame inciso ossidato è un blocco decorativo."
 
 msgid "Waxed Block of Copper"
 msgstr "Blocco di rame cerato"
@@ -170,7 +171,7 @@ msgid "Waxed Copper Bulb"
 msgstr "Lampada di rame cerato"
 
 msgid "Waxed Copper Bulb On"
-msgstr ""
+msgstr "Lampada di rame cerato accesa"
 
 msgid "Waxed Copper Grate"
 msgstr "Grata di rame cerato"
@@ -188,7 +189,7 @@ msgid "Waxed Cut Copper Stairs"
 msgstr "Scalini di rame inciso cerato"
 
 msgid "Waxed Double @1"
-msgstr ""
+msgstr "Doppio @1 cerato"
 
 msgid "Waxed Exposed Chiseled Copper"
 msgstr "Rame cesellato esposto cerato"
@@ -200,7 +201,7 @@ msgid "Waxed Exposed Copper Bulb"
 msgstr "Lampada di rame esposto cerato"
 
 msgid "Waxed Exposed Copper Bulb On"
-msgstr ""
+msgstr "Lampada di rame esposto cerato accesa"
 
 msgid "Waxed Exposed Copper Grate"
 msgstr "Grata di rame esposto cerato"
@@ -227,7 +228,7 @@ msgid "Waxed Oxidized Copper Bulb"
 msgstr "Lampada di rame ossidato cerato"
 
 msgid "Waxed Oxidized Copper Bulb On"
-msgstr ""
+msgstr "Lampada di rame ossidato cerato accesa"
 
 msgid "Waxed Oxidized Copper Grate"
 msgstr "Grata di rame ossidato cerato"
@@ -245,7 +246,7 @@ msgid "Waxed Oxidized Cut Copper Stairs"
 msgstr "Scalini di rame inciso ossidato cerato"
 
 msgid "Waxed Upper @1"
-msgstr ""
+msgstr "@1 superiore cerato"
 
 msgid "Waxed Weathered Chiseled Copper"
 msgstr "Rame cesellato corroso cerato"
@@ -257,7 +258,7 @@ msgid "Waxed Weathered Copper Bulb"
 msgstr "Lampada di rame corroso cerato"
 
 msgid "Waxed Weathered Copper Bulb On"
-msgstr ""
+msgstr "Lampada di rame corroso cerato accesa"
 
 msgid "Waxed Weathered Copper Grate"
 msgstr "Grata di rame corroso cerato"
@@ -278,7 +279,7 @@ msgid "Weathered Chiseled Copper"
 msgstr "Rame cesellato corroso"
 
 msgid "Weathered Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il rame cesellato corroso è un blocco decorativo."
 
 msgid "Weathered Copper"
 msgstr "Rame corroso"
@@ -287,10 +288,10 @@ msgid "Weathered Copper Bulb"
 msgstr "Lampada di rame corroso"
 
 msgid "Weathered Copper Bulb On"
-msgstr ""
+msgstr "Lampada di rame corroso accesa"
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
-msgstr ""
+msgstr "La lampada di rame corroso è un blocco decorativo."
 
 msgid "Weathered Copper Door"
 msgstr "Porta di rame corroso"
@@ -299,13 +300,13 @@ msgid "Weathered Copper Grate"
 msgstr "Grata di rame corroso"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
-msgstr ""
+msgstr "La grata di rame corroso è un blocco decorativo."
 
 msgid "Weathered Copper Trapdoor"
 msgstr "Botola di rame corroso"
 
 msgid "Weathered Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il rame corroso è un blocco decorativo."
 
 msgid "Weathered Cut Copper"
 msgstr "Rame inciso corroso"
@@ -317,17 +318,18 @@ msgid "Weathered Cut Copper Stairs"
 msgstr "Scalani di rame inciso corroso"
 
 msgid "Weathered Cut Copper is mostly a decorative block."
-msgstr ""
+msgstr "Il rame inciso corroso è un blocco decorativo."
 
 msgid "Copper Ore"
 msgstr "Minerale di rame"
 
 msgid "Some copper contained in stone, it is pretty common and can be found below sea level."
 msgstr ""
+"Del rame inglobato nella pietra, è molto comune e può essere trovato sotto "
+"il livello del mare."
 
 msgid "Block of Raw Copper"
 msgstr "Blocco di rame grezzo"
 
 msgid "A block used for compact raw copper storage."
-msgstr ""
-
+msgstr "Un blocco usato per ridurre l'ingombro in inventario del rame grezzo."

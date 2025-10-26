@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-10-17 11:09+0000\n"
+"Last-Translator: Jenkings <jenkings@noreply.codeberg.org>\n"
+"Language-Team: Czech <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_achievements/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.13.3\n"
 
 msgid "Benchmarking"
 msgstr "Srovnávací analýza"
@@ -24,218 +25,239 @@ msgstr "Čas těžit!"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
 msgstr ""
+"Pomocí řemeslného stolu vyrobte dřevěné krumpáče z dřevěných prken a tyčí."
 
 msgid "Hot Topic"
-msgstr ""
+msgstr "Horké téma"
 
 msgid "Use 8 cobblestones to craft a furnace."
-msgstr ""
+msgstr "Použijte osm bloků kamení pro vyrobení pece."
 
 msgid "Time to Farm!"
-msgstr ""
+msgstr "Čas farmařit!"
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
 msgstr ""
+"Pomocí pracovního stolu vyrobte dřevěnou motyku z dřevěných prken a tyček."
 
 msgid "Bake Bread"
-msgstr ""
+msgstr "Upéct chleba"
 
 msgid "Use wheat to craft a bread."
-msgstr ""
+msgstr "Použijtě obilí k výrobě chleba."
 
 msgid "The Lie"
-msgstr ""
+msgstr "Lež"
 
 msgid "Craft a cake using wheat, sugar, milk and an egg."
-msgstr ""
+msgstr "Upečte dort z pšenice, cukru, mléka a vajec."
 
 msgid "Getting an Upgrade"
-msgstr ""
+msgstr "Získávání vylepšení"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
-msgstr ""
+msgstr "Vyrobte kamenný krumpáč pomocí tyček a kamení."
 
 msgid "Time to Strike!"
-msgstr ""
+msgstr "Čas zaútočit!"
 
 msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
-msgstr ""
+msgstr "Vyrobte dřevěný meč pomocí dřevěných prken a tyček na pracovním stole."
 
 msgid "Librarian"
-msgstr ""
+msgstr "Knihovník"
 
 msgid "Craft a bookshelf."
-msgstr ""
+msgstr "Vyrob knihovnu."
 
 msgid "Isn't It Iron Pick"
-msgstr ""
+msgstr "Není to železný krumpáč"
 
 msgid "Craft a iron pickaxe using sticks and iron."
-msgstr ""
+msgstr "Vyrobte si železnou krumpáč pomocí tyček a železa."
 
 msgid "DIAMONDS!"
-msgstr ""
+msgstr "DIAMANTY!"
 
 msgid "Pick up a diamond from the floor."
-msgstr ""
+msgstr "Vytěž diamanty."
 
 msgid "Into Fire"
-msgstr ""
+msgstr "Do ohně"
 
 msgid "Pick up a blaze rod from the floor."
-msgstr ""
+msgstr "Zvedněte z podlahy ohnivákovu tyč."
 
 msgid "Cow Tipper"
-msgstr ""
+msgstr "Převraceč krav"
 
 msgid "Pick up leather from the floor.\n"
 "Hint: Cows and some other animals have a chance to drop leather, when killed."
 msgstr ""
+"Seber ze země kus kůže\n"
+"Nápověda: Krávy a některá další zvířata mají po zabití šanci dropnout kůži."
 
 msgid "Getting Wood"
-msgstr ""
+msgstr "Získávání dřeva"
 
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
 msgstr ""
+"Seber jakékoliv dřevo.\n"
+"Tip: mlať do stromu tak dlouho, dokud nevypadne jako předmět."
 
 msgid "Who is Cutting Onions?"
-msgstr ""
+msgstr "Kdo krájí cibuli?"
 
 msgid "Pick up a crying obsidian from the floor."
-msgstr ""
+msgstr "Seberte plačící obsidián."
 
 msgid "Hidden in the Depths"
-msgstr ""
+msgstr "Skryté v hlubinách"
 
 msgid "Pick up an Ancient Debris from the floor."
-msgstr ""
+msgstr "Seberte starodávný úlomek."
 
 msgid "The Next Generation"
-msgstr ""
+msgstr "Příští generace"
 
 msgid "Hold the Dragon Egg.\n"
 "Hint: Pick up the egg from the ground and have it in your inventory."
 msgstr ""
+"Držte dračí vejce.\n"
+"Tip: Seberte vejce ze země a uložte si ho do inventáře."
 
 msgid "Sky's the Limit"
-msgstr ""
+msgstr "Neexistují žádné hranice"
 
 msgid "Find the elytra and prepare to fly above and beyond!"
-msgstr ""
+msgstr "Najděte krovky a připravte se na let nad obzorem!"
 
 msgid "Acquire Hardware"
-msgstr ""
+msgstr "Pořízení vybavení"
 
 msgid "Take an iron ingot from a furnace's output slot.\n"
 "Hint: To smelt an iron ingot, put a fuel (like coal) and iron ore into a furnace."
 msgstr ""
+"Vezměte železný ingot z výstupního slotu pece.\n"
+"Tip: Chcete-li roztavit železný ingot, vložte do pece palivo (například uhlí)"
+" a železnou rudu."
 
 msgid "Delicious Fish"
-msgstr ""
+msgstr "Výtečná ryba"
 
 msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
 msgstr ""
+"Vezměte jakoukoli pečenou rybu z pece, udírnny, táboráku nebo ohniště.\n"
+"Tip: Použijte rybářský prut k ulovení ryby a upečte ji v peci."
 
 msgid "On A Rail"
-msgstr ""
+msgstr "Na kolejích"
 
 msgid "Travel by minecart for at least 1000 meters from your starting point in a single ride."
-msgstr ""
+msgstr "Cestujte důlním vozíkem nejméně 1000 metrů najednou."
 
 msgid "Sniper Duel"
-msgstr ""
+msgstr "Souboj odstřelovačů"
 
 msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distance of at least 20 meters."
 msgstr ""
+"Zabij kostlivce, Whiter kostlivce nebo toulavého kostlivce lukem a šípem ze "
+"vzdálenosti nejméně 20 metrů."
 
 msgid "Monster Hunter"
-msgstr ""
+msgstr "Lovec monster"
 
 msgid "Kill a monster."
-msgstr ""
+msgstr "zabij monstrum."
 
 msgid "We Need to Go Deeper"
-msgstr ""
+msgstr "Musíme se dostat hlouběji"
 
 msgid "Use obsidian and a fire starter to construct a Nether portal."
-msgstr ""
+msgstr "Použij obsidián a podpalovač, abys vytvořil portál do pekla."
 
 msgid "The End?"
-msgstr ""
+msgstr "Konec?"
 
 msgid "Or the beginning?\n"
 "Hint: Enter an end portal."
 msgstr ""
+"Nebo začátek?\n"
+"Tip: Vstupte do portálu do Endu."
 
 msgid "The Nether"
-msgstr ""
+msgstr "Peklo"
 
 msgid "Bring summer clothes.\n"
 "Hint: Enter the Nether."
 msgstr ""
+"Vezměte si letní oblečení.\n"
+"Tip: Vstupte do pekla."
 
 msgid "Postmortal"
-msgstr ""
+msgstr "Posmrtnost"
 
 msgid "Use a Totem of Undying to cheat death."
-msgstr ""
+msgstr "Použij Totem nesmrtelnosti, abys oklamal smrt."
 
 msgid "Sweet Dreams"
-msgstr ""
+msgstr "Sladké sny"
 
 msgid "Sleep in a bed to change your respawn point."
-msgstr ""
+msgstr "Spěte v posteli, abyste změnili místo respawnu."
 
 msgid "Not Quite \"Nine\" Lives"
-msgstr ""
+msgstr "Ne tak docela „devět“ životů"
 
 msgid "Charge a Respawn Anchor to the maximum."
-msgstr ""
+msgstr "Nabijte respawnovací kotvu na maximum."
 
 msgid "What A Deal!"
-msgstr ""
+msgstr "Výhodná nabídka!"
 
 msgid "Successfully trade with a Villager."
-msgstr ""
+msgstr "Obchodujte s vesničanem."
 
 msgid "Tactical Fishing"
-msgstr ""
+msgstr "Taktické rybaření"
 
 msgid "Catch a fish... without a fishing rod!"
-msgstr ""
+msgstr "Ulov rybu... bez prutu!"
 
 msgid "The Cutest Predator"
-msgstr ""
+msgstr "Nejroztomilejší dravec"
 
 msgid "Catch an Axolotl with a bucket!"
-msgstr ""
+msgstr "Chyťte axolotla pomocí kbelíku!"
 
 msgid "Withering Heights"
-msgstr ""
+msgstr "Vysychající výšiny"
 
 msgid "Summon the wither from the dead."
-msgstr ""
+msgstr "Vyvolejte Withera z mrtvých."
 
 msgid "Free the End"
-msgstr ""
+msgstr "Osvoboďte Enderworld"
 
 msgid "Kill the ender dragon. Good Luck!"
-msgstr ""
+msgstr "Zabij End draka. Hodně štěstí!"
 
 msgid "Fishy Business"
-msgstr ""
+msgstr "Řybářské podnikání"
 
 msgid "Catch a fish.\n"
 "Hint: Catch a fish, salmon, clownfish, or pufferfish."
 msgstr ""
+"Chyť rybu.\n"
+"Nápověda: Chyť rybu, lososa, klauna nebo čtverzubce."
 
 msgid "Country Lode, Take Me Home"
-msgstr ""
+msgstr "Veď mně dál, magnete můj"
 
 msgid "Use a compass on a Lodestone."
-msgstr ""
+msgstr "Použij kompas na svůj domovský blok."
 
 msgid "Serious Dedication"
 msgstr ""
@@ -381,4 +403,3 @@ msgstr ""
 
 msgid "Use a golden apple on a zombie villager under the Weakness effect; the advancement is granted when the zombie villager converts into a villager."
 msgstr ""
-

@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_farming x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-10-21 17:32+0000\n"
+"Last-Translator: Jenkings <jenkings@noreply.codeberg.org>\n"
+"Language-Team: Czech <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_farming/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.13.3\n"
 
 msgid "Beetroot Seeds"
 msgstr "Semínka červené řepy"
@@ -23,43 +24,52 @@ msgid "Place the beetroot seeds on farmland (which can be created with a hoe) to
 msgstr "Semena řepy umístěte na ornici (kterou lze vytvořit pomocí motyky) a zasaďte. Rostou na slunečním světle a na zavlažované ornici rostou rychleji. Kliknutím pravým tlačítkem myši na zvíře ho nakrmíte semeny řepy."
 
 msgid "Premature Beetroot Plant (Stage 1)"
-msgstr ""
+msgstr "Zárodek rostliny červené řepy (fáze 1)"
 
 msgid "Beetroot plants are plants which grow on farmland under sunlight in 4 stages. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature."
 msgstr ""
+"Řepné výhonky jsou rostliny, které rostou na zemědělské půdě pod slunečním "
+"světlem ve 4 fázích. Na zavlažované zemědělské půdě rostou o něco rychleji. "
+"Lze je sklízet kdykoli, ale plody přinesou až v době zralosti."
 
 msgid "Premature Beetroot Plant"
-msgstr ""
+msgstr "Zárodek rostliny červené řepy"
 
 msgid "Premature Beetroot Plant (Stage 2)"
-msgstr ""
+msgstr "Zárodek rostliny červené řepy (fáze 2)"
 
 msgid "Premature Beetroot Plant (Stage 3)"
-msgstr ""
+msgstr "Zárodek rostliny červené řepy (fáze 3)"
 
 msgid "Mature Beetroot Plant"
-msgstr ""
+msgstr "Zralá rostlina červené řepy"
 
 msgid "A mature beetroot plant is a farming plant which is ready to be harvested for a beetroot and some beetroot seeds. It won't grow any further."
 msgstr ""
+"Zralá řepa je zemědělská rostlina, která je připravena ke sklizni řepy a "
+"také semen řepy. Dále již nebude růst."
 
 msgid "Beetroot"
-msgstr ""
+msgstr "Řepa"
 
 msgid "Beetroots are both used as food item and a dye ingredient. Pigs like beetroots, too."
 msgstr ""
+"Červená řepa se používá jako potravina i jako barvivo. Červená řepa chutná i "
+"prasatům."
 
 msgid "Hold it in your hand and right-click to eat it. Rightclick an animal to feed it."
 msgstr ""
+"Držte ho v ruce a klikněte pravým tlačítkem myši, abyste ho snědli. Klikněte "
+"pravým tlačítkem myši na zvíře, abyste ho nakrmili."
 
 msgid "Beetroot Soup"
-msgstr ""
+msgstr "Řepová polévka"
 
 msgid "Beetroot soup is a food item."
-msgstr ""
+msgstr "Řepová polévka je potravina."
 
 msgid "Grows on farmland"
-msgstr ""
+msgstr "Roste na zemědělské půdě"
 
 msgid "Premature Carrot Plant"
 msgstr ""
@@ -152,7 +162,7 @@ msgid "Melon Slice"
 msgstr ""
 
 msgid "This is a food item which can be eaten."
-msgstr ""
+msgstr "Toto je potravina, kterou lze jíst."
 
 msgid "Premature Potato Plant"
 msgstr ""
@@ -321,4 +331,3 @@ msgid "\n"
 "		They won't grow any further.\n"
 "	"
 msgstr ""
-

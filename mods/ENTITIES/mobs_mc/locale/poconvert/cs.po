@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-09-11 13:09+0000\n"
+"Last-Translator: adoksnaj <adoksnaj@noreply.codeberg.org>\n"
+"Language-Team: Czech <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.12.2\n"
 
 msgid "Axolotl"
 msgstr "Axolotl"
@@ -20,287 +21,286 @@ msgid "Bat"
 msgstr "Netopýr"
 
 msgid "Blaze"
-msgstr "Blaze"
+msgstr "Ohnivák"
 
 msgid "Chicken"
-msgstr ""
+msgstr "Kuře"
 
 msgid "Cod"
-msgstr ""
+msgstr "Treska"
 
 msgid "Cow"
-msgstr ""
+msgstr "Kráva"
 
 msgid "Mooshroom"
-msgstr ""
+msgstr "Houbová kráva"
 
 msgid "Creeper"
-msgstr ""
+msgstr "Creeper"
 
 msgid "Charged Creeper"
-msgstr ""
+msgstr "Nabitý creeper"
 
 msgid "Dolphin"
-msgstr ""
+msgstr "Delfín"
 
 msgid "Ender Dragon"
-msgstr ""
+msgstr "Ender drak"
 
 msgid "Enderman"
-msgstr ""
+msgstr "Enderman"
 
 msgid "Endermite"
-msgstr ""
+msgstr "Endermit"
 
 msgid "Ghast"
-msgstr ""
+msgstr "Strašák"
 
 msgid "Ghast Fireball"
-msgstr ""
+msgstr "ohnivá strašidelná koule"
 
 msgid "Guardian"
-msgstr ""
+msgstr "Guardián"
 
 msgid "Elder Guardian"
 msgstr ""
 
 msgid "Hoglin"
-msgstr ""
+msgstr "Hoglin"
 
 msgid "Baby Hoglin"
-msgstr ""
+msgstr "Malý hoglin"
 
 msgid "Zoglin"
-msgstr ""
+msgstr "Zoglin"
 
 msgid "Sneak to dismount"
 msgstr "Plížením sesedni"
 
 msgid "Horse"
-msgstr ""
+msgstr "Kůň"
 
 msgid "Skeleton Horse"
-msgstr ""
+msgstr "Kůň kostlivec"
 
 msgid "Zombie Horse"
-msgstr ""
+msgstr "Zombie kůň"
 
 msgid "Donkey"
-msgstr ""
+msgstr "Osel"
 
 msgid "Mule"
-msgstr ""
+msgstr "Mula"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Železný golem"
 
 msgid "Llama"
-msgstr ""
+msgstr "Lama"
 
 msgid "Ocelot"
-msgstr ""
+msgstr "Ocelot"
 
 msgid "Cat"
-msgstr ""
+msgstr "Kočka"
 
 msgid "Parrot"
-msgstr ""
+msgstr "Papoušek"
 
 msgid "Pig"
-msgstr ""
+msgstr "Prase"
 
 msgid "Piglin"
-msgstr ""
+msgstr "Piglin"
 
 msgid "Piglin Brute"
-msgstr ""
+msgstr "Brutální piglin"
 
 msgid "Zombie Piglin"
-msgstr ""
+msgstr "Zombie piglin"
 
 msgid "Zombified Piglin"
-msgstr ""
+msgstr "Zombifikovaný piglin"
 
 msgid "Pillager"
-msgstr ""
+msgstr "Pillager"
 
 msgid "Polar Bear"
-msgstr ""
+msgstr "Lední medvěd"
 
 msgid "Rabbit"
-msgstr ""
+msgstr "Králík"
 
 msgid "Killer Bunny"
-msgstr ""
+msgstr "Zabijácký králík"
 
 msgid "Salmon"
-msgstr ""
+msgstr "Losos"
 
 msgid "Sheep"
-msgstr ""
+msgstr "Ovce"
 
 msgid "Shulker"
-msgstr ""
+msgstr "Shulker"
 
 msgid "Silverfish"
-msgstr ""
+msgstr "Rybenka"
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Kostlivec"
 
 msgid "Stray"
-msgstr ""
+msgstr "Tulák"
 
 msgid "Wither Skeleton"
-msgstr ""
+msgstr "Wither Kostlivec"
 
 msgid "Slime - big"
-msgstr ""
+msgstr "Velký slimák"
 
 msgid "Slime - small"
-msgstr ""
+msgstr "Malý slimák"
 
 msgid "Slime - tiny"
-msgstr ""
+msgstr "Maličký slimák"
 
 msgid "Magma Cube - big"
-msgstr ""
+msgstr "Velká magma kostka"
 
 msgid "Magma Cube - small"
-msgstr ""
+msgstr "Malá magma kostka"
 
 msgid "Magma Cube - tiny"
-msgstr ""
+msgstr "Maličká magma kostka"
 
 msgid "Magma Cube"
-msgstr ""
+msgstr "Magma kostka"
 
 msgid "Slime"
-msgstr ""
+msgstr "Slimák"
 
 msgid "Snow Golem"
-msgstr ""
+msgstr "Sněžný golem"
 
 msgid "Spider"
-msgstr ""
+msgstr "Pavouk"
 
 msgid "Cave Spider"
-msgstr ""
+msgstr "Jeskynní pavouk"
 
 msgid "Squid"
-msgstr ""
+msgstr "Oliheň"
 
 msgid "Glow Squid"
-msgstr ""
+msgstr "Zářivá oliheň"
 
 msgid "Strider"
-msgstr ""
+msgstr "Chodec"
 
 msgid "Baby Strider"
-msgstr ""
+msgstr "Malý chodec"
 
 msgid "Tropical Fish"
-msgstr ""
+msgstr "Tropická ryba"
 
 msgid "Vex"
-msgstr ""
+msgstr "Vex"
 
 msgid "Villager"
-msgstr ""
+msgstr "Vesničan"
 
 msgid "Armorer"
-msgstr ""
+msgstr "Zbrojíř"
 
 msgid "Butcher"
-msgstr ""
+msgstr "Řezník"
 
 msgid "Cartographer"
-msgstr ""
+msgstr "Kartograf"
 
 msgid "Cleric"
-msgstr ""
+msgstr "Kněz"
 
 msgid "Farmer"
-msgstr ""
+msgstr "Farmář"
 
 msgid "Fisherman"
-msgstr ""
+msgstr "Rybář"
 
 msgid "Fletcher"
-msgstr ""
+msgstr "Šípař"
 
 msgid "Leatherworker"
-msgstr ""
+msgstr "Koželuh"
 
 msgid "Librarian"
-msgstr ""
+msgstr "Knihovník"
 
 msgid "Mason"
-msgstr ""
+msgstr "Zedník"
 
 msgid "Shepherd"
-msgstr ""
+msgstr "Pastýř"
 
 msgid "Toolsmith"
-msgstr ""
+msgstr "Nástrojář"
 
 msgid "Weaponsmith"
-msgstr ""
+msgstr "Zbrojař"
 
 msgid "Nitwit"
-msgstr ""
+msgstr "Pobuda"
 
 msgid "Novice"
-msgstr ""
+msgstr "Začátečník"
 
 msgid "Apprentice"
-msgstr ""
+msgstr "Učeň"
 
 msgid "Journeyman"
-msgstr ""
+msgstr "Tovaryš"
 
 msgid "Expert"
-msgstr ""
+msgstr "Profík"
 
 msgid "Master"
-msgstr ""
+msgstr "Mistr"
 
 msgid "Evoker"
-msgstr ""
+msgstr "Evoker"
 
 msgid "Illusioner"
-msgstr ""
+msgstr "Iluzionista"
 
 msgid "Vindicator"
-msgstr ""
+msgstr "Vindicator"
 
 msgid "Zombie Villager"
-msgstr ""
+msgstr "Zombie vesničan"
 
 msgid "Wandering Trader"
-msgstr ""
+msgstr "Potulný obchodník"
 
 msgid "Trader Llama"
-msgstr ""
+msgstr "Obchodnická lama"
 
 msgid "Witch"
-msgstr ""
+msgstr "Čarodějnice"
 
 msgid "Wither"
-msgstr ""
+msgstr "Wither"
 
 msgid "Wolf"
-msgstr ""
+msgstr "Vlk"
 
 msgid "Zombie"
-msgstr ""
+msgstr "Zombie"
 
 msgid "Baby Zombie"
-msgstr ""
+msgstr "Malý zombie"
 
 msgid "Husk"
-msgstr ""
+msgstr "Husk"
 
 msgid "Baby Husk"
-msgstr ""
-
+msgstr "Malý husk"
