@@ -77,33 +77,43 @@ core.register_node("mcl_armor_stand:armor_stand", {
 	end,
 	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 		local protname = clicker:get_player_name()
-		local pointed_height = pointed_thing.above.y - pos.y
-		local pointed_fpos = core.pointed_thing_to_face_pos(clicker, pointed_thing).y - pointed_thing.above.y
-		local pointed_piece_index
-
 		if core.is_protected(pos, protname) then
 			core.record_protection_violation(pos, protname)
 			return itemstack
 		end
 
-		if pointed_height == 0 then
-			if pointed_fpos < 0.1875 then
+		local px, py, pz, ax, az = pos.x, pos.y, pos.z, pointed_thing.above.x, pointed_thing.above.z
+		-- try to take armor from armor stand if pointing at side face
+		if clicker:get_wielded_item():get_name() == "" and (px ~= ax or pz ~= az) then
+			-- try to determine pointed armor element by preparing
+			-- pointed_thing for core.pointed_thing_to_face_pos:
+			--
+			-- 1. force y to node pos.y (works around unexpected
+			--    pointed_thing.above.y values when pointing at the
+			--    part of the armor stand extending above the node
+			--    position)
+			--
+			-- 2. move intersection plane closer to the plane where
+			--    the armor is visually located to make the computed
+			--    position less dependent on distance of player to
+			--    armor stand
+			local above = vector.new(ax, py, az)
+			pointed_thing = { type = "node", under = (pos - above) * 0.75 + pos, above = above}
+			local pointed_fpos = core.pointed_thing_to_face_pos(clicker, pointed_thing).y - py
+			local pointed_piece_index
+			if pointed_fpos < 0.0 then
 				pointed_piece_index = mcl_armor.elements.feet.index
-			else
+			elseif pointed_fpos >= 0.0 and pointed_fpos < 0.45 then
 				pointed_piece_index = mcl_armor.elements.legs.index
-			end
-		elseif pointed_height == 1 then
-			if pointed_fpos <= 0.015 then
+			elseif pointed_fpos >= 0.45 and pointed_fpos < 0.95 then
 				pointed_piece_index = mcl_armor.elements.torso.index
-			else
+			elseif pointed_fpos >= 0.95 then
 				pointed_piece_index = mcl_armor.elements.head.index
 			end
-		else
-			return
-		end
 
-		if clicker:get_wielded_item():get_name() == "" then
-			return mcl_armor.unequip(get_stand_entity(pos, node).object, pointed_piece_index)
+			if pointed_piece_index then
+				return mcl_armor.unequip(get_stand_entity(pos, node).object, pointed_piece_index)
+			end
 		end
 
 		return mcl_armor.equip(itemstack, get_stand_entity(pos, node).object, true)
