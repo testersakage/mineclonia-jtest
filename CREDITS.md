@@ -14,18 +14,12 @@
 * Brama Udi
 * ellesheepy
 * Jürgen Rühle
-* kno10
 * Po Lu
-* Lars Müller
-* the-real-herowl
-* nooneatall
-* nixnoxus
-* Ælla Chiana Moskopp
+* JoseDouglas26
 * Raylight
 * Miguel_PL
-* Mikita Wiśniewski
 * WillConker
-* DragonWrangler1
+* B. Stack
 
 ## Previous Contributors
 * Lizzy Fleckenstein
@@ -66,6 +60,14 @@
 * Rootyjr
 * codiac
 * goblin_mode
+* kno10
+* Lars Müller
+* the-real-herowl
+* DragonWrangler1
+* Mikita Wiśniewski
+* nooneatall
+* nixnoxus
+* Ælla Chiana Moskopp
 
 ## Original Mod Authors
 * Wuzzy
