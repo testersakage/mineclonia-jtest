@@ -1,13 +1,12 @@
 # textdomain: mcl_doc_basics
 Advanced usage=Pokročilé použití
 Advanced information which may be nice to know, but is not crucial to gameplay=Pokročilé informace, které mohou být dobré vědět, ale nejsou pro hratelnost klíčové
-# MCL2 extensions
 Creative Mode=Kreativní mód
-Enabling Creative Mode in MineClonia applies the following changes:=
-• You keep the things you've placed=
-• Creative inventory is available to obtain most items easily=
-• Hand breaks all default blocks instantly=
-• Greatly increased hand pointing range=
+Enabling Creative Mode in MineClonia applies the following changes:=Povolení kreativního režimu v MineClonia má následující vlivy:
+• You keep the things you've placed=• Věci, které jste umístili, si ponecháte
+• Creative inventory is available to obtain most items easily=• Kreativní inventář umožňuje snadné získání většiny předmětů
+• Hand breaks all default blocks instantly=• Ruka zničí okamžitě všechny bloky
+• Greatly increased hand pointing range=• Výrazně zvětšený dosah rukou
 • Mined blocks don't drop items=
 • Items don't get used up=
 • Tools don't wear off=

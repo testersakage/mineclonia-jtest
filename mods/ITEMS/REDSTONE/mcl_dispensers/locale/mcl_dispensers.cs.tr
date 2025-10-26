@@ -2,11 +2,11 @@
 Dispenser=Vystřelovač
 Inventory=Inventář
 9 inventory slots=9 inventářových pozic
-Launches item when powered by redstone power=
-A dispenser is a block which acts as a redstone component which, when powered with redstone power, dispenses an item. It has a container with 9 inventory slots.=
-Place the dispenser in one of 6 possible directions. The “hole” is where items will fly out of the dispenser. Use the dispenser to access its inventory. Insert the items you wish to dispense. Supply the dispenser with redstone energy once to dispense a random item.=
-The dispenser will do different things, depending on the dispensed item:=
-• Arrows: Are launched=
+Launches item when powered by redstone power=Spustí předmět, když je napájen redstone signálem
+A dispenser is a block which acts as a redstone component which, when powered with redstone power, dispenses an item. It has a container with 9 inventory slots.=Dávkovač je blok, je redstone komponenta, která, když je přiveden redstone signál, vydhodí předmět. Má inventář s 9 sloty.
+Place the dispenser in one of 6 possible directions. The “hole” is where items will fly out of the dispenser. Use the dispenser to access its inventory. Insert the items you wish to dispense. Supply the dispenser with redstone energy once to dispense a random item.=Umístěte dávkovač do jedné ze 6 možných poloh. „Otvor“ je místo, kde budou předměty z dávkovače vypadávat. Pomocí akce použití na dávkovač získáte přístup k jeho inventáři. Vložte předměty, které chcete vydávat. Pulsem redstone do dávkovače vydáte náhodný předmět.
+The dispenser will do different things, depending on the dispensed item:=Dávkovač provádí různé úkony v závislosti na dávkovaném předmětu:
+• Arrows: Are launched=• Šípy: Jsou vystřeleny
 • Eggs and snowballs: Are thrown=
 • Fire charges: Are fired in a straight line=
 • Armor: Will be equipped to players and armor stands=

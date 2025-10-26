@@ -1,12 +1,12 @@
 # textdomain: mcl_enchanting
 Bane of Arthropods=Hmyzácká zhouba
 Increases damage and applies Slowness IV to arthropod mobs (spiders, cave spiders, silverfish and endermites).=Zvyšuje poškození a aplikuje zpomalení IV na hmyzáky (pavouky, jeskynní pavouky, stříbrné rybky a endermity).
-Channeling=
-Channels a bolt of lightning toward a target. Works only during thunderstorms and if target is unobstructed with opaque blocks.=
-Curse of Vanishing=
-Item destroyed on death.=
-Depth Strider=
-Increases underwater movement speed.=
+Channeling=Usměrnění
+Channels a bolt of lightning toward a target. Works only during thunderstorms and if target is unobstructed with opaque blocks.=Nasměruje blesk na cíl. Funguje pouze během bouřky a pokud cíl není zakrytý neprůhlednými bloky.
+Curse of Vanishing=Prokletí mizení
+Item destroyed on death.=Předměn se při smrti zničí.
+Depth Strider=Hloubkový strážce
+Increases underwater movement speed.=Zvyšuje rychlost pohybu pod vodou.
 Efficiency=
 Increases mining speed.=
 Fire Aspect=

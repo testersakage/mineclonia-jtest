@@ -1,12 +1,10 @@
 # textdomain: findbiome
-# mod title
-# mod strings
-Wait until all mods have loaded!=
-Find and teleport to biome=
-<biome>=
-No player.=
-Biome found at @1.=
-No biome found!=
-Biome does not exist!=
-List all biomes=
-No biomes.=
+Wait until all mods have loaded!=Espere até que os mods carreguem!
+Find and teleport to biome=Encontra e teletransporta para bioma
+<biome>=<bioma>
+No player.=Nenhum jogador.
+Biome found at @1.=Bioma encontrado em @1.
+No biome found!=Nenhum bioma encontrado!
+Biome does not exist!=Bioma não existe!
+List all biomes=Listar os biomas
+No biomes.=Nenhum bioma.

@@ -9,7 +9,6 @@ Hand=Mano
 Air=Aria
 Yes=Si
 No=No
-# List separator (e.g. “one, two, three”)
 , =, 
 Unknown item (@1)=Oggetto sconosciuto (@1)
 unknown=sconosciuto
@@ -20,14 +19,14 @@ unknown=sconosciuto
 • @1, rating @2: @3 s=
 • @1, level @2: @3 uses=
 • @1, level @2: Unlimited=
-This tool is capable of mining.=
+This tool is capable of mining.=Questo attrezzo è in grado di scavare la pietra.
 Maximum toughness levels:=
 Mining times:=
 Mining durability:=
-This is a melee weapon which deals damage by punching.=
+This is a melee weapon which deals damage by punching.=Questa è un'arma bianca che infigge danno quando sferrata.
 Maximum damage per hit:=Massimo danno per colpo:
 • @1: @2 HP=
-Full punch interval: @1 s=
+Full punch interval: @1 s=Intervallo massimo sferrata: @1 s
 This block can be mined by any mining tool in half a second.=
 This block can be mined by any mining tool immediately.=
 This block can not be mined by ordinary mining tools.=
@@ -38,7 +37,6 @@ This block can be mined by mining tools which match any of the following mining 
 Mining ratings:=
 Toughness level: @1=
 Range: @1=
-# Range: <Hand> (<Range>)
 Range: @1 (@2)=
 This tool can serve as a smelting fuel with a burning time of @1.=
 This block can serve as a smelting fuel with a burning time of @1.=
@@ -112,15 +110,10 @@ This block will drop the following when mined: @1.=
 This block will drop the following items when mined: @1.=
 This block will randomly drop one of the following when mined: @1.=
 This block will randomly drop up to @1 drops of the following possible drops when mined: @2.=
-# Final list separator (e.g. “One, two and three”)
  and =
-# Item count times item name
-@1×@2=
-# Itemname (<0.5%)
+@1×@2=@1×@2
 @1 (<0.5%)=
-# Itemname (ca. 25%)
 @1 (ca. @2%)=
-# Itemname (25%)
 @1 (@2%)=
 Tools and weapons=
 Item reference of all wieldable tools and weapons=

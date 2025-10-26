@@ -2,11 +2,11 @@
 Auto (use scroll bar if client >@= 5.11)=Auto (použijte posuvník, pokud je klient >@= 5.11)
 Off  (use paging buttons, faster)=Vypnuto (rychlejší využitím stránkovacích tlačítek)
 On   (more MC like, slower)=Zapnuto   (více podobné MC, pomalejší)
-Enable scrollable creative inventory=
-Building Blocks=
-Decoration Blocks=
-Redstone=
-Transportation=
+Enable scrollable creative inventory=Povolit rolovací kreativní inventář
+Building Blocks=Stavební bloky
+Decoration Blocks=Dekorativní bloky
+Redstone=redstone
+Transportation=Přeprava
 Miscellaneous=
 Search Items=
 Foodstuffs=

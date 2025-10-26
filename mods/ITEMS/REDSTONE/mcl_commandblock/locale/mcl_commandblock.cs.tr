@@ -2,11 +2,11 @@
 Command blocks are not enabled on this server=Příkazové bloky nejsou na tomto serveru povoleny
 Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands.=Chyba: Příkaz „@1“ neexistuje; váš příkazový blok nebyl změněn. Seznam dostupných příkazů zobrazíte pomocí příkazu „help“ v chatu.
 Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands. Hint: Try to remove the leading slash.=Chyba: Příkaz „@1“ neexistuje, příkazový blok nebyl změněn. Seznam dostupných příkazů získáte pomocí příkazu „help“. Tip: Zkuste odstranit počáteční lomítko.
-Error: You have insufficient privileges to use the command “@1” (missing privilege: @2)! The command block has not been changed.=
-Error: No commander! Block must be replaced.=
-Commander: @1=
-Submit=
-No commands.=
+Error: You have insufficient privileges to use the command “@1” (missing privilege: @2)! The command block has not been changed.=Chyba: Nemáte dostatečná oprávnění k použití příkazu „@1“ (chybějící oprávnění: @2)! Příkazový blok nebyl změněn.
+Error: No commander! Block must be replaced.=Chyba: Žádný velitel! Blok musí být vyměněn.
+Commander: @1=Commander:@1
+Submit=Odeslat
+No commands.=Žádné příkazy.
 Commands:=
 Help=Nápověda
 Command Block=

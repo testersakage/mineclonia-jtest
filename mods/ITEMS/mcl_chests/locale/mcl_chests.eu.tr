@@ -7,8 +7,8 @@ Chests are containers which provide 27 inventory slots. Chests can be turned int
 27 inventory slots=27 inbentario-arteka
 Can be combined to a large chest=Kutxa handi bihurtzeko konbinatu daiteke
 Trapped Chest=Tranpa-kutxa
-A trapped chest is a container which provides 27 inventory slots. When it is opened, it sends a redstone signal to its adjacent blocks as long it stays open. Trapped chests can be turned into large trapped chests with double the capacity by placing two trapped chests next to each other.=Zopa tranpa 27 inbentario-arteka ematen dituen edukiontzia da. Irekitzen denean, harrigorri seinalea bidaltzen du ondoko blokeetara, irekita dagoen bitartean. Kutxa tranpak kutxa tranpa handi bihur daitezke edukiera bikoitzarekin, bi kutxa bata bestearen ondoan harrapatuta utziz.
-Emits a redstone signal when opened=Harrigorri seinalea igortzen du irekitzean
+A trapped chest is a container which provides 27 inventory slots. When it is opened, it sends a redstone signal to its adjacent blocks as long it stays open. Trapped chests can be turned into large trapped chests with double the capacity by placing two trapped chests next to each other.=Zopa tranpa 27 inbentario-arteka ematen dituen edukiontzia da. Irekitzen denean, redstone seinalea bidaltzen du ondoko blokeetara, irekita dagoen bitartean. Kutxa tranpak kutxa tranpa handi bihur daitezke edukiera bikoitzarekin, bi kutxa bata bestearen ondoan harrapatuta utziz.
+Emits a redstone signal when opened=Redstone seinalea igortzen du irekitzean
 Ender Chest=Ekartze-kutxa
 27 interdimensional inventory slots=27 inbentario-arteka interdimentsional
 Put items inside, retrieve them from any ender chest=Jarri itemak barruan, itzuli edozein kutxatilatatik

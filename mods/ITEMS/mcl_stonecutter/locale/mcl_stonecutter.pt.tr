@@ -1,7 +1,7 @@
 # textdomain: mcl_stonecutter
 Stonecutter=
-Fill Craft Grid=
-Inventory=
+Fill Craft Grid=Encher Grelha de Craft
+Inventory=Inventário
 Stone Cutter=
 Used to cut stone like materials.=
 Stonecutters are used to create stairs and slabs from stone like materials. It is also the jobsite for the Stone Mason Villager.=

@@ -9,7 +9,6 @@ Hand=Ręka
 Air=Powietrze
 Yes=Tak
 No=Nie
-# List separator (e.g. “one, two, three”)
 , =, 
 Unknown item (@1)=Nieznany przedmiot (@1)
 unknown=nieznane
@@ -35,10 +34,9 @@ This block can be destroyed by any mining tool in half a second.=Ten blok może 
 This block can be destroyed by any mining tool immediately.=Ten blok może być zniszczony przez dowolne narzędzie do kopania natychmiastowo.
 This block can not be destroyed by ordinary mining tools.=Ten blok nie może być zniszczony przez typowe narzędzia do kopania.
 This block can be mined by mining tools which match any of the following mining ratings and its toughness level.=Ten blok może zostać wykopany przez narzędzia do kopania, które pasują do którychkolwiek klasyfikacji kopania i poziomu twardości.
-Mining ratings:=Klasyfikacja kopania
+Mining ratings:=Klasyfikacja kopania:
 Toughness level: @1=Poziom twardości: @1
 Range: @1=Zasięg: @1
-# Range: <Hand> (<Range>)
 Range: @1 (@2)=Zasięg @1 (@2)
 This tool can serve as a smelting fuel with a burning time of @1.=To narzędzie może być wykorzystany jako paliwo do przetapiania z czasem palenia @1.
 This block can serve as a smelting fuel with a burning time of @1.=Ten blok może być wykorzystany jako paliwo do przetapiania z czasem palenia @1.
@@ -112,18 +110,13 @@ This block will drop the following when mined: @1.=Z tego bloku wypadną następ
 This block will drop the following items when mined: @1.=Z tego bloku wypadną następujące przedmioty po wykopaniu: @1.
 This block will randomly drop one of the following when mined: @1.=Z tego bloku wypadnie losowo jedna z następujących rzeczy po wykopaniu: @1.
 This block will randomly drop up to @1 drops of the following possible drops when mined: @2.=Z tego bloku losowo wypadnie maksymalnie @1 rzeczy spośród tego zbioru: @2.
-# Final list separator (e.g. “One, two and three”)
  and = oraz 
-# Item count times item name
 @1×@2=@1×@2
-# Itemname (<0.5%)
 @1 (<0.5%)=@1 (<0.5%)
-# Itemname (ca. 25%)
 @1 (ca. @2%)=@1 (ca. @2%)
-# Itemname (25%)
 @1 (@2%)=@1 (@2%)
 Tools and weapons=Narzędzia i bronie
-Item reference of all wieldable tools and weapons=Informacje na temat wszystkich narzędzi i broni możliwych do trzymania.
+Item reference of all wieldable tools and weapons=Informacje na temat wszystkich narzędzi i broni możliwych do trzymania
 Durability: @1 uses=Wytrzymałość: @1 użyć
 Durability: @1=Wytrzymałość: @1
 Miscellaneous items=Różne rzeczy

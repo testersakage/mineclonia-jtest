@@ -1,11 +1,11 @@
 # textdomain: mcl_lush_caves
-Small Dripleaf=
-Big Dripleaf=
+Small Dripleaf=malá kapradina
+Big Dripleaf=velká kapradina
 Azalea Plant=Azalka
 Flowering Azalea Plant=Kvetoucí azalka
 Moss=mech
-Moss is a green block found in lush caves=
-Moss Carpet=
+Moss is a green block found in lush caves=Mech je zelený blok, který se vyskytuje v bujných jeskyních
+Moss Carpet=Mechový koberec
 A moss carpet is a flat variant of the moss block.=
 Hanging roots=
 Hanging roots are a decorative block found hanging from rooted dirt in lush caves.=
@@ -16,7 +16,7 @@ Lit cave vines are light emitting decorative blocks growing from the ceiling of 
 Rooted dirt=
 Rooted dirt is type of dirt found in lush caves.=
 Glow berry=
-This is a food item which can be eaten.=
+This is a food item which can be eaten.=Toto je potravina, kterou lze jíst.
 Azalea Leaves=
 Leaves of an Azalea tree=
 Flowering Azalea Leaves=

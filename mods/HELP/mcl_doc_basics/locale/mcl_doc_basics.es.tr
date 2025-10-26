@@ -1,7 +1,6 @@
 # textdomain: mcl_doc_basics
 Advanced usage=Uso avanzado
 Advanced information which may be nice to know, but is not crucial to gameplay=Información avanzada que puede ser útil conocer, pero no es crucial para la jugabilidad
-# MCL2 extensions
 Creative Mode=Modo creativo
 Enabling Creative Mode in MineClonia applies the following changes:=Al habilitar el modo creativo en MineClonia se aplican los siguientes cambios:
 • You keep the things you've placed=• Conservas las cosas que colocaste
@@ -454,7 +453,7 @@ Online multiplayer:=Multijugador en línea:
 • Protection: Mechanism to own areas of the world, which only allows the owners to modify blocks inside=• Protección: Mecanismo para poseer áreas del mundo, que solo permite a los propietarios modificar bloques dentro
 Technical terms:=Términos técnicos:
 • Luanti: This game engine=• Luanti: Este motor de juego
-• Minetest Game: A game for Luanti by the Luanti developers=
+• Minetest Game: A game for Luanti by the Luanti developers=• Minetest Game: Un juego para Luanti creado por los desarrolladores de Luanti
 • Game: A complete playing experience to be used in Luanti; such as a game or sandbox or similar=• Juego: Una experiencia de juego completa para ser utilizada en Luanti; como un juego o sandbox o similar
 • Mod: A single subsystem which adds or modifies functionality; is the basic building block of games and can be used to further enhance or modify them=• Mod: Un subsistema único que agrega o modifica funcionalidad; es el componente básico de los juegos y se puede utilizar para mejorarlos o modificarlos aún más
 • Privilege: Allows a player to do something=• Privilegio: permite a un jugador hacer algo

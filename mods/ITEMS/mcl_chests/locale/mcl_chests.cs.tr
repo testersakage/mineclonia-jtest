@@ -2,11 +2,11 @@
 Chest=Truhla
 Inventory=Inventář
 Large Chest=velká truhla
-To access its inventory, rightclick it. When broken, the items will drop out.=
-Chests are containers which provide 27 inventory slots. Chests can be turned into large chests with double the capacity by placing two chests next to each other.=
+To access its inventory, rightclick it. When broken, the items will drop out.=Chcete-li zobrazit její inventář, klikněte na ní pravým tlačítkem myši. Po rozbití z ní vypadnou předměty.
+Chests are containers which provide 27 inventory slots. Chests can be turned into large chests with double the capacity by placing two chests next to each other.=Truhly poskytují 27 inventárních slotů. Lze je přeměnit na dvojtruhly s dvojnásobnou kapacitou tak, že umístíte dvě truhly vedle sebe.
 27 inventory slots=27 invenrářových míst
-Can be combined to a large chest=
-Trapped Chest=
+Can be combined to a large chest=Lze kombinovat do velké truhly
+Trapped Chest=Nebezpečná truhla
 A trapped chest is a container which provides 27 inventory slots. When it is opened, it sends a redstone signal to its adjacent blocks as long it stays open. Trapped chests can be turned into large trapped chests with double the capacity by placing two trapped chests next to each other.=
 Emits a redstone signal when opened=
 Ender Chest=

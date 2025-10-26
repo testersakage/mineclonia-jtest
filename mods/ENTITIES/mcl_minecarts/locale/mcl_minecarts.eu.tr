@@ -27,12 +27,12 @@ Rails can be used to build transport tracks for minecarts. Normal rails slightly
 Powered Rail=Propultsio-erraila
 Speed up when powered, slow down when not powered=Aktibatuta dagoenean azeleratzen du, aktibatuta ez dagoenean abiadura gutxitzen du
 Rails can be used to build transport tracks for minecarts. Powered rails are able to accelerate and brake minecarts.=Errailak bagonetentzako garraiobideak eraikitzeko erabil daitezke. Propultsio-errailak bagonetak azeleratu eta balazta ditzakete.
-Without redstone power, the rail will brake minecarts. To make this rail accelerate minecarts, power it with redstone power.=Harrigorri-indarrik gabe, errailak bagonetak balaztatuko ditu. Errail honek bagonetak azeleratu ditzan, indartu harrigorri-indarrarekin.
+Without redstone power, the rail will brake minecarts. To make this rail accelerate minecarts, power it with redstone power.=Redstone indarrik gabe, errailak bagonetak balaztatuko ditu. Errail honek bagonetak azeleratu ditzan, indartu redstone indarrarekin.
 Activator Rail=Errail-aktibatzailea
 Activates minecarts when powered=Indarra duenean bagonetak aktibatzen ditu
 Rails can be used to build transport tracks for minecarts. Activator rails are used to activate special minecarts.=Errailak bagonetentzako garraiobideak eraikitzeko erabil daitezke. Errail-aktibatzaileak bagoneta bereziak aktibatzeko erabiltzen dira.
-To make this rail activate minecarts, power it with redstone power and send a minecart over this piece of rail.=Errail honek bagonetak aktiba ditzan, piztu harrigorri-indarraz eta bidali bagoneta bat errail zati honetara.
+To make this rail activate minecarts, power it with redstone power and send a minecart over this piece of rail.=Errail honek bagonetak aktiba ditzan, piztu redstone indarraz eta bidali bagoneta bat errail zati honetara.
 Detector Rail=Errail detektagailua
-Emits redstone power when a minecart is detected=Harrigorri-indar seinalea igortzen du bagoneta bat detektatzen denean
-Rails can be used to build transport tracks for minecarts. A detector rail is able to detect a minecart above it and powers redstone mechanisms.=Errailak bagonetentzako garraiobideak eraikitzeko erabil daitezke. Errail-detektagailu batek bagoneta bat detekta dezake haren gainean, eta harrigorri mekanismoak elikatzen ditu.
-To detect a minecart and provide redstone power, connect it to redstone trails or redstone mechanisms and send any minecart over the rail.=Bagoneta bat detektatzeko eta harrigorri-indarra emateko, konekta ezazu harrigorri errailetara edo harrigorri mekanismoetan eta bidal ezazu edozein bagoneta errailera.
+Emits redstone power when a minecart is detected=Redstone indar seinalea igortzen du bagoneta bat detektatzen denean
+Rails can be used to build transport tracks for minecarts. A detector rail is able to detect a minecart above it and powers redstone mechanisms.=Errailak bagonetentzako garraiobideak eraikitzeko erabil daitezke. Errail-detektagailu batek bagoneta bat detekta dezake haren gainean, eta redstone mekanismoak elikatzen ditu.
+To detect a minecart and provide redstone power, connect it to redstone trails or redstone mechanisms and send any minecart over the rail.=Bagoneta bat detektatzeko eta redstone indarra emateko, konekta ezazu redstone errailetara edo redstone mekanismoetan eta bidal ezazu edozein bagoneta errailera.
