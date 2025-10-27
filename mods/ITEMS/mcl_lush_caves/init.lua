@@ -64,14 +64,8 @@ function mcl_lush_caves.makelake(pos, _, pr)
 		   return vector_distance_xz(pos, a) < vector_distance_xz(pos, b)
 	end)
 	if not nn[1] then return end
-	--local dripleaves = {}
 	for i=1,pr:next(1,#nn) do
 		core.swap_node(nn[i],{name="mcl_core:water_source"})
-		--[[
-		if pr:next(1,20) == 1 then
-			table.insert(dripleaves,nn[i])
-		end
-		--]]
 	end
 	local nnn = core.find_nodes_in_area(p1,p2,{"mcl_core:water_source"})
 	for _, v in pairs(nnn) do
@@ -86,17 +80,6 @@ function mcl_lush_caves.makelake(pos, _, pr)
 			end
 		end
 	end
-	--[[
-	for _,d in pairs(dripleaves) do
-		if core.get_item_group(core.get_node(d).name,"water") > 0 then
-			core.set_node(vector.offset(d,0,-1,0),{name="mcl_lush_caves:dripleaf_big_waterroot"})
-			core.registered_nodes["mcl_lush_caves:dripleaf_big_stem"].on_construct(d)
-			for ii = 1, pr:next(1,4) do
-				mcl_lush_caves.dripleaf_grow(d,{name = "mcl_lush_caves:dripleaf_big_stem"})
-			end
-		end
-	end
-	--]]
 	return true
 end
 
@@ -246,21 +229,6 @@ mcl_flowerpots.register_potted_flower("mcl_lush_caves:azalea_flowering", {
 	desc = S("Flowering Azalea Plant"),
 	image = "mcl_lush_caves_azalea_flowering_side.png",
 })
-
---[[
-core.set_gen_notify({cave_begin = true})
-core.set_gen_notify({large_cave_begin = true})
-
-mcl_mapgen_core.register_generator("lush_caves",nil, function(minp, maxp, blockseed)
-	local gennotify = core.get_mapgen_object("gennotify")
-	for _, pos in pairs(gennotify["large_cave_begin"] or {}) do
-		--core.log("large cave at "..core.pos_to_string(pos))
-	end
-	for _, pos in pairs(gennotify["cave_begin"] or {}) do
-		core.log("cave at "..core.pos_to_string(pos))
-	end
-end, 99999, true)
-]]
 
 dofile (modpath .. "/lg_register.lua")
 mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")
