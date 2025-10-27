@@ -22,9 +22,6 @@ msgstr "Naplnit craftovací mřížku"
 msgid "Inventory"
 msgstr "Inventář"
 
-msgid "Stone Cutter"
-msgstr "Kamenická pila"
-
 msgid "Used to cut stone like materials."
 msgstr "Používá se k řezání minerálů."
 

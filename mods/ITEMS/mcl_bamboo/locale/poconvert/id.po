@@ -40,6 +40,9 @@ msgstr "Pagar Bambu"
 msgid "Bamboo Fence Gate"
 msgstr "Gerbang Pagar Bambu"
 
+msgid "Bamboo Hanging Sign"
+msgstr ""
+
 msgid "Bamboo Planks"
 msgstr "Papan Bambu"
 

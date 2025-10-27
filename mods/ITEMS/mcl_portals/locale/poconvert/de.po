@@ -25,6 +25,12 @@ msgstr "Ein Endportal teleportiert Kreaturen und Objekte zur mysteriösen Ende-D
 msgid "Hop into the portal to teleport. Entering an End portal in the Overworld teleports you to a fixed position in the End dimension and creates a 5×5 obsidian platform at your destination. End portals in the End will lead back to your spawn point in the Overworld."
 msgstr "Springen Sie ins Portal, um sich zu teleportieren. Von der Oberwelt aus werden Sie zu einer festen Position im Ende hin teleportiert. Eine 5×5-Obsidianplattform wird am Zielort erzeugt. Im Ende werden Sie zurück zu Ihrem Startpunkt in der Oberwelt teleportiert."
 
+msgid "Leaving the End"
+msgstr ""
+
+msgid "Entering the End"
+msgstr ""
+
 msgid "End Portal Frame"
 msgstr "Endportalrahmen"
 
@@ -57,6 +63,12 @@ msgstr "Ein Ende-Gateway-Portal teleportiert Kreaturen und Objekte in das äuße
 
 msgid "Throw an ender pearl into the portal to teleport. Entering an Gateway portal near the Overworld teleports you to the outer End. At this destination another gateway portal will be constructed, which you can use to get back."
 msgstr "Wirf eine Ender-Perle in das Portal, um dich zu teleportieren. Wenn du ein Torportal in der Nähe der Oberwelt betrittst, wirst du zum äußeren Ende teleportiert. An diesem Zielort wird ein weiteres Torportal errichtet, das du für den Rückweg benutzen kannst."
+
+msgid "Entering the Nether"
+msgstr ""
+
+msgid "Leaving the Nether"
+msgstr ""
 
 msgid "Obsidian is also used as the frame of Nether portals."
 msgstr "Obsidian wird auch als Rahmen von Netherportalen benutzt."

@@ -40,6 +40,9 @@ msgstr ""
 msgid "Bamboo Fence Gate"
 msgstr ""
 
+msgid "Bamboo Hanging Sign"
+msgstr ""
+
 msgid "Bamboo Planks"
 msgstr ""
 

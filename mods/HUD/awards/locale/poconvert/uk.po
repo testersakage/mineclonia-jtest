@@ -181,3 +181,6 @@ msgstr "З'їжте @1 предмет"
 msgid "Eat @1 items."
 msgstr "З'їжте @1 предметів."
 
+msgid "Enter one of the titular structures"
+msgstr ""
+

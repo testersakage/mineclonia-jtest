@@ -127,6 +127,9 @@ msgstr "Plyndrer"
 msgid "Polar Bear"
 msgstr "Isbjørn"
 
+msgid "Pufferfish"
+msgstr ""
+
 msgid "Rabbit"
 msgstr "Kanin"
 

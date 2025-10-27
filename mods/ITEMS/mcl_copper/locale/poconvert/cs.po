@@ -19,6 +19,9 @@ msgstr "Měděný ingot"
 msgid "Molten Raw Copper. It is used to craft blocks."
 msgstr "Roztavená surová měď. Používá se k výrobě bloků."
 
+msgid "Copper Material"
+msgstr ""
+
 msgid "Raw Copper"
 msgstr "Surová měď"
 
@@ -41,6 +44,12 @@ msgid "Copper Bulb"
 msgstr ""
 
 msgid "Copper Bulb On"
+msgstr ""
+
+msgid "Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Copper Bulb Powered On"
 msgstr ""
 
 msgid "Copper Bulb is mostly a decorative block."
@@ -83,6 +92,12 @@ msgid "Exposed Copper Bulb"
 msgstr ""
 
 msgid "Exposed Copper Bulb On"
+msgstr ""
+
+msgid "Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Exposed Copper Bulb Powered On"
 msgstr ""
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
@@ -130,6 +145,12 @@ msgstr ""
 msgid "Oxidized Copper Bulb On"
 msgstr ""
 
+msgid "Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Oxidized Copper Bulb Powered On"
+msgstr ""
+
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr ""
 
@@ -172,6 +193,12 @@ msgstr ""
 msgid "Waxed Copper Bulb On"
 msgstr ""
 
+msgid "Waxed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr ""
 
@@ -202,6 +229,12 @@ msgstr ""
 msgid "Waxed Exposed Copper Bulb On"
 msgstr ""
 
+msgid "Waxed Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Exposed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr ""
 
@@ -227,6 +260,12 @@ msgid "Waxed Oxidized Copper Bulb"
 msgstr ""
 
 msgid "Waxed Oxidized Copper Bulb On"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Bulb Powered On"
 msgstr ""
 
 msgid "Waxed Oxidized Copper Grate"
@@ -259,6 +298,12 @@ msgstr ""
 msgid "Waxed Weathered Copper Bulb On"
 msgstr ""
 
+msgid "Waxed Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Weathered Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr ""
 
@@ -287,6 +332,12 @@ msgid "Weathered Copper Bulb"
 msgstr ""
 
 msgid "Weathered Copper Bulb On"
+msgstr ""
+
+msgid "Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Weathered Copper Bulb Powered On"
 msgstr ""
 
 msgid "Weathered Copper Bulb is mostly a decorative block."

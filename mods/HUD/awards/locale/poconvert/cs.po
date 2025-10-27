@@ -181,3 +181,6 @@ msgstr "Sněz @1 item"
 msgid "Eat @1 items."
 msgstr "Sněz @1 itemů."
 
+msgid "Enter one of the titular structures"
+msgstr ""
+

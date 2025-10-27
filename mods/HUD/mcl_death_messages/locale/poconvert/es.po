@@ -187,3 +187,9 @@ msgstr "@1 murió por un arbusto de bayas dulces"
 msgid "@1 was poked to death by a sweet berry bush whilst trying to escape @2"
 msgstr "@1 murió por un arbusto de bayas dulce mientras intentaba escapar de @2"
 
+msgid "@1 froze to death"
+msgstr ""
+
+msgid "@1 was frozen to death by @2"
+msgstr ""
+

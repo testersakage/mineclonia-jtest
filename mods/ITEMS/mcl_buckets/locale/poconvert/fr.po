@@ -31,6 +31,9 @@ msgstr "Axolotl dans un seau"
 msgid "Bucket of Cod"
 msgstr "Morue dans un seau"
 
+msgid "Bucket of Pufferfish"
+msgstr ""
+
 msgid "Bucket of Salmon"
 msgstr "Saumon dans un seau"
 
@@ -39,6 +42,9 @@ msgstr "Poisson tropical dans un seau"
 
 msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
 msgstr "Placez-la pour vider le seau et placer une morue. S'obtient en faisant un clic droit sur une morue avec un seau d'eau."
+
+msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
+msgstr ""
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr "Placez-le pour vider le seau et placer un saumon. S'obtient en faisant un clic droit sur un Saumon avec un seau d'eau."
@@ -52,6 +58,9 @@ msgstr "Placez-le pour vider le seau et placer un Axolotl. S'obtient en faisant 
 msgid "Places a water source and a Cod."
 msgstr "Place une source d'eau et une morue."
 
+msgid "Places a water source and a Pufferfish."
+msgstr ""
+
 msgid "Places a water source and a Salmon."
 msgstr "Place une source d'eau et un saumon."
 
@@ -63,6 +72,9 @@ msgstr "Place une source d'eau et un axolotl."
 
 msgid "This bucket is filled with water and a Cod."
 msgstr "Ce seau est rempli d'eau et d'une morue."
+
+msgid "This bucket is filled with water and a Pufferfish."
+msgstr ""
 
 msgid "This bucket is filled with water and a Salmon."
 msgstr "Ce seau est rempli d'eau et d'un saumon."

@@ -40,6 +40,9 @@ msgstr "Бамбуковый забор"
 msgid "Bamboo Fence Gate"
 msgstr "Бамбуковая калитка"
 
+msgid "Bamboo Hanging Sign"
+msgstr ""
+
 msgid "Bamboo Planks"
 msgstr "Бамбуковые доски"
 

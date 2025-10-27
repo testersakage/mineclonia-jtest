@@ -127,6 +127,9 @@ msgstr "Rabló"
 msgid "Polar Bear"
 msgstr "Jegesmedve"
 
+msgid "Pufferfish"
+msgstr ""
+
 msgid "Rabbit"
 msgstr "Nyúl"
 

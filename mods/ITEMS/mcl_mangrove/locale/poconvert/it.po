@@ -82,6 +82,9 @@ msgstr "Staccionata di mangrovia"
 msgid "Mangrove Fence Gate"
 msgstr "Cancelletto di mangrovia"
 
+msgid "Mangrove Hanging Sign"
+msgstr ""
+
 msgid "Mangrove Leaves"
 msgstr "Foglie di mangrovia"
 

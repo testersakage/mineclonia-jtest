@@ -127,6 +127,9 @@ msgstr "Pillager"
 msgid "Polar Bear"
 msgstr "Lední medvěd"
 
+msgid "Pufferfish"
+msgstr ""
+
 msgid "Rabbit"
 msgstr "Králík"
 

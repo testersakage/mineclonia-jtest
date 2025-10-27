@@ -31,6 +31,9 @@ msgstr "Ajolotedun kuboa"
 msgid "Bucket of Cod"
 msgstr "Bakailaoa duen kuboa"
 
+msgid "Bucket of Pufferfish"
+msgstr ""
+
 msgid "Bucket of Salmon"
 msgstr "Izokindun kuboa"
 
@@ -39,6 +42,9 @@ msgstr "Arrain tropikala duen kuboa"
 
 msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
 msgstr "Jarri ontzia husteko eta bakailao bat jartzeko. Lortu ezazu bakailao baten gainean zuzen klik eginez ur-ontzi batekin."
+
+msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
+msgstr ""
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr "Jarri ontzia husteko eta izokin bat jartzeko. Lortu ezazu ur ontzi batekin izokin baten gainean zuzen klik eginez."
@@ -52,6 +58,9 @@ msgstr "Jarri ontzia husteko eta Ajolote bat jartzeko. Lor ezazu ur ontzi bateki
 msgid "Places a water source and a Cod."
 msgstr "Jarri ur-iturri bat eta bakailao bat."
 
+msgid "Places a water source and a Pufferfish."
+msgstr ""
+
 msgid "Places a water source and a Salmon."
 msgstr "Jarri ur-iturri bat eta izokin bat."
 
@@ -63,6 +72,9 @@ msgstr "Jarri ur iturri bat eta Ajolote bat."
 
 msgid "This bucket is filled with water and a Cod."
 msgstr "Kubo hau urez eta bakailaoz beteta dago."
+
+msgid "This bucket is filled with water and a Pufferfish."
+msgstr ""
 
 msgid "This bucket is filled with water and a Salmon."
 msgstr "Ontzi hau urez eta izokinez beteta dago."

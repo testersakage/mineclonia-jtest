@@ -31,6 +31,9 @@ msgstr "Secchio con axolotl"
 msgid "Bucket of Cod"
 msgstr "Secchio con merluzzo"
 
+msgid "Bucket of Pufferfish"
+msgstr ""
+
 msgid "Bucket of Salmon"
 msgstr "Secchio con salmone"
 
@@ -39,6 +42,9 @@ msgstr "Secchio con pesce tropicale"
 
 msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
 msgstr "Posizionalo per svuotare il secchio con dentro un merluzzo. Ottienilo facendo clic col destro su un merluzzo con un secchio d'acqua."
+
+msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
+msgstr ""
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr "Posizionalo per svuotare il secchio con dentro un salmone. Ottienilo facendo clic col destro su un salmone con un secchio d'acqua."
@@ -52,6 +58,9 @@ msgstr "Posizionalo per svuotare il secchio con dentro un axolotl. Ottienilo fac
 msgid "Places a water source and a Cod."
 msgstr "Posiziona una sorgente d'acqua ed un merluzzo."
 
+msgid "Places a water source and a Pufferfish."
+msgstr ""
+
 msgid "Places a water source and a Salmon."
 msgstr "Posiziona una sorgente d'acqua ed un salmone."
 
@@ -63,6 +72,9 @@ msgstr "Posiziona una sorgente d'acqua ed un axolotl."
 
 msgid "This bucket is filled with water and a Cod."
 msgstr "Questo secchio contiene acqua ed un merluzzo."
+
+msgid "This bucket is filled with water and a Pufferfish."
+msgstr ""
 
 msgid "This bucket is filled with water and a Salmon."
 msgstr "Questo secchio contiene acqua ed un salmone."

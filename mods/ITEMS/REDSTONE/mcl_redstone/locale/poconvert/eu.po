@@ -34,3 +34,6 @@ msgstr "Irakurri laguntza sarrerak beste redstone osagaiak nola elkarrekintzan i
 msgid "Redstone Dust"
 msgstr "Redstone Hautsa"
 
+msgid "Redstone Material"
+msgstr ""
+

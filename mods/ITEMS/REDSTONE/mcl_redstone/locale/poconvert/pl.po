@@ -34,3 +34,6 @@ msgstr "Przeczytaj wpisy na temat innych czerwienitowych mechanizmów, by dowied
 msgid "Redstone Dust"
 msgstr ""
 
+msgid "Redstone Material"
+msgstr ""
+

@@ -22,9 +22,6 @@ msgstr "Bete Artisautza Sareta"
 msgid "Inventory"
 msgstr "Inbentarioa"
 
-msgid "Stone Cutter"
-msgstr "Harri Ebakitzailea"
-
 msgid "Used to cut stone like materials."
 msgstr "Harriaren antzeko materialak mozteko erabiltzen da."
 

@@ -40,6 +40,9 @@ msgstr "Staccionata di ciliegio"
 msgid "Cherry Fence Gate"
 msgstr "Cancelletto di ciliegio"
 
+msgid "Cherry Hanging Sign"
+msgstr ""
+
 msgid "Cherry Leaves"
 msgstr "Foglie di ciliegio"
 

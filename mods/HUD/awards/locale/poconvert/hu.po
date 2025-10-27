@@ -181,3 +181,6 @@ msgstr "Egyél @1 élelmiszert"
 msgid "Eat @1 items."
 msgstr "Egyél @1 élelmiszert."
 
+msgid "Enter one of the titular structures"
+msgstr ""
+

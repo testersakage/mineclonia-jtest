@@ -31,6 +31,9 @@ msgstr "Ведро с аксолотлем"
 msgid "Bucket of Cod"
 msgstr "Ведро с треской"
 
+msgid "Bucket of Pufferfish"
+msgstr ""
+
 msgid "Bucket of Salmon"
 msgstr "Ведро с лососем"
 
@@ -39,6 +42,9 @@ msgstr "Ведро с тропической рыбой"
 
 msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
 msgstr "Используйте, чтобы опустошить ведро и выпустить треску. Можно получить, использовав ведро с водой на треске."
+
+msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
+msgstr ""
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr "Используйте, чтобы опустошить ведро и выпустить лосося. Можно получить, использовав ведро с водой на лососе."
@@ -52,6 +58,9 @@ msgstr "Используйте, чтобы опустошить ведро и в
 msgid "Places a water source and a Cod."
 msgstr "Переносит источник воды и треску."
 
+msgid "Places a water source and a Pufferfish."
+msgstr ""
+
 msgid "Places a water source and a Salmon."
 msgstr "Переносит источник воды и лосося."
 
@@ -63,6 +72,9 @@ msgstr "Переносит источник воды и аксолотля."
 
 msgid "This bucket is filled with water and a Cod."
 msgstr "Это ведро наполнено водой и содержит треску."
+
+msgid "This bucket is filled with water and a Pufferfish."
+msgstr ""
 
 msgid "This bucket is filled with water and a Salmon."
 msgstr "Это ведро наполнено водой и содержит лосося."

@@ -73,6 +73,9 @@ msgstr "Багровый забор"
 msgid "Crimson Fence Gate"
 msgstr "Багровая калитка"
 
+msgid "Crimson Hanging Sign"
+msgstr ""
+
 msgid "Crimson Log"
 msgstr "Багровая древесина"
 
@@ -144,6 +147,9 @@ msgstr "Искажённый забор"
 
 msgid "Warped Fence Gate"
 msgstr "Искажённая калитка"
+
+msgid "Warped Hanging Sign"
+msgstr ""
 
 msgid "Warped Log"
 msgstr "Искажённая древесина"

@@ -58,8 +58,8 @@ msgstr "ソウルサンド"
 msgid "Reduces walking speed"
 msgstr "歩行速度 低下"
 
-msgid "Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block."
-msgstr "ソウルサンドはネザー由来のブロックです。ソウルサンド上ではゆっくりしか歩けません。ソウルサンドが氷や氷塊、スライムブロックの上にある場合、速度低下の効果が増幅されます。"
+msgid "Soul sand is a block from the Nether. It has a slowing effect when walked on."
+msgstr ""
 
 msgid "Nether Brick Block"
 msgstr "ネザーレンガブロック"
@@ -130,6 +130,9 @@ msgstr "ネザークォーツ"
 msgid "Nether quartz is a versatile crafting ingredient."
 msgstr "ネザークォーツは、汎用性の高いクラフト材料です。"
 
+msgid "Quartz Material"
+msgstr ""
+
 msgid "Netherite Scrap"
 msgstr "ネザライトスクラップ"
 
@@ -140,6 +143,9 @@ msgid "Netherite Ingot"
 msgstr "ネザライトインゴット"
 
 msgid "Netherite ingots can be used with a smithing table to upgrade items to netherite."
+msgstr ""
+
+msgid "Netherite Material"
 msgstr ""
 
 msgid "Nether Brick"

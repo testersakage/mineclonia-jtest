@@ -40,6 +40,9 @@ msgstr "竹のフェンス"
 msgid "Bamboo Fence Gate"
 msgstr "竹のフェンスゲート"
 
+msgid "Bamboo Hanging Sign"
+msgstr ""
+
 msgid "Bamboo Planks"
 msgstr "竹の板材"
 

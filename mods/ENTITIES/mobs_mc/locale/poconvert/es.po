@@ -127,6 +127,9 @@ msgstr "Saqueador"
 msgid "Polar Bear"
 msgstr "Oso polar"
 
+msgid "Pufferfish"
+msgstr ""
+
 msgid "Rabbit"
 msgstr "Conejo"
 

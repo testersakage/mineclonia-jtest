@@ -58,8 +58,8 @@ msgstr "Arena de almas"
 msgid "Reduces walking speed"
 msgstr "Reduce la velocidad al caminar"
 
-msgid "Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block."
-msgstr "La arena de almas es un bloque del Nether. Solo se puede caminar lentamente sobre la arena de almas. El efecto de desaceleración se amplifica cuando la arena de almas está encima del hielo, hielo compacto o un bloque de slime."
+msgid "Soul sand is a block from the Nether. It has a slowing effect when walked on."
+msgstr ""
 
 msgid "Nether Brick Block"
 msgstr "Ladrillos del Nether"
@@ -130,6 +130,9 @@ msgstr "Cuarzo del Nether"
 msgid "Nether quartz is a versatile crafting ingredient."
 msgstr "El cuarzo del nether es un ingrediente de fabricación versátil."
 
+msgid "Quartz Material"
+msgstr ""
+
 msgid "Netherite Scrap"
 msgstr "Fragmentos de netherita"
 
@@ -141,6 +144,9 @@ msgstr "Lingote de netherita"
 
 msgid "Netherite ingots can be used with a smithing table to upgrade items to netherite."
 msgstr "Los lingotes de netherita se pueden usar en una mesa de herrería para actualizar ítems a netherita."
+
+msgid "Netherite Material"
+msgstr ""
 
 msgid "Nether Brick"
 msgstr "Ladrillos del Nether"

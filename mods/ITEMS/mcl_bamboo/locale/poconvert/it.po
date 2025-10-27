@@ -40,6 +40,9 @@ msgstr "Staccionata di bambù"
 msgid "Bamboo Fence Gate"
 msgstr "Cancelletto di bambù"
 
+msgid "Bamboo Hanging Sign"
+msgstr ""
+
 msgid "Bamboo Planks"
 msgstr "Assi di bambù"
 

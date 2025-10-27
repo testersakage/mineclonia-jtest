@@ -55,6 +55,9 @@ msgstr "Алмаз"
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr "Алмазы — это драгоценные камни, используемые для создания брони и инструментов высшего качества."
 
+msgid "Diamond Material"
+msgstr ""
+
 msgid "Clay Ball"
 msgstr "Глина"
 
@@ -67,11 +70,17 @@ msgstr "Железный слиток"
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr "Железный слиток. Используется для создания брони, инструментов и прочего."
 
+msgid "Iron Material"
+msgstr ""
+
 msgid "Gold Ingot"
 msgstr "Золотой слиток"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr "Золотой слиток. Используется для создания брони, инструментов и прочего."
+
+msgid "Gold Material"
+msgstr ""
 
 msgid "Emerald"
 msgstr "Изумруд"
@@ -79,11 +88,17 @@ msgstr "Изумруд"
 msgid "Emeralds are used in villager trades as currency."
 msgstr "Изумруды используют деревенские жители в качестве валюты."
 
+msgid "Emerald Material"
+msgstr ""
+
 msgid "Lapis Lazuli"
 msgstr "Лазурит"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr "Лазурит требуется для зачарования предметов на столе зачарований."
+
+msgid "Lapis Material"
+msgstr ""
 
 msgid "Brick"
 msgstr "Кирпич"
@@ -151,6 +166,9 @@ msgstr "Акациевый забор"
 msgid "Acacia Fence Gate"
 msgstr "Акациевая калитка"
 
+msgid "Acacia Hanging Sign"
+msgstr ""
+
 msgid "Acacia Leaves"
 msgstr "Акациевая листва"
 
@@ -207,6 +225,9 @@ msgstr "Берёзовый забор"
 
 msgid "Birch Fence Gate"
 msgstr "Берёзовая калитка"
+
+msgid "Birch Hanging Sign"
+msgstr ""
 
 msgid "Birch Leaves"
 msgstr "Берёзовая листва"
@@ -277,6 +298,9 @@ msgstr "Забор из тёмного дуба"
 msgid "Dark Oak Fence Gate"
 msgstr "Калитка из тёмного дуба"
 
+msgid "Dark Oak Hanging Sign"
+msgstr ""
+
 msgid "Dark Oak Leaves"
 msgstr "Листва тёмного дуба"
 
@@ -339,6 +363,9 @@ msgstr "Забор из тропического дерева"
 
 msgid "Jungle Fence Gate"
 msgstr "Калитка из тропического дерева"
+
+msgid "Jungle Hanging Sign"
+msgstr ""
 
 msgid "Jungle Leaves"
 msgstr "Листва тропического дерева"
@@ -409,6 +436,9 @@ msgstr "Дубовый забор"
 msgid "Oak Fence Gate"
 msgstr "Дубовая калитка"
 
+msgid "Oak Hanging Sign"
+msgstr ""
+
 msgid "Oak Leaves"
 msgstr "Дубовая листва"
 
@@ -477,6 +507,9 @@ msgstr "Еловый забор"
 
 msgid "Spruce Fence Gate"
 msgstr "Еловая калитка"
+
+msgid "Spruce Hanging Sign"
+msgstr ""
 
 msgid "Spruce Leaves"
 msgstr "Еловая хвоя"
@@ -904,6 +937,12 @@ msgstr "Плотный лёд"
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr "Плотный лёд — это сжатая форма льда. Он непрозрачный и твёрдый."
 
+msgid "Blue Ice"
+msgstr ""
+
+msgid "Blue Ice is a still more compressed form of ice.  It is opaque and solid."
+msgstr ""
+
 msgid "Frosted ice is a short-lived solid block. It melts into a water source within a few seconds."
 msgstr "Подмороженный лёд — это быстро исчезающий твёрдый блок. Он растает через несколько секунд, превратившись в источник воды."
 
@@ -1053,6 +1092,12 @@ msgstr "Мёртвый куст"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "Мёртвые кусты — это непримечательные растения, часто встречающиеся в засушливых областях. Их можно собирать, чтобы сделать из них палки."
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Barrier"
 msgstr "Барьер"

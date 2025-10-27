@@ -73,6 +73,9 @@ msgstr "Hesi gorrimina"
 msgid "Crimson Fence Gate"
 msgstr "Hesi gorrizko atea"
 
+msgid "Crimson Hanging Sign"
+msgstr ""
+
 msgid "Crimson Log"
 msgstr "Enbor gorrimina"
 
@@ -144,6 +147,9 @@ msgstr "Hesi distortsionatua"
 
 msgid "Warped Fence Gate"
 msgstr "Hesi-ate distortsionatua"
+
+msgid "Warped Hanging Sign"
+msgstr ""
 
 msgid "Warped Log"
 msgstr "Egur distortsionatua"

@@ -19,6 +19,9 @@ msgstr "Медный слиток"
 msgid "Molten Raw Copper. It is used to craft blocks."
 msgstr "Медный слиток. Используется для крафта блоков."
 
+msgid "Copper Material"
+msgstr ""
+
 msgid "Raw Copper"
 msgstr "Необработанная медь"
 
@@ -42,6 +45,12 @@ msgstr "Медная лампа"
 
 msgid "Copper Bulb On"
 msgstr "Медная лампа (вкл)"
+
+msgid "Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Copper Bulb Powered On"
+msgstr ""
 
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "Медная лампа — это декоративный блок."
@@ -84,6 +93,12 @@ msgstr "Потемневшая медная лампа"
 
 msgid "Exposed Copper Bulb On"
 msgstr "Потемневшая медная лампа (вкл)"
+
+msgid "Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Exposed Copper Bulb Powered On"
+msgstr ""
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "Потемневшая медная лампа — это декоративный блок."
@@ -130,6 +145,12 @@ msgstr "Окисленная медная лампа"
 msgid "Oxidized Copper Bulb On"
 msgstr "Окисленная медная лампа (вкл)"
 
+msgid "Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Oxidized Copper Bulb Powered On"
+msgstr ""
+
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "Окисленная медная лампа — это декоративный блок."
 
@@ -172,6 +193,12 @@ msgstr "Вощёная медная лампа"
 msgid "Waxed Copper Bulb On"
 msgstr "Вощёная медная лампа (вкл)"
 
+msgid "Waxed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "Вощёная медная решётка"
 
@@ -202,6 +229,12 @@ msgstr "Вощёная потемневшая медная лампа"
 msgid "Waxed Exposed Copper Bulb On"
 msgstr "Вощёная потемневшая медная лампа (вкл)"
 
+msgid "Waxed Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Exposed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "Вощёная потемневшая медная решётка"
 
@@ -228,6 +261,12 @@ msgstr "Вощёная окисленная медная лампа"
 
 msgid "Waxed Oxidized Copper Bulb On"
 msgstr "Вощёная окисленная медная лампа (вкл)"
+
+msgid "Waxed Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Bulb Powered On"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Grate"
 msgstr "Вощёная окисленная медная решётка"
@@ -259,6 +298,12 @@ msgstr "Вощёная состаренная медная лампа"
 msgid "Waxed Weathered Copper Bulb On"
 msgstr "Вощёная состаренная медная лампа (вкл)"
 
+msgid "Waxed Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Weathered Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "Вощёная состаренная медная решётка"
 
@@ -288,6 +333,12 @@ msgstr "Состаренная медная лампа"
 
 msgid "Weathered Copper Bulb On"
 msgstr "Состаренная медная лампа (вкл)"
+
+msgid "Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Weathered Copper Bulb Powered On"
+msgstr ""
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "Состаренная медная лампа — это декоративный блок."

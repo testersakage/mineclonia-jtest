@@ -73,6 +73,9 @@ msgstr "Valla carmesí"
 msgid "Crimson Fence Gate"
 msgstr "Puerta de valla carmesí"
 
+msgid "Crimson Hanging Sign"
+msgstr ""
+
 msgid "Crimson Log"
 msgstr "Tronco carmesí"
 
@@ -144,6 +147,9 @@ msgstr "Valla distorsionada"
 
 msgid "Warped Fence Gate"
 msgstr "Puerta de valla distorsionada"
+
+msgid "Warped Hanging Sign"
+msgstr ""
 
 msgid "Warped Log"
 msgstr "Leño distorsionado"

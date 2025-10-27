@@ -40,6 +40,9 @@ msgstr "Valla de bambú"
 msgid "Bamboo Fence Gate"
 msgstr "Puerta de valla de bambú"
 
+msgid "Bamboo Hanging Sign"
+msgstr ""
+
 msgid "Bamboo Planks"
 msgstr "Tablones de bambú"
 

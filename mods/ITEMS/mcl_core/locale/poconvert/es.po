@@ -55,6 +55,9 @@ msgstr "Diamante"
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr "Los diamantes son minerales preciosos y útiles para crear el nivel más alto de armadura y herramientas."
 
+msgid "Diamond Material"
+msgstr ""
+
 msgid "Clay Ball"
 msgstr "Bola de arcilla"
 
@@ -67,11 +70,17 @@ msgstr "Lingote de hierro"
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr "Hierro fundido. Se utiliza para fabricar armaduras, herramientas y otras cosas."
 
+msgid "Iron Material"
+msgstr ""
+
 msgid "Gold Ingot"
 msgstr "Lingote de oro"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr "Oro fundido Se utiliza para fabricar armaduras, herramientas y otras cosas."
+
+msgid "Gold Material"
+msgstr ""
 
 msgid "Emerald"
 msgstr "Esmeralda"
@@ -79,11 +88,17 @@ msgstr "Esmeralda"
 msgid "Emeralds are used in villager trades as currency."
 msgstr "Las esmeraldas se utilizan en el comercio de los aldeanos como moneda."
 
+msgid "Emerald Material"
+msgstr ""
+
 msgid "Lapis Lazuli"
 msgstr "Lapislázuli"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr "Los lapislázuli son necesarios para encantar ítems en una mesa de encantamiento."
+
+msgid "Lapis Material"
+msgstr ""
 
 msgid "Brick"
 msgstr "Ladrillo"
@@ -151,6 +166,9 @@ msgstr "Valla de acacia"
 msgid "Acacia Fence Gate"
 msgstr "Puerta de valla de acacia"
 
+msgid "Acacia Hanging Sign"
+msgstr ""
+
 msgid "Acacia Leaves"
 msgstr "Hojas de acacia"
 
@@ -207,6 +225,9 @@ msgstr "Valla de abedul"
 
 msgid "Birch Fence Gate"
 msgstr "Puerta de valla de abedul"
+
+msgid "Birch Hanging Sign"
+msgstr ""
 
 msgid "Birch Leaves"
 msgstr "Hojas de abedul"
@@ -277,6 +298,9 @@ msgstr "Valla de roble oscuro"
 msgid "Dark Oak Fence Gate"
 msgstr "Puerta de valla de roble oscuro"
 
+msgid "Dark Oak Hanging Sign"
+msgstr ""
+
 msgid "Dark Oak Leaves"
 msgstr "Hojas de roble oscuro"
 
@@ -339,6 +363,9 @@ msgstr "Valla de jungla"
 
 msgid "Jungle Fence Gate"
 msgstr "Puerta de valla de jungla"
+
+msgid "Jungle Hanging Sign"
+msgstr ""
 
 msgid "Jungle Leaves"
 msgstr "Hojas de jungla"
@@ -409,6 +436,9 @@ msgstr "Valla de roble"
 msgid "Oak Fence Gate"
 msgstr "Puerta de valla de roble"
 
+msgid "Oak Hanging Sign"
+msgstr ""
+
 msgid "Oak Leaves"
 msgstr "Hojas de roble"
 
@@ -477,6 +507,9 @@ msgstr "Valla de abeto"
 
 msgid "Spruce Fence Gate"
 msgstr "Puerta de valla de abeto"
+
+msgid "Spruce Hanging Sign"
+msgstr ""
 
 msgid "Spruce Leaves"
 msgstr "Hojas de abeto"
@@ -904,6 +937,12 @@ msgstr "Hielo compacto"
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr "El hielo compacto es una forma comprimida de hielo. Es opaco y sólido."
 
+msgid "Blue Ice"
+msgstr ""
+
+msgid "Blue Ice is a still more compressed form of ice.  It is opaque and solid."
+msgstr ""
+
 msgid "Frosted ice is a short-lived solid block. It melts into a water source within a few seconds."
 msgstr "El hielo escarchado es un bloque sólido de corta duración. Se funde en una fuente de agua en pocos segundos."
 
@@ -1053,6 +1092,12 @@ msgstr "Arbusto muerto"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "Los arbustos muertos son plantas poco comunes que a menudo se encuentran en áreas secas. Se pueden cosechar para obtener palos."
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Barrier"
 msgstr "Barrera"

@@ -13,6 +13,9 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
+msgid "Upgrade:"
+msgstr ""
+
 msgid "This is a piece of equippable armor which reduces the amount of damage you receive."
 msgstr "Ini adalah bagian dari pakaian zirah yang dapat dipakai untuk mengurangi jumlah kerusakan yang kamu terima."
 

@@ -13,13 +13,13 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Auto (use scroll bar if client >= 5.11)"
-msgstr "Automatisch (nutze Scrollbar falls Client >=5.11)"
-
-msgid "Off  (use paging buttons, faster)"
+msgid "Auto"
 msgstr ""
 
-msgid "On   (more MC like, slower)"
+msgid "Off"
+msgstr ""
+
+msgid "On (causes problems on some client versions)"
 msgstr ""
 
 msgid "Enable scrollable creative inventory"

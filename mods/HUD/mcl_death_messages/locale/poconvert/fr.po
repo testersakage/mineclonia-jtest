@@ -187,3 +187,9 @@ msgstr "@1 s'est fait piquer à mort par un buisson à baies sucrées"
 msgid "@1 was poked to death by a sweet berry bush whilst trying to escape @2"
 msgstr "@1 a foncé dans un buisson à baies sucrées en tentant de fuir (un(e)) @2"
 
+msgid "@1 froze to death"
+msgstr ""
+
+msgid "@1 was frozen to death by @2"
+msgstr ""
+

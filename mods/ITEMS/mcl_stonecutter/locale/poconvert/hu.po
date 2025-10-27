@@ -22,9 +22,6 @@ msgstr ""
 msgid "Inventory"
 msgstr "Eszköztár"
 
-msgid "Stone Cutter"
-msgstr ""
-
 msgid "Used to cut stone like materials."
 msgstr ""
 

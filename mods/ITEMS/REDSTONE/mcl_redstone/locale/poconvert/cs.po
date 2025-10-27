@@ -34,3 +34,6 @@ msgstr "Přečtěte si nápovědu k ostatním redstone komponentám, abyste se d
 msgid "Redstone Dust"
 msgstr "redstone prášek"
 
+msgid "Redstone Material"
+msgstr ""
+

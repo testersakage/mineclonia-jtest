@@ -40,6 +40,9 @@ msgstr "サクラのフェンス"
 msgid "Cherry Fence Gate"
 msgstr "サクラのフェンスゲート"
 
+msgid "Cherry Hanging Sign"
+msgstr ""
+
 msgid "Cherry Leaves"
 msgstr "サクラの葉"
 

@@ -73,6 +73,12 @@ msgstr "Mit Eisen hackt’s sich besser"
 msgid "Craft a iron pickaxe using sticks and iron."
 msgstr "Stelle eine Eisenspitzhacke aus Stöcken und Eisenbarren her."
 
+msgid "Bullseye"
+msgstr ""
+
+msgid "Hit the bullseye of a target block from at least 30 blocks away."
+msgstr ""
+
 msgid "DIAMONDS!"
 msgstr "DIAMANTEN!"
 
@@ -385,9 +391,39 @@ msgstr "Freiwilliges Exil"
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr "Töte einen Räuberhauptmann. Vielleicht solltest du dich vorerst von den örtlichen Dörfern fernhalten …"
 
+msgid "Return to Sender"
+msgstr ""
+
+msgid "Destroy a Ghast with a Fireball"
+msgstr ""
+
 msgid "Zombie Doctor"
 msgstr ""
 
 msgid "Use a golden apple on a zombie villager under the Weakness effect; the advancement is granted when the zombie villager converts into a villager."
+msgstr ""
+
+msgid "A Terrible Fortress"
+msgstr ""
+
+msgid "Break your way into a Nether Fortress"
+msgstr ""
+
+msgid "Eye Spy"
+msgstr ""
+
+msgid "Follow an Eye of Ender"
+msgstr ""
+
+msgid "The City at the End of the Game"
+msgstr ""
+
+msgid "Go on in, what could happen?"
+msgstr ""
+
+msgid "Those Were The Days"
+msgstr ""
+
+msgid "Enter a Bastion Remnant"
 msgstr ""
 

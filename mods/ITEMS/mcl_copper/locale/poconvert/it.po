@@ -19,6 +19,9 @@ msgstr "Lingotto di Rame"
 msgid "Molten Raw Copper. It is used to craft blocks."
 msgstr "Rame Grezzo Fuso. È utilizzato per assemblare dei blocchi."
 
+msgid "Copper Material"
+msgstr ""
+
 msgid "Raw Copper"
 msgstr "Rame grezzo"
 
@@ -42,6 +45,12 @@ msgstr "Lampada di rame"
 
 msgid "Copper Bulb On"
 msgstr "Lampada di rame accesa"
+
+msgid "Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Copper Bulb Powered On"
+msgstr ""
 
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "La Lampada di rame è un blocco decorativo."
@@ -84,6 +93,12 @@ msgstr "Lampada di rame esposto"
 
 msgid "Exposed Copper Bulb On"
 msgstr "Lampada di rame esposta accesa"
+
+msgid "Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Exposed Copper Bulb Powered On"
+msgstr ""
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "La Lampada di rame esposta è un blocco decorativo."
@@ -130,6 +145,12 @@ msgstr "Lampada di rame ossidato"
 msgid "Oxidized Copper Bulb On"
 msgstr "Lampada di rame ossidato accessa"
 
+msgid "Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Oxidized Copper Bulb Powered On"
+msgstr ""
+
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "La lampada di rame ossidato è un blocco decorativo."
 
@@ -172,6 +193,12 @@ msgstr "Lampada di rame cerato"
 msgid "Waxed Copper Bulb On"
 msgstr "Lampada di rame cerato accesa"
 
+msgid "Waxed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "Grata di rame cerato"
 
@@ -202,6 +229,12 @@ msgstr "Lampada di rame esposto cerato"
 msgid "Waxed Exposed Copper Bulb On"
 msgstr "Lampada di rame esposto cerato accesa"
 
+msgid "Waxed Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Exposed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "Grata di rame esposto cerato"
 
@@ -228,6 +261,12 @@ msgstr "Lampada di rame ossidato cerato"
 
 msgid "Waxed Oxidized Copper Bulb On"
 msgstr "Lampada di rame ossidato cerato accesa"
+
+msgid "Waxed Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Bulb Powered On"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Grate"
 msgstr "Grata di rame ossidato cerato"
@@ -259,6 +298,12 @@ msgstr "Lampada di rame corroso cerato"
 msgid "Waxed Weathered Copper Bulb On"
 msgstr "Lampada di rame corroso cerato accesa"
 
+msgid "Waxed Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Weathered Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "Grata di rame corroso cerato"
 
@@ -288,6 +333,12 @@ msgstr "Lampada di rame corroso"
 
 msgid "Weathered Copper Bulb On"
 msgstr "Lampada di rame corroso accesa"
+
+msgid "Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Weathered Copper Bulb Powered On"
+msgstr ""
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "La lampada di rame corroso è un blocco decorativo."

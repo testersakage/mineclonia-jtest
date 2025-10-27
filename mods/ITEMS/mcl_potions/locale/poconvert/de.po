@@ -346,19 +346,151 @@ msgstr ""
 msgid "Use the “Place” key to throw it."
 msgstr ""
 
+msgid "Arrow of Bad Luck"
+msgstr ""
+
+msgid "Arrow of Decay"
+msgstr ""
+
+msgid "Arrow of Fire Resistance"
+msgstr ""
+
+msgid "Arrow of Harming"
+msgstr ""
+
+msgid "Arrow of Healing"
+msgstr ""
+
+msgid "Arrow of Infestation"
+msgstr ""
+
+msgid "Arrow of Invisibility"
+msgstr ""
+
+msgid "Arrow of Leaping"
+msgstr ""
+
+msgid "Arrow of Luck"
+msgstr ""
+
+msgid "Arrow of Night Vision"
+msgstr ""
+
+msgid "Arrow of Oozing"
+msgstr ""
+
+msgid "Arrow of Poison"
+msgstr ""
+
+msgid "Arrow of Regeneration"
+msgstr ""
+
+msgid "Arrow of Slow Falling"
+msgstr ""
+
+msgid "Arrow of Slowness"
+msgstr ""
+
+msgid "Arrow of Strength"
+msgstr ""
+
+msgid "Arrow of Swiftness"
+msgstr ""
+
+msgid "Arrow of Water Breathing"
+msgstr ""
+
+msgid "Arrow of Weakness"
+msgstr ""
+
+msgid "Arrow of Weaving"
+msgstr ""
+
+msgid "Arrow of Wind Charging"
+msgstr ""
+
+msgid "Arrow of the Turtle Master"
+msgstr ""
+
+msgid "Awkward Potion"
+msgstr ""
+
+msgid "Mundane Potion"
+msgstr ""
+
+msgid "Potion of Bad Luck"
+msgstr ""
+
+msgid "Potion of Decay"
+msgstr ""
+
+msgid "Potion of Fire Resistance"
+msgstr ""
+
+msgid "Potion of Harming"
+msgstr ""
+
+msgid "Potion of Healing"
+msgstr ""
+
+msgid "Potion of Infestation"
+msgstr ""
+
+msgid "Potion of Invisibility"
+msgstr ""
+
+msgid "Potion of Leaping"
+msgstr ""
+
+msgid "Potion of Luck"
+msgstr ""
+
+msgid "Potion of Night Vision"
+msgstr ""
+
+msgid "Potion of Oozing"
+msgstr ""
+
+msgid "Potion of Poison"
+msgstr ""
+
+msgid "Potion of Regeneration"
+msgstr ""
+
+msgid "Potion of Slow Falling"
+msgstr ""
+
+msgid "Potion of Slowness"
+msgstr ""
+
+msgid "Potion of Strength"
+msgstr ""
+
+msgid "Potion of Swiftness"
+msgstr ""
+
+msgid "Potion of Water Breathing"
+msgstr ""
+
+msgid "Potion of Weakness"
+msgstr ""
+
+msgid "Potion of Weaving"
+msgstr ""
+
+msgid "Potion of Wind Charging"
+msgstr ""
+
+msgid "Potion of the Turtle Master"
+msgstr ""
+
+msgid "Thick Potion"
+msgstr ""
+
 msgid "Use the “Place” key to drink it."
 msgstr "Benutzen Sie die „Platzieren“-Taste zum Trinken."
 
 msgid "Drinking a potion gives you a particular effect or set of effects."
-msgstr ""
-
-msgid "@1 Potion @2"
-msgstr ""
-
-msgid "@1 Potion"
-msgstr "Trank der @1"
-
-msgid "Potion @1"
 msgstr ""
 
 msgid "Strange Potion"
@@ -370,15 +502,6 @@ msgstr ""
 msgid "Lingering @1"
 msgstr ""
 
-msgid "@1 Arrow @2"
-msgstr ""
-
-msgid "@1 Arrow"
-msgstr ""
-
-msgid "Arrow @1"
-msgstr ""
-
 msgid "Strange Tipped Arrow"
 msgstr ""
 
@@ -388,25 +511,13 @@ msgstr "Drachenatem"
 msgid "This item is used in brewing and can be combined with splash potions to create lingering potions."
 msgstr "Dieser Objekt wird für die Trankherstellung benutzt und kann mit Wurftränken kombiniert werden, um Verweiltränke herzustellen."
 
-msgid "Awkward"
-msgstr ""
-
 msgid "Has an awkward taste and is used for brewing potions."
 msgstr "Hat einen seltsamen Geschmack und wird in der Trankherstellung benutzt."
-
-msgid "Mundane"
-msgstr ""
 
 msgid "Has a terrible taste and is not really useful for brewing potions."
 msgstr ""
 
-msgid "Thick"
-msgstr ""
-
 msgid "Has a bitter taste and is not really useful for brewing potions."
-msgstr ""
-
-msgid "of Healing"
 msgstr ""
 
 msgid "+@1 HP"
@@ -415,136 +526,70 @@ msgstr ""
 msgid "Instantly heals."
 msgstr "Heilt sofort."
 
-msgid "of Harming"
-msgstr ""
-
 msgid "-@1 HP"
 msgstr ""
 
 msgid "Instantly deals damage."
 msgstr "Richtet sofort Schaden an."
 
-msgid "of Night Vision"
-msgstr ""
-
 msgid "Increases the perceived brightness of light under a dark sky."
 msgstr "Erhöht die wahrgenommene Helligkeit des Lichts unter einem dunklem Himmel."
-
-msgid "of Swiftness"
-msgstr ""
 
 msgid "Increases walking speed."
 msgstr "Erhöht Gehgeschwindigkeit."
 
-msgid "of Slowness"
-msgstr ""
-
 msgid "Decreases walking speed."
 msgstr "Verringert Gehgeschwindigkeit."
-
-msgid "of Leaping"
-msgstr ""
 
 msgid "Increases jump strength."
 msgstr "Erhöht Sprungstärke."
 
-msgid "of Decay"
-msgstr ""
-
 msgid "Applies the withering effect which deals damage at a regular interval and can kill."
 msgstr "Wendet den Verwelkungseffekt an, der in regelmäßigen Abständen Schaden verursacht und töten kann."
-
-msgid "of Poison"
-msgstr ""
 
 msgid "Applies the poison effect which deals damage at a regular interval."
 msgstr "Gibt den Gifteffekt, der Schaden in regelmäßigen Abständen anrichtet."
 
-msgid "of Regeneration"
-msgstr ""
-
 msgid "Regenerates health over time."
 msgstr "Regeneriert Gesundheit mit der Zeit."
-
-msgid "of Invisibility"
-msgstr ""
 
 msgid "Grants invisibility."
 msgstr "Gibt Unsichtbarkeit."
 
-msgid "of Water Breathing"
-msgstr ""
-
 msgid "Grants limitless breath underwater."
 msgstr "Gibt unbegrenzten Atem im Wasser."
-
-msgid "of Fire Resistance"
-msgstr ""
 
 msgid "Grants immunity to damage from heat sources like fire."
 msgstr "Gibt Immunität gegenüber Schaden von Hitzequellen wie Feuer."
 
-msgid "of Strength"
-msgstr ""
-
 msgid "Increases attack power."
-msgstr ""
-
-msgid "of Weakness"
 msgstr ""
 
 msgid "Decreases attack power."
 msgstr ""
 
-msgid "of Slow Falling"
-msgstr ""
-
 msgid "Instead of falling, you descend gracefully."
-msgstr ""
-
-msgid "of the Turtle Master"
 msgstr ""
 
 msgid "Decreases damage taken at the cost of speed."
 msgstr ""
 
-msgid "of Luck"
-msgstr ""
-
 msgid "Increases luck."
-msgstr ""
-
-msgid "of Bad Luck"
 msgstr ""
 
 msgid "Decreases luck."
 msgstr ""
 
-msgid "Ominous Bottle"
-msgstr ""
-
 msgid "Attracts danger."
-msgstr ""
-
-msgid "of Infestation"
 msgstr ""
 
 msgid "Causes 1-3 silverfish to spawn with a 5% chance when damaged. It not applies to silverfishes."
 msgstr ""
 
-msgid "of Oozing"
-msgstr ""
-
 msgid "Causes 2 medium slimes to spawn on death. It not applies to slimes."
 msgstr ""
 
-msgid "of Weaving"
-msgstr ""
-
 msgid "Causes 2-3 cobwebs to appear on death. Also increases walking speed when crossing cobwebs."
-msgstr ""
-
-msgid "of Wind Charging"
 msgstr ""
 
 msgid "Causes A wind burst on death."

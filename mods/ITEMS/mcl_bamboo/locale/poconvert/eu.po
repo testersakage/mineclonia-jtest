@@ -40,6 +40,9 @@ msgstr "Banbuzko hesia"
 msgid "Bamboo Fence Gate"
 msgstr "Banbuzko hesi-atea"
 
+msgid "Bamboo Hanging Sign"
+msgstr ""
+
 msgid "Bamboo Planks"
 msgstr "Banbuzko oholak"
 

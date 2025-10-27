@@ -127,6 +127,9 @@ msgstr "Predone"
 msgid "Polar Bear"
 msgstr "Orso polare"
 
+msgid "Pufferfish"
+msgstr ""
+
 msgid "Rabbit"
 msgstr "Coniglio"
 

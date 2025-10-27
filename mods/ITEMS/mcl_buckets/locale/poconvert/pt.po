@@ -31,6 +31,9 @@ msgstr ""
 msgid "Bucket of Cod"
 msgstr ""
 
+msgid "Bucket of Pufferfish"
+msgstr ""
+
 msgid "Bucket of Salmon"
 msgstr ""
 
@@ -38,6 +41,9 @@ msgid "Bucket of Tropical Fish"
 msgstr ""
 
 msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
+msgstr ""
+
+msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
 msgstr ""
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
@@ -52,6 +58,9 @@ msgstr ""
 msgid "Places a water source and a Cod."
 msgstr ""
 
+msgid "Places a water source and a Pufferfish."
+msgstr ""
+
 msgid "Places a water source and a Salmon."
 msgstr ""
 
@@ -62,6 +71,9 @@ msgid "Places a water source and an Axolotl."
 msgstr ""
 
 msgid "This bucket is filled with water and a Cod."
+msgstr ""
+
+msgid "This bucket is filled with water and a Pufferfish."
 msgstr ""
 
 msgid "This bucket is filled with water and a Salmon."
