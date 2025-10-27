@@ -260,7 +260,7 @@ mcl_mapgen_core.register_generator("lush_caves",nil, function(minp, maxp, blocks
 		core.log("cave at "..core.pos_to_string(pos))
 	end
 end, 99999, true)
+]]
 
 dofile (modpath .. "/lg_register.lua")
 mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")
-]]
