@@ -1,7 +1,7 @@
 # textdomain: mcl_inventory
-Auto (use scroll bar if client >@= 5.11)=Ауто (Егер клиент >@= 5.11 болса, айналдыру жолағын қолдану)
-Off  (use paging buttons, faster)=
-On   (more MC like, slower)=
+Auto=
+Off=
+On (causes problems on some client versions)=
 Enable scrollable creative inventory=
 Building Blocks=
 Decoration Blocks=
@@ -28,3 +28,8 @@ Return to player inventory=
 Crafting table out of range!=
 Crafting=Жасау
 Fill Craft Grid=
+
+
+##### not used anymore #####
+
+Auto (use scroll bar if client >@= 5.11)=Ауто (Егер клиент >@= 5.11 болса, айналдыру жолағын қолдану)

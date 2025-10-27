@@ -1,4 +1,5 @@
 # textdomain: mcl_bamboo
+### bamboo_base.lua ###
 A Block made of Bamboo stalks. Can be crafted into Bamboo Planks.=Blok z bambusových stonků. Lze z něj vyrobit bambusová prkna.
 Block of Bamboo=Bambusový blok
 Block of Stripped Bamboo=Blok holého bambusu
@@ -8,6 +9,7 @@ Bamboo Button=Bambusové tlačítko
 Bamboo Door=bambusové dveře
 Bamboo Fence=Bambusový plot
 Bamboo Fence Gate=
+Bamboo Hanging Sign=
 Bamboo Planks=
 Bamboo Pressure Plate=
 Bamboo Sign=

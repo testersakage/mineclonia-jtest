@@ -14,7 +14,7 @@ Burns your feet=Обжигает ваши ноги
 Magma blocks are hot solid blocks which hurt anyone standing on it, unless they have fire resistance. Starting a fire on this block will create an eternal fire.=Блоки магмы — это горячие твёрдые блоки, причиняющие урон тем, кто на них стоит, если у них нет защиты от огня. Разжигание огня на таком блоке создаст вечный огонь.
 Soul Sand=Песок душ
 Reduces walking speed=Уменьшает скорость ходьбы
-Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block.=Песок душ — это блок из Незера. Идти по нему можно только медленно. Замедляющий эффект усиливается, если песок душ стоит на льду, плотном льду или блоке слизи.
+Soul sand is a block from the Nether. It has a slowing effect when walked on.=
 Nether Brick Block=Адские кирпичи
 Red Nether Brick Block=Красные адские кирпичи
 Chiseled Nether Brick Block=Резные адские кирпичи
@@ -38,10 +38,12 @@ Glowstone Dust=Светопыль
 Glowstone dust is the dust which comes out of broken glowstones. It is mainly used in crafting.=Светопыль — это пыль, которая получается из сломанного светящегося камня.
 Nether Quartz=Кварц
 Nether quartz is a versatile crafting ingredient.=Кварц — это универсальный материал для крафта.
+Quartz Material=
 Netherite Scrap=Незеритовый скрап
 Netherite scrap is a crafting ingredient for netherite ingots.=Незеритовый скрап — это материал для крафта незеритовых слитков.
 Netherite Ingot=Незеритовый слиток
 Netherite ingots can be used with a smithing table to upgrade items to netherite.=Незеритовые слитки можно использовать с кузнечным столом для улучшения предметов до незерита.
+Netherite Material=
 Nether Brick=Адский кирпич
 Nether bricks are the main crafting ingredient for crafting nether brick blocks and nether fences.=Адские кирпичи — это главный материал для создания блоков адских кирпичей.
 Netherite Upgrade Template=Шаблон незеритового улучшения
@@ -61,3 +63,8 @@ Nether Wart=Адский нарост
 Grows on soul sand=Растёт на песке душ
 Nether warts are plants home to the Nether. They can be planted on soul sand and grow in 4 stages.=Адские наросты — это растения, домом которых является Незер. Их можно высаживать на песке душ, и они растут в 4 стадии.
 Place this item on soul sand to plant it and watch it grow.=Поместите этот предмет на песок душ, чтобы посадить его для выращивания.
+
+
+##### not used anymore #####
+
+Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block.=Песок душ — это блок из Незера. Идти по нему можно только медленно. Замедляющий эффект усиливается, если песок душ стоит на льду, плотном льду или блоке слизи.

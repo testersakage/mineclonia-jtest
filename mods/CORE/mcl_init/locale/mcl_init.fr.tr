@@ -1,4 +1,5 @@
 # textdomain: mcl_init
+The world has the custom Mineclonia mapgen enabled in combination with mcl_levelgen inhibiting mods. Disable the mods (@1) or update the mcl_singlenode_mapgen setting in @2 to play the world.=
 Outdated Client version detected!=Version dépassée du client détectée !
 Do not show again=Ne plus afficher
 Leave Server=Quitter le serveur

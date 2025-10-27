@@ -1,4 +1,5 @@
 # textdomain: mcl_bamboo
+### bamboo_base.lua ###
 A Block made of Bamboo stalks. Can be crafted into Bamboo Planks.=
 Block of Bamboo=竹ブロック
 Block of Stripped Bamboo=表皮を剥いだ竹ブロック
@@ -8,6 +9,7 @@ Bamboo Button=竹のボタン
 Bamboo Door=竹のドア
 Bamboo Fence=竹のフェンス
 Bamboo Fence Gate=竹のフェンスゲート
+Bamboo Hanging Sign=
 Bamboo Planks=竹の板材
 Bamboo Pressure Plate=竹の感圧板
 Bamboo Sign=竹の看板

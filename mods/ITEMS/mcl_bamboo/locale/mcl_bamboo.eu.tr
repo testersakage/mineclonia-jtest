@@ -1,4 +1,5 @@
 # textdomain: mcl_bamboo
+### bamboo_base.lua ###
 A Block made of Bamboo stalks. Can be crafted into Bamboo Planks.=Banbuko zurtoinez egindako bloke bat Banbuko oholetan egin daiteke.
 Block of Bamboo=Banbuzko blokea
 Block of Stripped Bamboo=Azalik gabeko banbuzko blokea
@@ -8,6 +9,7 @@ Bamboo Button=Banbu botoia
 Bamboo Door=Banbuzko atea
 Bamboo Fence=Banbuzko hesia
 Bamboo Fence Gate=Banbuzko hesi-atea
+Bamboo Hanging Sign=
 Bamboo Planks=Banbuzko oholak
 Bamboo Pressure Plate=Banbuzko presio-plaka
 Bamboo Sign=Banbuzko kartela

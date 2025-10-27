@@ -1,7 +1,7 @@
 # textdomain: mcl_inventory
-Auto (use scroll bar if client >@= 5.11)=Auto (usar barra de scroll se o cliente >@= 5.11)
-Off  (use paging buttons, faster)=Off  (usa botões de paginação, mais rápido)
-On   (more MC like, slower)=On   (mais como o MC, mais lento)
+Auto=
+Off=
+On (causes problems on some client versions)=
 Enable scrollable creative inventory=Ativar scrollable inventário criativo
 Building Blocks=Blocos de Construção
 Decoration Blocks=Blocos de Decoração
@@ -28,3 +28,10 @@ Return to player inventory=Voltar ao inventário do jogador
 Crafting table out of range!=Mesa de trabalho fora de alcance!
 Crafting=Crafting
 Fill Craft Grid=Encher Grelha de Craft
+
+
+##### not used anymore #####
+
+Auto (use scroll bar if client >@= 5.11)=Auto (usar barra de scroll se o cliente >@= 5.11)
+Off  (use paging buttons, faster)=Off  (usa botões de paginação, mais rápido)
+On   (more MC like, slower)=On   (mais como o MC, mais lento)

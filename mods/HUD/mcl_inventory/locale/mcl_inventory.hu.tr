@@ -1,7 +1,7 @@
 # textdomain: mcl_inventory
-Auto (use scroll bar if client >@= 5.11)=
-Off  (use paging buttons, faster)=
-On   (more MC like, slower)=
+Auto=
+Off=
+On (causes problems on some client versions)=
 Enable scrollable creative inventory=
 Building Blocks=Építőblokkok
 Decoration Blocks=Díszblokkok

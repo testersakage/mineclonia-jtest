@@ -1,4 +1,6 @@
 # textdomain: mcl_books
+Chiseled Bookshelf=
+Chiseled bookshelf holds up to six books.=
 Book=本
 Books are used to make bookshelves and book and quills.=本は、本棚や本と羽根ペンの材料として使われています。
 “@1”=“@1”
@@ -6,6 +8,7 @@ Copy of “@1”=“@1”のコピー
 Copy of Copy of “@1”=“@1”のコピーのコピー
 Tattered Book=ボロボロの本
 by @1=@1 著
+# as in “to sign a book”
 Sign=署名
 Done=完了
 Book and Quill=本と羽根ペン
