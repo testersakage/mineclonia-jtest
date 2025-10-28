@@ -35,12 +35,15 @@ local function makelake(pos,size,liquid,placein,border,pr,noair)
 		mcl_util.bulk_swap_node(air,{name="air"})
 		air = {}
 		local br = {}
+		local is_grass = border == "mcl_core:dirt_with_grass"
 		for _, v in pairs(lq) do
 			for _, vv in pairs(adjacents) do
 				local pp = vector.add(v,vv)
 				local an = core.get_node(pp)
 				if not noair and an.name ~= liquid then
-					table.insert(br,pp)
+					local p2 = is_grass and mcl_core.get_grass_palette_index(pp) or 0
+					if not br[p2] then br[p2] = {} end
+					table.insert(br[p2],pp)
 					local un = core.get_node(vector.offset(pp,0,1,0))
 					if un.name ~= liquid then
 						airtower(pp,air,10)
@@ -48,11 +51,9 @@ local function makelake(pos,size,liquid,placein,border,pr,noair)
 				end
 			end
 		end
-		local p2
-		if border == "mcl_core:dirt_with_grass" then
-			p2 = mcl_core.get_grass_palette_index(pos)
+		for p2, nodes in pairs(br) do
+			mcl_util.bulk_swap_node(nodes,{name = border, param2 = p2})
 		end
-		mcl_util.bulk_swap_node(br,{name = border, param2 = p2})
 		mcl_util.bulk_swap_node(air,{name="air"})
 		return true
 	end)
