@@ -513,7 +513,8 @@ core.register_entity(":__builtin:item", {
 		s = s / wield_scale
 		self.object:set_properties(table.merge({
 			wield_item = stack:get_name(),
-			visual_size = {x = s, y = s},
+			visual = def._mcl_item_visual,
+			visual_size = def._mcl_wield_visual_size or {x = s, y = s},
 			collisionbox = {-c, -c, -c, c, c, c},
 			infotext = def.description,
 			glow = def.light_source,

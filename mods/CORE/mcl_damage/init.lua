@@ -35,6 +35,7 @@ mcl_damage = {
 		fireworks = {is_explosion = true}, -- unused
 		environment = {},
 		light = {},
+		trident = {},
 	}
 }
 

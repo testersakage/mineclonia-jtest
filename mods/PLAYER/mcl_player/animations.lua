@@ -339,17 +339,24 @@ mcl_player.register_globalstep(function(player)
 	mcl_player.players[player].vel_yaw = player_vel_yaw
 
 	if parent or mcl_player.players[player].attached then
-		local hyaw = player_vel_yaw - yaw
-		if parent then
-			mcl_util.set_properties(player, player_props_riding)
-			local parent_yaw = math.deg(parent:get_yaw())
-			set_bone_pos(player,"Body_Control", nil, vector.zero())
-			hyaw = -limit_vel_yaw(yaw, parent_yaw) + parent_yaw
+		if mcl_tridents.obj_attached_to_riptide_trident_p (player) then
+			mcl_player.player_set_animation (player, "spin_attack")
+			set_bone_pos (player, "Body_Control", nil, vector.new (90, 0, 0))
+			set_bone_pos (player, "Head_Control", nil, vector.zero ())
+			mcl_util.set_properties (player, player_props_swimming)
 		else
-			set_bone_pos(player,"Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
-		end
+			local hyaw = player_vel_yaw - yaw
+			if parent then
+				mcl_util.set_properties(player, player_props_riding)
+				local parent_yaw = math.deg(parent:get_yaw())
+				set_bone_pos(player,"Body_Control", nil, vector.zero())
+				hyaw = -limit_vel_yaw(yaw, parent_yaw) + parent_yaw
+			else
+				set_bone_pos(player,"Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
+			end
 
-		set_bone_pos(player, "Head_Control", nil, vector.new(pitch, hyaw, 0))
+			set_bone_pos(player, "Head_Control", nil, vector.new(pitch, hyaw, 0))
+		end
 	else
 		local walking = control.up or control.down or control.left or control.right
 		local animation_speed_mod = model and model.animation_speed or 30

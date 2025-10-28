@@ -239,7 +239,7 @@ end
 
 function skeleton:on_die (pos, mcl_reason)
 	if mcl_reason
-		and mcl_reason.type == "arrow"
+		and (mcl_reason.type == "arrow" or mcl_reason.type == "trident")
 		and mcl_reason.source then
 		local source = mcl_reason.source
 		if source:is_player ()

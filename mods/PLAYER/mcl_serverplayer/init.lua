@@ -48,6 +48,7 @@ if not core.settings:get_bool("mcl_enable_csm", false) then
 		send_rescind_vehicle = nop,
 		send_rocket_use = nop,
 		send_shieldctrl = nop,
+		send_trident_ctrl = nop,
 		send_vehicle_capabilities = nop,
 		send_vehicle_handoff = nop,
 		send_vehicle_position = nop,
@@ -93,7 +94,7 @@ end)
 -- Modchannel message definitions.
 -----------------------------------------------------------------------
 
-local MAX_PROTO_VERSION = 3
+local MAX_PROTO_VERSION = 4
 
 -- Serverbound messages.
 local SERVERBOUND_HELLO = 'aa'
@@ -112,6 +113,7 @@ local SERVERBOUND_CONFIGURE_VEHICLE = 'am'
 local SERVERBOUND_TURN_VEHICLE = 'an'
 local SERVERBOUND_SHIELDCTRL = 'ao' -- Protocol version 1.
 local SERVERBOUND_EAT_ITEM = 'ap'
+local SERVERBOUND_RELEASE_TRIDENT_ITEM = 'aq' -- Protocol version 4.
 
 -- Clientbound messages.
 local CLIENTBOUND_HELLO = 'AA'
@@ -133,6 +135,7 @@ local CLIENTBOUND_KNOCKBACK = 'AP'
 local CLIENTBOUND_OFFHAND_ITEM = 'AQ' -- Protocol version 1.
 local CLIENTBOUND_PLAYER_VITALS = 'AR'
 local CLIENTBOUND_EFFECT_CTRL = 'AS' -- Protocol version 2.
+local CLIENTBOUND_TRIDENT_CTRL = 'AT' -- Protocol version 4.
 
 local MAX_PAYLOAD = 65533
 
@@ -278,6 +281,14 @@ function mcl_serverplayer.send_effect_ctrl (player, tbl)
 	})
 end
 
+function mcl_serverplayer.send_trident_ctrl (player, tbl)
+	local payload = core.write_json (tbl)
+	assert (#payload <= MAX_PAYLOAD, "oversized ClientboundTridentCtrl")
+	modchannels[player]:send_all (table.concat {
+		CLIENTBOUND_TRIDENT_CTRL, payload,
+	})
+end
+
 -----------------------------------------------------------------------
 -- Handshakes.  When a client joins, it is not considered CSM-enabled
 -- till a SERVERBOUND_HELLO packet is received containing the protocol
@@ -330,6 +341,8 @@ core.register_on_mods_loaded (function ()
 end)
 
 mcl_serverplayer.handshake_item_defs = {}
+mcl_serverplayer.handshake_item_defs_v4 = {}
+local item_defs_v4
 
 local function process_serverbound_hello (player, state, payload)
 	if state.handshake_status ~= "want_hello" then
@@ -342,7 +355,17 @@ local function process_serverbound_hello (player, state, payload)
 
 		-- Generate the response.
 		serverbound_handshake.proto = proto
-		if proto >= 1 then
+		if proto >= 4 then
+			if not item_defs_v4 then
+				local defs = mcl_serverplayer.handshake_item_defs
+				local defs_v4 = mcl_serverplayer.handshake_item_defs_v4
+				item_defs_v4
+					= table.merge (defs, defs_v4)
+			end
+			serverbound_handshake.item_defs = item_defs_v4
+			serverbound_handshake.trident_info
+				= mcl_serverplayer.trident_info
+		elseif proto >= 1 then
 			serverbound_handshake.item_defs
 				= mcl_serverplayer.handshake_item_defs
 		else
@@ -613,6 +636,12 @@ local function receive_modchannel_message_1 (player, message)
 			else
 				error ("Attempting to consume non-edible item")
 			end
+		elseif msgtype == SERVERBOUND_RELEASE_TRIDENT_ITEM then
+			if state.proto < 4 then
+				error ("ServerboundReleaseTridentItem messages can"
+				       .. " only be delivered when protocol version >= 4")
+			end
+			mcl_serverplayer.release_trident_item (player, state)
 		else
 			core.log ("warning", table.concat ({
 				"Client ", player:get_player_name (), " delivered",
