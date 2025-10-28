@@ -181,3 +181,6 @@ msgstr "吃掉 @1 个物品"
 msgid "Eat @1 items."
 msgstr "吃掉 @1 个物品。"
 
+msgid "Enter one of the titular structures"
+msgstr ""
+

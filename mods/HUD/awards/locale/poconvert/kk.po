@@ -181,3 +181,6 @@ msgstr ""
 msgid "Eat @1 items."
 msgstr ""
 
+msgid "Enter one of the titular structures"
+msgstr ""
+

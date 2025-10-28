@@ -1,7 +1,7 @@
 # textdomain: mcl_inventory
-Auto (use scroll bar if client >@= 5.11)=Auto (použijte posuvník, pokud je klient >@= 5.11)
-Off  (use paging buttons, faster)=Vypnuto (rychlejší využitím stránkovacích tlačítek)
-On   (more MC like, slower)=Zapnuto   (více podobné MC, pomalejší)
+Auto=
+Off=
+On (causes problems on some client versions)=
 Enable scrollable creative inventory=Povolit rolovací kreativní inventář
 Building Blocks=Stavební bloky
 Decoration Blocks=Dekorativní bloky

@@ -1,7 +1,7 @@
 # textdomain: mcl_inventory
-Auto (use scroll bar if client >@= 5.11)=Automatico (barra di scorrimento se >@= 5.11)
-Off  (use paging buttons, faster)=Spento  (usa i tasti di paginazione, veloce)
-On   (more MC like, slower)=Acceso   (come MC, lento)
+Auto=
+Off=
+On (causes problems on some client versions)=
 Enable scrollable creative inventory=Abilita lo scorrimento nell'inventario creativa
 Building Blocks=Blocchi da costruzione
 Decoration Blocks=Blocchi decorativi

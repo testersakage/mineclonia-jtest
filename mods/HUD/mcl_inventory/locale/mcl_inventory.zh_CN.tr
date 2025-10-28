@@ -1,7 +1,7 @@
 # textdomain: mcl_inventory
-Auto (use scroll bar if client >@= 5.11)=自动（如果客户端 >@= 5.11，则使用滚动条）
-Off  (use paging buttons, faster)=关闭（使用分页按钮，更快）
-On   (more MC like, slower)=开（更像 MC，更慢）
+Auto=
+Off=
+On (causes problems on some client versions)=
 Enable scrollable creative inventory=启用滚动型创造模式背包
 Building Blocks=建筑块
 Decoration Blocks=美化块

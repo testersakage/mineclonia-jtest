@@ -181,3 +181,6 @@ msgstr "進食 @1 次"
 msgid "Eat @1 items."
 msgstr "進食 @1 次。"
 
+msgid "Enter one of the titular structures"
+msgstr ""
+

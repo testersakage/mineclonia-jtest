@@ -187,3 +187,9 @@ msgstr "@1 身陷甜莓"
 msgid "@1 was poked to death by a sweet berry bush whilst trying to escape @2"
 msgstr "@1 在奮戰 @2 時身陷甜莓"
 
+msgid "@1 froze to death"
+msgstr ""
+
+msgid "@1 was frozen to death by @2"
+msgstr ""
+

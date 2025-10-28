@@ -73,6 +73,12 @@ msgstr "这不是铁镐么"
 msgid "Craft a iron pickaxe using sticks and iron."
 msgstr "用木棍和铁器制作铁镐。"
 
+msgid "Bullseye"
+msgstr ""
+
+msgid "Hit the bullseye of a target block from at least 30 blocks away."
+msgstr ""
+
 msgid "DIAMONDS!"
 msgstr "是钻石吔！"
 
@@ -385,9 +391,39 @@ msgstr "自愿流亡"
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr "击杀一名劫掠队长。或许可以考虑暂时远离当地的村庄……"
 
+msgid "Return to Sender"
+msgstr ""
+
+msgid "Destroy a Ghast with a Fireball"
+msgstr ""
+
 msgid "Zombie Doctor"
 msgstr "救活僵尸"
 
 msgid "Use a golden apple on a zombie villager under the Weakness effect; the advancement is granted when the zombie villager converts into a villager."
 msgstr "对虚弱效果下的僵尸村民使用金苹果；当僵尸村民转变为村民时，会达成该成就。"
+
+msgid "A Terrible Fortress"
+msgstr ""
+
+msgid "Break your way into a Nether Fortress"
+msgstr ""
+
+msgid "Eye Spy"
+msgstr ""
+
+msgid "Follow an Eye of Ender"
+msgstr ""
+
+msgid "The City at the End of the Game"
+msgstr ""
+
+msgid "Go on in, what could happen?"
+msgstr ""
+
+msgid "Those Were The Days"
+msgstr ""
+
+msgid "Enter a Bastion Remnant"
+msgstr ""
 

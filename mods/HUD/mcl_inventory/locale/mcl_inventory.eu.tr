@@ -1,7 +1,7 @@
 # textdomain: mcl_inventory
-Auto (use scroll bar if client >@= 5.11)=Auto (erabili korritze-barra bezeroaren bertsioa >@= 5.11 bada)
-Off  (use paging buttons, faster)=Off (erabili orriztatze-botoiak, azkarragoa)
-On   (more MC like, slower)=On (MC-en antzekoagoa, motelagoa)
+Auto=
+Off=
+On (causes problems on some client versions)=
 Enable scrollable creative inventory=Gaitu korritzea sorkuntza-inbentarioko barran
 Building Blocks=Eraikuntza-blokeak
 Decoration Blocks=Dekorazio-blokeak
