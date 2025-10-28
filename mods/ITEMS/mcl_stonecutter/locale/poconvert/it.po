@@ -22,9 +22,6 @@ msgstr "Riempi la griglia per costruire"
 msgid "Inventory"
 msgstr "Inventario"
 
-msgid "Stone Cutter"
-msgstr "Tagliapietre"
-
 msgid "Used to cut stone like materials."
 msgstr "Utilizzato per tagliare materiali simili alla pietra."
 

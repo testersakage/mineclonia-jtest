@@ -31,6 +31,9 @@ msgstr "Ametystový úlomek"
 msgid "An amethyst shard is a crystalline mineral."
 msgstr "Ametystový úlomek je krystalický minerál."
 
+msgid "Amethyst Material"
+msgstr ""
+
 msgid "Calcite"
 msgstr "Kalcit"
 

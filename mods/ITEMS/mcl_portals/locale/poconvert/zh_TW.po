@@ -25,6 +25,12 @@ msgstr "終界傳送門用於將生物和實體到達終末之界（或回來！
 msgid "Hop into the portal to teleport. Entering an End portal in the Overworld teleports you to a fixed position in the End dimension and creates a 5×5 obsidian platform at your destination. End portals in the End will lead back to your spawn point in the Overworld."
 msgstr "跳入傳送門進行傳送。進入終界傳送門會將你傳送到終界的一個固定位置，並在你的目的地創建一個5×5的黑曜石平台。終界的傳送門會將你帶回你在主界的出生點。"
 
+msgid "Leaving the End"
+msgstr ""
+
+msgid "Entering the End"
+msgstr ""
+
 msgid "End Portal Frame"
 msgstr "終界傳送門框架"
 
@@ -56,6 +62,12 @@ msgid "An End gateway portal teleports creatures and objects to the outer End (a
 msgstr ""
 
 msgid "Throw an ender pearl into the portal to teleport. Entering an Gateway portal near the Overworld teleports you to the outer End. At this destination another gateway portal will be constructed, which you can use to get back."
+msgstr ""
+
+msgid "Entering the Nether"
+msgstr ""
+
+msgid "Leaving the Nether"
 msgstr ""
 
 msgid "Obsidian is also used as the frame of Nether portals."

@@ -19,6 +19,9 @@ msgstr "Lingote de cobre"
 msgid "Molten Raw Copper. It is used to craft blocks."
 msgstr "Cobre crudo fundido. Se utiliza para fabricar bloques."
 
+msgid "Copper Material"
+msgstr ""
+
 msgid "Raw Copper"
 msgstr "Cobre crudo"
 
@@ -42,6 +45,12 @@ msgstr "Lámpara de cobre"
 
 msgid "Copper Bulb On"
 msgstr "Lámpara de cobre encendida"
+
+msgid "Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Copper Bulb Powered On"
+msgstr ""
 
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "La Lámpara de Cobre es principalmente un bloque decorativo."
@@ -84,6 +93,12 @@ msgstr "Lámpara de cobre expuesto"
 
 msgid "Exposed Copper Bulb On"
 msgstr "Lámpara de cobre expuesto encendida"
+
+msgid "Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Exposed Copper Bulb Powered On"
+msgstr ""
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "La Lámpara de Cobre Expuesto es principalmente un bloque decorativo."
@@ -130,6 +145,12 @@ msgstr "Lámpara de cobre oxidado"
 msgid "Oxidized Copper Bulb On"
 msgstr "Lámpara de cobre oxidado encendida"
 
+msgid "Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Oxidized Copper Bulb Powered On"
+msgstr ""
+
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "La Lámpara de Cobre Oxidado es principalmente un bloque decorativo."
 
@@ -172,6 +193,12 @@ msgstr "Lámpara de cobre encerado"
 msgid "Waxed Copper Bulb On"
 msgstr "Lámpara de cobre encerado encendida"
 
+msgid "Waxed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "Puerta de cobre encerado"
 
@@ -202,6 +229,12 @@ msgstr "Lámpara de cobre expuesto encerado"
 msgid "Waxed Exposed Copper Bulb On"
 msgstr "Lámpara de cobre expuesto encerado encendida"
 
+msgid "Waxed Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Exposed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "Rejilla de cobre expuesto encerado"
 
@@ -228,6 +261,12 @@ msgstr "Lámpara de cobre oxidado encerado"
 
 msgid "Waxed Oxidized Copper Bulb On"
 msgstr "Lámpara de cobre oxidado encerado encendida"
+
+msgid "Waxed Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Bulb Powered On"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Grate"
 msgstr "Rejilla de cobre oxidado encerado"
@@ -259,6 +298,12 @@ msgstr "Lámpara de cobre degradado encerado"
 msgid "Waxed Weathered Copper Bulb On"
 msgstr "Lámpara de cobre degradado encerado encendida"
 
+msgid "Waxed Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Weathered Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "Rejilla de cobre degradado encerado"
 
@@ -288,6 +333,12 @@ msgstr "Lámpara de cobre degradado"
 
 msgid "Weathered Copper Bulb On"
 msgstr "Lámpara de cobre degradado encendida"
+
+msgid "Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Weathered Copper Bulb Powered On"
+msgstr ""
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "La Lámpara de Cobre Degradado es principalmente un bloque decorativo."

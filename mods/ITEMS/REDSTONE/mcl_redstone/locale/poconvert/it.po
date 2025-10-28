@@ -34,3 +34,6 @@ msgstr "Leggi le voci di aiuto sugli oggetti di pietrarossa per imparare come in
 msgid "Redstone Dust"
 msgstr "Polvere di pietrarossa"
 
+msgid "Redstone Material"
+msgstr ""
+

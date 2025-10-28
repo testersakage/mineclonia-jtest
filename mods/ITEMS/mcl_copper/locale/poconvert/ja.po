@@ -19,6 +19,9 @@ msgstr "銅インゴット"
 msgid "Molten Raw Copper. It is used to craft blocks."
 msgstr "溶けた未処理の銅。ブロックのクラフトに使われます。"
 
+msgid "Copper Material"
+msgstr ""
+
 msgid "Raw Copper"
 msgstr "銅の粗鉱"
 
@@ -42,6 +45,12 @@ msgstr "銅の電球"
 
 msgid "Copper Bulb On"
 msgstr "点灯した銅の電球"
+
+msgid "Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Copper Bulb Powered On"
+msgstr ""
 
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "銅の電球は主な装飾ブロックです。"
@@ -84,6 +93,12 @@ msgstr "風化した銅の電球"
 
 msgid "Exposed Copper Bulb On"
 msgstr "点灯した風化した銅の電球"
+
+msgid "Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Exposed Copper Bulb Powered On"
+msgstr ""
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "風化した銅の電球は主な装飾ブロックです。"
@@ -130,6 +145,12 @@ msgstr "酸化した銅の電球"
 msgid "Oxidized Copper Bulb On"
 msgstr "点灯した酸化した銅の電球"
 
+msgid "Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Oxidized Copper Bulb Powered On"
+msgstr ""
+
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "酸化した銅の電球は主な装飾ブロックです。"
 
@@ -172,6 +193,12 @@ msgstr "錆止めされた銅の電球"
 msgid "Waxed Copper Bulb On"
 msgstr "点灯した錆止めされた銅の電球"
 
+msgid "Waxed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "錆止めされた銅の格子"
 
@@ -202,6 +229,12 @@ msgstr "錆止めされた風化した銅の電球"
 msgid "Waxed Exposed Copper Bulb On"
 msgstr "点灯した錆止めされた風化した銅の電球"
 
+msgid "Waxed Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Exposed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "錆止めされた風化した銅の格子"
 
@@ -228,6 +261,12 @@ msgstr "錆止めされた酸化した銅の電球"
 
 msgid "Waxed Oxidized Copper Bulb On"
 msgstr "点灯した錆止めされた酸化した銅の電球"
+
+msgid "Waxed Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Bulb Powered On"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Grate"
 msgstr "錆止めされた酸化した銅の格子"
@@ -259,6 +298,12 @@ msgstr "錆止めされた錆びた銅の電球"
 msgid "Waxed Weathered Copper Bulb On"
 msgstr "点灯した錆止めされた錆びた銅の電球"
 
+msgid "Waxed Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Weathered Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "錆止めされた錆びた銅の格子"
 
@@ -288,6 +333,12 @@ msgstr "錆びた銅の電球"
 
 msgid "Weathered Copper Bulb On"
 msgstr "点灯した錆びた銅の電球"
+
+msgid "Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Weathered Copper Bulb Powered On"
+msgstr ""
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "錆びた銅の電球は主な装飾ブロックです。"

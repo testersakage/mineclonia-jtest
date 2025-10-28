@@ -40,6 +40,9 @@ msgstr "Třešňový plot"
 msgid "Cherry Fence Gate"
 msgstr ""
 
+msgid "Cherry Hanging Sign"
+msgstr ""
+
 msgid "Cherry Leaves"
 msgstr ""
 

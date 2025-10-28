@@ -73,6 +73,9 @@ msgstr "Barrière carmin"
 msgid "Crimson Fence Gate"
 msgstr "Portillon carmin"
 
+msgid "Crimson Hanging Sign"
+msgstr ""
+
 msgid "Crimson Log"
 msgstr "Tige carmin"
 
@@ -144,6 +147,9 @@ msgstr "Barrière biscornue"
 
 msgid "Warped Fence Gate"
 msgstr "Portillon biscornu"
+
+msgid "Warped Hanging Sign"
+msgstr ""
 
 msgid "Warped Log"
 msgstr "Tronc biscornu"

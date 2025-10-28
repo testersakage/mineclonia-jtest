@@ -58,8 +58,8 @@ msgstr "Piasek dusz"
 msgid "Reduces walking speed"
 msgstr "Zmniejsza prędkość poruszania"
 
-msgid "Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block."
-msgstr "Piasek dusz jest blokiem z Netheru. Można na nim tylko chodzić powoli. Efekt spowolnienia jest mocniejszy gdy piasek dusz jest położony na lodzie, zbitym lodzi lub bloku szlamu."
+msgid "Soul sand is a block from the Nether. It has a slowing effect when walked on."
+msgstr ""
 
 msgid "Nether Brick Block"
 msgstr "Blok Netherowych cegieł"
@@ -130,6 +130,9 @@ msgstr "Netherowy kwarc"
 msgid "Nether quartz is a versatile crafting ingredient."
 msgstr "Netherowy kwarc jest wszechstronnym przedmiotem użytecznym w wytwarzaniu."
 
+msgid "Quartz Material"
+msgstr ""
+
 msgid "Netherite Scrap"
 msgstr ""
 
@@ -140,6 +143,9 @@ msgid "Netherite Ingot"
 msgstr ""
 
 msgid "Netherite ingots can be used with a smithing table to upgrade items to netherite."
+msgstr ""
+
+msgid "Netherite Material"
 msgstr ""
 
 msgid "Nether Brick"

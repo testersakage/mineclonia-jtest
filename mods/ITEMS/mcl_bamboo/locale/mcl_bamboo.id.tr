@@ -1,4 +1,5 @@
 # textdomain: mcl_bamboo
+### bamboo_base.lua ###
 A Block made of Bamboo stalks. Can be crafted into Bamboo Planks.=Blok yang terbuat dari batang bambu. Dapat dibuat menjadi papan bambu.
 Block of Bamboo=Blok Bambu
 Block of Stripped Bamboo=Blok Bambu Ukir
@@ -8,6 +9,7 @@ Bamboo Button=Tombol Bambu
 Bamboo Door=Pintu Bambu
 Bamboo Fence=Pagar Bambu
 Bamboo Fence Gate=Gerbang Pagar Bambu
+Bamboo Hanging Sign=
 Bamboo Planks=Papan Bambu
 Bamboo Pressure Plate=Plat Bambu
 Bamboo Sign=Tanda Bambu

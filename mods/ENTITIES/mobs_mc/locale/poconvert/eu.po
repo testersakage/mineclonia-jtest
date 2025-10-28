@@ -127,6 +127,9 @@ msgstr "Arpilatzailea"
 msgid "Polar Bear"
 msgstr "Hartz Polarra"
 
+msgid "Pufferfish"
+msgstr ""
+
 msgid "Rabbit"
 msgstr "Untxia"
 

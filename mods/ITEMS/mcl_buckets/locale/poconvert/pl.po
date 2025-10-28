@@ -31,6 +31,9 @@ msgstr "Wiadro z aksolotlem"
 msgid "Bucket of Cod"
 msgstr "Wiadro z dorszem"
 
+msgid "Bucket of Pufferfish"
+msgstr ""
+
 msgid "Bucket of Salmon"
 msgstr "Wiadro z łososiem"
 
@@ -39,6 +42,9 @@ msgstr "Wiadro z rybą tropikalną"
 
 msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
 msgstr "Umieść je aby opróżnić wiadro i wypuścić dorsza. Można go zdobyć, klikając prawym przyciskiem myszy na wiadro z dorszem."
+
+msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
+msgstr ""
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr "Umieść je aby opróżnić wiadro i wypuścić łososia. Można go zdobyć, klikając prawym przyciskiem myszy na wiadro z łososiem."
@@ -52,6 +58,9 @@ msgstr "Umieść je aby opróżnić wiadro i wypuścić aksolotla. Można go zdo
 msgid "Places a water source and a Cod."
 msgstr "Umieszcza źródło wody i dorsza."
 
+msgid "Places a water source and a Pufferfish."
+msgstr ""
+
 msgid "Places a water source and a Salmon."
 msgstr "Umieszcza źródło wody i łososia."
 
@@ -63,6 +72,9 @@ msgstr "Umieszcza źródło wody i aksolotla."
 
 msgid "This bucket is filled with water and a Cod."
 msgstr "To wiadro jest wypełnione wodą i zawiera dorsza."
+
+msgid "This bucket is filled with water and a Pufferfish."
+msgstr ""
 
 msgid "This bucket is filled with water and a Salmon."
 msgstr "To wiadro jest wypełnione wodą i zawiera łososia."

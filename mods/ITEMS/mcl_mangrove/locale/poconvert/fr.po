@@ -82,6 +82,9 @@ msgstr "Barrière en palétuvier"
 msgid "Mangrove Fence Gate"
 msgstr "Portillon en palétuvier"
 
+msgid "Mangrove Hanging Sign"
+msgstr ""
+
 msgid "Mangrove Leaves"
 msgstr "Feuilles de palétuvier"
 

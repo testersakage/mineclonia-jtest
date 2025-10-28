@@ -34,3 +34,6 @@ msgstr ""
 msgid "Redstone Dust"
 msgstr ""
 
+msgid "Redstone Material"
+msgstr ""
+

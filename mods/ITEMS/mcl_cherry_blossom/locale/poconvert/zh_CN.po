@@ -40,6 +40,9 @@ msgstr "樱花木栅栏"
 msgid "Cherry Fence Gate"
 msgstr "樱花木栅栏门"
 
+msgid "Cherry Hanging Sign"
+msgstr ""
+
 msgid "Cherry Leaves"
 msgstr "樱花树叶"
 

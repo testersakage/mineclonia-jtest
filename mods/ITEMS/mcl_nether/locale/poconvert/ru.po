@@ -58,8 +58,8 @@ msgstr "Песок душ"
 msgid "Reduces walking speed"
 msgstr "Уменьшает скорость ходьбы"
 
-msgid "Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block."
-msgstr "Песок душ — это блок из Незера. Идти по нему можно только медленно. Замедляющий эффект усиливается, если песок душ стоит на льду, плотном льду или блоке слизи."
+msgid "Soul sand is a block from the Nether. It has a slowing effect when walked on."
+msgstr ""
 
 msgid "Nether Brick Block"
 msgstr "Адские кирпичи"
@@ -130,6 +130,9 @@ msgstr "Кварц"
 msgid "Nether quartz is a versatile crafting ingredient."
 msgstr "Кварц — это универсальный материал для крафта."
 
+msgid "Quartz Material"
+msgstr ""
+
 msgid "Netherite Scrap"
 msgstr "Незеритовый скрап"
 
@@ -141,6 +144,9 @@ msgstr "Незеритовый слиток"
 
 msgid "Netherite ingots can be used with a smithing table to upgrade items to netherite."
 msgstr "Незеритовые слитки можно использовать с кузнечным столом для улучшения предметов до незерита."
+
+msgid "Netherite Material"
+msgstr ""
 
 msgid "Nether Brick"
 msgstr "Адский кирпич"

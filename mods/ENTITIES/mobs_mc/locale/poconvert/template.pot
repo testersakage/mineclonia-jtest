@@ -127,6 +127,9 @@ msgstr ""
 msgid "Polar Bear"
 msgstr ""
 
+msgid "Pufferfish"
+msgstr ""
+
 msgid "Rabbit"
 msgstr ""
 

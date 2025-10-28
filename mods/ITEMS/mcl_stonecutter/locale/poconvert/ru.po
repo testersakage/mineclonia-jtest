@@ -22,9 +22,6 @@ msgstr "Заполнить сетку крафта"
 msgid "Inventory"
 msgstr "Инвентарь"
 
-msgid "Stone Cutter"
-msgstr "Камнерез"
-
 msgid "Used to cut stone like materials."
 msgstr "Используется для резьбы каменных материалов."
 

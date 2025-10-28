@@ -40,6 +40,9 @@ msgstr "Gereziondo hesia"
 msgid "Cherry Fence Gate"
 msgstr "Gereziondo hesiko atea"
 
+msgid "Cherry Hanging Sign"
+msgstr ""
+
 msgid "Cherry Leaves"
 msgstr "Gereziondo hostoak"
 

@@ -40,6 +40,9 @@ msgstr "Valla de cerezo"
 msgid "Cherry Fence Gate"
 msgstr "Puerta de valla de cerezo"
 
+msgid "Cherry Hanging Sign"
+msgstr ""
+
 msgid "Cherry Leaves"
 msgstr "Hojas de cerezo"
 

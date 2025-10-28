@@ -82,6 +82,9 @@ msgstr "Valla de mangle"
 msgid "Mangrove Fence Gate"
 msgstr "Puerta de valla de mangle"
 
+msgid "Mangrove Hanging Sign"
+msgstr ""
+
 msgid "Mangrove Leaves"
 msgstr "Hojas de mangle"
 

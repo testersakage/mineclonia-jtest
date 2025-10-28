@@ -127,6 +127,9 @@ msgstr "掠奪者"
 msgid "Polar Bear"
 msgstr "北極熊"
 
+msgid "Pufferfish"
+msgstr ""
+
 msgid "Rabbit"
 msgstr "兔"
 

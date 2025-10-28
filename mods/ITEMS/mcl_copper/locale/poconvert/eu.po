@@ -19,6 +19,9 @@ msgstr "Kobrezko lingotea"
 msgid "Molten Raw Copper. It is used to craft blocks."
 msgstr "Landu gabeko Kobre urtua. Blokeak fabrikatzeko erabiltzen da."
 
+msgid "Copper Material"
+msgstr ""
+
 msgid "Raw Copper"
 msgstr "Landu gabeko Kobre"
 
@@ -42,6 +45,12 @@ msgstr "Kobrezko lanpara"
 
 msgid "Copper Bulb On"
 msgstr "Kobrezko lanpara piztua"
+
+msgid "Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Copper Bulb Powered On"
+msgstr ""
 
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "Kobrezko lanpara dekorazio-bloke bat da nagusiki."
@@ -84,6 +93,12 @@ msgstr "Esposizioan dagoen kobrezko lanpara"
 
 msgid "Exposed Copper Bulb On"
 msgstr "Esposizioko kobrezko lanpara piztuta"
+
+msgid "Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Exposed Copper Bulb Powered On"
+msgstr ""
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "Ikusgai dagoen kobrezko lanpara dekorazio-bloke bat da nagusiki."
@@ -130,6 +145,12 @@ msgstr "Kobre oxidatuzko lanpara"
 msgid "Oxidized Copper Bulb On"
 msgstr "Kobre oxidatuzko lanpara piztua"
 
+msgid "Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Oxidized Copper Bulb Powered On"
+msgstr ""
+
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "Kobre oxidatuzko lanpara dekorazio-bloke bat da nagusiki."
 
@@ -172,6 +193,12 @@ msgstr "Kobrezko lanpara argizariduna"
 msgid "Waxed Copper Bulb On"
 msgstr "Kobrezko lanpara argizariduna piztuta"
 
+msgid "Waxed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "Kobrezko ate argizariduna"
 
@@ -202,6 +229,12 @@ msgstr "Esposizioko kobrezko lanpara argizaritua"
 msgid "Waxed Exposed Copper Bulb On"
 msgstr "Esposizioko kobrezko lanpara argizaritua piztuta"
 
+msgid "Waxed Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Exposed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "Esposizioan dagoen kobrezko sareta argizaritua"
 
@@ -228,6 +261,12 @@ msgstr "Kobre oxidatuko lanpara argizaritua"
 
 msgid "Waxed Oxidized Copper Bulb On"
 msgstr "Kobre oxidatuzko lanpara argizaritua piztuta"
+
+msgid "Waxed Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Bulb Powered On"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Grate"
 msgstr "Kobre herdoildu argizarizko sareta"
@@ -259,6 +298,12 @@ msgstr "Kobre degradatuko lanpara argizaritua"
 msgid "Waxed Weathered Copper Bulb On"
 msgstr "Kobre degradatuko lanpara argizaritua piztuta"
 
+msgid "Waxed Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Weathered Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "Kobre degradatuzko sareta argizaritua"
 
@@ -288,6 +333,12 @@ msgstr "Kobrezko lanpara degradatua"
 
 msgid "Weathered Copper Bulb On"
 msgstr "Kobre degradatuko lanpara piztuta"
+
+msgid "Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Weathered Copper Bulb Powered On"
+msgstr ""
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "Kobre degradatuzko lanpara dekorazio-bloke bat da nagusiki."

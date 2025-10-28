@@ -82,6 +82,9 @@ msgstr "Мангровый забор"
 msgid "Mangrove Fence Gate"
 msgstr "Мангровая калитка"
 
+msgid "Mangrove Hanging Sign"
+msgstr ""
+
 msgid "Mangrove Leaves"
 msgstr "Мангровые листья"
 

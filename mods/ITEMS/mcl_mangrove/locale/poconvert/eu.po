@@ -82,6 +82,9 @@ msgstr "Manglazko hesia"
 msgid "Mangrove Fence Gate"
 msgstr "Manglazko hesi-atea"
 
+msgid "Mangrove Hanging Sign"
+msgstr ""
+
 msgid "Mangrove Leaves"
 msgstr "Mangla-orriak"
 

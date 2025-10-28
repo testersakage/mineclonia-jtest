@@ -22,9 +22,6 @@ msgstr ""
 msgid "Inventory"
 msgstr "库存"
 
-msgid "Stone Cutter"
-msgstr "石材切割机"
-
 msgid "Used to cut stone like materials."
 msgstr "用于切割像石头一样的材料。"
 

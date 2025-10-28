@@ -73,6 +73,9 @@ msgstr "真紅のフェンス"
 msgid "Crimson Fence Gate"
 msgstr "真紅のフェンスゲート"
 
+msgid "Crimson Hanging Sign"
+msgstr ""
+
 msgid "Crimson Log"
 msgstr "真紅の幹"
 
@@ -144,6 +147,9 @@ msgstr "歪んだフェンス"
 
 msgid "Warped Fence Gate"
 msgstr "歪んだフェンスゲート"
+
+msgid "Warped Hanging Sign"
+msgstr ""
 
 msgid "Warped Log"
 msgstr "歪んだ幹"

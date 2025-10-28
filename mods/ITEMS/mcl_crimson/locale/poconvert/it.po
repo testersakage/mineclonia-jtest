@@ -73,6 +73,9 @@ msgstr "Staccionata cremisi"
 msgid "Crimson Fence Gate"
 msgstr "Cancelletto cremisi"
 
+msgid "Crimson Hanging Sign"
+msgstr ""
+
 msgid "Crimson Log"
 msgstr "Tronco cremisi"
 
@@ -144,6 +147,9 @@ msgstr "Staccionata distorta"
 
 msgid "Warped Fence Gate"
 msgstr "Cancelletto distorto"
+
+msgid "Warped Hanging Sign"
+msgstr ""
 
 msgid "Warped Log"
 msgstr "Tronco distorto"

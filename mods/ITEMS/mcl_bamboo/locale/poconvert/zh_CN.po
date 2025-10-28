@@ -40,6 +40,9 @@ msgstr "竹栅栏"
 msgid "Bamboo Fence Gate"
 msgstr "竹栅栏门"
 
+msgid "Bamboo Hanging Sign"
+msgstr ""
+
 msgid "Bamboo Planks"
 msgstr "竹木板"
 

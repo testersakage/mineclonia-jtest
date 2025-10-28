@@ -127,6 +127,9 @@ msgstr "ピリジャー"
 msgid "Polar Bear"
 msgstr "シロクマ"
 
+msgid "Pufferfish"
+msgstr ""
+
 msgid "Rabbit"
 msgstr "ウサギ"
 

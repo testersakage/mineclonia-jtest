@@ -58,8 +58,8 @@ msgstr "Arimen harea"
 msgid "Reduces walking speed"
 msgstr "Ibiltzean abiadura murrizten du"
 
-msgid "Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block."
-msgstr "Arimen harea Netherren bloke bat da. Poliki-poliki arima-hondarren gainean ibili besterik ezin da egin. Desazelerazio efektua handitu egiten da arimen harea izotz, izotz trinko edo slime bloke baten gainean dagoenean."
+msgid "Soul sand is a block from the Nether. It has a slowing effect when walked on."
+msgstr ""
 
 msgid "Nether Brick Block"
 msgstr "Nether adreilu blokea"
@@ -130,6 +130,9 @@ msgstr "Nether kuartzoa"
 msgid "Nether quartz is a versatile crafting ingredient."
 msgstr "Nether kuartzoa fabrikazio moldakorreko osagai bat da."
 
+msgid "Quartz Material"
+msgstr ""
+
 msgid "Netherite Scrap"
 msgstr "Netherita zatiak"
 
@@ -141,6 +144,9 @@ msgstr "Netheritazko lingotea"
 
 msgid "Netherite ingots can be used with a smithing table to upgrade items to netherite."
 msgstr "Netheritazko lingoteak errementeriako mahai batean erabil daitezke, itemak netheritara eguneratzeko."
+
+msgid "Netherite Material"
+msgstr ""
 
 msgid "Nether Brick"
 msgstr "Nether adreiluak"

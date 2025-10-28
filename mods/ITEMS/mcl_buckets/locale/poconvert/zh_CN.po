@@ -31,6 +31,9 @@ msgstr "美西螈桶"
 msgid "Bucket of Cod"
 msgstr "鳕鱼桶"
 
+msgid "Bucket of Pufferfish"
+msgstr ""
+
 msgid "Bucket of Salmon"
 msgstr "三文鱼桶"
 
@@ -39,6 +42,9 @@ msgstr "热带鱼桶"
 
 msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
 msgstr "放置它（鳕鱼桶）可倒空水桶并放出一条鳕鱼。通过用水桶右键点击鳕鱼来获得（鳕鱼桶）。"
+
+msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
+msgstr ""
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr "放置它（三文鱼桶）可倒空水桶并放出一条三文鱼。通过用水桶右键点击三文鱼来获得（三文鱼桶）。"
@@ -52,6 +58,9 @@ msgstr "放置它（美西螈桶）可倒空水桶并放出一只美西螈。通
 msgid "Places a water source and a Cod."
 msgstr "放置一处水源和一条鳕鱼。"
 
+msgid "Places a water source and a Pufferfish."
+msgstr ""
+
 msgid "Places a water source and a Salmon."
 msgstr "放置一处水源和一条三文鱼。"
 
@@ -63,6 +72,9 @@ msgstr "放置一处水源和一只美西螈。"
 
 msgid "This bucket is filled with water and a Cod."
 msgstr "这个水桶里装满了水和一条鳕鱼。"
+
+msgid "This bucket is filled with water and a Pufferfish."
+msgstr ""
 
 msgid "This bucket is filled with water and a Salmon."
 msgstr "这个水桶里装满了水和一条三文鱼。"

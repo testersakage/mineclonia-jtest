@@ -58,8 +58,8 @@ msgstr "Seelensand"
 msgid "Reduces walking speed"
 msgstr "Reduziert das Schritttempo"
 
-msgid "Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block."
-msgstr "Seelensand ist ein Block aus dem Nether. Man kann auf ihm nur langsam gehen. Die Verlangsamung ist verstärkt, wenn sich der Seelensand auf Eis, Packeis oder einem Schleimblock befindet."
+msgid "Soul sand is a block from the Nether. It has a slowing effect when walked on."
+msgstr ""
 
 msgid "Nether Brick Block"
 msgstr "Netherziegelblock"
@@ -130,6 +130,9 @@ msgstr "Netherquarz"
 msgid "Nether quartz is a versatile crafting ingredient."
 msgstr "Netherquarz ist eine vielseitige Fertigungskomponente."
 
+msgid "Quartz Material"
+msgstr ""
+
 msgid "Netherite Scrap"
 msgstr ""
 
@@ -140,6 +143,9 @@ msgid "Netherite Ingot"
 msgstr ""
 
 msgid "Netherite ingots can be used with a smithing table to upgrade items to netherite."
+msgstr ""
+
+msgid "Netherite Material"
 msgstr ""
 
 msgid "Nether Brick"

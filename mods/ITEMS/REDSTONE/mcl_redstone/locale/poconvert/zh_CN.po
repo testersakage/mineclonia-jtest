@@ -34,3 +34,6 @@ msgstr "阅读其他红石组件的帮助条目，以了解红石组件是如何
 msgid "Redstone Dust"
 msgstr "红石粉"
 
+msgid "Redstone Material"
+msgstr ""
+

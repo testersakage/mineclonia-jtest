@@ -127,6 +127,9 @@ msgstr "Pillard"
 msgid "Polar Bear"
 msgstr "Ours blanc"
 
+msgid "Pufferfish"
+msgstr ""
+
 msgid "Rabbit"
 msgstr "Lapin"
 

@@ -6,3 +6,4 @@ Redstone power can be received from various redstone components, such as a block
 Place redstone on the ground to build a redstone trail. The trails will connect to each other automatically and it can also go over hills.=将红石放置在地面上以构建红石线路。这些线路会自动相互连接，而且还可以跨越山丘。
 Read the help entries on the other redstone components to learn how redstone components interact.=阅读其他红石组件的帮助条目，以了解红石组件是如何相互作用的。
 Redstone Dust=红石粉
+Redstone Material=

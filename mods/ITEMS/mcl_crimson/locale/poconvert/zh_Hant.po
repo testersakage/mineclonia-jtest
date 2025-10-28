@@ -73,6 +73,9 @@ msgstr "緋紅柵欄"
 msgid "Crimson Fence Gate"
 msgstr "緋紅柵欄門"
 
+msgid "Crimson Hanging Sign"
+msgstr ""
+
 msgid "Crimson Log"
 msgstr "緋紅蕈柄"
 
@@ -144,6 +147,9 @@ msgstr "扭曲柵欄"
 
 msgid "Warped Fence Gate"
 msgstr "扭曲柵欄門"
+
+msgid "Warped Hanging Sign"
+msgstr ""
 
 msgid "Warped Log"
 msgstr "扭曲蕈柄"

@@ -55,6 +55,9 @@ msgstr "钻石"
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr "珍贵的矿物，可用于制造顶级盔甲或工具。"
 
+msgid "Diamond Material"
+msgstr ""
+
 msgid "Clay Ball"
 msgstr "粘土球"
 
@@ -67,11 +70,17 @@ msgstr "铁锭"
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr "铁块熔炼而成，用于制作盔甲、工具等。"
 
+msgid "Iron Material"
+msgstr ""
+
 msgid "Gold Ingot"
 msgstr "金锭"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr "金块熔炼而成，用于制作盔甲、工具等。"
+
+msgid "Gold Material"
+msgstr ""
 
 msgid "Emerald"
 msgstr "绿宝石"
@@ -79,11 +88,17 @@ msgstr "绿宝石"
 msgid "Emeralds are used in villager trades as currency."
 msgstr "与村民交易时可当作货币。"
 
+msgid "Emerald Material"
+msgstr ""
+
 msgid "Lapis Lazuli"
 msgstr "青金石"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr "魔法台上附魔物品所必需的材料。"
+
+msgid "Lapis Material"
+msgstr ""
 
 msgid "Brick"
 msgstr "砖头"
@@ -151,6 +166,9 @@ msgstr "金合欢木栅栏"
 msgid "Acacia Fence Gate"
 msgstr "金合欢木栅栏门"
 
+msgid "Acacia Hanging Sign"
+msgstr ""
+
 msgid "Acacia Leaves"
 msgstr "金合欢树叶"
 
@@ -207,6 +225,9 @@ msgstr "白桦木栅栏"
 
 msgid "Birch Fence Gate"
 msgstr "白桦木栅栏门"
+
+msgid "Birch Hanging Sign"
+msgstr ""
 
 msgid "Birch Leaves"
 msgstr "白桦树叶"
@@ -277,6 +298,9 @@ msgstr "深色橡木栅栏"
 msgid "Dark Oak Fence Gate"
 msgstr "深色橡木栅栏门"
 
+msgid "Dark Oak Hanging Sign"
+msgstr ""
+
 msgid "Dark Oak Leaves"
 msgstr "深色橡树叶"
 
@@ -339,6 +363,9 @@ msgstr "丛林栅栏"
 
 msgid "Jungle Fence Gate"
 msgstr "丛林栅栏门"
+
+msgid "Jungle Hanging Sign"
+msgstr ""
 
 msgid "Jungle Leaves"
 msgstr "丛林树叶"
@@ -409,6 +436,9 @@ msgstr "橡木栅栏"
 msgid "Oak Fence Gate"
 msgstr "橡木栅栏门"
 
+msgid "Oak Hanging Sign"
+msgstr ""
+
 msgid "Oak Leaves"
 msgstr "橡木树叶"
 
@@ -477,6 +507,9 @@ msgstr "云杉栅栏"
 
 msgid "Spruce Fence Gate"
 msgstr "云杉栅栏门"
+
+msgid "Spruce Hanging Sign"
+msgstr ""
 
 msgid "Spruce Leaves"
 msgstr "云杉树叶"
@@ -904,6 +937,12 @@ msgstr "浮冰"
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr "浮冰是冰的一种压缩形态。它是不透明且坚固的。"
 
+msgid "Blue Ice"
+msgstr ""
+
+msgid "Blue Ice is a still more compressed form of ice.  It is opaque and solid."
+msgstr ""
+
 msgid "Frosted ice is a short-lived solid block. It melts into a water source within a few seconds."
 msgstr "霜冰是一种存在时间较短的固体方块。它会在几秒内融化成水源。"
 
@@ -1053,6 +1092,12 @@ msgstr "枯灌木丛"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "枯木丛是一种不起眼的植物，常出现在干旱地区。可以采集它们来获取木棍。"
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Barrier"
 msgstr "屏障"

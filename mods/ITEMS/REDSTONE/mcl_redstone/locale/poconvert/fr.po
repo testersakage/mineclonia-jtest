@@ -34,3 +34,6 @@ msgstr "Lisez les entrées d'aide sur les autres composants Redstone pour savoir
 msgid "Redstone Dust"
 msgstr "Poudre de redstone"
 
+msgid "Redstone Material"
+msgstr ""
+

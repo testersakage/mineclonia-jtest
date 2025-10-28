@@ -55,6 +55,9 @@ msgstr "Diamantea"
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr "Diamanteak mineral preziatuak eta erabilgarriak dira armaduraren eta erreminten mailarik altuena sortzeko."
 
+msgid "Diamond Material"
+msgstr ""
+
 msgid "Clay Ball"
 msgstr "Buztinezko bola"
 
@@ -67,11 +70,17 @@ msgstr "Burdinazko lingotea"
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr "Burdinurtua. Armadurak, erremintak eta beste gauza batzuk fabrikatzeko erabiltzen da."
 
+msgid "Iron Material"
+msgstr ""
+
 msgid "Gold Ingot"
 msgstr "Urrezko lingotea"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr "Urre urtua Armadurak, erremintak eta beste gauza batzuk egiteko erabiltzen da."
+
+msgid "Gold Material"
+msgstr ""
 
 msgid "Emerald"
 msgstr "Esmeralda"
@@ -79,11 +88,17 @@ msgstr "Esmeralda"
 msgid "Emeralds are used in villager trades as currency."
 msgstr "Esmeraldak baserritarren merkataritzan erabiltzen dira txanpon gisa."
 
+msgid "Emerald Material"
+msgstr ""
+
 msgid "Lapis Lazuli"
 msgstr "Lapis Lazuli"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr "Lapis Lazuliak beharrezkoak dira sorginkeria mahai batean itemak xarmatzeko."
+
+msgid "Lapis Material"
+msgstr ""
 
 msgid "Brick"
 msgstr "Adreilua"
@@ -151,6 +166,9 @@ msgstr "Akaziako hesia"
 msgid "Acacia Fence Gate"
 msgstr "Akaziako hesi atea"
 
+msgid "Acacia Hanging Sign"
+msgstr ""
+
 msgid "Acacia Leaves"
 msgstr "Akazia hostoak"
 
@@ -207,6 +225,9 @@ msgstr "Urki hesia"
 
 msgid "Birch Fence Gate"
 msgstr "Urki hesiko atea"
+
+msgid "Birch Hanging Sign"
+msgstr ""
 
 msgid "Birch Leaves"
 msgstr "Urki hostoak"
@@ -277,6 +298,9 @@ msgstr "Haritz iluneko hesia"
 msgid "Dark Oak Fence Gate"
 msgstr "Haritz iluneko hesi atea"
 
+msgid "Dark Oak Hanging Sign"
+msgstr ""
+
 msgid "Dark Oak Leaves"
 msgstr "Haritz iluneko hostoak"
 
@@ -339,6 +363,9 @@ msgstr "Oihan hesia"
 
 msgid "Jungle Fence Gate"
 msgstr "Oihaneko hesi atea"
+
+msgid "Jungle Hanging Sign"
+msgstr ""
 
 msgid "Jungle Leaves"
 msgstr "Oihan orriak"
@@ -409,6 +436,9 @@ msgstr "Haritzezko hesia"
 msgid "Oak Fence Gate"
 msgstr "Haritzezko hesi atea"
 
+msgid "Oak Hanging Sign"
+msgstr ""
+
 msgid "Oak Leaves"
 msgstr "Haritz hostoak"
 
@@ -477,6 +507,9 @@ msgstr "Izei hesia"
 
 msgid "Spruce Fence Gate"
 msgstr "Izei hesiko atea"
+
+msgid "Spruce Hanging Sign"
+msgstr ""
 
 msgid "Spruce Leaves"
 msgstr "Izei orriak"
@@ -904,6 +937,12 @@ msgstr "Izotz trinkoa"
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr "Izotz trinkoa izotz forma konprimitua da. Opakua eta solidoa da."
 
+msgid "Blue Ice"
+msgstr ""
+
+msgid "Blue Ice is a still more compressed form of ice.  It is opaque and solid."
+msgstr ""
+
 msgid "Frosted ice is a short-lived solid block. It melts into a water source within a few seconds."
 msgstr "Izotza bizi motzeko bloke solidoa da. Ur-iturrian bihurtuko da segundo gutxiren buruan."
 
@@ -1053,6 +1092,12 @@ msgstr "Zuhaixka hila"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "Zuhaixka hilak ez dira oso ohikoak, eta askotan eremu lehorretan egoten dira. Uzta bildu daiteke makilak lortzeko."
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Barrier"
 msgstr "Hesia"

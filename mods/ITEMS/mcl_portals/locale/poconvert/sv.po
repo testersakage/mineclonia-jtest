@@ -25,6 +25,12 @@ msgstr ""
 msgid "Hop into the portal to teleport. Entering an End portal in the Overworld teleports you to a fixed position in the End dimension and creates a 5×5 obsidian platform at your destination. End portals in the End will lead back to your spawn point in the Overworld."
 msgstr ""
 
+msgid "Leaving the End"
+msgstr ""
+
+msgid "Entering the End"
+msgstr ""
+
 msgid "End Portal Frame"
 msgstr ""
 
@@ -56,6 +62,12 @@ msgid "An End gateway portal teleports creatures and objects to the outer End (a
 msgstr ""
 
 msgid "Throw an ender pearl into the portal to teleport. Entering an Gateway portal near the Overworld teleports you to the outer End. At this destination another gateway portal will be constructed, which you can use to get back."
+msgstr ""
+
+msgid "Entering the Nether"
+msgstr ""
+
+msgid "Leaving the Nether"
 msgstr ""
 
 msgid "Obsidian is also used as the frame of Nether portals."

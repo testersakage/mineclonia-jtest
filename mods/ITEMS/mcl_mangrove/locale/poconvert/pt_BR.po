@@ -82,6 +82,9 @@ msgstr ""
 msgid "Mangrove Fence Gate"
 msgstr ""
 
+msgid "Mangrove Hanging Sign"
+msgstr ""
+
 msgid "Mangrove Leaves"
 msgstr ""
 

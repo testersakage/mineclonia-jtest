@@ -1,4 +1,5 @@
 # textdomain: mcl_bamboo
+### bamboo_base.lua ###
 A Block made of Bamboo stalks. Can be crafted into Bamboo Planks.=
 Block of Bamboo=Bloco de bambu
 Block of Stripped Bamboo=Bloco de bambu descascado
@@ -8,6 +9,7 @@ Bamboo Button=Botão de bambu
 Bamboo Door=Porta de bambu
 Bamboo Fence=Cerca de bambu
 Bamboo Fence Gate=Portão de bambu
+Bamboo Hanging Sign=
 Bamboo Planks=Tábuas de bambu
 Bamboo Pressure Plate=Placa de pressão de bambu
 Bamboo Sign=Tabuleta de bambu

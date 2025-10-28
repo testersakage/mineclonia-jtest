@@ -82,6 +82,9 @@ msgstr "红树栅栏"
 msgid "Mangrove Fence Gate"
 msgstr "红树栅栏门"
 
+msgid "Mangrove Hanging Sign"
+msgstr ""
+
 msgid "Mangrove Leaves"
 msgstr "红树树叶"
 

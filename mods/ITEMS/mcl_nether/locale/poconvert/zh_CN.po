@@ -58,8 +58,8 @@ msgstr "灵魂沙"
 msgid "Reduces walking speed"
 msgstr "降低行走速度"
 
-msgid "Soul sand is a block from the Nether. One can only slowly walk on soul sand. The slowing effect is amplified when the soul sand is on top of ice, packed ice or a slime block."
-msgstr "灵魂沙是来自下界的一种方块，人在上面只能缓慢行走，当灵魂沙位于冰、浮冰或黏液块之上时，减速效果会增强。"
+msgid "Soul sand is a block from the Nether. It has a slowing effect when walked on."
+msgstr ""
 
 msgid "Nether Brick Block"
 msgstr "下界砖方块"
@@ -130,6 +130,9 @@ msgstr "下界石英"
 msgid "Nether quartz is a versatile crafting ingredient."
 msgstr "下界石英是一种用途广泛的制作材料。"
 
+msgid "Quartz Material"
+msgstr ""
+
 msgid "Netherite Scrap"
 msgstr "下界合金碎片"
 
@@ -141,6 +144,9 @@ msgstr "下界合金锭"
 
 msgid "Netherite ingots can be used with a smithing table to upgrade items to netherite."
 msgstr "下界合金锭可与锻造台配合使用，将物品升级为下界合金材质的物品。"
+
+msgid "Netherite Material"
+msgstr ""
 
 msgid "Nether Brick"
 msgstr "下界砖"

@@ -40,6 +40,9 @@ msgstr "Cerca de Cerejeira"
 msgid "Cherry Fence Gate"
 msgstr "Portão de Cerejeira"
 
+msgid "Cherry Hanging Sign"
+msgstr ""
+
 msgid "Cherry Leaves"
 msgstr "Folhas de Cerejeira"
 

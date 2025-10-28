@@ -34,3 +34,6 @@ msgstr "Olvasd el a vöröskő eszközök leírását, hogy megismerd, hogyan m�
 msgid "Redstone Dust"
 msgstr ""
 
+msgid "Redstone Material"
+msgstr ""
+

@@ -73,6 +73,9 @@ msgstr ""
 msgid "Crimson Fence Gate"
 msgstr ""
 
+msgid "Crimson Hanging Sign"
+msgstr ""
+
 msgid "Crimson Log"
 msgstr ""
 
@@ -143,6 +146,9 @@ msgid "Warped Fence"
 msgstr ""
 
 msgid "Warped Fence Gate"
+msgstr ""
+
+msgid "Warped Hanging Sign"
 msgstr ""
 
 msgid "Warped Log"

@@ -82,6 +82,9 @@ msgstr "マングローブのフェンス"
 msgid "Mangrove Fence Gate"
 msgstr "マングローブのフェンスゲート"
 
+msgid "Mangrove Hanging Sign"
+msgstr ""
+
 msgid "Mangrove Leaves"
 msgstr "マングローブの葉"
 

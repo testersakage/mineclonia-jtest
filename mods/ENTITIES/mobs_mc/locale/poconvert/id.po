@@ -127,6 +127,9 @@ msgstr "Penjarah"
 msgid "Polar Bear"
 msgstr "Beruang Kutub"
 
+msgid "Pufferfish"
+msgstr ""
+
 msgid "Rabbit"
 msgstr "Kelinci"
 

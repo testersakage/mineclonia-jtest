@@ -346,20 +346,152 @@ msgstr "Edabe jaurtitzaile bat, talka egitean hausten dena, non hodei magiko bat
 msgid "Use the “Place” key to throw it."
 msgstr "Erabili \"Eraso\" tekla botatzeko."
 
+msgid "Arrow of Bad Luck"
+msgstr ""
+
+msgid "Arrow of Decay"
+msgstr ""
+
+msgid "Arrow of Fire Resistance"
+msgstr ""
+
+msgid "Arrow of Harming"
+msgstr ""
+
+msgid "Arrow of Healing"
+msgstr ""
+
+msgid "Arrow of Infestation"
+msgstr ""
+
+msgid "Arrow of Invisibility"
+msgstr ""
+
+msgid "Arrow of Leaping"
+msgstr ""
+
+msgid "Arrow of Luck"
+msgstr ""
+
+msgid "Arrow of Night Vision"
+msgstr ""
+
+msgid "Arrow of Oozing"
+msgstr ""
+
+msgid "Arrow of Poison"
+msgstr ""
+
+msgid "Arrow of Regeneration"
+msgstr ""
+
+msgid "Arrow of Slow Falling"
+msgstr ""
+
+msgid "Arrow of Slowness"
+msgstr ""
+
+msgid "Arrow of Strength"
+msgstr ""
+
+msgid "Arrow of Swiftness"
+msgstr ""
+
+msgid "Arrow of Water Breathing"
+msgstr ""
+
+msgid "Arrow of Weakness"
+msgstr ""
+
+msgid "Arrow of Weaving"
+msgstr ""
+
+msgid "Arrow of Wind Charging"
+msgstr ""
+
+msgid "Arrow of the Turtle Master"
+msgstr ""
+
+msgid "Awkward Potion"
+msgstr ""
+
+msgid "Mundane Potion"
+msgstr ""
+
+msgid "Potion of Bad Luck"
+msgstr ""
+
+msgid "Potion of Decay"
+msgstr ""
+
+msgid "Potion of Fire Resistance"
+msgstr ""
+
+msgid "Potion of Harming"
+msgstr ""
+
+msgid "Potion of Healing"
+msgstr ""
+
+msgid "Potion of Infestation"
+msgstr ""
+
+msgid "Potion of Invisibility"
+msgstr ""
+
+msgid "Potion of Leaping"
+msgstr ""
+
+msgid "Potion of Luck"
+msgstr ""
+
+msgid "Potion of Night Vision"
+msgstr ""
+
+msgid "Potion of Oozing"
+msgstr ""
+
+msgid "Potion of Poison"
+msgstr ""
+
+msgid "Potion of Regeneration"
+msgstr ""
+
+msgid "Potion of Slow Falling"
+msgstr ""
+
+msgid "Potion of Slowness"
+msgstr ""
+
+msgid "Potion of Strength"
+msgstr ""
+
+msgid "Potion of Swiftness"
+msgstr ""
+
+msgid "Potion of Water Breathing"
+msgstr ""
+
+msgid "Potion of Weakness"
+msgstr ""
+
+msgid "Potion of Weaving"
+msgstr ""
+
+msgid "Potion of Wind Charging"
+msgstr ""
+
+msgid "Potion of the Turtle Master"
+msgstr ""
+
+msgid "Thick Potion"
+msgstr ""
+
 msgid "Use the “Place” key to drink it."
 msgstr "Erabili \"Kokatu\" tekla edateko."
 
 msgid "Drinking a potion gives you a particular effect or set of effects."
 msgstr "Edabe bat edateak efektu berezi bat edo efektu multzo bat ematen dizu."
-
-msgid "@1 Potion @2"
-msgstr "@1 Edabea @2"
-
-msgid "@1 Potion"
-msgstr "@1 Edabea"
-
-msgid "Potion @1"
-msgstr "@1 Edabea"
 
 msgid "Strange Potion"
 msgstr "Edabe arraroa"
@@ -370,15 +502,6 @@ msgstr "@1 jaurtigaia"
 msgid "Lingering @1"
 msgstr "@1 iraunkorra"
 
-msgid "@1 Arrow @2"
-msgstr "@1 Gezia @2"
-
-msgid "@1 Arrow"
-msgstr "@1 Gezia"
-
-msgid "Arrow @1"
-msgstr "Gezia @1"
-
 msgid "Strange Tipped Arrow"
 msgstr "Punta Arrarodun Gezia"
 
@@ -388,26 +511,14 @@ msgstr "Dragoi Hatsa"
 msgid "This item is used in brewing and can be combined with splash potions to create lingering potions."
 msgstr "Item hori edabeak prestatzeko erabiltzen da, eta botatako itemekin konbina daiteke, edabe iraunkorrak sortzeko."
 
-msgid "Awkward"
-msgstr "Arraroa"
-
 msgid "Has an awkward taste and is used for brewing potions."
 msgstr "Zapore arraroa du eta edabeak prestatzeko erabiltzen da."
-
-msgid "Mundane"
-msgstr "Arrunta"
 
 msgid "Has a terrible taste and is not really useful for brewing potions."
 msgstr "Zapore izugarria du eta ez da benetan baliagarria edabeak prestatzeko."
 
-msgid "Thick"
-msgstr "Trinkoa"
-
 msgid "Has a bitter taste and is not really useful for brewing potions."
 msgstr "Zapore mingotsa du eta ez da benetan erabilgarria edabeak prestatzeko."
-
-msgid "of Healing"
-msgstr "sendatzeko"
 
 msgid "+@1 HP"
 msgstr "+@1 HP"
@@ -415,137 +526,71 @@ msgstr "+@1 HP"
 msgid "Instantly heals."
 msgstr "Berehala sendatzen da."
 
-msgid "of Harming"
-msgstr "mina"
-
 msgid "-@1 HP"
 msgstr "-@1 HP"
 
 msgid "Instantly deals damage."
 msgstr "Berehalako mina eragiten du."
 
-msgid "of Night Vision"
-msgstr "gauez ikustekoa"
-
 msgid "Increases the perceived brightness of light under a dark sky."
 msgstr "Leku ilunetan argiaren distira areagotu egiten da."
-
-msgid "of Swiftness"
-msgstr "azkartasuna"
 
 msgid "Increases walking speed."
 msgstr "Abiadura handitzen du ibiltzean."
 
-msgid "of Slowness"
-msgstr "moteltasuna"
-
 msgid "Decreases walking speed."
 msgstr "Ibiltzean abiadura moteltzen du."
-
-msgid "of Leaping"
-msgstr "jauzikoak"
 
 msgid "Increases jump strength."
 msgstr "Saltoaren indarra handitzen du."
 
-msgid "of Decay"
-msgstr "gainbeheraren"
-
 msgid "Applies the withering effect which deals damage at a regular interval and can kill."
 msgstr "Tarte erregularretako mina eragiten eta hil dezakeen wither efektua aplikatzen du."
-
-msgid "of Poison"
-msgstr "Pozoiarena"
 
 msgid "Applies the poison effect which deals damage at a regular interval."
 msgstr "Tarte erregularretako mina eragiten duen pozoi-efektua aplikatzen du."
 
-msgid "of Regeneration"
-msgstr "berroneratzekoak"
-
 msgid "Regenerates health over time."
 msgstr "Denborarekin osasuna suspertzen du."
-
-msgid "of Invisibility"
-msgstr "ikusezintasuna"
 
 msgid "Grants invisibility."
 msgstr "Ikusezintasuna ematen du."
 
-msgid "of Water Breathing"
-msgstr "uretan arnastea"
-
 msgid "Grants limitless breath underwater."
 msgstr "uraren azpian arnasketa mugagabea ematen du."
-
-msgid "of Fire Resistance"
-msgstr "suaren aurkako gorputza"
 
 msgid "Grants immunity to damage from heat sources like fire."
 msgstr "Bero-iturriek (suak, adibidez) eragindako minari immunitatea ematen dio."
 
-msgid "of Strength"
-msgstr "indarrekoak"
-
 msgid "Increases attack power."
 msgstr "Eraso-ahalmena handitzen du."
-
-msgid "of Weakness"
-msgstr "ahultasuna"
 
 msgid "Decreases attack power."
 msgstr "Eraso-ahalmena txikitzen du."
 
-msgid "of Slow Falling"
-msgstr "erorketa motela"
-
 msgid "Instead of falling, you descend gracefully."
 msgstr "Erori beharrean, graziaz jaisten zara."
-
-msgid "of the Turtle Master"
-msgstr "Dortoka maisua"
 
 msgid "Decreases damage taken at the cost of speed."
 msgstr "Jasotako mina murrizten du, abiaduraren kontura."
 
-msgid "of Luck"
-msgstr "zortekoa"
-
 msgid "Increases luck."
 msgstr "Zortea handitzen ari da."
-
-msgid "of Bad Luck"
-msgstr "zorte txarrekoa"
 
 msgid "Decreases luck."
 msgstr "Zortea txikitzen du."
 
-msgid "Ominous Bottle"
-msgstr "Zorigaiztoko Potea"
-
 msgid "Attracts danger."
 msgstr "Arriskua erakartzen du."
-
-msgid "of Infestation"
-msgstr "Infestazioa"
 
 msgid "Causes 1-3 silverfish to spawn with a 5% chance when damaged. It not applies to silverfishes."
 msgstr "Kolpatutakoan 1-3 zilar-arrain agertzea eragiten du %5-eko aukerarekin. Ez du zilar-arrainekin funtzionatzen."
 
-msgid "of Oozing"
-msgstr "Jarioarena"
-
 msgid "Causes 2 medium slimes to spawn on death. It not applies to slimes."
 msgstr "Hildakoan 2 likati ertain agertzea eragiten du. Ez du likatiekin funtzionatzen."
 
-msgid "of Weaving"
-msgstr "Olatuarena"
-
 msgid "Causes 2-3 cobwebs to appear on death. Also increases walking speed when crossing cobwebs."
 msgstr "Hildakoan 2-3 armiarma-sare agertzea eragiten du. Gainera, armiarma-sareak gurutzatzeko oinezko-abiadura handitzen du."
-
-msgid "of Wind Charging"
-msgstr "Haize Kargatzea"
 
 msgid "Causes A wind burst on death."
 msgstr "Hildakoan haize-bolada eragiten du."

@@ -19,6 +19,9 @@ msgstr "铜锭"
 msgid "Molten Raw Copper. It is used to craft blocks."
 msgstr "熔融生铜，用于制作方块。"
 
+msgid "Copper Material"
+msgstr ""
+
 msgid "Raw Copper"
 msgstr "粗铜"
 
@@ -42,6 +45,12 @@ msgstr "铜质灯泡"
 
 msgid "Copper Bulb On"
 msgstr "亮起的铜质灯泡"
+
+msgid "Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Copper Bulb Powered On"
+msgstr ""
 
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "铜质灯泡大多是一种装饰性方块。"
@@ -84,6 +93,12 @@ msgstr "外露铜质灯泡"
 
 msgid "Exposed Copper Bulb On"
 msgstr "亮起的外露铜质灯泡"
+
+msgid "Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Exposed Copper Bulb Powered On"
+msgstr ""
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "外露铜质灯泡大多是一种装饰性方块。"
@@ -130,6 +145,12 @@ msgstr "氧化铜质灯泡"
 msgid "Oxidized Copper Bulb On"
 msgstr "亮起的氧化铜质灯泡"
 
+msgid "Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Oxidized Copper Bulb Powered On"
+msgstr ""
+
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "氧化铜质灯泡大多是一种装饰性方块。"
 
@@ -172,6 +193,12 @@ msgstr "涂蜡铜质灯泡"
 msgid "Waxed Copper Bulb On"
 msgstr "亮起的涂蜡铜质灯泡"
 
+msgid "Waxed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "涂蜡铜格栅"
 
@@ -202,6 +229,12 @@ msgstr "涂蜡外露铜质灯泡"
 msgid "Waxed Exposed Copper Bulb On"
 msgstr "亮起的涂蜡外露铜质灯泡"
 
+msgid "Waxed Exposed Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Exposed Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "涂蜡外露铜格栅"
 
@@ -228,6 +261,12 @@ msgstr "涂蜡氧化铜灯泡"
 
 msgid "Waxed Oxidized Copper Bulb On"
 msgstr "亮起的涂蜡氧化铜灯泡"
+
+msgid "Waxed Oxidized Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Bulb Powered On"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Grate"
 msgstr "涂蜡氧化铜格栅"
@@ -259,6 +298,12 @@ msgstr "涂蜡风化铜质灯泡"
 msgid "Waxed Weathered Copper Bulb On"
 msgstr "亮起的涂蜡风化铜质灯泡"
 
+msgid "Waxed Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Waxed Weathered Copper Bulb Powered On"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "涂蜡风化铜格栅"
 
@@ -288,6 +333,12 @@ msgstr "风化铜质灯泡"
 
 msgid "Weathered Copper Bulb On"
 msgstr "亮起的风化铜质灯泡"
+
+msgid "Weathered Copper Bulb Powered Off"
+msgstr ""
+
+msgid "Weathered Copper Bulb Powered On"
+msgstr ""
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "风化铜质灯泡大多是一种装饰性方块。"

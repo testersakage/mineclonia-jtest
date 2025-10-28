@@ -34,3 +34,6 @@ msgstr "Смотрите справочные записи к остальным
 msgid "Redstone Dust"
 msgstr "Редстоуновая пыль"
 
+msgid "Redstone Material"
+msgstr ""
+

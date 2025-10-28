@@ -55,6 +55,9 @@ msgstr "Diamant"
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr "Les diamants sont des minéraux précieux et utiles pour créer le plus haut niveau d'armure et d'outils."
 
+msgid "Diamond Material"
+msgstr ""
+
 msgid "Clay Ball"
 msgstr "Motte d'argile"
 
@@ -67,11 +70,17 @@ msgstr "Lingot de fer"
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr "Le fer. Il est utilisé pour fabriquer des armures, des outils et ainsi de suite."
 
+msgid "Iron Material"
+msgstr ""
+
 msgid "Gold Ingot"
 msgstr "Lingot d'or"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr "L'Or. Il est utilisé pour fabriquer des armures, des outils et ainsi de suite."
+
+msgid "Gold Material"
+msgstr ""
 
 msgid "Emerald"
 msgstr "Émeraude"
@@ -79,11 +88,17 @@ msgstr "Émeraude"
 msgid "Emeralds are used in villager trades as currency."
 msgstr "Les émeraudes sont utilisées pour faire des échanges avec les villageois."
 
+msgid "Emerald Material"
+msgstr ""
+
 msgid "Lapis Lazuli"
 msgstr "Lapis-lazuli"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr "Les lapis-lazuli sont nécessaires pour enchanter des objets sur une table d'enchantement."
+
+msgid "Lapis Material"
+msgstr ""
 
 msgid "Brick"
 msgstr "Brique"
@@ -151,6 +166,9 @@ msgstr "Barrière en acacia"
 msgid "Acacia Fence Gate"
 msgstr "Portillon en acacia"
 
+msgid "Acacia Hanging Sign"
+msgstr ""
+
 msgid "Acacia Leaves"
 msgstr "Feuilles d'acacia"
 
@@ -207,6 +225,9 @@ msgstr "Barrière en bouleau"
 
 msgid "Birch Fence Gate"
 msgstr "Portillon en bouleau"
+
+msgid "Birch Hanging Sign"
+msgstr ""
 
 msgid "Birch Leaves"
 msgstr "Feuilles de bouleau"
@@ -277,6 +298,9 @@ msgstr "Barrière en chêne noir"
 msgid "Dark Oak Fence Gate"
 msgstr "Portillon en chêne noir"
 
+msgid "Dark Oak Hanging Sign"
+msgstr ""
+
 msgid "Dark Oak Leaves"
 msgstr "Feuilles de chêne noir"
 
@@ -339,6 +363,9 @@ msgstr "Barrière en acajou"
 
 msgid "Jungle Fence Gate"
 msgstr "Portillon en acajou"
+
+msgid "Jungle Hanging Sign"
+msgstr ""
 
 msgid "Jungle Leaves"
 msgstr "Feuilles d'acajou"
@@ -409,6 +436,9 @@ msgstr "Barrière en chêne"
 msgid "Oak Fence Gate"
 msgstr "Portillon en chêne"
 
+msgid "Oak Hanging Sign"
+msgstr ""
+
 msgid "Oak Leaves"
 msgstr "Feuilles de chêne"
 
@@ -477,6 +507,9 @@ msgstr "Barrière en sapin"
 
 msgid "Spruce Fence Gate"
 msgstr "Portillon en sapin"
+
+msgid "Spruce Hanging Sign"
+msgstr ""
 
 msgid "Spruce Leaves"
 msgstr "Feuilles de sapin"
@@ -904,6 +937,12 @@ msgstr "Glace compactée"
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr "La glace compactée est une forme de glace comprimée. Elle est opaque et solide."
 
+msgid "Blue Ice"
+msgstr ""
+
+msgid "Blue Ice is a still more compressed form of ice.  It is opaque and solid."
+msgstr ""
+
 msgid "Frosted ice is a short-lived solid block. It melts into a water source within a few seconds."
 msgstr "La glace givrée est un bloc solide de courte durée. Il fond dans une source d'eau en quelques secondes."
 
@@ -1053,6 +1092,12 @@ msgstr "Arbuste mort"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "Les buissons morts sont des plantes inhabituelles que l'on trouve souvent dans les zones sèches. Ils peuvent être récoltés avec des bâtons."
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Barrier"
 msgstr "Barrière invisible"

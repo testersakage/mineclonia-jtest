@@ -9,6 +9,7 @@ Bamboo Button=
 Bamboo Door=
 Bamboo Fence=
 Bamboo Fence Gate=
+Bamboo Hanging Sign=
 Bamboo Planks=
 Bamboo Pressure Plate=
 Bamboo Sign=

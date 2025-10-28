@@ -40,6 +40,9 @@ msgstr "Barrière en cerisier"
 msgid "Cherry Fence Gate"
 msgstr "Portillon en cerisier"
 
+msgid "Cherry Hanging Sign"
+msgstr ""
+
 msgid "Cherry Leaves"
 msgstr "Feuilles de cerisier"
 

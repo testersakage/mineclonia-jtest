@@ -31,6 +31,9 @@ msgstr "Cubo con ajolote"
 msgid "Bucket of Cod"
 msgstr "Cubo con bacalao"
 
+msgid "Bucket of Pufferfish"
+msgstr ""
+
 msgid "Bucket of Salmon"
 msgstr "Cubo con salmón"
 
@@ -39,6 +42,9 @@ msgstr "Cubo con pez tropical"
 
 msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
 msgstr "Colócalo para vaciar el cubo y colocar un Bacalao. Consíguelo haciendo clic derecho sobre un Bacalao con un cubo de agua."
+
+msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
+msgstr ""
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr "Colócalo para vaciar el cubo y colocar un Salmón. Consíguelo haciendo clic derecho sobre un Salmón con un cubo de agua."
@@ -52,6 +58,9 @@ msgstr "Colócalo para vaciar el cubo y colocar un Ajolote. Consíguelo haciendo
 msgid "Places a water source and a Cod."
 msgstr "Coloca una fuente de agua y un Bacalao."
 
+msgid "Places a water source and a Pufferfish."
+msgstr ""
+
 msgid "Places a water source and a Salmon."
 msgstr "Coloca una fuente de agua y un Salmón."
 
@@ -63,6 +72,9 @@ msgstr "Coloca una fuente de agua y un Ajolote."
 
 msgid "This bucket is filled with water and a Cod."
 msgstr "Este cubo está lleno con agua y un Bacalao."
+
+msgid "This bucket is filled with water and a Pufferfish."
+msgstr ""
 
 msgid "This bucket is filled with water and a Salmon."
 msgstr "Este cubo está lleno con agua y un Salmón."

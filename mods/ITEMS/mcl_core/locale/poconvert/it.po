@@ -55,6 +55,9 @@ msgstr "Diamante"
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr "I diamanti sono minerali utili e preziosi usati per creare armature ed attrezzi molto resistenti ed efficaci."
 
+msgid "Diamond Material"
+msgstr ""
+
 msgid "Clay Ball"
 msgstr "Zolla di argilla"
 
@@ -67,11 +70,17 @@ msgstr "Lingotto di ferro"
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr "Ferro fuso. Viene usato per creare armature, attrezzi e quant'altro."
 
+msgid "Iron Material"
+msgstr ""
+
 msgid "Gold Ingot"
 msgstr "Lingotto d'oro"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr "Oro fuso. Viene usato per creare armature, attrezzi e quant'altro."
+
+msgid "Gold Material"
+msgstr ""
 
 msgid "Emerald"
 msgstr "Smeraldo"
@@ -79,11 +88,17 @@ msgstr "Smeraldo"
 msgid "Emeralds are used in villager trades as currency."
 msgstr "Gli smeraldi vengono utilizzati negli scambi coi villici come valuta."
 
+msgid "Emerald Material"
+msgstr ""
+
 msgid "Lapis Lazuli"
 msgstr "Lapislazzuli"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr "I lapislazzuli sono fondamentali per incantare gli oggetti su un tavolo per incantesimi."
+
+msgid "Lapis Material"
+msgstr ""
 
 msgid "Brick"
 msgstr "Mattone"
@@ -151,6 +166,9 @@ msgstr "Staccionata di acacia"
 msgid "Acacia Fence Gate"
 msgstr "Cancelleto di acacia"
 
+msgid "Acacia Hanging Sign"
+msgstr ""
+
 msgid "Acacia Leaves"
 msgstr "Foglie di acacia"
 
@@ -207,6 +225,9 @@ msgstr "Staccionata di betulla"
 
 msgid "Birch Fence Gate"
 msgstr "Cancelletto di betulla"
+
+msgid "Birch Hanging Sign"
+msgstr ""
 
 msgid "Birch Leaves"
 msgstr "Foglie di betulla"
@@ -277,6 +298,9 @@ msgstr "Staccionata di quercia scura"
 msgid "Dark Oak Fence Gate"
 msgstr "Cancelletto di quercia scura"
 
+msgid "Dark Oak Hanging Sign"
+msgstr ""
+
 msgid "Dark Oak Leaves"
 msgstr "Foglie di quercia scura"
 
@@ -339,6 +363,9 @@ msgstr "Staccionata della giungla"
 
 msgid "Jungle Fence Gate"
 msgstr "Cancelletto della giungla"
+
+msgid "Jungle Hanging Sign"
+msgstr ""
 
 msgid "Jungle Leaves"
 msgstr "Foglie della giungla"
@@ -409,6 +436,9 @@ msgstr "Staccionata di quercia"
 msgid "Oak Fence Gate"
 msgstr "Cancelletto di quercia"
 
+msgid "Oak Hanging Sign"
+msgstr ""
+
 msgid "Oak Leaves"
 msgstr "Foglie di quercia"
 
@@ -477,6 +507,9 @@ msgstr "Staccionata di abete"
 
 msgid "Spruce Fence Gate"
 msgstr "Cancelletto di abete"
+
+msgid "Spruce Hanging Sign"
+msgstr ""
 
 msgid "Spruce Leaves"
 msgstr "Foglie di abete"
@@ -904,6 +937,12 @@ msgstr "Ghiaccio compatto"
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr "Il ghiaccio compatto è un blocco di ghiaccio compresso. È opaco e solido."
 
+msgid "Blue Ice"
+msgstr ""
+
+msgid "Blue Ice is a still more compressed form of ice.  It is opaque and solid."
+msgstr ""
+
 msgid "Frosted ice is a short-lived solid block. It melts into a water source within a few seconds."
 msgstr "Il ghiaccio azzurro è un blocco con vita breve. Si scioglie in una sorgente d'acqua dopo alcuni secondi."
 
@@ -1053,6 +1092,12 @@ msgstr "Arbusto secco"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "Gli arbusti secchi sono piante morte presenti negli ambienti aridi. Si possono rompere per ottenere dei bastoni."
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Barrier"
 msgstr "Barriera"

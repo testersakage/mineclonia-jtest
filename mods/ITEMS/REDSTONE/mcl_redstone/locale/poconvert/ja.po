@@ -34,3 +34,6 @@ msgstr "レッドストーン部品がどのように相互作用するかにつ
 msgid "Redstone Dust"
 msgstr ""
 
+msgid "Redstone Material"
+msgstr ""
+

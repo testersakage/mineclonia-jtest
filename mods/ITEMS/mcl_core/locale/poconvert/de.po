@@ -55,6 +55,9 @@ msgstr "Diamant"
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr "Diamanten sind kostbare Mineralien, die für die hochwertigsten Rüstungen und Werkzeuge gebraucht werden."
 
+msgid "Diamond Material"
+msgstr ""
+
 msgid "Clay Ball"
 msgstr "Tonklumpen"
 
@@ -67,11 +70,17 @@ msgstr "Eisenbarren"
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr "Geschmolzenes Eisen. Es wird benutzt, um Rüstungen, Werkzeuge, und vieles mehr herzustellen."
 
+msgid "Iron Material"
+msgstr ""
+
 msgid "Gold Ingot"
 msgstr "Goldbarren"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr "Geschmolzenes Gold. Es wird benutzt, um Rüstungen, Werkzeuge, und anderes herzustellen."
+
+msgid "Gold Material"
+msgstr ""
 
 msgid "Emerald"
 msgstr "Smaragd"
@@ -79,11 +88,17 @@ msgstr "Smaragd"
 msgid "Emeralds are used in villager trades as currency."
 msgstr "Smaragde werden als Währung für den Handel mit Dorfbewohnern genutzt."
 
+msgid "Emerald Material"
+msgstr ""
+
 msgid "Lapis Lazuli"
 msgstr "Lapislazuli"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr "Lapislazuli werden zum Verzaubern von Gegenständen auf einem Zaubertisch benötigt."
+
+msgid "Lapis Material"
+msgstr ""
 
 msgid "Brick"
 msgstr "Ziegel"
@@ -151,6 +166,9 @@ msgstr ""
 msgid "Acacia Fence Gate"
 msgstr ""
 
+msgid "Acacia Hanging Sign"
+msgstr ""
+
 msgid "Acacia Leaves"
 msgstr ""
 
@@ -206,6 +224,9 @@ msgid "Birch Fence"
 msgstr ""
 
 msgid "Birch Fence Gate"
+msgstr ""
+
+msgid "Birch Hanging Sign"
 msgstr ""
 
 msgid "Birch Leaves"
@@ -277,6 +298,9 @@ msgstr ""
 msgid "Dark Oak Fence Gate"
 msgstr ""
 
+msgid "Dark Oak Hanging Sign"
+msgstr ""
+
 msgid "Dark Oak Leaves"
 msgstr ""
 
@@ -338,6 +362,9 @@ msgid "Jungle Fence"
 msgstr ""
 
 msgid "Jungle Fence Gate"
+msgstr ""
+
+msgid "Jungle Hanging Sign"
 msgstr ""
 
 msgid "Jungle Leaves"
@@ -409,6 +436,9 @@ msgstr ""
 msgid "Oak Fence Gate"
 msgstr ""
 
+msgid "Oak Hanging Sign"
+msgstr ""
+
 msgid "Oak Leaves"
 msgstr ""
 
@@ -476,6 +506,9 @@ msgid "Spruce Fence"
 msgstr ""
 
 msgid "Spruce Fence Gate"
+msgstr ""
+
+msgid "Spruce Hanging Sign"
 msgstr ""
 
 msgid "Spruce Leaves"
@@ -904,6 +937,12 @@ msgstr "Packeis"
 msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr "Packeis ist eine kompakte Eisform. Es ist undurchsichtig und fest."
 
+msgid "Blue Ice"
+msgstr ""
+
+msgid "Blue Ice is a still more compressed form of ice.  It is opaque and solid."
+msgstr ""
+
 msgid "Frosted ice is a short-lived solid block. It melts into a water source within a few seconds."
 msgstr "Brüchiges Eis ist ein kurzlebiger durchscheinender Block. Er wird sich in einigen Sekunden zu einer Wasserquelle verwandeln."
 
@@ -1053,6 +1092,12 @@ msgstr "Toter Busch"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "Tote Büsche sind uninteressante Pflanzen, die oft in trockenen Gebieten vorkommen."
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Barrier"
 msgstr "Barriere"

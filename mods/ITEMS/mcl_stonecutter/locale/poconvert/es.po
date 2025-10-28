@@ -22,9 +22,6 @@ msgstr "Rellenar rejilla de fabricación"
 msgid "Inventory"
 msgstr "Inventario"
 
-msgid "Stone Cutter"
-msgstr "Corta piedras"
-
 msgid "Used to cut stone like materials."
 msgstr "Se utiliza para cortar materiales similares a la piedra."
 

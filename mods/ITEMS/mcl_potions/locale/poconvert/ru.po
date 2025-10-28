@@ -346,20 +346,152 @@ msgstr "Зелье, которое можно метать. Оно разбив�
 msgid "Use the “Place” key to throw it."
 msgstr "Используйте клавишу «Поставить», чтобы метнуть."
 
+msgid "Arrow of Bad Luck"
+msgstr ""
+
+msgid "Arrow of Decay"
+msgstr ""
+
+msgid "Arrow of Fire Resistance"
+msgstr ""
+
+msgid "Arrow of Harming"
+msgstr ""
+
+msgid "Arrow of Healing"
+msgstr ""
+
+msgid "Arrow of Infestation"
+msgstr ""
+
+msgid "Arrow of Invisibility"
+msgstr ""
+
+msgid "Arrow of Leaping"
+msgstr ""
+
+msgid "Arrow of Luck"
+msgstr ""
+
+msgid "Arrow of Night Vision"
+msgstr ""
+
+msgid "Arrow of Oozing"
+msgstr ""
+
+msgid "Arrow of Poison"
+msgstr ""
+
+msgid "Arrow of Regeneration"
+msgstr ""
+
+msgid "Arrow of Slow Falling"
+msgstr ""
+
+msgid "Arrow of Slowness"
+msgstr ""
+
+msgid "Arrow of Strength"
+msgstr ""
+
+msgid "Arrow of Swiftness"
+msgstr ""
+
+msgid "Arrow of Water Breathing"
+msgstr ""
+
+msgid "Arrow of Weakness"
+msgstr ""
+
+msgid "Arrow of Weaving"
+msgstr ""
+
+msgid "Arrow of Wind Charging"
+msgstr ""
+
+msgid "Arrow of the Turtle Master"
+msgstr ""
+
+msgid "Awkward Potion"
+msgstr ""
+
+msgid "Mundane Potion"
+msgstr ""
+
+msgid "Potion of Bad Luck"
+msgstr ""
+
+msgid "Potion of Decay"
+msgstr ""
+
+msgid "Potion of Fire Resistance"
+msgstr ""
+
+msgid "Potion of Harming"
+msgstr ""
+
+msgid "Potion of Healing"
+msgstr ""
+
+msgid "Potion of Infestation"
+msgstr ""
+
+msgid "Potion of Invisibility"
+msgstr ""
+
+msgid "Potion of Leaping"
+msgstr ""
+
+msgid "Potion of Luck"
+msgstr ""
+
+msgid "Potion of Night Vision"
+msgstr ""
+
+msgid "Potion of Oozing"
+msgstr ""
+
+msgid "Potion of Poison"
+msgstr ""
+
+msgid "Potion of Regeneration"
+msgstr ""
+
+msgid "Potion of Slow Falling"
+msgstr ""
+
+msgid "Potion of Slowness"
+msgstr ""
+
+msgid "Potion of Strength"
+msgstr ""
+
+msgid "Potion of Swiftness"
+msgstr ""
+
+msgid "Potion of Water Breathing"
+msgstr ""
+
+msgid "Potion of Weakness"
+msgstr ""
+
+msgid "Potion of Weaving"
+msgstr ""
+
+msgid "Potion of Wind Charging"
+msgstr ""
+
+msgid "Potion of the Turtle Master"
+msgstr ""
+
+msgid "Thick Potion"
+msgstr ""
+
 msgid "Use the “Place” key to drink it."
 msgstr "Нажмите [Использовать], чтобы выпить."
 
 msgid "Drinking a potion gives you a particular effect or set of effects."
 msgstr "Выпив зелье, вы получаете определенный эффект или набор эффектов."
-
-msgid "@1 Potion @2"
-msgstr "@1 зелье @2"
-
-msgid "@1 Potion"
-msgstr "@1 зелье"
-
-msgid "Potion @1"
-msgstr "Зелье @1"
 
 msgid "Strange Potion"
 msgstr "Странное зелье"
@@ -370,15 +502,6 @@ msgstr "Взрывное @1"
 msgid "Lingering @1"
 msgstr "Туманное @1"
 
-msgid "@1 Arrow @2"
-msgstr "@1 стрела @2"
-
-msgid "@1 Arrow"
-msgstr "@1 стрела"
-
-msgid "Arrow @1"
-msgstr "Стрела @1"
-
 msgid "Strange Tipped Arrow"
 msgstr "Странная обмакнутая стрела"
 
@@ -388,26 +511,14 @@ msgstr "Дыхание дракона"
 msgid "This item is used in brewing and can be combined with splash potions to create lingering potions."
 msgstr "Этот предмет используется в зельеварении и может объединяться со взрывающимися зельями, чтобы создать туманные зелья."
 
-msgid "Awkward"
-msgstr "Мутное"
-
 msgid "Has an awkward taste and is used for brewing potions."
 msgstr "Имеет неприятный вкус и используется для приготовления других зелий."
-
-msgid "Mundane"
-msgstr "Заурядное"
 
 msgid "Has a terrible taste and is not really useful for brewing potions."
 msgstr "Имеет ужасный вкус и не совсем используется для приготовления других зелий."
 
-msgid "Thick"
-msgstr "Густое"
-
 msgid "Has a bitter taste and is not really useful for brewing potions."
 msgstr "Имеет горький вкус и не очень подходит для варки зелий."
-
-msgid "of Healing"
-msgstr "лечения"
 
 msgid "+@1 HP"
 msgstr "+@1 HP"
@@ -415,137 +526,71 @@ msgstr "+@1 HP"
 msgid "Instantly heals."
 msgstr "Мгновенно исцеляет."
 
-msgid "of Harming"
-msgstr "вреда"
-
 msgid "-@1 HP"
 msgstr "-@1 HP"
 
 msgid "Instantly deals damage."
 msgstr "Наносит мгновенный урон."
 
-msgid "of Night Vision"
-msgstr "ночного зрения"
-
 msgid "Increases the perceived brightness of light under a dark sky."
 msgstr "Усиливает восприятие яркости освещения в тёмное время суток."
-
-msgid "of Swiftness"
-msgstr "стремительности"
 
 msgid "Increases walking speed."
 msgstr "Увеличивает скорость ходьбы."
 
-msgid "of Slowness"
-msgstr "замедления"
-
 msgid "Decreases walking speed."
 msgstr "Уменьшает скорость ходьбы."
-
-msgid "of Leaping"
-msgstr "прыгучести"
 
 msgid "Increases jump strength."
 msgstr "Увеличивает силу прыжка."
 
-msgid "of Decay"
-msgstr "упадок"
-
 msgid "Applies the withering effect which deals damage at a regular interval and can kill."
 msgstr "Накладывает эффект иссушения, который наносит урон через интервал времени и может убить."
-
-msgid "of Poison"
-msgstr "отравления"
 
 msgid "Applies the poison effect which deals damage at a regular interval."
 msgstr "Накладывает эффект отравления, который наносит урон через интервал времени."
 
-msgid "of Regeneration"
-msgstr "регенерации"
-
 msgid "Regenerates health over time."
 msgstr "Восстанавливает здоровье со временем."
-
-msgid "of Invisibility"
-msgstr "невидимости"
 
 msgid "Grants invisibility."
 msgstr "Даёт невидимость."
 
-msgid "of Water Breathing"
-msgstr "подводного дыхания"
-
 msgid "Grants limitless breath underwater."
 msgstr "Даёт возможность дышать под водой."
-
-msgid "of Fire Resistance"
-msgstr "огнестойкости"
 
 msgid "Grants immunity to damage from heat sources like fire."
 msgstr "Даёт неуязвимость к урону от источников тепла, например, от огня."
 
-msgid "of Strength"
-msgstr "силы"
-
 msgid "Increases attack power."
 msgstr "Увеличивает силу атаки."
-
-msgid "of Weakness"
-msgstr "слабости"
 
 msgid "Decreases attack power."
 msgstr "Уменьшает силу атаки."
 
-msgid "of Slow Falling"
-msgstr "медленного падения"
-
 msgid "Instead of falling, you descend gracefully."
 msgstr "Плавный спуск вместо падения."
-
-msgid "of the Turtle Master"
-msgstr "повелителя черепах"
 
 msgid "Decreases damage taken at the cost of speed."
 msgstr "Уменьшает получаемый урон ценой снижения скорости."
 
-msgid "of Luck"
-msgstr "удачи"
-
 msgid "Increases luck."
 msgstr "Увеличивает удачу."
-
-msgid "of Bad Luck"
-msgstr "невезения"
 
 msgid "Decreases luck."
 msgstr "Уменьшает удачу."
 
-msgid "Ominous Bottle"
-msgstr "Зловещая бутылка"
-
 msgid "Attracts danger."
 msgstr "Привлекает опасность."
-
-msgid "of Infestation"
-msgstr "заражения"
 
 msgid "Causes 1-3 silverfish to spawn with a 5% chance when damaged. It not applies to silverfishes."
 msgstr "Спавнит 1-3 чешуйницы с 5% шансом при получении урона. Не действует на чешуйниц."
 
-msgid "of Oozing"
-msgstr "слизистости"
-
 msgid "Causes 2 medium slimes to spawn on death. It not applies to slimes."
 msgstr "Спавнит 2 средних слизней после смерти. Не действует на слизней."
 
-msgid "of Weaving"
-msgstr "плетения"
-
 msgid "Causes 2-3 cobwebs to appear on death. Also increases walking speed when crossing cobwebs."
 msgstr "Создаёт 2-3 паутины после смерти. Также увеличивает скорость при прохождении через паутину."
-
-msgid "of Wind Charging"
-msgstr "ветрового заряда"
 
 msgid "Causes A wind burst on death."
 msgstr "Создаёт ветровой заряд после смерти."

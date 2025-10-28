@@ -22,9 +22,6 @@ msgstr ""
 msgid "Inventory"
 msgstr "Inventar"
 
-msgid "Stone Cutter"
-msgstr "Steinschneider"
-
 msgid "Used to cut stone like materials."
 msgstr "Zum Schneiden steinähnlicher Materialien."
 

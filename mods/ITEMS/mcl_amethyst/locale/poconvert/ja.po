@@ -31,6 +31,9 @@ msgstr "アメジストの欠片"
 msgid "An amethyst shard is a crystalline mineral."
 msgstr "アメジストの欠片は、結晶性の鉱物です。"
 
+msgid "Amethyst Material"
+msgstr ""
+
 msgid "Calcite"
 msgstr "方解石"
 
