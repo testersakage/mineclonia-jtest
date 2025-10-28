@@ -1,4 +1,3 @@
-local S = core.get_translator(core.get_current_modname())
 local mod_storage = core.get_mod_storage()
 local normal_vars_in_singlenode = false
 
@@ -107,7 +106,7 @@ if not mapmeta_settings_initialized then
 end
 
 if #levelgen_inhibiting_mods > 0 and mcl_vars.enable_mcl_levelgen then
-	error(S("The world has the custom Mineclonia mapgen enabled in combination with mcl_levelgen inhibiting mods. Disable the mods (@1) or update the mcl_singlenode_mapgen setting in @2 to play the world.",
+	error(string.format("The world has the custom Mineclonia mapgen enabled in combination with mcl_levelgen inhibiting mods. Disable the mods (%s) or update the mcl_singlenode_mapgen setting in %s to play the world.",
 		table.concat(levelgen_inhibiting_mods, ", "), core.get_worldpath().."/map_meta.txt"))
 end
 
