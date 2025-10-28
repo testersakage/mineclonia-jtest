@@ -135,6 +135,10 @@ mcl_death_messages = {
 			plain = NS ("@1 froze to death"),
 			assist = NS ("@1 was frozen to death by @2"),
 		},
+		trident = {
+			killer = NS ("@1 was impaled by @2"),
+			item = NS ("@1 was impaled by @2 with @3"),
+		},
 		-- Missing snowballs: The Minecraft wiki mentions them but it doesn't seem like they have a dedicated death message in MC
 	},
 }

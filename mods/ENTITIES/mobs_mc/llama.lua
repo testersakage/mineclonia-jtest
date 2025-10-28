@@ -569,6 +569,7 @@ local llama_spit = {
 			0.15625,
 			0.15625,
 		},
+		pointable = false,
 		physical = true,
 		collide_with_objects = false,
 		static_save = false,

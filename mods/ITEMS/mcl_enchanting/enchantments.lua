@@ -31,8 +31,7 @@ mcl_enchanting.enchantments.bane_of_arthropods = {
 	anvil_book_factor = 1,
 }
 
--- requires missing MineClone2 feature
---[[mcl_enchanting.enchantments.channeling = {
+mcl_enchanting.enchantments.channeling = {
 	name = S("Channeling"),
 	max_level = 1,
 	primary = {trident = true},
@@ -50,7 +49,7 @@ mcl_enchanting.enchantments.bane_of_arthropods = {
 	inv_tool_tab = false,
 	anvil_item_factor = 8,
 	anvil_book_factor = 4,
-}]]--
+}
 
 -- implemented in mcl_death_drop
 mcl_enchanting.enchantments.curse_of_vanishing = {
@@ -252,7 +251,7 @@ walkover.register_global(function(pos, _, player)
 end)
 
 -- requires missing MineClone2 feature
---[[mcl_enchanting.enchantments.impaling = {
+mcl_enchanting.enchantments.impaling = {
 	name = S("Impaling"),
 	max_level = 5,
 	primary = {trident = true},
@@ -270,7 +269,7 @@ end)
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}]]--
+}
 
 -- implemented in mcl_bows
 mcl_enchanting.enchantments.infinity = {
@@ -340,8 +339,7 @@ mcl_enchanting.enchantments.looting = {
 	anvil_book_factor = 2,
 }
 
--- requires missing MineClone2 feature
---[[mcl_enchanting.enchantments.loyalty = {
+mcl_enchanting.enchantments.loyalty = {
 	name = S("Loyalty"),
 	max_level = 3,
 	primary = {trident = true},
@@ -359,7 +357,7 @@ mcl_enchanting.enchantments.looting = {
 	inv_tool_tab = false,
 	anvil_item_factor = 1,
 	anvil_book_factor = 1,
-}]]--
+}
 
 -- implemented in mcl_fishing
 mcl_enchanting.enchantments.luck_of_the_sea = {
@@ -495,7 +493,6 @@ mcl_enchanting.enchantments.multishot = {
 	anvil_book_factor = 2,
 }
 
--- requires missing MineClone2 feature
 mcl_enchanting.enchantments.piercing = {
 	name = S("Piercing"),
 	max_level = 4,
@@ -558,7 +555,6 @@ mcl_enchanting.enchantments.punch = {
 	anvil_book_factor = 2,
 }
 
--- requires missing MineClone2 feature
 mcl_enchanting.enchantments.quick_charge = {
 	name = S("Quick Charge"),
 	max_level = 3,
@@ -600,8 +596,7 @@ mcl_enchanting.enchantments.respiration = {
 	anvil_book_factor = 2,
 }
 
--- requires missing MineClone2 feature
---[[mcl_enchanting.enchantments.riptide = {
+mcl_enchanting.enchantments.riptide = {
 	name = S("Riptide"),
 	max_level = 3,
 	primary = {trident = true},
@@ -619,7 +614,7 @@ mcl_enchanting.enchantments.respiration = {
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}]]--
+}
 
 -- implemented via on_enchant
 mcl_enchanting.enchantments.sharpness = {

@@ -678,3 +678,20 @@ if mcl_levelgen.levelgen_enabled or mcl_levelgen.enable_ersatz then
 		},
 	})
 end
+
+awards.register_achievement ("mcl:a_throwaway_joke", {
+	title = S ("A Throwaway Joke"),
+	description = S ([[Throw a Trident at something.
+Note: Throwing away your only weapon is not a good idea.]]),
+	icon = "mcl_tridents_trident_item.png",
+	type = "Advancement",
+	group = "Overworld",
+})
+
+awards.register_achievement ("mcl:very_very_frightening", {
+	title = S ("Very Very Frightening"),
+	description = S ([[Strike a Villager with lightning.]]),
+	icon = "mcl_tridents_trident_item.png",
+	type = "Advancement",
+	group = "Overworld",
+})

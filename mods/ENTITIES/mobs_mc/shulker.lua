@@ -783,7 +783,8 @@ function shulker:receive_damage (mcl_reason, damage)
 	if not self._peek_time and not self.attack then
 		if mcl_reason.direct then
 			local ent = mcl_reason.direct:get_luaentity ()
-			if ent and ent._is_arrow then
+			if ent and ent._is_arrow
+				or ent.name == "mcl_tridents:trident" then
 				return false
 			end
 		end

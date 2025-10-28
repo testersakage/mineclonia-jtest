@@ -13,6 +13,7 @@ mcl_shields = {
 		generic = true,
 		explosion = true,
 		dragon_breath = true,
+		trident = true,
 	},
 	enchantments = {"mending", "unbreaking"},
 	players = {},

@@ -116,6 +116,29 @@ function mcl_serverplayer.release_useitem (state, player, usetime, challenge)
 end
 
 ------------------------------------------------------------------------
+-- Tridents.
+------------------------------------------------------------------------
+
+mcl_serverplayer.trident_info = {
+	["mcl_tridents:trident"] = {
+		is_trident = true,
+	},
+	["mcl_tridents:trident_enchanted"] = {
+		is_trident = true,
+	},
+}
+
+function mcl_serverplayer.release_trident_item (player, state)
+	local wielditem = player:get_wielded_item ()
+	local name = wielditem:get_name ()
+
+	if core.get_item_group (name, "trident") > 0
+		and mcl_tridents.remaining_durability (wielditem) > 1 then
+		mcl_tridents.player_shoot (player, wielditem)
+	end
+end
+
+------------------------------------------------------------------------
 -- Offhand management.
 ------------------------------------------------------------------------
 
@@ -149,6 +172,10 @@ for name, item in pairs (core.registered_items) do
 	--   food_edible_whilst_full
 	--   shield
 	--   bow
+	--
+	-- When proto >= 4, the following placement class(es) also
+	-- exist:
+	--   trident
 
 	if item._placement_def then
 		handshake_item_defs[name] = item._placement_def
@@ -298,5 +325,16 @@ local bows = {
 }
 
 handshake_item_defs["bows"] = bows
+
+local handshake_item_defs_v4 = mcl_serverplayer.handshake_item_defs_v4
+
+-- Tridents.
+local tridents = {
+	default = "trident",
+	inherit = "placeable_on_actionable",
+}
+handshake_item_defs_v4["tridents"] = tridents
+handshake_item_defs_v4["mcl_tridents:trident"] = "tridents"
+handshake_item_defs_v4["mcl_tridents:trident_enchanted"] = "tridents"
 
 end)
