@@ -1762,6 +1762,7 @@ local zombified_piglin = table.merge (zombie, {
 	group_attack = {
 		"mobs_mc:zombified_piglin",
 	},
+	_convert_to = false,
 })
 
 ------------------------------------------------------------------------

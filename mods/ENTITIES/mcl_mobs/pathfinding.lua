@@ -2136,6 +2136,9 @@ local function waterbound_gwp_basic_classify (pos)
 	return value
 end
 
+mcl_mobs.waterbound_gwp_basic_classify
+	= waterbound_gwp_basic_classify
+
 local function waterbound_gwp_classify_node (self, context, pos)
 	local hash = hashpos (context, pos.x, pos.y, pos.z)
 	local cache = context.class_cache[hash]
@@ -3036,7 +3039,7 @@ function mob_class:next_waypoint (dtime)
 				self.waypoints = waypoints
 				self.waypoint_age = 0
 
-				-- if self.name == "mobs_mc:vindicator" then
+				-- if self.name == "mobs_mc:drowned" then
 				-- 	create_path_particles (waypoints, "repetitivestrain", 1, 0.1)
 				-- end
 			else
@@ -3336,7 +3339,7 @@ local function aquatic_gwp_skip_waypoint (self, self_pos, next_wp, ahead)
 		z = ahead.z,
 	}
 	local do_line_of_sight_check
-		= self.swims or self.airborne
+		= self.swims or self.airborne or self._swims_specially
 		or (self.amphibious and standing_in_water (self))
 
 	if do_line_of_sight_check
@@ -3348,7 +3351,17 @@ local function aquatic_gwp_skip_waypoint (self, self_pos, next_wp, ahead)
 	return mob_class.gwp_skip_waypoint (self, self_pos, next_wp, ahead)
 end
 
-function mob_class:gwp_configure_aquatic_mob ()
+function mob_class:gwp_configure_default_mob ()
+	self.gwp_edges = mob_class.gwp_edges
+	self.gwp_start = mob_class.gwp_start
+	self.gwp_initialize = mob_class.gwp_initialize
+	self.gwp_classify_node = mob_class.gwp_classify_node
+	self.gwp_classify_for_movement
+		= mob_class.gwp_classify_for_movement
+	self.gwp_skip_waypoint = mob_class.gwp_skip_waypoint
+end
+
+function mob_class:gwp_configure_aquatic_mob (nocopy)
 	self.gwp_edges = waterbound_gwp_edges
 	self.gwp_start = waterbound_gwp_start
 	self.gwp_initialize = waterbound_gwp_initialize
@@ -3356,9 +3369,12 @@ function mob_class:gwp_configure_aquatic_mob ()
 	self.gwp_classify_for_movement
 		= waterbound_gwp_classify_for_movement
 	self.gwp_skip_waypoint = aquatic_gwp_skip_waypoint
-	local new_penalties = table.copy (mob_class.gwp_penalties)
-	new_penalties.WATER = 0.0
-	self.gwp_penalties = new_penalties
+
+	if not nocopy then
+		local new_penalties = table.copy (mob_class.gwp_penalties)
+		new_penalties.WATER = 0.0
+		self.gwp_penalties = new_penalties
+	end
 end
 
 function mob_class:gwp_configure_airborne_mob ()

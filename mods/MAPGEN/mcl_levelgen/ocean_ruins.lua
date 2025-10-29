@@ -31,8 +31,13 @@ mcl_levelgen.register_loot_table ("mcl_levelgen:ocean_ruins", {
 	},
 })
 
+local drowned_staticdata = core.serialize ({
+	_persistent = true,
+	_structure_generation_spawn = true,
+})
+
 local function handle_drowned (rng, data, mirroring, rotation, x, y, z, item)
-	-- TODO: drowned.
+	mcl_levelgen.create_entity (x, y, z, "mobs_mc:drowned", drowned_staticdata)
 end
 
 mcl_levelgen.register_data_block_processor ("mcl_levelgen:drowned", handle_drowned)

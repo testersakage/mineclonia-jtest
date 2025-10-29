@@ -537,8 +537,10 @@ end
 --- Movement mechanics for flying/swimming/landed mobs.
 --------------------------------------------------------------------------------
 
+local ZERO_VECTOR = vector.zero ()
+
 function mob_class:do_go_pos (dtime, moveresult)
-	local target = self.movement_target or vector.zero ()
+	local target = self.movement_target or ZERO_VECTOR
 	local vel = self.movement_velocity
 	local pos = self.object:get_pos ()
 	local dist = vector.distance (pos, target)
@@ -1098,7 +1100,7 @@ function mob_class:init_ai ()
 	self:halt_in_tracks ()
 
 	if self.swims then
-		self:gwp_configure_aquatic_mob ()
+		self:gwp_configure_aquatic_mob (false)
 		self:configure_aquatic_mob ()
 	end
 	if self.amphibious then
@@ -1521,6 +1523,8 @@ local function aquatic_pacing_target (self, pos, width, height, groups)
 	return #nodes >= 1 and nodes[math.random (#nodes)]
 end
 
+mob_class.aquatic_pacing_target = aquatic_pacing_target
+
 function mob_class:can_reset_pitch ()
 	return true
 end
@@ -1754,6 +1758,8 @@ local function amphibious_pacing_target (self, pos, width, height, groups)
 		= mob_class.pacing_target (self, pos, width, height, SOLID_PACING_GROUPS)
 	return target
 end
+
+mob_class.amphibious_pacing_target = amphibious_pacing_target
 
 function mob_class:configure_amphibious_mob ()
 	self.pacing_target = amphibious_pacing_target
