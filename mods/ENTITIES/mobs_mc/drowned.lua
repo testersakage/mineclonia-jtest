@@ -793,9 +793,9 @@ function drowned_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 			local biome
 				= mcl_biome_dispatch.get_biome_name_nosample (node_pos)
 			if more_frequent_drowned_spawns_p (biome) then
-				return math.random (15) == 1
+				return math.random (2) == 1
 			else
-				return math.random (40) == 1 and node_pos.y < -5
+				return math.random (6) == 1 and node_pos.y < -5
 			end
 		end
 	end
