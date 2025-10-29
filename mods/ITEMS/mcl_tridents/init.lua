@@ -18,10 +18,20 @@ local ipairs = ipairs
 --       [X] Loyalty.
 --       [X] Impaling.
 --       [X] Channeling.
--- - [ ] Trident discharging without the CSM.
+-- - [X] Trident discharging without the CSM.
 -- - [ ] Riptide animations.
 -- - [ ] Dispenser interaction.
 ------------------------------------------------------------------------
+
+local WIELD_VISUAL_SIZE = {
+	x = 1.0 * 0.35,
+	y = 1.0 / 6.4 * 0.35,
+}
+
+local WIELDITEM_PROP_OVERRIDES = {
+	visual = "item",
+	visual_size = WIELD_VISUAL_SIZE,
+}
 
 core.register_tool ("mcl_tridents:trident", {
 	description = S ("Trident"),
@@ -36,11 +46,6 @@ core.register_tool ("mcl_tridents:trident", {
 	wield_scale = vector.new (1.0, 6.4, 1.0),
 	stack_max = 1,
 	_mcl_uses = 250,
-	_mcl_item_visual = "item",
-	_mcl_wield_visual_size = {
-		x = 1.0 * 0.35,
-		y = 1.0 / 6.4 * 0.35,
-	},
 	tool_capabilities = {
 		full_punch_interval = 1.1,
 		max_drop_level = 1,
@@ -48,6 +53,9 @@ core.register_tool ("mcl_tridents:trident", {
 			fleshy = 9,
 		},
 	},
+	_on_set_item_entity = function (_, _)
+		return nil, WIELDITEM_PROP_OVERRIDES
+	end,
 })
 
 ------------------------------------------------------------------------
@@ -92,6 +100,7 @@ local trident_entity = {
 	_can_pick_up = false,
 	_loyalty = 0,
 	_loyalty_timer = 1.0,
+	_age = 0,
 }
 
 core.register_entity ("mcl_tridents:trident", trident_entity)
@@ -145,7 +154,8 @@ function trident_entity:get_shooter ()
 	if type (self._shooter) == "string" then
 		return core.get_player_by_name (self._shooter)
 	end
-	return self._shooter:is_valid () and self._shooter or nil
+	return self._shooter and self._shooter:is_valid ()
+		and self._shooter or nil
 end
 
 function trident_entity:check_pickup (self_pos)
@@ -207,6 +217,7 @@ local function is_sensitive_to_impaling (object)
 			   or entity.name == "mobs_mc:guardian_elder"
 			   or entity.name == "mobs_mc:cod"
 			   or entity.name == "mobs_mc:pufferfish"
+			   or entity.name == "mobs_mc:tropical_fish"
 			   or entity.name == "mobs_mc:salmon"
 			   or entity.name == "mobs_mc:dolphin"
 			   or entity.name == "mobs_mc:squid"
@@ -222,7 +233,17 @@ function trident_entity:on_step (dtime, moveresult)
 	if self._riptide_player
 		and self._riptide_player:get_attach () ~= self.object then
 		self:riptide_detach (self._riptide_player)
-		return nil
+		return
+	end
+
+	-- If this trident is not collectible, arrange to despawn it
+	-- after 60 seconds.
+	if not self._can_pick_up then
+		self._age = self._age + dtime
+		if self._age >= 60.0 then
+			self.object:remove ()
+			return
+		end
 	end
 
 	-- Reorient entity.
@@ -288,13 +309,21 @@ function trident_entity:on_step (dtime, moveresult)
 				damage = damage + impaling * 2.5
 			end
 			local object_pos = mcl_util.get_nodepos (object:get_pos ())
-			local object_type = object:get_luaentity ()
-			if object_type then
-				object_type = object_type.name
+			local entity = object:get_luaentity ()
+			local object_type = nil
+			if entity then
+				object_type = entity.name
 			end
 			if mcl_util.deal_damage (object, damage, mcl_reason) then
 				if mcl_reason.source:is_player () then
 					awards.unlock (self._shooter, "mcl:a_throwaway_joke");
+				end
+				-- Utilize different methods of applying knockback for consistency.
+				if entity and entity.is_mob then
+					entity:projectile_knockback (1, vector.normalize (v))
+				elseif object:is_player () then
+					local dir = vector.normalize (v)
+					mcl_player.player_knockback (object, self.object, dir, nil, damage)
 				end
 			end
 			if mcl_weather.state == "thunder"
@@ -452,14 +481,22 @@ end
 -- Trident launching.
 ------------------------------------------------------------------------
 
-function mcl_tridents.shoot_trident (stack, obj, pos, yaw, pitch, collectable,
-				     riptide_level)
-	local ycos = mathcos (pitch)
-	local dx = -mathsin (yaw) * ycos
-	local dy = -mathsin (pitch)
-	local dz = mathcos (yaw) * ycos
+function mcl_tridents.shoot_trident (stack, obj, pos, yaw, pitch, dir, collectable,
+				     riptide_level, inaccuracy)
+	local dx, dy, dz
+	if not dir then
+		local ycos = mathcos (pitch)
+		dx = -mathsin (yaw) * ycos
+		dy = -mathsin (pitch)
+		dz = mathcos (yaw) * ycos
+	else
+		local len = vector.length (dir)
+		dx = dir.x / len
+		dy = dir.y / len
+		dz = dir.z / len
+	end
 	local v = vector.new (dx, dy, dz)
-	mcl_bows.add_inaccuracy (v, 1.0)
+	v = mcl_bows.add_inaccuracy (v, inaccuracy)
 	if riptide_level <= 0 then
 		v.x = v.x * 50.0
 		v.y = v.y * 50.0
@@ -526,8 +563,8 @@ function mcl_tridents.player_shoot (player, stack)
 	end
 
 	local riptide = mcl_enchanting.get_enchantment (item, "riptide")
-	if mcl_tridents.shoot_trident (item, player, pos, yaw, pitch, not creative,
-				       riptide) then
+	if mcl_tridents.shoot_trident (item, player, pos, yaw, pitch, nil,
+				       not creative, riptide, 1.0) then
 		if not creative and riptide <= 0 then
 			player:set_wielded_item (stack)
 		elseif not creative then

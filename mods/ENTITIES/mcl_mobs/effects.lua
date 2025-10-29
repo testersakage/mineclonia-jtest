@@ -639,6 +639,10 @@ local posing_humanoid = {
 	}
 }
 
+function posing_humanoid:pose_bone_absolute_p (bone)
+	return true
+end
+
 function posing_humanoid:apply_arm_pose (pose)
 	local pose = self._arm_poses[pose]
 	if pose then
@@ -652,20 +656,21 @@ function posing_humanoid:apply_arm_pose (pose)
 				local scale = v[3]
 				local pos = pos
 				local rot = rot
+				local absolute = self:pose_bone_absolute_p (k)
 				self.object:set_bone_override (k, {
 					position = pos and {
 						vec = pos,
-						absolute = true,
+						absolute = absolute,
 						interpolation = 0.1,
 					},
 					rotation = rot and {
 						vec = rot,
-						absolute = true,
+						absolute = absolute,
 						interpolation = 0.1,
 					},
 					scale = scale and {
 						vec = scale,
-						absolute = true,
+						absolute = absolute,
 						interpolation = 0.1,
 					},
 				})

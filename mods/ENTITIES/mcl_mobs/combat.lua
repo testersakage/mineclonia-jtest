@@ -145,7 +145,10 @@ function mob_class:receive_damage (mcl_reason, damage)
 	self._last_attacker = source
 
 	-- Alert others to the attack.
-	if source and source:get_pos () and self.health > 0 then
+	if source and source:is_valid () and self.health > 0
+	-- But not if the source is this mob itself, as when damage is
+	-- inflicted by a deflected trident.
+		and source ~= self.object then
 		self:call_group_attack (source)
 
 		if self.runaway then
@@ -321,17 +324,19 @@ function mob_class:do_runaway ()
 	self.runaway_timer = 5
 end
 
-function mob_class:call_group_attack(hitter)
+function mob_class:call_group_attack (hitter)
 	for obj in core.objects_inside_radius(hitter:get_pos(), self.view_range) do
-		local ent = obj:get_luaentity()
-		if ent then
-			-- only alert members of same mob or friends
-			if ent.group_attack then
-				if ent.name == self.name then
-					ent:do_attack(hitter)
-				elseif type(ent.group_attack) == "table" then
-					if table.indexof(ent.group_attack, self.name) ~= -1 then
+		if obj ~= hitter then
+			local ent = obj:get_luaentity()
+			if ent then
+				-- only alert members of same mob or friends
+				if ent.group_attack then
+					if ent.name == self.name then
 						ent:do_attack(hitter)
+					elseif type(ent.group_attack) == "table" then
+						if table.indexof (ent.group_attack, self.name) ~= -1 then
+							ent:do_attack (hitter)
+						end
 					end
 				end
 			end
@@ -1093,6 +1098,10 @@ function mob_class:wielditem_transform (info, stack)
 		and def and def.inventory_image == "" then
 		rot = info.blocklike_rotation
 		pos = info.blocklike_position
+	elseif info.trident_position
+		and core.get_item_group (name, "trident") > 0 then
+		rot = info.trident_rotation
+		pos = info.trident_position
 	end
 	return rot, pos, table.copy (wielditem_props.visual_size)
 end

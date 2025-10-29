@@ -119,6 +119,7 @@ local zombie = table.merge (posing_humanoid, {
 		"mobs_mc:baby_husk",
 		"mobs_mc:zombified_piglin",
 		"mobs_mc:villager_zombie",
+		"mobs_mc:drowned",
 	},
 	drops = drops_zombie,
 	animation = {
@@ -205,6 +206,8 @@ local zombie = table.merge (posing_humanoid, {
 	_zombie_punch_animation_timeout = 0,
 	_humanoid_superclass = mob_class,
 	_reinforcement_type = "mobs_mc:zombie",
+	_convert_to = "mobs_mc:drowned",
+	_time_submerged = 0,
 })
 
 mobs_mc.zombie = zombie
@@ -410,6 +413,10 @@ function zombie:do_custom (dtime)
 	posing_humanoid.do_custom (self, dtime)
 	local t = self._zombie_punch_animation_timeout - dtime
 	self._zombie_punch_animation_timeout = math.max (0.0, t)
+
+	if self._convert_to then
+		self:step_conversion (dtime)
+	end
 end
 
 function zombie:set_animation (anim, custom_frame)
@@ -554,6 +561,22 @@ end
 ------------------------------------------------------------------------
 -- Zombie AI.
 ------------------------------------------------------------------------
+
+function zombie:step_conversion (dtime)
+	if self._immersion_depth > self.head_eye_height then
+		self._time_submerged = self._time_submerged + dtime
+		if self._time_submerged > 30 then
+			self.shaking = true
+			if self._time_submerged > 45 then
+				self:replace_with (self._convert_to, true)
+				return false
+			end
+		end
+	else
+		self._time_submerged = 0
+		self.shaking = false
+	end
+end
 
 function zombie:gwp_initialize (targets, range, tolerance, penalties)
 	-- Limit the pathfinding distance of zombies to 24, as greater
@@ -759,6 +782,7 @@ local baby_zombie = table.merge (zombie, {
 		punch_start = 109, punch_end = 119
 	},
 	head_eye_height = 0.93,
+	_convert_to = "mobs_mc:baby_drowned",
 })
 
 mcl_mobs.register_mob ("mobs_mc:baby_zombie", baby_zombie)
@@ -782,30 +806,13 @@ local husk = table.merge (zombie, {
 		level = 1,
 		respect_local_difficulty = true,
 	},
-	_time_submerged = 0,
 	_reinforcement_type = "mobs_mc:husk",
+	_convert_to = "mobs_mc:zombie",
 })
 
 ------------------------------------------------------------------------
 -- Husk conversion.
 ------------------------------------------------------------------------
-
-function husk:do_custom (dtime)
-	if self._immersion_depth > self.head_eye_height then
-		self._time_submerged = self._time_submerged + dtime
-		if self._time_submerged > 30 then
-			self.shaking = true
-			if self._time_submerged > 45 then
-				self:replace_with ("mobs_mc:zombie", true)
-				return false
-			end
-		end
-	else
-		self._time_submerged = 0
-		self.shaking = false
-	end
-	zombie.do_custom (self, dtime)
-end
 
 mcl_mobs.register_mob ("mobs_mc:husk", husk)
 
@@ -829,24 +836,8 @@ local baby_husk = table.merge (baby_zombie, {
 		respect_local_difficulty = true,
 	},
 	_reinforcement_type = "mobs_mc:husk",
+	_convert_to = "mobs_mc:baby_zombie",
 })
-
-function baby_husk:do_custom (dtime)
-	if self._immersion_depth > self.head_eye_height then
-		self._time_submerged = self._time_submerged + dtime
-		if self._time_submerged > 30 then
-			self.shaking = true
-			if self._time_submerged > 45 then
-				self:replace_with ("mobs_mc:baby_zombie", true)
-				return false
-			end
-		end
-	else
-		self._time_submerged = 0
-		self.shaking = false
-	end
-	zombie.do_custom (self, dtime)
-end
 
 mcl_mobs.register_mob ("mobs_mc:baby_husk", baby_husk)
 

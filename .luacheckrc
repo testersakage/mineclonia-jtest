@@ -190,6 +190,7 @@ globals = {
 	"mcl_torches",
 	"mcl_totems",
 	"mcl_trees",
+	"mcl_tridents",
 	"mcl_buttons",
 	"mcl_tt",
 	"mcl_util",

@@ -65,6 +65,7 @@ local files = {
 	"wither.lua",
 	"wolf.lua",
 	"zombie.lua",
+	"drowned.lua",
 	"villager_zombie.lua",
 	"zombiepig.lua",
 	"piglin.lua",
