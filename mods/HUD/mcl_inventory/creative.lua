@@ -672,6 +672,12 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 		return
 	end
 
+	-- Do not resend formspec when moving scrollbar
+	local scrollbar_event = core.explode_scrollbar_event(fields.scroll)
+	if scrollbar_event.type == "CHG" then
+		return
+	end
+
 	local name = player:get_player_name()
 
 	if fields.blocks or fields.blocks_outer then
