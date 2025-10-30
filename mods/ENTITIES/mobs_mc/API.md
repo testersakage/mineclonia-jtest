@@ -60,6 +60,9 @@ TRADES is a list of trades, and GIFTS is a loot table of loot that
 will be offered to players afflicted with the Hero of the Village
 status effect, as below.
 
+Mods that invoke this function must declare a dependency on
+mcl_villages as well as mobs_mc.
+
 #### Example of adding a villager that trades honey and related items.
 
 ```lua

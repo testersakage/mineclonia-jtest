@@ -1161,12 +1161,16 @@ end
 
 function mobs_mc.register_villager (profession, poi, trades, gifts)
 	table.insert (villager_professions, profession)
+	-- It appears that the search cache needn't be reinitialized
+	-- after alterations to jobsite_groups, as
+	-- mcl_util.make_node_search_cache saves a reference to the
+	-- list and only resolves it after mods are loaded.
 	table.insert (jobsite_groups, profession.group)
 	table.insert (mobs_mc.jobsites, profession.group)
 
 	professions_by_name[profession.name] = profession
-	villager_trades[profession.name] = trades
-	villager_gift_tables[profession.name] = gifts
+	mobs_mc.villager_trades[profession.name] = trades
+	mobs_mc.villager_gift_tables[profession.name] = gifts
 
 	mcl_villages.register_poi (profession.poi, poi)
 end
@@ -1916,6 +1920,7 @@ local villager_trades = {
 		},
 	},
 }
+mobs_mc.villager_trades = villager_trades
 
 -- Assign the default price multiplier of 0.05 to all trades where
 -- such a multiplier is not already specified.
@@ -2608,13 +2613,9 @@ end
 local bed_search_cache
 	= mcl_util.make_node_search_cache ("limit_size", {"group:bed_bottom",})
 local poi_search_cache
+	= mcl_util.make_node_search_cache ("limit_size", jobsite_groups)
 local bell_search_cache
 	= mcl_util.make_node_search_cache ("limit_size", {"mcl_bells:bell",})
-
-core.register_on_mods_loaded (function ()
-	poi_search_cache
-		= mcl_util.make_node_search_cache ("limit_size", jobsite_groups)
-end)
 
 function mobs_mc.notify_bed_placed (pos)
 	bed_search_cache:notify_placed (pos)
@@ -4860,6 +4861,7 @@ local villager_gift_tables = {
 		},
 	},
 }
+mobs_mc.villager_gift_tables = villager_gift_tables
 
 function villager:throw_gifts (self_pos, recipient, pos)
 	local items
