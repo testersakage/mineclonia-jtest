@@ -41,6 +41,7 @@ core.register_tool ("mcl_tridents:trident", {
 		trident = 1,
 		enchantability = 1,
 		rarity = 2,
+		offhand_item = 1,
 	},
 	inventory_image = "mcl_tridents_trident_item.png",
 	wield_image = "blank.png^[resize:5x32^[combine:5x32:-19,0=mcl_tridents_trident_entity.png",
