@@ -191,7 +191,7 @@ local function get_entity_info(pos, param2, double, dir, _)
 end
 
 local function create_entity(pos, node_name, textures, param2, double, sound_prefix, mesh_prefix, animation_type, dir, entity_pos)
-	if animate_chests or double then
+	if animate_chests then
 		dir, entity_pos = get_entity_info(pos, param2, double, dir, entity_pos)
 		local initialization_data = core.serialize({pos, node_name, textures, dir, double, sound_prefix, mesh_prefix, animation_type, param2, "###mcl_chests:chest###"})
 		local obj = core.add_entity(entity_pos, "mcl_chests:chest", initialization_data)
@@ -450,7 +450,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		_doc_items_usagehelp = usagehelp,
 		_doc_items_hidden = hidden,
 		drawtype = animate_chests and "nodebox" or "mesh",
-		mesh = not animate_chests and "mcl_chests_chest.obj" or nil,
+		mesh = not animate_chests and "mcl_chests_chest.b3d" or nil,
 		node_box = animate_chests and {
 			type = "fixed",
 			fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.375, 0.4375},
@@ -603,8 +603,12 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 	})
 
 	core.register_node(left_name, {
-		drawtype = "nodebox",
-		node_box = {
+		drawtype = animate_chests and "nodebox" or "mesh",
+		nodebox = animate_chests and {
+			type = "fixed",
+			fixed = { -0.4375, -0.5, -0.4375, 0.5, 0.375, 0.4375 },
+		} or nil,
+		selection_box = {
 			type = "fixed",
 			fixed = { -0.4375, -0.5, -0.4375, 0.5, 0.375, 0.4375 },
 		},
@@ -614,6 +618,8 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		_chest_entity_sound = "default_chest",
 		_chest_entity_mesh = "mcl_chests_chest",
 		_chest_entity_animation_type = "chest",
+		mesh = not animate_chests and "mcl_chests_chest_double_static.obj" or nil,
+		tiles = not animate_chests and left_textures or { "blank.png^[resize:16x16" },
 		paramtype = "light",
 		paramtype2 = "facedir",
 		_mcl_baseitem = "mcl_chests:"..basename,
