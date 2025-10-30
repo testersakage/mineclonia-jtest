@@ -387,7 +387,7 @@ function drowned:do_go_pos (dtime, moveresult)
 		local scale = (1 - p) / (1 - DROWNED_SWIM_FRICTION)
 		local vel = self.movement_velocity
 
-		if (target and target:get_pos ().y > self_pos.y)
+		if (target and target:is_valid () and target:get_pos ().y > self_pos.y)
 			or self._swim_up then
 			v.y = v.y + DROWNED_CLIMB_BONUS * scale
 		end
