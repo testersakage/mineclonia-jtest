@@ -18,6 +18,8 @@ local wandering_trader = table.merge (villager_base, {
 	       "mobs_mc:baby_zombie",
 	       "mobs_mc:husk",
 	       "mobs_mc:baby_husk",
+	       "mobs_mc:drowned",
+	       "mobs_mc:baby_drowned",
 	       "mobs_mc:evoker",
 	       "mobs_mc:vindicator",
 	       "mobs_mc:vex",
