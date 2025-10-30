@@ -201,7 +201,7 @@ local cid_ice
 local cid_packed_ice
 local cid_mud
 local cid_mangrove_propagule
-local cid_hanging_mangrove_propagule
+local cid_hanging_mangrove_propagule_1
 local cid_soul_sand
 local cid_honey_block
 local cid_dead_bush
