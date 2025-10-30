@@ -242,7 +242,7 @@ for i = 1, 5 do
 		drop = i == 5 and "mcl_mangrove:propagule" or "",
 		use_texture_alpha = "clip",
 		drawtype = "mesh",
-		mesh = "mcl_mangrove_hanging_propagule.obj",
+		mesh = "mcl_mangrove_hanging_propagule_".. i .. ".obj",
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		sunlight_propagates = true,
 		selection_box = {
