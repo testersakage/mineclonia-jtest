@@ -7,17 +7,12 @@ local show_nici = core.settings:get_bool("mcl_creative_show_nici_tab", false)
 mcl_player.register_player_setting("mcl_inventory:scroll_on_creative_inventory", {
 	type = "enum",
 	options = {
-		{ name = "auto", description = S("Auto") },
-		{ name = "false", description = S("Off") },
-		{ name = "true", description = S("On (causes problems on some client versions)") },
+		{ name = "true", description = S("Scrollbar") },
+		{ name = "false", description = S("Pagination buttons") },
 	},
 	section = "Inventory",
-	short_desc = S("Enable scrollable creative inventory"),
-	long_desc = S([[Very large inventory displays may be slow when scrolling, especially on Luanti versions before 5.11.
-Therefore the creative inventory display can be split into pages with prev/next page buttons.
-Mineclonia defaults to use scrolling unless an older Luanti version is detected.
-This setting allows you to override that heuristic.]]),
-	ui_default = "auto",
+	short_desc = S("Creative inventory scrolling"),
+	ui_default = "true",
 	on_change = mcl_inventory.set_creative_formspec
 })
 
@@ -521,21 +516,8 @@ function mcl_inventory.set_creative_formspec(player)
 			"listring[current_player;offhand]"..
 			"listring[current_player;main]"
 	else
-		local scroll_setting = mcl_player.get_player_setting(player, "mcl_inventory:scroll_on_creative_inventory", "auto")
+		local scroll_setting = mcl_player.get_player_setting(player, "mcl_inventory:scroll_on_creative_inventory")
 		local scroll = scroll_setting == "true"
-		if scroll_setting == "auto" then
-			--[[
-				Luanti version <5.11 has serious performance
-				issues with scrollbars.  Luanti 5.13 also
-				introduced a regression which broke the
-				scrollbar completely.  When Luanti 5.11+ is
-				required for Mineclonia servers then the
-				hardcoded 47 and 48 can be replaced by
-				core.protocol_versions[<version>].
-			]]
-			local protocol_version = core.get_player_information(playername).protocol_version
-			scroll = 47 <= protocol_version and protocol_version < 49
-		end
 		if scroll then
 			local nb_lines = math.ceil(inv_size / 9)
 			main_list = table.concat({
