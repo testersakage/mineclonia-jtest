@@ -457,114 +457,119 @@ if detect_luajit () then
 		rotlull, shrull, ashrull, shlull, mul2ull = fn ()
 end
 
+local function lj_test_assert (cond)
+	assert (cond, [[PRNG validation failed.
+Your LuaJIT installation (or Lua interpreter) is out-of-date and does not generate pseudo-random numbers correctly.  Mineclonia will not function under such a configuration in order to avoid scenarios where structure or level generation proceeds erroneously or inconsistently.  Please refer to https://luajit.org/install.html for details as regards updating your LuaJIT installation.]])
+end
+
 -- Tests.
 if true then
 	local x = ull (UINT_MAX, UINT_MAX)
-	assert (tostringull (x) == "18446744073709551615")
+	lj_test_assert (tostringull (x) == "18446744073709551615")
 
 	local x = ull (0, UINT_MAX - 1)
 	addull (x, ull (0, 2))
-	assert (tostringull (x) == tostring (UINT_MAX + 1))
+	lj_test_assert (tostringull (x) == tostring (UINT_MAX + 1))
 	local x = ull (UINT_MAX, UINT_MAX)
 	addull (x, ull (65535, 1))
-	assert (tostringull (x) == "281470681743360")
+	lj_test_assert (tostringull (x) == "281470681743360")
 	local x = ull (UINT_MAX, UINT_MAX)
 	negull (x)
-	assert (tostringull (x) == "1")
+	lj_test_assert (tostringull (x) == "1")
 	local x = ull (0, 473902)
 	subull (x, ull (0, 473904))
 	local y = ull (0, 2)
 	negull (y)
-	assert (equalull (x, y))
-	assert (tostringull (ull (2654435769, 2135587861)) == "11400714819323198485")
-	assert (tostringull (ull (1779033703, 4089235721)) == "7640891576956012809")
+	lj_test_assert (equalull (x, y))
+	lj_test_assert (tostringull (ull (2654435769, 2135587861)) == "11400714819323198485")
+	lj_test_assert (tostringull (ull (1779033703, 4089235721)) == "7640891576956012809")
 
 	local x = ull (0, UINT_MAX)
 	shlull (x, 32)
-	assert (tostringull (x) == "18446744069414584320")
+	lj_test_assert (tostringull (x) == "18446744069414584320")
 	shlull (x, 31)
-	assert (tostringull (x) == "9223372036854775808")
+	lj_test_assert (tostringull (x) == "9223372036854775808")
 	local y = ull (0, UINT_MAX)
 	shlull (y, 24)
-	assert (tostringull (y) == "72057594021150720")
+	lj_test_assert (tostringull (y) == "72057594021150720")
 	shlull (y, 8)
-	assert (tostringull (y) == "18446744069414584320")
+	lj_test_assert (tostringull (y) == "18446744069414584320")
 	local y = ull (0, 1)
 	shlull (y, 63)
-	assert (tostringull (y) == "9223372036854775808")
+	lj_test_assert (tostringull (y) == "9223372036854775808")
 
 	local x = ull (UINT_MAX, 0)
 	shrull (x, 32)
-	assert (tostringull (x) == tostring (UINT_MAX))
+	lj_test_assert (tostringull (x) == tostring (UINT_MAX))
 
 	local x = ull (0xffff, 0xffff0000)
 	rotlull (x, 32)
-	assert (tostringull (x) == "18446462598732906495")
+	lj_test_assert (tostringull (x) == "18446462598732906495")
 
 	local x = ull (0x8416021, 0x7307451e)
 	rotlull (x, 17)
-	assert (tostringull (x) == "13853888353868189826")
+	lj_test_assert (tostringull (x) == "13853888353868189826")
 
 	local x = ull (0x8416021, 0x7307451e)
 	shrull (x, 47)
-	assert (tostringull (x) == "4226")
+	lj_test_assert (tostringull (x) == "4226")
 
 	local x = ull (0x9e3779b9, 0x7f4a7c15)
 	shlull (x, 49)
-	assert (tostringull (x) == "17882105270427975680")
+	lj_test_assert (tostringull (x) == "17882105270427975680")
 
 	local x = ull (0x9e3779b9, 0x7f4a7c15)
 	shrull (x, 15)
-	assert (tostringull (x) == "347922205179540")
+	lj_test_assert (tostringull (x) == "347922205179540")
 
 	local x = ull (0x9e3779b9, 0x7f4a7c15)
-	assert (divull (x, 2) == 1)
-	assert (tostringull (x) == "5700357409661599242")
+	lj_test_assert (divull (x, 2) == 1)
+	lj_test_assert (tostringull (x) == "5700357409661599242")
 
 	local x = ull (0x9e3779b9, 0x7f4a7c15)
-	assert (divull (x, 17) == 15)
-	assert (tostringull (x) == "670630283489599910")
+	lj_test_assert (divull (x, 17) == 15)
+	lj_test_assert (tostringull (x) == "670630283489599910")
 
 	local x = ull (0x9e3779b9, 0x7f4a7c15)
-	assert (divull (x, 0x7fff) == 21333)
-	assert (tostringull (x) == "347932823246656")
+	lj_test_assert (divull (x, 0x7fff) == 21333)
+	lj_test_assert (tostringull (x) == "347932823246656")
 
 	local x = ull (1024, 546633999)
 	mulull (x, 64)
-	assert (tostringull (x) == "281509961286592")
+	lj_test_assert (tostringull (x) == "281509961286592")
 
 	local x = ull (1024, 546633999)
-	assert (mulull (x, 0xffffffff) == 1024)
-	assert (tostringull (x) == "2347770749993551601")
+	lj_test_assert (mulull (x, 0xffffffff) == 1024)
+	lj_test_assert (tostringull (x) == "2347770749993551601")
 
 	local x = ull (1024, 546633999)
-	assert (mulull (x, 0xffffaaaa) == 1024)
-	assert (tostringull (x) == "2251683482738776566")
+	lj_test_assert (mulull (x, 0xffffaaaa) == 1024)
+	lj_test_assert (tostringull (x) == "2251683482738776566")
 
 	dtoull (x, 1.000000001 * 9.223372e18)
-	assert (tostringull (x) == "9223372009223372800")
+	lj_test_assert (tostringull (x) == "9223372009223372800")
 
 	dtoull (x, -1.000000001 * 9.223372e18)
-	assert (tostringull (x) == "9223372064486178816")
+	lj_test_assert (tostringull (x) == "9223372064486178816")
 
 	dtoull (x, -1.6168570900701e+18)
-	assert (tostringull (x) == "16829886983639451648")
+	lj_test_assert (tostringull (x) == "16829886983639451648")
 
 	dtoull (x, -6.772123677161575 * 1034383538)
-	assert (tostringull (x) == "18446744066704578368")
+	lj_test_assert (tostringull (x) == "18446744066704578368")
 
 	dtoull (x, -6.43123677161575 * 1034383538)
-	assert (tostringull (x) == "18446744067057186171")
+	lj_test_assert (tostringull (x) == "18446744067057186171")
 
 	local x = ull (0xffffffff, 0xffffffff)
 	local z = ull (0xffffffff, 0xffffffff)
 	ashrull (x, 32)
-	assert (equalull (x, z))
+	lj_test_assert (equalull (x, z))
 
 	local x = ull (0xffffffff, 0xffffffff)
 	local z = ull (0, 0xffffffff)
 	shrull (x, 32)
-	assert (equalull (x, z))
+	lj_test_assert (equalull (x, z))
 end
 
 mcl_levelgen.tostringull = tostringull
@@ -852,7 +857,7 @@ if true and detect_luajit () then
 			local ull2 = ull (0, 0)
 			seed_from_position (ull1, x, y, z)
 			lj_seed_from_position (ull2, x, y, z)
-			assert (equalull (ull1, ull2))
+			lj_test_assert (equalull (ull1, ull2))
 		end
 	end
 	seed_from_position = lj_seed_from_position
@@ -1079,7 +1084,7 @@ if true then
 		local factory_value
 			= factory ({x = x, y = y, z = z,}):next_long ()
 		local value = reseedable:next_long ()
-		assert (equalull (value, factory_value))
+		lj_test_assert (equalull (value, factory_value))
 	end
 
 	local seed1 = ull (0, 0)
@@ -1088,13 +1093,13 @@ if true then
 	stringtoull (seed1, "3948575739")
 	stringtoull (seed2, "18413248036093821064")
 	x:reseed (seed1)
-	assert (tostringull (x:next_long ()) == "1166925898593515289")
-	assert (tostringull (x:next_long ()) == "3959461064507847451")
-	assert (tostringull (x:next_long ()) == "12831638853348124801")
+	lj_test_assert (tostringull (x:next_long ()) == "1166925898593515289")
+	lj_test_assert (tostringull (x:next_long ()) == "3959461064507847451")
+	lj_test_assert (tostringull (x:next_long ()) == "12831638853348124801")
 	x:reseed (seed2)
-	assert (tostringull (x:next_long ()) == "17696910518188760863")
-	assert (tostringull (x:next_long ()) == "4876660131927854451")
-	assert (tostringull (x:next_long ()) == "2153688626528828990")
+	lj_test_assert (tostringull (x:next_long ()) == "17696910518188760863")
+	lj_test_assert (tostringull (x:next_long ()) == "4876660131927854451")
+	lj_test_assert (tostringull (x:next_long ()) == "2153688626528828990")
 
 	local seed = ull (0, 0)
 	stringtoull (seed, "300980754")
@@ -1104,12 +1109,12 @@ if true then
 	local x = mcl_levelgen.xoroshiro (seed1, seed2)
 	local abs = math.abs
 	local D = 16e-15
-	assert (abs (x:next_gaussian () - 0.05778929000253813) < D)
-	assert (abs (x:next_gaussian () - -0.0010128593488433443) < D)
-	assert (abs (x:next_gaussian () - -0.1341293654492881) < D)
-	assert (abs (x:next_gaussian () - -0.78415967880207) < D)
-	assert (abs (x:next_gaussian () - 0.6635210098754315) < D)
-	assert (abs (x:next_gaussian () - -0.26174819256398935) < D)
+	lj_test_assert (abs (x:next_gaussian () - 0.05778929000253813) < D)
+	lj_test_assert (abs (x:next_gaussian () - -0.0010128593488433443) < D)
+	lj_test_assert (abs (x:next_gaussian () - -0.1341293654492881) < D)
+	lj_test_assert (abs (x:next_gaussian () - -0.78415967880207) < D)
+	lj_test_assert (abs (x:next_gaussian () - 0.6635210098754315) < D)
+	lj_test_assert (abs (x:next_gaussian () - -0.26174819256398935) < D)
 end
 
 -- luacheck: push ignore 511
@@ -1149,7 +1154,7 @@ if true then
 
 		for i = 1, 1000 do
 			local a, b = fork:next_integer (3000), other:next_integer (3000)
-			assert (a == b)
+			lj_test_assert (a == b)
 		end
 	end
 end
@@ -1345,7 +1350,7 @@ if true then
 		local factory_value
 			= factory ({x = x, y = y, z = z,}):next_long ()
 		local value = reseedable:next_long ()
-		assert (equalull (value, factory_value))
+		lj_test_assert (equalull (value, factory_value))
 	end
 
 	local x = mcl_levelgen.jvm_random (extull (0))
@@ -1354,13 +1359,13 @@ if true then
 	stringtoull (seed1, "3948575739")
 	stringtoull (seed2, "18413248036093821064")
 	x:reseed (seed1)
-	assert (tostringull (x:next_long ()) == "11919139927092448892")
-	assert (tostringull (x:next_long ()) == "13835344951310129447")
-	assert (tostringull (x:next_long ()) == "13590812842237688474")
+	lj_test_assert (tostringull (x:next_long ()) == "11919139927092448892")
+	lj_test_assert (tostringull (x:next_long ()) == "13835344951310129447")
+	lj_test_assert (tostringull (x:next_long ()) == "13590812842237688474")
 	x:reseed (seed2)
-	assert (tostringull (x:next_long ()) == "5543589759440410229")
-	assert (tostringull (x:next_long ()) == "4799685316607659139")
-	assert (tostringull (x:next_long ()) == "12852779243211759225")
+	lj_test_assert (tostringull (x:next_long ()) == "5543589759440410229")
+	lj_test_assert (tostringull (x:next_long ()) == "4799685316607659139")
+	lj_test_assert (tostringull (x:next_long ()) == "12852779243211759225")
 end
 
 if true then
@@ -1376,7 +1381,7 @@ if true then
 
 		for i = 1, 1000 do
 			local a, b = fork:next_integer (3000), other:next_integer (3000)
-			assert (a == b)
+			lj_test_assert (a == b)
 		end
 	end
 end
@@ -1485,7 +1490,7 @@ if true then
 		if false then
 			print (seed)
 		else
-			assert (seed == value)
+			lj_test_assert (seed == value)
 		end
 	end
 	-- print ("seed: ", tostringull (seed), "incr: ", tostringull (incr))
@@ -1552,8 +1557,8 @@ if true then
 	stringtoull (seed2, "18413248036093821064")
 	biomeseedull (seed1, seed1)
 	biomeseedull (seed2, seed2)
-	assert (tostringull (seed1) == "17623870130031917223")
-	assert (tostringull (seed2) == "6736552460589820823")
+	lj_test_assert (tostringull (seed1) == "17623870130031917223")
+	lj_test_assert (tostringull (seed2) == "6736552460589820823")
 end
 
 ------------------------------------------------------------------------
@@ -1586,13 +1591,13 @@ end
 if true then
 	local lcg = mcl_levelgen.jvm_random (ull (0, 0))
 	mcl_levelgen.set_carver_seed (lcg, extull (304853), 25, 45)
-	assert (lcg:next_within (5000) == 2936)
-	assert (lcg:next_within (5000) == 4880)
-	assert (lcg:next_within (5000) == 4375)
+	lj_test_assert (lcg:next_within (5000) == 2936)
+	lj_test_assert (lcg:next_within (5000) == 4880)
+	lj_test_assert (lcg:next_within (5000) == 4375)
 	mcl_levelgen.set_carver_seed (lcg, extull (304853), -2503, -1774)
-	assert (lcg:next_within (5000) == 4611)
-	assert (lcg:next_within (5000) == 2202)
-	assert (lcg:next_within (5000) == 4126)
+	lj_test_assert (lcg:next_within (5000) == 4611)
+	lj_test_assert (lcg:next_within (5000) == 2202)
+	lj_test_assert (lcg:next_within (5000) == 4126)
 end
 
 function mcl_levelgen.set_population_seed (rng, seed, cx, cz)
@@ -1628,13 +1633,13 @@ if true then
 	local lcg = mcl_levelgen.jvm_random (ull (0, 0))
 	local pop = mcl_levelgen.set_population_seed (lcg, extull (304853),
 						      -11270, 9304)
-	assert (lcg:next_within (5000) == 1925)
-	assert (lcg:next_within (5000) == 182)
-	assert (lcg:next_within (5000) == 75)
+	lj_test_assert (lcg:next_within (5000) == 1925)
+	lj_test_assert (lcg:next_within (5000) == 182)
+	lj_test_assert (lcg:next_within (5000) == 75)
 	mcl_levelgen.set_decorator_seed (lcg, pop, 33, 11)
-	assert (lcg:next_within (5000) == 2357)
-	assert (lcg:next_within (5000) == 4883)
-	assert (lcg:next_within (5000) == 3244)
+	lj_test_assert (lcg:next_within (5000) == 2357)
+	lj_test_assert (lcg:next_within (5000) == 4883)
+	lj_test_assert (lcg:next_within (5000) == 3244)
 end
 
 -- https://maven.fabricmc.net/docs/yarn-1.21.5+build.1/
@@ -1665,14 +1670,14 @@ if true then
 	local level_seed = ull (0, 0)
 	stringtoull (level_seed, "3689348814741910323")
 	mcl_levelgen.set_region_seed (lcg, level_seed, 353, 192, -77583)
-	assert (lcg:next_within (5000) == 3651)
-	assert (lcg:next_within (5000) == 716)
-	assert (lcg:next_within (5000) == 4205)
-	assert (lcg:next_within (5000) == 4093)
+	lj_test_assert (lcg:next_within (5000) == 3651)
+	lj_test_assert (lcg:next_within (5000) == 716)
+	lj_test_assert (lcg:next_within (5000) == 4205)
+	lj_test_assert (lcg:next_within (5000) == 4093)
 	stringtoull (level_seed, "194")
 	mcl_levelgen.set_region_seed (lcg, level_seed, -442, -757, 1210)
-	assert (lcg:next_within (5000) == 838)
-	assert (lcg:next_within (5000) == 4832)
-	assert (lcg:next_within (5000) == 3972)
-	assert (lcg:next_within (5000) == 253)
+	lj_test_assert (lcg:next_within (5000) == 838)
+	lj_test_assert (lcg:next_within (5000) == 4832)
+	lj_test_assert (lcg:next_within (5000) == 3972)
+	lj_test_assert (lcg:next_within (5000) == 253)
 end
