@@ -32,7 +32,7 @@ mcl_levelgen.register_loot_table ("mcl_levelgen:ocean_ruins", {
 })
 
 local drowned_staticdata = core.serialize ({
-	_persistent = true,
+	persistent = true,
 	_structure_generation_spawn = true,
 })
 
