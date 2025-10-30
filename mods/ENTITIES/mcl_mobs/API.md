@@ -886,3 +886,73 @@ Custom projectiles for mobs can be registered using
  * 'mobs_spawn'			 if false then mobs no longer spawn without spawner or spawn egg.
  * 'mobs_drop_items'		when false mobs no longer drop items when they die.
  * 'mobs_griefing'			when false mobs cannot break blocks when using either pathfinding level 2, replace functions or mobs:boom
+
+## Public API
+
+This sections covers functions for use in external mods.
+
+### mobs_mc.register_villager
+
+This function allows mods to add villager mobs.
+
+**Signature:** `mobs_mc.register_villager (profession, poi, trades, gifts)`
+
+<TODO INSERT DESCRIPTION OF PARAMETERS HERE>
+
+#### Example of adding a villager that trades honey and related items.
+
+```lua
+	local profession = {
+		description = S("Beeologist"),
+		name = "beeologist",
+		poi = "my_mod:beeologist",
+		group = "group:beehive",
+		texture = "beeologist.png",
+		extra_pick_up = {},
+	}
+
+	local poi = {
+		is_valid = function(nodepos)
+			local node = core.get_node(nodepos)
+			return (node.name == "ignore" or core.get_item_group(node.name, "beehive") > 0)
+		end,
+		village_center = true,
+	}
+
+	local trades = {
+		{
+			{{"mcl_core:emerald", 1, 1}, {"mcl_potions:glass_bottle", 3, 3}},
+			-- Plus a bunch of trades for flowers
+		},
+
+		{
+			{{"mcl_honey:honey_bottle", 2, 2}, {"mcl_core:emerald", 1, 1}},
+			{{"mcl_campfires:campfire_lit", 1, 1}, {"mcl_core:emerald", 1, 1}},
+			{{"mcl_core:emerald", 1, 1}, {"mcl_honey:honeycomb", 3, 3}},
+		},
+
+		{
+			{{"mcl_core:emerald", 5, 5}, {"mcl_honey:honey_bottle", 2, 2}},
+			{{"mcl_beehives:beehive", 1, 1}, {"mcl_core:emerald", 5, 5}},
+		},
+
+		{
+			{{"mcl_core:emerald", 5, 5}, {"mcl_honey:honeycomb_block", 1, 1}}
+		},
+
+		{
+			{{"mcl_core:emerald", 2, 2}, {"mcl_honey:honey_block", 1, 1}},
+			{{"mcl_core:emerald", 6, 6}, {"mcl_beehives:beehive", 1, 1}},
+		},
+	}
+
+	local gifts = {
+		stacks_min = 1,
+		stacks_max = 1,
+		items = {
+			{itemstring = "mcl_honey:honey_bottle"},
+		},
+	}
+
+	mobs_mc.register_villager(profession, poi, trades, gifts)
+```
