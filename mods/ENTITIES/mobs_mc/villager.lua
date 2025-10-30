@@ -1159,6 +1159,18 @@ local function get_profession (job_site_name)
 	return nil
 end
 
+function mobs_mc.register_villager (profession, poi, trades, gifts)
+	table.insert (villager_professions, profession)
+	table.insert (jobsite_groups, profession.group)
+	table.insert (mobs_mc.jobsites, profession.group)
+
+	professions_by_name[profession.name] = profession
+	villager_trades[profession.name] = trades
+	villager_gift_tables[profession.name] = gifts
+
+	mcl_villages.register_poi (profession.poi, poi)
+end
+
 ------------------------------------------------------------------------
 -- Villager visuals.
 ------------------------------------------------------------------------
@@ -2596,9 +2608,13 @@ end
 local bed_search_cache
 	= mcl_util.make_node_search_cache ("limit_size", {"group:bed_bottom",})
 local poi_search_cache
-	= mcl_util.make_node_search_cache ("limit_size", jobsite_groups)
 local bell_search_cache
 	= mcl_util.make_node_search_cache ("limit_size", {"mcl_bells:bell",})
+
+core.register_on_mods_loaded (function ()
+	poi_search_cache
+		= mcl_util.make_node_search_cache ("limit_size", jobsite_groups)
+end)
 
 function mobs_mc.notify_bed_placed (pos)
 	bed_search_cache:notify_placed (pos)
@@ -6724,18 +6740,3 @@ mcl_mobs.register_mob ("mobs_mc:villager", villager)
 ------------------------------------------------------------------------
 
 mcl_mobs.register_egg ("mobs_mc:villager", S("Villager"), "#563d33", "#bc8b72", 0)
-
-function mobs_mc.register_villager (profession, poi, trades, gifts)
-	table.insert (villager_professions, profession)
-	table.insert (jobsite_groups, profession.group)
-	table.insert (mobs_mc.jobsites, profession.group)
-
-	professions_by_name[profession.name] = profession
-	villager_trades[profession.name] = trades
-	villager_gift_tables[profession.name] = gifts
-
-	mcl_villages.register_poi (profession.poi, poi)
-
-	poi_search_cache
-		= mcl_util.make_node_search_cache ("limit_size", jobsite_groups)
-end
