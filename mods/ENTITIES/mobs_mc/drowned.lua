@@ -575,7 +575,7 @@ function drowned:discharge_ranged (self_pos, target_pos)
 	local diff = vector.subtract (target_pos, self_pos)
 	local shoot_pos = mcl_util.target_eye_pos (self.object)
 	mcl_tridents.shoot_trident (stack, self.object, shoot_pos, nil, nil, diff,
-				    false, 0, inaccuracy)
+				    false, 0, inaccuracy, nil)
 end
 
 local function drowned_find_water_1 (self_pos)

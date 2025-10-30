@@ -186,6 +186,15 @@ function mcl_itemframes.tpl_entity:set_item(itemstack, pos)
 		update_entity()
 		return
 	end
+	local prop_overrides
+	local stackdef = itemstack:get_definition ()
+	if stackdef and stackdef._on_set_item_entity then
+		local s
+		s, prop_overrides = stackdef._on_set_item_entity (itemstack, self)
+		if s then
+			itemstack = s
+		end
+	end
 	local def = mcl_itemframes.registered_itemframes[ndef._mcl_itemframe]
 	self._item = itemstack:get_name()
 	self._stack = itemstack
@@ -217,7 +226,7 @@ function mcl_itemframes.tpl_entity:set_item(itemstack, pos)
 	self.object:set_properties(table.merge(base_props, {
 		wield_item = self._item,
 		visual_size = {x = base_props.visual_size.x / ws.x, y = base_props.visual_size.y / ws.y},
-	}, def.object_properties or {}))
+	}, prop_overrides or {}, def.object_properties or {}))
 end
 
 function mcl_itemframes.tpl_entity:get_staticdata()
