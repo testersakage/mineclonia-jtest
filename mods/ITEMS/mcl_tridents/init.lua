@@ -20,7 +20,7 @@ local ipairs = ipairs
 --       [X] Channeling.
 -- - [X] Trident discharging without the CSM.
 -- - [ ] Riptide animations.
--- - [ ] Dispenser interaction.
+-- - [X] Dispenser interaction.
 ------------------------------------------------------------------------
 
 local WIELD_VISUAL_SIZE = {
@@ -56,6 +56,12 @@ core.register_tool ("mcl_tridents:trident", {
 	},
 	_on_set_item_entity = function (_, _)
 		return nil, WIELDITEM_PROP_OVERRIDES
+	end,
+	_on_dispense = function (itemstack, dispenserpos, _, _, dropdir)
+		local shootpos
+			= vector.add (dispenserpos, vector.multiply (dropdir, 0.6))
+		mcl_tridents.shoot_trident (itemstack:take_item (), nil, shootpos, nil, nil,
+					    dropdir, true, 0, 1, 0.366666)
 	end,
 })
 
@@ -225,6 +231,16 @@ local function is_sensitive_to_impaling (object)
 			   or entity.name == "mobs_mc:glow_squid")
 end
 
+local function is_walkable (self_pos)
+	local cid, _, _
+		= core.get_node_raw (math.floor (self_pos.x + 0.5),
+				     math.floor (self_pos.y + 0.5),
+				     math.floor (self_pos.z + 0.5))
+	local name = core.get_name_from_content_id (cid)
+	local def = core.registered_nodes[name]
+	return def and def.walkable
+end
+
 function trident_entity:on_step (dtime, moveresult)
 	local v = self.object:get_velocity ()
 	local self_pos = self.object:get_pos ()
@@ -273,6 +289,29 @@ function trident_entity:on_step (dtime, moveresult)
 					and mcl_enchanting.get_enchantment (self._itemstack,
 									    "channeling") > 0 then
 					mcl_lightning.strike (vector.offset (node_pos, 0, 1, 0))
+				end
+				-- Detect buttons and like non-solid
+				-- nodes that might be occupying the
+				-- node in which this projectile has
+				-- been halted by the collision.
+				local new_nodepos
+					= mcl_util.get_nodepos (new_pos)
+				local node_here
+					= core.get_node (new_nodepos)
+				local def_here
+					= core.registered_nodes[node_here.name]
+				if def_here and def_here._on_arrow_hit then
+					self._stuckin = node_pos
+					def_here._on_arrow_hit (new_nodepos, self)
+				else
+					self._stuckin = node_pos
+					-- Otherwise, register a hit
+					-- on the node with which this
+					-- projectile collided.
+					local def = core.registered_nodes[node.name]
+					if def and def._on_arrow_hit then
+						def._on_arrow_hit (node_pos, self)
+					end
 				end
 				self._in_block = v1
 				self._objects_seen = {}
@@ -349,7 +388,8 @@ function trident_entity:on_step (dtime, moveresult)
 		local loyalty = self._loyalty
 		if loyalty > 0 then
 			local shooter = self:get_shooter ()
-			if not shooter and self._loyalty_timer <= 0 then
+			if not shooter and self._loyalty_timer <= 0
+				and not is_walkable (self_pos) then
 				-- Resume moving.
 				self._loyalty_timer = 1.0
 				self.object:set_acceleration (GRAVITY)
@@ -357,7 +397,7 @@ function trident_entity:on_step (dtime, moveresult)
 					physical = true,
 				})
 				self._in_block = nil
-			elseif self._loyalty_timer <= 0 then
+			elseif shooter and self._loyalty_timer <= 0 then
 				local dst_pos = shooter:get_pos ()
 				local dir = vector.direction (self_pos, dst_pos)
 				local speed = loyalty <= 2 and loyalty * 2.5 or loyalty * 2.4
@@ -371,7 +411,7 @@ function trident_entity:on_step (dtime, moveresult)
 				dir.y = dir.y * -1
 				dir.z = dir.z * -1
 				self:rotate (dir)
-			else
+			elseif shooter then
 				local t = self._loyalty_timer - dtime * 4
 				self._loyalty_timer = t
 			end
@@ -483,7 +523,7 @@ end
 ------------------------------------------------------------------------
 
 function mcl_tridents.shoot_trident (stack, obj, pos, yaw, pitch, dir, collectable,
-				     riptide_level, inaccuracy)
+				     riptide_level, inaccuracy, speed)
 	local dx, dy, dz
 	if not dir then
 		local ycos = mathcos (pitch)
@@ -499,9 +539,10 @@ function mcl_tridents.shoot_trident (stack, obj, pos, yaw, pitch, dir, collectab
 	local v = vector.new (dx, dy, dz)
 	v = mcl_bows.add_inaccuracy (v, inaccuracy)
 	if riptide_level <= 0 then
-		v.x = v.x * 50.0
-		v.y = v.y * 50.0
-		v.z = v.z * 50.0
+		local speed = speed or 1.0
+		v.x = v.x * 50.0 * speed
+		v.y = v.y * 50.0 * speed
+		v.z = v.z * 50.0 * speed
 	else
 		v.x = v.x * 40.0 * (1 + riptide_level) / 4.0
 		v.y = v.y * 40.0 * (1 + riptide_level) / 4.0
@@ -511,7 +552,7 @@ function mcl_tridents.shoot_trident (stack, obj, pos, yaw, pitch, dir, collectab
 	if object then
 		object:set_velocity (v)
 		local entity = object:get_luaentity ()
-		if obj:is_player () then
+		if obj and obj:is_player () then
 			entity._shooter = obj:get_player_name ()
 		else
 			entity._shooter = obj
@@ -565,7 +606,7 @@ function mcl_tridents.player_shoot (player, stack)
 
 	local riptide = mcl_enchanting.get_enchantment (item, "riptide")
 	if mcl_tridents.shoot_trident (item, player, pos, yaw, pitch, nil,
-				       not creative, riptide, 1.0) then
+				       not creative, riptide, 1.0, nil) then
 		if not creative and riptide <= 0 then
 			player:set_wielded_item (stack)
 		elseif not creative then
