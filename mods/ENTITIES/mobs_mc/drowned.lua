@@ -526,7 +526,9 @@ function drowned:should_swim ()
 	end
 	local attack = self.attack
 	return self._immersion_depth >= 1.0
-		and attack and object_submerged_p (attack)
+		and attack
+		and attack:is_valid ()
+		and object_submerged_p (attack)
 end
 
 function drowned:test_swimming ()
