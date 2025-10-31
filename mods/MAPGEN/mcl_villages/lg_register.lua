@@ -7,10 +7,9 @@ local pairs = pairs
 -- Village templates.
 ------------------------------------------------------------------------
 
-local schematic_meta = core.ipc_get ("mcl_villages:schematic_meta")
+local schematic_meta
 
-local function load_schematic (name)
-	local id = "mcl_villages:" .. name
+local function load_schematic (id)
 	assert (schematic_meta[id])
 	local meta = schematic_meta[id]
 	return {
@@ -24,252 +23,86 @@ local function load_schematic (name)
 	}
 end
 
+local village_template = {
+	meeting_points = {},
+	job_buildings = {},
+	house_buildings = {},
+	street_decor = {},
+	farms = {},
+	well = {},
+	piles = {},
+}
+
+local plains_village_template = table.copy (village_template)
+local desert_village_template = table.copy (village_template)
+local snowy_village_template = table.copy (village_template)
+local savannah_village_template = table.copy (village_template)
+local taiga_village_template = table.copy (village_template)
+
 -- Each component in a template should identify a portable schematic,
--- a ``connecting'' position and orientation, and possibly a list of
+-- a "connecting" position and orientation, and possibly a list of
 -- exit positions to which other types of components may attach with
 -- their "connecting" positions rotated to contact the source's exit.
 
-local plains_village_template = {
-	meeting_points = {
-		load_schematic ("new_villages/belltower"),
-	},
-	job_buildings = {
-		load_schematic ("new_villages/butcher"),
-		load_schematic ("new_villages/cartographer"),
-		load_schematic ("new_villages/church"),
-		load_schematic ("new_villages/chapel"),
-		load_schematic ("new_villages/farm"),
-		load_schematic ("new_villages/fishery_levelgen"),
-		load_schematic ("new_villages/fletcher"),
-		load_schematic ("new_villages/leather_worker"),
-		load_schematic ("new_villages/library"),
-		load_schematic ("new_villages/mason"),
-		load_schematic ("new_villages/mill"),
-		load_schematic ("new_villages/toolsmith"),
-		load_schematic ("new_villages/weaponsmith"),
-	},
-	house_buildings = {
-		load_schematic ("new_villages/house_1_bed"),
-		load_schematic ("new_villages/house_2_bed"),
-		load_schematic ("new_villages/house_3_bed"),
-		load_schematic ("new_villages/house_3_bed"),
-		load_schematic ("new_villages/house_4_bed"),
-		load_schematic ("new_villages/house_4_bed"),
-	},
-	street_decor = {
-		load_schematic ("new_villages/lamp_1"),
-		load_schematic ("new_villages/lamp_2"),
-		load_schematic ("new_villages/lamp_3"),
-		load_schematic ("new_villages/lamp_4"),
-		load_schematic ("new_villages/lamp_5"),
-		load_schematic ("new_villages/lamp_6"),
-	},
-	farms = {
-		load_schematic ("new_villages/farm_large_1"),
-		load_schematic ("new_villages/farm_small_1"),
-		load_schematic ("new_villages/farm_small_2"),
-	},
-	well = {
-		load_schematic ("new_villages/well"),
-	},
-	piles = {
-		"mcl_villages:pile_hay",
-	},
-}
+local function initialize_village_template (template, src)
+	for _, schematic in ipairs (src.meeting_points) do
+		table.insert (template.meeting_points,
+			      load_schematic (schematic))
+	end
 
-local desert_village_template = {
-	meeting_points = {
-		load_schematic ("new_villages/belltower"),
-	},
-	job_buildings = {
-		load_schematic ("new_villages/butcher"),
-		load_schematic ("new_villages/cartographer"),
-		load_schematic ("new_villages/church"),
-		load_schematic ("new_villages/chapel"),
-		load_schematic ("new_villages/farm"),
-		load_schematic ("new_villages/fishery_levelgen"),
-		load_schematic ("new_villages/fletcher"),
-		load_schematic ("new_villages/leather_worker"),
-		load_schematic ("new_villages/library"),
-		load_schematic ("new_villages/mason"),
-		load_schematic ("new_villages/mill"),
-		load_schematic ("new_villages/toolsmith"),
-		load_schematic ("new_villages/weaponsmith"),
-	},
-	house_buildings = {
-		load_schematic ("new_villages/house_1_bed"),
-		load_schematic ("new_villages/house_2_bed"),
-		load_schematic ("new_villages/house_3_bed"),
-		load_schematic ("new_villages/house_3_bed"),
-		load_schematic ("new_villages/house_4_bed"),
-		load_schematic ("new_villages/house_4_bed"),
-	},
-	street_decor = {
-		load_schematic ("new_villages/lamp_1"),
-		load_schematic ("new_villages/lamp_2"),
-		load_schematic ("new_villages/lamp_3"),
-		load_schematic ("new_villages/lamp_4"),
-		load_schematic ("new_villages/lamp_5"),
-		load_schematic ("new_villages/lamp_6"),
-	},
-	farms = {
-		load_schematic ("new_villages/farm_large_1"),
-		load_schematic ("new_villages/farm_small_1"),
-		load_schematic ("new_villages/farm_small_2"),
-	},
-	well = {
-		load_schematic ("new_villages/well"),
-	},
-	piles = {
-		"mcl_villages:pile_hay",
-	},
-}
+	for _, schematic in ipairs (src.job_buildings) do
+		table.insert (template.job_buildings,
+			      load_schematic (schematic))
+	end
 
-local snowy_village_template = {
-	meeting_points = {
-		load_schematic ("new_villages/belltower"),
-	},
-	job_buildings = {
-		load_schematic ("new_villages/butcher"),
-		load_schematic ("new_villages/cartographer"),
-		load_schematic ("new_villages/church"),
-		load_schematic ("new_villages/chapel"),
-		load_schematic ("new_villages/farm"),
-		load_schematic ("new_villages/fishery_levelgen"),
-		load_schematic ("new_villages/fletcher"),
-		load_schematic ("new_villages/leather_worker"),
-		load_schematic ("new_villages/library"),
-		load_schematic ("new_villages/mason"),
-		load_schematic ("new_villages/mill"),
-		load_schematic ("new_villages/toolsmith"),
-		load_schematic ("new_villages/weaponsmith"),
-	},
-	house_buildings = {
-		load_schematic ("new_villages/house_1_bed"),
-		load_schematic ("new_villages/house_2_bed"),
-		load_schematic ("new_villages/house_3_bed"),
-		load_schematic ("new_villages/house_3_bed"),
-		load_schematic ("new_villages/house_4_bed"),
-		load_schematic ("new_villages/house_4_bed"),
-	},
-	street_decor = {
-		load_schematic ("new_villages/lamp_1"),
-		load_schematic ("new_villages/lamp_2"),
-		load_schematic ("new_villages/lamp_3"),
-		load_schematic ("new_villages/lamp_4"),
-		load_schematic ("new_villages/lamp_5"),
-		load_schematic ("new_villages/lamp_6"),
-	},
-	farms = {
-		load_schematic ("new_villages/farm_large_1"),
-		load_schematic ("new_villages/farm_small_1"),
-		load_schematic ("new_villages/farm_small_2"),
-	},
-	well = {
-		load_schematic ("new_villages/well"),
-	},
-	piles = {
-		"mcl_villages:pile_ice",
-		"mcl_villages:pile_snow",
-	},
-}
+	for _, schematic in ipairs (src.house_buildings) do
+		table.insert (template.house_buildings,
+			      load_schematic (schematic))
+	end
 
-local savannah_village_template = {
-	meeting_points = {
-		load_schematic ("new_villages/belltower"),
-	},
-	job_buildings = {
-		load_schematic ("new_villages/butcher"),
-		load_schematic ("new_villages/cartographer"),
-		load_schematic ("new_villages/church"),
-		load_schematic ("new_villages/chapel"),
-		load_schematic ("new_villages/farm"),
-		load_schematic ("new_villages/fishery_levelgen"),
-		load_schematic ("new_villages/fletcher"),
-		load_schematic ("new_villages/leather_worker"),
-		load_schematic ("new_villages/library"),
-		load_schematic ("new_villages/mason"),
-		load_schematic ("new_villages/mill"),
-		load_schematic ("new_villages/toolsmith"),
-		load_schematic ("new_villages/weaponsmith"),
-	},
-	house_buildings = {
-		load_schematic ("new_villages/house_1_bed"),
-		load_schematic ("new_villages/house_2_bed"),
-		load_schematic ("new_villages/house_3_bed"),
-		load_schematic ("new_villages/house_3_bed"),
-		load_schematic ("new_villages/house_4_bed"),
-		load_schematic ("new_villages/house_4_bed"),
-	},
-	street_decor = {
-		load_schematic ("new_villages/lamp_1"),
-		load_schematic ("new_villages/lamp_2"),
-		load_schematic ("new_villages/lamp_3"),
-		load_schematic ("new_villages/lamp_4"),
-		load_schematic ("new_villages/lamp_5"),
-		load_schematic ("new_villages/lamp_6"),
-	},
-	farms = {
-		load_schematic ("new_villages/farm_large_1"),
-		load_schematic ("new_villages/farm_small_1"),
-		load_schematic ("new_villages/farm_small_2"),
-	},
-	well = {
-		load_schematic ("new_villages/well"),
-	},
-	piles = {
-		"mcl_villages:pile_hay",
-		"mcl_villages:pile_melon",
-	},
-}
+	for _, schematic in ipairs (src.street_decor) do
+		table.insert (template.street_decor,
+			      load_schematic (schematic))
+	end
 
-local taiga_village_template = {
-	meeting_points = {
-		load_schematic ("new_villages/belltower"),
-	},
-	job_buildings = {
-		load_schematic ("new_villages/butcher"),
-		load_schematic ("new_villages/cartographer"),
-		load_schematic ("new_villages/church"),
-		load_schematic ("new_villages/chapel"),
-		load_schematic ("new_villages/farm"),
-		load_schematic ("new_villages/fishery_levelgen"),
-		load_schematic ("new_villages/fletcher"),
-		load_schematic ("new_villages/leather_worker"),
-		load_schematic ("new_villages/library"),
-		load_schematic ("new_villages/mason"),
-		load_schematic ("new_villages/mill"),
-		load_schematic ("new_villages/toolsmith"),
-		load_schematic ("new_villages/weaponsmith"),
-	},
-	house_buildings = {
-		load_schematic ("new_villages/house_1_bed"),
-		load_schematic ("new_villages/house_2_bed"),
-		load_schematic ("new_villages/house_3_bed"),
-		load_schematic ("new_villages/house_3_bed"),
-		load_schematic ("new_villages/house_4_bed"),
-		load_schematic ("new_villages/house_4_bed"),
-	},
-	street_decor = {
-		load_schematic ("new_villages/lamp_1"),
-		load_schematic ("new_villages/lamp_2"),
-		load_schematic ("new_villages/lamp_3"),
-		load_schematic ("new_villages/lamp_4"),
-		load_schematic ("new_villages/lamp_5"),
-		load_schematic ("new_villages/lamp_6"),
-	},
-	farms = {
-		load_schematic ("new_villages/farm_large_1"),
-		load_schematic ("new_villages/farm_small_1"),
-		load_schematic ("new_villages/farm_small_2"),
-	},
-	well = {
-		load_schematic ("new_villages/well"),
-	},
-	piles = {
-		"mcl_villages:pile_pumpkin",
-	},
-}
+	for _, schematic in ipairs (src.farms) do
+		table.insert (template.farms,
+			      load_schematic (schematic))
+	end
+
+	for _, schematic in ipairs (src.well) do
+		table.insert (template.well,
+			      load_schematic (schematic))
+	end
+
+	for _, pile in ipairs (src.piles) do
+		assert (type (pile) == "string")
+		table.insert (template.piles, pile)
+	end
+end
+
+local function initialize_village_templates ()
+	local village_templates
+		= core.ipc_get ("mcl_villages:village_templates")
+	schematic_meta = core.ipc_get ("mcl_villages:schematic_meta")
+	local variants = {
+		{"plains", plains_village_template,},
+		{"desert", desert_village_template,},
+		{"snowy", snowy_village_template,},
+		{"savannah", savannah_village_template,},
+		{"taiga", taiga_village_template,},
+	}
+	for _, variant in ipairs (variants) do
+		local name = variant[1]
+		initialize_village_template (variant[2], village_templates[name])
+	end
+end
+
+if mcl_levelgen.is_levelgen_environment then
+	initialize_village_templates ()
+else
+	core.register_on_mods_loaded (initialize_village_templates)
+end
 
 ------------------------------------------------------------------------
 -- Village path piece.

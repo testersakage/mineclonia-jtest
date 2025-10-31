@@ -5,7 +5,11 @@ from crossing areas by using the `mcl_villages:no_paths` block. You may need to
 stack them 2 high to prevent all paths. After the village paths have be laid
 this block will be replaced by air.
 
-## Building Interfaces
+## Legacy Building Interfaces
+
+These functions are obsolete and inert when the new village generator
+is enabled.  Refer to the documentation in `schemgen.lua` and
+`mcl_levelgen.register_building_v2` for their replacement.
 
 ### Parameter
 
@@ -139,8 +143,11 @@ You can access the current profession and job site data in
 
 ### mcl_villages.register_on_village_placed(func)
 
-This function allows registering functions to be called after a village is
-laid out.
+This function allows registering functions to be called after a
+village is laid out by the old village generator.  This function is
+obsolete on Luanti 5.14 or later without replacement, as villages are
+now incrementally generated in emerge threads in a procedural manner
+that village placement callbacks cannot accommodate.
 
 Note that the village may not be completed as the building post processing is
 non-deterministic to avoid overloading the server.
@@ -166,8 +173,11 @@ placed as part of village generation.
 
 `villager_ent` is the entity created by `minetest.add_entity`.
 
-`blockseed` is the block seed for the chunk the village was generated for.
-Villages can extend outside of this chunk.
+`blockseed` is the block seed for the chunk the village was generated
+for.  Villages can extend outside of this chunk; or, under the new
+village generator, a ull value (see mcl_levelgen's API documentation)
+unique to this villager; this value is reused across calls and mustn't
+be cached or stored.
 
 ```lua
 local function my_villager_hook(villager_ent, blockseed)

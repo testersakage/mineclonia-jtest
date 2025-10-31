@@ -1,3 +1,5 @@
+local ipairs = ipairs
+
 ------------------------------------------------------------------------
 -- Village template component generation.
 ------------------------------------------------------------------------
@@ -329,46 +331,297 @@ local function generate_junction_schematic (schem_name)
 	return schematic
 end
 
-function mcl_villages.load_default_schematics ()
-	local names_bell = {
-		"new_villages/belltower",
-	}
-	local names_building = {
-		"new_villages/blacksmith",
-		"new_villages/butcher",
-		"new_villages/cartographer",
-		"new_villages/church",
-		"new_villages/house_1_bed",
-		"new_villages/house_2_bed",
-		"new_villages/house_3_bed",
-		"new_villages/house_4_bed",
-		"new_villages/leather_worker",
-		"new_villages/library",
-		"new_villages/mason",
-		"new_villages/mill",
-		"new_villages/toolsmith",
-		"new_villages/weaponsmith",
-	}
-	local names_junction = {
-		"new_villages/chapel",
-		"new_villages/farm",
-		"new_villages/farm_large_1",
-		"new_villages/farm_small_1",
-		"new_villages/farm_small_2",
-		"new_villages/fishery_levelgen",
-		"new_villages/fletcher",
-		"new_villages/well",
-	}
-	local names_standalone = {
-		"new_villages/lamp_1",
-		"new_villages/lamp_2",
-		"new_villages/lamp_3",
-		"new_villages/lamp_4",
-		"new_villages/lamp_5",
-		"new_villages/lamp_6",
-	}
+local plains_village_template = {
+	meeting_points = {
+		"mcl_villages:new_villages/belltower",
+	},
+	job_buildings = {
+		"mcl_villages:new_villages/butcher",
+		"mcl_villages:new_villages/cartographer",
+		"mcl_villages:new_villages/church",
+		"mcl_villages:new_villages/chapel",
+		"mcl_villages:new_villages/farm",
+		"mcl_villages:new_villages/fishery_levelgen",
+		"mcl_villages:new_villages/fletcher",
+		"mcl_villages:new_villages/leather_worker",
+		"mcl_villages:new_villages/library",
+		"mcl_villages:new_villages/mason",
+		"mcl_villages:new_villages/mill",
+		"mcl_villages:new_villages/toolsmith",
+		"mcl_villages:new_villages/weaponsmith",
+	},
+	house_buildings = {
+		"mcl_villages:new_villages/house_1_bed",
+		"mcl_villages:new_villages/house_2_bed",
+		"mcl_villages:new_villages/house_3_bed",
+		"mcl_villages:new_villages/house_3_bed",
+		"mcl_villages:new_villages/house_4_bed",
+		"mcl_villages:new_villages/house_4_bed",
+	},
+	street_decor = {
+		"mcl_villages:new_villages/lamp_1",
+		"mcl_villages:new_villages/lamp_2",
+		"mcl_villages:new_villages/lamp_3",
+		"mcl_villages:new_villages/lamp_4",
+		"mcl_villages:new_villages/lamp_5",
+		"mcl_villages:new_villages/lamp_6",
+	},
+	farms = {
+		"mcl_villages:new_villages/farm_large_1",
+		"mcl_villages:new_villages/farm_small_1",
+		"mcl_villages:new_villages/farm_small_2",
+	},
+	well = {
+		"mcl_villages:new_villages/well",
+	},
+	piles = {
+		"mcl_villages:pile_hay",
+	},
+}
 
-	local schematic_meta = {}
+local desert_village_template = {
+	meeting_points = {
+		"mcl_villages:new_villages/belltower",
+	},
+	job_buildings = {
+		"mcl_villages:new_villages/butcher",
+		"mcl_villages:new_villages/cartographer",
+		"mcl_villages:new_villages/church",
+		"mcl_villages:new_villages/chapel",
+		"mcl_villages:new_villages/farm",
+		"mcl_villages:new_villages/fishery_levelgen",
+		"mcl_villages:new_villages/fletcher",
+		"mcl_villages:new_villages/leather_worker",
+		"mcl_villages:new_villages/library",
+		"mcl_villages:new_villages/mason",
+		"mcl_villages:new_villages/mill",
+		"mcl_villages:new_villages/toolsmith",
+		"mcl_villages:new_villages/weaponsmith",
+	},
+	house_buildings = {
+		"mcl_villages:new_villages/house_1_bed",
+		"mcl_villages:new_villages/house_2_bed",
+		"mcl_villages:new_villages/house_3_bed",
+		"mcl_villages:new_villages/house_3_bed",
+		"mcl_villages:new_villages/house_4_bed",
+		"mcl_villages:new_villages/house_4_bed",
+	},
+	street_decor = {
+		"mcl_villages:new_villages/lamp_1",
+		"mcl_villages:new_villages/lamp_2",
+		"mcl_villages:new_villages/lamp_3",
+		"mcl_villages:new_villages/lamp_4",
+		"mcl_villages:new_villages/lamp_5",
+		"mcl_villages:new_villages/lamp_6",
+	},
+	farms = {
+		"mcl_villages:new_villages/farm_large_1",
+		"mcl_villages:new_villages/farm_small_1",
+		"mcl_villages:new_villages/farm_small_2",
+	},
+	well = {
+		"mcl_villages:new_villages/well",
+	},
+	piles = {
+		"mcl_villages:pile_hay",
+	},
+}
+
+local snowy_village_template = {
+	meeting_points = {
+		"mcl_villages:new_villages/belltower",
+	},
+	job_buildings = {
+		"mcl_villages:new_villages/butcher",
+		"mcl_villages:new_villages/cartographer",
+		"mcl_villages:new_villages/church",
+		"mcl_villages:new_villages/chapel",
+		"mcl_villages:new_villages/farm",
+		"mcl_villages:new_villages/fishery_levelgen",
+		"mcl_villages:new_villages/fletcher",
+		"mcl_villages:new_villages/leather_worker",
+		"mcl_villages:new_villages/library",
+		"mcl_villages:new_villages/mason",
+		"mcl_villages:new_villages/mill",
+		"mcl_villages:new_villages/toolsmith",
+		"mcl_villages:new_villages/weaponsmith",
+	},
+	house_buildings = {
+		"mcl_villages:new_villages/house_1_bed",
+		"mcl_villages:new_villages/house_2_bed",
+		"mcl_villages:new_villages/house_3_bed",
+		"mcl_villages:new_villages/house_3_bed",
+		"mcl_villages:new_villages/house_4_bed",
+		"mcl_villages:new_villages/house_4_bed",
+	},
+	street_decor = {
+		"mcl_villages:new_villages/lamp_1",
+		"mcl_villages:new_villages/lamp_2",
+		"mcl_villages:new_villages/lamp_3",
+		"mcl_villages:new_villages/lamp_4",
+		"mcl_villages:new_villages/lamp_5",
+		"mcl_villages:new_villages/lamp_6",
+	},
+	farms = {
+		"mcl_villages:new_villages/farm_large_1",
+		"mcl_villages:new_villages/farm_small_1",
+		"mcl_villages:new_villages/farm_small_2",
+	},
+	well = {
+		"mcl_villages:new_villages/well",
+	},
+	piles = {
+		"mcl_villages:pile_ice",
+		"mcl_villages:pile_snow",
+	},
+}
+
+local savannah_village_template = {
+	meeting_points = {
+		"mcl_villages:new_villages/belltower",
+	},
+	job_buildings = {
+		"mcl_villages:new_villages/butcher",
+		"mcl_villages:new_villages/cartographer",
+		"mcl_villages:new_villages/church",
+		"mcl_villages:new_villages/chapel",
+		"mcl_villages:new_villages/farm",
+		"mcl_villages:new_villages/fishery_levelgen",
+		"mcl_villages:new_villages/fletcher",
+		"mcl_villages:new_villages/leather_worker",
+		"mcl_villages:new_villages/library",
+		"mcl_villages:new_villages/mason",
+		"mcl_villages:new_villages/mill",
+		"mcl_villages:new_villages/toolsmith",
+		"mcl_villages:new_villages/weaponsmith",
+	},
+	house_buildings = {
+		"mcl_villages:new_villages/house_1_bed",
+		"mcl_villages:new_villages/house_2_bed",
+		"mcl_villages:new_villages/house_3_bed",
+		"mcl_villages:new_villages/house_3_bed",
+		"mcl_villages:new_villages/house_4_bed",
+		"mcl_villages:new_villages/house_4_bed",
+	},
+	street_decor = {
+		"mcl_villages:new_villages/lamp_1",
+		"mcl_villages:new_villages/lamp_2",
+		"mcl_villages:new_villages/lamp_3",
+		"mcl_villages:new_villages/lamp_4",
+		"mcl_villages:new_villages/lamp_5",
+		"mcl_villages:new_villages/lamp_6",
+	},
+	farms = {
+		"mcl_villages:new_villages/farm_large_1",
+		"mcl_villages:new_villages/farm_small_1",
+		"mcl_villages:new_villages/farm_small_2",
+	},
+	well = {
+		"mcl_villages:new_villages/well",
+	},
+	piles = {
+		"mcl_villages:pile_hay",
+		"mcl_villages:pile_melon",
+	},
+}
+
+local taiga_village_template = {
+	meeting_points = {
+		"mcl_villages:new_villages/belltower",
+	},
+	job_buildings = {
+		"mcl_villages:new_villages/butcher",
+		"mcl_villages:new_villages/cartographer",
+		"mcl_villages:new_villages/church",
+		"mcl_villages:new_villages/chapel",
+		"mcl_villages:new_villages/farm",
+		"mcl_villages:new_villages/fishery_levelgen",
+		"mcl_villages:new_villages/fletcher",
+		"mcl_villages:new_villages/leather_worker",
+		"mcl_villages:new_villages/library",
+		"mcl_villages:new_villages/mason",
+		"mcl_villages:new_villages/mill",
+		"mcl_villages:new_villages/toolsmith",
+		"mcl_villages:new_villages/weaponsmith",
+	},
+	house_buildings = {
+		"mcl_villages:new_villages/house_1_bed",
+		"mcl_villages:new_villages/house_2_bed",
+		"mcl_villages:new_villages/house_3_bed",
+		"mcl_villages:new_villages/house_3_bed",
+		"mcl_villages:new_villages/house_4_bed",
+		"mcl_villages:new_villages/house_4_bed",
+	},
+	street_decor = {
+		"mcl_villages:new_villages/lamp_1",
+		"mcl_villages:new_villages/lamp_2",
+		"mcl_villages:new_villages/lamp_3",
+		"mcl_villages:new_villages/lamp_4",
+		"mcl_villages:new_villages/lamp_5",
+		"mcl_villages:new_villages/lamp_6",
+	},
+	farms = {
+		"mcl_villages:new_villages/farm_large_1",
+		"mcl_villages:new_villages/farm_small_1",
+		"mcl_villages:new_villages/farm_small_2",
+	},
+	well = {
+		"mcl_villages:new_villages/well",
+	},
+	piles = {
+		"mcl_villages:pile_pumpkin",
+	},
+}
+
+local village_templates = {
+	plains = plains_village_template,
+	desert = desert_village_template,
+	snowy = snowy_village_template,
+	savannah = savannah_village_template,
+	taiga = taiga_village_template,
+}
+
+local names_bell = {
+	"new_villages/belltower",
+}
+local names_building = {
+	"new_villages/blacksmith",
+	"new_villages/butcher",
+	"new_villages/cartographer",
+	"new_villages/church",
+	"new_villages/house_1_bed",
+	"new_villages/house_2_bed",
+	"new_villages/house_3_bed",
+	"new_villages/house_4_bed",
+	"new_villages/leather_worker",
+	"new_villages/library",
+	"new_villages/mason",
+	"new_villages/mill",
+	"new_villages/toolsmith",
+	"new_villages/weaponsmith",
+}
+local names_junction = {
+	"new_villages/chapel",
+	"new_villages/farm",
+	"new_villages/farm_large_1",
+	"new_villages/farm_small_1",
+	"new_villages/farm_small_2",
+	"new_villages/fishery_levelgen",
+	"new_villages/fletcher",
+	"new_villages/well",
+}
+local names_standalone = {
+	"new_villages/lamp_1",
+	"new_villages/lamp_2",
+	"new_villages/lamp_3",
+	"new_villages/lamp_4",
+	"new_villages/lamp_5",
+	"new_villages/lamp_6",
+}
+
+local schematic_meta = {}
+
+function mcl_villages.load_default_schematics ()
 	for _, name in ipairs (names_bell) do
 		local id = "mcl_villages:" .. name
 		local file = mcl_villages.modpath .. "/schematics/" .. name .. ".mts"
@@ -422,11 +675,14 @@ function mcl_villages.load_default_schematics ()
 			exits = {},
 		}
 	end
-
-	core.ipc_set ("mcl_villages:schematic_meta", schematic_meta)
 end
 
 mcl_villages.load_default_schematics ()
+
+core.register_on_mods_loaded (function ()
+	core.ipc_set ("mcl_villages:schematic_meta", schematic_meta)
+	mcl_villages.finalize_building_definitions ()
+end)
 
 ------------------------------------------------------------------------
 -- Village callbacks.
@@ -1238,6 +1494,8 @@ if mcl_levelgen.levelgen_enabled or mcl_levelgen.enable_ersatz then
 	rng = rng:fork_positional ():create_reseedable ()
 end
 
+local on_villager_placed = mcl_villages.on_villager_placed
+
 local function handle_villager (_, data)
 	local bed, bell, poi = data.bed, data.bell, data.poi
 	v0.x, v0.y, v0.z
@@ -1291,6 +1549,14 @@ local function handle_villager (_, data)
 			name = poi[4],
 			param2 = 0,
 		})
+	end
+
+	if #on_villager_placed > 0 then
+		rng:reseed_positional (v0.x, v0.y, v0.z)
+		local ull = rng:next_long ()
+		for _, callback in ipairs (on_villager_placed) do
+			callback (villager, ull)
+		end
 	end
 end
 
@@ -1354,4 +1620,167 @@ if mcl_levelgen.levelgen_enabled or mcl_levelgen.enable_ersatz then
 			end
 		end,
 	})
+end
+
+------------------------------------------------------------------------
+-- Modding interface.
+------------------------------------------------------------------------
+
+-- Load and register a village building schematic identified by NAME.
+-- DEF must be a table with the following elements:
+--
+--    `type' identifies the type of village building schematic that is
+--    being registered, decides the manner in which building path
+--    endpoint nodes are treated by the schematic post-processor, and
+--    must be one of the strings enumerated here:
+--
+--      - "bell"
+--        Each path endpoint is treated as the origin of a village
+--        path extending from its position in the cardinal direction
+--        in which it stands in relation to the center of the
+--        schematic, which must be a village bell.  Village buildings
+--        will generate along the waysides.
+--
+--      - "building"
+--        The solitary path endpoint in this schematic treated as the
+--	  entrance to this building, which will generate with the side
+--	  containing this endpoint facing the path which gave rise to
+--	  it.
+--
+--      - "junction"
+--	  One path endpoint is reserved as the entrance to the
+--	  schematic and affects generation in the same manner as in
+--	  the case of "building".  By default, this is the solitary
+--	  endpoint on the north side of the schematic, but one is
+--	  selected at random if no such endpoint exists.
+--
+--    `list' identifies the type of village building as which this
+--    schematic should be capable of generating.  It must be one of
+--    the following strings:
+--
+--      - "meeting_points"
+--	  Village meeting points; the `type' of such a schematic must
+--	  be defined to "bell".  Village generation will commence from
+--	  schematics selected from this list, with paths radiating
+--	  outward from its endpoints.
+--
+--      - "job_buildings"
+--	  Village job buildings; these buildings are expected to
+--	  incorporate villager work sites.
+--
+--      - "house_buildings"
+--	  Village house buildings; these buildings are expected to
+--	  incorporate residences and beds for generated villagers.
+--
+--      - "farms"
+--	  Village farm buildings; these schematics are expected to
+--	  incorporate farms and job sites for farmer villagers.
+--
+--	- "well"
+--	  Village well buildings; these schematics are purely
+--	  decorative and attempt to generate less frequently than
+--	  other buildings (but generate successfully oftener, as they
+--	  are generally smaller).
+--
+--    `file' provides the path to the .mts file from which this
+--    village schematic will be loaded.
+--
+--    `variants' is any subset of the strings { "plains", "taiga",
+--    "desert", "snowy", and "savannah", } specifying in which village
+--    variants this schematic should generate.
+--
+--    `loot_table', if non-nil, specifies a loot table that will
+--    supersede the village variant's default loot table during the
+--    generation of chests in this schematic.
+--
+--    `weight', if non-nil, decides the relative weight of this
+--    building to others registered with the same `list', i.e., the
+--    number of occurrences of this schematic in that list; it may
+--    also be a table indiced by village variant providing specific
+--    values for each variant.
+--
+--  If this building's schematic incorporates job site nodes that
+--  should be assigned to villagers at the time of generation, then
+--  this function must be invoked _after_ the pertinent job sites are
+--  defined with `mobs_mc.register_villager'.
+
+local supplemental_building_definitions = {}
+
+function mcl_villages.register_building_v2 (name, def)
+	if schematic_meta[name] then
+		error ("The building schematic `" ..
+		       name .. "' has already been defined")
+	end
+	local schematic, meta
+
+	if def.type == "bell" then
+		schematic = generate_bell_schematic (def.file)
+		meta = {
+			connecting = schematic.connecting,
+			exits = schematic.exits,
+			bell = schematic.bell,
+			bell_spawn = schematic.bell_spawn,
+			beds = schematic.beds,
+			pois = schematic.pois,
+		}
+	elseif def.type == "building" then
+		schematic = generate_buildinglike_schematic (def.file)
+		meta = {
+			connecting = schematic.connecting,
+			exits = schematic.exits,
+			beds = schematic.beds,
+			pois = schematic.pois,
+		}
+	elseif def.type == "junction" then
+		schematic = generate_junction_schematic (def.file)
+		meta = {
+			connecting = schematic.connecting,
+			exits = schematic.exits,
+			beds = schematic.beds,
+			pois = schematic.pois,
+		}
+	else
+		error ("Invalid village building type: " .. def.type)
+	end
+	schematic_meta[name] = meta
+	mcl_levelgen.register_portable_schematic (name, schematic, true)
+	for _, variant in ipairs (def.variants) do
+		assert (variant == "plains" or variant == "taiga"
+			or variant == "desert" or variant == "snowy"
+			or variant == "savannah",
+			"Invalid village variant: " .. variant)
+	end
+	if def.list ~= "meeting_points"
+		and def.list ~= "job_buildings"
+		and def.list ~= "house_buildings"
+		and def.list ~= "farms"
+		and def.list ~= "well" then
+		error ("Invalid building list: " .. def.list)
+	end
+	table.insert (supplemental_building_definitions, {
+		id = name,
+		list = def.list,
+		variants = def.variants,
+		weight = def.weight or 1,
+	})
+	schematic_loot_tables[name] = def.loot_table
+end
+
+local function compare_ids (a, b)
+	return a.id < b.id
+end
+
+function mcl_villages.finalize_building_definitions ()
+	table.sort (supplemental_building_definitions, compare_ids)
+	for _, def in ipairs (supplemental_building_definitions) do
+		for _, variant in ipairs (def.variants) do
+			local list = village_templates[variant][def.list]
+			local weight = type (def.weight == "table")
+				and def.weight[variant] or def.weight
+			for i = 1, weight do
+				table.insert (list, def.id)
+			end
+		end
+	end
+	core.ipc_set ("mcl_villages:village_templates", village_templates)
 end

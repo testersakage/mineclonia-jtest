@@ -141,30 +141,62 @@ end
 
 local weighted_crops = {}
 
-local function adjust_weights(biome, crop_type)
+local function adjust_weights(biome, crop_type, list)
 	if weighted_crops[biome] == nil then
 		weighted_crops[biome] = {}
 	end
 
 	weighted_crops[biome][crop_type] = {}
 
-	local factor = 100 / crop_list[biome][crop_type]["total_weight"]
+	local factor = 100 / list["total_weight"]
 	local total = 0
 
-	for node, weight in pairs(crop_list[biome][crop_type]) do
+	local nodes = {}
+	for node, weight in pairs(list) do
 		if node ~= "total_weight" then
-			total = total + (math.round(weight * factor))
-			table.insert(weighted_crops[biome][crop_type], { total = total, node = node })
+			table.insert (nodes, { node = node, weight = weight, })
 		end
 	end
 
-	table.sort(weighted_crops[biome][crop_type], function(a, b)
-		return a.total < b.total
+	table.sort (nodes, function (a, b)
+		if a.weight < b.weight then
+			return true
+		elseif a.weight > b.weight then
+			return false
+		else
+			-- Also sort by node names to guarantee
+			-- independence from mod load order.
+			return a.node < b.node
+		end
 	end)
-	if core.ipc_set then
-		core.ipc_set ("mcl_villages:crop_types", weighted_crops)
+
+	for _, pair in ipairs (nodes) do
+		local node, weight = pair.node, pair.weight
+		total = total + (math.round(weight * factor))
+		table.insert (weighted_crops[biome][crop_type], { total = total, node = node })
 	end
+
+	table.sort (weighted_crops[biome][crop_type], function (a, b)
+		if a.total < b.total then
+			return true
+		elseif a.total > b.total then
+			return false
+		else
+			-- Also sort by node names to guarantee
+			-- independence from mod load order.
+			return a.node < b.node
+		end
+	end)
 end
+
+core.register_on_mods_loaded (function ()
+	for biome, by_type in pairs (crop_list) do
+		for crop_type, list in pairs (by_type) do
+			adjust_weights (biome, crop_type, list)
+		end
+	end
+	core.ipc_set ("mcl_villages:crop_types", weighted_crops)
+end)
 
 function mcl_villages.get_crop_types()
 	return table.copy(supported_crop_types)
@@ -216,7 +248,6 @@ function mcl_villages.register_crop(crop_def)
 
 		crop_list[biome][crop_type][node] = weight
 		crop_list[biome][crop_type]["total_weight"] = crop_list[biome][crop_type]["total_weight"] + weight
-		adjust_weights(biome, crop_type)
 	end
 end
 

@@ -534,7 +534,9 @@ mcl_villages.register_crop({
 })
 
 for name, def in pairs(core.registered_nodes) do
-	if def.groups["flower"] and not def.groups["double_plant"] and name ~= "mcl_flowers:wither_rose" then
+	if def.groups["flower"] and not def.groups["double_plant"]
+		and name ~= "mcl_flowers:wither_rose"
+		and name ~= "mcl_mangrove:propagule" then
 		mcl_villages.register_crop({
 			type = "flower",
 			node = name,
