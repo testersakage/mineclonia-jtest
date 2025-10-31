@@ -612,7 +612,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			type = "fixed",
 			fixed = { -0.4375, -0.5, -0.4375, 0.5, 0.375, 0.4375 },
 		},
-		tiles = { "blank.png^[resize:16x16" },
 		use_texture_alpha = "blend",
 		_chest_entity_textures = left_textures,
 		_chest_entity_sound = "default_chest",
