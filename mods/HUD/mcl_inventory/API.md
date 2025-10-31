@@ -40,6 +40,7 @@ mcl_inventory.register_survival_inventory_tab({
 	-- Returns true by default
 	access = function(player)
 	end,
+})
 ```
 
 ## Virtual items

@@ -124,6 +124,9 @@ mcl_player.register_player_setting("mcl_inventory:quick_move_to_craftgrid_", {
 	-- default value used in code affected by this setting (might not always
 	-- be possible).
 	settings_ui_default = minetest.settings:get_bool("mcl_quick_move_to_craftgrid", false),
+
+    -- Hide the setting for clients with protocol version less than this value.
+    min_protocol_version = 47,
 }
 
 -- Get the value of a player setting. It will automatically be converted to the
