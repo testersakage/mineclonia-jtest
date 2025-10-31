@@ -63,7 +63,10 @@ core.register_node("mcl_armor_stand:armor_stand", {
 	stack_max = 16,
 	selection_box = {
 		type = "fixed",
-		fixed = {-0.5,-0.5,-0.5, 0.5,1.4,0.5}
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, -7/16, 0.5},
+			{-6/16, -0.5, -2/16, 6/16, 22/16, 2/16},
+		}
 	},
 	-- TODO: This should be breakable by 2 quick punches
 	groups = {handy=1, deco_block=1, dig_by_piston=1, attached_node=1},
@@ -82,6 +85,7 @@ core.register_node("mcl_armor_stand:armor_stand", {
 			return itemstack
 		end
 
+		local stand_entity = get_stand_entity(pos, node).object
 		local px, py, pz, ax, az = pos.x, pos.y, pos.z, pointed_thing.above.x, pointed_thing.above.z
 		-- try to take armor from armor stand if pointing at side face
 		if clicker:get_wielded_item():get_name() == "" and (px ~= ax or pz ~= az) then
@@ -101,22 +105,23 @@ core.register_node("mcl_armor_stand:armor_stand", {
 			pointed_thing = { type = "node", under = (pos - above) * 0.75 + pos, above = above}
 			local pointed_fpos = core.pointed_thing_to_face_pos(clicker, pointed_thing).y - py
 			local pointed_piece_index
-			if pointed_fpos < 0.0 then
-				pointed_piece_index = mcl_armor.elements.feet.index
-			elseif pointed_fpos >= 0.0 and pointed_fpos < 0.45 then
-				pointed_piece_index = mcl_armor.elements.legs.index
-			elseif pointed_fpos >= 0.45 and pointed_fpos < 0.95 then
-				pointed_piece_index = mcl_armor.elements.torso.index
-			elseif pointed_fpos >= 0.95 then
+
+			if pointed_fpos > 0.9375 then
 				pointed_piece_index = mcl_armor.elements.head.index
+			elseif pointed_fpos > 0.3125 then
+				pointed_piece_index = mcl_armor.elements.torso.index
+			elseif pointed_fpos > -0.0625 then
+				pointed_piece_index = mcl_armor.elements.legs.index
+			elseif pointed_fpos > -0.5 then
+				pointed_piece_index = mcl_armor.elements.feet.index
 			end
 
 			if pointed_piece_index then
-				return mcl_armor.unequip(get_stand_entity(pos, node).object, pointed_piece_index)
+				return mcl_armor.unequip(stand_entity, pointed_piece_index)
 			end
 		end
 
-		return mcl_armor.equip(itemstack, get_stand_entity(pos, node).object, true)
+		return mcl_armor.equip(itemstack, stand_entity, true)
 	end,
 	on_rotate = function(pos, node, _, mode)
 		if mode == screwdriver.ROTATE_FACE then
