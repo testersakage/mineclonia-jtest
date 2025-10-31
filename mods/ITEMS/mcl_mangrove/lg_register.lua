@@ -20,15 +20,31 @@ local cid_mangrove_propagule
 	= core.get_content_id ("mcl_mangrove:propagule")
 local cid_hanging_mangrove_propagule_1
 	= core.get_content_id ("mcl_mangrove:propagule_hanging_1")
+local cid_hanging_mangrove_propagule_2
+	= core.get_content_id ("mcl_mangrove:propagule_hanging_2")
+local cid_hanging_mangrove_propagule_3
+	= core.get_content_id ("mcl_mangrove:propagule_hanging_3")
+local cid_hanging_mangrove_propagule_4
+	= core.get_content_id ("mcl_mangrove:propagule_hanging_4")
+local cid_hanging_mangrove_propagule_5
+	= core.get_content_id ("mcl_mangrove:propagule_hanging_5")
 local cid_water_source
 	= core.get_content_id ("mcl_core:water_source")
 local cid_water_logged_roots
 	= core.get_content_id ("mcl_mangrove:water_logged_roots")
 
+local hanging_propagules_by_age = {
+	cid_hanging_mangrove_propagule_1,
+	cid_hanging_mangrove_propagule_2,
+	cid_hanging_mangrove_propagule_3,
+	cid_hanging_mangrove_propagule_4,
+	cid_hanging_mangrove_propagule_5,
+}
+
 local mangrove_can_grow_through = mcl_levelgen.construct_cid_list ({
+	"group:hanging_propagule",
 	"mcl_core:vine",
 	"mcl_lush_caves:moss_carpet",
-	"mcl_mangrove:propagule_hanging_1",
 	"mcl_mangrove:mangrove_mud_roots",
 	"mcl_mangrove:mangrove_roots",
 	"mcl_mangrove:propagule",
@@ -38,9 +54,9 @@ local mangrove_can_grow_through = mcl_levelgen.construct_cid_list ({
 })
 
 local mangrove_roots_can_grow_through = mcl_levelgen.construct_cid_list ({
+	"group:hanging_propagule",
 	"group:snow_layer",
 	"mcl_lush_caves:moss_carpet",
-	"mcl_mangrove:propagule_hanging_1",
 	"mcl_mangrove:mangrove_mud_roots",
 	"mcl_mangrove:mangrove_roots",
 	"mcl_mangrove:propagule",
@@ -111,9 +127,8 @@ mcl_levelgen.register_configured_feature ("mcl_mangrove:mangrove", {
 	decorators = {
 		mcl_levelgen.build_leave_vine_decoration (0.125),
 		mcl_levelgen.build_attach_to_leaves_decoration ({
-			-- TODO: vary age!
-			content = function (_, _, _, _)
-				return cid_hanging_mangrove_propagule_1, 0
+			content = function (x, y, z, rng)
+				return hanging_propagules_by_age[rng:next_within (5) + 1], 0
 			end,
 			directions = {
 				{ 0, -1, 0, },
@@ -182,9 +197,8 @@ mcl_levelgen.register_configured_feature ("mcl_mangrove:tall_mangrove", {
 	decorators = {
 		mcl_levelgen.build_leave_vine_decoration (0.125),
 		mcl_levelgen.build_attach_to_leaves_decoration ({
-			-- TODO: vary age!
-			content = function (_, _, _, _)
-				return cid_hanging_mangrove_propagule_1, 0
+			content = function (x, y, z, rng)
+				return hanging_propagules_by_age[rng:next_within (5) + 1], 0
 			end,
 			directions = {
 				{ 0, -1, 0, },

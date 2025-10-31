@@ -252,7 +252,7 @@ for i = 1, 5 do
 		groups = {
 			plant = 1, not_in_creative_inventory = 1, non_mycelium_plant = 1,
 			dig_immediate = 1, dig_by_water = 1, dig_by_piston = 1, destroy_by_lava_flow = 1,
-			attached_node = 4
+			attached_node = 4, hanging_propagule = 1,
 		},
 		_on_bone_meal = i < 5 and function(_, _, _, pos, node)
 			grow_hanging_propagule(pos, node)

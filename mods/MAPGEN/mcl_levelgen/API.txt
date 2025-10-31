@@ -308,7 +308,6 @@ types:
   - group:floating_node (only when 3)
   - group:bamboo
   - mcl_mangrove:propagule
-  - mcl_mangrove:hanging_propagule_1
   - mcl_mushrooms:mushroom_red
   - mcl_mushrooms:mushroom_brown
   - mcl_crimson:{warped,crimson}_{fungus,roots}
