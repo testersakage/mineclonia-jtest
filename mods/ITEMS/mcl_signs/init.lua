@@ -374,7 +374,7 @@ local sign_hanging = table.merge(sign_tpl,{
 	},
 	groups = {
 		axey = 1, handy = 2, sign = 1, hanging_sign = 1,
-		attached_node = 4,
+		attached_node = 4, deco_block = 1,
 	},
 	_mcl_sign_type = "hanging",
 })
