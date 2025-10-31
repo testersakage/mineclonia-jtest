@@ -12,7 +12,7 @@ mcl_levelgen.initialize_portable_schematics ()
 -- local zone = require ("jit.zone")
 
 if core.global_exists ("jit") then
-	jit.opt.start ("maxmcode=33554432", "maxtrace=100000",
+	jit.opt.start ("maxmcode=40960", "maxtrace=100000",
 		       -- Just large enough that loops employing RNGs
 		       -- can be unrolled and compiled but the
 		       -- fix_distances loop in pick_grid_positions is
