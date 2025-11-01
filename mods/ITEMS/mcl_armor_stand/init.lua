@@ -108,7 +108,7 @@ core.register_node("mcl_armor_stand:armor_stand", {
 
 			if pointed_fpos > 0.9375 then
 				pointed_piece_index = mcl_armor.elements.head.index
-			elseif pointed_fpos > 0.3125 then
+			elseif pointed_fpos > 0.25 then
 				pointed_piece_index = mcl_armor.elements.torso.index
 			elseif pointed_fpos > -0.0625 then
 				pointed_piece_index = mcl_armor.elements.legs.index
@@ -124,7 +124,7 @@ core.register_node("mcl_armor_stand:armor_stand", {
 					pointed_piece_index = mcl_armor.elements.head.index
 				elseif pointed_fpos > 0.3125 + 4/16 then
 					pointed_piece_index = mcl_armor.elements.torso.index
-				elseif pointed_fpos > -0.0625 + 1/16 then
+				elseif pointed_fpos > -0.0625 + 2/16 then
 					pointed_piece_index = mcl_armor.elements.legs.index
 				else
 					pointed_piece_index = mcl_armor.elements.feet.index
