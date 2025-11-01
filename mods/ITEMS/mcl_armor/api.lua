@@ -126,6 +126,16 @@ function mcl_armor.equip(itemstack, obj, swap)
 	return itemstack
 end
 
+function mcl_armor.has_piece(obj, armor_index)
+	local inv = mcl_util.get_inventory(obj)
+
+	if not inv or inv:get_size("armor") == 0 then
+		return
+	end
+
+	return inv:get_stack("armor", armor_index):get_name() ~= ""
+end
+
 function mcl_armor.unequip(obj, armor_index)
 	local inv = mcl_util.get_inventory(obj)
 
