@@ -131,6 +131,7 @@ function mcl_heads.register_entity(def)
 			pointable = false,
 			makes_footstep_sound = false,
 			static_save = false,
+			glow = def.glow,
 		},
 		on_activate = function(self)
 			self.object:set_properties({is_visible = false})

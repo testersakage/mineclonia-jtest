@@ -442,7 +442,6 @@ function mcl_mobs.register_mob(name, def)
 			return false, true, {}
 		end,
 		on_activate = function(self, staticdata, dtime)
-			self._id = "id_"..core.sha1(core.get_gametime()..core.pos_to_string(self.object:get_pos())..tostring(math.random()))
 			return self:mob_activate (staticdata, dtime)
 		end,
 		_spawner = def._spawner,

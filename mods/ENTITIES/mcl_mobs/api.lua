@@ -446,8 +446,6 @@ function mob_class:mob_activate (staticdata, dtime)
 	self:display_wielditem (false)
 	self:display_wielditem (true)
 
-	mcl_armor.head_entity_equip(self.object)
-
 	if type (self._armor_texture_slots) == "number" then
 		self._armor_texture_slots = {
 			[self._armor_texture_slots] = {
@@ -465,6 +463,8 @@ function mob_class:mob_activate (staticdata, dtime)
 		self.armor_list = { head = "", torso = "", feet = "", legs = "" }
 		self:set_armor_texture ()
 		self._run_armor_init = true
+	else
+		mcl_armor.head_entity_equip (self.object)
 	end
 
 	if self.on_spawn and not self.on_spawn_run then

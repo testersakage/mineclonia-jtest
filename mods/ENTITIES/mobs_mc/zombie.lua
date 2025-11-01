@@ -74,6 +74,9 @@ local zombie = table.merge (posing_humanoid, {
 	head_pitch_multiplier=-1,
 	breath_max = -1,
 	wears_armor = "no_pickup",
+	_head_armor_bone = "head",
+	_head_armor_position = vector.new (0, 4.25, 0),
+	_head_armor_visual_scale = 1.2,
 	armor_drop_probability = {
 		head = 0.085,
 		torso = 0.085,
@@ -318,6 +321,16 @@ function zombie:on_spawn ()
 		self.can_wield_items = true
 	end
 	self:generate_default_equipment (mob_factor, true, true)
+	if mcl_util.is_halloween ()
+		and self.armor_list.head == ""
+		and math.random () < 0.25 then
+		if math.random () < 0.1 then
+			self.armor_list.head = "mcl_farming:pumpkin_face_light"
+		else
+			self.armor_list.head = "mcl_farming:pumpkin_face"
+		end
+		self:set_armor_texture ()
+	end
 
 	-- Randomize initial attributes.
 	self:add_physics_factor ("knockback_resistance",

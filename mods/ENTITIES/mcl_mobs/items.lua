@@ -43,6 +43,7 @@ function mob_class:set_armor_texture()
 		end
 		self:set_textures (self.base_texture)
 	end
+	mcl_armor.head_entity_equip (self.object)
 end
 
 function mob_class:effective_drop_probability (armor_slot)
@@ -182,13 +183,11 @@ function mob_class:try_equip_item (stack, def, itemname)
 			if math.max (0, random)
 				< self:effective_drop_probability (slot) then
 				core.add_item (self_pos, ItemStack (current))
-				mcl_armor.head_entity_unequip(self.object)
 			end
 		end
 		self.armor_list[slot] = stack:to_string ()
 		-- This indicates that the item was collected from a
 		-- player.
-		mcl_armor.head_entity_equip(self.object)
 		self:set_armor_drop_probability (slot, 2.0)
 		self:set_armor_texture ()
 		self.persistent = true
@@ -234,7 +233,6 @@ function mob_class:drop_armor (bonus, min_probability)
 			if not mcl_enchanting.has_enchantment (stack, "curse_of_vanishing") then
 				self:scale_durability_for_drop (stack, probability)
 				mcl_util.drop_item_stack (self_pos, stack)
-				mcl_armor.head_entity_unequip(self.object)
 			end
 		end
 	end
@@ -249,9 +247,8 @@ function mob_class:default_pickup (object, stack, def, itemname)
 end
 
 function mob_class:check_item_pickup ()
-	if self.can_wield_items
-		or self._inventory_size
-		or self._wears_armor then
+	if self.can_wield_items	or self._inventory_size
+		or (self.wears_armor and self.wears_armor ~= "no_pickup") then
 		local self_pos = self.object:get_pos ()
 		for object in core.objects_inside_radius (self_pos, 1.95) do
 			local entity = object:get_luaentity ()

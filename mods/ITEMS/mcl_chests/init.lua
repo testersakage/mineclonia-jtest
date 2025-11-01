@@ -9,41 +9,35 @@ local sf = string.format
 local mod_doc = core.get_modpath("doc")
 local shulker_num_tt_stacks = 5
 
--- Christmas chest setup
-local it_is_christmas = false
-local date = os.date("*t")
-if (
-		date.month == 12 and (
-			date.day == 24 or
-			date.day == 25 or
-			date.day == 26
-		)
-	) then
-	it_is_christmas = true
-end
-
 local tiles_chest_normal_small = { "mcl_chests_normal.png" }
 local tiles_chest_normal_double = { "mcl_chests_normal_double.png" }
 
-if it_is_christmas then
-	tiles_chest_normal_small = { "mcl_chests_normal_present.png^mcl_chests_noise.png" }
-	tiles_chest_normal_double = { "mcl_chests_normal_double_present.png^mcl_chests_noise_double.png" }
-end
+local tiles_chest_normal_small_present
+	= { "mcl_chests_normal_present.png^mcl_chests_noise.png" }
+local tiles_chest_normal_double_present
+	= { "mcl_chests_normal_double_present.png^mcl_chests_noise_double.png" }
 
 local tiles_chest_trapped_small = { "mcl_chests_trapped.png" }
 local tiles_chest_trapped_double = { "mcl_chests_trapped_double.png" }
 
-if it_is_christmas then
-	tiles_chest_trapped_small = { "mcl_chests_trapped_present.png^mcl_chests_noise.png" }
-	tiles_chest_trapped_double = { "mcl_chests_trapped_double_present.png^mcl_chests_noise_double.png" }
-end
+local tiles_chest_trapped_small_present
+	= { "mcl_chests_trapped_present.png^mcl_chests_noise.png" }
+local tiles_chest_trapped_double_present
+	= { "mcl_chests_trapped_double_present.png^mcl_chests_noise_double.png" }
 
 local tiles_chest_ender_small = { "mcl_chests_ender.png" }
 
-local ender_chest_texture = { "mcl_chests_ender.png" }
-if it_is_christmas then
-	tiles_chest_ender_small = { "mcl_chests_ender_present.png^mcl_chests_noise.png" }
-	ender_chest_texture = { "mcl_chests_ender_present.png" }
+local tiles_chest_ender_small_present
+	= { "mcl_chests_ender_present.png^mcl_chests_noise.png" }
+
+local is_christmas = mcl_util.is_christmas
+
+local function select_texture_maybe_present (textures)
+	if textures.present and is_christmas () then
+		return textures.present
+	else
+		return textures.default
+	end
 end
 
 local shulker_box_rotations = {
@@ -119,9 +113,11 @@ core.register_entity("mcl_chests:chest", {
 		local obj = self.object
 		obj:set_armor_groups({ immortal = 1 })
 		obj:set_properties({
-			textures = textures,
+			textures = select_texture_maybe_present (textures),
 			mesh = mesh_prefix .. (double and "_double" or "") .. ".b3d",
 		})
+		self._texture_list = textures
+		self._present_texture = is_christmas ()
 		self:set_yaw(dir)
 		self.players = {}
 	end,
@@ -162,9 +158,17 @@ core.register_entity("mcl_chests:chest", {
 	on_step = function(self)
 		if not self:check() then
 			self.object:remove()
+		elseif is_christmas () ~= self._present_texture
+			and self._texture_list then
+			self.object:set_properties ({
+				textures = select_texture_maybe_present (self._texture_list),
+			})
+			self._present_texture = is_christmas ()
 		end
 	end,
-	_mcl_pistons_unmovable = true
+	_mcl_pistons_unmovable = true,
+	_present_texture = false,
+	_texture_list = nil,
 })
 
 local function get_entity_pos(pos, dir, double)
@@ -404,9 +408,15 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 	end
 
 	local small_name = "mcl_chests:" .. basename .. "_small"
-	local small_textures = tiles_table.small
+	local small_textures = {
+		default = tiles_table.small,
+		present = tiles_table.small_present,
+	}
 	local left_name = "mcl_chests:" .. basename .. "_left"
-	local left_textures = tiles_table.double
+	local left_textures = {
+		default = tiles_table.double,
+		present = tiles_table.double_present,
+	}
 
 	core.register_node("mcl_chests:" .. basename, {
 		description = desc,
@@ -416,7 +426,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		_doc_items_hidden = hidden,
 		drawtype = "mesh",
 		mesh = "mcl_chests_chest.b3d",
-		tiles = small_textures,
+		tiles = select_texture_maybe_present (small_textures),
 		is_ground_content = false,
 		paramtype = "light",
 		paramtype2 = "facedir",
@@ -463,7 +473,8 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			type = "fixed",
 			fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.375, 0.4375},
 		},
-		tiles = animate_chests and {"blank.png^[resize:16x16"} or small_textures,
+		tiles = animate_chests and {"blank.png^[resize:16x16"}
+			or select_texture_maybe_present (small_textures),
 		use_texture_alpha = "blend",
 		_chest_entity_textures = small_textures,
 		_chest_entity_sound = "default_chest",
@@ -969,6 +980,8 @@ register_chest("chest",
 	{
 		small = tiles_chest_normal_small,
 		double = tiles_chest_normal_double,
+		small_present = tiles_chest_normal_small_present,
+		double_present = tiles_chest_normal_double_present,
 		inv = { "default_chest_top.png", "mcl_chests_chest_bottom.png",
 			"mcl_chests_chest_right.png", "mcl_chests_chest_left.png",
 			"mcl_chests_chest_back.png", "default_chest_front.png" },
@@ -979,6 +992,8 @@ register_chest("chest",
 local traptiles = {
 	small = tiles_chest_trapped_small,
 	double = tiles_chest_trapped_double,
+	small_present = tiles_chest_trapped_small_present,
+	double_present = tiles_chest_trapped_double_present,
 }
 
 register_chest("trapped_chest",
@@ -995,7 +1010,7 @@ register_chest("trapped_chest",
 	function(pos, node, _)
 		mcl_redstone.swap_node(pos, {name="mcl_chests:trapped_chest_on_small", param2 = node.param2})
 		if animate_chests then
-			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_small", {"mcl_chests_trapped.png"}, node.param2, false, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_small")
+			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_small", {default = {"mcl_chests_trapped.png",}, present = {"mcl_chests_trapped_present.png",},}, node.param2, false, "default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_small")
 		end
 	end,
 	function(pos, node, _)
@@ -1004,7 +1019,10 @@ register_chest("trapped_chest",
 
 		mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
 		if animate_chests then
-			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_left", tiles_chest_trapped_double, node.param2, true,
+			find_or_create_entity(pos, "mcl_chests:trapped_chest_on_left", {
+					default = tiles_chest_trapped_double,
+					present = tiles_chest_trapped_double_present,
+				}, node.param2, true,
 				"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_left")
 		end
 
@@ -1017,7 +1035,10 @@ register_chest("trapped_chest",
 		mcl_redstone.swap_node(pos, { name = "mcl_chests:trapped_chest_on_right", param2 = node.param2 })
 		mcl_redstone.swap_node(pos_other, { name = "mcl_chests:trapped_chest_on_left", param2 = node.param2 })
 		if animate_chests then
-			find_or_create_entity(pos_other, "mcl_chests:trapped_chest_on_left", tiles_chest_trapped_double, node.param2,
+			find_or_create_entity(pos_other, "mcl_chests:trapped_chest_on_left", {
+					default = tiles_chest_trapped_double,
+					present = tiles_chest_trapped_double_present,
+				}, node.param2,
 				true,
 				"default_chest", "mcl_chests_chest", "chest"):reinitialize("mcl_chests:trapped_chest_on_left")
 		end
@@ -1069,7 +1090,10 @@ core.register_node("mcl_chests:ender_chest", {
 	_doc_items_usagehelp = S("Rightclick the ender chest to access your personal interdimensional inventory."),
 	drawtype = "mesh",
 	mesh = "mcl_chests_chest.b3d",
-	tiles = tiles_chest_ender_small,
+	tiles = select_texture_maybe_present ({
+		default = tiles_chest_ender_small,
+		present = tiles_chest_ender_small_present,
+	}),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = { deco_block = 1, unmovable_by_piston = 1},
@@ -1122,8 +1146,15 @@ core.register_node("mcl_chests:ender_chest_small", {
 		type = "fixed",
 		fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.375, 0.4375},
 	},
-	tiles = animate_chests and {"blank.png"} or tiles_chest_ender_small,
-	_chest_entity_textures = tiles_chest_ender_small,
+	tiles = animate_chests and {"blank.png"}
+		or select_texture_maybe_present ({
+		default = tiles_chest_ender_small,
+		present = tiles_chest_ender_small_present,
+	}),
+	_chest_entity_textures = {
+		default = tiles_chest_ender_small,
+		present = tiles_chest_ender_small_present,
+	},
 	_chest_entity_sound = "mcl_chests_enderchest",
 	_chest_entity_mesh = "mcl_chests_chest",
 	_chest_entity_animation_type = "chest",
@@ -1147,7 +1178,10 @@ core.register_node("mcl_chests:ender_chest_small", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	drop = "mcl_core:obsidian 8",
 	on_construct = function(pos)
-		create_entity(pos, "mcl_chests:ender_chest_small", tiles_chest_ender_small, core.get_node(pos).param2, false, "mcl_chests_enderchest", "mcl_chests_chest", "chest")
+		create_entity(pos, "mcl_chests:ender_chest_small", {
+			default = tiles_chest_ender_small,
+			present = tiles_chest_ender_small_present,
+		}, core.get_node(pos).param2, false, "mcl_chests_enderchest", "mcl_chests_chest", "chest")
 	end,
 	on_rightclick = function(pos, node, clicker)
 		local def = core.registered_nodes[core.get_node(vector.offset(pos, 0, 1, 0)).name]
@@ -1157,7 +1191,11 @@ core.register_node("mcl_chests:ender_chest_small", {
 		end
 		core.show_formspec(clicker:get_player_name(), "mcl_chests:ender_chest_" .. clicker:get_player_name(),
 			formspec_ender_chest)
-		player_chest_open(clicker, pos, "mcl_chests:ender_chest_small", ender_chest_texture, node.param2, false,
+		local textures = {
+			default = tiles_chest_ender_small,
+			present = tiles_chest_ender_small_present,
+		}
+		player_chest_open(clicker, pos, "mcl_chests:ender_chest_small", textures, node.param2, false,
 			"mcl_chests_enderchest", "mcl_chests_chest")
 	end,
 	on_receive_fields = function(_, _, fields, sender)
@@ -1435,7 +1473,9 @@ for color, desc in pairs(boxtypes) do
 		mesh = not animate_chests and "mcl_chests_shulker.obj" or nil,
 		tiles = animate_chests and {"blank.png^[resize:16x16"} or {mob_texture},
 		use_texture_alpha = "blend",
-		_chest_entity_textures = {mob_texture},
+		_chest_entity_textures = {
+			default = {mob_texture,},
+		},
 		_chest_entity_sound = "mcl_chests_shulker",
 		_chest_entity_mesh = "mcl_chests_shulker",
 		_chest_entity_animation_type = "shulker",
@@ -1460,7 +1500,7 @@ for color, desc in pairs(boxtypes) do
 		on_construct = function(pos)
 			local param2 = core.get_node(pos).param2 or 1
 			local rot = {x = shulker_box_rotations[param2].x, y = shulker_box_rotations[param2].y, z = 0}
-			local entity = create_entity(pos, small_name, {mob_texture}, param2, false, "mcl_chests_shulker", "mcl_chests_shulker", "shulker")
+			local entity = create_entity(pos, small_name, {default = {mob_texture},}, param2, false, "mcl_chests_shulker", "mcl_chests_shulker", "shulker")
 			if entity and entity.object then
 				entity.object:set_rotation(rot)
 			end
@@ -1482,7 +1522,7 @@ for color, desc in pairs(boxtypes) do
 			end
 		end,
 		on_rightclick = function(pos, node, clicker)
-			player_chest_open(clicker, pos, small_name, { mob_texture }, node.param2, false, "mcl_chests_shulker",
+			player_chest_open(clicker, pos, small_name, {default = { mob_texture },}, node.param2, false, "mcl_chests_shulker",
 				"mcl_chests_shulker", true)
 		end,
 		on_receive_fields = function(_, _, fields, sender)

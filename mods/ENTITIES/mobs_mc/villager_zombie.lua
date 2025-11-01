@@ -107,6 +107,10 @@ local zombie_villager = table.merge (zombie, {
 			})
 		end,
 	},
+	_head_armor_bone = "head.control",
+	_head_armor_position = vector.new (0, 1.5, 0),
+	_head_armor_visual_scale = 1 / 2.5,
+	_head_armor_rotation = vector.new (0, 180, 0),
 	wielditem_info = {
 		bone = "arm.right",
 		position = {

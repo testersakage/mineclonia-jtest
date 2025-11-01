@@ -56,6 +56,8 @@ local piglin_base = {
 			})
 		end,
 	},
+	_head_armor_bone = "Head",
+	_head_armor_position = vector.new (0, 4, 0),
 	can_wield_items = true,
 	wielditem_drop_probability = 0.085,
 	wielditem_info = {
@@ -1756,6 +1758,8 @@ local zombified_piglin = table.merge (zombie, {
 	_armor_transforms = piglin._armor_transforms,
 	wielditem_info = piglin.wielditem_info,
 	_offhand_wielditem_info = piglin._offhand_wielditem_info,
+	_head_armor_bone = piglin._head_armor_bone,
+	_head_armor_position = piglin._head_armor_position,
 	_reinforcement_type = "mobs_mc:zombified_piglin",
 	_alert_interval = 0,
 	ignited_by_sunlight = false,

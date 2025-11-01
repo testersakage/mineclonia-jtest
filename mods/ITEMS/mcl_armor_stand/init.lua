@@ -165,7 +165,6 @@ core.register_entity("mcl_armor_stand:armor_entity", {
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = true,
 	on_activate = function(self)
-		self._id = "id_"..core.sha1(core.get_gametime()..core.pos_to_string(self.object:get_pos())..tostring(math.random()))
 		self.object:set_armor_groups({immortal = 1})
 		self.node_pos = vector.round(self.object:get_pos())
 		self.inventory = core.get_meta(self.node_pos):get_inventory()
@@ -175,9 +174,11 @@ core.register_entity("mcl_armor_stand:armor_entity", {
 	end,
 	on_step = function(self)
 		if core.get_node(self.node_pos).name ~= "mcl_armor_stand:armor_stand" then
-			mcl_armor.head_entity_unequip(self.object)
 			self.object:remove()
 		end
+	end,
+	on_deactivate = function (self, _)
+		mcl_armor.head_entity_unequip (self.object)
 	end,
 	update_armor = function(self, info)
 		self.object:set_properties({textures = {info.texture}})
@@ -185,6 +186,8 @@ core.register_entity("mcl_armor_stand:armor_entity", {
 	update_rotation = function(self, node)
 		self.object:set_yaw(core.dir_to_yaw(core.facedir_to_dir(node.param2)))
 	end,
+	_head_armor_bone = "",
+	_head_armor_position = vector.new (0, 14, 0),
 })
 
 core.register_lbm({

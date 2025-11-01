@@ -154,6 +154,13 @@ mcl_heads.register_entity({
 	texture = "mcl_farming_pumpkin_face.png"
 })
 
+mcl_heads.register_entity({
+	name = "mcl_farming:pumpkin_face_light",
+	mesh = "pumpkin_head.obj",
+	texture = "mcl_farming_pumpkin_face_light.png",
+	glow = 14,
+})
+
 pumpkin_face_base_def.mesh = "pumpkin_head.obj"
 pumpkin_face_base_def._mcl_armor_element = "head"
 pumpkin_face_base_def._mcl_armor_texture = "blank.png"
@@ -243,6 +250,11 @@ core.register_node("mcl_farming:pumpkin_face_light", {
 	end,
 	on_rotate = on_rotate,
 	_mcl_hardness = 1,
+	-- No _mcl_armor_element is defined, as jack o'lanterns are
+	-- not supposed to be wearable otherwise than by mobs during
+	-- spawning.
+	_mcl_armor_texture = "blank.png",
+	_mcl_armor_entity = "mcl_farming:pumpkin_face_light",
 })
 
 -- Crafting

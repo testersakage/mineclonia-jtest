@@ -229,14 +229,10 @@ function bat_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache
 
 		if eligible then
 			local light = core.get_node_light (node_pos)
-			local date = os.date ("*t")
+			local maxlight = 3
 
-			local maxlight
-			if (date.month == 10 and date.day >= 20)
-				or (date.month == 11 and date.day <= 3) then
+			if mcl_util.is_halloween_week () then
 				maxlight = 6
-			else
-				maxlight = 3
 			end
 
 			return light <= maxlight

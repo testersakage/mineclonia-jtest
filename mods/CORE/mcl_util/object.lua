@@ -1,9 +1,3 @@
-function mcl_util.get_luaentity_by_id(id)
-	for _, e in pairs(core.luaentities) do
-		if e._id == id then return e end
-	end
-end
-
 function mcl_util.get_hp(obj)
 	local luaentity = obj:get_luaentity()
 

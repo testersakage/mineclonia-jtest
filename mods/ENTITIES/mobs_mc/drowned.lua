@@ -68,6 +68,9 @@ local drowned = table.merge (zombie, {
 			})
 		end,
 	},
+	_head_armor_bone = "head",
+	_head_armor_position = vector.new (0, 8, 0),
+	_head_armor_visual_scale = 2.0,
 	wielditem_info = {
 		toollike_position = vector.new (0, 5.0, 0),
 		toollike_rotation = vector.new (0, 0, 45),

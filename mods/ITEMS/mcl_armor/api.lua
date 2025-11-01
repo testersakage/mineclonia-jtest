@@ -20,6 +20,9 @@ function mcl_armor.play_equip_sound(stack, obj, pos, unequip)
 	end
 end
 
+local PLAYER_ARMOR_ATTACHMENT = {x=0, y=4, z=0}
+local ZERO_VECTOR = {x=0, y=0, z=0}
+
 function mcl_armor.head_entity_equip(obj)
 	local luaentity = obj:get_luaentity()
 	local entity_name = luaentity and luaentity.name or nil
@@ -41,24 +44,35 @@ function mcl_armor.head_entity_equip(obj)
 		if not entity then return end
 		entity:set_properties({is_visible = true})
 		if obj:is_player() then
-			entity:set_attach(obj, "Head", {x=0, y=4, z=0}, {x=0, y=0, z=0})
+			entity:set_attach(obj, "Head", PLAYER_ARMOR_ATTACHMENT,
+					  ZERO_VECTOR)
 			mcl_armor.head_entity[obj:get_player_name()] = entity
 		else
-			-- TODO: rename all mobs head bone to "Head"
-			local bone = entity_name ~= "mcl_armor_stand:armor_entity" and "Head" or ""
-			local offset = entity_name ~= "mcl_armor_stand:armor_entity" and 4.3 or 14
-			if entity_name ~= "mcl_armor_stand:armor_entity" then
-				-- Make it bigger if it worn by mobs
-				entity:set_properties({visual_size={x=9,y=9,z=9}})
+			local luaentity = obj:get_luaentity ()
+			if luaentity and luaentity._head_armor_bone then
+				local bone = luaentity._head_armor_bone
+				local pos = luaentity._head_armor_position
+				local scale = luaentity._head_armor_visual_scale
+				local rot = luaentity._head_armor_rotation
+				entity:set_attach (obj, bone, pos, rot or ZERO_VECTOR)
+				if scale then
+					entity:set_properties (obj, {
+						visual_size = vector.new (scale * 8.1,
+									  scale * 8.1,
+									  scale * 8.1),
+					})
+				end
+				mcl_armor.head_entity[obj] = entity
 			end
-			entity:set_attach(obj, bone, {x=0, y=offset, z=0}, {x=0, y=0, z=0})
-			mcl_armor.head_entity[luaentity._id] = entity
 		end
+	else
+		mcl_armor.head_entity_unequip (obj)
 	end
 end
 
 function mcl_armor.head_entity_unequip(obj)
-	local id = obj:is_player() and obj:get_player_name() or obj:get_luaentity()._id
+	local id = obj:is_player()
+		and obj:get_player_name() or obj
 	if mcl_armor.head_entity[id] then
 		mcl_armor.head_entity[id]:remove()
 		mcl_armor.head_entity[id] = nil

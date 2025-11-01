@@ -1007,3 +1007,43 @@ function mcl_util.is_daytime()
 	local time = core.get_timeofday()
 	return time <= 0.76 and time >= 0.24
 end
+
+local is_halloween_week, is_halloween, is_christmas
+
+local function update_calendar_events ()
+	local date = os.date ("*t")
+	if (date.month == 10 and date.day == 31) or mcl_util.force_halloween then
+		is_halloween = true
+	else
+		is_halloween = false
+	end
+	if (date.month == 10 and date.day >= 20)
+		or (date.month == 11 and date.day <= 3)
+		or mcl_util.force_halloween_week then
+		is_halloween_week = true
+	else
+		is_halloween_week = false
+	end
+	if (date.month == 12 and date.day >= 24 and date.day <= 26)
+		or mcl_util.force_christmas then
+		is_christmas = true
+	else
+		is_christmas = false
+	end
+end
+
+function mcl_util.is_halloween_week ()
+	return is_halloween_week
+end
+
+function mcl_util.is_halloween ()
+	return is_halloween
+end
+
+function mcl_util.is_christmas ()
+	return is_christmas
+end
+
+core.register_globalstep (function ()
+	update_calendar_events ()
+end)
