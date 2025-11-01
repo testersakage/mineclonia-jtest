@@ -112,8 +112,23 @@ core.register_node("mcl_armor_stand:armor_stand", {
 				pointed_piece_index = mcl_armor.elements.torso.index
 			elseif pointed_fpos > -0.0625 then
 				pointed_piece_index = mcl_armor.elements.legs.index
-			elseif pointed_fpos > -0.5 then
+			else
 				pointed_piece_index = mcl_armor.elements.feet.index
+			end
+
+			-- If pointed piece does not have an item we try again
+			-- from bottom with more margins to find piece in a
+			-- location that would otherwise be covered.
+			if not mcl_armor.has_piece(stand_entity, pointed_piece_index) then
+				if pointed_fpos > 0.9375 + 1/16 then
+					pointed_piece_index = mcl_armor.elements.head.index
+				elseif pointed_fpos > 0.3125 + 4/16 then
+					pointed_piece_index = mcl_armor.elements.torso.index
+				elseif pointed_fpos > -0.0625 + 1/16 then
+					pointed_piece_index = mcl_armor.elements.legs.index
+				else
+					pointed_piece_index = mcl_armor.elements.feet.index
+				end
 			end
 
 			if pointed_piece_index then
