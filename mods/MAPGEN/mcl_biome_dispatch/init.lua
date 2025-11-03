@@ -1204,3 +1204,24 @@ These points of interest are available: ]]))
 		end
 	end,
 })
+
+------------------------------------------------------------------------
+-- Slime chunk seeding.
+------------------------------------------------------------------------
+
+local ull = mcl_levelgen.ull
+
+local SLIME_CHUNK_SALT = ull (0, 0x3ad8025f)
+local slime_chunk_rng = mcl_levelgen.jvm_random (ull (0, 0))
+local set_slime_chunk_seed = mcl_levelgen.set_slime_chunk_seed
+
+-- This value is always defined, even when neither mcl_levelgen nor
+-- the ersatz generator is enabled.
+local seed = mcl_levelgen.seed
+
+function mcl_biome_dispatch.is_slime_chunk (x, z)
+	local cx, cz = arshift (x, 4), arshift (-z - 1, 4)
+	set_slime_chunk_seed (slime_chunk_rng, seed, cx, cz,
+			      SLIME_CHUNK_SALT)
+	return slime_chunk_rng:next_within (10) == 0
+end
