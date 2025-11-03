@@ -1396,7 +1396,7 @@ for color, desc in pairs(boxtypes) do
 		_doc_items_usagehelp = usagehelp,
 		tiles = { mob_texture },
 		drawtype = "mesh",
-		mesh = "mcl_chests_shulker.b3d",
+		mesh = "mcl_chests_shulker.obj",
 		groups = {
 			handy = 1,
 			pickaxey = 1,
