@@ -1108,7 +1108,7 @@ core.register_node("mcl_chests:ender_chest_small", {
 		"Ender chests grant you access to a single personal interdimensional inventory with 27 slots. This inventory is the same no matter from which ender chest you access it from. If you put one item into one ender chest, you will find it in all other ender chests. Each player will only see their own items, but not the items of other players."),
 	_doc_items_usagehelp = S("Rightclick the ender chest to access your personal interdimensional inventory."),
 	drawtype = animate_chests and "nodebox" or "mesh",
-	mesh = not animate_chests and "mcl_chests_chest.obj" or nil,
+	mesh = not animate_chests and "mcl_chests_chest.b3d" or nil,
 	_mcl_baseitem = "mcl_chests:ender_chest",
 	node_box = animate_chests and {
 		type = "fixed",
