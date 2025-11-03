@@ -24,6 +24,27 @@ local tpl_pots = {
 	sounds = mcl_sounds.node_sound_stone_defaults()
 }
 
+local function check_player_protection(pos, player)
+	if not (player and player:is_player()) then
+		return
+	end
+	local name = player:get_player_name()
+	if core.is_protected(pos, name) then
+		core.record_protection_violation(pos, name)
+		return
+	end
+	return name
+end
+
+local function validate_pot(itemstack)
+	local name = itemstack:get_name()
+	local pot = mcl_flowerpots.registered_pots[name]
+	if type(pot) == "string" then
+		return true, pot
+	end
+	return false, nil
+end
+
 core.register_node("mcl_flowerpots:flower_pot", table.merge(tpl_pots, {
 	description = S("Flower Pot"),
 	_tt_help = S("Can hold a small flower or plant"),
@@ -37,19 +58,16 @@ core.register_node("mcl_flowerpots:flower_pot", table.merge(tpl_pots, {
 	inventory_image = "mcl_flowerpots_flowerpot_inventory.png",
 	groups = { dig_immediate = 3, deco_block = 1, attached_node = 1, dig_by_piston = 1, flower_pot = 1, unsticky = 1, pathfinder_partial = 2, },
 	on_rightclick = function(pos, _, clicker, itemstack)
-		local name = clicker:get_player_name()
-		if core.is_protected(pos, name) then
-			core.record_protection_violation(pos, name)
-			return itemstack
-		end
-		local item = clicker:get_wielded_item():get_name()
-		if mcl_flowerpots.registered_pots[item] then
-			core.swap_node(pos, { name = "mcl_flowerpots:flower_pot_" .. mcl_flowerpots.registered_pots[item] })
-			if not core.is_creative_enabled(clicker:get_player_name()) then
-				itemstack:take_item()
+		local name = check_player_protection(pos, clicker)
+		if name then
+			local valid_pot, pot = validate_pot(itemstack)
+			if valid_pot then
+				core.swap_node(pos, {name = "mcl_flowerpots:flower_pot_" .. pot})
+				if not core.is_creative_enabled(name) then
+					itemstack:take_item()
+				end
 			end
 		end
-
 		return itemstack
 	end,
 }))
@@ -72,14 +90,28 @@ function mcl_flowerpots.register_potted_flower(name, def)
 			"[combine:32x32:0,0=mcl_flowerpots_flowerpot.png:0,0=" .. def.image,
 		},
 		groups = { dig_immediate = 3, attached_node = 1, dig_by_piston = 1, not_in_creative_inventory = 1, flower_pot = 2, unsticky = 1},
-		on_rightclick = function(pos, _, clicker)
-			local player_name = clicker:get_player_name()
-			if core.is_protected(pos, player_name) then
-				core.record_protection_violation(pos, player_name)
-				return
+		on_rightclick = function(pos, node, clicker, itemstack)
+			local name = check_player_protection(pos, clicker)
+			if name then
+				local creative = core.is_creative_enabled(name)
+				local _, pot = validate_pot(itemstack)
+				local same_pot = pot and node.name == "mcl_flowerpots:flower_pot_" .. pot
+				if not same_pot or creative then
+					core.swap_node(pos, {name = "mcl_flowerpots:flower_pot"})
+					if not creative then
+						local stack = ItemStack(name)
+						local inventory = clicker:get_inventory()
+						if inventory:room_for_item("main", stack) then
+							inventory:add_item("main", stack)
+						elseif not itemstack:is_empty() then
+							core.add_item(pos, stack)
+						else
+							return stack
+						end
+					end
+				end
 			end
-			core.add_item(vector.offset(pos, 0, 0.5, 0), name)
-			core.set_node(pos, { name = "mcl_flowerpots:flower_pot" })
+			return itemstack
 		end,
 		drop = {
 			items = {
@@ -104,17 +136,28 @@ function mcl_flowerpots.register_potted_cube(name, def)
 			def.image,
 		},
 		groups = { dig_immediate = 3, attached_node = 1, dig_by_piston = 1, not_in_creative_inventory = 1, flower_pot = 2, unsticky = 1},
-		on_rightclick = function(pos, _, clicker)
-			local player_name = ""
-			if clicker:is_player() then
-				player_name = clicker:get_player_name()
+		on_rightclick = function(pos, node, clicker, itemstack)
+			local name = check_player_protection(pos, clicker)
+			if name then
+				local creative = core.is_creative_enabled(name)
+				local _, pot = validate_pot(itemstack)
+				local same_pot = pot and node.name == "mcl_flowerpots:flower_pot_" .. pot
+				if not same_pot or creative then
+					core.swap_node(pos, {name = "mcl_flowerpots:flower_pot"})
+					if not creative then
+						local stack = ItemStack(name)
+						local inventory = clicker:get_inventory()
+						if inventory:room_for_item("main", stack) then
+							inventory:add_item("main", stack)
+						elseif not itemstack:is_empty() then
+							core.add_item(pos, stack)
+						else
+							return stack
+						end
+					end
+				end
 			end
-			if core.is_protected(pos, player_name) then
-				core.record_protection_violation(pos, player_name)
-				return
-			end
-			core.add_item(vector.offset(pos, 0, 0.5, 0), name)
-			core.set_node(pos, { name = "mcl_flowerpots:flower_pot" })
+			return itemstack
 		end,
 		drop = {
 			items = {
