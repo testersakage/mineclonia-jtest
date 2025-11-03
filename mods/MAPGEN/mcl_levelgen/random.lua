@@ -848,6 +848,7 @@ if true and detect_luajit () then
 	local fn = loadstring (str)
 	local lj_seed_from_position = fn ()
 	if true then
+		local backup = math.random ()
 		math.randomseed (0)
 		for i = 1, 100 do
 			local x = math.random (-0x8000, 0x7fff)
@@ -859,6 +860,7 @@ if true and detect_luajit () then
 			lj_seed_from_position (ull2, x, y, z)
 			lj_test_assert (equalull (ull1, ull2))
 		end
+		math.randomseed (backup)
 	end
 	seed_from_position = lj_seed_from_position
 end
@@ -1681,3 +1683,58 @@ if true then
 	lj_test_assert (lcg:next_within (5000) == 3972)
 	lj_test_assert (lcg:next_within (5000) == 253)
 end
+
+local SLIME_CHUNK_MULTIPLIER_1 = ull (0, 0x4c1906)
+local SLIME_CHUNK_MULTIPLIER_2 = ull (0, 0x5ac0db)
+local SLIME_CHUNK_MULTIPLIER_3 = ull (0, 0x4307a7)
+local SLIME_CHUNK_MULTIPLIER_4 = ull (0, 0x5f24f)
+
+local xxu = ull (0, 0)
+local xzu = ull (0, 0)
+local xsc = ull (0, 0)
+
+function mcl_levelgen.set_slime_chunk_seed (rng, level_seed, region_x, region_z, salt)
+	extkull (xxu, region_x)
+	extkull (xzu, region_x)
+	xsc[1], xsc[2] = level_seed[1], level_seed[2]
+
+	mul2ull (xxu, xxu)
+	extkull (xxu, xxu[1])
+	mul2ull (xxu, SLIME_CHUNK_MULTIPLIER_1)
+	extkull (xxu, xxu[1])
+	addull (xsc, xxu)
+
+	mul2ull (xzu, SLIME_CHUNK_MULTIPLIER_2)
+	extkull (xzu, xzu[1])
+	addull (xsc, xzu)
+
+	extkull (xxu, region_z)
+	extkull (xzu, region_z)
+
+	mul2ull (xxu, xxu)
+	extkull (xxu, xxu[1])
+	mul2ull (xxu, SLIME_CHUNK_MULTIPLIER_3)
+	addull (xsc, xxu)
+
+	mul2ull (xzu, SLIME_CHUNK_MULTIPLIER_4)
+	extkull (xzu, xzu[1])
+	addull (xsc, xzu)
+	xorull (xsc, salt)
+	rng:reseed (xsc)
+end
+
+-- luacheck: push ignore 511
+if false then
+	local rng = mcl_levelgen.jvm_random (ull (0, 0))
+	local level_seed = ull (0, 0)
+	local salt = ull (0, 0)
+	stringtoull (level_seed, "193039485749")
+	stringtoull (salt, "987234911")
+	for x = -1024, 1023 do
+		for z = -1024, 1023 do
+			mcl_levelgen.set_slime_chunk_seed (rng, level_seed, x, z, salt)
+			print (rng:next_within (10))
+		end
+	end
+end
+-- luacheck: pop

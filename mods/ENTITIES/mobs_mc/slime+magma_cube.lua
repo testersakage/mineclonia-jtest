@@ -2,17 +2,13 @@
 
 local S = core.get_translator("mobs_mc")
 
-local slime_chunk_spawn_max = mcl_worlds.layer_to_y(40)
+local slime_chunk_spawn_max = -24 -- Y=40 in Minecraft.
 
 local only_peaceful_mobs
 	= core.settings:get_bool ("only_peaceful_mobs", false)
 
-local mapgen_seed = core.get_mapgen_setting("seed")
-
 local function in_slime_chunk(pos)
-	local encoded_pos = (math.floor(pos.x / 16) + 2048) * 4096 + (math.floor(pos.z / 16) + 2048)
-	encoded_pos = PcgRandom(encoded_pos):next() + mapgen_seed
-	return PcgRandom(encoded_pos):next(1, 10) == 1   -- 1/10th chance that mapblock column is a slime chunk
+	return mcl_biome_dispatch.is_slime_chunk (pos.x, pos.z)
 end
 
 -- If the light level is equal to or less than a random integer (from 0 to 7)
@@ -576,11 +572,13 @@ function slime_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cac
 	end
 
 	if spawn_pos.y <= slime_chunk_spawn_max + 0.5
-		and math.random (1, 10) == 1
-		and in_slime_chunk (spawn_pos) then
-		return default_spawner.test_spawn_position (self, spawn_pos,
-							    node_pos, sdata,
-							    node_cache)
+		and math.random (1, 10) <= 6
+		and in_slime_chunk (node_pos) then
+		if default_spawner.test_spawn_position (self, spawn_pos,
+							node_pos, sdata,
+							node_cache) then
+			return true
+		end
 	end
 	return false
 end
