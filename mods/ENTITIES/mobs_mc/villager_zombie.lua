@@ -159,6 +159,16 @@ local zombie_villager = table.merge (zombie, {
 			y = 130,
 			z = 115,
 		},
+		trident_position = {
+			x = 0.0,
+			y = 5.0 / 2.75,
+			z = 0.0,
+		},
+		trident_rotation = {
+			x = 90,
+			y = 0,
+			z = 0,
+		},
 	},
 	_reinforcement_type = "mobs_mc:villager_zombie",
 	_unplaceable_by_default = true,

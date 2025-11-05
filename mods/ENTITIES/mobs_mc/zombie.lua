@@ -188,6 +188,16 @@ local zombie = table.merge (posing_humanoid, {
 			y = 130,
 			z = 115,
 		},
+		trident_position = {
+			x = 0,
+			y = 5.0,
+			z = 0,
+		},
+		trident_rotation = {
+			x = 90,
+			y = 0,
+			z = 0,
+		},
 	},
 	ignite_targets_while_burning = true,
 	can_open_doors = false,
