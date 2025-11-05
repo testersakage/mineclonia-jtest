@@ -638,7 +638,7 @@ end
 local trident_held_times = {}
 
 core.register_on_joinplayer (function (player)
-	trident_held_times[player] = math.huge
+	trident_held_times[player] = -math.huge
 end)
 
 core.register_on_leaveplayer (function (player, _)
@@ -661,9 +661,21 @@ controls.register_on_hold (function (player, key)
 	local name = wielditem:get_name ()
 	if core.get_item_group (name, "trident") > 0
 		and player_may_launch_trident_p (player, wielditem) then
-		if trident_held_times[player] == math.huge then
-			trident_held_times[player] = ms_time ()
+		if trident_held_times[player] == -math.huge then
+			trident_held_times[player] = 0
 		end
+	end
+end)
+
+core.register_globalstep (function (dtime)
+	for player, time in pairs (trident_held_times) do
+		if time < 0.5 and time + dtime >= 0.5 then
+			mcl_title.set (player, "actionbar", {
+				text = S ("Trident charged.  Release RMB to launch."),
+				stay = 20,
+			})
+		end
+		trident_held_times[player] = time + dtime
 	end
 end)
 
@@ -676,11 +688,10 @@ controls.register_on_release (function (player, key)
 	end
 	local wielditem = player:get_wielded_item ()
 	local name = wielditem:get_name ()
-	local diff = ms_time () - (trident_held_times[player] or math.huge)
 	if core.get_item_group (name, "trident") > 0
 		and player_may_launch_trident_p (player, wielditem)
-		and diff >= 0.5 then
+		and (trident_held_times[player] or 0) >= 0.5 then
 		mcl_tridents.player_shoot (player, wielditem)
 	end
-	trident_held_times[player] = math.huge
+	trident_held_times[player] = -math.huge
 end)
