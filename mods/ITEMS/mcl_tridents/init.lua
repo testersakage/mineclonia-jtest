@@ -645,11 +645,6 @@ core.register_on_leaveplayer (function (player, _)
 	trident_held_times[player] = nil
 end)
 
-local function ms_time ()
-	-- FIXME: this doesn't return wall clock time.
-	return core.get_us_time () / 1000
-end
-
 controls.register_on_hold (function (player, key)
 	if mcl_serverplayer.is_csm_at_least (player, 4) then
 		return
