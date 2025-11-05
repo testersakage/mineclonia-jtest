@@ -385,28 +385,27 @@ core.register_entity(":__builtin:item", {
 	end,
 
 	pickup = function(self, player)
-		-- Don't try to collect again
 		if self._removed then return end
 		if not player or not player:get_pos() then return end
-
-		local inv = player:get_inventory()
-		local checkpos = vector.offset(player:get_pos(), 0, item_drop_settings.player_collect_height, 0)
-
-		-- Check magnet timer
+		if self.itemstring == "" then return end
 		if self._magnet_timer < 0 then return end
 		if self._magnet_timer >= item_drop_settings.magnet_time then return end
 
-		-- Ignore if itemstring is not set yet
-		if self.itemstring == "" then return end
-
-		-- Add what we can to the inventory
+		local inv = player:get_inventory()
+		local checkpos = vector.offset(player:get_pos(), 0, item_drop_settings.player_collect_height, 0)
 		local itemstack = ItemStack(self.itemstring)
-
 		local count = itemstack:get_count()
+		local def = itemstack:get_definition()
+
 		if not inv:is_empty("offhand") then
-		  itemstack = inv:add_item("offhand", itemstack)
+			itemstack = inv:add_item("offhand", itemstack)
 		end
-		local leftovers = inv:add_item("main", itemstack)
+
+		local leftovers = def.on_pickup(itemstack, player, { type = "object", ref = self.object })
+
+		if leftovers == nil then
+			return
+		end
 
 		self:check_pickup_achievements(player)
 
@@ -433,7 +432,7 @@ core.register_entity(":__builtin:item", {
 			self.object:move_to(checkpos)
 		else
 			-- Update entity itemstring
-			self.itemstring = leftovers:to_string()
+			self:set_item(leftovers:to_string())
 		end
 	end,
 
