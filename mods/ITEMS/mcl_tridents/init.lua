@@ -70,6 +70,36 @@ core.register_tool ("mcl_tridents:trident", {
 -- Trident entity.
 ------------------------------------------------------------------------
 
+local trident_clip = {
+	initial_properties = {
+		visual = "mesh",
+		mesh = "mcl_tridents_trident.obj",
+		textures = {
+			"mcl_tridents_trident_entity_clip.png",
+		},
+		visual_size = {
+			x = 1.0,
+			y = 1.0,
+		},
+		pointable = false,
+		physical = false,
+		static_save = false,
+		armor = {
+			immortal = 1,
+		},
+		use_texture_alpha = false,
+	},
+}
+
+function trident_clip:on_step (_, _)
+	if not self.object:get_attach () then
+		self.object:remove ()
+		return
+	end
+end
+
+core.register_entity ("mcl_tridents:trident_clip", trident_clip)
+
 local trident_entity = {
 	initial_properties = {
 		visual = "mesh",
@@ -95,7 +125,7 @@ local trident_entity = {
 		physical = true,
 		collide_with_objects = false,
 		static_save = true,
-		use_texture_alpha = false,
+		use_texture_alpha = true,
 		armor = {
 			immortal = 1,
 		},
@@ -467,6 +497,15 @@ function trident_entity:on_activate (staticdata, dtime)
 	end
 	self._prev_pos = self.object:get_pos ()
 	self._objects_seen = {}
+
+	-- Attach another object that is guaranteed to remain visible
+	-- even when this object is obscured by water or other
+	-- semitransparent materials.
+	local clip = core.add_entity (self.object:get_pos (),
+				      "mcl_tridents:trident_clip")
+	if clip then
+		clip:set_attach (self.object, "", ZERO, ZERO)
+	end
 end
 
 function trident_entity:riptide_init (player)
