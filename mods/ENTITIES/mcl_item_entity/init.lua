@@ -301,6 +301,17 @@ function core.node_dig(pos, node, digger)
 	return rc
 end
 
+
+local old_cipu = core.item_pickup
+function core.item_pickup(itemstack,picker,pointed_thing,time_from_last_punch,...)
+	local inv = picker:get_inventory()
+	if not inv:is_empty("offhand") then
+		itemstack = inv:add_item("offhand", itemstack)
+	end
+
+	return old_cipu(itemstack, picker, pointed_thing, time_from_last_punch, ...)
+end
+
 --modify builtin:item
 
 local time_to_live = tonumber(core.settings:get("item_entity_ttl")) or 300
@@ -391,15 +402,11 @@ core.register_entity(":__builtin:item", {
 		if self._magnet_timer < 0 then return end
 		if self._magnet_timer >= item_drop_settings.magnet_time then return end
 
-		local inv = player:get_inventory()
 		local checkpos = vector.offset(player:get_pos(), 0, item_drop_settings.player_collect_height, 0)
 		local itemstack = ItemStack(self.itemstring)
 		local count = itemstack:get_count()
 		local def = itemstack:get_definition()
 
-		if not inv:is_empty("offhand") then
-			itemstack = inv:add_item("offhand", itemstack)
-		end
 
 		local leftovers = def.on_pickup(itemstack, player, { type = "object", ref = self.object })
 
