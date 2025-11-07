@@ -144,7 +144,7 @@ local overworld_subtypes = {
 	"_deep_underground",
 }
 
-local function related_list_from_base (bases, subtypes)
+local function related_list_from_base (bases, subtypes, skip_base)
 	local list = {}
 	if type (bases) == "string" then
 		bases = {bases,}
@@ -152,7 +152,9 @@ local function related_list_from_base (bases, subtypes)
 	for _, base in ipairs (bases) do
 		assert (core.registered_biomes[base],
 			"Old-style biome " .. base .. " is not registered")
-		table.insert (list, base)
+		if not skip_base then
+			table.insert (list, base)
+		end
 
 		for _, subtype in ipairs (subtypes) do
 			local name = base .. subtype
@@ -165,6 +167,7 @@ local function related_list_from_base (bases, subtypes)
 end
 
 local ocean_subtypes = {
+	"_beach",
 	"_ocean",
 	"_deep_ocean",
 }
@@ -185,7 +188,7 @@ local function approximate_warm_ocean ()
 		"SavannaM",
 		"Swampland",
 	}
-	return related_list_from_base (base, ocean_subtypes)
+	return related_list_from_base (base, ocean_subtypes, true)
 end
 
 local function approximate_ocean ()
@@ -204,7 +207,7 @@ local function approximate_ocean ()
 		"SunflowerPlains",
 		"Taiga",
 	}
-	return related_list_from_base (base, ocean_subtypes)
+	return related_list_from_base (base, ocean_subtypes, true)
 end
 
 local function approximate_cold_ocean ()
@@ -216,7 +219,7 @@ local function approximate_cold_ocean ()
 		"IcePlains",
 		"IcePlainsSpikes",
 	}
-	return related_list_from_base (base, ocean_subtypes)
+	return related_list_from_base (base, ocean_subtypes, true)
 end
 
 local engine_aliases = nil
