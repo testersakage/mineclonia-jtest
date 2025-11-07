@@ -2144,7 +2144,7 @@ which are best avoided:
     E.g. when truncating coordinates to the nearest MapBlock/chunk,
     rather than:
 
-      local chunk_x = x % 16
+      local chunk_x = x - x % 16
 
     you are advised to write:
 
