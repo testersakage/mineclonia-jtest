@@ -1,6 +1,22 @@
 local S = core.get_translator(core.get_current_modname())
 
-core.register_tool("mcl_spyglass:spyglass",{
+local spyglass_block = {}
+local spyglass_scope = {}
+
+local function spyglass_block_or_unblock (itemstack, player, pointed_thing)
+	if spyglass_scope[player] ~= nil then
+		return itemstack
+	end
+	local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
+	if rc then
+		spyglass_block[player] = 1
+		return rc
+	end
+	spyglass_block[player] = nil
+	return itemstack
+end
+
+core.register_tool("mcl_spyglass:spyglass", {
 	description = S("Spyglass"),
 	_doc_items_longdesc = S("A spyglass is an item that can be used for zooming in on specific locations."),
 	inventory_image = "mcl_spyglass.png",
@@ -8,6 +24,8 @@ core.register_tool("mcl_spyglass:spyglass",{
 	stack_max = 1,
 	_mcl_toollike_wield = true,
 	touch_interaction = "short_dig_long_place",
+	on_place = spyglass_block_or_unblock,
+	on_secondary_use = spyglass_block_or_unblock,
 })
 
 core.register_craft({
@@ -18,8 +36,6 @@ core.register_craft({
 		{"mcl_copper:copper_ingot"},
 	}
 })
-
-local spyglass_scope = {}
 
 local function add_scope(player)
 	local wielditem = player:get_wielded_item()
@@ -43,16 +59,6 @@ local function remove_scope(player)
 	end
 end
 
-controls.register_on_press(function(player, key)
-	if mcl_serverplayer.is_csm_capable (player) then
-		return
-	end
-	if key ~= "RMB" and key ~= "zoom" then return end
-	if spyglass_scope[player] == nil then
-		add_scope(player)
-	end
-end)
-
 controls.register_on_release(function(player, key)
 	if mcl_serverplayer.is_csm_capable (player) then
 		return
@@ -69,7 +75,8 @@ controls.register_on_hold(function(player, key)
 	end
 	if key ~= "RMB" and key ~= "zoom" then return end
 	local wielditem = player:get_wielded_item()
-	if wielditem:get_name() == "mcl_spyglass:spyglass" then
+	if wielditem:get_name() == "mcl_spyglass:spyglass"
+	and spyglass_block[player] == nil then
 		playerphysics.set_absolute_fov(player, 8)
 		if spyglass_scope[player] == nil then
 			add_scope(player)
