@@ -397,7 +397,7 @@ function drowned:do_go_pos (dtime, moveresult)
 		local dy = target_pos.y - self_pos.y
 		local dz = target_pos.z - self_pos.z
 		local magnitude = mathsqrt (dx * dx + dy * dy + dz * dz)
-		local dy_scaled = dy / magnitude
+		local dy_scaled = magnitude > 0.05 and dy / magnitude or 0.0
 		local yaw = atan2 (dz, dx) - pi / 2
 		self:set_yaw (yaw)
 		local lerp_factor = pow_by_step (0.125, dtime)
