@@ -1767,3 +1767,74 @@ core.register_chatcommand ("spawn_cycle", {
 		mcl_mobs.spawn_cycle (param, true)
 	end,
 })
+
+local function sort_by_weight_dsc (a, b)
+	if b.weight < a.weight then
+		return true
+	elseif b.weight > a.weight then
+		return false
+	else
+		return b.name < a.name
+	end
+end
+
+core.register_chatcommand ("dump_spawners", {
+	privs = { debug = true, },
+	params = "[<biome>]",
+	func = function (player, param)
+		local player = core.get_player_by_name (player)
+		if not player then
+			return false
+		end
+
+		local pos = mcl_util.get_nodepos (player:get_pos ())
+		local param = param:trim ()
+		local biome_name = #param > 0 and param
+			or mcl_biome_dispatch.get_biome_name (pos)
+		local tbl = registered_spawners[biome_name]
+
+		if not tbl then
+			return false
+		end
+
+		print (";; Registered spawners in biome `" .. biome_name .. "'")
+		for category, list in pairs (tbl) do
+			local total_weight = total_weight[list] or -1
+			local mobs_by_weight = {}
+			local entry_by_mob = {}
+
+			for _, spawner in ipairs (list) do
+				local mob = spawner.name
+
+				if not entry_by_mob[mob] then
+					entry_by_mob[mob] = {
+						name = mob,
+						weight = spawner.weight,
+						spawners = {spawner},
+					}
+					table.insert (mobs_by_weight, entry_by_mob[mob])
+				else
+					local entry = entry_by_mob[mob]
+					entry.weight = entry.weight + spawner.weight
+					table.insert (entry.spawners, spawner)
+				end
+			end
+
+			print (string.format ("  ;; Category: %s, total weight: %d",
+					      category, total_weight))
+			table.sort (mobs_by_weight, sort_by_weight_dsc)
+			for _, entry in ipairs (mobs_by_weight) do
+				print (string.format ("    ;; Mob: %s: weight: %d", entry.name,
+						      entry.weight))
+				table.sort (entry.spawners, sort_by_weight_dsc)
+				for _, spawner in ipairs (entry.spawners) do
+					print (string.format ("    ;;  weight: %d pack_min, pack_max: %d, %d",
+							      spawner.weight, spawner.pack_min,
+							      spawner.pack_max))
+				end
+				print ("")
+			end
+		end
+		return true, S ("Dumped spawners for biome: @1", biome_name)
+	end,
+})
