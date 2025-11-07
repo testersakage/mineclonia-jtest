@@ -164,6 +164,7 @@ function mcl_levelgen.get_dimension (_)
 end
 
 if core.get_mapgen_setting ("mcl_levelgen_enable_ersatz") == "true"
+	and core.get_mapgen_setting ("mg_name") ~= "singlenode"
 	and core.features.generate_decorations_biomes then
 	-- Load the ersatz level generation system.
 	mcl_levelgen.enable_ersatz = true
