@@ -19,7 +19,7 @@ local hud_sequence_numbers = {}
 
 -- get random disc itemstring that is obtainable as creeper loot
 function mcl_jukebox.get_random_creeper_loot()
-	local _, key = table.random_element(table.filter(mcl_jukebox.registered_records, function(_, v) return v.id and not v.exclude_from_creeperdrop end))
+	local _, key = table.random_element(mcl_jukebox.registered_records, function(_, v) return v.id and not v.exclude_from_creeperdrop end)
 	return key
 end
 

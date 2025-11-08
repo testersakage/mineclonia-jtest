@@ -77,8 +77,10 @@ end
 
 function table.filter(t, f, reorder)
 	local r = {}
+	local ks = {}
 	for k, v in pairs(t) do
-		if f(k, v) then
+		if not f or f(k, v) then
+			table.insert(ks, k)
 			if reorder then
 				table.insert(r, v)
 			else
@@ -86,15 +88,12 @@ function table.filter(t, f, reorder)
 			end
 		end
 	end
-	return r
+	return r, ks
 end
 
 -- Returns a random element out of t
-function table.random_element(t)
-	local keyset = {}
-	for k, _ in pairs(t) do
-		table.insert(keyset, k)
-	end
+function table.random_element(t, f)
+	local _, keyset = table.filter(t, f)
 	local rk = keyset[math.random(#keyset)]
 	return t[rk], rk
 end
