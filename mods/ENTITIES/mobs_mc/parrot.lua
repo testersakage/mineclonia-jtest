@@ -137,23 +137,12 @@ local shoulders = {
 	right = vector.new(3.75,10.5,0),
 }
 
-local function table_get_rand(tbl)
-	local keys = {}
-	for k in pairs(tbl) do
-		table.insert(keys, k)
-	end
-	return tbl[keys[math.random(#keys)]]
-end
-
 local function get_random_mob_sound()
-	local t = table.copy(core.registered_entities)
-	table.shuffle(t)
-	for _,e in pairs(t) do
-		if e.is_mob and e.sounds and #e.sounds > 0 then
-			return table_get_rand(e.sounds)
-		end
-	end
-	return core.registered_entities["mobs_mc:parrot"].sounds.random
+	local def, _
+	repeat
+		def, _ =table.random_element(core.registered_entities)
+	until def.is_mob and def.sounds and #def.sounds > 0
+	return def.sounds.random
 end
 
 local function imitate_mob_sound(self,mob)
