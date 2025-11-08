@@ -114,8 +114,8 @@ function piglin_base:set_animation_speed (custom_speed)
 		local normal_speed = self.animation[name]
 			or self.animation.speed_normal
 			or 25
+		local v = math.max (self:get_velocity (), 1.0)
 		local speed = custom_speed or normal_speed
-		local v = self:get_velocity ()
 		local scaled_speed = math.sqrt (v)
 			* speed * self.frame_speed_multiplier
 		self.object:set_animation_frame_speed (scaled_speed)
