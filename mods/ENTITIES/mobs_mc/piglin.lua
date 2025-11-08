@@ -98,9 +98,27 @@ local piglin_base = {
 		dance_start = 500, dance_end = 520, dance_speed = 25,
 	},
 	makes_footstep_sound = true,
-	frame_speed_multiplier = 0.6,
 	_inventory_size = 8,
 }
+
+------------------------------------------------------------------------
+-- Abstract Piglin visuals.
+------------------------------------------------------------------------
+
+function piglin_base:set_animation_speed (custom_speed)
+	local anim = self._current_animation
+	if anim then
+		local name = anim .. "_speed"
+		local normal_speed = self.animation[name]
+			or self.animation.speed_normal
+			or 25
+		local speed = custom_speed or normal_speed
+		local v = self:get_velocity ()
+		local scaled_speed = math.sqrt (v)
+			* speed * self.frame_speed_multiplier
+		self.object:set_animation_frame_speed (scaled_speed)
+	end
+end
 
 ------------------------------------------------------------------------
 -- Piglin conversion.
@@ -234,16 +252,6 @@ local piglin = table.merge (piglin_base, table.merge (posing_humanoid, {
 ------------------------------------------------------------------------
 -- Piglin visuals.
 ------------------------------------------------------------------------
-
-function piglin_base:wielditem_transform (info, stack)
-	local rot, pos, size
-		= mob_class.wielditem_transform (self, info, stack)
-	if self.child then
-		size.x = size.x * 0.5
-		size.y = size.y * 0.5
-	end
-	return rot, pos, size
-end
 
 function piglin:who_are_you_looking_at ()
 	if self._interacting_with then
@@ -512,7 +520,7 @@ function mobs_mc.enrage_piglins (player, need_line_of_sight)
 	end
 end
 
-local function player_ok(player)
+local function player_ok (player)
 	return player and player.is_player and player:is_player ()
 		and not player.is_fake_player
 end
@@ -945,6 +953,11 @@ local function piglin_seek_treasure (self, self_pos, dtime)
 		self._seeking_treasure
 			= self._seeking_treasure + dtime
 		if self._seeking_treasure >= 10
+		-- Abort if no path could be found to the treasure in
+		-- question, to guarantee slightly faster repathing if
+		-- the treasure is first detected while still airborne
+		-- after being dropped by a player.
+			or self:navigation_finished ()
 			or not is_valid (self._treasure) then
 			self._seeking_treasure = nil
 			return false
@@ -988,7 +1001,8 @@ end
 
 function piglin:enrage (source, broadcast)
 	local self_pos = self.object:get_pos ()
-	if (not source:is_player () or self:attack_player_allowed (source))
+	if source:is_valid ()
+		and (not source:is_player () or self:attack_player_allowed (source))
 		and self:default_rangecheck (self_pos, source) then
 		self._piglin_provoker = source
 		self._piglin_provoker_timeout = 30
@@ -1141,12 +1155,6 @@ function piglin:should_continue_to_attack (object)
 		return false
 	end
 	local self_pos = self.object:get_pos ()
-	local zombie = self._nearest_zombified
-	local zombie_pos = zombie and zombie:get_pos () or nil
-	if zombie_pos and vector.distance (zombie_pos, self_pos) < 6 then
-		return false
-	end
-
 	local provoker = self._piglin_provoker
 	if provoker and is_valid (provoker)
 		and self:default_rangecheck (self_pos, provoker) then
@@ -1363,11 +1371,15 @@ function piglin:should_cancel_retreat (target)
 	return false
 end
 
-local function piglin_check_avoid (self, self_pos, dtime)
+local function piglin_check_avoid (self, self_pos, _)
 	if self._nearest_zombified then
-		self._retreat_asap = RETREAT_ATTEMPTS
-		self._retreat_from = self._nearest_zombified
-		self._retreat_time = pr:next (5, 7)
+		local obj = self._nearest_zombified
+		local pos = obj:get_pos ()
+		if pos and vector.distance (pos, self_pos) < 6.0 then
+			self._retreat_asap = RETREAT_ATTEMPTS
+			self._retreat_from = obj
+			self._retreat_time = pr:next (5, 7)
+		end
 	elseif self.child and self._nearest_witherlike then
 		self._retreat_asap = RETREAT_ATTEMPTS
 		self._retreat_from = self._nearest_witherlike
@@ -1425,12 +1437,18 @@ function piglin:beat_a_retreat (hitter)
 	self._retreat_from = hitter
 	self._retreat_time = math.random (5, 20)
 	self._hunting_cooldown = pr:next (30, 120)
-	for _, piglin in pairs (self._furthest_visible_adults) do
+	for _, piglin in ipairs (self._furthest_visible_adults) do
 		if piglin ~= self.object then
 			local entity = piglin:get_luaentity ()
 			if entity then
 				entity._retreat_asap = RETREAT_ATTEMPTS
 				entity._retreat_time = math.random (5, 20)
+				if entity.attack and entity.attack:is_valid () then
+					entity._retreat_from = entity.attack
+				else
+					local self_pos = piglin:get_pos ()
+					piglin_check_avoid (entity, self_pos)
+				end
 				entity._hunting_cooldown = pr:next (30, 120)
 			end
 		end
@@ -1931,6 +1949,8 @@ mcl_mobs.register_egg("mobs_mc:zombified_piglin", S("Zombie Piglin"), "#ea9393",
 -- Modern Piglin & Zombie Pigman spawning.
 ------------------------------------------------------------------------
 
+local monster_spawner = mobs_mc.monster_spawner
+
 local piglin_spawner = table.merge (mobs_mc.monster_spawner, {
 	name = "mobs_mc:piglin",
 	spawn_category = "monster",
@@ -1943,7 +1963,17 @@ local piglin_spawner = table.merge (mobs_mc.monster_spawner, {
 	max_artificial_light = 7,
 })
 
-local piglin_spawner_crimson_forest = table.merge (mobs_mc.monster_spawner, {
+function piglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+	if monster_spawner.test_spawn_position (self, spawn_pos,
+						node_pos, sdata,
+						node_cache) then
+		local node = self:get_node (node_cache, -1, node_pos)
+		return node.name ~= "mcl_nether:nether_wart_block"
+	end
+	return false
+end
+
+local piglin_spawner_crimson_forest = table.merge (piglin_spawner, {
 	name = "mobs_mc:piglin",
 	spawn_category = "monster",
 	pack_min = 3,

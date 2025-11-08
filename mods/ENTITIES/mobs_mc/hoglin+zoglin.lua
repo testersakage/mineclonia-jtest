@@ -504,6 +504,14 @@ local hoglin_spawner = table.merge (mobs_mc.monster_spawner, {
 	weight = 9,
 })
 
+function hoglin_spawner:spawn (spawn_pos, _)
+	if math.random () >= 0.2 then
+		return core.add_entity (spawn_pos, "mobs_mc:hoglin")
+	else
+		return core.add_entity (spawn_pos, "mobs_mc:baby_hoglin")
+	end
+end
+
 function hoglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
 	if mcl_vars.difficulty == 0 then
 		return false
