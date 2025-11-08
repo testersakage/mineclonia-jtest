@@ -75,6 +75,20 @@ function table.count(t, does_it_count)
 	return r
 end
 
+function table.filter(t, f, reorder)
+	local r = {}
+	for k, v in pairs(t) do
+		if f(k, v) then
+			if reorder then
+				table.insert(r, v)
+			else
+				r[k] = v
+			end
+		end
+	end
+	return r
+end
+
 -- Returns a random element out of t
 function table.random_element(t)
 	local keyset = {}
