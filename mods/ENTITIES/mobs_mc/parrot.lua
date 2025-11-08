@@ -138,11 +138,7 @@ local shoulders = {
 }
 
 local function get_random_mob_sound()
-	local def, _
-	repeat
-		def, _ =table.random_element(core.registered_entities)
-	until def.is_mob and def.sounds and #def.sounds > 0
-	return def.sounds.random
+	return table.random_element(table.filter(core.registered_entities, function(_, v) return v.is_mob and v.sounds and #v.sounds > 0 end))
 end
 
 local function imitate_mob_sound(self,mob)
