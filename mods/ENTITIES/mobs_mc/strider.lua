@@ -494,6 +494,7 @@ local strider_spawner = {
 	pack_min = 1,
 	pack_max = 2,
 	biomes = {
+		"CrimsonForest",
 		"WarpedForest",
 		"NetherWastes",
 		"BasaltDeltas",
