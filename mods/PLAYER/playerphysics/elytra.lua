@@ -1,112 +1,263 @@
--- elytra physics
-local elytra_vars = {
-	slowdown_mult = 0.0, -- amount of vel to take per sec
-	fall_speed = 0.2, -- amount of vel to fall down per sec
-	speedup_mult = 2, -- amount of speed to add based on look dir
-	max_speed = 6, -- max amount to multiply against look direction when flying
-	pitch_penalty = 1.3, -- if pitching up, slow down at this rate as a multiplier
-	rocket_speed = 5.5,
+local gravity = -1.6 -- mcl_localplayer gravity
+
+local ONE_TICK			= 0.05
+local TICK_TO_SEC		= 1 / ONE_TICK
+
+local AIR_DRAG = 0.98
+local FALL_FLYING_DRAG_HORIZ	= 0.99
+local FALL_FLYING_DRAG_ASCENT	= 0.04
+local FALL_FLYING_ACC_DESCENT	= 3.2
+local FALL_FLYING_ROTATION_DRAG = 0.1
+
+local BASE_ROCKET_BOOST = 2.0
+local ROCKET_BOOST_FORCE = 30.0
+
+local elytra_entity = {
+    initial_properties = {
+		visual = "mesh",
+        mesh = "mcl_elytra_entity.obj",
+		textures = { "blank.png" },
+        visual_size = {x=1.0, y=1.0},
+        collisionbox = {-0.25, -0.25, -0.25, 0.25, 0.25, 0.25},
+		pointable = false,
+		physical = true,
+		collide_with_objects = false,
+		static_save = false,
+	},
+    _horiz_collision = false,
+    _damage_immune = 0,
+    _timer = 0,
 }
 
-local function anglediff(a1, a2)
-	local a = a1 - a2
-	return math.abs((a + math.pi) % (math.pi*2) - math.pi)
-end
-
-local function clamp(num, min, max)
-	return math.min(max, math.max(num, min))
-end
-
-mcl_player.register_globalstep(function(player, dtime)
-	if mcl_serverplayer.is_csm_capable (player) then
-		return
-	end
-
-	local fly_pos = player:get_pos()
-	local fly_node = core.get_node({x = fly_pos.x, y = fly_pos.y - 0.1, z = fly_pos.z}).name
-	local player_vel = player:get_velocity()
-	local elytra = mcl_player.players[player].elytra
-
-	if not elytra.active then
-		elytra.speed = 0
-	end
-
-	if not elytra.last_yaw then
-		elytra.last_yaw = player:get_look_horizontal()
-	end
-
-	local is_just_jumped = player:get_player_control().jump and not mcl_player.players[player].is_pressing_jump and not elytra.active
-	mcl_player.players[player].is_pressing_jump = player:get_player_control().jump
-	if is_just_jumped and not elytra.active then
-		local direction = player:get_look_dir()
-		elytra.speed = 1 - (direction.y/2 + 0.5)
-	end
-
-	local fly_node_walkable = core.registered_nodes[fly_node] and core.registered_nodes[fly_node].walkable
-	elytra.active = core.get_item_group(player:get_inventory():get_stack("armor", 3):get_name(), "elytra") ~= 0
-		and not player:get_attach()
-		and (elytra.active or (is_just_jumped and player_vel.y < -0))
-		and ((not fly_node_walkable) or fly_node == "ignore")
-
-	if elytra.active then
-		if is_just_jumped then -- move the player up when they start flying to give some clearance
-			player:set_pos(vector.offset(player:get_pos(), 0, 0.8, 0))
-		end
-		mcl_player.player_set_animation(player, "fly")
-		local direction = player:get_look_dir()
-		local turn_amount = anglediff(core.dir_to_yaw(direction), core.dir_to_yaw(player_vel))
-		local direction_mult = clamp(-(direction.y+0.1), -1, 1)
-		if direction_mult < 0 then direction_mult = direction_mult * elytra_vars.pitch_penalty end
-
-		local speed_mult = elytra.speed
-		local block_below = core.get_node(vector.offset(fly_pos, 0, -0.9, 0)).name
-		local reg_node_below = core.registered_nodes[block_below]
-		if (reg_node_below and not reg_node_below.walkable) and (player_vel.y ~= 0) then
-			speed_mult = speed_mult + direction_mult * elytra_vars.speedup_mult * dtime
-		end
-		speed_mult = speed_mult - elytra_vars.slowdown_mult * clamp(dtime, 0.09, 0.2) -- slow down but don't overdo it
-		speed_mult = clamp(speed_mult, -elytra_vars.max_speed, elytra_vars.max_speed)
-		if turn_amount > 0.3 and math.abs(direction.y) < 0.98 then -- don't do this if looking straight up / down
-			speed_mult = speed_mult - (speed_mult * (turn_amount / (math.pi*8)))
-		end
-
-		playerphysics.add_physics_factor(player, "gravity", "mcl_playerplus:elytra", elytra_vars.fall_speed)
-		if elytra.rocketing > 0 then
-			elytra.rocketing = elytra.rocketing - dtime
-			if vector.length(player_vel) < 40 then
-				-- player:add_velocity(vector.multiply(player:get_look_dir(), 4))
-				speed_mult = elytra_vars.rocket_speed
-				core.add_particle({
-					pos = fly_pos,
-					velocity = {x = 0, y = 0, z = 0},
-					acceleration = {x = 0, y = 0, z = 0},
-					expirationtime = mcl_util.float_random(0.3, 0.5),
-					size = mcl_util.float_random(1, 2),
-					collisiondetection = false,
-					vertical = false,
-					texture = "mcl_particles_bonemeal.png^[colorize:#bc7a57:127",
-					glow = 5,
-				})
+local function horiz_collision (moveresult)
+	for _, item in ipairs (moveresult.collisions) do
+		if item.axis == "x" or item.axis == "z" then
+			-- Exclude ignore nodes from collision detection.
+			if item.type ~= "node"
+				or core.get_node_or_nil (item.node_pos) then
+				return true, item.old_velocity, item.new_velocity
 			end
 		end
-
-		elytra.speed = speed_mult -- set the speed so you can keep track of it and add to it
-
-		local new_vel = vector.multiply(direction, speed_mult * dtime * 30) -- use the look dir and speed as a mult
-		-- new_vel.y = new_vel.y - elytra_vars.fall_speed * dtime -- make the player fall a set amount
-
-		-- slow the player down so less spongy movement by applying some of the inverse velocity
-		-- NOTE: do not set this higher than about 0.2 or the game will get the wrong vel and it will be broken
-		-- this is far from ideal, but there's no good way to set_velocity or slow down the player
-		player_vel = vector.multiply(player_vel, -0.1)
-		-- if speed_mult < 1 then player_vel.y = player_vel.y * 0.1 end
-		new_vel = vector.add(new_vel, player_vel)
-
-		player:add_velocity(new_vel)
-	else -- reset things when you stop flying with elytra
-		elytra.rocketing = 0
-		mcl_player.players[player].elytra.active = false
-		playerphysics.remove_physics_factor(player, "gravity", "mcl_playerplus:elytra")
 	end
-	mcl_player.players[player].elytra.last_yaw = player:get_look_horizontal()
+	return false, nil
+end
+
+function elytra_entity:rotate (v)
+    local look_dir = self._player:get_look_dir()
+    local yaw = math.atan2(look_dir.z, look_dir.x) - math.pi/2
+    local pitch = -math.asin(look_dir.y)
+    self.object:set_rotation (vector.new(pitch - math.rad(90), yaw, 0))
+end
+
+function elytra_entity:attach(player)
+	player:set_attach (self.object, "", vector.zero(), vector.zero())
+	self._player = player
+end
+
+function elytra_entity:detach(player)
+    if player:get_attach () == self.object then
+        mcl_player.players[player].elytra.active = false
+		player:set_detach ()
+        self.object:remove()
+	end
+end
+
+function elytra_entity:check_horiz_collision(player, moveresult)
+    local elytra = mcl_player.players[player].elytra
+    local damage_immune = math.max (self._damage_immune - 1, 0)
+    self._damage_immune = damage_immune
+
+    local old, new
+    if not self._horiz_collision then
+        self._horiz_collision, old, new = horiz_collision (moveresult)
+    end
+
+    -- Apply "kinetic damage" when the player collides
+    -- with a wall while fall flying.
+    if elytra.active and self._horiz_collision then
+        if old and new then
+            local diff = math.abs (vector.length (old) - vector.length (new))
+            if diff >= 6.0 and self._damage_immune == 0 then
+                mcl_damage.damage_player (player, diff * 0.5, { type = "fall", })
+                self._damage_immune = 10
+            end
+        end
+    end
+end
+
+function elytra_entity:rocket_boost(dtime, v)
+    local player = self._player
+    local elytra = mcl_player.players[player].elytra
+    local dir = player:get_look_dir()
+    local self_pos = player:get_pos()
+
+    if elytra.rocketing > 0 then
+        v.x = dir.x * BASE_ROCKET_BOOST
+			+ (dir.x * ROCKET_BOOST_FORCE - v.x) * 0.5
+			+ v.x
+		v.y = dir.y * BASE_ROCKET_BOOST
+			+ (dir.y * ROCKET_BOOST_FORCE - v.y) * 0.5
+			+ v.y
+		v.z = dir.z * BASE_ROCKET_BOOST
+			+ (dir.z * ROCKET_BOOST_FORCE - v.z) * 0.5
+			+ v.z
+		elytra.rocketing = elytra.rocketing - dtime
+		local dir = vector.new (dir.x, 0, dir.z)
+		local pos = vector.normalize (dir)
+		local s = pos.x
+		local c = pos.z
+		pos.x = self_pos.x + (c * 0.5 + s * 0.7)
+		pos.y = self_pos.y + 0.3
+		pos.z = self_pos.z + (c * 0.7 - s * 0.5)
+		core.add_particle ({
+			pos = pos,
+			expirationtime = 1.0,
+			texture = "mcl_bows_rocket_particle.png^[colorize:#bc7a57:127",
+		})
+    end
+end
+
+function elytra_entity:consume_durability(dtime)
+    self._timer = self._timer + dtime
+    if self._timer >= 1.0 then
+        local player = self._player
+        local inv = mcl_util.get_inventory(player)
+        local itemstack = inv:get_stack("armor", 3)
+        local durability = mcl_util.calculate_durability (itemstack)
+        local remaining = math.floor ((65536 - itemstack:get_wear ())
+            * durability / 65536)
+
+        if remaining == 1 then
+            self:detach(player)
+            mcl_armor.disable_elytra (itemstack)
+        else
+            mcl_util.use_item_durability(itemstack, 1)
+            inv:set_stack("armor", 3, itemstack)
+        end
+
+        self._timer = self._timer - 1.0
+    end
+end
+
+function elytra_entity:fall_flying(v)
+    local player = self._player
+
+    local inv = mcl_util.get_inventory(player)
+    local itemstack = inv:get_stack("armor", 3)
+    local armor_name = itemstack:get_name()
+
+    if core.get_item_group(armor_name, "elytra") <= 0 then
+        self:detach(player)
+    end
+
+    local dir = player:get_look_dir()
+    local pitch = player:get_look_vertical()
+    local horiz = math.sqrt (dir.x * dir.x + dir.z * dir.z)
+    local movement = math.sqrt (v.x * v.x + v.z * v.z)
+    local incline = math.cos (pitch)
+    local v_movement = incline * incline
+
+    v.y = v.y + -gravity * (-1.0 + v_movement * 0.75)
+
+    -- Accelerate if moving downward.
+    if v.y < 0.0 and horiz > 0.0 then
+        local yacc = v.y * ONE_TICK * -0.1 * v_movement
+        v.x = v.x + (dir.x * yacc / horiz) * TICK_TO_SEC
+        v.y = v.y + yacc * TICK_TO_SEC
+        v.z = v.z + (dir.z * yacc / horiz) * TICK_TO_SEC
+    end
+    -- Arrest horizontal movement when moving upward.
+    if horiz > 0.0 and pitch < 0.0 then
+        local yacc = movement * ONE_TICK * -math.sin(pitch)
+            * FALL_FLYING_DRAG_ASCENT
+        v.x = v.x - (dir.x * TICK_TO_SEC) * yacc / horiz
+        v.y = v.y + yacc * FALL_FLYING_ACC_DESCENT * TICK_TO_SEC
+        v.z = v.z - (dir.z * TICK_TO_SEC) * yacc / horiz
+    end
+    -- Apply rotation penalties.
+    if horiz > 0.0 then
+        v.x = v.x + (dir.x / horiz * movement - v.x)
+            * FALL_FLYING_ROTATION_DRAG
+        v.z = v.z + (dir.z / horiz * movement - v.z)
+            * FALL_FLYING_ROTATION_DRAG
+    end
+
+    v.x = v.x * FALL_FLYING_DRAG_HORIZ
+    v.z = v.z * FALL_FLYING_DRAG_HORIZ
+    v.y = v.y * AIR_DRAG
+end
+
+function elytra_entity:underwater()
+    local player = self._player
+    local fly_pos = player:get_pos()
+    local fly_node = core.get_node(vector.offset(fly_pos,0,-0.1,0)).name
+    local def = core.registered_nodes[fly_node]
+    local liquid_type = def and (def.liquidtype or def._liquidtype)
+
+    if liquid_type and liquid_type ~= "none" then
+        self:detach(player)
+    end
+end
+
+function elytra_entity:on_step(dtime, moveresult)
+    local player = self._player
+    mcl_player.players[player].elytra.active = true
+    mcl_player.player_set_animation(player, "fly")
+
+    local v = self.object:get_velocity()
+
+    self:consume_durability(dtime)
+    self:check_horiz_collision(player, moveresult)
+    self:fall_flying(v)
+    self:rocket_boost(dtime, v)
+    self:underwater()
+
+    self.object:set_velocity(v)
+    self:rotate(v)
+
+    if moveresult and moveresult.touching_ground then
+        self:detach(self._player)
+    end
+end
+
+core.register_entity(":mcl_armor:elytra_entity", elytra_entity)
+
+core.register_globalstep(function (_)
+    for _, player in ipairs(core.get_connected_players()) do
+        if mcl_serverplayer.is_csm_capable (player) then
+            return
+        end
+        local self_pos = player:get_pos()
+        local inv = mcl_util.get_inventory(player)
+        local itemstack = inv:get_stack("armor", 3)
+        local armor_name = itemstack:get_name()
+
+        local elytra = mcl_player.players[player].elytra
+
+        local fly_pos = player:get_pos()
+	    local fly_node = core.get_node(vector.offset(fly_pos,0,-0.1,0)).name
+        local fly_node_walkable = core.registered_nodes[fly_node]
+            and core.registered_nodes[fly_node].walkable
+        local is_just_jumped = player:get_player_control().jump and not mcl_player.players[player].is_pressing_jump and not elytra.active
+        mcl_player.players[player].is_pressing_jump = player:get_player_control().jump
+
+        elytra.active = core.get_item_group(armor_name, "elytra") > 0
+            and not player:get_attach()
+            and (elytra.active or (is_just_jumped and player:get_velocity().y < -0))
+            and ((not fly_node_walkable) or fly_node == "ignore")
+
+        if elytra.active then
+            local durability = mcl_util.calculate_durability (itemstack)
+            local remaining = math.floor ((65536 - itemstack:get_wear ())
+                * durability / 65536)
+            if remaining <= 1 then
+                return
+            end
+            local obj = core.add_entity(self_pos, "mcl_armor:elytra_entity")
+            local ent = obj:get_luaentity()
+            if obj and ent then
+                ent:attach(player)
+            end
+        end
+    end
 end)
