@@ -232,6 +232,7 @@ read_globals = {
 			update_deep = { read_only = false },
 			merge = { read_only = false },
 			merge_deep = { read_only = false },
+			filter = { read_only = false },
 			"copy",
 			"indexof",
 			"insert_all",
