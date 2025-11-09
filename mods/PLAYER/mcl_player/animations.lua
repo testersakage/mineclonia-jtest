@@ -319,7 +319,7 @@ mcl_player.register_globalstep(function(player)
 	local wielded_itemname = player:get_wielded_item():get_name()
 	local player_velocity = player:get_velocity()
 	local elytra = mcl_player.players[player].elytra and mcl_player.players[player].elytra.active
-	
+
 	local c_x, c_y = player_collision (player)
 
 	if player_velocity.x + player_velocity.y < .5 and c_x + c_y > 0 then

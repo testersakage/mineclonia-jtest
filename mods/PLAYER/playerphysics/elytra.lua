@@ -1,3 +1,5 @@
+local S = core.get_translator(core.get_current_modname())
+
 local gravity = -1.6 -- mcl_localplayer gravity
 
 local ONE_TICK			= 0.05
@@ -261,6 +263,7 @@ mcl_player.register_globalstep(function (player)
         local remaining = math.floor ((65536 - itemstack:get_wear ())
             * durability / 65536)
         if remaining <= 1 then
+            mcl_title.set(player, "actionbar", { text = S("Elytra is already broken."), color = "white", stay = 30 })
             return
         end
         local obj = core.add_entity(self_pos, "mcl_armor:elytra_entity")
