@@ -101,7 +101,7 @@ core.register_node("mcl_core:deadbush", {
 			},
 			{
 				items = {"mcl_core:stick 1"},
-				rarity = 3,
+				rarity = 2,
 			},
 		}
 	},
