@@ -97,11 +97,11 @@ core.register_node("mcl_core:deadbush", {
 		items = {
 			{
 				items = {"mcl_core:stick 2"},
-				rarity = 2,
+				rarity = 3,
 			},
 			{
 				items = {"mcl_core:stick 1"},
-				rarity = 2,
+				rarity = 3,
 			},
 		}
 	},
