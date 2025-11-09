@@ -2947,6 +2947,9 @@ local function get_section_string ()
 		.. table.concat (values, "\n")
 end
 
+local registered_hud_callbacks = {}
+mcl_levelgen.registered_hud_callbacks = registered_hud_callbacks
+
 local function hud_text (pos)
 	local self_pos = pos
 	local x = floor (self_pos.x / 16)
@@ -2997,6 +3000,13 @@ local function hud_text (pos)
 	table.insert (tbl, string.format ("Intersecting structures: %s\n",
 					  get_structure_string (self_pos)))
 	table.insert (tbl, get_section_string ())
+	for _, fn in ipairs (registered_hud_callbacks) do
+		local value = fn (self_pos.x, self_pos.y, self_pos.z)
+		if value then
+			table.insert (tbl, "\n")
+			table.insert (tbl, value)
+		end
+	end
 	switch_to_namespace (namespace)
 	return table.concat (tbl)
 end
@@ -3035,6 +3045,10 @@ local function update_hud (player)
 		player:hud_change (hud, "text",
 				   core.colorize ("#808080", hud_text (pos)))
 	end
+end
+
+function mcl_levelgen.register_hud_callback (fn)
+	table.insert (registered_hud_callbacks, fn)
 end
 
 if not mcl_levelgen.load_feature_environment then

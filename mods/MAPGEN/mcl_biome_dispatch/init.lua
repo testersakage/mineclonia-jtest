@@ -1225,3 +1225,16 @@ function mcl_biome_dispatch.is_slime_chunk (x, z)
 			      SLIME_CHUNK_SALT)
 	return slime_chunk_rng:next_within (10) == 0
 end
+
+if mcl_levelgen.levelgen_enabled then
+
+mcl_levelgen.register_hud_callback (function (x, y, z)
+	if mcl_biome_dispatch.is_slime_chunk (x, z) then
+		return string.format ("Slime chunk: YES (%d, %d)",
+				      arshift (x, 4), arshift (-z - 1, 4))
+	else
+		return "Slime chunk: NO"
+	end
+end)
+
+end
