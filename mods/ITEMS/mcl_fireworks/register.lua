@@ -13,14 +13,12 @@ local function use_rocket(itemstack, user, duration)
 		return itemstack
 	end
 	local elytra = mcl_player.players[user].elytra
-	if elytra.active and elytra.rocketing <= 0 then
+	if elytra.active then
 		elytra.rocketing = duration
 		if not core.is_creative_enabled(user:get_player_name()) then
 			itemstack:take_item()
 		end
 		core.sound_play("mcl_fireworks_rocket", {pos = user:get_pos()})
-	elseif elytra.active then
-		mcl_title.set(user, "actionbar", { text = S("@1s power left. Not using rocket.", string.format("%.1f", elytra.rocketing)), color = "white", stay = 60 })
 	elseif core.get_item_group(user:get_inventory():get_stack("armor", 3):get_name(), "elytra") ~= 0 then
 		mcl_title.set(user, "actionbar", { text = S("Elytra not deployed. Jump while falling down to deploy."), color = "white", stay = 60 })
 	else
