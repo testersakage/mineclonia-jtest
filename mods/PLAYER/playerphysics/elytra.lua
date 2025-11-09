@@ -43,13 +43,17 @@ local function horiz_collision (moveresult)
 end
 
 function elytra_entity:rotate (v)
-    local look_dir = self._player:get_look_dir()
-    local yaw = math.atan2(look_dir.z, look_dir.x) - math.pi/2
-    local pitch = -math.asin(look_dir.y)
-    self.object:set_rotation (vector.new(pitch - math.rad(90), yaw, 0))
+    local player = self._player
+    local pitch = -player:get_look_vertical()
+	local yaw = player:get_look_horizontal()
+    local rot = vector.new(pitch, yaw, 0)
+    self.object:set_rotation (rot)
 end
 
 function elytra_entity:attach(player)
+    local player_v = player:get_velocity()
+    mcl_player.players[player].elytra.active = true
+    self.object:set_velocity(player_v)
 	player:set_attach (self.object, "", vector.zero(), vector.zero())
 	self._player = player
 end
@@ -200,14 +204,11 @@ function elytra_entity:underwater()
 end
 
 function elytra_entity:on_step(dtime, moveresult)
-    local player = self._player
-    mcl_player.players[player].elytra.active = true
-    mcl_player.player_set_animation(player, "fly")
-
+    local elytra = mcl_player.players[self._player].elytra
     local v = self.object:get_velocity()
 
     self:consume_durability(dtime)
-    self:check_horiz_collision(player, moveresult)
+    self:check_horiz_collision(self._player, moveresult)
     self:fall_flying(v)
     self:rocket_boost(dtime, v)
     self:underwater()
@@ -217,47 +218,48 @@ function elytra_entity:on_step(dtime, moveresult)
 
     if moveresult and moveresult.touching_ground then
         self:detach(self._player)
+        elytra.rocketing = 0
     end
 end
 
 core.register_entity(":mcl_armor:elytra_entity", elytra_entity)
 
-core.register_globalstep(function (_)
-    for _, player in ipairs(core.get_connected_players()) do
-        if mcl_serverplayer.is_csm_capable (player) then
+mcl_player.register_globalstep(function (player)
+    if mcl_serverplayer.is_csm_capable (player) then
+        return
+    end
+    local self_pos = player:get_pos()
+    local inv = mcl_util.get_inventory(player)
+    local itemstack = inv:get_stack("armor", 3)
+    local armor_name = itemstack:get_name()
+
+    local elytra = mcl_player.players[player].elytra
+
+    local fly_pos = player:get_pos()
+    local fly_node = core.get_node(vector.offset(fly_pos,0,-0.1,0)).name
+    local fly_node_walkable = core.registered_nodes[fly_node]
+        and core.registered_nodes[fly_node].walkable
+    local is_just_jumped = player:get_player_control().jump and not mcl_player.players[player].is_pressing_jump and not elytra.active
+    mcl_player.players[player].is_pressing_jump = player:get_player_control().jump
+
+    local can_fly = false
+    can_fly = core.get_item_group(armor_name, "elytra") > 0
+        and not player:get_attach()
+        and (can_fly or (is_just_jumped and player:get_velocity().y < -0))
+        and ((not fly_node_walkable) or fly_node == "ignore")
+
+    if can_fly then
+        local durability = mcl_util.calculate_durability (itemstack)
+        local remaining = math.floor ((65536 - itemstack:get_wear ())
+            * durability / 65536)
+        if remaining <= 1 then
             return
         end
-        local self_pos = player:get_pos()
-        local inv = mcl_util.get_inventory(player)
-        local itemstack = inv:get_stack("armor", 3)
-        local armor_name = itemstack:get_name()
-
-        local elytra = mcl_player.players[player].elytra
-
-        local fly_pos = player:get_pos()
-	    local fly_node = core.get_node(vector.offset(fly_pos,0,-0.1,0)).name
-        local fly_node_walkable = core.registered_nodes[fly_node]
-            and core.registered_nodes[fly_node].walkable
-        local is_just_jumped = player:get_player_control().jump and not mcl_player.players[player].is_pressing_jump and not elytra.active
-        mcl_player.players[player].is_pressing_jump = player:get_player_control().jump
-
-        elytra.active = core.get_item_group(armor_name, "elytra") > 0
-            and not player:get_attach()
-            and (elytra.active or (is_just_jumped and player:get_velocity().y < -0))
-            and ((not fly_node_walkable) or fly_node == "ignore")
-
-        if elytra.active then
-            local durability = mcl_util.calculate_durability (itemstack)
-            local remaining = math.floor ((65536 - itemstack:get_wear ())
-                * durability / 65536)
-            if remaining <= 1 then
-                return
-            end
-            local obj = core.add_entity(self_pos, "mcl_armor:elytra_entity")
-            local ent = obj:get_luaentity()
-            if obj and ent then
-                ent:attach(player)
-            end
+        local obj = core.add_entity(self_pos, "mcl_armor:elytra_entity")
+        local ent = obj:get_luaentity()
+        if obj and ent then
+            player:set_pos(vector.offset(self_pos,0,1,0))
+            ent:attach(player)
         end
     end
 end)

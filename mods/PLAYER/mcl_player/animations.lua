@@ -319,7 +319,7 @@ mcl_player.register_globalstep(function(player)
 	local wielded_itemname = player:get_wielded_item():get_name()
 	local player_velocity = player:get_velocity()
 	local elytra = mcl_player.players[player].elytra and mcl_player.players[player].elytra.active
-
+	
 	local c_x, c_y = player_collision (player)
 
 	if player_velocity.x + player_velocity.y < .5 and c_x + c_y > 0 then
@@ -338,7 +338,7 @@ mcl_player.register_globalstep(function(player)
 	player_vel_yaw = limit_vel_yaw(player_vel_yaw, yaw)
 	mcl_player.players[player].vel_yaw = player_vel_yaw
 
-	if parent or mcl_player.players[player].attached then
+	if not elytra and (parent or mcl_player.players[player].attached) then
 		local hyaw = player_vel_yaw - yaw
 		if parent then
 			mcl_util.set_properties(player, player_props_riding)
@@ -374,8 +374,9 @@ mcl_player.register_globalstep(function(player)
 		if player:get_hp() == 0 then --dead
 			mcl_player.player_set_animation(player, "die")
 		elseif elytra then --using elytra
-			set_bone_pos(player,"Head_Control", nil, vector.new(pitch - math.deg(dir_to_pitch(player_velocity)) + 50, player_vel_yaw - yaw, 0))
-			set_bone_pos(player, "Body_Control", nil, vector.new(math.deg(dir_to_pitch(player_velocity)) + 110, -player_vel_yaw + yaw, 0))
+			mcl_player.player_set_animation(player, "fly")
+			set_bone_pos(player,"Head_Control", nil, vector.new(-player:get_look_vertical() + 50, player:get_look_horizontal(), 0))
+			set_bone_pos(player, "Body_Control", nil, vector.new(-player:get_look_vertical() + 85, player:get_look_horizontal(), 0))
 			-- sets eye height, and nametag color accordingly
 			mcl_util.set_properties(player, player_props_elytra)
 		elseif walking and (math.abs(velocity.x) > 0.35 or math.abs(velocity.z) > 0.35) then --walking
