@@ -58,12 +58,16 @@ function elytra_entity:attach(player)
 	self._player = player
 end
 
+function elytra_entity:remove(player)
+    local elytra = mcl_player.players[player].elytra
+    mcl_player.players[player].elytra.active = false
+    elytra.rocketing = 0
+    self.object:remove()
+end
+
 function elytra_entity:detach(player)
-    if player:get_attach () == self.object then
-        mcl_player.players[player].elytra.active = false
-		player:set_detach ()
-        self.object:remove()
-	end
+    self:remove(player)
+    player:set_detach ()
 end
 
 function elytra_entity:check_horiz_collision(player, moveresult)
@@ -204,7 +208,6 @@ function elytra_entity:underwater()
 end
 
 function elytra_entity:on_step(dtime, moveresult)
-    local elytra = mcl_player.players[self._player].elytra
     local v = self.object:get_velocity()
 
     self:consume_durability(dtime)
@@ -216,9 +219,14 @@ function elytra_entity:on_step(dtime, moveresult)
     self.object:set_velocity(v)
     self:rotate(v)
 
+    local attach = self._player:get_attach()
+    if attach and attach:get_luaentity()
+    and attach:get_luaentity().name ~= "mcl_armor:elytra_entity" then
+        self:remove(self._player)
+    end
+
     if moveresult and moveresult.touching_ground then
         self:detach(self._player)
-        elytra.rocketing = 0
     end
 end
 
