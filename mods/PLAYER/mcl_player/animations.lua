@@ -3,6 +3,8 @@ mcl_player.registered_on_visual_change = {}
 
 local animation_blend = 0.2
 
+local prev_yaw, current_roll
+
 local player_props_elytra = {
 	collisionbox = { -0.35, 0, -0.35, 0.35, 0.8, 0.35 },
 	eye_height = 0.4,
@@ -374,9 +376,16 @@ mcl_player.register_globalstep(function(player)
 		if player:get_hp() == 0 then --dead
 			mcl_player.player_set_animation(player, "die")
 		elseif elytra then --using elytra
+			prev_yaw = prev_yaw or yaw
+			local yaw_diff = yaw - prev_yaw
+			local clamped_roll = math.max(-45, math.min(45, yaw_diff * 45))
+			current_roll = current_roll or 0
+			current_roll = current_roll + (clamped_roll - current_roll) * animation_blend
+			local roll = current_roll
+			prev_yaw = yaw
 			mcl_player.player_set_animation(player, "fly")
-			set_bone_pos(player,"Head_Control", nil, vector.new(-player:get_look_vertical() + 50, player:get_look_horizontal(), 0))
-			set_bone_pos(player, "Body_Control", nil, vector.new(-player:get_look_vertical() + 85, player:get_look_horizontal(), 0))
+			set_bone_pos(player,"Head_Control", nil, vector.new(-math.rad(pitch) + 50, math.rad(yaw), 0))
+			set_bone_pos(player, "Body_Control", nil, vector.new(-math.rad(pitch) + 85, math.rad(yaw) - math.pi, roll))
 			-- sets eye height, and nametag color accordingly
 			mcl_util.set_properties(player, player_props_elytra)
 		elseif walking and (math.abs(velocity.x) > 0.35 or math.abs(velocity.z) > 0.35) then --walking
