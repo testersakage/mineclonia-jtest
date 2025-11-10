@@ -44,7 +44,7 @@ local function horiz_collision (moveresult)
 	return false, nil
 end
 
-function elytra_entity:rotate (v)
+function elytra_entity:rotate()
     local player = self._player
     local pitch = -player:get_look_vertical()
 	local yaw = player:get_look_horizontal()
@@ -72,7 +72,8 @@ function elytra_entity:detach(player)
     player:set_detach ()
 end
 
-function elytra_entity:check_horiz_collision(player, moveresult)
+function elytra_entity:check_horiz_collision(moveresult)
+    local player = self._player
     local elytra = mcl_player.players[player].elytra
     local damage_immune = math.max (self._damage_immune - 1, 0)
     self._damage_immune = damage_immune
@@ -95,11 +96,12 @@ function elytra_entity:check_horiz_collision(player, moveresult)
     end
 end
 
-function elytra_entity:rocket_boost(dtime, v)
+function elytra_entity:rocket_boost(dtime)
     local player = self._player
     local elytra = mcl_player.players[player].elytra
     local dir = player:get_look_dir()
     local self_pos = player:get_pos()
+    local v = self.object:get_velocity()
 
     if elytra.rocketing > 0 then
         v.x = dir.x * BASE_ROCKET_BOOST
@@ -125,6 +127,8 @@ function elytra_entity:rocket_boost(dtime, v)
 			texture = "mcl_bows_rocket_particle.png^[colorize:#bc7a57:127",
 		})
     end
+
+    self.object:set_velocity(v)
 end
 
 function elytra_entity:consume_durability(dtime)
@@ -149,8 +153,9 @@ function elytra_entity:consume_durability(dtime)
     end
 end
 
-function elytra_entity:fall_flying(v)
+function elytra_entity:fall_flying()
     local player = self._player
+    local v = self.object:get_velocity()
 
     local inv = mcl_util.get_inventory(player)
     local itemstack = inv:get_stack("armor", 3)
@@ -195,6 +200,8 @@ function elytra_entity:fall_flying(v)
     v.x = v.x * FALL_FLYING_DRAG_HORIZ
     v.z = v.z * FALL_FLYING_DRAG_HORIZ
     v.y = v.y * AIR_DRAG
+
+    self.object:set_velocity(v)
 end
 
 function elytra_entity:underwater()
@@ -210,16 +217,12 @@ function elytra_entity:underwater()
 end
 
 function elytra_entity:on_step(dtime, moveresult)
-    local v = self.object:get_velocity()
-
     self:consume_durability(dtime)
-    self:check_horiz_collision(self._player, moveresult)
-    self:fall_flying(v)
-    self:rocket_boost(dtime, v)
+    self:check_horiz_collision(moveresult)
+    self:fall_flying()
+    self:rocket_boost(dtime)
     self:underwater()
-
-    self.object:set_velocity(v)
-    self:rotate(v)
+    self:rotate()
 
     local attach = self._player:get_attach()
     if attach and attach:get_luaentity()
