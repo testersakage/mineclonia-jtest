@@ -78,19 +78,23 @@ function mcl_damage.run_death_callbacks(obj, reason)
 end
 
 function mcl_damage.from_punch(mcl_reason, object)
-	mcl_reason.direct = object
-	local luaentity = mcl_reason.direct:get_luaentity()
-	if luaentity then
-		if luaentity._is_arrow then
-			mcl_reason.type = "arrow"
-		elseif luaentity._is_fireball then
-			mcl_reason.type = "fireball"
-		elseif luaentity.is_mob then
-			mcl_reason.type = "mob"
+	if object then
+		mcl_reason.direct = object
+		local luaentity = object:get_luaentity()
+		if luaentity then
+			if luaentity._is_arrow then
+				mcl_reason.type = "arrow"
+			elseif luaentity._is_fireball then
+				mcl_reason.type = "fireball"
+			elseif luaentity.is_mob then
+				mcl_reason.type = "mob"
+			end
+			mcl_reason.source = mcl_reason.source or luaentity._source_object
+		else
+			mcl_reason.type = "player"
 		end
-		mcl_reason.source = mcl_reason.source or luaentity._source_object
 	else
-		mcl_reason.type = "player"
+		mcl_reason.type = "generic"
 	end
 end
 
