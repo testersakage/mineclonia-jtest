@@ -44,7 +44,7 @@ local function horiz_collision (moveresult)
 end
 
 function elytra_entity:rotate()
-	local player = self._player
+	local player = self.driver
 	local pitch = -player:get_look_vertical()
 	local yaw = player:get_look_horizontal()
 	local rot = vector.new(pitch, yaw, 0)
@@ -56,7 +56,7 @@ function elytra_entity:attach(player)
 	mcl_player.players[player].elytra.active = true
 	self.object:set_velocity(player_v)
 	player:set_attach (self.object, "", vector.zero(), vector.zero())
-	self._player = player
+	self.driver = player
 end
 
 function elytra_entity:remove(player)
@@ -73,7 +73,7 @@ function elytra_entity:detach(player)
 end
 
 function elytra_entity:check_horiz_collision(moveresult)
-	local player = self._player
+	local player = self.driver
 	local elytra = mcl_player.players[player].elytra
 	local damage_immune = math.max (self._damage_immune - 1, 0)
 	self._damage_immune = damage_immune
@@ -97,7 +97,7 @@ function elytra_entity:check_horiz_collision(moveresult)
 end
 
 function elytra_entity:rocket_boost(dtime)
-	local player = self._player
+	local player = self.driver
 	local elytra = mcl_player.players[player].elytra
 	local dir = player:get_look_dir()
 	local self_pos = player:get_pos()
@@ -134,7 +134,7 @@ end
 function elytra_entity:consume_durability(dtime)
 	self._timer = self._timer + dtime
 	if self._timer >= 1.0 then
-		local player = self._player
+		local player = self.driver
 		local inv = mcl_util.get_inventory(player)
 		local itemstack = inv:get_stack("armor", 3)
 		local durability = mcl_util.calculate_durability (itemstack)
@@ -154,7 +154,7 @@ function elytra_entity:consume_durability(dtime)
 end
 
 function elytra_entity:step_fall_flying (dtime)
-	local player = self._player
+	local player = self.driver
 	local v = self.object:get_velocity()
 	if not v then
 		-- The object was unloaded??
@@ -229,7 +229,7 @@ function elytra_entity:step_fall_flying (dtime)
 end
 
 function elytra_entity:underwater()
-	local player = self._player
+	local player = self.driver
 	local fly_pos = player:get_pos()
 	local fly_node = core.get_node(vector.offset(fly_pos,0,-0.1,0)).name
 	local def = core.registered_nodes[fly_node]
@@ -241,6 +241,8 @@ function elytra_entity:underwater()
 end
 
 function elytra_entity:on_step(dtime, moveresult)
+    if not self.driver then return end
+
 	self:consume_durability(dtime)
 	self:check_horiz_collision(moveresult)
 	self:step_fall_flying (dtime)
@@ -248,14 +250,14 @@ function elytra_entity:on_step(dtime, moveresult)
 	self:underwater()
 	self:rotate()
 
-	local attach = self._player:get_attach()
+	local attach = self.driver:get_attach()
 	if attach and attach:get_luaentity()
 		and attach:get_luaentity().name ~= "mcl_armor:elytra_entity" then
-		self:remove(self._player)
+		self:remove(self.driver)
 	end
 
 	if moveresult and moveresult.touching_ground then
-		self:detach(self._player)
+		self:detach(self.driver)
 	end
 end
 
