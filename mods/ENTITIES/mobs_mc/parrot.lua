@@ -137,14 +137,23 @@ local shoulders = {
 	right = vector.new(3.75,10.5,0),
 }
 
+local function is_valid_mob_sound (_, v)
+	return v.is_mob and v.sounds and type (v.sounds) == "table"
+end
+
 local function get_random_mob_sound()
-	return table.random_element(core.registered_entities, function(_, v) return v.is_mob and v.sounds and #v.sounds > 0 end).sounds.random
+	local random_mob_sound
+		= table.random_element (core.registered_entities, is_valid_mob_sound)
+	return random_mob_sound and random_mob_sound.sounds.random
 end
 
 local function imitate_mob_sound(self,mob)
 	local snd = mob.sounds.random
 	if not snd or mob.name == "mobs_mc:parrot" or math.random(20) == 1 then
 		snd = get_random_mob_sound()
+		if not snd then
+			return
+		end
 	end
 	return core.sound_play(snd, {
 		pos = self.object:get_pos(),
