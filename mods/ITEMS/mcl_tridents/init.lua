@@ -139,6 +139,7 @@ local trident_entity = {
 	_loyalty = 0,
 	_loyalty_timer = 1.0,
 	_age = 0,
+	_clip_entity = nil,
 }
 
 core.register_entity ("mcl_tridents:trident", trident_entity)
@@ -505,6 +506,7 @@ function trident_entity:on_activate (staticdata, dtime)
 				      "mcl_tridents:trident_clip")
 	if clip then
 		clip:set_attach (self.object, "", ZERO, ZERO)
+		self._clip_entity = clip
 	end
 end
 
@@ -516,6 +518,9 @@ function trident_entity:riptide_init (player)
 			"blank.png",
 		},
 	})
+	if self._clip_entity then
+		self._clip_entity:remove ()
+	end
 	player:set_attach (self.object, "", ZERO, ZERO)
 	self._riptide_player = player
 	if mcl_serverplayer.is_csm_at_least (player, 4) then
