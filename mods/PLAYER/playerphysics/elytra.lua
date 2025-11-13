@@ -135,6 +135,9 @@ function elytra_entity:consume_durability(dtime)
 	self._timer = self._timer + dtime
 	if self._timer >= 1.0 then
 		local player = self.driver
+		if core.is_creative_enabled (player:get_player_name ()) then
+			return
+		end
 		local inv = mcl_util.get_inventory(player)
 		local itemstack = inv:get_stack("armor", 3)
 		local durability = mcl_util.calculate_durability (itemstack)

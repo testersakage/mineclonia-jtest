@@ -379,7 +379,6 @@ local FOURTY_DEG = math.rad (40)
 local TWENTY_DEG = math.rad (20)
 local SEVENTY_FIVE_DEG = math.rad (75)
 local FIFTY_DEG = math.rad (50)
-local ONE_HUNDRED_AND_TEN_DEG = math.rad (110)
 
 local RIGHT_ARM_BLOCKING_OVERRIDE = {
 	rotation = {
@@ -510,11 +509,9 @@ function mcl_serverplayer.animate_localplayer (state, player)
 		player:set_bone_override ("Head_Control", {
 			rotation = { vec = rot, absolute = true, },
 		})
-		local xrot = move_pitch + ONE_HUNDRED_AND_TEN_DEG
-		local yrot = -move_yaw + norm_radians (look_dir)
-		rot.x = xrot
-		rot.y = yrot
-		rot.z = math.pi
+		local xrot = -move_pitch + math.pi / 2
+		rot.x, rot.y, rot.z
+			= mcl_util.rotation_to_irrlicht (xrot, math.pi + yrot, 0)
 		player:set_bone_override ("Body_Control", {
 			rotation = { vec = rot, absolute = true, },
 		})
