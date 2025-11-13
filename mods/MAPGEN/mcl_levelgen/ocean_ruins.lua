@@ -291,6 +291,19 @@ end
 
 local random_schematic_rotation = mcl_levelgen.random_schematic_rotation
 local intersect_2d_p = mcl_levelgen.intersect_2d_p
+local arshift = bit.arshift
+
+local function fisher_yates_pairs (tbl, rng)
+	local n = arshift (#tbl, 1)
+	for i = n - 1, 1, -1 do
+		local j = rng:next_within (i + 1)
+		tbl[1 + i * 2], tbl[1 + j * 2]
+			= tbl[1 + j * 2], tbl[1 + i * 2]
+		tbl[2 + i * 2], tbl[2 + j * 2]
+			= tbl[2 + j * 2], tbl[2 + i * 2]
+	end
+	return tbl
+end
 
 local function get_ocean_ruin_pieces (self, x, z, rot, rng)
 	local large = rng:next_float () <= self.large_probability
@@ -310,7 +323,7 @@ local function get_ocean_ruin_pieces (self, x, z, rot, rng)
 		-- Spawn smaller ruins in up to 9 positions around the
 		-- center of this ruin.
 		randomize_cluster_poses (cx, cz, rng)
-		fisher_yates (posns, rng)
+		fisher_yates_pairs (posns, rng)
 
 		local max = 4 + rng:next_within (4)
 		for i = 1, 1 + max * 2, 2 do
