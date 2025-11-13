@@ -279,9 +279,9 @@ function mob_class:check_jump (self_pos, moveresult)
 		local node = minetest.get_node(collision_pos)
 		local ndef = minetest.registered_nodes[node.name]
 		if ndef and ndef.groups then
-			minetest.log("error", "[mcl_mobs] Checking node at "..minetest.pos_to_string(collision_pos)..": group is wall: "..tostring(ndef.groups.wall or "false")..", fence: "..tostring(ndef.groups.fence or "false")..", fence_gate: "..tostring(ndef.groups.fence_gate or "false"))
 			if (ndef.groups.fence or 0) ~= 0 
-				or (ndef.groups.fence_gate or 0) ~= 0 then
+				or (ndef.groups.fence_gate or 0) ~= 0 or 
+				(ndef.groups.wall or 0) ~= 0 then
 				self.facing_fence = true
 				return false  -- Ne pas sauter par-dessus les fences/walls
 			end
