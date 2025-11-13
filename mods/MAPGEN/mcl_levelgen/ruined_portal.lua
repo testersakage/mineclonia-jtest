@@ -664,7 +664,7 @@ local function ruined_portal_place (self, level, terrain, rng, x1, z1, x2, z2)
 				      bbox[5],
 				      mathmin (z2, bbox[6])) do
 			if overgrown then
-				place_leaves_above (self, x, y, z)
+				place_leaves_above (self, rng, x, y, z)
 			end
 			if vines then
 				maybe_place_vines (rng, x, y, z)
