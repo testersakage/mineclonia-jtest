@@ -253,16 +253,18 @@ end
 function mob_class:check_jump (self_pos, moveresult)
 	local max_y = nil
 	local dir = vector.zero ()
-
+	local collision_pos = nil  -- Nouvelle variable pour stocker la position du bloc de collision
+	
 	-- Read the height of every colliding node in moveresult,
 	-- and the node above.
 	for _, item in pairs (moveresult.collisions) do
 		if item.type == "node"
 			and (item.new_velocity.x ~= item.old_velocity.x
-			     or item.new_velocity.z ~= item.old_velocity.z) then
+			     or item.new_velocity.z ~= item.new_velocity.z) then
 			dir.x = dir.x + item.old_velocity.x - item.new_velocity.x
 			dir.z = dir.z + item.old_velocity.z - item.new_velocity.z
 			local pos = item.node_pos
+			collision_pos = pos  -- Sauvegarder la position du bloc de collision
 			local boxes = core.get_node_boxes ("collision_box", pos)
 			if pos.y + 0.5 > self_pos.y then
 				for _, box in ipairs (boxes) do
@@ -271,7 +273,21 @@ function mob_class:check_jump (self_pos, moveresult)
 			end
 		end
 	end
-
+	
+	-- NOUVELLE VÉRIFICATION : Ne pas sauter si c'est une fence/wall
+	if collision_pos then
+		local node = minetest.get_node(collision_pos)
+		local ndef = minetest.registered_nodes[node.name]
+		if ndef and ndef.groups then
+			minetest.log("error", "[mcl_mobs] Checking node at "..minetest.pos_to_string(collision_pos)..": group is wall: "..tostring(ndef.groups.wall or "false")..", fence: "..tostring(ndef.groups.fence or "false")..", fence_gate: "..tostring(ndef.groups.fence_gate or "false"))
+			if (ndef.groups.fence or 0) ~= 0 
+				or (ndef.groups.fence_gate or 0) ~= 0 then
+				self.facing_fence = true
+				return false  -- Ne pas sauter par-dessus les fences/walls
+			end
+		end
+	end
+	
 	if max_y and (max_y > self_pos.y)
 		and (max_y - self_pos.y > self._initial_step_height) then
 		-- Verify that the direction of the collision measured as a
