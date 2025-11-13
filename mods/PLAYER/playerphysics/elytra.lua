@@ -28,6 +28,9 @@ local elytra_entity = {
 	_horiz_collision = false,
 	_damage_immune = 0,
 	_timer = 0,
+	_last_fall_y = nil,
+	_fall_distance = 0,
+	_safe_fall_distance = 3.0,
 }
 
 local function horiz_collision (moveresult)
@@ -67,8 +70,11 @@ function elytra_entity:remove(player)
 end
 
 function elytra_entity:detach(player)
-	player:add_velocity (self.object:get_velocity ())
-	self:remove(player)
+	local v = self.object:get_velocity ()
+	if v then
+		player:add_velocity (v)
+	end
+	self:remove (player)
 	player:set_detach ()
 end
 
@@ -89,7 +95,9 @@ function elytra_entity:check_horiz_collision(moveresult)
 		if old and new then
 			local diff = math.abs (vector.length (old) - vector.length (new))
 			if diff >= 6.0 and self._damage_immune == 0 then
-				mcl_damage.damage_player (player, diff * 0.5, { type = "fall", })
+				mcl_damage.damage_player (player, diff * 0.5, {
+					type = "fly_into_wall",
+				})
 				self._damage_immune = 10
 			end
 		end
@@ -173,6 +181,12 @@ function elytra_entity:step_fall_flying (dtime)
 		self:detach(player)
 	end
 
+	-- Limit fall_distance to 1.0 if vertical velocity is
+	-- less than -0.5 n/tick.
+	if v.y > -10.0 and self._fall_distance > 1.0 then
+		self._fall_distance = 1.0
+	end
+
 	local dir = player:get_look_dir()
 	local pitch = player:get_look_vertical()
 	local horiz = math.sqrt (dir.x * dir.x + dir.z * dir.z)
@@ -239,19 +253,69 @@ function elytra_entity:underwater()
 	local liquid_type = def and (def.liquidtype or def._liquidtype)
 
 	if liquid_type and liquid_type ~= "none" then
-		self:detach(player)
+		self:detach (player)
+		return true
+	end
+	return false
+end
+
+local cid_ignore = core.CONTENT_IGNORE
+
+local function touching_only_ignore (moveresult)
+	for _, item in pairs (moveresult.collisions) do
+		if item.axis == "y" and item.old_velocity.y < 0 then
+			if item.type ~= "node" then
+				return false
+			else
+				local cid, _, _ = core.get_node_raw (item.node_pos.x,
+								     item.node_pos.y,
+								     item.node_pos.z)
+				if cid ~= cid_ignore then
+					return false
+				end
+			end
+		end
+	end
+	return true
+end
+
+function elytra_entity:check_fall_damage (moveresult)
+	local self_pos = self.object:get_pos ()
+	local fall_y = self._last_fall_y or self_pos.y
+	local d = self._fall_distance + (fall_y - self_pos.y)
+	self._fall_distance = math.max (d, 0)
+	self._last_fall_y = self_pos.y
+
+	if moveresult.touching_ground
+		and not touching_only_ignore (moveresult) then
+		local distance = self._fall_distance
+		if distance > self._safe_fall_distance then
+			local damage = {
+				type = "fall",
+			}
+			if self.driver:is_valid () then
+				local amt = self._fall_distance
+				mcl_damage.damage_player (self.driver, amt, damage)
+			end
+		end
+		self._last_fall_y = nil
+		self._fall_distance = 0
 	end
 end
 
 function elytra_entity:on_step(dtime, moveresult)
-    if not self.driver then return end
+	if not self.driver or not moveresult then
+		return
+	end
 
 	self:consume_durability(dtime)
 	self:check_horiz_collision(moveresult)
-	self:step_fall_flying (dtime)
-	self:rocket_boost (dtime)
-	self:underwater()
-	self:rotate()
+	if not self:underwater () then
+		self:rotate ()
+		self:check_fall_damage (moveresult)
+		self:step_fall_flying (dtime)
+		self:rocket_boost (dtime)
+	end
 
 	local attach = self.driver:get_attach()
 	if attach and attach:get_luaentity()
