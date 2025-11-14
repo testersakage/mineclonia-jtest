@@ -274,7 +274,7 @@ function mob_class:check_jump (self_pos, moveresult)
 		end
 	end
 	
-	-- NOUVELLE VÉRIFICATION : Ne pas sauter si c'est une fence/wall
+	-- NEW CHECK: Do not jump if it's a fence or wall
 	if collision_pos then
 		local node = minetest.get_node(collision_pos)
 		local ndef = minetest.registered_nodes[node.name]
@@ -282,8 +282,8 @@ function mob_class:check_jump (self_pos, moveresult)
 			if (ndef.groups.fence or 0) ~= 0 
 				or (ndef.groups.fence_gate or 0) ~= 0 or 
 				(ndef.groups.wall or 0) ~= 0 then
-				self.facing_fence = true
-				return false  -- Ne pas sauter par-dessus les fences/walls
+				-- Maybe for future: self.facing_fence = true
+				return false  -- No jump if it's a fence or wall
 			end
 		end
 	end
