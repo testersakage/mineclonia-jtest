@@ -299,7 +299,9 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		end
 
 
-		local wielditem = mcl_util.get_wielditem (hitter)
+		local wielditem = hitter
+			and mcl_util.get_wielditem (hitter)
+			or ItemStack ()
 		kb = kb + mcl_enchanting.get_enchantment (wielditem, "knockback")
 		self.frame_speed_multiplier=2.3
 		if self.animation.run_end then
