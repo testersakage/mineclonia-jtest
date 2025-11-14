@@ -356,7 +356,7 @@ if not mcl_levelgen.is_levelgen_environment then
 					weight = 5,
 				},
 				{
-					itemstring = "mcl_nether:nether_wart",
+					itemstring = "mcl_nether:nether_wart_item",
 					weight = 5,
 					amount_min = 3,
 					amount_max = 7,
