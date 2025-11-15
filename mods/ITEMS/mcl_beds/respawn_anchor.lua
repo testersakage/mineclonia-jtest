@@ -45,7 +45,6 @@ for i=0,4 do
 			_mcl_hardness = 50,
 			_mcl_blast_resistance = 1200,
 			sounds= mcl_sounds.node_sound_stone_defaults(),
-			use_texture_alpha = "blend",
 			_mcl_baseitem = "mcl_beds:respawn_anchor",
 		})
 	else
