@@ -98,7 +98,7 @@ local tpl_candle = {
 	sounds = mcl_sounds.node_sound_defaults(),
 	sunlight_propagates = true,
 	tiles = {"mcl_candles_candle.png", "blank.png"},
-	use_texture_alpha = "blend",
+	use_texture_alpha = "clip",
 	wield_image = "mcl_candles_item.png"
 }
 
@@ -355,7 +355,7 @@ local tpl_cake = {
 		"mcl_candles_candle.png",
 		"blank.png"
 	},
-	use_texture_alpha = "blend"
+	use_texture_alpha = "clip"
 }
 
 core.register_node("mcl_candles:candle_cake", tpl_cake)
