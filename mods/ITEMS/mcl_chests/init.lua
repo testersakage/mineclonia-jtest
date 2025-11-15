@@ -1397,7 +1397,7 @@ for color, desc in pairs(boxtypes) do
 		tiles = { mob_texture },
 		drawtype = "mesh",
 		mesh = "mcl_chests_shulker.obj",
-		use_texture_alpha = "blend",
+		use_texture_alpha = "clip",
 		groups = {
 			handy = 1,
 			pickaxey = 1,
