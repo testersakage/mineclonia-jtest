@@ -319,7 +319,8 @@ local tpl_large_plant_bottom = table.merge(tpl_large_plant_top, {
 			core.sound_play(core.registered_nodes[itemstring].sounds.place, {pos = bottom, gain=1}, true)
 			core.set_node(bottom, {name=itemstring, param2=param2})
 			core.set_node(top, {name=itemstring.."_top", param2=param2})
-			if not core.is_creative_enabled(placer:get_player_name()) then
+            if not (placer and placer:is_player() and
+                core.is_creative_enabled(placer:get_player_name())) then
 				itemstack:take_item()
 			end
 		end
