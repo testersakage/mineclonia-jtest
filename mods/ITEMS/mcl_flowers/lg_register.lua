@@ -207,7 +207,7 @@ register_flower_feature ("flower_swamp", {
 })
 
 register_flower_feature ("patch_lilac", {
-	block_content = build_flower_cid_provider ("blue_orchid"),
+	block_content = build_flower_cid_provider ("lilac"),
 	patch_cfg = {
 		tries = 96,
 		xz_spread = 7,
