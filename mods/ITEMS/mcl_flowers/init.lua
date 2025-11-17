@@ -193,7 +193,6 @@ function mcl_flowers.register_simple_flower(flowername, def, node_defs)
 		},
 		_mcl_silk_touch_drop = def._mcl_silk_touch_drop,
 		_on_bone_meal = mcl_flowers.on_bone_meal_simple,
-		_mcl_crafting_output = def._mcl_crafting_output
 	}, node_defs or {}))
 	if def.potted then
 		mcl_flowerpots.register_potted_flower(nodename, {

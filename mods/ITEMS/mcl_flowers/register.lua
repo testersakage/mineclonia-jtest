@@ -6,7 +6,8 @@ mcl_flowers.register_simple_flower("poppy", {
 	selection_box = { -5/16, -0.5, -5/16, 5/16, 5/16, 5/16 },
 	potted = true,
 	sus_stew = {effect = "night_vision", duration = 5},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:red"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:red"}},
 })
 
 mcl_flowers.register_simple_flower("dandelion", {
@@ -15,95 +16,118 @@ mcl_flowers.register_simple_flower("dandelion", {
 	selection_box = { -4/16, -0.5, -4/16, 4/16, 3/16, 4/16 },
 	potted = true,
 	sus_stew = {effect = "saturation", duration = 0.5},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:yellow"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:yellow"}},
 })
+
 mcl_flowers.register_simple_flower("oxeye_daisy", {
 	desc = S("Oxeye Daisy"),
 	image = "mcl_flowers_oxeye_daisy.png",
 	selection_box = { -4/16, -0.5, -4/16, 4/16, 4/16, 4/16 },
 	potted = true,
 	sus_stew = {effect = "regeneration", duration = 8},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:silver"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:silver"}},
 })
+
 mcl_flowers.register_simple_flower("tulip_orange", {
 	desc = S("Orange Tulip"),
 	image = "flowers_tulip.png",
 	selection_box = { -3/16, -0.5, -3/16, 3/16, 5/16, 3/16 },
 	potted = true,
 	sus_stew = {effect = "weakness", duration = 9},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:orange"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:orange"}},
 })
+
 mcl_flowers.register_simple_flower("tulip_pink", {
 	desc = S("Pink Tulip"),
 	image = "mcl_flowers_tulip_pink.png",
 	selection_box = { -3/16, -0.5, -3/16, 3/16, 5/16, 3/16 },
 	potted = true,
 	sus_stew = {effect = "weakness", duration = 9},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:pink"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:pink"}},
 })
+
 mcl_flowers.register_simple_flower("tulip_red", {
 	desc = S("Red Tulip"),
 	image = "mcl_flowers_tulip_red.png",
 	selection_box = { -3/16, -0.5, -3/16, 3/16, 6/16, 3/16 },
 	potted = true,
 	sus_stew = {effect = "weakness", duration = 9},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:red"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:red"}},
 })
+
 mcl_flowers.register_simple_flower("tulip_white", {
 	desc = S("White Tulip"),
 	image = "mcl_flowers_tulip_white.png",
 	selection_box = { -3/16, -0.5, -3/16, 3/16, 4/16, 3/16 },
 	potted = true,
 	sus_stew = {effect = "weakness", duration = 9},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:silver"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:silver"}},
 })
+
 mcl_flowers.register_simple_flower("allium", {
 	desc = S("Allium"),
 	image = "mcl_flowers_allium.png",
 	selection_box = { -3/16, -0.5, -3/16, 3/16, 6/16, 3/16 },
 	potted = true,
 	sus_stew = {effect = "fire_resistance", duration = 4},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:magenta"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:magenta"}},
 })
+
 mcl_flowers.register_simple_flower("azure_bluet", {
 	desc = S("Azure Bluet"),
 	image = "mcl_flowers_azure_bluet.png",
 	selection_box = { -5/16, -0.5, -5/16, 5/16, 3/16, 5/16 },
 	potted = true,
 	sus_stew = {effect = "blindness", duration = 8},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:silver"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:silver"}},
 })
+
 mcl_flowers.register_simple_flower("blue_orchid", {
 	desc = S("Blue Orchid"),
 	image = "mcl_flowers_blue_orchid.png",
 	selection_box = { -5/16, -0.5, -5/16, 5/16, 7/16, 5/16 },
 	potted = true,
 	sus_stew = {effect = "saturation", duration = 0.5},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:light_blue"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:light_blue"}},
 })
+
 mcl_flowers.register_simple_flower("wither_rose", {
 	desc = S("Wither Rose"),
 	image = "mcl_flowers_wither_rose.png",
 	selection_box = { -3/16, -0.5, -3/16, 3/16, 6/16, 3/16 },
 	potted = true,
 	sus_stew = {effect = "withering", duration = 8},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:black"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:black"}},
 })
+
 mcl_flowers.register_simple_flower("lily_of_the_valley", {
 	desc = S("Lily of the Valley"),
 	image = "mcl_flowers_lily_of_the_valley.png",
 	selection_box = { -5/16, -0.5, -5/16, 4/16, 5/16, 5/16 },
 	potted = true,
 	sus_stew = {effect = "poison", duration = 12},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:white"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:white"}},
 })
+
 mcl_flowers.register_simple_flower("cornflower", {
 	desc = S("Cornflower"),
 	image = "mcl_flowers_cornflower.png",
 	selection_box = { -4/16, -0.5, -4/16, 4/16, 3/16, 4/16 },
 	potted = true,
 	sus_stew = {effect = "leaping", duration = 6},
-	_mcl_crafting_output = {single = {output = "mcl_dyes:blue"}}
+}, {
+	_mcl_crafting_output = {single = {output = "mcl_dyes:blue"}},
 })
 
 mcl_flowers.register_ground_flower("wildflowers", {
