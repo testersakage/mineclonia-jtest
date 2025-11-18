@@ -184,7 +184,7 @@ function mcl_flowers.register_ground_flower(name, def)
 			local above_pos = {x=pos.x, y=pos.y+1, z=pos.z}
 			local above_node = core.get_node(above_pos)
 			local wildflower_group = core.get_item_group(node.name, "wildflower")
-			local creative = core.is_creative_enabled(placer:get_player_name())
+			local creative = mcl_util.is_creative(placer)
 
 			-- Swap the node in place if it's part of the progression
 			local swap_map = {
@@ -319,8 +319,7 @@ local tpl_large_plant_bottom = table.merge(tpl_large_plant_top, {
 			core.sound_play(core.registered_nodes[itemstring].sounds.place, {pos = bottom, gain=1}, true)
 			core.set_node(bottom, {name=itemstring, param2=param2})
 			core.set_node(top, {name=itemstring.."_top", param2=param2})
-            if not (placer and placer:is_player() and
-                core.is_creative_enabled(placer:get_player_name())) then
+			if not mcl_util.is_creative(placer) then
 				itemstack:take_item()
 			end
 		end
