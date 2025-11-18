@@ -39,6 +39,10 @@ function mcl_util.get_object_name(object)
 	end
 end
 
+function mcl_util.is_creative(object)
+	return object and object:is_player() and core.is_creative_enabled(object:get_player_name())
+end
+
 function mcl_util.replace_mob(obj, mob_type, propagate_equipment)
 	local sacrifice = obj:get_luaentity()
 	return sacrifice:replace_with(mob_type, propagate_equipment)
