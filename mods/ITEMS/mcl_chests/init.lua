@@ -629,7 +629,9 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		_chest_entity_mesh = "mcl_chests_chest",
 		_chest_entity_animation_type = "chest",
 		mesh = not animate_chests and "mcl_chests_chest_double_static.obj" or nil,
-		tiles = not animate_chests and left_textures or { "blank.png^[resize:16x16" },
+		tiles = not animate_chests
+			and select_texture_maybe_present (left_textures)
+			or { "blank.png^[resize:16x16" },
 		paramtype = "light",
 		paramtype2 = "facedir",
 		_mcl_baseitem = "mcl_chests:"..basename,
