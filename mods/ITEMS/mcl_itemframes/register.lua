@@ -1,4 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
+local enable_invisible_frames = core.settings:get_bool("mcl_enable_invisible_frames", true)
 
 mcl_itemframes.register_itemframe("frame", {
 	node = {
@@ -25,26 +26,28 @@ mcl_itemframes.register_itemframe("glow_frame", {
 	object_properties = {glow = 15},
 })
 
-mcl_itemframes.register_itemframe("invisible_frame", {
-	node = {
-		description = S("Invisible Item Frame"),
-		drawtype = "airlike",
-		_tt_help = S("Can hold an item but is invisible"),
-		inventory_image = "mcl_itemframes_invisible_item_frame.png",
-		wield_image = "mcl_itemframes_invisible_item_frame.png",
-	},
-})
+if enable_invisible_frames then
+	mcl_itemframes.register_itemframe("invisible_frame", {
+		node = {
+			description = S("Invisible Item Frame"),
+			drawtype = "airlike",
+			_tt_help = S("Can hold an item but is invisible"),
+			inventory_image = "mcl_itemframes_invisible_item_frame.png",
+			wield_image = "mcl_itemframes_invisible_item_frame.png",
+		},
+	})
 
-mcl_itemframes.register_itemframe("invisible_glow_frame", {
-	node = {
-		description = S("Invisible Glow Item Frame"),
-		drawtype = "airlike",
-		_tt_help = S("Can hold an item and glows but is invisible"),
-		inventory_image = "mcl_itemframes_invisible_glow_item_frame.png",
-		wield_image = "mcl_itemframes_invisible_glow_item_frame.png",
-	},
-	object_properties = {glow = 15},
-})
+	mcl_itemframes.register_itemframe("invisible_glow_frame", {
+		node = {
+			description = S("Invisible Glow Item Frame"),
+			drawtype = "airlike",
+			_tt_help = S("Can hold an item and glows but is invisible"),
+			inventory_image = "mcl_itemframes_invisible_glow_item_frame.png",
+			wield_image = "mcl_itemframes_invisible_glow_item_frame.png",
+		},
+		object_properties = {glow = 15},
+	})
+end
 
 awards.register_achievement("mcl_itemframes:glowframe", {
 	title = S("Glow and Behold!"),

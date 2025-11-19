@@ -220,6 +220,9 @@ mcl_extended_pet_control (Extended pet control) bool false
 # nether brick fence gates, and Bamboo Bark.
 mcl_extra_nodes (Additional nodes) bool true
 
+# Enables invisible item frames and invisible glow item frames.
+mcl_enable_invisible_frames (Invisible Item Frames) bool true
+
 # Enable piston movement of inventory nodes.
 mcl_inv_nodes_movable (Movable inventory nodes) bool true
 
