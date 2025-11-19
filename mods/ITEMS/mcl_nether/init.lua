@@ -373,7 +373,7 @@ core.register_craftitem("mcl_nether:netherite_upgrade_template", {
 	_tt_help = S("Smithing Template").."\n\n"..
 	C(mcl_colors.GRAY, S("Applies to:")).."\n\t"..C(mcl_colors.BLUE, S("Diamond Equipment")).."\n"..
 	C(mcl_colors.GRAY, S("Ingredients:")).."\n\t"..C(mcl_colors.BLUE, S("Netherite Ingot")),
-	inventory_image  = "mcl_nether_netherite_ugrade_template.png",
+	inventory_image  = "mcl_nether_netherite_upgrade_template.png",
 	groups = { rarity = 1, upgrade_template  = 1 },
 })
 
