@@ -389,7 +389,8 @@ local function is_water (node)
 	return def and def.groups.water and def.groups.water > 0
 end
 
-function guardian_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function guardian_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					       spawn_flag)
 	if mcl_vars.difficulty > 0
 		and is_water (self:get_node (node_cache, 0, node_pos))
 		and is_water (self:get_node (node_cache, -1, node_pos)) then

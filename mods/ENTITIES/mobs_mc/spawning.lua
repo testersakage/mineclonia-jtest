@@ -162,7 +162,8 @@ function animal_spawner:get_misc_spawning_description ()
 		  self:describe_supporting_nodes (), self:describe_mob_collision_box ())
 end
 
-function animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					     spawn_flag)
 	local light = core.get_node_light (node_pos)
 	if not light or light <= 8 then
 		return false
@@ -171,7 +172,8 @@ function animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_ca
 	if self:test_supporting_node (node_below) then
 		if default_spawner.test_spawn_position (self, spawn_pos,
 							node_pos, sdata,
-							node_cache) then
+							node_cache,
+							spawn_flag) then
 			return true
 		end
 	end
@@ -188,7 +190,8 @@ local aquatic_animal_spawner = table.merge (default_spawner, {
 	spawn_placement = "aquatic",
 })
 
-function aquatic_animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function aquatic_animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+						     spawn_flag)
 	if spawn_pos.y > 0.5 or spawn_pos.y < -12.5 then
 		return false
 	end
@@ -199,7 +202,8 @@ function aquatic_animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata,
 		and core.get_item_group (node_above.name, "water") > 0 then
 		if default_spawner.test_spawn_position (self, spawn_pos,
 							node_pos, sdata,
-							node_cache) then
+							node_cache,
+							spawn_flag) then
 			return true
 		end
 	end
@@ -224,7 +228,8 @@ local monster_spawner = table.merge (default_spawner, {
 	max_light = 6,
 })
 
-function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					      spawn_flag)
 	if mcl_vars.difficulty == 0 or only_peaceful_mobs then
 		return false
 	end
@@ -236,7 +241,7 @@ function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 	end
 
 	if default_spawner.test_spawn_position (self, spawn_pos, node_pos,
-						sdata, node_cache) then
+						sdata, node_cache, spawn_flag) then
 		-- Natural light tests are expensive...
 		local natural_light = core.get_natural_light (node_pos)
 		if not natural_light

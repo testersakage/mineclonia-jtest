@@ -484,11 +484,13 @@ local strider_spawner = {
 	},
 }
 
-function strider_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function strider_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					      spawn_flag)
 	local above = self:get_node (node_cache, 1, node_pos)
 	return above.name == "air"
 		and default_spawner.test_spawn_position (self, spawn_pos, node_pos,
-							 sdata, node_cache)
+							 sdata, node_cache,
+							 spawn_flag)
 end
 
 mcl_mobs.register_spawner (strider_spawner)

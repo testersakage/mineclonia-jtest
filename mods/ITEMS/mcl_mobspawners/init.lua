@@ -200,7 +200,7 @@ local function spawn_mobs(pos)
 		v1.y = pos.y + dy
 		v1.z = pos.z + dz - 4
 
-		if mcl_mobs.spawn_abnormally (v1, mob, {}) then
+		if mcl_mobs.spawn_abnormally (v1, mob, {}, "spawner") then
 			spawned = spawned + 1
 			if spawned == 4 then
 				break

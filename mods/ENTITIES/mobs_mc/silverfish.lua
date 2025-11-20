@@ -158,10 +158,12 @@ local silverfish_spawner = table.merge (default_spawner, {
 	is_canonical = true,
 })
 
-function silverfish_spawner:test_spawn_position (mob_def, spawn_pos, node_pos, sdata, node_cache)
+function silverfish_spawner:test_spawn_position (mob_def, spawn_pos, node_pos, sdata, node_cache,
+						 spawn_flag)
 	return mcl_vars.difficulty > 0
 		and default_spawner.test_spawn_position (self, mob_def, spawn_pos,
-							 node_pos, sdata, node_cache)
+							 node_pos, sdata, node_cache,
+							 spawn_flag)
 end
 
 mcl_mobs.register_spawner (silverfish_spawner)

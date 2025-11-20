@@ -451,16 +451,19 @@ local swamp_or_mangrove_swamp_p = mcl_biome_dispatch.make_biome_test ({
 	"MangroveSwamp",
 })
 
-function slime_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function slime_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					    spawn_flag)
 	if mcl_vars.difficulty == 0 or only_peaceful_mobs then
 		return false
 	end
 
 	local name = mcl_biome_dispatch.get_biome_name (node_pos)
-	if swamp_or_mangrove_swamp_p (name) and swamp_spawn (spawn_pos) then
+	if (swamp_or_mangrove_swamp_p (name) and swamp_spawn (spawn_pos))
+		or spawn_flag == "spawner" then
 		if default_spawner.test_spawn_position (self, spawn_pos,
 							node_pos, sdata,
-							node_cache) then
+							node_cache,
+							spawn_flag) then
 			return true
 		end
 	end
@@ -470,7 +473,8 @@ function slime_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cac
 		and in_slime_chunk (node_pos) then
 		if default_spawner.test_spawn_position (self, spawn_pos,
 							node_pos, sdata,
-							node_cache) then
+							node_cache,
+							spawn_flag) then
 			return true
 		end
 	end
@@ -515,11 +519,12 @@ local magma_cube_spawner = {
 	},
 }
 
-function magma_cube_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function magma_cube_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+						 spawn_flag)
 	return mcl_vars.difficulty > 0
 		and default_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
-							 node_cache)
+							 node_cache, spawn_flag)
 end
 
 function magma_cube_spawner:spawn (spawn_pos, _)

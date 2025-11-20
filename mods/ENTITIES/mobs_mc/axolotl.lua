@@ -318,9 +318,10 @@ local axolotl_spawner = {
 	},
 }
 
-function axolotl_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function axolotl_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					      spawn_flag)
 	if default_spawner.test_spawn_position (self, spawn_pos, node_pos,
-						sdata, node_cache) then
+						sdata, node_cache, spawn_flag) then
 		local block = self:get_node (node_cache, -1, node_pos)
 		if block.name == "mcl_core:clay" then
 			return true

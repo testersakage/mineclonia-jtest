@@ -565,7 +565,8 @@ local glow_squid_spawner = {
 	biomes = mobs_mc.overworld_biomes,
 }
 
-function glow_squid_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function glow_squid_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+						 spawn_flag)
 	if spawn_pos.y > -32.5 then
 		return false
 	end
@@ -575,7 +576,8 @@ function glow_squid_spawner:test_spawn_position (spawn_pos, node_pos, sdata, nod
 	if light == 0 then
 		if default_spawner.test_spawn_position (self, spawn_pos,
 							node_pos, sdata,
-							node_cache) then
+							node_cache,
+							spawn_flag) then
 			return true
 		end
 	end

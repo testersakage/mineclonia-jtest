@@ -650,9 +650,10 @@ local function get_eligible_spawn_type (pos, category)
 	return value
 end
 
-local function test_spawn_position (mob_def, spawn_pos, node_pos, sdata, node_cache)
+local function test_spawn_position (mob_def, spawn_pos, node_pos, sdata, node_cache,
+				    spawn_flag)
 	local value = mob_def:test_spawn_position (spawn_pos, node_pos, sdata,
-						   node_cache)
+						   node_cache, spawn_flag)
 	return value
 end
 
@@ -707,7 +708,7 @@ local function spawn_a_pack (pos, players, category, scratch0,
 		-- Is it possible to spawn mobs here?
 		if dist < mob_def.despawn_distance_sqr
 			and dist > 576.0
-			and test_spawn_position (mob_def, spawn_pos, pos, sdata, {})
+			and test_spawn_position (mob_def, spawn_pos, pos, sdata, {}, nil)
 			and test_spawn_clearance (mob_def, spawn_pos, sdata)
 			and test_generation (pos, mob_def) then
 			local object = mob_def:spawn (spawn_pos, n_spawned + 1, sdata)
@@ -1042,9 +1043,11 @@ end
 -- provided that they restore its original values before calling the
 -- default test_spawn_position implementation.
 
-function default_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function default_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					      spawn_flag)
 	local spawn_placement = self.spawn_placement
-	if spawn_placement == "misc" then
+	if spawn_placement == "misc"
+		or (spawn_placement == "ground" and spawn_flag == "spawner") then
 		-- Just test that the position is loaded.
 		return core.compare_block_status (node_pos, "active")
 	elseif spawn_placement == "ground" then
@@ -1419,10 +1422,13 @@ end
 -- the absence of collisions, and minimum or maximum light level
 -- requirements.  Value is the object if spawning is successful, nil
 -- otherwise.  SDATA is a table of parameters which is provided to the
--- mob's spawning procedure.
+-- mob's spawning procedure.  SPAWN_FLAG is nil, or a string
+-- designating the source from which this mob is spawning, which is
+-- provided to each spawning definition's `test_spawn_position'
+-- method.
 
 local warned = {}
-function mcl_mobs.spawn_abnormally (pos, mob, sdata)
+function mcl_mobs.spawn_abnormally (pos, mob, sdata, spawn_flag)
 	local spawner = get_mob_spawner_at_pos (mob, pos)
 	if not spawner then
 		if not warned[mob] then
@@ -1435,7 +1441,8 @@ function mcl_mobs.spawn_abnormally (pos, mob, sdata)
 	end
 
 	local spawn_pos = vector.new (pos.x, pos.y - 0.5, pos.z)
-	if test_spawn_position (spawner, spawn_pos, pos, sdata, {})
+	if test_spawn_position (spawner, spawn_pos, pos, sdata, {},
+				spawn_flag)
 		and test_spawn_clearance (spawner, spawn_pos, sdata)
 		and test_generation (pos, spawner) then
 		local object = spawner:spawn (spawn_pos, 0, sdata)

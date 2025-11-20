@@ -1087,13 +1087,15 @@ function ocelot_spawner:floor_is_grass_or_leaves (node_pos, node_cache)
 		or core.get_item_group (node.name, "grass_block") > 0
 end
 
-function ocelot_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function ocelot_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					     spawn_flag)
 	return math.random (3) == 1
 		and spawn_pos.y >= 0.5
 		and self:floor_is_grass_or_leaves (node_pos, node_cache)
 		and default_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
-							 node_cache)
+							 node_cache,
+							 spawn_flag)
 end
 
 function ocelot_spawner:get_misc_spawning_description ()

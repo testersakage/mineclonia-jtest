@@ -321,7 +321,7 @@ function mcl_structures.register_structure_spawn(def)
 			end
 			mcl_mobs.spawn_abnormally (p, def.name, {
 				_structure_spawn = 1,
-			})
+			}, "structure")
 		end,
 	})
 end

@@ -1922,10 +1922,12 @@ local piglin_spawner = table.merge (mobs_mc.monster_spawner, {
 	max_artificial_light = 7,
 })
 
-function piglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function piglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					     spawn_flag)
 	if monster_spawner.test_spawn_position (self, spawn_pos,
 						node_pos, sdata,
-						node_cache) then
+						node_cache,
+						spawn_flag) then
 		local node = self:get_node (node_cache, -1, node_pos)
 		return node.name ~= "mcl_nether:nether_wart_block"
 	end

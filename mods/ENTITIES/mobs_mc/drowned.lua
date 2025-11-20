@@ -788,8 +788,10 @@ core.register_on_mods_loaded (function ()
 	})
 end)
 
-function drowned_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
-	if monster_spawner.test_spawn_position (self, spawn_pos, node_pos, sdata, node_cache) then
+function drowned_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					      spawn_flag)
+	if monster_spawner.test_spawn_position (self, spawn_pos, node_pos, sdata, node_cache,
+						spawn_flag) then
 		local node = self:get_node (node_cache, -1, node_pos)
 		if node.name ~= "mcl_core:water_source"
 			and node.name ~= "mcl_core:water_flowing" then

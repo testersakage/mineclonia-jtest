@@ -500,7 +500,8 @@ function hoglin_spawner:spawn (spawn_pos, _)
 	end
 end
 
-function hoglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function hoglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					     spawn_flag)
 	if mcl_vars.difficulty == 0 then
 		return false
 	end
@@ -508,7 +509,8 @@ function hoglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_ca
 	return node.name ~= "mcl_nether:nether_wart_block"
 		and default_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
-							 node_cache)
+							 node_cache,
+							 spawn_flag)
 end
 
 function hoglin_spawner:describe_criteria (tbl, omit_group_details)

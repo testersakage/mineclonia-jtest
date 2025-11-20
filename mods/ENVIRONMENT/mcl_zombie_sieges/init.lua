@@ -9,7 +9,8 @@ local function spawn_zombies(self)
 			v.y = pos.y
 			local nodepos = mobs_mc.find_surface_position (v)
 			if mcl_villages.get_poi_heat (nodepos) >= 5 then
-				local m = mcl_mobs.spawn_abnormally (nodepos, "mobs_mc:zombie")
+				local m = mcl_mobs.spawn_abnormally (nodepos, "mobs_mc:zombie",
+								     "siege")
 				if m then
 					local l = m:get_luaentity()
 					table.insert (self.mobs, m)

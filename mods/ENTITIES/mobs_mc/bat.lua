@@ -179,11 +179,13 @@ local bat_spawner = {
 	biomes = mobs_mc.overworld_biomes,
 }
 
-function bat_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function bat_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					  spawn_flag)
 	if spawn_pos.y < 0 then
 		local eligible
 			= default_spawner.test_spawn_position (self, spawn_pos, node_pos,
-							       sdata, node_cache)
+							       sdata, node_cache,
+							       spawn_flag)
 
 		if eligible then
 			local light = core.get_node_light (node_pos)

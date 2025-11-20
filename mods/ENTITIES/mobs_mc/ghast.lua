@@ -250,13 +250,15 @@ local ghast_spawner = table.merge (mobs_mc.monster_spawner, {
 	max_artificial_light = 15,
 })
 
-function ghast_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function ghast_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					    spawn_flag)
 	return mcl_vars.difficulty > 0
 		and not only_peaceful_mobs
 		and math.random (20) == 1
 		and monster_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
-							 node_cache)
+							 node_cache,
+							 spawn_flag)
 end
 
 local ghast_spawner_basalt_delta = table.merge (ghast_spawner, {
