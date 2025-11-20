@@ -479,7 +479,7 @@ core.register_abm({
 	label = "Freeze water in cold areas",
 	nodenames = {"mcl_core:water_source", "mclx_core:river_water_source"},
 	interval = 32,
-	chance = 8,
+	chance = 10,
 	action = function(pos, node)
 		local ratio = get_current_day_night_ratio ()
 		if ratio < MAX_DNR then
