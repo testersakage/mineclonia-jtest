@@ -26,7 +26,6 @@ local ghast = {
 	doll_size_override = { x = 1.05, y = 1.05 },
 	visual = "mesh",
 	mesh = "mobs_mc_ghast.b3d",
-	spawn_in_group = 1,
 	textures = {
 		{"mobs_mc_ghast.png"},
 	},

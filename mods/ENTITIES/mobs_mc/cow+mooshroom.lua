@@ -14,8 +14,6 @@ local cow_def = {
 	xp_min = 1,
 	xp_max = 3,
 	collisionbox = {-0.45, 0.0, -0.45, 0.45, 1.4, 0.45},
-	spawn_in_group = 4,
-	spawn_in_group_min = 3,
 	visual = "mesh",
 	mesh = "mobs_mc_cow.b3d",
 	textures = {
@@ -115,8 +113,6 @@ mcl_mobs.register_mob ("mobs_mc:cow", cow_def)
 
 local mooshroom = table.merge(cow_def, {
 	description = S("Mooshroom"),
-	spawn_in_group_min = 4,
-	spawn_in_group = 8,
 	textures = {
 		{"mobs_mc_mooshroom.png", "mobs_mc_mushroom_red.png"},
 		{"mobs_mc_mooshroom_brown.png", "mobs_mc_mushroom_brown.png" },

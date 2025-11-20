@@ -82,8 +82,6 @@ local polar_bear = {
 	water_friction = 0.98,
 	_standing = false,
 	_rearing_time = nil,
-	spawn_in_group_min = 1,
-	spawn_in_group_max = 2,
 }
 
 ------------------------------------------------------------------------

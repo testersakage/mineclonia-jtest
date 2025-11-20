@@ -19,7 +19,6 @@ local wolf = {
 	xp_min = 1,
 	xp_max = 3,
 	passive = false,
-	spawn_in_group = 8,
 	collisionbox = {-0.3, 0.0, -0.3, 0.3, 0.85, 0.3},
 	visual = "mesh",
 	mesh = "mobs_mc_wolf.b3d",

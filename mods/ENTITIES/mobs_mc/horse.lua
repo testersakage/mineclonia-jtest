@@ -72,8 +72,6 @@ local horse = {
 	description = S("Horse"),
 	type = "animal",
 	_spawn_category = "creature",
-	spawn_in_group_min = 2,
-	spawn_in_group = 6,
 	visual = "mesh",
 	mesh = "mobs_mc_horse.b3d",
 	visual_size = {x=3.0, y=3.0},
@@ -1231,8 +1229,6 @@ local d = 0.86
 local donkey = table.merge (horse, {
 	description = S("Donkey"),
 	textures = {{"blank.png", "mobs_mc_donkey.png", "blank.png"}},
-	spawn_in_group = 3,
-	spawn_in_group_min = 1,
 	movement_speed = 3.5,
 	head_eye_height = 1.425,
 	animation = {

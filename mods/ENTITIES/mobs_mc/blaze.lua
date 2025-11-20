@@ -16,8 +16,6 @@ local blaze = {
 	description = S("Blaze"),
 	type = "monster",
 	_spawn_category = "monster",
-	spawn_in_group_min = 2,
-	spawn_in_group = 3,
 	group_attack = {
 		"mobs_mc:blaze",
 	},

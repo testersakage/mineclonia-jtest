@@ -250,7 +250,6 @@ local enderman = {
 	visual_size = {x=3, y=3},
 	makes_footstep_sound = true,
 	can_despawn = true,
-	spawn_in_group = 2,
 	head_eye_height = 2.55,
 	esp = true,
 	sounds = {

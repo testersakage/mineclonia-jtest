@@ -21,7 +21,6 @@ local salmon = {
 	xp_min = 1,
 	xp_max = 3,
 	armor = 100,
-	spawn_in_group = 5,
 	tilt_swim = true,
 	head_eye_height = 0.26,
 	collisionbox = {-0.35, 0.0, -0.35, 0.35, 0.4, 0.35},

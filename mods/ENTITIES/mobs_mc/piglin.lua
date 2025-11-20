@@ -206,8 +206,6 @@ local piglin = table.merge (piglin_base, table.merge (posing_humanoid, {
 	armor = {fleshy = 90},
 	damage = 5,
 	reach = 3,
-	spawn_in_group = 4,
-	spawn_in_group_min = 2,
 	_child_mesh = "mobs_mc_baby_piglin.b3d",
 	textures = {
 		{

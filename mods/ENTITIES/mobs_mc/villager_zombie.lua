@@ -26,7 +26,6 @@ local zombie_villager = table.merge (zombie, {
 	description = S("Zombie Villager"),
 	type = "monster",
 	_spawn_category = "monster",
-	spawn_in_group = 1,
 	hp_min = 20,
 	hp_max = 20,
 	xp_min = 5,

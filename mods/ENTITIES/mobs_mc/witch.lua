@@ -64,7 +64,6 @@ local witch = table.merge (raid_mob, {
 	hp_max = 26,
 	xp_min = 5,
 	xp_max = 5,
-	spawn_in_group = 1,
 	collisionbox = {-0.3, 0.00, -0.3, 0.3, 1.95, 0.3},
 	doll_size_override = {
 		x = 0.95,

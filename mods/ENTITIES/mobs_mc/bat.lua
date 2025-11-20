@@ -8,7 +8,6 @@ local bat = {
 	type = "animal",
 	_spawn_category = "ambient",
 	can_despawn = true,
-	spawn_in_group = 8,
 	passive = true,
 	hp_min = 6,
 	hp_max = 6,

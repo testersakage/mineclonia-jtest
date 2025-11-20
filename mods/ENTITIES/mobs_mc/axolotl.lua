@@ -33,8 +33,6 @@ local axolotl = {
 	},
 	armor = 100,
 	rotate = 180,
-	spawn_in_group_min = 1,
-	spawn_in_group = 4,
 	tilt_swim = true,
 	collisionbox = {-0.375, 0.0, -0.375, 0.375, 0.42, 0.375},
 	visual = "mesh",
