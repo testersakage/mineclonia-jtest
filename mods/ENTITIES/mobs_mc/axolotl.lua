@@ -9,7 +9,6 @@ local is_valid = mcl_util.is_valid_objectref
 local axolotl = {
 	description = S("Axolotl"),
 	type = "animal",
-	spawn_class = "water",
 	_spawn_category = "axolotl",
 	can_despawn = true,
 	passive = false,
@@ -301,31 +300,7 @@ axolotl.ai_functions = {
 -- Axolotl spawning.
 ------------------------------------------------------------------------
 
-function axolotl.can_spawn (pos)
-	for i = 1, 4 do
-		local block = core.get_node (vector.offset (pos, 0, -i, 0))
-		if block.name == "mcl_core:clay" then
-			return true
-		end
-	end
-	return false
-end
-
 mcl_mobs.register_mob ("mobs_mc:axolotl", axolotl)
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:axolotl",
-	type_of_spawning = "water",
-	dimension = "overworld",
-	min_light = 0,
-	max_light = core.LIGHT_MAX + 1,
-	aoc = 7,
-	chance = 100,
-	biomes = {
-		"LushCaves",
-		"LushCaves_underground",
-	},
-})
 
 ------------------------------------------------------------------------
 -- Modern Axolotl spawning.
@@ -354,6 +329,10 @@ function axolotl_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 		end
 	end
 	return false
+end
+
+function axolotl_spawner:describe_additional_spawning_criteria ()
+	return S ("Spawning will only be successful on clay.")
 end
 
 mcl_mobs.register_spawner (axolotl_spawner)

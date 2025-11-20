@@ -12,7 +12,6 @@ local mob_class = mcl_mobs.mob_class
 
 local creeper_defs = {
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	hp_min = 20,
 	hp_max = 20,
@@ -299,18 +298,6 @@ local charged_creeper = table.merge (creeper_defs, {
 })
 
 mcl_mobs.register_mob ("mobs_mc:creeper_charged", charged_creeper)
-
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:creeper",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 2,
-	biomes_except = {
-		"MushroomIslandShore",
-		"MushroomIsland"
-	},
-	chance = 1000,
-})
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:creeper", S("Creeper"), "#0da70a", "#000000", 0)

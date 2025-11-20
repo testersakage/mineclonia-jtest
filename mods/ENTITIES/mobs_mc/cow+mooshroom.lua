@@ -6,7 +6,6 @@ local mob_class = mcl_mobs.mob_class
 local cow_def = {
 	description = S("Cow"),
 	type = "animal",
-	spawn_class = "passive",
 	_spawn_category = "creature",
 	runaway = true,
 	passive = true,
@@ -206,62 +205,6 @@ mcl_mobs.register_mob ("mobs_mc:mooshroom", mooshroom)
 -- Cow & Mooshroom spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:cow",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	min_height = mobs_mc.water_level,
-	biomes = {
-		"flat",
-		"MegaTaiga",
-		"MegaSpruceTaiga",
-		"ExtremeHills",
-		"ExtremeHills_beach",
-		"ExtremeHillsM",
-		"ExtremeHills+",
-		"StoneBeach",
-		"Plains",
-		"Plains_beach",
-		"SunflowerPlains",
-		"Taiga",
-		"Taiga_beach",
-		"Forest",
-		"Forest_beach",
-		"FlowerForest",
-		"FlowerForest_beach",
-		"BirchForest",
-		"BirchForestM",
-		"RoofedForest",
-		"Savanna",
-		"Savanna_beach",
-		"SavannaM",
-		"Jungle",
-		"BambooJungle",
-		"Jungle_shore",
-		"JungleM",
-		"JungleM_shore",
-		"JungleEdge",
-		"JungleEdgeM",
-		"Swampland",
-		"Swampland_shore"
-	},
-	chance = 80,
-})
-
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:mooshroom",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	min_height = mobs_mc.water_level,
-	biomes = {
-		"MushroomIslandShore",
-		"MushroomIsland"
-	},
-	chance = 80,
-})
-
 -- spawn egg
 mcl_mobs.register_egg("mobs_mc:cow", S("Cow"), "#443626", "#a1a1a1", 0)
 mcl_mobs.register_egg("mobs_mc:mooshroom", S("Mooshroom"), "#a00f10", "#b7b7b7", 0)
@@ -290,6 +233,10 @@ local mooshroom_spawner = table.merge (mobs_mc.animal_spawner, {
 
 function mooshroom_spawner:test_supporting_node (node)
 	return core.get_item_group (node.name, "mycelium") > 0
+end
+
+function mooshroom_spawner:describe_supporting_nodes ()
+	return "on mycelium"
 end
 
 mcl_mobs.register_spawner (mooshroom_spawner)

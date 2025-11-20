@@ -37,21 +37,9 @@ function mcl_mobs.register_arrow(self,name,def) ---@diagnostic disable-line: dup
 	return oldregarrow(name,def)
 end
 
-function mcl_mobs.spawn_specific(name, dimension, type_of_spawning, biomes, min_light, max_light, _, chance, aoc, min_height, max_height, day_toggle, on_spawn)
-	mcl_mobs.spawn_setup({
-		name             = name,
-		dimension        = dimension,
-		type_of_spawning = type_of_spawning,
-		biomes           = biomes,
-		min_light        = min_light,
-		max_light        = max_light,
-		chance           = chance,
-		aoc              = aoc,
-		min_height       = min_height,
-		max_height       = max_height,
-		day_toggle       = day_toggle,
-		on_spawn         = on_spawn,
-	})
+function mcl_mobs.spawn_specific (name, _)
+	local blurb = "[mcl_mobs]: An obsolete mob spawning definition is being registered for `%s'.  `%s' will not spawn naturally till its spawning configuration is updated to conform to the modern spawning API."
+	core.log ("warning", string.format (blurb, name))
 end
 
 ------------------------------------------------------------------------

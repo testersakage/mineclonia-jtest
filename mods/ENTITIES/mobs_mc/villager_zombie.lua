@@ -25,7 +25,6 @@ end
 local zombie_villager = table.merge (zombie, {
 	description = S("Zombie Villager"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	spawn_in_group = 1,
 	hp_min = 20,
@@ -574,18 +573,6 @@ mcl_mobs.register_mob ("mobs_mc:villager_zombie", zombie_villager)
 ------------------------------------------------------------------------
 -- Zombie Villager spawning.
 ------------------------------------------------------------------------
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:villager_zombie",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	biomes_except = {
-		"MushroomIslandShore",
-		"MushroomIsland",
-	},
-	chance = 50,
-})
 
 -- spawn eggs
 mcl_mobs.register_egg ("mobs_mc:villager_zombie", S("Zombie Villager"), "#563d33", "#799c66", 0)

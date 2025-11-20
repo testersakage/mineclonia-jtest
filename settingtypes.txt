@@ -160,51 +160,12 @@ mobs_spawn (Spawn mobs naturally) bool true
 # This setting is only read at startup.
 only_peaceful_mobs (Spawn only peaceful mobs) bool false
 
-# If enabled, use old spawning mechanics.
-mobs_spawn_old (Use old spawning mechanics) bool false
-
-# Allow mobs to spawn in protected areas.
-# This does not affect mob spawners.
-mobs_spawn_protected (Spawn mobs in protected areas) bool false
-
-# Use light levels from Minecraft 1.18+ for monster spawning.
-# Disable to use older mob specific light levels.
-mcl_mobs_modern_lighting (Modern light rules for spawning) bool true
-
 # If enabled, mobs might drop items when they die.
 mobs_drop_items (Mob drops) bool true
 
 # If enabled, mobs can take, place, change and
 # destroy blocks around them.
 mobs_griefing (Mob griefing) bool true
-
-# How far from players should mobs stop moving
-# Larger values will have a larger performance impact
-mcl_mob_active_range (Active mob range) int 48 0 256
-
-[Mob caps]
-# Global maximum amount of mobs
-# This controls how many mobs can exist in the map
-mcl_mob_cap_total (Global mob cap) int 500 0 2048
-
-# Maximum amount of mobs (animals+monsters) per player
-mcl_mob_cap_player (Mob cap per player) int 75 0 2048
-
-# Maximum amount of monsters that will spawn near a player
-mcl_mob_cap_monster (Mob cap for monsters) int 70 0 2048
-
-# Maximum amount of animals that will spawn near a player
-mcl_mob_cap_animal (Mob cap for animals) int 10 0 1024
-
-# Maximum amount of ambient mobs that will spawn near a player
-mcl_mob_cap_ambient (Mob cap for ambient mobs) int 15 0 1024
-
-# Maximum amount of water mobs (squids, dolphins)
-# that will spawn near a player
-mcl_mob_cap_water (Mob cap for water mobs) int 5 0 1024
-
-# Maximum amount of ambient water mobs (fish) that will spawn near a player
-mcl_mob_cap_water_ambient (Mob cap for ambient water mobs) int 20 0 1024
 
 [Features]
 # Enabling this setting adds an inventory to bookshelves

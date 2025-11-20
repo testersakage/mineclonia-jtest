@@ -13,7 +13,6 @@ local dragon = {
 	description = S("Ender Dragon"),
 	type = "monster",
 	_spawn_category = "misc",
-	spawn_class = "hostile",
 	persist_in_peaceful = true,
 	hp_max = 200,
 	hp_min = 200,

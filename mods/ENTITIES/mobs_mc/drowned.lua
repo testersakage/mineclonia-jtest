@@ -823,6 +823,11 @@ local drowned_spawner_river = table.merge (drowned_spawner, {
 	weight = 100,
 	pack_min = 1,
 	pack_max = 1,
+	describe_additional_spawning_criteria = function (self)
+		return monster_spawner.describe_additional_spawning_criteria (self)
+			.. "  "
+			.. S ("Drowned will spawn more frequently in this biome.")
+	end,
 })
 
 local drowned_spawner_frozen_river = table.merge (drowned_spawner, {

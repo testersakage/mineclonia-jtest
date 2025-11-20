@@ -237,7 +237,6 @@ local enderman = {
 	description = S("Enderman"),
 	type = "monster",
 	_spawn_category = "monster",
-	spawn_class = "passive",
 	retaliates = true,
 	hp_min = 40,
 	hp_max = 40,
@@ -276,9 +275,6 @@ local enderman = {
 	},
 	animation = select_enderman_animation("normal"),
 	_taken_node = "",
-	can_spawn = function(pos)
-		return #core.find_nodes_in_area(vector.offset(pos,0,1,0),vector.offset(pos,0,3,0),{"air"}) > 2
-	end,
 	armor = {
 		fleshy = 100,
 		water_vulnerable = 100,
@@ -751,61 +747,6 @@ mcl_mobs.register_mob ("mobs_mc:enderman", enderman)
 ------------------------------------------------------------------------
 -- Enderman spawning.
 ------------------------------------------------------------------------
-
--- End spawn
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:enderman",
-	type_of_spawning = "ground",
-	dimension = "end",
-	aoc = 9,
-	min_height = mcl_vars.mg_end_min,
-	max_height = mcl_vars.mg_end_max,
-	min_light = 0,
-	chance = 100,
-})
-
--- Overworld spawn
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:enderman",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	min_light = 0,
-	max_light = 7,
-	min_height = mcl_vars.mg_overworld_min,
-	max_height = mcl_vars.mg_overworld_max,
-	biomes_except = {
-		"MushroomIslandShore",
-		"MushroomIsland"
-	},
-	chance = 100,
-})
--- Nether spawn (rare)
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:enderman",
-	type_of_spawning = "ground",
-	dimension = "nether",
-	min_light = 0,
-	aoc = 9,
-	biomes = {
-		"Nether",
-		"SoulsandValley",
-	},
-	chance = 1000,
-})
-
-
--- Warped Forest spawn (common)
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:enderman",
-	type_of_spawning = "ground",
-	dimension = "nether",
-	aoc = 9,
-	biomes = {
-		"WarpedForest",
-	},
-	chance = 100,
-})
 
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:enderman", S("Enderman"), "#252525", "#151515", 0)

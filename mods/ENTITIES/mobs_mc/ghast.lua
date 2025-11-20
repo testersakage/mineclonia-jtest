@@ -16,7 +16,6 @@ local only_peaceful_mobs
 local ghast = {
 	description = S("Ghast"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	glow = 3,
 	hp_min = 10,
@@ -227,31 +226,7 @@ end
 -- Ghast spawning.
 ------------------------------------------------------------------------
 
-function ghast.can_spawn (pos)
-	if not core.get_item_group(core.get_node(pos).name,"solid") then return false end
-	local p1=vector.offset(pos,-2,1,-2)
-	local p2=vector.offset(pos,2,5,2)
-	local nn = core.find_nodes_in_area(p1,p2,{"air"})
-	if #nn< 41 then return false end
-	return true
-end
-
 mcl_mobs.register_mob ("mobs_mc:ghast", ghast)
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:ghast",
-	type_of_spawning = "ground",
-	dimension = "nether",
-	min_light = 0,
-	max_light = 15,
-	aoc = 2,
-	biomes = {
-		"Nether",
-		"SoulsandValley",
-		"BasaltDelta",
-	},
-	chance = 400,
-})
 
 -- spawn eggs
 mcl_mobs.register_egg ("mobs_mc:ghast", S("Ghast"), "#f9f9f9", "#bcbcbc", 0)

@@ -38,7 +38,6 @@ core.register_entity("mobs_mc:spider_eyes", {
 local spider = {
 	description = S("Spider"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	passive = false,
 	attack_type = "melee",
@@ -331,18 +330,6 @@ mcl_mobs.register_mob ("mobs_mc:cave_spider", cave_spider)
 -- Spider spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:spider",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	biomes_except = {
-		"MushroomIslandShore",
-		"MushroomIsland"
-	},
-	chance = 1000,
-})
-
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:spider", S("Spider"), "#342d26", "#a80e0e", 0)
 mcl_mobs.register_egg("mobs_mc:cave_spider", S("Cave Spider"), "#0c424e", "#a80e0e", 0)
@@ -360,3 +347,11 @@ local spider_spawner = table.merge (mobs_mc.monster_spawner, {
 })
 
 mcl_mobs.register_spawner (spider_spawner)
+
+local cave_spider_spawner = table.merge (mobs_mc.monster_spawner, {
+	name = "mobs_mc:cave_spider",
+	biomes = {},
+	is_canonical = true,
+})
+
+mcl_mobs.register_spawner (cave_spider_spawner)

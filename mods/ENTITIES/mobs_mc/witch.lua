@@ -58,7 +58,6 @@ local witch_base_drops = {
 local witch = table.merge (raid_mob, {
 	description = S("Witch"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	can_despawn = true,
 	hp_min = 26,
@@ -381,19 +380,6 @@ mcl_mobs.register_mob ("mobs_mc:witch", witch)
 ------------------------------------------------------------------------
 -- Witch spawning.
 ------------------------------------------------------------------------
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:witch",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	biomes_except = {
-		"MushroomIslandShore",
-		"MushroomIsland",
-		"DeepDark",
-	},
-	chance = 200,
-})
 
 mcl_mobs.register_egg ("mobs_mc:witch", S("Witch"), "#340000", "#51a03e", 0)
 

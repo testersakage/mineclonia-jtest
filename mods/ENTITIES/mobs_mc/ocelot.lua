@@ -24,7 +24,6 @@ local food = {
 local ocelot = {
 	description = S("Ocelot"),
 	type = "animal",
-	spawn_class = "passive",
 	_spawn_category = "monster",
 	persist_in_peaceful = false,
 	passive = false,
@@ -986,22 +985,6 @@ mcl_mobs.register_mob ("mobs_mc:cat", cat)
 -- Cat & Ocelot spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:ocelot",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 5,
-	min_height = mobs_mc.water_level+15,
-	biomes = {
-		"Jungle",
-		"JungleEdgeM",
-		"JungleM",
-		"JungleEdge",
-		"BambooJungle",
-	},
-	chance = 300,
-})
-
 if mobs_spawn then
 
 local time_since_spawn_attempt = 0
@@ -1073,6 +1056,7 @@ mcl_mobs.register_egg("mobs_mc:cat", S("Cat"), "#AA8755", "#505438", 0)
 ------------------------------------------------------------------------
 
 local cat_spawner_swamp_hut = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:cat",
 	weight = 1,
 	biomes = {},
 	structures = {
@@ -1112,6 +1096,14 @@ function ocelot_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_ca
 		and default_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
 							 node_cache)
+end
+
+function ocelot_spawner:get_misc_spawning_description ()
+	return S ("This mob will spawn infrequently on grass or leaves when no obstructions exist within a volume @1 nodes in size around the center of such a node's upper surface.", self:describe_mob_collision_box ())
+end
+
+function ocelot_spawner:describe_additional_spawning_criteria ()
+	return nil
 end
 
 local ocelot_spawner_bamboo_jungle = table.merge (ocelot_spawner, {

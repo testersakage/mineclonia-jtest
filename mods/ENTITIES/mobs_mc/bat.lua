@@ -3,26 +3,9 @@
 local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 
-local function check_light(_, _, artificial_light, _)
-	local date = os.date("*t")
-	local maxlight
-	if (date.month == 10 and date.day >= 20) or (date.month == 11 and date.day <= 3) then
-		maxlight = 6
-	else
-		maxlight = 3
-	end
-
-	if artificial_light > maxlight then
-		return false, "Too bright"
-	end
-
-	return true, ""
-end
-
 local bat = {
 	description = S("Bat"),
 	type = "animal",
-	spawn_class = "ambient",
 	_spawn_category = "ambient",
 	can_despawn = true,
 	spawn_in_group = 8,
@@ -56,7 +39,6 @@ local bat = {
 	makes_footstep_sound = false,
 	can_ride_cart = false,
 	can_ride_boat = false,
-	check_light = check_light,
 	gravity_drag = 0.6,
 	_apply_gravity_drag_on_ground = true,
 	pushable = false,
@@ -179,29 +161,6 @@ mcl_mobs.register_mob ("mobs_mc:bat", bat)
 -- Bat spawning.
 ------------------------------------------------------------------------
 
---[[ If the game has been launched between the 20th of October and the 3rd of November system time,
--- the maximum spawn light level is increased. ]]
-local date = os.date ("*t")
-local maxlight
-if (date.month == 10 and date.day >= 20)
-	or (date.month == 11 and date.day <= 3) then
-	maxlight = 6
-else
-	maxlight = 3
-end
-
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:bat",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	min_height = mcl_vars.mg_overworld_min,
-	max_height = mobs_mc.water_level - 1,
-	min_light = 0,
-	max_light = maxlight,
-	aoc = 3,
-	chance = 100,
-})
-
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:bat", S("Bat"), "#4c3e30", "#0f0f0f", 0)
 
@@ -240,6 +199,10 @@ function bat_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache
 		end
 	end
 	return false
+end
+
+function bat:describe_additional_spawning_criteria ()
+	return S ("Spawning will only be successful between light levels of 0 and 3 at most times of the year, or 0 and 6 between 20 October and 3 November.")
 end
 
 mcl_mobs.register_spawner (bat_spawner)

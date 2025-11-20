@@ -19,7 +19,6 @@ local pr = PcgRandom (os.time () * 666)
 local illusioner = table.merge (evoker, table.merge (posing_humanoid, {
 	description = S("Illusioner"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	attack_type = "bowshoot",
 	shoot_interval = 0.5,

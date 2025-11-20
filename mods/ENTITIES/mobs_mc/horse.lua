@@ -71,7 +71,6 @@ end
 local horse = {
 	description = S("Horse"),
 	type = "animal",
-	spawn_class = "passive",
 	_spawn_category = "creature",
 	spawn_in_group_min = 2,
 	spawn_in_group = 6,
@@ -1328,49 +1327,8 @@ mcl_mobs.register_mob ("mobs_mc:mule", mule)
 mcl_entity_invs.register_inv ("mobs_mc:mule", "Mule", 15, true)
 
 ------------------------------------------------------------------------
--- Spawning.
+-- Horse Spawning.
 ------------------------------------------------------------------------
-
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:horse",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	min_height = mobs_mc.water_level + 3,
-	biomes = {
-	"flat",
-	"Plains",
-	"Plains_beach",
-	"SunflowerPlains",
-	"Savanna",
-	"Savanna_beach",
-	"SavannaM",
-	"Savanna_beach",
-	"Plains_beach",
-	},
-	chance = 40,
-})
-
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:donkey",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	min_height = mobs_mc.water_level + 3,
-	biomes = {
-	"flat",
-	"Plains",
-	"Plains_beach",
-	"SunflowerPlains",
-	"Savanna",
-	"Savanna_beach",
-	"SavannaM",
-	"Savanna_beach",
-	"Plains_beach",
-	"CherryGrove",
-	},
-	chance = 10,
-})
 
 mcl_mobs.register_egg("mobs_mc:horse", S("Horse"), "#c09e7d", "#eee500", 0)
 mcl_mobs.register_egg("mobs_mc:skeleton_horse", S("Skeleton Horse"), "#68684f", "#e5e5d8", 0)

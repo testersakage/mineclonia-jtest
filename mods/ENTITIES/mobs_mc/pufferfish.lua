@@ -36,7 +36,6 @@ local large_collision_box = {
 local pufferfish = {
 	description = S ("Pufferfish"),
 	type = "animal",
-	spawn_class = "water_ambient",
 	_spawn_category = "water_ambient",
 	can_despawn = true,
 	passive = true,

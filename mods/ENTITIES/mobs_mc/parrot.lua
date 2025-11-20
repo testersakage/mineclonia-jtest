@@ -13,7 +13,6 @@ local mob_class = mcl_mobs.mob_class
 local parrot = {
 	description = S("Parrot"),
 	type = "animal",
-	spawn_class = "passive",
 	_spawn_category = "creature",
 	passive = true,
 	pathfinding = 1,
@@ -341,23 +340,6 @@ mcl_mobs.register_mob ("mobs_mc:parrot", parrot)
 -- Parrot spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:parrot",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 3,
-	min_height = mobs_mc.water_level+7,
-	max_height = mcl_vars.mg_overworld_max,
-	biomes = {
-		"Jungle",
-		"JungleEdgeM",
-		"JungleM",
-		"JungleEdge",
-		"BambooJungle",
-	},
-	chance = 400,
-})
-
 -- spawn eggs
 mcl_mobs.register_egg("mobs_mc:parrot", S("Parrot"), "#0da70a", "#ff0000", 0)
 
@@ -374,6 +356,10 @@ local parrot_spawner = table.merge (mobs_mc.animal_spawner, {
 		"#is_jungle",
 	},
 })
+
+function parrot_spawner:describe_supporting_nodes ()
+	return S ("on grass, leaves, or logs")
+end
 
 function parrot_spawner:test_supporting_node (node)
 	return  core.get_item_group (node.name, "grass_block") > 0

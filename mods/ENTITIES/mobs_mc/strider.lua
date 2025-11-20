@@ -17,7 +17,6 @@ local strider = {
 	type = "animal",
 	_spawn_category = "creature",
 	passive = true,
-	spawn_class = "passive",
 	runaway = true,
 	hp_min = 20,
 	hp_max = 20,
@@ -460,24 +459,7 @@ strider.gwp_penalties = table.merge (mob_class.gwp_penalties, {
 -- Strider spawning.
 ------------------------------------------------------------------------
 
-local spawn_nodes = {
-	"mcl_nether:nether_lava_source",
-	"mcl_nether:nether_lava_flowing",
-}
-
-function strider.can_spawn (pos)
-	local l = core.find_node_near (pos, 2, spawn_nodes)
-	return l ~= nil
-end
-
 mcl_mobs.register_mob ("mobs_mc:strider", strider)
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:strider",
-	type_of_spawning = "lava",
-	dimension = "nether",
-	chance = 200,
-})
 
 mcl_mobs.register_egg ("mobs_mc:strider", S("Strider"), "#000000", "#FF0000", 0)
 

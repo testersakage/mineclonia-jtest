@@ -14,7 +14,6 @@ local is_valid = mcl_util.is_valid_objectref
 local golem = {
 	description = S("Iron Golem"),
 	type = "npc",
-	spawn_class = "passive",
 	_spawn_category = "misc",
 	passive = true,
 	retaliates = true,

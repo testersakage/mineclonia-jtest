@@ -12,7 +12,6 @@ local messytextures = {
 local llama = table.merge (horse, {
 	description = S("Llama"),
 	type = "animal",
-	spawn_class = "passive",
 	_spawn_category = "creature",
 	passive = false,
 	attack_type = "ranged",
@@ -497,25 +496,6 @@ mcl_entity_invs.register_inv ("mobs_mc:llama", "Llama", nil, true)
 ------------------------------------------------------------------------
 -- Llama spawning.
 ------------------------------------------------------------------------
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:llama",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 5,
-	min_height = mobs_mc.water_level+15,
-	biomes = {
-		"Savanna",
-		"SavannaM",
-		"SavannaM_beach",
-		"Savanna_beach",
-		"Savanna_ocean",
-		"ExtremeHills",
-		"ExtremeHills_beach",
-		"ExtremeHillsM",
-	},
-	chance = 50,
-})
 
 mcl_mobs.register_egg ("mobs_mc:llama", S("Llama"), "#c09e7d", "#995f40", 0)
 

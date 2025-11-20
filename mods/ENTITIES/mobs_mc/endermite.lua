@@ -8,7 +8,6 @@ local mob_class = mcl_mobs.mob_class
 local endermite = {
 	description = S("Endermite"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	passive = false,
 	hp_min = 8,

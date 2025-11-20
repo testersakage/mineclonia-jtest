@@ -16,7 +16,6 @@ local mob_griefing = core.settings:get_bool ("mobs_griefing", true)
 local vindicator = table.merge (illager, table.merge (posing_humanoid, {
 	description = S("Vindicator"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	pathfinding = 1,
 	hp_min = 24,

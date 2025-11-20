@@ -14,7 +14,6 @@ local squid = {
 	},
 	type = "animal",
 	_spawn_category = "water_creature",
-	spawn_class = "water",
 	can_despawn = true,
 	passive = true,
 	hp_min = 10,
@@ -478,50 +477,14 @@ function glow_squid:ai_step (dtime)
 	end
 end
 
--- The mobs framework no longer respects min_light and max_light when
--- modern spawning thresholds are enabled.
-
-function glow_squid.check_light (_, gotten_light, _, _)
-	return gotten_light == 0
-end
-
 mcl_mobs.register_mob ("mobs_mc:glow_squid", glow_squid)
 
 ------------------------------------------------------------------------
 -- Squid & Glow Squid spawning.
 ------------------------------------------------------------------------
 
--- Spawn near the water surface
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:squid",
-	type_of_spawning = "water",
-	dimension = "overworld",
-	min_height = mobs_mc.water_level - 16,
-	max_height = mobs_mc.water_level + 1,
-	min_light = 0,
-	max_light = core.LIGHT_MAX + 1,
-	aoc = 7,
-	chance = 80,
-})
-
--- spawn eggs
-mcl_mobs.register_egg("mobs_mc:squid", S("Squid"), "#223b4d", "#708999", 0)
-
--- spawning
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:glow_squid",
-	type_of_spawning = "water",
-	dimension = "overworld",
-	min_height = mobs_mc.water_level - 125,
-	max_height = mobs_mc.water_level - 32 + 1,
-	min_light = 0,
-	max_light = 0,
-	aoc = 3,
-	chance = 100,
-})
-
--- spawn egg
-mcl_mobs.register_egg("mobs_mc:glow_squid", S("Glow Squid"), "#095757", "#87f6c0", 0)
+mcl_mobs.register_egg ("mobs_mc:squid", S("Squid"), "#223b4d", "#708999", 0)
+mcl_mobs.register_egg ("mobs_mc:glow_squid", S("Glow Squid"), "#095757", "#87f6c0", 0)
 
 ------------------------------------------------------------------------
 -- Modern Squid & Glow Squid spawning.
@@ -619,6 +582,10 @@ function glow_squid_spawner:test_spawn_position (spawn_pos, node_pos, sdata, nod
 		end
 	end
 	return false
+end
+
+function glow_squid_spawner:describe_additional_spawning_criteria ()
+	return S ("Glow Squid only spawn in absolute darkness at Y levels of 33 or below.")
 end
 
 mcl_mobs.register_spawner (glow_squid_spawner)

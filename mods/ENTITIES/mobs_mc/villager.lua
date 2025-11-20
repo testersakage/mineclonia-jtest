@@ -27,7 +27,6 @@ local WIELD_POSITION = vector.copy ({
 
 local villager_base = {
 	type = "npc",
-	spawn_class = "passive",
 	_spawn_category = "misc",
 	passive = true,
 	hp_min = 20,

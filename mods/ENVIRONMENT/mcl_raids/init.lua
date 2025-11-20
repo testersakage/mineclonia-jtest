@@ -1078,31 +1078,3 @@ mcl_player.register_globalstep_slow (function (player, _)
 	}))
 	mcl_potions.clear_effect (player, "bad_omen")
 end)
-
--- TODO: horn audio effects.
-
-------------------------------------------------------------------------
--- Temporarily retained obsolete functions.
-------------------------------------------------------------------------
-
-
-function mcl_raids.find_villager(pos)
-	for objects in core.objects_inside_radius(pos, 8) do
-		local object = objects:get_luaentity()
-		if object and object.name == "mobs_mc:villager" then
-			return true
-		end
-	end
-end
-
-function mcl_raids.find_bed(pos)
-	return core.find_node_near(pos,32,{"group:bed"})
-end
-
-function mcl_raids.find_village(pos)
-	local bed = mcl_raids.find_bed(pos)
-	if bed and mcl_raids.find_villager(bed) then
-		return bed
-	end
-end
-

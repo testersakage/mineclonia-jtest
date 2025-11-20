@@ -18,7 +18,6 @@ local pr = PcgRandom (os.time () * 666)
 local evoker = table.merge (illager, {
 	description = S("Evoker"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	can_despawn = false,
 	hp_min = 24,
