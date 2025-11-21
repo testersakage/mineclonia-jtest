@@ -446,10 +446,14 @@ local slime_spawner = table.merge (default_spawner, {
 	pack_min = 4,
 	biomes = mobs_mc.monster_biomes,
 })
-local swamp_or_mangrove_swamp_p = mcl_biome_dispatch.make_biome_test ({
-	"Swamp",
-	"MangroveSwamp",
-})
+local swamp_or_mangrove_swamp_p
+
+core.register_on_mods_loaded (function ()
+	swamp_or_mangrove_swamp_p = mcl_biome_dispatch.make_biome_test ({
+		"Swamp",
+		"MangroveSwamp",
+	})
+end)
 
 function slime_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
 					    spawn_flag)
