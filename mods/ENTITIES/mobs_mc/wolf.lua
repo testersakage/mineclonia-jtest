@@ -939,7 +939,7 @@ local wolf_spawner_mesa = table.merge (wolf_spawner_taiga, {
 	pack_min = 4,
 	pack_max = 8,
 	biomes = {
-		"#is_mesa",
+		"#is_badlands",
 	},
 })
 
