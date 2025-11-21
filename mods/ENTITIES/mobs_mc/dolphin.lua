@@ -635,15 +635,30 @@ mcl_mobs.register_egg("mobs_mc:dolphin", S("Dolphin"), "#223b4d", "#f9f9f9", 0)
 -- Modern Dolphin spawning.
 ------------------------------------------------------------------------
 
-local dolphin_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
+local dolphin_spawner_warm = table.merge (mobs_mc.aquatic_animal_spawner, {
 	spawn_category = "water_creature",
 	name = "mobs_mc:dolphin",
 	biomes = {
-		"#is_ocean",
+		"WarmOcean",
+		"DeepLukewarmOcean",
+		"LukewarmOcean",
 	},
 	weight = 2,
 	pack_min = 1,
 	pack_max = 2,
 })
 
+local dolphin_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
+	spawn_category = "water_creature",
+	name = "mobs_mc:dolphin",
+	biomes = {
+		"DeepOcean",
+		"Ocean",
+	},
+	weight = 1,
+	pack_min = 1,
+	pack_max = 2,
+})
+
+mcl_mobs.register_spawner (dolphin_spawner_warm)
 mcl_mobs.register_spawner (dolphin_spawner)

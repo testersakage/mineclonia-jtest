@@ -503,6 +503,7 @@ local squid_spawner_frozen_ocean = table.merge (mobs_mc.aquatic_animal_spawner, 
 local squid_spawner_cold_ocean = table.merge (squid_spawner_frozen_ocean, {
 	biomes = {
 		"ColdOcean",
+		"DeepColdOcean",
 	},
 	weight = 3,
 	pack_min = 1,
@@ -541,9 +542,19 @@ local squid_spawner_ocean = table.merge (squid_spawner_frozen_ocean, {
 		"Ocean",
 		"DeepOcean",
 	},
-	weight = 4,
+	weight = 1,
 	pack_min = 1,
-	pack_max = 1,
+	pack_max = 4,
+})
+
+local squid_spawner_river = table.merge (squid_spawner_frozen_ocean, {
+	biomes = {
+		"River",
+		"FrozenRiver",
+	},
+	weight = 2,
+	pack_min = 1,
+	pack_max = 4,
 })
 
 mcl_mobs.register_spawner (squid_spawner_frozen_ocean)
@@ -552,6 +563,7 @@ mcl_mobs.register_spawner (squid_spawner_lukewarm_ocean)
 mcl_mobs.register_spawner (squid_spawner_warm_ocean)
 mcl_mobs.register_spawner (squid_spawner_deep_lukewarm_ocean)
 mcl_mobs.register_spawner (squid_spawner_ocean)
+mcl_mobs.register_spawner (squid_spawner_river)
 
 local default_spawner = mcl_mobs.default_spawner
 
