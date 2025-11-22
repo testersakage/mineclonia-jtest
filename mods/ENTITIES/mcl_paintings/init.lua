@@ -154,8 +154,8 @@ core.register_entity("mcl_paintings:painting", {
 			end
 			if not mcl_util.check_position_protection(pos, puncher) then
 				self.object:remove()
-				if not minetest.is_creative_enabled(kname) then
-					minetest.add_item(pos, "mcl_paintings:painting")
+				if not core.is_creative_enabled(kname) then
+					core.add_item(pos, "mcl_paintings:painting")
 				end
 			end
 		end
