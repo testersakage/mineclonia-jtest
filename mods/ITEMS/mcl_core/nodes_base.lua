@@ -417,6 +417,20 @@ core.register_node("mcl_core:mycelium", {
 mcl_core.register_snowed_node("mcl_core:mycelium_snow", "mcl_core:mycelium", nil, nil, false, S("Mycelium with Snow"))
 
 local PARTICLE_ABM_DISTANCE = 16
+local townaurora_particlespawner = {
+	time = 2,
+	amount = 5,
+	minpos = vector.zero (),
+	maxpos = vector.zero (),
+	minvel = vector.new (-3/10, 0, -3/10),
+	maxvel = vector.new (3/10, 10/60, 3/10),
+	minacc = vector.zero (),
+	expirationtime = 4,
+	collisiondetection = true,
+	collision_removal = true,
+	size = 1,
+	texture = "mcl_core_mycelium_particle.png",
+}
 
 --if core.settings:get("mcl_node_particles") == "full" then
 core.register_abm({
@@ -424,23 +438,23 @@ core.register_abm({
 	nodenames = {"group:mycelium"},
 	interval = 2,
 	chance = 30,
-	action = function(pos)
-		for player in mcl_util.connected_players(pos, PARTICLE_ABM_DISTANCE) do
-			core.add_particlespawner({
-				time = 2,
-				amount = 5,
-				minpos = vector.offset(pos,-2,0.51,-2),
-				maxpos = vector.offset(pos,2,0.51,2),
-				minvel = vector.new(-3/10, 0, -3/10),
-				maxvel = vector.new(3/10, 10/60, 3/10),
-				minacc = vector.zero(),
-				expirationtime = 4,
-				collisiondetection = true,
-				collision_removal = true,
-				playername = player:get_player_name(),
-				size = 1,
-				texture = "mcl_core_mycelium_particle.png",
-			})
+	action = function (pos)
+		for player, pos1 in mcl_player.iterate_connected_players () do
+			local dx = pos1.x - pos.x
+			local dy = pos1.y - pos.y
+			local dz = pos1.z - pos.z
+			if dx * dx + dy * dy + dz * dz
+				< PARTICLE_ABM_DISTANCE * PARTICLE_ABM_DISTANCE then
+				local ps = townaurora_particlespawner
+				ps.minpos.x = pos.x - 2
+				ps.minpos.y = pos.y + 0.51
+				ps.minpos.z = pos.z - 2
+				ps.maxpos.x = pos.x + 2
+				ps.maxpos.y = pos.y + 0.51
+				ps.maxpos.z = pos.z + 2
+				ps.playername = player:get_player_name ()
+				core.add_particlespawner (ps)
+			end
 		end
 	end,
 })
