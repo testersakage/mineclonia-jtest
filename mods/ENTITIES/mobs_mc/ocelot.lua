@@ -947,7 +947,8 @@ function cat:on_rightclick (clicker)
 		else
 			self:stay ()
 		end
-	elseif table.indexof (cat_food, item:get_name ()) ~= -1 then
+	elseif not self.tamed
+		and table.indexof (cat_food, item:get_name ()) ~= -1 then
 		local r = pr:next (1, 3)
 		if r == 1 then
 			self:just_tame (self_pos, clicker)
