@@ -105,6 +105,11 @@ function ocelot:mob_activate (staticdata, dtime)
 	if not mob_class.mob_activate (self, staticdata, dtime) then
 		return false
 	end
+	-- Delete _head_pitch_offset fields applied by earlier
+	-- versions of this code.
+	if rawget (self, "_head_pitch_offset") then
+		self._head_pitch_offset = nil
+	end
 	self._pose = "walk"
 	return true
 end
