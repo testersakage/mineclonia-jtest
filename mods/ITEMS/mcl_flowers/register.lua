@@ -282,9 +282,39 @@ core.register_node("mcl_flowers:bush", table.merge(def_tallgrass, {
 		type = "fixed",
 		fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.25, 0.4375}
 	},
-	groups = table.merge(def_tallgrass.groups, {compostability = 30}),
 	_mcl_shears_drop = true,
 	_mcl_silk_touch_drop = true
+}))
+
+core.register_node("mcl_flowers:short_dry_grass", table.merge(def_tallgrass, {
+	description = S("Short Dry Grass"),
+	drop = "",
+	tiles = {"mcl_flowers_short_dry_grass.png"},
+	inventory_image = "mcl_flowers_short_dry_grass.png",
+	wield_image = "mcl_flowers_short_dry_grass.png",
+	palette = "",
+	selection_box = {
+		type = "fixed",
+		fixed = {-0.25, -0.5, -0.25, 0.25, 0, 0.25}
+	},
+	_mcl_burntime = 5,
+	_mcl_silk_touch_drop = true,
+	_mcl_shears_drop = true,
+	on_place = mcl_util.generate_on_place_plant_function(function(pos)
+		local below = vector.offset(pos, 0, -1, 0)
+		local soil = core.get_node_or_nil(below)
+		if not soil then return end
+		local allowed_nodes = {
+			"mcl_core:dirt_with_grass", "mcl_core:mycelium", "mcl_core:podzol", "mcl_core:dirt",
+			"mcl_core:coarse_dirt", "mcl_lush_caves:rooted_dirt", "mcl_farming:soil", "mcl_farming:soil_wet",
+			"mcl_colorblocks:hardened_clay", "mcl_core:sand", "mcl_core:redsand", "mcl_sus_nodes:sand",
+			"mcl_mud:mud", "mcl_mangrove:mangrove_mud_roots", "mcl_lush_caves:moss"
+		}
+
+		if table.indexof(allowed_nodes, soil.name) ~= -1 then
+			return true, 0
+		end
+	end)
 }))
 
 core.register_node("mcl_flowers:waterlily", {
