@@ -38,8 +38,9 @@ local ocelot = {
 	xp_max = 3,
 	visual_size = { x = 1.75, y = 1.75, },
 	head_swivel = "head.control",
-	bone_eye_height = 6.2,
+	bone_eye_height = 0,
 	head_eye_height = 0.35,
+	head_pitch_multiplier = 1.2,
 	horizontal_head_height = -0,
 	head_yaw = "z",
 	curiosity = 4,
@@ -64,15 +65,20 @@ local ocelot = {
 		run_start = 0, run_end = 40, run_speed = 110,
 		sit_start = 50, sit_end = 50,
 		crouch_start = 61, crouch_end = 80, crouch_speed = 20,
-		sleep_start = 137, sleep_end = 137,
+		sleep_start = 94, sleep_end = 137, sleep_loop = false,
+		sleep_speed = 80,
 	},
 	_child_animations = {
-		stand_start = 100 + 51, stand_end = 100 + 51,
-		walk_start = 100 + 51, walk_end = 100 + 91, walk_speed = 160,
-		run_start = 100 + 51, run_end = 100 + 91, run_speed = 160,
-		sit_start = 100 + 101, sit_end = 100 + 101,
-		crouch_start = 100 + 113, crouch_end = 100 + 132, crouch_speed = 40,
-		sleep_start = 239, sleep_end = 239,
+		stand_start = 140 + 0, stand_end = 140 + 0,
+		walk_start = 140 + 0, walk_end = 140 + 40,
+		walk_speed = 110,
+		run_start = 140 + 0, run_end = 140 + 40,
+		run_speed = 110,
+		sit_start = 140 + 50, sit_end = 140 + 50,
+		crouch_start = 140 + 61, crouch_end = 140 + 80,
+		crouch_speed = 140 + 20,
+		sleep_start = 140 + 94, sleep_end = 140 + 137,
+		sleep_speed = 80, sleep_loop = false,
 	},
 	view_range = 12,
 	attack_type = "null",
@@ -104,8 +110,6 @@ function ocelot:mob_activate (staticdata, dtime)
 	return true
 end
 
-local FOURTY_FIVE_DEG = math.rad (45)
-
 function ocelot:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
 	local v = self.object:get_velocity ()
@@ -132,12 +136,10 @@ function ocelot:ai_step (dtime)
 		self._pose = "walk"
 	end
 
-	self._head_pitch_offset = 0
 	if self._pose == "repose" then
 		mob_class.set_animation (self, "sleep")
 	elseif self._pose == "sit" then
 		mob_class.set_animation (self, "sit")
-		self._head_pitch_offset = FOURTY_FIVE_DEG
 	elseif xz > 0.0025 then
 		if self._pose == "crouching" then
 			mob_class.set_animation (self, "crouch")
@@ -341,7 +343,7 @@ function ocelot:breeding_possible ()
 end
 
 function ocelot:on_rightclick (clicker)
-	if self.child or not clicker or not clicker:is_player () then
+	if not clicker or not clicker:is_player () then
 		return
 	end
 	local item = clicker:get_wielded_item ()
@@ -794,6 +796,14 @@ cat.ai_functions = {
 -- Cat visuals.
 ------------------------------------------------------------------------
 
+function cat:who_are_you_looking_at ()
+	if self._pose == "repose" then
+		self._locked_object = nil
+	else
+		mob_class.who_are_you_looking_at (self)
+	end
+end
+
 function cat:any_witch_hut ()
 	local self_pos = self.object:get_pos ()
 	local pieces = mcl_levelgen.get_structures_at (self_pos, false)
@@ -893,7 +903,7 @@ local cat_food = {
 }
 
 function cat:on_rightclick (clicker)
-	if self.child or not clicker or not clicker:is_player () then
+	if not clicker or not clicker:is_player () then
 		return
 	end
 	local item = clicker:get_wielded_item ()
