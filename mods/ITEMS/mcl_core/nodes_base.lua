@@ -71,7 +71,7 @@ core.register_node("mcl_core:stone_with_gold", {
 local redstone_timer = 68.28
 local function redstone_ore_activate(pos, node, puncher, pointed_thing)
 	local nodedef = core.registered_nodes[core.get_node(pos).name]
-	core.swap_node(pos, {name=nodedef._mcl_ore_lit})
+	core.set_node(pos, {name=nodedef._mcl_ore_lit})
 	local t = core.get_node_timer(pos)
 	t:start(redstone_timer)
 	if puncher and pointed_thing then
@@ -145,7 +145,7 @@ core.register_node("mcl_core:stone_with_redstone_lit", {
 	-- Turn back to normal node after some time has passed
 	on_timer = function(pos)
 		local nodedef = core.registered_nodes[core.get_node(pos).name]
-		core.swap_node(pos, {name=nodedef._mcl_ore_unlit})
+		core.set_node(pos, {name=nodedef._mcl_ore_unlit})
 	end,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = {"mcl_core:stone_with_redstone"},
