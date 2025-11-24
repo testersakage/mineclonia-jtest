@@ -272,6 +272,21 @@ mcl_flowerpots.register_potted_flower("mcl_flowers:fern", {
 	image = "mcl_flowers_fern_inv.png",
 })
 
+core.register_node("mcl_flowers:bush", table.merge(def_tallgrass, {
+	description = S("Bush"),
+	drop = "",
+	tiles = {"mcl_flowers_bush.png"},
+	inventory_image = "mcl_flowers_bush.png^[multiply:#507A32",
+	wield_image = "mcl_flowers_bush.png^[multiply:#507A32:187",
+	selection_box = {
+		type = "fixed",
+		fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.25, 0.4375}
+	},
+	groups = table.merge(def_tallgrass.groups, {compostability = 30}),
+	_mcl_shears_drop = true,
+	_mcl_silk_touch_drop = true
+}))
+
 core.register_node("mcl_flowers:waterlily", {
 	description = S("Lily Pad"),
 	_doc_items_longdesc = S("A lily pad is a flat plant block which can be walked on. They can be placed on water sources, ice and frosted ice."),
