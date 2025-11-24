@@ -864,12 +864,13 @@ function cat:on_breed (parent1, parent2)
 		local p = math.random (1, 2)
 		if p == 1 then
 			ent_c.base_texture = parent1.base_texture
+			ent_c._default_texture = parent1._default_texture
 			ent_c._collar_color = parent1._collar_color
 		else
 			ent_c.base_texture = parent2.base_texture
+			ent_c._default_texture = parent2._default_texture
 			ent_c._collar_color = parent2._collar_color
 		end
-		ent_c._default_texture = ent_c.base_texture[0]
 		ent_c:set_textures (ent_c.base_texture)
 		ent_c.tamed = true
 		ent_c.owner = self.owner

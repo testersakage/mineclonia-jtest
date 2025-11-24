@@ -171,7 +171,7 @@ function rabbit:on_spawn ()
 			texture = "mobs_mc_rabbit_black.png"
 		end
 	end
-	self.base_texture[0] = texture
+	self.base_texture[1] = texture
 	self:set_textures (self.base_texture)
 end
 
