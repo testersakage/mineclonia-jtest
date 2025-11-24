@@ -261,7 +261,8 @@ local function sheep_graze (self, self_pos, dtime)
 			local consumed = false
 			if node.name == "mcl_flowers:tallgrass" or
 				node.name == "mcl_flowers:fern" or
-				node.name == "mcl_flowers:short_dry_grass" then
+				node.name == "mcl_flowers:short_dry_grass" or
+				node.name == "mcl_flowers:tall_dry_grass" then
 				if mob_griefing then
 					core.remove_node (self_pos)
 				end

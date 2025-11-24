@@ -62,6 +62,30 @@ function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 				return true
 			end
 		end
+	elseif n.name == "mcl_flowers:tall_dry_grass" then
+		local allowed_blocks = {
+			"mcl_core:dirt_with_grass", "mcl_core:dirt", "mcl_core:coarse_dirt",
+			"mcl_lush_caves:rooted_dirt", "mcl_mud:mud", "mcl_lush_caves:moss",
+			"mcl_core:mycelium", "mcl_core:podzol", "mcl_mangrove:mangrove_mud_roots",
+			"mcl_farming:soil", "mcl_farming:soil_wet", "mcl_core:sand", "mcl_core:redsand",
+			"mcl_colorblocks:hardened_clay", "mcl_sus_nodes:sand"
+		}
+		local neighbours = {
+			vector.offset(pos, -1, -1, 0),
+			vector.offset(pos, 1, -1, 0),
+			vector.offset(pos, 0, -1, -1),
+			vector.offset(pos, 0, -1, 1)
+		}
+		table.shuffle(neighbours)
+		for i = 1, #neighbours do
+			local under_neighbor = core.get_node(neighbours[i]).name
+			local new_pos = vector.offset(neighbours[i], 0, 1, 0)
+			local neighbor = core.get_node(new_pos).name
+			if table.indexof(allowed_blocks, under_neighbor) ~= -1 and neighbor == "air" then
+				core.add_node(new_pos, {name = "mcl_flowers:tall_dry_grass"})
+				return true
+			end
+		end
 	end
 	return false
 end
