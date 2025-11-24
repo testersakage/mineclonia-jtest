@@ -253,7 +253,7 @@ core.register_abm({
 				n2 = mcl_core.get_grass_block_type(pos)
 			end
 			if n2 then
-				core.swap_node(pos, n2)
+				core.set_node(pos, n2)
 				-- If this was mycelium, uproot plant above
 				if n2.name == "mcl_core:mycelium" then
 					if core.get_item_group(core.get_node(above).name, "non_mycelium_plant") > 0 then
@@ -277,7 +277,7 @@ core.register_abm({
 		local name = core.get_node(above).name
 		-- Kill grass/mycelium when below opaque block or liquid
 		if name ~= "ignore" and (core.get_item_group(name, "opaque") == 1 or core.get_item_group(name, "liquid") ~= 0) then
-			core.swap_node(pos, {name = "mcl_core:dirt"})
+			core.set_node(pos, {name = "mcl_core:dirt"})
 		end
 	end
 })
@@ -305,7 +305,7 @@ core.register_abm({
 		local name = core.get_node(above).name
 		local nodedef = core.registered_nodes[name]
 		if name ~= "ignore" and nodedef and (nodedef.groups and nodedef.groups.solid) then
-			core.swap_node(pos, {name = "mcl_core:dirt"})
+			core.set_node(pos, {name = "mcl_core:dirt"})
 		end
 	end,
 })
@@ -456,7 +456,7 @@ core.register_abm({
 	action = function(pos, node)
 		if mcl_weather.has_snow(pos) and core.get_natural_light(vector.offset(pos,0,1,0), 0.5) == core.LIGHT_MAX + 1 and core.get_node_light(pos) < 10 then
 			node.name = "mcl_core:ice"
-			core.swap_node(pos, node)
+			core.set_node(pos, node)
 		end
 	end
 })
@@ -565,7 +565,7 @@ end
 function mcl_core.clear_snow_dirt(pos, node)
 	local def = core.registered_nodes[node.name]
 	if def and def._mcl_snowless then
-		core.swap_node(pos, {name = def._mcl_snowless, param2=node.param2})
+		core.set_node(pos, {name = def._mcl_snowless, param2=node.param2})
 	end
 end
 
@@ -586,7 +586,7 @@ function mcl_core.on_snowable_construct(pos)
 	if core.get_item_group(anode.name, "snow_cover") == 1 then
 		local def = core.registered_nodes[node.name]
 		if def and def._mcl_snowed then
-			core.swap_node(pos, {name = def._mcl_snowed, param2=node.param2})
+			core.set_node(pos, {name = def._mcl_snowed, param2=node.param2})
 		end
 	end
 end
@@ -672,7 +672,7 @@ function mcl_core.make_dirtpath(itemstack, placer, pointed_thing)
 			itemstack:add_wear(wear)
 		end
 		core.sound_play({name="default_grass_footstep", gain=1}, {pos = above}, true)
-		core.swap_node(pointed_thing.under, {name="mcl_core:grass_path"})
+		core.set_node(pointed_thing.under, {name="mcl_core:grass_path"})
 	end
 	return itemstack,true
 end
