@@ -40,7 +40,6 @@ local ocelot = {
 	head_swivel = "head.control",
 	bone_eye_height = 0,
 	head_eye_height = 0.35,
-	head_pitch_multiplier = 1.2,
 	horizontal_head_height = -0,
 	head_yaw = "z",
 	curiosity = 4,
