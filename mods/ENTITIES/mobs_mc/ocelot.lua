@@ -797,15 +797,19 @@ cat.ai_functions = {
 -- Cat visuals.
 ------------------------------------------------------------------------
 
-function cat:any_witch_hut ()
-	local self_pos = self.object:get_pos ()
-	local pieces = mcl_levelgen.get_structures_at (self_pos, false)
+local function any_witch_hut (pos)
+	local pieces = mcl_levelgen.get_structures_at (pos, false)
 	for _, piece in pairs (pieces) do
 		if piece.data == "mcl_levelgen:swamp_hut" then
 			return true
 		end
 	end
 	return false
+end
+
+function cat:any_witch_hut ()
+	local self_pos = self.object:get_pos ()
+	return any_witch_hut (mcl_util.get_nodepos (self_pos))
 end
 
 function cat:update_textures ()
@@ -987,13 +991,8 @@ if mobs_spawn then
 
 local time_since_spawn_attempt = 0
 
-function is_cat_spawn_position (spawn_pos)
-	local node = core.get_node (spawn_pos)
-	local def = core.registered_nodes[node.name]
-	local node1 = core.get_node (vector.offset (spawn_pos, 0, -1, 0))
-	local def1 = core.registered_nodes[node1.name]
-
-	return def and not def.walkable and def1 and def1.walkable
+local function is_cat_spawn_position (spawn_pos)
+	return mcl_mobs.spawning_possible (spawn_pos, "mobs_mc:cat")
 end
 
 core.register_globalstep (function (dtime)
@@ -1012,31 +1011,55 @@ core.register_globalstep (function (dtime)
 		spawn_pos.y = math.floor (spawn_pos.y + 0.5)
 		spawn_pos.z = math.floor (spawn_pos.z + 0.5)
 
-		if is_cat_spawn_position (spawn_pos)
-			and mcl_villages.get_poi_heat (spawn_pos) >= 4 then
-			-- Count nearby homes and cats.
-			local count_homes = 0
-			local aa = vector.offset (spawn_pos, -48, -8, -48)
-			local bb = vector.offset (spawn_pos, 48, 8, 48)
-			local pois = mcl_villages.get_pois_in_by_nodepos (aa, bb)
-			for _, poi in pairs (pois) do
-				local def = mcl_villages.registered_pois[poi.data]
-				if def and def.is_home then
-					count_homes = count_homes + 1
+		if is_cat_spawn_position (spawn_pos) then
+			if mcl_villages.get_poi_heat (spawn_pos) >= 4 then
+				-- Count nearby homes and cats.
+				local count_homes = 0
+				local aa = vector.offset (spawn_pos, -48, -8, -48)
+				local bb = vector.offset (spawn_pos, 48, 8, 48)
+				local pois = mcl_villages.get_pois_in_by_nodepos (aa, bb)
+				for _, poi in pairs (pois) do
+					local def = mcl_villages.registered_pois[poi.data]
+					if def and def.is_home then
+						count_homes = count_homes + 1
+					end
 				end
-			end
-			if count_homes >= 5 then
+				if count_homes >= 5 then
+					local count_cats = 0
+					for obj in core.objects_in_area (aa, bb) do
+						local entity = obj:get_luaentity ()
+						if entity and entity.name == "mobs_mc:cat" then
+							count_cats = count_cats + 1
+							if count_cats > 4 then
+								break
+							end
+						end
+					end
+
+					if count_cats <= 4 then
+						mcl_mobs.spawn_abnormally (spawn_pos, "mobs_mc:cat")
+					end
+				end
+			-- Cat spawning in swamp huts is also
+			-- conducted from the same timer as spawning
+			-- in villages, but as when spawned by the
+			-- natural spawning system, a grass block is
+			-- required for spawning to succeed.
+			--
+			-- https://minecraft.wiki/w/Cat#Natural_spawning
+			elseif any_witch_hut (spawn_pos) then
 				local count_cats = 0
+				local aa = vector.offset (spawn_pos, -16, -8, -16)
+				local bb = vector.offset (spawn_pos, 16, 8, 16)
 				for obj in core.objects_in_area (aa, bb) do
 					local entity = obj:get_luaentity ()
 					if entity and entity.name == "mobs_mc:cat" then
 						count_cats = count_cats + 1
+						break
 					end
 				end
-
-				if count_cats <= 4 then
-					spawn_pos.x = spawn_pos.x - 0.5
-					core.add_entity (spawn_pos, "mobs_mc:cat")
+				if count_cats < 1 then
+					mcl_mobs.spawn_abnormally (spawn_pos, "mobs_mc:cat")
 				end
 			end
 		end

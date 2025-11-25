@@ -413,38 +413,20 @@ mcl_mobs.register_mob ("mobs_mc:wandering_trader", wandering_trader)
 
 local storage = core.get_mod_storage ()
 
-local function is_clear (nodepos, x, y, z)
-	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = core.get_node (nodepos)
-	local def = core.registered_nodes[node.name]
-	return def and not def.walkable and def.liquidtype == "none"
-end
-
-local function is_solid (nodepos, x, y, z)
-	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = core.get_node (nodepos)
-	local def = core.registered_nodes[node.name]
-	return def and def.walkable and def.groups.opaque
-end
-
 local function spawn_one_llama (around, entity)
 	for i = 1, 10 do
 		local dx = pr:next (-4, 4)
 		local dz = pr:next (-4, 4)
 		local pos = vector.offset (around, dx, 0, dz)
 		local surface = mobs_mc.find_surface_position (pos)
-
-		if is_clear (surface, 0, 0, 0)
-			and is_clear (surface, 0, 1, 0)
-			and is_solid (surface, 0, -1, 0) then
-			local llama = core.add_entity (surface, "mobs_mc:trader_llama")
-			if llama then
-				local llama = llama:get_luaentity ()
-				llama._trader_id = entity._trader_id
-				llama._get_owner = entity._provide_owner
-				llama._life_timer = entity._life_timer
-				table.insert (entity._llamas, llama.object)
-			end
+		local llama = mcl_mobs.spawn_abnormally (surface, "mobs_mc:trader_llama",
+							 nil, "trader_spawning")
+		if llama then
+			local llama = llama:get_luaentity ()
+			llama._trader_id = entity._trader_id
+			llama._get_owner = entity._provide_owner
+			llama._life_timer = entity._life_timer
+			table.insert (entity._llamas, llama.object)
 			return
 		end
 	end
@@ -468,8 +450,10 @@ local function spawn_wandering_trader ()
 		end
 	end
 	local nplayers = #players_in_overworld
-	if nplayers == 0 or pr:next (1, 10) ~= 1 then
+	if nplayers == 0 then
 		return true
+	elseif pr:next (1, 10) ~= 1 then
+		return false
 	end
 	local player = players_in_overworld[pr:next (1, nplayers)]
 
@@ -498,17 +482,12 @@ local function spawn_wandering_trader ()
 		local pos = vector.offset (base_position, dx, 0, dz)
 		local surface = mobs_mc.find_surface_position (pos)
 
-		-- Is it safe to spawn here?
-		if is_clear (surface, 0, 0, 0)
-			and is_clear (surface, 0, 1, 0)
-			and is_solid (surface, 0, -1, 0) then
-			-- Spawn a trader and attempt to link llamas
-			-- to the same.
-			local trader = core.add_entity (surface, "mobs_mc:wandering_trader")
-			if not trader then
-				return false
-			end
-
+		-- Spawn a trader and attempt to link llamas to the
+		-- same.
+		local trader = mcl_mobs.spawn_abnormally (surface,
+							  "mobs_mc:wandering_trader",
+							  nil, "trader_spawning")
+		if trader then
 			local trader_id = storage:get_int ("last_trader_id") + 1
 			storage:set_int ("last_trader_id", trader_id)
 			local entity = trader:get_luaentity ()
@@ -561,6 +540,14 @@ end)
 end
 
 mcl_mobs.register_egg ("mobs_mc:wandering_trader", S("Wandering Trader"), "#1E90FF", "#bc8b72", 0)
+
+local wandering_trader_spawner = table.merge (mcl_mobs.default_spawner, {
+	name = "mobs_mc:wandering_trader",
+	biomes = {},
+	is_canonical = true,
+})
+
+mcl_mobs.register_spawner (wandering_trader_spawner)
 
 ------------------------------------------------------------------------------
 -- Trader Llama.
@@ -688,3 +675,11 @@ trader_llama.ai_functions = {
 
 mcl_mobs.register_mob ("mobs_mc:trader_llama", trader_llama)
 mcl_mobs.register_egg ("mobs_mc:trader_llama", S("Trader Llama"), "#eaa430", "#456296", 0)
+
+local trader_llama_spawner = table.merge (mcl_mobs.default_spawner, {
+	name = "mobs_mc:trader_llama",
+	biomes = {},
+	is_canonical = true,
+})
+
+mcl_mobs.register_spawner (trader_llama_spawner)

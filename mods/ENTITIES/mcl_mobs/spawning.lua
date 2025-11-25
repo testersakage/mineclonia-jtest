@@ -1452,6 +1452,25 @@ function mcl_mobs.spawn_abnormally (pos, mob, sdata, spawn_flag)
 	return nil
 end
 
+function mcl_mobs.spawning_possible (pos, mob, sdata, spawn_flag)
+	local spawner = get_mob_spawner_at_pos (mob, pos)
+	if not spawner then
+		if not warned[mob] then
+			local spawner = "[mcl_mobs]: Can't decide how to spawn "
+				.. mob .. " at " .. vector.to_string (pos)
+			core.log ("warning", spawner)
+			warned[mob] = true
+		end
+		return nil
+	end
+
+	local spawn_pos = vector.new (pos.x, pos.y - 0.5, pos.z)
+	return test_spawn_position (spawner, spawn_pos, pos, sdata, {},
+				    spawn_flag)
+		and test_spawn_clearance (spawner, spawn_pos, sdata)
+		and test_generation (pos, spawner)
+end
+
 function mcl_mobs.describe_spawning (mob)
 	local tbl = {
 		S ("Environmental spawning requirements and mechanics:"),
