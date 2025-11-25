@@ -155,6 +155,7 @@ local drowned = table.merge (zombie, {
 		_attempting_to_surface = true,
 	},
 	_convert_to = false,
+	_reinforcement_type = "mobs_mc:drowned",
 })
 
 ------------------------------------------------------------------------

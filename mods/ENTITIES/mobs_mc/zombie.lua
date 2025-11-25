@@ -615,26 +615,6 @@ function zombie:can_spawn_reinforcements (mcl_reason)
 	return (source and source:is_player ()) or entity and entity.is_mob
 end
 
-local function is_dark (nodepos, x, y, z)
-	local nodepos = vector.offset (nodepos, x, y, z)
-	local light = core.get_node_light (nodepos)
-	return light and light <= 4.0
-end
-
-local function is_clear (nodepos, x, y, z)
-	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = core.get_node (nodepos)
-	local def = core.registered_nodes[node.name]
-	return def and not def.walkable and def.liquidtype == "none"
-end
-
-local function is_solid (nodepos, x, y, z)
-	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = core.get_node (nodepos)
-	local def = core.registered_nodes[node.name]
-	return def and def.walkable and def.groups.solid
-end
-
 local function is_free_of_living_players (pos, radius)
 	for player in mcl_util.connected_players (pos, radius) do
 		if player:get_hp () > 0 then
@@ -674,11 +654,9 @@ function zombie:receive_damage (mcl_reason, damage)
 			local dz = math.random (7, 40) * math.random (-1, 1)
 			local pos = vector.offset (node_pos, dx, dy, dz)
 
-			if is_dark (pos, 0, 0, 0) and is_solid (pos, 0, -1, 0)
-				and is_clear (pos, 0, 0, 0) and is_clear (pos, 0, 1, 0)
-				and is_free_of_living_players (pos, 7.0) then
-				local floor = vector.offset (pos, 0, -0.5, 0)
-				local object = core.add_entity (floor, self._reinforcement_type)
+			if is_free_of_living_players (pos, 7.0) then
+				local object = mcl_mobs.spawn_abnormally (pos, self._reinforcement_type,
+									  "reinforcement")
 				if object then
 					local entity = object:get_luaentity ()
 					self:add_physics_factor ("_spawn_reinforcements_chance",
