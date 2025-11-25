@@ -201,6 +201,13 @@ function trident_entity:check_pickup (self_pos)
 	if self._loyalty > 0 then
 		local shooter = self:get_shooter ()
 		if shooter then
+			if self._loyalty_timer == 1 then
+				core.sound_play("mcl_tridents_loyalty_"..math.random(1,3), {
+					pos = shooter:get_pos(), gain = 0.5,
+					max_hear_distance = 16
+				}, true)
+			end
+
 			if vector.distance (self_pos, shooter:get_pos ()) < 1.65 then
 				if not self._can_pick_up then
 					self.object:remove ()
@@ -320,6 +327,10 @@ function trident_entity:on_step (dtime, moveresult)
 					and mcl_weather.is_outdoor (node_pos)
 					and mcl_enchanting.get_enchantment (self._itemstack,
 									    "channeling") > 0 then
+					core.sound_play("mcl_tridents_channeling", {
+						pos = node_pos, gain = 1,
+						max_hear_distance = 16
+					}, true)
 					mcl_lightning.strike (vector.offset (node_pos, 0, 1, 0))
 				end
 				-- Detect buttons and like non-solid
@@ -356,6 +367,11 @@ function trident_entity:on_step (dtime, moveresult)
 				if self._riptide_player then
 					self:riptide_detach (self._riptide_player)
 					return
+				else
+					core.sound_play("mcl_tridents_stuck", {
+						pos = node_pos, gain = 0.5,
+						max_hear_distance = 16
+					}, true)
 				end
 				local delta = vector.normalize (v1)
 				self.object:set_pos (vector.offset (new_pos, delta.x * 0.35,
@@ -397,7 +413,11 @@ function trident_entity:on_step (dtime, moveresult)
 					local dir = vector.normalize (v)
 					mcl_player.player_knockback (object, self.object, dir, nil, damage)
 				end
-			end
+				core.sound_play("mcl_tridents_hit", {
+						pos = object:get_pos(), gain = 0.5,
+						max_hear_distance = 16
+					}, true)
+				end
 			if mcl_weather.state == "thunder"
 				and mcl_weather.is_outdoor (object_pos)
 				and mcl_enchanting.get_enchantment (self._itemstack,
@@ -407,6 +427,10 @@ function trident_entity:on_step (dtime, moveresult)
 					and mcl_reason.source:is_player () then
 					awards.unlock (self._shooter, "mcl:very_very_frightening")
 				end
+				core.sound_play("mcl_tridents_channeling", {
+					pos = object_pos, gain = 1,
+					max_hear_distance = 16
+				}, true)
 			end
 		else
 			self:rotate (v)
@@ -613,8 +637,16 @@ function mcl_tridents.shoot_trident (stack, obj, pos, yaw, pitch, dir, collectab
 		if riptide_level > 0 then
 			assert (obj:is_player ())
 			entity:riptide_init (obj)
+			core.sound_play("mcl_tridents_riptide", {
+				pos = pos, gain = 1,
+				max_hear_distance = 16
+			}, true)
 		end
 		entity:rotate (v)
+		core.sound_play("mcl_tridents_throw_"..math.random(1,2), {
+			pos = obj:get_pos(), gain = 0.5,
+			max_hear_distance = 16
+		}, true)
 		return true
 	end
 
