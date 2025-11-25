@@ -628,8 +628,10 @@ end
 local function player_may_launch_trident_p (player, item)
 	local riptide = mcl_enchanting.get_enchantment (item, "riptide")
 	if riptide > 0 then
-		if player:get_attach () then
-			return false
+		local attach = player:get_attach ()
+		if attach then
+			local entity = attach:get_luaentity ()
+			return entity and entity.name == "mcl_tridents:trident"
 		elseif not mcl_weather.is_underwater (player)
 			and not mcl_tridents.weather_admits_of_riptide_p (player) then
 			return false
