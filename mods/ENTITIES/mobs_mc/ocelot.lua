@@ -800,14 +800,6 @@ cat.ai_functions = {
 -- Cat visuals.
 ------------------------------------------------------------------------
 
-function cat:who_are_you_looking_at ()
-	if self._pose == "repose" then
-		self._locked_object = nil
-	else
-		mob_class.who_are_you_looking_at (self)
-	end
-end
-
 function cat:any_witch_hut ()
 	local self_pos = self.object:get_pos ()
 	local pieces = mcl_levelgen.get_structures_at (self_pos, false)
@@ -849,6 +841,14 @@ function cat:update_textures ()
 	self.base_size = self.initial_properties.visual_size
 	self.base_colbox = self.initial_properties.collisionbox
 	self.base_selbox = self.initial_properties.selectionbox
+end
+
+function cat:who_are_you_looking_at ()
+	if self._pose == "repose" then
+		self._locked_object = nil
+	else
+		mob_class.who_are_you_looking_at (self)
+	end
 end
 
 ------------------------------------------------------------------------
