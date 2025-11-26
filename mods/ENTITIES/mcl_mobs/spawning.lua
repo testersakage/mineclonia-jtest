@@ -1247,6 +1247,9 @@ local function spawn_a_pack (pos, players, category, scratch0,
 			and test_generation (pos, mob_def) then
 			local object = mob_def:spawn (spawn_pos, n_spawned + 1, sdata)
 			if object then
+				local entity = object:get_luaentity ()
+				entity._spawn_pos = vector.copy (spawn_pos)
+				entity._spawn_gmt = core.get_gametime ()
 				n_spawned = n_spawned + 1
 				if spawned then
 					spawned[n_spawned] = object

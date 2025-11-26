@@ -474,6 +474,18 @@ function mob_class:on_deactivate (removal)
 	if self.wears_armor then
 		mcl_armor.head_entity_unequip (self.object)
 	end
+
+	if self.can_despawn == false and self._spawn_pos and self._spawn_gmt then
+		local pos = self.object:get_pos ()
+		print (string.format ("Deactivating persistent %s:%s, at %s (%.2f nodes from %s, after %s seconds)",
+				      self.name, self.object:get_guid (),
+				      vector.to_string (self._spawn_pos),
+				      vector.distance (self._spawn_pos, pos),
+				      vector.to_string (pos),
+				      core.get_gametime () - self._spawn_gmt))
+		self._spawn_pos = nil
+		self._spawn_gmt = nil
+	end
 end
 
 function mob_class:jockey_death ()
