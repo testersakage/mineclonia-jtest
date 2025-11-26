@@ -84,9 +84,6 @@ local trident_clip = {
 		pointable = false,
 		physical = false,
 		static_save = false,
-		armor = {
-			immortal = 1,
-		},
 		use_texture_alpha = false,
 	},
 }
@@ -96,6 +93,12 @@ function trident_clip:on_step (_, _)
 		self.object:remove ()
 		return
 	end
+end
+
+function trident_clip:on_activate (_)
+	self.object:set_armor_groups ({
+		immortal = 1,
+	})
 end
 
 core.register_entity ("mcl_tridents:trident_clip", trident_clip)
@@ -126,9 +129,6 @@ local trident_entity = {
 		collide_with_objects = false,
 		static_save = true,
 		use_texture_alpha = true,
-		armor = {
-			immortal = 1,
-		},
 	},
 	_in_block = false,
 	_shooter = nil,
@@ -472,6 +472,9 @@ function trident_entity:on_deactivate (removal)
 end
 
 function trident_entity:on_activate (staticdata, dtime)
+	self.object:set_armor_groups ({
+		immortal = 1,
+	})
 	if staticdata then
 		local sdata = core.deserialize (staticdata)
 		if sdata then
