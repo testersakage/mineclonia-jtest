@@ -280,6 +280,16 @@ local function is_walkable (self_pos)
 	return def and def.walkable
 end
 
+local function attach_elytra (player, trident_v, self_pos)
+	local obj = core.add_entity(self_pos, "mcl_armor:elytra_entity")
+	local ent = obj:get_luaentity()
+	if obj and ent then
+		player:set_pos(vector.offset(self_pos,0,1,0))
+		ent:attach(player)
+		ent.object:set_velocity(trident_v)
+	end
+end
+
 function trident_entity:on_step (dtime, moveresult)
 	local v = self.object:get_velocity ()
 	local self_pos = self.object:get_pos ()
@@ -288,6 +298,13 @@ function trident_entity:on_step (dtime, moveresult)
 	-- attached, finalize its attachment and destroy this object.
 	if self._riptide_player
 		and self._riptide_player:get_attach () ~= self.object then
+		self:riptide_detach (self._riptide_player)
+		return
+	end
+
+	if self._riptide_player
+		and self._riptide_player:get_player_control().jump then
+		attach_elytra(self._riptide_player, v, self_pos)
 		self:riptide_detach (self._riptide_player)
 		return
 	end
@@ -667,6 +684,7 @@ local function player_may_launch_trident_p (player, item)
 		if attach then
 			local entity = attach:get_luaentity ()
 			return entity and entity.name == "mcl_tridents:trident"
+				or entity and entity.name == "mcl_armor:elytra_entity"
 		elseif not mcl_weather.is_underwater (player)
 			and not mcl_tridents.weather_admits_of_riptide_p (player) then
 			return false
@@ -764,10 +782,20 @@ controls.register_on_release (function (player, key)
 	end
 	local wielditem = player:get_wielded_item ()
 	local name = wielditem:get_name ()
+	local elytra = mcl_player.players[player].elytra
+	local creative = core.is_creative_enabled (player:get_player_name ())
 	if core.get_item_group (name, "trident") > 0
 		and player_may_launch_trident_p (player, wielditem)
 		and (trident_held_times[player] or 0) >= 0.5 then
-		mcl_tridents.player_shoot (player, wielditem)
+		if elytra.active then
+			elytra.riptide = 0.05
+			if not creative then
+				mcl_util.use_item_durability (wielditem, 1)
+				player:set_wielded_item (wielditem)
+			end
+		else
+			mcl_tridents.player_shoot (player, wielditem)
+		end
 	end
 	trident_held_times[player] = -math.huge
 end)
