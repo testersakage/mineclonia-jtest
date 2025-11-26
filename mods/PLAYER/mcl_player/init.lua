@@ -11,7 +11,7 @@ local tpl_playerinfo = {
 	sneak = false,
 	visible = true,
 	attached = false,
-	elytra = {active = false, rocketing = 0, speed = 0},
+	elytra = {active = false, rocketing = 0, riptide = 0},
 	is_pressing_jump = {},
 	lastPos = nil,
 	swimDistance = 0,

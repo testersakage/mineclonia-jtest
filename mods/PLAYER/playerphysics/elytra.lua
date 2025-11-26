@@ -139,6 +139,39 @@ function elytra_entity:rocket_boost(dtime)
 	self.object:set_velocity(v)
 end
 
+function elytra_entity:riptide_boost(dtime)
+	local player = self.driver
+	local elytra = mcl_player.players[player].elytra
+	local dir = player:get_look_dir()
+	local self_pos = player:get_pos()
+	local v = self.object:get_velocity()
+
+	local item = player:get_wielded_item ()
+	local riptide = mcl_enchanting.get_enchantment (item, "riptide")
+
+	if elytra.riptide > 0 then
+		v.x = dir.x * BASE_ROCKET_BOOST
+			+ (dir.x * ROCKET_BOOST_FORCE * riptide - v.x) * 0.5
+			+ v.x
+		v.y = dir.y * BASE_ROCKET_BOOST
+			+ (dir.y * ROCKET_BOOST_FORCE * riptide - v.y) * 0.5
+			+ v.y
+		v.z = dir.z * BASE_ROCKET_BOOST
+			+ (dir.z * ROCKET_BOOST_FORCE * riptide - v.z) * 0.5
+			+ v.z
+		elytra.riptide = elytra.riptide - dtime
+		local dir = vector.new (dir.x, 0, dir.z)
+		local pos = vector.normalize (dir)
+		local s = pos.x
+		local c = pos.z
+		pos.x = self_pos.x + (c * 0.5 + s * 0.7)
+		pos.y = self_pos.y + 0.3
+		pos.z = self_pos.z + (c * 0.7 - s * 0.5)
+	end
+
+	self.object:set_velocity(v)
+end
+
 function elytra_entity:consume_durability(dtime)
 	self._timer = self._timer + dtime
 	if self._timer >= 1.0 then
@@ -315,6 +348,7 @@ function elytra_entity:on_step(dtime, moveresult)
 		self:check_fall_damage (moveresult)
 		self:step_fall_flying (dtime)
 		self:rocket_boost (dtime)
+		self:riptide_boost (dtime)
 	end
 
 	local attach = self.driver:get_attach()
