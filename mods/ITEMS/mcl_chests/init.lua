@@ -1634,7 +1634,7 @@ end
 
 function mcl_chests.is_opened (chest)
 	for k, v in pairs (open_chests) do
-		if vector.equal (v.pos, chest)
+		if vector.equals (v.pos, chest)
 			and core.get_player_by_name (k) then
 			return true
 		end
