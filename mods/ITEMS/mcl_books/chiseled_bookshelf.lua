@@ -291,7 +291,7 @@ local basedef = {
 		core.log("action", player:get_player_name() ..
 			" takes stuff from chiseled bookshelf at " .. core.pos_to_string(pos))
 	end,
-	on_destruct = mcl_util.drop_items_from_meta_container("main"),
+	after_dig_node= mcl_util.drop_items_from_meta_container("main"),
 	on_rightclick = on_chiseled_bookshelf_rightclick,
 	_on_hopper_out = on_hopper_out,
 	_on_hopper_in = on_hopper_in,
