@@ -59,58 +59,9 @@ function mcl_player.register_on_visual_change(func)
 	table.insert(mcl_player.registered_on_visual_change, func)
 end
 
-function mcl_player.player_collision(player, object)
-	local pos = player:get_pos()
-	local pos2 = object:get_pos()
-	local r1 = (math.random (300) - 150) / 2400
-	local r2 = (math.random (300) - 150) / 2400
-	local x_diff = pos2.x - pos.x + r1
-	local z_diff = pos2.z - pos.z + r2
-	local max_diff = math.max (math.abs (x_diff), math.abs (z_diff))
-	local d_scale
-
-	if max_diff > 0.01 then
-		max_diff = math.sqrt (max_diff)
-		d_scale = math.min (1.0, 1.0 / max_diff)
-		z_diff = z_diff / max_diff * d_scale * 0.91
-		x_diff = x_diff / max_diff * d_scale * 0.91
-
-		player:add_velocity (vector.new (-x_diff, 0, -z_diff))
-	end
-end
-
 local function player_collision (player)
-	local pos = player:get_pos()
-	local x = 0
-	local z = 0
-	local width = .75
-
-	-- This function is only concerned with players; mobs
-	-- colliding with players call mcl_player.player_collision
-	-- instead.
-	for object in core.objects_inside_radius(pos, width) do
-		if object ~= player and object:is_player () then
-			local pos2 = object:get_pos()
-			local r1 = (math.random (300) - 150) / 2400
-			local r2 = (math.random (300) - 150) / 2400
-			local x_diff = pos2.x - pos.x + r1
-			local z_diff = pos2.z - pos.z + r2
-			local max_diff
-				= math.max (math.abs (x_diff), math.abs (z_diff))
-			local d_scale
-
-			if max_diff > 0.01 then
-				max_diff = math.sqrt (max_diff)
-				d_scale = math.min (1.0, 1.0 / max_diff)
-				z_diff = z_diff / max_diff * d_scale
-				x_diff = x_diff / max_diff * d_scale
-
-				x = x - x_diff
-				z = z - z_diff
-			end
-		end
-	end
-	return x * 0.91, z * 0.91
+	local cbox = player:get_properties ().collisionbox
+	return mcl_mobs.common_collision (cbox, player, player:get_pos ())
 end
 
 local function dir_to_pitch(dir)
@@ -308,8 +259,19 @@ function mcl_player.position_wielditem (wielded_itemname, wielded_def, player)
 end
 
 mcl_player.register_globalstep(function(player)
+	local cx, cz = player_collision (player)
+
 	if mcl_serverplayer.is_csm_capable (player) then
+		player:add_velocity (vector.new (cx, 0, cz))
 		return
+	end
+
+	-- Adjust velocity to match Luanti's player physics' more
+	-- aggressive damping.
+	local mag = math.sqrt (cx * cx + cz * cz)
+	if mag > 0.01 then
+		local d1 = 1.5 * mag
+		player:add_velocity (vector.new (cx * d1, 0, cz * d1))
 	end
 	local name = player:get_player_name()
 	local model_name = mcl_player.players[player].model
@@ -322,10 +284,7 @@ mcl_player.register_globalstep(function(player)
 	local player_velocity = player:get_velocity()
 	local elytra = mcl_player.players[player].elytra and mcl_player.players[player].elytra.active
 
-	local c_x, c_y = player_collision (player)
-
-	if player_velocity.x + player_velocity.y < .5 and c_x + c_y > 0 then
-		player:add_velocity({x = c_x, y = 0, z = c_y})
+	if player_velocity.x + player_velocity.y < .5 then
 		player_velocity = player:get_velocity()
 	end
 

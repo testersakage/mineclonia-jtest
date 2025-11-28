@@ -98,50 +98,58 @@ function mob_class:item_drop(cooked, looting_level, mcl_reason)
 	self.drops = {}
 end
 
--- collision function borrowed amended from jordan4ibanez open_ai mod
-function mob_class:collision (pos)
-	local attach = self.object:get_attach ()
-
-	if not self.pushable or attach then
-		return 0, 0
+local function get_cbox_for_collision (obj)
+	local entity = obj:get_luaentity ()
+	if entity then
+		return entity.is_mob
+			and entity.collisionbox or nil
+	elseif obj:is_player () then
+		return obj:get_properties ().collisionbox
+	else
+		return nil
 	end
+end
 
-	local x = 0
-	local z = 0
-	local cbox = self.collisionbox
-	local width = -cbox[1] + cbox[4]
-	for object in core.objects_inside_radius (pos, width) do
-		local ent = object:get_luaentity()
-		local is_player = object:is_player ()
-		-- Sleeping players shouldn't ever be pushed around.
-		if (is_player and object:get_attach () ~= self.object
-			and not mcl_beds.player[object:get_player_name ()])
-			or (ent and ent.is_mob
-			    and object ~= self.object
-			    and object ~= self._jockey_rider) then
-			local pos2 = object:get_pos()
-			local r1 = (math.random (300) - 150) / 2400
-			local r2 = (math.random (300) - 150) / 2400
-			local x_diff = pos2.x - pos.x + r1
-			local z_diff = pos2.z - pos.z + r2
-			local max_diff = math.max (math.abs (x_diff), math.abs (z_diff))
-			local d_scale
+local mathsqrt = math.sqrt
 
-			if max_diff > 0.01 then
-				max_diff = math.sqrt (max_diff)
-				d_scale = math.min (1.0, 1.0 / max_diff)
-				z_diff = z_diff / max_diff * d_scale
-				x_diff = x_diff / max_diff * d_scale
+local function cbox_intersect_p (cbox, x, y, z, cbox1, pos1)
+	return cbox[1] + x <= pos1.x + cbox1[4]
+		and cbox[2] + y <= pos1.y + cbox1[5]
+		and cbox[3] + z <= pos1.z + cbox1[6]
+		and cbox[4] + x >= pos1.x + cbox1[1]
+		and cbox[5] + y >= pos1.y + cbox1[2]
+		and cbox[6] + z >= pos1.z + cbox1[3]
+end
 
-				x = x - x_diff
-				z = z - z_diff
-			end
-
-			if is_player then
-				mcl_player.player_collision (object, self.object)
+local function common_collision (cbox, this_object, pos)
+	local w = cbox[4] - cbox[1]
+	local x, z = 0, 0
+	local px, py, pz = pos.x, pos.y, pos.z
+	for object in core.objects_inside_radius (pos, w + 1.0) do
+		if object ~= this_object and not object:get_attach () then
+			local pos1 = object:get_pos ()
+			local cbox1 = get_cbox_for_collision (object)
+			if cbox1 and cbox_intersect_p (cbox, px, py, pz, cbox1, pos1) then
+				local dx = pos1.x - pos.x
+					+ math.random () * 0.10 - 0.05
+				local dz = pos1.z - pos.z
+					+ math.random () * 0.10 - 0.05
+				local d = mathsqrt (w * dx * dx + dz * dz)
+				if d > 0.01 then
+					local v = mathsqrt (1 / d)
+					x = x - dx / d * v
+					z = z - dz / d * v
+				end
 			end
 		end
 	end
+	return x, z
+end
+
+mcl_mobs.common_collision = common_collision
+
+function mob_class:collision (pos)
+	local x, z = common_collision (self.collisionbox, self.object, pos)
 	return x, z
 end
 
@@ -156,10 +164,10 @@ function mob_class:set_velocity(v)
 end
 
 -- calculate mob velocity
-function mob_class:get_velocity()
-	local v = self.object:get_velocity()
+function mob_class:get_velocity ()
+	local v = self.object:get_velocity ()
 	if v then
-		return (v.x * v.x + v.z * v.z) ^ 0.5
+		return mathsqrt (v.x * v.x + v.z * v.z)
 	end
 	return 0
 end
@@ -1033,17 +1041,12 @@ function mob_class:immersion_depth (liquidgroup, pos, max)
 	return ymax and ymax - start or 0
 end
 
-function mob_class:check_collision (self_pos)
+function mob_class:check_collision (self_pos, v, h_scale)
 	-- can mob be pushed, if so calculate direction
-	if self.pushable then
+	if self.pushable and not self.object:get_attach () then
 		local c_x, c_z = self:collision (self_pos)
-		if c_x > 0 or c_z > 0 then
-			self.object:add_velocity ({
-				x = c_x,
-				y = 0,
-				z = c_z,
-			})
-		end
+		v.x = v.x + c_x * h_scale
+		v.z = v.z + c_z * h_scale
 	end
 end
 
@@ -1442,8 +1445,8 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	-- Clear the jump flag even when jumping is not yet possible.
 	self._jump = false
 	self._was_touching_ground = touching_ground
+	self:check_collision (self_pos, v, h_scale)
 	self.object:set_velocity (v)
-	self:check_collision (self_pos)
 	return h_scale, v_scale
 end
 
@@ -1503,8 +1506,8 @@ function mob_class:flying_step (dtime, moveresult, self_pos)
 	v.z = v.z * p + fv_z
 	self._previously_floating = true
 	self.object:set_properties ({stepheight = 0.0})
+	self:check_collision (self_pos, v, scale)
 	self.object:set_velocity (v)
-	self:check_collision (self_pos)
 end
 
 -- Simplified `motion_step' for true (i.e., not birds or blazes)
@@ -1542,8 +1545,8 @@ function mob_class:aquatic_step (dtime, moveresult, self_pos)
 			v.y = v.y + AQUATIC_GRAVITY * scale
 		end
 
+		self:check_collision (self_pos, v, scale)
 		self.object:set_velocity (v)
-		self:check_collision (self_pos)
 		self._previously_floating = true
 		self.object:set_properties ({stepheight = 0.0})
 	else
