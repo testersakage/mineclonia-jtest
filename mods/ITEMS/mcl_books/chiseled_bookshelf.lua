@@ -43,7 +43,7 @@ end
 
 local function protection_check_put_take(pos, _, _, stack, player)
 	local name = player:get_player_name()
-	if core.is_protected(pos, name) then
+	if core.is_protected(pos, name) or not mcl_enchanting.is_book(stack:get_name()) then
 		core.record_protection_violation(pos, name)
 		return 0
 	else
