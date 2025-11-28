@@ -243,6 +243,7 @@ function squid:motion_step (dtime, moveresult, self_pos)
 		}
 
 		local v = self.object:get_velocity ()
+		self:check_collision (self_pos, new_v, 1.0)
 		self.object:set_velocity (new_v)
 
 		-- Animate this mob according to the previous velocity
@@ -283,6 +284,7 @@ function squid:motion_step (dtime, moveresult, self_pos)
 		v.x = 0
 		v.y = new_y
 		v.z = 0
+		self:check_collision (self_pos, v, 1.0)
 		self.object:set_velocity (v)
 
 		if moveresult.touching_ground
@@ -301,7 +303,6 @@ function squid:motion_step (dtime, moveresult, self_pos)
 		end
 	end
 
-	self:check_collision (self_pos)
 	self._tentacle_movement = movement
 	self._tentacle_speed = speed
 end
