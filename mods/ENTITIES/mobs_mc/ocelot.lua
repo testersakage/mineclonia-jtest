@@ -680,7 +680,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 	elseif self._target_block then
 		local node = core.get_node (self._target_block_real)
 		if core.get_item_group (node.name, "furnace") == 0
-			and node.name ~= "mcl_chests:chest" then
+			and node.name ~= "mcl_chests:chest_small" then
 			self._target_block = nil
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
@@ -726,7 +726,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 			local bb = vector.offset (self_pos, 4, 1, 4)
 			local block_groups = {
 				"group:furnace",
-				"mcl_chests:chest",
+				"mcl_chests:chest_small",
 			}
 			local nodes = core.find_nodes_in_area (aa, bb, block_groups)
 			if #nodes > 0 then
@@ -739,7 +739,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 					local name = core.get_node (node)
 					local open = false
 
-					if name.name == "mcl_chests:chest" then
+					if name.name == "mcl_chests:chest_small" then
 						open = mcl_chests.is_opened (node)
 					end
 
