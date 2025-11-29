@@ -303,6 +303,7 @@ function trident_entity:on_step (dtime, moveresult)
 	end
 
 	if self._riptide_player
+		and not mcl_serverplayer.is_csm_capable(self._riptide_player)
 		and self._riptide_player:get_player_control().jump then
 		attach_elytra(self._riptide_player, v, self_pos)
 		self:riptide_detach (self._riptide_player)
