@@ -425,7 +425,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		_doc_items_usagehelp = usagehelp,
 		_doc_items_hidden = hidden,
 		drawtype = "mesh",
-		mesh = "mcl_chests_chest.b3d",
+		mesh = "mcl_chests_chest.obj",
 		tiles = select_texture_maybe_present (small_textures),
 		is_ground_content = false,
 		paramtype = "light",
@@ -460,7 +460,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		_doc_items_usagehelp = usagehelp,
 		_doc_items_hidden = hidden,
 		drawtype = animate_chests and "nodebox" or "mesh",
-		mesh = not animate_chests and "mcl_chests_chest.b3d" or nil,
+		mesh = not animate_chests and "mcl_chests_chest.obj" or nil,
 		node_box = animate_chests and {
 			type = "fixed",
 			fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.375, 0.4375},
@@ -1091,7 +1091,7 @@ core.register_node("mcl_chests:ender_chest", {
 		"Ender chests grant you access to a single personal interdimensional inventory with 27 slots. This inventory is the same no matter from which ender chest you access it from. If you put one item into one ender chest, you will find it in all other ender chests. Each player will only see their own items, but not the items of other players."),
 	_doc_items_usagehelp = S("Rightclick the ender chest to access your personal interdimensional inventory."),
 	drawtype = "mesh",
-	mesh = "mcl_chests_chest.b3d",
+	mesh = "mcl_chests_chest.obj",
 	tiles = select_texture_maybe_present ({
 		default = tiles_chest_ender_small,
 		present = tiles_chest_ender_small_present,
@@ -1134,7 +1134,7 @@ core.register_node("mcl_chests:ender_chest_small", {
 		"Ender chests grant you access to a single personal interdimensional inventory with 27 slots. This inventory is the same no matter from which ender chest you access it from. If you put one item into one ender chest, you will find it in all other ender chests. Each player will only see their own items, but not the items of other players."),
 	_doc_items_usagehelp = S("Rightclick the ender chest to access your personal interdimensional inventory."),
 	drawtype = animate_chests and "nodebox" or "mesh",
-	mesh = not animate_chests and "mcl_chests_chest.b3d" or nil,
+	mesh = not animate_chests and "mcl_chests_chest.obj" or nil,
 	_mcl_baseitem = "mcl_chests:ender_chest",
 	node_box = animate_chests and {
 		type = "fixed",
