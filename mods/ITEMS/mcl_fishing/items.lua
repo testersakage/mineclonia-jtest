@@ -51,7 +51,7 @@ core.register_craftitem("mcl_fishing:pufferfish_raw", {
 	_mcl_saturation = 0.2,
 	_eat_effect = function (_, placer)
 		mcl_potions.give_effect_by_level("poison", placer, 3, 60)
-    	mcl_potions.give_effect_by_level("nausea", placer, 2, 60)
+		mcl_potions.give_effect_by_level("nausea", placer, 2, 60)
 	end
 })
 
