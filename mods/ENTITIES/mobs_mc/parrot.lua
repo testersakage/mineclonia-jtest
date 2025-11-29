@@ -78,6 +78,19 @@ local parrot = {
 -- Parrot interaction.
 ------------------------------------------------------------------------
 
+local parrot_foods = {
+	"mcl_farming:wheat_seeds",
+	"mcl_farming:melon_seeds",
+	"mcl_farming:pumpkin_seeds",
+	"mcl_farming:beetroot_seeds",
+}
+
+function parrot:actionable_on_rightclick (clicker)
+	local item = clicker:get_wielded_item ()
+	local wield_food = table.indexof(parrot_foods, item:get_name ()) ~= -1
+	return item:get_name () == "mcl_farming:cookie" or self.tamed or wield_food
+end
+
 function parrot:on_rightclick (clicker)
 	local item = clicker:get_wielded_item ()
 	if not item then
@@ -106,13 +119,7 @@ function parrot:on_rightclick (clicker)
 	end
 
 	-- Feed to tame, but not breed
-	local food = {
-		"mcl_farming:wheat_seeds",
-		"mcl_farming:melon_seeds",
-		"mcl_farming:pumpkin_seeds",
-		"mcl_farming:beetroot_seeds",
-	}
-	if table.indexof (food, name) ~= -1 then
+	if not self.tamed and table.indexof (parrot_foods, name) ~= -1 then
 		self:feed_tame (clicker, 4, false, true, false, 0.1)
 		return
 	end

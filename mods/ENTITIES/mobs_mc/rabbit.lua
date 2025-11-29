@@ -107,6 +107,11 @@ function rabbit:on_rightclick (clicker)
 	end
 end
 
+function rabbit:actionable_on_rightclick (clicker)
+	local wielditem = clicker:get_wielded_item ()
+	return table.indexof(self.follow, wielditem:get_name ()) ~= -1
+end
+
 function rabbit:set_nametag (nametag)
 	if mob_class.set_nametag (self, nametag) then
 		-- MC Easter egg: Change texture if rabbit is named

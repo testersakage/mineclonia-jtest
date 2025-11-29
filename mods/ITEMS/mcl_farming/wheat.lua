@@ -141,8 +141,6 @@ core.register_craftitem("mcl_farming:cookie", {
 	inventory_image = "farming_cookie.png",
 	groups = {food = 2, eatable = 2, compostability = 85},
 	_mcl_saturation = 0.4,
-	on_place = core.item_eat(2),
-	on_secondary_use = core.item_eat(2),
 })
 
 core.register_craftitem("mcl_farming:bread", {
@@ -151,8 +149,6 @@ core.register_craftitem("mcl_farming:bread", {
 	inventory_image = "farming_bread.png",
 	groups = {food = 2, eatable = 5, compostability = 85},
 	_mcl_saturation = 6.0,
-	on_place = core.item_eat(5),
-	on_secondary_use = core.item_eat(5),
 })
 
 local mod_screwdriver = core.get_modpath("screwdriver")

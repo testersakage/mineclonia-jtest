@@ -74,12 +74,12 @@ core.register_craftitem("mcl_farming:sweet_berry", {
 	description = S("Sweet Berry"),
 	inventory_image = "mcl_farming_sweet_berry.png",
 	_mcl_saturation = 0.4,
-	groups = { food = 2, eatable = 2, compostability=30 },
-	on_secondary_use = core.item_eat(2),
+	groups = { food = 2, eatable = 1, compostability=30 },
 	on_place = function(itemstack, placer, pointed_thing)
 		local pn = placer:get_player_name()
 		if placer:is_player() and core.is_protected(pointed_thing.above, pn or "") then
 			core.record_protection_violation(pointed_thing.above, pn)
+			mcl_hunger.eat_anim_block[placer] = 1
 			return itemstack
 		end
 		if pointed_thing.type == "node" and
@@ -90,9 +90,9 @@ core.register_craftitem("mcl_farming:sweet_berry", {
 			if not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 			end
+			mcl_hunger.eat_anim_block[placer] = 1
 			return itemstack
 		end
-		return core.do_item_eat(2, nil, itemstack, placer, pointed_thing)
 	end,
 })
 core.register_alias("mcl_sweet_berry:sweet_berry", "mcl_farming:sweet_berry")

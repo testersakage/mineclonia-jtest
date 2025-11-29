@@ -270,8 +270,6 @@ core.register_craftitem("mcl_farming:pumpkin_pie", {
 	_doc_items_longdesc = S("A pumpkin pie is a tasty food item which can be eaten."),
 	inventory_image = "mcl_farming_pumpkin_pie.png",
 	wield_image = "mcl_farming_pumpkin_pie.png",
-	on_place = core.item_eat(8),
-	on_secondary_use = core.item_eat(8),
 	groups = {food = 2, eatable = 8, compostability = 100},
 	_mcl_saturation = 4.8,
 })

@@ -607,8 +607,6 @@ core.register_craftitem("mcl_ocean:dried_kelp", {
 	inventory_image = "mcl_ocean_dried_kelp.png",
 	wield_image = "mcl_ocean_dried_kelp.png",
 	groups = {food = 2, eatable = 1, compostability = 30},
-	on_place = core.item_eat(1),
-	on_secondary_use = core.item_eat(1),
 	_mcl_saturation = 0.6,
 	_mcl_crafting_output = {square3 = {output = "mcl_ocean:dried_kelp_block"}}
 })

@@ -18,6 +18,8 @@ end
 
 mcl_hunger.HUD_TICK = 0.1
 
+mcl_hunger.EAT_DELAY = 1.6
+
 -- Exhaustion increase
 mcl_hunger.EXHAUST_DIG = 5  -- after digging node
 mcl_hunger.EXHAUST_JUMP = 50 -- jump
@@ -38,6 +40,10 @@ mcl_hunger.debug = false
 
 -- Cooldown timers for each player, to force a short delay between consuming 2 food items
 mcl_hunger.last_eat = {}
+
+mcl_hunger.eat_anim_hud = {} -- track eating animation HUD
+mcl_hunger.eat_anim_timer = {} -- holding food RMB timer based on dtime
+mcl_hunger.eat_anim_block = {} -- if not nil then forbid eat animation
 
 dofile(modpath.."/api.lua")
 dofile(modpath.."/hunger.lua")
@@ -74,6 +80,15 @@ local function init_hud(player)
 		hb.init_hudbar(player, "saturation", mcl_hunger.get_saturation(player), mcl_hunger.get_hunger(player))
 		hb.init_hudbar(player, "exhaustion", mcl_hunger.get_exhaustion(player))
 	end
+	mcl_hunger.eat_anim_hud[player] = player:hud_add({
+		hud_elem_type = "image",
+		text = "blank.png",
+		position = {x = 0.5, y = 1},
+		scale = {x = -25, y = -45},
+		alignment = {x = 0, y = -1},
+		offset = {x = 0, y = -30},
+		z_index = -200,
+	})
 end
 
 -- HUD updating functions for Debug Mode. No-op if not in Debug Mode

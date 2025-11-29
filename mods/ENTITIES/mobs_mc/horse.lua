@@ -180,6 +180,12 @@ function horse:on_spawn ()
 	self:set_textures (tex)
 end
 
+function horse:actionable_on_rightclick (clicker)
+	local wielditem = clicker:get_wielded_item ()
+	local wield_food = self._food_items[wielditem:get_name ()] ~= nil
+	return self.tamed or wield_food
+end
+
 ------------------------------------------------------------------------
 -- Horse AI.
 ------------------------------------------------------------------------

@@ -7,8 +7,6 @@ core.register_craftitem("mcl_mobitems:rotten_flesh", {
 	_doc_items_longdesc = S("Yuck! This piece of flesh clearly has seen better days. If you're really desperate, you can eat it to restore a few hunger points, but there's a 80% chance it causes food poisoning, which increases your hunger for a while."),
 	inventory_image = "mcl_mobitems_rotten_flesh.png",
 	wield_image = "mcl_mobitems_rotten_flesh.png",
-	on_place = core.item_eat(4),
-	on_secondary_use = core.item_eat(4),
 	groups = { food = 2, eatable = 4 },
 	_mcl_saturation = 0.8,
 })
@@ -18,8 +16,6 @@ core.register_craftitem("mcl_mobitems:mutton", {
 	_doc_items_longdesc = S("Raw mutton is the flesh from a sheep and can be eaten safely. Cooking it will greatly increase its nutritional value."),
 	inventory_image = "mcl_mobitems_mutton_raw.png",
 	wield_image = "mcl_mobitems_mutton_raw.png",
-	on_place = core.item_eat(2),
-	on_secondary_use = core.item_eat(2),
 	groups = { food = 2, eatable = 2, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 1.2,
 	_mcl_cooking_output = "mcl_mobitems:cooked_mutton"
@@ -30,8 +26,6 @@ core.register_craftitem("mcl_mobitems:cooked_mutton", {
 	_doc_items_longdesc = S("Cooked mutton is the cooked flesh from a sheep and is used as food."),
 	inventory_image = "mcl_mobitems_mutton_cooked.png",
 	wield_image = "mcl_mobitems_mutton_cooked.png",
-	on_place = core.item_eat(6),
-	on_secondary_use = core.item_eat(6),
 	groups = { food = 2, eatable = 6 },
 	_mcl_saturation = 9.6,
 })
@@ -41,8 +35,6 @@ core.register_craftitem("mcl_mobitems:beef", {
 	_doc_items_longdesc = S("Raw beef is the flesh from cows and can be eaten safely. Cooking it will greatly increase its nutritional value."),
 	inventory_image = "mcl_mobitems_beef_raw.png",
 	wield_image = "mcl_mobitems_beef_raw.png",
-	on_place = core.item_eat(3),
-	on_secondary_use = core.item_eat(3),
 	groups = { food = 2, eatable = 3, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 1.8,
 	_mcl_cooking_output = "mcl_mobitems:cooked_beef"
@@ -53,8 +45,6 @@ core.register_craftitem("mcl_mobitems:cooked_beef", {
 	_doc_items_longdesc = S("Steak is cooked beef from cows and can be eaten."),
 	inventory_image = "mcl_mobitems_beef_cooked.png",
 	wield_image = "mcl_mobitems_beef_cooked.png",
-	on_place = core.item_eat(8),
-	on_secondary_use = core.item_eat(8),
 	groups = { food = 2, eatable = 8 },
 	_mcl_saturation = 12.8,
 })
@@ -65,8 +55,6 @@ core.register_craftitem("mcl_mobitems:chicken", {
 	_doc_items_longdesc = S("Raw chicken is a food item which is not safe to consume. You can eat it to restore a few hunger points, but there's a 30% chance to suffer from food poisoning, which increases your hunger rate for a while. Cooking raw chicken will make it safe to eat and increases its nutritional value."),
 	inventory_image = "mcl_mobitems_chicken_raw.png",
 	wield_image = "mcl_mobitems_chicken_raw.png",
-	on_place = core.item_eat(2),
-	on_secondary_use = core.item_eat(2),
 	groups = { food = 2, eatable = 2, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 1.2,
 	_mcl_cooking_output = "mcl_mobitems:cooked_chicken"
@@ -77,8 +65,6 @@ core.register_craftitem("mcl_mobitems:cooked_chicken", {
 	_doc_items_longdesc = S("A cooked chicken is a healthy food item which can be eaten."),
 	inventory_image = "mcl_mobitems_chicken_cooked.png",
 	wield_image = "mcl_mobitems_chicken_cooked.png",
-	on_place = core.item_eat(6),
-	on_secondary_use = core.item_eat(6),
 	groups = { food = 2, eatable = 6 },
 	_mcl_saturation = 7.2,
 })
@@ -88,8 +74,6 @@ core.register_craftitem("mcl_mobitems:porkchop", {
 	_doc_items_longdesc = S("A raw porkchop is the flesh from a pig and can be eaten safely. Cooking it will greatly increase its nutritional value."),
 	inventory_image = "mcl_mobitems_porkchop_raw.png",
 	wield_image = "mcl_mobitems_porkchop_raw.png",
-	on_place = core.item_eat(3),
-	on_secondary_use = core.item_eat(3),
 	groups = { food = 2, eatable = 3, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 1.8,
 	_mcl_cooking_output = "mcl_mobitems:cooked_porkchop"
@@ -100,8 +84,6 @@ core.register_craftitem("mcl_mobitems:cooked_porkchop", {
 	_doc_items_longdesc = S("Cooked porkchop is the cooked flesh of a pig and is used as food."),
 	inventory_image = "mcl_mobitems_porkchop_cooked.png",
 	wield_image = "mcl_mobitems_porkchop_cooked.png",
-	on_place = core.item_eat(8),
-	on_secondary_use = core.item_eat(8),
 	groups = { food = 2, eatable = 8 },
 	_mcl_saturation = 12.8,
 })
@@ -111,8 +93,6 @@ core.register_craftitem("mcl_mobitems:rabbit", {
 	_doc_items_longdesc = S("Raw rabbit is a food item from a dead rabbit. It can be eaten safely. Cooking it will increase its nutritional value."),
 	inventory_image = "mcl_mobitems_rabbit_raw.png",
 	wield_image = "mcl_mobitems_rabbit_raw.png",
-	on_place = core.item_eat(3),
-	on_secondary_use = core.item_eat(3),
 	groups = { food = 2, eatable = 3, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 1.8,
 	_mcl_cooking_output = "mcl_mobitems:cooked_rabbit"
@@ -123,22 +103,9 @@ core.register_craftitem("mcl_mobitems:cooked_rabbit", {
 	_doc_items_longdesc = S("This is a food item which can be eaten."),
 	inventory_image = "mcl_mobitems_rabbit_cooked.png",
 	wield_image = "mcl_mobitems_rabbit_cooked.png",
-	on_place = core.item_eat(5),
-	on_secondary_use = core.item_eat(5),
 	groups = { food = 2, eatable = 5 },
 	_mcl_saturation = 6.0,
 })
-
--- Reset food poisoning and status effects
-local function drink_milk(itemstack, player, pointed_thing)
-	local bucket = core.do_item_eat(0, "mcl_buckets:bucket_empty", itemstack, player, pointed_thing)
-	-- Check if we were allowed to drink this (eat delay check)
-	if mcl_hunger.active and (bucket:get_name() ~= "mcl_mobitems:milk_bucket" or core.is_creative_enabled(player:get_player_name())) then
-		mcl_hunger.stop_poison(player)
-	end
-	mcl_potions._reset_effects(player)
-	return bucket
-end
 
 core.register_craftitem("mcl_mobitems:milk_bucket", {
 	description = S("Milk"),
@@ -147,10 +114,16 @@ core.register_craftitem("mcl_mobitems:milk_bucket", {
 	_doc_items_usagehelp = S("Use the placement key to drink the milk."),
 	inventory_image = "mcl_mobitems_bucket_milk.png",
 	wield_image = "mcl_mobitems_bucket_milk.png",
-	on_place = drink_milk,
-	on_secondary_use = drink_milk,
+	_eat_effect = function (itemstack, player)
+		-- Check if we were allowed to drink this (eat delay check)
+		if mcl_hunger.active and (itemstack:get_name() ~= "mcl_mobitems:milk_bucket" or core.is_creative_enabled(player:get_player_name())) then
+			mcl_hunger.stop_poison(player)
+		end
+		mcl_potions._reset_effects(player)
+	end,
+	_eat_replace_with = "mcl_buckets:bucket_empty",
 	stack_max = 1,
-	groups = { food = 3, can_eat_when_full = 1 },
+	groups = { food = 3, eatable=0, can_eat_when_full = 1 },
 })
 
 core.register_craftitem("mcl_mobitems:spider_eye", {
@@ -159,8 +132,6 @@ core.register_craftitem("mcl_mobitems:spider_eye", {
 	_doc_items_longdesc = S("Spider eyes are used mainly in crafting. If you're really desperate, you can eat a spider eye, but it will poison you briefly."),
 	inventory_image = "mcl_mobitems_spider_eye.png",
 	wield_image = "mcl_mobitems_spider_eye.png",
-	on_place = core.item_eat(2),
-	on_secondary_use = core.item_eat(2),
 	groups = { food = 2, eatable = 2, brewitem = 1 },
 	_mcl_saturation = 3.2,
 })
@@ -294,10 +265,9 @@ core.register_craftitem("mcl_mobitems:rabbit_stew", {
 	wield_image = "mcl_mobitems_rabbit_stew.png",
 	inventory_image = "mcl_mobitems_rabbit_stew.png",
 	stack_max = 1,
-	on_place = core.item_eat(10, "mcl_core:bowl"),
-	on_secondary_use = core.item_eat(10, "mcl_core:bowl"),
-	groups = { food = 3, eatable = 10 },
+	groups = { food = 2, eatable = 10 },
 	_mcl_saturation = 12.0,
+	_eat_replace_with = "mcl_core:bowl",
 })
 
 core.register_craftitem("mcl_mobitems:shulker_shell", {

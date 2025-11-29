@@ -486,6 +486,12 @@ function wolf:is_food (name)
 	return wolf_food[name] ~= nil
 end
 
+function wolf:actionable_on_rightclick (clicker)
+	local wielditem = clicker:get_wielded_item ()
+	local wield_food = wolf:is_food (wielditem:get_name())
+	return self.tamed or wield_food
+end
+
 function wolf:on_rightclick (clicker)
 	if not clicker:is_player () then
 		return

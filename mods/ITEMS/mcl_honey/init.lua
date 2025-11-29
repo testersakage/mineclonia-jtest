@@ -46,9 +46,8 @@ core.register_craftitem("mcl_honey:honey_bottle", {
 	_doc_items_usagehelp = S("Drinking will restore 6 hunger points. Can also be used to craft honey blocks."),
 	inventory_image = "mcl_honey_honey_bottle.png",
 	groups = { craftitem = 1, food = 3, eatable = 6, can_eat_when_full=1 },
-	on_place = core.item_eat(6, "mcl_potions:glass_bottle"),
-	on_secondary_use = core.item_eat(6, "mcl_potions:glass_bottle"),
 	_mcl_saturation = 1.2,
+	_eat_replace_with = "mcl_potions:glass_bottle",
 	stack_max = 16,
 	_mcl_crafting_output = {
 		single = {
