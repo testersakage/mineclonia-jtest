@@ -80,15 +80,6 @@ local function init_hud(player)
 		hb.init_hudbar(player, "saturation", mcl_hunger.get_saturation(player), mcl_hunger.get_hunger(player))
 		hb.init_hudbar(player, "exhaustion", mcl_hunger.get_exhaustion(player))
 	end
-	mcl_hunger.eat_anim_hud[player] = player:hud_add({
-		hud_elem_type = "image",
-		text = "blank.png",
-		position = {x = 0.5, y = 1},
-		scale = {x = -25, y = -45},
-		alignment = {x = 0, y = -1},
-		offset = {x = 0, y = -30},
-		z_index = -200,
-	})
 end
 
 -- HUD updating functions for Debug Mode. No-op if not in Debug Mode

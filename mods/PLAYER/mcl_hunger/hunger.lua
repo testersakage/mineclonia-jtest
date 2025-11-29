@@ -228,6 +228,15 @@ end
 core.register_on_joinplayer (function (player)
 	mcl_hunger.eat_anim_timer[player] = -math.huge
 	player:hud_set_flags({wielditem = true})
+	mcl_hunger.eat_anim_hud[player] = player:hud_add({
+		hud_elem_type = "image",
+		text = "blank.png",
+		position = {x = 0.5, y = 1},
+		scale = {x = -25, y = -45},
+		alignment = {x = 0, y = -1},
+		offset = {x = 0, y = -30},
+		z_index = -200,
+	})
 end)
 
 core.register_on_leaveplayer (function (player, _)
