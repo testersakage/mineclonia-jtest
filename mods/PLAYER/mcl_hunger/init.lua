@@ -38,9 +38,6 @@ mcl_hunger.SATURATION_INIT = 5 -- Initial saturation for new/respawning players
 -- NOTE: Only updated when settings are loaded.
 mcl_hunger.debug = false
 
--- Cooldown timers for each player, to force a short delay between consuming 2 food items
-mcl_hunger.last_eat = {}
-
 mcl_hunger.eat_anim_hud = {} -- track eating animation HUD
 mcl_hunger.eat_anim_timer = {} -- holding food RMB timer based on dtime
 mcl_hunger.eat_anim_block = {} -- if not nil then forbid eat animation
@@ -109,15 +106,11 @@ core.register_on_joinplayer(function(player)
 	mcl_hunger.init_player(player)
 	init_hud(player)
 	mcl_hunger.poison_hunger[name] = 0
-	mcl_hunger.last_eat[name] = -1
 end)
 
 core.register_on_respawnplayer(function(player)
 	-- reset hunger, related values and poison
-	local name = player:get_player_name()
-
 	mcl_hunger.stop_poison(player)
-	mcl_hunger.last_eat[name] = -1
 
 	local h, s, e = 20, mcl_hunger.SATURATION_INIT, 0
 	mcl_hunger.set_hunger(player, h, false)
@@ -317,7 +310,6 @@ else
 
 core.register_on_joinplayer(function(player)
 	mcl_hunger.init_player(player)
-	mcl_hunger.last_eat[player:get_player_name()] = -1
 end)
 
 end

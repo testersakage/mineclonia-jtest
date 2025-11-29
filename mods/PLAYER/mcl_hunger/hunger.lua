@@ -4,44 +4,25 @@
 function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
 	if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
 
+	local def = core.registered_items[itemstack:get_name()]
+	if def and def._eat_effect then
+		def._eat_effect(itemstack, user)
+	end
 	local old_itemstack = itemstack
-
-	local name = user:get_player_name()
-
-	local creative = core.is_creative_enabled(name)
-
-	-- Special foodstuffs like the cake may disable the eating delay
-	local no_eat_delay = creative
-		or (pointed_thing and pointed_thing._csm_eating)
-		or (core.get_item_group(itemstack:get_name(), "no_eat_delay") == 1)
-
-	-- Allow eating only after a delay of 2 seconds. This prevents eating as an excessive speed.
-	-- FIXME: time() is not a precise timer, so the actual delay may be +- 1 second, depending on which fraction
-	-- of the second the player made the first eat.
-	-- FIXME: In singleplayer, there's a cheat to circumvent this, simply by pausing the game between eats.
-	-- This is because os.time() obviously does not care about the pause. A fix needs a different timer mechanism.
-	if no_eat_delay
-		or (mcl_hunger.last_eat[name] < 0)
-		or (os.difftime(os.time(), mcl_hunger.last_eat[name]) >= 2) then
-		local can_eat_when_full = creative
-			or (mcl_hunger.active == false)
-			or core.get_item_group(itemstack:get_name(), "can_eat_when_full") == 1
-		-- Don't allow eating when player has full hunger bar (some exceptional items apply)
-		if can_eat_when_full or (mcl_hunger.get_hunger(user) < 20) then
-			local def = core.registered_items[itemstack:get_name()]
-			if def and def._eat_effect then
-				def._eat_effect(itemstack, user)
-			end
-			itemstack = mcl_hunger.eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
-			for _, callback in pairs(core.registered_on_item_eats) do
-				local result = callback(hp_change, replace_with_item, itemstack, user, pointed_thing, old_itemstack)
-				if result then
-					return result
-				end
-			end
-			mcl_hunger.last_eat[name] = os.time()
+	itemstack = mcl_hunger.eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
+	for _, callback in pairs(core.registered_on_item_eats) do
+		local result = callback(hp_change, replace_with_item, itemstack, user, pointed_thing, old_itemstack)
+		if result then
+			return result
 		end
 	end
+
+	core.sound_play("mcl_hunger_eat", {
+		max_hear_distance = 12,
+		gain = 0.5,
+		pitch = 1,
+		object = user,
+	}, true)
 
 	return itemstack
 end
@@ -189,7 +170,7 @@ function mcl_hunger.eat_effects(user, itemname, pos, hunger_change, item_def, pi
 		end
 		core.sound_play("mcl_hunger_bite", {
 			max_hear_distance = 12,
-			gain = 0.35,
+			gain = 0.1,
 			pitch = pitch or (1 + math.random(-10, 10) * 0.005),
 			object = user,
 		}, true)
@@ -276,6 +257,7 @@ controls.register_on_hold (function (player, key)
 				or core.get_item_group(itemstack:get_name(), "can_eat_when_full") == 1
 
 		-- Start eating animation
+		-- Don't allow eating when player has full hunger bar (some exceptional items apply)
 		if mcl_hunger.eat_anim_timer[player] == -math.huge
 			and (can_eat_when_full or h < 20) then
 			mcl_hunger.eat_anim_timer[player] = 0
@@ -285,11 +267,15 @@ controls.register_on_hold (function (player, key)
 			mcl_hunger.eat_effects(player, name, player:get_pos(), hp_change, def)
 		end
 		-- Actual eat
-		if (mcl_hunger.eat_anim_timer[player] or 0) >= mcl_hunger.EAT_DELAY then
+		if mcl_hunger.eat_anim_timer[player] >= mcl_hunger.EAT_DELAY then
 			core.do_item_eat(hp_change, def._eat_replace_with, itemstack, player, pointed_thing)
 			player:set_wielded_item(itemstack)
+			mcl_hunger.eat_anim_block[player] = 1
 			mcl_hunger.eat_anim_timer[player] = -math.huge
 			mcl_hunger.hud_eat_remove(player)
+			core.after(0.2, function ()
+				mcl_hunger.eat_anim_block[player] = nil
+			end)
 			return
 		end
 	end
@@ -297,17 +283,7 @@ end)
 
 core.register_globalstep (function (dtime)
 	for player, time in pairs (mcl_hunger.eat_anim_timer) do
-		local h = mcl_hunger.get_hunger(player)
-		local wielditem = player:get_wielded_item()
-		local creative = core.is_creative_enabled(player:get_player_name())
-		local can_eat_when_full = creative
-				or (mcl_hunger.active == false)
-				or core.get_item_group(wielditem:get_name(), "can_eat_when_full") == 1
-
-		-- Only start timer when eating is feasible
-		if can_eat_when_full or h < 20 then
-			mcl_hunger.eat_anim_timer[player] = time + dtime
-		end
+		mcl_hunger.eat_anim_timer[player] = time + dtime
 	end
 end)
 
