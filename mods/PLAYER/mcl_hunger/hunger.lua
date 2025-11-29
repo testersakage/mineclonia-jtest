@@ -251,27 +251,25 @@ controls.register_on_hold (function (player, key)
 	if key ~= "RMB" then
 		return
 	end
-
-	local itemstack = player:get_wielded_item ()
-	local pointed_thing = mcl_util.get_pointed_thing (player, true)
-
-	-- Don't eat when pointing object
-	local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
-	if rc then
-		mcl_hunger.eat_anim_block[player] = 1
-		return rc
-	end
-
 	if mcl_hunger.eat_anim_block[player] ~= nil then
 		return
 	end
 
+	local itemstack = player:get_wielded_item ()
 	local name = itemstack:get_name ()
 	local h = mcl_hunger.get_hunger(player)
 	local def = core.registered_items[name]
 	local hp_change = core.get_item_group(itemstack:get_name(), "eatable")
 
 	if core.get_item_group(itemstack:get_name(), "food") > 0 then
+		-- Don't eat when pointing object
+		local pointed_thing = mcl_util.get_pointed_thing (player, true)
+		local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
+		if rc then
+			mcl_hunger.eat_anim_block[player] = 1
+			return rc
+		end
+
 		local creative = core.is_creative_enabled(player:get_player_name())
 		local can_eat_when_full = creative
 				or (mcl_hunger.active == false)
