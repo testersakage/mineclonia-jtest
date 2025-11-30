@@ -36,19 +36,8 @@ mcl_player.player_props_sneaking = player_props_sneaking
 mcl_player.player_props_swimming = player_props_swimming
 mcl_player.player_props_normal = player_props_normal
 
--- HACK work around https://github.com/luanti-org/luanti/issues/15692
--- Scales corresponding to default perfect 180° rotations in the character b3d model
-local bone_workaround_scales = {
-	Body_Control = vector.new(-1, 1, -1),
-	Leg_Right = vector.new(1, -1, -1),
-	Leg_Left = vector.new(1, -1, -1),
-	Cape = vector.new(1, -1, 1),
-	Arm_Right_Pitch_Control = vector.new(1, -1, -1),
-	Arm_Left_Pitch_Control = vector.new(1, -1, -1),
-}
-
 local function set_bone_pos(player, bonename, pos, rot)
-	return mcl_util.set_bone_position(player, bonename, pos, rot, bone_workaround_scales[bonename])
+	return mcl_util.set_bone_position(player, bonename, pos, rot)
 end
 
 function mcl_player.player_register_model(name, def)
@@ -392,7 +381,7 @@ mcl_player.register_globalstep(function(player)
 			prev_yaw = yaw
 			mcl_player.player_set_animation(player, "fly")
 			set_bone_pos(player,"Head_Control", nil, vector.new(-math.rad(pitch) + 50, math.rad(yaw), 0))
-			set_bone_pos(player, "Body_Control", nil, vector.new(-math.rad(pitch) + 85, math.rad(yaw) - math.pi, roll))
+			set_bone_pos(player, "Body_Control", nil, vector.new(-math.rad(pitch) + 85, math.rad(yaw), roll))
 			-- sets eye height, and nametag color accordingly
 			mcl_util.set_properties(player, player_props_elytra)
 		elseif walking and (math.abs(velocity.x) > 0.35 or math.abs(velocity.z) > 0.35) then --walking
