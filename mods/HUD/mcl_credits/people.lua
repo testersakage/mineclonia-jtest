@@ -20,8 +20,8 @@ return {
 		"JoseDouglas26",
 		"Raylight",
 		"Miguel_PL",
-		"WillConker",
 		"B. Stack",
+		"cosinus",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",
