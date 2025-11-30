@@ -147,7 +147,7 @@ function mcl_skins.update_player_skin(player)
 	else
 		slim_arms = skin.slim_arms
 	end
-	local model = slim_arms and "mcl_armor_character_female.b3d" or "mcl_armor_character.b3d"
+	local model = slim_arms and "mcl_armor_character_female.gltf" or "mcl_armor_character.gltf"
 	mcl_player.player_set_model(player, model)
 end
 
@@ -232,7 +232,7 @@ function mcl_skins.show_formspec(player)
 	else
 		slim_arms = skin.slim_arms
 	end
-	local mesh = slim_arms and "mcl_armor_character_female.b3d" or "mcl_armor_character.b3d"
+	local mesh = slim_arms and "mcl_armor_character_female.gltf" or "mcl_armor_character.gltf"
 
 	formspec = formspec ..
 		"model[11,0.3;3,7;player_mesh;" .. mesh .. ";" ..
@@ -258,8 +258,8 @@ function mcl_skins.show_formspec(player)
 		for i = page_start, page_end do
 			local skin = mcl_skins.simple_skins[i]
 			local j = i - page_start - 1
-			local mesh = skin.slim_arms and "mcl_armor_character_female.b3d" or
-				"mcl_armor_character.b3d"
+			local mesh = skin.slim_arms and "mcl_armor_character_female.gltf" or
+				"mcl_armor_character.gltf"
 
 			local x = 4.5 + (j + 1) % 4 * 1.6
 			local y = 0.3 + math.floor((j + 1) / 4) * 3.1
@@ -284,13 +284,13 @@ function mcl_skins.show_formspec(player)
 		end
 	elseif active_tab == "template" then
 		formspec = formspec ..
-			"model[5,2;2,3;player_mesh;mcl_armor_character.b3d;" ..
+			"model[5,2;2,3;player_mesh;mcl_armor_character.gltf;" ..
 			mcl_skins.compile_skin(mcl_skins.steve) ..
 			",blank.png,blank.png;0,180;false;true;0,0]" ..
 
 			"button[5,5.2;2,0.8;steve;" .. S("Select") .. "]" ..
 
-			"model[7.5,2;2,3;player_mesh;mcl_armor_character_female.b3d;" ..
+			"model[7.5,2;2,3;player_mesh;mcl_armor_character_female.gltf;" ..
 			mcl_skins.compile_skin(mcl_skins.alex) ..
 			",blank.png,blank.png;0,180;false;true;0,0]" ..
 

@@ -1,5 +1,5 @@
-mcl_player.player_register_model("mcl_armor_character.b3d", {
-	animation_speed = 30,
+mcl_player.player_register_model("mcl_armor_character.gltf", {
+	animation_speed = 1,
 	textures = {
 		"character.png",
 		"blank.png",
@@ -31,7 +31,7 @@ mcl_player.player_register_model("mcl_armor_character.b3d", {
 	},
 })
 
-mcl_player.player_register_model("mcl_armor_character_female.b3d", {
+mcl_player.player_register_model("mcl_armor_character_female.gltf", {
 	animation_speed = 30,
 	textures = {
 		"character.png",
@@ -164,7 +164,7 @@ end)
 core.register_on_joinplayer(function(player)
 	player:get_inventory():set_size("armor", 5)
 	if not core.global_exists("mcl_skins") then
-		mcl_player.player_set_model(player, "mcl_armor_character.b3d")
+		mcl_player.player_set_model(player, "mcl_armor_character.gltf")
 	end
 
 	core.after(1, function()
