@@ -1,5 +1,7 @@
 --local S = core.get_translator(core.get_current_modname())
 
+local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / tonumber(core.settings:get("movement_speed_walk"))
+
 -- wrapper for core.item_eat (this way we make sure other mods can't break this one)
 function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
 	if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
@@ -178,19 +180,28 @@ function mcl_hunger.eat_effects(user, itemname, pos, hunger_change, item_def, pi
 end
 
 function mcl_hunger.hud_eat_add(player)
-	player:hud_set_flags({wielditem = false})
-
+	mcl_hunger.eat_anim_timer[player] = 0
 	local wielditem = player:get_wielded_item()
 	local itemstackdef = wielditem:get_definition()
 	local wield_image = itemstackdef.wield_image
 	if not wield_image or wield_image == "" then wield_image = itemstackdef.inventory_image end
+	player:hud_set_flags({wielditem = false})
 	player:hud_change(mcl_hunger.eat_anim_hud[player], "text", wield_image)
 	player:hud_change(mcl_hunger.eat_anim_hud[player], "offset", {x = 0, y = 50*math.sin(10*mcl_hunger.eat_anim_timer[player]+math.random())-50})
 end
 
 function mcl_hunger.hud_eat_remove(player)
+	mcl_hunger.eat_anim_timer[player] = -math.huge
 	player:hud_set_flags({wielditem = true})
 	player:hud_change(mcl_hunger.eat_anim_hud[player], "text", "blank.png")
+	if core.get_modpath("playerphysics") then
+		playerphysics.remove_physics_factor(player, "speed", "mcl_hunger:eat_anim")
+	end
+	-- Add cooldown interval
+	mcl_hunger.eat_anim_block[player] = 1
+	core.after(0.2, function ()
+		mcl_hunger.eat_anim_block[player] = nil
+	end)
 end
 
 if mcl_hunger.active then
@@ -208,7 +219,6 @@ end
 
 core.register_on_joinplayer (function (player)
 	mcl_hunger.eat_anim_timer[player] = -math.huge
-	player:hud_set_flags({wielditem = true})
 	mcl_hunger.eat_anim_hud[player] = player:hud_add({
 		hud_elem_type = "image",
 		text = "blank.png",
@@ -218,6 +228,7 @@ core.register_on_joinplayer (function (player)
 		offset = {x = 0, y = -30},
 		z_index = -200,
 	})
+	player:hud_set_flags({wielditem = true})
 end)
 
 core.register_on_leaveplayer (function (player, _)
@@ -260,8 +271,10 @@ controls.register_on_hold (function (player, key)
 		-- Don't allow eating when player has full hunger bar (some exceptional items apply)
 		if mcl_hunger.eat_anim_timer[player] == -math.huge
 			and (can_eat_when_full or h < 20) then
-			mcl_hunger.eat_anim_timer[player] = 0
 			mcl_hunger.hud_eat_add(player)
+			if core.get_modpath("playerphysics") then
+				playerphysics.add_physics_factor(player, "speed", "mcl_hunger:eat_anim", SPEED_WHILE_EAT)
+			end
 		end
 		if mcl_hunger.eat_anim_timer[player] % 0.2 <= 0.05 then
 			mcl_hunger.eat_effects(player, name, player:get_pos(), hp_change, def)
@@ -270,12 +283,7 @@ controls.register_on_hold (function (player, key)
 		if mcl_hunger.eat_anim_timer[player] >= mcl_hunger.EAT_DELAY then
 			core.do_item_eat(hp_change, def._eat_replace_with, itemstack, player, pointed_thing)
 			player:set_wielded_item(itemstack)
-			mcl_hunger.eat_anim_block[player] = 1
-			mcl_hunger.eat_anim_timer[player] = -math.huge
 			mcl_hunger.hud_eat_remove(player)
-			core.after(0.2, function ()
-				mcl_hunger.eat_anim_block[player] = nil
-			end)
 			return
 		end
 	end
@@ -294,8 +302,6 @@ controls.register_on_release (function (player, key)
 	if key ~= "RMB" then
 		return
 	end
-	mcl_hunger.eat_anim_block[player] = nil
-	mcl_hunger.eat_anim_timer[player] = -math.huge
 	mcl_hunger.hud_eat_remove(player)
 end)
 
