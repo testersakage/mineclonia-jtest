@@ -1,0 +1,30 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luanti textdomain mcl_dripstone x.x.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2025-11-23 09:01+0000\n"
+"Last-Translator: Notxor <notxor@noreply.codeberg.org>\n"
+"Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_dripstone/eo/>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.14\n"
+
+msgid "Dripstone block"
+msgstr "Kalkŝtona bloko"
+
+msgid "Dripstone is type of stone that allows stalagmites and stalagtites to grow on it"
+msgstr ""
+
+msgid "Pointed dripstone"
+msgstr ""
+
+msgid "Pointed dripstone is what stalagmites and stalagtites are made of"
+msgstr ""
+
+msgid "Pointed dripstone (@1/@2)"
+msgstr ""
