@@ -303,7 +303,7 @@ core.register_on_mods_loaded(function()
 	for name, def in pairs(core.registered_items) do
 		if def.groups.eatable and def.groups.eatable > 0 then
 			core.override_item(name, {
-				on_place = function (itemstack, player, pointed_thing)
+				on_place = def.on_place or function (itemstack, player, pointed_thing)
 					local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 					if rc then
 						mcl_hunger.eat_anim_block[player] = 1
