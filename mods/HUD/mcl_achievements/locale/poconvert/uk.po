@@ -419,3 +419,16 @@ msgstr ""
 msgid "Enter a Bastion Remnant"
 msgstr ""
 
+msgid "A Throwaway Joke"
+msgstr ""
+
+msgid "Very Very Frightening"
+msgstr ""
+
+msgid "Throw a Trident at something.\n"
+"Note: Throwing away your only weapon is not a good idea."
+msgstr ""
+
+msgid "Strike a Villager with lightning."
+msgstr ""
+

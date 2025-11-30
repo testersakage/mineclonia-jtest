@@ -1,6 +1,6 @@
 # textdomain: mcl_books
-Chiseled Bookshelf=
-Chiseled bookshelf holds up to six books.=
+Chiseled Bookshelf=Резной книжный шкаф
+Chiseled bookshelf holds up to six books.=Резной книжный шкаф вмещает до шести книг.
 Book=Книга
 Books are used to make bookshelves and book and quills.=Из книг можно создавать книжные полки и книги с перьями.
 “@1”=«@1»

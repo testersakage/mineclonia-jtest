@@ -47,3 +47,7 @@ Red Bed=
 White Bed=
 Yellow Bed=
 Respawn Anchor=Genopståelsesanker
+The respawn anchor is a block that allows the player to set their spawn point in the Nether. It will only work if fueled using glowstone blocks.=
+Use a glowstone block to add a charge.=
+Respawn anchors can be charged up to four times. Rightclick on a charged anchor to set a new spawn point.=
+A respawn anchor only works in the Nether. Attempting to use a charged anchor to set a new spawn point outside the Nether will cause it to explode.=

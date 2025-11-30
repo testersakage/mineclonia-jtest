@@ -3,17 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_buckets x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-11-29 03:10+0000\n"
-"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
-"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
-"mcl_buckets/ru/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.14\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Empty Bucket"
 msgstr "Пустое ведро"
@@ -46,9 +44,7 @@ msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on
 msgstr "Используйте, чтобы опустошить ведро и выпустить треску. Можно получить, использовав ведро с водой на треске."
 
 msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
-msgstr ""
-"Используйте, чтобы опустошить ведро и выпустить иглобрюха. Можно получить, "
-"использовав ведро с водой на иглобрюхе."
+msgstr "Используйте, чтобы опустошить ведро и выпустить иглобрюха. Можно получить, использовав ведро с водой на иглобрюхе."
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr "Используйте, чтобы опустошить ведро и выпустить лосося. Можно получить, использовав ведро с водой на лососе."
@@ -124,3 +120,4 @@ msgstr "Используйте ведро на пустом месте для с
 
 msgid "Places a river water source"
 msgstr "Переносит источник речной воды"
+

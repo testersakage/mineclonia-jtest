@@ -16,9 +16,6 @@ msgstr ""
 msgid "Firework Rocket"
 msgstr "Raketa s ohňostrojem"
 
-msgid "@1s power left. Not using rocket."
-msgstr "Zbývá @1s výkonu. Bez použití rakety."
-
 msgid "Elytra not deployed. Jump while falling down to deploy."
 msgstr "Krovky nebyly aktivovány. Pro aktivaci skočte ve chvíli kdy padáte."
 

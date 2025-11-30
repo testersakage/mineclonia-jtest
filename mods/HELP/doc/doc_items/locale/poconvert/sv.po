@@ -385,21 +385,6 @@ msgstr "Mobs"
 msgid "Different Mobs"
 msgstr "Andra mobs"
 
-msgid "Type: @1"
-msgstr "Typ: @1"
-
-msgid "Spawning light levels (min / max): @1 / @2"
-msgstr "Ljusstyrka för att spawna (min / max): @1 / @2"
-
-msgid "Can Jump a height of @1 nodes"
-msgstr "Kan hoppa en höjd av @1 noder"
-
-msgid "Can Fly"
-msgstr "Kan flyga"
-
-msgid "Can Swim"
-msgstr "Kan simma"
-
 msgid "Drops: "
 msgstr "Droppar: "
 

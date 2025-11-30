@@ -1,6 +1,5 @@
 # textdomain: mcl_fireworks
 Firework Rocket=Razzo Pirotecnico
-@1s power left. Not using rocket.=@1s di forza rimasta (senza razzi).
 Elytra not deployed. Jump while falling down to deploy.=Elitra non dispiegata. Salta mentre cadi per aprirla.
 Elytra not equipped.=Elitra non equipaggiata.
 Flight Duration: @1s=

@@ -1,8 +1,8 @@
 # textdomain: mcl_inventory
-Auto=
-Off=
-On (causes problems on some client versions)=
-Enable scrollable creative inventory=Ativar scrollable inventário criativo
+Auto=Auto
+Off=Off
+On (causes problems on some client versions)=On (causa problemas em algumas versões dos clientes)
+Enable scrollable creative inventory=Ativar inventário do criativo scrollable
 Building Blocks=Blocos de Construção
 Decoration Blocks=Blocos de Decoração
 Redstone=Redstone

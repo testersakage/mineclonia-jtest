@@ -1,7 +1,7 @@
 # textdomain: mcl_inventory
-Auto=
-Off=
-On (causes problems on some client versions)=
+Auto=Авто
+Off=Выкл.
+On (causes problems on some client versions)=Вкл. (вызывает проблемы в некоторых версиях клиента)
 Enable scrollable creative inventory=Включить прокрутку в творческом инвентаре
 Building Blocks=Строительные блоки
 Decoration Blocks=Декоративные блоки

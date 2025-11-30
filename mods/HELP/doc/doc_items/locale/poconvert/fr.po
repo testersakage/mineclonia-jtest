@@ -385,21 +385,6 @@ msgstr "Créatures"
 msgid "Different Mobs"
 msgstr "Différentes créatures"
 
-msgid "Type: @1"
-msgstr "Type : @1"
-
-msgid "Spawning light levels (min / max): @1 / @2"
-msgstr "Luminosité requise pour apparaitre (min / max) : @1 / @2"
-
-msgid "Can Jump a height of @1 nodes"
-msgstr "Peut sauter à une hauteur de @1 nœuds"
-
-msgid "Can Fly"
-msgstr "Peut voler"
-
-msgid "Can Swim"
-msgstr "Peut nager"
-
 msgid "Drops: "
 msgstr "Lâche : "
 

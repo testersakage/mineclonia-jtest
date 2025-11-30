@@ -16,9 +16,6 @@ msgstr ""
 msgid "Firework Rocket"
 msgstr "烟花火箭"
 
-msgid "@1s power left. Not using rocket."
-msgstr "还剩 @1秒动力。不使用火箭。"
-
 msgid "Elytra not deployed. Jump while falling down to deploy."
 msgstr "鞘翅未展开。在下落过程中跳跃可展开鞘翅。"
 

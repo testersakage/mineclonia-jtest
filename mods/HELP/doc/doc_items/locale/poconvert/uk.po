@@ -385,21 +385,6 @@ msgstr "Моби"
 msgid "Different Mobs"
 msgstr ""
 
-msgid "Type: @1"
-msgstr ""
-
-msgid "Spawning light levels (min / max): @1 / @2"
-msgstr ""
-
-msgid "Can Jump a height of @1 nodes"
-msgstr ""
-
-msgid "Can Fly"
-msgstr ""
-
-msgid "Can Swim"
-msgstr ""
-
 msgid "Drops: "
 msgstr ""
 

@@ -47,3 +47,7 @@ Red Bed=红色床
 White Bed=白色床
 Yellow Bed=黄色床
 Respawn Anchor=重生锚
+The respawn anchor is a block that allows the player to set their spawn point in the Nether. It will only work if fueled using glowstone blocks.=
+Use a glowstone block to add a charge.=
+Respawn anchors can be charged up to four times. Rightclick on a charged anchor to set a new spawn point.=
+A respawn anchor only works in the Nether. Attempting to use a charged anchor to set a new spawn point outside the Nether will cause it to explode.=

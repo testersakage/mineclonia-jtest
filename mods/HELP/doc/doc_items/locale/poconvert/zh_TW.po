@@ -385,21 +385,6 @@ msgstr "生物"
 msgid "Different Mobs"
 msgstr "各種友善、敵對、或死或活的生物"
 
-msgid "Type: @1"
-msgstr "類型：@1"
-
-msgid "Spawning light levels (min / max): @1 / @2"
-msgstr "生成的亮度要求：@1 至 @2"
-
-msgid "Can Jump a height of @1 nodes"
-msgstr "跳躍高度 @1 格"
-
-msgid "Can Fly"
-msgstr "會飛行"
-
-msgid "Can Swim"
-msgstr "會游泳"
-
 msgid "Drops: "
 msgstr "掉落物： "
 
