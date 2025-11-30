@@ -17,7 +17,7 @@ msgid "Honeycomb"
 msgstr "Favo de Mel"
 
 msgid "Used to craft beehives and protect copper blocks from further oxidation."
-msgstr "Usado para fabricar colméias artificiais e protejer blocos de cobre da oxidação adicional."
+msgstr "Usado para produzir colmeias artificiais e proteger blocos de cobre da oxidação adicional."
 
 msgid "Use on copper blocks to prevent further oxidation."
 msgstr "Use em blocos de cobre para previnir oxidação adicional."
@@ -32,10 +32,10 @@ msgid "Honey Bottle"
 msgstr "Garrafa de Mel"
 
 msgid "Honey Bottle is used to craft honey blocks and to restore hunger points."
-msgstr "Garrafa de Mel é usada para fabricar blocos de mel e para restaurar pontos de fome."
+msgstr "Garrafa de Mel é usada para produzir blocos de mel e para restaurar pontos de fome."
 
 msgid "Drinking will restore 6 hunger points. Can also be used to craft honey blocks."
-msgstr "Beber irá restaurar 6 pontos de fome. Também pode ser usada para fabricar blocos de mel."
+msgstr "Beber irá restaurar 6 pontos de fome. Também pode ser usada para produzir blocos de mel."
 
 msgid "Honey Block"
 msgstr "Bloco de Mel"

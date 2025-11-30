@@ -2,7 +2,7 @@
 Enchantment Cost: =Вартість Чари: 
 Repair and Name=
 Repair and rename items=
-Anvil=
+Anvil=Наковальня
 The anvil allows you to repair tools and armor, and to give names to items. It has a limited durability, however. Don't let it fall on your head, it could be quite painful!=
 To use an anvil, rightclick it. An anvil has 2 input slots (on the left) and one output slot.=
 To rename items, put an item stack in one of the item slots while keeping the other input slot empty. Type in a name, hit enter or “Set Name”, then take the renamed item from the output slot.=

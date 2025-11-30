@@ -116,40 +116,40 @@ msgid "Diamond Hoe"
 msgstr "Diamentowa motyka"
 
 msgid "Netherite Hoe"
-msgstr ""
+msgstr "Netherytowa motyka"
 
 msgid "Melon Seeds"
-msgstr "Nasiona melona"
+msgstr "Nasiona arbuza"
 
 msgid "Grows into a melon stem which in turn grows melons. Chickens like melon seeds."
-msgstr "Wyrasta z nich łodyga melona, z której z kolei wyrastają melony. Kurczaki lubią nasiona melona."
+msgstr "Wyrasta z nich łodyga arbuza, z której z kolei wyrastają arbuzy. Kurczaki lubią nasiona arbuza."
 
 msgid "Place the melon seeds on farmland (which can be created with a hoe) to plant a melon stem. Melon stems grow in sunlight and grow faster on hydrated farmland. When mature, the stem will attempt to grow a melon at the side. Rightclick an animal to feed it melon seeds."
-msgstr "Umieść nasiona melona na polu uprawnym (ziemię można zaorać motyką), aby zasadzić łodygę melona. Łodygi melona rosną w słońcu i rosną szybciej na nawodnionym polu. Gdy są dojrzałe, łodygi melona będą próbować umieścić melon na boku. Kliknij prawym na zwierzę aby nakarmić je nasionami melona."
+msgstr "Aby uzyskać łodygę arbuza umieść nasiona arbuza na polu uprawnym - żeby je uzyskać ziemię trzeba zaorać motyką. Łodygi arbuza rosną w słońcu, a robi ą to szybciej na nawodnionym polu. Gdy dojrzeją łodygi spróbują umieścić arbuza na boku. Kliknij prawym przyciskiem na zwierzę aby nakarmić je nasionami arbuza."
 
 msgid "Melon"
-msgstr "Melon"
+msgstr "Arbuz"
 
 msgid "A melon is a block which can be grown from melon stems, which in turn are grown from melon seeds. It can be harvested for melon slices."
-msgstr "Melon jest blokiem, który wyrasta z łodygi melona, która z kolei wyrasta z nasion melona."
+msgstr "Arbuz jest blokiem, który wyrasta z łodygi arbuza, która z kolei wyrasta z nasion arbuza. Może być podzielony na kawałki arbuza."
 
 msgid "Premature Melon Stem"
-msgstr "Niedojrzała łodyga melona."
+msgstr "Niedojrzała łodyga arbuza"
 
 msgid "Melon stems grow on farmland in 8 stages. On hydrated farmland, the growth is a bit quicker. Mature melon stems are able to grow melons."
-msgstr "Łodygi melona rosną na polu uprawnym w 8 etapach. Na nawodnionym polu rosną nieco szybciej. Dojrzałe łodygi melona są w stanie tworzyć melony."
+msgstr "Łodygi arbuza rosną na polu uprawnym w 8 etapach. Na nawodnionym polu rosną nieco szybciej. Dojrzałe łodygi arbuza są w stanie tworzyć arbuzy."
 
 msgid "Premature Melon Stem (Stage @1)"
-msgstr "Niedojrzała łodyga melona (etap @1)"
+msgstr "Niedojrzała łodyga arbuza (etap @1)"
 
 msgid "Mature Melon Stem"
-msgstr "Dojrzała łodyga melona"
+msgstr "Dojrzała łodyga arbuza"
 
 msgid "A mature melon stem attempts to grow a melon at one of its four adjacent blocks. A melon can only grow on top of farmland, dirt, or a grass block. When a melon is next to a melon stem, the melon stem immediately bends and connects to the melon. While connected, a melon stem can't grow another melon. As soon all melons around the stem have been removed, it loses the connection and is ready to grow another melon."
-msgstr "Dojrzała łodyga melona próbuje stworzyć melona na jednym z czterech sąsiednich bloków. Melon może wyrosnąć tylko na polu uprawnym, ziemi lub bloku trawy. Gdy melon jest obok łodygi melona, łodyga natychmiast się zgina i łączy z melonem. Dopóki jest połączona, nie może z niej wyrosnąć inny melon. Jak tylko wszystkie melony wokół łodygi są usunięte traci ona połączenie i może z niej wyrosnąć następny melon."
+msgstr "Dojrzała łodyga arbuza próbuje stworzyć arbuza na jednym z czterech sąsiednich bloków. Arbuz może wyrosnąć tylko na polu uprawnym, ziemi lub bloku trawy. Gdy arbuz jest obok łodygi arbuza, łodyga natychmiast się zgina i łączy z arbuzem. Dopóki jest połączona, nie może z niej wyrosnąć inny arbuz. Jak tylko wszystkie arbuzy wokół łodygi są usunięte traci ona połączenie i może z niej wyrosnąć następny arbuz."
 
 msgid "Melon Slice"
-msgstr "Kawałek melona"
+msgstr "Kawałek arbuza"
 
 msgid "This is a food item which can be eaten."
 msgstr "Jest to przedmiot, który można zjeść."
@@ -158,7 +158,7 @@ msgid "Premature Potato Plant"
 msgstr "Niedojrzała roślina ziemniaka"
 
 msgid "Potato plants are plants which grow on farmland under sunlight in 8 stages, but only 4 stages can be visually told apart. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature."
-msgstr "Rośliny ziemniaka są roślinami rosnącymi w słońcu w 8 etapach, ale tylko 4 są rozróżnialne wizualnie. Na nawodnionym polu rosną nieco szybciej. Mogą być zebrane w dowolnym momencie, ale jest to zyskowne tylko gdy są dojrzałe. "
+msgstr "Ziemniaki są roślinami rosnącymi w słońcu w 8 etapach, ale tylko 4 są rozróżnialne wizualnie. Na nawodnionym polu rosną nieco szybciej. Mogą być zebrane w dowolnym momencie, ale jest to opłacalne tylko wtedy gdy ziemniaki są dojrzałe."
 
 msgid "Premature Potato Plant (Stage @1)"
 msgstr "Niedojrzała roślina ziemniaka (Etap @1)"
@@ -194,7 +194,7 @@ msgid "This potato doesn't look too healthy. You can eat it to restore hunger po
 msgstr "Ten ziemniak nie wygląda na zdrowy. Możesz go zjeść aby odzyskać punkty głodu, ale jest 60% szans, że chwilowo cię zatruje."
 
 msgid "Pumpkin Seeds"
-msgstr "Nasiona dyni "
+msgstr "Nasiona dyni"
 
 msgid "Grows into a pumpkin stem which in turn grows pumpkins. Chickens like pumpkin seeds."
 msgstr "Wyrasta z nich łodyga dyni, z której z kolei wyrastają dynie. Kurczaki lubią nasiona dyni."
@@ -215,7 +215,7 @@ msgid "Mature Pumpkin Stem"
 msgstr "Dojrzała łodyga dyni"
 
 msgid "A mature pumpkin stem attempts to grow a pumpkin at one of its four adjacent blocks. A pumpkin can only grow on top of farmland, dirt or a grass block. When a pumpkin is next to a pumpkin stem, the pumpkin stem immediately bends and connects to the pumpkin. A connected pumpkin stem can't grow another pumpkin. As soon all pumpkins around the stem have been removed, it loses the connection and is ready to grow another pumpkin."
-msgstr "Dojrzała łodyga dyni próbuje postawić dynię na jednym  z czterech sąsiadujących bloków. Dynia może wyrosnąć tylko na polu uprawnym, ziemi lub bloku trawy. Gdy dynia jest obok łodygi dyni, ugina się ona i łączy z dynią. Z połączonej łodygi dyni nie może wyrosnąć kolejna dynia. Jak tylko wszystkie pobliskie dynie są usunięte, traci ona połączenie i może z niej wyrosnąć następna dynia. "
+msgstr "Dojrzała łodyga dyni próbuje postawić dynię na jednym z czterech sąsiadujących bloków. Dynia może wyrosnąć tylko na polu uprawnym, ziemi lub bloku trawy. Łodyga dyni ugina się i łączy z dynią znajdującą się obok. Z połączonej łodygi dyni nie może wyrosnąć kolejna dynia. Jak tylko wszystkie pobliskie dynie zostaną usunięte, straci ona połączenie i może z niej wyrosnąć następna dynia."
 
 msgid "Faceless Pumpkin"
 msgstr "Dynia bez twarzy"
@@ -263,31 +263,31 @@ msgid "Hydrated farmland is used in farming, this is where you can plant and gro
 msgstr "Nawodnione pole uprawne jest używane w rolnictwie, do sadzenia roślin. Jest utworzone gdy na pole uprawne spadnie deszcz lub w pobliżu jest woda. Bez wody blok ten wyschnie po jakimś czasie. Ten blok zamieni się w ziemię gdy stały blok pojawi się nad nim, lub ramię tłoku będzie nad nim wysunięte."
 
 msgid "Sweet Berry Bush (Stage @1)"
-msgstr ""
+msgstr "Krzaczek słodkich jagód (Etap @1)"
 
 msgid "Sweet Berry"
-msgstr ""
+msgstr "Słodka jagoda"
 
 msgid "Wheat Seeds"
-msgstr "Nasiona zboża"
+msgstr "Nasiona pszenicy"
 
 msgid "Grows into a wheat plant. Chickens like wheat seeds."
-msgstr "Wyrasta w zboże. Kurczaki lubią nasiona zboża."
+msgstr "Wyrasta w pszenicę. Kurczaki lubią nasiona pszenicy."
 
 msgid "Premature Wheat Plant"
-msgstr "Niedojrzałe zboże"
+msgstr "Niedojrzała pszenica"
 
 msgid "Premature Wheat Plant (Stage @1)"
-msgstr "Niedojrzałe zboże (etap @1)"
+msgstr "Niedojrzałe pszenica (Etap @1)"
 
 msgid "Mature Wheat Plant"
-msgstr "Dojrzałe zboże"
+msgstr "Dojrzała pszenica"
 
 msgid "Wheat"
-msgstr "Zboże"
+msgstr "Pszenica"
 
 msgid "Wheat is used in crafting. Some animals like wheat."
-msgstr "Zboże jest używane do wytwarzania. Niektóre zwierzęta lubią zboże."
+msgstr "Pszenica jest używana do wytwarzania. Niektóre zwierzęta lubią pszenicę."
 
 msgid "Use the “Place” key on an animal to try to feed it wheat."
 msgstr "Użyj przycisku \"Umieść\" na zwierzęciu, aby spróbować je nakarmić."
@@ -299,26 +299,35 @@ msgid "Bread"
 msgstr "Chleb"
 
 msgid "Hay Bale"
-msgstr "Bela siana"
+msgstr "Bela słomy"
 
 msgid "Hay bales are decorative blocks made from wheat."
-msgstr "Bele siana są blokami dekoracyjnymi wytwarzanymi ze zboża."
+msgstr "Bele słomy są blokami dekoracyjnymi wytwarzanymi z pszenicy."
 
 msgid "\n"
 "		Place the wheat seeds on farmland (which can be created with a hoe) to plant a wheat plant.\n"
 "		They grow in sunlight and grow faster on hydrated farmland. Rightclick an animal to feed it wheat seeds.\n"
 "	"
-msgstr ""
+msgstr "\n"
+"\t\tAby zasiać pszenicę umieść nasiona pszenicy na polu uprawnym (które można stworzyć za pomocą motyki). \n"
+"\t\tPszenica rośnie w słońcu, a robi to szybciej na nawodnionych polach. Kliknij prawym przyciskiem myszy zwierzę, aby nakarmić je nasionami pszenicy.\n"
+"\t"
 
 msgid "\n"
 "			Premature wheat plants grow on farmland under sunlight in 8 stages.\n"
 "			On hydrated farmland, they grow faster. They can be harvested at any time but will only yield a profit when mature.\n"
 "		"
-msgstr ""
+msgstr "\n"
+"\t\t\tPszenica dojrzewa w słońcu w 8 etapach.\n"
+"\t\t\tNa nawodnionym polu dojrzewa znacznie szybciej. Można ją ściąć w dowolnym momencie ale opłaca się to tylko gdy jest dojrzała.\n"
+"\t\t"
 
 msgid "\n"
 "		Mature wheat plants are ready to be harvested for wheat and wheat seeds.\n"
 "		They won't grow any further.\n"
 "	"
-msgstr ""
+msgstr "\n"
+"\t\tDojrzała pszenica jest gotowa do zbioru. Uzyskasz z niej pszenicę i nasiona pszenicy.\n"
+"\t\tBardziej już nie dojrzeje..\n"
+"\t"
 

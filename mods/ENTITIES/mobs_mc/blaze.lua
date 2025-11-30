@@ -12,20 +12,10 @@ local mod_target = core.get_modpath("mcl_target")
 --################### BLAZE
 --###################
 
-local function check_light(_, _, artificial_light, _)
-	if artificial_light > 11 then
-		return false, "To bright"
-	end
-	return true, ""
-end
-
 local blaze = {
 	description = S("Blaze"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
-	spawn_in_group_min = 2,
-	spawn_in_group = 3,
 	group_attack = {
 		"mobs_mc:blaze",
 	},
@@ -88,7 +78,6 @@ local blaze = {
 	makes_footstep_sound = false,
 	glow = 14,
 	fire_damage_resistant = true,
-	check_light = check_light,
 	view_range = 48.0,
 	tracking_distance = 48.0,
 	_projectile_gravity = false,
@@ -297,8 +286,8 @@ local blaze_spawner = table.merge (mobs_mc.monster_spawner, {
 	weight = 10,
 	pack_min = 2,
 	pack_max = 3,
-	max_artificial_light = 15,
-	max_light = 15,
+	max_artificial_light = 11,
+	max_light = 11,
 	biomes = {},
 	structures = {
 		"mcl_levelgen:nether_fortress",

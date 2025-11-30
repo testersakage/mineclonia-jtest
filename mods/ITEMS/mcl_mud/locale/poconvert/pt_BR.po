@@ -23,13 +23,13 @@ msgid "Packed Mud"
 msgstr "Barro Seco"
 
 msgid "Packed mud is a decorative block used to craft mud bricks."
-msgstr "Barro seco é um bloco decorativo usado para fabricar tijolos de barro."
+msgstr "Barro seco é um bloco decorativo usado para produzir tijolos de barro."
 
 msgid "Mud Bricks"
 msgstr "Tijolos de Barro"
 
 msgid "Decorative block crafted from packed mud."
-msgstr "Bloco decorativo fabricado a partir de barro seco."
+msgstr "Bloco decorativo produzido a partir de barro seco."
 
 msgid "Mud Brick Stair"
 msgstr ""

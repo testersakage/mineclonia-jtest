@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Bane of Arthropods"
-msgstr ""
+msgstr "Ruína dos Artrópodes"
 
 msgid "Increases damage and applies Slowness IV to arthropod mobs (spiders, cave spiders, silverfish and endermites)."
 msgstr ""

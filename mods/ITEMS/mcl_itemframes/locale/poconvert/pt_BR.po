@@ -17,35 +17,35 @@ msgid "Item Frame"
 msgstr "Moldura"
 
 msgid "Can hold an item"
-msgstr ""
+msgstr "Pode conter um item"
 
 msgid "Item frames are decorative blocks in which items can be placed."
-msgstr "Molduras são blocos decorativos aos quais itens podem ser posicionadas."
+msgstr "Molduras são blocos decorativos em que itens podem ser colocados."
 
 msgid "Just place any item on the item frame. Use the item frame again to retrieve the item."
-msgstr "Apenas posicione qualquer item na moldura. Use a moldura de novo para pegar o item de volta."
+msgstr "Basta colocar qualquer item na moldura. Use a moldura de novo para pegar o item de volta."
 
 msgid "Glow Item Frame"
-msgstr ""
+msgstr "Moldura Brilhante"
 
 msgid "Can hold an item and glows"
-msgstr ""
+msgstr "Pode conter um item e brilha"
 
 msgid "Invisible Item Frame"
-msgstr ""
+msgstr "Moldura Invisível"
 
 msgid "Can hold an item but is invisible"
-msgstr ""
+msgstr "Pode conter um item, mas é invisível"
 
 msgid "Invisible Glow Item Frame"
-msgstr ""
+msgstr "Moldura Invisível com Brilho"
 
 msgid "Can hold an item and glows but is invisible"
-msgstr ""
+msgstr "Pode conter um item e é invisível, mas brilha"
 
 msgid "Glow and Behold!"
-msgstr "Brilhe e Veja!"
+msgstr "Brilhe e Contemple!"
 
 msgid "Craft a glow item frame."
-msgstr "Fabrique uma moldura brilhante."
+msgstr "Produza uma moldura brilhante."
 

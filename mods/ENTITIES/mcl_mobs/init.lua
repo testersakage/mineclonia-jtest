@@ -167,8 +167,6 @@ mcl_mobs.mob_class = {
 	ignited_by_sunlight = false,
 	avoids_sunlight = false,
 	tnt_knockback = true,
-	min_light = 7,
-	max_light = core.LIGHT_MAX + 1,
 	does_not_prevent_sleep = false,
 	prevents_sleep_when_hostile = false,
 	persist_in_peaceful = true,
@@ -380,7 +378,8 @@ function mcl_mobs.register_mob(name, def)
 	local can_despawn
 	if def.can_despawn ~= nil then
 		can_despawn = def.can_despawn
-	elseif def.spawn_class == "passive" then
+	elseif def._spawn_category == "misc"
+		or def._spawn_category == "creature" then
 		can_despawn = false
 	else
 		can_despawn = true
@@ -432,8 +431,6 @@ function mcl_mobs.register_mob(name, def)
 						 DOOR_WOOD_CLOSED = 0.0,
 					}) or gwp_penalties,
 
-		min_light = def.min_light or (def.spawn_class == "hostile" and 0) or 7,
-		max_light = def.max_light or (def.spawn_class == "hostile" and 7) or core.LIGHT_MAX + 1,
 		on_blast = def.on_blast or function(self,damage)
 			self.object:punch(self.object, 1.0, {
 				full_punch_interval = 1.0,

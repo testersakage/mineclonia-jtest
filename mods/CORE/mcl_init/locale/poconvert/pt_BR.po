@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Outdated Client version detected!"
-msgstr ""
+msgstr "Versão do Cliente desatualizada detectada!"
 
 msgid "Do not show again"
 msgstr ""

@@ -14,14 +14,14 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Set debug bit mask: 0 = disable, 1 = player coords, 2 = coordinates, 3 = biome name, 4 = all"
-msgstr ""
+msgstr "Mudar o bit de depuração: 0 = desativar, 1 = coordenadas do jogador, 2 = coordenadas, 3 = nome do bioma, 4 = todos"
 
 msgid "<bitmask>"
-msgstr ""
+msgstr "<bitmask>"
 
 msgid "Error! Possible values are integer numbers from @1 to @2"
-msgstr ""
+msgstr "Erro! Valores possíveis são número inteiros de @1 a @2"
 
 msgid "Set location bit mask: 0 = disable, 1 = coordinates"
-msgstr ""
+msgstr "Mudar o bit de depuração: 0 = desativar, 1 = coordenadas"
 

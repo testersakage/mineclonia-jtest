@@ -14,23 +14,23 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Bottle o' Enchanting"
-msgstr ""
+msgstr "Frasco Encantado"
 
 msgid "[[<player>] <xp>]"
-msgstr ""
+msgstr "[[<jogador>] <xp>]"
 
 msgid "Gives a player some XP"
-msgstr ""
+msgstr "Dá algum XP a um jogador"
 
 msgid "Error: Too many parameters!"
-msgstr ""
+msgstr "Erro: Demasiados parâmetros!"
 
 msgid "Error: Incorrect value of XP"
-msgstr ""
+msgstr "Erro: Valor incorreto de XP"
 
 msgid "Error: Player not found"
-msgstr ""
+msgstr "Erro: Jogador não encontrado"
 
 msgid "Added @1 XP to @2, total: @3, experience level: @4"
-msgstr ""
+msgstr "Adicionado @1 XP para @2, total: @3, nível: @4"
 

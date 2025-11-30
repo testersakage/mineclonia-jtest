@@ -208,7 +208,7 @@ local function pane(description, node, append, color)
 		_doc_items_entry_name = entry_name,
 		_doc_items_longdesc = longdesc,
 		textures = {texture1, texture1, "xpanes_top_glass"..txappend..".png"},
-		use_texture_alpha = "blend",
+		use_texture_alpha = append == "_natural" and "clip" or "blend",
 		inventory_image = texture1,
 		wield_image = texture1,
 		sounds = mcl_sounds.node_sound_glass_defaults(),

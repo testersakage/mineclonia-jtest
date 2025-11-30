@@ -74,7 +74,7 @@ msgid "Trident deals additional damage to ocean mobs."
 msgstr ""
 
 msgid "Infinity"
-msgstr ""
+msgstr "Безкінечність"
 
 msgid "Shooting consumes no regular arrows."
 msgstr ""
@@ -110,7 +110,7 @@ msgid "Decreases time until rod catches something."
 msgstr ""
 
 msgid "Mending"
-msgstr ""
+msgstr "Лагодження"
 
 msgid "Repair the item while gaining XP orbs."
 msgstr ""
@@ -128,7 +128,7 @@ msgid "Arrows passes through multiple objects."
 msgstr ""
 
 msgid "Power"
-msgstr ""
+msgstr "Сила"
 
 msgid "Increases arrow damage."
 msgstr ""
@@ -158,19 +158,19 @@ msgid "Trident launches player with itself when thrown. Works only in water or r
 msgstr ""
 
 msgid "Sharpness"
-msgstr ""
+msgstr "Гострота"
 
 msgid "Increases damage."
 msgstr ""
 
 msgid "Silk Touch"
-msgstr ""
+msgstr "Шовковий дотик"
 
 msgid "Mined blocks drop themselves."
 msgstr ""
 
 msgid "Smite"
-msgstr ""
+msgstr "Небесна кара"
 
 msgid "Increases damage to undead mobs."
 msgstr ""
@@ -188,7 +188,7 @@ msgid "Increases sweeping attack damage."
 msgstr ""
 
 msgid "Unbreaking"
-msgstr ""
+msgstr "Незламність"
 
 msgid "Increases item durability."
 msgstr ""

@@ -41,7 +41,7 @@ msgid "Cherry Fence Gate"
 msgstr "Portão de Cerejeira"
 
 msgid "Cherry Hanging Sign"
-msgstr ""
+msgstr "Placa de Cerejeira Pendurada"
 
 msgid "Cherry Leaves"
 msgstr "Folhas de Cerejeira"

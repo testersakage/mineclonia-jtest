@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Chiseled Bookshelf"
-msgstr ""
+msgstr "Estante Entalhada"
 
 msgid "Chiseled bookshelf holds up to six books."
-msgstr ""
+msgstr "Estante entalhada com capacidade de até seis livros."
 
 msgid "Book"
 msgstr "Livro"
@@ -44,7 +44,7 @@ msgid "Sign"
 msgstr "Assinar"
 
 msgid "Done"
-msgstr "Finalizar"
+msgstr "Concluído"
 
 msgid "Book and Quill"
 msgstr "Livro e Pena"
@@ -56,7 +56,7 @@ msgid "This item can be used to write down some notes."
 msgstr "Este item pode ser utilizado para escrever algumas anotações."
 
 msgid "Hold it in the hand, then rightclick to read the current notes and edit then. You can edit the text as often as you like. You can also sign the book which turns it into a written book which you can stack, but it can't be edited anymore."
-msgstr "Segure na mão e aperte o botão direito para ler e editar as anotações. Você pode editar o texto o quanto quiser. Você pode assinar o livro, o que o torna em um livro escrito em que você pode empilhar, mas não poderá ser editado mais."
+msgstr "Coloque na mão e aperte o botão direito para ler e editar as anotações. Você pode editar o texto o quanto quiser. Você pode assinar o livro, o que o torna em um livro escrito em que você pode estocar, mas não poderá ser editado mais."
 
 msgid "A book can hold up to @1 characters. The title length is limited to @2 characters."
 msgstr ""
@@ -90,7 +90,7 @@ msgid "Hold it in your hand, then rightclick to read the book."
 msgstr "Segure em sua mão e aperte o botão direito para ler o livro."
 
 msgid "To copy the text of the written book, place it into the crafting grid together with a book and quill (or multiple of those) and craft. The written book will not be consumed. Copies of copies can not be copied."
-msgstr "Para copiar o texto de um livro escrito, coloque-o na mesa de trabalho junto de um livro e pena (ou vários deste) e copie. O livro escrito não será consumido. Copias de copias não poderão ser copiadas."
+msgstr "Para copiar o texto de um livro escrito, coloque na bancada de produção junto de um livro e pena (ou vários deste) e copie. O livro escrito não será consumido. Cópias de cópias não poderão ser copiadas."
 
 msgid "Bookshelf"
 msgstr "Estante de Livros"

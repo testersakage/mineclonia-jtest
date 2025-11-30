@@ -28,10 +28,21 @@ msgstr "Ha bisogno di terra e luce per crescere"
 msgid "When placed on soil (such as dirt) and exposed to light, an propagule will grow into an mangrove after some time."
 msgstr ""
 
-msgid "Hanging Propagule"
+msgid "Suspended mague propagules grow on the underside of mangrove leaves.\n"
+""
 msgstr ""
 
-msgid "Grows on Mangrove leaves"
+msgid "They grow in four stages. Using bone meal on a suspended propagule advances it to the next growth stage.\n"
+""
+msgstr ""
+
+msgid "When the propagule reaches the final stage, it drops as an item when broken."
+msgstr ""
+
+msgid "Hanging Mangrove Propagule"
+msgstr ""
+
+msgid "Hanging Propagule (Stage @1)"
 msgstr ""
 
 msgid "Water logged mangrove roots"

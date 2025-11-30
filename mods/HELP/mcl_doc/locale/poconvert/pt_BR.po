@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Water can flow into this block and cause it to drop as an item."
-msgstr ""
+msgstr "A água pode fluir para dentro deste bloco e fazer com que ele caia como um item."
 
 msgid "This block can be turned into dirt with a hoe."
-msgstr ""
+msgstr "Este bloco pode ser transformado em terra com uma enxada."
 
 msgid "This block can be turned into farmland with a hoe."
 msgstr ""

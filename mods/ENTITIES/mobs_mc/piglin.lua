@@ -21,7 +21,6 @@ local piglin_base = {
 	type = "monster",
 	passive = false,
 	mesh = "mobs_mc_piglin.b3d",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	persist_in_peaceful = true,
 	collisionbox = {-0.3, 0, -0.3, 0.3, 1.95, 0.3},
@@ -207,8 +206,6 @@ local piglin = table.merge (piglin_base, table.merge (posing_humanoid, {
 	armor = {fleshy = 90},
 	damage = 5,
 	reach = 3,
-	spawn_in_group = 4,
-	spawn_in_group_min = 2,
 	_child_mesh = "mobs_mc_baby_piglin.b3d",
 	textures = {
 		{
@@ -1503,18 +1500,6 @@ piglin.ai_functions = {
 -- Piglin spawning.
 ------------------------------------------------------------------------
 
-function piglin:check_light (_, _, artificial_light, _)
-	if artificial_light > 11 then
-		return false, "Too bright"
-	end
-	return true, ""
-end
-
-function piglin.can_spawn (pos)
-	local block = core.get_node (vector.offset (pos, 0, -1, 0))
-	return block.name ~= "mcl_nether:nether_wart_block"
-end
-
 mcl_mobs.register_mob ("mobs_mc:piglin", piglin)
 
 ------------------------------------------------------------------------
@@ -1692,7 +1677,6 @@ local zombie = mobs_mc.zombie
 
 local zombified_piglin = table.merge (zombie, {
 	description = S("Zombified Piglin"),
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	prevents_sleep_when_hostile = true,
 	_neutral_to_players = true,
@@ -1916,36 +1900,6 @@ mcl_mobs.register_mob ("mobs_mc:zombified_piglin", zombified_piglin)
 -- Piglin & Zombie Pigman spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:piglin",
-	type_of_spawning = "ground",
-	dimension = "nether",
-	min_light = 0,
-	max_light = core.LIGHT_MAX+1,
-	min_height = mcl_vars.mg_lava_nether_max,
-	aoc = 3,
-	biomes = {
-		"Nether",
-		"CrimsonForest"
-	},
-	chance = 300,
-})
-
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:zombified_piglin",
-	type_of_spawning = "lava",
-	dimension = "nether",
-	min_light = 0,
-	max_light = core.LIGHT_MAX+1,
-	min_height = mcl_vars.mg_lava_nether_max,
-	aoc = 4,
-	biomes = {
-		"Nether",
-		"CrimsonForest"
-	},
-	chance = 1000,
-})
-
 mcl_mobs.register_egg("mobs_mc:piglin", S("Piglin"), "#7b4a17","#d5c381", 0)
 mcl_mobs.register_egg("mobs_mc:piglin_brute", S("Piglin Brute"), "#562b0c","#ddc89d", 0)
 mcl_mobs.register_egg("mobs_mc:zombified_piglin", S("Zombie Piglin"), "#ea9393", "#4c7129", 0)
@@ -1968,14 +1922,22 @@ local piglin_spawner = table.merge (mobs_mc.monster_spawner, {
 	max_artificial_light = 7,
 })
 
-function piglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function piglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					     spawn_flag)
 	if monster_spawner.test_spawn_position (self, spawn_pos,
 						node_pos, sdata,
-						node_cache) then
+						node_cache,
+						spawn_flag) then
 		local node = self:get_node (node_cache, -1, node_pos)
 		return node.name ~= "mcl_nether:nether_wart_block"
 	end
 	return false
+end
+
+function piglin_spawner:describe_criteria (tbl, omit_group_details)
+	monster_spawner.describe_criteria (self, tbl, omit_group_details)
+	table.insert (tbl, "Piglins will not spawn on Nether Wart blocks.")
+	table.insert (tbl, "10% of Piglins spawn as their baby variants.")
 end
 
 local piglin_spawner_crimson_forest = table.merge (piglin_spawner, {

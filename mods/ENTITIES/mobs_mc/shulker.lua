@@ -14,7 +14,6 @@ local is_valid = mcl_util.is_valid_objectref
 local shulker = {
 	description = S("Shulker"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	persist_in_peaceful = true,
 	attack_type = "null",

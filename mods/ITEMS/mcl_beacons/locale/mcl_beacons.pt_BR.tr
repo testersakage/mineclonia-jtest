@@ -1,13 +1,13 @@
 # textdomain: mcl_beacons
-Unavailable=
-Active=
+Unavailable=Indisponível
+Active=Ativo
 Beacon=Sinalizador
 Primary Power:=Poder Primário:
 Secondary Power:=Poder Secundário:
-Swiftness=
-Haste=
-Resistance=
-Leaping=
-Strength=
-Regeneration=
+Swiftness=Agilidade
+Haste=Pressa
+Resistance=Resistência
+Leaping=Salto
+Strength=Força
+Regeneration=Regeneração
 Inventory=Inventário

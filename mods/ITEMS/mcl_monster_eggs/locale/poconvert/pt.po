@@ -14,29 +14,32 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Hides a silverfish"
-msgstr ""
+msgstr "Esconde um bicho da prata"
 
 msgid "Infested Stone"
-msgstr ""
+msgstr "Pedra Infestada"
 
 msgid "Infested Cobblestone"
-msgstr ""
+msgstr "Pedregulho Infestado"
 
 msgid "Infested Stone Bricks"
-msgstr ""
+msgstr "Tijolos de Pedra Infestados"
 
 msgid "Infested Cracked Stone Bricks"
-msgstr ""
+msgstr "Tijolos de Pedra Rachados Infestados"
 
 msgid "Infested Mossy Stone Bricks"
-msgstr ""
+msgstr "Tijolos de Pedra Musgosos Infestados"
 
 msgid "Infested Chiseled Stone Bricks"
-msgstr ""
+msgstr "Tijolos de Pedra Talhados Infestados"
 
 msgid "\n"
 "			An infested block is a block from which a silverfish will pop out when it is broken.\n"
 "			It looks identical to its normal counterpart.\n"
 "		"
-msgstr ""
+msgstr "\n"
+"\t\t\tUm bloco infestado é um bloco que contém um bicho da prata que sairá quando quebrado.\n"
+"\t\t\tÉ fisicamente idêntico ao seu equivalente normal.\n"
+"\t\t"
 

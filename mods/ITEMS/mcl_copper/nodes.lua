@@ -132,10 +132,10 @@ for n, desc in pairs(n_desc) do
 	core.register_node("mcl_copper:block"..n.."_grate", {
 		description = D(desc .. "Copper Grate"),
 		_doc_items_longdesc = D(desc .. "Copper Grate is mostly a decorative block."),
-		drawtype = "allfaces_optional",
+		drawtype = "allfaces",
 		paramtype = "light",
 		tiles = {"mcl_copper"..(n == "" and "_block" or n) .."_grate.png"},
-		use_texture_alpha = "blend",
+		use_texture_alpha = "clip",
 		is_ground_content = false,
 		groups = {pickaxey = 2, building_block = 1, copper_grate = 1, },
 		sounds = mcl_sounds.node_sound_metal_defaults(),

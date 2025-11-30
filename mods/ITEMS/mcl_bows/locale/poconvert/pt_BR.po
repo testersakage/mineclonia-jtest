@@ -35,7 +35,7 @@ msgid "Arrows might get stuck on solid blocks and can be retrieved again. They a
 msgstr "Flechas poderão ficar presas em blocos sólidos e podem ser recuperadas novamente. Elas também são capazes de empurrar botões de madeira."
 
 msgid "To use arrows as ammunition for a bow, just put them anywhere in your inventory, they will be used up automatically. To use arrows as ammunition for a dispenser, place them in the dispenser's inventory. To retrieve an arrow that sticks in a block, simply walk close to it."
-msgstr "Para usar flechas como munição para um arco, apenas as coloque em seu inventário, elas serão consumidas automaticamente. Para usar flechas como munição de dispensores, coloque as no inventário do dispensor. Para recuperar uma flecha presa em um bloco, simplemente se aproxime dela."
+msgstr "Para usar flechas como munição para um arco, basta as colocar em seu inventário, elas serão consumidas automaticamente. Para usar flechas como munição de dispensores, coloque as no inventário do ejetor. Para recuperar uma flecha presa em um bloco, simplemente se aproxime dela."
 
 msgid "Bow"
 msgstr "Arco"

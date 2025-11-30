@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Hopper"
-msgstr ""
+msgstr "Funil"
 
 msgid "Inventory"
 msgstr "Inventário"

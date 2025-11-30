@@ -319,12 +319,9 @@ function mcl_structures.register_structure_spawn(def)
 					return
 				end
 			end
-			local mobdef = core.registered_entities[def.name]
-			if mobdef.can_spawn and not mobdef.can_spawn(p) then return end
-			local staticdata = core.serialize ({
+			mcl_mobs.spawn_abnormally (p, def.name, {
 				_structure_spawn = 1,
-			})
-			core.add_entity (vector.offset(p,0,-0.5,0), def.name, staticdata)
+			}, "structure")
 		end,
 	})
 end

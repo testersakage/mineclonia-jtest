@@ -17,11 +17,11 @@ msgid "Armor Stand"
 msgstr "Suporte de armaduras"
 
 msgid "Displays pieces of armor"
-msgstr ""
+msgstr "Exibe peças de armadura"
 
 msgid "An armor stand is a decorative object which can display different pieces of armor. Anything which players can wear as armor can also be put on an armor stand."
-msgstr ""
+msgstr "Um suporte de armadura é um objeto que pode mostrar diferentes peças de armadura. Tudo o que um jogador possa vestir como armadura também pode ser posto no suporte."
 
 msgid "Just place an armor item on the armor stand. To take the top piece of armor from the armor stand, select your hand and use the place key on the armor stand."
-msgstr ""
+msgstr "Basta colocar um item de armadura no suporte. Para remover a peça superior do suporte, selecione a sua mão e use a tecla de colocar no suporte de armadura."
 

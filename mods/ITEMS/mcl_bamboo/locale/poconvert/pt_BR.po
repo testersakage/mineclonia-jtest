@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "A Block made of Bamboo stalks. Can be crafted into Bamboo Planks."
-msgstr ""
+msgstr "Um bloco feito de talos de Bambu. Pode produzir Tábuas de Bambu."
 
 msgid "Block of Bamboo"
-msgstr ""
+msgstr "Bloco de Bambu"
 
 msgid "Block of Stripped Bamboo"
 msgstr ""
@@ -38,7 +38,7 @@ msgid "Bamboo Fence"
 msgstr ""
 
 msgid "Bamboo Fence Gate"
-msgstr ""
+msgstr "Portinhola de Bambu"
 
 msgid "Bamboo Hanging Sign"
 msgstr ""

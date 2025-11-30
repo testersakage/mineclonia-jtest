@@ -9,7 +9,6 @@ local pillager = table.merge (illager, table.merge (posing_humanoid, {
 	description = S("Pillager"),
 	type = "monster",
 	_spawn_category = "monster",
-	spawn_class = "hostile",
 	hp_min = 24,
 	hp_max = 24,
 	xp_min = 6,
@@ -291,47 +290,19 @@ mcl_mobs.register_egg ("mobs_mc:pillager", S("Pillager"), "#532f36", "#959b9b", 
 local mobs_spawn = core.settings:get_bool ("mobs_spawn", true)
 local next_spawn_attempt = (12000 + pr:next (0, 1200)) / 20
 
-local function is_clear (nodepos, x, y, z)
-	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = core.get_node (nodepos)
-	local def = core.registered_nodes[node.name]
-	return def and not def.walkable and def.liquidtype == "none"
-end
-
-local function is_solid (nodepos, x, y, z)
-	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = core.get_node (nodepos)
-	local def = core.registered_nodes[node.name]
-	return def and def.walkable and def.groups.opaque
-end
-
 local function spawn_patrolman (nodepos, as_leader)
-	-- Ensure adequate clearance.
-	local clearance = is_clear (nodepos, 0, 1, 0)
-		and is_clear (nodepos, 0, 0, 0)
-	-- Ensure solid footing.
-	local solid = is_solid (nodepos, 0, -1, 0)
-	-- Ensure that the block is spawnable and is sufficiently
-	-- dark.
-	local node = core.get_node (nodepos)
-	local light = core.get_artificial_light (node.param1)
-	if clearance and solid and light <= 8 then
-		-- Success.
-		local staticdata = {
-			_raidcaptain = as_leader,
-			_patrolling = true,
-			_patrol_spawn = true,
-		}
-		local str = core.serialize (staticdata)
-		local surface = vector.offset (nodepos, 0, -0.5, 0)
-		local object = core.add_entity (surface, "mobs_mc:pillager", str)
-		if as_leader and object then
-			local entity = object:get_luaentity ()
-			entity:select_patrol_target (nodepos)
-		end
-		return object ~= nil
+	local staticdata = {
+		_raidcaptain = as_leader,
+		_patrolling = true,
+		_patrol_spawn = true,
+	}
+	local object = mcl_mobs.spawn_abnormally (nodepos, "mobs_mc:pillager",
+						  staticdata, "patrol")
+	if as_leader and object then
+		local entity = object:get_luaentity ()
+		entity:select_patrol_target (nodepos)
 	end
-	return false
+	return object ~= nil
 end
 
 local is_mushroom_islands

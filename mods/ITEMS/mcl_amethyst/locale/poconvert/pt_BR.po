@@ -17,7 +17,7 @@ msgid "Block of Amethyst"
 msgstr "Bloco de Ametista"
 
 msgid "The Block of Amethyst is a decoration block crafted from amethyst shards."
-msgstr "O bloco de ametista é um bloco decorativo feito a partir de fragmentos de ametista."
+msgstr "O bloco de Ametista é um bloco decorativo produzido a partir de fragmentos de ametista."
 
 msgid "Budding Amethyst"
 msgstr "Ametista Brotando"
@@ -32,7 +32,7 @@ msgid "An amethyst shard is a crystalline mineral."
 msgstr "Um fragmento de ametista é um mineral cristalino."
 
 msgid "Amethyst Material"
-msgstr ""
+msgstr "Material de Ametista"
 
 msgid "Calcite"
 msgstr "Calcita"

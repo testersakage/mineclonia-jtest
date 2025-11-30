@@ -93,7 +93,7 @@ msgid "To copy the text of the written book, place it into the crafting grid tog
 msgstr ""
 
 msgid "Bookshelf"
-msgstr ""
+msgstr "Книжкова полиця"
 
 msgid "Inventory"
 msgstr "Інвентар"

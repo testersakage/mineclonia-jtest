@@ -385,21 +385,6 @@ msgstr "Massa"
 msgid "Different Mobs"
 msgstr "Massa yang Berbeda"
 
-msgid "Type: @1"
-msgstr "Tipe : @1"
-
-msgid "Spawning light levels (min / max): @1 / @2"
-msgstr "Tingkat cahaya pemijahan (min / maks) : @1 / @2"
-
-msgid "Can Jump a height of @1 nodes"
-msgstr "Dapat melompat setinggi @1 node"
-
-msgid "Can Fly"
-msgstr "Dapat Terbang"
-
-msgid "Can Swim"
-msgstr "Dapat Berenang"
-
 msgid "Drops: "
 msgstr "Menjatuhkan : "
 

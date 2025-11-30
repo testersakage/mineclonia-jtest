@@ -71,10 +71,7 @@ end
 local horse = {
 	description = S("Horse"),
 	type = "animal",
-	spawn_class = "passive",
 	_spawn_category = "creature",
-	spawn_in_group_min = 2,
-	spawn_in_group = 6,
 	visual = "mesh",
 	mesh = "mobs_mc_horse.b3d",
 	visual_size = {x=3.0, y=3.0},
@@ -1232,8 +1229,6 @@ local d = 0.86
 local donkey = table.merge (horse, {
 	description = S("Donkey"),
 	textures = {{"blank.png", "mobs_mc_donkey.png", "blank.png"}},
-	spawn_in_group = 3,
-	spawn_in_group_min = 1,
 	movement_speed = 3.5,
 	head_eye_height = 1.425,
 	animation = {
@@ -1328,49 +1323,8 @@ mcl_mobs.register_mob ("mobs_mc:mule", mule)
 mcl_entity_invs.register_inv ("mobs_mc:mule", "Mule", 15, true)
 
 ------------------------------------------------------------------------
--- Spawning.
+-- Horse Spawning.
 ------------------------------------------------------------------------
-
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:horse",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	min_height = mobs_mc.water_level + 3,
-	biomes = {
-	"flat",
-	"Plains",
-	"Plains_beach",
-	"SunflowerPlains",
-	"Savanna",
-	"Savanna_beach",
-	"SavannaM",
-	"Savanna_beach",
-	"Plains_beach",
-	},
-	chance = 40,
-})
-
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:donkey",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	min_height = mobs_mc.water_level + 3,
-	biomes = {
-	"flat",
-	"Plains",
-	"Plains_beach",
-	"SunflowerPlains",
-	"Savanna",
-	"Savanna_beach",
-	"SavannaM",
-	"Savanna_beach",
-	"Plains_beach",
-	"CherryGrove",
-	},
-	chance = 10,
-})
 
 mcl_mobs.register_egg("mobs_mc:horse", S("Horse"), "#c09e7d", "#eee500", 0)
 mcl_mobs.register_egg("mobs_mc:skeleton_horse", S("Skeleton Horse"), "#68684f", "#e5e5d8", 0)

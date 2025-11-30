@@ -17,7 +17,7 @@ msgid "Stonecutter"
 msgstr "Cortador de Pedras"
 
 msgid "Fill Craft Grid"
-msgstr ""
+msgstr "Encher Grade de Produção"
 
 msgid "Inventory"
 msgstr "Inventário"

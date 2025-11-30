@@ -10,7 +10,6 @@ local mob_class = mcl_mobs.mob_class
 local polar_bear = {
 	description = S("Polar Bear"),
 	type = "animal",
-	spawn_class = "passive",
 	_spawn_category = "creature",
 	runaway = true,
 	passive = false,
@@ -83,23 +82,7 @@ local polar_bear = {
 	water_friction = 0.98,
 	_standing = false,
 	_rearing_time = nil,
-	spawn_in_group_min = 1,
-	spawn_in_group_max = 2,
 }
-
-------------------------------------------------------------------------
--- Polar bear mechanics.
-------------------------------------------------------------------------
-
-function polar_bear.spawn_group_member_data (idx)
-	if idx == 2 then
-		return core.serialize ({
-			child = true,
-			can_ride_boat = true,
-		})
-	end
-	return nil
-end
 
 ------------------------------------------------------------------------
 -- Polar bear visuals.
@@ -283,19 +266,6 @@ mcl_mobs.register_mob ("mobs_mc:polar_bear", polar_bear)
 -- Polar bear spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:polar_bear",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 3,
-	biomes = {
-		"ColdTaiga",
-		"IcePlainsSpikes",
-		"IcePlains",
-	},
-	chance = 50,
-})
-
 -- spawn egg
 mcl_mobs.register_egg("mobs_mc:polar_bear", S("Polar Bear"), "#f2f2f2", "#959590", 0)
 
@@ -304,8 +274,9 @@ mcl_mobs.register_egg("mobs_mc:polar_bear", S("Polar Bear"), "#f2f2f2", "#959590
 ------------------------------------------------------------------------
 
 local default_spawner = mcl_mobs.default_spawner
+local animal_spawner = mobs_mc.animal_spawner
 
-local polar_bear_spawner = table.merge (mobs_mc.animal_spawner, {
+local polar_bear_spawner = table.merge (animal_spawner, {
 	name = "mobs_mc:polar_bear",
 	biomes = {
 		"DeepFrozenOcean",
@@ -335,6 +306,17 @@ end
 function polar_bear_spawner:test_supporting_node (node)
 	return core.get_item_group (node.name, "grass_block") > 0
 		or node.name == "mcl_core:snowblock"
+end
+
+function polar_bear_spawner:describe_supporting_nodes ()
+	return S ("on grass or snow blocks")
+end
+
+function polar_bear_spawner:describe_criteria (tbl, omit_group_details)
+	animal_spawner.describe_criteria (self, tbl, omit_group_details)
+	if not omit_group_details then
+		table.insert (tbl, S ("The second polar bear in a group will always be spawned as a cub."))
+	end
 end
 
 mcl_mobs.register_spawner (polar_bear_spawner)

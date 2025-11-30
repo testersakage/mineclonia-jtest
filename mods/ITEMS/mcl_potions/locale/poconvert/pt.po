@@ -74,13 +74,13 @@ msgid "-1 HP / @1 s"
 msgstr ""
 
 msgid "Regeneration"
-msgstr ""
+msgstr "Regeneração"
 
 msgid "+1 HP / @1 s"
 msgstr ""
 
 msgid "Strength"
-msgstr ""
+msgstr "Força"
 
 msgid "+@1% melee damage"
 msgstr ""
@@ -104,7 +104,7 @@ msgid "swimming gracefully"
 msgstr ""
 
 msgid "Leaping"
-msgstr ""
+msgstr "Salto"
 
 msgid "+@1% jumping power"
 msgstr ""
@@ -131,7 +131,7 @@ msgid "Select strength of the FoV change of the swiftness and slowness effects."
 msgstr ""
 
 msgid "Swiftness"
-msgstr ""
+msgstr "Agilidade"
 
 msgid "+@1% running speed"
 msgstr ""
@@ -188,7 +188,7 @@ msgid "resistance to fire damage"
 msgstr ""
 
 msgid "Resistance"
-msgstr ""
+msgstr "Resistência"
 
 msgid "resist @1% of incoming damage"
 msgstr ""
@@ -233,13 +233,13 @@ msgid "frequency: @1 / 1 s"
 msgstr ""
 
 msgid "Saturation"
-msgstr ""
+msgstr "Saturação"
 
 msgid "saturates by @1 per second"
 msgstr ""
 
 msgid "Haste"
-msgstr ""
+msgstr "Pressa"
 
 msgid "+@1% mining and attack speed"
 msgstr ""

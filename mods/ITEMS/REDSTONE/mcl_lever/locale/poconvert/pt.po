@@ -14,14 +14,14 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Lever"
-msgstr ""
+msgstr "Alavanca"
 
 msgid "Provides redstone power while it's turned on"
-msgstr ""
+msgstr "Fornece energia de redstone enquanto ativada"
 
 msgid "A lever is a redstone component which can be flipped on and off. It supplies redstone power to adjacent blocks while it is in the “on” state."
-msgstr ""
+msgstr "Uma alavanca é um componente de redstone que pode ser puxada para ligar e desligar. Fornece energia de redstone a blocos adjacentes enquanto ligada."
 
 msgid "Use the lever to flip it on or off."
-msgstr ""
+msgstr "Use a alavanca para a ligar ou desligar."
 

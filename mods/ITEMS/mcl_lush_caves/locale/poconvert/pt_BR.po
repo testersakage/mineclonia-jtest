@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Small Dripleaf"
-msgstr ""
+msgstr "Plantaforma Pequena"
 
 msgid "Big Dripleaf"
-msgstr ""
+msgstr "Plantaforma Grande"
 
 msgid "Azalea Plant"
 msgstr ""

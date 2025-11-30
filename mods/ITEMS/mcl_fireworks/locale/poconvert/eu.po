@@ -16,9 +16,6 @@ msgstr ""
 msgid "Firework Rocket"
 msgstr "Su artifizialen suziria"
 
-msgid "@1s power left. Not using rocket."
-msgstr "@1 Gainerako boterea. Ez erabili suziririk."
-
 msgid "Elytra not deployed. Jump while falling down to deploy."
 msgstr "Zabaldu gabeko elitroak. Zabaltzkeo egin jauzi erortzen zaren bitartean."
 

@@ -14,23 +14,23 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Empty Map"
-msgstr ""
+msgstr "Mapa Vazio"
 
 msgid "Empty maps are not useful as maps, but they can be stacked and turned to maps which can be used."
-msgstr ""
+msgstr "Mapas em branco não são úteis como mapas, mas podem ser estocados e transformados em mapas que podem ser usados."
 
 msgid "Rightclick to create a filled map (which can't be stacked anymore)."
-msgstr ""
+msgstr "Clique com o botão direito para criar um mapa preenchido (que não pode mais ser estocado)."
 
 msgid "Map"
-msgstr ""
+msgstr "Mapa"
 
 msgid "Shows a map image."
-msgstr ""
+msgstr "Mostra um mapa."
 
 msgid "When created, the map saves the nearby area as an image that can be viewed any time by holding the map."
-msgstr ""
+msgstr "Após ser criado, o mapa salva a área próxima como uma imagem que pode ser vista a qualquer momento, ao manter o mapa na mão."
 
 msgid "Hold the map in your hand. This will display a map on your screen."
-msgstr ""
+msgstr "Mantenha o mapa na mão. Isso fará com que ele apareça na sua tela."
 

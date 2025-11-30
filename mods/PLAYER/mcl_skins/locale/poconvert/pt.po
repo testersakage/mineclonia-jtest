@@ -14,44 +14,44 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Templates"
-msgstr ""
+msgstr "Modelos"
 
 msgid "Arm size"
-msgstr ""
+msgstr "Tamanho dos Braços"
 
 msgid "Bases"
-msgstr ""
+msgstr "Bases"
 
 msgid "Footwears"
-msgstr ""
+msgstr "Calçados"
 
 msgid "Eyes"
-msgstr ""
+msgstr "Olhos"
 
 msgid "Mouths"
-msgstr ""
+msgstr "Bocas"
 
 msgid "Bottoms"
-msgstr ""
+msgstr "Inferiores"
 
 msgid "Tops"
-msgstr ""
+msgstr "Superiores"
 
 msgid "Hairs"
-msgstr ""
+msgstr "Cabelos"
 
 msgid "Headwears"
-msgstr ""
+msgstr "Acessórios"
 
 msgid "Skins"
-msgstr ""
+msgstr "Skins"
 
 msgid "Open skin configuration screen."
-msgstr ""
+msgstr "Abrir ecrã de configuração do ecrã."
 
 msgid "Select"
-msgstr ""
+msgstr "Selecionar"
 
 msgid "Select player skin"
-msgstr ""
+msgstr "Selecionar skin do jogador"
 

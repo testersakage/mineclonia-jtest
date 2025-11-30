@@ -23,13 +23,13 @@ msgid "Advancement Unlocked: @1"
 msgstr "Conquista Desbloqueada: @1"
 
 msgid "Hidden Advancement Unlocked!"
-msgstr ""
+msgstr "Avanço Oculto Desbloqueado!"
 
 msgid "Goal Reached!"
-msgstr ""
+msgstr "Meta Atingida!"
 
 msgid "Challenge Complete!"
-msgstr ""
+msgstr "Desafio Concluído!"
 
 msgid "Advancement Made!"
 msgstr "Conquista Concluída!"
@@ -59,13 +59,13 @@ msgid "<name>"
 msgstr "<nome>"
 
 msgid "Get the advancement statistics for the given player or yourself"
-msgstr ""
+msgstr "Confira as estatísticas de progresso do jogador selecionado ou as suas próprias"
 
 msgid "Error: No advancements available."
 msgstr "Erro: não há conquistas disponíveis."
 
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgid "(Hidden Advancement)"
 msgstr "(Conquista Oculta)"
@@ -98,89 +98,89 @@ msgid "Chat @1 times"
 msgstr "Converse @1 vezes"
 
 msgid "@1/@2 joins"
-msgstr ""
+msgstr "@1/@2 entradas"
 
 msgid "Join once"
-msgstr ""
+msgstr "Entrou uma vez"
 
 msgid "Join @1 times"
-msgstr ""
+msgstr "Entrou @1 vezes"
 
 msgid "@1/@2 deaths"
-msgstr ""
+msgstr "@1/@2 mortes"
 
 msgid "Die once of @1"
-msgstr ""
+msgstr "Morrer uma vez de @1"
 
 msgid "Die @1 times of @2"
-msgstr ""
+msgstr "Morrer @1 vezes de @2"
 
 msgid "Die @1 times."
-msgstr ""
+msgstr "Morrer @1 vezes."
 
 msgid "Mine @1 times"
-msgstr ""
+msgstr "Minerar @1 vezes"
 
 msgid "@1/@2 dug"
-msgstr ""
+msgstr "@1/@2 escavado"
 
 msgid "Mine: @1"
-msgstr ""
+msgstr "Minerar: @1"
 
 msgid "Mine: @1×@2"
-msgstr ""
+msgstr "Minerar: @1×@2"
 
 msgid "Mine @1 block."
-msgstr ""
+msgstr "Minerar @1 bloco."
 
 msgid "Mine @1 blocks."
-msgstr ""
+msgstr "Minerar @1 blocos."
 
 msgid "@1/@2 placed"
-msgstr ""
+msgstr "@1/@2 colocado(s)"
 
 msgid "Place: @1"
-msgstr ""
+msgstr "Colocar: @1"
 
 msgid "Place: @1×@2"
-msgstr ""
+msgstr "Colocar: @1×@2"
 
 msgid "Place @1 block."
-msgstr ""
+msgstr "Colocar @1 bloco."
 
 msgid "Place @1 blocks."
-msgstr ""
+msgstr "Colocar @1 blocos."
 
 msgid "@1/@2 crafted"
-msgstr ""
+msgstr "@1/@2 produzido"
 
 msgid "Craft: @1"
-msgstr ""
+msgstr "Produzir: @1"
 
 msgid "Craft: @1×@2"
-msgstr ""
+msgstr "Produzir: @1×@2"
 
 msgid "Craft @1 item"
-msgstr ""
+msgstr "Produzir @1 item"
 
 msgid "Craft @1 items."
-msgstr ""
+msgstr "Produzir @1 items."
 
 msgid "@1/@2 eaten"
-msgstr ""
+msgstr "@1/@2 comido(s)"
 
 msgid "Eat @1"
-msgstr ""
+msgstr "Comer @1"
 
 msgid "Eat @1×@2"
-msgstr ""
+msgstr "Comer @1×@2"
 
 msgid "Eat @1 item"
-msgstr ""
+msgstr "Comer @1 item"
 
 msgid "Eat @1 items."
-msgstr ""
+msgstr "Comer @1 itens."
 
 msgid "Enter one of the titular structures"
-msgstr ""
+msgstr "Insira uma das estruturas titulares"
 

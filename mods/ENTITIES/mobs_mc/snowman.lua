@@ -21,7 +21,6 @@ local sheared_textures = {
 local snow_golem = {
 	description = S("Snow Golem"),
 	type = "npc",
-	spawn_class = "passive",
 	_spawn_category = "misc",
 	passive = true,
 	hp_min = 4,

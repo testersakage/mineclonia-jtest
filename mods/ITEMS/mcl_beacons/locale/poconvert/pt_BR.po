@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Indisponível"
 
 msgid "Active"
-msgstr ""
+msgstr "Ativo"
 
 msgid "Beacon"
 msgstr "Sinalizador"
@@ -29,22 +29,22 @@ msgid "Secondary Power:"
 msgstr "Poder Secundário:"
 
 msgid "Swiftness"
-msgstr ""
+msgstr "Agilidade"
 
 msgid "Haste"
-msgstr ""
+msgstr "Pressa"
 
 msgid "Resistance"
-msgstr ""
+msgstr "Resistência"
 
 msgid "Leaping"
-msgstr ""
+msgstr "Salto"
 
 msgid "Strength"
-msgstr ""
+msgstr "Força"
 
 msgid "Regeneration"
-msgstr ""
+msgstr "Regeneração"
 
 msgid "Inventory"
 msgstr "Inventário"

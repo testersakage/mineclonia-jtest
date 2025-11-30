@@ -14,26 +14,26 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Mud"
-msgstr ""
+msgstr "Barro"
 
 msgid "Mud is a decorative block that generates in mangrove swamps. Mud can also be obtained by using water bottles on dirt or coarse dirt."
-msgstr ""
+msgstr "Barro é um bloco decorativo que gera em manguezais. Barro também pode ser obtido por usar garrafas de água em terra ou terra infértil."
 
 msgid "Packed Mud"
-msgstr ""
+msgstr "Barro Seco"
 
 msgid "Packed mud is a decorative block used to craft mud bricks."
-msgstr ""
+msgstr "Barro seco é um bloco decorativo usado para craftar tijolos de barro."
 
 msgid "Mud Bricks"
-msgstr ""
+msgstr "Tijolos de Barro"
 
 msgid "Decorative block crafted from packed mud."
-msgstr ""
+msgstr "Bloco decorativo craftado com barro seco."
 
 msgid "Mud Brick Stair"
-msgstr ""
+msgstr "Escadas de Tijolos de Barro Seco"
 
 msgid "Mud Brick Slab"
-msgstr ""
+msgstr "Degrau de Tijolos de Barro Seco"
 

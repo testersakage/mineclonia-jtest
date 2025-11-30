@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "[<gamemode>] [<player>]"
-msgstr ""
+msgstr "[<mododejogo>] [<jogador>]"
 
 msgid "Change gamemode (survival/creative/0/1/s/c) for yourself or player"
 msgstr ""

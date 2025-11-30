@@ -24,21 +24,18 @@ local food = {
 local ocelot = {
 	description = S("Ocelot"),
 	type = "animal",
-	spawn_class = "passive",
 	_spawn_category = "monster",
 	persist_in_peaceful = false,
 	passive = false,
 	retaliates = false,
 	can_despawn = true,
-	spawn_in_group = 3,
-	spawn_in_group_min = 1,
 	hp_min = 10,
 	hp_max = 10,
 	xp_min = 1,
 	xp_max = 3,
 	visual_size = { x = 1.75, y = 1.75, },
 	head_swivel = "head.control",
-	bone_eye_height = 6.2,
+	bone_eye_height = 0,
 	head_eye_height = 0.35,
 	horizontal_head_height = -0,
 	head_yaw = "z",
@@ -64,15 +61,20 @@ local ocelot = {
 		run_start = 0, run_end = 40, run_speed = 110,
 		sit_start = 50, sit_end = 50,
 		crouch_start = 61, crouch_end = 80, crouch_speed = 20,
-		sleep_start = 137, sleep_end = 137,
+		sleep_start = 94, sleep_end = 137, sleep_loop = false,
+		sleep_speed = 80,
 	},
 	_child_animations = {
-		stand_start = 100 + 51, stand_end = 100 + 51,
-		walk_start = 100 + 51, walk_end = 100 + 91, walk_speed = 160,
-		run_start = 100 + 51, run_end = 100 + 91, run_speed = 160,
-		sit_start = 100 + 101, sit_end = 100 + 101,
-		crouch_start = 100 + 113, crouch_end = 100 + 132, crouch_speed = 40,
-		sleep_start = 239, sleep_end = 239,
+		stand_start = 140 + 0, stand_end = 140 + 0,
+		walk_start = 140 + 0, walk_end = 140 + 40,
+		walk_speed = 110,
+		run_start = 140 + 0, run_end = 140 + 40,
+		run_speed = 110,
+		sit_start = 140 + 50, sit_end = 140 + 50,
+		crouch_start = 140 + 61, crouch_end = 140 + 80,
+		crouch_speed = 140 + 20,
+		sleep_start = 140 + 94, sleep_end = 140 + 137,
+		sleep_speed = 80, sleep_loop = false,
 	},
 	view_range = 12,
 	attack_type = "null",
@@ -100,11 +102,14 @@ function ocelot:mob_activate (staticdata, dtime)
 	if not mob_class.mob_activate (self, staticdata, dtime) then
 		return false
 	end
+	-- Delete _head_pitch_offset fields applied by earlier
+	-- versions of this code.
+	if rawget (self, "_head_pitch_offset") then
+		self._head_pitch_offset = nil
+	end
 	self._pose = "walk"
 	return true
 end
-
-local FOURTY_FIVE_DEG = math.rad (45)
 
 function ocelot:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
@@ -132,12 +137,10 @@ function ocelot:ai_step (dtime)
 		self._pose = "walk"
 	end
 
-	self._head_pitch_offset = 0
 	if self._pose == "repose" then
 		mob_class.set_animation (self, "sleep")
 	elseif self._pose == "sit" then
 		mob_class.set_animation (self, "sit")
-		self._head_pitch_offset = FOURTY_FIVE_DEG
 	elseif xz > 0.0025 then
 		if self._pose == "crouching" then
 			mob_class.set_animation (self, "crouch")
@@ -341,7 +344,7 @@ function ocelot:breeding_possible ()
 end
 
 function ocelot:on_rightclick (clicker)
-	if self.child or not clicker or not clicker:is_player () then
+	if not clicker or not clicker:is_player () then
 		return
 	end
 	local item = clicker:get_wielded_item ()
@@ -674,7 +677,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 	elseif self._target_block then
 		local node = core.get_node (self._target_block_real)
 		if core.get_item_group (node.name, "furnace") == 0
-			and node.name ~= "mcl_chests:chest" then
+			and node.name ~= "mcl_chests:chest_small" then
 			self._target_block = nil
 			self:cancel_navigation ()
 			self:halt_in_tracks ()
@@ -720,7 +723,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 			local bb = vector.offset (self_pos, 4, 1, 4)
 			local block_groups = {
 				"group:furnace",
-				"mcl_chests:chest",
+				"mcl_chests:chest_small",
 			}
 			local nodes = core.find_nodes_in_area (aa, bb, block_groups)
 			if #nodes > 0 then
@@ -733,7 +736,7 @@ local function cat_sit_on_block (self, self_pos, dtime)
 					local name = core.get_node (node)
 					local open = false
 
-					if name.name == "mcl_chests:chest" then
+					if name.name == "mcl_chests:chest_small" then
 						open = mcl_chests.is_opened (node)
 					end
 
@@ -794,15 +797,19 @@ cat.ai_functions = {
 -- Cat visuals.
 ------------------------------------------------------------------------
 
-function cat:any_witch_hut ()
-	local self_pos = self.object:get_pos ()
-	local pieces = mcl_levelgen.get_structures_at (self_pos, false)
+local function any_witch_hut (pos)
+	local pieces = mcl_levelgen.get_structures_at (pos, false)
 	for _, piece in pairs (pieces) do
 		if piece.data == "mcl_levelgen:swamp_hut" then
 			return true
 		end
 	end
 	return false
+end
+
+function cat:any_witch_hut ()
+	local self_pos = self.object:get_pos ()
+	return any_witch_hut (mcl_util.get_nodepos (self_pos))
 end
 
 function cat:update_textures ()
@@ -837,6 +844,14 @@ function cat:update_textures ()
 	self.base_selbox = self.initial_properties.selectionbox
 end
 
+function cat:who_are_you_looking_at ()
+	if self._pose == "repose" then
+		self._locked_object = nil
+	else
+		mob_class.who_are_you_looking_at (self)
+	end
+end
+
 ------------------------------------------------------------------------
 -- Cat breeding.
 ------------------------------------------------------------------------
@@ -850,12 +865,13 @@ function cat:on_breed (parent1, parent2)
 		local p = math.random (1, 2)
 		if p == 1 then
 			ent_c.base_texture = parent1.base_texture
+			ent_c._default_texture = parent1._default_texture
 			ent_c._collar_color = parent1._collar_color
 		else
 			ent_c.base_texture = parent2.base_texture
+			ent_c._default_texture = parent2._default_texture
 			ent_c._collar_color = parent2._collar_color
 		end
-		ent_c._default_texture = ent_c.base_texture[0]
 		ent_c:set_textures (ent_c.base_texture)
 		ent_c.tamed = true
 		ent_c.owner = self.owner
@@ -893,7 +909,7 @@ local cat_food = {
 }
 
 function cat:on_rightclick (clicker)
-	if self.child or not clicker or not clicker:is_player () then
+	if not clicker or not clicker:is_player () then
 		return
 	end
 	local item = clicker:get_wielded_item ()
@@ -933,7 +949,8 @@ function cat:on_rightclick (clicker)
 		else
 			self:stay ()
 		end
-	elseif table.indexof (cat_food, item:get_name ()) ~= -1 then
+	elseif not self.tamed
+		and table.indexof (cat_food, item:get_name ()) ~= -1 then
 		local r = pr:next (1, 3)
 		if r == 1 then
 			self:just_tame (self_pos, clicker)
@@ -970,33 +987,12 @@ mcl_mobs.register_mob ("mobs_mc:cat", cat)
 -- Cat & Ocelot spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:ocelot",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 5,
-	min_height = mobs_mc.water_level+15,
-	biomes = {
-		"Jungle",
-		"JungleEdgeM",
-		"JungleM",
-		"JungleEdge",
-		"BambooJungle",
-	},
-	chance = 300,
-})
-
 if mobs_spawn then
 
 local time_since_spawn_attempt = 0
 
-function is_cat_spawn_position (spawn_pos)
-	local node = core.get_node (spawn_pos)
-	local def = core.registered_nodes[node.name]
-	local node1 = core.get_node (vector.offset (spawn_pos, 0, -1, 0))
-	local def1 = core.registered_nodes[node1.name]
-
-	return def and not def.walkable and def1 and def1.walkable
+local function is_cat_spawn_position (spawn_pos)
+	return mcl_mobs.spawning_possible (spawn_pos, "mobs_mc:cat")
 end
 
 core.register_globalstep (function (dtime)
@@ -1015,31 +1011,55 @@ core.register_globalstep (function (dtime)
 		spawn_pos.y = math.floor (spawn_pos.y + 0.5)
 		spawn_pos.z = math.floor (spawn_pos.z + 0.5)
 
-		if is_cat_spawn_position (spawn_pos)
-			and mcl_villages.get_poi_heat (spawn_pos) >= 4 then
-			-- Count nearby homes and cats.
-			local count_homes = 0
-			local aa = vector.offset (spawn_pos, -48, -8, -48)
-			local bb = vector.offset (spawn_pos, 48, 8, 48)
-			local pois = mcl_villages.get_pois_in_by_nodepos (aa, bb)
-			for _, poi in pairs (pois) do
-				local def = mcl_villages.registered_pois[poi.data]
-				if def and def.is_home then
-					count_homes = count_homes + 1
+		if is_cat_spawn_position (spawn_pos) then
+			if mcl_villages.get_poi_heat (spawn_pos) >= 4 then
+				-- Count nearby homes and cats.
+				local count_homes = 0
+				local aa = vector.offset (spawn_pos, -48, -8, -48)
+				local bb = vector.offset (spawn_pos, 48, 8, 48)
+				local pois = mcl_villages.get_pois_in_by_nodepos (aa, bb)
+				for _, poi in pairs (pois) do
+					local def = mcl_villages.registered_pois[poi.data]
+					if def and def.is_home then
+						count_homes = count_homes + 1
+					end
 				end
-			end
-			if count_homes >= 5 then
+				if count_homes >= 5 then
+					local count_cats = 0
+					for obj in core.objects_in_area (aa, bb) do
+						local entity = obj:get_luaentity ()
+						if entity and entity.name == "mobs_mc:cat" then
+							count_cats = count_cats + 1
+							if count_cats > 4 then
+								break
+							end
+						end
+					end
+
+					if count_cats <= 4 then
+						mcl_mobs.spawn_abnormally (spawn_pos, "mobs_mc:cat")
+					end
+				end
+			-- Cat spawning in swamp huts is also
+			-- conducted from the same timer as spawning
+			-- in villages, but as when spawned by the
+			-- natural spawning system, a grass block is
+			-- required for spawning to succeed.
+			--
+			-- https://minecraft.wiki/w/Cat#Natural_spawning
+			elseif any_witch_hut (spawn_pos) then
 				local count_cats = 0
+				local aa = vector.offset (spawn_pos, -16, -8, -16)
+				local bb = vector.offset (spawn_pos, 16, 8, 16)
 				for obj in core.objects_in_area (aa, bb) do
 					local entity = obj:get_luaentity ()
 					if entity and entity.name == "mobs_mc:cat" then
 						count_cats = count_cats + 1
+						break
 					end
 				end
-
-				if count_cats <= 4 then
-					spawn_pos.x = spawn_pos.x - 0.5
-					core.add_entity (spawn_pos, "mobs_mc:cat")
+				if count_cats < 1 then
+					mcl_mobs.spawn_abnormally (spawn_pos, "mobs_mc:cat")
 				end
 			end
 		end
@@ -1057,6 +1077,7 @@ mcl_mobs.register_egg("mobs_mc:cat", S("Cat"), "#AA8755", "#505438", 0)
 ------------------------------------------------------------------------
 
 local cat_spawner_swamp_hut = table.merge (mobs_mc.animal_spawner, {
+	name = "mobs_mc:cat",
 	weight = 1,
 	biomes = {},
 	structures = {
@@ -1089,13 +1110,23 @@ function ocelot_spawner:floor_is_grass_or_leaves (node_pos, node_cache)
 		or core.get_item_group (node.name, "grass_block") > 0
 end
 
-function ocelot_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function ocelot_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					     spawn_flag)
 	return math.random (3) == 1
 		and spawn_pos.y >= 0.5
 		and self:floor_is_grass_or_leaves (node_pos, node_cache)
 		and default_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
-							 node_cache)
+							 node_cache,
+							 spawn_flag)
+end
+
+function ocelot_spawner:get_misc_spawning_description ()
+	return S ("This mob will spawn infrequently on grass or leaves when no obstructions exist within a volume @1 nodes in size around the center of such a node's upper surface.", self:describe_mob_collision_box ())
+end
+
+function ocelot_spawner:describe_additional_spawning_criteria ()
+	return nil
 end
 
 local ocelot_spawner_bamboo_jungle = table.merge (ocelot_spawner, {

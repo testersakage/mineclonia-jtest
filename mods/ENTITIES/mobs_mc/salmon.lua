@@ -13,7 +13,6 @@ local mob_class = mcl_mobs.mob_class
 local salmon = {
 	description = S("Salmon"),
 	type = "animal",
-	spawn_class = "water_ambient",
 	_spawn_category = "water_ambient",
 	can_despawn = true,
 	passive = true,
@@ -22,7 +21,6 @@ local salmon = {
 	xp_min = 1,
 	xp_max = 3,
 	armor = 100,
-	spawn_in_group = 5,
 	tilt_swim = true,
 	head_eye_height = 0.26,
 	collisionbox = {-0.35, 0.0, -0.35, 0.35, 0.4, 0.35},
@@ -97,18 +95,6 @@ mcl_mobs.register_mob ("mobs_mc:salmon", salmon)
 -- Salmon spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:salmon",
-	type_of_spawning = "water",
-	dimension = "overworld",
-	min_height = mobs_mc.water_level - 16,
-	max_height = mobs_mc.water_level + 1,
-	min_light = 0,
-	max_light = core.LIGHT_MAX + 1,
-	aoc = 7,
-	chance = 260,
-})
-
 --spawn egg
 mcl_mobs.register_egg("mobs_mc:salmon", S("Salmon"), "#a00f10", "#0e8474", 0)
 
@@ -116,7 +102,8 @@ mcl_mobs.register_egg("mobs_mc:salmon", S("Salmon"), "#a00f10", "#0e8474", 0)
 -- Modern Salmon spawning.
 ------------------------------------------------------------------------
 
-local salmon_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
+local aquatic_animal_spawner = mobs_mc.aquatic_animal_spawner
+local salmon_spawner = table.merge (aquatic_animal_spawner, {
 	name = "mobs_mc:salmon",
 	biomes = {
 		"FrozenOcean",
@@ -131,6 +118,13 @@ local salmon_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
 
 function salmon_spawner:init_group (list, sdata)
 	mob_class.school_init_group (list)
+end
+
+function salmon_spawner:describe_criteria (tbl, omit_group_details)
+	aquatic_animal_spawner.describe_criteria (self, tbl, omit_group_details)
+	if not omit_group_details then
+		table.insert (tbl, S ("Each mob spawned will form a school with the remainder of the mobs in the group."))
+	end
 end
 
 local salmon_spawner_river = table.merge (salmon_spawner, {

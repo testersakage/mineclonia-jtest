@@ -110,7 +110,7 @@ core.register_node("mcl_portals:portal_end", {
 	drawtype = "nodebox",
 	paramtype = "light",
 	sunlight_propagates = true,
-	use_texture_alpha = "blend",
+	use_texture_alpha = "clip",
 	walkable = false,
 	diggable = false,
 	buildable_to = false,

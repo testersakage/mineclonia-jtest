@@ -17,7 +17,7 @@ msgid "Copper Ingot"
 msgstr "Lingote de Cobre"
 
 msgid "Molten Raw Copper. It is used to craft blocks."
-msgstr "Minério de Cobre Fundido. É utilizado para fabricar blocos."
+msgstr "Minério de Cobre Fundido. É usado para produzir blocos."
 
 msgid "Copper Material"
 msgstr ""
@@ -35,10 +35,10 @@ msgid "Block of Copper is mostly a decorative block."
 msgstr "Bloco de cobre é um bloco majoritariamente decorativo."
 
 msgid "Chiseled Copper"
-msgstr "Cobre Talhado"
+msgstr "Cobre Entalhado"
 
 msgid "Chiseled Copper is mostly a decorative block."
-msgstr "Cobre talhado é majoritariamente um bloco decorativo."
+msgstr "Cobre entalhado é em grande parte um bloco decorativo."
 
 msgid "Copper Bulb"
 msgstr "Bulbo de Cobre"
@@ -80,10 +80,10 @@ msgid "Cut Copper is mostly a decorative block."
 msgstr "Cobre lapidado é majoritariamente um bloco decorativo."
 
 msgid "Exposed Chiseled Copper"
-msgstr "Cobre Talhado Exposto"
+msgstr "Cobre Entalhado Exposto"
 
 msgid "Exposed Chiseled Copper is mostly a decorative block."
-msgstr "Cobre talhado exposto é majoritariamente um bloco decorativo."
+msgstr "Cobre entalhado exposto é em grande parte um bloco decorativo."
 
 msgid "Exposed Copper"
 msgstr "Cobre Exposto"
@@ -131,10 +131,10 @@ msgid "Exposed Cut Copper is mostly a decorative block."
 msgstr "Cobre lapidado exposto é majoritariamente um bloco decorativo."
 
 msgid "Oxidized Chiseled Copper"
-msgstr "Cobre Talhado Oxidado"
+msgstr "Cobre Entalhado Oxidado"
 
 msgid "Oxidized Chiseled Copper is mostly a decorative block."
-msgstr "Cobre talhado oxidado é majoritariamente um bloco decorativo."
+msgstr "Cobre entalhado oxidado é em grande parte um bloco decorativo."
 
 msgid "Oxidized Copper"
 msgstr "Cobre Oxidado"
@@ -185,7 +185,7 @@ msgid "Waxed Block of Copper"
 msgstr "Bloco de Cobre Encerado"
 
 msgid "Waxed Chiseled Copper"
-msgstr "Cobre Talhado Encerado"
+msgstr "Cobre Entalhado Encerado"
 
 msgid "Waxed Copper Bulb"
 msgstr "Bulbo de Cobre Encerado"
@@ -218,7 +218,7 @@ msgid "Waxed Double @1"
 msgstr "@1 Dupla Encerada"
 
 msgid "Waxed Exposed Chiseled Copper"
-msgstr "Cobre Talhado Exposto Encerado"
+msgstr "Cobre Entalhado Exposto Encerado"
 
 msgid "Waxed Exposed Copper"
 msgstr "Cobre Exposto Encerado"
@@ -251,7 +251,7 @@ msgid "Waxed Exposed Cut Copper Stairs"
 msgstr "Escadas de Cobre Lapidado Exposto Encerado"
 
 msgid "Waxed Oxidized Chiseled Copper"
-msgstr "Cobre Talhado Oxidado Encerado"
+msgstr "Cobre Entalhado Oxidado Encerado"
 
 msgid "Waxed Oxidized Copper"
 msgstr "Cobre Oxidado Encerado"
@@ -287,7 +287,7 @@ msgid "Waxed Upper @1"
 msgstr "@1 Superior Encerada"
 
 msgid "Waxed Weathered Chiseled Copper"
-msgstr "Cobre Talhado Desgastado Encerado"
+msgstr "Cobre Entalhado Desgastado Encerado"
 
 msgid "Waxed Weathered Copper"
 msgstr "Cobre Desgastado Encerado"
@@ -320,10 +320,10 @@ msgid "Waxed Weathered Cut Copper Stairs"
 msgstr "Escadas de Cobre Lapidado Desgastado Encerado"
 
 msgid "Weathered Chiseled Copper"
-msgstr "Cobre Talhado Desgastado"
+msgstr "Cobre Entalhado Desgastado"
 
 msgid "Weathered Chiseled Copper is mostly a decorative block."
-msgstr "Cobre talhado desgastado é majoritariamente um bloco decorativo."
+msgstr "Cobre entalhado desgastado é em grande parte um bloco decorativo."
 
 msgid "Weathered Copper"
 msgstr "Cobre Desgastado"

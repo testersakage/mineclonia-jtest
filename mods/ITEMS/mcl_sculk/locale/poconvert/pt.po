@@ -14,23 +14,23 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Sculk"
-msgstr ""
+msgstr "Sculk"
 
 msgid "Sculk Vein"
-msgstr ""
+msgstr "Veia de Sculk"
 
 msgid "Sculk vein."
-msgstr ""
+msgstr "Veia de sculk."
 
 msgid "Sculk Catalyst"
-msgstr ""
+msgstr "Catalisador de Sculk"
 
 msgid "Sculk Sensor"
-msgstr ""
+msgstr "Sensor de Sculk"
 
 msgid "Sculk Shrieker"
-msgstr ""
+msgstr "Alarme de Sculk"
 
 msgid "Echo Shard"
-msgstr ""
+msgstr "Fragmento de Eco"
 

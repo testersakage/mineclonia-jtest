@@ -43,7 +43,7 @@ end
 
 local function protection_check_put_take(pos, _, _, stack, player)
 	local name = player:get_player_name()
-	if core.is_protected(pos, name) then
+	if core.is_protected(pos, name) or not mcl_enchanting.is_book(stack:get_name()) then
 		core.record_protection_violation(pos, name)
 		return 0
 	else
@@ -291,7 +291,7 @@ local basedef = {
 		core.log("action", player:get_player_name() ..
 			" takes stuff from chiseled bookshelf at " .. core.pos_to_string(pos))
 	end,
-	on_destruct = mcl_util.drop_items_from_meta_container("main"),
+	after_dig_node= mcl_util.drop_items_from_meta_container("main"),
 	on_rightclick = on_chiseled_bookshelf_rightclick,
 	_on_hopper_out = on_hopper_out,
 	_on_hopper_in = on_hopper_in,

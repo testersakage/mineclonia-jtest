@@ -1,7 +1,7 @@
 # textdomain: mcl_raids
 ### init.lua ###
-Ominous Banner=
-Raid (@1 of @2)=
-Raid=
-Raid (defeat)=
-Raid (victory)=
+Ominous Banner=Estandarte Sinistro
+Raid (@1 of @2)=Invasão (@1 de @2)
+Raid=Invasão
+Raid (defeat)=Invasão (derrota)
+Raid (victory)=Invasão (vitória)

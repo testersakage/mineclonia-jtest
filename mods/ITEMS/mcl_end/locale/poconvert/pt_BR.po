@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "End Stone"
-msgstr ""
+msgstr "Pedra do Fim"
 
 msgid "End Stone Bricks"
-msgstr ""
+msgstr "Tijolos de Pedra do Fim"
 
 msgid "Purpur Block"
 msgstr ""

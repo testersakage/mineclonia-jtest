@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Beetroot Seeds"
-msgstr ""
+msgstr "Sementes de Beterraba"
 
 msgid "Grows into a beetroot plant. Chickens like beetroot seeds."
 msgstr ""
@@ -287,7 +287,7 @@ msgid "Wheat"
 msgstr ""
 
 msgid "Wheat is used in crafting. Some animals like wheat."
-msgstr ""
+msgstr "O trigo é usado na produção. Alguns animais gostam de trigo."
 
 msgid "Use the “Place” key on an animal to try to feed it wheat."
 msgstr ""

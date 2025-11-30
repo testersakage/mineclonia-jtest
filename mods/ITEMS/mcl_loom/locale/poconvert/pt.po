@@ -14,14 +14,14 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Loom"
-msgstr ""
+msgstr "Tear"
 
 msgid "Inventory"
 msgstr "Inventário"
 
 msgid "Used to create banner designs"
-msgstr ""
+msgstr "Usado para criar designs nos estandartes"
 
 msgid "This is the shepherd villager's work station. It is used to create banner designs."
-msgstr ""
+msgstr "Esta é a estação de trabalho do aldeão pastor. É usado para criar designs de estandartes."
 

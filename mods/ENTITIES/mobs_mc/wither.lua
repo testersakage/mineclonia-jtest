@@ -10,7 +10,6 @@ local is_valid = mcl_util.is_valid_objectref
 local wither_def = {
 	description = S("Wither"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "misc",
 	hp_max = 600,
 	hp_min = 600,
@@ -452,7 +451,7 @@ function spawn_one_skeleton (object, aa, bb, self_pos)
 				and def3 and not def3.walkable then
 				copy.y = nodepos.y + 1
 				local entity
-					= mcl_mobs.spawn (copy, "mobs_mc:witherskeleton")
+					= core.add_entity (copy, "mobs_mc:witherskeleton")
 				-- Prevent summoned skeletons from
 				-- attacking their invoker.
 				if entity then

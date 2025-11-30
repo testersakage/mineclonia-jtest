@@ -14,14 +14,14 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Fences are structures which block the way. Fences will connect to each other and solid blocks. They cannot be jumped over with a simple jump."
-msgstr ""
+msgstr "Cercas são estruturas que bloqueiam o caminho. Cercas conectam entre si e a blocos sólidos. Não podem ser saltadas com um salto normal."
 
 msgid "Openable by players and redstone power"
 msgstr "Aberta por jogadores e energia de redstone"
 
 msgid "Fence gates can be opened or closed and can't be jumped over. Fences will connect nicely to fence gates."
-msgstr ""
+msgstr "Portões podem ser abertos ou fechados e não podem ser saltados sobre. Cercas conectam-se bem a portões."
 
 msgid "Right-click the fence gate to open or close it."
-msgstr ""
+msgstr "Clique com o botão direito para abrir ou fechar o portão."
 

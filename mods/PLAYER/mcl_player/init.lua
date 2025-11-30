@@ -78,14 +78,40 @@ function mcl_player.register_globalstep_slow(func)
 	table.insert(mcl_player.registered_globalsteps_slow, func)
 end
 
+local connected_player_cache = {}
+
+local iterator_idx
+
+local function connected_players_iterator ()
+	local player
+	repeat
+		player = connected_player_cache[iterator_idx]
+		if not player then
+			return nil
+		end
+		iterator_idx = iterator_idx + 1
+	until player[1]:is_valid ()
+	return player[1], player[2]
+end
+
+function mcl_player.iterate_connected_players ()
+	iterator_idx = 1
+	return connected_players_iterator
+end
+
 -- Check each player and run callbacks
 core.register_globalstep(function(dtime)
+	connected_player_cache = {}
 	for player in mcl_util.connected_players() do
 		for _, func in pairs(mcl_player.registered_globalsteps) do
 			if mcl_player.players[player] then
 				func(player, dtime)
 			end
 		end
+		table.insert (connected_player_cache, {
+			player,
+			player:get_pos (),
+		})
 	end
 
 	slow_gs_timer = slow_gs_timer - dtime

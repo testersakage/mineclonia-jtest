@@ -385,21 +385,6 @@ msgstr "Мобы"
 msgid "Different Mobs"
 msgstr "Различные мобы"
 
-msgid "Type: @1"
-msgstr "Тип: @1"
-
-msgid "Spawning light levels (min / max): @1 / @2"
-msgstr "Уровни освещенности при спавне (мин / макс): @1 / @2"
-
-msgid "Can Jump a height of @1 nodes"
-msgstr "Может прыгать на высоту @1 узла(ов)"
-
-msgid "Can Fly"
-msgstr "Может летать"
-
-msgid "Can Swim"
-msgstr "Умеет плавать"
-
 msgid "Drops: "
 msgstr "Дроп: "
 

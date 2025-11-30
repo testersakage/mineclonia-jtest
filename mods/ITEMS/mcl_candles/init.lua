@@ -5,9 +5,9 @@ local D = mcl_util.get_dynamic_translator(core.get_current_modname())
 
 local candle_boxes = {
 	{-0.0625, -0.5, -0.0625, 0.0625, -0.125, 0.0625},
-	{-0.15625, -0.5, -0.09375, 0.15625, -0.125, 0.09375},
-	{-0.15625, -0.5, -0.15625, 0.15625, -0.125, 0.21875},
-	{-0.1875, -0.5, -0.15625, 0.21875, -0.125, 0.21875}
+	{-0.1875, -0.5, -0.0625, 0.1875, -0.125, 0.125},
+	{-0.1875, -0.5, -0.1875, 0.125, -0.125, 0.125},
+	{-0.1875, -0.5, -0.125, 0.1875, -0.125, 0.1875}
 }
 
 local function set_candle_properties(stack, color)
@@ -54,8 +54,22 @@ local function ignite_candle(pos)
 	end
 end
 
+local function get_candle_item(pos)
+	local stack = ItemStack("mcl_candles:candle_1")
+	local node = core.get_node(pos)
+	local color_index = node.param2 > 0 and node.param2
+	local color = color_index and mcl_dyes.palette_index_to_color(color_index - 1)
+
+	if color then set_candle_properties(stack, color) end
+
+	tt.reload_itemstack_description(stack)
+
+	return stack
+end
+
 local tpl_candle = {
 	_doc_items_longdesc = S("A candle is a block that emits light when lit with a flint and steel. It comes in the sixteen dye colors. Up to four of the same color of candle can be placed in one block space, which affects the amount of light produced."),
+	_mcl_baseitem = get_candle_item,
 	_mcl_hardness = 0.1,
 	_on_dye_place = function(pos, color)
 		local node = core.get_node(pos)
@@ -98,12 +112,11 @@ local tpl_candle = {
 	sounds = mcl_sounds.node_sound_defaults(),
 	sunlight_propagates = true,
 	tiles = {"mcl_candles_candle.png", "blank.png"},
-	use_texture_alpha = "blend",
+	use_texture_alpha = "clip",
 	wield_image = "mcl_candles_item.png"
 }
 
 local tpl_lit_candle = {
-	_doc_items_longdesc = nil,
 	_doc_items_create_entry = false,
 	description = S("Lit Candle"),
 	groups = {
@@ -187,7 +200,6 @@ for i = 1, #candle_boxes do
 	local creative_group
 	local candle_n = {
 		collision_box = {fixed = candle_boxes[i], type = "fixed"},
-		mesh = "mcl_candles_candle_" .. i .. ".obj",
 		selection_box = {fixed = candle_boxes[i], type = "fixed"}
 	}
 
@@ -215,6 +227,7 @@ for i = 1, #candle_boxes do
 			return output
 		end,
 		groups = table.merge(tpl_candle.groups, {candles = i, unlit_candles = i}, creative_group),
+		mesh = "mcl_candles_candle_" .. i .. ".obj",
 	}))
 	local lit_candle = table.merge(tpl_candle, tpl_lit_candle, candle_n, {
 		_on_wind_charge_hit = function (pos)
@@ -225,14 +238,15 @@ for i = 1, #candle_boxes do
 		end,
 		groups = table.merge(tpl_lit_candle.groups, {candles = i, lit_candles = i}),
 		light_source = 3 * i,
+		mesh = "mcl_candles_candle_lit_" .. i .. ".obj",
 		on_rightclick = extinguish
 	})
 	lit_candle._on_ignite = nil
 	lit_candle._on_arrow_hit = nil
 	core.register_node("mcl_candles:candle_lit_" .. i, lit_candle)
 
-
 	doc.add_entry_alias("nodes", "mcl_candles:candle_1", "nodes", "mcl_candles:candle_" .. i)
+	doc.add_entry_alias("nodes", "mcl_candles:candle_1", "nodes", "mcl_candles:candle_lit_" .. i)
 end
 
 local function candle_craft(output, _, old_craft_grid, _)
@@ -316,15 +330,16 @@ end
 
 local tpl_cake = {
 	_food_particles = false,
+	_mcl_baseitem = get_candle_item,
 	on_destruct = drop_candles,
 	collision_box = cake_box,
 	description = S("Cake"),
 	drawtype = "mesh",
+	drop = "mcl_cake:cake",
 	groups = {
 		attached_node = 1, dig_by_piston = 1, food = 2, handy = 1, no_eat_delay = 1,
 		not_in_creative_inventory = 1, unsticky = 1
 	},
-	mesh = "mcl_candles_cake.obj",
 	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 		if not looking_at_candle(clicker, pointed_thing) then
 			drop_candles(pos, node, nil, clicker)
@@ -355,10 +370,27 @@ local tpl_cake = {
 		"mcl_candles_candle.png",
 		"blank.png"
 	},
-	use_texture_alpha = "blend"
+	use_texture_alpha = "clip"
 }
 
-core.register_node("mcl_candles:candle_cake", tpl_cake)
+core.register_node("mcl_candles:candle_cake", table.merge(tpl_cake, {
+	mesh = "mcl_candles_cake.obj",
+	tiles = {
+		{
+			color = "white",
+			name = "cake_top.png"
+		},
+		{
+			color = "white",
+			name = "cake_bottom.png"
+		},
+		{
+			color = "white",
+			name = "cake_side.png"
+		},
+		"mcl_candles_candle.png"
+	}
+}))
 core.register_node("mcl_candles:candle_cake_lit", table.merge(tpl_cake, {
 	_on_wind_charge_hit = function (pos)
 		local node = core.get_node(pos)
@@ -375,10 +407,19 @@ core.register_node("mcl_candles:candle_cake_lit", table.merge(tpl_cake, {
 	end,
 	light_source = 3,
 	groups = table.merge(tpl_cake.groups, {lit_cake = 1}),
+	mesh = "mcl_candles_cake_lit.obj",
 	tiles = {
 		{
 			color = "white",
-			name = "[combine:32x32:0,0=cake_top.png:16,0=cake_bottom.png:0,16=cake_side.png"
+			name = "cake_top.png"
+		},
+		{
+			color = "white",
+			name = "cake_bottom.png"
+		},
+		{
+			color = "white",
+			name = "cake_side.png"
 		},
 		"mcl_candles_candle.png",
 		{

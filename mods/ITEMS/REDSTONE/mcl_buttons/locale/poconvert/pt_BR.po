@@ -14,26 +14,26 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Provides redstone power when pushed"
-msgstr ""
+msgstr "Fornece energia de redstone quando pressionado"
 
 msgid "Push duration: @1s"
-msgstr ""
+msgstr "Duração do aperto: @1s"
 
 msgid "Pushable by arrow"
-msgstr ""
+msgstr "Pressionável por flecha"
 
 msgid "Use the button to push it."
-msgstr ""
+msgstr "Use o botão para o pressionar."
 
 msgid "Stone Button"
-msgstr ""
+msgstr "Botão de Pedra"
 
 msgid "A stone button is a redstone component made out of stone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second."
-msgstr ""
+msgstr "Um botão de pedra é um componente de redstone feito de pedra que pode ser pressionado para fornecer energia de redstone. Quando pressionado, ele energiza os componentes de redstone adjacentes por 1 segundo."
 
 msgid "Polished Blackstone Button"
-msgstr ""
+msgstr "Botão de Pedra Negra Polida"
 
 msgid "A polished blackstone button is a redstone component made out of polished blackstone which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 1 second."
-msgstr ""
+msgstr "Um botão de pedra negra polida é um componente de redstone feito de pedra negra polida que pode ser pressionado para fornecer energia de redstone. Quando pressionado, ele energiza os componentes de redstone adjacentes por 1 segundo."
 

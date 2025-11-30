@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "This block can have one of 6 possible orientations."
-msgstr ""
+msgstr "Esse bloco pode ter uma de 6 orientações possíveis."
 
 msgid "Piston"
-msgstr ""
+msgstr "Pistão"
 
 msgid "Pushes block when powered by redstone power"
 msgstr ""

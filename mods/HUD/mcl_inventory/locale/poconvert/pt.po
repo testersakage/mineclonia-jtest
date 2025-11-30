@@ -14,16 +14,16 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 msgid "Off"
-msgstr ""
+msgstr "Off"
 
 msgid "On (causes problems on some client versions)"
-msgstr ""
+msgstr "On (causa problemas em algumas versões dos clientes)"
 
 msgid "Enable scrollable creative inventory"
-msgstr "Ativar scrollable inventário criativo"
+msgstr "Ativar inventário do criativo scrollable"
 
 msgid "Building Blocks"
 msgstr "Blocos de Construção"

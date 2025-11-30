@@ -32,7 +32,7 @@ msgid "Grows at the side of jungle trees"
 msgstr "Cresce nas laterais de árvores da selva"
 
 msgid "Cocoa beans can be used to plant cocoa, bake cookies or craft brown dye."
-msgstr "Sementes de cacau podem ser usadas para plantar cacau, cozinhar biscoitos e fabricar corante marrom."
+msgstr "Sementes de cacau podem ser usadas para plantar cacau, cozinhar biscoitos e produzir corante marrom."
 
 msgid "Right click on the side of a jungle tree trunk (Jungle Wood) to plant a young cocoa."
 msgstr "Clique com o botão direito na lateral de um tronco de árvore da selva (Madeira da Selva) para plantar um cacau jovem."

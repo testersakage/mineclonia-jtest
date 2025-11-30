@@ -14,11 +14,11 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Cartography Table"
-msgstr ""
+msgstr "Mesa de Cartografia"
 
 msgid "Used to create or copy maps"
-msgstr ""
+msgstr "Utilizada para criar ou copiar mapas"
 
 msgid "Is used to create or copy maps for use.."
-msgstr ""
+msgstr "É usada para criar ou copiar mapas para uso.."
 

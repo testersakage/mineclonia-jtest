@@ -13,7 +13,6 @@ local mob_class = mcl_mobs.mob_class
 local cod = {
 	description = S("Cod"),
 	type = "animal",
-	spawn_class = "water_ambient",
 	_spawn_category = "water_ambient",
 	can_despawn = true,
 	passive = true,
@@ -24,8 +23,7 @@ local cod = {
 	xp_max = 3,
 	armor = 100,
 	rotate = 180,
-	spawn_in_group_min = 3,
-	spawn_in_group = 8,
+	_school_size = 8,
 	collisionbox = {-0.3, 0.0, -0.3, 0.3, 0.79, 0.3},
 	head_eye_height = 0.195,
 	visual = "mesh",
@@ -104,18 +102,6 @@ mcl_mobs.register_mob ("mobs_mc:cod", cod)
 -- Cod spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:cod",
-	type_of_spawning = "water",
-	dimension = "overworld",
-	min_height = mobs_mc.water_level - 16,
-	max_height = mobs_mc.water_level + 1,
-	min_light = 0,
-	max_light = core.LIGHT_MAX + 1,
-	aoc = 7,
-	chance = 750,
-})
-
 --spawn egg
 mcl_mobs.register_egg("mobs_mc:cod", S("Cod"), "#c1a76a", "#e5c48b", 0)
 
@@ -123,7 +109,8 @@ mcl_mobs.register_egg("mobs_mc:cod", S("Cod"), "#c1a76a", "#e5c48b", 0)
 -- Modern Cod spawning.
 ------------------------------------------------------------------------
 
-local cod_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
+local aquatic_animal_spawner = mobs_mc.aquatic_animal_spawner
+local cod_spawner = table.merge (aquatic_animal_spawner, {
 	name = "mobs_mc:cod",
 	biomes = {
 		"Ocean",
@@ -136,6 +123,13 @@ local cod_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
 
 function cod_spawner:init_group (list, sdata)
 	mob_class.school_init_group (list)
+end
+
+function cod_spawner:describe_criteria (tbl, omit_group_details)
+	aquatic_animal_spawner.describe_criteria (self, tbl, omit_group_details)
+	if not omit_group_details then
+		table.insert (tbl, S ("Each mob spawned will form a school with the remainder of the mobs in the group."))
+	end
 end
 
 local cod_spawner_cold_ocean = table.merge (cod_spawner, {

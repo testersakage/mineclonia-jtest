@@ -53,7 +53,7 @@ msgid "Write down some notes"
 msgstr "Zapisz jakieś notatki"
 
 msgid "This item can be used to write down some notes."
-msgstr "Ten przedmiot może być wykorzystany do zapisania notatek"
+msgstr "Ten przedmiot może być wykorzystany do zapisania notatek."
 
 msgid "Hold it in the hand, then rightclick to read the current notes and edit then. You can edit the text as often as you like. You can also sign the book which turns it into a written book which you can stack, but it can't be edited anymore."
 msgstr "Weź ją do ręki, następnie kliknij prawym przyciskiem by przeczytać notatki i je edytować. Możesz edytować tekst tak często jak tylko chcesz. Możesz także podpisać książkę, co zamienia ją w zapisaną książkę, którą można grupować, ale nie można jej edytować."

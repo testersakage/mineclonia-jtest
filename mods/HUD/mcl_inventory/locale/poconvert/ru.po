@@ -14,13 +14,13 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Auto"
-msgstr ""
+msgstr "Авто"
 
 msgid "Off"
-msgstr ""
+msgstr "Выкл."
 
 msgid "On (causes problems on some client versions)"
-msgstr ""
+msgstr "Вкл. (вызывает проблемы в некоторых версиях клиента)"
 
 msgid "Enable scrollable creative inventory"
 msgstr "Включить прокрутку в творческом инвентаре"

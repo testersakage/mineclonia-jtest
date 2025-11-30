@@ -107,7 +107,7 @@ msgid "Spider eyes are used mainly in crafting. If you're really desperate, you 
 msgstr ""
 
 msgid "Bone"
-msgstr ""
+msgstr "Кістка"
 
 msgid "Bones can be used to tame wolves so they will protect you. They are also useful as a crafting ingredient."
 msgstr ""

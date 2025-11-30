@@ -61,7 +61,6 @@ table.insert (drops_zombie, {
 local zombie = table.merge (posing_humanoid, {
 	description = S("Zombie"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	hp_min = 20,
 	hp_max = 20,
@@ -616,26 +615,6 @@ function zombie:can_spawn_reinforcements (mcl_reason)
 	return (source and source:is_player ()) or entity and entity.is_mob
 end
 
-local function is_dark (nodepos, x, y, z)
-	local nodepos = vector.offset (nodepos, x, y, z)
-	local light = core.get_node_light (nodepos)
-	return light and light <= 4.0
-end
-
-local function is_clear (nodepos, x, y, z)
-	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = core.get_node (nodepos)
-	local def = core.registered_nodes[node.name]
-	return def and not def.walkable and def.liquidtype == "none"
-end
-
-local function is_solid (nodepos, x, y, z)
-	local nodepos = vector.offset (nodepos, x, y, z)
-	local node = core.get_node (nodepos)
-	local def = core.registered_nodes[node.name]
-	return def and def.walkable and def.groups.solid
-end
-
 local function is_free_of_living_players (pos, radius)
 	for player in mcl_util.connected_players (pos, radius) do
 		if player:get_hp () > 0 then
@@ -675,11 +654,9 @@ function zombie:receive_damage (mcl_reason, damage)
 			local dz = math.random (7, 40) * math.random (-1, 1)
 			local pos = vector.offset (node_pos, dx, dy, dz)
 
-			if is_dark (pos, 0, 0, 0) and is_solid (pos, 0, -1, 0)
-				and is_clear (pos, 0, 0, 0) and is_clear (pos, 0, 1, 0)
-				and is_free_of_living_players (pos, 7.0) then
-				local floor = vector.offset (pos, 0, -0.5, 0)
-				local object = core.add_entity (floor, self._reinforcement_type)
+			if is_free_of_living_players (pos, 7.0) then
+				local object = mcl_mobs.spawn_abnormally (pos, self._reinforcement_type,
+									  "reinforcement")
 				if object then
 					local entity = object:get_luaentity ()
 					self:add_physics_factor ("_spawn_reinforcements_chance",
@@ -868,52 +845,6 @@ mcl_mobs.register_mob ("mobs_mc:baby_husk", baby_husk)
 -- Zombie and variant spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:zombie",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	biomes_except = {
-		"MushroomIslandShore",
-		"MushroomIsland"
-	},
-	chance = 1000,
-})
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:baby_zombie",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	biomes_except = {
-		"MushroomIslandShore",
-		"MushroomIsland"
-	},
-	chance = 50,
-})
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:husk",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	biomes = {
-		"Desert",
-	},
-	chance = 2400,
-})
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:baby_husk",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 9,
-	biomes = {
-		"Desert",
-	},
-	chance = 20,
-})
-
 -- Spawn eggs
 mcl_mobs.register_egg ("mobs_mc:husk", S("Husk"), "#777361", "#ded88f", 0)
 mcl_mobs.register_egg ("mobs_mc:zombie", S("Zombie"), "#00afaf", "#799c66", 0)
@@ -930,7 +861,8 @@ for _, biome in pairs (mobs_mc.monster_biomes) do
 	end
 end
 
-local zombie_spawner = table.merge (mobs_mc.monster_spawner, {
+local monster_spawner = mobs_mc.monster_spawner
+local zombie_spawner = table.merge (monster_spawner, {
 	name = "mobs_mc:zombie",
 	weight = 95,
 	pack_max = 4,
@@ -946,6 +878,11 @@ function zombie_spawner:spawn (spawn_pos, idx, sdata, pack_size)
 	end
 end
 
+function zombie_spawner:describe_criteria (tbl, omit_group_details)
+	monster_spawner.describe_criteria (self, tbl, omit_group_details)
+	table.insert (tbl, S ("5% of Zombies will spawn as their baby variants."))
+end
+
 local zombie_spawner_desert = table.merge (zombie_spawner, {
 	weight = 19,
 	biomes = {
@@ -953,7 +890,7 @@ local zombie_spawner_desert = table.merge (zombie_spawner, {
 	},
 })
 
-local husk_spawner = table.merge (mobs_mc.monster_spawner, {
+local husk_spawner = table.merge (monster_spawner, {
 	name = "mobs_mc:husk",
 	weight = 80,
 	pack_max = 4,
@@ -963,13 +900,13 @@ local husk_spawner = table.merge (mobs_mc.monster_spawner, {
 	},
 })
 
-local monster_spawner = mobs_mc.monster_spawner
-
-function husk_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function husk_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					   spawn_flag)
 	return mcl_weather.is_outdoor (spawn_pos)
 		and monster_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
-							 node_cache)
+							 node_cache,
+							 spawn_flag)
 end
 
 function husk_spawner:spawn (spawn_pos, idx, sdata, pack_size)
@@ -978,6 +915,12 @@ function husk_spawner:spawn (spawn_pos, idx, sdata, pack_size)
 	else
 		return core.add_entity (spawn_pos, "mobs_mc:husk")
 	end
+end
+
+function husk_spawner:describe_criteria (tbl, omit_group_details)
+	monster_spawner.describe_criteria (self, tbl, omit_group_details)
+	table.insert (tbl, S ("5% of Husks will spawn as their baby variants."))
+	table.insert (tbl, S ("Husks will only spawn on nodes that are exposed to sky."))
 end
 
 mcl_mobs.register_spawner (zombie_spawner)

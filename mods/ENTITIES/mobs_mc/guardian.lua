@@ -9,10 +9,7 @@ local is_valid = mcl_util.is_valid_objectref
 local guardian = {
 	description = S("Guardian"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
-	spawn_in_group_min = 2,
-	spawn_in_group = 4,
 	hp_min = 30,
 	hp_max = 30,
 	xp_min = 10,
@@ -350,7 +347,8 @@ guardian.ai_functions = {
 -- Guardian spawning.
 ------------------------------------------------------------------------
 
-local guardian_spawner = table.merge (mobs_mc.monster_spawner, {
+local monster_spawner = mobs_mc.monster_spawner
+local guardian_spawner = table.merge (monster_spawner, {
 	name = "mobs_mc:guardian",
 	weight = 1,
 	pack_min = 2,
@@ -391,7 +389,8 @@ local function is_water (node)
 	return def and def.groups.water and def.groups.water > 0
 end
 
-function guardian_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function guardian_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					       spawn_flag)
 	if mcl_vars.difficulty > 0
 		and is_water (self:get_node (node_cache, 0, node_pos))
 		and is_water (self:get_node (node_cache, -1, node_pos)) then
@@ -399,6 +398,12 @@ function guardian_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_
 			or guardian_visibility_test (node_pos)
 	end
 	return nil
+end
+
+function guardian_spawner:describe_additional_spawning_criteria ()
+	return monster_spawner.describe_additional_spawning_criteria (self)
+		.. "  "
+		.. S ("Guardians spawn less frequently in regions of the ocean which are exposed to the sky at the surface.")
 end
 
 mcl_mobs.register_spawner (guardian_spawner)

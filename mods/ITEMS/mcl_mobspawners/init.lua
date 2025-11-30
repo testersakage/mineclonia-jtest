@@ -30,15 +30,6 @@ local function spawn_doll(pos)
 	return core.add_entity({x=pos.x, y=pos.y-0.3, z=pos.z}, "mcl_mobspawners:doll")
 end
 
-local spawn_count_overrides = {
-	["mobs_mc:enderdragon"] = 1,
-	["mobs_mc:wither"] = 1,
-	["mobs_mc:ghast"] = 1,
-	["mobs_mc:guardian_elder"] = 1,
-	["mobs_mc:guardian"] = 2,
-	["mobs_mc:iron_golem"] = 2,
-}
-
 local function set_doll_properties(doll, mob)
 	local mobinfo = core.registered_entities[mob]
 	if not mobinfo then return end
@@ -88,26 +79,17 @@ All the arguments are optional!
 * MaxLight: Maximum light to spawn (default: 15)
 * MaxMobsInArea: How many mobs are allowed in the area around the spawner (default: 4)
 * PlayerDistance: Spawn mobs only if a player is within this distance; 0 to disable (default: 15)
-* YOffset: Y offset to spawn mobs; 0 to disable (default: 0)
 ]]
 
-function mcl_mobspawners.setup_spawner(pos, Mob, MinLight, MaxLight, MaxMobsInArea, PlayerDistance, YOffset)
+function mcl_mobspawners.setup_spawner(pos, Mob, _, _, MaxMobsInArea, PlayerDistance, _)
 	-- Activate mob spawner and disable editing functionality
-	local dim = mcl_worlds.pos_to_dimension(pos)
 	if Mob == nil then Mob = default_mob end
-	local mn,mx = mcl_mobs.get_mob_light_level(Mob,dim)
-	if MinLight == nil then MinLight = mn end
-	if MaxLight == nil then MaxLight = mx end
 	if MaxMobsInArea == nil then MaxMobsInArea = 4  end
 	if PlayerDistance == nil then PlayerDistance = 15 end
-	if YOffset == nil then YOffset = 0 end
 	local meta = core.get_meta(pos)
 	meta:set_string("Mob", Mob)
-	meta:set_int("MinLight", MinLight)
-	meta:set_int("MaxLight", MaxLight)
 	meta:set_int("MaxMobsInArea", MaxMobsInArea)
 	meta:set_int("PlayerDistance", PlayerDistance)
-	meta:set_int("YOffset", YOffset)
 
 	-- Create doll or replace existing doll
 	local doll = find_doll(pos)
@@ -122,6 +104,14 @@ function mcl_mobspawners.setup_spawner(pos, Mob, MinLight, MaxLight, MaxMobsInAr
 	t:start(2)
 end
 
+local posns = {}
+
+for i = 0, 242 do
+	table.insert (posns, i)
+end
+
+local floor = math.floor
+
 -- Spawn mobs around pos
 -- NOTE: The node is timer-based, rather than ABM-based.
 local function spawn_mobs(pos)
@@ -131,11 +121,8 @@ local function spawn_mobs(pos)
 
 	-- get settings
 	local mob = meta:get_string("Mob")
-	local mlig = meta:get_int("MinLight")
-	local xlig = meta:get_int("MaxLight")
 	local num = meta:get_int("MaxMobsInArea")
 	local pla = meta:get_int("PlayerDistance")
-	local yof = meta:get_int("YOffset")
 
 	-- if amount is 0 then do nothing
 	if num == 0 then
@@ -152,20 +139,15 @@ local function spawn_mobs(pos)
 	local count = 0
 	local ent
 
-
 	local timer = core.get_node_timer(pos)
 
 	-- spawn mob if player detected and in range
 	if pla > 0 then
-
 		local in_range = 0
 
 		for oir in core.objects_inside_radius(pos, pla) do
-
 			if oir:is_player() then
-
 				in_range = 1
-
 				break
 			end
 		end
@@ -207,40 +189,27 @@ local function spawn_mobs(pos)
 		return
 	end
 
-	-- find air blocks within 8×3×8 nodes of spawner
-	local air = core.find_nodes_in_area(
-		{x = pos.x - 4, y = pos.y - 1 + yof, z = pos.z - 4},
-		{x = pos.x + 4, y = pos.y + 1 + yof, z = pos.z + 4},
-		{"air"})
+	table.shuffle (posns)
+	local spawned = 0
+	local v1 = vector.new ()
+	for _, posn in ipairs (posns) do
+		local dx = posn % 9
+		local dy = floor (posn / 9) % 3
+		local dz = floor (posn / 27) % 9
+		v1.x = pos.x + dx - 4
+		v1.y = pos.y + dy
+		v1.z = pos.z + dz - 4
 
-	-- spawn up to 4 mobs in random air blocks
-	if air then
-		local max = 4
-		if spawn_count_overrides[mob] then
-			max = spawn_count_overrides[mob]
-		end
-		for _ = 1, max do
-			if #air <= 0 then
-				-- We're out of space! Stop spawning
+		if mcl_mobs.spawn_abnormally (v1, mob, {}, "spawner") then
+			spawned = spawned + 1
+			if spawned == 4 then
 				break
 			end
-			local air_index = math.random(#air)
-			local pos2 = air[air_index]
-			local lig = core.get_node_light(pos2) or 0
-
-			pos2.y = pos2.y + 0.5
-
-			-- only if light levels are within range
-			if lig >= mlig and lig <= xlig then
-				core.add_entity(pos2, mob)
-			end
-			table.remove(air, air_index)
 		end
 	end
 
 	-- Spawn attempt done. Next spawn attempt much later
-	timer:start(mcl_util.float_random(10, 39.95))
-
+	timer:start (mcl_util.float_random(10, 39.95))
 end
 
 -- The mob spawner node.

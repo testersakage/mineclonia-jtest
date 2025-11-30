@@ -74,7 +74,7 @@ msgid "Crimson Fence Gate"
 msgstr "Portão Carmesim"
 
 msgid "Crimson Hanging Sign"
-msgstr ""
+msgstr "Placa de Carmesim Pendurada"
 
 msgid "Crimson Log"
 msgstr "Tronco Carmesim"
@@ -149,7 +149,7 @@ msgid "Warped Fence Gate"
 msgstr "Portão Distorcido"
 
 msgid "Warped Hanging Sign"
-msgstr ""
+msgstr "Placa Distorcida Pendurada"
 
 msgid "Warped Log"
 msgstr "Tronco Distorcido"

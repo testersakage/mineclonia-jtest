@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "@1: @2/@3"
-msgstr ""
+msgstr "@1: @2/@3"
 
 msgid "Health"
 msgstr "Vida"

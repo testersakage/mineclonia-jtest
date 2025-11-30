@@ -14,20 +14,20 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Vault"
-msgstr ""
+msgstr "Cofre"
 
 msgid "Ejects loot when opened with the key"
-msgstr ""
+msgstr "Ejeta espólio quando aberto com a chave"
 
 msgid "A vault ejects loot when opened with the right key. It can only be opened once by each player."
-msgstr ""
+msgstr "Um cofre ejeta espólio quando aberto com a chave certa. Pode ser aberto uma só vez por jogador."
 
 msgid "Trial Key"
-msgstr ""
+msgstr "Chave de Desafio"
 
 msgid "Ominous Trial Key"
-msgstr ""
+msgstr "Chave de Desafio Sombria"
 
 msgid "Ominous Vault"
-msgstr ""
+msgstr "Cofre Sombrio"
 

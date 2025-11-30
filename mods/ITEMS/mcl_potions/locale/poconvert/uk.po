@@ -287,7 +287,7 @@ msgid "Try different combinations to create potions."
 msgstr ""
 
 msgid "Glass Bottle"
-msgstr ""
+msgstr "Пляшка"
 
 msgid "Liquid container"
 msgstr ""

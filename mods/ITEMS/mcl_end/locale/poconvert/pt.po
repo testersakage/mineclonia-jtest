@@ -113,7 +113,7 @@ msgid "This item is used to locate End portal shrines in the Overworld and to ac
 msgstr ""
 
 msgid "NOTE: The End dimension is currently incomplete and might change in future versions."
-msgstr ""
+msgstr "NOTA: A dimensão do End está atualmente incompleta e pode mudar em versões futuras."
 
 msgid "Use the attack key to release the eye of ender. It will rise and fly in the horizontal direction of the closest end portal shrine. If you're very close, the eye of ender will take the direct path to the End portal shrine instead. After a few seconds, it stops. It may drop as an item, but there's a 20% chance it shatters."
 msgstr ""

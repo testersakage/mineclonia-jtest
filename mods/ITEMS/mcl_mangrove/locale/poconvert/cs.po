@@ -28,11 +28,22 @@ msgstr "Potřebuje půdu a světlo pro svůj růst"
 msgid "When placed on soil (such as dirt) and exposed to light, an propagule will grow into an mangrove after some time."
 msgstr "Když se propagule umístí na půdu (například hlínu) a vystaví se světlu, po určité době vyroste z ní mangrovník."
 
-msgid "Hanging Propagule"
-msgstr "visící diaspora"
+msgid "Suspended mague propagules grow on the underside of mangrove leaves.\n"
+""
+msgstr ""
 
-msgid "Grows on Mangrove leaves"
-msgstr "Roste na listech mangrovníků"
+msgid "They grow in four stages. Using bone meal on a suspended propagule advances it to the next growth stage.\n"
+""
+msgstr ""
+
+msgid "When the propagule reaches the final stage, it drops as an item when broken."
+msgstr ""
+
+msgid "Hanging Mangrove Propagule"
+msgstr ""
+
+msgid "Hanging Propagule (Stage @1)"
+msgstr ""
 
 msgid "Water logged mangrove roots"
 msgstr "Zaplavené kořeny mangrovníků"

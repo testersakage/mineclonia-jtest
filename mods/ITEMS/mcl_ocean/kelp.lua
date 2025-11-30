@@ -130,36 +130,39 @@ end
 -- Converts param2 to kelp height.
 -- For the special case where the max param2 is reached, interpret that as the
 -- 16th kelp stem.
-function kelp.get_height(param2)
-	return math.floor(param2 / 16) + math.floor(param2 % 16 / 8)
+local floor = math.floor
+local function kelp_get_height (param2)
+	return floor (param2 / 16) + floor (param2 % 16 / 8)
 end
 
 
 -- Obtain pos and node of the tip of kelp.
 function kelp.get_tip(pos, height)
 	-- Optional params: height
-	local height = height or kelp.get_height(core.get_node(pos).param2)
+	local height = height or kelp_get_height(core.get_node(pos).param2)
 	local pos_tip = {x=pos.x, y=pos.y+height+1, z=pos.z}
 	return pos_tip, core.get_node(pos_tip), height
 end
 
+local cid_water_source = core.get_content_id ("mcl_core:water_source")
+local cid_water_flowing = core.get_content_id ("mcl_core:water_flowing")
+local cid_ignore = core.CONTENT_IGNORE
 
 -- Obtain position of the first kelp unsubmerged.
-function kelp.find_unsubmerged(pos, node, height)
-	-- Optional params: node, height
-	local node = node or core.get_node(pos)
-	local height = height or ((node.param2 >= 0 and node.param2 < 16) and 1) or kelp.get_height(node.param2)
+function kelp.find_unsubmerged (pos)
+	local cid, _, param2, _ = core.get_node_raw (pos.x, pos.y, pos.z)
+	local height = param2 < 16 and 1 or kelp_get_height (param2)
 
-	local walk_pos = {x=pos.x, z=pos.z}
-	local y = pos.y
-	for i=1,height do
-		walk_pos.y = y + i
-		local walk_node = core.get_node(walk_pos)
-		if not kelp.is_submerged(walk_node) then
-			return walk_pos, walk_node, height, i
+	for y = pos.y + 1, pos.y + height do
+		local walk_node, _, _, _
+			= core.get_node_raw (pos.x, y, pos.z)
+		if walk_node ~= cid_water_source
+			and walk_node ~= cid_ignore
+			and walk_node ~= cid_water_flowing then
+			return vector.new (pos.x, y, pos.z), height, cid
 		end
 	end
-	return nil, nil, height, height
+	return nil, nil, nil
 end
 
 
@@ -250,7 +253,7 @@ end
 -- Drops the items for detached kelps.
 function kelp.detach_drop(pos, height)
 	-- Optional params: height
-	local height = height or kelp.get_height(core.get_node(pos).param2)
+	local height = height or kelp_get_height(core.get_node(pos).param2)
 	local y = pos.y
 	local walk_pos = {x=pos.x, z=pos.z}
 	for i=1,height do
@@ -269,7 +272,7 @@ function kelp.detach_dig(dig_pos, pos, drop, node, height)
 	-- Optional params: drop, node, height
 
 	local node = node or core.get_node(pos)
-	local height = height or kelp.get_height(node.param2)
+	local height = height or kelp_get_height(node.param2)
 	-- pos.y points to the surface, offset needed to point to the first kelp.
 	local new_height = dig_pos.y - (pos.y+1)
 
@@ -305,16 +308,17 @@ function kelp.surface_after_dig_node(pos, node)
 	return core.set_node(pos, {name=core.registered_nodes[node.name].node_dig_prediction})
 end
 
-
-
-local function detach_unsubmerged(pos)
-	local node = core.get_node(pos)
-	local dig_pos,_, height = kelp.find_unsubmerged(pos, node)
+local function detach_unsubmerged (pos)
+	local dig_pos, height, cid_kelp = kelp.find_unsubmerged (pos)
 	if dig_pos then
-		core.sound_play(core.registered_nodes[node.name].sounds.dug, { gain = 0.5, pos = dig_pos }, true)
-		kelp.detach_dig(dig_pos, pos, true, node, height)
-		local new_age = kelp.roll_init_age()
-		store_age(pos, new_age)
+		local name = core.get_name_from_content_id (cid_kelp)
+		if name and core.registered_nodes[name] then
+			local sound = core.registered_nodes[name].sounds.dug
+			core.sound_play (sound, { gain = 0.5, pos = dig_pos }, true)
+			kelp.detach_dig (dig_pos, pos, true, nil, height)
+		end
+		local new_age = kelp.roll_init_age ()
+		store_age (pos, new_age)
 	end
 end
 
@@ -340,7 +344,7 @@ function kelp.surface_on_destruct(pos)
 	-- on_falling callback. Activated by pistons for falling nodes too.
 	-- I'm not sure this works. I think piston digs water and the unsubmerged nature drops kelp.
 	if kelp.is_falling(pos, node) then
-		kelp.detach_drop(pos, kelp.get_height(node.param2))
+		kelp.detach_drop(pos, kelp_get_height(node.param2))
 	end
 end
 
@@ -386,7 +390,7 @@ function kelp.kelp_on_place(itemstack, placer, pointed_thing)
 
 	-- When placed on kelp.
 	if core.get_item_group(nu_name, "kelp") == 1 then
-		height = kelp.get_height(node_under.param2)
+		height = kelp_get_height(node_under.param2)
 		pos_tip,node_tip = kelp.get_tip(pos_under, height)
 		def_tip = core.registered_nodes[node_tip.name]
 

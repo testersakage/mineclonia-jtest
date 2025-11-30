@@ -14,14 +14,14 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Flower Pot"
-msgstr ""
+msgstr "Vaso"
 
 msgid "Can hold a small flower or plant"
-msgstr ""
+msgstr "Pode conter uma pequena flor ou planta"
 
 msgid "Flower pots are decorative blocks in which flowers and other small plants can be placed."
-msgstr ""
+msgstr "Vasos são blocos decorativos onde se podem colocar flores ou outras pequenas plantas."
 
 msgid "Just place a plant on the flower pot. Flower pots can hold small flowers (not higher than 1 block), saplings, ferns, dead bushes, mushrooms and cacti. Rightclick a potted plant to retrieve the plant."
-msgstr ""
+msgstr "Basta plantar uma planta no vaso. Vasos podem ter flores pequenas (com 1 bloco de altura), rebentos, fetos, arbustos secos, cogumelos ou catos. Clique com o direito numa planta envasada para a retirar."
 

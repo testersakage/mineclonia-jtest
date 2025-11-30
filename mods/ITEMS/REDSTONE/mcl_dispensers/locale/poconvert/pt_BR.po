@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Dispenser"
-msgstr ""
+msgstr "Ejetor"
 
 msgid "Inventory"
 msgstr "Inventário"

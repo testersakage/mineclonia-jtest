@@ -35,7 +35,7 @@ msgid "Polished Blackstone"
 msgstr "Rocha-negra Polida"
 
 msgid "Chiseled Polished Blackstone"
-msgstr "Rocha-negra Polida Cinzelada"
+msgstr "Rocha Negra Polida Entalhada"
 
 msgid "Polished Blackstone Bricks"
 msgstr "Tijolo de Rocha-negra Polida"

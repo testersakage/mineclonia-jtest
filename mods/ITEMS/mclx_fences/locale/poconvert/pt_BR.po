@@ -17,8 +17,8 @@ msgid "Red Nether Brick Fence"
 msgstr "Cerca de Tijolos Vermelhos do Nether"
 
 msgid "Red Nether Brick Fence Gate"
-msgstr "Portão de Tijolos Vermelhos do Nether"
+msgstr "Portinhola de Tijolos Vermelhos do Nether"
 
 msgid "Nether Brick Fence Gate"
-msgstr "Portão de Tijolos do Nether"
+msgstr "Portinhola de Tijolos do Nether"
 

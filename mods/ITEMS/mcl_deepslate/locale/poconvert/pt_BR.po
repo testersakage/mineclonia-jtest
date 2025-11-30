@@ -122,7 +122,7 @@ msgid "Cracked Deepslate Tiles"
 msgstr "Azulejos de Ardósia Rachado"
 
 msgid "Chiseled Deepslate"
-msgstr "Ardósia Cinzelada"
+msgstr "Ardósia Entalhada"
 
 msgid "@1 is a variant of @2 that can generate in deepslate and tuff blobs."
 msgstr "@1 é uma variante de @2 que pode gerar em bolhas de ardósia e tufo."
@@ -137,16 +137,16 @@ msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in undergr
 msgstr ""
 
 msgid "Chiseled Tuff"
-msgstr ""
+msgstr "Tufo Entalhado"
 
 msgid "Chiseled tuff is a chiseled variant of tuff."
-msgstr ""
+msgstr "O tufo entalhado é uma variante entalhada do tufo."
 
 msgid "Chiseled Tuff Bricks"
-msgstr ""
+msgstr "Tijolos de Tufo Entalhados"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
-msgstr ""
+msgstr "Os tijolos de tufo entalhados são uma variante dos tijolos de tufo, caracterizados por um tijolo grande no centro do bloco, com um desenho geométrico acima e abaixo."
 
 msgid "Tuff Stairs"
 msgstr ""

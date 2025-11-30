@@ -1,6 +1,6 @@
 # textdomain: mcl_doors
-This door is a 2-block high barrier which can be opened or closed by hand or by redstone power.=
-This door is a 2-block high barrier which can only be opened by redstone power, not by hand.=
+This door is a 2-block high barrier which can be opened or closed by hand or by redstone power.=Esta porta é uma barreira de 2 blocos de altura que pode ser aberta ou fechada manualmente ou com energia de redstone.
+This door is a 2-block high barrier which can only be opened by redstone power, not by hand.=Essa porta é uma barreira de 2 blocos de altura que só pode ser aberta com energia de redstone, não à mão.
 To open or close this door, send a redstone signal to its bottom half.=
 To open or close this door, rightclick it or send a redstone signal to its bottom half.=
 Openable by redstone power=Aberto por sinal de redstone

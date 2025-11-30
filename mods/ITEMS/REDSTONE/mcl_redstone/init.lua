@@ -32,7 +32,7 @@ core.register_on_mods_loaded(function()
 		elseif core.get_item_group(name, "redstone_conductive") == 1 then
 			mcl_redstone._solid_opaque_tab[name] = 0
 		end
-		if core.settings:get_bool("mcl_redstone_slab_signals", true) and core.get_item_group(name, "slab_top") ~= 0 then
+		if core.get_item_group(name, "slab_top") ~= 0 then
 			mcl_redstone._slab_tab[name] = 0
 		end
 	end

@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Glass panes are thin layers of glass which neatly connect to their neighbors as you build them."
-msgstr ""
+msgstr "Os painéis de vidro são finas camadas de vidro que se encaixam perfeitamente umas nas outras durante a construção."
 
 msgid "Stained glass panes are thin layers of stained glass which neatly connect to their neighbors as you build them. They come in many different colors."
 msgstr ""

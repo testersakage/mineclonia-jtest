@@ -27,7 +27,6 @@ local WIELD_POSITION = vector.copy ({
 
 local villager_base = {
 	type = "npc",
-	spawn_class = "passive",
 	_spawn_category = "misc",
 	passive = true,
 	hp_min = 20,
@@ -2239,11 +2238,15 @@ local function villager_type_from_biome (name)
 end
 
 function villager:on_spawn ()
-	if pr:next (1, 100) == 1 then
-		self:set_profession ("nitwit")
-	end
-
 	if not rawget (self, "_villager_type") then
+		-- Villagers converted from Zombie Villagers or
+		-- otherwise spawned with a profession shouldn't
+		-- exhibit a 1/100 probability of generating as
+		-- nitwits.
+		if pr:next (1, 100) == 1 then
+			self:set_profession ("nitwit")
+		end
+
 		local self_pos = self.object:get_pos ()
 		local biomename = mcl_biome_dispatch.get_biome_name (self_pos)
 		local villager_type = villager_type_from_biome (biomename)

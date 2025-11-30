@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Observer"
-msgstr ""
+msgstr "Observador"
 
 msgid "Emits redstone pulse when block in front changes"
 msgstr ""

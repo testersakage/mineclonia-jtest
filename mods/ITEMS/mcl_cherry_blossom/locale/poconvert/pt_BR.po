@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Cherry Bark"
-msgstr ""
+msgstr "Casca de Cerejeira"
 
 msgid "Cherry Bark Slab"
-msgstr ""
+msgstr "Laje de Casca de Cerejeira"
 
 msgid "Cherry Bark Stairs"
 msgstr ""
@@ -38,7 +38,7 @@ msgid "Cherry Fence"
 msgstr ""
 
 msgid "Cherry Fence Gate"
-msgstr ""
+msgstr "Portinhola de Cerejeira"
 
 msgid "Cherry Hanging Sign"
 msgstr ""

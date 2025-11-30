@@ -6,10 +6,7 @@ local mob_class = mcl_mobs.mob_class
 local rabbit = {
 	description = S("Rabbit"),
 	type = "animal",
-	spawn_class = "passive",
 	_spawn_category = "creature",
-	spawn_in_group_min = 2,
-	spawn_in_group = 3,
 	passive = true,
 	reach = 1,
 	hp_min = 3,
@@ -171,7 +168,7 @@ function rabbit:on_spawn ()
 			texture = "mobs_mc_rabbit_black.png"
 		end
 	end
-	self.base_texture[0] = texture
+	self.base_texture[1] = texture
 	self:set_textures (self.base_texture)
 end
 
@@ -425,7 +422,6 @@ mcl_mobs.register_mob ("mobs_mc:rabbit", rabbit)
 -- The killer bunny (Only with spawn egg)
 local killer_bunny = table.merge (rabbit, {
 	description = S("Killer Bunny"),
-	spawn_class = "hostile",
 	attack_type = "melee",
 	specific_attack = {
 		"player",
@@ -465,25 +461,6 @@ mcl_mobs.register_mob ("mobs_mc:killer_bunny", killer_bunny)
 ------------------------------------------------------------------------
 -- Mob spawning rules.
 -- Different skins depending on spawn location.
-
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:rabbit",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 8,
-	min_light = 9,
-	biomes = {
-		"flat",
-		"Desert",
-		"FlowerForest",
-		"Taiga",
-		"MegaSpruceTaiga",
-		"MegaTaiga",
-		"ColdTaiga",
-		"CherryGrove",
-	},
-	chance = 40,
-})
 
 -- Spawn egg
 mcl_mobs.register_egg("mobs_mc:rabbit", S("Rabbit"), "#995f40", "#734831", 0)

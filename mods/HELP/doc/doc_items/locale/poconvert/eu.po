@@ -385,21 +385,6 @@ msgstr "Izakiak"
 msgid "Different Mobs"
 msgstr "Izaki desberdinak"
 
-msgid "Type: @1"
-msgstr "Mota: @1"
-
-msgid "Spawning light levels (min / max): @1 / @2"
-msgstr "Agertzeko beharrezko argi-maila (mín./max.): @1 / @2"
-
-msgid "Can Jump a height of @1 nodes"
-msgstr "@1 nodoko altuera jauzi egin daiteke"
-
-msgid "Can Fly"
-msgstr "Hegan egin dezake"
-
-msgid "Can Swim"
-msgstr "Igeri egin dezake"
-
 msgid "Drops: "
 msgstr "Sariak: "
 

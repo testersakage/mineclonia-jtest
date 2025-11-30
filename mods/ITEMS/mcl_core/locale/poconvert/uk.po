@@ -131,7 +131,7 @@ msgid "Apples are food items which can be eaten."
 msgstr "Яблука - це продукти харчування, які можна їсти."
 
 msgid "Golden Apple"
-msgstr ""
+msgstr "Золоте яблуко"
 
 msgid "Golden apples are precious food items which can be eaten."
 msgstr ""
@@ -1010,7 +1010,7 @@ msgid "Vines are climbable blocks which can be placed on the sides of solid full
 msgstr "Лози - це блоки, на які можна підніматися, та які можна розмістити на сторонах суцільних повнокубових блоків. Лози повільно ростуть і поширюються."
 
 msgid "Glass"
-msgstr "Стекло"
+msgstr "Скло"
 
 msgid "A decorative and mostly transparent block."
 msgstr "Декоративний і здебільшого прозорий блок."

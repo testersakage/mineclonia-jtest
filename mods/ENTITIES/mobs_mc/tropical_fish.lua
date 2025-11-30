@@ -5,7 +5,6 @@ local mob_class = mcl_mobs.mob_class
 local tropical_fish = {
 	description = S("Tropical Fish"),
 	type = "animal",
-	spawn_class = "water_ambient",
 	_spawn_category = "water_ambient",
 	can_despawn = true,
 	passive = true,
@@ -15,7 +14,7 @@ local tropical_fish = {
 	xp_max = 3,
 	armor = 100,
 	head_eye_height = 0.26,
-	spawn_in_group = 9,
+	_school_size = 9,
 	tilt_swim = true,
 	movement_speed = 14,
 	collisionbox = { -0.15, 0.0, -0.15, 0.15, 0.75, 0.15 },
@@ -198,75 +197,6 @@ mcl_mobs.register_mob ("mobs_mc:tropical_fish", tropical_fish)
 -- Tropical Fish spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:tropical_fish",
-	type_of_spawning = "water",
-	dimension = "overworld",
-	min_height = mobs_mc.water_level - 16,
-	max_height = mobs_mc.water_level + 1,
-	min_light = 0,
-	max_light = core.LIGHT_MAX + 1,
-	aoc = 7,
-	chance = 750,
-	biomes = {
-		"Mesa",
-		"Jungle",
-		"BambooJungle",
-		"Savanna",
-		"Desert",
-		"MesaPlateauFM_grasstop",
-		"JungleEdgeM",
-		"JungleM",
-		"MesaPlateauF",
-		"MesaPlateauFM",
-		"MesaPlateauF_grasstop",
-		"MesaBryce",
-		"JungleEdge",
-		"SavannaM",
-		"Savanna_beach",
-		"JungleM_shore",
-		"Jungle_shore",
-		"MesaPlateauFM_sandlevel",
-		"MesaPlateauF_sandlevel",
-		"MesaBryce_sandlevel",
-		"Mesa_sandlevel",
-		"JungleEdgeM_ocean",
-		"Jungle_deep_ocean",
-		"BambooJungle_ocean",
-		"Savanna_ocean",
-		"MesaPlateauF_ocean",
-		"Savanna_deep_ocean",
-		"JungleEdgeM_deep_ocean",
-		"SunflowerPlains_deep_ocean",
-		"Mesa_ocean",
-		"JungleEdge_deep_ocean",
-		"SavannaM_deep_ocean",
-		"Desert_deep_ocean",
-		"Mesa_deep_ocean",
-		"MesaPlateauFM_ocean",
-		"JungleM_deep_ocean",
-		"SavannaM_ocean",
-		"MesaPlateauF_deep_ocean",
-		"MesaBryce_deep_ocean",
-		"JungleEdge_ocean",
-		"MesaBryce_ocean",
-		"Jungle_ocean",
-		"MesaPlateauFM_deep_ocean",
-		"Desert_ocean",
-		"JungleM_ocean",
-		"MesaBryce_underground",
-		"Mesa_underground",
-		"Jungle_underground",
-		"MesaPlateauF_underground",
-		"SavannaM_underground",
-		"MesaPlateauFM_underground",
-		"Desert_underground",
-		"Savanna_underground",
-		"JungleM_underground",
-		"JungleEdgeM_underground",
-	},
-})
-
 --spawn egg
 mcl_mobs.register_egg("mobs_mc:tropical_fish", S("Tropical Fish"), "#ef6915", "#fff9ef", 0)
 
@@ -274,7 +204,8 @@ mcl_mobs.register_egg("mobs_mc:tropical_fish", S("Tropical Fish"), "#ef6915", "#
 -- Modern Tropical Fish spawning.
 ------------------------------------------------------------------------
 
-local tropical_fish_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
+local aquatic_animal_spawner = mobs_mc.aquatic_animal_spawner
+local tropical_fish_spawner = table.merge (aquatic_animal_spawner, {
 	name = "mobs_mc:tropical_fish",
 	biomes = {
 		"WarmOcean",
@@ -289,6 +220,13 @@ local tropical_fish_spawner = table.merge (mobs_mc.aquatic_animal_spawner, {
 
 function tropical_fish_spawner:init_group (list, sdata)
 	mob_class.school_init_group (list)
+end
+
+function tropical_fish_spawner:describe_criteria (tbl, omit_group_details)
+	aquatic_animal_spawner.describe_criteria (self, tbl, omit_group_details)
+	if not omit_group_details then
+		table.insert (tbl, S ("Each mob spawned will form a school with the remainder of the mobs in the group."))
+	end
 end
 
 mcl_mobs.register_spawner (tropical_fish_spawner)

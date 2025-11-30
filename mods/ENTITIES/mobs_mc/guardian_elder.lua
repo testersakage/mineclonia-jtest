@@ -10,7 +10,6 @@ local mob_class = mcl_mobs.mob_class
 local guardian_elder = table.merge (mobs_mc.guardian, {
 	description = S("Elder Guardian"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	hp_min = 80,
 	hp_max = 80,

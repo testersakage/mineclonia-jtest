@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "This item is a dye which is used for dyeing and crafting."
-msgstr "Este item é um corante o qual é usado para colorir e fabricar."
+msgstr "Este item é um corante que é usado na produção e tingimento."
 
 msgid "Rightclick on a sheep to dye its wool. Other things are dyed by crafting."
-msgstr "Clique com o botão direito em uma ovelha para colorir sua lã. Outras coisas são coloridas ao fabricá-las."
+msgstr "Clique com o botão direito em uma ovelha para colorir sua lã. Outras coisas podem ser tingidas na produção."
 
 msgid "Black Dye"
 msgstr "Corante Preto"

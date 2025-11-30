@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "A Block made of Bamboo stalks. Can be crafted into Bamboo Planks."
-msgstr ""
+msgstr "Um Bloco feito de caules de Bambu. Pode ser craftado para Tábuas de Bambu."
 
 msgid "Block of Bamboo"
 msgstr "Bloco de bambu"
@@ -41,7 +41,7 @@ msgid "Bamboo Fence Gate"
 msgstr "Portão de bambu"
 
 msgid "Bamboo Hanging Sign"
-msgstr ""
+msgstr "Placa de Bambu Pendurada"
 
 msgid "Bamboo Planks"
 msgstr "Tábuas de bambu"
@@ -65,26 +65,26 @@ msgid "Bamboo"
 msgstr "Bambu"
 
 msgid "Bamboo Plant"
-msgstr ""
+msgstr "Planta de Bambu"
 
 msgid "Bamboo Mosaic Plank"
-msgstr ""
+msgstr "Mosaico de Tábuas de Bambu"
 
 msgid "Bamboo Mosaic Stairs"
-msgstr ""
+msgstr "Escadas de Mosaico de Bambu"
 
 msgid "Bamboo Mosaic Slab"
-msgstr ""
+msgstr "Degrau de Mosaico de Bambu"
 
 msgid "Scaffolding"
 msgstr "Andaime"
 
 msgid "Scaffolding is a temporary structure to easily climb up while building that is easily removed"
-msgstr ""
+msgstr "Andaimes são estruturas temporárias que se sobem e descem e podem ser removidas facilmente"
 
 msgid "Scaffolding horizontal"
-msgstr ""
+msgstr "Andaime Horizontal"
 
 msgid "Scaffolding block..."
-msgstr ""
+msgstr "Bloco de andaime..."
 

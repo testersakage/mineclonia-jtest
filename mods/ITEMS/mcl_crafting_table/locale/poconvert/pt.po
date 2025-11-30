@@ -26,14 +26,14 @@ msgid "Fill Craft Grid"
 msgstr "Encher Grelha de Craft"
 
 msgid "Crafting Table"
-msgstr ""
+msgstr "Mesa de Trabalho"
 
 msgid "3×3 crafting grid"
-msgstr ""
+msgstr "Grade de crafting 3×3"
 
 msgid "A crafting table is a block which grants you access to a 3×3 crafting grid which allows you to perform advanced crafts."
-msgstr ""
+msgstr "Uma mesa de trabalho é um bloco que garante acesso a uma grade de crafting 3×3 que permite realizar crafts avançados."
 
 msgid "Rightclick the crafting table to access the 3×3 crafting grid."
-msgstr ""
+msgstr "Clique com o direito na mesa de trabalho para aceder à grade de crafting 3×3."
 

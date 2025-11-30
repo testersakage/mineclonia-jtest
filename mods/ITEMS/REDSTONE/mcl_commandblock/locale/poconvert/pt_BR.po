@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Command blocks are not enabled on this server"
-msgstr ""
+msgstr "Os blocos de comando não estão habilitados neste servidor"
 
 msgid "Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands."
 msgstr ""
@@ -59,7 +59,7 @@ msgid "Everyone can activate a command block and look at its commands, but not e
 msgstr ""
 
 msgid "To view the commands in a command block, use it. To activate the command block, just supply it with redstone power. This will execute the commands once. To execute the commands again, turn the redstone power off and on again."
-msgstr ""
+msgstr "Use para visualizar os comandos em um bloco de comando. Para ativar o bloco de comando, basta fornecer energia de redstone a ele. Isso executará os comandos uma vez. Para executar os comandos novamente, desligue e ligue a energia de redstone."
 
 msgid "To be able to place a command block and change the commands, you need to be in Creative Mode and must have the “maphack” privilege. A new command block does not have any commands and does nothing. Use the command block (in Creative Mode!) to edit its commands. Read the help entry “Advanced usage > Server Commands” to understand how commands work. Each line contains a single command. You enter them like you would in the console, but without the leading slash. The commands will be executed from top to bottom."
 msgstr ""

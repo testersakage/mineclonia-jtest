@@ -17,7 +17,7 @@ msgid "Upgrade Gear"
 msgstr "Atualizar Equipamento"
 
 msgid "Smithing Table"
-msgstr ""
+msgstr "Bacada de Ferraria"
 
 msgid "A smithing table is a utility block used to alter tools and armor at the cost of a smithing template and the appropriate material. This is the only way to obtain trimmed armor or upgrade diamond equipment with netherite. It also serves as a toolsmith's job site block."
 msgstr ""

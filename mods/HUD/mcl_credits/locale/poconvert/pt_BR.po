@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "A faithful Open Source clone of Minecraft"
-msgstr "Um clone fiel Open Source do Minecraft"
+msgstr "Um clone de Código Aberto fiel ao Minecraft"
 
 msgid "Sneak to skip"
 msgstr "Agache para pular"

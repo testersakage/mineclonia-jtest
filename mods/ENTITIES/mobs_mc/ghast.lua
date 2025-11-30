@@ -16,7 +16,6 @@ local only_peaceful_mobs
 local ghast = {
 	description = S("Ghast"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	glow = 3,
 	hp_min = 10,
@@ -27,7 +26,6 @@ local ghast = {
 	doll_size_override = { x = 1.05, y = 1.05 },
 	visual = "mesh",
 	mesh = "mobs_mc_ghast.b3d",
-	spawn_in_group = 1,
 	textures = {
 		{"mobs_mc_ghast.png"},
 	},
@@ -227,31 +225,7 @@ end
 -- Ghast spawning.
 ------------------------------------------------------------------------
 
-function ghast.can_spawn (pos)
-	if not core.get_item_group(core.get_node(pos).name,"solid") then return false end
-	local p1=vector.offset(pos,-2,1,-2)
-	local p2=vector.offset(pos,2,5,2)
-	local nn = core.find_nodes_in_area(p1,p2,{"air"})
-	if #nn< 41 then return false end
-	return true
-end
-
 mcl_mobs.register_mob ("mobs_mc:ghast", ghast)
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:ghast",
-	type_of_spawning = "ground",
-	dimension = "nether",
-	min_light = 0,
-	max_light = 15,
-	aoc = 2,
-	biomes = {
-		"Nether",
-		"SoulsandValley",
-		"BasaltDelta",
-	},
-	chance = 400,
-})
 
 -- spawn eggs
 mcl_mobs.register_egg ("mobs_mc:ghast", S("Ghast"), "#f9f9f9", "#bcbcbc", 0)
@@ -276,13 +250,15 @@ local ghast_spawner = table.merge (mobs_mc.monster_spawner, {
 	max_artificial_light = 15,
 })
 
-function ghast_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function ghast_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					    spawn_flag)
 	return mcl_vars.difficulty > 0
 		and not only_peaceful_mobs
 		and math.random (20) == 1
 		and monster_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
-							 node_cache)
+							 node_cache,
+							 spawn_flag)
 end
 
 local ghast_spawner_basalt_delta = table.merge (ghast_spawner, {

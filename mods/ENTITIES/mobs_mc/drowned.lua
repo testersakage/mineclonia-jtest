@@ -155,6 +155,7 @@ local drowned = table.merge (zombie, {
 		_attempting_to_surface = true,
 	},
 	_convert_to = false,
+	_reinforcement_type = "mobs_mc:drowned",
 })
 
 ------------------------------------------------------------------------
@@ -788,8 +789,10 @@ core.register_on_mods_loaded (function ()
 	})
 end)
 
-function drowned_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
-	if monster_spawner.test_spawn_position (self, spawn_pos, node_pos, sdata, node_cache) then
+function drowned_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					      spawn_flag)
+	if monster_spawner.test_spawn_position (self, spawn_pos, node_pos, sdata, node_cache,
+						spawn_flag) then
 		local node = self:get_node (node_cache, -1, node_pos)
 		if node.name ~= "mcl_core:water_source"
 			and node.name ~= "mcl_core:water_flowing" then
@@ -823,6 +826,11 @@ local drowned_spawner_river = table.merge (drowned_spawner, {
 	weight = 100,
 	pack_min = 1,
 	pack_max = 1,
+	describe_additional_spawning_criteria = function (self)
+		return monster_spawner.describe_additional_spawning_criteria (self)
+			.. "  "
+			.. S ("Drowned will spawn more frequently in this biome.")
+	end,
 })
 
 local drowned_spawner_frozen_river = table.merge (drowned_spawner, {

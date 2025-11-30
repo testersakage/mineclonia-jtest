@@ -299,7 +299,7 @@ msgid "Bread"
 msgstr ""
 
 msgid "Hay Bale"
-msgstr ""
+msgstr "Сноп сіна"
 
 msgid "Hay bales are decorative blocks made from wheat."
 msgstr ""

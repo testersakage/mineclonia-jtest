@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Glowstone"
-msgstr ""
+msgstr "Pedra luminosa"
 
 msgid "Glowstone is a naturally-glowing block which is home to the Nether."
-msgstr ""
+msgstr "A pedra luminosa é um bloco que brilha naturalmente e nativa do Nether."
 
 msgid "Nether Quartz Ore"
 msgstr ""
@@ -68,7 +68,7 @@ msgid "Red Nether Brick Block"
 msgstr ""
 
 msgid "Chiseled Nether Brick Block"
-msgstr ""
+msgstr "Bloco de Tijolos do Nether Entalhado"
 
 msgid "Cracked Nether Bricks"
 msgstr ""
@@ -83,7 +83,7 @@ msgid "Block of Quartz"
 msgstr ""
 
 msgid "Chiseled Quartz Block"
-msgstr ""
+msgstr "Bloco de Quartzo Entalhado"
 
 msgid "Pillar Quartz Block"
 msgstr ""
@@ -122,13 +122,13 @@ msgid "Glowstone Dust"
 msgstr ""
 
 msgid "Glowstone dust is the dust which comes out of broken glowstones. It is mainly used in crafting."
-msgstr ""
+msgstr "O pó de pedra luminosa é o pó que sai das pedras luminosas quebradas. É usado principalmente na produção."
 
 msgid "Nether Quartz"
 msgstr ""
 
 msgid "Nether quartz is a versatile crafting ingredient."
-msgstr ""
+msgstr "O quartzo do Nether é um ingrediente versátil para produção."
 
 msgid "Quartz Material"
 msgstr ""
@@ -137,7 +137,7 @@ msgid "Netherite Scrap"
 msgstr ""
 
 msgid "Netherite scrap is a crafting ingredient for netherite ingots."
-msgstr ""
+msgstr "A sucata de netherita é um ingrediente usado na produção de lingotes de netherita."
 
 msgid "Netherite Ingot"
 msgstr ""
@@ -152,7 +152,7 @@ msgid "Nether Brick"
 msgstr ""
 
 msgid "Nether bricks are the main crafting ingredient for crafting nether brick blocks and nether fences."
-msgstr ""
+msgstr "Os tijolos do Nether são o principal ingrediente para a produção de blocos de tijolos do Nether e cercas do Nether."
 
 msgid "Netherite Upgrade Template"
 msgstr ""
@@ -179,7 +179,7 @@ msgid "Premature Nether Wart (Stage 1)"
 msgstr ""
 
 msgid "A premature nether wart has just recently been planted on soul sand. Nether wart slowly grows on soul sand in 4 stages (the second and third stages look identical). Although nether wart is home to the Nether, it grows in any dimension."
-msgstr ""
+msgstr "Um fungo do nether prematuro foi plantado recentemente na areia das almas. O fungo do nether cresce lentamente na areia das almas em 4 estágios (o segundo e o terceiro estágios são idênticos). Embora o fungo do nether seja nativo do Nether, ela cresce em qualquer dimensão."
 
 msgid "Premature Nether Wart (Stage 2)"
 msgstr ""

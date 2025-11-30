@@ -14,116 +14,127 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Mangrove Roots"
-msgstr ""
+msgstr "Raízes de Mangue"
 
 msgid "Mangrove roots are decorative blocks that form as part of mangrove trees."
-msgstr ""
+msgstr "As raízes do mangue são blocos decorativos que se formam como parte das árvores de mangue."
 
 msgid "Mangrove Propagule"
-msgstr ""
+msgstr "Propágulo do Mangue"
 
 msgid "Needs soil and light to grow"
-msgstr ""
+msgstr "Precisa de solo e luz para crescer"
 
 msgid "When placed on soil (such as dirt) and exposed to light, an propagule will grow into an mangrove after some time."
+msgstr "Quando colocado sobre o solo (como na terra) e exposto à luz, um propágulo crescerá e se tornará um manguezal após algum tempo."
+
+msgid "Suspended mague propagules grow on the underside of mangrove leaves.\n"
+""
 msgstr ""
 
-msgid "Hanging Propagule"
+msgid "They grow in four stages. Using bone meal on a suspended propagule advances it to the next growth stage.\n"
+""
 msgstr ""
 
-msgid "Grows on Mangrove leaves"
+msgid "When the propagule reaches the final stage, it drops as an item when broken."
+msgstr ""
+
+msgid "Hanging Mangrove Propagule"
+msgstr ""
+
+msgid "Hanging Propagule (Stage @1)"
 msgstr ""
 
 msgid "Water logged mangrove roots"
-msgstr ""
+msgstr "Raízes de mangue encharcadas"
 
 msgid "Mangrove roots, despite being a full block, can be waterlogged and do not flow water out"
-msgstr ""
+msgstr "As raízes do mangue, apesar de formarem um bloco completo, podem ficar imersas sem retirar a água"
 
 msgid "These cannot be crafted yet only occure when get in contact of water."
-msgstr ""
+msgstr "Estes ainda não podem ser produzidos, apenas ocorrem quando entram em contato com a água."
 
 msgid "River water logged mangrove roots"
-msgstr ""
+msgstr "Raízes de mangue imersas em água de rio"
 
 msgid "Muddy Mangrove Roots"
-msgstr ""
+msgstr "Raízes de Mangue Lamacentas"
 
 msgid "crafted with Mud and Mangrove roots"
-msgstr ""
+msgstr "Produzido com Barro e Raízes de Mangue"
 
 msgid "Muddy Mangrove Roots is a block from mangrove swamp.It drowns player a bit inside it."
-msgstr ""
+msgstr "Raízes de Mangue Lamacentas são a um bloco do mangue do pântano. Elas afogam um pouco o jogador."
 
 msgid "Mangrove Bark"
-msgstr ""
+msgstr "Casca de Mangue"
 
 msgid "Mangrove Bark Slab"
-msgstr ""
+msgstr "Laje de Casca de Mangue"
 
 msgid "Mangrove Bark Stairs"
-msgstr ""
+msgstr "Escadas de Casca de Mangue"
 
 msgid "Mangrove Boat"
-msgstr ""
+msgstr "Barco de Mangue"
 
 msgid "Mangrove Button"
-msgstr ""
+msgstr "Botão de Mangue"
 
 msgid "Mangrove Chest Boat"
-msgstr ""
+msgstr "Bote de Mangue com Baú"
 
 msgid "Mangrove Door"
-msgstr ""
+msgstr "Porta de Mangue"
 
 msgid "Mangrove Fence"
-msgstr ""
+msgstr "Cerca de Mangue"
 
 msgid "Mangrove Fence Gate"
-msgstr ""
+msgstr "Portinhola de Mangue"
 
 msgid "Mangrove Hanging Sign"
-msgstr ""
+msgstr "Placa Suspensa de Mangue"
 
 msgid "Mangrove Leaves"
-msgstr ""
+msgstr "Folhas de Mangue"
 
 msgid "Mangrove Log"
-msgstr ""
+msgstr "Tronco de Mangue"
 
 msgid "Mangrove Planks"
-msgstr ""
+msgstr "Tábuas de Mangue"
 
 msgid "Mangrove Pressure Plate"
-msgstr ""
+msgstr "Placa de Pressão de Mangue"
 
 msgid "Mangrove Sign"
-msgstr ""
+msgstr "Placa de Mangue"
 
 msgid "Mangrove Slab"
-msgstr ""
+msgstr "Laje de Mangue"
 
 msgid "Mangrove Stairs"
-msgstr ""
+msgstr "Escadas de Mangue"
 
 msgid "Mangrove Trapdoor"
-msgstr ""
+msgstr "Alçapão de Mangue"
 
 msgid "Mangrove leaves are grown from Mangrove trees."
-msgstr ""
+msgstr "As folhas de mangue crescem das árvores Mangue."
 
 msgid "Stripped Mangrove Bark"
-msgstr ""
+msgstr "Casca de Mangue Lisa"
 
 msgid "Stripped Mangrove Log"
-msgstr ""
+msgstr "Tronco de Mangue Descascado"
 
 msgid "The stripped trunk of an Mangrove tree."
-msgstr ""
+msgstr "O tronco descascado da árvore Mangue."
 
 msgid "The stripped wood of an Mangrove tree."
-msgstr ""
+msgstr "A madeira descascada da árvore Mangue."
 
 msgid "The trunk of a Mangrove tree."
-msgstr ""
+msgstr "O tronco da árvore Mangue."
 

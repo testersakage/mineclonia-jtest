@@ -40,3 +40,49 @@ msgstr "spawn_mob es un comando que te permite escribir el nombre de una criatur
 " spawn_mob skeleton:var<passive=true>::var<jump_height=NUM10>::var<fly_in=air>::var<fly=true>:\n"
 " etc."
 
+msgid "This mob will spawn on solid and opaque nodes with a surface occupying a full node when no obstructions exist within a volume @1 nodes in size around the center of such a node's upper surface."
+msgstr ""
+
+msgid "This mob will spawn in water when the node above is not opaque and no obstructions exist within a volume @1 nodes in size around the center of the base of the fluid node in question."
+msgstr ""
+
+msgid "This mob will spawn on flowing lava and lava sources when no liquid or solid obstructions exist within a volume @1 nodes in size."
+msgstr ""
+
+msgid "This mob does not document its spawning requirements."
+msgstr ""
+
+msgid "Mobs will spawn in individual groups of 1."
+msgstr ""
+
+msgid "Up to @1 mobs will spawn as a single group upon each spawning attempt."
+msgstr ""
+
+msgid "A group of @1 to @2 mobs will attempt to be spawned upon each spawning attempt."
+msgstr ""
+
+msgid "Dumped spawners for biome: @1"
+msgstr ""
+
+msgid "Environmental spawning requirements and mechanics:"
+msgstr ""
+
+msgid "\n"
+"When spawned from spawner:"
+msgstr ""
+
+msgid "\n"
+"Mob does not spawn environmentally."
+msgstr ""
+
+msgid "\n"
+"When spawned in biome(s): "
+msgstr ""
+
+msgid "and when spawned in structure(s): "
+msgstr ""
+
+msgid "\n"
+"When spawned in structure(s): "
+msgstr ""
+

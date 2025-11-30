@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Wait until all mods have loaded!"
-msgstr ""
+msgstr "Aguarde até que todos os mods sejam carregados!"
 
 msgid "Find and teleport to biome"
 msgstr "Encontra e teleporta para um bioma"

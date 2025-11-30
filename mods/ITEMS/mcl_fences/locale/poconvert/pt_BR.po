@@ -20,8 +20,8 @@ msgid "Openable by players and redstone power"
 msgstr "Abrível por jogadores e carga de redstone"
 
 msgid "Fence gates can be opened or closed and can't be jumped over. Fences will connect nicely to fence gates."
-msgstr "Portões podem ser abertos ou fechados e não podem ser pulados. As cercas irão se conectar aos portões."
+msgstr "Portinholas podem ser abertas ou fechadas e não podem ser puladas. As cercas irão se conectar às portinholas."
 
 msgid "Right-click the fence gate to open or close it."
-msgstr "Clique com o botão direito no portão para abri-lo ou fecha-lo."
+msgstr "Clique com o botão direito na portinhola para a abrir ou fechar."
 

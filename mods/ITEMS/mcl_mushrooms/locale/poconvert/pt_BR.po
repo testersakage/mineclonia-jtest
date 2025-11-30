@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "This decorative block is like a huge mushroom stem, but with the stem texture on all sides."
-msgstr ""
+msgstr "Esse bloco decorativo é como um enorme caule de cogumelo, mas com textura do caule em todos os lados."
 
 msgid "By placing huge mushroom blocks of the same species next to each other, the sides that touch each other will turn into pores permanently."
 msgstr ""
@@ -50,10 +50,10 @@ msgid "Huge Brown Mushroom All-Faces Stem"
 msgstr ""
 
 msgid "Brown mushrooms are fungi which grow and spread in darkness, but are sensitive to light. They are inedible as such, but they can be used to craft food items."
-msgstr ""
+msgstr "Os cogumelos marrons são fungos que crescem e se espalham na escuridão, mas são sensíveis à luz. Eles não são comestíveis por si só, mas podem ser usados para produzir alimentos."
 
 msgid "Red mushrooms are fungi which grow and spread in darkness, but are sensitive to light. They are inedible as such, but they can be used to craft food items."
-msgstr ""
+msgstr "Os cogumelos vermelhos são fungos que crescem e se espalham na escuridão, mas são sensíveis à luz. Não são comestíveis por si só, mas podem ser usados para produzir alimentos."
 
 msgid "A single mushroom of this species will slowly spread over time towards a random solid opaque block with a light level of 12 or lower in a 3×3×3 cube around the mushroom. It stops spreading when there are 5 or more mushrooms of the same species within an area of 9×3×9 blocks around the mushroom."
 msgstr ""

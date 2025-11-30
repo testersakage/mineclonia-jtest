@@ -448,15 +448,47 @@ core.register_abm({
 })
 
 -- Freeze water
+
+local function position_cold_p (pos)
+	-- Avoid the redundant natural light tests in mcl_weather.
+	local name = mcl_biome_dispatch.get_biome_name (pos)
+	return mcl_biome_dispatch.is_position_cold (name, pos)
+end
+
+local band = bit.band
+
+local function is_sunlit (param1, dnr)
+	-- It is possible to sidestep various expensive computations
+	-- in core.get_natural_light and a redundant Luanti API call
+	-- because the artificial light level that is also required is
+	-- lesser than full daylight.
+
+	local artificial = band (param1, 0xf0)
+	return band (param1, 0xf) == 0xf and param1 < 0xa0
+		and dnr < (artificial - 0xa0) / (artificial - 0xf0)
+end
+
+-- Day-night ratio below which areas exposed to full daylight receive
+-- light levels lesser than 10.
+local MAX_DNR = 11.0 / 15.0
+
+local get_current_day_night_ratio
+	= mcl_util.get_current_day_night_ratio
+
 core.register_abm({
 	label = "Freeze water in cold areas",
 	nodenames = {"mcl_core:water_source", "mclx_core:river_water_source"},
 	interval = 32,
-	chance = 8,
+	chance = 10,
 	action = function(pos, node)
-		if mcl_weather.has_snow(pos) and core.get_natural_light(vector.offset(pos,0,1,0), 0.5) == core.LIGHT_MAX + 1 and core.get_node_light(pos) < 10 then
-			node.name = "mcl_core:ice"
-			core.swap_node(pos, node)
+		local ratio = get_current_day_night_ratio ()
+		if ratio < MAX_DNR then
+			local _, param1, _, _
+				= core.get_node_raw (pos.x, pos.y + 1, pos.z)
+			if is_sunlit (param1, ratio) and position_cold_p (pos) then
+				node.name = "mcl_core:ice"
+				core.swap_node (pos, node)
+			end
 		end
 	end
 })

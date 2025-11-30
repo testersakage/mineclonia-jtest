@@ -32,7 +32,7 @@ msgid "To use an anvil, rightclick it. An anvil has 2 input slots (on the left) 
 msgstr "Para usar a bigorna, aperte-a com o botão direito. Uma bigorna possui 2 espaços de entrada (a esquerda) e um espaço de saída."
 
 msgid "To rename items, put an item stack in one of the item slots while keeping the other input slot empty. Type in a name, hit enter or “Set Name”, then take the renamed item from the output slot."
-msgstr "Para renomear itens, coloque-o em um espaço de entrada enquanto mantém o outro vazio. Digite um nome e aperte enter ou \"Colocar nome\". Retire o item renomeado do espaço de saída."
+msgstr "Para renomear itens, coloque um estoque de itens em um dos nichos de itens enquanto mantém o outro vazio. Digite um nome e aperte enter ou \"Definir Nome\" e retire o item renomeado do nicho de saída."
 
 msgid "There are two possibilities to repair tools (and armor):"
 msgstr "Há duas possibilidades de reparar ferramentas (e armaduras):"

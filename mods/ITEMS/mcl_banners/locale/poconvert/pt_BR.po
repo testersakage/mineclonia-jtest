@@ -23,19 +23,19 @@ msgid "Banner"
 msgstr "Estandarte"
 
 msgid "Banners are tall colorful decorative blocks. They can be placed on the floor and at walls. Banners can be emblazoned with a variety of patterns by placing it with a dye in the loom, or with lots of dyes in crafting table."
-msgstr ""
+msgstr "Estandartes são blocos decorativos altos e coloridos. Podem ser colocados no chão e nas paredes. É possível estampar diversos padrões nos estandartes, aplicando corantes no tear ou em uma bancada de produção."
 
 msgid "Emblazoned banners can be emblazoned again to combine patterns. Up to @1 patterns can be layered on a banner. To wash off a banner's top-most layer, use it on a cauldron with water."
 msgstr ""
 
 msgid "An emblazoned banner can be copied by placing two banners of the same base color in the crafting table — one needs to be emblazoned, the other one must be clean."
-msgstr ""
+msgstr "Um estandarte ornamentado pode ser copiado colocando dois estandartes da mesma cor base na bancada de produção — um precisa estar ornamentado e o outro não."
 
 msgid "Paintable decoration"
 msgstr "Decoração pintável"
 
 msgid "Can be used to craft special banner designs on the loom"
-msgstr "Pode ser usado para fabricar designs especiais no tear"
+msgstr "Pode ser usado para produzir designs especiais no tear"
 
 msgid "Special Banner Pattern"
 msgstr "Figuras de Estandarte Especiais"

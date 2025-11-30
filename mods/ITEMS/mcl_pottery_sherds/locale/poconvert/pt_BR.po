@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Used for crafting decorated pots"
-msgstr "Usado para fabricar vasos decorados"
+msgstr "Usado para produzir vasos decorados"
 
 msgid "Decorated Pot"
 msgstr "Vaso Decorado"
@@ -23,7 +23,7 @@ msgid "Pots are decorative blocks."
 msgstr "Vasos são blocos decorativos."
 
 msgid "Specially decorated pots can be crafted using pottery sherds"
-msgstr "Vasos decorados especiais podem ser fabricados com óstracos"
+msgstr "Vasos decorados especiais podem ser produzidos com óstracos"
 
 msgid "Angler Pottery Sherd"
 msgstr ""

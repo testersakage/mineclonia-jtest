@@ -32,7 +32,7 @@ msgid "An amethyst shard is a crystalline mineral."
 msgstr "Осколок аметиста — это кристаллический минерал, получаемый в результате разрушения кластеров аметиста."
 
 msgid "Amethyst Material"
-msgstr ""
+msgstr "Аметистовый материал"
 
 msgid "Calcite"
 msgstr "Кальцит"

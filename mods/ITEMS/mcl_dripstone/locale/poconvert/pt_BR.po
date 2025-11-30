@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Dripstone block"
-msgstr ""
+msgstr "Bloco de estalactite"
 
 msgid "Dripstone is type of stone that allows stalagmites and stalagtites to grow on it"
 msgstr ""

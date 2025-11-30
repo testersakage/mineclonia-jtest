@@ -16,9 +16,6 @@ msgstr ""
 msgid "Firework Rocket"
 msgstr "Fusée de feu d'artifice"
 
-msgid "@1s power left. Not using rocket."
-msgstr "@1s puissance restante. Fusée non utilisée."
-
 msgid "Elytra not deployed. Jump while falling down to deploy."
 msgstr "Élytres non déployées. Sautez au cours d'une chute pour les déployer."
 

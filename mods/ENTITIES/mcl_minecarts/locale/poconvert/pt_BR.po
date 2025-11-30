@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Sneak-click to remove"
-msgstr ""
+msgstr "Agachar + Clique para remover"
 
 msgid "Minecart"
 msgstr "Carrinho"
@@ -35,10 +35,10 @@ msgid "To obtain the minecart, punch it while holding down the sneak key."
 msgstr "Para obter o carrinho, soque-o enquanto segura pressionada a tecla de agachar."
 
 msgid "If it moves over a powered activator rail, you'll get ejected."
-msgstr ""
+msgstr "Se passar por cima de um trilho ativador energizado, você será ejetado."
 
 msgid "Sneak to dismount"
-msgstr "Agache para desmontar"
+msgstr "Agache para sair"
 
 msgid "Minecart with Chest"
 msgstr "Carrinho com Baú"

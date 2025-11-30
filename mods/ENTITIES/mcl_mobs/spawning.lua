@@ -5,57 +5,12 @@ local ipairs = ipairs
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
-local only_peaceful_mobs = core.settings:get_bool("only_peaceful_mobs", false)
-local modern_lighting = core.settings:get_bool("mcl_mobs_modern_lighting", true)
-
-local nether_threshold = 11
-local end_threshold = 15
-local overworld_threshold = 0
-local overworld_sky_threshold = 7
-local overworld_passive_threshold = 7
-
-local PASSIVE_INTERVAL = 20
-local HOSTILE_INTERVAL = 10
-local dbg_spawn_attempts = 0
-local dbg_spawn_succ = 0
-local dbg_spawn_counts = {}
--- range for mob count
-local aoc_range = 136
-local remove_far = true
-
 local instant_despawn_range = 128
 local random_despawn_range = 32
 
-local mob_cap = {
-	monster = tonumber(core.settings:get("mcl_mob_cap_monster")) or 70,
-	animal = tonumber(core.settings:get("mcl_mob_cap_animal")) or 10,
-	ambient = tonumber(core.settings:get("mcl_mob_cap_ambient")) or 15,
-	water = tonumber(core.settings:get("mcl_mob_cap_water")) or 5,
-	water_ambient = tonumber(core.settings:get("mcl_mob_cap_water_ambient")) or 20,
-	player = tonumber(core.settings:get("mcl_mob_cap_player")) or 75,
-	total = tonumber(core.settings:get("mcl_mob_cap_total")) or 500,
-}
-
 --do mobs spawn?
 local mobs_spawn = core.settings:get_bool("mobs_spawn", true) ~= false
-local mobs_spawn_old = core.settings:get_bool("mobs_spawn_old", false) ~= false
-local spawn_protected = core.settings:get_bool("mobs_spawn_protected") ~= false
 local logging = core.settings:get_bool("mcl_logging_mobs_spawn", false)
-local mgname = core.get_mapgen_setting("mgname")
-
--- count how many mobs are in an area
-local function count_mobs(pos,r,mob_type)
-	local num = 0
-	for _,l in pairs(core.luaentities) do
-		if l and l.is_mob and (mob_type == nil or l.type == mob_type) then
-			local p = l.object:get_pos()
-			if p and vector.distance(p,pos) < r then
-				num = num + 1
-			end
-		end
-	end
-	return num
-end
 
 local function count_mobs_total(mob_type)
 	local num = 0
@@ -89,253 +44,20 @@ local function count_mobs_all()
 	return mobs_found, num
 end
 
-local function count_mobs_total_cap(mob_type)
-	local num = 0
-	for _,l in pairs(core.luaentities) do
-		if l.is_mob then
-			if ( mob_type == nil or l.type == mob_type ) and l.can_despawn and not l.nametag then
-				num = num + 1
-			end
-		end
-	end
-	return num
+function mcl_mobs.spawn_setup (def)
+	local blurb = "[mcl_mobs]: An obsolete mob spawning definition is being registered for `%s'.  `%s' will not spawn naturally till its spawning configuration is updated to conform to the modern spawning API."
+	core.log ("warning", string.format (blurb, def.name, def.name))
 end
 
---this is where all of the spawning information is kept
-local spawn_dictionary = {}
-
-local spawn_defaults = {
-	dimension = "overworld",
-	type_of_spawning = "ground",
-	min_light = 7,
-	max_light = core.LIGHT_MAX + 1,
-	chance = 1000,
-	aoc = aoc_range,
-	min_height = -mcl_vars.mapgen_limit,
-	max_height = mcl_vars.mapgen_limit,
-}
-
-local spawn_defaults_meta = { __INDEX = spawn_defaults }
-
-function mcl_mobs.spawn_setup(def)
-	if not mobs_spawn then return end
-
-	assert(def, "Empty spawn setup definition from mod: "..tostring(core.get_current_modname()))
-	assert(def.name, "Missing mob name from from mod: "..tostring(core.get_current_modname()))
-
-	local mob_def = core.registered_entities[def.name]
-	assert(mob_def, "spawn definition with invalid entity: "..tostring(def.name))
-	if (mcl_vars.difficulty <= 0 or only_peaceful_mobs) and not mob_def.persist_in_peaceful then return end
-	assert(def.chance > 0, "Chance shouldn't be less than 1 (mob name: " .. def.name ..")")
-
-	setmetatable(def, spawn_defaults_meta)
-	def.min_light        = def.min_light or mob_def.min_light or (mob_def.spawn_class == "hostile" and 0)
-	def.max_light        = def.max_light or mob_def.max_light or (mob_def.spawn_class == "hostile" and 7)
-	def.min_height       = def.min_height or mcl_vars["mg_"..def.dimension.."_min"]
-	def.max_height       = def.max_height or mcl_vars["mg_"..def.dimension.."_max"]
-
-	table.insert(spawn_dictionary, def)
+function mcl_mobs.spawn (pos, id, staticdata)
+	core.log ("warning", "[mcl_mobs]: `mcl_mobs.spawn' is obsolete.  Use `core.add_entity' or `mcl_mobs.spawn_abnormally' instead.")
+	return core.add_entity (pos, id, staticdata)
 end
 
-function mcl_mobs.get_mob_light_level(mob,dim)
-	for _,v in pairs(spawn_dictionary) do
-		if v.name == mob and v.dimension == dim then
-			return v.min_light,v.max_light
-		end
-	end
-	local def = core.registered_entities[mob]
-	return def.min_light,def.max_light
-end
+local S = core.get_translator ("mcl_mobs")
 
-local function biome_check(biome_list, biome_goal)
-	if mgname == "singlenode" then return true end
-	return table.indexof(biome_list,biome_goal) ~= -1
-end
-
-local function is_farm_animal(n)
-	return n == "mobs_mc:pig" or n == "mobs_mc:cow" or n == "mobs_mc:sheep" or n == "mobs_mc:chicken" or n == "mobs_mc:horse" or n == "mobs_mc:donkey"
-end
-
-local function get_water_spawn(p)
-		local nn = core.find_nodes_in_area(vector.offset(p,-2,-1,-2),vector.offset(p,2,-15,2),{"group:water"})
-		if nn and #nn > 0 then
-			return nn[math.random(#nn)]
-		end
-end
-
-local function has_room(self,pos)
-	local cb = self.initial_properties.collisionbox
-	local nodes = {}
-	if self.fly_in then
-		local t = type(self.fly_in)
-		if t == "table" then
-			nodes = table.copy(self.fly_in)
-		elseif t == "string" then
-			table.insert(nodes,self.fly_in)
-		end
-	end
-	if self.swims_in then
-		local t = type(self.swims_in)
-		if t == "table" then
-			nodes = table.copy(self.swims_in)
-		elseif t == "string" then
-			table.insert(nodes,self.swims_in)
-		end
-	end
-	table.insert(nodes,"air")
-	local x = cb[4] - cb[1]
-	local y = cb[5] - cb[2]
-	local z = cb[6] - cb[3]
-	local r = math.ceil(x * y * z)
-	local p1 = vector.offset(pos,cb[1],cb[2],cb[3])
-	local p2 = vector.offset(pos,cb[4],cb[5],cb[6])
-	local n = #core.find_nodes_in_area(p1,p2,nodes) or 0
-	if r > n then
-		core.log("info","[mcl_mobs] No room for mob "..self.name.." at "..core.pos_to_string(vector.round(pos)))
-		return false
-	end
+function mob_class:despawn_ok (d_to_closest_player)
 	return true
-end
-
-local function spawn_check(pos,spawn_def,ignore_caps)
-	if not spawn_def or not pos then return end
-	dbg_spawn_attempts = dbg_spawn_attempts + 1
-	local dimension = mcl_worlds.pos_to_dimension(pos)
-	local mob_def = core.registered_entities[spawn_def.name]
-	local mob_type = mob_def.type
-	local gotten_node = core.get_node_or_nil(pos)
-	if not gotten_node then return end
-	gotten_node = gotten_node.name
-	local is_ground = core.get_item_group(gotten_node,"opaque") ~= 0
-	if not is_ground then
-		pos.y = pos.y - 1
-		gotten_node = core.get_node(pos).name
-		is_ground = core.get_item_group(gotten_node,"opaque") ~= 0
-	end
-	pos.y = pos.y + 1
-	local is_water = core.get_item_group(gotten_node, "water") ~= 0
-	local is_lava  = core.get_item_group(gotten_node, "lava") ~= 0
-	local is_leaf  = core.get_item_group(gotten_node, "leaves") ~= 0
-	local is_bedrock  = gotten_node == "mcl_core:bedrock"
-	local is_grass = core.get_item_group(gotten_node,"grass_block") ~= 0
-
-
-	if not pos then return false,"no pos" end
-	if not spawn_def then return false,"no spawn_def" end
-	if not ( spawn_def.min_height and pos.y >= spawn_def.min_height ) then return false, "too low" end
-	if not ( spawn_def.max_height and pos.y <= spawn_def.max_height ) then return false, "too high" end
-	if spawn_def.dimension ~= dimension then return false, "wrong dimension" end
-	if not (is_ground or spawn_def.type_of_spawning ~= "ground") then return false, "not on ground" end
-	if not (spawn_def.type_of_spawning ~= "ground" or not is_leaf) then return false, "leaf" end
-	if not has_room(mob_def,pos) then return false, "no room" end
-	if not (spawn_def.check_position and spawn_def.check_position(pos) or true) then return false, "check_position failed" end
-	if not (not is_farm_animal(spawn_def.name) or is_grass) then return false, "farm animals only on grass" end
-	if not (spawn_def.type_of_spawning ~= "water" or is_water) then return false, "water mob only on water" end
-	if not (spawn_def.type_of_spawning ~= "lava" or is_lava) then return false, "lava mobs only on lava" end
-	if not ( not spawn_protected or not core.is_protected(pos, "") ) then return false, "spawn protected" end
-	if is_bedrock then return false, "no spawn on bedrock" end
-
-	-- More expensive checks last
-	local biome = core.get_biome_data(pos)
-	if not biome then return false, "no biome found" end
-	biome = core.get_biome_name(biome.biome) --makes it easier to work with
-	if not ( not spawn_def.biomes_except or (spawn_def.biomes_except and not biome_check(spawn_def.biomes_except, biome))) then return false, "biomes_except failed" end
-	if not ( not spawn_def.biomes or (spawn_def.biomes and biome_check(spawn_def.biomes, biome))) then return false, "biome check failed" end
-
-	local gotten_light = core.get_node_light(pos)
-	local my_node = core.get_node(pos)
-	local sky_light = core.get_natural_light(pos)
-	local art_light = core.get_artificial_light(my_node.param1)
-	if modern_lighting then
-
-		if mob_def.check_light then
-			return mob_def.check_light(pos, gotten_light, art_light, sky_light)
-		elseif mob_type == "monster" then
-			if dimension == "nether" then
-				if art_light > nether_threshold then
-					return false, "too bright"
-				end
-			elseif dimension == "end" then
-				if art_light > end_threshold then
-					return false, "too bright"
-				end
-			elseif dimension == "overworld" then
-				if art_light > overworld_threshold or sky_light > overworld_sky_threshold then
-					return false, "too bright"
-				end
-			end
-		else
-			-- passive threshold is apparently the same in all dimensions ...
-			if gotten_light <= overworld_passive_threshold then
-				return false, "too dark"
-			end
-		end
-	else
-		if gotten_light < spawn_def.min_light then return false,"too dark" end
-		if gotten_light > spawn_def.max_light then return false,"too bright" end
-	end
-
-	local mob_count_wide = 0
-	local mob_count = 0
-	if not ignore_caps then
-		mob_count = count_mobs(pos,32,mob_type)
-		mob_count_wide = count_mobs(pos,aoc_range,mob_type)
-	end
-
-	if ( mob_count_wide >= (mob_cap[mob_type] or 15) ) then return false,"mob cap wide full" end
-	if ( mob_count >= 5 ) then return false, "local mob cap full" end
-
-	return true, ""
-end
-
-function mcl_mobs.spawn(pos,id, staticdata)
-	local def = core.registered_entities[id] or core.registered_entities["mobs_mc:"..id] or core.registered_entities["extra_mobs:"..id]
-	if not def or (def.can_spawn and not def.can_spawn(pos)) or not def.is_mob then
-		return false
-	end
-	if not dbg_spawn_counts[def.name] then
-		dbg_spawn_counts[def.name] = 1
-	else
-		dbg_spawn_counts[def.name] = dbg_spawn_counts[def.name] + 1
-	end
-	return core.add_entity(pos, def.name, staticdata)
-end
-
-function mob_class.spawn_group_member_data (idx)
-	return nil
-end
-
-local function spawn_group(p,mob,spawn_on,group_max,group_min)
-	if not group_min then group_min = 1 end
-	local mob_def = core.registered_entities[mob.name]
-	local nn= core.find_nodes_in_area_under_air(vector.offset(p,-5,-3,-5),vector.offset(p,5,3,5),spawn_on)
-	local group_members = {}
-	local o
-	table.shuffle(nn)
-	if not nn or #nn < 1 then
-		nn = {}
-		table.insert(nn,p)
-	end
-	for i = 1, math.random(group_min,group_max) do
-		local sp = vector.offset(nn[math.random(#nn)],0,1,0)
-		if spawn_check(nn[math.random(#nn)],mob) then
-			if mob.type_of_spawning == "water" then
-				sp = get_water_spawn(sp)
-			end
-			local data
-				= mob_def.spawn_group_member_data (i)
-			o = mcl_mobs.spawn (sp, mob.name, data)
-			if o then
-				dbg_spawn_succ = dbg_spawn_succ + 1
-				table.insert (group_members, o)
-			end
-		end
-	end
-	local init_func = mob_def.initialize_group
-	if init_func and #group_members > 0 then
-		init_func (group_members)
-	end
-	return o
 end
 
 function mob_class:despawn_allowed ()
@@ -356,224 +78,10 @@ function mob_class:despawn_allowed ()
 	return false
 end
 
-mcl_mobs.spawn_group = spawn_group
-
-local S = core.get_translator("mcl_mobs")
-
---extra checks for mob spawning
-local function can_spawn(spawn_def,spawning_position)
-	if spawn_def.type_of_spawning == "water" then
-		spawning_position = get_water_spawn(spawning_position)
-		if not spawning_position then
-			core.log("warning","[mcl_mobs] no water spawn for mob "..spawn_def.name.." found at "..core.pos_to_string(vector.round(spawning_position)))
-			return
-		end
-	end
-	if core.registered_entities[spawn_def.name].can_spawn and not core.registered_entities[spawn_def.name].can_spawn(spawning_position) then
-		core.log("warning","[mcl_mobs] mob "..spawn_def.name.." refused to spawn at "..core.pos_to_string(vector.round(spawning_position)))
-		return false
-	end
-	return true
-end
-
-mcl_mobs.can_spawn = can_spawn
-mcl_mobs.spawn_dictionary = spawn_dictionary
-
-local passive_timer = PASSIVE_INTERVAL
-
---timer function to check if passive mobs should spawn (only every 20 secs unlike other mob spawn classes)
-local function check_timer(spawn_def)
-	local mob_def = core.registered_entities[spawn_def.name]
-	if mob_def and mob_def.spawn_class == "passive" then
-		if passive_timer > 0 then
-			return false
-		else
-			passive_timer = PASSIVE_INTERVAL
-		end
-	end
-	return true
-end
-
-local MOB_SPAWN_ZONE_INNER = 24
-local MOB_SPAWN_ZONE_OUTER = 128
-
-
-local SPAWN_MAPGEN_LIMIT = math.abs(mcl_vars.mapgen_edge_min)
-
-local function math_round(x) return (x > 0) and math.floor(x + 0.5) or math.ceil(x - 0.5) end
-
-local function get_next_mob_spawn_pos(pos)
-	-- Select a distance such that distances closer to the player are selected much more often than
-	-- those further away from the player. This does produce a concentration at INNER (24 blocks)
-	local distance = math.random()^2 * (MOB_SPAWN_ZONE_OUTER - MOB_SPAWN_ZONE_INNER) + MOB_SPAWN_ZONE_INNER
-	local dir = vector.random_direction()
-	-- core.log("action", "Using spawn distance of "..tostring(distance).." in direction "..core.pos_to_string(dir))
-	local goal_pos = vector.offset(pos, dir.x * distance, dir.y * distance, dir.z * distance)
-
-	if not ( math.abs(goal_pos.x) <= SPAWN_MAPGEN_LIMIT and math.abs(goal_pos.y) <= SPAWN_MAPGEN_LIMIT and math.abs(goal_pos.z) <= SPAWN_MAPGEN_LIMIT ) then
-		return nil
-	end
-
-	-- Calculate upper/lower y limits
-	local R1 = distance + 3
-	local d = vector.distance( pos, vector.new( goal_pos.x, pos.y, goal_pos.z ) ) -- distance from player to projected point on horizontal plane
-	local y1 = math.sqrt( R1*R1 - d*d ) -- absolue value of distance to outer sphere
-
-	local y_min
-	local y_max
-	if d >= MOB_SPAWN_ZONE_INNER then
-		-- Outer region, y range has both ends on the outer sphere
-		y_min = pos.y - y1
-		y_max = pos.y + y1
-	else
-		-- Inner region, y range spans between inner and outer spheres
-		local R2 = MOB_SPAWN_ZONE_INNER
-		local y2 = math.sqrt( R2*R2 - d*d )
-		if goal_pos.y > pos. y then
-			-- Upper hemisphere
-			y_min = pos.y + y2
-			y_max = pos.y + y1
-		else
-			-- Lower hemisphere
-			y_min = pos.y - y1
-			y_max = pos.y - y2
-		end
-	end
-	y_min = math_round(y_min)
-	y_max = math_round(y_max)
-
-	local spawning_position_list = core.find_nodes_in_area_under_air(
-			{x = goal_pos.x, y = y_min, z = goal_pos.z},
-			{x = goal_pos.x, y = y_max, z = goal_pos.z},
-			{"group:opaque", "group:water", "group:lava"}
-	) or {}
-
-	-- Select only the locations at a valid distance
-	local valid_positions = {}
-	for _,check_pos in ipairs(spawning_position_list) do
-		local dist = vector.distance(pos, check_pos)
-		if dist >= MOB_SPAWN_ZONE_INNER and dist <= MOB_SPAWN_ZONE_OUTER then
-			table.insert(valid_positions, check_pos)
-		end
-	end
-
-	if #valid_positions == 0 then return end
-	return valid_positions[math.random(#valid_positions)]
-
-end
-
-
-if mobs_spawn and mobs_spawn_old then
-	local cumulative_chance
-	local mob_library_worker_table
-	local function initialize_spawn_data()
-		if not mob_library_worker_table then
-			mob_library_worker_table = table.copy(spawn_dictionary)
-		end
-		if not cumulative_chance then
-			cumulative_chance = 0
-			for _, v in pairs(mob_library_worker_table) do
-				cumulative_chance = cumulative_chance + v.chance
-			end
-		end
-	end
-
-	local function spawn_a_mob(pos, _, _)
-		--create a disconnected clone of the spawn dictionary
-		--prevents memory leak
-
-		local mob_library_worker_table = table.copy(spawn_dictionary)
-		local spawning_position = get_next_mob_spawn_pos(pos)
-
-		local spawn_loop_counter = #mob_library_worker_table
-		--use random weighted choice with replacement to grab a mob, don't exclude any possibilities
-		--shuffle table once every loop to provide equal inclusion probability to all mobs
-		--repeat grabbing a mob to maintain existing spawn rates
-		while spawn_loop_counter > 0 do
-			table.shuffle(mob_library_worker_table)
-			local mob_chance_offset = math.random(1, cumulative_chance)
-			local mob_index = 1
-			local mob_chance = mob_library_worker_table[mob_index].chance
-			local step_chance = mob_chance
-			while step_chance < mob_chance_offset do
-				mob_index = mob_index + 1
-				if mob_index <= #mob_library_worker_table then
-					mob_chance = mob_library_worker_table[mob_index].chance
-					step_chance = step_chance + mob_chance
-				else
-					break
-				end
-				mob_chance = mob_library_worker_table[mob_index].chance
-				step_chance = step_chance + mob_chance
-			end
-			local spawn_def = mob_library_worker_table[mob_index]
-			--core.log(spawn_def.name.." "..step_chance.. " "..mob_chance)
-			if spawn_def and spawn_def.name and core.registered_entities[spawn_def.name] then
-				local spawn_in_group = spawn_def.spawn_in_group
-					or core.registered_entities[spawn_def.name].spawn_in_group or 4
-				local spawn_in_group_min = spawn_def.spawn_in_group_min
-					or core.registered_entities[spawn_def.name].spawn_in_group_min or 1
-				local mob_type = core.registered_entities[spawn_def.name].type
-				if spawn_check(spawning_position,spawn_def) then
-
-					if can_spawn(spawn_def,spawning_position) and check_timer(spawn_def) then
-						--everything is correct, spawn mob
-						if spawn_in_group and ( mob_type ~= "monster" or math.random(5) == 1 ) then
-							if logging then
-								core.log("action", "[mcl_mobs] A group of mob " .. spawn_def.name .. " spawns on " ..core.get_node(vector.offset(spawning_position,0,-1,0)).name .." at " .. core.pos_to_string(spawning_position, 1))
-							end
-							spawn_group(spawning_position,spawn_def,{core.get_node(vector.offset(spawning_position,0,-1,0)).name},spawn_in_group,spawn_in_group_min)
-
-						else
-							if logging then
-								core.log("action", "[mcl_mobs] Mob " .. spawn_def.name .. " spawns on " ..core.get_node(vector.offset(spawning_position,0,-1,0)).name .." at ".. core.pos_to_string(spawning_position, 1))
-							end
-							mcl_mobs.spawn(spawning_position, spawn_def.name)
-						end
-					end
-				end
-			end
-			spawn_loop_counter = spawn_loop_counter - 1
-		end
-	end
-
-
-	--MAIN LOOP
-
-	local timer = HOSTILE_INTERVAL
-	core.register_globalstep(function(dtime)
-		passive_timer = passive_timer - dtime
-		timer = timer - dtime
-		if timer > 0 then return end
-		timer = HOSTILE_INTERVAL
-
-		local players = core.get_connected_players()
-		local total_mobs = count_mobs_total_cap()
-		if total_mobs > mob_cap.total or total_mobs > #players * mob_cap.player then
-			core.log("action","[mcl_mobs] global mob cap reached. no cycle spawning.")
-			return
-		end --mob cap per player
-
-		initialize_spawn_data()
-		for _, player in pairs(players) do
-			local pos = player:get_pos()
-			local dimension = mcl_worlds.pos_to_dimension(pos)
-			-- ignore void and unloaded area
-			if dimension ~= "void" and dimension ~= "default" then
-				spawn_a_mob(pos, dimension, dtime)
-			end
-		end
-	end)
-end
-
-function mob_class:despawn_ok (d_to_closest_player)
-	return true
-end
-
 local scale_chance = mcl_mobs.scale_chance
 
-function mob_class:check_despawn(pos, dtime)
-	if remove_far and self:despawn_allowed() then
+function mob_class:check_despawn (pos, dtime)
+	if self:despawn_allowed () then
 		local min_dist = math.huge
 		for player in mcl_util.connected_players () do
 			min_dist = math.min (min_dist, vector.distance (player:get_pos (), pos))
@@ -642,7 +150,8 @@ core.register_chatcommand("spawn_mob",{
 			mobname = string.sub(param, 1, mod1-1)
 		end
 
-		local mob = mcl_mobs.spawn(pos, mobname, core.serialize({ persist_in_peaceful = true }))
+		local staticdata = core.serialize ({ persist_in_peaceful = true })
+		local mob = core.add_entity (pos, mobname, staticdata)
 
 		if mob then
 			for c=1, #modifiers do
@@ -687,29 +196,6 @@ core.register_chatcommand("spawn_mob",{
 			return true, mobname.." spawned at "..core.pos_to_string(pos)
 		else
 			return false, "Couldn't spawn "..mobname
-		end
-	end
-})
-core.register_chatcommand("spawncheck",{
-	privs = { debug = true },
-	func = function(n,param)
-		local pl = core.get_player_by_name(n)
-		local pos = vector.offset(pl:get_pos(),0,-1,0)
-		local dim = mcl_worlds.pos_to_dimension(pos)
-		local sp
-		for _,v in pairs(spawn_dictionary) do
-			if v.name == param and v.dimension == dim then sp = v end
-		end
-		if sp then
-			core.log(dump(sp))
-			local r,t = spawn_check(pos,sp)
-			if r then
-				return true, "spawn check for "..sp.name.." at "..core.pos_to_string(pos).." successful"
-			else
-				return r,tostring(t) or ""
-			end
-		else
-			return false,"no spawndef found for "..param
 		end
 	end
 })
@@ -889,70 +375,49 @@ local current_mob_caps = {}
 core.register_chatcommand("mobstats",{
 	privs = { debug = true },
 	func = function(n, _)
-		if mobs_spawn_old then
-			core.chat_send_player(n,dump(dbg_spawn_counts))
-			local pos = core.get_player_by_name(n):get_pos()
-			core.chat_send_player(n,"mobs within 32 radius of player:"..count_mobs(pos,32))
-			core.chat_send_player(n,"total mobs:"..count_mobs_total())
-			core.chat_send_player(n,"spawning attempts since server start:"..dbg_spawn_attempts)
-			core.chat_send_player(n,"successful spawns since server start:"..dbg_spawn_succ)
+		local mob_caps = {}
+		local pos = core.get_player_by_name (n):get_pos ()
+		local level = mcl_worlds.pos_to_dimension (pos)
 
+		if level == "void" then
+			local blurb = "No spawning data is available in the Void"
+			core.chat_send_player (n, blurb)
+			return
+		end
 
-			local mob_counts, total_mobs = count_mobs_all()
-			if (total_mobs) then
-				core.log("action", "Total mobs found: " .. total_mobs)
-			end
-			if mob_counts then
-				for k, v1 in pairs(mob_counts) do
-					core.log("action", "k: " .. tostring(k))
-					core.log("action", "v1: " .. tostring(v1))
-				end
-			end
-		else
-			local mob_caps = {}
-			local pos = core.get_player_by_name (n):get_pos ()
-			local level = mcl_worlds.pos_to_dimension (pos)
+		local _, n_chunks = collect_all_unique_chunks ()
+		for category, data in pairs (mcl_mobs.spawn_categories) do
+			local global_max
+				= math.floor ((n_chunks * data.chunk_mob_cap)
+					* MOB_CAP_RECIPROCAL)
+			global_max = math.max (global_max, data.min_chunk_mob_cap)
+			mob_caps[category] = global_max
+		end
 
-			if level == "void" then
-				local blurb = "No spawning data is available in the Void"
-				core.chat_send_player (n, blurb)
-				return
-			end
+		core.chat_send_player (n, table.concat ({
+			"Currently active mobs by category: ",
+			dump (mcl_mobs.active_mobs_by_category),
+			"\n",
+			"Chunk-derived mob caps (per-level): ",
+			dump (mob_caps), "\n",
+			"Chunk count: ", tostring (n_chunks), "\n",
+			"Mob cap overfulfillment theshold: ",
+			tostring (spawn_border_chunks), "\n",
+			"No. active mobs in total: ",
+			tostring (count_mobs_total ()), "\n"
+		}))
 
-			local _, n_chunks = collect_all_unique_chunks ()
-			for category, data in pairs (mcl_mobs.spawn_categories) do
-				local global_max
-					= math.floor ((n_chunks * data.chunk_mob_cap)
-						* MOB_CAP_RECIPROCAL)
-				global_max = math.max (global_max, data.min_chunk_mob_cap)
-				mob_caps[category] = global_max
-			end
-
+		local mob_counts, _ = count_mobs_all ()
+		for k, v1 in pairs (mob_counts) do
 			core.chat_send_player (n, table.concat ({
-				"Currently active mobs by category: ",
-				dump (mcl_mobs.active_mobs_by_category),
-				"\n",
-				"Chunk-derived mob caps (per-level): ",
-				dump (mob_caps), "\n",
-				"Chunk count: ", tostring (n_chunks), "\n",
-				"Mob cap overfulfillment theshold: ",
-				tostring (spawn_border_chunks), "\n",
-				"No. active mobs in total: ",
-				tostring (count_mobs_total ()), "\n"
+				"  ", k, ": ", tostring (v1),
 			}))
-
-			local mob_counts, _ = count_mobs_all ()
-			for k, v1 in pairs (mob_counts) do
-				core.chat_send_player (n, table.concat ({
-					"  ", k, ": ", tostring (v1),
-				}))
-			end
 		end
 	end
 })
 
 ------------------------------------------------------------------------
--- Minecraft-like spawning mechanics.
+-- Modern spawning mechanics.
 ------------------------------------------------------------------------
 
 local MAX_PACK_SIZE = 8
@@ -1185,9 +650,10 @@ local function get_eligible_spawn_type (pos, category)
 	return value
 end
 
-local function test_spawn_position (mob_def, spawn_pos, node_pos, sdata, node_cache)
+local function test_spawn_position (mob_def, spawn_pos, node_pos, sdata, node_cache,
+				    spawn_flag)
 	local value = mob_def:test_spawn_position (spawn_pos, node_pos, sdata,
-						   node_cache)
+						   node_cache, spawn_flag)
 	return value
 end
 
@@ -1242,7 +708,7 @@ local function spawn_a_pack (pos, players, category, scratch0,
 		-- Is it possible to spawn mobs here?
 		if dist < mob_def.despawn_distance_sqr
 			and dist > 576.0
-			and test_spawn_position (mob_def, spawn_pos, pos, sdata, {})
+			and test_spawn_position (mob_def, spawn_pos, pos, sdata, {}, nil)
 			and test_spawn_clearance (mob_def, spawn_pos, sdata)
 			and test_generation (pos, mob_def) then
 			local object = mob_def:spawn (spawn_pos, n_spawned + 1, sdata)
@@ -1377,9 +843,14 @@ local default_spawner = {
 	fire_immune = false,
 	pack_min = 4,
 	pack_max = 4,
+	is_canonical = false, 	-- If true, this is the only spawner
+				-- that will be invoked by
+				-- `mcl_mobs.spawn_abnormally'.
 }
 
 local spawners_initialized = false
+local canonical_spawners = {}
+local ordinary_spawners = {}
 
 function mcl_mobs.register_spawner (spawner)
 	if spawners_initialized then
@@ -1388,6 +859,15 @@ function mcl_mobs.register_spawner (spawner)
 	end
 	local spawner = table.merge (default_spawner, spawner)
 	table.insert (registered_spawners, spawner)
+
+	if spawner.is_canonical then
+		canonical_spawners[spawner.name] = spawner
+	else
+		if not ordinary_spawners[spawner.name] then
+			ordinary_spawners[spawner.name] = {}
+		end
+		table.insert (ordinary_spawners[spawner.name], spawner)
+	end
 end
 
 function mcl_mobs.suppress_spawning_in_structure (structure, category)
@@ -1412,6 +892,8 @@ core.register_on_mods_loaded (function ()
 	for i = 1, n do
 		local spawner = registered_spawners[i]
 		local biomes = mcl_biome_dispatch.build_biome_list (spawner.biomes)
+		local biome_test = mcl_biome_dispatch.make_biome_test (spawner.biomes)
+		spawner.internal_biome_dest = biome_test
 		for _, id in ipairs (biomes) do
 			if not output[id] then
 				output[id] = {}
@@ -1561,9 +1043,11 @@ end
 -- provided that they restore its original values before calling the
 -- default test_spawn_position implementation.
 
-function default_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function default_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					      spawn_flag)
 	local spawn_placement = self.spawn_placement
-	if spawn_placement == "misc" then
+	if spawn_placement == "misc"
+		or (spawn_placement == "ground" and spawn_flag == "spawner") then
 		-- Just test that the position is loaded.
 		return core.compare_block_status (node_pos, "active")
 	elseif spawn_placement == "ground" then
@@ -1620,7 +1104,10 @@ function default_spawner:test_collision (node, cbox)
 	if def and not def.walkable
 		and ((self.spawn_placement == "aquatic"
 			or self.spawn_placement == "lava")
-			or def.liquidtype == "none") then
+			or def.liquidtype == "none"
+			-- Cobwebs are defined as liquids solely in
+			-- order to retard player movement.
+			or node.name == "mcl_core:cobweb") then
 		return false
 	end
 
@@ -1691,7 +1178,61 @@ function default_spawner:prepare_to_spawn (pack_size, center)
 	return nil
 end
 
-if not mobs_spawn_old and mobs_spawn then
+function default_spawner:describe_mob_collision_box ()
+	local mob_def = core.registered_entities[self.name]
+	if not mob_def then
+		return false
+	end
+	local cbox = mob_def.initial_properties.collisionbox
+	if not cbox then
+		return false
+	end
+	return string.format ("%.2f,%.2f,%.2f", cbox[4] - cbox[1],
+			      cbox[5] - cbox[2], cbox[6] - cbox[3])
+end
+
+function default_spawner:get_misc_spawning_description ()
+	return nil
+end
+
+function default_spawner:describe_additional_spawning_criteria ()
+	return nil
+end
+
+function default_spawner:describe_criteria (tbl, omit_group_details)
+	local tbl1 = {}
+	local desc = self:get_misc_spawning_description ()
+	if desc then
+		tbl1[1] = desc
+	elseif self.spawn_placement == "ground" then
+		tbl1[1] = S ("This mob will spawn on solid and opaque nodes with a surface occupying a full node when no obstructions exist within a volume @1 nodes in size around the center of such a node's upper surface.",
+			     self:describe_mob_collision_box ())
+	elseif self.spawn_placement == "aquatic" then
+		tbl1[1] = S ("This mob will spawn in water when the node above is not opaque and no obstructions exist within a volume @1 nodes in size around the center of the base of the fluid node in question.",
+			     self:describe_mob_collision_box ())
+	elseif self.spawn_placement == "lava" then
+		tbl1[1] = S ("This mob will spawn on flowing lava and lava sources when no liquid or solid obstructions exist within a volume @1 nodes in size.",
+			     self:describe_mob_collision_box ())
+	else
+		tbl1[1] = S ("This mob does not document its spawning requirements.")
+	end
+	local addendum = self:describe_additional_spawning_criteria ()
+	if addendum then
+		table.insert (tbl1, addendum)
+	end
+	if not omit_group_details then
+		if self.pack_min == 1 and self.pack_max == 1 then
+			tbl1[#tbl1 + 1] = S ("Mobs will spawn in individual groups of 1.")
+		elseif self.pack_min == self.pack_max then
+			tbl1[#tbl1 + 1] = S ("Up to @1 mobs will spawn as a single group upon each spawning attempt.", self.pack_min)
+		else
+			tbl1[#tbl1 + 1] = S ("A group of @1 to @2 mobs will attempt to be spawned upon each spawning attempt.", self.pack_min, self.pack_max)
+		end
+	end
+	table.insert (tbl, table.concat (tbl1, "  "))
+end
+
+if mobs_spawn then
 
 local spawn_timer = 0
 local passive_spawn_timer = 0
@@ -1767,3 +1308,203 @@ core.register_chatcommand ("spawn_cycle", {
 		mcl_mobs.spawn_cycle (param, true)
 	end,
 })
+
+local function sort_by_weight_dsc (a, b)
+	if b.weight < a.weight then
+		return true
+	elseif b.weight > a.weight then
+		return false
+	else
+		return b.name < a.name
+	end
+end
+
+core.register_chatcommand ("dump_spawners", {
+	privs = { debug = true, },
+	params = "[<biome>]",
+	func = function (player, param)
+		local player = core.get_player_by_name (player)
+		if not player then
+			return false
+		end
+
+		local pos = mcl_util.get_nodepos (player:get_pos ())
+		local param = param:trim ()
+		local biome_name = #param > 0 and param
+			or mcl_biome_dispatch.get_biome_name (pos)
+		local tbl = registered_spawners[biome_name]
+
+		if not tbl then
+			return false
+		end
+
+		print (";; Registered spawners in biome `" .. biome_name .. "'")
+		for category, list in pairs (tbl) do
+			local total_weight = total_weight[list] or -1
+			local mobs_by_weight = {}
+			local entry_by_mob = {}
+
+			for _, spawner in ipairs (list) do
+				local mob = spawner.name
+
+				if not entry_by_mob[mob] then
+					entry_by_mob[mob] = {
+						name = mob,
+						weight = spawner.weight,
+						spawners = {spawner},
+					}
+					table.insert (mobs_by_weight, entry_by_mob[mob])
+				else
+					local entry = entry_by_mob[mob]
+					entry.weight = entry.weight + spawner.weight
+					table.insert (entry.spawners, spawner)
+				end
+			end
+
+			print (string.format ("  ;; Category: %s, total weight: %d",
+					      category, total_weight))
+			table.sort (mobs_by_weight, sort_by_weight_dsc)
+			for _, entry in ipairs (mobs_by_weight) do
+				print (string.format ("    ;; Mob: %s: weight: %d", entry.name,
+						      entry.weight))
+				table.sort (entry.spawners, sort_by_weight_dsc)
+				for _, spawner in ipairs (entry.spawners) do
+					print (string.format ("    ;;  weight: %d pack_min, pack_max: %d, %d",
+							      spawner.weight, spawner.pack_min,
+							      spawner.pack_max))
+				end
+				print ("")
+			end
+		end
+		return true, S ("Dumped spawners for biome: @1", biome_name)
+	end,
+})
+
+------------------------------------------------------------------------
+-- Manual spawning API.
+------------------------------------------------------------------------
+
+local function get_mob_spawner_at_pos (mob, pos)
+	if canonical_spawners[mob] then
+		return canonical_spawners[mob]
+	end
+
+	local spawners = ordinary_spawners[mob]
+	if spawners then
+		-- First search for an overriding structure spawner.
+		local structures = get_structures_at (pos, false)
+		for _, structure in pairs (structures) do
+			for _, spawner in ipairs (spawners) do
+				if table.indexof (spawner.structures, structure) ~= -1 then
+					return spawner
+				end
+			end
+		end
+
+		-- Next, search for a spawner which applies to the biome at
+		-- POS.
+		local biome = get_biome_name_nosample (pos)
+		for _, spawner in ipairs (spawners) do
+			if spawner.internal_biome_dest (biome) then
+				return spawner
+			end
+		end
+
+		-- And in extremis, just return the first registered
+		-- spawner.
+		return spawners[1]
+	end
+end
+
+-- Spawn an instance of MOB at POS (a node position) independently of
+-- the ordinary course of environmental mob spawning, applying
+-- spawning criteria enforced by its mob spawning definitions, such as
+-- the absence of collisions, and minimum or maximum light level
+-- requirements.  Value is the object if spawning is successful, nil
+-- otherwise.  SDATA is a table of parameters which is provided to the
+-- mob's spawning procedure.  SPAWN_FLAG is nil, or a string
+-- designating the source from which this mob is spawning, which is
+-- provided to each spawning definition's `test_spawn_position'
+-- method.
+
+local warned = {}
+function mcl_mobs.spawn_abnormally (pos, mob, sdata, spawn_flag)
+	local spawner = get_mob_spawner_at_pos (mob, pos)
+	if not spawner then
+		if not warned[mob] then
+			local spawner = "[mcl_mobs]: Can't decide how to spawn "
+				.. mob .. " at " .. vector.to_string (pos)
+			core.log ("warning", spawner)
+			warned[mob] = true
+		end
+		return nil
+	end
+
+	local spawn_pos = vector.new (pos.x, pos.y - 0.5, pos.z)
+	if test_spawn_position (spawner, spawn_pos, pos, sdata, {},
+				spawn_flag)
+		and test_spawn_clearance (spawner, spawn_pos, sdata)
+		and test_generation (pos, spawner) then
+		local object = spawner:spawn (spawn_pos, 0, sdata)
+		return object
+	end
+
+	return nil
+end
+
+function mcl_mobs.spawning_possible (pos, mob, sdata, spawn_flag)
+	local spawner = get_mob_spawner_at_pos (mob, pos)
+	if not spawner then
+		if not warned[mob] then
+			local spawner = "[mcl_mobs]: Can't decide how to spawn "
+				.. mob .. " at " .. vector.to_string (pos)
+			core.log ("warning", spawner)
+			warned[mob] = true
+		end
+		return nil
+	end
+
+	local spawn_pos = vector.new (pos.x, pos.y - 0.5, pos.z)
+	return test_spawn_position (spawner, spawn_pos, pos, sdata, {},
+				    spawn_flag)
+		and test_spawn_clearance (spawner, spawn_pos, sdata)
+		and test_generation (pos, spawner)
+end
+
+function mcl_mobs.describe_spawning (mob)
+	local tbl = {
+		S ("Environmental spawning requirements and mechanics:"),
+	}
+
+	if canonical_spawners[mob] then
+		table.insert (tbl, S ("\nWhen spawned from spawner:"))
+		canonical_spawners[mob]:describe_criteria (tbl, true)
+	elseif ordinary_spawners[mob]and ordinary_spawners[mob][1] then
+		table.insert (tbl, S ("\nWhen spawned from spawner:"))
+		ordinary_spawners[mob][1]:describe_criteria (tbl, true)
+	else
+		table.insert (tbl, S ("\nMob does not spawn environmentally."))
+	end
+
+	if ordinary_spawners[mob] then
+		for _, spawner in ipairs (ordinary_spawners[mob]) do
+			if #spawner.biomes > 0 then
+				table.insert (tbl, S ("\nWhen spawned in biome(s): "))
+				table.insert (tbl, table.concat (spawner.biomes, ", "))
+			end
+
+			if #spawner.structures > 0 then
+				if #spawner.biomes > 0 then
+					table.insert (tbl, S ("and when spawned in structure(s): "))
+				else
+					table.insert (tbl, S ("\nWhen spawned in structure(s): "))
+				end
+				table.insert (tbl, table.concat (spawner.structures, ", "))
+			end
+
+			spawner:describe_criteria (tbl, false)
+		end
+	end
+
+	return table.concat (tbl, "\n")
+end

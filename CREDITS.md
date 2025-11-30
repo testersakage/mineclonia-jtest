@@ -18,8 +18,8 @@
 * JoseDouglas26
 * Raylight
 * Miguel_PL
-* WillConker
 * B. Stack
+* cosinus
 
 ## Previous Contributors
 * Lizzy Fleckenstein

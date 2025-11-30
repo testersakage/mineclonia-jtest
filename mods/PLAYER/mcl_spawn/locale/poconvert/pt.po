@@ -14,14 +14,14 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Respawn position cleared!"
-msgstr ""
+msgstr "Posição de renascimento limpa!"
 
 msgid "New respawn position set!"
-msgstr ""
+msgstr "Nova posição de renascimento definida!"
 
 msgid "Couldn't get level of your respawn anchor!"
-msgstr ""
+msgstr "Impossível encontrar o nível da sua âncora de renascimento!"
 
 msgid "Your spawn bed was missing or blocked, and you had no charged respawn anchor!"
-msgstr ""
+msgstr "A sua cama foi partida ou obstruída, e não tem nenhuma âncora de renascimento carregada!"
 

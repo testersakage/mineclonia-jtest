@@ -385,21 +385,6 @@ msgstr "Criaturas"
 msgid "Different Mobs"
 msgstr "Diferentes criaturas"
 
-msgid "Type: @1"
-msgstr "Tipo: @1"
-
-msgid "Spawning light levels (min / max): @1 / @2"
-msgstr "Brillo necesario para spawnear (mín./máx.): @1 / @2"
-
-msgid "Can Jump a height of @1 nodes"
-msgstr "Puede saltar una altura de @1 nodos"
-
-msgid "Can Fly"
-msgstr "Puede volar"
-
-msgid "Can Swim"
-msgstr "Puede nadar"
-
 msgid "Drops: "
 msgstr "Recompensas: "
 

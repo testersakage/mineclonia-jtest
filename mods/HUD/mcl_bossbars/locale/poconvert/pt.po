@@ -14,14 +14,14 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "None"
-msgstr ""
+msgstr "Nenhuma"
 
 msgid "Unlimited"
-msgstr ""
+msgstr "Ilimitada"
 
 msgid "Maximum number of boss bars to display simultaneously"
-msgstr ""
+msgstr "Número máximo de barras de chefes que pode aparecer simultaneamente"
 
 msgid "Multiple bosses can be active at the same time. To not clutter your screen, you may limit the number of simultaneously displayed boss bars."
-msgstr ""
+msgstr "Várias barras de chefes podem ser ativadas ao mesmo tempo. Para não criarem confusão, pode limitar o número de barras mostradas ao mesmo tempo."
 

@@ -26,10 +26,10 @@ msgid "The Budding Amethyst can grow amethyst"
 msgstr "Родючий Аметист може виростити аметист"
 
 msgid "Amethyst Shard"
-msgstr "Аметистовий Осколок"
+msgstr "Уламок аметисту"
 
 msgid "An amethyst shard is a crystalline mineral."
-msgstr "Осколок Аметисту - це кристалічний мінерал."
+msgstr "Уламок аметисту - це кристалічний мінерал."
 
 msgid "Amethyst Material"
 msgstr ""

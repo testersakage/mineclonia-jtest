@@ -14,16 +14,16 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Warped Fungus"
-msgstr ""
+msgstr "Fungo Distorcido"
 
 msgid "Warped fungus is a mushroom found in the nether's warped forest."
-msgstr ""
+msgstr "O fungo distorcido é um cogumelo encontrado na floresta distorcida do Nether."
 
 msgid "Twisting Vines"
 msgstr "Trepadeiras Distorcidas"
 
 msgid "Weeping Vines"
-msgstr ""
+msgstr "Videiras Chorosas"
 
 msgid "Nether Sprouts"
 msgstr "Brotos do Nether"
@@ -41,10 +41,10 @@ msgid "Warped Nylium"
 msgstr "Nicélio Distorcido"
 
 msgid "Crimson Fungus"
-msgstr ""
+msgstr "Fungo Carmesim"
 
 msgid "Crimson fungus is a mushroom found in the nether's crimson forest."
-msgstr ""
+msgstr "O fungo carmesim é um cogumelo encontrado na floresta carmesim do Nether."
 
 msgid "Crimson Roots"
 msgstr "Raízes Carmesim"
@@ -53,122 +53,122 @@ msgid "Crimson Nylium"
 msgstr "Nicélio Carmesim"
 
 msgid "Crimson Bark"
-msgstr ""
+msgstr "Casca Carmesim"
 
 msgid "Crimson Bark Slab"
-msgstr ""
+msgstr "Laje de Casca Carmesim"
 
 msgid "Crimson Bark Stairs"
-msgstr ""
+msgstr "Escadas de Casca Carmesim"
 
 msgid "Crimson Button"
-msgstr ""
+msgstr "Botão Carmesim"
 
 msgid "Crimson Door"
-msgstr ""
+msgstr "Porta Carmesim"
 
 msgid "Crimson Fence"
-msgstr ""
+msgstr "Cerca Carmesim"
 
 msgid "Crimson Fence Gate"
-msgstr ""
+msgstr "Portinhola Carmesim"
 
 msgid "Crimson Hanging Sign"
-msgstr ""
+msgstr "Placa Suspensa Carmesim"
 
 msgid "Crimson Log"
-msgstr ""
+msgstr "Tronco Carmesim"
 
 msgid "Crimson Planks"
-msgstr ""
+msgstr "Tábuas Carmesim"
 
 msgid "Crimson Pressure Plate"
-msgstr ""
+msgstr "Placa de Pressão Carmesim"
 
 msgid "Crimson Sign"
-msgstr ""
+msgstr "Placa Carmesim"
 
 msgid "Crimson Slab"
-msgstr ""
+msgstr "Laje Carmesim"
 
 msgid "Crimson Stairs"
-msgstr ""
+msgstr "Escadas Carmesim"
 
 msgid "Crimson Trapdoor"
-msgstr ""
+msgstr "Alçapão Carmesim"
 
 msgid "Stripped Crimson Bark"
-msgstr ""
+msgstr "Casca Carmesim Descascada"
 
 msgid "Stripped Crimson Log"
-msgstr ""
+msgstr "Tronco Carmesim Descascado"
 
 msgid "Stripped Warped Bark"
-msgstr ""
+msgstr "Casca Distorcida Descascada"
 
 msgid "Stripped Warped Log"
-msgstr ""
+msgstr "Tronco Distorcido Descascado"
 
 msgid "The stripped trunk of an Crimson tree."
-msgstr ""
+msgstr "O tronco descascado de uma Árvore Carmesim."
 
 msgid "The stripped trunk of an Warped tree."
-msgstr ""
+msgstr "O tronco descascado de uma Árvore Distorcida."
 
 msgid "The stripped wood of an Crimson tree."
-msgstr ""
+msgstr "A madeira descascada de uma Árvore Carmesim."
 
 msgid "The stripped wood of an Warped tree."
-msgstr ""
+msgstr "A madeira descascada de uma Árvore Distorcida."
 
 msgid "The trunk of a Crimson tree."
-msgstr ""
+msgstr "O tronco de uma Árvore Carmesim."
 
 msgid "The trunk of a Warped tree."
-msgstr ""
+msgstr "O tronco de uma Árvore Distorcida."
 
 msgid "Warped Bark"
-msgstr ""
+msgstr "Casca Distorcida"
 
 msgid "Warped Bark Slab"
-msgstr ""
+msgstr "Laje de Casca Distorcida"
 
 msgid "Warped Bark Stairs"
-msgstr ""
+msgstr "Escadas de Casca Distorcida"
 
 msgid "Warped Button"
-msgstr ""
+msgstr "Botão Distorcido"
 
 msgid "Warped Door"
-msgstr ""
+msgstr "Porta Distorcida"
 
 msgid "Warped Fence"
-msgstr ""
+msgstr "Cerca Distorcida"
 
 msgid "Warped Fence Gate"
-msgstr ""
+msgstr "Portinhola Distorcida"
 
 msgid "Warped Hanging Sign"
-msgstr ""
+msgstr "Placa Suspensa Distorcida"
 
 msgid "Warped Log"
-msgstr ""
+msgstr "Tronco Distorcido"
 
 msgid "Warped Planks"
-msgstr ""
+msgstr "Tábuas Distorcidas"
 
 msgid "Warped Pressure Plate"
-msgstr ""
+msgstr "Placa de Pressão Distorcida"
 
 msgid "Warped Sign"
-msgstr ""
+msgstr "Placa Distorcida"
 
 msgid "Warped Slab"
-msgstr ""
+msgstr "Laje Distorcida"
 
 msgid "Warped Stairs"
-msgstr ""
+msgstr "Escadas Distorcidas"
 
 msgid "Warped Trapdoor"
-msgstr ""
+msgstr "Alçapão Distorcido"
 

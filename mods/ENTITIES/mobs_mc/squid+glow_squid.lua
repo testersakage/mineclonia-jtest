@@ -14,7 +14,6 @@ local squid = {
 	},
 	type = "animal",
 	_spawn_category = "water_creature",
-	spawn_class = "water",
 	can_despawn = true,
 	passive = true,
 	hp_min = 10,
@@ -22,8 +21,6 @@ local squid = {
 	xp_min = 1,
 	xp_max = 3,
 	head_eye_height = 0.4,
-	spawn_in_group_min = 2,
-	spawn_in_group = 4,
 	collisionbox = { -0.4, 0.0, -0.4, 0.4, 0.9, 0.4 },
 	visual = "mesh",
 	mesh = "mobs_mc_squid.b3d",
@@ -478,50 +475,14 @@ function glow_squid:ai_step (dtime)
 	end
 end
 
--- The mobs framework no longer respects min_light and max_light when
--- modern spawning thresholds are enabled.
-
-function glow_squid.check_light (_, gotten_light, _, _)
-	return gotten_light == 0
-end
-
 mcl_mobs.register_mob ("mobs_mc:glow_squid", glow_squid)
 
 ------------------------------------------------------------------------
 -- Squid & Glow Squid spawning.
 ------------------------------------------------------------------------
 
--- Spawn near the water surface
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:squid",
-	type_of_spawning = "water",
-	dimension = "overworld",
-	min_height = mobs_mc.water_level - 16,
-	max_height = mobs_mc.water_level + 1,
-	min_light = 0,
-	max_light = core.LIGHT_MAX + 1,
-	aoc = 7,
-	chance = 80,
-})
-
--- spawn eggs
-mcl_mobs.register_egg("mobs_mc:squid", S("Squid"), "#223b4d", "#708999", 0)
-
--- spawning
-mcl_mobs.spawn_setup({
-	name = "mobs_mc:glow_squid",
-	type_of_spawning = "water",
-	dimension = "overworld",
-	min_height = mobs_mc.water_level - 125,
-	max_height = mobs_mc.water_level - 32 + 1,
-	min_light = 0,
-	max_light = 0,
-	aoc = 3,
-	chance = 100,
-})
-
--- spawn egg
-mcl_mobs.register_egg("mobs_mc:glow_squid", S("Glow Squid"), "#095757", "#87f6c0", 0)
+mcl_mobs.register_egg ("mobs_mc:squid", S("Squid"), "#223b4d", "#708999", 0)
+mcl_mobs.register_egg ("mobs_mc:glow_squid", S("Glow Squid"), "#095757", "#87f6c0", 0)
 
 ------------------------------------------------------------------------
 -- Modern Squid & Glow Squid spawning.
@@ -542,6 +503,7 @@ local squid_spawner_frozen_ocean = table.merge (mobs_mc.aquatic_animal_spawner, 
 local squid_spawner_cold_ocean = table.merge (squid_spawner_frozen_ocean, {
 	biomes = {
 		"ColdOcean",
+		"DeepColdOcean",
 	},
 	weight = 3,
 	pack_min = 1,
@@ -580,9 +542,19 @@ local squid_spawner_ocean = table.merge (squid_spawner_frozen_ocean, {
 		"Ocean",
 		"DeepOcean",
 	},
-	weight = 4,
+	weight = 1,
 	pack_min = 1,
-	pack_max = 1,
+	pack_max = 4,
+})
+
+local squid_spawner_river = table.merge (squid_spawner_frozen_ocean, {
+	biomes = {
+		"River",
+		"FrozenRiver",
+	},
+	weight = 2,
+	pack_min = 1,
+	pack_max = 4,
 })
 
 mcl_mobs.register_spawner (squid_spawner_frozen_ocean)
@@ -591,6 +563,7 @@ mcl_mobs.register_spawner (squid_spawner_lukewarm_ocean)
 mcl_mobs.register_spawner (squid_spawner_warm_ocean)
 mcl_mobs.register_spawner (squid_spawner_deep_lukewarm_ocean)
 mcl_mobs.register_spawner (squid_spawner_ocean)
+mcl_mobs.register_spawner (squid_spawner_river)
 
 local default_spawner = mcl_mobs.default_spawner
 
@@ -604,7 +577,8 @@ local glow_squid_spawner = {
 	biomes = mobs_mc.overworld_biomes,
 }
 
-function glow_squid_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function glow_squid_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+						 spawn_flag)
 	if spawn_pos.y > -32.5 then
 		return false
 	end
@@ -614,11 +588,16 @@ function glow_squid_spawner:test_spawn_position (spawn_pos, node_pos, sdata, nod
 	if light == 0 then
 		if default_spawner.test_spawn_position (self, spawn_pos,
 							node_pos, sdata,
-							node_cache) then
+							node_cache,
+							spawn_flag) then
 			return true
 		end
 	end
 	return false
+end
+
+function glow_squid_spawner:describe_additional_spawning_criteria ()
+	return S ("Glow Squid only spawn in absolute darkness at Y levels of 33 or below.")
 end
 
 mcl_mobs.register_spawner (glow_squid_spawner)

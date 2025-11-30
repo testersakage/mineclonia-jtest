@@ -14,17 +14,17 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Ominous Banner"
-msgstr ""
+msgstr "Estandarte Sinistro"
 
 msgid "Raid (@1 of @2)"
-msgstr ""
+msgstr "Invasão (@1 de @2)"
 
 msgid "Raid"
-msgstr ""
+msgstr "Invasão"
 
 msgid "Raid (defeat)"
-msgstr ""
+msgstr "Invasão (derrota)"
 
 msgid "Raid (victory)"
-msgstr ""
+msgstr "Invasão (vitória)"
 

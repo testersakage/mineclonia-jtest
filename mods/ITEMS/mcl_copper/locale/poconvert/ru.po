@@ -20,7 +20,7 @@ msgid "Molten Raw Copper. It is used to craft blocks."
 msgstr "Медный слиток. Используется для крафта блоков."
 
 msgid "Copper Material"
-msgstr ""
+msgstr "Медный материал"
 
 msgid "Raw Copper"
 msgstr "Необработанная медь"

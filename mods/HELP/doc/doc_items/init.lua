@@ -1130,35 +1130,11 @@ doc.add_category("mobs", {
 	hide_entries_by_default = true,
 	build_formspec = function(d, _)
 		local data = mcl_mobs.registered_mobs[d.name]
-		local min_light = data.min_light or (data.spawn_class == "hostile" and 0) or 7
-		local max_light = data.max_light or (data.spawn_class == "hostile" and 7) or core.LIGHT_MAX + 1
 		if data then
 			local datastring = ""
 
 			if data.description then
 				datastring = datastring .. S("Description: @1", data.description)
-				datastring = newline2(datastring)
-			end
-
-			if data.type then
-				datastring = datastring .. S("Type: @1", data.type:sub(1,1):upper()..data.type:sub(2))
-				datastring = newline2(datastring)
-			end
-
-			datastring = datastring .. S("Spawning light levels (min / max): @1 / @2", min_light, max_light)
-			datastring = newline2(datastring)
-
-			if data.jump then
-				datastring = datastring .. S("Can Jump a height of @1 nodes", data.jump_height)
-				datastring = newline2(datastring)
-			end
-
-			if data.fly then
-				if data.fly_in and ((type(data.fly_in) == "table" and table.indexof(data.fly_in, "air") ~= -1 ) or data.fly_in == "air" ) then
-					datastring = datastring .. S("Can Fly")
-				else
-					datastring = datastring .. S("Can Swim")
-				end
 				datastring = newline2(datastring)
 			end
 
@@ -1178,6 +1154,10 @@ doc.add_category("mobs", {
 					datastring = newline2(datastring)
 				end
 			end
+
+			datastring = datastring
+				.. mcl_mobs.describe_spawning (d.name)
+				.. "\n\n"
 
 			if data.follow then
 				datastring = datastring .. S("Follows player when these items are held:")

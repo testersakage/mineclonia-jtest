@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Repair & Disenchant"
-msgstr ""
+msgstr "Reparar e Desencantar"
 
 msgid "Inventory"
 msgstr "Inventário"

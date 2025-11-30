@@ -41,7 +41,7 @@ msgid "Cherry Fence Gate"
 msgstr "Вишнёвая калитка"
 
 msgid "Cherry Hanging Sign"
-msgstr ""
+msgstr "Вишневая подвесная табличка"
 
 msgid "Cherry Leaves"
 msgstr "Вишнёвые листья"

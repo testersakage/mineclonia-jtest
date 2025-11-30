@@ -14,14 +14,14 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "River Water Source"
-msgstr ""
+msgstr "Fonte de Água do Rio"
 
 msgid "River water has the same properties as water, but has a reduced flowing distance and is not renewable."
-msgstr ""
+msgstr "Água do rio tem as mesmas propriedades que a água, mas uma distância de escoamento reduzida e é não renovável."
 
 msgid "River Water"
-msgstr ""
+msgstr "Água do Rio"
 
 msgid "Flowing River Water"
-msgstr ""
+msgstr "Água do Rio Corrente"
 

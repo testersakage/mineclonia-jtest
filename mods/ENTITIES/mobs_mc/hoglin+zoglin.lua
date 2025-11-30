@@ -15,7 +15,6 @@ local hoglin = {
 	description = S("Hoglin"),
 	type = "monster",
 	passive = false,
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	persist_in_peaceful = true,
 	hp_min = 40,
@@ -472,28 +471,17 @@ mcl_mobs.register_mob("mobs_mc:baby_hoglin", table.merge (hoglin, {
 -- Hoglin spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:hoglin",
-	type_of_spawning = "ground",
-	dimension = "nether",
-	min_light = 0,
-	max_light = core.LIGHT_MAX+1,
-	min_height = mcl_vars.mg_lava_nether_max,
-	aoc = 3,
-	biomes = {
-		"Nether",
-		"CrimsonForest"
-	},
-	chance = 200,
-})
+-- Spawn eggs.
+mcl_mobs.register_egg("mobs_mc:hoglin", S("Hoglin"), "#85682e", "#2b2140", 0)
 
 ------------------------------------------------------------------------
 -- Modern Hoglin spawning.
 ------------------------------------------------------------------------
 
 local default_spawner = mcl_mobs.default_spawner
+local monster_spawner = mobs_mc.monster_spawner
 
-local hoglin_spawner = table.merge (mobs_mc.monster_spawner, {
+local hoglin_spawner = table.merge (monster_spawner, {
 	name = "mobs_mc:hoglin",
 	spawn_category = "monster",
 	pack_min = 3,
@@ -512,7 +500,8 @@ function hoglin_spawner:spawn (spawn_pos, _)
 	end
 end
 
-function hoglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function hoglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					     spawn_flag)
 	if mcl_vars.difficulty == 0 then
 		return false
 	end
@@ -520,7 +509,14 @@ function hoglin_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_ca
 	return node.name ~= "mcl_nether:nether_wart_block"
 		and default_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
-							 node_cache)
+							 node_cache,
+							 spawn_flag)
+end
+
+function hoglin_spawner:describe_criteria (tbl, omit_group_details)
+	monster_spawner.describe_criteria (self, tbl, omit_group_details)
+	table.insert (tbl, S ("Hoglins do not spawn above Nether Wart blocks."))
+	table.insert (tbl, S ("20% of Hoglins spawn as their baby variants."))
 end
 
 mcl_mobs.register_spawner (hoglin_spawner)
@@ -629,6 +625,3 @@ baby_zoglin.call_group_attack = mob_class.call_group_attack
 baby_zoglin.get_staticdata_table = mob_class.get_staticdata_table
 
 mcl_mobs.register_mob ("mobs_mc:baby_zoglin", baby_zoglin)
-
--- spawn eggs
-mcl_mobs.register_egg("mobs_mc:hoglin", S("Hoglin"), "#85682e", "#2b2140", 0)

@@ -14,11 +14,11 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Red Nether Brick Fence"
-msgstr ""
+msgstr "Cerca de Tijolos Vermelhos do Nether"
 
 msgid "Red Nether Brick Fence Gate"
-msgstr ""
+msgstr "Portão de Tijolos Vermelhos do Nether"
 
 msgid "Nether Brick Fence Gate"
-msgstr ""
+msgstr "Portão de Tijolos do Nether"
 

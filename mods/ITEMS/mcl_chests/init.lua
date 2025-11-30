@@ -425,7 +425,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		_doc_items_usagehelp = usagehelp,
 		_doc_items_hidden = hidden,
 		drawtype = "mesh",
-		mesh = "mcl_chests_chest.b3d",
+		mesh = "mcl_chests_chest.obj",
 		tiles = select_texture_maybe_present (small_textures),
 		is_ground_content = false,
 		paramtype = "light",
@@ -460,7 +460,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		_doc_items_usagehelp = usagehelp,
 		_doc_items_hidden = hidden,
 		drawtype = animate_chests and "nodebox" or "mesh",
-		mesh = not animate_chests and "mcl_chests_chest.b3d" or nil,
+		mesh = not animate_chests and "mcl_chests_chest.obj" or nil,
 		node_box = animate_chests and {
 			type = "fixed",
 			fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.375, 0.4375},
@@ -475,7 +475,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		},
 		tiles = animate_chests and {"blank.png^[resize:16x16"}
 			or select_texture_maybe_present (small_textures),
-		use_texture_alpha = "blend",
+		use_texture_alpha = "clip",
 		_chest_entity_textures = small_textures,
 		_chest_entity_sound = "default_chest",
 		_chest_entity_mesh = "mcl_chests_chest",
@@ -623,7 +623,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			type = "fixed",
 			fixed = { -0.4375, -0.5, -0.4375, 0.5, 0.375, 0.4375 },
 		},
-		use_texture_alpha = "blend",
+		use_texture_alpha = "clip",
 		_chest_entity_textures = left_textures,
 		_chest_entity_sound = "default_chest",
 		_chest_entity_mesh = "mcl_chests_chest",
@@ -805,7 +805,7 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			fixed = { -0.5, -0.5, -0.4375, 0.4375, 0.375, 0.4375 },
 		},
 		tiles = { "blank.png^[resize:16x16" },
-		use_texture_alpha = "blend",
+		use_texture_alpha = "clip",
 		groups = {
 			handy = 1,
 			axey = 1,
@@ -1091,7 +1091,7 @@ core.register_node("mcl_chests:ender_chest", {
 		"Ender chests grant you access to a single personal interdimensional inventory with 27 slots. This inventory is the same no matter from which ender chest you access it from. If you put one item into one ender chest, you will find it in all other ender chests. Each player will only see their own items, but not the items of other players."),
 	_doc_items_usagehelp = S("Rightclick the ender chest to access your personal interdimensional inventory."),
 	drawtype = "mesh",
-	mesh = "mcl_chests_chest.b3d",
+	mesh = "mcl_chests_chest.obj",
 	tiles = select_texture_maybe_present ({
 		default = tiles_chest_ender_small,
 		present = tiles_chest_ender_small_present,
@@ -1134,7 +1134,7 @@ core.register_node("mcl_chests:ender_chest_small", {
 		"Ender chests grant you access to a single personal interdimensional inventory with 27 slots. This inventory is the same no matter from which ender chest you access it from. If you put one item into one ender chest, you will find it in all other ender chests. Each player will only see their own items, but not the items of other players."),
 	_doc_items_usagehelp = S("Rightclick the ender chest to access your personal interdimensional inventory."),
 	drawtype = animate_chests and "nodebox" or "mesh",
-	mesh = not animate_chests and "mcl_chests_chest.b3d" or nil,
+	mesh = not animate_chests and "mcl_chests_chest.obj" or nil,
 	_mcl_baseitem = "mcl_chests:ender_chest",
 	node_box = animate_chests and {
 		type = "fixed",
@@ -1396,7 +1396,8 @@ for color, desc in pairs(boxtypes) do
 		_doc_items_usagehelp = usagehelp,
 		tiles = { mob_texture },
 		drawtype = "mesh",
-		mesh = "mcl_chests_shulker.b3d",
+		mesh = "mcl_chests_shulker.obj",
+		use_texture_alpha = "clip",
 		groups = {
 			handy = 1,
 			pickaxey = 1,
@@ -1474,10 +1475,10 @@ for color, desc in pairs(boxtypes) do
 		drawtype = animate_chests and "nodebox" or "mesh",
 		mesh = not animate_chests and "mcl_chests_shulker.obj" or nil,
 		tiles = animate_chests and {"blank.png^[resize:16x16"} or {mob_texture},
-		use_texture_alpha = "blend",
 		_chest_entity_textures = {
 			default = {mob_texture,},
 		},
+		use_texture_alpha = "clip",
 		_chest_entity_sound = "mcl_chests_shulker",
 		_chest_entity_mesh = "mcl_chests_shulker",
 		_chest_entity_animation_type = "shulker",
@@ -1633,8 +1634,8 @@ local function select_and_spawn_entity(pos, node)
 end
 
 function mcl_chests.is_opened (chest)
-	for k, v in open_chests do
-		if vector.equal (v.pos, chest)
+	for k, v in pairs (open_chests) do
+		if vector.equals (v.pos, chest)
 			and core.get_player_by_name (k) then
 			return true
 		end

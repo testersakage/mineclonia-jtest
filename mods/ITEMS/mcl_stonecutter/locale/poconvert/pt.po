@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Stonecutter"
-msgstr ""
+msgstr "Cortador de Pedras"
 
 msgid "Fill Craft Grid"
 msgstr "Encher Grelha de Craft"
@@ -23,8 +23,8 @@ msgid "Inventory"
 msgstr "Inventário"
 
 msgid "Used to cut stone like materials."
-msgstr ""
+msgstr "Usado para talhar materiais rochosos."
 
 msgid "Stonecutters are used to create stairs and slabs from stone like materials. It is also the jobsite for the Stone Mason Villager."
-msgstr ""
+msgstr "Cortadores de pedras são usados para criar escadas e degraus de materiais rochosos. Também é a estação de trabalho do aldeão pedreiro."
 

@@ -1650,7 +1650,7 @@ function mob_class:check_schooling (self_pos, list)
 		return false
 	elseif self:check_timer ("form_school", (200 + math.random (20)) / 40) then
 		local nearby = core.get_objects_inside_radius (self_pos, 8)
-		local cluster = self._school_size or self.spawn_in_group or 4
+		local cluster = self._school_size or 4
 		local leader = find_school_leader (nearby, self.name, cluster) or self
 		leader._school = leader._school or {}
 

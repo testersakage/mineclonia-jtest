@@ -2,6 +2,8 @@
 -- Spawning initialization.
 -------------------------------------------------------------------------
 
+local S = core.get_translator (core.get_current_modname ())
+
 local only_peaceful_mobs
 	= core.settings:get_bool ("only_peaceful_mobs", false)
 
@@ -142,16 +144,26 @@ mobs_mc.monster_biomes = {
 -- Land animals.
 
 local default_spawner = mcl_mobs.default_spawner
-local animal_spawner = {
+local animal_spawner = table.merge (default_spawner, {
 	spawn_category = "creature",
 	spawn_placement = "ground",
-}
+})
 
 function animal_spawner:test_supporting_node (node)
 	return core.get_item_group (node.name, "grass_block") > 0
 end
 
-function animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function animal_spawner:describe_supporting_nodes ()
+	return S ("on grass nodes")
+end
+
+function animal_spawner:get_misc_spawning_description ()
+	return S ("This mob will spawn infrequently @1 with a surface occupying a full node when no obstructions exist within a volume @2 nodes in size around the center of such a node's upper surface, in light levels of 8 or greater.",
+		  self:describe_supporting_nodes (), self:describe_mob_collision_box ())
+end
+
+function animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					     spawn_flag)
 	local light = core.get_node_light (node_pos)
 	if not light or light <= 8 then
 		return false
@@ -160,7 +172,8 @@ function animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_ca
 	if self:test_supporting_node (node_below) then
 		if default_spawner.test_spawn_position (self, spawn_pos,
 							node_pos, sdata,
-							node_cache) then
+							node_cache,
+							spawn_flag) then
 			return true
 		end
 	end
@@ -172,12 +185,13 @@ mobs_mc.animal_spawner = animal_spawner
 -- Aquatic animals.
 
 local default_spawner = mcl_mobs.default_spawner
-local aquatic_animal_spawner = {
+local aquatic_animal_spawner = table.merge (default_spawner, {
 	spawn_category = "water_ambient",
 	spawn_placement = "aquatic",
-}
+})
 
-function aquatic_animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function aquatic_animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+						     spawn_flag)
 	if spawn_pos.y > 0.5 or spawn_pos.y < -12.5 then
 		return false
 	end
@@ -188,27 +202,34 @@ function aquatic_animal_spawner:test_spawn_position (spawn_pos, node_pos, sdata,
 		and core.get_item_group (node_above.name, "water") > 0 then
 		if default_spawner.test_spawn_position (self, spawn_pos,
 							node_pos, sdata,
-							node_cache) then
+							node_cache,
+							spawn_flag) then
 			return true
 		end
 	end
 	return false
 end
 
+function aquatic_animal_spawner:get_misc_spawning_description ()
+	return S ("This mob will spawn between sea level and Y level -12 when the nodes above and below are water and no obstructions exist within a volume @1 nodes in size around the center of the base of the fluid node where spawning is being attempted.",
+		  self:describe_mob_collision_box ())
+end
+
 mobs_mc.aquatic_animal_spawner = aquatic_animal_spawner
 
 -- Monsters.
 
-local monster_spawner = {
+local monster_spawner = table.merge (default_spawner, {
 	spawn_placement = "ground",
 	spawn_category = "monster",
 	pack_min = 4,
 	pack_max = 4,
 	max_artificial_light = 0,
 	max_light = 6,
-}
+})
 
-function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					      spawn_flag)
 	if mcl_vars.difficulty == 0 or only_peaceful_mobs then
 		return false
 	end
@@ -220,7 +241,7 @@ function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 	end
 
 	if default_spawner.test_spawn_position (self, spawn_pos, node_pos,
-						sdata, node_cache) then
+						sdata, node_cache, spawn_flag) then
 		-- Natural light tests are expensive...
 		local natural_light = core.get_natural_light (node_pos)
 		if not natural_light
@@ -231,6 +252,20 @@ function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 		return true
 	end
 	return false
+end
+
+function monster_spawner:describe_additional_spawning_criteria ()
+	if self.max_artificial_light == 15 and self.max_light >= 14 then
+		return nil
+	elseif self.max_artificial_light == 0 then
+		return S ("Spawning will only succeed in the absence of artificial lighting and if the natural light is @1 or dimmer.", self.max_light)
+	elseif self.max_light == 15 then
+		return S ("Spawning will only succeed between artificial light levels of 0 and @1.", self.max_artificial_light)
+	elseif self.max_artificial_light >= 14 then
+		return S ("Spawning will only succeed between natural light levels of 0 and @1.", self.max_light)
+	else
+		return S ("Spawning will only succeed between artificial light levels of 0 and @1, and natural light levels of 0 and @2.", self.max_artificial_light, self.max_light)
+	end
 end
 
 mobs_mc.monster_spawner = monster_spawner

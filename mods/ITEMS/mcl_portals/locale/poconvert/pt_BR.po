@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "End Portal"
-msgstr ""
+msgstr "Portal do Fim"
 
 msgid "Used to construct end portals"
 msgstr ""
@@ -53,16 +53,16 @@ msgid "End Portal Frame with Eye of Ender"
 msgstr ""
 
 msgid "End Gateway Portal"
-msgstr ""
+msgstr "Portal da Passagem do Fim"
 
 msgid "Used to construct end gateway portals"
-msgstr ""
+msgstr "Usado para construir portais de transição do Fim"
 
 msgid "An End gateway portal teleports creatures and objects to the outer End (and back!)."
-msgstr ""
+msgstr "Um portal de transição do Fim teletransporta criaturas e objetos para fora do Fim (ou de volta!)."
 
 msgid "Throw an ender pearl into the portal to teleport. Entering an Gateway portal near the Overworld teleports you to the outer End. At this destination another gateway portal will be constructed, which you can use to get back."
-msgstr ""
+msgstr "Lance uma pérola do fim no portal para se teletransportar. Entrar em um portal de transição próximo ao Mundo Superior teletransporta você para fora do Fim. Nesse destino, outro portal de transição será construído, que você poderá usar para retornar."
 
 msgid "Entering the Nether"
 msgstr ""

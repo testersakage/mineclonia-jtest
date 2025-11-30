@@ -12,7 +12,6 @@ local is_valid = mcl_util.is_valid_objectref
 local wolf = {
 	description = S("Wolf"),
 	type = "animal",
-	spawn_class = "passive",
 	_spawn_category = "creature",
 	can_despawn = true,
 	hp_min = 8,
@@ -20,7 +19,6 @@ local wolf = {
 	xp_min = 1,
 	xp_max = 3,
 	passive = false,
-	spawn_in_group = 8,
 	collisionbox = {-0.3, 0.0, -0.3, 0.3, 0.85, 0.3},
 	visual = "mesh",
 	mesh = "mobs_mc_wolf.b3d",
@@ -884,100 +882,10 @@ mcl_mobs.register_mob ("mobs_mc:wolf", wolf)
 -- Wolf spawning.
 ------------------------------------------------------------------------
 
-local biome_spawn_configurations = {
-	["Forest"] = {
-		group_size = 4,
-	},
-	["Forest_beach"] = {
-		group_size = 4,
-	},
-	["MegaSpruceTaiga"] = {
-		group_size_min = 2,
-		group_size = 4,
-	},
-	["MegaTaiga"] = {
-		group_size_min = 2,
-		group_size = 4,
-	},
-	["Savanna"] = {
-		group_size_min = 4,
-		group_size = 8,
-	},
-	["SavannaM"] = {
-		group_size_min = 4,
-		group_size = 8,
-	},
-	["Mesa"] = {
-		group_size_min = 4,
-		group_size = 8,
-	},
-	["MesaPlateauF"] = {
-		group_size_min = 4,
-		group_size = 8,
-	},
-	["MesaPlateauFM"] = {
-		group_size_min = 4,
-		group_size = 8,
-	},
-	["ColdTaiga"] = {
-		group_size = 4,
-	},
-	["ColdTaiga_beach"] = {
-		group_size = 4,
-	},
-	["ColdTaiga_beach_water"] = {
-		group_size = 4,
-	},
-	["Jungle"] = {
-		group_size_min = 2,
-		group_size = 4,
-	},
-	["JungleEdge"] = {
-		group_size_min = 2,
-		group_size = 4,
-	},
-	["BambooJungle"] = {
-		group_size_min = 2,
-		group_size = 4,
-	},
-	["IcePlains"] = {
-		group_size = 1,
-	},
-	["IcePlainsSpikes"] = {
-		group_size = 1,
-	},
-}
-
-local spawn_def_template = {
-	name = "mobs_mc:wolf",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 7,
-	min_height = mobs_mc.water_level + 3,
-	chance = 80,
-}
-
-mcl_mobs.spawn_setup (table.merge (spawn_def_template, {
-	biomes = {
-		"flat",
-	},
-}))
-
-for biome, spawndef in pairs (biome_spawn_configurations) do
-	local spawndef = table.merge (spawn_def_template, {
-		biomes = {
-			biome,
-		},
-		group_size_min = spawndef.group_size_min,
-		group_size = spawndef.group_size,
-	})
-	mcl_mobs.spawn_setup (spawndef)
-end
-
 mcl_mobs.register_egg ("mobs_mc:wolf", S("Wolf"), "#d7d3d3", "#ceaf96", 0)
 
 ------------------------------------------------------------------------
--- Wolf spawning.
+-- Modern Wolf spawning.
 ------------------------------------------------------------------------
 
 local wolf_spawner_taiga = table.merge (mobs_mc.animal_spawner, {
@@ -995,6 +903,10 @@ function wolf_spawner_taiga:test_supporting_node (node)
 		or node.name == "mcl_core:snowblock"
 		or node.name == "mcl_core:coarse_dirt"
 		or node.name == "mcl_core:podzol"
+end
+
+function wolf_spawner_taiga:describe_supporting_nodes ()
+	return S ("on grass, snow blocks, coarse dirt, or podzol")
 end
 
 function wolf_spawner_taiga:prepare_to_spawn (pack_size, center)
@@ -1027,7 +939,7 @@ local wolf_spawner_mesa = table.merge (wolf_spawner_taiga, {
 	pack_min = 4,
 	pack_max = 8,
 	biomes = {
-		"#is_mesa",
+		"#is_badlands",
 	},
 })
 

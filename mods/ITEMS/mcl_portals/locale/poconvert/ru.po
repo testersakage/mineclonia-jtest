@@ -26,10 +26,10 @@ msgid "Hop into the portal to teleport. Entering an End portal in the Overworld 
 msgstr "Прыгайте в портал, чтобы телепортироваться. Портал Края в Верхнем мире телепортирует вас в определённое место в измерении Края и создаёт обсидиановую платформу 5×5 в пункте вашего назначения. Портал Края в измерении Края телепортирует вас в вашу точку возрождения в Верхнем мире."
 
 msgid "Leaving the End"
-msgstr ""
+msgstr "Выход из Края"
 
 msgid "Entering the End"
-msgstr ""
+msgstr "Вход в Край"
 
 msgid "End Portal Frame"
 msgstr "Рамка портала Края"

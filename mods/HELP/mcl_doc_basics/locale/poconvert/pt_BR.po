@@ -14,49 +14,49 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Advanced usage"
-msgstr ""
+msgstr "Uso avançado"
 
 msgid "Advanced information which may be nice to know, but is not crucial to gameplay"
-msgstr ""
+msgstr "Informações avançadas que podem ser interessantes de saber, mas não são cruciais para o jogo"
 
 msgid "Creative Mode"
-msgstr ""
+msgstr "Modo Criativo"
 
 msgid "Enabling Creative Mode in MineClonia applies the following changes:"
-msgstr ""
+msgstr "Ativar o Modo Criativo no MineClonia aplica as seguintes alterações:"
 
 msgid "• You keep the things you've placed"
-msgstr ""
+msgstr "• Você fica com os itens que colocou"
 
 msgid "• Creative inventory is available to obtain most items easily"
-msgstr ""
+msgstr "• O sistema de inventário criativo permite obter a maioria dos itens com facilidade"
 
 msgid "• Hand breaks all default blocks instantly"
-msgstr ""
+msgstr "• A mão quebra todos os blocos padrão instantaneamente"
 
 msgid "• Greatly increased hand pointing range"
-msgstr ""
+msgstr "• Alcance de apontamento manual significativamente aumentado"
 
 msgid "• Mined blocks don't drop items"
-msgstr ""
+msgstr "• Blocos quebrados não soltam itens"
 
 msgid "• Items don't get used up"
-msgstr ""
+msgstr "• Os itens não se desgastam"
 
 msgid "• Tools don't wear off"
-msgstr ""
+msgstr "• As ferramentas não se desgastam"
 
 msgid "• You can eat food whenever you want"
-msgstr ""
+msgstr "• Você pode comer quando quiser"
 
 msgid "• You can always use the minimap (including radar mode)"
-msgstr ""
+msgstr "• Você sempre pode usar o minimapa (incluindo o modo radar)"
 
 msgid "Damage is not affected by Creative Mode, it needs to be disabled separately."
-msgstr ""
+msgstr "O Modo Criativo não afeta o dano, sendo necessário o desativar separadamente."
 
 msgid "Console"
-msgstr ""
+msgstr "Console"
 
 msgid "With [F10] you can open and close the console. The main use of the console is to show the chat log and enter chat messages or server commands."
 msgstr ""
@@ -68,7 +68,7 @@ msgid "Use the chat to communicate with other players. This requires you to have
 msgstr ""
 
 msgid "Just type in the message and hit [Enter]. Public chat messages can not begin with “/”."
-msgstr ""
+msgstr "Basta digitar a mensagem e pressionar [Enter]. Mensagens de bate-papo público não podem começar com “/”."
 
 msgid "You can send private messages: Say “/msg <player> <message>” in chat to send “<message>” which can only be seen by <player>."
 msgstr ""
@@ -161,7 +161,7 @@ msgid "Here are some examples to illustrate the command syntax:"
 msgstr ""
 
 msgid "• /mods: No parameters. Just enter “/mods”"
-msgstr ""
+msgstr "• /mods: Sem parâmetros. Basta digitar “/mods”"
 
 msgid "• /me <action>: 1 parameter. You have to enter “/me ” followed by any text, e.g. “/me orders pizza”"
 msgstr ""
@@ -329,7 +329,7 @@ msgid "• Damage enabled (enable_damage): Enables the health and breath attribu
 msgstr ""
 
 msgid "• Creative Mode (creative_mode): Enables sandbox-style gameplay focusing on creativity rather than a challenging gameplay. The meaning depends on the game; usual changes are: Reduced dig times, easy access to almost all items, tools never wear off, etc."
-msgstr ""
+msgstr "• Modo Criativo (creative_mode): Ativa um estilo de jogo sandbox com foco na criatividade em vez de um desafio. O significado varia de acordo com o jogo. As mudanças mais comuns são: redução do tempo de escavação, acesso fácil a quase todos os itens, ferramentas que nunca se desgastam, etc."
 
 msgid "• PvP (enable_pvp): Short for “Player vs Player”. If enabled, players can deal damage to each other"
 msgstr ""
@@ -389,10 +389,10 @@ msgid "• Place the wood into the 2×2 grid (your “crafting grid”) in your 
 msgstr ""
 
 msgid "• Place them in a 2×2 shape in the crafting grid to craft a crafting table"
-msgstr ""
+msgstr "• Coloque eles de forma 2x2 na grade de produção para produzir uma bancada de produção"
 
 msgid "• Place the crafting table on the ground"
-msgstr ""
+msgstr "• Coloque a bancada de produção no chão"
 
 msgid "• Rightclick it for a 3×3 crafting grid"
 msgstr ""
@@ -494,7 +494,7 @@ msgid "• 1-9: Select item in hotbar directly"
 msgstr ""
 
 msgid "• Q: Drop item stack"
-msgstr ""
+msgstr "• Q: Soltar estoque de itens"
 
 msgid "• Shift+Q: Drop 1 item"
 msgstr ""
@@ -572,7 +572,7 @@ msgid "“Pointing” means looking at something in range with the crosshair. Po
 msgstr ""
 
 msgid "To point something, it must be in the pointing range (also just called “range”) of your wielded item. There's a default range when you are not wielding anything. A pointed thing will be outlined or highlighted (depending on your settings). Pointing is not possible with the 3rd person front camera."
-msgstr ""
+msgstr "Para apontar algo, esse objeto deve estar dentro do alcance de apontamento (também chamado só \"alcance\") do item que você está empunhando. Existe um alcance padrão quando você não está empunhando nada. O objeto apontado será contornado ou destacado (dependendo das suas configurações). Não é possível apontar com a câmera frontal em terceira pessoa."
 
 msgid "A few things can not be pointed. Most blocks are pointable. A few blocks, like air, can never be pointed. Other blocks, like liquids can only be pointed by special items."
 msgstr ""
@@ -584,13 +584,13 @@ msgid "Items are things you can carry along and store in inventories. They can b
 msgstr ""
 
 msgid "An item stack is a collection of items of the same type which fits into a single item slot. Item stacks can be dropped on the ground. Items which drop into the same coordinates will form an item stack."
-msgstr ""
+msgstr "Um estoque de itens é uma coleção de itens do mesmo tipo que cabem em um único nicho de itens. Estoques de itens podem ser soltos no chão. Itens que caem nas mesmas coordenadas formarão um estoque de itens."
 
 msgid "Items have several properties, including the following:"
 msgstr ""
 
 msgid "• Maximum stack size: Number of items which fit on 1 item stack"
-msgstr ""
+msgstr "• Tamanho máximo do estoque: Número de itens que cabem no estoque de 1 item"
 
 msgid "• Pointing range: How close things must be to be pointed while wielding this item"
 msgstr ""
@@ -605,7 +605,7 @@ msgid "Inventory"
 msgstr "Inventário"
 
 msgid "Inventories are used to store item stacks. There are other uses, such as crafting. An inventory consists of a rectangular grid of item slots. Each item slot can either be empty or hold one item stack. Item stacks can be moved freely between most slots."
-msgstr ""
+msgstr "Os inventários são usados para armazenar estoques de itens. Existem outros usos, como a criação de itens. Um inventário consiste em uma grade retangular de nichos para itens. Cada nicho pode estar vazio ou conter um estoque de itens. Os estoques de itens podem ser movidos livremente entre a maioria dos nichos."
 
 msgid "You have your own inventory which is called your “player inventory”, you can open it with the inventory key (default: [I])."
 msgstr ""
@@ -620,25 +620,25 @@ msgid "Taking: You can take items from an occupied slot if the cursor holds noth
 msgstr ""
 
 msgid "• Left click: take entire item stack"
-msgstr ""
+msgstr "• Clique esquerdo: pega todo o estoque de itens"
 
 msgid "• Right click: take half from the item stack (rounded up)"
-msgstr ""
+msgstr "• Clicar com o botão direito: pega metade dos itens no estoque (arredondado para mais)"
 
 msgid "• Middle click: take 10 items from the item stack"
-msgstr ""
+msgstr "• Clique do meio: pega 10 itens do estoque de itens"
 
 msgid "• Mouse wheel down: take 1 item from the item stack"
-msgstr ""
+msgstr "• Roda do mouse para baixo: pega 1 item do estoque de itens"
 
 msgid "• Mouse wheel up: put 1 item in the item stack (if you're holding an item stack of the same type)"
-msgstr ""
+msgstr "• Roda do mouse para cima: coloca 1 item no estoque de itens (se você estiver segurando um estoque de itens do mesmo tipo)"
 
 msgid "Putting: You can put items onto a slot if the cursor holds 1 or more items and the slot is either empty or contains an item stack of the same item type."
-msgstr ""
+msgstr "Colocar: Você pode colocar itens em um nicho se o cursor estiver segurando 1 ou mais itens e o nicho estiver vazio ou contiver uma estoque de itens do mesmo tipo."
 
 msgid "• Left click: put entire item stack"
-msgstr ""
+msgstr "• Clique esquerdo: coloca toda o estoque de itens"
 
 msgid "• Right click or mouse wheel up: put 1 item of the item stack"
 msgstr ""
@@ -662,10 +662,10 @@ msgid "• Sneak+Left click: Automatically transfer item stack (Sneak is by defa
 msgstr ""
 
 msgid "Hotbar"
-msgstr ""
+msgstr "Barra de Itens"
 
 msgid "At the bottom of the screen you see some squares. This is called the “hotbar”, and contains the items you have put in the last row of your inventory."
-msgstr ""
+msgstr "Na parte inferior da tela, você verá alguns quadrados. Isso é chamado de \"barra de itens\" e contém os itens que você colocou na última linha do seu inventário."
 
 msgid "You can change the selected item with the mouse wheel or the keyboard:"
 msgstr ""
@@ -683,7 +683,7 @@ msgid "The selected item is also your wielded item."
 msgstr ""
 
 msgid "Tools"
-msgstr ""
+msgstr "Ferramentas"
 
 msgid "Some items may serve as a tool when wielded. Any item which has some special use which can be directly used by its wielder is considered a tool."
 msgstr ""
@@ -698,10 +698,10 @@ msgid "Usually tools have a durability which limits the amount of uses of it. Th
 msgstr ""
 
 msgid "Weapons"
-msgstr ""
+msgstr "Armas"
 
 msgid "Some items are usable as a melee weapon when wielded. Weapons share most of the properties of tools."
-msgstr ""
+msgstr "Alguns itens podem ser usados como armas de combate corpo a corpo quando empunhados. As armas compartilham a maioria das propriedades das ferramentas."
 
 msgid "Melee weapons deal damage by punching players and other animate objects. There are two ways to attack:"
 msgstr ""
@@ -728,7 +728,7 @@ msgid "There is a rule which sometimes makes attacks impossible: Players, animat
 msgstr ""
 
 msgid "Blocks"
-msgstr ""
+msgstr "Blocos"
 
 msgid "The world is made entirely out of blocks (voxels, to be precise). Blocks can be added or removed with the correct tools."
 msgstr ""
@@ -740,7 +740,7 @@ msgid "• Collidable: Collidable blocks can not be passed through; players can 
 msgstr ""
 
 msgid "• Pointable: Pointable blocks show a wireframe or a halo box when pointed. But you will just point through non-pointable blocks. Liquids are usually non-pointable but they can be pointed at by some special tools"
-msgstr ""
+msgstr "• Apontável: Blocos apontáveis exibem uma estrutura de arame ou uma caixa com contorno quando apontados. No entanto, você apenas apontará através de blocos não apontáveis. Líquidos geralmente não são apontáveis, mas podem ser apontados com algumas ferramentas especiais"
 
 msgid "• Mining properties: By which tools it can be mined, how fast and how much it wears off tools"
 msgstr ""
@@ -764,7 +764,7 @@ msgid "Mining (or digging) is the process of breaking blocks to remove them. To 
 msgstr ""
 
 msgid "Blocks require a mining tool to be mined. Different blocks are mined by different mining tools, and some blocks can not be mined by any tool. Blocks vary in hardness and tools vary in strength. Mining tools will wear off over time. The mining time and the tool wear depend on the block and the mining tool. The fastest way to find out how efficient your mining tools are is by just trying them out on various blocks. Any items you gather by mining will drop on the ground, ready to be collected."
-msgstr ""
+msgstr "Blocos requerem uma ferramenta de mineração para serem minerados. Diferentes blocos exigem ferramentas diferentes, e alguns não podem ser minerados por nenhuma ferramenta. A dureza dos blocos varia, assim como a resistência das ferramentas. As ferramentas de mineração se desgastam com o tempo. O tempo de mineração e o desgaste da ferramenta dependem do bloco e da ferramenta utilizada. A maneira mais rápida de descobrir a eficiência das suas ferramentas de mineração é testando em diferentes blocos. Os itens coletados durante a mineração cairão no chão, prontos para serem recolhidos."
 
 msgid "After mining, a block may leave a “drop” behind. This is a number of items you get after mining. Most commonly, you will get the block itself. There are other possibilities for a drop which depends on the block type. The following drops are possible:"
 msgstr ""
@@ -797,7 +797,7 @@ msgid "Normally, blocks are built in front of the pointed side of the pointed bl
 msgstr ""
 
 msgid "Crafting"
-msgstr ""
+msgstr "Produção"
 
 msgid "Crafting is the task of combining several items to form a new item."
 msgstr ""
@@ -806,7 +806,7 @@ msgid "To craft something, you need one or more items, a crafting grid (C) and a
 msgstr ""
 
 msgid "The crafting grid you have inside your inventory is 2x2, limiting the amount of potential recipes you can craft. To craft recipes that require a 3x3 grid you will need a crafting table."
-msgstr ""
+msgstr "A grade de produção que você tem no seu inventário é 2x2, o que limita os tipos de receitas você pode produzir. Para produzir receitas que exigem uma grade 3x3, você precisará de uma bancada de produção."
 
 msgid "To complete the craft, take the result item from the output slot, which will consume items from the crafting grid and creates a new item. It is not possible to place items into the output slot."
 msgstr ""
@@ -941,7 +941,7 @@ msgid "Other actions, like walking, do not exaust you."
 msgstr ""
 
 msgid "Mobs"
-msgstr ""
+msgstr "Mobs"
 
 msgid "Mobs are the living beings in the world. This includes animals and monsters."
 msgstr ""
@@ -1379,7 +1379,7 @@ msgid "• Minetest Game: A game for Luanti by the Luanti developers"
 msgstr ""
 
 msgid "• Game: A complete playing experience to be used in Luanti; such as a game or sandbox or similar"
-msgstr ""
+msgstr "• Jogo: Uma experiência de jogo completa para ser usada no Luanti; como um jogo, um sandbox ou algo similar"
 
 msgid "• Mod: A single subsystem which adds or modifies functionality; is the basic building block of games and can be used to further enhance or modify them"
 msgstr ""
@@ -1394,7 +1394,7 @@ msgid "Luanti"
 msgstr ""
 
 msgid "Luanti (formely Minetest) is a free software game engine for games based on voxel gameplay, inspired by InfiniMiner, Minecraft, and the like. Luanti was originally created by Perttu Ahola (alias “celeron55”)."
-msgstr ""
+msgstr "Luanti (anteriormente Minetest) é um motor de jogo de software livre para jogos baseados em jogabilidade voxel, inspirado em InfiniMiner, Minecraft e similares. Luanti foi originalmente criado por Perttu Ahola (também conhecido como “celeron55”)."
 
 msgid "A core feature of Luanti is the built-in modding capability, which all games consist of too. They can be as simple as adding a few decorational blocks or be very complex by e.g. introducing completely new gameplay concepts, generating a completely different kind of world, and many other things."
 msgstr ""

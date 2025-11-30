@@ -14,10 +14,10 @@ msgstr ""
 "X-Generator: mtt_convert 0.1.1\n"
 
 msgid "When placed on soil (such as dirt) and exposed to light, a sapling will grow into a tree after some time."
-msgstr ""
+msgstr "Quando colocada no solo (como na terra) e exposta à luz, uma muda crescerá em uma árvore após algum tempo."
 
 msgid "Needs soil and light to grow"
-msgstr ""
+msgstr "Precisa de solo e luz para crescer"
 
 msgid "Wooden doors are 2-block high barriers which can be opened or closed by hand and by a redstone signal."
 msgstr ""

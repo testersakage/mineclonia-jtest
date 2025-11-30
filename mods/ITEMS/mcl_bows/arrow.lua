@@ -682,7 +682,7 @@ function ARROW_ENTITY:on_activate(staticdata)
 	if data then
 		-- First, check if the arrow is already past its life timer. If
 		-- yes, delete it. If starttime is nil always delete it.
-		self._lifetime = minetest.get_gametime() - (data.starttime or 0)
+		self._lifetime = core.get_gametime() - (data.starttime or 0)
 		if self._lifetime > ARROW_LIFETIME or data.stuckin_player then
 			self:remove()
 			return
@@ -720,7 +720,7 @@ function ARROW_ENTITY:on_deactivate()
 	self:stop_particle()
 end
 
-minetest.register_on_respawnplayer(function(player)
+core.register_on_respawnplayer(function(player)
 	for _, obj in pairs(player:get_children()) do
 		local ent = obj:get_luaentity()
 		if ent and ent.name and string.find(ent.name, "mcl_bows:arrow_entity") then

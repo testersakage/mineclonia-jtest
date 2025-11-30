@@ -10,17 +10,9 @@ local mob_class = mcl_mobs.mob_class
 --- Silverfish.
 ------------------------------------------------------------------------
 
-local function check_light (_, _, artificial_light, _)
-	if artificial_light > 11 then
-		return false, "Too bright"
-	end
-	return true, ""
-end
-
 local silverfish = {
 	description = S("Silverfish"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	passive = false,
 	group_attack = true,
@@ -53,7 +45,6 @@ local silverfish = {
 	},
 	attack_type = "melee",
 	damage = 1,
-	check_light = check_light,
 	climb_powder_snow = true,
 	_reinforcement_time = 0,
 	pace_interval = 0,
@@ -154,4 +145,26 @@ silverfish.ai_functions = {
 }
 
 mcl_mobs.register_mob ("mobs_mc:silverfish", silverfish)
+
+------------------------------------------------------------------------
+-- Modern Silverfish spawning.
+------------------------------------------------------------------------
+
+local default_spawner = mcl_mobs.default_spawner
+
+local silverfish_spawner = table.merge (default_spawner, {
+	name = "mobs_mc:silverfish",
+	biomes = {},
+	is_canonical = true,
+})
+
+function silverfish_spawner:test_spawn_position (mob_def, spawn_pos, node_pos, sdata, node_cache,
+						 spawn_flag)
+	return mcl_vars.difficulty > 0
+		and default_spawner.test_spawn_position (self, mob_def, spawn_pos,
+							 node_pos, sdata, node_cache,
+							 spawn_flag)
+end
+
+mcl_mobs.register_spawner (silverfish_spawner)
 mcl_mobs.register_egg ("mobs_mc:silverfish", S("Silverfish"), "#6d6d6d", "#313131", 0)

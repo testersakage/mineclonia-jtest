@@ -14,7 +14,6 @@ local posing_humanoid = mcl_mobs.posing_humanoid
 local skeleton = table.merge (posing_humanoid, {
 	description = S("Skeleton"),
 	type = "monster",
-	spawn_class = "hostile",
 	_spawn_category = "monster",
 	hp_min = 20,
 	hp_max = 20,
@@ -394,43 +393,6 @@ mcl_mobs.register_mob ("mobs_mc:stray", stray)
 -- Skeleton & Stray spawning.
 ------------------------------------------------------------------------
 
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:skeleton",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 2,
-	biomes_except = {
-		"MushroomIslandShore",
-		"MushroomIsland"
-	},
-	chance = 800,
-})
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:skeleton",
-	type_of_spawning = "ground",
-	dimension = "nether",
-	aoc = 2,
-	biomes = {
-		"SoulsandValley",
-	},
-	chance = 800,
-})
-
-mcl_mobs.spawn_setup ({
-	name = "mobs_mc:stray",
-	type_of_spawning = "ground",
-	dimension = "overworld",
-	aoc = 2,
-	biomes = {
-		"ColdTaiga",
-		"IcePlainsSpikes",
-		"IcePlains",
-		"ExtremeHills+_snowtop",
-	},
-	chance = 1200,
-})
-
 mcl_mobs.register_egg ("mobs_mc:skeleton", S("Skeleton"), "#c1c1c1", "#494949", 0)
 mcl_mobs.register_egg ("mobs_mc:stray", S("Stray"), "#5f7476", "#dae8e7", 0)
 
@@ -507,11 +469,18 @@ local stray_spawner = table.merge (mobs_mc.monster_spawner, {
 
 local monster_spawner = mobs_mc.monster_spawner
 
-function stray_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache)
+function stray_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					    spawn_flag)
 	return mcl_weather.is_outdoor (node_pos)
 		and monster_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
-							 node_cache)
+							 node_cache,
+							 spawn_flag)
+end
+
+function stray_spawner:describe_additional_spawning_criteria ()
+	return monster_spawner.describe_additional_spawning_criteria (self)
+		.. "  " .. S ("Moreover, the block where the mob is to spawn must be exposed to sky.")
 end
 
 mcl_mobs.register_spawner (skeleton_spawner)
