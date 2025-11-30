@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_buckets x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-11-04 17:09+0000\n"
-"Last-Translator: Sotis <sotis@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2025-11-29 03:10+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
 "Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_buckets/ru/>\n"
 "Language: ru\n"
@@ -34,7 +34,7 @@ msgid "Bucket of Cod"
 msgstr "Ведро с треской"
 
 msgid "Bucket of Pufferfish"
-msgstr "Ведро с ежовиком"
+msgstr "Ведро с иглобрюхом"
 
 msgid "Bucket of Salmon"
 msgstr "Ведро с лососем"
@@ -47,6 +47,8 @@ msgstr "Используйте, чтобы опустошить ведро и в
 
 msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
 msgstr ""
+"Используйте, чтобы опустошить ведро и выпустить иглобрюха. Можно получить, "
+"использовав ведро с водой на иглобрюхе."
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr "Используйте, чтобы опустошить ведро и выпустить лосося. Можно получить, использовав ведро с водой на лососе."
@@ -61,7 +63,7 @@ msgid "Places a water source and a Cod."
 msgstr "Переносит источник воды и треску."
 
 msgid "Places a water source and a Pufferfish."
-msgstr ""
+msgstr "Переносит источник воды и иглобрюха."
 
 msgid "Places a water source and a Salmon."
 msgstr "Переносит источник воды и лосося."
@@ -76,7 +78,7 @@ msgid "This bucket is filled with water and a Cod."
 msgstr "Это ведро наполнено водой и содержит треску."
 
 msgid "This bucket is filled with water and a Pufferfish."
-msgstr ""
+msgstr "Это ведро наполнено водой и содержит иглобрюха."
 
 msgid "This bucket is filled with water and a Salmon."
 msgstr "Это ведро наполнено водой и содержит лосося."
