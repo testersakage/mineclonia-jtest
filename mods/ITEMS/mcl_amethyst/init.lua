@@ -174,25 +174,6 @@ core.register_craft({
 	},
 })
 
-if core.get_modpath("mcl_spyglass") then
-	core.clear_craft({output = "mcl_spyglass:spyglass",})
-	local function craft_spyglass(ingot)
-		core.register_craft({
-			output = "mcl_spyglass:spyglass",
-			recipe = {
-				{"mcl_amethyst:amethyst_shard"},
-				{ingot},
-				{ingot},
-			}
-		})
-	end
-	if core.get_modpath("mcl_copper") then
-		craft_spyglass("mcl_copper:copper_ingot")
-	else
-		craft_spyglass("mcl_core:iron_ingot")
-	end
-end
-
 -- Amethyst Growth
 local modpath = core.get_modpath (core.get_current_modname ())
 dofile(modpath .. "/grow.lua")
