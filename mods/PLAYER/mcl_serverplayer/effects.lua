@@ -2,6 +2,38 @@
 -- Skybox and weather support for client-side players.
 ------------------------------------------------------------------------
 
+mcl_serverplayer.default_precipitation_spawners = {
+	default = {
+		textures = {
+			"weather_pack_rain_raindrop_1.png",
+			"weather_pack_rain_raindrop_2.png",
+			"weather_pack_rain_raindrop_3.png",
+		},
+		velocity_min = vector.new (0, -14, 0),
+		velocity_max = vector.new (0, -14, 0),
+		particles_per_column = 28,
+		size = 3,
+		range_vertical = 10,
+		range_horizontal = 8,
+		period = 65536.0,
+		above_heightmap = true,
+	},
+	cold = {
+		textures = {
+			"weather_pack_snow_snowflake1.png",
+			"weather_pack_snow_snowflake2.png",
+		},
+		velocity_min = vector.new (-0.124, -0.53, -0.124),
+		velocity_max = vector.new (0.124, -0.49, 0.124),
+		particles_per_column = 30,
+		size = 1,
+		range_vertical = 10,
+		range_horizontal = 10,
+		period = 65536.0,
+		above_heightmap = true,
+	},
+}
+
 function mcl_serverplayer.update_skybox (state, player, dtime)
 	local self_pos = player:get_pos ()
 	local node_pos = mcl_util.get_nodepos (self_pos)
@@ -13,16 +45,34 @@ function mcl_serverplayer.update_skybox (state, player, dtime)
 		= mcl_biome_dispatch.get_fog_color (node_pos)
 	local weather_state = mcl_weather.state
 	local update_p = false
+	local need_climate_update = state.proto >= 5
+	local climate = nil
+
+	if need_climate_update then
+		local name = mcl_biome_dispatch.get_biome_name (node_pos)
+		if not mcl_worlds.has_weather (node_pos) then
+			climate = "none"
+		elseif mcl_biome_dispatch.is_position_cold (name, node_pos) then
+			climate = "cold"
+		elseif mcl_biome_dispatch.is_position_arid (name, node_pos) then
+			climate = "arid"
+		else
+			climate = "default"
+		end
+	end
 
 	if biome_sky_color ~= skybox_data.biome_sky_color
 		or biome_fog_color ~= skybox_data.biome_fog_color
-		or weather_state ~= skybox_data.weather_state then
+		or weather_state ~= skybox_data.weather_state
+		or (need_climate_update
+		    and climate ~= skybox_data.climate) then
 		update_p = true
 	end
 
 	skybox_data.biome_sky_color = biome_sky_color
 	skybox_data.biome_fog_color = biome_fog_color
 	skybox_data.weather_state = weather_state
+	skybox_data.climate = climate
 
 	if update_p then
 		mcl_serverplayer.send_effect_ctrl (player, skybox_data)

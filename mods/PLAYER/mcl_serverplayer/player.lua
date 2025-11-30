@@ -250,6 +250,9 @@ function mcl_serverplayer.init_player (client_state, player)
 			moon_texture = client_state.proto >= 3
 				and mcl_moon.get_moon_texture ()
 				or nil,
+			preciptation_spawners = client_state.proto >= 5
+				and mcl_serverplayer.default_precipitation_spawners
+				or nil,
 		})
 		mcl_serverplayer.send_effect_ctrl (player, initial)
 	end

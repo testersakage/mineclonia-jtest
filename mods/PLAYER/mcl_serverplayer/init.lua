@@ -94,7 +94,7 @@ end)
 -- Modchannel message definitions.
 -----------------------------------------------------------------------
 
-local MAX_PROTO_VERSION = 4
+local MAX_PROTO_VERSION = 5
 
 -- Serverbound messages.
 local SERVERBOUND_HELLO = 'aa'
