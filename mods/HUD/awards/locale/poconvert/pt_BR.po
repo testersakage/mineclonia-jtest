@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain awards x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-11-25 13:11+0000\n"
+"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/awards/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.14\n"
 
 msgid "@1 has made the advancement @2"
 msgstr "@1 concluiu a conquista @2"
@@ -23,13 +24,13 @@ msgid "Advancement Unlocked: @1"
 msgstr "Conquista Desbloqueada: @1"
 
 msgid "Hidden Advancement Unlocked!"
-msgstr ""
+msgstr "Avanço Oculto Desbloqueado!"
 
 msgid "Goal Reached!"
-msgstr ""
+msgstr "Meta Atingida!"
 
 msgid "Challenge Complete!"
-msgstr ""
+msgstr "Desafio Concluído!"
 
 msgid "Advancement Made!"
 msgstr "Conquista Concluída!"
@@ -60,12 +61,14 @@ msgstr "<nome>"
 
 msgid "Get the advancement statistics for the given player or yourself"
 msgstr ""
+"Confira as estatísticas de progresso do jogador selecionado ou as suas "
+"próprias"
 
 msgid "Error: No advancements available."
 msgstr "Erro: não há conquistas disponíveis."
 
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgid "(Hidden Advancement)"
 msgstr "(Conquista Oculta)"
@@ -98,89 +101,88 @@ msgid "Chat @1 times"
 msgstr "Converse @1 vezes"
 
 msgid "@1/@2 joins"
-msgstr ""
+msgstr "@1/@2 entradas"
 
 msgid "Join once"
-msgstr ""
+msgstr "Entrou uma vez"
 
 msgid "Join @1 times"
-msgstr ""
+msgstr "Entrou @1 vezes"
 
 msgid "@1/@2 deaths"
-msgstr ""
+msgstr "@1/@2 mortes"
 
 msgid "Die once of @1"
-msgstr ""
+msgstr "Morrer uma vez de @1"
 
 msgid "Die @1 times of @2"
-msgstr ""
+msgstr "Morrer @1 vezes de @2"
 
 msgid "Die @1 times."
-msgstr ""
+msgstr "Morrer @1 vezes."
 
 msgid "Mine @1 times"
-msgstr ""
+msgstr "Minerar @1 vezes"
 
 msgid "@1/@2 dug"
-msgstr ""
+msgstr "@1/@2 escavado"
 
 msgid "Mine: @1"
-msgstr ""
+msgstr "Minerar: @1"
 
 msgid "Mine: @1×@2"
-msgstr ""
+msgstr "Minerar: @1×@2"
 
 msgid "Mine @1 block."
-msgstr ""
+msgstr "Minerar @1 bloco."
 
 msgid "Mine @1 blocks."
-msgstr ""
+msgstr "Minerar @1 blocos."
 
 msgid "@1/@2 placed"
-msgstr ""
+msgstr "@1/@2 colocado(s)"
 
 msgid "Place: @1"
-msgstr ""
+msgstr "Colocar: @1"
 
 msgid "Place: @1×@2"
-msgstr ""
+msgstr "Colocar: @1×@2"
 
 msgid "Place @1 block."
-msgstr ""
+msgstr "Colocar @1 bloco."
 
 msgid "Place @1 blocks."
-msgstr ""
+msgstr "Colocar @1 blocos."
 
 msgid "@1/@2 crafted"
-msgstr ""
+msgstr "@1/@2 produzido"
 
 msgid "Craft: @1"
-msgstr ""
+msgstr "Produzir: @1"
 
 msgid "Craft: @1×@2"
-msgstr ""
+msgstr "Produzir: @1×@2"
 
 msgid "Craft @1 item"
-msgstr ""
+msgstr "Produzir @1 item"
 
 msgid "Craft @1 items."
-msgstr ""
+msgstr "Produzir @1 items."
 
 msgid "@1/@2 eaten"
-msgstr ""
+msgstr "@1/@2 comido(s)"
 
 msgid "Eat @1"
-msgstr ""
+msgstr "Comer @1"
 
 msgid "Eat @1×@2"
-msgstr ""
+msgstr "Comer @1×@2"
 
 msgid "Eat @1 item"
-msgstr ""
+msgstr "Comer @1 item"
 
 msgid "Eat @1 items."
-msgstr ""
+msgstr "Comer @1 itens."
 
 msgid "Enter one of the titular structures"
-msgstr ""
-
+msgstr "Insira uma das estruturas titulares"

@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-11-25 17:10+0000\n"
+"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/doc_items/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.14\n"
 
 msgid "This is a decorational block."
 msgstr "Esse é um bloco decorativo."
@@ -20,7 +21,7 @@ msgid "This block is a building block for creating various buildings."
 msgstr "Esse bloco é um bloco de construção para criar vários edifícios."
 
 msgid "This item is primarily used for crafting other items."
-msgstr "Esse item é usado principalmente para criar outros itens."
+msgstr "Esse item é usado principalmente para produzir outros itens."
 
 msgid "Hold it in your hand, then leftclick to eat it."
 msgstr "Segure-o na sua mão, depois clique com o botão esquerdo para comer."
@@ -152,7 +153,7 @@ msgid "Usage help: @1"
 msgstr "Como usar: @1"
 
 msgid "Maximum stack size: @1"
-msgstr "Tamanho máximo de empilhamento: @1"
+msgstr "Tamanho máximo de estoque: @1"
 
 msgid "This block points to liquids."
 msgstr "Esse bloco pode ser apontado para líquidos."
@@ -380,7 +381,7 @@ msgid "Item reference of items which are neither blocks, tools or weapons (esp. 
 msgstr "Referência de itens que não são blocos, ferramentas ou armas (especialmente itens de criação)"
 
 msgid "Mobs"
-msgstr ""
+msgstr "Mobs"
 
 msgid "Different Mobs"
 msgstr ""
@@ -411,4 +412,3 @@ msgstr "Um bloco transparente, basicamente um vazio. Isso geralmente fica no lug
 
 msgid "Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand."
 msgstr "Sempre que você não estiver empunhando nenhum item, você usa a mão que atua como uma ferramentacom caracteristicas próprias. Quando você está empunhando um item que não é uma ferramenta de mineração ou uma arma, ele se comportará como se fosse a mão."
-

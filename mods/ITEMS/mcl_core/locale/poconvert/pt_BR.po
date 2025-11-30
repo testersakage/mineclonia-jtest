@@ -3,27 +3,30 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-11-25 23:10+0000\n"
+"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_core/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.14\n"
 
 msgid "Stick"
 msgstr "Graveto"
 
 msgid "Sticks are a very versatile crafting material; used in countless crafting recipes."
-msgstr "Gravetos são materiais de fabricação muito versáteis; usados em inumeráveis receitas de fabricação."
+msgstr ""
+"Gravetos são materiais de produção muito versáteis; usados em inúmeras "
+"receitas de produção."
 
 msgid "Paper"
 msgstr "Papel"
 
 msgid "Paper is used to craft books and maps."
-msgstr "Papel é utilizado para fabricar livros e mapas."
+msgstr "Papel é usado para produzir livros e mapas."
 
 msgid "Coal"
 msgstr "Carvão"
@@ -35,7 +38,11 @@ msgid "Charcoal"
 msgstr "Carvão Vegetal"
 
 msgid "Charcoal is an alternative furnace fuel created by cooking wood in a furnace. It has the same burning time as coal and also shares many of its crafting recipes, but it can not be used to create coal blocks."
-msgstr "Carvão vegetal é um combustível alternativo de fornalha produzido ao cozinhar madeira em uma fornalha. Possui o mesmo tempo de queima que o carvão e também compartilha diversas receitas de fabricação, mas não pode ser usado para fabricar blocos de carvão."
+msgstr ""
+"Carvão vegetal é um combustível alternativo de fornalha produzido ao "
+"cozinhar madeira em uma fornalha. Possui o mesmo tempo de queima que o "
+"carvão e também compartilha diversas receitas de produção, mas não pode ser "
+"usado para produzir blocos de carvão."
 
 msgid "Iron Nugget"
 msgstr "Pepita de Ferro"
@@ -68,7 +75,7 @@ msgid "Iron Ingot"
 msgstr "Lingote de Ferro"
 
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
-msgstr "Ferro fundido. É usado para fabricar armaduras, ferramentas e o que não."
+msgstr "Ferro fundido. É usado para produzir armaduras, ferramentas e outros."
 
 msgid "Iron Material"
 msgstr ""
@@ -77,7 +84,7 @@ msgid "Gold Ingot"
 msgstr "Lingote de Ouro"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
-msgstr "Ouro fundido. É usado para fabricar armaduras, ferramentas e o que não."
+msgstr "Ouro fundido. É usado para produzir armaduras, ferramentas e outros."
 
 msgid "Gold Material"
 msgstr ""
@@ -104,7 +111,7 @@ msgid "Brick"
 msgstr "Tijolo"
 
 msgid "Bricks are used to craft brick blocks."
-msgstr "Tijolos são usados para fabricar blocos de tijolo."
+msgstr "Tijolos são usados para produzir blocos de tijolo."
 
 msgid "Flint"
 msgstr "Sílex"
@@ -164,7 +171,7 @@ msgid "Acacia Fence"
 msgstr ""
 
 msgid "Acacia Fence Gate"
-msgstr ""
+msgstr "Portinhola de Acácia"
 
 msgid "Acacia Hanging Sign"
 msgstr ""
@@ -224,7 +231,7 @@ msgid "Birch Fence"
 msgstr ""
 
 msgid "Birch Fence Gate"
-msgstr ""
+msgstr "Portinhola de Bétula"
 
 msgid "Birch Hanging Sign"
 msgstr ""
@@ -296,7 +303,7 @@ msgid "Dark Oak Fence"
 msgstr ""
 
 msgid "Dark Oak Fence Gate"
-msgstr ""
+msgstr "Portinhola de Carvalho Escuro"
 
 msgid "Dark Oak Hanging Sign"
 msgstr ""
@@ -362,7 +369,7 @@ msgid "Jungle Fence"
 msgstr ""
 
 msgid "Jungle Fence Gate"
-msgstr ""
+msgstr "Portinhola da Selva"
 
 msgid "Jungle Hanging Sign"
 msgstr ""
@@ -434,7 +441,7 @@ msgid "Oak Fence"
 msgstr ""
 
 msgid "Oak Fence Gate"
-msgstr ""
+msgstr "Portinhola de Carvalho"
 
 msgid "Oak Hanging Sign"
 msgstr ""
@@ -506,7 +513,7 @@ msgid "Spruce Fence"
 msgstr ""
 
 msgid "Spruce Fence Gate"
-msgstr ""
+msgstr "Portinhola de Pinheiro"
 
 msgid "Spruce Hanging Sign"
 msgstr ""
@@ -692,7 +699,7 @@ msgid "Stone Bricks"
 msgstr "Tijolo de Rocha"
 
 msgid "Chiseled Stone Bricks"
-msgstr "Tijolo de Rocha Cinzelado"
+msgstr "Tijolos de Pedra Entalhados"
 
 msgid "Cracked Stone Bricks"
 msgstr "Tijolo de Rocha Rachado"
@@ -809,10 +816,10 @@ msgid "Cut sandstone is a decorative building block."
 msgstr "Arenito cortado é um bloco de construção decorativo."
 
 msgid "Chiseled Sandstone"
-msgstr "Arenito Cinzelado"
+msgstr "Arenito Entalhado"
 
 msgid "Chiseled sandstone is a decorative building block."
-msgstr "Arenito cinzelado é um bloco de construção decorativo."
+msgstr "Arenito entalhado é um bloco de construção decorativo."
 
 msgid "Smooth Sandstone"
 msgstr "Arenito Liso"
@@ -839,10 +846,10 @@ msgid "Cut red sandstone is a decorative building block."
 msgstr "Arenito vermelho cortado é um bloco de construção decorativo."
 
 msgid "Chiseled Red Sandstone"
-msgstr "Arenito Vermelho Cinzelado"
+msgstr "Arenito Vermelho Entalhado"
 
 msgid "Chiseled red sandstone is a decorative building block."
-msgstr "Arenito vermelho cinzelado é um bloco de construção decorativo."
+msgstr "Arenito vermelho entalhado é um bloco de construção decorativo."
 
 msgid "Smooth Red Sandstone"
 msgstr "Arenito Vermelho Liso"
@@ -959,7 +966,10 @@ msgid "Top snow is a layer of snow. It melts near light sources other than the s
 msgstr "A cobertura de neve é uma camada de neve. Ela derrete próxima de fontes luminosas além do sol quando o nível de luz for 12 ou superior."
 
 msgid "Top snow can be stacked and has one of 8 different height levels. At levels 2-8, top snow is collidable. Top snow drops 2-9 snowballs, depending on its height."
-msgstr "Cobertura de neve pode ser empilhada e possui 8 diferentes níveis de altura. Aos níveis 2-8, a cobertura de neve é colisional. Cobertura de neve derruba 2-9 bolas de neve, dependendo de sua altura."
+msgstr ""
+"Cobertura de neve pode ser empilhada e possui 8 diferentes níveis de altura. "
+"Aos níveis 2-8, a cobertura de neve é colidível. A cobertura de neve solta 2-"
+"9 bolas de neve, dependendo de sua altura."
 
 msgid "This block can only be placed on full solid blocks and on another top snow (which increases its height)."
 msgstr "Esse bloco só pode ser colocado em blocos sólidos e em outras coberturas de neve (o que aumenta sua altura)."
@@ -1233,4 +1243,3 @@ msgstr ""
 
 msgid "Mossy Stone Brick Slab"
 msgstr ""
-
