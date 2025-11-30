@@ -268,7 +268,7 @@ function mcl_player.player_set_animation(player, anim_name, speed)
 end
 
 local function set_swimming(player, anim, anim_speed)
-	local pitch = - math.deg(player:get_look_vertical())
+	local pitch = math.deg(player:get_look_vertical())
 	local yaw = math.deg(player:get_look_horizontal())
 	local vel = player:get_velocity()
 	mcl_player.players[player].is_swimming = true
@@ -319,7 +319,7 @@ mcl_player.register_globalstep(function(player)
 	end
 
 	-- control head bone
-	local pitch = - math.deg(player:get_look_vertical())
+	local pitch = math.deg(player:get_look_vertical())
 	local yaw = math.deg(player:get_look_horizontal())
 
 	local player_vel_yaw = math.deg(core.dir_to_yaw(player_velocity))
