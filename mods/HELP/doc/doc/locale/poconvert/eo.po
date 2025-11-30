@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-11-23 09:13+0000\n"
-"Last-Translator: Notxor <notxor@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2025-11-29 12:55+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
 "Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
 "doc/eo/>\n"
 "Language: eo\n"
@@ -33,7 +33,7 @@ msgid "Entry"
 msgstr ""
 
 msgid "Error: No help available."
-msgstr ""
+msgstr "Eraro: Nenia helpo estas disponebla."
 
 msgid "No categories have been registered, but they are required to provide help."
 msgstr ""
@@ -45,7 +45,7 @@ msgid "Recommended mods: doc_basics, doc_items, doc_identifier, doc_encyclopedia
 msgstr ""
 
 msgid "Error: Access denied."
-msgstr ""
+msgstr "Eraro: atingo estas rifuzita."
 
 msgid "Access to the requested entry has been denied; this entry is secret. You may unlock access by progressing in the game. Figure out on your own how to unlock this entry."
 msgstr ""
@@ -81,7 +81,7 @@ msgid "Open a window providing help entries about Minetest and more"
 msgstr ""
 
 msgid "Help"
-msgstr ""
+msgstr "Helpo"
 
 msgid "Allows you to reveal all hidden help entries with /help_reveal"
 msgstr ""
