@@ -18,11 +18,6 @@ core.register_node("mcl_colorblocks:hardened_clay", {
 	_mcl_hardness = 1.25,
 })
 
-local on_rotate
-if core.get_modpath("screwdriver") then
-	on_rotate = screwdriver.rotate_simple
-end
-
 local canonical_color = "yellow"
 
 for color,colordef in pairs(mcl_dyes.colors) do
@@ -112,7 +107,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		is_ground_content = false,
 		sounds = mcl_sounds.node_sound_stone_defaults(),
 		_mcl_hardness = 1.4,
-		on_rotate = on_rotate,
+		on_rotate = screwdriver.rotate_simple,
 	})
 
 	if not is_canonical and doc_mod then

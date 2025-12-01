@@ -405,6 +405,7 @@ local anvildef = {
 	_mcl_hardness = 5,
 	_mcl_after_falling = damage_anvil_by_falling,
 
+	on_rotate = screwdriver.rotate_simple,
 	after_dig_node = drop_contents,
 	allow_metadata_inventory_take = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
@@ -577,9 +578,6 @@ local anvildef = {
 	end,
 }
 
-if core.get_modpath("screwdriver") then
-	anvildef.on_rotate = screwdriver.rotate_simple
-end
 
 core.register_node("mcl_anvils:anvil", table.merge(anvildef, {
 	description = S("Anvil"),
@@ -620,10 +618,8 @@ core.register_craft({
 	},
 })
 
-if core.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_anvils:anvil", "nodes", "mcl_anvils:anvil_damage_1")
-	doc.add_entry_alias("nodes", "mcl_anvils:anvil", "nodes", "mcl_anvils:anvil_damage_2")
-end
+doc.add_entry_alias("nodes", "mcl_anvils:anvil", "nodes", "mcl_anvils:anvil_damage_1")
+doc.add_entry_alias("nodes", "mcl_anvils:anvil", "nodes", "mcl_anvils:anvil_damage_2")
 
 -- Legacy
 core.register_lbm({
