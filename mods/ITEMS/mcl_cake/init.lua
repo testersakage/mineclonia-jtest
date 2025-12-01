@@ -65,6 +65,7 @@ core.register_node("mcl_cake:cake", {
 		end
 		-- Check if we were allowed to eat
 		if node.name == "mcl_cake:cake" or core.is_creative_enabled(clicker:get_player_name()) then
+			mcl_hunger.eat_anim_block[clicker] = 1
 			mcl_redstone.swap_node(pos, {name = "mcl_cake:cake_6", param2 = 0})
 			core.do_item_eat(2, ItemStack(), ItemStack("mcl_cake:cake"), clicker, {type="nothing"})
 		end

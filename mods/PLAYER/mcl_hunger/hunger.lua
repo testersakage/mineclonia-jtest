@@ -262,6 +262,10 @@ controls.register_on_hold (function (player, key)
 	local hp_change = core.get_item_group(itemstack:get_name(), "eatable")
 	local pointed_thing = mcl_util.get_pointed_thing (player, true)
 
+	if core.get_item_group(name, "no_eat_delay") > 0 then
+		return
+	end
+
 	if not mcl_player.get_player_setting(player, "mcl_hunger:eat_anim", true) then
 		if (mcl_hunger.last_eat[player] < 0) or (os.difftime(os.time(), mcl_hunger.last_eat[player]) >= 2) then
 			mcl_hunger.eat_effects(player, name, player:get_pos(), hp_change, def)
