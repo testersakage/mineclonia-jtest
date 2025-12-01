@@ -455,11 +455,7 @@ local function register_slab(subname, stairdef)
 		})
 
 	end
-
-	-- Help alias for the upper slab
-	if core.get_modpath("doc") then
-		doc.add_entry_alias("nodes", lower_slab, "nodes", upper_slab)
-	end
+	doc.add_entry_alias("nodes", lower_slab, "nodes", upper_slab)
 end
 
 local copied_groups = {
