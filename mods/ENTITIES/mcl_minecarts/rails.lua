@@ -346,8 +346,5 @@ core.register_craft({
 })
 
 
--- Aliases
-if core.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_minecarts:golden_rail", "nodes", "mcl_minecarts:golden_rail_on")
-end
+doc.add_entry_alias("nodes", "mcl_minecarts:golden_rail", "nodes", "mcl_minecarts:golden_rail_on")
 
