@@ -41,6 +41,7 @@ mcl_hunger.debug = false
 mcl_hunger.eat_anim_hud = {} -- track eating animation HUD
 mcl_hunger.eat_anim_timer = {} -- holding food RMB timer based on dtime
 mcl_hunger.eat_anim_block = {} -- if not nil then forbid eat animation
+mcl_hunger.eat_anim_effect = {} -- effect timer for precise interval
 
 dofile(modpath.."/api.lua")
 dofile(modpath.."/hunger.lua")

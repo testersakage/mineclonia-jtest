@@ -148,7 +148,6 @@ function mcl_hunger.eat_effects(user, itemname, pos, hunger_change, item_def, pi
 	else
 		-- Assume the item is a food
 		-- Add eat particle effect and sound
-		--local def = core.registered_items[itemname]
 		local texture = item_def.inventory_image
 		if not texture or texture == "" then
 			texture = item_def.wield_image
@@ -156,19 +155,27 @@ function mcl_hunger.eat_effects(user, itemname, pos, hunger_change, item_def, pi
 		-- Special item definition field: _food_particles
 		-- If false, force item to not spawn any food partiles when eaten
 		if item_def._food_particles ~= false and texture and texture ~= "" then
-			local v = user:get_velocity() or user:get_player_velocity()
-			for i = 0, math.min(math.max(8, hunger_change*2), 25) do
-				core.add_particle({
-					pos = { x = pos.x, y = pos.y, z = pos.z },
-					velocity = vector.add(v, { x = math.random(-1, 1), y = math.random(1, 2), z = math.random(-1, 1) }),
-					acceleration = { x = 0, y = math.random(-9, -5), z = 0 },
-					expirationtime = 1,
-					size = math.random(1, 2),
-					collisiondetection = true,
-					vertical = false,
-					texture = "[combine:3x3:" .. -i .. "," .. -i .. "=" .. texture,
-				})
-			end
+			-- get velocity once
+			local v = user.get_velocity and user:get_velocity() or user:get_player_velocity() or {x=0, y=0, z=0}
+			local count = math.min(math.max(8, hunger_change * 2), 25)
+			local texture_index = math.random(0, count)
+			core.add_particlespawner({
+				amount = count,
+				time = 0.01,
+				minpos = pos,
+				maxpos = pos,
+				minvel = vector.add(v, { x = -1, y = 1, z = -1 }),
+				maxvel = vector.add(v, { x =  1, y = 2, z =  1 }),
+				minacc = { x = 0, y = -9, z = 0 },
+				maxacc = { x = 0, y = -5, z = 0 },
+				minexptime = 0.5,
+				maxexptime = 0.8,
+				minsize = 1,
+				maxsize = 2,
+				collisiondetection = true,
+				vertical = false,
+				texture = "[combine:3x3:" .. -texture_index .. "," .. -texture_index .. "=" .. texture,
+			})
 		end
 		core.sound_play("mcl_hunger_bite", {
 			max_hear_distance = 12,
@@ -192,6 +199,7 @@ end
 
 function mcl_hunger.hud_eat_remove(player)
 	mcl_hunger.eat_anim_timer[player] = -math.huge
+	mcl_hunger.eat_anim_effect[player] = nil
 	player:hud_set_flags({wielditem = true})
 	player:hud_change(mcl_hunger.eat_anim_hud[player], "text", "blank.png")
 	if core.get_modpath("playerphysics") then
@@ -276,7 +284,11 @@ controls.register_on_hold (function (player, key)
 				playerphysics.add_physics_factor(player, "speed", "mcl_hunger:eat_anim", SPEED_WHILE_EAT)
 			end
 		end
-		if mcl_hunger.eat_anim_timer[player] % 0.2 <= 0.05 then
+		-- Eat animation sound & particle
+		local step = math.floor(mcl_hunger.eat_anim_timer[player] / 0.2)
+		local last_step = mcl_hunger.eat_anim_effect[player] or 0
+		if step > last_step then
+			mcl_hunger.eat_anim_effect[player] = step
 			mcl_hunger.eat_effects(player, name, player:get_pos(), hp_change, def)
 		end
 		-- Actual eat
