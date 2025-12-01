@@ -59,10 +59,11 @@ local pig = {
 		"mcl_farming:potato_item",
 		"mcl_farming:carrot_item",
 		"mcl_farming:beetroot_item",
-		"mcl_mobitems:carrot_on_a_stick"
+		"mcl_mobitems:carrot_on_a_stick",
+		"mcl_mobitems:carrot_on_a_stick_enchanted"
 	},
 	steer_class = "follow_item",
-	steer_item = "mcl_mobitems:carrot_on_a_stick",
+	steer_item = "group:controls_pig",
 	follow_herd_bonus = 1.1,
 	_csm_driving_enabled = true,
 }

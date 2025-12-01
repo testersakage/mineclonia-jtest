@@ -111,7 +111,7 @@ function mob_class:should_drive ()
 		end
 		local item = self.driver:get_wielded_item ()
 		local itemname = item and item:get_name ()
-		return self.steer_item == nil or itemname == self.steer_item
+		return self.steer_item == nil or mcl_util.is_item_or_in_group(itemname, self.steer_item)
 	end
 end
 
