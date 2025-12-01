@@ -258,16 +258,15 @@ end
 
 core.register_entity("mcl_tnt:tnt", TNT)
 
-if core.get_modpath("mcl_mobitems") then
-	core.register_craft({
-		output = "mcl_tnt:tnt",
-		recipe = {
-			{ "mcl_mobitems:gunpowder", "group:sand", "mcl_mobitems:gunpowder" },
-			{ "group:sand", "mcl_mobitems:gunpowder", "group:sand" },
-			{ "mcl_mobitems:gunpowder", "group:sand", "mcl_mobitems:gunpowder" }
-		},
-	})
-end
+
+core.register_craft({
+	output = "mcl_tnt:tnt",
+	recipe = {
+		{ "mcl_mobitems:gunpowder", "group:sand", "mcl_mobitems:gunpowder" },
+		{ "group:sand", "mcl_mobitems:gunpowder", "group:sand" },
+		{ "mcl_mobitems:gunpowder", "group:sand", "mcl_mobitems:gunpowder" }
+	},
+})
 
 if core.get_modpath("doc_identifier") then
 	doc.sub.identifier.register_object("mcl_tnt:tnt", "nodes", "mcl_tnt:tnt")
