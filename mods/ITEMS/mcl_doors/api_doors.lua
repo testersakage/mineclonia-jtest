@@ -392,11 +392,8 @@ function mcl_doors:register_door(name, def)
 			tt[2].."^[transformFX", tt[1].."^[transformFX", tt[1]
 		}
 	}, tpl_doors, tpl_top))
-	-- Add entry aliases for the Help
-	if core.get_modpath("doc") then
-		doc.add_entry_alias("craftitems", name, "nodes", name.."_b_1")
-		doc.add_entry_alias("craftitems", name, "nodes", name.."_b_2")
-		doc.add_entry_alias("craftitems", name, "nodes", name.."_t_1")
-		doc.add_entry_alias("craftitems", name, "nodes", name.."_t_2")
-	end
+	doc.add_entry_alias("craftitems", name, "nodes", name.."_b_1")
+	doc.add_entry_alias("craftitems", name, "nodes", name.."_b_2")
+	doc.add_entry_alias("craftitems", name, "nodes", name.."_t_1")
+	doc.add_entry_alias("craftitems", name, "nodes", name.."_t_2")
 end

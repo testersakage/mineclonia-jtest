@@ -20,10 +20,7 @@ local cx2 = { 0.125, -0.5, -0.125, 0.5, 1.01, 0.125 }
 local cz1 = { -0.125, -0.5, -0.5, 0.125, 1.01, -0.125 }
 local cz2 = { -0.125, -0.5, 0.125, 0.125, 1.01, 0.5 }
 
-local on_rotate
-if core.get_modpath("screwdriver") then
-	on_rotate = screwdriver.rotate_simple
-end
+local on_rotate = screwdriver.rotate_simple
 
 local function update_gate(pos, node)
 	if node.name:sub(-5) == "_open" then
@@ -292,9 +289,7 @@ function mcl_fences.register_fence_gate_def(name, definitions)
 		})
 	end
 
-	if core.get_modpath("doc") then
-		doc.add_entry_alias("nodes", fence_gate_name, "nodes", fence_gate_name_open)
-	end
+	doc.add_entry_alias("nodes", fence_gate_name, "nodes", fence_gate_name_open)
 
 	return fence_gate_name, fence_gate_name_open
 end

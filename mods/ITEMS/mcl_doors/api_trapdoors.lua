@@ -5,27 +5,24 @@ local function get_fpos(placer, pointed_thing)
 	return finepos.y % 1 or 0
 end
 
-local on_rotate
-if core.get_modpath("screwdriver") then
-	on_rotate = function(pos, node, _, mode, _)
-		-- Flip trapdoor vertically
-		if mode == screwdriver.ROTATE_AXIS then
-			local minor = node.param2
-			if node.param2 >= 20 then
-				minor = node.param2 - 20
-				if minor == 3 then minor = 1 elseif minor == 1 then minor = 3 end
+local function	on_rotate(pos, node, _, mode, _)
+	-- Flip trapdoor vertically
+	if mode == screwdriver.ROTATE_AXIS then
+		local minor = node.param2
+		if node.param2 >= 20 then
+			minor = node.param2 - 20
+			if minor == 3 then minor = 1 elseif minor == 1 then minor = 3 end
 
-				node.param2 = minor
-			else
-				if minor == 3 then minor = 1 elseif minor == 1 then minor = 3 end
+			node.param2 = minor
+		else
+			if minor == 3 then minor = 1 elseif minor == 1 then minor = 3 end
 
-				node.param2 = minor
-				node.param2 = node.param2 + 20
-			end
-			core.set_node(pos, node)
-
-			return true
+			node.param2 = minor
+			node.param2 = node.param2 + 20
 		end
+		core.set_node(pos, node)
+
+		return true
 	end
 end
 
@@ -202,7 +199,5 @@ function mcl_doors:register_trapdoor(name, def)
 		tiles = tiles_open
 	}))
 
-	if core.get_modpath("doc") then
-		doc.add_entry_alias("nodes", name, "nodes", name.."_open")
-	end
+	doc.add_entry_alias("nodes", name, "nodes", name.."_open")
 end
