@@ -625,6 +625,9 @@ function mcl_serverplayer.globalstep (player, dtime)
 			state.riptide_eligible = riptide
 		end
 	end
+	if mcl_serverplayer.is_csm_at_least (player, 6) then
+		mcl_serverplayer.update_biome_data (state, player, dtime)
+	end
 end
 
 function mcl_serverplayer.handle_movement_event (player, event)

@@ -94,7 +94,7 @@ end)
 -- Modchannel message definitions.
 -----------------------------------------------------------------------
 
-local MAX_PROTO_VERSION = 5
+local MAX_PROTO_VERSION = 6
 
 -- Serverbound messages.
 local SERVERBOUND_HELLO = 'aa'
@@ -114,6 +114,7 @@ local SERVERBOUND_TURN_VEHICLE = 'an'
 local SERVERBOUND_SHIELDCTRL = 'ao' -- Protocol version 1.
 local SERVERBOUND_EAT_ITEM = 'ap'
 local SERVERBOUND_RELEASE_TRIDENT_ITEM = 'aq' -- Protocol version 4.
+local SERVERBOUND_DISCARD_BIOME_DATA = 'ar' -- Protocol version 6.
 
 -- Clientbound messages.
 local CLIENTBOUND_HELLO = 'AA'
@@ -136,6 +137,7 @@ local CLIENTBOUND_OFFHAND_ITEM = 'AQ' -- Protocol version 1.
 local CLIENTBOUND_PLAYER_VITALS = 'AR'
 local CLIENTBOUND_EFFECT_CTRL = 'AS' -- Protocol version 2.
 local CLIENTBOUND_TRIDENT_CTRL = 'AT' -- Protocol version 4.
+local CLIENTBOUND_BIOME_DATA = 'AU' -- Protocol version 6.
 
 local MAX_PAYLOAD = 65533
 
@@ -289,6 +291,22 @@ function mcl_serverplayer.send_trident_ctrl (player, tbl)
 	})
 end
 
+function mcl_serverplayer.send_biome_data (player, index, meta)
+	local payload = index .. meta
+
+	-- The maximum size of the payload of a biome data message for
+	-- a volume 7x7x7 in size is 43904 b for the metadata and 6517
+	-- b for the index (= 50078 bytes), given that the largest of
+	-- biome metadata strings are 4^3*2 bytes in length, and index
+	-- entries comprise a 5-digit offset into the payload, a
+	-- 12-digit block hash, and two delimiter characters.
+	assert (#payload + 5 <= MAX_PAYLOAD,  "oversized ClientboundBiomeData")
+	modchannels[player]:send_all (table.concat {
+		CLIENTBOUND_BIOME_DATA,
+		tostring (#index), ",", index, meta,
+	})
+end
+
 -----------------------------------------------------------------------
 -- Handshakes.  When a client joins, it is not considered CSM-enabled
 -- till a SERVERBOUND_HELLO packet is received containing the protocol
@@ -326,6 +344,11 @@ local keys_to_copy = {
 	"_liquid_type",
 	"climbable",
 }
+local biome_keys_to_copy = {
+	"temperature",
+	"temperature_modifier",
+	"has_precipitation",
+}
 
 core.register_on_mods_loaded (function ()
 	local tbl = {}
@@ -343,6 +366,14 @@ end)
 mcl_serverplayer.handshake_item_defs = {}
 mcl_serverplayer.handshake_item_defs_v4 = {}
 local item_defs_v4
+
+local function serialize_id_to_name_map (id_to_name_map)
+	local tbl = {}
+	for id, biome in pairs (id_to_name_map) do
+		tbl[tostring (id)] = biome
+	end
+	return tbl
+end
 
 local function process_serverbound_hello (player, state, payload)
 	if state.handshake_status ~= "want_hello" then
@@ -391,6 +422,25 @@ local function process_serverbound_hello (player, state, payload)
 			}
 		else
 			serverbound_handshake.map_configuration = nil
+		end
+		if proto >= 6 then
+			serverbound_handshake.biome_data_available
+				= mcl_levelgen.levelgen_enabled
+			if mcl_levelgen.levelgen_enabled then
+				serverbound_handshake.biome_id_to_name_map
+					= serialize_id_to_name_map (mcl_levelgen.biome_id_to_name_map)
+				local biomes = {}
+				for name, def in pairs (mcl_levelgen.registered_biomes) do
+					local tbl = {}
+					for _, key in ipairs (biome_keys_to_copy) do
+						tbl[key] = def[key]
+					end
+					biomes[name] = tbl
+				end
+				serverbound_handshake.biome_definitions = biomes
+			end
+		else
+			serverbound_handshake.biome_data_available = nil
 		end
 		local payload = core.write_json (serverbound_handshake)
 		if (#payload % MAX_PAYLOAD) == 0 then
@@ -642,6 +692,21 @@ local function receive_modchannel_message_1 (player, message)
 				       .. " only be delivered when protocol version >= 4")
 			end
 			mcl_serverplayer.release_trident_item (player, state)
+		elseif msgtype == SERVERBOUND_DISCARD_BIOME_DATA then
+			if state.proto < 6 then
+				error ("ServerboundDiscardBiomeData messages require"
+				       .. " protocol version >= 6")
+			end
+
+			local list = string.split (payload, ',')
+			for i, hash in ipairs (list) do
+				list[i] = tonumber (hash)
+				if not list[i] then
+					error ("Invalid data in ServerboundDiscardBiomeData message")
+				end
+			end
+
+			mcl_serverplayer.discard_biome_data (player, state, list)
 		else
 			core.log ("warning", table.concat ({
 				"Client ", player:get_player_name (), " delivered",
@@ -673,3 +738,4 @@ dofile (modpath .. "/player.lua")
 dofile (modpath .. "/items.lua")
 dofile (modpath .. "/mount.lua")
 dofile (modpath .. "/effects.lua")
+dofile (modpath .. "/level.lua")

@@ -1921,6 +1921,7 @@ local function unhashmapblock (hash)
 	local z = hash % 4096 - 2048
 	return x, y, z
 end
+mcl_levelgen.unhashmapblock = unhashmapblock
 
 local function restore_feature_placement_queue ()
 	local blocks_generated = {}
