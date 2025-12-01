@@ -957,9 +957,7 @@ for i=0,3 do
 	})
 
 	-- Add entry aliases for the Help
-	if core.get_modpath("doc") and i > 0 then
-		doc.add_entry_alias("nodes", "mcl_core:frosted_ice_0", "nodes", "mcl_core:frosted_ice_"..i)
-	end
+	doc.add_entry_alias("nodes", "mcl_core:frosted_ice_0", "nodes", "mcl_core:frosted_ice_"..i)
 end
 
 local function on_place(itemstack, placer, pointed_thing)
@@ -1030,9 +1028,7 @@ for i=1,8 do
 	else
 		id = "mcl_core:snow_"..i
 		help = false
-		if core.get_modpath("doc") then
-			doc.add_entry_alias("nodes", "mcl_core:snow", "nodes", id)
-		end
+		doc.add_entry_alias("nodes", "mcl_core:snow", "nodes", id)
 		walkable = true
 	end
 	if i ~= 8 then
@@ -1092,8 +1088,6 @@ core.register_node("mcl_core:snowblock", {
 })
 
 -- Add entry aliases for the Help
-if core.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_core:stone_with_redstone", "nodes", "mcl_core:stone_with_redstone_lit")
-	doc.add_entry_alias("nodes", "mcl_core:water_source", "nodes", "mcl_core:water_flowing")
-	doc.add_entry_alias("nodes", "mcl_core:lava_source", "nodes", "mcl_core:lava_flowing")
-end
+doc.add_entry_alias("nodes", "mcl_core:stone_with_redstone", "nodes", "mcl_core:stone_with_redstone_lit")
+doc.add_entry_alias("nodes", "mcl_core:water_source", "nodes", "mcl_core:water_flowing")
+doc.add_entry_alias("nodes", "mcl_core:lava_source", "nodes", "mcl_core:lava_flowing")
