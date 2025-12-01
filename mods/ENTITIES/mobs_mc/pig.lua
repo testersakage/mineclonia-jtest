@@ -170,8 +170,7 @@ function pig:on_rightclick (clicker)
 
 	-- Accelerate pig when right clicked with carrot on a stick.
 	if self.driver and clicker == self.driver and
-	(self.driver:get_wielded_item():get_name() == "mcl_mobitems:carrot_on_a_stick" or
-	self.driver:get_wielded_item():get_name() == "mcl_mobitems:carrot_on_a_stick_enchanted") then
+	mcl_util.is_item_or_in_group(self.driver:get_wielded_item():get_name(), self.steer_item) then
 		if self:hog_boost () and not core.is_creative_enabled(clicker:get_player_name()) then
 			local inv = self.driver:get_inventory()
 			local wielditem = clicker:get_wielded_item ()
