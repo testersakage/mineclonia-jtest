@@ -44,8 +44,4 @@ core.register_craft({
 	}
 })
 
--- Add entry alias for the Help
-if core.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_redstone_lamp:lamp_off", "nodes", "mcl_redstone_lamp:lamp_on")
-end
-
+doc.add_entry_alias("nodes", "mcl_redstone_lamp:lamp_off", "nodes", "mcl_redstone_lamp:lamp_on")

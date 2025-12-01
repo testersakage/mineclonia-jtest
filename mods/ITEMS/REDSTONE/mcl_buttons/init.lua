@@ -191,8 +191,5 @@ mcl_buttons.register_button("polished_blackstone", {
 	push_sound = "mesecons_button_push",
 })
 
--- Add entry aliases for the Help
-if core.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_buttons:button_wood_off", "nodes", "mcl_buttons:button_wood_on")
-	doc.add_entry_alias("nodes", "mcl_buttons:button_stone_off", "nodes", "mcl_buttons:button_stone_on")
-end
+doc.add_entry_alias("nodes", "mcl_buttons:button_wood_off", "nodes", "mcl_buttons:button_wood_on")
+doc.add_entry_alias("nodes", "mcl_buttons:button_stone_off", "nodes", "mcl_buttons:button_stone_on")

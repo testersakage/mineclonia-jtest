@@ -165,6 +165,4 @@ core.register_craft({
 	}
 })
 
-if core.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_lever:lever_off", "nodes", "mcl_lever:lever_on")
-end
+doc.add_entry_alias("nodes", "mcl_lever:lever_off", "nodes", "mcl_lever:lever_on")

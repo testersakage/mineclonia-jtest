@@ -171,9 +171,7 @@ function mcl_pressureplates.register_pressure_plate(basename, def)
 		recipe = {{def.recipeitem, def.recipeitem}},
 	})
 
-	if core.get_modpath("doc") then
-		doc.add_entry_alias("nodes", basename .. "_off", "nodes", basename .. "_on")
-	end
+	doc.add_entry_alias("nodes", basename .. "_off", "nodes", basename .. "_on")
 end
 
 mcl_pressureplates.register_pressure_plate("stone", {
