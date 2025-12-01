@@ -66,6 +66,7 @@ local strider = {
 	follow = {
 		"mcl_crimson:warped_fungus",
 		"mcl_mobitems:warped_fungus_on_a_stick",
+		"mcl_mobitems:warped_fungus_on_a_stick_enchanted",
 	},
 	lava_damage = 0,
 	fire_damage = 0,
@@ -75,7 +76,7 @@ local strider = {
 	floats_on_lava = true,
 	floats = 0,
 	steer_class = "follow_item",
-	steer_item = "mcl_mobitems:warped_fungus_on_a_stick",
+	steer_item = "group:controls_strider",
 	run_bonus = 1.65,
 	follow_herd_bonus = 1.0,
 	follow_bonus = 1.4,

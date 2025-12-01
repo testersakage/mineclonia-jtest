@@ -57,3 +57,11 @@ function mcl_util.use_item_durability(itemstack, n)
 	local uses = mcl_util.calculate_durability(itemstack)
 	itemstack:add_wear_by_uses(uses * n)
 end
+
+function mcl_util.is_item_or_in_group(itemname, group_or_item)
+	if group_or_item:sub(1,6) == "group:" then
+		local g = core.get_item_group(itemname, group_or_item:sub(7))
+		return g ~= 0 and g or false
+	end
+	return itemname == group_or_item
+end
