@@ -1,10 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
 
-local equip_armor
-if core.get_modpath("mcl_armor") then
-	equip_armor = mcl_armor.equip_on_use
-end
-
 mcl_heads = {}
 mcl_heads.FLOOR_BOX = { -0.25, -0.5, -0.25, 0.25, 0.0, 0.25, }
 mcl_heads.CEILING_BOX = { -0.25, 0, -0.25, 0.25, 0.5, 0.25, }
@@ -42,7 +37,7 @@ mcl_heads.deftemplate = {
 	is_ground_content = false,
 	_mcl_armor_element = "head",
 	_mcl_hardness = 1,
-	on_secondary_use = equip_armor,
+	on_secondary_use = mcl_armor.equip_on_use,
 }
 
 local function normalize_rotation(rot)
