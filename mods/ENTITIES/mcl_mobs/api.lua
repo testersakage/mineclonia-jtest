@@ -503,6 +503,10 @@ function mob_class:mob_activate (staticdata, dtime)
 	return true
 end
 
+function mob_class:actionable_on_rightclick (player)
+	return self.tamed
+end
+
 local scale_chance = mcl_mobs.scale_chance
 
 local MAX_PHYSICS_DTIME = 0.075

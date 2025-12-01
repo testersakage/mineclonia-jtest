@@ -6742,6 +6742,10 @@ function villager:post_load_staticdata ()
 	end
 end
 
+function villager:actionable_on_rightclick (player)
+	return true
+end
+
 mcl_mobs.register_mob ("mobs_mc:villager", villager)
 
 ------------------------------------------------------------------------

@@ -86,6 +86,10 @@ function pig:on_breed (parent1, parent2)
 	end
 end
 
+function pig:actionable_on_rightclick (player)
+	return self.saddle == "yes"
+end
+
 ------------------------------------------------------------------------
 -- Pig steering.
 ------------------------------------------------------------------------

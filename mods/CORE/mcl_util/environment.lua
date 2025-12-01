@@ -448,6 +448,17 @@ function mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 			end
 		end
 	end
+	-- Prevent itemstack on_rightclick invoked when interact with certain mobs
+	if pointed_thing and pointed_thing.type == "object" then
+		local ent = pointed_thing.ref:get_luaentity()
+		if ent then
+			local def = core.registered_entities[ent.name]
+			if not def._unplaceable_by_default
+			and (ent.actionable_on_rightclick and ent:actionable_on_rightclick (player)) then
+				return itemstack
+			end
+		end
+	end
 end
 
 -- This function is essentially a wrapper around core.raycast to get the currently pointed at "pointed_thing"
