@@ -49,7 +49,7 @@ local strider = {
 	movement_speed = 3.5,
 	drops = {
 		{
-			name = "mcl_mobsitems:string",
+			name = "mcl_mobitems:string",
 			chance = 1,
 			min = 2,
 			max = 5,
@@ -236,7 +236,7 @@ function strider:on_rightclick (clicker)
 		self.saddle = "false"
 		self.drops = {
 			{
-				name = "mcl_mobsitems:string",
+				name = "mcl_mobitems:string",
 				chance = 1,
 				min = 1,
 				max = 3
@@ -260,7 +260,8 @@ function strider:on_rightclick (clicker)
 		self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}
 		self:attach (clicker)
 	elseif self.driver and clicker == self.driver then
-		if name == "mcl_mobitems:warped_fungus_on_a_stick" then
+		if name == "mcl_mobitems:warped_fungus_on_a_stick" or
+		name == "mcl_mobitems:warped_fungus_on_a_stick_enchanted" then
 			self:hog_boost ()
 		else
 			self:detach (clicker, {x = 1, y = 0, z = 0})

@@ -109,8 +109,9 @@ function pig:on_rightclick (clicker)
 
 	-- Feed pig
 	if self:follow_holding (clicker) then
-		if item_name ~= "mcl_mobitems:carrot_on_a_stick"
-			and self:feed_tame(clicker, 4, true, false) then
+		if item_name ~= "mcl_mobitems:carrot_on_a_stick" and
+			item_name ~= "mcl_mobitems:carrot_on_a_stick_enchanted" and
+			self:feed_tame(clicker, 4, true, false) then
 			return
 		end
 	end
@@ -168,7 +169,9 @@ function pig:on_rightclick (clicker)
 	end
 
 	-- Accelerate pig when right clicked with carrot on a stick.
-	if self.driver and clicker == self.driver and self.driver:get_wielded_item():get_name() == "mcl_mobitems:carrot_on_a_stick" then
+	if self.driver and clicker == self.driver and
+	(self.driver:get_wielded_item():get_name() == "mcl_mobitems:carrot_on_a_stick" or
+	self.driver:get_wielded_item():get_name() == "mcl_mobitems:carrot_on_a_stick_enchanted") then
 		if self:hog_boost () and not core.is_creative_enabled(clicker:get_player_name()) then
 			local inv = self.driver:get_inventory()
 			local wielditem = clicker:get_wielded_item ()
