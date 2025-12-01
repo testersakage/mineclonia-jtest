@@ -1,4 +1,4 @@
---local S = core.get_translator(core.get_current_modname())
+local S = core.get_translator(core.get_current_modname())
 
 local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / tonumber(core.settings:get("movement_speed_walk"))
 
@@ -260,10 +260,19 @@ controls.register_on_hold (function (player, key)
 	local h = mcl_hunger.get_hunger(player)
 	local def = core.registered_items[name]
 	local hp_change = core.get_item_group(itemstack:get_name(), "eatable")
+	local pointed_thing = mcl_util.get_pointed_thing (player, true)
+
+	if not mcl_player.get_player_setting(player, "mcl_hunger:eat_anim", true) then
+		if (mcl_hunger.last_eat[player] < 0) or (os.difftime(os.time(), mcl_hunger.last_eat[player]) >= 2) then
+			mcl_hunger.eat_effects(player, name, player:get_pos(), hp_change, def)
+			core.do_item_eat(hp_change, def._eat_replace_with, itemstack, player, pointed_thing)
+			player:set_wielded_item(itemstack)
+			mcl_hunger.last_eat[player] = os.time()
+		end
+		return
+	end
 
 	if core.get_item_group(itemstack:get_name(), "food") > 0 then
-		-- Don't eat when pointing object
-		local pointed_thing = mcl_util.get_pointed_thing (player, true)
 		local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 		if rc then
 			mcl_hunger.eat_anim_block[player] = 1
@@ -332,3 +341,10 @@ core.register_on_mods_loaded(function()
 		end
 	end
 end)
+
+mcl_player.register_player_setting("mcl_hunger:eat_anim", {
+	type = "boolean",
+	section = "Behavior",
+	short_desc = S("Enable eat animation"),
+	ui_default = true,
+})
