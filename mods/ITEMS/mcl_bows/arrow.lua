@@ -740,6 +740,4 @@ core.register_craft({
 	}
 })
 
-if core.get_modpath("doc_identifier") then
-	doc.sub.identifier.register_object("mcl_bows:arrow_entity", "craftitems", "mcl_bows:arrow")
-end
+doc.sub.identifier.register_object("mcl_bows:arrow_entity", "craftitems", "mcl_bows:arrow")

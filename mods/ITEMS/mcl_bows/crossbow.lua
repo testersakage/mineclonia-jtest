@@ -222,9 +222,8 @@ end
 local function reset_bow_state(player, also_reset_bows)
 	bow_load[player:get_player_name()] = nil
 	bow_index[player:get_player_name()] = nil
-	if core.get_modpath("playerphysics") then
-		playerphysics.remove_physics_factor(player, "speed", "mcl_bows:use_crossbow")
-	end
+
+	playerphysics.remove_physics_factor(player, "speed", "mcl_bows:use_crossbow")
 	if also_reset_bows then
 		reset_bows(player)
 	end
@@ -415,10 +414,8 @@ controls.register_on_hold(function(player, key)
 				play_load_sound(0, player)
 			end
 			player:set_wielded_item(wielditem)
-			if core.get_modpath("playerphysics") then
-				-- Slow player down when using bow
-				playerphysics.add_physics_factor(player, "speed", "mcl_bows:use_crossbow", PLAYER_USE_CROSSBOW_SPEED)
-			end
+			-- Slow player down when using bow
+			playerphysics.add_physics_factor(player, "speed", "mcl_bows:use_crossbow", PLAYER_USE_CROSSBOW_SPEED)
 			bow_load[name] = core.get_us_time()
 			bow_index[name] = player:get_wield_index()
 	else
@@ -482,9 +479,6 @@ core.register_craft({
 	}
 })
 
--- Add entry aliases for the Help
-if core.get_modpath("doc") then
-	doc.add_entry_alias("tools", "mcl_bows:crossbow", "tools", "mcl_bows:crossbow_0")
-	doc.add_entry_alias("tools", "mcl_bows:crossbow", "tools", "mcl_bows:crossbow_1")
-	doc.add_entry_alias("tools", "mcl_bows:crossbow", "tools", "mcl_bows:crossbow_2")
-end
+doc.add_entry_alias("tools", "mcl_bows:crossbow", "tools", "mcl_bows:crossbow_0")
+doc.add_entry_alias("tools", "mcl_bows:crossbow", "tools", "mcl_bows:crossbow_1")
+doc.add_entry_alias("tools", "mcl_bows:crossbow", "tools", "mcl_bows:crossbow_2")
