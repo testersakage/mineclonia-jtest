@@ -215,20 +215,17 @@ local function find_or_create_entity(pos, node_name, textures, param2, double, s
 		create_entity(pos, node_name, textures, param2, double, sound_prefix, mesh_prefix, animation_type, dir, entity_pos)
 end
 
-local no_rotate, simple_rotate
-if core.get_modpath("screwdriver") then
-	no_rotate = screwdriver.disallow
-	simple_rotate = function(pos, node, user, mode, new_param2)
-		if screwdriver.rotate_simple(pos, node, user, mode, new_param2) ~= false then
-			local nodename = node.name
-			local nodedef = core.registered_nodes[nodename]
-			local dir = core.facedir_to_dir(new_param2)
-			if animate_chests then
-				find_or_create_entity(pos, nodename, nodedef._chest_entity_textures, new_param2, false, nodedef._chest_entity_sound, nodedef._chest_entity_mesh, nodedef._chest_entity_animation_type, dir):set_yaw(dir)
-			end
-		else
-			return false
+local no_rotate = screwdriver.disallow
+local function simple_rotate(pos, node, user, mode, new_param2)
+	if screwdriver.rotate_simple(pos, node, user, mode, new_param2) ~= false then
+		local nodename = node.name
+		local nodedef = core.registered_nodes[nodename]
+		local dir = core.facedir_to_dir(new_param2)
+		if animate_chests then
+			find_or_create_entity(pos, nodename, nodedef._chest_entity_textures, new_param2, false, nodedef._chest_entity_sound, nodedef._chest_entity_mesh, nodedef._chest_entity_animation_type, dir):set_yaw(dir)
 		end
+	else
+		return false
 	end
 end
 

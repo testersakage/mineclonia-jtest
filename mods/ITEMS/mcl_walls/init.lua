@@ -192,10 +192,7 @@ function mcl_walls.register_wall(nodename, description, source, tiles, inventory
 			_pathfinding_class = "FENCE",
 		}, overrides or {}))
 
-		-- Add entry alias for the Help
-		if core.get_modpath("doc") then
-			doc.add_entry_alias("nodes", nodename, "nodes", nodename.."_"..i)
-		end
+		doc.add_entry_alias("nodes", nodename, "nodes", nodename.."_"..i)
 	end
 
 	core.register_node(nodename.."_16", table.merge({
@@ -221,10 +218,7 @@ function mcl_walls.register_wall(nodename, description, source, tiles, inventory
 		_mcl_baseitem = nodename,
 		_pathfinding_class = "FENCE",
 	}, overrides or {}))
-	-- Add entry alias for the Help
-	if core.get_modpath("doc") then
-		doc.add_entry_alias("nodes", nodename, "nodes", nodename.."_16")
-	end
+	doc.add_entry_alias("nodes", nodename, "nodes", nodename.."_16")
 
 	core.register_node(nodename.."_21", table.merge({
 		drawtype = "nodebox",
@@ -248,10 +242,7 @@ function mcl_walls.register_wall(nodename, description, source, tiles, inventory
 		_mcl_baseitem = nodename,
 		_pathfinding_class = "FENCE"
 	}, overrides or {}))
-	-- Add entry alias for the Help
-	if core.get_modpath("doc") then
-		doc.add_entry_alias("nodes", nodename, "nodes", nodename.."_21")
-	end
+	doc.add_entry_alias("nodes", nodename, "nodes", nodename.."_21")
 
 	-- Inventory item
 	core.register_node(nodename, table.merge({
