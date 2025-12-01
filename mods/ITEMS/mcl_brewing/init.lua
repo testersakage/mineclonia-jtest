@@ -209,11 +209,6 @@ end
 
 local drop_contents = mcl_util.drop_items_from_meta_container({"fuel", "input", "stand"})
 
-local on_rotate
-if core.get_modpath("screwdriver") then
-	on_rotate = screwdriver.rotate_simple
-end
-
 local doc_string =
 	S("To use a brewing stand, rightclick it.").."\n"..
 	S("To brew, you need blaze powder as fuel, a brewing material and at least 1 glass bottle filled with a liquid.").."\n"..
@@ -427,7 +422,7 @@ local tpl_brewing_stand = {
 		end
 	end,
 	on_timer = brewing_stand_timer,
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.rotate_simple,
 	_on_hopper_in = hopper_in,
 	_on_hopper_out = hopper_out,
 }
@@ -505,15 +500,13 @@ core.register_craft({
 
 core.register_alias("mcl_brewing:stand", "mcl_brewing:stand_000")
 
-if core.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_001")
-	doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_010")
-	doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_011")
-	doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_100")
-	doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_101")
-	doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_110")
-	doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_111")
-end
+doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_001")
+doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_010")
+doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_011")
+doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_100")
+doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_101")
+doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_110")
+doc.add_entry_alias("nodes", "mcl_brewing:stand_000", "nodes", "mcl_brewing:stand_111")
 
 core.register_lbm({
 	label = "Update brewing stand formspecs and invs to allow new sneak+click behavior",
