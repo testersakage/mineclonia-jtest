@@ -26,9 +26,7 @@ for i=1, 7 do
 		longdesc = S("Potato plants are plants which grow on farmland under sunlight in 8 stages, but only 4 stages can be visually told apart. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature.")
 	else
 		create = false
-		if core.get_modpath("doc") then
-			doc.add_entry_alias("nodes", "mcl_farming:potato_1", "nodes", "mcl_farming:potato_"..i)
-		end
+		doc.add_entry_alias("nodes", "mcl_farming:potato_1", "nodes", "mcl_farming:potato_"..i)
 	end
 
 	core.register_node("mcl_farming:potato_"..i, {

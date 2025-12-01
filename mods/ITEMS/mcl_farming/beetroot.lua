@@ -186,10 +186,8 @@ core.register_craft({
 
 mcl_farming:add_plant("plant_beetroot", "mcl_farming:beetroot", {"mcl_farming:beetroot_0", "mcl_farming:beetroot_1", "mcl_farming:beetroot_2"}, 68, 3)
 
-if core.get_modpath("doc") then
-	for i = 1, 2 do
-		doc.add_entry_alias("nodes", "mcl_farming:beetroot_0", "nodes", "mcl_farming:beetroot_" .. i)
-	end
+for i = 1, 2 do
+	doc.add_entry_alias("nodes", "mcl_farming:beetroot_0", "nodes", "mcl_farming:beetroot_" .. i)
 end
 
 core.register_alias("beetroot_seeds", "mcl_farming:beetroot_seeds")

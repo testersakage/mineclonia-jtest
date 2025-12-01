@@ -366,9 +366,7 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 			_mcl_hardness = 0,
 		})
 
-		if core.get_modpath("doc") then
-			doc.add_entry_alias("nodes", full_unconnected_stem, "nodes", connected_stem_names[i])
-		end
+		doc.add_entry_alias("nodes", full_unconnected_stem, "nodes", connected_stem_names[i])
 	end
 
 	core.register_abm({
