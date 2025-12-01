@@ -39,10 +39,7 @@ end
 
 local TNT_RANGE = 3
 
-local sounds
-if core.get_modpath("mcl_sounds") then
-	sounds = mcl_sounds.node_sound_wood_defaults()
-end
+local sounds = mcl_sounds.node_sound_wood_defaults()
 
 local longdesc
 if explosions_griefing then
@@ -268,6 +265,4 @@ core.register_craft({
 	},
 })
 
-if core.get_modpath("doc_identifier") then
-	doc.sub.identifier.register_object("mcl_tnt:tnt", "nodes", "mcl_tnt:tnt")
-end
+doc.sub.identifier.register_object("mcl_tnt:tnt", "nodes", "mcl_tnt:tnt")
