@@ -36,7 +36,6 @@ local function within_map_limits_p (x, y, z)
 end
 
 local buffer = {}
-local char = string.char
 local sub = string.sub
 local concat = table.concat
 
