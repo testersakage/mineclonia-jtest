@@ -610,16 +610,15 @@ core.register_node("mcl_anvils:anvil_damage_2", table.merge(anvildef1, {
 	tiles = { "mcl_anvils_anvil_top_damaged_2.png^[transformR90", "mcl_anvils_anvil_base.png", "mcl_anvils_anvil_side.png" }
 }))
 
-if core.get_modpath("mcl_core") then
-	core.register_craft({
-		output = "mcl_anvils:anvil",
-		recipe = {
-			{ "mcl_core:ironblock", "mcl_core:ironblock", "mcl_core:ironblock" },
-			{ "", "mcl_core:iron_ingot", "" },
-			{ "mcl_core:iron_ingot", "mcl_core:iron_ingot", "mcl_core:iron_ingot" },
-		},
-	})
-end
+
+core.register_craft({
+	output = "mcl_anvils:anvil",
+	recipe = {
+		{ "mcl_core:ironblock", "mcl_core:ironblock", "mcl_core:ironblock" },
+		{ "", "mcl_core:iron_ingot", "" },
+		{ "mcl_core:iron_ingot", "mcl_core:iron_ingot", "mcl_core:iron_ingot" },
+	},
+})
 
 if core.get_modpath("doc") then
 	doc.add_entry_alias("nodes", "mcl_anvils:anvil", "nodes", "mcl_anvils:anvil_damage_1")

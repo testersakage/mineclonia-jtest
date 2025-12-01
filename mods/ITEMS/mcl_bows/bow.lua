@@ -385,24 +385,23 @@ core.register_on_leaveplayer(function(player)
 	reset_bow_state(player, true)
 end)
 
-if core.get_modpath("mcl_core") and core.get_modpath("mcl_mobitems") then
-	core.register_craft({
-		output = "mcl_bows:bow",
-		recipe = {
-			{"", "mcl_core:stick", "mcl_mobitems:string"},
-			{"mcl_core:stick", "", "mcl_mobitems:string"},
-			{"", "mcl_core:stick", "mcl_mobitems:string"},
-		}
-	})
-	core.register_craft({
-		output = "mcl_bows:bow",
-		recipe = {
-			{"mcl_mobitems:string", "mcl_core:stick", ""},
-			{"mcl_mobitems:string", "", "mcl_core:stick"},
-			{"mcl_mobitems:string", "mcl_core:stick", ""},
-		}
-	})
-end
+core.register_craft({
+	output = "mcl_bows:bow",
+	recipe = {
+		{"", "mcl_core:stick", "mcl_mobitems:string"},
+		{"mcl_core:stick", "", "mcl_mobitems:string"},
+		{"", "mcl_core:stick", "mcl_mobitems:string"},
+	}
+})
+
+core.register_craft({
+	output = "mcl_bows:bow",
+	recipe = {
+		{"mcl_mobitems:string", "mcl_core:stick", ""},
+		{"mcl_mobitems:string", "", "mcl_core:stick"},
+		{"mcl_mobitems:string", "mcl_core:stick", ""},
+	}
+})
 
 -- Add entry aliases for the Help
 if core.get_modpath("doc") then
