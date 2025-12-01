@@ -175,8 +175,6 @@ core.register_node("mcl_farming:hay_block", {
 	_mcl_crafting_output = {single = {output = "mcl_farming:wheat_item 9"}}
 })
 
-if core.get_modpath("doc") then
-	for i=2,7 do
-		doc.add_entry_alias("nodes", "mcl_farming:wheat_1", "nodes", "mcl_farming:wheat_"..i)
-	end
+for i=2,7 do
+	doc.add_entry_alias("nodes", "mcl_farming:wheat_1", "nodes", "mcl_farming:wheat_"..i)
 end

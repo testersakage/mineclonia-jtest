@@ -233,10 +233,7 @@ local function register_filled_cauldron(water_level, description, liquid)
 		end,
 	})
 
-	-- Add entry aliases for the Help
-	if core.get_modpath("doc") then
-		doc.add_entry_alias("nodes", "mcl_cauldrons:cauldron", "nodes", id)
-	end
+	doc.add_entry_alias("nodes", "mcl_cauldrons:cauldron", "nodes", id)
 end
 
 -- Filled cauldrons (3 levels)
@@ -244,9 +241,7 @@ for i=1,3 do
 	register_filled_cauldron(i, S("Cauldron (@1/3 Water)", i))
 	register_filled_cauldron(i, S("Cauldron (@1/3 Lava)", i),"lava")
 	register_filled_cauldron(i, S("Cauldron (@1/3 Powder Snow)", i), "powder_snow")
-	if core.get_modpath("mclx_core") then
-		register_filled_cauldron(i, S("Cauldron (@1/3 River Water)", i),"river_water")
-	end
+	register_filled_cauldron(i, S("Cauldron (@1/3 River Water)", i),"river_water")
 end
 
 core.register_craft({
