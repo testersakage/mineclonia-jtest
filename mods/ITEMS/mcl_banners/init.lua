@@ -10,10 +10,7 @@ mcl_banners.max_craftable_layers = 12
 -- Max. number layers to be displayed in item descriptions.
 local max_layer_lines = 6
 
-local node_sounds
-if core.get_modpath("mcl_sounds") then
-	node_sounds = mcl_sounds.node_sound_wood_defaults()
-end
+local node_sounds = mcl_sounds.node_sound_wood_defaults()
 dofile(modpath.."/items.lua")
 
 -- Format:
@@ -92,8 +89,7 @@ function mcl_banners.update_description (itemstack, limit)
 	if name ~= "" and name:find("Ominous Banner") then name = "" end -- Pre-0.84.0 Ominous Banners
 	if name == "" then
 		name = def_name
-		if core.get_modpath("mcl_raids")
-		and mcl_raids.is_banner_item(itemstack, layers) then
+		if mcl_raids.is_banner_item(itemstack, layers) then
 			name = def_name:gsub(base_name, mcl_raids.ominous_banner_name)
 		end
 	else

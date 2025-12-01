@@ -228,11 +228,6 @@ core.register_entity("mcl_enchanting:book", {
 	_mcl_pistons_unmovable = true
 })
 
-local rotate
-if core.get_modpath("screwdriver") then
-	rotate = screwdriver.rotate_simple
-end
-
 core.register_node("mcl_enchanting:table", {
 	description = S("Enchanting Table"),
 	_tt_help = S("Spend experience, and lapis to enchant various items."),
@@ -253,7 +248,7 @@ core.register_node("mcl_enchanting:table", {
 	},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	groups = {pickaxey = 2, deco_block = 1, unmovable_by_piston = 1, pathfinder_partial = 2},
-	on_rotate = rotate,
+	on_rotate = screwdriver.rotate_simple,
 	on_rightclick = function(pos, _, clicker)
 		local player_meta = clicker:get_meta()
 		--local table_meta = core.get_meta(pos)
