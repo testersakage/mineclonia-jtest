@@ -264,9 +264,22 @@ function strider:on_rightclick (clicker)
 		self.driver_scale = {x = 1/vsize.x, y = 1/vsize.y}
 		self:attach (clicker)
 	elseif self.driver and clicker == self.driver then
-		if name == "mcl_mobitems:warped_fungus_on_a_stick" or
-		name == "mcl_mobitems:warped_fungus_on_a_stick_enchanted" then
-			self:hog_boost ()
+		if mcl_util.is_item_or_in_group(name, self.steer_item) then
+			if self:hog_boost () and not core.is_creative_enabled(clicker:get_player_name()) then
+				local inv = clicker:get_inventory()
+				local wielditem = clicker:get_wielded_item()
+				if wielditem:get_wear() > 62865 then
+					-- Break carrot on a stick
+					local def = wielditem:get_definition()
+					if def.sounds and def.sounds.breaks then
+						core.sound_play(def.sounds.breaks, {pos = clicker:get_pos(), max_hear_distance = 8, gain = 0.5}, true)
+					end
+					wielditem = {name = "mcl_fishing:fishing_rod", count = 1}
+				else
+					wielditem:add_wear(635)
+				end
+				inv:set_stack("main",self.driver:get_wield_index(), wielditem)
+			end
 		else
 			self:detach (clicker, {x = 1, y = 0, z = 0})
 		end
