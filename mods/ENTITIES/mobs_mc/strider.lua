@@ -128,6 +128,10 @@ function strider:on_spawn ()
 	end
 end
 
+function strider:actionable_on_rightclick (player)
+	return self.saddle == "yes"
+end
+
 ------------------------------------------------------------------------
 -- Strider mounting.
 ------------------------------------------------------------------------

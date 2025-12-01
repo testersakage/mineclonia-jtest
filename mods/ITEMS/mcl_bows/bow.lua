@@ -174,7 +174,10 @@ S("The speed and damage of the arrow increases the longer you charge. The regula
 		itemstack:get_meta():set_string("active", "true")
 		return itemstack
 	end,
-	on_secondary_use = function(itemstack)
+	on_secondary_use = function(itemstack, player, pointed_thing)
+		local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
+		if rc then return rc end
+
 		itemstack:get_meta():set_string("active", "true")
 		return itemstack
 	end,
