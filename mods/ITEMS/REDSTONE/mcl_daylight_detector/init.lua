@@ -107,8 +107,6 @@ core.register_craft({
 	burntime = 15
 })
 
-if core.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_daylight_detector:daylight_detector", "nodes", "mcl_daylight_detector:solar_panel_on")
-	doc.add_entry_alias("nodes", "mcl_daylight_detector:daylight_detector", "nodes", "mcl_daylight_detector:solar_panel_inverted_off")
-	doc.add_entry_alias("nodes", "mcl_daylight_detector:daylight_detector", "nodes", "mcl_daylight_detector:solar_panel_inverted_on")
-end
+doc.add_entry_alias("nodes", "mcl_daylight_detector:daylight_detector", "nodes", "mcl_daylight_detector:solar_panel_on")
+doc.add_entry_alias("nodes", "mcl_daylight_detector:daylight_detector", "nodes", "mcl_daylight_detector:solar_panel_inverted_off")
+doc.add_entry_alias("nodes", "mcl_daylight_detector:daylight_detector", "nodes", "mcl_daylight_detector:solar_panel_inverted_on")

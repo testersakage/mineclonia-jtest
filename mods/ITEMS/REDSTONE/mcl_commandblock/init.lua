@@ -301,7 +301,4 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
--- Add entry alias for the Help
-if core.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_commandblock:commandblock_off", "nodes", "mcl_commandblock:commandblock_on")
-end
+doc.add_entry_alias("nodes", "mcl_commandblock:commandblock_off", "nodes", "mcl_commandblock:commandblock_on")
