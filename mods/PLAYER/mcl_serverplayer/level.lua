@@ -35,6 +35,27 @@ local function within_map_limits_p (x, y, z)
 		and y >= -2048 and y <= 2047
 end
 
+local buffer = {}
+local char = string.char
+local sub = string.sub
+local concat = table.concat
+
+local function substitute_zeros (meta)
+	for i = 1, #meta do
+		local c = sub (meta, i, i)
+		if c == '\0' then
+			buffer[i] = '\255'
+		else
+			buffer[i] = c
+		end
+	end
+
+	for i = #meta + 1, #buffer do
+		buffer[i] = nil
+	end
+	return concat (buffer)
+end
+
 local v = vector.new ()
 
 function mcl_serverplayer.update_biome_data (state, player, dtime)
@@ -88,7 +109,12 @@ function mcl_serverplayer.update_biome_data (state, player, dtime)
 				insert (load_list, hash)
 				insert (load_list, len)
 				len = len + #meta
-				insert (meta_list, meta)
+				-- Replace biome ID 0 with ID 255, as
+				-- the Luanti modchannel API is not
+				-- NULL-byte clean.  It is not
+				-- necessary to account for run length
+				-- values, as they are never 0 anyway.
+				insert (meta_list, substitute_zeros (meta))
 			end
 		end
 	end

@@ -370,6 +370,12 @@ local item_defs_v4
 local function serialize_id_to_name_map (id_to_name_map)
 	local tbl = {}
 	for id, biome in pairs (id_to_name_map) do
+		assert (id < 255)
+		if id == 0 then
+			-- Biome ID 0 cannot be transmitted over
+			-- modchannels.
+			id = 255
+		end
 		tbl[tostring (id)] = biome
 	end
 	return tbl
