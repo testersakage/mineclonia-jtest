@@ -172,6 +172,10 @@ function wandering_trader:show_trade_progress_bar ()
 	return false
 end
 
+function wandering_trader:actionable_on_rightclick (player)
+	return true
+end
+
 ------------------------------------------------------------------------
 -- Wandering Trader AI.
 ------------------------------------------------------------------------
