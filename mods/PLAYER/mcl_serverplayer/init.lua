@@ -94,7 +94,7 @@ end)
 -- Modchannel message definitions.
 -----------------------------------------------------------------------
 
-local MAX_PROTO_VERSION = 6
+local MAX_PROTO_VERSION = 7
 
 -- Serverbound messages.
 local SERVERBOUND_HELLO = 'aa'
@@ -430,8 +430,17 @@ local function process_serverbound_hello (player, state, payload)
 			serverbound_handshake.map_configuration = nil
 		end
 		if proto >= 6 then
-			serverbound_handshake.biome_data_available
-				= mcl_levelgen.levelgen_enabled
+			if proto == 6 then
+				serverbound_handshake.biome_data_available
+					= mcl_levelgen.levelgen_enabled
+			elseif proto >= 7 then
+				serverbound_handshake.biome_data_available = true
+				if mcl_levelgen.levelgen_enabled then
+					serverbound_handshake.biome_data_type = "levelgen_data"
+				else
+					serverbound_handshake.biome_data_type = "engine_data"
+				end
+			end
 			if mcl_levelgen.levelgen_enabled then
 				serverbound_handshake.biome_id_to_name_map
 					= serialize_id_to_name_map (mcl_levelgen.biome_id_to_name_map)
@@ -444,6 +453,13 @@ local function process_serverbound_hello (player, state, payload)
 					biomes[name] = tbl
 				end
 				serverbound_handshake.biome_definitions = biomes
+			elseif proto >= 7 then
+				local id_to_name, name_to_def
+					= mcl_serverplayer.marshal_engine_biomes ()
+				serverbound_handshake.biome_id_to_name_map
+					= id_to_name
+				serverbound_handshake.biome_definitions
+					= name_to_def
 			end
 		else
 			serverbound_handshake.biome_data_available = nil
