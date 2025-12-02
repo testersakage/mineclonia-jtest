@@ -283,6 +283,8 @@ controls.register_on_hold (function (player, key)
 			return rc
 		end
 
+		mcl_shields.players[player].blocking = 0
+
 		local creative = core.is_creative_enabled(player:get_player_name())
 		local can_eat_when_full = creative
 				or (mcl_hunger.active == false)
