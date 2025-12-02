@@ -336,14 +336,6 @@ core.register_abm({
 	action = mcl_portals.end_portal_teleport,
 })
 
-local rotate_frame, rotate_frame_eye
-
-if core.get_modpath("screwdriver") then
-	-- Intentionally not rotatable
-	rotate_frame = false
-	rotate_frame_eye = false
-end
-
 local function maybe_activate_end_portal (pos, nosound)
 	local ok, ppos = check_end_portal_frame(pos)
 	if ok then
@@ -385,7 +377,7 @@ core.register_node("mcl_portals:end_portal_frame", {
 	light_source = 1,
 	drop = "",
 
-	on_rotate = rotate_frame,
+	on_rotate = false,
 
 	after_place_node = after_place_node,
 
@@ -421,7 +413,7 @@ core.register_node("mcl_portals:end_portal_frame_eye", {
 		end
 	end,
 
-	on_rotate = rotate_frame_eye,
+	on_rotate = false,
 
 	after_place_node = after_place_node,
 

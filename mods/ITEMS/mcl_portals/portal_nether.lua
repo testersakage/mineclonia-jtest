@@ -724,13 +724,11 @@ core.override_item("mcl_core:obsidian", {
 
 		if portal_placed then
 			core.log("action", "[mcl_portal] Portal activated at " .. tostring(pos))
-			if core.get_modpath("doc") then
-				doc.mark_entry_as_revealed(user:get_player_name(), "nodes", "mcl_portals:portal")
+			doc.mark_entry_as_revealed(user:get_player_name(), "nodes", "mcl_portals:portal")
 
-				local dim = mcl_worlds.pos_to_dimension(pos)
-				if core.get_modpath("awards") and dim ~= "nether" and user:is_player() then
-					awards.unlock(user:get_player_name(), "mcl:buildNetherPortal")
-				end
+			local dim = mcl_worlds.pos_to_dimension(pos)
+			if dim ~= "nether" and user:is_player() then
+				awards.unlock(user:get_player_name(), "mcl:buildNetherPortal")
 			end
 			return true
 		else
@@ -738,11 +736,6 @@ core.override_item("mcl_core:obsidian", {
 		end
 	end,
 })
-
-local on_rotate
-if core.get_modpath("screwdriver") then
-	on_rotate = screwdriver.disallow
-end
 
 core.register_node("mcl_portals:portal", {
 	description = S("Nether Portal"),
@@ -792,7 +785,7 @@ core.register_node("mcl_portals:portal", {
 	groups = { creative_breakable = 1, portal = 1, not_in_creative_inventory = 1, unmovable_by_piston = 1},
 	sounds = mcl_sounds.node_sound_glass_defaults(),
 	on_destruct = destroy_portal,
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.disallow,
 	_mcl_hardness = -1,
 	_mcl_blast_resistance = 0,
 	_on_object_in = function(pos, node, _)
