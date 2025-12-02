@@ -99,12 +99,12 @@ function mcl_serverplayer.update_biome_data (state, player, dtime)
 	end
 
 	local tbl = get_biome_state (state)
-	tbl.dtime_since_last_transfer
-		= tbl.dtime_since_last_transfer + dtime
-	if tbl.dtime_since_last_transfer < 0.5 then
+	local t = tbl.dtime_since_last_transfer + dtime
+	if t < 0.5 then
+		tbl.dtime_since_last_transfer = t
 		return
 	else
-		tbl.dtime_since_last_transfer = 0
+		tbl.dtime_since_last_transfer = t % 0.5
 	end
 
 	if tbl.num_loaded > MAX_LOADED_MAPBLOCKS then
