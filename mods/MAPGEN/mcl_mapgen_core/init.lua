@@ -14,11 +14,7 @@ core.register_alias("mapgen_water_source", "mcl_core:water_source")
 core.register_alias("mapgen_lava_source", "air") -- Built-in lava generator is too unpredictable, we generate lava on our own
 core.register_alias("mapgen_cobble", "mcl_core:cobble")
 
-if core.get_modpath("mclx_core") then
-	core.register_alias("mapgen_river_water_source", "mclx_core:river_water_source")
-else
-	core.register_alias("mapgen_river_water_source", "mcl_core:water_source")
-end
+core.register_alias("mapgen_river_water_source", "mclx_core:river_water_source")
 
 dofile(modpath.."/api.lua")
 
