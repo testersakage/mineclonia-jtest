@@ -15,9 +15,11 @@ local function send_biome_data_updates_p (state)
 end
 
 local function get_biome_meta (x, y, z)
-	return levelgen_enabled
-		and mcl_levelgen.get_biome_meta (x, y, z)
-		or mcl_serverplayer.get_engine_biome_meta (x, y, z)
+	if levelgen_enabled then
+		return mcl_levelgen.get_biome_meta (x, y, z)
+	else
+		return mcl_serverplayer.get_engine_biome_meta (x, y, z)
+	end
 end
 
 local function get_biome_state (state)
@@ -134,20 +136,23 @@ function mcl_serverplayer.update_biome_data (state, player, dtime)
 			v.x = x * 16
 			v.y = y * 16
 			v.z = z * 16
-			local meta = core.compare_block_status (v, "loaded")
-				and get_biome_meta (x, y, z)
-			if meta then
-				is_loaded[hash] = true
-				tbl.num_loaded = tbl.num_loaded + 1
-				insert (load_list, hash)
-				insert (load_list, len)
-				len = len + #meta
-				-- Replace biome ID 0 with ID 255, as
-				-- the Luanti modchannel API is not
-				-- NULL-byte clean.  It is not
-				-- necessary to account for run length
-				-- values, as they are never 0 anyway.
-				insert (meta_list, substitute_zeros (meta))
+			if core.compare_block_status (v, "loaded") then
+				local meta = get_biome_meta (x, y, z)
+				if meta then
+					is_loaded[hash] = true
+					tbl.num_loaded = tbl.num_loaded + 1
+					insert (load_list, hash)
+					insert (load_list, len)
+					len = len + #meta
+					-- Replace biome ID 0 with ID
+					-- 255, as the Luanti
+					-- modchannel API is not
+					-- NULL-byte clean.  It is not
+					-- necessary to account for
+					-- run length values, as they
+					-- are never 0 anyway.
+					insert (meta_list, substitute_zeros (meta))
+				end
 			end
 		end
 	end
