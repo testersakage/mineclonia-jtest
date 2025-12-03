@@ -138,13 +138,12 @@ end
 -- used for water bottles and river water bottles
 local function dispense_water_bottle(stack, _, droppos)
 	local node = core.get_node(droppos)
-	if node.name == "mcl_core:dirt" or node.name == "mcl_core:coarse_dirt" or node.name == "mcl_lush_caves:rooted_dirt" then
-		-- convert dirt/coarse dirt/rooted dirt to mud
+	if core.get_item_group(node.name, "converts_to_mud") ~= 0 then
 		core.set_node(droppos, {name = "mcl_mud:mud"})
 		core.sound_play("mcl_potions_bottle_pour", {pos=droppos, gain=0.5, max_hear_range=16}, true)
+
 		return ItemStack("mcl_potions:glass_bottle")
 	else
-		-- dont dispense into mud
 		return stack
 	end
 end
