@@ -210,6 +210,8 @@ function mcl_serverplayer.init_player (client_state, player)
 		= core.get_item_group (stack:get_name (), "elytra") > 0
 		and mcl_armor.elytra_usable (stack)
 	local level = mcl_enchanting.get_enchantment (boots, "depth_strider")
+	local soul_speed
+		= mcl_enchanting.get_enchantment (boots, "soul_speed")
 	local initial_caps = {
 		pose_defs = client_poses[player],
 		movement_arresting_nodes
@@ -226,6 +228,10 @@ function mcl_serverplayer.init_player (client_state, player)
 	client_state.can_sprint = can_sprint
 	client_state.can_fall_fly = can_fall_fly
 	client_state.depth_strider_level = level
+	if client_state.proto >= 8 then
+		client_state.soul_speed_level = soul_speed
+		initial_caps.soul_speed_level = soul_speed
+	end
 	client_state.movement_statistics = {
 		dist_swum = 0.0,
 		dist_walked_in_water = 0.0,
@@ -282,6 +288,19 @@ function mcl_serverplayer.set_depth_strider_level (player, level)
 		state.depth_strider_level = level
 		mcl_serverplayer.send_player_capabilities (player, {
 			depth_strider_level = level,
+		})
+	end
+end
+
+function mcl_serverplayer.set_soul_speed_level (player, level)
+	local state = mcl_serverplayer.client_states[player]
+	if not state or not state.proto or state.proto < 8 then
+		return
+	end
+	if level ~= state.soul_speed_level then
+		state.soul_speed_level = level
+		mcl_serverplayer.send_player_capabilities (player, {
+			soul_speed_level = level,
 		})
 	end
 end

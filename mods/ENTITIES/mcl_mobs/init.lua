@@ -228,6 +228,8 @@ mcl_mobs.mob_class = {
 	_inactivity_timer = 0,
 	standing_in = "ignore",
 	standing_on = "ignore",
+	_last_standing_in = nil,
+	_last_standing_on = nil,
 	opinion_sound_cooloff = 7, -- used to prevent sound spam of particular sound types
 	_frozen_for = 0,
 	_restriction_center = nil,
@@ -241,6 +243,9 @@ mcl_mobs.mob_class = {
 	_liquidtype = nil,
 	_last_liquidtype = nil,
 	raidmob = false,
+	_depth_strider_level = 0,
+	_soul_speed_level = 0,
+	_last_soul_speed_bonus = 0,
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = core.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"

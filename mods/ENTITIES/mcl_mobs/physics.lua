@@ -625,6 +625,20 @@ function mob_class:check_entity_cramming()
 	end
 end
 
+local floor = math.floor
+
+local function node_name_with_fallback (pos, fallback)
+	local cid, _, param2, pos_ok
+		= core.get_node_raw (floor (pos.x + 0.5),
+				     floor (pos.y + 0.5),
+				     floor (pos.z + 0.5))
+	if pos_ok then
+		return core.get_name_from_content_id (cid), param2
+	else
+		return fallback, 0
+	end
+end
+
 -- falling and fall damage
 -- returns true if mob died
 function mob_class:falling(pos)
@@ -637,22 +651,25 @@ function mob_class:falling(pos)
 		return false -- mob has teleported through portal - it's 99% not falling
 	end
 
-	local node = mcl_mobs.node_ok (pos, "air")
+	local node = node_name_with_fallback (pos, "air")
 	if node.name == "mcl_powder_snow:powder_snow" then
 		self.reset_fall_damage = 1
-	elseif core.registered_nodes[node.name].groups.water and core.registered_nodes[node.name].groups.water > 0 then
+	elseif core.registered_nodes[node].groups.water
+		and core.registered_nodes[node].groups.water > 0 then
 		-- Reset fall damage when falling into water first.
 		self.reset_fall_damage = 1
 	else
 		-- fall damage onto solid ground
 		if self.fall_damage == 1
-			and self.object:get_velocity().y == 0 then
-			local n = mcl_mobs.node_ok(vector.offset(pos,0,-1,0)).name
+			and self.object:get_velocity ().y == 0 then
 			-- init old_y to current height if not set.
+			local node = node_name_with_fallback (vector.offset (pos, 0, -1.0, 0),
+							      "air")
 			local self_pos = self.object:get_pos ()
 			local d = (self.old_y or self_pos.y) - self_pos.y
 
-			if d > 5 and n ~= "air" and n ~= "ignore" and self.reset_fall_damage ~= 1 then
+			if d > 5 and node ~= "air" and node ~= "ignore"
+				and self.reset_fall_damage ~= 1 then
 				local add = core.get_item_group(self.standing_on, "fall_damage_add_percent")
 				local damage = d - 5
 				if add ~= 0 then
@@ -830,6 +847,46 @@ end
 
 function mcl_mobs.make_physics_factor_persistent (id)
 	mcl_mobs.persistent_physics_factors[id] = true
+end
+
+------------------------------------------------------------------------
+-- Soul Speed & enchantment modifiers.
+------------------------------------------------------------------------
+
+local SPEED_MODIFIER_SOUL_SPEED = "mcl_mobs:soul_speed_movement_modifier"
+
+function mob_class:node_changed (standon)
+	if not standon or not self.wears_armor then
+		return
+	end
+
+	local soul_block = standon.groups.soul_block or 0
+	if soul_block <= 0 or self._soul_speed_level <= 0 then
+		if self._last_soul_speed_bonus ~= -1 then
+			self._last_soul_speed_bonus = -1
+			self:remove_physics_factor ("movement_speed", SPEED_MODIFIER_SOUL_SPEED)
+		end
+	else
+		local level = self._soul_speed_level
+		local f = 0.03 * (1.0 + level * 0.35) * 20.0
+		if self._last_soul_speed_bonus ~= f then
+			self:add_physics_factor ("movement_speed", SPEED_MODIFIER_SOUL_SPEED,
+						 f, "add", false)
+			self._last_soul_speed_bonus = f
+		end
+	end
+end
+
+function mob_class:reapply_soul_speed_modifiers ()
+	local standon = core.registered_nodes[self.standing_on]
+	self:node_changed (standon)
+end
+
+function mob_class:pre_motion_step (dtime)
+	if self.standing_on ~= self._last_standing_on then
+		local standon = core.registered_nodes[self.standing_on]
+		self:node_changed (standon)
+	end
 end
 
 ------------------------------------------------------------------------
@@ -1135,10 +1192,16 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 	end
 
 	local water_vec = self:check_water_flow (self_pos)
-	local velocity_factor = standon._mcl_velocity_factor or 1
+	local velocity_factor = 1.0
 	local liquidtype = self._last_liquidtype
 		or (self.floats_on_lava and self._liquidtype == "lava"
 			and "lava")
+
+	if self._soul_speed_level <= 0
+		or not standon.groups.soul_block
+		or standon.groups.soul_block <= 0 then
+		velocity_factor = standon._mcl_velocity_factor or 1.0
+	end
 
 	if liquidtype == "water" then
 		local saved_vy = v.y
@@ -1150,7 +1213,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 		local speed = self.water_velocity
 
 		-- Apply depth strider.
-		local level = math.min (3, mcl_enchanting.depth_strider_level (self))
+		local level = math.min (3, self._depth_strider_level)
 		level = touching_ground and level or level / 2
 		if level > 0 then
 			local delta = BASE_FRICTION * AIR_FRICTION - friction
@@ -1657,6 +1720,8 @@ function mob_class:post_motion_step (self_pos, dtime, moveresult)
 		self._was_stuck = true
 	end
 
+	self._last_standing_in = self.standing_in
+	self._last_standing_on = self.standing_on
 	self._last_liquidtype = self._liquidtype
 
 	----------------------------------------------------------------

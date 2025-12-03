@@ -54,6 +54,7 @@ if not core.settings:get_bool("mcl_enable_csm", false) then
 		send_vehicle_position = nop,
 		set_depth_strider_level = nop,
 		set_fall_flying_capable = nop,
+		set_soul_speed_level = nop,
 		sprinting_locally = nop,
 		update_ammo = nop,
 		update_vehicle = nop,
@@ -94,7 +95,7 @@ end)
 -- Modchannel message definitions.
 -----------------------------------------------------------------------
 
-local MAX_PROTO_VERSION = 7
+local MAX_PROTO_VERSION = 8
 
 -- Serverbound messages.
 local SERVERBOUND_HELLO = 'aa'

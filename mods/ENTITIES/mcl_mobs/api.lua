@@ -155,8 +155,13 @@ function mob_class:get_staticdata_table ()
 	tmp._water_current = nil
 	tmp._stuck_in = nil
 	tmp._liquidtype = nil
+	tmp._last_standing_in = nil
+	tmp._last_standing_on = nil
 	tmp._last_liquidtype = nil
 	tmp._reloaded = true
+	tmp._soul_speed_level = nil
+	tmp._last_soul_speed_bonus = nil
+	tmp._depth_strider_level = nil
 
 	-- Remove physics factors that are not persistent and revert
 	-- fields that were modified and disapply them.
@@ -465,6 +470,7 @@ function mob_class:mob_activate (staticdata, dtime)
 		self._run_armor_init = true
 	else
 		mcl_armor.head_entity_equip (self.object)
+		self:initialize_armor_enchantments ()
 	end
 
 	if self.on_spawn and not self.on_spawn_run then
@@ -511,6 +517,19 @@ local scale_chance = mcl_mobs.scale_chance
 
 local MAX_PHYSICS_DTIME = 0.075
 local is_limbo_pos = mcl_biome_dispatch.is_limbo_pos
+local floor = math.floor
+
+local function node_name_with_fallback (pos, fallback)
+	local cid, _, param2, pos_ok
+		= core.get_node_raw (floor (pos.x + 0.5),
+				     floor (pos.y + 0.5),
+				     floor (pos.z + 0.5))
+	if pos_ok then
+		return core.get_name_from_content_id (cid), param2
+	else
+		return fallback, 0
+	end
+end
 
 function mob_class:on_step (dtime, moveresult)
 	local pos = self.object:get_pos ()
@@ -573,20 +592,21 @@ function mob_class:on_step (dtime, moveresult)
 	local bbase = pos.y + self.collisionbox[2] + 0.5
 	feet.y = math.floor (bbase + 1.0e-2)
 	if bbase - feet.y <= 1.0e-2 then
-		self.standing_in = mcl_mobs.node_ok (feet, "air").name
+		local name, _ = node_name_with_fallback (feet, "air")
+		self.standing_in = name
 		feet.y = feet.y - 1
-		local node = mcl_mobs.node_ok (feet, "air")
-		self.standing_on = node.name
-		self.standing_on_param2 = node.param2
+		local name, param2 = node_name_with_fallback (feet, "air")
+		self.standing_on = name
+		self.standing_on_param2 = param2
 	else
-		local node = mcl_mobs.node_ok (feet, "air")
-		self.standing_in = node.name
+		local name, param2 = node_name_with_fallback (feet, "air")
+		self.standing_in = name
 		self.standing_on = self.standing_in
-		self.standing_on_param2 = node.param2
+		self.standing_on_param2 = param2
 	end
 	local head_y = cbox[2] + (cbox[5] - cbox[2]) * 0.75
 	local pos_head = vector.offset (pos, 0, head_y, 0)
-	self.head_in = mcl_mobs.node_ok (pos_head, "air").name
+	self.head_in = node_name_with_fallback (pos_head, "air")
 
 	if self:check_jockey_status () then
 		return
@@ -602,6 +622,7 @@ function mob_class:on_step (dtime, moveresult)
 		else
 			self:halt_in_tracks ()
 		end
+		self:pre_motion_step (dtime)
 		self:motion_step (dtime, moveresult, pos)
 		self:rotate_step (dtime)
 		return
@@ -616,6 +637,7 @@ function mob_class:on_step (dtime, moveresult)
 		local phys_dtime = math.min (dtime, MAX_PHYSICS_DTIME)
 		self:navigation_step (dtime, moveresult)
 		self:movement_step (dtime, moveresult)
+		self:pre_motion_step (dtime)
 		self:motion_step (phys_dtime, moveresult, pos)
 	else
 		-- At times damage is applied and kills this mob

@@ -73,6 +73,7 @@ function mcl_armor.update_player(player, info)
 	mcl_armor.player_view_range_factors[player] = info.view_range_factors
 	mcl_serverplayer.set_fall_flying_capable (player, info.elytra_present)
 	mcl_serverplayer.set_depth_strider_level (player, info.depth_strider_level)
+	mcl_serverplayer.set_soul_speed_level (player, info.soul_speed_level)
 end
 
 local function is_armor_action(inventory_info)

@@ -371,6 +371,7 @@ function mcl_armor.update(obj)
 		view_range_factors = {},
 		elytra_present = false,
 		depth_strider_level = 0,
+		soul_speed_level = 0,
 	}
 	local resp_lv = 0
 
@@ -425,6 +426,8 @@ function mcl_armor.update(obj)
 				if i == 5 then
 					info.depth_strider_level
 						= mcl_enchanting.get_enchantment (itemstack, "depth_strider")
+					info.soul_speed_level
+						= mcl_enchanting.get_enchantment (itemstack, "soul_speed")
 				end
 			end
 		end

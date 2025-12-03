@@ -231,6 +231,7 @@ function mob_class:drive (moving_anim, stand_anim, can_fly, dtime, moveresult)
 	end
 
 	self:apply_driver_input (speed, pos, moveresult, dtime)
+	self:pre_motion_step (dtime)
 	self:motion_step (phys_dtime, moveresult, pos)
 
 	-- This function is called after motion_step to apply forces

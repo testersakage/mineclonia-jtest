@@ -16,7 +16,19 @@ local function get_armor_texture (obj, stack)
 	return t
 end
 
-function mob_class:set_armor_texture()
+function mob_class:initialize_armor_enchantments ()
+	-- Recompute physics modifiers that are derived from armor
+	-- enchantments.
+	local depth_strider, soul_speed
+		= mcl_enchanting.mob_physics_enchantment_levels (self)
+	self._depth_strider_level = depth_strider
+	if soul_speed ~= self._soul_speed_level then
+		self._soul_speed_level = soul_speed
+		self:reapply_soul_speed_modifiers ()
+	end
+end
+
+function mob_class:set_armor_texture ()
 	if not self.wears_armor then
 		return
 	end
@@ -42,6 +54,12 @@ function mob_class:set_armor_texture()
 			self.base_texture[slot] = texture
 		end
 		self:set_textures (self.base_texture)
+		-- XXX: this function's responsibilities extend beyond
+		-- applying armor textures already and it is invoked
+		-- wherever the armor list is altered, but it could be
+		-- more elegant to call
+		-- `initialize_armor_enchantments' separately.
+		self:initialize_armor_enchantments ()
 	end
 	mcl_armor.head_entity_equip (self.object)
 end

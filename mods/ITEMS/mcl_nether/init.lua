@@ -168,13 +168,30 @@ mcl_player.register_globalstep_slow(function(player)
 	-- Standing on soul sand or soul soil?
 	if core.get_item_group(mcl_player.players[player].nodes.stand, "soul_block") > 0 then
 		-- TODO: Tweak walk speed
-		local boots = player:get_inventory():get_stack("armor", 5)
+		local inv = player:get_inventory ()
+		local boots = inv:get_stack("armor", 5)
 		local soul_speed = mcl_enchanting.get_enchantment(boots, "soul_speed")
 		-- If player wears Soul Speed boots, increase speed
 		if soul_speed > 0 then
 			playerphysics.add_physics_factor(player, "speed", "mcl_playerplus:soul_sand", soul_speed * 0.105 + 1.3)
-		-- otherwise walk slower on soul sand
+			-- Apply a 4% chance of damaging the boots per
+			-- tick, taking into account that each "slow"
+			-- globalstep is supposed to extend over 10
+			-- ticks.
+
+			if not core.is_creative_enabled (player:get_player_name ()) then
+				for i = 1, 10 do
+					if math.random () < 0.04 then
+						mcl_armor.use_durability (player, inv, 5, boots, 1)
+						if boots:is_empty () then
+							mcl_armor.update (player)
+							break
+						end
+					end
+				end
+			end
 		elseif mcl_player.players[player].nodes.stand == "mcl_nether:soul_sand" then
+			-- Otherwise walk slower on soul sand.
 			playerphysics.add_physics_factor(player, "speed", "mcl_playerplus:soul_sand", 0.4)
 		else
 			playerphysics.remove_physics_factor(player, "speed", "mcl_playerplus:soul_sand")
