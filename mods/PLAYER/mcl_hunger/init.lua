@@ -18,7 +18,7 @@ end
 
 mcl_hunger.HUD_TICK = 0.1
 
-mcl_hunger.EAT_DELAY = 1.6
+mcl_hunger.EAT_DELAY = 1.61
 
 -- Exhaustion increase
 mcl_hunger.EXHAUST_DIG = 5  -- after digging node

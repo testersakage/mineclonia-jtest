@@ -6,6 +6,11 @@ local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / t
 function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
 	if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
 
+	if mcl_hunger.get_hunger(user) >= 20
+		or (os.difftime(os.time(), mcl_hunger.last_eat[user]) < 2) then
+		return
+	end
+
 	local def = core.registered_items[itemstack:get_name()]
 	if def and def._eat_effect then
 		def._eat_effect(itemstack, user)
@@ -18,6 +23,8 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 			return result
 		end
 	end
+
+	mcl_hunger.last_eat[user] = os.time()
 
 	core.sound_play("mcl_hunger_eat", {
 		max_hear_distance = 12,
@@ -262,17 +269,14 @@ controls.register_on_hold (function (player, key)
 	local hp_change = core.get_item_group(itemstack:get_name(), "eatable")
 	local pointed_thing = mcl_util.get_pointed_thing (player, true)
 
-	if core.get_item_group(name, "no_eat_delay") > 0 then
+	if core.get_item_group(name, "no_eat_delay") > 0 or h >= 20  then
 		return
 	end
 
 	if not mcl_player.get_player_setting(player, "mcl_hunger:eat_anim", true) then
-		if (mcl_hunger.last_eat[player] < 0) or (os.difftime(os.time(), mcl_hunger.last_eat[player]) >= 2) then
-			mcl_hunger.eat_effects(player, name, player:get_pos(), hp_change, def)
-			core.do_item_eat(hp_change, def._eat_replace_with, itemstack, player, pointed_thing)
-			player:set_wielded_item(itemstack)
-			mcl_hunger.last_eat[player] = os.time()
-		end
+		mcl_hunger.eat_effects(player, name, player:get_pos(), hp_change, def)
+		core.do_item_eat(hp_change, def._eat_replace_with, itemstack, player, pointed_thing)
+		player:set_wielded_item(itemstack)
 		return
 	end
 
@@ -291,9 +295,7 @@ controls.register_on_hold (function (player, key)
 				or core.get_item_group(itemstack:get_name(), "can_eat_when_full") == 1
 
 		-- Start eating animation
-		-- Don't allow eating when player has full hunger bar (some exceptional items apply)
-		if mcl_hunger.eat_anim_timer[player] == -math.huge
-			and (can_eat_when_full or h < 20) then
+		if mcl_hunger.eat_anim_timer[player] == -math.huge then
 			mcl_hunger.hud_eat_add(player)
 			if core.get_modpath("playerphysics") then
 				playerphysics.add_physics_factor(player, "speed", "mcl_hunger:eat_anim", SPEED_WHILE_EAT)
@@ -336,6 +338,7 @@ core.register_on_mods_loaded(function()
 	for name, def in pairs(core.registered_items) do
 		if def.groups.eatable and def.groups.eatable > 0 then
 			core.override_item(name, {
+				touch_interaction = "short_dig_long_place",
 				on_place = def.on_place or function (itemstack, player, pointed_thing)
 					local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 					if rc then
