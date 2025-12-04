@@ -55,7 +55,7 @@ function playerphysics.add_physics_factor(player, attribute, id, value)
 		if player:is_player() and not a.fov_absolute then
 			player:set_fov(raw_value, true, 0.1)
 		end
-	else
+	elseif not mcl_serverplayer.is_csm_capable (player) then
 		player:set_physics_override({[attribute] = raw_value})
 	end
 end
@@ -75,7 +75,7 @@ function playerphysics.remove_physics_factor(player, attribute, id)
 		if player:is_player() and not a.fov_absolute then
 			player:set_fov(raw_value, true, 0.1)
 		end
-	else
+	elseif not mcl_serverplayer.is_csm_capable (player) then
 		player:set_physics_override({[attribute] = raw_value})
 	end
 end

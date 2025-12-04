@@ -3,6 +3,12 @@
 ------------------------------------------------------------------------
 
 local S = core.get_translator (core.get_current_modname ())
+local enable_engine_anticheat
+	= core.settings:get_bool ("mcl_serverplayer_enable_anticheat", true)
+if core.is_singleplayer () then
+	enable_engine_anticheat = false
+end
+
 local client_poses = {}
 local persistent_physics_factors = {}
 
@@ -581,6 +587,9 @@ end
 function mcl_serverplayer.globalstep (player, dtime)
 	local state = mcl_serverplayer.client_states[player]
 	local self_pos = player:get_pos ()
+	if state.rocketing then
+		state.rocketing = state.rocketing - dtime
+	end
 	mcl_serverplayer.check_movement (state, player, self_pos)
 	if state.is_sprinting then
 		mcl_sprint.spawn_particles (player, self_pos)
@@ -647,6 +656,9 @@ function mcl_serverplayer.globalstep (player, dtime)
 	if mcl_serverplayer.is_csm_at_least (player, 6) then
 		mcl_serverplayer.update_biome_data (state, player, dtime)
 	end
+	if enable_engine_anticheat then
+		mcl_serverplayer.anticheat_globalstep (state, player, dtime)
+	end
 end
 
 function mcl_serverplayer.handle_movement_event (player, event)
@@ -685,6 +697,7 @@ function mcl_serverplayer.use_rocket (user, duration)
 		})
 		return false
 	else
+		state.rocketing = duration
 		mcl_serverplayer.send_rocket_use (user, duration)
 		return true
 	end
@@ -907,5 +920,292 @@ function mcl_serverplayer.update_vitals (player)
 			state.last_saturation = saturation
 			state.last_health = health
 		end
+	end
+end
+
+------------------------------------------------------------------------
+-- Anticheat integration.
+------------------------------------------------------------------------
+
+local AIR_DRAG			= 0.98
+local AIR_FRICTION		= 0.91
+local SPRINTING_WATER_DRAG	= 0.9
+local BASE_FRICTION		= 0.6
+local BASE_FRICTION3		= math.pow (0.6, 3)
+local DOLPHIN_GRANTED_FRICTION	= 0.96
+local FALL_FLYING_DRAG_HORIZ	= 0.99
+local BASE_SLIPPERY_1		= 0.989
+local BASE_SLIPPERY		= 0.98
+
+local function scale_speed (speed, friction)
+	local f = BASE_FRICTION3 / (friction * friction * friction)
+	return speed * f
+end
+
+-- Luanti's built-in anticheat is quite rudimentary and operates by
+-- comparing time elapsed between movement packets to the minimum time
+-- required for players to traverse the distance they have covered
+-- given their greatest movement speed or climb speed parameter, as
+-- the case may be.
+--
+-- Compatibility with this anticheat is implemented by adjusting these
+-- server-side movement parameters to be consistent with the amount of
+-- movement the client is entitled to perform.  Unfortunately, it does
+-- not appear trivially possible effectively to prevent players
+-- equipped with elytra from cheating.
+
+local mathexp = math.exp
+local mathlog = math.log
+-- local mathpow = math.pow
+
+local mathmin = math.min
+local mathmax = math.max
+
+local function walk_speed_max (movement_speed, friction)
+	local g = AIR_FRICTION * friction
+	local s = scale_speed (movement_speed * AIR_DRAG, friction)
+	-- p''(x) = p'(x) * -(1.0 - g) + s
+	-- p''(x) = s * exp (g * x - x)
+	-- 0.00001 = p''(log (0.00001 / s) / (g - 1))
+	-- p'(x) = (((s * exp (-((g - 1.0) * x))) / (1.0 - g)) + C) * exp ((g - 1.0) * x)
+	-- p'(x) = (exp(-x) * (s * exp (g * x) - s * exp (s))) / g - 1
+
+	local x = mathlog (0.00001 / s) / (g - 1)
+	local dx = (mathexp (-x) * (s * mathexp (g * x) - s * mathexp (x))) / (g - 1)
+	return dx
+end
+
+local function jump_speed_max (jump_height, leaping)
+	return jump_height + leaping * 2.0
+end
+
+local function swim_speed_max (movement_speed, water_velocity,
+			       water_friction, velocity_factor,
+			       depth_strider_level,
+			       has_dolphins_grace)
+	local g = water_friction * velocity_factor
+	local s = water_velocity
+
+	local level = mathmin (3, depth_strider_level)
+	if level > 0 then
+		local delta = BASE_FRICTION * AIR_FRICTION - g
+		g = g + delta * level / 3
+		s = g + (movement_speed - s) * level / 3
+	end
+
+	if has_dolphins_grace then
+		g = DOLPHIN_GRANTED_FRICTION
+	end
+	s = s * AIR_FRICTION
+
+	local x = mathlog (0.00001 / s) / (g - 1)
+	local dx = (mathexp (-x) * (s * mathexp (g * x) - s * mathexp (x))) / (g - 1)
+
+	-- p''(x) = -p'(x) * (1 - g) + s + ((20 - p'(x)) * 0.085 * g)
+	-- p''(x) = 0.1*(10*s+17*g)*exp(0.915*g*x-x)
+	-- p'(x) = -((((200*s+340*g)*exp(x-0.915*g*x)-200*s-340*g)*exp(0.915*g*x-x))/(183*g-200))
+	-- n = p''((200*log((10*n)/(10*s+17*g)))/(183*g-200))
+
+	local x = -((200 * mathlog (100000 * s + 170000 * g)) / (183 * g - 200))
+	local t1 = ((200 * s + 340 * g)
+		* mathexp (x - 0.915 * g * x) - 200 * s - 340 * g)
+		* mathexp (0.915 * g * x - x)
+	local t2 = 183 * g - 200
+	local dy = -(t1 / t2)
+	return dx, dy
+end
+
+--[[
+local function fall_flying_fall_max (s, g)
+	-- p''(x) = ((g^(x + 1) * log (g) * s) / (g - 1))
+	-- 1e-10 = p''((log (((g-1) * 1e-10) / (log (g) * s)) - log (g)) / log (g))
+	-- p'(x) = (g^(x + 1) * s) / (g - 1) - (g * s) / (g - 1)
+
+	local x = (mathlog (((g - 1) * 1e-10) / (mathlog (g) * s)) - mathlog (g))
+		/ mathlog (g)
+	local v = (mathpow (g, x + 1) * s) / (g - 1) - (g * s) / (g - 1)
+	return v
+end
+]]--
+
+-- local mathsqrt = math.sqrt
+local mathcos = math.cos
+local mathabs = math.abs
+local ELYTRA_FLIGHT_TIME = 10000.0
+
+local function fall_flying_speed_max (t, pitch, gravity, drag, drag_horiz)
+	local j = mathcos (pitch) * mathcos (pitch)
+	local k = mathabs (mathcos (pitch))
+	local s = -gravity * (-1.0 + j * 0.75)
+	local g = drag
+	local h = drag_horiz
+
+	-- j = cos (pitch) ^ 2
+	-- k = abs (cos (pitch))
+	-- s = -gravity * (-1.0 + j * 0.75)
+	-- g = drag
+	-- h = drag_horiz
+
+	-- y''(t) = (s + (y(t) + s) * -0.1 * j) * g - y(t) * (1.0 - g)
+	-- x''(t) = ((y(t) + s) * -0.1 * j / k) * h - x(t) * (1.0 - h)
+
+	local yt = ((10*g*j-100*g)*s*mathexp(-(((g*j-10*g+10)*t)/10)))/(10*(g*j-10*g+10))-((g*j-10*g)*s)/(g*j-10*g+10)
+	local xt = ((10*g*h*j^2-100*g*h*j)*s*mathexp(-(((g*j-10*g+10)*t)/10)))/(10*(g^2*j^2+(10*g*h-20*g^2+10*g)*j+(100-100*g)*h+100*g^2-100*g)*k)-(h^2*j*s*mathexp(-((1-h)*t)))/(((g*h-g)*j+10*h^2+(-(10*g)-10)*h+10*g)*k)+(h*j*s)/(((g*h-g)*j+(10-10*g)*h+10*g-10)*k)
+	return xt, yt
+end
+
+local function apply_physics_factors (factors, field_name, base)
+	local total = base
+	local to_add = {}
+	local to_add_multiply_base = {}
+	local to_multiply_total = {}
+	for _, value in pairs (factors) do
+		if value.field == field_name then
+			if value.op == "scale_by" then
+				table.insert (to_multiply_total, value.value)
+			elseif value.op == "add_multiplied_base" then
+				table.insert (to_add_multiply_base, value.value)
+			elseif value.op == "add_multiplied_total" then
+				table.insert (to_multiply_total, 1.0 + value.value)
+			elseif value.op == "add" then
+				table.insert (to_add, value.value)
+			end
+		end
+	end
+	for _, value in ipairs (to_add) do
+		total = total + value
+	end
+	base = total
+	for _, value in ipairs (to_add_multiply_base) do
+		total = total + base * value
+	end
+	for _, value in ipairs (to_multiply_total) do
+		total = total * value
+	end
+	return total, base
+end
+
+local DEFAULT_MOVEMENT_SPEED = 2.0
+local DEFAULT_GRAVITY = -1.6
+local DEFAULT_WATER_VELOCITY = 0.4
+local DEFAULT_WATER_FRICTION = 0.8
+local DEFAULT_JUMP_HEIGHT = 8.4
+
+local BASE_ROCKET_BOOST = 2.0
+local ROCKET_BOOST_FORCE = 30.0
+
+function mcl_serverplayer.player_movement_speed (player, state)
+	local desired_speed_walk
+	local desired_speed_climb
+	local self_pos = player:get_pos ()
+	local node_pos = mcl_util.get_nodepos (self_pos)
+	local node, _ = core.get_node (node_pos)
+	node_pos.y = node_pos.y - 1
+	local node_below, _ = core.get_node (node_pos)
+	local factors = persistent_physics_factors[player] or {}
+	local base_movement_speed, initial_base
+		= apply_physics_factors (factors, "movement_speed",
+					 DEFAULT_MOVEMENT_SPEED)
+	local can_sprint = state.can_sprint
+
+	if state.soul_speed_level > 0
+		and core.get_item_group (node_below.name, "soul_block") > 0 then
+		local level = 0.03 * (1.0 + state.soul_speed_level * 0.35) * 20.0
+		base_movement_speed = base_movement_speed + level
+	end
+
+	-- Is this player submerged in a fluid?
+	if core.get_item_group (node.name, "water") > 0
+		or core.get_item_group (node.name, "river_water") > 0
+		or core.get_item_group (node.name, "lava") > 0 then
+		local water_velocity
+			= apply_physics_factors (factors, "water_velocity",
+						 DEFAULT_WATER_VELOCITY)
+		local water_friction
+			= apply_physics_factors (factors, "water_friction",
+						 DEFAULT_WATER_FRICTION)
+		local movement_speed = base_movement_speed
+		if can_sprint then
+			water_friction = SPRINTING_WATER_DRAG
+			if state.is_sprinting then
+				movement_speed = movement_speed + initial_base * 0.3
+			end
+		end
+
+		local depth_strider = state.depth_strider_level
+		local dolphins_grace
+			= mcl_potions.has_effect (player, "dolphin_grace")
+
+		local vx, vy = swim_speed_max (movement_speed,
+					       water_velocity,
+					       water_friction,
+					       1.0,
+					       depth_strider,
+					       dolphins_grace)
+		desired_speed_walk = vx
+		desired_speed_climb = vy
+	elseif state.can_fall_fly and state.is_fall_flying then
+		local gravity = apply_physics_factors (factors, "gravity",
+						       DEFAULT_GRAVITY)
+		-- XXX: Lua can't trust this.
+		local pitch = -player:get_look_vertical ()
+		local vx, vy = fall_flying_speed_max (ELYTRA_FLIGHT_TIME,
+						      pitch, gravity, AIR_DRAG,
+						      FALL_FLYING_DRAG_HORIZ)
+		if state.rocketing and state.rocketing > -2.0 then
+			vx = mathmax (vx, ROCKET_BOOST_FORCE + BASE_ROCKET_BOOST)
+			vy = mathmax (vy, ROCKET_BOOST_FORCE + BASE_ROCKET_BOOST)
+			desired_speed_walk = vx
+			desired_speed_climb = mathabs(vy)
+		elseif pitch >= 0 then
+			desired_speed_walk = vx
+			desired_speed_climb = mathabs (vy) * 0.35
+		else
+			desired_speed_walk = vx
+			desired_speed_climb = mathmax (vy, 0)
+		end
+	else
+		local leaping = mcl_potions.get_effect_level (player, "leaping")
+		local jump_height = apply_physics_factors (factors, "jump_height",
+							   DEFAULT_JUMP_HEIGHT)
+		local vy = jump_speed_max (jump_height, leaping)
+		local movement_speed = base_movement_speed
+		if state.is_sprinting then
+			movement_speed = movement_speed + initial_base * 0.3
+		end
+		local slippery = core.get_item_group (node_below.name, "slippery")
+		local friction = 1
+		if slippery > 3 then
+			friction = BASE_SLIPPERY_1
+		elseif slippery > 0 then
+			friction = BASE_SLIPPERY
+		end
+		local vx = walk_speed_max (movement_speed, friction)
+		desired_speed_walk = vx
+		-- A velocity of 4.0 is always attainable when
+		-- climbing.
+		desired_speed_climb = mathmax (vy, 4.0)
+	end
+
+	return desired_speed_walk, desired_speed_climb
+end
+
+local movement_speed_walk = core.settings:get ("movement_speed_walk")
+	or 4
+local movement_speed_climb = core.settings:get ("movement_speed_climb")
+	or 6.5
+
+function mcl_serverplayer.anticheat_globalstep (state, player, dtime)
+	if core.check_player_privs (player, "fly") then
+		player:set_physics_override ({
+			speed_walk = 100.0,
+			speed_climb = 100.0,
+		})
+	else
+		local vx, vy = mcl_serverplayer.player_movement_speed (player, state)
+		player:set_physics_override ({
+			speed_walk = vx / movement_speed_walk,
+			speed_climb = vy / movement_speed_climb / 3.574,
+		})
 	end
 end

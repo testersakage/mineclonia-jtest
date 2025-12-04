@@ -264,6 +264,24 @@ mcl_old_spawn_icons (Old spawn icons instead of eggs) bool false
 # is needed to take advantage of this.
 mcl_enable_csm (Enable Support for the mineclonia CSM) bool false
 
+# Enable anticheat integration for the mcl_serverplayer client-side mod.
+#
+# Enabling this setting will prompt the server to adjust engine-level
+# movement statistics to reflect the amount of movement a player is
+# entitled to perform by right of its equipment and server-side status
+# effects.  If disabled, the Luanti anticheat will apply Luanti's
+# default restrictions to players connecting with the CSM, which
+# generally causes the anticheat to be triggered in error when
+# sprinting or fall flying.  In consequence of time constraints, it
+# was not possible to implement effective cheat suppression for
+# players equipped with elytra and actively fall flying, and therefore
+# such players should be considered impossible to keep under control;
+# if preventing cheating by such means is important to you, we suggest
+# disabling this option for the present.
+#
+# This option produces no effect when mcl_enable_csm is disabled.
+mcl_serverplayer_enable_anticheat (Enable anti-cheat integration for CSM clients) bool false
+
 # Set this to true to use an alternative event queue implementation
 # that preserves insertion order for events with the same priority/tick.
 mcl_redstone_ordered_event_queue (Enable ordered event queue) bool false
