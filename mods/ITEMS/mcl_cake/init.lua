@@ -20,7 +20,8 @@ local cake_box = {
 }
 
 local cake_groups = {
-	handy = 1, attached_node = 1, dig_by_piston = 1, food = 2, no_eat_delay = 1, unsticky = 1
+	handy = 1, attached_node = 1, dig_by_piston = 1, food = CAKE_HUNGER_POINTS,
+	no_eat_delay = 1, unsticky = 1
 }
 
 local tpl_cake = {
@@ -46,7 +47,7 @@ local tpl_cake = {
 				mcl_redstone.update_comparators(pos)
 			end
 
-			core.do_item_eat(2, ItemStack(), ItemStack(node.name), clicker, {type = "nothing"})
+			core.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack(node.name), clicker, {type = "nothing"})
 		end
 	end,
 	_mcl_spawn_food_particles = false,
