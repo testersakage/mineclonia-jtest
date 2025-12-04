@@ -7,55 +7,67 @@ local CAKE_HUNGER_POINTS = 2
 
 local S = core.get_translator(core.get_current_modname())
 
-local cake_texture = {"cake_top.png","cake_bottom.png","cake_inner.png","cake_side.png","cake_side.png","cake_side.png"}
-local slice_1 = { -7/16, -8/16, -7/16, -5/16, 0/16, 7/16}
-local slice_2 = { -7/16, -8/16, -7/16, -3/16, 0/16, 7/16}
-local slice_3 = { -7/16, -8/16, -7/16, -1/16, 0/16, 7/16}
-local slice_4 = { -7/16, -8/16, -7/16, 1/16, 0/16, 7/16}
-local slice_5 = { -7/16, -8/16, -7/16, 3/16, 0/16, 7/16}
-local slice_6 = { -7/16, -8/16, -7/16, 5/16, 0/16, 7/16}
-
-local full_cake = { -7/16, -8/16, -7/16, 7/16, 0/16, 7/16}
-
-core.register_craft({
-	output = "mcl_cake:cake",
-	recipe = {
-		{"mcl_mobitems:milk_bucket", "mcl_mobitems:milk_bucket", "mcl_mobitems:milk_bucket"},
-		{"mcl_core:sugar", "mcl_throwing:egg", "mcl_core:sugar"},
-		{"mcl_farming:wheat_item", "mcl_farming:wheat_item", "mcl_farming:wheat_item"},
+local cake_box = {
+	slices = {
+		{-0.4375, -0.5, -0.4375, -0.3125, 0, 0.4375},
+		{-0.4375, -0.5, -0.4375, -0.1875, 0, 0.4375},
+		{-0.4375, -0.5, -0.4375, -0.0625, 0, 0.4375},
+		{-0.4375, -0.5, -0.4375, 0.0625, 0, 0.4375},
+		{-0.4375, -0.5, -0.4375, 0.1875, 0, 0.4375},
+		{-0.4375, -0.5, -0.4375, 0.3125, 0, 0.4375}
 	},
-	replacements = {
-		{"mcl_mobitems:milk_bucket", "mcl_buckets:bucket_empty"},
-		{"mcl_mobitems:milk_bucket", "mcl_buckets:bucket_empty"},
-		{"mcl_mobitems:milk_bucket", "mcl_buckets:bucket_empty"},
-	},
-})
+	full_cake = {-0.4375, -0.5, -0.4375, 0.4375, 0, 0.4375}
+}
 
-core.register_node("mcl_cake:cake", {
+local cake_groups = {
+	handy = 1, attached_node = 1, dig_by_piston = 1, food = 2, no_eat_delay = 1, unsticky = 1
+}
+
+local tpl_cake = {
 	description = S("Cake"),
-	_tt_help = S("With 7 tasty slices!").."\n"..S("Hunger points: +@1 per slice", CAKE_HUNGER_POINTS),
-	_doc_items_longdesc = S("Cakes can be placed and eaten to restore hunger points. A cake has 7 slices. Each slice restores 2 hunger points and 0.4 saturation points. Cakes will be destroyed when dug or when the block below them is broken."),
-	_doc_items_usagehelp = S("Place the cake anywhere, then rightclick it to eat a single slice. You can't eat from the cake when your hunger bar is full."),
-	tiles = {"cake_top.png","cake_bottom.png","cake_side.png","cake_side.png","cake_side.png","cake_side.png"},
-	inventory_image = "cake.png",
-	wield_image = "cake.png",
 	paramtype = "light",
 	is_ground_content = false,
 	drawtype = "nodebox",
+	stack_max = 1,
+	drop = "",
+	sounds = mcl_sounds.node_sound_wool_defaults(),
+	_food_particles = false,
+	_mcl_saturation = 0.4,
+	_mcl_hardness = 0.5,
+	on_rightclick = function(pos, node, clicker)
+		if not mcl_util.check_position_protection(pos, clicker) then
+			local cake = core.get_item_group(node.name, "cake")
+
+			if cake ~= 1 then
+				mcl_redstone.swap_node(pos, {name = "mcl_cake:cake_" .. cake - 1})
+			else
+				core.remove_node(pos)
+				core.check_for_falling(pos)
+				mcl_redstone.update_comparators(pos)
+			end
+
+			core.do_item_eat(2, ItemStack(), ItemStack(node.name), clicker, {type = "nothing"})
+		end
+	end,
+	_mcl_spawn_food_particles = false,
+}
+
+core.register_node("mcl_cake:cake", table.merge(tpl_cake, {
+	_tt_help = S("With 7 tasty slices!").."\n"..S("Hunger points: +@1 per slice", CAKE_HUNGER_POINTS),
+	_doc_items_longdesc = S("Cakes can be placed and eaten to restore hunger points. A cake has 7 slices. Each slice restores 2 hunger points and 0.4 saturation points. Cakes will be destroyed when dug or when the block below them is broken."),
+	_doc_items_usagehelp = S("Place the cake anywhere, then rightclick it to eat a single slice. You can't eat from the cake when your hunger bar is full."),
+	tiles = {"cake_top.png", "cake_bottom.png", "cake_side.png"},
+	inventory_image = "cake.png",
+	wield_image = "cake.png",
 	selection_box = {
 		type = "fixed",
-		fixed = full_cake
+		fixed = cake_box.full_cake
 	},
 	node_box = {
 		type = "fixed",
-		fixed = full_cake
+		fixed = cake_box.full_cake
 	},
-	stack_max = 1,
-	groups = {
-		handy = 1, attached_node = 1, dig_by_piston = 1, comparator_signal = 14,
-		cake = 7, food = 2, no_eat_delay = 1, compostability = 100, unsticky = 1
-	},
-	drop = "",
+	groups = table.merge(cake_groups, {comparator_signal = 14, cake = 7}),
 	on_rightclick = function(pos, node, clicker)
 		-- Cake is subject to protection
 		local name = clicker:get_player_name()
@@ -73,89 +85,40 @@ core.register_node("mcl_cake:cake", {
 			core.do_item_eat(2, ItemStack(), ItemStack("mcl_cake:cake"), clicker, {type="nothing"})
 		end
 	end,
-	sounds = mcl_sounds.node_sound_leaves_defaults(),
+}))
 
-	_mcl_spawn_food_particles = false,
-	_mcl_saturation = 0.4,
-	_mcl_hardness = 0.5,
-})
+for i = 1, 6 do
+	local name = "mcl_cake:cake_"..i
 
-local register_slice = function(level, nodebox, desc)
-	local this = "mcl_cake:cake_"..level
-	local after_eat = "mcl_cake:cake_"..(level-1)
-	local on_rightclick
-	if level > 1 then
-		on_rightclick = function(pos, node, clicker)
-			local name = clicker:get_player_name()
-			if core.is_protected(pos, name) then
-				core.record_protection_violation(pos, name)
-				return
-			end
-			if mcl_hunger.is_player_full (clicker) then
-				return
-			end
-			-- Check if we were allowed to eat
-			if node.name == this or core.is_creative_enabled(clicker:get_player_name()) then
-				mcl_redstone.swap_node(pos, {name = after_eat, param2 = 0})
-				core.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack(this), clicker, {type="nothing"})
-			end
-		end
-	else
-		-- Last slice
-		on_rightclick = function(pos, node, clicker)
-			local name = clicker:get_player_name()
-			if core.is_protected(pos, name) then
-				core.record_protection_violation(pos, name)
-				return
-			end
-			if mcl_hunger.is_player_full (clicker) then
-				return
-			end
-			-- Check if we were allowed to eat
-			if node.name == this or core.is_creative_enabled(clicker:get_player_name()) then
-				core.remove_node(pos)
-				core.check_for_falling(pos)
-				core.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack("mcl_cake:cake_1"), clicker, {type="nothing"})
-				mcl_redstone.update_comparators(pos)
-			end
-		end
-	end
-
-	core.register_node(this, {
-		description = desc,
+	core.register_node(name, table.merge(tpl_cake, {
 		_doc_items_create_entry = false,
-		tiles = cake_texture,
-		paramtype = "light",
-		is_ground_content = false,
-		drawtype = "nodebox",
+		tiles = {"cake_top.png", "cake_bottom.png", "cake_inner.png", "cake_side.png"},
 		selection_box = {
 			type = "fixed",
-			fixed = nodebox,
+			fixed = cake_box.slices[i]
 		},
 		node_box = {
 			type = "fixed",
-			fixed = nodebox,
-			},
-		groups = {
-			handy = 1, attached_node = 1, not_in_creative_inventory = 1,
-			dig_by_piston = 1, cake = level, comparator_signal = level * 2,
-			food = 2, no_eat_delay = 1, unsticky = 1
+			fixed = cake_box.slices[i]
 		},
-		drop = "",
-		on_rightclick = on_rightclick,
-		sounds = mcl_sounds.node_sound_leaves_defaults(),
+		groups = table.merge(cake_groups, {
+			comparator_signal = i * 2, not_in_creative_inventory = 1, cake = i
+		})
+	}))
 
-		_mcl_spawn_food_particles = false,
-		_mcl_saturation = 0.4,
-		_mcl_hardness = 0.5,
-	})
-
-	doc.add_entry_alias("nodes", "mcl_cake:cake", "nodes", "mcl_cake:cake_"..level)
+	doc.add_entry_alias("nodes", "mcl_cake:cake", "nodes", name)
 end
 
-register_slice(6, slice_6, S("Cake (6 Slices Left)"))
-register_slice(5, slice_5, S("Cake (5 Slices Left)"))
-register_slice(4, slice_4, S("Cake (4 Slices Left)"))
-register_slice(3, slice_3, S("Cake (3 Slices Left)"))
-register_slice(2, slice_2, S("Cake (2 Slices Left)"))
-register_slice(1, slice_1, S("Cake (1 Slice Left)"))
+core.register_craft({
+	output = "mcl_cake:cake",
+	recipe = {
+		{"mcl_mobitems:milk_bucket", "mcl_mobitems:milk_bucket", "mcl_mobitems:milk_bucket"},
+		{"mcl_core:sugar", "mcl_throwing:egg", "mcl_core:sugar"},
+		{"mcl_farming:wheat_item", "mcl_farming:wheat_item", "mcl_farming:wheat_item"},
+	},
+	replacements = {
+		{"mcl_mobitems:milk_bucket", "mcl_buckets:bucket_empty"},
+		{"mcl_mobitems:milk_bucket", "mcl_buckets:bucket_empty"},
+		{"mcl_mobitems:milk_bucket", "mcl_buckets:bucket_empty"},
+	}
+})
