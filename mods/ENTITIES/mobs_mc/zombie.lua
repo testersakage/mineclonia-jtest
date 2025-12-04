@@ -656,7 +656,7 @@ function zombie:receive_damage (mcl_reason, damage)
 
 			if is_free_of_living_players (pos, 7.0) then
 				local object = mcl_mobs.spawn_abnormally (pos, self._reinforcement_type,
-									  "reinforcement")
+									  nil, "reinforcement")
 				if object then
 					local entity = object:get_luaentity ()
 					self:add_physics_factor ("_spawn_reinforcements_chance",
