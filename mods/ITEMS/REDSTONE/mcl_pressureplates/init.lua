@@ -1,7 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
 
-local PRESSURE_PLATE_INTERVAL = 0.25
-
 local pp_box_off = {
 	type = "fixed",
 	fixed = { -7/16, -8/16, -7/16, 7/16, -7/16, 7/16 },
@@ -79,28 +77,13 @@ local function update_pp(pos)
 				obj_touching_plate_pos(obj, pos)
 			then
 				n = n + 1
-				core.get_meta(pos):set_string("deact_time", "")
 			end
 		end
 		return n
 	end
 
 	local n_entities = count_obj_touching_plate_pos(pos)
-	if node.name == basename .. "_on" then
-		if n_entities == 0 then
-			local meta = core.get_meta(pos)
-			local deact_time = meta:get_float("deact_time")
-			local current_time = core.get_us_time()
-			if deact_time == 0 then
-				deact_time = current_time + 1 * 1000 * 1000
-				meta:set_float("deact_time", deact_time)
-			end
-			if deact_time <= current_time then
-				core.set_node(pos, { name = basename .. "_off" })
-				meta:set_string("deact_time", "")
-			end
-		end
-	end
+
 	if n_entities > 0 then
 		local power = math.min(weighted and (n_entities / weighted) or 15, 15)
 		core.set_node(pos, { name = basename .. "_on", param2 = power })
@@ -141,12 +124,8 @@ function mcl_pressureplates.register_pressure_plate(basename, def)
 		description = def.description,
 		tiles = { def.texture },
 		drop = basename.."_off",
-		on_timer = update_pp,
 		_on_walk_through = function(pos)
 			update_pp(vector.round(pos))
-		end,
-		on_construct = function(pos)
-			core.get_node_timer(pos):start(PRESSURE_PLATE_INTERVAL)
 		end,
 		sounds = def.sounds,
 		is_ground_content = false,
@@ -179,6 +158,12 @@ function mcl_pressureplates.register_pressure_plate(basename, def)
 			get_power = function(node, dir)
 				return dir.y ~= 1 and node.param2 or 0, dir.y < 0
 			end,
+			init = function()
+				return {
+					name = basename.."_off",
+					delay = 10
+				}
+			end
 		}),
 	}))
 	core.register_craft({
