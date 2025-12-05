@@ -6,12 +6,16 @@ local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / t
 function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
 	if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
 
+	local item = itemstack:get_name()
+	local def = core.registered_items[item]
+	local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
+
 	local creative = core.is_creative_enabled(user:get_player_name())
 	local can_eat_when_full = creative
 		or (mcl_hunger.active == false)
 		or core.get_item_group(itemstack:get_name(), "can_eat_when_full") == 1
 
-	if (os.difftime(os.time(), mcl_hunger.last_eat[user]) < 2)
+	if (mcl_hunger.eat_anim_timer[user] < eat_delay)
 		or (not can_eat_when_full and mcl_hunger.get_hunger(user) >= 20) then
 		return
 	end
@@ -29,7 +33,7 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 		end
 	end
 
-	mcl_hunger.last_eat[user] = os.time()
+	mcl_hunger.eat_anim_timer[user] = -math.huge
 
 	local foodtype = core.get_item_group(itemstack:get_name(), "food")
 	if foodtype == 3 then
@@ -279,10 +283,13 @@ controls.register_on_hold (function (player, key)
 
 	local itemstack = player:get_wielded_item ()
 	local name = itemstack:get_name ()
+
 	local h = mcl_hunger.get_hunger(player)
 	local def = core.registered_items[name]
 	local hp_change = core.get_item_group(itemstack:get_name(), "eatable")
+
 	local pointed_thing = mcl_util.get_pointed_thing (player, true)
+
 	local creative = core.is_creative_enabled(player:get_player_name())
 	local can_eat_when_full = creative
 		or (mcl_hunger.active == false)
@@ -324,7 +331,8 @@ controls.register_on_hold (function (player, key)
 			mcl_hunger.eat_effects(player, name, player:get_pos(), hp_change, def)
 		end
 		-- Actual eat
-		if mcl_hunger.eat_anim_timer[player] >= mcl_hunger.EAT_DELAY then
+		local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
+		if mcl_hunger.eat_anim_timer[player] >= eat_delay then
 			core.do_item_eat(hp_change, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
 			player:set_wielded_item(itemstack)
 			mcl_hunger.hud_eat_remove(player)

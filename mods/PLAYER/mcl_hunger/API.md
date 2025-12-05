@@ -63,8 +63,6 @@ Food item must have `food` and `eatable` groups, the `eatable` value is treated 
 the hunger change (e.g. `eatable=3` is the same as `core.item_eat(3)`).
 
 You are no longed need to add `core.item_eat(n)` explicitly to `on_secondary_use` or `on_place`.
-In most case that should be nil in order to trigger make eat animation,
-otherwise your food will be consumed instantly just like before.
 
 There also few custom property used:
 ```lua
@@ -74,5 +72,8 @@ There also few custom property used:
 
     -- Replace consumed item, optional (e.g. _mcl_eat_replace_with = "mcl_core:bowl")
     _mcl_eat_replace_with = nil,
+
+    -- Custom eat animation duration, optional
+    _mcl_eat_delay = nil,
 }
 ```

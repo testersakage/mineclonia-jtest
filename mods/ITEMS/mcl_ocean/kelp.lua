@@ -608,6 +608,7 @@ core.register_craftitem("mcl_ocean:dried_kelp", {
 	wield_image = "mcl_ocean_dried_kelp.png",
 	groups = {food = 2, eatable = 1, compostability = 30},
 	_mcl_saturation = 0.6,
+	_mcl_eat_delay = 0.865,
 	_mcl_crafting_output = {square3 = {output = "mcl_ocean:dried_kelp_block"}}
 })
 
