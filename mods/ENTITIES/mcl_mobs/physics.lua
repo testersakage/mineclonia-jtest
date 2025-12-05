@@ -1628,8 +1628,16 @@ function mob_class:check_standin (pos)
 					end
 				end
 				local factors = self.slowdown_nodes[node]
+				local ndef = core.registered_nodes[node]
 				if factors then
 					self._stuck_in = factors
+				elseif ndef.move_resistance and ndef.move_resistance > 0 then
+					local slowdown = 3 / ndef.move_resistance
+					self._stuck_in = {
+						x = slowdown,
+						y = slowdown,
+						z = slowdown
+					}
 				end
 			end
 		end
