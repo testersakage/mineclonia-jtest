@@ -820,18 +820,6 @@ core.register_chatcommand("dumpportals", {
 	end,
 })
 
-core.register_abm({
-	label = "Nether portal teleportation and particles",
-	nodenames = { "mcl_portals:portal" },
-	interval = 1,
-	chance = 1,
-	action = function(pos, node)
-		emit_portal_particles(pos, node)
-		teleport_objs_in_portal(pos)
-		spawn_zombified_piglin(pos)
-	end,
-})
-
 mcl_structures.register_structure("nether_portal",{
 	nospawn = true,
 	filenames = {
