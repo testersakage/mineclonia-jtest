@@ -6,8 +6,13 @@ local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / t
 function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
 	if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
 
-	if mcl_hunger.get_hunger(user) >= 20
-		or (os.difftime(os.time(), mcl_hunger.last_eat[user]) < 2) then
+	local creative = core.is_creative_enabled(user:get_player_name())
+	local can_eat_when_full = creative
+		or (mcl_hunger.active == false)
+		or core.get_item_group(itemstack:get_name(), "can_eat_when_full") == 1
+
+	if (os.difftime(os.time(), mcl_hunger.last_eat[user]) < 2)
+		or (not can_eat_when_full and mcl_hunger.get_hunger(user) >= 20) then
 		return
 	end
 
@@ -268,8 +273,13 @@ controls.register_on_hold (function (player, key)
 	local def = core.registered_items[name]
 	local hp_change = core.get_item_group(itemstack:get_name(), "eatable")
 	local pointed_thing = mcl_util.get_pointed_thing (player, true)
+	local creative = core.is_creative_enabled(player:get_player_name())
+	local can_eat_when_full = creative
+		or (mcl_hunger.active == false)
+		or core.get_item_group(itemstack:get_name(), "can_eat_when_full") == 1
 
-	if core.get_item_group(name, "no_eat_delay") > 0 or h >= 20  then
+	if core.get_item_group(name, "no_eat_delay") > 0
+		or (not can_eat_when_full and h >= 20) then
 		return
 	end
 
@@ -288,11 +298,6 @@ controls.register_on_hold (function (player, key)
 		end
 
 		mcl_shields.players[player].blocking = 0
-
-		local creative = core.is_creative_enabled(player:get_player_name())
-		local can_eat_when_full = creative
-				or (mcl_hunger.active == false)
-				or core.get_item_group(itemstack:get_name(), "can_eat_when_full") == 1
 
 		-- Start eating animation
 		if mcl_hunger.eat_anim_timer[player] == -math.huge then
