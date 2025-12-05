@@ -113,10 +113,13 @@ end
 function mcl_weather.rain.remove_player(player)
 	local player_meta = mcl_weather.players[player:get_player_name()]
 	if player_meta and player_meta.origin_sky then
-		player:set_clouds({color="#FFF0F0E5"})
 		mcl_weather.players[player:get_player_name()] = nil
 		update_sound[player:get_player_name()]=true
 	end
+	-- player_meta.origin_sky is not set if the player is a CSM
+	-- client; reset its cloud color regardless, as no mischief
+	-- can become of doing so.
+	player:set_clouds({color="#FFF0F0E5"})
 end
 
 -- adds and removes rain sound depending how much rain particles around player currently exist.
