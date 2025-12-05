@@ -31,12 +31,22 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 
 	mcl_hunger.last_eat[user] = os.time()
 
-	core.sound_play("mcl_hunger_eat", {
-		max_hear_distance = 12,
-		gain = 0.5,
-		pitch = 1,
-		object = user,
-	}, true)
+	local foodtype = core.get_item_group(itemstack:get_name(), "food")
+	if foodtype == 3 then
+		core.sound_play("survival_thirst_drink", {
+			max_hear_distance = 12,
+			gain = 0.5,
+			pitch = 1,
+			object = user,
+		}, true)
+	else
+		core.sound_play("mcl_hunger_eat", {
+			max_hear_distance = 12,
+			gain = 0.5,
+			pitch = 1,
+			object = user,
+		}, true)
+	end
 
 	return itemstack
 end
