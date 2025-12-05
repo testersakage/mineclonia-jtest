@@ -114,14 +114,14 @@ core.register_craftitem("mcl_mobitems:milk_bucket", {
 	_doc_items_usagehelp = S("Use the placement key to drink the milk."),
 	inventory_image = "mcl_mobitems_bucket_milk.png",
 	wield_image = "mcl_mobitems_bucket_milk.png",
-	_eat_effect = function (itemstack, player)
+	_mcl_eat_effect = function (itemstack, player)
 		-- Check if we were allowed to drink this (eat delay check)
 		if mcl_hunger.active and (itemstack:get_name() ~= "mcl_mobitems:milk_bucket" or core.is_creative_enabled(player:get_player_name())) then
 			mcl_hunger.stop_poison(player)
 		end
 		mcl_potions._reset_effects(player)
 	end,
-	_eat_replace_with = "mcl_buckets:bucket_empty",
+	_mcl_eat_replace_with = "mcl_buckets:bucket_empty",
 	stack_max = 1,
 	groups = { food = 3, eatable=0, can_eat_when_full = 1 },
 })
@@ -267,7 +267,7 @@ core.register_craftitem("mcl_mobitems:rabbit_stew", {
 	stack_max = 1,
 	groups = { food = 2, eatable = 10 },
 	_mcl_saturation = 12.0,
-	_eat_replace_with = "mcl_core:bowl",
+	_mcl_eat_replace_with = "mcl_core:bowl",
 })
 
 core.register_craftitem("mcl_mobitems:shulker_shell", {

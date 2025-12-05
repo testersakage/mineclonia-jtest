@@ -83,8 +83,8 @@ core.register_craftitem("mcl_sus_stew:stew",{
 	stack_max = 1,
 	groups = { food = 2, eatable = 6, can_eat_when_full = 1, not_in_creative_inventory=1,},
 	_mcl_saturation = 7.2,
-	_eat_replace_with = "mcl_core:bowl",
-	_eat_effect = function (itemstack, placer, pointed_thing)
+	_mcl_eat_replace_with = "mcl_core:bowl",
+	_mcl_eat_effect = function (itemstack, placer, pointed_thing)
 		local e = itemstack:get_meta():get_string("effect")
 		local f = effects[e]
 		if not f then

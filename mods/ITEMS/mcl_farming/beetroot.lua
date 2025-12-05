@@ -171,7 +171,7 @@ core.register_craftitem("mcl_farming:beetroot_soup", {
 	inventory_image = "mcl_farming_beetroot_soup.png",
 	wield_image = "mcl_farming_beetroot_soup.png",
 	groups = { food = 2, eatable = 6 },
-	_eat_replace_with = "mcl_core:bowl",
+	_mcl_eat_replace_with = "mcl_core:bowl",
 	_mcl_saturation = 7.2,
 })
 

@@ -162,7 +162,7 @@ core.register_craftitem("mcl_mushrooms:mushroom_stew", {
 	inventory_image = "farming_mushroom_stew.png",
 	groups = { food = 2, eatable = 6 },
 	_mcl_saturation = 7.2,
-	_eat_replace_with = "mcl_core:bowl",
+	_mcl_eat_replace_with = "mcl_core:bowl",
 	stack_max = 1,
 })
 

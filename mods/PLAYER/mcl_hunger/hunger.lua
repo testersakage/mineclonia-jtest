@@ -17,8 +17,8 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 	end
 
 	local def = core.registered_items[itemstack:get_name()]
-	if def and def._eat_effect then
-		def._eat_effect(itemstack, user)
+	if def and def._mcl_eat_effect then
+		def._mcl_eat_effect(itemstack, user)
 	end
 	local old_itemstack = itemstack
 	itemstack = mcl_hunger.eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
@@ -285,7 +285,7 @@ controls.register_on_hold (function (player, key)
 
 	if not mcl_player.get_player_setting(player, "mcl_hunger:eat_anim", true) then
 		mcl_hunger.eat_effects(player, name, player:get_pos(), hp_change, def)
-		core.do_item_eat(hp_change, def._eat_replace_with, itemstack, player, pointed_thing)
+		core.do_item_eat(hp_change, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
 		player:set_wielded_item(itemstack)
 		return
 	end
@@ -315,7 +315,7 @@ controls.register_on_hold (function (player, key)
 		end
 		-- Actual eat
 		if mcl_hunger.eat_anim_timer[player] >= mcl_hunger.EAT_DELAY then
-			core.do_item_eat(hp_change, def._eat_replace_with, itemstack, player, pointed_thing)
+			core.do_item_eat(hp_change, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
 			player:set_wielded_item(itemstack)
 			mcl_hunger.hud_eat_remove(player)
 			return

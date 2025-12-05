@@ -704,7 +704,7 @@ local function receive_modchannel_message_1 (player, message)
 				-- Guarantee that the stack's contents
 				-- haven't changed in the interim.
 				if inv:get_stack ("main", index):equals (stack) then
-					core.do_item_eat(def.groups.eatable, def._eat_replace_with, stack, player)
+					core.do_item_eat(def.groups.eatable, def._mcl_eat_replace_with, stack, player)
 					player:set_wielded_item(stack)
 				end
 			else

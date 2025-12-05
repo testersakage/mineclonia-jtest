@@ -177,7 +177,7 @@ function mcl_potions.register_potion(def)
 	pdef._default_extend_level = def.default_extend_level or 1
 	pdef.has_plus = has_plus
 	if def.drinkable ~= false then
-		pdef._eat_effect = function (itemstack, player)
+		pdef._mcl_eat_effect = function (itemstack, player)
 			local potency = itemstack:get_meta():get_int("mcl_potions:potion_potent")
 			local plus = itemstack:get_meta():get_int("mcl_potions:potion_plus")
 			local ef_level
@@ -197,7 +197,7 @@ function mcl_potions.register_potion(def)
 
 			mcl_potions._use_potion (player)
 		end
-		pdef._eat_replace_with = def.vanishing and nil or "mcl_potions:glass_bottle"
+		pdef._mcl_eat_replace_with = def.vanishing and nil or "mcl_potions:glass_bottle"
 	end
 	pdef._mcl_filter_description = mcl_potions.filter_potion_description
 

@@ -168,7 +168,7 @@ core.register_craftitem("mcl_core:apple_gold", {
 	inventory_image = "mcl_core_apple_golden.png",
 	groups = { food = 2, eatable = 4, can_eat_when_full = 1 },
 	_mcl_saturation = 9.6,
-	_eat_effect = function (_, placer)
+	_mcl_eat_effect = function (_, placer)
 		mcl_potions.give_effect_by_level("absorption", placer, 1, 120)
 		mcl_potions.give_effect_by_level("regeneration", placer, 2, 5)
 	end,
@@ -185,7 +185,7 @@ core.register_craftitem("mcl_core:apple_gold_enchanted", {
 	inventory_image = "mcl_core_apple_golden.png" .. mcl_enchanting.overlay,
 	groups = { food = 2, eatable = 4, can_eat_when_full = 1, rarity = 2 },
 	_mcl_saturation = 9.6,
-	_eat_effect = function (_, placer)
+	_mcl_eat_effect = function (_, placer)
 		mcl_potions.give_effect("fire_resistance", placer, 1, 300)
 		mcl_potions.give_effect_by_level("resistance", placer, 1, 300)
 		mcl_potions.give_effect_by_level("absorption", placer, 4, 120)

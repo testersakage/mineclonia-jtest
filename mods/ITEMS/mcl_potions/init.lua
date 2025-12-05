@@ -190,7 +190,7 @@ core.register_craftitem("mcl_potions:water", {
 	},
 	_dispense_into_walkable = true,
 	_mcl_cauldrons_liquid = "water",
-	_eat_replace_with = "mcl_potions:glass_bottle"
+	_mcl_eat_replace_with = "mcl_potions:glass_bottle"
 })
 
 
@@ -208,7 +208,7 @@ core.register_craftitem("mcl_potions:river_water", {
 	_on_dispense = dispense_water_bottle,
 	_dispense_into_walkable = true,
 	_mcl_cauldrons_liquid = "river_water",
-	_eat_replace_with = "mcl_potions:glass_bottle"
+	_mcl_eat_replace_with = "mcl_potions:glass_bottle"
 })
 
 mcl_potions.register_splash("water", S("Splash Water Bottle"), "#8091ff", {

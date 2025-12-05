@@ -47,7 +47,7 @@ core.register_craftitem("mcl_honey:honey_bottle", {
 	inventory_image = "mcl_honey_honey_bottle.png",
 	groups = { craftitem = 1, food = 3, eatable = 6, can_eat_when_full=1 },
 	_mcl_saturation = 1.2,
-	_eat_replace_with = "mcl_potions:glass_bottle",
+	_mcl_eat_replace_with = "mcl_potions:glass_bottle",
 	stack_max = 16,
 	_mcl_crafting_output = {
 		single = {
