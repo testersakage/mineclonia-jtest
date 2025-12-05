@@ -310,6 +310,7 @@ for n, desc in pairs(n_desc) do
 	})
 
 	mcl_wip.register_wip_item("mcl_copper:door"..n)
+	mcl_wip.register_wip_item("mcl_panes:copper_bar"..n)
 end
 
 -- These are static translation strings, but use D instead of S, anyway, to get
