@@ -975,6 +975,13 @@ local function walk_speed_max (movement_speed, friction)
 	return dx
 end
 
+local function integrate_jump_speed (speed, initial_friction, t)
+	local g = AIR_FRICTION
+	local c = speed * initial_friction
+	local v = (mathexp(t*g)/(mathexp(t)*g-mathexp(t))-1/(g-1))*c
+	return v / t
+end
+
 local function jump_speed_max (jump_height, leaping)
 	return jump_height + leaping * 2.0
 end
@@ -1087,6 +1094,7 @@ end
 
 local DEFAULT_MOVEMENT_SPEED = 2.0
 local DEFAULT_GRAVITY = -1.6
+local SLOW_FALLING_GRAVITY = -0.2
 local DEFAULT_WATER_VELOCITY = 0.4
 local DEFAULT_WATER_FRICTION = 0.8
 local DEFAULT_JUMP_HEIGHT = 8.4
@@ -1098,10 +1106,15 @@ function mcl_serverplayer.player_movement_speed (player, state)
 	local desired_speed_walk
 	local desired_speed_climb
 	local self_pos = player:get_pos ()
+	self_pos.y = self_pos.y + 1.0e-4
 	local node_pos = mcl_util.get_nodepos (self_pos)
 	local node, _ = core.get_node (node_pos)
 	node_pos.y = node_pos.y - 1
 	local node_below, _ = core.get_node (node_pos)
+	node_pos.y = node_pos.y - 1
+	local node_below_below, _ = core.get_node (node_pos)
+	node_pos.y = node_pos.y + 4
+	local node_above, _ = core.get_node (node_pos)
 	local factors = persistent_physics_factors[player] or {}
 	local base_movement_speed, initial_base
 		= apply_physics_factors (factors, "movement_speed",
@@ -1147,6 +1160,9 @@ function mcl_serverplayer.player_movement_speed (player, state)
 	elseif state.can_fall_fly and state.is_fall_flying then
 		local gravity = apply_physics_factors (factors, "gravity",
 						       DEFAULT_GRAVITY)
+		if mcl_potions.has_effect (player, "slow_falling") then
+			gravity = mathmax (gravity, SLOW_FALLING_GRAVITY)
+		end
 		-- XXX: Lua can't trust this.
 		local pitch = -player:get_look_vertical ()
 		local vx, vy = fall_flying_speed_max (ELYTRA_FLIGHT_TIME,
@@ -1170,18 +1186,42 @@ function mcl_serverplayer.player_movement_speed (player, state)
 							   DEFAULT_JUMP_HEIGHT)
 		local vy = jump_speed_max (jump_height, leaping)
 		local movement_speed = base_movement_speed
-		if state.is_sprinting then
+		if state.is_sprinting and state.can_sprint then
 			movement_speed = movement_speed + initial_base * 0.3
 		end
-		local slippery = core.get_item_group (node_below.name, "slippery")
-		local friction = 1
+		local slippery
+			= core.get_item_group (node_below.name, "slippery")
+		local def = core.registered_nodes[node_below.name]
+		if def and not def.walkable then
+			-- Test the node two nodes below also, if
+			-- node_below is air, to account for jumping.
+			local slippery_1
+				= core.get_item_group (node_below_below.name, "slippery")
+			slippery = mathmax (slippery, slippery_1)
+		end
+		local friction = BASE_FRICTION
 		if slippery > 3 then
 			friction = BASE_SLIPPERY_1
 		elseif slippery > 0 then
 			friction = BASE_SLIPPERY
 		end
 		local vx = walk_speed_max (movement_speed, friction)
-		desired_speed_walk = vx
+		if state.is_sprinting and state.can_sprint then
+			-- Jumping while sprinting applies an impulse
+			-- of 4.0 n/s in the direction of movement,
+			-- which can be realized to the full by
+			-- sprint-jumping in a 2 block tall tunnel.
+			local t = 10
+			local def = core.registered_nodes[node_above.name]
+			if def and def.walkable then
+				t = 2
+			end
+			local jump_speed_avg
+				= integrate_jump_speed (vx + 4.0, friction, t)
+			desired_speed_walk = mathmax (vx, jump_speed_avg)
+		else
+			desired_speed_walk = vx
+		end
 		-- A velocity of 4.0 is always attainable when
 		-- climbing.
 		desired_speed_climb = mathmax (vy, 4.0)
