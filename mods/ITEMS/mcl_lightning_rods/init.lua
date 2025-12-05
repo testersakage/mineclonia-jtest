@@ -60,6 +60,8 @@ core.register_node("mcl_lightning_rods:rod", rod_def)
 
 local rod_def_powered = table.copy(rod_def)
 
+rod_def_powered.groups.not_in_creative_inventory = 1
+
 core.register_node("mcl_lightning_rods:rod_powered", rod_def_powered)
 
 mcl_lightning.register_on_strike(function(pos, pos2, objects, for_trap)
