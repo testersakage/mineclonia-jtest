@@ -55,3 +55,24 @@ based on the inventory image or wield image (whatever is available first).
 Normally, all food items considered food (not drinks) make food particles.
 You can suppress the food particles by adding the field
 `_food_particles=false` to the item definition.
+
+## Eat animation
+In addition of eating animation there is also new changes on how to define food item.
+
+Food item must have `food` and `eatable` groups, the `eatable` value is treated as
+the hunger change (e.g. `eatable=3` is the same as `core.item_eat(3)`).
+
+You are no longed need to add `core.item_eat(n)` explicitly to `on_secondary_use` or `on_place`.
+In most case that should be nil in order to trigger make eat animation,
+otherwise your food will be consumed instantly just like before.
+
+There also few custom property used:
+```lua
+{
+    -- Add status effect or any behavior when item consumed, optional
+    _mcl_eat_effect = function (itemstack, player, pointed_thing) ... end,
+
+    -- Replace consumed item, optional (e.g. _mcl_eat_replace_with = "mcl_core:bowl")
+    _mcl_eat_replace_with = nil,
+}
+```
