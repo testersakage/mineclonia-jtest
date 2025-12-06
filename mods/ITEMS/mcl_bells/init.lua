@@ -34,7 +34,7 @@ local function create_entity(pos)
 	local node = core.get_node(pos)
 	local node_name = node.name
 	local node_def = core.registered_nodes[node_name]
-	local param2 = node.param2
+	local param2 = node.param2 % 8 -- get first 3 bits
 
 	local static_data = {
 	    param2 = param2,
@@ -53,7 +53,6 @@ local function create_entity(pos)
 	local obj = core.add_entity(pos, "mcl_bells:bell_ent",
 	                            core.serialize(static_data))
 	if obj and obj:get_pos() then
-		-- BUGBUG this needs to cope with redstone using the high bits
 		local rot = {x = 0, y = bell_rotations[param2 + 1], z = 0}
 		obj:set_rotation(rot)
 	else
@@ -91,15 +90,25 @@ core.register_node("mcl_bells:bell", {
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	on_rightclick = mcl_bells.ring_once,
 	_mcl_redstone = {
+		connects_to = function(node, dir)
+			return true
+		end,
 	    update = function(pos, node)
-	        local oldpowered = node.param2 ~= 0
+			local param2 = node.param2 % 8 -- get first 3 bits
+			local other = node.param2 - param2
+
+	        local oldpowered = other ~= 0
 	        local powered = mcl_redstone.get_power(pos) ~= 0
+
 	        if powered and not oldpowered then
-	            mcl_bells.ring_once(pos)
+				local ent = find_entity(pos)
+				if ent then
+				    mcl_bells.ring_once(pos)
+					ent.object:set_animation({x = 0, y = 155}, 20, 0.0, false)
+				end
 	        end
 
-	        -- BUGBUG this needs to be fixed to not use the lower bits for redstone
-	        -- core.swap_node(pos, {name = node.name, param2 = powered and 1 or 0})
+	        core.swap_node(pos, {name = node.name, param2 = param2 + (powered and 1 or 0)})
 	    end
 	},
 
@@ -144,7 +153,7 @@ core.register_entity("mcl_bells:bell_ent", {
 	end,
 	on_punch = function(self, puncher)
 	    mcl_bells.ring_once(self.object:get_pos())
-	    self.object:set_animation({x = 0, y = 800}, 2, 0.0, false)
+	    self.object:set_animation({x = 0, y = 155}, 20, 0.0, false)
 
 		-- BUGBUG need to handle digging?
 	    -- To do no damage do this ...
