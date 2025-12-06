@@ -13,7 +13,6 @@ local wolf = {
 	description = S("Wolf"),
 	type = "animal",
 	_spawn_category = "creature",
-	can_despawn = true,
 	hp_min = 8,
 	hp_max = 8,
 	xp_min = 1,
