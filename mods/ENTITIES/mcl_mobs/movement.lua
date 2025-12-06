@@ -1940,3 +1940,23 @@ function mob_class:randomize_attributes ()
 	self:add_physics_factor ("tracking_distance", "mcl_mobs:standard_tracking_distance_bonus",
 		d, "add_multiplied_base")
 end
+
+------------------------------------------------------------------------
+-- Utility functions.
+------------------------------------------------------------------------
+
+-- Return position of the node containing this mob's base, providing
+-- for minor deviations below the surface of any colliding supporting
+-- node that may have been produced by imprecisions in collision
+-- detection.
+
+function mob_class:get_nodepos ()
+	local pos = self.object:get_pos ()
+	if pos then
+		pos.x = floor (pos.x + 0.5)
+		pos.y = floor (pos.y + 0.50001)
+		pos.z = floor (pos.z + 0.5)
+		return pos
+	end
+	return nil
+end
