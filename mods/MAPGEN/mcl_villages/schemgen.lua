@@ -54,7 +54,7 @@ local function generate_bell_schematic (schem_name)
 		elseif ndata[idx].name == "mcl_villages:path_endpoint" then
 			ndata[idx].name = "air"
 			table.insert (endpoints, { x, y, z, })
-		elseif ndata[idx].name == "mcl_bells:bell" then
+		elseif core.get_item_group (ndata[idx].name, "bell") >= 1 then
 			bell_x, bell_y, bell_z = x, y, z
 			schematic.bell = { x, y, size.z - z - 1, }
 		end

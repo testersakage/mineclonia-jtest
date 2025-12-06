@@ -740,7 +740,7 @@ mcl_villages.register_poi ("mcl_villages:bell", {
 	is_valid = function (nodepos)
 		local node = core.get_node (nodepos)
 		return (node.name == "ignore"
-			or node.name == "mcl_bells:bell")
+			or core.get_item_group (node.name, "bell") > 0)
 	end,
 	on_destroy = function (nodepos)
 		local meta = core.get_meta (nodepos)
