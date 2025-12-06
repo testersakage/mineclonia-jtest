@@ -636,7 +636,8 @@ function wolf:ai_step (dtime)
 	local moveresult = self._moveresult
 	mob_class.ai_step (self, dtime)
 
-	if self._immersion_depth and self._immersion_depth > 0 then
+	if (self._immersion_depth and self._immersion_depth > 0)
+		or mcl_weather.is_exposed_to_rain (self:get_nodepos ()) then
 		if not self._is_wet then
 			self._is_wet = true
 			self.base_texture = self:compute_textures ()
