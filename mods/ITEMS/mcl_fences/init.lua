@@ -1,5 +1,5 @@
 -- mcl_fences/init.lua
-local S = core.get_translator and core.get_translator("mcl_fences") or function(s) return s end
+local S = core.get_translator ("mcl_fences") or function(s) return s end
 mcl_fences = {}
 
 -- CONFIG: mask size in pixels (change if your mask PNGs are a different resolution)
@@ -25,7 +25,7 @@ local cz2 = { -0.125, -0.5, 0.125, 0.125, 1.01, 0.5 }
 
 -- screwdriver support (optional)
 local on_rotate
-if core.get_modpath and core.get_modpath("screwdriver") then
+if core.get_modpath("screwdriver") then
 	on_rotate = screwdriver.rotate_simple
 end
 
