@@ -6,6 +6,12 @@ local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / t
 function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
 	if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
 
+	local rc = mcl_util.call_on_rightclick (itemstack, user, pointed_thing)
+	if rc then
+		mcl_hunger.eat_anim_block[user] = 1
+		return rc
+	end
+
 	local item = itemstack:get_name()
 	local def = core.registered_items[item]
 	local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
@@ -274,70 +280,70 @@ controls.register_on_hold (function (player, key)
 	if mcl_serverplayer.is_csm_capable (player) then
 		return
 	end
-	if key ~= "RMB" then
+
+	local itemstack = player:get_wielded_item ()
+	local itemname = itemstack:get_name ()
+	if core.get_item_group(itemname, "food") == 0
+		or key ~= "RMB" then
 		return
 	end
+
 	if mcl_hunger.eat_anim_block[player] ~= nil then
 		return
 	end
 
-	local itemstack = player:get_wielded_item ()
-	local name = itemstack:get_name ()
+	-- Prevent stuck on eat_anim if pointed_thing have rc
+	local pointed_thing = mcl_util.get_pointed_thing (player, true)
+	local rc = mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
+	if rc then
+		mcl_hunger.eat_anim_block[player] = 1
+		return rc
+	end
 
 	local h = mcl_hunger.get_hunger(player)
-	local def = core.registered_items[name]
-	local hp_change = core.get_item_group(itemstack:get_name(), "eatable")
-
-	local pointed_thing = mcl_util.get_pointed_thing (player, true)
-
 	local creative = core.is_creative_enabled(player:get_player_name())
 	local can_eat_when_full = creative
 		or (mcl_hunger.active == false)
-		or core.get_item_group(itemstack:get_name(), "can_eat_when_full") == 1
-
-	if core.get_item_group(name, "no_eat_delay") > 0
+		or core.get_item_group(itemname, "can_eat_when_full") == 1
+	if core.get_item_group(itemname, "no_eat_delay") > 0
 		or (not can_eat_when_full and h >= 20) then
 		return
 	end
 
+	local def = core.registered_items[itemname]
+	local hp_change = core.get_item_group(itemname, "eatable")
+	-- Instant eat when eat_anim disabled
 	if not mcl_player.get_player_setting(player, "mcl_hunger:eat_anim", true) then
-		mcl_hunger.eat_effects(player, name, player:get_pos(), hp_change, def)
+		mcl_hunger.eat_effects(player, itemname, player:get_pos(), hp_change, def)
 		core.do_item_eat(hp_change, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
 		player:set_wielded_item(itemstack)
 		return
 	end
 
-	if core.get_item_group(itemstack:get_name(), "food") > 0 then
-		local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
-		if rc then
-			mcl_hunger.eat_anim_block[player] = 1
-			return rc
-		end
+	-- Prioritize eat over shield block
+	mcl_shields.players[player].blocking = 0
 
-		mcl_shields.players[player].blocking = 0
-
-		-- Start eating animation
-		if mcl_hunger.eat_anim_timer[player] == -math.huge then
-			mcl_hunger.hud_eat_add(player)
-			if core.get_modpath("playerphysics") then
-				playerphysics.add_physics_factor(player, "speed", "mcl_hunger:eat_anim", SPEED_WHILE_EAT)
-			end
+	-- Start eating animation
+	if mcl_hunger.eat_anim_timer[player] == -math.huge then
+		mcl_hunger.hud_eat_add(player)
+		if core.get_modpath("playerphysics") then
+			playerphysics.add_physics_factor(player, "speed", "mcl_hunger:eat_anim", SPEED_WHILE_EAT)
 		end
-		-- Eat animation sound & particle
-		local step = math.floor(mcl_hunger.eat_anim_timer[player] / 0.2)
-		local last_step = mcl_hunger.eat_anim_effect[player] or 0
-		if step > last_step then
-			mcl_hunger.eat_anim_effect[player] = step
-			mcl_hunger.eat_effects(player, name, player:get_pos(), hp_change, def)
-		end
-		-- Actual eat
-		local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
-		if mcl_hunger.eat_anim_timer[player] >= eat_delay then
-			core.do_item_eat(hp_change, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
-			player:set_wielded_item(itemstack)
-			mcl_hunger.hud_eat_remove(player)
-			return
-		end
+	end
+	-- Eat animation sound & particle
+	local step = math.floor(mcl_hunger.eat_anim_timer[player] / 0.2)
+	local last_step = mcl_hunger.eat_anim_effect[player] or 0
+	if step > last_step then
+		mcl_hunger.eat_anim_effect[player] = step
+		mcl_hunger.eat_effects(player, itemname, player:get_pos(), hp_change, def)
+	end
+	-- Actual eat
+	local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
+	if mcl_hunger.eat_anim_timer[player] >= eat_delay then
+		core.do_item_eat(hp_change, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
+		player:set_wielded_item(itemstack)
+		mcl_hunger.hud_eat_remove(player)
+		return
 	end
 end)
 
