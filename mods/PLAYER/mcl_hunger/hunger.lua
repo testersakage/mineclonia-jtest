@@ -237,11 +237,6 @@ function mcl_hunger.hud_eat_remove(player)
 	if core.get_modpath("playerphysics") then
 		playerphysics.remove_physics_factor(player, "speed", "mcl_hunger:eat_anim")
 	end
-	-- Add cooldown interval
-	mcl_hunger.eat_anim_block[player] = 1
-	core.after(0.2, function ()
-		mcl_hunger.eat_anim_block[player] = nil
-	end)
 end
 
 if mcl_hunger.active then
@@ -343,7 +338,6 @@ controls.register_on_hold (function (player, key)
 		core.do_item_eat(hp_change, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
 		player:set_wielded_item(itemstack)
 		mcl_hunger.hud_eat_remove(player)
-		return
 	end
 end)
 
@@ -361,6 +355,10 @@ controls.register_on_release (function (player, key)
 		return
 	end
 	mcl_hunger.hud_eat_remove(player)
+	mcl_hunger.eat_anim_block[player] = 1
+	core.after(0.2, function ()
+		mcl_hunger.eat_anim_block[player] = nil
+	end)
 end)
 
 core.register_on_mods_loaded(function()
