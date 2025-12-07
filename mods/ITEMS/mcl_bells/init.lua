@@ -134,6 +134,13 @@ core.register_node("mcl_bells:bell", {
 	on_destruct = function(pos) mcl_bells.remove_ent(pos) end,
 })
 
+local function check_node(pos)
+	local node = core.get_node(pos)
+
+	return (node.name == "ignore"
+			or core.get_item_group(node.name, "bell") > 0)
+end
+
 core.register_entity("mcl_bells:bell_ent", {
 	initial_properties = {
 		visual = "mesh",
@@ -147,6 +154,11 @@ core.register_entity("mcl_bells:bell_ent", {
 	_mesh = "bell.gltf",
 	_textures = {"bell_uv.png"},
 	on_activate = function(self, staticdata)
+		if not check_node(self.object:get_pos()) then
+			self.object:remove()
+			return
+		end
+
 		if staticdata and staticdata ~= "" then
 		    local data = core.deserialize(staticdata)
 		    if data then
