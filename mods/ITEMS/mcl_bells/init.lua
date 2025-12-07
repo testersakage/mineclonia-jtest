@@ -94,7 +94,7 @@ core.register_node("mcl_bells:bell", {
 	is_ground_content = false,
 	groups = {
 		bell = 1,
-		attached_node_wallmounted = 1,
+		supported_node_wallmounted = 1,
 		dig_by_piston = 1,
 	},
 	sunlight_propagates = true,
