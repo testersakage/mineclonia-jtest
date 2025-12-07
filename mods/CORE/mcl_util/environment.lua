@@ -421,7 +421,10 @@ end
 
 function core.item_place(itemstack, placer, pointed_thing, param2)
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-	if rc ~= nil then return rc, nil end
+	if rc ~= nil then
+		mcl_hunger.eat_anim_block[placer] = 1
+		return rc, nil
+	end
 
 	if itemstack:get_definition().type == "node" then
 		return core.item_place_node(itemstack, placer, pointed_thing, param2)

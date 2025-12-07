@@ -226,7 +226,7 @@ function mcl_hunger.hud_eat_add(player)
 	if not wield_image or wield_image == "" then wield_image = itemstackdef.inventory_image end
 	player:hud_set_flags({wielditem = false})
 	player:hud_change(mcl_hunger.eat_anim_hud[player], "text", wield_image)
-	player:hud_change(mcl_hunger.eat_anim_hud[player], "offset", {x = 0, y = 50*math.sin(10*mcl_hunger.eat_anim_timer[player]+math.random())-50})
+	player:hud_change(mcl_hunger.eat_anim_hud[player], "offset", {x = 0, y = 50*math.sin(10*mcl_hunger.eat_anim_timer[player])-50})
 end
 
 function mcl_hunger.hud_eat_remove(player)
@@ -366,13 +366,6 @@ core.register_on_mods_loaded(function()
 		if def.groups.eatable and def.groups.eatable > 0 then
 			core.override_item(name, {
 				touch_interaction = "short_dig_long_place",
-				on_place = def.on_place or function (itemstack, player, pointed_thing)
-					local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
-					if rc then
-						mcl_hunger.eat_anim_block[player] = 1
-						return rc
-					end
-				end
 			})
 		end
 	end
