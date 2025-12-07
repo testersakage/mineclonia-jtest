@@ -87,7 +87,6 @@ local function ensure_tiles_are_plank(definitions)
 	if definitions.tiles and definitions.tiles[1] and definitions.tiles[1]:lower():find("plank") then
 		return
 	end
-
 	local baseitem = definitions._mcl_fences_baseitem or definitions._mcl_fences_material or definitions._mcl_fence_material
 	local wood = get_wood_type(baseitem or definitions.description or "")
 	if wood and PLANK_TEXTURES[wood] then
@@ -95,7 +94,6 @@ local function ensure_tiles_are_plank(definitions)
 		core.log("action", "[mcl_fences] inferred plank '"..PLANK_TEXTURES[wood].."' for '"..tostring(definitions.description or "").."'")
 		return
 	end
-
 	if definitions.tiles and definitions.tiles[1] then
 		local t = definitions.tiles[1]:lower()
 		for wood_key, plank in pairs(PLANK_TEXTURES) do
@@ -114,14 +112,11 @@ local function handle_textures(block, definitions)
 		core.log("warning", "[mcl_fences] handle_textures: no tiles for '"..tostring(definitions.description or "unknown").."'")
 		return
 	end
-
 	local base_texture = definitions.tiles[1]
 	definitions.tiles = { base_texture }
-
 	local mask_filename = (block == "fence_gate") and "mcl_fences_fence_gate_mask.png" or "mcl_fences_fence_mask.png"
 	local scaled_plank = base_texture .. "^[resize:"..tostring(MASK_SIZE).."x"..tostring(MASK_SIZE)
 	local composed = mask_filename .. "^" .. scaled_plank .. "^" .. mask_filename .. "^[makealpha:255,126,126"
-
 	if not definitions.inventory_image then definitions.inventory_image = composed end
 	if not definitions.wield_image then definitions.wield_image = composed end
 end
@@ -230,7 +225,6 @@ function mcl_fences.register_fence_def(name, definitions)
 	definitions._pathfinding_class = "FENCE"
 	definitions.groups.deco_block = 1
 	definitions.connects_to = definitions.connects_to or { fence_name, "group:fence", "group:fence_gate", "group:solid" }
-
 	if definitions.tiles and definitions.tiles[1] then
 		handle_textures("fence", definitions)
 	else
@@ -243,7 +237,6 @@ function mcl_fences.register_fence_def(name, definitions)
 	end
 
 	core.register_node(":"..fence_name, table.merge(tpl_fences, definitions))
-
 	if definitions._mcl_fences_baseitem then
 		local stick = definitions._mcl_fences_stickreplacer or "mcl_core:stick"
 		local material = definitions._mcl_fences_baseitem
@@ -256,19 +249,16 @@ function mcl_fences.register_fence_def(name, definitions)
 			}
 		})
 	end
-
 	return fence_name
 end
 
 function mcl_fences.register_fence_gate_def(name, definitions)
 	local fence_gate_name = "mcl_fences:"..name.."_gate"
 	local fence_gate_name_open = fence_gate_name.."_open"
-
 	definitions.groups = definitions.groups or {}
 	definitions.groups.fence_gate = 1
 	definitions._pathfinding_class = "FENCE"
 	definitions.groups.deco_block = 1
-
 	if definitions.tiles and definitions.tiles[1] then
 		handle_textures("fence_gate", definitions)
 	else
@@ -279,7 +269,6 @@ function mcl_fences.register_fence_gate_def(name, definitions)
 			core.log("warning", "[mcl_fences] register_fence_gate_def: '"..tostring(name).."' has no tiles.")
 		end
 	end
-
 core.register_node(":"..fence_gate_name, table.merge(tpl_fence_gates, definitions))
 
 local opendefinitions = table.copy(definitions)
@@ -294,7 +283,6 @@ opendefinitions.mesecon_ignore_opaque_dig = 1
 opendefinitions.mesecon_effector_on = 1
 
 core.register_node(":"..fence_gate_name_open, table.merge(tpl_fence_gates_open, { drop = fence_gate_name }, opendefinitions))
-
 	if definitions._mcl_fences_baseitem then
 		local stick = definitions._mcl_fences_stickreplacer or "mcl_core:stick"
 		local material = definitions._mcl_fences_baseitem
@@ -307,11 +295,9 @@ core.register_node(":"..fence_gate_name_open, table.merge(tpl_fence_gates_open, 
 			}
 		})
 	end
-
 	if core.get_modpath("doc") then
 		doc.add_entry_alias("nodes", fence_gate_name, "nodes", fence_gate_name_open)
 	end
-
 	return fence_gate_name, fence_gate_name_open
 end
 
