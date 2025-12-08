@@ -54,6 +54,7 @@ local function create_entity(pos)
 	if obj and obj:get_pos() then
 		local rot = { x = 0, y = bell_rotations[param2 + 1], z = 0 }
 		obj:set_rotation(rot)
+		return obj:get_luaentity()
 	else
 		core.log("warning", "[mcl_bells] Failed to create entity at " .. (pos and core.pos_to_string(pos, 1) or "nil"))
 	end
@@ -77,6 +78,16 @@ end
 
 function mcl_bells.find_or_create_entity(pos)
 	return find_entity(pos) or create_entity(pos)
+end
+
+local function rotate_for_placer(pos, placer)
+	if not placer then
+		return
+	end
+
+	local yaw = (math.floor(placer:get_look_horizontal()) % 4)
+	local rot = { x = 0, y = bell_rotations[yaw + 1], z = 0 }
+	mcl_bells.find_or_create_entity(pos).object:set_rotation(rot)
 end
 
 core.register_node("mcl_bells:bell", {
@@ -134,6 +145,7 @@ core.register_node("mcl_bells:bell", {
 	on_destruct = function(pos)
 		mcl_bells.remove_ent(pos)
 	end,
+	after_place_node = rotate_for_placer,
 })
 
 local function check_node(pos)
