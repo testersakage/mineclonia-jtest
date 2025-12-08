@@ -105,9 +105,13 @@ core.register_node("mcl_bells:bell", {
 		bell = 1,
 		supported_node_wallmounted = 1,
 		dig_by_piston = 1,
+		pickaxey = 2,
+		deco_block = 1,
+		pathfinder_partial = 2,
 	},
 	sunlight_propagates = true,
 	sounds = mcl_sounds.node_sound_metal_defaults(),
+	_mcl_hardness = 5,
 	on_rightclick = mcl_bells.ring_once,
 	_mcl_redstone = {
 		connects_to = function(node, dir)
@@ -159,7 +163,6 @@ core.register_entity("mcl_bells:bell_ent", {
 		visual = "mesh",
 		mesh = "mcl_bells_bell_ceiling.b3d",
 		textures = { "mcl_bells_bell_uv.png" },
-		hp_max = 20,
 		physical = true,
 		collisionbox = { -0.3, -0.5, -0.3, 0.3, 0.5, 0.3 },
 		collide_with_objects = true,
