@@ -139,3 +139,21 @@ local function stable_sort (array, less)
 end
 
 table.stable_sort = stable_sort
+
+-- Creates a read-only table that protects against inadvertent modifications.
+
+-- Attribution: https://www.lua.org/pil/13.4.5.html
+
+-- May eventually be superceded by constant variables when available: https://www.lua.org/manual/5.4/manual.html#3.3.7
+
+function table.read_only(t)
+	local proxy = {}
+	local mt = {
+		__index = t,
+		__newindex = function (t, k, v)
+			error("attempted to update read-only value \"" .. k .. "\" to " .. v, 2)
+		end
+	}
+	setmetatable(proxy, mt)
+	return proxy
+end
