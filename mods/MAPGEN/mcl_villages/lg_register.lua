@@ -265,6 +265,7 @@ if mcl_levelgen.is_levelgen_environment then
 		"mcl_smithing_table:table",
 		"mcl_stonecutter:stonecutter",
 		"group:jigsaw_construct",
+		"group:bell",
 	})
 else
 	nodes_to_construct = {}
@@ -353,15 +354,6 @@ local function place_belltower (piece, rng, x1, z1, x2, z2)
 					  x, floor (spawn[2] + 0.5), z, {
 				spawn[1], spawn[2], spawn[3],
 			})
-
-			notify_generated(
-				"mcl_bells:spawn_bell",
-				x,
-				floor(spawn[2] + 0.5),
-				z,
-				{ floor(spawn[1]), floor(spawn[2]), floor(spawn[3]) }
-			)
-
 			return
 		end
 	end

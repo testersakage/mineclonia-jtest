@@ -226,13 +226,3 @@ core.register_lbm({
 	run_at_every_load = true,
 	action = mcl_bells.find_or_create_entity,
 })
-
-local function handle_spawn_bell(_, data)
-	local a1 = vector.offset(vector.new(mcl_levelgen.level_to_minetest_position(data[1], data[2], data[3])), -8, 0, -8)
-	local a2 = vector.offset(a1, 16, 16, 16)
-	for _, npos in pairs(core.find_nodes_in_area(a1, a2, { "group:bell" })) do
-		mcl_bells.find_or_create_entity(npos)
-	end
-end
-
-mcl_levelgen.register_notification_handler("mcl_bells:spawn_bell", handle_spawn_bell)
