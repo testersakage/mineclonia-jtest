@@ -132,11 +132,11 @@ core.register_node("mcl_bells:bell", {
 		end,
 	},
 
-	_ceiling_mesh = "mcl_bells_bell_ceiling.gltf",
+	_ceiling_mesh = "mcl_bells_bell_ceiling.b3d",
 	_ceiling_textures = { "mcl_bells_bell_uv.png" },
-	_ground_mesh = "mcl_bells_bell_ground.gltf",
+	_ground_mesh = "mcl_bells_bell_ground.b3d",
 	_ground_textures = { "mcl_bells_bell_uv.png" },
-	_wall_mesh = "mcl_bells_bell_wall.gltf",
+	_wall_mesh = "mcl_bells_bell_wall.b3d",
 	_wall_textures = { "mcl_bells_bell_uv.png" },
 
 	on_construct = function(pos)
@@ -157,14 +157,14 @@ end
 core.register_entity("mcl_bells:bell_ent", {
 	initial_properties = {
 		visual = "mesh",
-		mesh = "mcl_bells_bell_ceiling.gltf",
+		mesh = "mcl_bells_bell_ceiling.b3d",
 		textures = { "mcl_bells_bell_uv.png" },
 		hp_max = 20,
 		physical = true,
 		collisionbox = { -0.3, -0.5, -0.3, 0.3, 0.5, 0.3 },
 		collide_with_objects = true,
 	},
-	_mesh = "bell.gltf",
+	_mesh = "mcl_bells_bell_ceiling.b3d",
 	_textures = { "bell_uv.png" },
 	on_activate = function(self, staticdata)
 		if not check_node(self.object:get_pos()) then
