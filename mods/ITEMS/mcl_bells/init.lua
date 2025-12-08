@@ -30,11 +30,24 @@ local bell_rotations = {
 	0, -- z+
 }
 
+local required_fields = {
+	"_ceiling_mesh",
+	"_ceiling_textures",
+	"_ground_mesh",
+	"_ground_textures",
+	"_wall_mesh",
+	"_wall_textures",
+}
+
 local function create_entity(pos)
 	local node = core.get_node(pos)
 	local node_name = node.name
 	local node_def = core.registered_nodes[node_name]
 	local param2 = node.param2 % 8 -- get first 3 bits
+
+	for _, field in ipairs(required_fields) do
+		assert(node_def[field] and node_def[field] ~= "", "You cannot create a bell without specifying " .. field)
+	end
 
 	local static_data = {
 		param2 = param2,
