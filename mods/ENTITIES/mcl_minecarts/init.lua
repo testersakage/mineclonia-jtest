@@ -5,8 +5,11 @@ local has_mcl_wip = core.get_modpath("mcl_wip")
 
 mcl_minecarts = {}
 mcl_minecarts.modpath = core.get_modpath(modname)
-mcl_minecarts.speed_max = 10
-mcl_minecarts.check_float_time = 15
+
+dofile(mcl_minecarts.modpath.."/constants.lua")
+
+mcl_minecarts.speed_max = constants.SPEED_MAX
+mcl_minecarts.check_float_time = constants.CHECK_FLOAT_TIME
 
 dofile(mcl_minecarts.modpath.."/functions.lua")
 dofile(mcl_minecarts.modpath.."/rails.lua")
