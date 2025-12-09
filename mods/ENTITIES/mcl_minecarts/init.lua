@@ -918,48 +918,10 @@ register_minecart(
 		end
 	end, activate_tnt_minecart)
 
-
-core.register_craft({
-	output = "mcl_minecarts:minecart",
-	recipe = {
-		{"mcl_core:iron_ingot", "", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_core:iron_ingot", "mcl_core:iron_ingot"},
-	},
-})
-
-core.register_craft({
-	output = "mcl_minecarts:tnt_minecart",
-	recipe = {
-		{"mcl_tnt:tnt"},
-		{"mcl_minecarts:minecart"},
-	},
-})
-
-core.register_craft({
-	output = "mcl_minecarts:furnace_minecart",
-	recipe = {
-		{"mcl_furnaces:furnace"},
-		{"mcl_minecarts:minecart"},
-	},
-})
-
-core.register_craft({
-	output = "mcl_minecarts:hopper_minecart",
-	recipe = {
-		{"mcl_hoppers:hopper"},
-		{"mcl_minecarts:minecart"},
-	},
-})
-
-
-core.register_craft({
-	output = "mcl_minecarts:chest_minecart",
-	recipe = {
-		{"mcl_chests:chest"},
-		{"mcl_minecarts:minecart"},
-	},
-})
-
+-- Load Minecart Recipes
+for output, recipe in pairs(mcl_util.load_json_file(mcl_minecarts.modpath, "recipes")) do
+	core.register_craft({ output = output, recipe = recipe })
+end
 
 if has_mcl_wip then
 	mcl_wip.register_wip_item("mcl_minecarts:chest_minecart")
