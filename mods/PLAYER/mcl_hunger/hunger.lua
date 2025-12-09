@@ -271,6 +271,24 @@ core.register_on_leaveplayer (function (player, _)
 	mcl_hunger.eat_anim_hud[player] = nil
 end)
 
+controls.register_on_press (function (player, key)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return
+	end
+
+	local pname = player:get_player_name ()
+	local pinfo = core.get_player_window_information (pname)
+	if pinfo.touch_controls and (key == "LMB" or key == "RMB") then
+		local itemstack = player:get_wielded_item ()
+		local pointed_thing = mcl_util.get_pointed_thing (player, true)
+		local rc = mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
+		if rc then
+			mcl_hunger.eat_anim_block[player] = 1
+			return rc
+		end
+	end
+end)
+
 controls.register_on_hold (function (player, key)
 	if mcl_serverplayer.is_csm_capable (player) then
 		return
