@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_portals x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-07 08:57+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_portals/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.14.3\n"
 
 msgid "End Portal"
 msgstr "Портал Края"
@@ -65,10 +67,10 @@ msgid "Throw an ender pearl into the portal to teleport. Entering an Gateway por
 msgstr "Киньте жемчуг Края в портал чтобы телепортироваться. Войдя во портал врат рядом с Верхним миром, вы телепортируетесь во внешний Край. На месте прибытия появится еще одни врата, которые перенесут вас обратно."
 
 msgid "Entering the Nether"
-msgstr ""
+msgstr "Вход в Незер"
 
 msgid "Leaving the Nether"
-msgstr ""
+msgstr "Выход из Незера"
 
 msgid "Obsidian is also used as the frame of Nether portals."
 msgstr "Обсидиан также используется в качестве рамки Адского портала."
@@ -90,4 +92,3 @@ msgstr "Координаты сброса зарегистрированных �
 
 msgid "Invalid dimension argument."
 msgstr "Недопустимый аргумент измерения."
-
