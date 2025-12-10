@@ -16,8 +16,8 @@ core.register_on_mods_loaded(function()
 		if def.on_walk_over then
 			on_walk[name] = def.on_walk_over
 		end
-		if def._on_entity_inside then
-			on_entity_inside[name] = def._on_entity_inside
+		if def._mcl_on_entity_inside then
+			on_entity_inside[name] = def._mcl_on_entity_inside
 		end
 	end
 end)

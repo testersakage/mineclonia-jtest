@@ -691,8 +691,8 @@ core.register_entity(":__builtin:item", {
 			-- Don't infinetly fall into unloaded map
 			self:disable_physics()
 			return
-		elseif core.registered_nodes[node.name]._on_entity_inside then
-			core.registered_nodes[node.name]._on_entity_inside(p, node, self.object)
+		elseif core.registered_nodes[node.name]._mcl_on_entity_inside then
+			core.registered_nodes[node.name]._mcl_on_entity_inside(p, node, self.object)
 		end
 
 		if self._on_entity_step then
