@@ -52,7 +52,7 @@ doc.sub.items.register_factoid("nodes", "groups", function(itemstring, _)
 	if core.get_item_group(itemstring, "soil_sugarcane") ~= 0 then
 		datastring = datastring .. S("Sugar canes will grow on this block.") .. "\n"
 	end
-	if core.get_item_group(itemstring, "soil_nether_wart") then
+	if core.get_item_group(itemstring, "soil_nether_wart") ~= 0 then
 		datastring = datastring .. S("Nether wart will grow on this block.") .. "\n"
 	end
 	return datastring
@@ -91,7 +91,7 @@ end)
 
 -- destroys_items
 doc.sub.items.register_factoid("nodes", "groups", function(itemstring, _)
-	if core.get_item_group(itemstring, "destroys_items") then
+	if core.get_item_group(itemstring, "destroys_items") ~= 0 then
 		return S("This block destroys any item it touches.")
 	end
 	return ""
