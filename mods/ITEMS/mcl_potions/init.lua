@@ -56,7 +56,7 @@ core.register_craftitem("mcl_potions:glass_bottle", {
 			core.swap_node(droppos, {name = node_name:gsub("_5", ""), param2 = dropnode.param2})
 			new_stack = ItemStack("mcl_honey:honey_bottle")
 			droppos = vector.add(droppos, dropdir)
-		elseif core.get_item_group(node_name, "water") then
+		elseif core.get_item_group(node_name, "water") ~= 0 then
 			local water_type = "water"
 			local defs = core.registered_nodes[node_name]
 			local is_source = defs and defs.liquidtype == "source"

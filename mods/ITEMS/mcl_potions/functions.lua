@@ -2295,7 +2295,7 @@ function mcl_potions._water_effect(pos, radius)
 	if core.get_item_group(dnode.name, "fire") ~= 0 or
 	core.get_item_group(dnode.name, "lit_campfire") ~= 0 or
 	core.get_item_group(dnode.name, "lit_candles") ~= 0 or
-	core.get_item_group(dnode.name, "lit_cake") then
+	core.get_item_group(dnode.name, "lit_cake") ~= 0 then
 		epos.y = pos.y - 0.5
 	end
 	local exting = false
@@ -2348,7 +2348,7 @@ function mcl_potions._water_effect(pos, radius)
 			elseif candle_group ~= 0 then
 				core.sound_play("fire_extinguish_flame", {pos = nodes[n], gain = 0.1, max_hear_distance = 16}, true)
 				core.set_node(nodes[n], {name = "mcl_candles:candle_" .. candle_group, param2 = node.param2})
-			elseif core.get_item_group(node.name, "lit_cake") then
+			elseif core.get_item_group(node.name, "lit_cake") ~= 0 then
 				core.set_node(nodes[n], {name = node.name:gsub("_lit", ""), param2 = node.param2})
 			end
 			exting = true
