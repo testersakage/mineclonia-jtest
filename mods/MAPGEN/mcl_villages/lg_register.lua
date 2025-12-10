@@ -254,19 +254,20 @@ local function instantiate_crops_and_chests (x, y, z, rng, cid_existing,
 	return cid, param2
 end
 
-local poi_nodes_with_formspecs
+local nodes_to_construct
 
 if mcl_levelgen.is_levelgen_environment then
-	poi_nodes_with_formspecs = mcl_levelgen.construct_cid_list ({
+	nodes_to_construct = mcl_levelgen.construct_cid_list ({
 		"group:brewing_stand",
 		"group:furnace",
 		"group:anvil",
 		"mcl_grindstone:grindstone",
 		"mcl_smithing_table:table",
 		"mcl_stonecutter:stonecutter",
+		"group:jigsaw_construct",
 	})
 else
-	poi_nodes_with_formspecs = {}
+	nodes_to_construct = {}
 end
 
 local indexof = table.indexof
@@ -274,7 +275,7 @@ local construct_block = mcl_levelgen.construct_block
 
 local function construct_pois_with_formspecs (x, y, z, rng, cid_existing,
 					 param2_existing, cid, param2)
-	if indexof (poi_nodes_with_formspecs, cid) ~= -1 then
+	if indexof (nodes_to_construct, cid) ~= -1 then
 		construct_block (x, y, z)
 	end
 	return cid, param2
