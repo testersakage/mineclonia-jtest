@@ -339,18 +339,19 @@ local function stringtoull (x, str)
 	return true
 end
 
+local tmp = ull (0, 0)
+
 local function mul2ull (a, b)
 	local lo, hi = a[1], a[2]
-	mulull (a, b[1])
+	local lb, hb = b[1], b[2]
+	mulull (a, lb)
 	a[1], lo = lo, a[1]
 	a[2], hi = hi, a[2]
-	mulull (a, b[2])
+	mulull (a, hb)
 	shlull (a, 32)
-	lo, b[1] = b[1], lo
-	hi, b[2] = b[2], hi
-	addull (a, b)
-	b[1] = lo
-	b[2] = hi
+	tmp[1] = lo
+	tmp[2] = hi
+	addull (a, tmp)
 end
 
 if detect_luajit () then
@@ -418,28 +419,28 @@ if detect_luajit () then
 		local along = 0x100000000ull * a[2] + a[1]
 		local value = rol (along, k)
 		a[1] = tonumber (band (value, 0xffffffffull))
-		a[2] = tonumber (rshift (value, 32ull))
+		a[2] = tonumber (rshift (value, 32))
 	end
 
 	local function shrull (a, k)
 		local along = 0x100000000ull * a[2] + a[1]
 		local value = rshift (along, k)
 		a[1] = tonumber (band (value, 0xffffffffull))
-		a[2] = tonumber (rshift (value, 32ull))
+		a[2] = tonumber (rshift (value, 32))
 	end
 
 	local function ashrull (a, k)
 		local along = 0x100000000ull * a[2] + a[1]
 		local value = arshift (along, k)
 		a[1] = tonumber (band (value, 0xffffffffull))
-		a[2] = tonumber (rshift (value, 32ull))
+		a[2] = tonumber (rshift (value, 32))
 	end
 
 	local function shlull (a, k)
 		local along = 0x100000000ull * a[2] + a[1]
 		local value = lshift (along, k)
 		a[1] = tonumber (band (value, 0xffffffffull))
-		a[2] = tonumber (rshift (value, 32ull))
+		a[2] = tonumber (rshift (value, 32))
 	end
 
 	local function mul2ull (a, b)
@@ -1730,8 +1731,8 @@ if false then
 	local salt = ull (0, 0)
 	stringtoull (level_seed, "193039485749")
 	stringtoull (salt, "987234911")
-	for x = -1024, 1023 do
-		for z = -1024, 1023 do
+	for x = -10, 10 do
+		for z = -10, 10 do
 			mcl_levelgen.set_slime_chunk_seed (rng, level_seed, x, z, salt)
 			print (rng:next_within (10))
 		end
