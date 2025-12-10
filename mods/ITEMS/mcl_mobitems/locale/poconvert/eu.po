@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_mobitems x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-09 09:11+0000\n"
+"Last-Translator: josuigoa <josuigoa@noreply.codeberg.org>\n"
+"Language-Team: Basque <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_mobitems/eu/>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.14.3\n"
 
 msgid "Rotten Flesh"
 msgstr "Haragi ustela"
@@ -188,16 +189,20 @@ msgid "Must be your lucky day! Place this item in an item frame for decoration."
 msgstr "Zure zorioneko eguna izango da! Jarri item hau dekoraziorako item-marko batean."
 
 msgid "Saddle"
-msgstr "Armazoia"
+msgstr "Aulkia"
 
 msgid "Can be placed on animals to ride them"
 msgstr "Animalien gainean jar daiteke, muntatzeko"
 
 msgid "Saddles can be put on some animals in order to mount them."
-msgstr "Muntaiak jar daitezke animalia batzuetan, muntatzeko."
+msgstr "Aulkiak animalia batzuetan jar daitezke, muntatzeko."
 
 msgid "Use the placement key with the saddle in your hand to try to put on the saddle. Saddles fit on horses, mules, donkeys and pigs. Horses, mules and donkeys need to be tamed first, otherwise they'll reject the saddle. Saddled animals can be mounted by using the placement key on them again."
-msgstr "Erabili eraikuntza-tekla aulkia eskuan duzula, jartzen saiatzeko. Zaldi-aulkiak zaldi, mando, asto eta txerriei egokitzen zaizkie, baina lehenik eta behin etxekotu egin behar dituzu, bestela aulkia baztertu egingo dute. Etxekotutako animaliak berriz ere eraikuntza-tekla erabiliz muntatu daitezke."
+msgstr ""
+"Erabili eraikuntza-tekla aulkia eskuan duzula, jartzen saiatzeko. Aulkiak "
+"zaldi, mando, asto eta txerriei egokitzen zaizkie, baina lehenik eta behin "
+"etxekotu egin behar dituzu, bestela aulkia baztertu egingo dute. "
+"Etxekotutako animaliak berriz ere eraikuntza-tekla erabiliz muntatu daitezke."
 
 msgid "Rabbit Stew"
 msgstr "Untxi erregosia"
@@ -224,13 +229,16 @@ msgid "Carrot on a Stick"
 msgstr "Kanabera azenarioarekin"
 
 msgid "Lets you ride a saddled pig"
-msgstr "Txerri bezatu bat muntatzeko aukera ematen dizu"
+msgstr "Txerri etxekotu bat muntatzeko aukera ematen dizu"
 
 msgid "A carrot on a stick can be used on saddled pigs to ride them."
-msgstr "Azenarioa duen kanabera txerri siloratuetan erabil daiteke, muntatzeko."
+msgstr "Azenarioa duen kanabera txerri etxekotuetan erabil daiteke, muntatzeko."
 
 msgid "Place it on a saddled pig to mount it. You can now ride the pig like a horse. Pigs will also walk towards you when you just wield the carrot on a stick."
-msgstr "Jarri txerri siloratu baten gainean muntatzeko. Orain zaldi bat bezala igo dezakezu txerria. Txerriak ere zuregana joango dira azenarioa makila batean bakarrik maneiatzen dutenean."
+msgstr ""
+"Jarri txerri etxekotu baten gainean muntatzeko. Orain zaldi bat bezala igo "
+"dezakezu txerria. Txerriak ere zuregana joango dira azenarioa makila batean "
+"bakarrik maneiatzen dutenean."
 
 msgid "Warped Fungus on a Stick"
 msgstr "Onddo distortsionatu bat duen kanabera"
@@ -269,19 +277,19 @@ msgid "Leather horse armor can be worn by horses to increase their protection fr
 msgstr "Zaldiek larruzko armadurak erabil ditzakete kalteen aurkako babesa handitzeko."
 
 msgid "Iron Horse Armor"
-msgstr "Burdinazko armadura zaldiarentzat"
+msgstr "Zaldiarentzako burdinazko armadura"
 
 msgid "Iron horse armor can be worn by horses to increase their protection from harm a bit."
 msgstr "Zaldiek burdinazko zaldiaren armadura erabil dezakete kaltearen aurkako babesa handitzeko."
 
 msgid "Golden Horse Armor"
-msgstr "Urrezko armadura zaldiarentzat"
+msgstr "Zaldiarentzako urrezko armadura"
 
 msgid "Golden horse armor can be worn by horses to increase their protection from harm."
 msgstr "Zaldiek urrezko zaldiaren armadura erabil dezakete kaltearen aurkako babesa handitzeko."
 
 msgid "Diamond Horse Armor"
-msgstr "Zaldirako diamantezko armadura"
+msgstr "Zaldiarentzako diamantezko armadura"
 
 msgid "Diamond horse armor can be worn by horses to greatly increase their protection from harm."
 msgstr "Zaldiek diamantezko zaldiaren armadura erabil dezakete, kaltearen aurkako babesa handitzeko neurri handi batean."
@@ -309,4 +317,3 @@ msgstr "Etiketa batek izaki bat izendatzeko balio du."
 
 msgid "Before you use the name tag, you need to set a name at an anvil. Then you can use the name tag to name a mob. This uses up the name tag."
 msgstr "Etiketa erabili aurretik, izen berria jarri behar diozu ingude batean. Gero etiketa erabil dezakezu izaki bati izen bat jartzeko. Horrek etiketa kontsumitzen du."
-
