@@ -5,8 +5,7 @@ local has_mcl_wip = core.get_modpath("mcl_wip")
 
 mcl_minecarts = {}
 mcl_minecarts.modpath = core.get_modpath(modname)
-mcl_minecarts.speed_max = 10
-mcl_minecarts.check_float_time = 15
+mcl_util.update_table_from_json_file(mcl_minecarts, "properties", mcl_minecarts.modpath)
 
 dofile(mcl_minecarts.modpath.."/functions.lua")
 dofile(mcl_minecarts.modpath.."/rails.lua")
@@ -919,9 +918,7 @@ register_minecart(
 	end, activate_tnt_minecart)
 
 -- Load Minecart Recipes
-for output, recipe in pairs(mcl_util.load_json_file(mcl_minecarts.modpath, "recipes")) do
-	core.register_craft({ output = output, recipe = recipe })
-end
+mcl_util.register_craft_from_json_file("minecart", mcl_minecarts.modpath)
 
 if has_mcl_wip then
 	mcl_wip.register_wip_item("mcl_minecarts:chest_minecart")

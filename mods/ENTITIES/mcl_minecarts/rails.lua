@@ -308,43 +308,8 @@ register_rail("mcl_minecarts:detector_rail_on",
 )
 
 
--- Crafting
-core.register_craft({
-	output = "mcl_minecarts:rail 16",
-	recipe = {
-		{"mcl_core:iron_ingot", "", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_core:stick", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "", "mcl_core:iron_ingot"},
-	}
-})
-
-core.register_craft({
-	output = "mcl_minecarts:golden_rail 6",
-	recipe = {
-		{"mcl_core:gold_ingot", "", "mcl_core:gold_ingot"},
-		{"mcl_core:gold_ingot", "mcl_core:stick", "mcl_core:gold_ingot"},
-		{"mcl_core:gold_ingot", "mcl_redstone:redstone", "mcl_core:gold_ingot"},
-	}
-})
-
-core.register_craft({
-	output = "mcl_minecarts:activator_rail 6",
-	recipe = {
-		{"mcl_core:iron_ingot", "mcl_core:stick", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_redstone_torch:redstone_torch_on", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_core:stick", "mcl_core:iron_ingot"},
-	}
-})
-
-core.register_craft({
-	output = "mcl_minecarts:detector_rail 6",
-	recipe = {
-		{"mcl_core:iron_ingot", "", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_pressureplates:pressure_plate_stone_off", "mcl_core:iron_ingot"},
-		{"mcl_core:iron_ingot", "mcl_redstone:redstone", "mcl_core:iron_ingot"},
-	}
-})
-
+-- Load Rail Recipes
+mcl_util.register_craft_from_json_file("rails", mcl_minecarts.modpath)
 
 -- Aliases
 if core.get_modpath("doc") then

@@ -1,0 +1,22 @@
+{
+	"mcl_minecarts:rail 16": [
+		["mcl_core:iron_ingot", "", "mcl_core:iron_ingot"],
+		["mcl_core:iron_ingot", "mcl_core:stick", "mcl_core:iron_ingot"],
+		["mcl_core:iron_ingot", "", "mcl_core:iron_ingot"]
+	],
+	"mcl_minecarts:golden_rail": [
+		["mcl_core:gold_ingot", "", "mcl_core:gold_ingot"],
+		["mcl_core:gold_ingot", "mcl_core:stick", "mcl_core:gold_ingot"],
+		["mcl_core:gold_ingot", "mcl_redstone:redstone", "mcl_core:gold_ingot"]
+	],
+	"mcl_minecarts:activator_rail 6": [
+		["mcl_core:iron_ingot", "mcl_core:stick", "mcl_core:iron_ingot"],
+		["mcl_core:iron_ingot", "mcl_redstone_torch:redstone_torch_on", "mcl_core:iron_ingot"],
+		["mcl_core:iron_ingot", "mcl_core:stick", "mcl_core:iron_ingot"]
+	],
+	"mcl_minecarts:detector_rail 6": [
+		["mcl_core:iron_ingot", "", "mcl_core:iron_ingot"],
+		["mcl_core:iron_ingot", "mcl_pressureplates:pressure_plate_stone_off", "mcl_core:iron_ingot"],
+		["mcl_core:iron_ingot", "mcl_redstone:redstone", "mcl_core:iron_ingot"]
+	]
+}

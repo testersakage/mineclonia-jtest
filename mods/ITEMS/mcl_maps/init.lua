@@ -11,8 +11,8 @@ local map_textures_path = worldpath .. "/mcl_maps/"
 
 core.mkdir(map_textures_path)
 
-local texture_colors = mcl_util.load_json_file(modpath, "colors")
-local palettes = mcl_util.load_json_file(modpath, "palettes")
+local texture_colors = mcl_util.load_json_file("colors", modpath)
+local palettes = mcl_util.load_json_file("palettes", modpath)
 
 local color_cache = {}
 
