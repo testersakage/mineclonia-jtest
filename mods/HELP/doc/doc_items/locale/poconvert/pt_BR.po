@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-06 03:10+0000\n"
+"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/doc_items/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.14.3\n"
 
 msgid "This is a decorational block."
 msgstr "Esse é um bloco decorativo."
@@ -30,6 +31,9 @@ msgstr "Segure-o na sua mão, depois clique com o botão esquerdo para comer. Ma
 
 msgid "This block's rotation is affected by the way you place it: Place it on the floor or ceiling for a vertical orientation; place it at the side for a horizontal orientation. Sneaking while placing it leads to a perpendicular orientation instead."
 msgstr ""
+"A rotação deste bloco é afetada pela forma como você o coloca: Coloque no "
+"chão ou no teto para uma orientação vertical; coloque na lateral para uma "
+"orientação horizontal. Se agachando ao colocar, ele ficará na perpendicular."
 
 msgid "Hand"
 msgstr "Mão"
@@ -44,7 +48,7 @@ msgid "No"
 msgstr "Não"
 
 msgid ", "
-msgstr ","
+msgstr ", "
 
 msgid "Unknown item (@1)"
 msgstr "Item desconhecido (@1)"
@@ -59,19 +63,19 @@ msgid "@1 seconds"
 msgstr "@1 segundos"
 
 msgid "• @1: @2"
-msgstr ""
+msgstr "• @1: @2"
 
 msgid "• @1, rating @2: @3 s - @4 s"
-msgstr ""
+msgstr "• @1, classificação @2: @3 s - @4 s"
 
 msgid "• @1, rating @2: @3 s"
-msgstr ""
+msgstr "• @1, classificação @2: @3 s"
 
 msgid "• @1, level @2: @3 uses"
-msgstr ""
+msgstr "• @1, nível @2: @3 usos"
 
 msgid "• @1, level @2: Unlimited"
-msgstr ""
+msgstr "• @1, nível @2: Ilimitado"
 
 msgid "This tool is capable of mining."
 msgstr "Essa ferramenta é capaz de minerar."
@@ -83,7 +87,7 @@ msgid "Mining times:"
 msgstr "Tempos de mineração:"
 
 msgid "Mining durability:"
-msgstr ""
+msgstr "Durabilidade de mineração:"
 
 msgid "This is a melee weapon which deals damage by punching."
 msgstr "Essa é uma arma corpo-a-corpo que causa dano ao socar."
@@ -92,7 +96,7 @@ msgid "Maximum damage per hit:"
 msgstr "Dano máximo por acerto:"
 
 msgid "• @1: @2 HP"
-msgstr ""
+msgstr "• @1: @2 HP"
 
 msgid "Full punch interval: @1 s"
 msgstr "Intervalo completo de golpe: @1 s"
@@ -122,7 +126,7 @@ msgid "Mining ratings:"
 msgstr "Classificações de mineração:"
 
 msgid "Toughness level: @1"
-msgstr ""
+msgstr "Nível de dureza: @1"
 
 msgid "Range: @1"
 msgstr "Alcance: @1"
@@ -143,7 +147,7 @@ msgid " Using it as fuel turns it into: @1."
 msgstr " Usar isso como combustivel o transforma em: @1."
 
 msgid "Itemstring: \"@1\""
-msgstr ""
+msgstr "ID do Item: \"@1\""
 
 msgid "Description: @1"
 msgstr "Descrição: @1"
@@ -218,10 +222,10 @@ msgid "• Not renewable"
 msgstr "• Não renovável"
 
 msgid "• No flowing"
-msgstr ""
+msgstr "• Não corrente"
 
 msgid "• Flowing range: @1"
-msgstr ""
+msgstr "• Alcance de fluxo: @1"
 
 msgid "• Viscosity: @1"
 msgstr "• Viscosidade: @1"
@@ -248,7 +252,7 @@ msgid "The fall damage on this block is reduced by @1%."
 msgstr "O dano por queda nesse bloco é reduzido em @1%."
 
 msgid "You can not jump while standing on this block."
-msgstr " Você não pode pular enquanto estiver neste bloco."
+msgstr "Você não pode pular enquanto estiver neste bloco."
 
 msgid "This block can be climbed."
 msgstr "Esse bloco pode ser escalado."
@@ -257,7 +261,7 @@ msgid "This block will make you bounce off with an elasticity of @1%."
 msgstr "Esse bloco fará você saltar com uma elasticidade de @1%."
 
 msgid "This block is slippery."
-msgstr ""
+msgstr "Este bloco é escorregadio."
 
 msgid "This block is completely silent when walked on, mined or built."
 msgstr "Esse bloco é completamente silencioso quando pisado, extraído ou construído."
@@ -266,7 +270,7 @@ msgid "This block is completely silent when mined or built."
 msgstr "Esse bloco é completamente silencioso quando extraído ou construído."
 
 msgid "Walking on this block is completely silent."
-msgstr ""
+msgstr "Andar neste bloco é completamente silencioso."
 
 msgid "Mining this block is completely silent."
 msgstr "Minerar esse bloco é completamente silencioso."
@@ -396,4 +400,3 @@ msgstr "Um bloco transparente, basicamente um vazio. Isso geralmente fica no lug
 
 msgid "Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand."
 msgstr "Sempre que você não estiver empunhando nenhum item, você usa a mão que atua como uma ferramentacom caracteristicas próprias. Quando você está empunhando um item que não é uma ferramenta de mineração ou uma arma, ele se comportará como se fosse a mão."
-
