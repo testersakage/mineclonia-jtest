@@ -124,7 +124,7 @@ function mcl_pressureplates.register_pressure_plate(basename, def)
 		description = def.description,
 		tiles = { def.texture },
 		drop = basename.."_off",
-		_on_walk_through = function(pos)
+		_on_entity_inside = function(pos)
 			update_pp(vector.round(pos))
 		end,
 		sounds = def.sounds,

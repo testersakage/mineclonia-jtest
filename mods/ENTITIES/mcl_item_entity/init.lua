@@ -686,10 +686,13 @@ core.register_entity(":__builtin:item", {
 		end
 
 		local p = self.object:get_pos()
-		if core.get_node(p).name == "ignore" then
+		local node = core.get_node(p)
+		if node.name == "ignore" then
 			-- Don't infinetly fall into unloaded map
 			self:disable_physics()
 			return
+		elseif core.registered_nodes[node.name]._on_entity_inside then
+			core.registered_nodes[node.name]._on_entity_inside(p, node, self.object)
 		end
 
 		if self._on_entity_step then
