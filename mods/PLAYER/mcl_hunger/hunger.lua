@@ -30,16 +30,6 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 	if def and def._mcl_eat_effect then
 		def._mcl_eat_effect(itemstack, user)
 	end
-	local old_itemstack = itemstack
-	itemstack = mcl_hunger.eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
-	for _, callback in pairs(core.registered_on_item_eats) do
-		local result = callback(hp_change, replace_with_item, itemstack, user, pointed_thing, old_itemstack)
-		if result then
-			return result
-		end
-	end
-
-	mcl_hunger.eat_anim_timer[user] = -math.huge
 
 	local foodtype = core.get_item_group(itemstack:get_name(), "food")
 	if foodtype == 3 then
@@ -57,6 +47,17 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 			object = user,
 		}, true)
 	end
+
+	local old_itemstack = itemstack
+	itemstack = mcl_hunger.eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
+	for _, callback in pairs(core.registered_on_item_eats) do
+		local result = callback(hp_change, replace_with_item, itemstack, user, pointed_thing, old_itemstack)
+		if result then
+			return result
+		end
+	end
+
+	mcl_hunger.eat_anim_timer[user] = -math.huge
 
 	return itemstack
 end

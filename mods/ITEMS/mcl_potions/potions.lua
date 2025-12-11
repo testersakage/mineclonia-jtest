@@ -197,7 +197,7 @@ function mcl_potions.register_potion(def)
 
 			mcl_potions._use_potion (player)
 		end
-		pdef._mcl_eat_replace_with = def.vanishing and nil or "mcl_potions:glass_bottle"
+		pdef._mcl_eat_replace_with = def.vanishing and "" or "mcl_potions:glass_bottle"
 	end
 	pdef._mcl_filter_description = mcl_potions.filter_potion_description
 
