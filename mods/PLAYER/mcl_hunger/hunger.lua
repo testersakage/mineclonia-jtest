@@ -2,6 +2,41 @@ local S = core.get_translator(core.get_current_modname())
 
 local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / tonumber(core.settings:get("movement_speed_walk"))
 
+
+local function is_eat_anim_possible (player, key)
+	if mcl_serverplayer.is_csm_capable (player) then
+		return false
+	end
+
+	local itemstack = player:get_wielded_item ()
+	local itemname = itemstack:get_name ()
+	if core.get_item_group(itemname, "food") == 0 then
+		return false
+	end
+
+	local pname = player:get_player_name ()
+	local pinfo = core.get_player_window_information (pname)
+	if pinfo and pinfo.touch_controls then
+		if key ~= "LMB" or key ~= "RMB" then
+			return false
+		end
+	else
+		if key ~= "RMB" then
+			return false
+		end
+	end
+
+	if mcl_hunger.eat_anim_block[player] ~= nil then
+		return false
+	end
+
+	local pointed_thing = mcl_util.get_pointed_thing (player, true)
+	local rc = mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
+	if rc then return false end
+
+	return true
+end
+
 -- wrapper for core.item_eat (this way we make sure other mods can't break this one)
 function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
 	if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
@@ -273,48 +308,21 @@ core.register_on_leaveplayer (function (player, _)
 end)
 
 controls.register_on_press (function (player, key)
-	if mcl_serverplayer.is_csm_capable (player) then
+	if not is_eat_anim_possible (player, key) then
 		return
-	end
-
-	local pname = player:get_player_name ()
-	local pinfo = core.get_player_window_information (pname)
-	if (pinfo and pinfo.touch_controls) and (key == "LMB" or key == "RMB") then
-		local itemstack = player:get_wielded_item ()
-		local pointed_thing = mcl_util.get_pointed_thing (player, true)
-		local rc = mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
-		if rc then
-			mcl_hunger.eat_anim_block[player] = 1
-			return rc
-		end
 	end
 end)
 
 controls.register_on_hold (function (player, key)
-	if mcl_serverplayer.is_csm_capable (player) then
+	if not is_eat_anim_possible (player, key) then
 		return
 	end
 
 	local itemstack = player:get_wielded_item ()
 	local itemname = itemstack:get_name ()
-	if core.get_item_group(itemname, "food") == 0
-		or key ~= "RMB" then
-		return
-	end
-
-	if mcl_hunger.eat_anim_block[player] ~= nil then
-		return
-	end
-
-	-- Prevent stuck on eat_anim if pointed_thing have rc
 	local pointed_thing = mcl_util.get_pointed_thing (player, true)
-	local rc = mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
-	if rc then
-		mcl_hunger.eat_anim_block[player] = 1
-		return rc
-	end
-
 	local h = mcl_hunger.get_hunger(player)
+
 	local creative = core.is_creative_enabled(player:get_player_name())
 	local can_eat_when_full = creative
 		or (mcl_hunger.active == false)
