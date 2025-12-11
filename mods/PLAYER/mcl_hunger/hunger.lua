@@ -279,7 +279,7 @@ controls.register_on_press (function (player, key)
 
 	local pname = player:get_player_name ()
 	local pinfo = core.get_player_window_information (pname)
-	if pinfo.touch_controls and (key == "LMB" or key == "RMB") then
+	if (pinfo and pinfo.touch_controls) and (key == "LMB" or key == "RMB") then
 		local itemstack = player:get_wielded_item ()
 		local pointed_thing = mcl_util.get_pointed_thing (player, true)
 		local rc = mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
