@@ -95,7 +95,7 @@ end)
 -- Modchannel message definitions.
 -----------------------------------------------------------------------
 
-local MAX_PROTO_VERSION = 8
+local MAX_PROTO_VERSION = 9
 
 -- Serverbound messages.
 local SERVERBOUND_HELLO = 'aa'
@@ -454,6 +454,12 @@ local function process_serverbound_hello (player, state, payload)
 					biomes[name] = tbl
 				end
 				serverbound_handshake.biome_definitions = biomes
+				if proto >= 9 then
+					serverbound_handshake.biome_seed
+						= mcl_levelgen.biome_seed
+					serverbound_handshake.registered_dimensions
+						= mcl_serverplayer.marshal_registered_dimensions ()
+				end
 			elseif proto >= 7 then
 				local id_to_name, name_to_def
 					= mcl_serverplayer.marshal_engine_biomes ()

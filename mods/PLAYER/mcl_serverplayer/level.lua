@@ -304,3 +304,27 @@ function mcl_serverplayer.get_engine_biome_meta (bx, by, bz)
 	end
 	return meta
 end
+
+------------------------------------------------------------------------
+-- Miscellaneous utilities.
+------------------------------------------------------------------------
+
+local dim_keys_to_copy = {
+	"y_global",
+	"y_global_block",
+	"y_max",
+	"y_offset",
+	"id",
+}
+
+function mcl_serverplayer.marshal_registered_dimensions ()
+	local tbl = {}
+	for _, dim in ipairs (mcl_levelgen.dimensions_sorted) do
+		local export = {}
+		for _, key in ipairs (dim_keys_to_copy) do
+			export[key] = dim[key]
+		end
+		table.insert (tbl, export)
+	end
+	return tbl
+end
