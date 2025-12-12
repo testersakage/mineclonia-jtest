@@ -1792,10 +1792,11 @@ function mob_class:post_motion_step (self_pos, dtime, moveresult)
 		end
 	end
 
-	-- Call the callback function
-	if core.registered_nodes[self.standing_in]._mcl_on_entity_inside then
-		local feet_pos = vector.copy(self_pos)
-		feet_pos.y = math.floor(self_pos.y + self.collisionbox[2] + 0.5 + 1.0e-2)
-		core.registered_nodes[self.standing_in]._mcl_on_entity_inside(feet_pos, mcl_mobs.node_ok (feet_pos, "air"), self.object)
+	if core.registered_nodes[self.standing_in]._mcl_on_object_inside then
+		-- This is a workaround to prevent excess table allocations
+		local saved_y_pos = self_pos.y
+		self_pos.y = math.floor(self_pos.y + self.collisionbox[2] + 0.5 + 1.0e-2)
+		core.registered_nodes[self.standing_in]._mcl_on_object_inside(self_pos, mcl_mobs.node_ok(self_pos, "air"), self.object)
+		self_pos.y = saved_y_pos
 	end
 end

@@ -795,7 +795,7 @@ core.register_node("mcl_portals:portal", {
 	on_rotate = on_rotate,
 	_mcl_hardness = -1,
 	_mcl_blast_resistance = 0,
-	_mcl_on_entity_inside = function(pos, node, _)
+	_mcl_on_object_inside = function(pos, node, _)
 		emit_portal_particles(pos, node)
 		teleport_objs_in_portal(pos)
 	end,

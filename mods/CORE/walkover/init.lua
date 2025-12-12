@@ -2,7 +2,7 @@
 walkover = {}
 
 local on_walk = {}
-local on_entity_inside = {}
+local on_object_inside = {}
 local registered_globals = {}
 
 walkover.registered_globals = registered_globals
@@ -16,8 +16,8 @@ core.register_on_mods_loaded(function()
 		if def.on_walk_over then
 			on_walk[name] = def.on_walk_over
 		end
-		if def._mcl_on_entity_inside then
-			on_entity_inside[name] = def._mcl_on_entity_inside
+		if def._mcl_on_object_inside then
+			on_object_inside[name] = def._mcl_on_object_inside
 		end
 	end
 end)
@@ -32,12 +32,12 @@ mcl_player.register_globalstep(function(player)
 	for i = 1, #registered_globals do
 		registered_globals[i](npos, node, player)
 	end
-	if on_entity_inside[mcl_player.players[player].nodes.feet] then
+	if on_object_inside[mcl_player.players[player].nodes.feet] then
 		local npos = vector.add(pos, mcl_player.node_offsets.feet)
-		on_entity_inside[mcl_player.players[player].nodes.feet](npos, core.get_node(npos), player)
+		on_object_inside[mcl_player.players[player].nodes.feet](npos, core.get_node(npos), player)
 	end
-	if on_entity_inside[mcl_player.players[player].nodes.head] then
+	if on_object_inside[mcl_player.players[player].nodes.head] then
 		local npos = vector.add(pos, mcl_player.node_offsets.head)
-		on_entity_inside[mcl_player.players[player].nodes.head](npos, core.get_node(npos), player)
+		on_object_inside[mcl_player.players[player].nodes.head](npos, core.get_node(npos), player)
 	end
 end)
