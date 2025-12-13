@@ -646,9 +646,18 @@ function mob_class:falling(pos)
 		return
 	end
 
+	-- Fall damage is reported by the client when the CSM is in
+	-- use, as only the client can account for such obstacles as
+	-- ladders and the like.
+	if self.driver and self._csm_driving then
+		self.reset_fall_damage = 1
+		self.old_y = pos.y
+		return
+	end
+
 	if self._just_portaled then
 		self.reset_fall_damage = 1
-		return false -- mob has teleported through portal - it's 99% not falling
+		return -- mob has teleported through portal - it's 99% not falling
 	end
 
 	local node = node_name_with_fallback (pos, "air")
