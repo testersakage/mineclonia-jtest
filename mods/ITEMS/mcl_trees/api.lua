@@ -682,6 +682,24 @@ function mcl_trees.register_wood(name, p)
 		def.description = def.description or D(rname .. " Chest Boat")
 		mcl_boats.register_boat(name.."_chest", def, p.chest_boat.object or {}, p.chest_boat.entity or {})
 	end
+
+	if p.shelf == nil or type(p.shelf) == "table" then
+		mcl_shelfs.register_shelf(name, {
+			description = D(rname .. " Shelf"),
+			tiles = {"mcl_shelfs_" .. name .. "_shelf.png"}
+		})
+
+		local stripped = "mcl_trees:stripped_" .. name
+
+		core.register_craft({
+			output = "mcl_shelfs:shelf_" .. name .. " 6",
+			recipe = {
+				{stripped, stripped, stripped},
+				{"", "", ""},
+				{stripped, stripped, stripped}
+			}
+		})
+	end
 end
 
 local modpath = core.get_modpath(core.get_current_modname())
