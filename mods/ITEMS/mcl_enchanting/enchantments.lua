@@ -218,7 +218,7 @@ mcl_enchanting.enchantments.fortune = {
 	anvil_book_factor = 2,
 }
 
--- implemented via walkover.register_global
+-- implemented via mcl_walkover.register_global
 mcl_enchanting.enchantments.frost_walker = {
 	name = S("Frost Walker"),
 	max_level = 2,
@@ -239,7 +239,7 @@ mcl_enchanting.enchantments.frost_walker = {
 	anvil_book_factor = 2,
 }
 
-walkover.register_global(function(pos, _, player)
+mcl_walkover.register_global(function(pos, _, player)
 	local boots = player:get_inventory():get_stack("armor", 5)
 	local frost_walker = mcl_enchanting.get_enchantment(boots, "frost_walker")
 	if frost_walker <= 0 then

@@ -56,7 +56,7 @@ function core.sound_play(spec, parameters, ephemeral)
 	return rt
 end
 
-walkover.register_global(function(pos, node, player)
+mcl_walkover.register_global(function(pos, node, player)
 	local s = core.find_node_near(pos,SPREAD_RANGE,{"mcl_sculk:sensor"})
 	if not s then return end
 	local v = player:get_velocity()
@@ -64,7 +64,7 @@ walkover.register_global(function(pos, node, player)
 	if player:get_player_control().sneak then return end
 	local def = core.registered_nodes[node.name]
 	if def and def.sounds then
-		core.log("walkover "..node.name)
+		core.log("mcl_walkover "..node.name)
 		core.after(SENSOR_DELAY,sensor_action,s,pos)
 	end
 end)

@@ -98,7 +98,7 @@ core.register_node("mcl_core:stone_with_redstone", {
 	},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_punch = redstone_ore_activate,
-	on_walk_over = redstone_ore_activate, -- Uses walkover mod
+	on_walk_over = redstone_ore_activate,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = {
@@ -141,7 +141,7 @@ core.register_node("mcl_core:stone_with_redstone_lit", {
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	-- Reset timer after re-punching or stepping on
 	on_punch = redstone_ore_reactivate,
-	on_walk_over = redstone_ore_reactivate, -- Uses walkover mod
+	on_walk_over = redstone_ore_reactivate,
 	-- Turn back to normal node after some time has passed
 	on_timer = function(pos)
 		local nodedef = core.registered_nodes[core.get_node(pos).name]

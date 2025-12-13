@@ -1,13 +1,13 @@
 -- register extra flavours of a base nodedef
-walkover = {}
+mcl_walkover = {}
 
 local on_walk = {}
 local on_object_inside = {}
 local registered_globals = {}
 
-walkover.registered_globals = registered_globals
+mcl_walkover.registered_globals = registered_globals
 
-function walkover.register_global(func)
+function mcl_walkover.register_global(func)
 	table.insert(registered_globals, func)
 end
 
