@@ -63,6 +63,9 @@ core.register_node("mcl_cake:cake", {
 			core.record_protection_violation(pos, name)
 			return
 		end
+		if mcl_hunger.get_hunger(clicker) >= 20 then
+			return
+		end
 		-- Check if we were allowed to eat
 		if node.name == "mcl_cake:cake" or core.is_creative_enabled(clicker:get_player_name()) then
 			mcl_hunger.eat_anim_block[clicker] = 1
@@ -88,6 +91,9 @@ local register_slice = function(level, nodebox, desc)
 				core.record_protection_violation(pos, name)
 				return
 			end
+			if mcl_hunger.get_hunger(clicker) >= 20 then
+				return
+			end
 			-- Check if we were allowed to eat
 			if node.name == this or core.is_creative_enabled(clicker:get_player_name()) then
 				mcl_redstone.swap_node(pos, {name = after_eat, param2 = 0})
@@ -100,6 +106,9 @@ local register_slice = function(level, nodebox, desc)
 			local name = clicker:get_player_name()
 			if core.is_protected(pos, name) then
 				core.record_protection_violation(pos, name)
+				return
+			end
+			if mcl_hunger.get_hunger(clicker) >= 20 then
 				return
 			end
 			-- Check if we were allowed to eat

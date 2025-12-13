@@ -71,9 +71,10 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 		or (mcl_hunger.active == false)
 		or core.get_item_group(itemstack:get_name(), "can_eat_when_full") == 1
 
-	if (mcl_hunger.eat_anim_timer[user] < eat_delay)
-		or (not can_eat_when_full and mcl_hunger.get_hunger(user) >= 20) then
-		return
+	if (not can_eat_when_full and mcl_hunger.get_hunger(user) >= 20) then
+		if mcl_hunger.eat_anim_timer[user] < eat_delay then
+			return
+		end
 	end
 
 	local def = core.registered_items[itemstack:get_name()]
@@ -342,6 +343,7 @@ controls.register_on_hold (function (player, key)
 	local can_eat_when_full = creative
 		or (mcl_hunger.active == false)
 		or core.get_item_group(itemname, "can_eat_when_full") == 1
+
 	if core.get_item_group(itemname, "no_eat_delay") > 0
 		or (not can_eat_when_full and h >= 20) then
 		return
