@@ -280,7 +280,7 @@ mcl_enable_csm (Enable Support for the mineclonia CSM) bool false
 # disabling this option for the present.
 #
 # This option produces no effect when mcl_enable_csm is disabled.
-mcl_serverplayer_enable_anticheat (Enable anti-cheat integration for CSM clients) bool false
+mcl_serverplayer_enable_anticheat (Enable anti-cheat integration for CSM clients) bool true
 
 # Set this to true to use an alternative event queue implementation
 # that preserves insertion order for events with the same priority/tick.
