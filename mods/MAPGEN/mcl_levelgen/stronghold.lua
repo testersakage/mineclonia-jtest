@@ -490,10 +490,11 @@ local function generate_door (piece, kind, dx, dy, dz)
 		set_block_reorientated (piece, dx + 1, dy + 1, dz, cid_oak_door_upper, param2)
 		set_block_reorientated (piece, dx + 1, dy, dz, cid_oak_door_lower, param2)
 	elseif kind == "bars" then
+		local param2 = facedirs[piece.dir]
 		fill_area (piece, 1.0, dx, dy + 2, dz, dx + 2, dy + 2, dz, cid_iron_bars,
-			   facedirs[piece.dir], nil)
+			   param2, nil)
 		fill_area (piece, 1.0, dx, dy, dz, dx + 2, dy + 1, dz, cid_iron_bars_junction,
-			   facedirs[piece.dir], nil)
+			   param2, nil)
 		set_block_reorientated (piece, dx + 1, dy, dz, cid_air, 0)
 		set_block_reorientated (piece, dx + 1, dy + 1, dz, cid_air, 0)
 	elseif kind == "iron" then
