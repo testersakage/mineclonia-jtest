@@ -3,18 +3,51 @@ local S = core.get_translator(modname)
 local D = mcl_util.get_dynamic_translator()
 local mod_doc = core.get_modpath("doc")
 
---maps normalized base color name to non-standard texture color names
-local messy_texture_names = {
-	["grey"] = "gray",
+mcl_panes = {}
+
+local flat_pane_groups_tpl = {
+	pane = 1,
+	deco_block = 1,
+	pathfinder_partial = 1
 }
 
-local function is_pane(pos)
-	return core.get_item_group(core.get_node(pos).name, "pane") > 0
-end
+local pane_groups_tpl = {
+	pane = 1,
+	deco_block = 1,
+	pathfinder_partial = 1,
+	not_in_creative_inventory = 1
+}
+
+--maps normalized base color name to non-standard texture color names
+local messy_texture_names = {
+	["_grey"] = "_gray",
+}
+
+local pane_nodebox = {
+	type          = "connected",
+	fixed         = {{-1/16, -1/2, -1/16, 1/16,  1/2, 1/16}},
+	connect_front = {{-1/16, -1/2, -1/2,  1/16,  1/2, -1/16}},
+	connect_left  = {{-1/2,  -1/2, -1/16, -1/16, 1/2, 1/16}},
+	connect_back  = {{-1/16, -1/2, 1/16,  1/16,  1/2, 1/2}},
+	connect_right = {{1/16,  -1/2, -1/16, 1/2,   1/2, 1/16}},
+}
+
+local flat_pane_nodebox = {
+	type = "fixed",
+	fixed = {{-1/2, -1/2, -1/16, 1/2, 1/2, 1/16}},
+}
+
+local neighbour_offsets = {
+	vector.new(1,  0,  0),
+	vector.new(0,  0,  1),
+	vector.new(-1, 0,  0),
+	vector.new(0,  0,  -1),
+}
 
 local function connects_dir(pos, name, dir)
-	local aside = vector.add(pos, core.facedir_to_dir(dir))
-	if is_pane(aside) then
+	local aside = vector.add(pos, dir)
+
+	if core.get_item_group(core.get_node(aside).name, "pane") > 0 then
 		return true
 	end
 
@@ -22,16 +55,13 @@ local function connects_dir(pos, name, dir)
 	if not connects_to then
 		return false
 	end
+
 	local list = core.find_nodes_in_area(aside, aside, connects_to)
 
-	if #list > 0 then
-		return true
-	end
-
-	return false
+	return #list > 0
 end
 
-local function swap(pos, node, name, param2)
+local function swap_node_if_different(pos, node, name, param2)
 	if node.name == name and node.param2 == param2 then
 		return
 	end
@@ -40,73 +70,65 @@ local function swap(pos, node, name, param2)
 end
 
 local function update_pane(pos)
-	if not is_pane(pos) then
+	local node = core.get_node(pos)
+
+	if core.get_item_group(node.name, "pane") <= 0 then
 		return
 	end
-	local node = core.get_node(pos)
+
 	local name = node.name
 	if name:sub(-5) == "_flat" then
 		name = name:sub(1, -6)
 	end
 
 	local any = node.param2
-	local c = {}
+	local connects_to_side = {}
 	local count = 0
-	for dir = 0, 3 do
-		c[dir] = connects_dir(pos, name, dir)
-		if c[dir] then
+	for i, dir in pairs(neighbour_offsets) do
+		connects_to_side[i] = connects_dir(pos, name, dir)
+		if connects_to_side[i] then
 			any = dir
 			count = count + 1
 		end
 	end
 
-	if count == 0 then
-		swap(pos, node, name .. "_flat", any)
-	elseif count == 1 then
-		swap(pos, node, name .. "_flat", (any + 1) % 4)
-	elseif count == 2 then
-		if (c[0] and c[2]) or (c[1] and c[3]) then
-			swap(pos, node, name .. "_flat", (any + 1) % 4)
-		else
-			swap(pos, node, name, 0)
-		end
+	if count == 2
+			and (
+				(connects_to_side[1] and connects_to_side[3])
+				or (connects_to_side[2] and connects_to_side[4])
+			) then
+		swap_node_if_different(pos,
+			node,
+			name .. "_flat",
+			(core.dir_to_facedir(any) + 1) % 4
+		)
 	else
-		swap(pos, node, name, 0)
+		swap_node_if_different(pos, node, name, 0)
 	end
 end
 
-core.register_on_placenode(function(pos, node)
-	if core.get_item_group(node.name, "pane") <= 0 then return end
-	update_pane(pos)
-	for i = 0, 3 do
-		local dir = core.facedir_to_dir(i)
+core.register_on_placenode(function(pos, _)
+	for _, dir in pairs(neighbour_offsets) do
 		update_pane(vector.add(pos, dir))
 	end
 end)
 
-core.register_on_dignode(function(pos,node)
-	if core.get_item_group(node.name, "pane") <= 0 then return end
-	for i = 0, 3 do
-		local dir = core.facedir_to_dir(i)
+core.register_on_dignode(function(pos, _)
+	for _, dir in pairs(neighbour_offsets) do
 		update_pane(vector.add(pos, dir))
 	end
 end)
 
-mcl_panes = {}
 mcl_panes.update_pane = update_pane
 function mcl_panes.register_pane(name, def)
 	for i = 1, 15 do
 		core.register_alias("mcl_panes:" .. name .. "_" .. i, "mcl_panes:" .. name .. "_flat")
 	end
 
-	local flatgroups = table.copy(def.groups)
-	local drop = def.drop
-	if not drop then
-		drop = "mcl_panes:" .. name .. "_flat"
-	end
-	flatgroups.pane = 1
-	flatgroups.deco_block = 1
-	flatgroups.pathfinder_partial = 2
+	local node_name_flat = "mcl_panes:" .. name .. "_flat"
+	local node_name = "mcl_panes:" .. name
+
+	local drop = def.drop or node_name_flat
 	core.register_node(":mcl_panes:" .. name .. "_flat", {
 		description = def.description,
 		_doc_items_create_entry = def._doc_items_create_entry,
@@ -122,27 +144,21 @@ function mcl_panes.register_pane(name, def)
 		paramtype2 = "facedir",
 		tiles = {def.textures[3], def.textures[2], def.textures[1]},
 		use_texture_alpha = def.use_texture_alpha,
-		groups = flatgroups,
+		groups = table.merge(flat_pane_groups_tpl, def.groups),
 		drop = drop,
 		sounds = def.sounds,
-		node_box = {
-			type = "fixed",
-			fixed = {{-1/2, -1/2, -1/32, 1/2, 1/2, 1/32}},
-		},
-		selection_box = {
-			type = "fixed",
-			fixed = {{-1/2, -1/2, -1/32, 1/2, 1/2, 1/32}},
-		},
-		connect_sides = { "left", "right" },
+		node_box = flat_pane_nodebox,
 		_mcl_blast_resistance = def._mcl_blast_resistance,
 		_mcl_hardness = def._mcl_hardness,
-		_mcl_silk_touch_drop = def._mcl_silk_touch_drop and {"mcl_panes:" .. name .. "_flat"},
+		_mcl_silk_touch_drop = def._mcl_silk_touch_drop and {node_name_flat},
+		on_construct = function(pos)
+			update_pane(pos)
+		end,
+
+		-- Flat panes don't use connected nodeboxes, but its used in the code to know when to turn into a nodebox pane
+		connects_to = {"group:pane", "group:solid"},
 	})
 
-	local groups = table.copy(def.groups)
-	groups.pane = 1
-	groups.not_in_creative_inventory = 1
-	groups.pathfinder_partial = 2
 	core.register_node(":mcl_panes:" .. name, {
 		drawtype = "nodebox",
 		paramtype = "light",
@@ -151,66 +167,59 @@ function mcl_panes.register_pane(name, def)
 		_doc_items_create_entry = false,
 		tiles = {def.textures[3], def.textures[2], def.textures[1]},
 		use_texture_alpha = def.use_texture_alpha,
-		groups = groups,
+		groups = table.merge(pane_groups_tpl, def.groups),
 		drop = drop,
 		sounds = def.sounds,
-		node_box = {
-			type = "connected",
-			fixed = {{-1/32, -1/2, -1/32, 1/32, 1/2, 1/32}},
-			connect_front = {{-1/32, -1/2, -1/2, 1/32, 1/2, -1/32}},
-			connect_left = {{-1/2, -1/2, -1/32, -1/32, 1/2, 1/32}},
-			connect_back = {{-1/32, -1/2, 1/32, 1/32, 1/2, 1/2}},
-			connect_right = {{1/32, -1/2, -1/32, 1/2, 1/2, 1/32}},
-		},
-		connects_to = {"group:pane", "group:stone", "group:glass", "group:wood", "group:tree"},
+		node_box = pane_nodebox,
+		connects_to = {"group:pane", "group:solid"},
 		_mcl_blast_resistance = def._mcl_blast_resistance,
 		_mcl_hardness = def._mcl_hardness,
-		_mcl_silk_touch_drop = def._mcl_silk_touch_drop and {"mcl_panes:" .. name .. "_flat"},
+		_mcl_silk_touch_drop = def._mcl_silk_touch_drop and {node_name_flat},
+		on_construct = function(pos)
+			update_pane(pos)
+		end
 	})
 
 	core.register_craft({
-		output = "mcl_panes:" .. name .. "_flat 16",
+		output = string.format("%s 16", node_name_flat),
 		recipe = def.recipe
 	})
 
 	if mod_doc and def._doc_items_create_entry ~= false then
-		doc.add_entry_alias("nodes", "mcl_panes:" .. name .. "_flat", "nodes", "mcl_panes:" .. name)
+		doc.add_entry_alias("nodes", node_name_flat, "nodes", node_name)
 	end
 end
 
-local canonical_color = "yellow"
--- Register glass pane (stained and unstained)
-local function pane(description, node, append, color)
-	local texture1, longdesc, entry_name, create_entry
+local canonical_color = "_yellow"
+local function register_pane(description, node, suffix, color)
+	local texture, longdesc, entry_name
 	local is_canonical = true
-	local txappend = append
-	if messy_texture_names[append:gsub("_","")] then
-		txappend = "_"..messy_texture_names[append:gsub("_","")]
-	end
+	-- This is to handle the naming scheme clash between mcl_dyes and legacy texture names
+	-- basically, mcl_dyes uses "grey", but the texture names use `gray`
+	local texture_suffix = messy_texture_names[suffix] or suffix
 
 	-- Special case: Default (unstained) glass texture
-	if append == "_natural" then
-		texture1 = "default_glass.png"
+	if suffix == "_natural" then
+		texture = "default_glass.png"
 		longdesc = S("Glass panes are thin layers of glass which neatly connect to their neighbors as you build them.")
 	else
-		if append ~= "_"..canonical_color then
+		if suffix ~= canonical_color then
 			is_canonical = false
-			create_entry = false
 		else
 			longdesc = S("Stained glass panes are thin layers of stained glass which neatly connect to their neighbors as you build them. They come in many different colors.")
 			entry_name = S("Stained Glass Pane")
 		end
-		texture1 = "mcl_core_glass"..txappend..".png"
+		texture = "mcl_core_glass"..texture_suffix..".png"
 	end
-	mcl_panes.register_pane("pane"..append, {
+
+	mcl_panes.register_pane("pane"..suffix, {
 		description = description,
-		_doc_items_create_entry = create_entry,
+		_doc_items_create_entry = is_canonical,
 		_doc_items_entry_name = entry_name,
 		_doc_items_longdesc = longdesc,
-		textures = {texture1, texture1, "xpanes_top_glass"..txappend..".png"},
-		use_texture_alpha = append == "_natural" and "clip" or "blend",
-		inventory_image = texture1,
-		wield_image = texture1,
+		textures = {texture, texture, "xpanes_top_glass"..texture_suffix..".png"},
+		use_texture_alpha = suffix == "_natural" and "clip" or "blend",
+		inventory_image = texture,
 		sounds = mcl_sounds.node_sound_glass_defaults(),
 		groups = {handy=1, material_glass=1, pathfinder_partial=2},
 		recipe = {
@@ -224,18 +233,16 @@ local function pane(description, node, append, color)
 	})
 
 	if mod_doc and not is_canonical then
-		doc.add_entry_alias("nodes", "mcl_panes:pane_".. canonical_color .. "_flat", "nodes", "mcl_panes:pane"..append)
-		doc.add_entry_alias("nodes", "mcl_panes:pane_".. canonical_color .. "_flat", "nodes", "mcl_panes:pane"..append.."_flat")
+		doc.add_entry_alias("nodes", "mcl_panes:pane".. canonical_color .. "_flat", "nodes", "mcl_panes:pane"..suffix)
+		doc.add_entry_alias("nodes", "mcl_panes:pane".. canonical_color .. "_flat", "nodes", "mcl_panes:pane"..suffix.."_flat")
 	end
 end
 
--- Iron Bars
 mcl_panes.register_pane("bar", {
 	description = S("Iron Bars"),
 	_doc_items_longdesc = S("Iron bars neatly connect to their neighbors as you build them."),
 	textures = {"xpanes_pane_iron.png","xpanes_pane_iron.png","xpanes_top_iron.png"},
 	inventory_image = "xpanes_pane_iron.png",
-	wield_image = "xpanes_pane_iron.png",
 	groups = {pickaxey=1, iron_bars=1},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	use_texture_alpha = "clip",
@@ -247,10 +254,8 @@ mcl_panes.register_pane("bar", {
 	_mcl_hardness = 5,
 })
 
--- Glass Pane
-pane(S("Glass Pane"), "mcl_core:glass", "_natural") -- triggers special case
+register_pane(S("Glass Pane"), "mcl_core:glass", "_natural") -- triggers special case
 
--- Stained Glass Panes
-for k,v in pairs(mcl_dyes.colors) do
-	pane(D("@1 Glass Pane", v.readable_name), "mcl_core:glass_"..k, "_"..k, k)
+for k, v in pairs(mcl_dyes.colors) do
+	register_pane(D("@1 Glass Pane", v.readable_name), "mcl_core:glass_"..k, "_"..k, k)
 end
