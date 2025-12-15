@@ -27,6 +27,8 @@ core.register_node("mcl_tools:heavy_core", {
     _mcl_blast_resistance = 30,
 })
 
+local WIND_BURST_BOUNCE_MULTIPLIER = 8
+
 --Mace
 core.register_tool("mcl_tools:mace", {
 	description = S("Mace"),
@@ -45,34 +47,68 @@ core.register_tool("mcl_tools:mace", {
 	_mcl_toollike_wield = true,
 
 	on_use = function(itemstack, user, pointed_thing)
-			local fall_distance = user:get_velocity().y
-			mcl_tools.entity = pointed_thing.ref
-			if pointed_thing.type == "object" then
-				if mcl_tools.mace_cooldown[user] == nil then
-					mcl_tools.mace_cooldown[user] = mcl_tools.mace_cooldown[user] or 0
-				end
-				local current_time = core.get_gametime()
-				if current_time - mcl_tools.mace_cooldown[user] >= cooldown_time then
-					mcl_tools.mace_cooldown[user] = current_time
-					if fall_distance < 0 then
-						if mcl_tools.entity:is_player() or mcl_tools.entity:get_luaentity() then
-							mcl_tools.entity:punch(user, 1.6, {
-							full_punch_interval = 1.6,
-							damage_groups = {fleshy = -6 * fall_distance / 5.5},
-							}, nil)
+		local user_velocity = user:get_velocity()
+		mcl_tools.entity = pointed_thing.ref
+		if pointed_thing.type == "object" then
+			local current_time = core.get_gametime()
+			mcl_tools.mace_cooldown[user] = mcl_tools.mace_cooldown[user] or 0
+			if current_time - mcl_tools.mace_cooldown[user] >= cooldown_time then
+				mcl_tools.mace_cooldown[user] = current_time
+				-- Define blocks based on laws of physics (an non-perfect solution for defining "blocks" based on velocity):
+				-- E(h) = mgh
+				-- E(k) = (mv^2)/2
+				-- E(h) = E(k) so:
+				-- mgh = (mv^2)/2
+				-- h = (v^2)/2g
+				-- based on experiment g = 20
+				local blocks = -1*math.abs(user_velocity.y)*user_velocity.y/40
+				local enchantments = mcl_enchanting.get_enchantments(itemstack)
+				if mcl_tools.entity:is_player() or mcl_tools.entity:get_luaentity() then
+					if blocks > 1 then
+						user:add_velocity(vector.new(0, -user_velocity.y, 0))
+						if enchantments.wind_burst then
+							local pos = core.get_pointed_thing_position(pointed_thing)
+							local user_pos = user:get_pos()
+							if vector.distance(user_pos, pos) < 3 then
+								user:add_velocity(vector.new(0, WIND_BURST_BOUNCE_MULTIPLIER * enchantments.wind_burst, 0))
+							end
+						core.sound_play("tnt_explode", { pos = pos, gain = 0.4, max_hear_distance = 30, pitch = 2.5 }, true)
+						core.add_particlespawner(table.merge(mcl_charges.wind_burst_spawner, {
+							minacc = v,
+							maxacc = v,
+							minpos = vector.offset(pos, -0.8, 0.6, -0.8),
+							maxpos = vector.offset(pos, 0.8, 0.8, 0.8),
+						}))
 						end
+					end
+					--damage calculation from https://minecraft.wiki/w/Mace
+					local damage = 0
+					local enchantments = mcl_enchanting.get_enchantments(itemstack)
+					if blocks > 1.5 and enchantments.density then
+						damage =  damage + enchantments.density * blocks/2
+					end
+					if blocks > 8 then
+						damage = damage + 23 + blocks
+					elseif blocks > 3 then
+						damage = damage + blocks * 2 + 18
+					elseif blocks > 1.5 then
+						damage = damage + blocks * 4 + 9
+					elseif blocks > 0 then
+						damage = damage + 9
 					else
-					if mcl_tools.entity:is_player() or mcl_tools.entity:get_luaentity() then
-						mcl_tools.entity:punch(user, 1.6, {
+						damage = 6
+					end
+
+					mcl_tools.entity:punch(user, 1.6, {
 						full_punch_interval = 1.6,
-						damage_groups = {fleshy = 6},
-						}, nil)
+						damage_groups = {fleshy = damage},
+					}, nil)
+
+					if not core.is_creative_enabled(user:get_player_name()) then
+						itemstack:add_wear(65535 / 500)
+						return itemstack
 					end
 				end
-			end
-			if not core.is_creative_enabled(user:get_player_name()) then
-				itemstack:add_wear(65535 / 500)
-				return itemstack
 			end
 		end
 	end,
