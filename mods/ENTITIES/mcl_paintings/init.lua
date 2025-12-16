@@ -1,10 +1,8 @@
 mcl_paintings = {}
 
 local modname = core.get_current_modname()
-
 local S = core.get_translator(modname)
 
--- local wood = "[combine:16x16:-192,0=mcl_paintings_paintings.png"
 local wood = "mcl_paintings_frame.png"
 
 -- a painting definition has these fields
