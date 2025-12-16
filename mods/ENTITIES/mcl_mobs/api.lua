@@ -518,18 +518,7 @@ local scale_chance = mcl_mobs.scale_chance
 local MAX_PHYSICS_DTIME = 0.075
 local is_limbo_pos = mcl_biome_dispatch.is_limbo_pos
 local floor = math.floor
-
-local function node_name_with_fallback (pos, fallback)
-	local cid, _, param2, pos_ok
-		= core.get_node_raw (floor (pos.x + 0.5),
-				     floor (pos.y + 0.5),
-				     floor (pos.z + 0.5))
-	if pos_ok then
-		return core.get_name_from_content_id (cid), param2
-	else
-		return fallback, 0
-	end
-end
+local node_name_with_fallback = mcl_mobs.node_name_with_fallback
 
 function mob_class:on_step (dtime, moveresult)
 	local pos = self.object:get_pos ()

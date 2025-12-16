@@ -633,11 +633,13 @@ local function node_name_with_fallback (pos, fallback)
 				     floor (pos.y + 0.5),
 				     floor (pos.z + 0.5))
 	if pos_ok then
-		return core.get_name_from_content_id (cid), param2
+		local name = core.get_name_from_content_id (cid)
+		return core.registered_nodes[name] and name or fallback, param2
 	else
 		return fallback, 0
 	end
 end
+mcl_mobs.node_name_with_fallback = node_name_with_fallback
 
 -- falling and fall damage
 -- returns true if mob died
