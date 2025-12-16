@@ -12,6 +12,15 @@ for x=-2, 2 do
 end
 
 mobs_mc.water_level = tonumber(core.settings:get("water_level")) or 0
+mobs_mc.is_mob_griefing_enabled = function(mob_name)
+	for _, mob in pairs((core.settings:get("mobs_griefing_disable") or ""):split(",")) do
+		mob = mob:trim()
+		if mob == mob_name then
+			return false
+		end
+	end
+	return core.settings:get_bool("mobs_griefing", true)
+end
 
 -- Load mobs in the right order.
 local path = core.get_modpath ("mobs_mc")

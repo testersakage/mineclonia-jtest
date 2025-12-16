@@ -5,7 +5,7 @@
 local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
-local mobs_griefing = core.settings:get_bool ("mobs_griefing") ~= false
+local mobs_griefing = mobs_mc.is_mob_griefing_enabled("ender_dragon")
 local dragon_debug
 	= core.settings:get_bool ("dragon_debug", false)
 

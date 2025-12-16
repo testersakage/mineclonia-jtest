@@ -7,7 +7,7 @@ local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local illager = mobs_mc.illager
 local posing_humanoid = mcl_mobs.posing_humanoid
-local mob_griefing = core.settings:get_bool ("mobs_griefing", true)
+local mob_griefing = mobs_mc.is_mob_griefing_enabled("vindicator")
 
 ------------------------------------------------------------------------
 -- Vindicator.

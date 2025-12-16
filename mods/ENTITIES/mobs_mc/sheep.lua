@@ -1,5 +1,5 @@
 local S = core.get_translator ("mobs_mc")
-local mob_griefing = core.settings:get_bool ("mobs_griefing", true)
+local mob_griefing = mobs_mc.is_mob_griefing_enabled("sheep")
 local mob_class = mcl_mobs.mob_class
 
 local function sheared_textures(unicolor_group)
