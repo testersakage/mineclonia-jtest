@@ -579,7 +579,7 @@ function mob_class:on_step (dtime, moveresult)
 	local cbox = self.collisionbox
 	local feet = vector.copy (pos)
 	local bbase = pos.y + self.collisionbox[2] + 0.5
-	feet.y = math.floor (bbase + 1.0e-2)
+	feet.y = floor (bbase + 1.0e-2)
 	if bbase - feet.y <= 1.0e-2 then
 		local name, _ = node_name_with_fallback (feet, "air")
 		self.standing_in = name
