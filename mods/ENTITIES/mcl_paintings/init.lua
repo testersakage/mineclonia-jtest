@@ -1,11 +1,12 @@
 mcl_paintings = {}
 
 local modname = core.get_current_modname()
-dofile(core.get_modpath(modname).."/paintings.lua")
+-- dofile(core.get_modpath(modname).."/paintings.lua")
 
 local S = core.get_translator(modname)
 
-local wood = "[combine:16x16:-192,0=mcl_paintings_paintings.png"
+-- local wood = "[combine:16x16:-192,0=mcl_paintings_paintings.png"
+local wood = "mcl_paintings_frame.png"
 
 -- a painting definition has these fields
 -- width         - integer
@@ -15,6 +16,7 @@ local wood = "[combine:16x16:-192,0=mcl_paintings_paintings.png"
 local registered_paintings = {}
 local maximum_width = 0
 local maximum_height = 0
+local search_distance = 15
 
 function mcl_paintings.register_painting(name, def)
 	def.name = name
@@ -28,6 +30,8 @@ local function is_node_okay_for_placement(under_node, above_node)
 	return above_node.name == "air" and (under_ndef and under_ndef.walkable)
 end
 
+local epsilon = 0.001
+
 local function get_biggest_painting_for_position(pos, dir)
 	local negative_dir = -dir
 	local dir_perpendicular = dir.x ~= 0
@@ -39,15 +43,45 @@ local function get_biggest_painting_for_position(pos, dir)
 	local placement_ranges = {}
 	local maximum_so_far = maximum_width
 
+	local neighbouring_painting_positions = {}
+
+	local above_pos = pos + negative_dir
+	for obj in core.objects_inside_radius(pos, search_distance) do
+		local l = obj:get_luaentity()
+		if l and l.name == "mcl_paintings:painting" then
+			local pdef = registered_paintings[l._painting_name]
+			local obj_pos = obj:get_pos()
+			core.debug("lok", obj_pos, l, l and l.name, pdef.width, pdef.height)
+			local painting_dir = core.wallmounted_to_dir(l._facing) -- for whatever reason, the wallmounted value is actually reversed...
+			local start_position = vector.round(vector.offset(obj_pos, dir_perpendicular.x * pdef.width / 2, -pdef.height / 2, dir_perpendicular.z * pdef.width / 2))
+			core.debug(start_position, dir_perpendicular.x * pdef.width / 2, dir_perpendicular.z * pdef.width / 2, painting_dir)
+			for y = 0, pdef.height - 1 do
+				for i = 0, pdef.width - 1 do
+					core.debug("AX", y, i, vector.offset(start_position, -i * dir_perpendicular.x, y, -i * dir_perpendicular.z))
+					neighbouring_painting_positions[core.hash_node_position(vector.offset(start_position, -i * dir_perpendicular.x, y, -i * dir_perpendicular.z))] = true
+				end
+			end
+			-- for y = (-pdef.height / 2) + epsilon, (pdef.height / 2) - epsilon do
+			-- 	for i = -(pdef.width / 2) + epsilon, (pdef.width / 2) - epsilon do
+			-- 		core.debug("AX", y, i, vector.offset(obj_pos, -i * dir_perpendicular.x, y, -i * dir_perpendicular.z), obj_pos.y + y)
+			-- 		neighbouring_painting_positions[core.hash_node_position(vector.round(vector.offset(obj_pos, -i * dir_perpendicular.x, y, -i * dir_perpendicular.z)))] = true
+			-- 	end
+			-- end
+		end
+	end
+
+	core.debug(dump(neighbouring_painting_positions))
+
 	for y = 0, maximum_height do
 		local i = 0
 		while i < maximum_so_far do
 			local offset_pos = vector.offset(pos, -i * dir_perpendicular.x, y, -i * dir_perpendicular.z)
+			local offset_above_pos = offset_pos + dir
 			local node_under = core.get_node(offset_pos)
-			local node_above = core.get_node(offset_pos + negative_dir)
+			local node_above = core.get_node(offset_above_pos)
 
-			core.debug(y, i, offset_pos, node_under.name, node_above.name)
-			if is_node_okay_for_placement(node_under, node_above) then
+			core.debug(y, i, offset_above_pos, core.hash_node_position(offset_above_pos))
+			if is_node_okay_for_placement(node_under, node_above) and not neighbouring_painting_positions[core.hash_node_position(offset_above_pos)] then
 				i = i + 1
 			else
 				break
@@ -206,7 +240,7 @@ core.register_entity("mcl_paintings:painting", {
 				if data._motive then
 					local successfully_converted = false
 					for pname, pdef in pairs(registered_paintings) do
-						core.debug("loopy", pname, data._motive, data._ysize, data._xsize)
+						-- core.debug("loopy", pname, data._motive, data._ysize, data._xsize)
 						if pdef.legacy_motive
 								-- and pdef.legacy_motive.cx == self._motive.cx
 								-- and pdef.legacy_motive.cy == self._motive.cy then
@@ -214,7 +248,7 @@ core.register_entity("mcl_paintings:painting", {
 								and pdef.width == data._xsize
 								and pdef.legacy_motive == data._motive then
 
-							core.debug("here", dump(pdef))
+							-- core.debug("here", dump(pdef))
 							successfully_converted = true
 							self._painting_name = pname
 							break
@@ -229,7 +263,7 @@ core.register_entity("mcl_paintings:painting", {
 				end
 			end
 		end
-		core.debug("moo", dump(self._painting_name))
+		-- core.debug("moo", dump(self._painting_name))
 		set_entity(self.object, registered_paintings[self._painting_name])
 	end,
 	get_staticdata = function(self)
@@ -341,14 +375,14 @@ mcl_paintings.register_painting("endless dunes", {
 })
 
 mcl_paintings.register_painting("green banner", {
-	texture = "endless_dunes.png",
+	texture = "green_banner.png",
 	width = 1,
 	height = 2,
 	legacy_motive = 0,
 })
 
 mcl_paintings.register_painting("blue banner", {
-	texture = "endless_dunes.png",
+	texture = "blue_banner.png",
 	width = 1,
 	height = 2,
 	legacy_motive = 1,
