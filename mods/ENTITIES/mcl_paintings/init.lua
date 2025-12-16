@@ -30,13 +30,39 @@ local function is_node_okay_for_placement(under_node, above_node)
 	return above_node.name == "air" and (under_ndef and under_ndef.walkable)
 end
 
-local epsilon = 0.001
+-- fancy rounding algorith that takes the direction into account
+-- so when going from positive to negative. -23.5 would go to -23
+-- but when going from negative to positive. it would go from -23.5 to -24
+local function fancy_round(val, dir_sign)
+	local frac = math.abs(val - math.floor(val))
+	if frac == 0.5 then
+		if dir_sign > 0 then
+			return val + 0.5
+		else
+			return val - 0.5
+		end
+	elseif frac > 0.5 then
+		return math.floor(val) + 1
+	elseif frac < 0.5 then
+		return math.floor(val)
+	end
+end
+
+local function rotate_dir_90_deg_clockwise(dir)
+	local rotated_dir = vector.copy(dir)
+
+	-- inlined linear transformation to rotate 90 degrees clockwise
+	--    i   j
+	-- x [1,  0]
+	-- y [0, -1]
+	rotated_dir.x = dir.z
+	rotated_dir.z = -dir.x
+
+	return rotated_dir
+end
 
 local function get_biggest_painting_for_position(pos, dir)
-	local negative_dir = -dir
-	local dir_perpendicular = dir.x ~= 0
-		and vector.new(0, 0, dir.x)
-		or  vector.new(dir.z, 0, 0)
+	local dir_perpendicular = rotate_dir_90_deg_clockwise(-dir)
 
 	-- A table where each element represents the Y level (starting from the bottom).
 	-- Where the value is the maximum extend of the width for a painting that wide and that high
@@ -45,42 +71,35 @@ local function get_biggest_painting_for_position(pos, dir)
 
 	local neighbouring_painting_positions = {}
 
-	local above_pos = pos + negative_dir
 	for obj in core.objects_inside_radius(pos, search_distance) do
 		local l = obj:get_luaentity()
 		if l and l.name == "mcl_paintings:painting" then
 			local pdef = registered_paintings[l._painting_name]
 			local obj_pos = obj:get_pos()
-			core.debug("lok", obj_pos, l, l and l.name, pdef.width, pdef.height)
-			local painting_dir = core.wallmounted_to_dir(l._facing) -- for whatever reason, the wallmounted value is actually reversed...
-			local start_position = vector.round(vector.offset(obj_pos, dir_perpendicular.x * pdef.width / 2, -pdef.height / 2, dir_perpendicular.z * pdef.width / 2))
-			core.debug(start_position, dir_perpendicular.x * pdef.width / 2, dir_perpendicular.z * pdef.width / 2, painting_dir)
+			local painting_dir = core.wallmounted_to_dir(l._facing)
+			local painting_dir_perpendicular = rotate_dir_90_deg_clockwise(-painting_dir)
+
+			local start_position = vector.offset(obj_pos, -painting_dir_perpendicular.x * (pdef.width / 2), -pdef.height / 2, -painting_dir_perpendicular.z * pdef.width / 2)
+
+			start_position.x = fancy_round(start_position.x, painting_dir_perpendicular.x)
+			start_position.z = fancy_round(start_position.z, painting_dir_perpendicular.z)
+			start_position.y = math.round(start_position.y)
 			for y = 0, pdef.height - 1 do
 				for i = 0, pdef.width - 1 do
-					core.debug("AX", y, i, vector.offset(start_position, -i * dir_perpendicular.x, y, -i * dir_perpendicular.z))
-					neighbouring_painting_positions[core.hash_node_position(vector.offset(start_position, -i * dir_perpendicular.x, y, -i * dir_perpendicular.z))] = true
+					neighbouring_painting_positions[core.hash_node_position(vector.offset(start_position, i * painting_dir_perpendicular.x, y, i * painting_dir_perpendicular.z))] = true
 				end
 			end
-			-- for y = (-pdef.height / 2) + epsilon, (pdef.height / 2) - epsilon do
-			-- 	for i = -(pdef.width / 2) + epsilon, (pdef.width / 2) - epsilon do
-			-- 		core.debug("AX", y, i, vector.offset(obj_pos, -i * dir_perpendicular.x, y, -i * dir_perpendicular.z), obj_pos.y + y)
-			-- 		neighbouring_painting_positions[core.hash_node_position(vector.round(vector.offset(obj_pos, -i * dir_perpendicular.x, y, -i * dir_perpendicular.z)))] = true
-			-- 	end
-			-- end
 		end
 	end
-
-	core.debug(dump(neighbouring_painting_positions))
 
 	for y = 0, maximum_height do
 		local i = 0
 		while i < maximum_so_far do
-			local offset_pos = vector.offset(pos, -i * dir_perpendicular.x, y, -i * dir_perpendicular.z)
+			local offset_pos = vector.offset(pos, i * dir_perpendicular.x, y, i * dir_perpendicular.z)
 			local offset_above_pos = offset_pos + dir
 			local node_under = core.get_node(offset_pos)
 			local node_above = core.get_node(offset_above_pos)
 
-			core.debug(y, i, offset_above_pos, core.hash_node_position(offset_above_pos))
 			if is_node_okay_for_placement(node_under, node_above) and not neighbouring_painting_positions[core.hash_node_position(offset_above_pos)] then
 				i = i + 1
 			else
@@ -99,10 +118,8 @@ local function get_biggest_painting_for_position(pos, dir)
 		if pdef.width <= placement_ranges[pdef.height] then
 			local painting_volume = pdef.width * pdef.height
 			if maximum_volume < painting_volume then
-					-- or (maximum_volume == painting_volume and math.random() > 0.5) then
 				canditates = {pdef}
 				maximum_volume = painting_volume
-				-- maximum_volume_name = name
 			elseif maximum_volume == painting_volume then
 				table.insert(canditates, pdef)
 			end
@@ -124,18 +141,14 @@ core.register_craftitem("mcl_paintings:painting", {
 	inventory_image = "mcl_paintings_painting.png",
 	groups = {deco_block = 1},
 	on_place = function(itemstack, placer, pointed_thing)
-		if pointed_thing.type ~= "node" then
-			return itemstack
-		end
+		if pointed_thing.type ~= "node" then return itemstack end
 
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
 
 		local dir = vector.subtract(pointed_thing.above, pointed_thing.under)
 
-		if dir.y ~= 0 then
-			return itemstack
-		end
+		if dir.y ~= 0 then return itemstack end
 
 		local pdef = get_biggest_painting_for_position(pointed_thing.under, dir)
 		local wallm = core.dir_to_wallmounted(dir)
@@ -147,8 +160,17 @@ core.register_craftitem("mcl_paintings:painting", {
 			_painting_name = pdef.name
 		}
 
+		local side_offset = pdef.width / 2 - 0.5
+		local dir_perpendicular_dir = rotate_dir_90_deg_clockwise(-dir)
+
 		local obj = core.add_entity(
-			vector.subtract(pointed_thing.above, vector.multiply(dir, 0.5-5/256)) + vector.new(-dir.z * (pdef.width / 2 - 0.5), pdef.height / 2 - 0.5, -dir.x * (pdef.width / 2 - 0.5)),
+			vector.subtract(
+				pointed_thing.above,
+				vector.multiply(dir, 0.5-5/256)) + vector.new(
+					dir_perpendicular_dir.x * side_offset,
+					pdef.height / 2 - 0.5,
+					dir_perpendicular_dir.z * side_offset
+				),
 			"mcl_paintings:painting",
 			core.serialize(staticdata)
 		)
@@ -169,22 +191,14 @@ end
 local function set_entity(object, pdef)
 
 	if not pdef then
-		-- error("Invalid painting")
 		core.log("error", "[mcl_paintings] Painting loaded with missing painting values!")
 	end
-
-	core.debug("aa", dump(pdef))
 
 	local ent = object:get_luaentity()
 	local wallm = ent._facing
 	local exmin, exmax = size_to_minmax_entity(pdef.width)
 	local eymin, eymax = size_to_minmax_entity(pdef.height)
 	local visual_size = { x=pdef.width-0.0001, y=pdef.height-0.0001, z=1/32 }
-
-	if not ent._xsize or not ent._ysize or not ent._motive then
-		core.log("error", "[mcl_paintings] Painting loaded with missing painting values!")
-		return
-	end
 
 	local box
 	if wallm == 2 then
@@ -196,6 +210,7 @@ local function set_entity(object, pdef)
 	elseif wallm == 5 then
 		box = { exmin, eymin, -1/64, exmax, eymax, 3/128 }
 	end
+
 	object:set_properties({
 		selectionbox = box,
 		visual_size = visual_size,
@@ -203,9 +218,9 @@ local function set_entity(object, pdef)
 	})
 
 	local dir = core.wallmounted_to_dir(wallm)
-	if not dir then
-		return
-	end
+
+	if not dir then return end
+
 	object:set_yaw(core.dir_to_yaw(dir))
 end
 
@@ -221,11 +236,7 @@ core.register_entity("mcl_paintings:painting", {
 	},
 
 	_mcl_pistons_unmovable = true,
-	_motive = 0,
-	_pos = nil,
 	_facing = 2,
-	_xsize = 1,
-	_ysize = 1,
 	on_activate = function(self, staticdata)
 		self.object:set_armor_groups({immortal = 1})
 		if staticdata and staticdata ~= "" then
@@ -233,26 +244,19 @@ core.register_entity("mcl_paintings:painting", {
 			if data then
 				self._facing = data._facing
 				self._painting_name = data._painting_name
-				-- _xsize = xsize,
-				-- _ysize = ysize,
 
 				-- Putting the old mcl_painting crap to grave
 				if data._motive then
 					local successfully_converted = false
 					for pname, pdef in pairs(registered_paintings) do
-						-- core.debug("loopy", pname, data._motive, data._ysize, data._xsize)
 						if pdef.legacy_motive
-								-- and pdef.legacy_motive.cx == self._motive.cx
-								-- and pdef.legacy_motive.cy == self._motive.cy then
 								and pdef.height == data._ysize
 								and pdef.width == data._xsize
 								and pdef.legacy_motive == data._motive then
 
-							-- core.debug("here", dump(pdef))
 							successfully_converted = true
 							self._painting_name = pname
 							break
-							-- yummy nesting
 						end
 					end
 
@@ -263,7 +267,7 @@ core.register_entity("mcl_paintings:painting", {
 				end
 			end
 		end
-		-- core.debug("moo", dump(self._painting_name))
+
 		set_entity(self.object, registered_paintings[self._painting_name])
 	end,
 	get_staticdata = function(self)
