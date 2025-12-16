@@ -260,6 +260,7 @@ core.register_entity("mcl_paintings:painting", {
 					if not successfully_converted then
 						self.object:remove()
 						core.log("error", "Could not migrate painting to the new system")
+						return
 					end
 				end
 			end
