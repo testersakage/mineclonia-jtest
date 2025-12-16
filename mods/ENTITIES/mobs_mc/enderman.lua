@@ -214,7 +214,7 @@ local select_enderman_animation = function(animation_type)
 	end
 end
 
-local mobs_griefing = core.settings:get_bool("mobs_griefing") ~= false
+local mobs_griefing = mobs_mc.is_mob_griefing_enabled("enderman")
 local psdefs = {{
 	amount = 5,
 	minpos = vector.new(-0.6,0,-0.6),

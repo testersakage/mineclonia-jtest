@@ -289,7 +289,7 @@ end
 -- Rabbit AI.
 ------------------------------------------------------------------------
 
-local mob_griefing = core.settings:get_bool ("mobs_griefing", true)
+local mob_griefing = mobs_mc.is_mob_griefing_enabled("rabbit")
 
 function rabbit:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
