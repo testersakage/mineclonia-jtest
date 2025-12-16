@@ -8,13 +8,13 @@ mcl_panes = {}
 local flat_pane_groups_tpl = {
 	pane = 1,
 	deco_block = 1,
-	pathfinder_partial = 1
+	pathfinder_partial = 2
 }
 
 local pane_groups_tpl = {
 	pane = 1,
 	deco_block = 1,
-	pathfinder_partial = 1,
+	pathfinder_partial = 2,
 	not_in_creative_inventory = 1
 }
 
