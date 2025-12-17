@@ -37,6 +37,9 @@ Returns the current hunger level of `player` (ObjectRef).
 Sets the hunger level of `player` (ObjectRef) to `hunger` immediately.
 `hunger` ***must*** be between 0 and 20 inclusive.
 
+### `mcl_hunger.is_player_full(player)`
+Check whether player have enough hunger point which is >= 20.
+
 ### `mcl_hunger.exhaust(player, exhaust)`
 Increase exhaustion of player by `exhaust`.
 

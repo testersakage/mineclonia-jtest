@@ -63,7 +63,7 @@ core.register_node("mcl_cake:cake", {
 			core.record_protection_violation(pos, name)
 			return
 		end
-		if mcl_hunger.get_hunger(clicker) >= 20 then
+		if mcl_hunger.is_player_full (clicker) then
 			return
 		end
 		-- Check if we were allowed to eat
@@ -91,7 +91,7 @@ local register_slice = function(level, nodebox, desc)
 				core.record_protection_violation(pos, name)
 				return
 			end
-			if mcl_hunger.get_hunger(clicker) >= 20 then
+			if mcl_hunger.is_player_full (clicker) then
 				return
 			end
 			-- Check if we were allowed to eat
@@ -108,7 +108,7 @@ local register_slice = function(level, nodebox, desc)
 				core.record_protection_violation(pos, name)
 				return
 			end
-			if mcl_hunger.get_hunger(clicker) >= 20 then
+			if mcl_hunger.is_player_full (clicker) then
 				return
 			end
 			-- Check if we were allowed to eat

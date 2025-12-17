@@ -304,6 +304,10 @@ function mcl_hunger.hud_eat_remove(player)
 	end
 end
 
+function mcl_hunger.is_player_full (player)
+	return mcl_hunger.get_hunger (player) >= 20
+end
+
 if mcl_hunger.active then
 	-- player-action based hunger changes
 	core.register_on_dignode(function(_, _, player)
@@ -350,7 +354,7 @@ controls.register_on_hold (function (player, key)
 	local itemstack = player:get_wielded_item ()
 	local itemname = itemstack:get_name ()
 	local pointed_thing = mcl_util.get_pointed_thing (player, true)
-	local h = mcl_hunger.get_hunger(player)
+	local is_full = mcl_hunger.is_player_full (player)
 
 	local creative = core.is_creative_enabled(player:get_player_name())
 	local can_eat_when_full = creative
@@ -358,7 +362,7 @@ controls.register_on_hold (function (player, key)
 		or core.get_item_group(itemname, "can_eat_when_full") == 1
 
 	if core.get_item_group(itemname, "no_eat_delay") > 0
-		or (not can_eat_when_full and h >= 20) then
+		or (not can_eat_when_full and is_full) then
 		return
 	end
 
