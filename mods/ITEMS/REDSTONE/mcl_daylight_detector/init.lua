@@ -11,6 +11,7 @@ local function update_detector(pos)
 		name = core.get_node(pos).name,
 		param2 = core.get_natural_light(pos),
 	})
+	mcl_redstone._notify_observer_neighbours(pos)
 end
 
 local commdef = {
@@ -38,6 +39,7 @@ local commdef = {
 			return
 		end
 		mcl_redstone.swap_node(pos, {name = toggle_inverted[node.name], param2 = node.param2})
+		mcl_redstone._notify_observer_neighbours(pos)
 	end,
 	_mcl_hardness = 0.2,
 	_mcl_redstone = {
