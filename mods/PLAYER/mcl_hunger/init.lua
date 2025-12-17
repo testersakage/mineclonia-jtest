@@ -38,6 +38,8 @@ mcl_hunger.SATURATION_INIT = 5 -- Initial saturation for new/respawning players
 -- NOTE: Only updated when settings are loaded.
 mcl_hunger.debug = false
 
+mcl_hunger.eat_timer = {} -- eat timer when eat_anim disabled
+
 mcl_hunger.eat_anim_hud = {} -- track eating animation HUD
 mcl_hunger.eat_anim_timer = {} -- holding food RMB timer based on dtime
 mcl_hunger.eat_anim_block = {} -- if not nil then forbid eat animation

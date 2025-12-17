@@ -1,7 +1,6 @@
-local S = core.get_translator(core.get_current_modname())
-
 local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / tonumber(core.settings:get("movement_speed_walk"))
 
+local eat_anim_enabled = core.settings:get_bool("mcl_eat_anim", true)
 
 local function is_eat_anim_possible (player, key)
 	if mcl_serverplayer.is_csm_capable (player) then
@@ -49,6 +48,14 @@ local function is_eat_anim_possible (player, key)
 	local rc = mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
 	if rc then return false end
 
+	local def = core.registered_items[itemname]
+	local hp_change = core.get_item_group(itemname, "eatable")
+	-- Instant eat when eat_anim disabled
+	if not eat_anim_enabled then
+		core.do_item_eat(hp_change, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
+		return false
+	end
+
 	return true
 end
 
@@ -66,15 +73,20 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 	local def = core.registered_items[item]
 	local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
 
+	local timer_check = mcl_hunger.eat_anim_timer[user] < eat_delay
+	if not eat_anim_enabled then
+		timer_check = (mcl_hunger.eat_timer[user] or 0) > 0
+	end
+
 	local creative = core.is_creative_enabled(user:get_player_name())
 	local can_eat_when_full = creative
 		or (mcl_hunger.active == false)
 		or core.get_item_group(itemstack:get_name(), "can_eat_when_full") == 1
 
-	if (not can_eat_when_full and mcl_hunger.get_hunger(user) >= 20) then
-		if mcl_hunger.eat_anim_timer[user] < eat_delay then
-			return
-		end
+	if not can_eat_when_full
+	and core.get_item_group(itemstack:get_name(), "no_eat_delay") == 0
+	and timer_check then
+		return
 	end
 
 	local def = core.registered_items[itemstack:get_name()]
@@ -108,6 +120,7 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 		end
 	end
 
+	mcl_hunger.eat_timer[user] = eat_delay
 	mcl_hunger.eat_anim_timer[user] = -math.huge
 
 	return itemstack
@@ -351,13 +364,6 @@ controls.register_on_hold (function (player, key)
 
 	local def = core.registered_items[itemname]
 	local hp_change = core.get_item_group(itemname, "eatable")
-	-- Instant eat when eat_anim disabled
-	if not mcl_player.get_player_setting(player, "mcl_hunger:eat_anim", true) then
-		mcl_hunger.eat_effects(player, itemname, player:get_pos(), hp_change, def)
-		core.do_item_eat(hp_change, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
-		player:set_wielded_item(itemstack)
-		return
-	end
 
 	-- Prioritize eat over shield block
 	mcl_shields.players[player].blocking = 0
@@ -386,6 +392,9 @@ controls.register_on_hold (function (player, key)
 end)
 
 core.register_globalstep (function (dtime)
+	for player, time in pairs (mcl_hunger.eat_timer) do
+		mcl_hunger.eat_timer[player] = time - dtime
+	end
 	for player, time in pairs (mcl_hunger.eat_anim_timer) do
 		mcl_hunger.eat_anim_timer[player] = time + dtime
 	end
@@ -414,10 +423,3 @@ core.register_on_mods_loaded(function()
 		end
 	end
 end)
-
-mcl_player.register_player_setting("mcl_hunger:eat_anim", {
-	type = "boolean",
-	section = "Behavior",
-	short_desc = S("Enable eat animation"),
-	ui_default = true,
-})
