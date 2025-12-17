@@ -301,10 +301,13 @@ for n, desc in pairs(n_desc) do
 		_doc_items_longdesc = S(desc.."Copper Bars neatly connect to their neighbors as you build them."),
 		textures = {"mcl_copper_pane"..n..".png", "mcl_copper_pane"..n..".png","mcl_copper_pane_top"..n..".png"},
 		inventory_image = "mcl_copper_pane"..n..".png",
-		wield_image = "mcl_copper_pane"..n..".png",
 		groups = {pickaxey = 1, copper_bars = 1},
 		sounds = mcl_sounds.node_sound_metal_defaults(),
 		use_texture_alpha = "clip",
+		recipe = {
+			{"mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot"},
+			{"mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot"},
+		},
 		_mcl_blast_resistance = 6,
 		_mcl_hardness = 5
 	})
