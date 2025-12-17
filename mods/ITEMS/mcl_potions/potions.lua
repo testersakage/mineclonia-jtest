@@ -189,10 +189,10 @@ function mcl_potions.register_potion(def)
 				mcl_potions.give_effect_by_level(name, player, ef_level, dur)
 			end
 
-			local on_use = pdef.custom_on_use
+			local on_use = def.custom_on_use
 			if on_use then on_use(player, potency+1) end
 
-			local custom_effect = pdef.custom_effect
+			local custom_effect = def.custom_effect
 			if custom_effect then custom_effect(player, potency+1, plus, player) end
 
 			mcl_potions._use_potion (player)
