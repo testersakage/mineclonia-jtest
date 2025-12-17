@@ -40,6 +40,9 @@ Sets the hunger level of `player` (ObjectRef) to `hunger` immediately.
 ### `mcl_hunger.is_player_full(player)`
 Check whether player have enough hunger point which is >= 20.
 
+### `mcl_hunger.prevent_eating(player)`
+Prevent player to procced eat/drink while holding a food/drink.
+
 ### `mcl_hunger.exhaust(player, exhaust)`
 Increase exhaustion of player by `exhaust`.
 

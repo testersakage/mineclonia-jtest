@@ -422,7 +422,6 @@ end
 function core.item_place(itemstack, placer, pointed_thing, param2)
 	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 	if rc ~= nil then
-		mcl_hunger.eat_anim_block[placer] = 1
 		return rc, nil
 	end
 
@@ -447,6 +446,7 @@ function mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 			end
 			local on_rightclick = nodedef and nodedef.on_rightclick
 			if not player:get_player_control().sneak and on_rightclick then
+				mcl_hunger.prevent_eating (player)
 				return on_rightclick(pos, node, player, itemstack, pointed_thing) or itemstack
 			end
 		end
@@ -458,6 +458,7 @@ function mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 			local def = core.registered_entities[ent.name]
 			if not def._unplaceable_by_default
 			and (ent.actionable_on_rightclick and ent:actionable_on_rightclick (player)) then
+				mcl_hunger.prevent_eating (player)
 				return itemstack
 			end
 		end

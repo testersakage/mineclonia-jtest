@@ -79,7 +79,6 @@ core.register_craftitem("mcl_farming:sweet_berry", {
 		local pn = placer:get_player_name()
 		if placer:is_player() and core.is_protected(pointed_thing.above, pn or "") then
 			core.record_protection_violation(pointed_thing.above, pn)
-			mcl_hunger.eat_anim_block[placer] = 1
 			return itemstack
 		end
 		if pointed_thing.type == "node" and
@@ -90,7 +89,7 @@ core.register_craftitem("mcl_farming:sweet_berry", {
 			if not core.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 			end
-			mcl_hunger.eat_anim_block[placer] = 1
+			mcl_hunger.prevent_eating (placer)
 			return itemstack
 		end
 	end,

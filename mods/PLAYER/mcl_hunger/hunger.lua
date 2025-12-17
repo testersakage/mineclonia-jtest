@@ -40,7 +40,7 @@ local function is_eat_anim_possible (player, key)
 		end
 	end
 
-	if mcl_hunger.eat_anim_block[player] ~= nil then
+	if mcl_hunger.eat_anim_block[player] then
 		return false
 	end
 
@@ -308,6 +308,14 @@ function mcl_hunger.is_player_full (player)
 	return mcl_hunger.get_hunger (player) >= 20
 end
 
+function mcl_hunger.prevent_eating (player)
+	mcl_hunger.eat_anim_block[player] = true
+	-- reset eat animation blocking after a while
+	core.after(0.2, function ()
+		mcl_hunger.eat_anim_block[player] = nil
+	end)
+end
+
 if mcl_hunger.active then
 	-- player-action based hunger changes
 	core.register_on_dignode(function(_, _, player)
@@ -412,10 +420,7 @@ controls.register_on_release (function (player, key)
 		return
 	end
 	mcl_hunger.hud_eat_remove(player)
-	mcl_hunger.eat_anim_block[player] = 1
-	core.after(0.2, function ()
-		mcl_hunger.eat_anim_block[player] = nil
-	end)
+	mcl_hunger.prevent_eating (player)
 end)
 
 core.register_on_mods_loaded(function()
