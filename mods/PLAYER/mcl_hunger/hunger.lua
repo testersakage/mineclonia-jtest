@@ -49,10 +49,12 @@ local function is_eat_anim_possible (player, key)
 	if rc then return false end
 
 	local def = core.registered_items[itemname]
-	local hp_change = core.get_item_group(itemname, "eatable")
+	local is_full = mcl_hunger.is_player_full (player)
+	local hunger_points = core.get_item_group(itemname, "eatable")
 	-- Instant eat when eat_anim disabled
-	if not eat_anim_enabled then
-		core.do_item_eat(hp_change, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
+	if not eat_anim_enabled and not is_full then
+		core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
+		player:set_wielded_item (itemstack)
 		return false
 	end
 
@@ -60,12 +62,11 @@ local function is_eat_anim_possible (player, key)
 end
 
 -- wrapper for core.item_eat (this way we make sure other mods can't break this one)
-function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
+function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, pointed_thing)
 	if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
 
 	local rc = mcl_util.call_on_rightclick (itemstack, user, pointed_thing)
 	if rc then
-		mcl_hunger.eat_anim_block[user] = 1
 		return rc
 	end
 
@@ -73,9 +74,9 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 	local def = core.registered_items[item]
 	local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
 
-	local timer_check = mcl_hunger.eat_anim_timer[user] < eat_delay
+	local timer_check = mcl_hunger.eat_duration[user] < eat_delay
 	if not eat_anim_enabled then
-		timer_check = (mcl_hunger.eat_timer[user] or 0) > 0
+		timer_check = (mcl_hunger.eat_cooldown[user] or 0) > 0
 	end
 
 	local creative = core.is_creative_enabled(user:get_player_name())
@@ -112,30 +113,30 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 	end
 
 	local old_itemstack = itemstack
-	itemstack = mcl_hunger.eat(hp_change, replace_with_item, itemstack, user, pointed_thing)
+	itemstack = mcl_hunger.eat(hunger_points, replace_with_item, itemstack, user, pointed_thing)
 	for _, callback in pairs(core.registered_on_item_eats) do
-		local result = callback(hp_change, replace_with_item, itemstack, user, pointed_thing, old_itemstack)
+		local result = callback(hunger_points, replace_with_item, itemstack, user, pointed_thing, old_itemstack)
 		if result then
 			return result
 		end
 	end
 
-	mcl_hunger.eat_timer[user] = eat_delay
-	mcl_hunger.eat_anim_timer[user] = -math.huge
+	mcl_hunger.eat_cooldown[user] = eat_delay
+	mcl_hunger.eat_duration[user] = -math.huge
 
 	return itemstack
 end
 
-function mcl_hunger.eat(hp_change, replace_with_item, itemstack, user, _)
+function mcl_hunger.eat(hunger_points, replace_with_item, itemstack, user, _)
 	local item = itemstack:get_name()
 	local def = mcl_hunger.registered_foods[item]
 	if not def then
 		def = {}
-		if type(hp_change) ~= "number" then
-			hp_change = 1
+		if type(hunger_points) ~= "number" then
+			hunger_points = 1
 			core.log("error", "Wrong on_use() definition for item '" .. item .. "'")
 		end
-		def.saturation = hp_change
+		def.saturation = hunger_points
 		def.replace = replace_with_item
 	end
 	local func = mcl_hunger.item_eat(def.saturation, def.replace, def.poisontime, def.poison, def.exhaust, def.poisonchance)
@@ -153,7 +154,7 @@ end
 
 local poisonrandomizer = PcgRandom(os.time())
 
-function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poison, exhaust, poisonchance)
+function mcl_hunger.item_eat(hunger_points, replace_with_item, poisontime, poison, exhaust, poisonchance)
 	return function(itemstack, user)
 		if not user or not user.is_player or not user:is_player() or user.is_fake_player then return itemstack end
 		local itemname = itemstack:get_name()
@@ -168,9 +169,9 @@ function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poiso
 			local pos = user:get_pos()
 			local def = core.registered_items[itemname]
 
-			mcl_hunger.eat_effects(user, itemname, pos, hunger_change, def)
+			mcl_hunger.eat_effects(user, itemname, pos, hunger_points, def)
 
-			if mcl_hunger.active and hunger_change then
+			if mcl_hunger.active and hunger_points then
 				-- Add saturation (must be defined in item table)
 				local _mcl_saturation = core.registered_items[itemname]._mcl_saturation
 				local saturation
@@ -183,17 +184,17 @@ function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poiso
 
 				-- Add food points
 				local h = mcl_hunger.get_hunger(user)
-				if h < 20 and hunger_change then
-					h = h + hunger_change
+				if h < 20 and hunger_points then
+					h = h + hunger_points
 					if h > 20 then h = 20 end
 					mcl_hunger.set_hunger(user, h, false)
 				end
 
 				hb.change_hudbar(user, "hunger", h)
 				mcl_hunger.update_saturation_hud(user, mcl_hunger.get_saturation(user), h)
-			elseif not mcl_hunger.active and hunger_change then
+			elseif not mcl_hunger.active and hunger_points then
 			   -- Is this code still reachable?
-			   mcl_damage.heal_player (user, hunger_change)
+			   mcl_damage.heal_player (user, hunger_points)
 			end
 			-- Poison
 			if mcl_hunger.active and poisontime then
@@ -227,8 +228,8 @@ function mcl_hunger.item_eat(hunger_change, replace_with_item, poisontime, poiso
 	end
 end
 
-function mcl_hunger.eat_effects(user, itemname, pos, hunger_change, item_def, pitch)
-	if not (user and itemname and pos and hunger_change and item_def) then
+function mcl_hunger.eat_effects(user, itemname, pos, hunger_points, item_def, pitch)
+	if not (user and itemname and pos and hunger_points and item_def) then
 		return false
 	end
 	-- player height
@@ -254,7 +255,7 @@ function mcl_hunger.eat_effects(user, itemname, pos, hunger_change, item_def, pi
 		if item_def._food_particles ~= false and texture and texture ~= "" then
 			-- get velocity once
 			local v = user.get_velocity and user:get_velocity() or user:get_player_velocity() or {x=0, y=0, z=0}
-			local count = math.min(math.max(8, hunger_change * 2), 25)
+			local count = math.min(math.max(8, hunger_points * 2), 25)
 			local texture_index = math.random(0, count)
 			core.add_particlespawner({
 				amount = count,
@@ -284,18 +285,18 @@ function mcl_hunger.eat_effects(user, itemname, pos, hunger_change, item_def, pi
 end
 
 function mcl_hunger.hud_eat_add(player)
-	mcl_hunger.eat_anim_timer[player] = 0
+	mcl_hunger.eat_duration[player] = 0
 	local wielditem = player:get_wielded_item()
 	local itemstackdef = wielditem:get_definition()
 	local wield_image = itemstackdef.wield_image
 	if not wield_image or wield_image == "" then wield_image = itemstackdef.inventory_image end
 	player:hud_set_flags({wielditem = false})
 	player:hud_change(mcl_hunger.eat_anim_hud[player], "text", wield_image)
-	player:hud_change(mcl_hunger.eat_anim_hud[player], "offset", {x = 0, y = 50*math.sin(10*mcl_hunger.eat_anim_timer[player])-50})
+	player:hud_change(mcl_hunger.eat_anim_hud[player], "offset", {x = 0, y = 50*math.sin(10*mcl_hunger.eat_duration[player])-50})
 end
 
 function mcl_hunger.hud_eat_remove(player)
-	mcl_hunger.eat_anim_timer[player] = -math.huge
+	mcl_hunger.eat_duration[player] = -math.huge
 	mcl_hunger.eat_anim_effect[player] = nil
 	player:hud_set_flags({wielditem = true})
 	player:hud_change(mcl_hunger.eat_anim_hud[player], "text", "blank.png")
@@ -310,10 +311,6 @@ end
 
 function mcl_hunger.prevent_eating (player)
 	mcl_hunger.eat_anim_block[player] = true
-	-- reset eat animation blocking after a while
-	core.after(0.2, function ()
-		mcl_hunger.eat_anim_block[player] = nil
-	end)
 end
 
 if mcl_hunger.active then
@@ -330,7 +327,7 @@ if mcl_hunger.active then
 end
 
 core.register_on_joinplayer (function (player)
-	mcl_hunger.eat_anim_timer[player] = -math.huge
+	mcl_hunger.eat_duration[player] = -math.huge
 	mcl_hunger.eat_anim_hud[player] = player:hud_add({
 		hud_elem_type = "image",
 		text = "blank.png",
@@ -344,7 +341,7 @@ core.register_on_joinplayer (function (player)
 end)
 
 core.register_on_leaveplayer (function (player, _)
-	mcl_hunger.eat_anim_timer[player] = nil
+	mcl_hunger.eat_duration[player] = nil
 	mcl_hunger.eat_anim_hud[player] = nil
 end)
 
@@ -375,40 +372,40 @@ controls.register_on_hold (function (player, key)
 	end
 
 	local def = core.registered_items[itemname]
-	local hp_change = core.get_item_group(itemname, "eatable")
+	local hunger_points = core.get_item_group(itemname, "eatable")
 
 	-- Prioritize eat over shield block
 	mcl_shields.players[player].blocking = 0
 
 	-- Start eating animation
-	if mcl_hunger.eat_anim_timer[player] == -math.huge then
+	if mcl_hunger.eat_duration[player] == -math.huge then
 		mcl_hunger.hud_eat_add(player)
 		if core.get_modpath("playerphysics") then
 			playerphysics.add_physics_factor(player, "speed", "mcl_hunger:eat_anim", SPEED_WHILE_EAT)
 		end
 	end
 	-- Eat animation sound & particle
-	local step = math.floor(mcl_hunger.eat_anim_timer[player] / 0.2)
+	local step = math.floor(mcl_hunger.eat_duration[player] / 0.2)
 	local last_step = mcl_hunger.eat_anim_effect[player] or 0
 	if step > last_step then
 		mcl_hunger.eat_anim_effect[player] = step
-		mcl_hunger.eat_effects(player, itemname, player:get_pos(), hp_change, def)
+		mcl_hunger.eat_effects(player, itemname, player:get_pos(), hunger_points, def)
 	end
 	-- Actual eat
 	local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
-	if mcl_hunger.eat_anim_timer[player] >= eat_delay then
-		core.do_item_eat(hp_change, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
+	if mcl_hunger.eat_duration[player] >= eat_delay then
+		core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
 		player:set_wielded_item(itemstack)
 		mcl_hunger.hud_eat_remove(player)
 	end
 end)
 
 core.register_globalstep (function (dtime)
-	for player, time in pairs (mcl_hunger.eat_timer) do
-		mcl_hunger.eat_timer[player] = time - dtime
+	for player, time in pairs (mcl_hunger.eat_cooldown) do
+		mcl_hunger.eat_cooldown[player] = time - dtime
 	end
-	for player, time in pairs (mcl_hunger.eat_anim_timer) do
-		mcl_hunger.eat_anim_timer[player] = time + dtime
+	for player, time in pairs (mcl_hunger.eat_duration) do
+		mcl_hunger.eat_duration[player] = time + dtime
 	end
 end)
 
@@ -421,6 +418,10 @@ controls.register_on_release (function (player, key)
 	end
 	mcl_hunger.hud_eat_remove(player)
 	mcl_hunger.prevent_eating (player)
+	-- reset eat animation blocking after a while
+	core.after(0.2, function ()
+		mcl_hunger.eat_anim_block[player] = nil
+	end)
 end)
 
 core.register_on_mods_loaded(function()
