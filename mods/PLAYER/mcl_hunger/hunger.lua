@@ -20,12 +20,12 @@ local function is_eat_anim_possible (player, key)
 		return false
 	end
 
+	local pointed_thing = mcl_util.get_pointed_thing (player, true)
 	local pname = player:get_player_name ()
 	local pinfo = core.get_player_window_information (pname)
 	if pinfo and pinfo.touch_controls then
 		-- Trigger rightclick/formspec on touch controls
 		if key == "LMB" then
-			local pointed_thing = mcl_util.get_pointed_thing (player, true)
 			if pointed_thing and pointed_thing.type == "node" then
 				local node = core.get_node (pointed_thing.under)
 				local meta = core.get_meta (pointed_thing.under)
@@ -51,7 +51,6 @@ local function is_eat_anim_possible (player, key)
 		return false
 	end
 
-	local pointed_thing = mcl_util.get_pointed_thing (player, true)
 	local rc = mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
 	if rc then return false end
 
