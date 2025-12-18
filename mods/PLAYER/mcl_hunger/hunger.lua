@@ -292,7 +292,7 @@ function mcl_hunger.hud_eat_add(player)
 	if not wield_image or wield_image == "" then wield_image = itemstackdef.inventory_image end
 	player:hud_set_flags({wielditem = false})
 	player:hud_change(mcl_hunger.eat_anim_hud[player], "text", wield_image)
-	player:hud_change(mcl_hunger.eat_anim_hud[player], "offset", {x = 0, y = 50*math.sin(10*mcl_hunger.eat_duration[player])-50})
+	player:hud_change(mcl_hunger.eat_anim_hud[player], "offset", {x = 0, y = -50})
 end
 
 function mcl_hunger.hud_eat_remove(player)
