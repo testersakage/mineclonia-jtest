@@ -423,13 +423,3 @@ controls.register_on_release (function (player, key)
 		mcl_hunger.eat_anim_block[player] = nil
 	end)
 end)
-
-core.register_on_mods_loaded(function()
-	for name, def in pairs(core.registered_items) do
-		if def.groups.eatable and def.groups.eatable > 0 then
-			core.override_item(name, {
-				touch_interaction = "short_dig_long_place",
-			})
-		end
-	end
-end)
