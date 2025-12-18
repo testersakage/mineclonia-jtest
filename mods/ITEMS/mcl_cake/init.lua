@@ -4,10 +4,11 @@
 ]]--
 
 local CAKE_HUNGER_POINTS = 2
+local CAKE_SATURATION_POINTS = 0.4
 
 local S = core.get_translator(core.get_current_modname())
 
-local cake_box = {
+local cake_boxes = {
 	slices = {
 		{-0.4375, -0.5, -0.4375, -0.3125, 0, 0.4375},
 		{-0.4375, -0.5, -0.4375, -0.1875, 0, 0.4375},
@@ -33,59 +34,46 @@ local tpl_cake = {
 	drop = "",
 	sounds = mcl_sounds.node_sound_wool_defaults(),
 	_food_particles = false,
-	_mcl_saturation = 0.4,
+	_mcl_saturation = CAKE_SATURATION_POINTS,
 	_mcl_hardness = 0.5,
 	on_rightclick = function(pos, node, clicker)
 		if not mcl_util.check_position_protection(pos, clicker) then
+			local name = clicker:get_player_name()
 			local cake = core.get_item_group(node.name, "cake")
 
-			if cake ~= 1 then
-				mcl_redstone.swap_node(pos, {name = "mcl_cake:cake_" .. cake - 1})
-			else
-				core.remove_node(pos)
-				core.check_for_falling(pos)
-				mcl_redstone.update_comparators(pos)
-			end
+			-- Eat only when you are hungry or in creative mode
+			if mcl_hunger.get_hunger(clicker) < 20 or core.is_creative_enabled(name) then
+				if cake == 1 then
+					core.remove_node(pos)
+					core.check_for_falling(pos)
+					mcl_redstone.update_comparators(pos)
+				else
+					mcl_redstone.swap_node(pos, {name = "mcl_cake:cake_" .. cake - 1})
+				end
 
-			core.do_item_eat(CAKE_HUNGER_POINTS, ItemStack(), ItemStack(node.name), clicker, {type = "nothing"})
+				core.do_item_eat(CAKE_HUNGER_POINTS, nil, ItemStack(node.name), clicker, {type = "nothing"})
+			end
 		end
 	end,
 	_mcl_spawn_food_particles = false,
 }
 
 core.register_node("mcl_cake:cake", table.merge(tpl_cake, {
-	_tt_help = S("With 7 tasty slices!").."\n"..S("Hunger points: +@1 per slice", CAKE_HUNGER_POINTS),
-	_doc_items_longdesc = S("Cakes can be placed and eaten to restore hunger points. A cake has 7 slices. Each slice restores 2 hunger points and 0.4 saturation points. Cakes will be destroyed when dug or when the block below them is broken."),
+	_tt_help = S("With 7 tasty slices! Hunger points: +@1 per slice", CAKE_HUNGER_POINTS),
+	_doc_items_longdesc = S("Cakes can be placed and eaten to restore hunger points. A cake has 7 slices. Each slice restores @1 hunger points and @2 saturation points. Cakes will be destroyed when dug or when the block below them is broken.", CAKE_HUNGER_POINTS, CAKE_SATURATION_POINTS),
 	_doc_items_usagehelp = S("Place the cake anywhere, then rightclick it to eat a single slice. You can't eat from the cake when your hunger bar is full."),
 	tiles = {"cake_top.png", "cake_bottom.png", "cake_side.png"},
 	inventory_image = "cake.png",
 	wield_image = "cake.png",
 	selection_box = {
 		type = "fixed",
-		fixed = cake_box.full_cake
+		fixed = cake_boxes.full_cake
 	},
 	node_box = {
 		type = "fixed",
-		fixed = cake_box.full_cake
+		fixed = cake_boxes.full_cake
 	},
-	groups = table.merge(cake_groups, {comparator_signal = 14, cake = 7}),
-	on_rightclick = function(pos, node, clicker)
-		-- Cake is subject to protection
-		local name = clicker:get_player_name()
-		if core.is_protected(pos, name) then
-			core.record_protection_violation(pos, name)
-			return
-		end
-		if mcl_hunger.is_player_full (clicker) then
-			return
-		end
-		-- Check if we were allowed to eat
-		if node.name == "mcl_cake:cake" or core.is_creative_enabled(clicker:get_player_name()) then
-			mcl_hunger.prevent_eating (clicker)
-			mcl_redstone.swap_node(pos, {name = "mcl_cake:cake_6", param2 = 0})
-			core.do_item_eat(2, ItemStack(), ItemStack("mcl_cake:cake"), clicker, {type="nothing"})
-		end
-	end,
+	groups = table.merge(cake_groups, {comparator_signal = 14, cake = 7, compostability = 100})
 }))
 
 for i = 1, 6 do
@@ -96,11 +84,11 @@ for i = 1, 6 do
 		tiles = {"cake_top.png", "cake_bottom.png", "cake_inner.png", "cake_side.png"},
 		selection_box = {
 			type = "fixed",
-			fixed = cake_box.slices[i]
+			fixed = cake_boxes.slices[i]
 		},
 		node_box = {
 			type = "fixed",
-			fixed = cake_box.slices[i]
+			fixed = cake_boxes.slices[i]
 		},
 		groups = table.merge(cake_groups, {
 			comparator_signal = i * 2, not_in_creative_inventory = 1, cake = i
