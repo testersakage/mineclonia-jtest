@@ -165,8 +165,6 @@ function mcl_hunger.item_eat(hunger_points, replace_with_item, poisontime, poiso
 				itemstack:take_item()
 			end
 			local name = user:get_player_name()
-			--local hp = mcl_util.get_hp (user)
-
 			local pos = user:get_pos()
 			local def = core.registered_items[itemname]
 
