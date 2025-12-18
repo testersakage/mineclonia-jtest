@@ -143,7 +143,6 @@ core.register_node("mcl_amethyst:amethyst_cluster",{
 	inventory_image = "mcl_amethyst_amethyst_cluster.png",
 	paramtype2 = "wallmounted",
 	drawtype = "plantlike",
-	paramtype1 = "light",
 	use_texture_alpha = "clip",
 	sunlight_propagates = true,
 	walkable = false,
