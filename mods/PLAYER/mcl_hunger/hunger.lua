@@ -242,45 +242,45 @@ function mcl_hunger.eat_effects(user, itemname, pos, hunger_points, item_def, pi
 			pitch = pitch or (1 + math.random(-10, 10) * 0.005),
 			object = user,
 		}, true)
-	else
-		-- Assume the item is a food
-		-- Add eat particle effect and sound
-		local texture = item_def.inventory_image
-		if not texture or texture == "" then
-			texture = item_def.wield_image
-		end
-		-- Special item definition field: _food_particles
-		-- If false, force item to not spawn any food partiles when eaten
-		if item_def._food_particles ~= false and texture and texture ~= "" then
-			-- get velocity once
-			local v = user.get_velocity and user:get_velocity() or user:get_player_velocity() or {x=0, y=0, z=0}
-			local count = math.min(math.max(8, hunger_points * 2), 25)
-			local texture_index = math.random(0, count)
-			core.add_particlespawner({
-				amount = count,
-				time = 0.01,
-				minpos = pos,
-				maxpos = pos,
-				minvel = vector.add(v, { x = -1, y = 1, z = -1 }),
-				maxvel = vector.add(v, { x =  1, y = 2, z =  1 }),
-				minacc = { x = 0, y = -9, z = 0 },
-				maxacc = { x = 0, y = -5, z = 0 },
-				minexptime = 0.5,
-				maxexptime = 0.8,
-				minsize = 1,
-				maxsize = 2,
-				collisiondetection = true,
-				vertical = false,
-				texture = "[combine:3x3:" .. -texture_index .. "," .. -texture_index .. "=" .. texture,
-			})
-		end
-		core.sound_play("mcl_hunger_bite", {
-			max_hear_distance = 12,
-			gain = 0.1,
-			pitch = pitch or (1 + math.random(-10, 10) * 0.005),
-			object = user,
-		}, true)
+		return
 	end
+	-- Assume the item is a food
+	-- Add eat particle effect and sound
+	local texture = item_def.inventory_image
+	if not texture or texture == "" then
+		texture = item_def.wield_image
+	end
+	-- Special item definition field: _food_particles
+	-- If false, force item to not spawn any food partiles when eaten
+	if item_def._food_particles ~= false and texture and texture ~= "" then
+		-- get velocity once
+		local v = user.get_velocity and user:get_velocity() or user:get_player_velocity() or {x=0, y=0, z=0}
+		local count = math.min(math.max(8, hunger_points * 2), 25)
+		local texture_index = math.random(0, count)
+		core.add_particlespawner({
+			amount = count,
+			time = 0.01,
+			minpos = pos,
+			maxpos = pos,
+			minvel = vector.add(v, { x = -1, y = 1, z = -1 }),
+			maxvel = vector.add(v, { x =  1, y = 2, z =  1 }),
+			minacc = { x = 0, y = -9, z = 0 },
+			maxacc = { x = 0, y = -5, z = 0 },
+			minexptime = 0.5,
+			maxexptime = 0.8,
+			minsize = 1,
+			maxsize = 2,
+			collisiondetection = true,
+			vertical = false,
+			texture = "[combine:3x3:" .. -texture_index .. "," .. -texture_index .. "=" .. texture,
+		})
+	end
+	core.sound_play("mcl_hunger_bite", {
+		max_hear_distance = 12,
+		gain = 0.1,
+		pitch = pitch or (1 + math.random(-10, 10) * 0.005),
+		object = user,
+	}, true)
 end
 
 function mcl_hunger.hud_eat_add(player)
