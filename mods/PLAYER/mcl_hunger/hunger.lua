@@ -2,6 +2,13 @@ local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / t
 
 local eat_anim_enabled = core.settings:get_bool("mcl_eat_anim", true)
 
+local function is_can_eat_when_full (player, itemstack)
+	local creative = core.is_creative_enabled (player:get_player_name ())
+	return creative
+		or (mcl_hunger.active == false)
+		or core.get_item_group (itemstack:get_name (), "can_eat_when_full") == 1
+end
+
 local function is_eat_anim_possible (player, key)
 	if mcl_serverplayer.is_csm_capable (player) then
 		return false
@@ -79,12 +86,7 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 		timer_check = (mcl_hunger.eat_cooldown[user] or 0) > 0
 	end
 
-	local creative = core.is_creative_enabled(user:get_player_name())
-	local can_eat_when_full = creative
-		or (mcl_hunger.active == false)
-		or core.get_item_group(itemstack:get_name(), "can_eat_when_full") == 1
-
-	if not can_eat_when_full
+	if not is_can_eat_when_full (user, itemstack)
 	and core.get_item_group(itemstack:get_name(), "no_eat_delay") == 0
 	and timer_check then
 		return
@@ -361,13 +363,9 @@ controls.register_on_hold (function (player, key)
 	local pointed_thing = mcl_util.get_pointed_thing (player, true)
 	local is_full = mcl_hunger.is_player_full (player)
 
-	local creative = core.is_creative_enabled(player:get_player_name())
-	local can_eat_when_full = creative
-		or (mcl_hunger.active == false)
-		or core.get_item_group(itemname, "can_eat_when_full") == 1
-
 	if core.get_item_group(itemname, "no_eat_delay") > 0
-		or (not can_eat_when_full and is_full) then
+		or (not is_can_eat_when_full (player, itemstack)
+			and is_full) then
 		return
 	end
 
