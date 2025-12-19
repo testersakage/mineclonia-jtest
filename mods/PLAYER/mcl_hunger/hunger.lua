@@ -2,11 +2,9 @@ local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / t
 
 local eat_anim_enabled = core.settings:get_bool("mcl_eat_anim", true)
 
-local function can_eat_when_full (player, itemstack)
-	local creative = core.is_creative_enabled (player:get_player_name ())
-	return creative
-		or (mcl_hunger.active == false)
-		or core.get_item_group (itemstack:get_name (), "can_eat_when_full") == 1
+local function can_eat_when_full (itemstack)
+	return (mcl_hunger.active == false)
+		or (core.get_item_group (itemstack:get_name (), "can_eat_when_full") == 1)
 end
 
 local function is_eat_anim_possible (player, key)
@@ -55,10 +53,11 @@ local function is_eat_anim_possible (player, key)
 	if rc then return false end
 
 	local def = core.registered_items[itemname]
+	local creative = core.is_creative_enabled (player:get_player_name ())
 	local is_full = mcl_hunger.is_player_full (player)
 	local hunger_points = core.get_item_group(itemname, "eatable")
 	-- Instant eat when eat_anim disabled
-	if not eat_anim_enabled and not is_full then
+	if not eat_anim_enabled and (creative or not is_full) then
 		core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
 		player:set_wielded_item (itemstack)
 		return false
@@ -90,8 +89,7 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 		is_still_eating = false
 	end
 
-	if not can_eat_when_full (user, itemstack)
-	and is_still_eating then
+	if not can_eat_when_full (itemstack) and is_still_eating then
 		return
 	end
 
@@ -363,10 +361,11 @@ controls.register_on_hold (function (player, key)
 	local itemname = itemstack:get_name ()
 	local pointed_thing = mcl_util.get_pointed_thing (player, true)
 	local is_full = mcl_hunger.is_player_full (player)
+	local creative = core.is_creative_enabled (player:get_player_name ())
 
 	if core.get_item_group(itemname, "no_eat_delay") > 0
-		or (not can_eat_when_full (player, itemstack)
-			and is_full) then
+		or (not can_eat_when_full (itemstack)
+			and (not creative and is_full)) then
 		return
 	end
 
