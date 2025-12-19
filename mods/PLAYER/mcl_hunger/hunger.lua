@@ -80,16 +80,18 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 	local def = core.registered_items[item]
 	local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
 
-	local timer_check = mcl_hunger.eat_duration[user] < eat_delay
+	local is_still_eating = mcl_hunger.eat_duration[user] < eat_delay
+
 	if not eat_anim_enabled then
-		timer_check = (mcl_hunger.eat_cooldown[user] or 0) > 0
+		is_still_eating = (mcl_hunger.eat_cooldown[user] or 0) > 0
 	end
+
 	if core.get_item_group(itemstack:get_name(), "no_eat_delay") > 0 then
-		timer_check = false
+		is_still_eating = false
 	end
 
 	if not can_eat_when_full (user, itemstack)
-	and timer_check then
+	and is_still_eating then
 		return
 	end
 
