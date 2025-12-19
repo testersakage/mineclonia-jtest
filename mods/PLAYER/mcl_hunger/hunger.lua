@@ -84,9 +84,11 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 	if not eat_anim_enabled then
 		timer_check = (mcl_hunger.eat_cooldown[user] or 0) > 0
 	end
+	if core.get_item_group(itemstack:get_name(), "no_eat_delay") > 0 then
+		timer_check = false
+	end
 
 	if not can_eat_when_full (user, itemstack)
-	and core.get_item_group(itemstack:get_name(), "no_eat_delay") == 0
 	and timer_check then
 		return
 	end
