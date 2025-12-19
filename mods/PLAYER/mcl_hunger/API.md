@@ -60,7 +60,7 @@ based on the inventory image or wield image (whatever is available first).
 ## Suppressing food particles
 Normally, all food items considered food (not drinks) make food particles.
 You can suppress the food particles by adding the field
-`_food_particles=false` to the item definition.
+`_mcl_spawn_food_particles=false` to the item definition.
 
 ## Eat animation
 In addition of eating animation there is also new changes on how to define food item.

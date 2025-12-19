@@ -2,7 +2,7 @@ local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / t
 
 local eat_anim_enabled = core.settings:get_bool("mcl_eat_anim", true)
 
-local function is_can_eat_when_full (player, itemstack)
+local function can_eat_when_full (player, itemstack)
 	local creative = core.is_creative_enabled (player:get_player_name ())
 	return creative
 		or (mcl_hunger.active == false)
@@ -85,7 +85,7 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 		timer_check = (mcl_hunger.eat_cooldown[user] or 0) > 0
 	end
 
-	if not is_can_eat_when_full (user, itemstack)
+	if not can_eat_when_full (user, itemstack)
 	and core.get_item_group(itemstack:get_name(), "no_eat_delay") == 0
 	and timer_check then
 		return
@@ -250,9 +250,9 @@ function mcl_hunger.eat_effects(user, itemname, pos, hunger_points, item_def, pi
 	if not texture or texture == "" then
 		texture = item_def.wield_image
 	end
-	-- Special item definition field: _food_particles
+	-- Special item definition field: _mcl_spawn_food_particles
 	-- If false, force item to not spawn any food partiles when eaten
-	if item_def._food_particles ~= false and texture and texture ~= "" then
+	if item_def._mcl_spawn_food_particles ~= false and texture and texture ~= "" then
 		-- get velocity once
 		local v = user.get_velocity and user:get_velocity() or user:get_player_velocity() or {x=0, y=0, z=0}
 		local count = math.min(math.max(8, hunger_points * 2), 25)
@@ -361,7 +361,7 @@ controls.register_on_hold (function (player, key)
 	local is_full = mcl_hunger.is_player_full (player)
 
 	if core.get_item_group(itemname, "no_eat_delay") > 0
-		or (not is_can_eat_when_full (player, itemstack)
+		or (not can_eat_when_full (player, itemstack)
 			and is_full) then
 		return
 	end

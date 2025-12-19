@@ -75,7 +75,7 @@ core.register_node("mcl_cake:cake", {
 	end,
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 
-	_food_particles = false,
+	_mcl_spawn_food_particles = false,
 	_mcl_saturation = 0.4,
 	_mcl_hardness = 0.5,
 })
@@ -145,7 +145,7 @@ local register_slice = function(level, nodebox, desc)
 		on_rightclick = on_rightclick,
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 
-		_food_particles = false,
+		_mcl_spawn_food_particles = false,
 		_mcl_saturation = 0.4,
 		_mcl_hardness = 0.5,
 	})
