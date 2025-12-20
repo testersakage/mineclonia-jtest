@@ -74,8 +74,6 @@ core.register_tool("mcl_tools:mace", {
 							end
 						core.sound_play("tnt_explode", { pos = pos, gain = 0.4, max_hear_distance = 30, pitch = 2.5 }, true)
 						core.add_particlespawner(table.merge(mcl_charges.wind_burst_spawner, {
-							minacc = v,
-							maxacc = v,
 							minpos = vector.offset(pos, -0.8, 0.6, -0.8),
 							maxpos = vector.offset(pos, 0.8, 0.8, 0.8),
 						}))
