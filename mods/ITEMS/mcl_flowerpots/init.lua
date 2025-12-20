@@ -58,14 +58,15 @@ core.register_node("mcl_flowerpots:flower_pot", table.merge(tpl_pots, {
 	inventory_image = "mcl_flowerpots_flowerpot_inventory.png",
 	groups = { dig_immediate = 3, deco_block = 1, attached_node = 1, dig_by_piston = 1, flower_pot = 1, unsticky = 1, pathfinder_partial = 2, },
 	on_rightclick = function(pos, _, clicker, itemstack)
-		local name = check_player_protection(pos, clicker)
-		if name then
-			local valid_pot, pot = validate_pot(itemstack)
-			if valid_pot then
-				core.swap_node(pos, {name = "mcl_flowerpots:flower_pot_" .. pot})
-				if not core.is_creative_enabled(name) then
-					itemstack:take_item()
-				end
+		local player_name = check_player_protection(pos, clicker)
+		if not player_name then
+			return itemstack
+		end
+		local valid_pot, pot = validate_pot(itemstack)
+		if valid_pot then
+			core.swap_node(pos, {name = "mcl_flowerpots:flower_pot_" .. pot})
+			if not core.is_creative_enabled(player_name) then
+				itemstack:take_item()
 			end
 		end
 		return itemstack
@@ -91,23 +92,24 @@ function mcl_flowerpots.register_potted_flower(name, def)
 		},
 		groups = { dig_immediate = 3, attached_node = 1, dig_by_piston = 1, not_in_creative_inventory = 1, flower_pot = 2, unsticky = 1},
 		on_rightclick = function(pos, node, clicker, itemstack)
-			local name = check_player_protection(pos, clicker)
-			if name then
-				local creative = core.is_creative_enabled(name)
-				local _, pot = validate_pot(itemstack)
-				local same_pot = pot and node.name == "mcl_flowerpots:flower_pot_" .. pot
-				if not same_pot or creative then
-					core.swap_node(pos, {name = "mcl_flowerpots:flower_pot"})
-					if not creative then
-						local stack = ItemStack(name)
-						local inventory = clicker:get_inventory()
-						if inventory:room_for_item("main", stack) then
-							inventory:add_item("main", stack)
-						elseif not itemstack:is_empty() then
-							core.add_item(pos, stack)
-						else
-							return stack
-						end
+			local player_name = check_player_protection(pos, clicker)
+			if not player_name then
+				return itemstack
+			end
+			local creative = core.is_creative_enabled(player_name)
+			local _, pot = validate_pot(itemstack)
+			local same_pot = pot and node.name == "mcl_flowerpots:flower_pot_" .. pot
+			if not same_pot or creative then
+				core.swap_node(pos, {name = "mcl_flowerpots:flower_pot"})
+				if not creative then
+					local stack = ItemStack(name)
+					local inventory = clicker:get_inventory()
+					if inventory:room_for_item("main", stack) then
+						inventory:add_item("main", stack)
+					elseif not itemstack:is_empty() then
+						core.add_item(pos, stack)
+					else
+						return stack
 					end
 				end
 			end
@@ -137,23 +139,24 @@ function mcl_flowerpots.register_potted_cube(name, def)
 		},
 		groups = { dig_immediate = 3, attached_node = 1, dig_by_piston = 1, not_in_creative_inventory = 1, flower_pot = 2, unsticky = 1},
 		on_rightclick = function(pos, node, clicker, itemstack)
-			local name = check_player_protection(pos, clicker)
-			if name then
-				local creative = core.is_creative_enabled(name)
-				local _, pot = validate_pot(itemstack)
-				local same_pot = pot and node.name == "mcl_flowerpots:flower_pot_" .. pot
-				if not same_pot or creative then
-					core.swap_node(pos, {name = "mcl_flowerpots:flower_pot"})
-					if not creative then
-						local stack = ItemStack(name)
-						local inventory = clicker:get_inventory()
-						if inventory:room_for_item("main", stack) then
-							inventory:add_item("main", stack)
-						elseif not itemstack:is_empty() then
-							core.add_item(pos, stack)
-						else
-							return stack
-						end
+			local player_name = check_player_protection(pos, clicker)
+			if not player_name then
+				return itemstack
+			end
+			local creative = core.is_creative_enabled(player_name)
+			local _, pot = validate_pot(itemstack)
+			local same_pot = pot and node.name == "mcl_flowerpots:flower_pot_" .. pot
+			if not same_pot or creative then
+				core.swap_node(pos, {name = "mcl_flowerpots:flower_pot"})
+				if not creative then
+					local stack = ItemStack(name)
+					local inventory = clicker:get_inventory()
+					if inventory:room_for_item("main", stack) then
+						inventory:add_item("main", stack)
+					elseif not itemstack:is_empty() then
+						core.add_item(pos, stack)
+					else
+						return stack
 					end
 				end
 			end
