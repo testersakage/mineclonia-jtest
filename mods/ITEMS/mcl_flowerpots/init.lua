@@ -111,6 +111,7 @@ function mcl_flowerpots.register_potted_flower(name, def)
 					else
 						return stack
 					end
+					return inventory:get_stack("main", clicker:get_wield_index())
 				end
 			end
 			return itemstack
@@ -158,6 +159,7 @@ function mcl_flowerpots.register_potted_cube(name, def)
 					else
 						return stack
 					end
+					return inventory:get_stack("main", clicker:get_wield_index())
 				end
 			end
 			return itemstack
