@@ -1,5 +1,7 @@
-Walkover
+mcl_walkover
 --------
+
+[Note: the implementation of this mod may be subject to future changes. External mod authors should not assume that the interface and semantics will remain stable.]
 
 Some mode developers have shown an interest in having an `on_walk_over` event. This is useful for pressure-plates and the like.
 
@@ -14,6 +16,7 @@ Example Usage
            description = "Talking Block",
            tiles = {"somemod_someblock.png"},
            _on_object_over = function(pos, node, player)
+           _on_object_in = function(pos, node, player)
                  minetest.chat_send_player(player, "Hey! Watch it!")
            end
     })
