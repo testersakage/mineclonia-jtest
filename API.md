@@ -183,7 +183,7 @@ These can be applied to all item registrations:
 
 #### Node Definitions
 These can be applied to all node registrations.
-* `on_walk_over` callback for nodes: `CORE/mcl_walkover`
+* `_on_object_over`: called every step when a player, mob or entity is on top of the node: function(object_pos, node, object)
 * `_on_arrow_hit` callback when node is hit by an arrow: function(pos, arrow_luaentity)
 * `_on_dye_place` callback when node is rickclicked with a dye: function(pos, color_name)
 * `_on_hopper_in` callback when an item is about to be pushed to the node from a hopper: function(hopper_pos, node_pos)

@@ -13,7 +13,7 @@ Example Usage
     minetest.register_node("somemod:someblock", {
            description = "Talking Block",
            tiles = {"somemod_someblock.png"},
-           on_walk_over = function(pos, node, player)
+           _on_object_over = function(pos, node, player)
                  minetest.chat_send_player(player, "Hey! Watch it!")
            end
     })
