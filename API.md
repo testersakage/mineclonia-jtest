@@ -90,7 +90,7 @@ All nodes can have these fields:
   into this node before it starts to fall.
 * `_mcl_after_falling(pos)`: Called after a falling node finished falling and
   turned into a node.
-* `_mcl_on_object_inside(entity_pos, node, obj)`: Called every step when an entity
+* `_on_object_in(entity_pos, node, obj)`: Called every step when an entity
   is inside the node
 
 ### Tool Callbacks

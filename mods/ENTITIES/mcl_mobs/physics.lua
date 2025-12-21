@@ -1792,11 +1792,11 @@ function mob_class:post_motion_step (self_pos, dtime, moveresult)
 		end
 	end
 
-	if core.registered_nodes[self.standing_in]._mcl_on_object_inside then
+	if core.registered_nodes[self.standing_in]._on_object_in then
 		-- This is a workaround to prevent excess table allocations
 		local saved_y_pos = self_pos.y
 		self_pos.y = math.floor(self_pos.y + self.collisionbox[2] + 0.5 + 1.0e-2)
-		core.registered_nodes[self.standing_in]._mcl_on_object_inside(self_pos, mcl_mobs.node_ok(self_pos, "air"), self.object)
+		core.registered_nodes[self.standing_in]._on_object_in(self_pos, mcl_mobs.node_ok(self_pos, "air"), self.object)
 		self_pos.y = saved_y_pos
 	end
 end
