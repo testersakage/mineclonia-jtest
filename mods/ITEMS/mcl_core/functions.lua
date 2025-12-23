@@ -80,8 +80,14 @@ function mcl_core.grow_reeds(pos, amount)
 		if height >= 3 then return end
 		amount = math.min(amount, 3 - height)
 
-		for i = top_pos.y, top_pos.y + amount do
-			core.set_node(vector.new(pos.x, i, pos.z), {name="mcl_core:reeds"})
+		for i = 1, amount do
+			local pos2 = pos:offset(0, i, 0)
+			local node2 = core.get_node(pos2)
+			local ndef = core.registered_nodes[node2.name]
+			if node2.name ~= "air" and not ndef.buildable_to then
+				break
+			end
+			core.set_node(pos2, {name="mcl_core:reeds"})
 		end
 		return true
 	end
