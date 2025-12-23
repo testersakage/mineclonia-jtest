@@ -51,6 +51,18 @@ function mcl_doors:register_trapdoor(name, def)
 		core.set_node(pos, tmp_node)
 	end
 
+	local function on_redstone_update(pos)
+		local meta = core.get_meta(pos)
+		local previous_power = meta:get_int("redstone_power")
+		local power = mcl_redstone.get_power(pos)
+
+		if power ~= previous_power then
+			punch(pos)
+		end
+
+		meta:set_int("redstone_power", power)
+	end
+
 	local on_rightclick
 	if not def.only_redstone_can_open then
 		on_rightclick = function(pos, _, _) punch(pos) end
@@ -120,9 +132,7 @@ function mcl_doors:register_trapdoor(name, def)
 		_mcl_burntime = def._mcl_burntime,
 		_mcl_redstone = {
 			init = function() end,
-			update = function(pos, _)
-				if mcl_redstone.get_power(pos) ~= 0 then punch(pos) end
-			end
+			update = on_redstone_update,
 		},
 		_tt_help = tt_help,
 		description = def.description,
@@ -177,9 +187,7 @@ function mcl_doors:register_trapdoor(name, def)
 		_mcl_baseitem = name,
 		_mcl_redstone = {
 			init = function() end,
-			update = function(pos, _)
-				if mcl_redstone.get_power(pos) == 0 then punch(pos) end
-			end
+			update = on_redstone_update
 		},
 		-- TODO: Implement Minecraft behaviour: Climbable if directly above
 		-- ladder w/ matching orientation.
