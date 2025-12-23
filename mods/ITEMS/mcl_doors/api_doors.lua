@@ -339,9 +339,6 @@ function mcl_doors:register_door(name, def)
 			meta1:set_int("is_open", 0)
 			meta2:set_int("is_open", 0)
 
-			meta1:set_int("redstone_power", 0)
-			meta1:set_int("redstone_power", 0)
-
 			if not core.is_creative_enabled(pn) then itemstack:take_item() end
 
 			local place_defs_pt = {
