@@ -334,20 +334,21 @@ local function register_vines(name, def, extra_groups)
 		_on_bone_meal = function(_, _, _, pos)
 			mcl_crimson.grow_vines(pos, math.random(1, 3), name, nil, max_vines_age)
 		end,
-		_mcl_on_rightclick_optional = function (pos, node, clicker, itemstack)
-			local item_name = clicker:get_wielded_item():get_name()
-			local shears = core.get_item_group(item_name, "shears") > 0
+
+		_on_shears_place = function(itemstack, placer, pointed_thing)
+			local pos = pointed_thing.under
 			local dir = grow_vines_direction[core.get_item_group(
-				node.name, "vinelike_node")] or 1
+				name, "vinelike_node")] or 1
 			local tip = mcl_util.traverse_tower(pos, dir)
 
-			if shears and vector.equals(pos, tip) then
+			if vector.equals(pos, tip) then
 				core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
-				local wear = mcl_autogroup.get_wear(item_name, "shearsy")
-				itemstack:add_wear(wear)
+				local node = core.get_node(pos)
 				node.param2 = 25
 				core.swap_node(pos,node)
+				return itemstack
 			end
+			return itemstack, true
 		end
 	}, def or {}))
 end
