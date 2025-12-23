@@ -13,18 +13,22 @@ local wood = "mcl_paintings_frame.png"
 local registered_paintings = {}
 local maximum_width = 0
 local maximum_height = 0
-local search_distance = 15
+local search_distance = 0
 
 function mcl_paintings.register_painting(name, def)
 	def.name = name
 	registered_paintings[name] = def
 	maximum_width = math.max(maximum_width, def.width)
 	maximum_height = math.max(maximum_height, def.height)
+
+	-- Calculating the distance between the bottom left corner of a painting and the center of another painting in the worst
+	-- possible case. The worst case is when the two paintings are on perpendicular walls and both are the biggest possible
+	-- paintings
+	search_distance = math.sqrt(maximum_width^2 + (math.max(maximum_width, maximum_height) / 2)^2 + (1.5 * maximum_height)^2)
 end
 
 local function is_node_okay_for_placement(under_node, above_node)
-	local under_ndef = core.registered_nodes[under_node.name]
-	return above_node.name == "air" and (under_ndef and under_ndef.walkable)
+	return above_node.name == "air" and  under_node.name ~= "air"
 end
 
 -- fancy rounding algorith that takes the direction into account
@@ -85,6 +89,7 @@ local function get_biggest_painting_for_position(pos, dir)
 	for obj in core.objects_inside_radius(pos, search_distance) do
 		local l = obj:get_luaentity()
 		if l and l.name == "mcl_paintings:painting" then
+			core.debug(search_distance, vector.distance(pos, obj:get_pos()), pos, obj:get_pos())
 			local pdef = registered_paintings[l._painting_name]
 			local obj_pos = obj:get_pos()
 			local painting_dir = core.wallmounted_to_dir(l._facing)
@@ -156,15 +161,12 @@ core.register_craftitem("mcl_paintings:painting", {
 		if rc then return rc end
 
 		local dir = vector.subtract(pointed_thing.above, pointed_thing.under)
-
 		if dir.y ~= 0 then return itemstack end
 
 		local pdef = get_biggest_painting_for_position(pointed_thing.under, dir)
-
 		if not pdef then return end
 
 		local wallm = core.dir_to_wallmounted(dir)
-
 		if not wallm then return itemstack end
 
 		local staticdata = {
@@ -186,7 +188,6 @@ core.register_craftitem("mcl_paintings:painting", {
 			"mcl_paintings:painting",
 			core.serialize(staticdata)
 		)
-
 		if not obj then return itemstack end
 
 		if not core.is_creative_enabled(placer:get_player_name()) then
