@@ -139,8 +139,7 @@ local function get_biggest_painting_for_position(pos, dir)
 	end
 
 	if #canditates == 0 then
-		-- This should never happen, since we have 1x1 paintings. But it doesn't hurt to have extra protection
-		error("No possible painting canditate found")
+		return nil
 	end
 
 	return canditates[math.random(1, #canditates)]
@@ -161,6 +160,9 @@ core.register_craftitem("mcl_paintings:painting", {
 		if dir.y ~= 0 then return itemstack end
 
 		local pdef = get_biggest_painting_for_position(pointed_thing.under, dir)
+
+		if not pdef then return end
+
 		local wallm = core.dir_to_wallmounted(dir)
 
 		if not wallm then return itemstack end
