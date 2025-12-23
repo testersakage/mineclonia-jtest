@@ -335,7 +335,7 @@ local tpl_cake = {
 	collision_box = cake_box,
 	description = S("Cake"),
 	drawtype = "mesh",
-	drop = "mcl_cake:cake",
+	drop = "",
 	groups = {
 		attached_node = 1, dig_by_piston = 1, food = 2, handy = 1, no_eat_delay = 1,
 		not_in_creative_inventory = 1, unsticky = 1
