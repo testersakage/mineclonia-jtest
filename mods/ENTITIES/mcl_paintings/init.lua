@@ -38,10 +38,8 @@ local function fancy_round(val, dir_sign)
 		else
 			return val - 0.5
 		end
-	elseif frac > 0.5 then
-		return math.floor(val) + 1
-	elseif frac < 0.5 then
-		return math.floor(val)
+	else
+		return math.round(val)
 	end
 end
 
@@ -50,16 +48,32 @@ local function rotate_dir_90_deg_clockwise(dir)
 
 	-- inlined linear transformation to rotate 90 degrees clockwise
 	--    i   j
-	-- x [1,  0]
-	-- y [0, -1]
-	rotated_dir.x = dir.z
-	rotated_dir.z = -dir.x
+	-- x [-1,  0]
+	-- y [0, 1]
+	rotated_dir.x = -dir.z
+	rotated_dir.z = dir.x
 
 	return rotated_dir
 end
 
 local function get_biggest_painting_for_position(pos, dir)
-	local dir_perpendicular = rotate_dir_90_deg_clockwise(-dir)
+	local dir_perpendicular = rotate_dir_90_deg_clockwise(dir)
+
+	-- Since this is a non trivial algorith i guess i will make a little write up.
+	--
+	-- The first thing it does is index all positions that are already taken by other paintings. Its done with getting the
+	-- nearest paintings and using their position and width/height to find the position of the bottom left corner of the
+	-- painting, and from there, index all the positions
+	--
+	-- The next thing we do is get the possible painting sizes in the `placement_ranges` table. This is done by scanning each
+	-- Y slice and searching how wide it can be in that slice. But do note that its not "what is the maximum extend this slice
+	-- is uninterrupted" but rather "How wide can a painting be with this height and this width". The differenc is that the
+	-- extend can't be bigger than the previous elements (the job of ensuring this is done by `maximum_so_far`), otherwise it
+	-- would have holes. Each Y slice is terminated either by an invalid placement (see `is_node_okay_for_placement`) or if it
+	-- was indexed as taken by another painting (see the above paragraph)
+	--
+	-- Now that we figured out how big the painting can be for an arbitrary width and height, we iterate each painting and pick
+	-- the ones with biggest volume. We store the results in a table so that we can pick the final result at random
 
 	-- A table where each element represents the Y level (starting from the bottom).
 	-- Where the value is the maximum extend of the width for a painting that wide and that high
@@ -74,7 +88,7 @@ local function get_biggest_painting_for_position(pos, dir)
 			local pdef = registered_paintings[l._painting_name]
 			local obj_pos = obj:get_pos()
 			local painting_dir = core.wallmounted_to_dir(l._facing)
-			local painting_dir_perpendicular = rotate_dir_90_deg_clockwise(-painting_dir)
+			local painting_dir_perpendicular = rotate_dir_90_deg_clockwise(painting_dir)
 
 			local start_position = vector.offset(obj_pos, -painting_dir_perpendicular.x * (pdef.width / 2), -pdef.height / 2, -painting_dir_perpendicular.z * pdef.width / 2)
 
@@ -97,7 +111,8 @@ local function get_biggest_painting_for_position(pos, dir)
 			local node_under = core.get_node(offset_pos)
 			local node_above = core.get_node(offset_above_pos)
 
-			if is_node_okay_for_placement(node_under, node_above) and not neighbouring_painting_positions[core.hash_node_position(offset_above_pos)] then
+			local above_hash = core.hash_node_position(offset_above_pos)
+			if is_node_okay_for_placement(node_under, node_above) and not neighbouring_painting_positions[above_hash] then
 				i = i + 1
 			else
 				break
@@ -128,9 +143,7 @@ local function get_biggest_painting_for_position(pos, dir)
 		error("No possible painting canditate found")
 	end
 
-	local random_pick = canditates[math.random(1, #canditates)]
-
-	return random_pick
+	return canditates[math.random(1, #canditates)]
 end
 
 core.register_craftitem("mcl_paintings:painting", {
@@ -158,7 +171,7 @@ core.register_craftitem("mcl_paintings:painting", {
 		}
 
 		local side_offset = pdef.width / 2 - 0.5
-		local dir_perpendicular_dir = rotate_dir_90_deg_clockwise(-dir)
+		local dir_perpendicular_dir = rotate_dir_90_deg_clockwise(dir)
 
 		local obj = core.add_entity(
 			vector.subtract(
@@ -278,10 +291,7 @@ core.register_entity("mcl_paintings:painting", {
 	on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir, damage) ---@diagnostic disable-line: unused-local
 		if puncher and puncher:is_player() then
 			local kname = puncher:get_player_name()
-			local pos = self._pos
-			if not pos then
-				pos = self.object:get_pos()
-			end
+			local pos = self.object:get_pos()
 			if not mcl_util.check_position_protection(pos, puncher) then
 				self.object:remove()
 				if not core.is_creative_enabled(kname) then
