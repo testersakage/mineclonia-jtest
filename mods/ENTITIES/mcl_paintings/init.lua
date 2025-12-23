@@ -282,6 +282,12 @@ core.register_entity("mcl_paintings:painting", {
 			end
 		end
 
+		if not registered_paintings[self._painting_name] then
+			core.log("error", "Could not find painting definnition for `" .. self._painting_name .. "`")
+			self.object:remove()
+			return
+		end
+
 		set_entity(self.object, registered_paintings[self._painting_name])
 	end,
 	get_staticdata = function(self)
