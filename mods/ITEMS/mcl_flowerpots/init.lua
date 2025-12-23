@@ -15,7 +15,6 @@ local pot_box = {
 local tpl_pots = {
 	drawtype = "mesh",
 	use_texture_alpha = "clip",
-	visual_scale = 0.5,
 	paramtype = "light",
 	sunlight_propagates = true,
 	selection_box = pot_box,
@@ -50,10 +49,8 @@ core.register_node("mcl_flowerpots:flower_pot", table.merge(tpl_pots, {
 	_tt_help = S("Can hold a small flower or plant"),
 	_doc_items_longdesc = S("Flower pots are decorative blocks in which flowers and other small plants can be placed."),
 	_doc_items_usagehelp = S("Just place a plant on the flower pot. Flower pots can hold small flowers (not higher than 1 block), saplings, ferns, dead bushes, mushrooms and cacti. Rightclick a potted plant to retrieve the plant."),
-	mesh = "flowerpot.obj",
-	tiles = {
-		"mcl_flowerpots_flowerpot.png",
-	},
+	mesh = "flower_pot.obj",
+	tiles = {"mcl_flowerpots_flowerpot.png"},
 	wield_image = "mcl_flowerpots_flowerpot_inventory.png",
 	inventory_image = "mcl_flowerpots_flowerpot_inventory.png",
 	groups = { dig_immediate = 3, deco_block = 1, attached_node = 1, dig_by_piston = 1, flower_pot = 1, unsticky = 1, pathfinder_partial = 2, },
@@ -86,7 +83,7 @@ function mcl_flowerpots.register_potted_flower(name, def)
 	core.register_node(":mcl_flowerpots:flower_pot_" .. def.name, table.merge(tpl_pots, {
 		description = def.desc .. " " .. S("Flower Pot"),
 		_doc_items_create_entry = false,
-		mesh = "flowerpot.obj",
+		mesh = "flower_pot_plant.obj",
 		tiles = {
 			"[combine:32x32:0,0=mcl_flowerpots_flowerpot.png:0,0=" .. def.image,
 		},
