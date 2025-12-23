@@ -135,24 +135,20 @@ function mcl_doors:register_door(name, def)
 
 	local function redstone_connects_to(_, _) return true end
 
-	local function redstone_update_bottom(pos)
-		local pos2 = pos:offset(0, 1, 0)
+	local function redstone_update(pos_bottom, pos_top)
+		local power_top = mcl_redstone.get_power(pos_top)
+		local power_bottom = mcl_redstone.get_power(pos_bottom)
+		local meta_top = core.get_meta(pos_top)
+		local meta_bottom = core.get_meta(pos_bottom)
 
-		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
-			open(pos)
-		else
-			close(pos)
+		local power = math.max(power_top, power_bottom)
+		local previous_power = math.max(meta_top:get_int("redstone_power"), meta_bottom:get_int("redstone_power"))
+
+		if power ~= previous_power then
+			swap_door(pos_bottom)
 		end
-	end
 
-	local function redstone_update_top(pos)
-		local pos2 = pos:offset(0, -1, 0)
-
-		if mcl_redstone.get_power(pos) ~= 0 or mcl_redstone.get_power(pos2) ~= 0 then
-			open(pos2)
-		else
-			close(pos2)
-		end
+		meta_top:set_int("redstone_power", power)
 	end
 
 	local function get_other_half(node_name)
@@ -226,7 +222,9 @@ function mcl_doors:register_door(name, def)
 		_mcl_redstone = {
 			connects_to = redstone_connects_to,
 			init = function() end,
-			update = redstone_update_bottom
+			update = function(pos)
+				redstone_update(pos, pos:offset(0, 1, 0))
+			end
 		},
 		_on_wind_charge_hit = function(pos)
 			if mcl_doors.is_open(pos) then close(pos) else open(pos) end
@@ -246,7 +244,9 @@ function mcl_doors:register_door(name, def)
 		_mcl_redstone = {
 			connects_to = redstone_connects_to,
 			init = function() end,
-			update = redstone_update_top
+			update = function(pos)
+				redstone_update(pos:offset(0, -1, 0), pos)
+			end
 		},
 		_on_wind_charge_hit = function(pos)
 			pos.y = pos.y - 1
@@ -338,6 +338,9 @@ function mcl_doors:register_door(name, def)
 			-- Save open state. 1 = open. 0 = closed
 			meta1:set_int("is_open", 0)
 			meta2:set_int("is_open", 0)
+
+			meta1:set_int("redstone_power", 0)
+			meta1:set_int("redstone_power", 0)
 
 			if not core.is_creative_enabled(pn) then itemstack:take_item() end
 
