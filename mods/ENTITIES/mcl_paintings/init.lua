@@ -89,7 +89,6 @@ local function get_biggest_painting_for_position(pos, dir)
 	for obj in core.objects_inside_radius(pos, search_distance) do
 		local l = obj:get_luaentity()
 		if l and l.name == "mcl_paintings:painting" then
-			core.debug(search_distance, vector.distance(pos, obj:get_pos()), pos, obj:get_pos())
 			local pdef = registered_paintings[l._painting_name]
 			local obj_pos = obj:get_pos()
 			local painting_dir = core.wallmounted_to_dir(l._facing)
@@ -283,7 +282,7 @@ core.register_entity("mcl_paintings:painting", {
 		end
 
 		if not registered_paintings[self._painting_name] then
-			core.log("error", "Could not find painting definnition for `" .. self._painting_name .. "`")
+			core.log("error", "Could not find painting definition for `" .. self._painting_name .. "`")
 			self.object:remove()
 			return
 		end
