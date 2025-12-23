@@ -181,18 +181,19 @@ core.register_node("mcl_lush_caves:cave_vines", {
 			param2=node.param2})
 		return true
 	end,
-	_mcl_on_rightclick_optional = function (pos, node, clicker, itemstack)
-		local item_name = clicker:get_wielded_item():get_name()
-		local shears = core.get_item_group(item_name, "shears") > 0
+
+	_on_shears_place = function(itemstack, placer, pointed_thing)
+		local pos = pointed_thing.under
 		local tip = mcl_util.traverse_tower(pos, -1)
 
-		if shears and vector.equals(pos, tip) then
+		if vector.equals(pos, tip) then
 			core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
-			local wear = mcl_autogroup.get_wear(item_name, "shearsy")
-			itemstack:add_wear(wear)
+			local node = core.get_node(pos)
 			node.param2 = 25
 			core.swap_node(pos,node)
+			return itemstack
 		end
+		return itemstack, true
 	end
 })
 
