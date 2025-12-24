@@ -82,20 +82,20 @@ end
 function mcl_copper.spawn_particles(pos, texture)
 	core.add_particlespawner({
 		amount = 8,
-		time = 1,
-		minpos = vector.subtract(pos, 1),
-		maxpos = vector.add(pos,1),
+		time = 0.25,
+		minpos = vector.subtract(pos, 0.8),
+		maxpos = vector.add(pos, 0.8),
 		minvel = vector.zero(),
 		maxvel = vector.zero(),
-		minacc = vector.zero(),
-		maxacc = vector.zero(),
+		minacc = {x=0, y=-0.8, z=0},
+		maxacc = {x=0, y=-1, z=0},
 		minexptime = 0.5,
 		maxexptime = 1,
-		minsize = 1,
-		maxsize = 2.5,
+		minsize = 3,
+		maxsize = 4.5,
 		collisiondetection = false,
 		vertical = false,
-		texture = texture or "mcl_copper_anti_oxidation_particle.png",
+		texture = texture or "mcl_copper_anti_oxidation_particle.png^[colorize:#888888:125",
 		glow = 5,
 	})
 end
@@ -224,7 +224,7 @@ local function register_preserve(nodename,def,chaindef)
 				if core.registered_nodes[node.name] then
 					core.swap_node(pointed_thing.under,node)
 					swap_door_part(pointed_thing.under,node)
-					mcl_copper.spawn_particles(pointed_thing.under, "mcl_copper_anti_oxidation_particle.png^[colorize:#d1d553:125")
+					mcl_copper.spawn_particles(pointed_thing.under, "mcl_copper_anti_oxidation_particle.png^[colorize:#fcbf3c:200")
 					if not core.is_creative_enabled(placer and placer:get_player_name() or "") then
 						itemstack:take_item()
 					end
