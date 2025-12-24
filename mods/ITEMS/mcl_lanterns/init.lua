@@ -166,15 +166,28 @@ function mcl_lanterns.register_lantern(name, def)
 				return itemstack
 			end
 
+			local fakestack_name = fakestack:get_name ()
 			if wdir == 0 then
-				fakestack:set_name(itemstring_ceiling)
+				fakestack:set_name(
+					fakestack_name:find ("_preserved")
+					and itemstring_ceiling .. "_preserved"
+					or itemstring_ceiling
+				)
 			elseif wdir == 1 then
-				fakestack:set_name(itemstring_floor)
+				fakestack:set_name(
+					fakestack_name:find ("_preserved")
+					and itemstring_floor .. "_preserved"
+					or itemstring_floor
+				)
 			end
 
 			local success
 			itemstack, success = core.item_place_node(fakestack, placer, pointed_thing, wdir)
-			itemstack:set_name(itemstring_floor)
+			itemstack:set_name(
+				fakestack_name:find ("_preserved")
+				and itemstring_floor .. "_preserved"
+				or itemstring_floor
+			)
 
 			if success then
 				core.sound_play(sounds.place, {pos = under, gain = 1}, true)
