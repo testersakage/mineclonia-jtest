@@ -77,8 +77,9 @@ local function update_pane(pos)
 	end
 
 	local name = node.name
-	if name:sub(-5) == "_flat" then
-		name = name:sub(1, -6)
+	local is_flat = name:find("_flat")
+	if is_flat then
+		name = name:gsub("_flat", "")
 	end
 
 	local any = node.param2
@@ -97,9 +98,14 @@ local function update_pane(pos)
 				(connects_to_side[1] and connects_to_side[3])
 				or (connects_to_side[2] and connects_to_side[4])
 			) then
+		if name:find("_preserved") then
+			name = name:gsub("_preserved", "_flat_preserved")
+		else
+			name = name .. "_flat"
+		end
 		swap_node_if_different(pos,
 			node,
-			name .. "_flat",
+			name,
 			(core.dir_to_facedir(any) + 1) % 4
 		)
 	else

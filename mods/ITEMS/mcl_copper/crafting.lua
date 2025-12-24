@@ -111,14 +111,14 @@ for _, t in ipairs(block_type) do
 	end
 end
 
--- for _, x in ipairs(block_exposure_level) do
--- 	core.register_craft({
--- 		output = "mcl_copper:door"..x.."_preserved",
--- 		recipe = {
--- 			{ "mcl_copper:door"..x, "mcl_honey:honeycomb" }
--- 		}
--- 	})
--- end
+for _, x in ipairs(block_exposure_level) do
+	core.register_craft({
+		output = "mcl_copper:door"..x.."_preserved",
+		recipe = {
+			{ "mcl_copper:door"..x, "mcl_honey:honeycomb" }
+		}
+	})
+end
 
 for _, x in ipairs(block_exposure_level) do
 	core.register_craft({
@@ -209,11 +209,11 @@ for _, x in pairs(block_exposure_level) do
 	})
 end
 
---for _, x in pairs(block_exposure_level) do
---	core.register_craft({
---		output = "mcl_panes:copper_bar"..x.."_flat_preserved",
---		recipe = {
---			{ "mcl_panes:copper_bar"..x.."_flat", "mcl_honey:honeycomb" }
---		}
---	})
---end
+for _, x in pairs(block_exposure_level) do
+	core.register_craft({
+		output = "mcl_panes:copper_bar"..x.."_flat_preserved",
+		recipe = {
+			{ "mcl_panes:copper_bar"..x.."_flat", "mcl_honey:honeycomb" }
+		}
+	})
+end

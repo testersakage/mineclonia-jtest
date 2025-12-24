@@ -58,6 +58,20 @@ for _, v in pairs({ "on", "off" }) do
 	})
 end
 
+for _, v in pairs({"_t_1", "_t_2", "_b_1", "_b_2"}) do
+	mcl_copper.register_decaychain("copper_door"..v,{
+		preserve_group = "preserves_copper",
+		unpreserve_callback = "_on_axe_place",
+		undecay_callback = "_on_axe_place",
+		nodes = { --order is significant
+			"mcl_copper:door"..v,
+			"mcl_copper:door_exposed"..v,
+			"mcl_copper:door_weathered"..v,
+			"mcl_copper:door_oxidized"..v,
+		},
+	})
+end
+
 for _, v in pairs({"", "_open"}) do
 	mcl_copper.register_decaychain("copper_trapdoor"..v,{
 		preserve_group = "preserves_copper",
@@ -108,17 +122,17 @@ mcl_copper.register_decaychain("bar",{
 	},
 })
 
---mcl_copper.register_decaychain("bar_flat",{
---	preserve_group = "preserves_copper",
---	unpreserve_callback = "_on_axe_place",
---	undecay_callback = "_on_axe_place",
---	nodes = { --order is significant
---		"mcl_panes:copper_bar_flat",
---		"mcl_panes:copper_bar_exposed_flat",
---		"mcl_panes:copper_bar_weathered_flat",
---		"mcl_panes:copper_bar_oxidized_flat",
---	},
---})
+mcl_copper.register_decaychain("bar_flat",{
+	preserve_group = "preserves_copper",
+	unpreserve_callback = "_on_axe_place",
+	undecay_callback = "_on_axe_place",
+	nodes = { --order is significant
+		"mcl_panes:copper_bar_flat",
+		"mcl_panes:copper_bar_exposed_flat",
+		"mcl_panes:copper_bar_weathered_flat",
+		"mcl_panes:copper_bar_oxidized_flat",
+	},
+})
 
 mcl_copper.register_decaychain("chain",{
 	preserve_group = "preserves_copper",
