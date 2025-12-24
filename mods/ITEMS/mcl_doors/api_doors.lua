@@ -268,12 +268,14 @@ function mcl_doors:register_door(name, def)
 		}
 	}
 
-	core.register_craftitem(":"..name, {
+	core.register_node(":"..name, {
 		description = def.description,
 		_tt_help = tt_help,
 		_doc_items_longdesc = longdesc,
 		_doc_items_usagehelp = usagehelp,
 		_mcl_burntime = def._mcl_burntime,
+		tiles = {"blank.png"},
+		wield_image = def.inventory_image,
 		inventory_image = def.inventory_image,
 		groups = craftitem_groups,
 		on_place = function(itemstack, placer, pointed_thing)
@@ -281,6 +283,7 @@ function mcl_doors:register_door(name, def)
 				return itemstack
 			end
 
+			local name = itemstack:get_name()
 			local pn = placer:get_player_name()
 			local pt = pointed_thing.above
 			local ptu = pointed_thing.under

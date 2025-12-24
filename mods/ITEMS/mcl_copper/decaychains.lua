@@ -159,7 +159,15 @@ local function register_unpreserve(nodename,od,def)
 	elseif core.get_item_group(nodename, "slab") > 0 then
 		nd._mcl_stairs_double_slab = nodename.."_double_preserved"
 	end
-	core.register_node(":"..nodename.."_preserved",nd)
+	if core.get_item_group(nodename, "door") > 0 then
+		local suffix = nodename:sub(-4) -- find: _t_1, _t_2, _b_1, _b_2
+		nodename = nodename:gsub(suffix, "_preserved"..suffix)
+	elseif core.get_item_group(nodename, "trapdoor") > 0 and nodename:find("_open") then
+		nodename = nodename:gsub("_open","_preserved_open")
+	else
+		nodename = nodename .. "_preserved"
+	end
+	core.register_node(":"..nodename,nd)
 end
 
 local function register_undecay(nodename,def)
