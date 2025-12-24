@@ -213,32 +213,8 @@ for n, desc in pairs(n_desc) do
 		_mcl_hardness = 3
 	})
 
-	mcl_doors:register_trapdoor("mcl_copper:trapdoor"..n.."_preserved", {
-		description = D("Waxed " .. desc .. "Copper Trapdoor"),
-		groups = { copper = 1, pickaxey = 2, deco_block = 1 },
-		sounds = mcl_sounds.node_sound_metal_defaults(),
-		sound_close = "doors_steel_door_close",
-		sound_open = "doors_steel_door_open",
-		tile_front = "mcl_copper_trapdoor"..n..".png",
-		tile_side = "mcl_copper_trapdoor"..n.."_side.png",
-		wield_image = "mcl_copper_trapdoor"..n..".png",
-		_mcl_hardness = 3
-	})
-
 	mcl_doors:register_door("mcl_copper:door"..n, {
 		description = D(desc .. "Copper Door"),
-		groups = { door = 1, copper = 1, pickaxey = 2, building_block = 1, door_iron = 1,},
-		inventory_image = "mcl_copper_door"..n..".png",
-		sounds = mcl_sounds.node_sound_metal_defaults(),
-		sound_close = "doors_steel_door_close",
-		sound_open = "doors_steel_door_open",
-		tiles_bottom = { "mcl_copper_door"..n.."_bottom.png^[transformFX", "mcl_copper_door"..n.."_bottom.png" },
-		tiles_top = { "mcl_copper_door"..n.."_top.png^[transformFX", "mcl_copper_door"..n.."_top.png" },
-		_mcl_hardness = 3
-	})
-
-	mcl_doors:register_door("mcl_copper:door"..n.."_preserved", {
-		description = D("Waxed " .. desc .. "Copper Door"),
 		groups = { door = 1, copper = 1, pickaxey = 2, building_block = 1, door_iron = 1,},
 		inventory_image = "mcl_copper_door"..n..".png",
 		sounds = mcl_sounds.node_sound_metal_defaults(),

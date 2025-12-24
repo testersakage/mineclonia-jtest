@@ -58,7 +58,7 @@ for _, v in pairs({ "on", "off" }) do
 	})
 end
 
-for _, v in pairs({"_t_1", "_t_2", "_b_1", "_b_2"}) do
+for _, v in pairs({"", "_t_1", "_t_2", "_b_1", "_b_2"}) do
 	mcl_copper.register_decaychain("copper_door"..v,{
 		preserve_group = "preserves_copper",
 		unpreserve_callback = "_on_axe_place",
