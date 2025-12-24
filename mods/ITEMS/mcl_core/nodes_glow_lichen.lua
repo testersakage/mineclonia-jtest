@@ -406,8 +406,6 @@ for n = 0, 1 do
 	end
 end
 
-local glow_lichen_base = table.copy (tpl)
-
 local function glow_lichen_merge (node, itemstack, pos, param2, placer)
 	if placer:is_player () then
 		local name = placer:get_player_name ()
@@ -456,7 +454,9 @@ local function glow_lichen_merge (node, itemstack, pos, param2, placer)
 	return itemstack
 end
 
-function glow_lichen_base.on_place (itemstack, placer, pointed_thing)
+local glow_lichen_item = table.copy (tpl)
+
+function glow_lichen_item.on_place (itemstack, placer, pointed_thing)
 	if pointed_thing.type ~= "node" then
 		-- No interaction possible with entities.
 		return itemstack
@@ -482,4 +482,4 @@ function glow_lichen_base.on_place (itemstack, placer, pointed_thing)
 				     pointed_thing, param2)
 end
 
-core.register_node ("mcl_core:glow_lichen", glow_lichen_base)
+core.register_node ("mcl_core:glow_lichen", glow_lichen_item)
