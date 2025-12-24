@@ -20,7 +20,7 @@ mcl_vars.gui_nonbg = mcl_vars.gui_slots ..
 	"style_type[checkbox;textcolor=#323232]"
 
 -- Background stuff must be manually added by mods (no formspec prepend)
-mcl_vars.gui_bg_color = "bgcolor[#00000000]"
+mcl_vars.gui_bg_color = "bgcolor[#00000000;true]"
 mcl_vars.gui_bg_img = "background9[1,1;1,1;mcl_base_textures_background9.png;true;7]"
 
 -- Legacy
