@@ -464,7 +464,7 @@ function glow_lichen_item.on_place (itemstack, placer, pointed_thing)
 
 	local name = core.get_node (pointed_thing.under).name
 	local def = core.registered_nodes[name]
-	if not def.walkable then
+	if not (def and def.walkable) then
 		return itemstack
 	end
 	local param2 = mcl_core.test_wallmounted_face (pointed_thing)
