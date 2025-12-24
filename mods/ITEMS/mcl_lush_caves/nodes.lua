@@ -225,7 +225,6 @@ core.register_node("mcl_lush_caves:cave_vines_lit", {
 	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_hardness = 0,
-	_mcl_shears_drop = true,
 	drop = "mcl_lush_caves:glow_berry",
 	on_rightclick = function(pos, node)
 		core.add_item(pos,"mcl_lush_caves:glow_berry")
