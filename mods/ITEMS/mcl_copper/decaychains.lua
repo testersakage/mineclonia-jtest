@@ -100,12 +100,37 @@ function mcl_copper.spawn_particles(pos, texture)
 	})
 end
 
+local function append_door_suffix(nodename)
+	if core.get_item_group(nodename, "door") > 0 then
+		local suffix = nodename:sub(-4) -- find: _t_1, _t_2, _b_1, _b_2
+		nodename = nodename:gsub(suffix, "_preserved"..suffix)
+		return nodename
+	end
+end
+
+local function swap_door_part(pos, node)
+	if core.get_item_group(node.name, "door") > 0 then
+		if node.name:find("_t_") then
+			core.swap_node(vector.offset(pos,0,-1,0), {
+				name = node.name:gsub("_t_", "_b_"),
+				param2 = node.param2
+			})
+		else
+			core.swap_node(vector.offset(pos,0,1,0), {
+				name = node.name:gsub("_b_", "_t_"),
+				param2 = node.param2
+			})
+		end
+	end
+end
+
 local function unpreserve(itemstack, _, pointed_thing)
 	local node = core.get_node(pointed_thing.under)
 	local unpreserved = node.name:gsub("_preserved","")
 	if core.registered_nodes[unpreserved] then
 		node.name = unpreserved
 		core.swap_node(pointed_thing.under,node)
+		swap_door_part(pointed_thing.under,node)
 	end
 	return itemstack
 end
@@ -114,6 +139,7 @@ local function undecay(itemstack, _, pointed_thing)
 	local node = core.get_node(pointed_thing.under)
 	node.name = mcl_copper.get_undecayed(node.name)
 	core.swap_node(pointed_thing.under,node)
+	swap_door_part(pointed_thing.under,node)
 	mcl_copper.spawn_particles(pointed_thing.under)
 	return itemstack
 end
@@ -159,9 +185,8 @@ local function register_unpreserve(nodename,od,def)
 	elseif core.get_item_group(nodename, "slab") > 0 then
 		nd._mcl_stairs_double_slab = nodename.."_double_preserved"
 	end
-	if core.get_item_group(nodename, "door") > 0 then
-		local suffix = nodename:sub(-4) -- find: _t_1, _t_2, _b_1, _b_2
-		nodename = nodename:gsub(suffix, "_preserved"..suffix)
+	if append_door_suffix(nodename) then
+		nodename = append_door_suffix(nodename)
 	elseif core.get_item_group(nodename, "trapdoor") > 0 and nodename:find("_open") then
 		nodename = nodename:gsub("_open","_preserved_open")
 	else
@@ -191,9 +216,14 @@ local function register_preserve(nodename,def,chaindef)
 			if table.indexof(chaindef.nodes,node.name) == -1 then
 				if old_op then return old_op(itemstack, placer, pointed_thing) end
 			elseif table.indexof(chaindef.nodes,node.name) <= #chaindef.nodes then
-				node.name = node.name.."_preserved"
+				if append_door_suffix(node.name) then
+					node.name = append_door_suffix(node.name)
+				else
+					node.name = node.name.."_preserved"
+				end
 				if core.registered_nodes[node.name] then
 					core.swap_node(pointed_thing.under,node)
+					swap_door_part(pointed_thing.under,node)
 					mcl_copper.spawn_particles(pointed_thing.under, "mcl_copper_anti_oxidation_particle.png^[colorize:#d1d553:125")
 					if not core.is_creative_enabled(placer and placer:get_player_name() or "") then
 						itemstack:take_item()
