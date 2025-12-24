@@ -28,6 +28,7 @@ dofile(modpath.."/nodes_glass.lua") -- Glass
 dofile(modpath.."/nodes_climb.lua") -- Climbable nodes
 dofile(modpath.."/nodes_stairs.lua")
 dofile(modpath.."/nodes_misc.lua") -- Other and special nodes
+dofile(modpath.."/nodes_glow_lichen.lua") -- Other and special nodes
 dofile(modpath.."/craftitems.lua")
 dofile(modpath.."/crafting.lua")
 dofile(modpath.."/compat.lua")
