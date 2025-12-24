@@ -18,6 +18,7 @@ local S = core.get_translator(core.get_current_modname())
 local F = core.formspec_escape
 
 local sign_tpl = {
+	_mcl_hardness = 1,
 	paramtype = "light",
 	description = S("Sign"),
 	_tt_help = S("Can be written"),
