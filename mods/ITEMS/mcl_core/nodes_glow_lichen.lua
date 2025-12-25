@@ -133,9 +133,9 @@ end
 local function glow_lichen_attachments (node)
 	local north, west, south, east, up, down
 	local def = core.registered_nodes[node.name]
-	if def.glow_lichen_faces then
+	if def._mcl_glow_lichen_faces then
 		north, west, south, east, up, down
-			= unpack (def.glow_lichen_faces)
+			= unpack (def._mcl_glow_lichen_faces)
 	else
 		north, west, south, east, up, down
 			= wallmounted_to_faces (node.param2)
@@ -381,7 +381,7 @@ local function register_glow_lichen (north, west, south, east, up, down)
 				fixed = boxes,
 			},
 			_mcl_shears_drop = shears_drops,
-			glow_lichen_faces = {
+			_mcl_glow_lichen_faces = {
 				north,
 				west,
 				south,
@@ -426,9 +426,9 @@ local function glow_lichen_merge (node, itemstack, pos, param2, placer)
 	local north, west, south, east, up, down
 	local north1, west1, south1, east1, up1, down1
 	assert (def)
-	if def.glow_lichen_faces then
+	if def._mcl_glow_lichen_faces then
 		north, west, south, east, up, down
-			= unpack (def.glow_lichen_faces)
+			= unpack (def._mcl_glow_lichen_faces)
 	else
 		north, west, south, east, up, down
 			= wallmounted_to_faces (node.param2)
