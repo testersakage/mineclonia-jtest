@@ -333,29 +333,37 @@ local function register_glow_lichen (north, west, south, east, up, down)
 	if north or west or south or east or up or down then
 		local name = "mcl_core:glow_lichen_"
 		local boxes = {}
+		local shears_drops = {}
+		local drop_name = "mcl_core:glow_lichen"
 		if north then
 			name = name .. "n"
 			table.insert (boxes, nodebox_north)
+			table.insert (shears_drops, drop_name)
 		end
 		if west then
 			name = name .. "w"
 			table.insert (boxes, nodebox_west)
+			table.insert (shears_drops, drop_name)
 		end
 		if south then
 			name = name .. "s"
 			table.insert (boxes, nodebox_south)
+			table.insert (shears_drops, drop_name)
 		end
 		if east then
 			name = name .. "e"
 			table.insert (boxes, nodebox_east)
+			table.insert (shears_drops, drop_name)
 		end
 		if up then
 			name = name .. "u"
 			table.insert (boxes, nodebox_up)
+			table.insert (shears_drops, drop_name)
 		end
 		if down then
 			name = name .. "d"
 			table.insert (boxes, nodebox_down)
+			table.insert (shears_drops, drop_name)
 		end
 		local tbl = table.merge (tpl, {
 			groups = table.merge (tpl.groups, {
@@ -372,8 +380,7 @@ local function register_glow_lichen (north, west, south, east, up, down)
 				type = "fixed",
 				fixed = boxes,
 			},
-			_mcl_shears_drop_name = "mcl_core:glow_lichen",
-			_mcl_shears_drop_cnt = #boxes,
+			_mcl_shears_drop = shears_drops,
 			glow_lichen_faces = {
 				north,
 				west,
