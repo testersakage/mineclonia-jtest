@@ -1,3 +1,7 @@
+mcl_init = {
+	
+}
+
 local mod_storage = core.get_mod_storage()
 local normal_vars_in_singlenode = false
 
@@ -455,3 +459,40 @@ else
 end
 
 dofile(modpath.."/outdated_warning.lua")
+
+function mcl_init.viable_hit(player, hitter)
+	if hitter:is_player() then -- code basically copied from mcl_mobs/combat.lua
+		local weapon = hitter:get_wielded_item()
+		local reach = (weapon:get_definition().range or 3)
+		local prop, p = hitter:get_properties(), hitter:get_pos()
+		local eye_p = vector.add(p, vector.new(0, prop.eye_height, 0))
+		eye_extended_pos = vector.add(eye_p, vector.multiply(hitter:get_look_dir(), reach))
+		local raycast = core.raycast(
+			eye_p,
+			eye_extended_pos,
+			true, true
+		)
+
+		local name = player:get_player_name()
+		
+		local reaches_player
+		for thing in raycast do
+			if thing.type == "object" and vector.distance(eye_p, thing.intersection_point) <= reach and thing.ref:is_player() and thing.ref:get_player_name() == name then
+				reaches_player = true
+				break
+			end
+		end
+		if reaches_player then return true end
+	else return true
+	end
+end
+
+local original_function = table.copy(core.register_on_punchplayer)
+
+core.register_on_punchplayer = function(func)
+	original_function(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+		if not mcl_init.viable_hit(player, hitter) then return true end
+		
+		func(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+	end)
+end
