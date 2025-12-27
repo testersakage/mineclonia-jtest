@@ -461,7 +461,7 @@ end
 dofile(modpath.."/outdated_warning.lua")
 
 function mcl_init.viable_hit(player, hitter)
-	if hitter:is_player() then -- code basically copied from mcl_mobs/combat.lua
+	if hitter:is_player() then
 		local weapon = hitter:get_wielded_item()
 		local reach = (weapon:get_definition().range or 3)
 		local prop, p = hitter:get_properties(), hitter:get_pos()
