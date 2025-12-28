@@ -174,10 +174,10 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	if hitter_playername and hitter_playername ~= "" then
 
 		local weapon = hitter:get_wielded_item()
-		local reach = (weapon:get_definition().range or 3)
+		local range = (weapon:get_definition().range or 3)
 		local prop, p = hitter:get_properties(), hitter:get_pos()
 		local eye_p = vector.add(p, vector.new(0, prop.eye_height, 0))
-		eye_extended_pos = vector.add(eye_p, vector.multiply(hitter:get_look_dir(), reach))
+		eye_extended_pos = vector.add(eye_p, vector.multiply(hitter:get_look_dir(), range))
 		local raycast = core.raycast(
 			eye_p,
 			eye_extended_pos,
@@ -186,7 +186,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 
 		local reaches_mob = false
 		for thing in raycast do
-			if thing.type == "object" and vector.distance(eye_p, thing.intersection_point) <= reach and not thing.ref:is_player() then
+			if thing.type == "object" and vector.distance(eye_p, thing.intersection_point) <= range and not thing.ref:is_player() then
 				reaches_mob = true
 				break
 			end
