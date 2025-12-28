@@ -563,7 +563,7 @@ end
 function enderman:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 	local self_eye_pos = {
 		x = self_pos.x,
-		y = self_pos.y + self.head_eye_height,
+		y = self_pos.y + self:get_eye_height (),
 		z = self_pos.z,
 	}
 	-- Freeze if the target is looking directly at this enderman.
@@ -586,7 +586,7 @@ function enderman:check_attack (self_pos, dtime, moveresult)
 		local distance = vector.distance (self_pos, target_pos)
 		local self_eye_pos = {
 			x = self_pos.x,
-			y = self_pos.y + self.head_eye_height,
+			y = self_pos.y + self:get_eye_height (),
 			z = self_pos.z,
 		}
 		-- Attempt to break eye contact.
@@ -652,7 +652,7 @@ function enderman:attack_custom (self_pos, dtime)
 	-- Check to see if people are near by enough to look at us.
 	local self_eye_pos = {
 		x = self_pos.x,
-		y = self_pos.y + self.head_eye_height,
+		y = self_pos.y + self:get_eye_height (),
 		z = self_pos.z,
 	}
 	if not self._pending_target then

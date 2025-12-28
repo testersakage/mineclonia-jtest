@@ -33,13 +33,7 @@ local pillager = table.merge (illager, table.merge (posing_humanoid, {
 		"mobs_mc:villager",
 		"mobs_mc:wandering_trader",
 	},
-	group_attack = {
-		"mobs_mc:evoker",
-		"mobs_mc:vindicator",
-		"mobs_mc:pillager",
-		"mobs_mc:illusioner",
-		"mobs_mc:witch",
-	},
+	group_attack = true,
 	sounds = {
 		random = {name = "mobs_mc_pillager_grunt2", gain=0.5},
 		war_cry = {name = "mobs_mc_pillager_grunt1", gain=0.5},
@@ -167,7 +161,7 @@ function pillager:get_rightarm_with_pitch ()
 		if target_pos then
 			local self_pos = self.object:get_pos ()
 			local dx = target_pos.x - self_pos.x
-			local dy = target_pos.y - (self_pos.y + self.head_eye_height)
+			local dy = target_pos.y - (self_pos.y + self:get_eye_height ())
 			local dz = target_pos.z - self_pos.z
 			local xz_mag = math.sqrt (dx * dx + dz * dz)
 			pitch = math.atan2 (dy, xz_mag)
@@ -183,7 +177,7 @@ function pillager:get_leftarm_with_pitch ()
 		if target_pos then
 			local self_pos = self.object:get_pos ()
 			local dx = target_pos.x - self_pos.x
-			local dy = target_pos.y - (self_pos.y + self.head_eye_height)
+			local dy = target_pos.y - (self_pos.y + self:get_eye_height ())
 			local dz = target_pos.z - self_pos.z
 			local xz_mag = math.sqrt (dx * dx + dz * dz)
 			pitch = math.atan2 (dy, xz_mag)
@@ -229,19 +223,38 @@ pillager._arm_poses = {
 
 pillager._arm_pose_continuous = {
 	default = false,
+	jockey_default = false,
 	crossbow_1 = false,
+	jockey_crossbow_1 = false,
 	crossbow_2 = true,
+	jockey_crossbow_2 = true,
 }
 
+mcl_mobs.define_composite_pose (pillager._arm_poses, "jockey", {
+	["leg.left"] = {
+		nil,
+		vector.new (270, -30, 0),
+	},
+	["leg.right"] = {
+		nil,
+		vector.new (270, 30, 0),
+	},
+})
+
 function pillager:select_arm_pose ()
+	local pose = "default"
 	if self.attack then
 		if self._crossbow_state == 1 then
-			return "crossbow_1"
+			pose = "crossbow_1"
 		elseif self._crossbow_state == 2 then
-			return "crossbow_2"
+			pose = "crossbow_2"
 		end
 	end
-	return "default"
+	if self.jockey_vehicle then
+		return "jockey_" .. pose
+	else
+		return pose
+	end
 end
 
 function pillager:wielditem_transform (info, stack)

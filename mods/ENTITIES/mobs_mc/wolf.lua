@@ -405,7 +405,7 @@ function wolf:visually_display_interest (dtime, self_pos, target_pos)
 	if self.object.set_bone_override then
 		local dz = target_pos.z - self_pos.z
 		local dx = target_pos.x - self_pos.x
-		local dy = target_pos.y - (self_pos.y + self.head_eye_height)
+		local dy = target_pos.y - (self_pos.y + self:get_eye_height ())
 		local yaw = self.object:get_yaw ()
 
 		if not self._beg_vector

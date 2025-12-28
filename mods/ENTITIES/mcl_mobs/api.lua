@@ -87,8 +87,10 @@ function mob_class:replace_with (successor_type, propagate_equipment, mob_static
 		local bone = vehicle._jockey_bone
 		local pos = vehicle._jockey_pos
 		local rot = vehicle._jockey_rot
+		local fix_eye_height = vehicle._jockey_fix_eye_height
 		self:dismount_jockey ()
-		luaentity:jock_to_existing (vehicle, bone, pos, rot)
+		luaentity:jock_to_existing (vehicle, bone, pos, rot,
+					    fix_eye_height)
 	end
 	luaentity:set_yaw (yaw)
 	self:safe_remove ()

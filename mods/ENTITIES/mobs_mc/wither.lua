@@ -662,7 +662,7 @@ function wither_def:run_ai (dtime, moveresult)
 	if ws.pending_explode
 		and (moveresult.touching_ground
 		     or (self._immersion_depth or 0) > 0) then
-		mcl_explosions.explode (vector.offset (self_pos, 0, self.head_eye_height, 0),
+		mcl_explosions.explode (vector.offset (self_pos, 0, self:get_eye_height (), 0),
 					WITHER_DESCENT_BOOM, {drop_chance = 1.0}, self.object)
 		self:spawn_skeletons (self_pos)
 		ws.pending_explode = false

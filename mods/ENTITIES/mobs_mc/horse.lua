@@ -1153,9 +1153,9 @@ local function check_skeleton_trap (self, self_pos, dtime)
 			if skelly then
 				local entity = skelly:get_luaentity ()
 				entity:jock_to_existing (horse, "", {
-								 x = 0,
-								 y = 1.6,
-								 z = 0,
+					x = 0,
+					y = 1.6,
+					z = 0,
 				}, vector.zero ())
 				-- Equip it with an enchanted iron
 				-- helmet and bow (or whatever it

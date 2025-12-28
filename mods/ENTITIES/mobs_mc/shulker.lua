@@ -526,7 +526,7 @@ function shulker:check_head_swivel (self_pos, dtime, clear)
 			and vector.equals (self._look_target, target_pos) then
 			return
 		end
-		self_pos.y = self_pos.y + self.head_eye_height
+		self_pos.y = self_pos.y + self:get_eye_height ()
 		self:shulker_look_at (self_pos, target_pos)
 		self._look_target = target_pos
 	elseif self._look_target then

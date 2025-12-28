@@ -209,7 +209,7 @@ function blaze:attack_null (self_pos, dtime, target_pos, line_of_sight)
 	local target_eye_height
 		= target_pos.y + mcl_util.target_eye_height (self.attack)
 	local self_eye_height
-		= self_pos.y + self.head_eye_height
+		= self_pos.y + self:get_eye_height ()
 	if target_eye_height > self_eye_height + self._height_diff_tolerance then
 		local v = self.object:get_velocity ()
 		v.y = lerp1d_scaled (0.3, dtime, v.y, 6.0)

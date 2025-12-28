@@ -24,6 +24,7 @@ local hoglin = {
 	armor = {fleshy = 90},
 	attack_type = "melee",
 	melee_interval = 2,
+	_attack_knockback = 1.0,
 	reach = 3,
 	collisionbox = {-.6, 0, -.6, .6, 1.4, .6},
 	visual = "mesh",

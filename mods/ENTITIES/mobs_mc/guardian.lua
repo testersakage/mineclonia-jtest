@@ -202,7 +202,7 @@ function guardian:check_head_swivel (self_pos, dtime, clear)
 		end
 		local yaw = self.object:get_yaw ()
 		local forward_vector = core.yaw_to_dir (yaw)
-		local diff = vector.offset (self_pos, 0, self.head_eye_height, 0)
+		local diff = vector.offset (self_pos, 0, self:get_eye_height (), 0)
 		local eye_vector = {
 			x = math.cos (yaw) * EYE_LATITUDE,
 			y = 0,

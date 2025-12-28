@@ -311,6 +311,13 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 	local can_block, stack, dpos = mcl_shields.can_block (obj, nil, reason)
 	if can_block and dpos then
 		mcl_shields.add_wear(obj, damage, stack)
+		local direct = reason.direct
+		if direct then
+			local entity = direct:get_luaentity ()
+			if entity and entity.is_mob and obj:is_valid () then
+				entity:shield_impact (obj, reason)
+			end
+		end
 		core.sound_play({name = "mcl_block"}, {pos = obj:get_pos(), max_hear_distance = 16})
 		return 0
 	end

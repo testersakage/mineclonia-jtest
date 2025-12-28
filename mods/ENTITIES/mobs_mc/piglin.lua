@@ -283,7 +283,7 @@ function piglin:get_pitch_of_target ()
 		if target_pos then
 			local self_pos = self.object:get_pos ()
 			local dx = target_pos.x - self_pos.x
-			local dy = target_pos.y - (self_pos.y + self.head_eye_height)
+			local dy = target_pos.y - (self_pos.y + self:get_eye_height ())
 			local dz = target_pos.z - self_pos.z
 			local xz_mag = math.sqrt (dx * dx + dz * dz)
 			local pitch = math.atan2 (dy, xz_mag)
@@ -1030,7 +1030,7 @@ end
 
 local RETREAT_ATTEMPTS = 5
 
-function piglin:retaliate_against (source)
+function piglin:retaliate_against (source, persistence)
 	-- Confiscate any item being admired.
 	if self._admiring_item then
 		self._admiring_item = nil
@@ -1648,7 +1648,7 @@ function piglin_brute:enrage (source, broadcast)
 	end
 end
 
-function piglin_brute:retaliate_against (source)
+function piglin_brute:retaliate_against (source, persistence)
 	local entity = source:get_luaentity ()
 	if entity and (entity.name == "mobs_mc:piglin"
 			or entity.name == "mobs_mc:piglin_brute") then

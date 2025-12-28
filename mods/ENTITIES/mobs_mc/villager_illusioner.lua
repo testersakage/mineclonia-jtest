@@ -5,7 +5,6 @@
 
 local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
-local posing_humanoid = mcl_mobs.posing_humanoid
 local illager = mobs_mc.illager
 local evoker = mobs_mc.evoker
 local is_valid = mcl_util.is_valid_objectref
@@ -16,7 +15,7 @@ local is_valid = mcl_util.is_valid_objectref
 
 local pr = PcgRandom (os.time () * 666)
 
-local illusioner = table.merge (evoker, table.merge (posing_humanoid, {
+local illusioner = table.merge (evoker, {
 	description = S("Illusioner"),
 	type = "monster",
 	_spawn_category = "monster",
@@ -68,12 +67,11 @@ local illusioner = table.merge (evoker, table.merge (posing_humanoid, {
 		rotate_bone = true,
 	},
 	wielditem_drop_probability = 0.085,
-	_humanoid_superclass = evoker,
 	_decoys = {},
 	_banner_bone = "head",
 	_banner_bone_position = vector.new (0, 0, -2.556729),
 	_decoy_wielditems = {},
-}))
+})
 
 ------------------------------------------------------------------------
 -- Illusioner mechanics.
@@ -170,7 +168,7 @@ illusioner._arm_poses = illusioner_poses
 
 function illusioner:apply_arm_pose (pose)
 	local decoys = self._decoy_wielditems
-	posing_humanoid.apply_arm_pose (self, pose)
+	evoker.apply_arm_pose (self, pose)
 
 	if pose ~= "default" then
 		if self._wielditem_object then
@@ -327,7 +325,7 @@ function illusioner:configure_illusion (dtime)
 end
 
 function illusioner:do_custom (dtime)
-	posing_humanoid.do_custom (self, dtime)
+	evoker.do_custom (self, dtime)
 
 	if self._illusion_offsets then
 		self:configure_illusion (dtime)
@@ -379,7 +377,7 @@ function illusioner:adjust_head_swivel (mob_yaw, mob_pitch, out_of_view)
 end
 
 function illusioner:mob_activate (staticdata, dtime)
-	if not posing_humanoid.mob_activate (self, staticdata, dtime) then
+	if not evoker.mob_activate (self, staticdata, dtime) then
 		return false
 	end
 	self._decoy_wielditems = {}
