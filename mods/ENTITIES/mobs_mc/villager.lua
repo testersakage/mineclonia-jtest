@@ -3036,7 +3036,7 @@ local function sense_find_a_home (self, self_pos)
 		-- If the closest bed is within 2 blocks of
 		-- this mob and is within line of sight, do
 		-- nothing.
-		local eye_height = self.head_eye_height
+		local eye_height = self:get_eye_height ()
 		local eye_pos = vector.offset (self_pos, 0, eye_height, 0)
 		local offset = vector.offset (nodes[1], 0, 0.1, 0)
 		if vector.distance (self_pos, offset) <= 2.0

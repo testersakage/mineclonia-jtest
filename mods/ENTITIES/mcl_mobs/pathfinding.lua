@@ -1041,6 +1041,7 @@ mob_class.gwp_penalties = {
 	-- A penalty < 0 indicates unconditional rejection, while one
 	-- greater than zero compounds the heuristic distance.
 	BLOCKED = -1.0,
+	LEAVES = -1.0,
 	SLAB = -1.0,
 	DAMAGE_FIRE = 16.0,
 	DAMAGE_OTHER = -1.0,
@@ -1173,13 +1174,15 @@ core.register_on_mods_loaded (function ()
 			value = def._pathfinding_class
 		elseif def.damage_per_second ~= 0 then
 			value = "DAMAGE_OTHER"
-		elseif core.get_item_group(name, "door") > 0 then
+		elseif core.get_item_group (name, "door") > 0 then
 			value = nil
-			if core.get_item_group(name, "door_iron") > 0 then
+			if core.get_item_group (name, "door_iron") > 0 then
 				gwp_door_classes[key] = "DOOR_IRON_CLOSED"
 			else
 				gwp_door_classes[key] = "DOOR_WOOD_CLOSED"
 			end
+		elseif core.get_item_group (name, "leaves") > 0 then
+			value = "LEAVES"
 		elseif def.walkable then
 			value = get_partial_type (name, def)
 		end
@@ -2775,6 +2778,7 @@ end
 
 local gwp_airborne_floortypes = {
 	BLOCKED = "WALKABLE",
+	LEAVES = "WALKABLE",
 	DAMAGE_FIRE = "DAMAGE_FIRE",
 	DAMAGE_OTHER = "DAMAGE_OTHER",
 	DANGER_FIRE = "WALKABLE",

@@ -348,13 +348,17 @@ end
 -- Jockeys.
 ------------------------------------------------------------------------
 
-function mob_class:jock_to (mob, relative_pos, rot)
+local MODEL_RECIPROCAL = 1.0 / 10.0
+
+function mob_class:jock_to (mob, relative_pos, rot, fix_eye_height)
 	local jock = core.add_entity (self.object:get_pos (), mob)
 	if not jock then return end
-	return self:jock_to_existing (jock, "", relative_pos, rot)
+	return self:jock_to_existing (jock, "", relative_pos, rot,
+				      fix_eye_height)
 end
 
-function mob_class:jock_to_existing (jock, bone, relative_pos, rot)
+function mob_class:jock_to_existing (jock, bone, relative_pos, rot,
+				     fix_eye_height)
 	local entity = jock:get_luaentity ()
 	-- Controlling mobs in jockeys are not saved directly, but in
 	-- the staticdata of their vehicles.
@@ -382,6 +386,21 @@ function mob_class:jock_to_existing (jock, bone, relative_pos, rot)
 	entity._jockey_bone = bone
 	entity._jockey_rot = rot
 	entity._jockey_rider_non_dominant = not self._dominant_in_jockeys
+	entity._jockey_fix_eye_height = fix_eye_height
+	if fix_eye_height then
+		-- Caveat emptor: FIX_EYE_HEIGHT when specified will
+		-- not prompt eye height to be readjusted when the
+		-- mob's parent's eye height is adjusted, or account
+		-- for more than one mob in the attachment chain.
+		-- Neither will it function if BONE is not the base of
+		-- the object, as bone offsets are unavailable to
+		-- server-side programs.
+		local pos = relative_pos.y * MODEL_RECIPROCAL
+		self._jockey_eye_offset
+			= pos / jock_properties.visual_size.y
+	else
+		self._jockey_eye_offset = 0
+	end
 	self.object:set_attach (jock, bone, relative_pos, rot)
 	self:set_animation ("jockey")
 	return jock
@@ -512,7 +531,9 @@ function mob_class:restore_jockey ()
 			local relative_pos = self._jockey_relative_pos
 			local rot = self._jockey_rot
 			local bone = self._jockey_bone
-			entity:jock_to_existing (self.object, bone, relative_pos, rot)
+			local fix_eye_height = self._jockey_fix_eye_height
+			entity:jock_to_existing (self.object, bone, relative_pos, rot,
+						 fix_eye_height)
 		end
 		self._jockey_staticdata = nil
 	end
@@ -530,10 +551,10 @@ end
 function mob_class:unjock ()
 	self.object:set_detach ()
 	self.object:set_properties ({
-			static_save = true,
-			-- XXX: what about mobs which alter their
-			-- visual sizes?
-			visual_size = self._original_visual_size,
+		static_save = true,
+		-- XXX: what about mobs which alter their visual
+		-- sizes?
+		visual_size = self._original_visual_size,
 	})
 end
 
@@ -1325,7 +1346,7 @@ function mob_class:check_avoid_sunlight (pos)
 		-- Still seeking sunlight?
 		if self:navigation_finished () then
 			self.avoiding_sunlight = false
-			local eye_height = self.head_eye_height
+			local eye_height = self:get_eye_height ()
 			local head_pos = vector.offset (pos, 0, eye_height, 0)
 			self._direct_sunlight
 				= core.get_natural_light (head_pos, 0.5)

@@ -206,14 +206,15 @@ function mob_class:check_particlespawners(dtime)
 	self._particle_timer = self._particle_timer + dtime
 end
 
-
--- set defined animation
-function mob_class:set_animation(anim, fixed_frame)
+function mob_class:set_animation (anim, fixed_frame)
 	if not self.animation or not anim then
 		return
 	end
 
-	if self.jockey_vehicle and self.object:get_attach () then
+	if self.jockey_vehicle
+	-- Don't use `jockey' animations if none are defined.
+		and self.animation.jockey_start
+		and self.object:get_attach () then
 		anim = "jockey"
 	end
 
@@ -358,7 +359,7 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 			end
 			local ps = self_pos
 			local old_y = ps.y
-			ps.y = ps.y + self.head_eye_height
+			ps.y = ps.y + self:get_eye_height ()
 			local pt = locked_object:get_pos ()
 			pt.y = pt.y + _locked_object_eye_height
 			local dir = vector.direction (ps, pt)
@@ -455,10 +456,10 @@ core.register_on_leaveplayer(function(player)
 	active_particlespawners[pn] = nil
 end)
 
-----------------------------------------------------------------------------------
--- Smooth rotation.  In the long run, most mob models should receive a root bone,
--- enabling client-side interpolation.
-----------------------------------------------------------------------------------
+------------------------------------------------------------------------
+-- Smooth rotation.  In the long run, most mob models should receive a
+-- root bone, enabling client-side interpolation.
+------------------------------------------------------------------------
 
 local norm_radians = nil
 
