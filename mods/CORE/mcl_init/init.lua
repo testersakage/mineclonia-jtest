@@ -463,10 +463,10 @@ dofile(modpath.."/outdated_warning.lua")
 function mcl_init.viable_hit(player, hitter)
 	if hitter:is_player() then
 		local weapon = hitter:get_wielded_item()
-		local reach = (weapon:get_definition().range or 3)
+		local range = (weapon:get_definition().range or 3)
 		local prop, p = hitter:get_properties(), hitter:get_pos()
 		local eye_p = vector.add(p, vector.new(0, prop.eye_height, 0))
-		eye_extended_pos = vector.add(eye_p, vector.multiply(hitter:get_look_dir(), reach))
+		eye_extended_pos = vector.add(eye_p, vector.multiply(hitter:get_look_dir(), range))
 		local raycast = core.raycast(
 			eye_p,
 			eye_extended_pos,
@@ -477,7 +477,7 @@ function mcl_init.viable_hit(player, hitter)
 		
 		local reaches_player
 		for thing in raycast do
-			if thing.type == "object" and vector.distance(eye_p, thing.intersection_point) <= reach and thing.ref:is_player() and thing.ref:get_player_name() == name then
+			if thing.type == "object" and vector.distance(eye_p, thing.intersection_point) <= range and thing.ref:is_player() and thing.ref:get_player_name() == name then
 				reaches_player = true
 				break
 			end
