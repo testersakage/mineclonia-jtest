@@ -35,6 +35,7 @@ core.register_tool("mcl_tools:mace", {
 	_doc_items_longdesc = mace_longdesc,
 	inventory_image = "mcl_tools_mace.png",
 	groups = { weapon=1, mace=1, dig_speed_class=1, enchantability=10, sword=1, rarity = 3 },
+	wield_scale = mcl_vars.tool_wield_scale,
 	tool_capabilities = {
 		full_punch_interval = 1.6,
 		max_drop_level = 1,
