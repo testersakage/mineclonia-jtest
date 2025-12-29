@@ -35,7 +35,6 @@ mcl_itemframes.tpl_node = {
 	sounds = mcl_sounds.node_sound_defaults(),
 	node_placement_prediction = "",
 	_mcl_hardness = 0.5,
-	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 	allow_metadata_inventory_move = function() return 0 end,
 	allow_metadata_inventory_put = function() return 0 end,
 	allow_metadata_inventory_take = function() return 0 end,
@@ -152,7 +151,12 @@ function mcl_itemframes.tpl_node.on_rightclick(pos, _, clicker, ostack, _)
 	return ostack
 end
 
-mcl_itemframes.tpl_node.on_destruct = remove_entity
+mcl_itemframes.tpl_node.on_destruct = function(pos)
+	local inv = core.get_inventory({type = "node", pos = pos})
+	local stack = inv:get_stack("main", 1)
+	core.add_item(pos, stack)
+	remove_entity(pos)
+end
 
 function mcl_itemframes.tpl_node.on_construct(pos)
 	if not mcl_structures.is_structure_constructor () then
