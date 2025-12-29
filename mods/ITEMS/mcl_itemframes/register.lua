@@ -32,6 +32,7 @@ mcl_itemframes.register_itemframe("invisible_frame", {
 		_tt_help = S("Can hold an item but is invisible"),
 		inventory_image = "mcl_itemframes_invisible_item_frame.png",
 		wield_image = "mcl_itemframes_invisible_item_frame.png",
+		groups = {not_in_creative_inventory = 1},
 	},
 })
 
@@ -42,6 +43,7 @@ mcl_itemframes.register_itemframe("invisible_glow_frame", {
 		_tt_help = S("Can hold an item and glows but is invisible"),
 		inventory_image = "mcl_itemframes_invisible_glow_item_frame.png",
 		wield_image = "mcl_itemframes_invisible_glow_item_frame.png",
+		groups = {not_in_creative_inventory = 1},
 	},
 	object_properties = {glow = 15},
 })
