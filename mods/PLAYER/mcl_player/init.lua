@@ -232,6 +232,60 @@ function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, da
 	end
 end
 
+
+local function viable_hit(player, hitter)
+	if hitter:is_player() then
+		local weapon = hitter:get_wielded_item()
+		local range = (weapon:get_definition().range or 3)
+		
+		if mcl_gamemode.get_gamemode(hitter) == "creative" then range = 5 end
+		
+		local prop, p = hitter:get_properties(), hitter:get_pos()
+		local eye_p = vector.add(p, vector.new(0, prop.eye_height, 0))
+		eye_extended_pos = vector.add(eye_p, vector.multiply(hitter:get_look_dir(), range))
+		local raycast = core.raycast(
+			eye_p,
+			eye_extended_pos,
+			true, true
+		)
+
+		local name = player:get_player_name()
+		
+		local reaches_player
+		for thing in raycast do
+			if thing.type == "object" and vector.distance(eye_p, thing.intersection_point) <= range and thing.ref:is_player() and thing.ref:get_player_name() == name then
+				reaches_player = true
+				break
+			end
+		end
+		if reaches_player then return true end
+	else return true
+	end
+end
+
+local original_function = table.copy(core.register_on_punchplayer)
+
+core.register_on_punchplayer = function(func)
+	original_function(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+		if not viable_hit(player, hitter) then return true end
+		
+		func(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+	end)
+end
+
+
+-- punchplayer call for mcl_damage
+core.register_on_punchplayer (function (player, hitter, _, _, _, damage)
+	  -- Inflict the Minetest-computed damage by means of
+	  -- mcl_damage.damage_player.
+	  if damage > 0 then
+	 local mcl_reason = { type = "generic", }
+	 mcl_damage.from_punch (mcl_reason, hitter)
+	 mcl_damage.damage_player (player, damage, mcl_reason)
+	 return true
+	  end
+end)
+
 core.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	-- This section borrowed from Minetest.
 	if player:get_hp() == 0 then
