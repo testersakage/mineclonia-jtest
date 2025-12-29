@@ -283,9 +283,17 @@ function ravager:ravager_knockback (self_pos, object)
 	local pos = object:get_pos ()
 	local dx = pos.x - self_pos.x
 	local dz = pos.z - self_pos.z
-	local d_sqr = mathmax (dx * dx + dz * dz, 0.001)
-	object:add_velocity (vector.new (dx / d_sqr * 80.0, 0.2,
-					 dz / d_sqr * 80.0))
+	if mcl_util.object_has_mc_physics (object) then
+		local d_sqr = mathmax (dx * dx + dz * dz, 0.001)
+		local v = vector.new (dx / d_sqr * 80.0, 4.0,
+				      dz / d_sqr * 80.0)
+		object:add_velocity (v)
+	else
+		local d = mathsqrt (dx * dx + dz * dz)
+		local v = vector.new (dx / d * 10.0, 4.0,
+				      dz / d * 10.0)
+		object:add_velocity (v)
+	end
 end
 
 function ravager:ravager_attack ()
@@ -375,9 +383,20 @@ function ravager:shield_impact (object, mcl_reason)
 			end
 		else
 			local self_pos = self.object:get_pos ()
-			self:ravager_knockback (self_pos, object)
+			-- Otherwise the default knockback is more
+			-- than adequate to repulse the player.
+			if mcl_util.object_has_mc_physics (object) then
+				self:ravager_knockback (self_pos, object)
+			end
 		end
 	end
+end
+
+function ravager:pre_melee_attack (distance, delay, line_of_sight)
+	return self._stunned_time <= 0
+		and self._roar_time <= 0
+		and mob_class.pre_melee_attack (self, distance, delay,
+						line_of_sight)
 end
 
 function ravager:custom_attack ()
