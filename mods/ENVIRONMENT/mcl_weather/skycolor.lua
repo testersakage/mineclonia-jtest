@@ -366,7 +366,7 @@ local function initsky(player)
 	if player.set_lighting then
 		player:set_lighting({
 			shadows = { intensity = 0.33 },
-			volumetric_light = { strength = 0.45 },
+			volumetric_light = { strength = 0.2 },
 			exposure = {
 				luminance_min = -3.5,
 				luminance_max = -2.5,
