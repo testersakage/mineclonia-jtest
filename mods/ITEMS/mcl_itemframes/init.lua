@@ -151,12 +151,7 @@ function mcl_itemframes.tpl_node.on_rightclick(pos, _, clicker, ostack, _)
 	return ostack
 end
 
-mcl_itemframes.tpl_node.on_destruct = function(pos)
-	local inv = core.get_inventory({type = "node", pos = pos})
-	local stack = inv:get_stack("main", 1)
-	core.add_item(pos, stack)
-	remove_entity(pos)
-end
+mcl_itemframes.tpl_node.on_destruct = drop_item
 
 function mcl_itemframes.tpl_node.on_construct(pos)
 	if not mcl_structures.is_structure_constructor () then
