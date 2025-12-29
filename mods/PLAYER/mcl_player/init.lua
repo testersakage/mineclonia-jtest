@@ -251,16 +251,13 @@ local function viable_hit(player, hitter)
 
 		local name = player:get_player_name()
 		
-		local reaches_player
 		for thing in raycast do
 			if thing.type == "object" and vector.distance(eye_p, thing.intersection_point) <= range and thing.ref:is_player() and thing.ref:get_player_name() == name then
-				reaches_player = true
-				break
+				return true
 			end
 		end
-		if reaches_player then return true end
-	else return true
-	end
+		return false
+	else return false	end
 end
 
 local original_function = table.copy(core.register_on_punchplayer)
