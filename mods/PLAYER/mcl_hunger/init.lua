@@ -41,7 +41,6 @@ mcl_hunger.debug = false
 mcl_hunger.eat_cooldown = {} -- is only used when mcl_eat_anim setting is enabled
 mcl_hunger.eat_duration = {} -- is only used when mcl_eat_anim setting is disabled
 
-mcl_hunger.eat_anim_hud = {} -- track eating animation HUD
 mcl_hunger.eat_anim_block = {} -- if not nil/false then forbid eat animation
 mcl_hunger.eat_anim_effect = {} -- effect timer for precise interval
 

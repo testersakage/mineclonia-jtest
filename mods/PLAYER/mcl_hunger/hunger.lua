@@ -292,15 +292,12 @@ function mcl_hunger.hud_eat_add(player)
 	local wield_image = itemstackdef.wield_image
 	if not wield_image or wield_image == "" then wield_image = itemstackdef.inventory_image end
 	player:hud_set_flags({wielditem = false})
-	player:hud_change(mcl_hunger.eat_anim_hud[player], "text", wield_image)
-	player:hud_change(mcl_hunger.eat_anim_hud[player], "offset", {x = 0, y = -50})
 end
 
 function mcl_hunger.hud_eat_remove(player)
 	mcl_hunger.eat_duration[player] = -math.huge
 	mcl_hunger.eat_anim_effect[player] = nil
 	player:hud_set_flags({wielditem = true})
-	player:hud_change(mcl_hunger.eat_anim_hud[player], "text", "blank.png")
 	if core.get_modpath("playerphysics") then
 		playerphysics.remove_physics_factor(player, "speed", "mcl_hunger:eat_anim")
 	end
@@ -329,21 +326,11 @@ end
 
 core.register_on_joinplayer (function (player)
 	mcl_hunger.eat_duration[player] = -math.huge
-	mcl_hunger.eat_anim_hud[player] = player:hud_add({
-		hud_elem_type = "image",
-		text = "blank.png",
-		position = {x = 0.5, y = 1},
-		scale = {x = -25, y = -45},
-		alignment = {x = 0, y = -1},
-		offset = {x = 0, y = -30},
-		z_index = -200,
-	})
 	player:hud_set_flags({wielditem = true})
 end)
 
 core.register_on_leaveplayer (function (player, _)
 	mcl_hunger.eat_duration[player] = nil
-	mcl_hunger.eat_anim_hud[player] = nil
 end)
 
 controls.register_on_press (function (player, key)
