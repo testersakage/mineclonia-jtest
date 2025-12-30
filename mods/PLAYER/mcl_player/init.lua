@@ -232,39 +232,35 @@ function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, da
 	end
 end
 
-local function viable_hit(player, hitter)
-	if hitter:is_player() then
-		local weapon = hitter:get_wielded_item():get_definition()
-		local range = 3
-		if weapon and weapon.range then range = weapon.range end
-		if mcl_gamemode.get_gamemode(hitter) == "creative" then range = 5 end
-		local eye_p, p = mcl_util.target_eye_pos(hitter), hitter:get_pos()
-		local eye_extended_pos = vector.add(eye_p, vector.multiply(hitter:get_look_dir(), range))
-		local raycast = core.raycast(
-			eye_p,
-			eye_extended_pos,
-			true, true
-		)
-		local name = player:get_player_name()
-		for thing in raycast do
-			if thing.type == "object"
-					and vector.distance(eye_p, thing.intersection_point) <= range
-					and thing.ref:is_player()
-					and thing.ref:get_player_name() == name then
-				return true
-			end
+-- this should only be called inside of an `on_punched` callback
+function mcl_player.interaction_reaches_punched_object(player)
+	local wielded = player:get_wielded_item():get_definition()
+	local range = 3
+	if wielded and wielded.range then range = wielded.range end
+	if mcl_gamemode.get_gamemode(player) == "creative" then range = 5 end
+	local eye_p = mcl_util.target_eye_pos(player)
+	local raycast = core.raycast(
+		eye_p,
+		vector.add(eye_p, vector.multiply(player:get_look_dir(), range)),
+		true, true
+	)
+
+	for thing in raycast do
+		if thing.type == "object"
+				and vector.distance(eye_p, thing.intersection_point) <= range
+				and not thing.ref:is_player()
+				or thing.ref:is_player() and thing.ref ~= player then
+			return true
 		end
-		return false
-	else
-		return true
 	end
+	return false
 end
 
 local original_function = core.register_on_punchplayer
 
 function core.register_on_punchplayer(func)
 	original_function(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
-		if not viable_hit(player, hitter) then return true end
+		if not mcl_player.interaction_reaches_punched_object(hitter) then return true end
 		func(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	end)
 end
