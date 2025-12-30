@@ -267,7 +267,6 @@ local original_function = core.register_on_punchplayer
 function core.register_on_punchplayer(func)
 	original_function(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 		if not viable_hit(player, hitter) then return true end
-		
 		func(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	end)
 end
