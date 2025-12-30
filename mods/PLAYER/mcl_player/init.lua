@@ -262,7 +262,7 @@ local function viable_hit(player, hitter)
 	else return false	end
 end
 
-local original_function = table.copy(core.register_on_punchplayer)
+local original_function = core.register_on_punchplayer
 
 function core.register_on_punchplayer(func)
 	original_function(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
