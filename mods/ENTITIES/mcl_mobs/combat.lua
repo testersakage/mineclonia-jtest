@@ -172,14 +172,11 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	local is_player = hitter and hitter:is_player()
 	local hitter_playername = is_player and hitter:get_player_name()
 	if hitter_playername and hitter_playername ~= "" then
-
-		local weapon = hitter:get_wielded_item()
-		local range = (weapon:get_definition().range or 3)
-		
+		local weapon = hitter:get_wielded_item():get_definition()
+		local range = 3
+		if weapon and weapon.range then range = weapon.range end
 		if mcl_gamemode.get_gamemode(hitter) == "creative" then range = 5 end
-		
-		local prop, p = hitter:get_properties(), hitter:get_pos()
-		local eye_p = vector.offset(p, 0, prop.eye_height, 0)
+		local eye_p, p = mcl_util.target_eye_pos(hitter), hitter:get_pos()
 		local eye_extended_pos = vector.add(eye_p, vector.multiply(hitter:get_look_dir(), range))
 		local raycast = core.raycast(
 			eye_p,
@@ -194,10 +191,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 				break
 			end
 		end
-		
 		if not reaches_mob then return end
-		
-		
 		doc.mark_entry_as_revealed(hitter_playername, "mobs", self.name)
 		mcl_potions.update_haste_and_fatigue(hitter)
 	end
