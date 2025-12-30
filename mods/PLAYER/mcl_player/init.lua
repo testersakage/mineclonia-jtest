@@ -251,7 +251,10 @@ local function viable_hit(player, hitter)
 		local name = player:get_player_name()
 		
 		for thing in raycast do
-			if thing.type == "object" and vector.distance(eye_p, thing.intersection_point) <= range and thing.ref:is_player() and thing.ref:get_player_name() == name then
+			if thing.type == "object"
+					and vector.distance(eye_p, thing.intersection_point) <= range
+					and thing.ref:is_player()
+					and thing.ref:get_player_name() == name then
 				return true
 			end
 		end
