@@ -259,7 +259,9 @@ local function viable_hit(player, hitter)
 			end
 		end
 		return false
-	else return false	end
+	else
+		return true
+	end
 end
 
 local original_function = core.register_on_punchplayer

@@ -179,8 +179,8 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		if mcl_gamemode.get_gamemode(hitter) == "creative" then range = 5 end
 		
 		local prop, p = hitter:get_properties(), hitter:get_pos()
-		local eye_p = vector.add(p, vector.new(0, prop.eye_height, 0))
-		eye_extended_pos = vector.add(eye_p, vector.multiply(hitter:get_look_dir(), range))
+		local eye_p = vector.offset(p, 0, prop.eye_height, 0)
+		local eye_extended_pos = vector.add(eye_p, vector.multiply(hitter:get_look_dir(), range))
 		local raycast = core.raycast(
 			eye_p,
 			eye_extended_pos,
