@@ -275,12 +275,12 @@ end
 core.register_on_punchplayer (function (player, hitter, _, _, _, damage)
 	  -- Inflict the Minetest-computed damage by means of
 	  -- mcl_damage.damage_player.
-	  if damage > 0 then
-	 local mcl_reason = { type = "generic", }
-	 mcl_damage.from_punch (mcl_reason, hitter)
-	 mcl_damage.damage_player (player, damage, mcl_reason)
-	 return true
-	  end
+	if damage > 0 then
+		local mcl_reason = { type = "generic", }
+		mcl_damage.from_punch (mcl_reason, hitter)
+		mcl_damage.damage_player (player, damage, mcl_reason)
+		return true
+	end
 end)
 
 core.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
