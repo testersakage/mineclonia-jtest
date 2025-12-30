@@ -232,7 +232,6 @@ function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, da
 	end
 end
 
-
 local function viable_hit(player, hitter)
 	if hitter:is_player() then
 		local weapon = hitter:get_wielded_item()
@@ -269,7 +268,6 @@ function core.register_on_punchplayer(func)
 		func(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	end)
 end
-
 
 -- punchplayer call for mcl_damage
 core.register_on_punchplayer (function (player, hitter, _, _, _, damage)
