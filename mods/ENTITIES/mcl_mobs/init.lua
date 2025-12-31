@@ -58,7 +58,6 @@ mcl_mobs.mob_class = {
 		collide_with_objects = false,
 	},
 	max_name_length = 30,
-	head_yaw_offset = 0,
 	head_pitch_multiplier = 1,
 	_head_pitch_offset = 0,
 	_head_rot_limit = math.pi / 3, -- 60 degrees.

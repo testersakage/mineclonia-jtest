@@ -365,7 +365,6 @@ function mob_class:check_head_swivel (self_pos, dtime, clear)
 			ps.y = old_y
 			local mob_yaw_raw = self_yaw
 				+ math.atan2 (dir.x, dir.z)
-				+ self.head_yaw_offset
 			local mob_yaw = mcl_util.norm_radians (mob_yaw_raw)
 			local mob_pitch = math.asin(-dir.y) * self.head_pitch_multiplier
 				+ self._head_pitch_offset
