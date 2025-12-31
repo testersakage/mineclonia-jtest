@@ -235,6 +235,7 @@ end
 -- this should only be called inside of an `on_punched/on_rightclicked` callback.
 -- the function assumes the `player` (puncher/rightclicker) is pointing at the target.
 function mcl_player.interaction_reaches_punched_object(player)
+	if not player:is_player() then return end
 	local wielded = player:get_wielded_item():get_definition()
 	local range = 3
 	if wielded and wielded.range then range = wielded.range end
