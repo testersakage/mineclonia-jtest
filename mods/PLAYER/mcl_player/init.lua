@@ -256,7 +256,7 @@ function mcl_player.interaction_reaches_punched_object(player)
 				and thing.ref
 				and vector.distance(eye_p, thing.intersection_point) <= range
 				and not thing.ref:is_player()
-				or thing.ref:is_player() and thing.ref ~= player then
+				or thing.ref and thing.ref:is_player() and thing.ref ~= player then
 			return true
 		end
 	end
