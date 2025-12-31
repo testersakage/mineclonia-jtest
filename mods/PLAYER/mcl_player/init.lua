@@ -232,7 +232,8 @@ function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, da
 	end
 end
 
--- this should only be called inside of an `on_punched` callback
+-- this should only be called inside of an `on_punched/on_rightclicked` callback.
+-- the function assumes the `player` (puncher/rightclicker) is pointing at the target.
 function mcl_player.interaction_reaches_punched_object(player)
 	local wielded = player:get_wielded_item():get_definition()
 	local range = 3
