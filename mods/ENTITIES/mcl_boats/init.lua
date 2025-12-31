@@ -59,12 +59,27 @@ local function set_attach(boat)
 		{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
 end
 
+local function remove_seat(self)
+	if self._passenger_seat and self._passenger_seat:get_luaentity() then
+		self._passenger_seat:remove()
+		self._passenger_seat = nil
+	end
+end
+
 local function set_double_attach(boat)
 	boat._driver:set_attach(boat.object, "",
 		{x = 0, y = 0.42, z = 0.8}, {x = 0, y = 0, z = 0})
+
+
 	if boat._passenger:is_player() then
-		boat._passenger:set_attach(boat.object, "",
+		if not boat._passenger_seat or not boat._passenger_seat:get_luaentity() then
+			local pos = boat.object:get_pos()
+			boat._passenger_seat = core.add_entity(pos, "mcl_boats:seat")
+		end
+		boat._passenger_seat:set_attach(boat.object, "",
 			{x = 0, y = 0.42, z = -6.2}, {x = 0, y = 0, z = 0})
+		boat._passenger:set_attach(boat._passenger_seat, "",
+			{x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
 	else
 		boat._passenger:set_attach(boat.object, "",
 			{x = 0, y = 0.42, z = -4.5}, {x = 0, y = 270, z = 0})
@@ -238,6 +253,7 @@ function boat:on_death(killer)
 	if self._passenger then
 		detach_object(self._passenger)
 	end
+	remove_seat(self)
 	self._driver = nil
 	self._passenger = nil
 end
@@ -318,6 +334,7 @@ function boat:on_step(dtime, moveresult)
 			if ctrl and ctrl.sneak then
 				detach_object(self._passenger, true)
 				self._passenger = nil
+				remove_seat(self)
 			end
 		end
 	end
@@ -518,6 +535,18 @@ end
 
 -- Register one entity for all boat types
 core.register_entity("mcl_boats:boat", boat)
+
+-- Boat seat intermediary object for camera positioning
+core.register_entity("mcl_boats:seat", {
+	initial_properties = {
+		visual = "sprite",
+		textures = { "blank.png" },
+		collisionbox = {0,0,0,0,0,0},
+		physical = false,
+		pointable = false,
+		static_save = false,
+	},
+})
 
 local cboat = table.copy(boat)
 cboat._itemstring = "mcl_boats:chest_boat"
