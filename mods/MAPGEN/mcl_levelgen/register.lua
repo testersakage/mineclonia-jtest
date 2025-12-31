@@ -102,6 +102,7 @@ if core and not core.get_player_by_name then
 	if mcl_levelgen.load_feature_environment then
 		mcl_levelgen.initialize_biome_features ()
 	end
+	mcl_levelgen.run_on_scripts_loaded ()
 elseif core then
 	-- Load and register jigsaw blocks.
 	dofile (mcl_levelgen.prefix .. "/jigsaw.lua")
