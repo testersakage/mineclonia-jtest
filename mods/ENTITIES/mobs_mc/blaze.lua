@@ -25,13 +25,10 @@ local blaze = {
 	xp_min = 10,
 	xp_max = 10,
 	collisionbox = {-0.3, -0.01, -0.3, 0.3, 1.79, 0.3},
-	rotate = -180,
-	head_yaw_offset = math.rad (-180),
 	visual = "mesh",
 	mesh = "mobs_mc_blaze.b3d",
 	head_swivel = "head.control",
 	bone_eye_height = 4,
-	head_pitch_multiplier=-1,
 	textures = {
 		{"mobs_mc_blaze.png"},
 	},
@@ -93,6 +90,21 @@ local function blaze_set_charged (self, charged)
 	else
 		mcl_burning.extinguish (self.object)
 	end
+end
+
+function blaze:mob_activate (staticdata, dtime)
+	if not mob_class.mob_activate (self, staticdata, dtime) then
+		return false
+	end
+	self.object:set_animation ({
+		x = self.animation.stand_start,
+		y = self.animation.stand_end,
+	})
+	return true
+end
+
+function blaze:set_animation (anim, fixed_frame)
+	return
 end
 
 function blaze:do_custom (dtime)
@@ -165,6 +177,16 @@ end
 -- Blaze AI.
 ------------------------------------------------------------------------
 
+local TICKS_PER_SEC = 20
+local mathpow = math.pow
+
+local function lerp1d_scaled (u, dtime, s1, s2)
+	local x = dtime * TICKS_PER_SEC
+	local v = -(s2 * mathpow (1 - u, x))
+		+ s1 * mathpow (1 - u, x) + s2
+	return v
+end
+
 function blaze:attack_null (self_pos, dtime, target_pos, line_of_sight)
 	if not self.attacking then
 		-- Initialize fields used during the attack.
@@ -190,7 +212,7 @@ function blaze:attack_null (self_pos, dtime, target_pos, line_of_sight)
 		= self_pos.y + self.head_eye_height
 	if target_eye_height > self_eye_height + self._height_diff_tolerance then
 		local v = self.object:get_velocity ()
-		v.y = v.y + (6 - v.y) * mcl_mobs.pow_by_step (0.3, dtime)
+		v.y = lerp1d_scaled (0.3, dtime, v.y, 6.0)
 		self.object:set_velocity (v)
 	end
 
