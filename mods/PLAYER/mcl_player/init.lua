@@ -241,14 +241,19 @@ function mcl_player.interaction_reaches_punched_object(player)
 	if wielded and wielded.range then range = wielded.range end
 	if mcl_gamemode.get_gamemode(player) == "creative" then range = 5 end
 	local eye_p = mcl_util.target_eye_pos(player)
+	local ray_end = player:get_look_dir ()
+		ray_end.x = ray_end.x * range + eye_p.x
+		ray_end.y = ray_end.y * range + eye_p.y
+		ray_end.z = ray_end.z * range + eye_p.z
 	local raycast = core.raycast(
 		eye_p,
-		vector.add(eye_p, vector.multiply(player:get_look_dir(), range)),
+		ray_end,
 		true, true
 	)
 
 	for thing in raycast do
 		if thing.type == "object"
+				and thing.ref
 				and vector.distance(eye_p, thing.intersection_point) <= range
 				and not thing.ref:is_player()
 				or thing.ref:is_player() and thing.ref ~= player then
