@@ -331,8 +331,12 @@ end)
 
 core.register_on_leaveplayer (function (player, _)
 	mcl_hunger.eat_duration[player] = nil
+	mcl_hunger.hud_eat_remove(player)
 end)
 
+core.register_on_dieplayer(function (player)
+	mcl_hunger.eat_anim_block[player] = 1
+end)
 controls.register_on_press (function (player, key)
 	if not is_eat_anim_possible (player, key) then
 		return
