@@ -287,10 +287,6 @@ end
 
 function mcl_hunger.hud_eat_add(player)
 	mcl_hunger.eat_duration[player] = 0
-	local wielditem = player:get_wielded_item()
-	local itemstackdef = wielditem:get_definition()
-	local wield_image = itemstackdef.wield_image
-	if not wield_image or wield_image == "" then wield_image = itemstackdef.inventory_image end
 	player:hud_set_flags({wielditem = false})
 end
 
@@ -337,6 +333,7 @@ end)
 core.register_on_dieplayer(function (player)
 	mcl_hunger.eat_anim_block[player] = 1
 end)
+
 controls.register_on_press (function (player, key)
 	if not is_eat_anim_possible (player, key) then
 		return
