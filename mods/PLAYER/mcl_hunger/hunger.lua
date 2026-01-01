@@ -305,6 +305,7 @@ end
 
 function mcl_hunger.prevent_eating (player)
 	mcl_hunger.eat_anim_block[player] = true
+	mcl_hunger.hud_eat_remove(player)
 end
 
 if mcl_hunger.active then
@@ -331,7 +332,7 @@ core.register_on_leaveplayer (function (player, _)
 end)
 
 core.register_on_dieplayer(function (player)
-	mcl_hunger.eat_anim_block[player] = 1
+	mcl_hunger.prevent_eating(player)
 end)
 
 controls.register_on_press (function (player, key)
