@@ -1,12 +1,7 @@
---[[
-#!#!#!#Cake mod created by Jordan4ibanez#!#!#
-#!#!#!#Released under CC Attribution-ShareAlike 3.0 Unported #!#!#
-]]--
+local S = core.get_translator(core.get_current_modname())
 
 local CAKE_HUNGER_POINTS = 2
 local CAKE_SATURATION_POINTS = 0.4
-
-local S = core.get_translator(core.get_current_modname())
 
 local cake_boxes = {
 	slices = {
@@ -21,7 +16,7 @@ local cake_boxes = {
 }
 
 local cake_groups = {
-	handy = 1, attached_node = 1, dig_by_piston = 1, food = CAKE_HUNGER_POINTS,
+	handy = 1, attached_node = 1, dig_by_piston = 1, food = 2,
 	no_eat_delay = 1, unsticky = 1
 }
 
@@ -33,7 +28,6 @@ local tpl_cake = {
 	stack_max = 1,
 	drop = "",
 	sounds = mcl_sounds.node_sound_wool_defaults(),
-	_food_particles = false,
 	_mcl_saturation = CAKE_SATURATION_POINTS,
 	_mcl_hardness = 0.5,
 	on_rightclick = function(pos, node, clicker)
