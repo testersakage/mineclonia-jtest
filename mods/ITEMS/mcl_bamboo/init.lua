@@ -60,6 +60,7 @@ mcl_trees.register_wood("bamboo",{
 		object = {
 			collisionbox = {-0.5, -0.15, -0.5, 0.5, 0.25, 0.5},
 			selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.25, 0.7},
+			mesh = "mcl_boats_raft.glb",
 		},
 	}, --needs different model
 	chest_boat = {
@@ -69,6 +70,7 @@ mcl_trees.register_wood("bamboo",{
 		object = {
 			collisionbox = {-0.5, -0.15, -0.5, 0.5, 0.25, 0.5},
 			selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.25, 0.7},
+			mesh = "mcl_boats_raft.glb",
 		},
 	},
 	hanging_sign = true,
