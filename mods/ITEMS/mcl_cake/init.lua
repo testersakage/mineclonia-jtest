@@ -36,7 +36,7 @@ local tpl_cake = {
 			local cake = core.get_item_group(node.name, "cake")
 
 			-- Eat only when you are hungry or in creative mode
-			if mcl_hunger.get_hunger(clicker) < 20 or core.is_creative_enabled(name) then
+			if mcl_hunger.is_player_full(clicker) or core.is_creative_enabled(name) then
 				if cake == 1 then
 					core.remove_node(pos)
 					core.check_for_falling(pos)
