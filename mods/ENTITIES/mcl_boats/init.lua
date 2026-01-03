@@ -7,6 +7,17 @@ local boat_y_offset = 0.35
 local boat_y_offset_ground = boat_y_offset + 0.6
 local boat_side_offset = 1.001
 local boat_max_hp = 4
+local Variant = {
+	BOAT = 0,
+	RAFT = 1,
+}
+mcl_boats.Variant = Variant
+local raft_specific_properties = {
+	collisionbox = {-0.5, -0.15, -0.5, 0.5, 0.25, 0.5},
+	selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.25, 0.7},
+	mesh = "mcl_boats_raft.glb",
+}
+
 
 local function is_group(pos, group)
 	local nn = core.get_node(pos).name
@@ -139,6 +150,7 @@ local boat = {
 		damage_texture_modifier = "^[colorize:white:0",
 	},
 
+	_variant = Variant.BOAT,
 	_driver = nil, -- Attached driver (player) or nil if none
 	_passenger = nil,
 	_v = 0, -- Speed
@@ -186,10 +198,6 @@ function boat:on_activate(staticdata)
 		self._last_v = self._v
 		self._itemstring = data.itemstring
 
-        if data.mesh then
-            self.object:set_properties({mesh = data.mesh})
-        end
-
 		-- Fall back to oak boat texture if no texture is set
 		if not data.textures then
 			local tx = { "mcl_boats_texture_oak_boat.png", "blank.png" }
@@ -212,6 +220,13 @@ function boat:on_activate(staticdata)
 			}
 		end
 
+		if data.variant then
+			self._variant = data.variant
+			if data.variant == Variant.RAFT then
+				self.object:set_properties(raft_specific_properties)
+			end
+		end
+
 		self.object:set_properties({textures = data.textures})
 	end
 end
@@ -222,7 +237,7 @@ function boat:get_staticdata()
 		v = self._v,
 		itemstring = self._itemstring,
 		textures = props and props.textures or nil,
-		mesh = props and props.mesh or nil,
+		variant = self._variant
 	})
 end
 
@@ -631,7 +646,14 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 			if boat and boat:get_pos() then
 				local ent = boat:get_luaentity()
 				ent._itemstring = itemstring
-				boat:set_properties(table.merge({ textures = { texture, chest_tex }},object_properties or {}))
+				local custom_properties = {textures = {texture, chest_tex}}
+				if object_properties and object_properties.variant == Variant.RAFT then
+					custom_properties = table.merge(raft_specific_properties, custom_properties)
+					ent._variant = Variant.RAFT
+				else
+					ent._variant = Variant.BOAT
+				end
+				boat:set_properties(table.merge( custom_properties, object_properties or {}))
 				boat:set_yaw(placer:get_look_horizontal())
 				for k,v in pairs(entity_overrides or {}) do
 					ent[k] = v
