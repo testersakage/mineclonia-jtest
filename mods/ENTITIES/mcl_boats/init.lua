@@ -186,6 +186,10 @@ function boat:on_activate(staticdata)
 		self._last_v = self._v
 		self._itemstring = data.itemstring
 
+        if data.mesh then
+            self.object:set_properties({mesh = data.mesh})
+        end
+
 		-- Fall back to oak boat texture if no texture is set
 		if not data.textures then
 			local tx = { "mcl_boats_texture_oak_boat.png", "blank.png" }
@@ -217,7 +221,8 @@ function boat:get_staticdata()
 	return core.serialize({
 		v = self._v,
 		itemstring = self._itemstring,
-		textures = props and props.textures or nil
+		textures = props and props.textures or nil,
+		mesh = props and props.mesh or nil,
 	})
 end
 
