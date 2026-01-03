@@ -81,7 +81,8 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 
 	local is_still_eating = mcl_hunger.eat_duration[user] < eat_delay
 
-	if not eat_anim_enabled then
+	if not eat_anim_enabled
+		or mcl_serverplayer.is_csm_at_least (user, 1) then
 		is_still_eating = (mcl_hunger.eat_cooldown[user] or 0) > 0
 	end
 
