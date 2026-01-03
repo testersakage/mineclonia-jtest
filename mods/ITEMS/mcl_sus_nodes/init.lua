@@ -113,10 +113,10 @@ local sus_node_loot = {
 				itemstring = "mcl_panes:pane_yellow_flat",
 			},
 			{
-			 	itemstring = "mcl_signs:hanging_sign_spruce",
+				itemstring = "mcl_signs:hanging_sign_spruce",
 			},
 			{
-			 	itemstring = "mcl_signs:hanging_sign_oak",
+				itemstring = "mcl_signs:hanging_sign_oak"
 			},
 			{
 				itemstring = "mcl_core:gold_nugget",
