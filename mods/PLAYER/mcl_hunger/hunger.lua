@@ -8,7 +8,7 @@ local function can_eat_when_full (itemstack)
 end
 
 local function is_eat_anim_possible (player, key)
-	if mcl_serverplayer.is_csm_capable (player) then
+	if mcl_serverplayer.is_csm_at_least (player, 1) then
 		return false
 	end
 
@@ -397,7 +397,7 @@ core.register_globalstep (function (dtime)
 end)
 
 controls.register_on_release (function (player, key)
-	if mcl_serverplayer.is_csm_capable (player) then
+	if mcl_serverplayer.is_csm_at_least (player, 1) then
 		return
 	end
 	if key ~= "RMB" then
