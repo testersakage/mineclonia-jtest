@@ -29,7 +29,7 @@ local function enchant_random_level(stack, list, pr)
 	return stack
 end
 
-mcl_vaults.register_vault("vault",{
+mcl_vaults.register_vault("vault", {
 	key = {
 		name = "trial_key",
 		description = S("Trial Key"),
@@ -53,7 +53,7 @@ mcl_vaults.register_vault("vault",{
 			"mcl_vaults_vault_side_ejecting.png", "mcl_vaults_vault_front_ejecting.png",
 		},
 	},
-	loot ={
+	loot = {
 		{
 			stacks_min = 1,
 			stacks_max = 1,
@@ -104,13 +104,13 @@ mcl_vaults.register_vault("vault",{
 				{ itemstring = "mcl_armor:bolt", weight = 3, amount_min = 1, amount_max = 1 },
 				{ itemstring = "mcl_jukebox:record_8", weight = 2, amount_min = 1, amount_max = 1 },
 				{ itemstring = "mcl_banners:pattern_guster", weight = 2, amount_min = 1, amount_max = 1 },
-				--{ itemstring = "TODO:trident", weight = 1, amount_min = 1, amount_max = 1 },
+				{ itemstring = "mcl_tridents:trident", weight = 1, amount_min = 1, amount_max = 1 },
 			}
 		}
-}
+	}
 })
 
-mcl_vaults.register_vault("ominous_vault",{
+mcl_vaults.register_vault("ominous_vault", {
 	key = {
 		name = "ominous_trial_key",
 		description = S("Ominous Trial Key"),
@@ -135,7 +135,7 @@ mcl_vaults.register_vault("ominous_vault",{
 			"mcl_vaults_vault_ominous_side_ejecting.png", "mcl_vaults_vault_ominous_front_ejecting.png",
 		},
 	},
-	loot ={
+	loot = {
 		{
 			stacks_min = 1,
 			stacks_max = 1,
@@ -180,5 +180,5 @@ mcl_vaults.register_vault("ominous_vault",{
 				{ itemstring = "mcl_tools:heavy_core", weight = 3, amount_min = 1, amount_max = 1 },
 			}
 		}
-}
+	}
 })
