@@ -14,7 +14,7 @@ end
 mcl_enchanting.enchantments.bane_of_arthropods = {
 	name = S("Bane of Arthropods"),
 	max_level = 5,
-	primary = {sword = true},
+	primary = {sword = true, spear = true},
 	secondary = {axe = true},
 	disallow = {},
 	incompatible = {smite = true, sharpness = true, density = true, breach = true},
@@ -56,7 +56,7 @@ mcl_enchanting.enchantments.curse_of_vanishing = {
 	name = S("Curse of Vanishing"),
 	max_level = 1,
 	primary = {},
-	secondary = {armor_head = true, armor_torso = true, armor_legs = true, armor_feet = true, tool = true, weapon = true, trident = true, },
+	secondary = {armor_head = true, armor_torso = true, armor_legs = true, armor_feet = true, tool = true, weapon = true, trident = true, spear = true},
 	disallow = {},
 	incompatible = {},
 	weight = 1,
@@ -150,7 +150,7 @@ mcl_enchanting.enchantments.efficiency = {
 mcl_enchanting.enchantments.fire_aspect = {
 	name = S("Fire Aspect"),
 	max_level = 2,
-	primary = {sword = true},
+	primary = {sword = true, spear = true},
 	secondary = {},
 	disallow = {},
 	incompatible = {},
@@ -302,7 +302,7 @@ mcl_enchanting.enchantments.infinity = {
 mcl_enchanting.enchantments.knockback = {
 	name = S("Knockback"),
 	max_level = 2,
-	primary = {sword = true},
+	primary = {sword = true, spear = true},
 	secondary = {},
 	disallow = {},
 	incompatible = {},
@@ -328,7 +328,7 @@ end
 mcl_enchanting.enchantments.looting = {
 	name = S("Looting"),
 	max_level = 3,
-	primary = {sword = true},
+	primary = {sword = true, spear = true},
 	secondary = {},
 	disallow = {},
 	incompatible = {},
@@ -412,7 +412,7 @@ mcl_enchanting.enchantments.mending = {
 	name = S("Mending"),
 	max_level = 1,
 	primary = {},
-	secondary = {armor_head = true, armor_torso = true, armor_legs = true, armor_feet = true, tool = true, weapon = true, trident = true, },
+	secondary = {armor_head = true, armor_torso = true, armor_legs = true, armor_feet = true, tool = true, weapon = true, trident = true, spear = true},
 	disallow = {},
 	incompatible = {infinity = true},
 	weight = 2,
@@ -626,7 +626,7 @@ mcl_enchanting.enchantments.riptide = {
 mcl_enchanting.enchantments.sharpness = {
 	name = S("Sharpness"),
 	max_level = 5,
-	primary = {sword = true},
+	primary = {sword = true, spear = true},
 	secondary = {axe = true},
 	disallow = {},
 	incompatible = {bane_of_arthropods = true, smite = true},
@@ -668,7 +668,7 @@ mcl_enchanting.enchantments.silk_touch = {
 mcl_enchanting.enchantments.smite = {
 	name = S("Smite"),
 	max_level = 5,
-	primary = {sword = true},
+	primary = {sword = true, spear = true},
 	secondary = {axe = true},
 	disallow = {},
 	incompatible = {bane_of_arthropods = true, sharpness = true, density = true, breach = true},
