@@ -91,7 +91,7 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		end
 
 		-- No sleeping if too far away
-		if vector.distance(bed_pos, pos) > 2 and vector.distance(bed_pos2, pos) > 2 then
+		if vector.distance(bed_pos, pos) > 3 and vector.distance(bed_pos2, pos) > 3 then
 			return false, S("You can't sleep, the bed's too far away!")
 		end
 
@@ -99,14 +99,6 @@ local function lay_down(player, pos, bed_pos, state, skip)
 			if vector.distance(bed_pos2, other_pos) < 0.1 then
 				return false,  S("This bed is already occupied!")
 			end
-		end
-
-		-- No sleeping while moving. Slightly different behaviour than in MC.
-		-- FIXME: Velocity threshold should be 0.01 but Minetest 5.3.0
-		-- sometimes reports incorrect Y speed. A velocity threshold
-		-- of 0.125 still seems good enough.
-		if vector.length(player:get_velocity() or player:get_player_velocity()) > 0.125 then
-			return false, S("You have to stop moving before going to bed!")
 		end
 
 		-- No sleeping if monsters nearby.
@@ -186,6 +178,7 @@ local function lay_down(player, pos, bed_pos, state, skip)
 		player:get_meta():set_string("mcl_beds:sleeping", "true")
 		playerphysics.add_physics_factor(player, "speed", "mcl_beds:sleeping", 0)
 		playerphysics.add_physics_factor(player, "jump", "mcl_beds:sleeping", 0)
+		player:add_velocity(-player:get_velocity())
 		player:set_pos(bed_center)
 		mcl_player.players[player].attached = true
 		hud_flags.wielditem = false
@@ -197,6 +190,20 @@ local function lay_down(player, pos, bed_pos, state, skip)
 	player:hud_set_flags(hud_flags)
 	return true
 end
+
+mcl_player.register_globalstep_slow(function(player)
+	local name = player:get_player_name()
+	if mcl_beds.player[name] then
+		local player_pos = player:get_pos()
+		local bed_pos = mcl_beds.bed_pos[name]
+		local bed_node = core.get_node(bed_pos)
+		local bed_center_pos = bed_pos + vector.multiply(core.facedir_to_dir(bed_node.param2), 0.5)
+		bed_center_pos.y = player_pos.y
+
+		player:add_velocity(-player:get_velocity())
+		player:set_pos(bed_center_pos)
+	end
+end)
 
 local function update_formspecs(finished, players)
 	local ges = players_in_overworld(players or core.get_connected_players())
