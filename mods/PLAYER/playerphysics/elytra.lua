@@ -394,6 +394,9 @@ core.register_chatcommand ("attach_elytra", {
 	end,
 })
 
+local jump_counters = {}
+local jump_min_interval = 0.1
+
 mcl_player.register_globalstep(function (player)
 	if mcl_serverplayer.is_csm_capable (player) then
 		return
@@ -405,20 +408,35 @@ mcl_player.register_globalstep(function (player)
 
 	local elytra = mcl_player.players[player].elytra
 
+	mcl_player.players[player].is_pressing_jump = player:get_player_control().jump
+	if elytra.active then
+		return
+	end
+
 	local fly_pos = player:get_pos()
 	local fly_node = core.get_node(vector.offset(fly_pos,0,-0.1,0)).name
 	local fly_node_walkable = core.registered_nodes[fly_node]
 		and core.registered_nodes[fly_node].walkable
-	local is_just_jumped = player:get_player_control().jump and not mcl_player.players[player].is_pressing_jump and not elytra.active
-	mcl_player.players[player].is_pressing_jump = player:get_player_control().jump
 
-	local can_fly = false
-	can_fly = core.get_item_group(armor_name, "elytra") > 0
+	local timestamp = core.get_us_time()
+	if player:get_velocity().y == 0 then
+		jump_counters[player] = nil
+	elseif player:get_player_control().jump
+			and not mcl_player.players[player].is_pressing_jump
+			and (not jump_counters[player] or  timestamp - jump_counters[player].last_jump > jump_min_interval) then
+
+		jump_counters[player] = jump_counters[player] or {count = 0, last_jump = 0}
+		jump_counters[player].count = jump_counters[player].count + 1
+		jump_counters[player].last_jump = timestamp
+	end
+
+	local can_fly = core.get_item_group(armor_name, "elytra") > 0
 		and not player:get_attach()
-		and (can_fly or (is_just_jumped and player:get_velocity().y < -0))
+		and ((jump_counters[player] and jump_counters[player].count) or 0) >= 2
 		and ((not fly_node_walkable) or fly_node == "ignore")
 
 	if can_fly then
 		attach_elytra (player, itemstack, self_pos)
+		jump_counters[player] = nil
 	end
 end)
