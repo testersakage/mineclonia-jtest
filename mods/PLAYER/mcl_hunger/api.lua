@@ -51,7 +51,7 @@ if mcl_hunger.active then
 	end
 
 	function mcl_hunger.set_exhaustion(player, exhaustion, update_hudbar)
-		exhaustion = math.min(mcl_hunger.EXHAUST_LVL, math.max(0.0, exhaustion))
+		exhaustion = math.max(0.0, exhaustion)
 		player:get_meta():set_string("mcl_hunger:exhaustion", tostring(exhaustion))
 		if update_hudbar ~= false then
 			mcl_hunger.update_exhaustion_hud(player, exhaustion)
@@ -63,24 +63,27 @@ if mcl_hunger.active then
 		local player = core.get_player_by_name(playername)
 		if not player or mcl_vars.difficulty == 0 then return false end
 		mcl_hunger.set_exhaustion(player, mcl_hunger.get_exhaustion(player) + increase)
-		if mcl_hunger.get_exhaustion(player) >= mcl_hunger.EXHAUST_LVL then
-			mcl_hunger.set_exhaustion(player, 0.0)
-			local h = nil
-			local satuchanged = false
-			local s = mcl_hunger.get_saturation(player)
-			if s > 0 then
-				mcl_hunger.set_saturation(player, math.max(s - 1.5, 0))
-				satuchanged = true
-			elseif s <= 0.0001 then
-				h = mcl_hunger.get_hunger(player)
-				h = math.max(h-1, 0)
-				mcl_hunger.set_hunger(player, h)
-				satuchanged = true
+		local exhaustion = mcl_hunger.get_exhaustion(player)
+		if exhaustion >= mcl_hunger.EXHAUST_LVL then
+			local exhaust_times = math.floor(exhaustion / mcl_hunger.EXHAUST_LVL)
+
+			local changed = false
+			local saturation = mcl_hunger.get_saturation(player)
+			local remainder = exhaust_times
+			if saturation > 0 then
+				remainder = exhaust_times - saturation
+				mcl_hunger.set_saturation(player, math.max(saturation - exhaust_times, 0))
+				changed = true
 			end
-			if satuchanged then
-				if h then h = h end
-				mcl_hunger.update_saturation_hud(player, mcl_hunger.get_saturation(player), h)
+
+			if remainder > 0 then
+				mcl_hunger.set_hunger(player, math.max(mcl_hunger.get_hunger(player) - remainder, 0))
 			end
+
+			if changed then
+				mcl_hunger.update_saturation_hud(player, mcl_hunger.get_saturation(player), mcl_hunger.get_hunger(player))
+			end
+			mcl_hunger.set_exhaustion(player, exhaustion - exhaust_times * mcl_hunger.EXHAUST_LVL)
 		end
 		mcl_hunger.update_exhaustion_hud(player, mcl_hunger.get_exhaustion(player))
 		return true
