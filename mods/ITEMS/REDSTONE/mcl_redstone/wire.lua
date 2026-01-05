@@ -270,7 +270,7 @@ do
 				update_wire_connections(pos)
 			end,
 			on_rightclick = on_rightclick,
-			_mcl_armor_trim_color = wire == 0 and "#af2c23" or nil,
+			_mcl_armor_trim_color = wire == 0 and "#e80202" or nil,
 			_mcl_armor_trim_desc = wire == 0 and S("Redstone Material") or nil
 		})
 		wireflag_tab[name] = wire
