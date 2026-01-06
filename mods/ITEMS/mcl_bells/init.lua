@@ -47,12 +47,14 @@ local function create_entity(pos, node)
 		rot.x = math.pi/2
 	end
 
-	local obj = core.add_entity(pos, "mcl_bells:bell_ent", core.serialize(static_data))
+	local obj = core.add_entity(pos, "mcl_bells:bell_ent",
+														core.serialize(static_data))
 	if obj and obj:get_pos() then
 		obj:set_rotation(rot)
 		return obj:get_luaentity()
 	else
-		core.log("warning", "[mcl_bells] Failed to create entity at " .. (pos and core.pos_to_string(pos, 1) or "nil"))
+		core.log("warning", "[mcl_bells] Failed to create entity at "
+								.. (pos and core.pos_to_string(pos, 1) or "nil"))
 	end
 end
 
@@ -171,12 +173,6 @@ core.register_node("mcl_bells:bell_wall", table.merge(bell_def, {
     },
   },
 }))
-
-local function check_node(pos)
-	local node = core.get_node(pos)
-
-	return (node.name == "ignore" or core.get_item_group(node.name, "bell") > 0)
-end
 
 core.register_entity("mcl_bells:bell_ent", {
 	initial_properties = {
