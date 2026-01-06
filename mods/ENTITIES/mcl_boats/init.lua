@@ -65,25 +65,51 @@ local function get_visual_size(obj)
 	return obj:is_player() and {x = 1, y = 1, z = 1} or obj:get_luaentity()._old_visual_size or obj:get_properties().visual_size
 end
 
+local function attach_driver(boat)
+	if (boat._variant == Variant.RAFT) then
+		boat._driver:set_attach(boat.object, "",
+			{x = 0, y = 2.5, z = 0.5}, {x = 0, y = 0, z = 0})
+	else
+		boat._driver:set_attach(boat.object, "",
+			{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
+	end
+end
+
+local function attach_passenger(boat)
+	if (boat._variant == Variant.RAFT) then
+		boat._passenger:set_attach(boat.object, "",
+			{x = 0, y = 2.5, z = -8.2}, {x = 0, y = 0, z = 0})
+	else
+		boat._passenger:set_attach(boat.object, "",
+			{x = 0, y = 1.5, z = -7.2}, {x = 0, y = 0, z = 0})
+	end
+end
+
+local function attach_non_player_passenger(boat)
+	if (boat._variant == Variant.RAFT) then
+		boat._passenger:set_attach(boat.object, "",
+			{x = 0, y = 2.5, z = -4.5}, {x = 0, y = 270, z = 0})
+	else
+		boat._passenger:set_attach(boat.object, "",
+			{x = 0, y = 1.5, z = -4.5}, {x = 0, y = 270, z = 0})
+	end
+end
+
 local function set_attach(boat)
-	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
+	attach_driver(boat)
 end
 
 local function set_double_attach(boat)
-	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 0.42, z = 0.8}, {x = 0, y = 0, z = 0})
+	attach_driver(boat)
 	if boat._passenger:is_player() then
-		boat._passenger:set_attach(boat.object, "",
-			{x = 0, y = 0.42, z = -6.2}, {x = 0, y = 0, z = 0})
+		attach_passenger(boat)
 	else
-		boat._passenger:set_attach(boat.object, "",
-			{x = 0, y = 0.42, z = -4.5}, {x = 0, y = 270, z = 0})
+		attach_non_player_passenger(boat)
 	end
 end
+
 local function set_choat_attach(boat)
-	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
+	attach_driver(boat)
 end
 
 local function attach_object(self, obj)
