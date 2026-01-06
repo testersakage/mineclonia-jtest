@@ -13,8 +13,8 @@ local Variant = {
 }
 mcl_boats.Variant = Variant
 local raft_specific_properties = {
-	collisionbox = {-0.5, -0.15, -0.5, 0.5, 0.25, 0.5},
-	selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.25, 0.7},
+	collisionbox = {-0.25, 0.0, -0.55, 0.25, 0.30, 0.7},
+	selectionbox = {-0.7, 0.0, -0.7, 0.7, 0.30, 0.7},
 	mesh = "mcl_boats_raft.glb",
 }
 
