@@ -322,7 +322,7 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 	local can_block, stack, dpos = mcl_shields.can_block (obj, nil, reason)
 	if can_block and dpos then
 		local wielded_item = mcl_util.get_wielditem(reason.direct)
-		if core.get_item_group(wielded_item:get_name(), "axey") then
+		if core.get_item_group(wielded_item:get_name(), "axe") > 0 then
 			mcl_shields.disable_player_shield(obj)
 		end
 		mcl_shields.add_wear(obj, damage, stack)
