@@ -33,19 +33,37 @@ function mcl_doors:register_trapdoor(name, def)
 	if not def.sound_open then def.sound_open = "doors_door_open" end
 	if not def.sound_close then def.sound_close = "doors_door_close" end
 
+	local function close(pos)
+		local me = core.get_node(pos)
+		if core.get_item_group(me.name, "trapdoor") > 0 then
+			name = name:gsub("_open", "")
+			if me.name ~= name then
+				core.sound_play(def.sound_close, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
+			end
+			core.set_node(pos, {name=name, param1=me.param1, param2=me.param2})
+		end
+	end
+
+	local function open(pos)
+		local me = core.get_node(pos)
+		if core.get_item_group(me.name, "trapdoor") > 0 then
+			if not name:find("_open") then
+				name = name.."_open"
+			end
+			if me.name ~= name then
+				core.sound_play(def.sound_open, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
+			end
+			core.set_node(pos, {name=name, param1=me.param1, param2=me.param2})
+		end
+	end
+
 	local function punch(pos)
 		local me = core.get_node(pos)
-		local tmp_node
-		-- Close
 		if core.get_item_group(me.name, "trapdoor") == 2 then
-			core.sound_play(def.sound_close, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
-			tmp_node = {name=name, param1=me.param1, param2=me.param2}
-		-- Open
+			close(pos)
 		else
-			core.sound_play(def.sound_open, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
-			tmp_node = {name=name.."_open", param1=me.param1, param2=me.param2}
+			open(pos)
 		end
-		core.set_node(pos, tmp_node)
 	end
 
 	local function on_redstone_update(pos)
@@ -54,7 +72,11 @@ function mcl_doors:register_trapdoor(name, def)
 		local power = mcl_redstone.get_power(pos)
 
 		if power ~= previous_power then
-			punch(pos)
+			if power ~= 0 then
+				open(pos)
+			else
+				close(pos)
+			end
 		end
 
 		meta:set_int("redstone_power", power)
