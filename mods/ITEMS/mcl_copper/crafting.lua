@@ -3,6 +3,8 @@ local block_exposure_level = { "", "_exposed", "_weathered", "_oxidized" }
 local waxed = { "", "_preserved" }
 
 for _, x in ipairs(block_exposure_level) do
+
+	-- {{{ waxed
 	for _, w in ipairs(waxed) do
 		core.register_craft({
 			output = "mcl_copper:block"..x.."_cut"..w.." 4",
@@ -11,11 +13,7 @@ for _, x in ipairs(block_exposure_level) do
 				{ "mcl_copper:block"..x..w, "mcl_copper:block"..x..w }
 			}
 		})
-	end
-end
 
-for _, x in ipairs(block_exposure_level) do
-	for _, w in ipairs(waxed) do
 		core.register_craft({
 			output = "mcl_copper:block"..x.."_grate"..w.." 4",
 			recipe = {
@@ -24,11 +22,7 @@ for _, x in ipairs(block_exposure_level) do
 				{ "", "mcl_copper:block"..x..w, "" }
 			}
 		})
-	end
-end
 
-for _, x in ipairs(block_exposure_level) do
-	for _, w in ipairs(waxed) do
 		core.register_craft({
 			output = "mcl_copper:block"..x.."_chiseled"..w.." 4",
 			recipe = {
@@ -36,42 +30,7 @@ for _, x in ipairs(block_exposure_level) do
 				{ "mcl_stairs:slab_copper"..x.."_cut"..w }
 			}
 		})
-	end
-end
 
-for _, x in ipairs(block_exposure_level) do
-	core.register_craft({
-		output = "mcl_stairs:slab_copper"..x.."_cut_preserved 6",
-		recipe = {
-			{ "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved" }
-		}
-	})
-end
-
-for _, x in ipairs(block_exposure_level) do
-	core.register_craft({
-		output = "mcl_stairs:stair_copper"..x.."_cut_preserved 4",
-		recipe = {
-			{ "", "", "mcl_copper:block"..x.."_cut_preserved" },
-			{"", "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved"},
-			{"mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved" }
-		}
-	})
-end
-
-for _, x in ipairs(block_exposure_level) do
-	core.register_craft({
-		output = "mcl_stairs:stair_copper"..x.."_cut_preserved 4",
-		recipe = {
-			{ "mcl_copper:block"..x.."_cut_preserved", "", "" },
-			{ "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved", "" },
-			{ "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved" }
-		}
-	})
-end
-
-for _, x in ipairs(block_exposure_level) do
-	for _, w in ipairs(waxed) do
 		core.register_craft({
 			output = "mcl_copper:bulb"..x.."_off"..w.." 4",
 			recipe = {
@@ -81,6 +40,98 @@ for _, x in ipairs(block_exposure_level) do
 			}
 		})
 	end
+
+	-- }}}
+
+	for _, t in ipairs(block_type) do
+		core.register_craft({
+			output = "mcl_copper:block"..x..t.."_preserved",
+			recipe = {
+				{ "mcl_copper:block"..x..t, "mcl_honey:honeycomb" }
+			}
+		})
+	end
+
+	core.register_craft({
+		output = "mcl_stairs:slab_copper"..x.."_cut_preserved 6",
+		recipe = {
+			{ "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved" }
+		}
+	})
+
+	core.register_craft({
+		output = "mcl_stairs:stair_copper"..x.."_cut_preserved 4",
+		recipe = {
+			{ "", "", "mcl_copper:block"..x.."_cut_preserved" },
+			{"", "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved"},
+			{"mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved" }
+		}
+	})
+
+	core.register_craft({
+		output = "mcl_stairs:stair_copper"..x.."_cut_preserved 4",
+		recipe = {
+			{ "mcl_copper:block"..x.."_cut_preserved", "", "" },
+			{ "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved", "" },
+			{ "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved", "mcl_copper:block"..x.."_cut_preserved" }
+		}
+	})
+
+	core.register_craft({
+		output = "mcl_copper:door"..x.."_preserved",
+		recipe = {
+			{ "mcl_copper:door"..x, "mcl_honey:honeycomb" }
+		}
+	})
+
+	core.register_craft({
+		output = "mcl_copper:trapdoor"..x.."_preserved",
+		recipe = {
+			{ "mcl_copper:trapdoor"..x, "mcl_honey:honeycomb" }
+		}
+	})
+
+	core.register_craft({
+		output = "mcl_copper:bulb"..x.."_off_preserved",
+		recipe = {
+			{ "mcl_copper:bulb"..x.."_off", "mcl_honey:honeycomb" }
+		}
+	})
+
+	core.register_craft({
+		output = "mcl_stairs:slab_copper"..x.."_cut_preserved",
+		recipe = {
+			{ "mcl_stairs:slab_copper"..x.."_cut", "mcl_honey:honeycomb" }
+		}
+	})
+
+	core.register_craft({
+		output = "mcl_stairs:stair_copper"..x.."_cut_preserved",
+		recipe = {
+			{ "mcl_stairs:stair_copper"..x.."_cut", "mcl_honey:honeycomb" }
+		}
+	})
+
+	core.register_craft({
+		output = "mcl_lanterns:copper_lantern"..x.."_floor_preserved",
+		recipe = {
+			{ "mcl_lanterns:copper_lantern"..x.."_floor", "mcl_honey:honeycomb" }
+		}
+	})
+
+	core.register_craft({
+		output = "mcl_copper:chain"..x.."_preserved",
+		recipe = {
+			{ "mcl_copper:chain"..x, "mcl_honey:honeycomb" }
+		}
+	})
+
+	core.register_craft({
+		output = "mcl_panes:copper_bar"..x.."_flat_preserved",
+		recipe = {
+			{ "mcl_panes:copper_bar"..x.."_flat", "mcl_honey:honeycomb" }
+		}
+	})
 end
 
 core.register_craft({
@@ -99,62 +150,6 @@ core.register_craft({
 		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" }
 	}
 })
-
-for _, t in ipairs(block_type) do
-	for _, x in ipairs(block_exposure_level) do
-		core.register_craft({
-			output = "mcl_copper:block"..x..t.."_preserved",
-			recipe = {
-				{ "mcl_copper:block"..x..t, "mcl_honey:honeycomb" }
-			}
-		})
-	end
-end
-
-for _, x in ipairs(block_exposure_level) do
-	core.register_craft({
-		output = "mcl_copper:door"..x.."_preserved",
-		recipe = {
-			{ "mcl_copper:door"..x, "mcl_honey:honeycomb" }
-		}
-	})
-end
-
-for _, x in ipairs(block_exposure_level) do
-	core.register_craft({
-		output = "mcl_copper:trapdoor"..x.."_preserved",
-		recipe = {
-			{ "mcl_copper:trapdoor"..x, "mcl_honey:honeycomb" }
-		}
-	})
-end
-
-for _, x in ipairs(block_exposure_level) do
-	core.register_craft({
-		output = "mcl_copper:bulb"..x.."_off_preserved",
-		recipe = {
-			{ "mcl_copper:bulb"..x.."_off", "mcl_honey:honeycomb" }
-		}
-	})
-end
-
-for _, x in ipairs(block_exposure_level) do
-	core.register_craft({
-		output = "mcl_stairs:slab_copper"..x.."_cut_preserved",
-		recipe = {
-			{ "mcl_stairs:slab_copper"..x.."_cut", "mcl_honey:honeycomb" }
-		}
-	})
-end
-
-for _, x in ipairs(block_exposure_level) do
-	core.register_craft({
-		output = "mcl_stairs:stair_copper"..x.."_cut_preserved",
-		recipe = {
-			{ "mcl_stairs:stair_copper"..x.."_cut", "mcl_honey:honeycomb" }
-		}
-	})
-end
 
 core.register_craft({
 	output = "mcl_copper:copper_torch 4",
@@ -190,30 +185,3 @@ core.register_craft({
 		{ "mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot" },
 	}
 })
-
-for _, x in pairs(block_exposure_level) do
-	core.register_craft({
-		output = "mcl_lanterns:copper_lantern"..x.."_floor_preserved",
-		recipe = {
-			{ "mcl_lanterns:copper_lantern"..x.."_floor", "mcl_honey:honeycomb" }
-		}
-	})
-end
-
-for _, x in pairs(block_exposure_level) do
-	core.register_craft({
-		output = "mcl_copper:chain"..x.."_preserved",
-		recipe = {
-			{ "mcl_copper:chain"..x, "mcl_honey:honeycomb" }
-		}
-	})
-end
-
-for _, x in pairs(block_exposure_level) do
-	core.register_craft({
-		output = "mcl_panes:copper_bar"..x.."_flat_preserved",
-		recipe = {
-			{ "mcl_panes:copper_bar"..x.."_flat", "mcl_honey:honeycomb" }
-		}
-	})
-end
