@@ -137,7 +137,7 @@ mcl_copper.register_decaychain("lightning_rod",{
 	preserve_group = "preserves_copper",
 	unpreserve_callback = "_on_axe_place",
 	undecay_callback = "_on_axe_place",
-	nodes = { --order is significant
+	nodes = {
 			"mcl_lightning_rods:rod",
 			"mcl_lightning_rods:rod_exposed",
 			"mcl_lightning_rods:rod_weathered",
