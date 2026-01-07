@@ -130,20 +130,14 @@ local bell_def = {
 			return true
 		end,
 		update = function(pos, node)
-			local param2 = node.param2 % 8 -- get first 3 bits
-			local other = node.param2 - param2
-
-			local oldpowered = other ~= 0
+			local oldpowered = math.floor(node.param2 / 32) ~= 0
 			local powered = mcl_redstone.get_power(pos) ~= 0
-
 			if powered and not oldpowered then
 				local ent = create_entity(pos, node)
 				if ent then ent:ring() end
 			end
-
-			core.swap_node(pos, {name = node.name,
-							param2 = param2 + (powered and 1 or 0)})
-		end
+		end,
+		init = function() end,
 	},
 }
 
