@@ -68,6 +68,18 @@ local bell_def = {
 	pointable = true,
 	tiles = {"mcl_bells_bell_uv.png"},
 	wield_image = "mcl_bells_bell.png",
+	selection_box = {
+    type = "fixed",
+    fixed = {
+      {-0.3125, -0.5, -0.3125, 0.3125, 0.5, 0.3125},
+    },
+  },
+	collision_box = {
+    type = "fixed",
+    fixed = {
+      {-0.3125, -0.5, -0.3125, 0.3125, 0.5, 0.3125},
+    },
+  },
 	is_ground_content = true,
 	groups = {
 		bell = 1,
@@ -108,6 +120,11 @@ local bell_def = {
 
 		return itemstack
 	end,
+	_on_arrow_hit = function (pos)
+		local node = core.get_node(pos)
+		local ent = create_entity(pos, node)
+		if ent then ent:ring() end
+	end,
 	_mcl_redstone = {
 		connects_to = function(node, dir)
 			return true
@@ -139,12 +156,6 @@ core.register_node("mcl_bells:bell_floor", table.merge(bell_def, {
 		not_in_creative_inventory = 1,
 		attached_node = 1
 	}),
-	selection_box = {
-    type = "fixed",
-    fixed = {
-      {-0.3125, -0.3725, -0.3125, 0.3125, 0.3125, 0.3125},
-    },
-  },
 }))
 core.register_node("mcl_bells:bell_ceiling", table.merge(bell_def, {
 	mesh = "mcl_bells_bell_ceiling.b3d",
@@ -153,12 +164,6 @@ core.register_node("mcl_bells:bell_ceiling", table.merge(bell_def, {
 		not_in_creative_inventory = 1,
 		supported_node_wallmounted = 1,
 	}),
-	selection_box = {
-    type = "fixed",
-    fixed = {
-      {-0.3125, -0.3525, -0.3125, 0.3125, 0.3425, 0.3125},
-    },
-  },
 }))
 core.register_node("mcl_bells:bell_wall", table.merge(bell_def, {
 	mesh = "mcl_bells_bell_wall.b3d",
@@ -169,7 +174,13 @@ core.register_node("mcl_bells:bell_wall", table.merge(bell_def, {
 	selection_box = {
     type = "fixed",
     fixed = {
-      {-0.3125, -0.3125, -0.5, 0.3125, 0.3125, 0.2},
+      {-0.3125, -0.3125, -0.5, 0.3125, 0.3125, 0.5},
+    },
+  },
+	collision_box = {
+    type = "fixed",
+    fixed = {
+      {-0.3125, -0.3125, -0.5, 0.3125, 0.3125, 0.5},
     },
   },
 }))
