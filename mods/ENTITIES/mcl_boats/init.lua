@@ -2,7 +2,8 @@ mcl_boats = {}
 local S = core.get_translator(core.get_current_modname())
 
 local boat_visual_size = {x = 1, y = 1, z = 1}
-local paddling_speed = 22
+local boat_anim = {x=1, y=456}
+local paddling_speed = (boat_anim.y - boat_anim.x) / 1 -- 1 second
 local boat_y_offset = 0.35
 local boat_y_offset_ground = boat_y_offset + 0.6
 local boat_side_offset = 1.001
@@ -15,7 +16,7 @@ mcl_boats.Variant = Variant
 local raft_specific_properties = {
 	collisionbox = {-0.25, 0.0, -0.55, 0.25, 0.30, 0.7},
 	selectionbox = {-0.7, 0.0, -0.7, 0.7, 0.30, 0.7},
-	mesh = "mcl_boats_raft.glb",
+	mesh = "mcl_boats_raft.b3d",
 }
 
 
@@ -169,7 +170,7 @@ local boat = {
 		collisionbox = {-0.5, -0.00, -0.5, 0.5, 0.55, 0.5},
 		selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.55, 0.7},
 		visual = "mesh",
-		mesh = "mcl_boats_boat.glb",
+		mesh = "mcl_boats_boat.b3d",
 		textures = { "mcl_boats_texture_oak_boat.png", "blank.png" },
 		visual_size = boat_visual_size,
 		hp_max = boat_max_hp,
@@ -383,7 +384,7 @@ function boat:on_step(dtime, moveresult)
 			local v_horiz = math.sqrt (v.x * v.x + v.z * v.z)
 			if v_horiz > 0 then
 				if self._animation == 0 then
-					self.object:set_animation ({x = 0, y = 40}, paddling_speed, 0, true)
+					self.object:set_animation (boat_anim, paddling_speed, 0, true)
 					self._animation = 1
 				end
 			else
@@ -405,7 +406,7 @@ function boat:on_step(dtime, moveresult)
 
 			-- Paddling animation
 			if self._animation ~= 1 then
-				self.object:set_animation({x=0, y=40}, paddling_speed, 0, true)
+				self.object:set_animation(boat_anim, paddling_speed, 0, true)
 				self._animation = 1
 			end
 		elseif ctrl and ctrl.down then
@@ -414,13 +415,13 @@ function boat:on_step(dtime, moveresult)
 
 			-- Paddling animation, reversed
 			if self._animation ~= -1 then
-				self.object:set_animation({x=0, y=40}, -paddling_speed, 0, true)
+				self.object:set_animation(boat_anim, -paddling_speed, 0, true)
 				self._animation = -1
 			end
 		else
 			-- Stop paddling animation if no control pressed
 			if self._animation ~= 0 then
-				self.object:set_animation({x=0, y=40}, 0, 0, true)
+				self.object:set_animation(boat_anim, 0, 0, true)
 				self._animation = 0
 			end
 		end
@@ -440,7 +441,7 @@ function boat:on_step(dtime, moveresult)
 	else
 		-- Stop paddling without driver
 		if self._animation ~= 0 then
-			self.object:set_animation({x=0, y=40}, 0, 0, true)
+			self.object:set_animation(boat_anim, 0, 0, true)
 			self._animation = 0
 		end
 
