@@ -286,6 +286,46 @@ core.register_node("mcl_flowers:bush", table.merge(def_tallgrass, {
 	_mcl_silk_touch_drop = true
 }))
 
+core.register_node("mcl_flowers:firefly_bush", table.merge(def_tallgrass, {
+	description = S("Firefly Bush"),
+	drop = "",
+	tiles = {
+		{
+			name = "mcl_flowers_firefly_bush.png",
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 16,
+				aspect_h = 16,
+				length = 1
+			}
+		}
+	},
+	inventory_image = "mcl_flowers_firefly_bush_inv.png",
+	wield_image = "mcl_flowers_firefly_bush_inv.png",
+	light_source = 2,
+	selection_box = {
+		type = "fixed",
+		fixed = {-0.3, -0.5, -0.3, 0.3, 0.4, 0.3}
+	},
+	_mcl_silk_touch_drop = true,
+	_mcl_shears_drop = true,
+	on_place = mcl_util.generate_on_place_plant_function(function(pos)
+		local below = vector.offset(pos, 0, -1, 0)
+		local soil = core.get_node_or_nil(below)
+		if not soil then return end
+		local allowed_nodes = {
+			"mcl_core:dirt_with_grass", "mcl_core:mycelium", "mcl_core:podzol", "mcl_core:dirt",
+			"mcl_core:coarse_dirt", "mcl_lush_caves:rooted_dirt", "mcl_farming:soil", "mcl_farming:soil_wet",
+			"mcl_colorblocks:hardened_clay", "mcl_core:sand", "mcl_core:redsand", "mcl_sus_nodes:sand",
+			"mcl_mud:mud", "mcl_mangrove:mangrove_mud_roots", "mcl_lush_caves:moss"
+		}
+
+		if table.indexof(allowed_nodes, soil.name) ~= -1 then
+			return true, 0
+		end
+	end),
+}))
+
 core.register_node("mcl_flowers:short_dry_grass", table.merge(def_tallgrass, {
 	description = S("Short Dry Grass"),
 	drop = "",
