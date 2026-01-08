@@ -85,6 +85,10 @@ core.register_node("mcl_core:cactus_flower",
 			fire_encouragement = 60, fire_flammability = 100, non_mycelium_plant = 1,
 			compostability = 30, unsticky = 1, attached_node = 1
 	},
+	selection_box = {
+		type = "fixed",
+		fixed = {-0.25, -0.5, -0.25, 0.25, 0, 0.25}
+	},
 	_mcl_hardness = 0,
 	_mcl_blast_resistance = 0,
 	_mcl_crafting_output = {single = {output = "mcl_dyes:pink"}}
