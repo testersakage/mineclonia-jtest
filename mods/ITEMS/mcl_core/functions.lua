@@ -54,6 +54,16 @@ function mcl_core.grow_cactus(pos, _)
 			height = height+1
 			pos.y = pos.y+1
 		end
+
+		if math.random() < (height >= 3 and 0.25 or 0.1) then
+			if core.get_node(pos).name == "air" then
+				core.set_node(pos, {name="mcl_core:cactus_flower"})
+			end
+
+			return
+		end
+
+
 		if height < 3 then
 			if core.get_node(pos).name == "air" then
 				core.set_node(pos, {name="mcl_core:cactus"})
