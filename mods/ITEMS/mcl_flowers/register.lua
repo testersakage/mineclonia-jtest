@@ -364,6 +364,7 @@ core.register_node("mcl_flowers:short_dry_grass", table.merge(def_tallgrass, {
 core.register_node("mcl_flowers:tall_dry_grass", table.merge(def_tallgrass, {
 	description = S("Tall Dry Grass"),
 	drop = "",
+	visual_scale = 2,
 	tiles = {"mcl_flowers_tall_dry_grass.png"},
 	inventory_image = "mcl_flowers_tall_dry_grass.png",
 	wield_image = "mcl_flowers_tall_dry_grass.png",
