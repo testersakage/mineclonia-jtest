@@ -200,7 +200,7 @@ mcl_player.register_globalstep_slow(function(player)
 		local bed_center_pos = bed_pos + vector.multiply(core.facedir_to_dir(bed_node.param2), 0.5)
 		bed_center_pos.y = player_pos.y
 
-		player:add_velocity(-player:get_velocity())
+		player:add_velocity(vector.multiply(-player:get_velocity(), 0.75))
 		player:set_pos(bed_center_pos)
 	end
 end)
