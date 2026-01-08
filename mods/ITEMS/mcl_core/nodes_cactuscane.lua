@@ -81,8 +81,9 @@ core.register_node("mcl_core:cactus_flower",
 	tiles = {"cactus_flower.png"},
 	inventory_image = "cactus_flower.png",
 	groups = {
-		dig_immediate = 3, deco_block = 1, dig_by_piston = 1, plant = 1,
-		non_mycelium_plant = 1, compostability = 30, unsticky = 1, attached_node = 1
+			dig_immediate = 3, deco_block = 1, dig_by_piston = 1, plant = 1, flammable = 3,
+			fire_encouragement = 60, fire_flammability = 100, non_mycelium_plant = 1,
+			compostability = 30, unsticky = 1, attached_node = 1
 	},
 	_mcl_hardness = 0,
 	_mcl_blast_resistance = 0,
