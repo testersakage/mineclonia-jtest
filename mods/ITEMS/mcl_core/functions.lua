@@ -63,7 +63,6 @@ function mcl_core.grow_cactus(pos, _)
 			return
 		end
 
-
 		if height < 3 then
 			if core.get_node(pos).name == "air" then
 				core.set_node(pos, {name="mcl_core:cactus"})
