@@ -277,7 +277,7 @@ core.register_node("mcl_flowers:bush", table.merge(def_tallgrass, {
 	drop = "",
 	tiles = {"mcl_flowers_bush.png"},
 	inventory_image = "mcl_flowers_bush.png^[multiply:#507A32",
-	wield_image = "mcl_flowers_bush.png^[multiply:#507A32:187",
+	wield_image = "mcl_flowers_bush.png^[multiply:#507A32",
 	selection_box = {
 		type = "fixed",
 		fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.25, 0.4375}
