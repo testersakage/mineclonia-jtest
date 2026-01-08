@@ -8,11 +8,11 @@ local boat_y_offset = 0.35
 local boat_y_offset_ground = boat_y_offset + 0.6
 local boat_side_offset = 1.001
 local boat_max_hp = 4
-local Variant = {
+local variant = {
 	BOAT = 0,
 	RAFT = 1,
 }
-mcl_boats.Variant = Variant
+mcl_boats.variant = variant
 local raft_specific_properties = {
 	collisionbox = {-0.25, 0.0, -0.55, 0.25, 0.30, 0.7},
 	selectionbox = {-0.7, 0.0, -0.7, 0.7, 0.30, 0.7},
@@ -67,7 +67,7 @@ local function get_visual_size(obj)
 end
 
 local function attach_driver(boat)
-	if (boat._variant == Variant.RAFT) then
+	if (boat._variant == variant.RAFT) then
 		boat._driver:set_attach(boat.object, "",
 			{x = 0, y = 2.5, z = 0.5}, {x = 0, y = 0, z = 0})
 	else
@@ -77,7 +77,7 @@ local function attach_driver(boat)
 end
 
 local function attach_passenger(boat)
-	if (boat._variant == Variant.RAFT) then
+	if (boat._variant == variant.RAFT) then
 		boat._passenger:set_attach(boat.object, "",
 			{x = 0, y = 2.5, z = -8.2}, {x = 0, y = 0, z = 0})
 	else
@@ -87,7 +87,7 @@ local function attach_passenger(boat)
 end
 
 local function attach_non_player_passenger(boat)
-	if (boat._variant == Variant.RAFT) then
+	if (boat._variant == variant.RAFT) then
 		boat._passenger:set_attach(boat.object, "",
 			{x = 0, y = 2.5, z = -4.5}, {x = 0, y = 270, z = 0})
 	else
@@ -177,7 +177,7 @@ local boat = {
 		damage_texture_modifier = "^[colorize:white:0",
 	},
 
-	_variant = Variant.BOAT,
+	_variant = variant.BOAT,
 	_driver = nil, -- Attached driver (player) or nil if none
 	_passenger = nil,
 	_v = 0, -- Speed
@@ -249,7 +249,7 @@ function boat:on_activate(staticdata)
 
 		if data.variant then
 			self._variant = data.variant
-			if data.variant == Variant.RAFT then
+			if data.variant == variant.RAFT then
 				self.object:set_properties(raft_specific_properties)
 			end
 		end
@@ -673,11 +673,11 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 				local ent = boat:get_luaentity()
 				ent._itemstring = itemstring
 				local custom_properties = {textures = {texture, chest_tex}}
-				if object_properties and object_properties.variant == Variant.RAFT then
+				if object_properties and object_properties.variant == variant.RAFT then
 					custom_properties = table.merge(raft_specific_properties, custom_properties)
-					ent._variant = Variant.RAFT
+					ent._variant = variant.RAFT
 				else
-					ent._variant = Variant.BOAT
+					ent._variant = variant.BOAT
 				end
 				boat:set_properties(table.merge( custom_properties, object_properties or {}))
 				boat:set_yaw(placer:get_look_horizontal())

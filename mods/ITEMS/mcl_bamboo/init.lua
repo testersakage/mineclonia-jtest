@@ -58,7 +58,7 @@ mcl_trees.register_wood("bamboo",{
 			description = S("Bamboo Raft"),
 		},
 		object = {
-			variant = mcl_boats.Variant.RAFT,
+			variant = mcl_boats.variant.RAFT,
 		},
 	},
 	chest_boat = {
@@ -66,7 +66,7 @@ mcl_trees.register_wood("bamboo",{
 			description = S("Chest Bamboo Raft"),
 		},
 		object = {
-			variant = mcl_boats.Variant.RAFT,
+			variant = mcl_boats.variant.RAFT,
 		},
 	},
 	hanging_sign = true,
