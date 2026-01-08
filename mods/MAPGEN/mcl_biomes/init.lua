@@ -5863,6 +5863,16 @@ local function register_decorations()
 	register_grass_decoration("litter", 0.06, -0.013, {"Forest", "MesaPlateauF", "RoofedForest"})
 	register_grass_decoration("litter", 0.09, -0.03,  {"Forest", "MesaPlateauF", "RoofedForest"})
 
+	core.register_decoration({
+		deco_type = "simple",
+		place_on = {"group:dirt_with_grass", "mcl_core:sand"},
+		fill_ratio = 0.02,
+		biomes = {"Desert", "Mesa", "MesaBryce", "MesaPlateauF", "MesaPlateauFM"},
+		y_min = mcl_vars.mg_overworld_min,
+		y_max = mcl_vars.mg_overworld_max,
+		decoration = {"mcl_flowers:short_dry_grass", "mcl_flowers:tall_dry_grass"},
+	})
+
 	local b_seagrass = {"ColdTaiga_ocean","ExtremeHills_ocean","ExtremeHillsM_ocean","ExtremeHills+_ocean","Taiga_ocean","MegaTaiga_ocean","MegaSpruceTaiga_ocean","StoneBeach_ocean","Plains_ocean","SunflowerPlains_ocean","Forest_ocean","FlowerForest_ocean","BirchForest_ocean","BirchForestM_ocean","RoofedForest_ocean","Swampland_ocean","Jungle_ocean","JungleM_ocean","BambooJungle_ocean", "JungleEdge_ocean","JungleEdgeM_ocean","MushroomIsland_ocean","Desert_ocean","Savanna_ocean","SavannaM_ocean","Mesa_ocean","MesaBryce_ocean","MesaPlateauF_ocean","MesaPlateauFM_ocean",
 "ColdTaiga_deep_ocean","ExtremeHills_deep_ocean","ExtremeHillsM_deep_ocean","ExtremeHills+_deep_ocean","Taiga_deep_ocean","MegaTaiga_deep_ocean","MegaSpruceTaiga_deep_ocean","StoneBeach_deep_ocean","Plains_deep_ocean","SunflowerPlains_deep_ocean","Forest_deep_ocean","FlowerForest_deep_ocean","BirchForest_deep_ocean","BirchForestM_deep_ocean","RoofedForest_deep_ocean","Swampland_deep_ocean","Jungle_deep_ocean","JungleM_deep_ocean","JungleEdge_deep_ocean","JungleEdgeM_deep_ocean","MushroomIsland_deep_ocean","Desert_deep_ocean","Savanna_deep_ocean","SavannaM_deep_ocean","Mesa_deep_ocean","MesaBryce_deep_ocean","MesaPlateauF_deep_ocean","MesaPlateauFM_deep_ocean",
 "Mesa_sandlevel","MesaBryce_sandlevel","MesaPlateauF_sandlevel","MesaPlateauFM_sandlevel","Swampland_shore","Jungle_shore","JungleM_shore","Savanna_beach","FlowerForest_beach","ColdTaiga_beach_water","ExtremeHills_beach"}
