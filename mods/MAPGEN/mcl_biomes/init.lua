@@ -3699,15 +3699,19 @@ end
 
 -- Template to register a grass or fern decoration
 function mcl_biomes.register_grass_decoration(grasstype, offset, scale, biomes)
-	local place_on, seed, node
+	local place_on, seed, decoration
 	if grasstype == "fern" then
-		node = "mcl_flowers:fern"
+		decoration = "mcl_flowers:fern"
 		place_on = {"group:grass_block_no_snow", "mcl_core:podzol","mcl_mud:mud"}
 		seed = 333
 	elseif grasstype == "tallgrass" then
-		node = "mcl_flowers:tallgrass"
+		decoration = "mcl_flowers:tallgrass"
 		place_on = {"group:grass_block_no_snow","mcl_mud:mud"}
 		seed = 420
+	elseif grasstype == "litter" then
+		decoration = {"mcl_flowers:leaf_litter_1", "mcl_flowers:leaf_litter_2", "mcl_flowers:leaf_litter_3", "mcl_flowers:leaf_litter_4"}
+		place_on = {"group:grass_block_no_snow","mcl_mud:mud"}
+		seed = 348
 	end
 	local noise = {
 		offset = offset,
@@ -3719,6 +3723,11 @@ function mcl_biomes.register_grass_decoration(grasstype, offset, scale, biomes)
 	}
 	for b=1, #biomes do
 		local param2 = core.registered_biomes[biomes[b]]._mcl_palette_index
+
+		if grasstype == "litter" then
+			param2 = bit.lshift(param2, 2)
+		end
+
 		core.register_decoration({
 			deco_type = "simple",
 			place_on = place_on,
@@ -3727,7 +3736,7 @@ function mcl_biomes.register_grass_decoration(grasstype, offset, scale, biomes)
 			biomes = { biomes[b] },
 			y_min = 1,
 			y_max = mcl_vars.mg_overworld_max,
-			decoration = node,
+			decoration = decoration,
 			param2 = param2,
 		})
 	end
@@ -5376,6 +5385,36 @@ local function register_decorations()
 		height_max = 3,
 	})
 
+	-- Cacti with flowers
+	core.register_decoration({
+		deco_type = "schematic",
+		place_on = {"group:sand"},
+		sidelen = 16,
+		noise_params = {
+			offset = -0.012,
+			scale = 0.024,
+			spread = {x = 100, y = 100, z = 100},
+			seed = 485,
+			octaves = 3,
+			persist = 0.6
+		},
+		y_min = 4,
+		y_max = mcl_vars.mg_overworld_max,
+		biomes = {"Desert",
+			"Mesa","Mesa_sandlevel",
+			"MesaPlateauF","MesaPlateauF_sandlevel",
+			"MesaPlateauFM","MesaPlateauFM_sandlevel"},
+		schematic = {
+			size = {x = 1, y = 4, z = 1},
+			data = {
+				{name = "mcl_core:cactus", param1 = 255, param2 = 0},
+				{name = "mcl_core:cactus", param1 = 255, param2 = 0},
+				{name = "mcl_core:cactus", param1 = 255, param2 = 0},
+				{name = "mcl_core:cactus_flower", param1 = 255, param2 = 0}
+			}
+		}
+	})
+
 	-- Sugar canes
 	core.register_decoration({
 		deco_type = "simple",
@@ -5819,6 +5858,10 @@ local function register_decorations()
 	register_grass_decoration("fern", 0.07, -0.01, fern_Jungle)
 	register_grass_decoration("fern", 0.09, -0.03, fern_Jungle)
 	register_grass_decoration("fern", 0.12, -0.03, {"JungleM"})
+
+	register_grass_decoration("litter", 0.04, -0.028, {"Forest", "MesaPlateauF", "RoofedForest"})
+	register_grass_decoration("litter", 0.06, -0.013, {"Forest", "MesaPlateauF", "RoofedForest"})
+	register_grass_decoration("litter", 0.09, -0.03,  {"Forest", "MesaPlateauF", "RoofedForest"})
 
 	local b_seagrass = {"ColdTaiga_ocean","ExtremeHills_ocean","ExtremeHillsM_ocean","ExtremeHills+_ocean","Taiga_ocean","MegaTaiga_ocean","MegaSpruceTaiga_ocean","StoneBeach_ocean","Plains_ocean","SunflowerPlains_ocean","Forest_ocean","FlowerForest_ocean","BirchForest_ocean","BirchForestM_ocean","RoofedForest_ocean","Swampland_ocean","Jungle_ocean","JungleM_ocean","BambooJungle_ocean", "JungleEdge_ocean","JungleEdgeM_ocean","MushroomIsland_ocean","Desert_ocean","Savanna_ocean","SavannaM_ocean","Mesa_ocean","MesaBryce_ocean","MesaPlateauF_ocean","MesaPlateauFM_ocean",
 "ColdTaiga_deep_ocean","ExtremeHills_deep_ocean","ExtremeHillsM_deep_ocean","ExtremeHills+_deep_ocean","Taiga_deep_ocean","MegaTaiga_deep_ocean","MegaSpruceTaiga_deep_ocean","StoneBeach_deep_ocean","Plains_deep_ocean","SunflowerPlains_deep_ocean","Forest_deep_ocean","FlowerForest_deep_ocean","BirchForest_deep_ocean","BirchForestM_deep_ocean","RoofedForest_deep_ocean","Swampland_deep_ocean","Jungle_deep_ocean","JungleM_deep_ocean","JungleEdge_deep_ocean","JungleEdgeM_deep_ocean","MushroomIsland_deep_ocean","Desert_deep_ocean","Savanna_deep_ocean","SavannaM_deep_ocean","Mesa_deep_ocean","MesaBryce_deep_ocean","MesaPlateauF_deep_ocean","MesaPlateauFM_deep_ocean",
