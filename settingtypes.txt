@@ -154,7 +154,7 @@ mcl_melee_range (Melee hand range) float 3 1 128
 
 # How far towards entities the player hand can reach in creative mode
 # Default: 5
-mcl_melee_range_creative (Creative melee mode hand range) float 5 1 128
+mcl_melee_range_creative (Creative mode melee hand range) float 5 1 128
 
 # If enabled the hunger mechanic will be active
 # If disabled eating food will heal instantly.
