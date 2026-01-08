@@ -4,6 +4,9 @@ mcl_player = {
 	players = {},
 }
 
+local MAX_MELEE_RANGE = tonumber(core.settings:get("mcl_melee_range")) or 3
+local MAX_CREATIVE_MELEE_RANGE = tonumber(core.settings:get("mcl_melee_range_creative")) or 5
+
 local tpl_playerinfo = {
 	textures = { "character.png", "blank.png", "blank.png" },
 	model = "",
@@ -237,9 +240,9 @@ end
 function mcl_player.interaction_reaches_punched_object(player)
 	if not player:is_player() then return true end
 	local wielded = player:get_wielded_item():get_definition()
-	local range = 3
+	local range = MAX_MELEE_RANGE
 	if wielded and wielded.range then range = wielded.range end
-	if mcl_gamemode.get_gamemode(player) == "creative" then range = 5 end
+	if mcl_gamemode.get_gamemode(player) == "creative" then range = MAX_CREATIVE_MELEE_RANGE end
 	local eye_p = mcl_util.target_eye_pos(player)
 	local ray_end = player:get_look_dir ()
 		ray_end.x = ray_end.x * range + eye_p.x
