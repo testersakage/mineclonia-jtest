@@ -364,14 +364,16 @@ core.register_node("mcl_flowers:short_dry_grass", table.merge(def_tallgrass, {
 core.register_node("mcl_flowers:tall_dry_grass", table.merge(def_tallgrass, {
 	description = S("Tall Dry Grass"),
 	drop = "",
-	visual_scale = 2,
+	visual_scale = 0.5,
+	drawtype = "mesh",
+	mesh = "tall_dry_grass.obj",
 	tiles = {"mcl_flowers_tall_dry_grass.png"},
 	inventory_image = "mcl_flowers_tall_dry_grass.png",
 	wield_image = "mcl_flowers_tall_dry_grass.png",
 	palette = "",
 	selection_box = {
 		type = "fixed",
-		fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.25, 0.4375}
+		fixed = {-0.3, -0.5, -0.3, 0.3, 0.25, 0.3}
 	},
 	_mcl_burntime = 5,
 	_mcl_silk_touch_drop = true,
