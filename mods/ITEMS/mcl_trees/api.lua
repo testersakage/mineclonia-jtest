@@ -200,7 +200,7 @@ local tpl_leaves = {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	_mcl_hardness = 0.2,
 	_mcl_silk_touch_drop = true,
-	_mcl_cooking_output = "mcl_flowers:leaf_litter_1"
+	_mcl_cooking_output = "mcl_flowers:leaf_litter"
 }
 
 local tpl_sapling = {
