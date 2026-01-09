@@ -204,10 +204,14 @@ function mcl_flowers.register_simple_flower(name, def)
 	end
 end
 
-function mcl_flowers.register_ground_flower(name, def)
+function mcl_flowers.register_ground_flower(name, def, add_def)
 	local newname = "mcl_flowers:"..name
 
-	core.register_craftitem(":"..newname, {
+	if not add_def then
+		add_def = {}
+	end
+
+	core.register_craftitem(":"..newname, table.merge({
     description = def.desc,
 		_doc_items_longdesc = def.longdesc,
     inventory_image = def.image,
@@ -217,10 +221,9 @@ function mcl_flowers.register_ground_flower(name, def)
 			attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
 			dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
 			plant = 1, flower = 1, place_flowerlike = 1, non_mycelium_plant = 1,
-			flammable = 2, fire_encouragement = 60, fire_flammability = 100,
-			compostability = 65, unsticky = 1
+			flammable = 3, fire_encouragement = 60, fire_flammability = 100,
+			compostability = 30, unsticky = 1
 		},
-		_mcl_crafting_output = def._mcl_crafting_output,
 
     on_place = function(itemstack, placer, pointed_thing)
 			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
@@ -259,14 +262,19 @@ function mcl_flowers.register_ground_flower(name, def)
 
 			return itemstack
     end,
-	})
+	}, add_def))
+
+	local mesh_prefix = "mcl_flowers_wildflower_"
+	if def.mesh_prefix then
+		mesh_prefix = def.mesh_prefix
+	end
 
 	for i = 1,4 do
-		core.register_node(":"..newname.."_"..i, {
+		core.register_node(":"..newname.."_"..i, table.merge({
 			description = def.desc,
 			_doc_items_create_entry = false,
 			drawtype = "mesh",
-			mesh = "mcl_flowers_wildflower_"..i..".obj",
+			mesh = mesh_prefix..i..".obj",
 			tiles = def.tiles,
 			use_texture_alpha = "clip",
 			paramtype = "light",
@@ -279,8 +287,8 @@ function mcl_flowers.register_ground_flower(name, def)
 				attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
 				dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
 				plant = 1, flower = 1, wildflower=i, place_flowerlike = 1, non_mycelium_plant = 1,
-				flammable = 2, fire_encouragement = 60, fire_flammability = 100,
-				compostability = 65, unsticky = 1,
+				flammable = 3, fire_encouragement = 60, fire_flammability = 100,
+				compostability = 30, unsticky = 1,
 				not_in_creative_inventory = 1,
 				not_in_craft_guide = 1
 			},
@@ -288,7 +296,7 @@ function mcl_flowers.register_ground_flower(name, def)
 			drop = newname.." "..i,
 			node_placement_prediction = "",
 			_on_bone_meal = mcl_flowers.on_bone_meal_simple,
-		})
+		}, add_def))
 	end
 end
 
