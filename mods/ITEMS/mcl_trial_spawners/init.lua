@@ -412,9 +412,9 @@ local tpl = {
 		trial_spawners_spawned_mobs[core.hash_node_position(pos)] = nil
 	end,
 	on_rightclick = function(pos, _, clicker, stack)
-		if not clicker:is_player() then return itemstack end
+		if not clicker:is_player() then return stack end
 		if core.get_item_group(stack:get_name(), "spawn_egg") == 0 then return stack end
-		if not core.is_creative_enabled(name:get_player_name()) then return stack end
+		if not core.is_creative_enabled(clicker:get_player_name()) then return stack end
 
 		local meta = core.get_meta(pos)
 		meta:set_string("mob", stack:get_name())
