@@ -204,6 +204,9 @@ end
 local shield_disable_duration = 5
 function mcl_shields.disable_player_shield(player)
 	shield_disables[player] = shield_disable_duration
+	if mcl_serverplayer.is_csm_at_least (player, 10) then
+		mcl_serverplayer.send_shieldctrl (player, shield_disable_duration)
+	end
 	core.sound_play("default_tool_breaks", {object = player}, true)
 end
 
