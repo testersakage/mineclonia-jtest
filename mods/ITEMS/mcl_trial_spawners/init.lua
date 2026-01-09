@@ -142,7 +142,7 @@ local function trial_spawner_in_eye_sight(spawner_pos, destination_pos)
 	return not obstructed
 end
 
-local function trial_spawner_attemp_spawning_mob(pos, meta, is_ominous)
+local function trial_spawner_attempt_spawning_mob(pos, meta, is_ominous)
 	local hash = core.hash_node_position(pos)
 
 	local spawned_mob
@@ -161,13 +161,19 @@ local function trial_spawner_attemp_spawning_mob(pos, meta, is_ominous)
 
 				if mobdef.wears_armor then
 					if math.random() > 0.5 then
-						local armor_piece = table.random_element(possible_mob_gear.chestplates):get_name()
-						l.armor_list.torso = armor_piece
+						l.armor_list.torso = table.random_element(possible_mob_gear.chestplates):get_name()
 					end
 
 					if math.random() > 0.5 then
-						local armor_piece = table.random_element(possible_mob_gear.helmets):get_name()
-						l.armor_list.head = armor_piece
+						l.armor_list.head = table.random_element(possible_mob_gear.helmets):get_name()
+					end
+
+					if l.can_wield_items then
+						if l.attack_type == "melee" then
+							l:set_wielditem(ItemStack(table.random_element(possible_mob_gear.melee_weapons):get_name()))
+						elseif l.attack_type == "bowshoot" then
+							l:set_wielditem(ItemStack(table.random_element(possible_mob_gear.ranged_weapons):get_name()))
+						end
 					end
 
 					l:set_armor_texture()
@@ -340,7 +346,7 @@ local function trial_spawner_step(pos, meta)
 
 	if is_active then
 		if timestamp - last_spawn >= spawning_interval and trial_spawner_can_spawn_mobs(pos, meta, #players) then
-			trial_spawner_attemp_spawning_mob(pos, meta, is_ominous)
+			trial_spawner_attempt_spawning_mob(pos, meta, is_ominous)
 		elseif trial_spawner_is_complete(pos, meta, #players, is_ominous) then
 			on_trial_spawner_complete(pos, meta, is_ominous)
 		elseif is_ominous and timestamp - meta:get_int("last_item_spawner") >= 8000 then
@@ -546,7 +552,6 @@ core.register_entity("mcl_trial_spawners:ominous_item_spawner", {
 		self.spawn_time = data.spawn_time
 	end,
 	get_staticdata = function(self)
-		core.debug(dump(self.type, self.spawn_time))
 		return core.serialize({
 			type = self.type,
 			spawn_time = self.spawn_time
@@ -554,7 +559,6 @@ core.register_entity("mcl_trial_spawners:ominous_item_spawner", {
 	end,
 	on_step = function(self)
 		if get_milisecond_timestamp() < self.spawn_time then return end
-		core.debug("doing the thing", self.type)
 
 		registered_item_spawners[self.type].func(self.object:get_pos())
 		self.object:remove()
