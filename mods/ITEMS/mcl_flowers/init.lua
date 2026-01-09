@@ -480,7 +480,6 @@ core.register_abm({
 	end,
 })
 
-
 local PARTICLE_DISTANCE = 25
 core.register_abm({
 	label = "Firefly Bush Particles",
