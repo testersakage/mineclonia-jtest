@@ -107,7 +107,7 @@ end
 
 --throwable charge registry
 function mcl_charges.register_charge(name, descr, def)
-	core.register_craftitem("mcl_charges:" .. name .. "", {
+	core.register_craftitem("mcl_charges:" .. name, {
 		description = descr,
 		inventory_image = "mcl_charges_" .. name .. ".png",
 

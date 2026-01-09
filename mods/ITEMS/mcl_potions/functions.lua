@@ -883,6 +883,17 @@ mcl_potions.register_effect({
 })
 
 mcl_potions.register_effect({
+	name = "trial_omen",
+	description = S("Trial omen"),
+	get_tt = function()
+		return S("danger is imminent")
+	end,
+	particle_color = "#16A6A6",
+	uses_factor = false,
+})
+
+
+mcl_potions.register_effect({
 	name = "hero_of_village",
 	description = S("Hero of the Village"),
 	particle_color = "#44FF44",
