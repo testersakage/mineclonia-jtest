@@ -229,7 +229,7 @@ function boat:on_activate(staticdata)
 		if not data.textures then
 			local tx = { "mcl_boats_texture_oak_boat.png", "blank.png" }
 			if self.name == "mcl_boats:chest_boat" then
-				tx = { "mcl_boats_texture_oak_chest_boat.png", "mcl_chests_normal.png" }
+				tx = { "mcl_boats_texture_oak_boat.png", "mcl_chests_normal.png" }
 			end
 			data.textures = tx
 		end
@@ -568,7 +568,7 @@ core.register_entity("mcl_boats:boat", boat)
 
 local cboat = table.copy(boat)
 cboat._itemstring = "mcl_boats:chest_boat"
-cboat.initial_properties.textures = { "mcl_boats_texture_oak_chest_boat.png", "mcl_chests_normal.png" }
+cboat.initial_properties.textures = { "mcl_boats_texture_oak_boat.png", "mcl_chests_normal.png" }
 cboat.initial_properties.selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.75, 0.7}
 
 function cboat:_on_show_entity_inv (player)
