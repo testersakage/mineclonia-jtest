@@ -480,6 +480,40 @@ core.register_abm({
 	end,
 })
 
+
+local PARTICLE_DISTANCE = 25
+core.register_abm({
+	label = "Firefly Bush Particles",
+	nodenames = {"mcl_flowers:firefly_bush"},
+	interval = 25,
+	chance = 2,
+	action = function(pos)
+		if core.get_node_light(pos) > 13 then return end
+
+		for pl in mcl_util.connected_players(pos, PARTICLE_DISTANCE) do
+			core.add_particlespawner({
+				texture = "[fill:1x1:0,0:#FAFAF2",
+				amount = 32,
+				time = 25,
+				jitter = {
+					min = vector.new(0.5, 0.5, 0.5),
+					max = vector.new(-0.5, -0.5, -0.5)
+				},
+				minexptime = 1.5,
+				maxexptime = 8.5,
+				minsize = 0.2,
+				maxsize= 0.6,
+				glow = 15,
+				collisiondetection = true,
+				collision_removal = true,
+				minpos = vector.offset(pos, -5, -5, -5),
+				maxpos = vector.offset(pos, 5, 5, 5),
+				playername = pl:get_player_name(),
+			})
+		end
+	end
+})
+
 -- Legacy support
 core.register_alias("mcl_core:tallgrass", "mcl_flowers:tallgrass")
 
