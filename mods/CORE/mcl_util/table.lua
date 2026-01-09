@@ -89,7 +89,7 @@ end
 -- Returns a random element out of t
 function table.random_element(t, f)
 	local keyset = table.keyset(t, f)
-	local rk = keyset[math.random(#keyset)]
+	local rk = keyset[math.random(1, #keyset)]
 	return t[rk], rk
 end
 
