@@ -5,6 +5,13 @@ local D = mcl_util.get_dynamic_translator(modname)
 local SHIELD_BLOCK_ARC = 180 -- A shield's effective arc in degree. 180 degrees equals frontal half.
 local SHIELD_BLOCK_COSINE = -math.cos(SHIELD_BLOCK_ARC/2) -- Actual value for angle check.
 
+-- XXX: Adapted from creative.lua.
+local function is_touch_enabled(player)
+	local name = player:get_player_name()
+	local window = core.get_player_window_information(name)
+	return window and window.touch_controls
+end
+
 mcl_shields = {
 	types = {
 		mob = true,
@@ -473,8 +480,14 @@ local function handle_blocking(player)
 		return
 	end
 
-	local rmb = player:get_player_control().RMB
-	if not rmb then
+	-- XXX: This currently assumes that players using touch screen
+	-- devices do not use a physical mouse.
+	local has_touchscreen = is_touch_enabled(player)
+	local control = player:get_player_control()
+	local should_clear_block =
+		(not has_touchscreen and not control.RMB) or -- desktop
+		(has_touchscreen and not control.sneak)	     -- mobile
+	if should_clear_block then
 		if player_shield.blocking ~= 0 then
 			mcl_serverplayer.handle_blocking (player, 0)
 		end
@@ -524,16 +537,19 @@ local function handle_blocking(player)
 				mcl_serverplayer.handle_blocking (player, 2)
 			end
 		end
-	elseif shield_in_offhand then
-		local offhand_can_block = (core.get_item_group(wielded_item(player), "bow") ~= 1
-		and core.get_item_group(wielded_item(player), "crossbow") ~= 1)
-
+	elseif shield_in_offhand then -- usual case for blocking
+		local offhand_can_block =
+			(core.get_item_group(wielded_item(player), "bow") ~= 1
+			 and core.get_item_group(wielded_item(player), "crossbow") ~= 1)
 		if not offhand_can_block then
 			return
 		end
+		local want_block =
+			(not has_touchscreen and control.RMB) or -- desktop
+			(has_touchscreen and control.sneak)	 -- mobile
 		if not_blocking then
 			core.after(0.05, function()
-				if (not_blocking or not shield_in_hand) and shield_in_offhand and rmb  and offhand_can_block then
+				if (not_blocking or not shield_in_hand) and shield_in_offhand and want_block and offhand_can_block then
 					if player_shield.blocking ~= 1 then
 						mcl_serverplayer.handle_blocking (player, 1)
 					end
@@ -547,7 +563,7 @@ local function handle_blocking(player)
 			end
 			player_shield.blocking = 1
 		end
-	else
+	else			-- not holding any shield
 		if player_shield.blocking ~= 0 then
 			mcl_serverplayer.handle_blocking (player, 0)
 		end

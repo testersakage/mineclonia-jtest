@@ -395,14 +395,8 @@ core.register_on_joinplayer(function(player)
 end)
 
 local function is_touch_enabled(playername)
-	-- Minetest < 5.7.0 support
-	if not core.get_player_window_information then
-		return false
-	end
 	local window = core.get_player_window_information(playername)
-	-- Always return a boolean (not nil) to avoid false-negatives when
-	-- comparing to a boolean later.
-	return window and window.touch_controls or false
+	return window and window.touch_controls
 end
 
 function mcl_inventory.set_creative_formspec(player)
