@@ -74,13 +74,14 @@ end)
 
 core.register_node("mcl_core:cactus_flower",
 {
-	description = S("Cactus flowe"),
+	description = S("Cactus Flower"),
 	_tt_help = S("Grows on cacti"),
 	paramtype = "light",
 	sunlight_propagates = true,
 	drawtype = "plantlike",
 	tiles = {"cactus_flower.png"},
 	inventory_image = "cactus_flower.png",
+	wield_image = "cactus_flower.png",
 	groups = {
 			dig_immediate = 3, deco_block = 1, dig_by_piston = 1, plant = 1, flammable = 3,
 			fire_encouragement = 60, fire_flammability = 100, non_mycelium_plant = 1,
