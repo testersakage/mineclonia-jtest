@@ -472,7 +472,8 @@ core.register_node("mcl_flowers:waterlily", {
 
 local litter_groups = {
 	dig_immediate = 3, dig_by_water = 1, flammable = 3, fire_encouragement = 60,
-	fire_flammability = 100, attached_node = 1, dig_by_piston = 1, destroy_by_lava_flow = 1
+	fire_flammability = 100, attached_node = 1, dig_by_piston = 1, destroy_by_lava_flow = 1,
+	compostability = 30
 }
 
 local tpl_litter = {
@@ -518,7 +519,7 @@ local tpl_litter = {
 core.register_node("mcl_flowers:leaf_litter_1", table.merge(tpl_litter, {
 	_doc_items_longdesc = S(""),
 	_mcl_burntime = 5,
-	groups = table.merge(litter_groups, {deco_block = 1, leaf_litter = 1, compostability = 30}),
+	groups = table.merge(litter_groups, {deco_block = 1, leaf_litter = 1}),
 	mesh = "mcl_flowers_leaf_litter_1.obj",
 	inventory_image = "mcl_flowers_leaf_litter.png^[multiply:#A37546",
 	wield_image = "mcl_flowers_leaf_litter.png^[multiply:#A37546"
