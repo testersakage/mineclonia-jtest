@@ -145,8 +145,7 @@ function mcl_doors:register_door(name, def)
 		local previous_power = math.max(meta_top:get_int("redstone_power"), meta_bottom:get_int("redstone_power"))
 
 		if power ~= previous_power then
-			if mcl_redstone.get_power(pos_top) ~= 0
-				or mcl_redstone.get_power(pos_bottom) ~= 0 then
+			if power ~= 0 then
 				open(pos_bottom)
 			else
 				close(pos_bottom)
