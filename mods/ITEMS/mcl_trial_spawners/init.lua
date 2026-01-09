@@ -515,7 +515,7 @@ register_item_spawner("small fire charge", {
 register_item_spawner("arrow", {
 	entity_item = "mcl_bows:arrow",
 	func = function(pos)
-		mcl_bows.shoot_arrow (ItemStack("mcl_bows:arrow"), pos, vector.new(0, -1, 0), 0, "mcl_trial_spawners:ominous_item_spawner", 1)
+		mcl_bows.shoot_arrow ("mcl_bows:arrow", pos, vector.new(0, -1, 0), 0, "mcl_trial_spawners:ominous_item_spawner", 1)
 	end
 })
 
@@ -525,14 +525,14 @@ register_item_spawner("slowness arrow", {
 		local stack = ItemStack("mcl_potions:slowness_arrow")
 		local meta = stack:get_meta()
 		meta:set_int("mcl_potions:potion_potent", 4)
-		mcl_bows.shoot_arrow (stack, pos, vector.new(0, -1, 0), 0, "mcl_trial_spawners:ominous_item_spawner", 1)
+		mcl_bows.shoot_arrow (stack:get_name(), pos, vector.new(0, -1, 0), 0, "mcl_trial_spawners:ominous_item_spawner", 1)
 	end
 })
 
 register_item_spawner("poison arrow", {
 	entity_item = "mcl_potions:poison_arrow",
 	func = function(pos)
-		mcl_bows.shoot_arrow (ItemStack("mcl_potions:poison_arrow"), pos, vector.new(0, -1, 0), 0, "mcl_trial_spawners:ominous_item_spawner", 1)
+		mcl_bows.shoot_arrow ("mcl_potions:poison_arrow", pos, vector.new(0, -1, 0), 0, "mcl_trial_spawners:ominous_item_spawner", 1)
 	end
 })
 
