@@ -115,7 +115,60 @@ local function spawn_item_spawner_above_object(obj)
 	spawned_obj:set_properties({wield_item = random_item_spawner.entity_item})
 end
 
+local function spawn_blue_bar_particles(pos)
+	core.add_particlespawner({
+		texpool = {
+			{
+				name = "trialspawner_blue_bar_particles.1.png",
+				animation = {
+					type = "vertical_frames",
+					aspect_w = 8,
+					aspect_h = 8,
+					length = -1
+				}
+			},
+			{
+				name = "trialspawner_blue_bar_particles.2.png",
+				animation = {
+					type = "vertical_frames",
+					aspect_w = 8,
+					aspect_h = 8,
+					length = -1
+				}
+			},
+		},
+		vel = {
+			min = vector.new(0, 0.1, 0),
+			max = vector.new(0, 1.5, 0),
+		},
+		exptime = {min = 1.1, max = 1.3},
+		amount = 50,
+		time = 0.1,
+		vertical = true,
+		glow = 15,
+		pos = pos,
+		radius = {min = 0.9, max = 1.1, bias = 1}
+	})
+end
+
+local function spawn_spawning_particles(pos, is_ominous)
+	core.add_particlespawner({
+		texture = is_ominous and "mcl_particles_soul_fire_flame.png" or "mcl_particles_fire_flame.png",
+		exptime = {min = 0.75, max = 1},
+		amount = 25,
+		time = 0.01,
+		vertical = true,
+		glow = 15,
+		size = {min = 1, max = 2},
+		pos = {
+			min = vector.offset(pos, -1, -1, -1),
+			max = vector.offset(pos, 1, 1, 1),
+		},
+	})
+end
+
 local function transform_to_ominous_spawner(pos, meta)
+	spawn_blue_bar_particles(pos)
 	core.swap_node(pos, {name = "mcl_trial_spawners:ominous_trialspawner"})
 	meta:set_int("last_activation", 0)
 	local hash = core.hash_node_position(pos)
@@ -155,6 +208,8 @@ local function trial_spawner_attempt_spawning_mob(pos, meta, is_ominous)
 			spawned_mob = core.add_entity(spawn_attempt_pos, mob_name)
 			local l = spawned_mob:get_luaentity()
 			l.persistent = true
+			spawn_spawning_particles(pos, is_ominous)
+			spawn_spawning_particles(spawned_mob:get_pos(), is_ominous)
 
 			if is_ominous then
 				local mobdef = mcl_mobs.registered_mobs[mob_name]
@@ -252,7 +307,6 @@ local function on_trial_spawner_complete(pos, meta, is_ominous)
 	meta:set_int("last_activation", get_milisecond_timestamp())
 	meta:set_int("last_spawn", 0)
 	meta:set_int("total_mobs_spawned", 0)
-	meta:set_int("is_active", 0)
 	core.swap_node(pos, {name = "mcl_trial_spawners:trialspawner"})
 
 	local item_count = #core.deserialize(meta:get_string("active_players"))
@@ -297,11 +351,12 @@ local function on_trial_spawner_complete(pos, meta, is_ominous)
 end
 
 local function trial_spawner_step(pos, meta)
-	local is_active = meta:get_int("is_active") == 1
 	local last_activation = meta:get_int("last_activation")
 	local timestamp = get_milisecond_timestamp()
 
-	local is_ominous = core.get_node(pos).name == "mcl_trial_spawners:ominous_trialspawner"
+	local node = core.get_node(pos)
+	local is_ominous = node.name == "mcl_trial_spawners:ominous_trialspawner"
+	local is_active = node.name ~= "mcl_trial_spawners:trialspawner"
 	local last_spawn = meta:get_int("last_spawn")
 	local players = core.deserialize(meta:get_string("active_players"))
 	local new_players = {}
@@ -324,6 +379,7 @@ local function trial_spawner_step(pos, meta)
 	end
 
 	if not is_ominous then
+		local transformed = false
 		for _, name in pairs(players) do
 			local player = core.get_player_by_name(name)
 			local ominous_effect = mcl_potions.get_effect_level(player, "bad_omen") or 0
@@ -336,8 +392,14 @@ local function trial_spawner_step(pos, meta)
 			local trial_omen_effect = mcl_potions.get_effect_level(player, "trial_omen") or 0
 
 			if trial_omen_effect > 0 then
+				transformed = true
+				spawn_blue_bar_particles(vector.offset(player:get_pos(), 0, 1.5, 0))
 				transform_to_ominous_spawner(pos, meta)
 			end
+		end
+
+		if transformed then
+			return
 		end
 	end
 
@@ -362,13 +424,41 @@ local function trial_spawner_step(pos, meta)
 		end
 	else
 		if #players ~= 0 then
-			meta:set_int("is_active", 1)
+			core.add_particlespawner({
+				texpool = {
+					{
+						name = "trialspawner_orange_bar_particles.1.png",
+						animation = {
+							type = "vertical_frames",
+							aspect_w = 8,
+							aspect_h = 8,
+							length = -1
+						}
+					},
+					{
+						name = "trialspawner_orange_bar_particles.2.png",
+						animation = {
+							type = "vertical_frames",
+							aspect_w = 8,
+							aspect_h = 8,
+							length = -1
+						}
+					},
+				},
+				vel = {
+					min = vector.new(0, 0.1, 0),
+					max = vector.new(0, 1.5, 0),
+				},
+				exptime = {min = 1.1, max = 1.3},
+				amount = 50,
+				time = 0.1,
+				vertical = true,
+				glow = 15,
+				pos = pos,
+				radius = {min = 0.9, max = 1.1, bias = 1}
+			})
 
-			if is_ominous then
-				core.swap_node(pos, {name = "mcl_trial_spawners:ominous_trialspawner"})
-			else
-				core.swap_node(pos, {name = "mcl_trial_spawners:trialspawner_on"})
-			end
+			core.swap_node(pos, {name = "mcl_trial_spawners:trialspawner_on"})
 		end
 	end
 end
@@ -385,6 +475,7 @@ local tpl = {
 	groups = {deco_block=1, features_cannot_replace = 1, },
 	is_ground_content = false,
 	drop = "",
+	light_source = 4,
 	_mcl_hardness = 50,
 	_mcl_blast_resitance = 50,
 	on_construct = function(pos)
@@ -401,7 +492,6 @@ local tpl = {
 		meta:set_int("last_activation", 0)
 		meta:set_int("last_spawn", 0)
 		meta:set_int("last_item_spawner", 0)
-		meta:set_int("is_active", 0)
 
 		meta:set_string("mob", "mobs_mc:zombie")
 
@@ -436,6 +526,7 @@ core.register_node("mcl_trial_spawners:trialspawner_on", table.merge(tpl, {
 		"trialspawner_top_on.png", "trialspawner_bottom_on.png", "trialspawner_side_on.png",
 		"trialspawner_side_on.png", "trialspawner_side_on.png", "trialspawner_side_on.png"
 	},
+	light_source = 8
 }))
 core.register_node("mcl_trial_spawners:ominous_trialspawner", table.merge(tpl, {
 	description = S("Trial spawner"),
@@ -443,7 +534,8 @@ core.register_node("mcl_trial_spawners:ominous_trialspawner", table.merge(tpl, {
 		"trialspawner_top_ominous.png", "trialspawner_bottom_ominous.png", "trialspawner_side_ominous.png",
 		"trialspawner_side_ominous.png", "trialspawner_side_ominous.png", "trialspawner_side_ominous.png"
 	},
-	groups = table.merge(tpl.groups, {not_in_creative_inventory = 1})
+	groups = table.merge(tpl.groups, {not_in_creative_inventory = 1}),
+	light_source = 8
 }))
 
 local function register_item_spawner(name, def)
@@ -577,3 +669,6 @@ core.register_entity("mcl_trial_spawners:ominous_item_spawner", {
 		self.object:remove()
 	end
 })
+
+-- particles: mcl_particles_fire_flame.png
+-- particles: mcl_particles_soul_fire_flame.png
