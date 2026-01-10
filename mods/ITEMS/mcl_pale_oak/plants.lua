@@ -1,3 +1,5 @@
+local S = core.get_translator("mcl_pale_oak")
+
 local function grow_hanging_moss(pos)
 	local last_pos = pos
 	local pos_iterator = vector.offset(pos, 0, -1, 0)
@@ -14,7 +16,7 @@ local function grow_hanging_moss(pos)
 end
 
 local hanging_moss_tpl = {
-	description = "Pale hanging moss",
+	description = S("Pale hanging moss"),
 	groups = {
 		dig_immediate = 3, shearsy = 1, dig_by_water = 1, destroy_by_lava_flow = 1, dig_by_piston = 1, deco_block = 1,
 		compostability= 30, pale_hanging_moss = 1, attached_node = 4, fire_encouragement = 5, fire_flammability = 100
@@ -69,7 +71,7 @@ core.register_node("mcl_pale_oak:hanging_moss_tip", table.merge(hanging_moss_tpl
 local eyeblossom_selection_box = { -5/16, -0.5, -5/16, 5/16, 7/16, 5/16 }
 
 mcl_flowers.register_simple_flower("eyeblossom", {
-	desc = "Eyeblossom",
+	desc = S("Eyeblossom"),
 	image = "mcl_pale_oak_eyeblossom.png",
 	selection_box = eyeblossom_selection_box,
 	potted = true,
@@ -77,7 +79,7 @@ mcl_flowers.register_simple_flower("eyeblossom", {
 })
 
 mcl_flowers.register_simple_flower("eyeblossom_open", {
-	desc = "Eyeblossom (open)",
+	desc = S("Eyeblossom (open)"),
 	image = "mcl_pale_oak_eyeblossom_open.png",
 	selection_box = eyeblossom_selection_box,
 	potted = true,
@@ -90,7 +92,7 @@ local function is_night()
 end
 
 core.register_abm({
-	label = "Eyeblossom activation",
+	label = S("Eyeblossom activation"),
 	chance = 2,
 	interval = 2,
 	nodenames = {"mcl_flowers:eyeblossom"},
@@ -102,7 +104,7 @@ core.register_abm({
 })
 
 core.register_abm({
-	label = "Eyeblossom in a pot activation",
+	label = S("Eyeblossom in a pot activation"),
 	chance = 2,
 	interval = 2,
 	nodenames = {"mcl_flowerpots:flower_pot_eyeblossom"},
@@ -114,7 +116,7 @@ core.register_abm({
 })
 
 core.register_abm({
-	label = "Eyeblossom deactivation",
+	label = S("Eyeblossom deactivation"),
 	chance = 2,
 	interval = 2,
 	nodenames = {"mcl_flowers:eyeblossom_open"},
@@ -126,7 +128,7 @@ core.register_abm({
 })
 
 core.register_abm({
-	label = "Eyeblossom in a pot deactivation",
+	label = S("Eyeblossom in a pot deactivation"),
 	chance = 2,
 	interval = 2,
 	nodenames = {"mcl_flowerpots:flower_pot_eyeblossom_open"},
@@ -198,9 +200,9 @@ local function bone_meal_moss(_, _, _, pos)
 end
 
 core.register_node("mcl_pale_oak:pale_moss", {
-	description = "Pale Moss",
-	_doc_items_longdesc = "Moss is a grey block found in pale garden",
-	_doc_items_entry_name = "Pale Moss",
+	description = S("Pale Moss"),
+	_doc_items_longdesc = S("Moss is a grey block found in pale garden"),
+	_doc_items_entry_name = S("Pale Moss"),
 	_doc_items_hidden = false,
 	tiles = {"mcl_pale_oak_moss.png"},
 	groups = {
@@ -214,8 +216,8 @@ core.register_node("mcl_pale_oak:pale_moss", {
 })
 
 core.register_node("mcl_pale_oak:pale_moss_carpet", {
-	description = "Pale Moss Carpet",
-	_doc_items_longdesc = "A pale moss carpet is a flat variant of the pale moss block.",
+	description = S("Pale Moss Carpet"),
+	_doc_items_longdesc = S("A pale moss carpet is a flat variant of the pale moss block."),
 	is_ground_content = false,
 	tiles = {"mcl_pale_oak_moss.png"},
 	wield_image = "mcl_pale_oak_moss.png",

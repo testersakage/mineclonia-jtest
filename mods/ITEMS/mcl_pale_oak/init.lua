@@ -3,17 +3,12 @@ local modname = core.get_current_modname()
 local modpath = core.get_modpath(modname)
 
 mcl_trees.register_wood("pale_oak",{
-	readable_name = "Pale_oak",
+	readable_name = S("Pale Oak"),
 	sign_color = "#cfbfc5",
 	tree_schems_2x2 = {
 		{file = modpath.."/schematics/mcl_pale_oak_1.mts", offset = vector.new(1,0,1)},
 		{file = modpath.."/schematics/mcl_pale_oak_2.mts", offset = vector.new(1,0,1)},
 		{file = modpath.."/schematics/mcl_pale_oak_3.mts", offset = vector.new(1,0,1)},
-	},
-	sapling = {
-		tiles = {"mcl_pale_oak_sapling.png"},
-		inventory_image = "mcl_pale_oak_sapling.png",
-		wield_image = "mcl_pale_oak_sapling.png",
 	},
 	tree = { tiles = {"mcl_pale_oak_log_top.png", "mcl_pale_oak_log_top.png","mcl_pale_oak_log.png" }},
 	bark = { tiles = {"mcl_pale_oak_log.png"}},
