@@ -10,6 +10,7 @@ local mod_mcl_crimson = core.get_modpath("mcl_crimson")
 local mod_mcl_blackstone = core.get_modpath("mcl_blackstone")
 local mod_mcl_mangrove = core.get_modpath("mcl_mangrove")
 local mod_cherry_blossom = core.get_modpath("mcl_cherry_blossom")
+local mod_pale_oak = core.get_modpath("mcl_pale_oak")
 
 local deco_id_chorus_plant
 
@@ -1471,6 +1472,51 @@ local function register_biomes()
 		_mcl_biome_type = "medium",
 		_mcl_palette_index = 18,
 		_mcl_skycolor = ocean_skycolor,
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_ocean = true,
+			is_forest = true,
+		},
+	})
+
+	-- Pale Garden
+	core.register_biome({
+		name = "PaleGarden",
+		node_top = "mcl_core:dirt_with_grass",
+		depth_top = 1,
+		node_filler = "mcl_core:dirt",
+		depth_filler = 2,
+		node_riverbed = "mcl_core:sand",
+		depth_riverbed = 2,
+		y_min = 1,
+		y_max = mcl_vars.mg_overworld_max,
+		humidity_point = 80,
+		heat_point = 70,
+		_mcl_biome_type = "medium",
+		_mcl_palette_index = 35,
+		_mcl_skycolor = "#A4A4A4",
+		_mcl_fogcolor = overworld_fogcolor,
+		_mcl_groups = {
+			is_overworld = true,
+			is_forest = true,
+		},
+	})
+	core.register_biome({
+		name = "PaleGarden_ocean",
+		node_top = "mcl_core:gravel",
+		depth_top = 1,
+		node_filler = "mcl_core:gravel",
+		depth_filler = 2,
+		node_riverbed = "mcl_core:sand",
+		depth_riverbed = 2,
+		y_min = OCEAN_MIN,
+		y_max = 0,
+		humidity_point = 84,
+		heat_point = 70,
+		_mcl_biome_type = "medium",
+		_mcl_palette_index = 35,
+		_mcl_skycolor = "#A4A4A4",
 		_mcl_fogcolor = overworld_fogcolor,
 		_mcl_groups = {
 			is_overworld = true,
@@ -5132,6 +5178,84 @@ local function register_decorations()
 		rotation = "random",
 	})
 
+	core.register_decoration({
+		deco_type = "schematic",
+		place_on = {"group:grass_block_no_snow", "mcl_pale_oak:pale_moss"},
+		sidelen = 16,
+		noise_params = {
+			offset = 0.01,
+			scale = 0.0015,
+			spread = {x = 125, y = 125, z = 125},
+			seed = 394,
+			octaves = 3,
+			persist = 0.66
+		},
+		biomes = {"PaleGarden"},
+		y_min = 4,
+		y_max = mcl_vars.mg_overworld_max,
+		schematic = mod_pale_oak.."/schematics/mcl_pale_oak_1.mts",
+		flags = "place_center_x, place_center_z",
+		rotation = "random",
+	})
+
+	core.register_decoration({
+		deco_type = "schematic",
+		place_on = {"group:grass_block_no_snow", "mcl_pale_oak:pale_moss"},
+		sidelen = 16,
+		noise_params = {
+			offset = 0.01,
+			scale = 0.0015,
+			spread = {x = 125, y = 125, z = 125},
+			seed = 483,
+			octaves = 3,
+			persist = 0.66
+		},
+		biomes = {"PaleGarden"},
+		y_min = 4,
+		y_max = mcl_vars.mg_overworld_max,
+		schematic = mod_pale_oak.."/schematics/mcl_pale_oak_2.mts",
+		flags = "place_center_x, place_center_z",
+		rotation = "random",
+	})
+
+	core.register_decoration({
+		deco_type = "schematic",
+		place_on = {"group:grass_block_no_snow", "mcl_pale_oak:pale_moss"},
+		sidelen = 16,
+		noise_params = {
+			offset = 0.01,
+			scale = 0.0015,
+			spread = {x = 125, y = 125, z = 125},
+			seed = 942,
+			octaves = 3,
+			persist = 0.66
+		},
+		biomes = {"PaleGarden"},
+		y_min = 4,
+		y_max = mcl_vars.mg_overworld_max,
+		schematic = mod_pale_oak.."/schematics/mcl_pale_oak_3.mts",
+		flags = "place_center_x, place_center_z",
+		rotation = "random",
+	})
+
+	core.register_decoration({
+		decoration = "mcl_pale_oak:pale_moss",
+		deco_type = "simple",
+		place_on = {"group:grass_block_no_snow"},
+		biomes = {"PaleGarden"},
+		flags = "force_placement",
+		noise_params = {
+			offset = 0.2,
+			scale = 0.03,
+			spread = {x = 125, y = 125, z = 125},
+			seed = 143,
+			octaves = 2,
+			persist = 0.66
+		},
+		place_offset_y = -1,
+		y_min = mcl_vars.mg_overworld_min,
+	})
+
 	-- Cherry
 	for i=1,3 do
 		core.register_decoration({
@@ -5492,9 +5616,9 @@ local function register_decorations()
 
 	local register_doubletall_grass = mcl_biomes.register_doubletall_grass
 
-	register_doubletall_grass(-0.01, 0.03, {"Taiga", "Forest", "FlowerForest", "BirchForest", "BirchForestM", "RoofedForest"})
-	register_doubletall_grass(-0.002, 0.03, {"Plains", "SunflowerPlains", "CherryGrove", "Meadow"})
-	register_doubletall_grass(-0.0005, -0.03, {"Savanna", "SavannaM"})
+	register_doubletall_grass(-0.01, 0.03, {"Taiga", "Forest", "FlowerForest", "BirchForest", "BirchForestM", "RoofedForest", "PaleGarden"})
+	register_doubletall_grass(-0.002, 0.03, {"Plains", "SunflowerPlains", "CherryGrove", "Meadow", "PaleGarden"})
+	register_doubletall_grass(-0.0005, -0.03, {"Savanna", "SavannaM", "PaleGarden"})
 
 	-- Large ferns
 	function mcl_biomes.register_double_fern(offset, scale, biomes)
@@ -5842,6 +5966,8 @@ local function register_decorations()
 	register_grass_decoration("tallgrass", 0.05, -0.03, grass_sparse)
 	register_grass_decoration("tallgrass", 0.05, 0.05, grass_mpfm)
 
+	register_grass_decoration("tallgrass", 0.04, 0.02, {"PaleGarden"})
+
 	local fern_minimal = { "Jungle", "JungleM", "BambooJungle", "JungleEdge", "JungleEdgeM", "Taiga", "MegaTaiga", "MegaSpruceTaiga", "ColdTaiga", "MangroveSwamp" }
 	local fern_low = { "Jungle", "JungleM", "BambooJungle", "JungleEdge", "JungleEdgeM", "Taiga", "MegaTaiga", "MegaSpruceTaiga" }
 	local fern_Jungle = { "Jungle", "JungleM", "BambooJungle", "JungleEdge", "JungleEdgeM" }
@@ -6152,6 +6278,7 @@ local function register_decorations()
 
 	register_flower("dandelion", flower_biomes1, 8)
 	register_flower("poppy", flower_biomes1, 9439)
+	register_flower("eyeblossom", {"PaleGarden"}, 4832)
 
 	local flower_biomes2 = {"Plains", "SunflowerPlains"}
 	register_flower("tulip_red", flower_biomes2, 436)

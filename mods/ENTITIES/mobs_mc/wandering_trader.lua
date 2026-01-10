@@ -104,6 +104,7 @@ local trades_ordinary_table = {
 	{ E(), { "mcl_farming:pumpkin", 1, 1, }, 4, 0 },
 	{ E(), { get_random_flower, 1, 1, }, 12, 0 },
 
+	{ E(), { "mcl_pale_oak:hanging_moss", 1, 1, }, 4, 0 },
 	{ E(), { "mcl_farming:wheat_seeds", 1, 1, }, 12, 0 },
 	{ E(), { "mcl_farming:beetroot_seeds", 1, 1, }, 12, 0 },
 	{ E(), { "mcl_farming:pumpkin_seeds", 1, 1, }, 12, 0 },
