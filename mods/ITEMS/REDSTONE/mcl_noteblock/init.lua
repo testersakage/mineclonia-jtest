@@ -87,7 +87,7 @@ local function noteblock_play(pos, param2)
 	local soundname, pitch
 	if block_below_name == "mcl_core:goldblock" then
 		soundname="mesecons_noteblock_bell"
-	elseif block_below_name == "mcl_core:clay" then
+	elseif block_below_name == "mcl_core:clay" or block_below_name == "mcl_pale_oak:block_of_resin" then
 		soundname="mesecons_noteblock_flute"
 	elseif block_below_name == "mcl_core:packed_ice" then
 		soundname="mesecons_noteblock_chime"

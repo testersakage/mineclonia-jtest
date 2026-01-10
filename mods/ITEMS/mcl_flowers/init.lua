@@ -99,11 +99,11 @@ mcl_flowers.on_place_flower = mcl_util.generate_on_place_plant_function(function
 	if (light_night and light_night >= 8) or (light_day and light_day >= core.LIGHT_MAX) then
 		light_ok = true
 	end
-	if itemstack:get_name() == "mcl_flowers:wither_rose" and (  core.get_item_group(soil_node.name, "grass_block") > 0 or soil_node.name == "mcl_core:dirt" or soil_node.name == "mcl_core:coarse_dirt" or soil_node.name == "mcl_mud:mud" or soil_node.name == "mcl_lush_caves:moss" or soil_node.name == "mcl_nether:netherrack" or core.get_item_group(soil_node.name, "soul_block") > 0  ) then
+	if itemstack:get_name() == "mcl_flowers:wither_rose" and (  core.get_item_group(soil_node.name, "grass_block") > 0 or soil_node.name == "mcl_core:dirt" or soil_node.name == "mcl_core:coarse_dirt" or soil_node.name == "mcl_mud:mud" or soil_node.name == "mcl_lush_caves:moss" or soil_node.name == "mcl_pale_oak:pale_moss" or soil_node.name == "mcl_nether:netherrack" or core.get_item_group(soil_node.name, "soul_block") > 0  ) then
 		return true,colorize
 	end
 	local is_flower = core.get_item_group(itemstack:get_name(), "flower") == 1
-	local ok = (soil_node.name == "mcl_core:dirt" or core.get_item_group(soil_node.name, "grass_block") == 1 or soil_node.name == "mcl_lush_caves:moss" or (not is_flower and (soil_node.name == "mcl_core:coarse_dirt" or soil_node.name == "mcl_core:podzol" or soil_node.name == "mcl_core:podzol_snow"))) and light_ok
+	local ok = (soil_node.name == "mcl_core:dirt" or core.get_item_group(soil_node.name, "grass_block") == 1 or soil_node.name == "mcl_lush_caves:moss" or soil_node.name == "mcl_pale_oak:pale_moss" or (not is_flower and (soil_node.name == "mcl_core:coarse_dirt" or soil_node.name == "mcl_core:podzol" or soil_node.name == "mcl_core:podzol_snow"))) and light_ok
 	return ok, colorize
 end)
 

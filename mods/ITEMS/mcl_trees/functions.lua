@@ -213,10 +213,12 @@ function mcl_trees.grow_tree(pos, node)
 	local is_2by2 = false
 	if mcl_trees.woods[name].tree_schems_2x2  then
 		tbt, ne = check_2by2_saps(pos, node)
+		core.debug("tonsa", tbt, ne)
 		if tbt then
 			table.shuffle(mcl_trees.woods[name].tree_schems_2x2)
 			schem = mcl_trees.woods[name].tree_schems_2x2[1]
 			can_grow = check_schem_growth(ne, schem.file, true)
+			core.debug("lol", can_grow)
 			place_at = ne
 			is_2by2 = true
 		end
