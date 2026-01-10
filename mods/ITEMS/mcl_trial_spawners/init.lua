@@ -93,7 +93,7 @@ local function spawn_item_spawner_above_object(obj)
 	local obj_pos = obj:get_pos()
 	local ray_destination = vector.offset(obj_pos, 0, math.random(2, 6), 0)
 
-	local ray = core.raycast(obj_pos, ray_destination, 0, 0)
+	local ray = core.raycast(vector.offset(obj_pos, 0, 0.5, 0), ray_destination, 0, 0)
 	local final_pos = ray_destination
 
 	for pointed_thing in ray do
@@ -104,12 +104,30 @@ local function spawn_item_spawner_above_object(obj)
 	end
 
 	local random_item_spawner, random_item_spawner_name = table.random_element(registered_item_spawners)
+	local spawn_time = ((math.random() * 3) + 3)
+
+	core.add_particlespawner({
+		texture = "trialspawner_blue_dot_particle.png",
+		attract = {
+			kind = "point",
+			origin = final_pos,
+			strength = {min = 0.75, max = 2.5}
+		},
+		size = {min = 0.2, max = 0.75},
+		exptime = 2,
+		amount = 40,
+		time = spawn_time,
+		glow = 15,
+		pos = final_pos,
+		radius = {min = 0.6, max = 0.8, bias = 1}
+	})
+
 	local spawned_obj = core.add_entity(
 		final_pos,
 		"mcl_trial_spawners:ominous_item_spawner",
 		core.serialize({
 			type = random_item_spawner_name,
-			spawn_time = get_milisecond_timestamp() + ((math.random() * 3) + 3) * 1000
+			spawn_time = get_milisecond_timestamp() + spawn_time * 1000
 		})
 	)
 	spawned_obj:set_properties({wield_item = random_item_spawner.entity_item})
@@ -554,7 +572,7 @@ register_item_spawner("oozing splash", {
 	entity_item = "mcl_potions:oozing_lingering",
 	func = function(pos)
 		local obj = core.add_entity(pos, "mcl_potions:oozing_lingering_flying")
-		obj:set_acceleration(vector.new(0, -9.8, 0))
+		obj:set_acceleration(vector.new(0, -20, 0))
 	end
 })
 
@@ -562,7 +580,7 @@ register_item_spawner("weaving splash", {
 	entity_item = "mcl_potions:weaving_lingering",
 	func = function(pos)
 		local obj = core.add_entity(pos, "mcl_potions:weaving_lingering_flying")
-		obj:set_acceleration(vector.new(0, -9.8, 0))
+		obj:set_acceleration(vector.new(0, -20, 0))
 	end
 })
 
@@ -570,7 +588,7 @@ register_item_spawner("infestation splash", {
 	entity_item = "mcl_potions:infestation_lingering",
 	func = function(pos)
 		local obj = core.add_entity(pos, "mcl_potions:infestation_lingering_flying")
-		obj:set_acceleration(vector.new(0, -9.8, 0))
+		obj:set_acceleration(vector.new(0, -20, 0))
 	end
 })
 
@@ -578,7 +596,7 @@ register_item_spawner("strength splash", {
 	entity_item = "mcl_potions:strength_lingering",
 	func = function(pos)
 		local obj = core.add_entity(pos, "mcl_potions:strength_lingering_flying")
-		obj:set_acceleration(vector.new(0, -9.8, 0))
+		obj:set_acceleration(vector.new(0, -20, 0))
 	end
 })
 
@@ -586,7 +604,7 @@ register_item_spawner("swiftness splash", {
 	entity_item = "mcl_potions:swiftness_lingering",
 	func = function(pos)
 		local obj = core.add_entity(pos, "mcl_potions:swiftness_lingering_flying")
-		obj:set_acceleration(vector.new(0, -9.8, 0))
+		obj:set_acceleration(vector.new(0, -20, 0))
 	end
 })
 
@@ -594,7 +612,7 @@ register_item_spawner("slow falling splash", {
 	entity_item = "mcl_potions:slow_falling_lingering",
 	func = function(pos)
 		local obj = core.add_entity(pos, "mcl_potions:slow_falling_lingering_flying")
-		obj:set_acceleration(vector.new(0, -9.8, 0))
+		obj:set_acceleration(vector.new(0, -20, 0))
 	end
 })
 
@@ -665,10 +683,9 @@ core.register_entity("mcl_trial_spawners:ominous_item_spawner", {
 	on_step = function(self)
 		if get_milisecond_timestamp() < self.spawn_time then return end
 
-		registered_item_spawners[self.type].func(self.object:get_pos())
+		local obj_pos = self.object:get_pos()
+		spawn_spawning_particles(obj_pos, true)
+		registered_item_spawners[self.type].func(obj_pos)
 		self.object:remove()
 	end
 })
-
--- particles: mcl_particles_fire_flame.png
--- particles: mcl_particles_soul_fire_flame.png
