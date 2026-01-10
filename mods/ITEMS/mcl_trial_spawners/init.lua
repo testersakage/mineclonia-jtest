@@ -253,6 +253,7 @@ local function on_trial_spawner_complete(pos, meta, is_ominous)
 	meta:set_int("last_spawn", 0)
 	meta:set_int("total_mobs_spawned", 0)
 	meta:set_int("is_active", 0)
+	core.swap_node(pos, {name = "mcl_trial_spawners:trialspawner"})
 
 	local item_count = #core.deserialize(meta:get_string("active_players"))
 
@@ -364,7 +365,9 @@ local function trial_spawner_step(pos, meta)
 			meta:set_int("is_active", 1)
 
 			if is_ominous then
-				core.swap_node(pos, {name = "mcl_trial_spawners:trialspawner"})
+				core.swap_node(pos, {name = "mcl_trial_spawners:ominous_trialspawner"})
+			else
+				core.swap_node(pos, {name = "mcl_trial_spawners:trialspawner_on"})
 			end
 		end
 	end
@@ -428,8 +431,18 @@ local tpl = {
 }
 
 core.register_node("mcl_trial_spawners:trialspawner", tpl)
+core.register_node("mcl_trial_spawners:trialspawner_on", table.merge(tpl, {
+	tiles = {
+		"trialspawner_top_on.png", "trialspawner_bottom_on.png", "trialspawner_side_on.png",
+		"trialspawner_side_on.png", "trialspawner_side_on.png", "trialspawner_side_on.png"
+	},
+}))
 core.register_node("mcl_trial_spawners:ominous_trialspawner", table.merge(tpl, {
 	description = S("Trial spawner"),
+	tiles = {
+		"trialspawner_top_ominous.png", "trialspawner_bottom_ominous.png", "trialspawner_side_ominous.png",
+		"trialspawner_side_ominous.png", "trialspawner_side_ominous.png", "trialspawner_side_ominous.png"
+	},
 	groups = table.merge(tpl.groups, {not_in_creative_inventory = 1})
 }))
 
