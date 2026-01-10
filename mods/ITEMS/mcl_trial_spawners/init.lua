@@ -1,10 +1,14 @@
 local modname = core.get_current_modname()
+local modpath = core.get_modpath(modname)
 local S = core.get_translator(modname)
+
+mcl_trial_spawners = {}
 
 local activation_radius = 14
 local spawning_radius = 4
-local activation_cooldown = 30 * 60 * 1000
-local spawning_interval = 2 * 1000
+-- local activation_cooldown = 30 * 60 * 1000
+local activation_cooldown = 30 * 1000
+local item_spawner_spawning_interval = 8000
 
 local standard_loot_table = {
 	stacks_min = 1,
@@ -30,6 +34,12 @@ local ominous_loot_table = {
 	}
 }
 
+local possible_mob_gear
+
+-- This is stored here and not in node metadata because it uses object references, which can't be serialized
+-- TODO: perhaps switch out to GUID's once we drop older versions of luanti
+local trial_spawners_spawned_mobs = {}
+
 local function modify_aromr(stack, trim)
 	stack = mcl_enchanting.enchant(stack, "protection", 4)
 	stack = mcl_enchanting.enchant(stack, "projectile_protection", 4)
@@ -37,9 +47,6 @@ local function modify_aromr(stack, trim)
 	mcl_armor.trim(stack, trim, ItemStack("mcl_copper:copper_ingot"))
 	return stack
 end
-
-local possible_mob_gear
-local registered_item_spawners = {}
 
 -- this needs to be initialized so late since mcl_enchanting.enchant can only work after all the mods have loaded
 core.register_on_mods_loaded(function()
@@ -80,57 +87,10 @@ core.register_on_mods_loaded(function()
 	}
 end)
 
--- This is stored here and not in node metadata because it uses object references, which can't be serialized
-local trial_spawners_spawned_mobs = {}
-
--- We use milisecond timestamps because meta:set_int() can't store such big numbers.
--- This level of precision is completely useless to us either way
-local function get_milisecond_timestamp()
+-- We use milisecond timestamps because meta:set_int() can't store very big numbers, and storing microseconds overflows.
+-- This level of precision is completely irrelevant to us either way
+function mcl_trial_spawners.get_milisecond_timestamp()
 	return math.floor(core.get_us_time() / 1000)
-end
-
-local function spawn_item_spawner_above_object(obj)
-	local obj_pos = obj:get_pos()
-	local ray_destination = vector.offset(obj_pos, 0, math.random(2, 6), 0)
-
-	local ray = core.raycast(vector.offset(obj_pos, 0, 0.5, 0), ray_destination, 0, 0)
-	local final_pos = ray_destination
-
-	for pointed_thing in ray do
-		if pointed_thing.type == "node" then
-			final_pos = pointed_thing.above
-			break
-		end
-	end
-
-	local random_item_spawner, random_item_spawner_name = table.random_element(registered_item_spawners)
-	local spawn_time = ((math.random() * 3) + 3)
-
-	core.add_particlespawner({
-		texture = "trialspawner_blue_dot_particle.png",
-		attract = {
-			kind = "point",
-			origin = final_pos,
-			strength = {min = 0.75, max = 2.5}
-		},
-		size = {min = 0.2, max = 0.75},
-		exptime = 2,
-		amount = 40,
-		time = spawn_time,
-		glow = 15,
-		pos = final_pos,
-		radius = {min = 0.6, max = 0.8, bias = 1}
-	})
-
-	local spawned_obj = core.add_entity(
-		final_pos,
-		"mcl_trial_spawners:ominous_item_spawner",
-		core.serialize({
-			type = random_item_spawner_name,
-			spawn_time = get_milisecond_timestamp() + spawn_time * 1000
-		})
-	)
-	spawned_obj:set_properties({wield_item = random_item_spawner.entity_item})
 end
 
 local function spawn_blue_bar_particles(pos)
@@ -169,7 +129,7 @@ local function spawn_blue_bar_particles(pos)
 	})
 end
 
-local function spawn_spawning_particles(pos, is_ominous)
+function mcl_trial_spawners.spawn_spawning_particles(pos, is_ominous)
 	core.add_particlespawner({
 		texture = is_ominous and "mcl_particles_soul_fire_flame.png" or "mcl_particles_fire_flame.png",
 		exptime = {min = 0.75, max = 1},
@@ -187,7 +147,7 @@ end
 
 local function transform_to_ominous_spawner(pos, meta)
 	spawn_blue_bar_particles(pos)
-	core.swap_node(pos, {name = "mcl_trial_spawners:ominous_trialspawner"})
+	core.swap_node(pos, {name = "mcl_trial_spawners:ominous_trialspawner_on"})
 	meta:set_int("last_activation", 0)
 	local hash = core.hash_node_position(pos)
 
@@ -199,7 +159,7 @@ local function transform_to_ominous_spawner(pos, meta)
 	end
 end
 
-local function trial_spawner_in_eye_sight(spawner_pos, destination_pos)
+local function is_in_eyesight_of_spawner(spawner_pos, destination_pos)
 	local ray = core.raycast(spawner_pos, destination_pos, false, false)
 	local obstructed = false
 
@@ -213,21 +173,20 @@ local function trial_spawner_in_eye_sight(spawner_pos, destination_pos)
 	return not obstructed
 end
 
-local function trial_spawner_attempt_spawning_mob(pos, meta, is_ominous)
+local function attempt_spawning_trial_mob(pos, meta, is_ominous)
 	local hash = core.hash_node_position(pos)
 
-	local spawned_mob
 	local frustration = 0
-	while frustration < 50 do
+	while frustration < 30 do
 		local spawn_attempt_pos = pos + vector.multiply(vector.random_direction(), (math.random() * (spawning_radius - 1) + 1))
 
-		if trial_spawner_in_eye_sight(pos, spawn_attempt_pos) then
+		if is_in_eyesight_of_spawner(pos, spawn_attempt_pos) then
 			local mob_name = meta:get_string("mob")
-			spawned_mob = core.add_entity(spawn_attempt_pos, mob_name)
+			local spawned_mob = core.add_entity(spawn_attempt_pos, mob_name)
 			local l = spawned_mob:get_luaentity()
 			l.persistent = true
-			spawn_spawning_particles(pos, is_ominous)
-			spawn_spawning_particles(spawned_mob:get_pos(), is_ominous)
+			mcl_trial_spawners.spawn_spawning_particles(pos, is_ominous)
+			mcl_trial_spawners.spawn_spawning_particles(spawned_mob:get_pos(), is_ominous)
 
 			if is_ominous then
 				local mobdef = mcl_mobs.registered_mobs[mob_name]
@@ -253,26 +212,22 @@ local function trial_spawner_attempt_spawning_mob(pos, meta, is_ominous)
 				end
 			end
 
-			break
+			if not trial_spawners_spawned_mobs[hash] then
+				trial_spawners_spawned_mobs[hash] = {}
+			end
+
+			table.insert(trial_spawners_spawned_mobs[hash], spawned_mob)
+
+			meta:set_int("total_mobs_spawned", meta:get_int("total_mobs_spawned") + 1)
+			meta:set_int("last_spawn", mcl_trial_spawners.get_milisecond_timestamp())
+
+			return
 		end
 	end
-
-	if not spawned_mob then
-		return
-	end
-
-	if not trial_spawners_spawned_mobs[hash] then
-		trial_spawners_spawned_mobs[hash] = {}
-	end
-
-	table.insert(trial_spawners_spawned_mobs[hash], spawned_mob)
-
-	meta:set_int("total_mobs_spawned", meta:get_int("total_mobs_spawned") + 1)
-	meta:set_int("last_spawn", get_milisecond_timestamp())
 end
 
 -- not optimized as it could be, but should be fine since these tables are so short
-local function prune_invalid_objrefs(list)
+local function prune_invalid_objectrefs(list)
 	local i = 1
 	while #list >= i do
 		if not list[i]:is_valid() then
@@ -283,13 +238,13 @@ local function prune_invalid_objrefs(list)
 	end
 end
 
-local function trial_spawner_is_complete(pos, meta, player_count, is_ominous)
-	local total_spawn_limit = (player_count - 1) * meta:get_int("total_mobs_added_per_player") + meta:get_int("base_total_mobs")
+local function is_trial_complete(pos, meta, player_count, is_ominous)
+	local total_spawn_limit = (player_count - 1) * math.floor(meta:get_float("total_mobs_added_per_player")) + meta:get_int("base_total_mobs")
 	local total_mobs_spawned = meta:get_int("total_mobs_spawned")
 	local hash = core.hash_node_position(pos)
 	local spawned = trial_spawners_spawned_mobs[hash] or {}
 
-	prune_invalid_objrefs(spawned)
+	prune_invalid_objectrefs(spawned)
 
 	if is_ominous and not mcl_mobs.registered_mobs[meta:get_string("mob")].wears_armor then
 		total_spawn_limit = total_spawn_limit * 2
@@ -298,8 +253,8 @@ local function trial_spawner_is_complete(pos, meta, player_count, is_ominous)
 	return total_mobs_spawned >= total_spawn_limit and #spawned == 0
 end
 
-local function trial_spawner_can_spawn_mobs(pos, meta, player_count, is_ominous)
-	local total_spawn_limit = (player_count - 1) * meta:get_int("total_mobs_added_per_player") + meta:get_int("base_total_mobs")
+local function can_trial_spawner_spawn_mobs(pos, meta, player_count, is_ominous)
+	local total_spawn_limit = (player_count - 1) * math.floor(meta:get_float("total_mobs_added_per_player")) + meta:get_int("base_total_mobs")
 	local total_mobs_spawned = meta:get_int("total_mobs_spawned")
 
 	if is_ominous and not mcl_mobs.registered_mobs[meta:get_string("mob")].wears_armor then
@@ -316,22 +271,28 @@ local function trial_spawner_can_spawn_mobs(pos, meta, player_count, is_ominous)
 		+ meta:get_int("base_simultaneous_mobs")
 		+ (is_ominous and 1 or 0)
 
-	prune_invalid_objrefs(spawned)
+	prune_invalid_objectrefs(spawned)
 
 	return #spawned < simultaneous_mobs_limit
 end
 
-local function on_trial_spawner_complete(pos, meta, is_ominous)
-	meta:set_int("last_activation", get_milisecond_timestamp())
+local function complete_trial(pos, meta, is_ominous)
+	meta:set_int("last_activation", mcl_trial_spawners.get_milisecond_timestamp())
 	meta:set_int("last_spawn", 0)
 	meta:set_int("total_mobs_spawned", 0)
-	core.swap_node(pos, {name = "mcl_trial_spawners:trialspawner"})
+
+	if is_ominous then
+		core.swap_node(pos, {name = "mcl_trial_spawners:ominous_trialspawner"})
+	else
+		core.swap_node(pos, {name = "mcl_trial_spawners:trialspawner"})
+	end
 
 	local item_count = #core.deserialize(meta:get_string("active_players"))
-
-	local key_drop_chance = is_ominous and 0.3 or 0.5
-
+	local key_drop_chance = is_ominous and 0.3 or 0.1
 	local drop_pos = vector.offset(pos, 0, 1, 0)
+
+	meta:set_string("active_players", core.serialize({}))
+
 	if math.random() > key_drop_chance then
 		local loot_table = is_ominous and ominous_loot_table or standard_loot_table
 
@@ -370,20 +331,19 @@ end
 
 local function trial_spawner_step(pos, meta)
 	local last_activation = meta:get_int("last_activation")
-	local timestamp = get_milisecond_timestamp()
+	local timestamp = mcl_trial_spawners.get_milisecond_timestamp()
 
 	local node = core.get_node(pos)
-	local is_ominous = node.name == "mcl_trial_spawners:ominous_trialspawner"
-	local is_active = node.name ~= "mcl_trial_spawners:trialspawner"
+	local is_ominous = core.get_item_group(node.name, "ominous_trial_spawner") > 0
+	local is_active = core.get_item_group(node.name, "active_trial_spawner") > 0
 	local last_spawn = meta:get_int("last_spawn")
 	local players = core.deserialize(meta:get_string("active_players"))
 	local new_players = {}
-
 	for obj in core.objects_inside_radius(pos, activation_radius) do
 		if core.is_player(obj)
 				and table.indexof(players, obj:get_player_name()) == -1
-				-- and not core.is_creative_enabled(obj:get_player_name())
-				and trial_spawner_in_eye_sight(pos, vector.offset(obj:get_pos(), 0, 1.5, 0)) then
+				and not core.is_creative_enabled(obj:get_player_name())
+				and is_in_eyesight_of_spawner(pos, vector.offset(obj:get_pos(), 0, 1.5, 0)) then
 			table.insert(new_players, obj:get_player_name())
 		end
 	end
@@ -403,6 +363,7 @@ local function trial_spawner_step(pos, meta)
 			local ominous_effect = mcl_potions.get_effect_level(player, "bad_omen") or 0
 
 			if ominous_effect > 0 then
+				spawn_blue_bar_particles(vector.offset(player:get_pos(), 0, 1.5, 0))
 				mcl_potions.give_effect_by_level("trial_omen", player, 1, 60 * 15 * ominous_effect)
 				mcl_potions.clear_effect(player, "bad_omen")
 			end
@@ -411,7 +372,6 @@ local function trial_spawner_step(pos, meta)
 
 			if trial_omen_effect > 0 then
 				transformed = true
-				spawn_blue_bar_particles(vector.offset(player:get_pos(), 0, 1.5, 0))
 				transform_to_ominous_spawner(pos, meta)
 			end
 		end
@@ -426,58 +386,59 @@ local function trial_spawner_step(pos, meta)
 	end
 
 	if is_active then
-		if timestamp - last_spawn >= spawning_interval and trial_spawner_can_spawn_mobs(pos, meta, #players) then
-			trial_spawner_attempt_spawning_mob(pos, meta, is_ominous)
-		elseif trial_spawner_is_complete(pos, meta, #players, is_ominous) then
-			on_trial_spawner_complete(pos, meta, is_ominous)
-		elseif is_ominous and timestamp - meta:get_int("last_item_spawner") >= 8000 then
+		if timestamp - last_spawn >= meta:get_int("spawn_interval") and can_trial_spawner_spawn_mobs(pos, meta, #players) then
+			attempt_spawning_trial_mob(pos, meta, is_ominous)
+		elseif is_trial_complete(pos, meta, #players, is_ominous) then
+			complete_trial(pos, meta, is_ominous)
+		end
+
+		if is_ominous and timestamp - meta:get_int("last_item_spawner") >= item_spawner_spawning_interval then
 			local spawned = trial_spawners_spawned_mobs[core.hash_node_position(pos)] or {}
 			for obj in core.objects_inside_radius(pos, activation_radius) do
 				if table.indexof(spawned, obj) ~= -1 or core.is_player(obj) then
-					spawn_item_spawner_above_object(obj)
-					meta:set_int("last_item_spawner", get_milisecond_timestamp())
+					mcl_trial_spawners.spawn_item_spawner_above_object(obj)
+					meta:set_int("last_item_spawner", mcl_trial_spawners.get_milisecond_timestamp())
 					break
 				end
 			end
 		end
-	else
-		if #players ~= 0 then
-			core.add_particlespawner({
-				texpool = {
-					{
-						name = "trialspawner_orange_bar_particles.1.png",
-						animation = {
-							type = "vertical_frames",
-							aspect_w = 8,
-							aspect_h = 8,
-							length = -1
-						}
-					},
-					{
-						name = "trialspawner_orange_bar_particles.2.png",
-						animation = {
-							type = "vertical_frames",
-							aspect_w = 8,
-							aspect_h = 8,
-							length = -1
-						}
-					},
+	elseif #players ~= 0 then
+		core.swap_node(pos, {name = "mcl_trial_spawners:trialspawner_on"})
+		core.add_particlespawner({
+			texpool = {
+				{
+					name = "trialspawner_orange_bar_particles.1.png",
+					animation = {
+						type = "vertical_frames",
+						aspect_w = 8,
+						aspect_h = 8,
+						length = -1
+					}
 				},
-				vel = {
-					min = vector.new(0, 0.1, 0),
-					max = vector.new(0, 1.5, 0),
+				{
+					name = "trialspawner_orange_bar_particles.2.png",
+					animation = {
+						type = "vertical_frames",
+						aspect_w = 8,
+						aspect_h = 8,
+						length = -1
+					}
 				},
-				exptime = {min = 1.1, max = 1.3},
-				amount = 50,
-				time = 0.1,
-				vertical = true,
-				glow = 15,
-				pos = pos,
-				radius = {min = 0.9, max = 1.1, bias = 1}
-			})
-
-			core.swap_node(pos, {name = "mcl_trial_spawners:trialspawner_on"})
-		end
+			},
+			vel = {
+				min = vector.new(0, 0.1, 0),
+				max = vector.new(0, 1.5, 0),
+			},
+			exptime = {min = 1.1, max = 1.3},
+			amount = 50,
+			time = 0.1,
+			vertical = true,
+			glow = 15,
+			pos = pos,
+			radius = {min = 0.9, max = 1.1, bias = 1}
+		})
+	elseif is_ominous then
+		core.swap_node(pos, {name = "mcl_trial_spawners:trialspawner"})
 	end
 end
 
@@ -514,7 +475,7 @@ local tpl = {
 		meta:set_string("mob", "mobs_mc:zombie")
 
 		meta:set_int("base_total_mobs", 6)
-		meta:set_int("total_mobs_added_per_player", 2)
+		meta:set_float("total_mobs_added_per_player", 2)
 
 		meta:set_string("active_players", core.serialize({}))
 
@@ -523,7 +484,7 @@ local tpl = {
 
 		meta:set_int("total_mobs_spawned", 0)
 
-		meta:set_float("spawn_interval", 2)
+		meta:set_float("spawn_interval", 2000)
 	end,
 	on_destruct = function(pos)
 		trial_spawners_spawned_mobs[core.hash_node_position(pos)] = nil
@@ -539,153 +500,34 @@ local tpl = {
 }
 
 core.register_node("mcl_trial_spawners:trialspawner", tpl)
+
 core.register_node("mcl_trial_spawners:trialspawner_on", table.merge(tpl, {
 	tiles = {
 		"trialspawner_top_on.png", "trialspawner_bottom_on.png", "trialspawner_side_on.png",
 		"trialspawner_side_on.png", "trialspawner_side_on.png", "trialspawner_side_on.png"
 	},
+	groups = table.merge(tpl.groups, {not_in_creative_inventory = 1, active_trial_spawner = 1}),
 	light_source = 8
 }))
+
 core.register_node("mcl_trial_spawners:ominous_trialspawner", table.merge(tpl, {
 	description = S("Trial spawner"),
 	tiles = {
 		"trialspawner_top_ominous.png", "trialspawner_bottom_ominous.png", "trialspawner_side_ominous.png",
 		"trialspawner_side_ominous.png", "trialspawner_side_ominous.png", "trialspawner_side_ominous.png"
 	},
-	groups = table.merge(tpl.groups, {not_in_creative_inventory = 1}),
+	groups = table.merge(tpl.groups, {not_in_creative_inventory = 1, ominous_trial_spawner = 1}),
 	light_source = 8
 }))
 
-local function register_item_spawner(name, def)
-	registered_item_spawners[name] = def
-end
-
-register_item_spawner("wind charged splash", {
-	entity_item = "mcl_potions:wind_charged_lingering",
-	func = function(pos)
-		local obj = core.add_entity(pos, "mcl_potions:wind_charged_lingering_flying")
-		obj:set_acceleration(vector.new(0, -9.8, 0))
-	end
-})
-
-register_item_spawner("oozing splash", {
-	entity_item = "mcl_potions:oozing_lingering",
-	func = function(pos)
-		local obj = core.add_entity(pos, "mcl_potions:oozing_lingering_flying")
-		obj:set_acceleration(vector.new(0, -20, 0))
-	end
-})
-
-register_item_spawner("weaving splash", {
-	entity_item = "mcl_potions:weaving_lingering",
-	func = function(pos)
-		local obj = core.add_entity(pos, "mcl_potions:weaving_lingering_flying")
-		obj:set_acceleration(vector.new(0, -20, 0))
-	end
-})
-
-register_item_spawner("infestation splash", {
-	entity_item = "mcl_potions:infestation_lingering",
-	func = function(pos)
-		local obj = core.add_entity(pos, "mcl_potions:infestation_lingering_flying")
-		obj:set_acceleration(vector.new(0, -20, 0))
-	end
-})
-
-register_item_spawner("strength splash", {
-	entity_item = "mcl_potions:strength_lingering",
-	func = function(pos)
-		local obj = core.add_entity(pos, "mcl_potions:strength_lingering_flying")
-		obj:set_acceleration(vector.new(0, -20, 0))
-	end
-})
-
-register_item_spawner("swiftness splash", {
-	entity_item = "mcl_potions:swiftness_lingering",
-	func = function(pos)
-		local obj = core.add_entity(pos, "mcl_potions:swiftness_lingering_flying")
-		obj:set_acceleration(vector.new(0, -20, 0))
-	end
-})
-
-register_item_spawner("slow falling splash", {
-	entity_item = "mcl_potions:slow_falling_lingering",
-	func = function(pos)
-		local obj = core.add_entity(pos, "mcl_potions:slow_falling_lingering_flying")
-		obj:set_acceleration(vector.new(0, -20, 0))
-	end
-})
-
-register_item_spawner("wind charge", {
-	entity_item = "mcl_charges:wind_charge",
-	func = function(pos)
-		local obj = core.add_entity(pos, "mcl_charges:wind_charge_flying")
-		obj:set_velocity(vector.new(0, -15, 0))
-	end
-})
-
-register_item_spawner("small fire charge", {
-	entity_item = "mcl_fire:fire_charge",
-	func = function(pos)
-		local obj = core.add_entity(pos, "mobs_mc:blaze_fireball")
-		local l = obj:get_luaentity()
-		l._shot_from_dispenser = true
-		l.switch = 1
-		obj:set_velocity(vector.new(0, -15, 0))
-	end
-})
-
-register_item_spawner("arrow", {
-	entity_item = "mcl_bows:arrow",
-	func = function(pos)
-		mcl_bows.shoot_arrow ("mcl_bows:arrow", pos, vector.new(0, -1, 0), 0, "mcl_trial_spawners:ominous_item_spawner", 1)
-	end
-})
-
-register_item_spawner("slowness arrow", {
-	entity_item = "mcl_potions:slowness_arrow",
-	func = function(pos)
-		local stack = ItemStack("mcl_potions:slowness_arrow")
-		local meta = stack:get_meta()
-		meta:set_int("mcl_potions:potion_potent", 4)
-		mcl_bows.shoot_arrow (stack:get_name(), pos, vector.new(0, -1, 0), 0, "mcl_trial_spawners:ominous_item_spawner", 1)
-	end
-})
-
-register_item_spawner("poison arrow", {
-	entity_item = "mcl_potions:poison_arrow",
-	func = function(pos)
-		mcl_bows.shoot_arrow ("mcl_potions:poison_arrow", pos, vector.new(0, -1, 0), 0, "mcl_trial_spawners:ominous_item_spawner", 1)
-	end
-})
-
-core.register_entity("mcl_trial_spawners:ominous_item_spawner", {
-	initial_properties = {
-		physical = false,
-		pointable = false,
-		visual = "wielditem",
-		visual_size = {x = 0.2, y = 0.2, z = 0.2},
-		automatic_rotate = 1,
-		static_save = true
+core.register_node("mcl_trial_spawners:ominous_trialspawner_on", table.merge(tpl, {
+	description = S("Trial spawner"),
+	tiles = {
+		"trialspawner_top_ominous.png", "trialspawner_bottom_ominous.png", "trialspawner_side_ominous.png",
+		"trialspawner_side_ominous.png", "trialspawner_side_ominous.png", "trialspawner_side_ominous.png"
 	},
-	on_activate = function(self, staticdata)
-		local data = core.deserialize(staticdata)
-		if not data then return end
-		self.type = data.type
-		self.spawn_time = data.spawn_time
-	end,
-	get_staticdata = function(self)
-		return core.serialize({
-			type = self.type,
-			spawn_time = self.spawn_time
-		})
-	end,
-	on_step = function(self)
-		if get_milisecond_timestamp() < self.spawn_time then return end
+	groups = table.merge(tpl.groups, {not_in_creative_inventory = 1, ominous_trial_spawner = 1, active_trial_spawner = 1}),
+	light_source = 8
+}))
 
-		local obj_pos = self.object:get_pos()
-		spawn_spawning_particles(obj_pos, true)
-		registered_item_spawners[self.type].func(obj_pos)
-		self.object:remove()
-	end
-})
+dofile(modpath .. "/item_spawner.lua")
