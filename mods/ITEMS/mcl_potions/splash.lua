@@ -38,7 +38,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 		end
 		return item
 	end
-	core.register_craftitem(id, {
+	core.register_craftitem(":" .. id, {
 		description = descr,
 		_tt_help = def._tt,
 		_dynamic_tt = def._dynamic_tt,
@@ -77,7 +77,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 
 	local w = 0.7
 
-	core.register_entity(id.."_flying",{
+	core.register_entity(":" ..id.."_flying",{
 		initial_properties = {
 			textures = {splash_image(color)},
 			hp_max = 1,

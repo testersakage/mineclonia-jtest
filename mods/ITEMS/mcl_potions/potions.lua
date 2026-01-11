@@ -205,7 +205,7 @@ function mcl_potions.register_potion(def)
 	local itemname = modname .. ":" .. name
 
 	pdef._get_all_virtual_items = generate_get_all_virtual_items_func(itemname, pdef, def.nocreative)
-	core.register_craftitem (itemname, pdef)
+	core.register_craftitem (":" .. itemname, pdef)
 
 	if def.has_splash or def.has_splash == nil then
 		local splash_desc = S("Splash @1", pdef.description)
