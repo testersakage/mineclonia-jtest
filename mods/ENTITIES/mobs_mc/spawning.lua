@@ -236,7 +236,7 @@ function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 
 	local node_data = self:get_node (node_cache, 0, node_pos)
 	local light = core.get_artificial_light (node_data.param1)
-	if not light or light > self.max_artificial_light then
+	if spawn_flag ~= "trial_spawner" and (not light or light > self.max_artificial_light) then
 		return false
 	end
 
@@ -244,9 +244,12 @@ function monster_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_c
 						sdata, node_cache, spawn_flag) then
 		-- Natural light tests are expensive...
 		local natural_light = core.get_natural_light (node_pos)
-		if not natural_light
-			or natural_light > self.max_light
-			or natural_light > math.random (0, 31) then
+		if spawn_flag ~= "trial_spawner"
+			and (
+				not natural_light
+				or natural_light > self.max_light
+				or natural_light > math.random (0, 31)
+			) then
 			return false
 		end
 		return true

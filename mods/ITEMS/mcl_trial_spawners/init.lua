@@ -175,48 +175,57 @@ local function attempt_spawning_trial_mob(pos, meta, is_ominous)
 
 		if is_in_eyesight_of_spawner(pos, spawn_attempt_pos) then
 			local mob_name = meta:get_string("mob")
-			local spawned_mob = core.add_entity(spawn_attempt_pos, mob_name)
-			local l = spawned_mob:get_luaentity()
-			l.persistent = true
-			mcl_trial_spawners.spawn_spawning_particles(pos, is_ominous)
-			mcl_trial_spawners.spawn_spawning_particles(spawned_mob:get_pos(), is_ominous)
+			-- local spawned_mob = core.add_entity(spawn_attempt_pos, mob_name)
+			local spawned_mob = mcl_mobs.spawn_abnormally(spawn_attempt_pos, mob_name, "", "trial_spawner")
 
-			if is_ominous then
-				local mobdef = mcl_mobs.registered_mobs[mob_name]
+			if spawned_mob then
+				local l = spawned_mob:get_luaentity()
+				l.persistent = true
+				l._effective_wielditem_drop_probability = 0
+				mcl_trial_spawners.spawn_spawning_particles(pos, is_ominous)
+				mcl_trial_spawners.spawn_spawning_particles(spawned_mob:get_pos(), is_ominous)
 
-				if mobdef.wears_armor then
-					if math.random() > 0.5 then
-						l.armor_list.torso = table.random_element(possible_mob_gear.chestplates):get_name()
-					end
+				if is_ominous then
+					local mobdef = mcl_mobs.registered_mobs[mob_name]
 
-					if math.random() > 0.5 then
-						l.armor_list.head = table.random_element(possible_mob_gear.helmets):get_name()
-					end
-
-					if l.can_wield_items then
-						if l.attack_type == "melee" then
-							l:set_wielditem(ItemStack(table.random_element(possible_mob_gear.melee_weapons):get_name()))
-						elseif l.attack_type == "bowshoot" then
-							l:set_wielditem(ItemStack(table.random_element(possible_mob_gear.ranged_weapons):get_name()))
+					if mobdef.wears_armor then
+						if math.random() > 0.5 then
+							l.armor_list.torso = table.random_element(possible_mob_gear.chestplates):get_name()
 						end
+
+						if math.random() > 0.5 then
+							l.armor_list.head = table.random_element(possible_mob_gear.helmets):get_name()
+						end
+
+						if l.can_wield_items then
+							if l.attack_type == "melee" then
+								l:set_wielditem(ItemStack(table.random_element(possible_mob_gear.melee_weapons):get_name()))
+							elseif l.attack_type == "bowshoot" then
+								l:set_wielditem(ItemStack(table.random_element(possible_mob_gear.ranged_weapons):get_name()))
+							end
+						end
+
+						l:set_armor_texture()
 					end
-
-					l:set_armor_texture()
 				end
+
+				if not trial_spawners_spawned_mobs[hash] then
+					trial_spawners_spawned_mobs[hash] = {}
+				end
+
+				table.insert(trial_spawners_spawned_mobs[hash], spawned_mob)
+
+				meta:set_int("total_mobs_spawned", meta:get_int("total_mobs_spawned") + 1)
+				meta:set_int("last_spawn", core.get_gametime())
+
+				return
 			end
-
-			if not trial_spawners_spawned_mobs[hash] then
-				trial_spawners_spawned_mobs[hash] = {}
-			end
-
-			table.insert(trial_spawners_spawned_mobs[hash], spawned_mob)
-
-			meta:set_int("total_mobs_spawned", meta:get_int("total_mobs_spawned") + 1)
-			meta:set_int("last_spawn", core.get_gametime())
-
-			return
 		end
+
+		frustration = frustration + 1
 	end
+
+	core.debug("frustrated as shit")
 end
 
 -- not optimized as it could be, but should be fine since these tables are so short
@@ -281,7 +290,7 @@ local function complete_trial(pos, meta, is_ominous)
 	end
 
 	local item_count = #core.deserialize(meta:get_string("active_players"))
-	local key_drop_chance = is_ominous and 0.3 or 0.1
+	local key_drop_chance = is_ominous and 0.3 or 0.5
 	local drop_pos = vector.offset(pos, 0, 1, 0)
 
 	meta:set_string("active_players", core.serialize({}))
