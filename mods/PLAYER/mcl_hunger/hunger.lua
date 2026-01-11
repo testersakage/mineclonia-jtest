@@ -209,8 +209,7 @@ function mcl_hunger.item_eat(hunger_points, replace_with_item, poisontime, poiso
 					do_poison = true
 				end
 				if do_poison then
-					local level = mcl_potions.get_effect_level(user, "hunger")
-					mcl_potions.give_effect_by_level("hunger", user, level+exhaust, poisontime)
+					mcl_potions.give_effect_by_level("hunger", user, exhaust, poisontime)
 				end
 			end
 
