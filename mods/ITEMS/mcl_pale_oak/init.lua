@@ -1,9 +1,8 @@
-local S = core.get_translator("mcl_pale_oak")
 local modname = core.get_current_modname()
 local modpath = core.get_modpath(modname)
 
 mcl_trees.register_wood("pale_oak",{
-	readable_name = S("Pale Oak"),
+	readable_name = "Pale Oak",
 	sign_color = "#cfbfc5",
 	tree_schems_2x2 = {
 		{file = modpath.."/schematics/mcl_pale_oak_1.mts", offset = vector.new(1,0,1)},
