@@ -1494,7 +1494,7 @@ local function register_biomes()
 		humidity_point = 80,
 		heat_point = 70,
 		_mcl_biome_type = "medium",
-		_mcl_palette_index = 35,
+		_mcl_palette_index = 31,
 		_mcl_skycolor = "#A4A4A4",
 		_mcl_fogcolor = overworld_fogcolor,
 		_mcl_groups = {
@@ -1514,7 +1514,7 @@ local function register_biomes()
 		humidity_point = 84,
 		heat_point = 70,
 		_mcl_biome_type = "medium",
-		_mcl_palette_index = 35,
+		_mcl_palette_index = 31,
 		_mcl_skycolor = "#A4A4A4",
 		_mcl_fogcolor = overworld_fogcolor,
 		_mcl_groups = {
