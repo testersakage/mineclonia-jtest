@@ -6,9 +6,8 @@ mcl_trial_spawners = {}
 
 local activation_radius = 14
 local spawning_radius = 4
--- local activation_cooldown = 30 * 60 * 1000
-local activation_cooldown = 30 * 1000
-local item_spawner_spawning_interval = 8000
+local activation_cooldown = 30 * 60
+local item_spawner_spawning_interval = 8
 
 local standard_loot_table = {
 	stacks_min = 1,
@@ -86,12 +85,6 @@ core.register_on_mods_loaded(function()
 		}
 	}
 end)
-
--- We use milisecond timestamps because meta:set_int() can't store very big numbers, and storing microseconds overflows.
--- This level of precision is completely irrelevant to us either way
-function mcl_trial_spawners.get_milisecond_timestamp()
-	return math.floor(core.get_us_time() / 1000)
-end
 
 local function spawn_blue_bar_particles(pos)
 	core.add_particlespawner({
@@ -178,7 +171,7 @@ local function attempt_spawning_trial_mob(pos, meta, is_ominous)
 
 	local frustration = 0
 	while frustration < 30 do
-		local spawn_attempt_pos = pos + vector.multiply(vector.random_direction(), (math.random() * (spawning_radius - 1) + 1))
+		local spawn_attempt_pos = pos + vector.multiply(vector.random_direction(), mcl_util.float_random(1, spawning_radius))
 
 		if is_in_eyesight_of_spawner(pos, spawn_attempt_pos) then
 			local mob_name = meta:get_string("mob")
@@ -219,7 +212,7 @@ local function attempt_spawning_trial_mob(pos, meta, is_ominous)
 			table.insert(trial_spawners_spawned_mobs[hash], spawned_mob)
 
 			meta:set_int("total_mobs_spawned", meta:get_int("total_mobs_spawned") + 1)
-			meta:set_int("last_spawn", mcl_trial_spawners.get_milisecond_timestamp())
+			meta:set_int("last_spawn", core.get_gametime())
 
 			return
 		end
@@ -277,7 +270,7 @@ local function can_trial_spawner_spawn_mobs(pos, meta, player_count, is_ominous)
 end
 
 local function complete_trial(pos, meta, is_ominous)
-	meta:set_int("last_activation", mcl_trial_spawners.get_milisecond_timestamp())
+	meta:set_int("last_activation", core.get_gametime())
 	meta:set_int("last_spawn", 0)
 	meta:set_int("total_mobs_spawned", 0)
 
@@ -331,7 +324,7 @@ end
 
 local function trial_spawner_step(pos, meta)
 	local last_activation = meta:get_int("last_activation")
-	local timestamp = mcl_trial_spawners.get_milisecond_timestamp()
+	local timestamp = core.get_gametime()
 
 	local node = core.get_node(pos)
 	local is_ominous = core.get_item_group(node.name, "ominous_trial_spawner") > 0
@@ -397,7 +390,7 @@ local function trial_spawner_step(pos, meta)
 			for obj in core.objects_inside_radius(pos, activation_radius) do
 				if table.indexof(spawned, obj) ~= -1 or core.is_player(obj) then
 					mcl_trial_spawners.spawn_item_spawner_above_object(obj)
-					meta:set_int("last_item_spawner", mcl_trial_spawners.get_milisecond_timestamp())
+					meta:set_int("last_item_spawner", core.get_gametime())
 					break
 				end
 			end
@@ -484,7 +477,7 @@ local tpl = {
 
 		meta:set_int("total_mobs_spawned", 0)
 
-		meta:set_float("spawn_interval", 2000)
+		meta:set_float("spawn_interval", 2)
 	end,
 	on_destruct = function(pos)
 		trial_spawners_spawned_mobs[core.hash_node_position(pos)] = nil
