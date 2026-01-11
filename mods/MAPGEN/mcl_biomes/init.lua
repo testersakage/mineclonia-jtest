@@ -1499,7 +1499,6 @@ local function register_biomes()
 		_mcl_fogcolor = overworld_fogcolor,
 		_mcl_groups = {
 			is_overworld = true,
-			is_forest = true,
 		},
 	})
 	core.register_biome({
@@ -1521,7 +1520,6 @@ local function register_biomes()
 		_mcl_groups = {
 			is_overworld = true,
 			is_ocean = true,
-			is_forest = true,
 		},
 	})
 

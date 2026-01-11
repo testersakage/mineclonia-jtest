@@ -241,6 +241,7 @@ local function initialize_engine_aliases ()
 						      overworld_subtypes),
 		ColdOcean = approximate_cold_ocean (),
 		DarkForest = related_list_from_base ("RoofedForest", overworld_subtypes),
+		PaleGarden = related_list_from_base ("PaleGarden", overworld_subtypes),
 		DeepColdOcean = approximate_cold_ocean (),
 		DeepFrozenOcean = {},
 		DeepOcean = approximate_ocean (),
