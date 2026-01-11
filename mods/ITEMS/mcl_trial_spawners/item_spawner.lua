@@ -2,7 +2,7 @@ local registered_item_spawners = {}
 
 function mcl_trial_spawners.spawn_item_spawner_above_object(obj)
 	local obj_pos = obj:get_pos()
-	local ray_destination = vector.offset(obj_pos, 0, math.random(2, 6), 0)
+	local ray_destination = vector.offset(obj_pos, 0, mcl_util.float_random(2, 6), 0)
 
 	local ray = core.raycast(vector.offset(obj_pos, 0, 0.5, 0), ray_destination, 0, 0)
 	local final_pos = ray_destination
@@ -15,7 +15,7 @@ function mcl_trial_spawners.spawn_item_spawner_above_object(obj)
 	end
 
 	local random_item_spawner, random_item_spawner_name = table.random_element(registered_item_spawners)
-	local spawn_time = ((math.random() * 3) + 3)
+	local spawn_time = mcl_util.float_random(3, 6)
 
 	core.add_particlespawner({
 		texture = "trialspawner_blue_dot_particle.png",
@@ -38,7 +38,7 @@ function mcl_trial_spawners.spawn_item_spawner_above_object(obj)
 		"mcl_trial_spawners:ominous_item_spawner",
 		core.serialize({
 			type = random_item_spawner_name,
-			spawn_time = mcl_trial_spawners.get_milisecond_timestamp() + spawn_time * 1000
+			spawn_time = core.get_gametime() + spawn_time
 		})
 	)
 	spawned_obj:set_properties({wield_item = random_item_spawner.entity_item})
@@ -169,7 +169,7 @@ core.register_entity("mcl_trial_spawners:ominous_item_spawner", {
 		})
 	end,
 	on_step = function(self)
-		if mcl_trial_spawners.get_milisecond_timestamp() < self.spawn_time then return end
+		if core.get_gametime() < self.spawn_time then return end
 
 		local obj_pos = self.object:get_pos()
 		mcl_trial_spawners.spawn_spawning_particles(obj_pos, true)
