@@ -512,8 +512,8 @@ mcl_mobs.register_mob ("mobs_mc:parched", parched)
 
 mcl_mobs.register_egg ("mobs_mc:skeleton", S("Skeleton"), "#c1c1c1", "#494949", 0)
 mcl_mobs.register_egg ("mobs_mc:stray", S("Stray"), "#5f7476", "#dae8e7", 0)
-mcl_mobs.register_egg ("mobs_mc:bogged", S("Bogged"), "#5FE476", "#444444", 0)
-mcl_mobs.register_egg ("mobs_mc:parched", S("Parched"), "#5FE476", "#444444", 0)
+mcl_mobs.register_egg ("mobs_mc:bogged", S("Bogged"), "#454a25", "#f7eac8", 0)
+mcl_mobs.register_egg ("mobs_mc:parched", S("Parched"), "#7a6e63", "#ebd2b3", 0)
 
 ------------------------------------------------------------------------
 -- Modern Skeleton + Stray spawning.
