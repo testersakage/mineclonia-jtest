@@ -434,6 +434,27 @@ function bogged:shoot_arrow (pos, dir)
 			false, wielditem)
 end
 
+function bogged:on_rightclick(clicker)
+	local item = clicker:get_wielded_item()
+	local item_name = item:get_name()
+
+	if core.get_item_group(item_name, "shears") > 0 and not self._bogged_sheared then
+		local pos = self.object:get_pos()
+		core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+		pos.y = pos.y + 1.5
+		core.add_item(pos, ItemStack(math.random() > 0.5 and "mcl_mushrooms:mushroom_brown" or "mcl_mushrooms:mushroom_red"))
+		core.add_item(pos, ItemStack(math.random() > 0.5 and "mcl_mushrooms:mushroom_brown" or "mcl_mushrooms:mushroom_red"))
+
+		if not core.is_creative_enabled(clicker:get_player_name()) then
+			local wear = mcl_autogroup.get_wear(item_name, "shearsy")
+			item:add_wear(wear)
+			clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
+		end
+
+		self._bogged_sheared = true
+	end
+end
+
 mcl_mobs.register_mob ("mobs_mc:bogged", bogged)
 
 ------------------------------------------------------------------------
