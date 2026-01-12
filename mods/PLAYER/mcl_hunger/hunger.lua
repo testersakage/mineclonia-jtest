@@ -49,9 +49,6 @@ local function is_eat_anim_possible (player, key)
 		return false
 	end
 
-	local rc = mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
-	if rc then return false end
-
 	local def = core.registered_items[itemname]
 	local creative = core.is_creative_enabled (player:get_player_name ())
 	local is_full = mcl_hunger.is_player_full (player)

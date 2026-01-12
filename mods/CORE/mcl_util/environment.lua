@@ -442,7 +442,10 @@ function mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
 			local on_rightclick_optional = nodedef and nodedef._mcl_on_rightclick_optional
 			if on_rightclick_optional then
 				local rc = on_rightclick_optional(pos, node, player, itemstack, pointed_thing)
-				if rc ~= nil then return rc end
+				if rc ~= nil then
+					mcl_hunger.prevent_eating (player)
+					return rc
+				end
 			end
 			local on_rightclick = nodedef and nodedef.on_rightclick
 			if not player:get_player_control().sneak and on_rightclick then
