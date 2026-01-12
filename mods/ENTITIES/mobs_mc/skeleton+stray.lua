@@ -390,11 +390,109 @@ end
 mcl_mobs.register_mob ("mobs_mc:stray", stray)
 
 ------------------------------------------------------------------------
+-- Bogged.
+------------------------------------------------------------------------
+
+local bogged = table.merge (skeleton, {
+	description = S("Bogged"),
+	mesh = "mobs_mc_skeleton.b3d",
+	hp_min = 16,
+	hp_max = 16,
+	shoot_interval = 1.5,
+	_mcl_freeze_damage = 2,
+	textures = {
+		{
+			"mobs_mc_empty.png", -- armor
+			"mobs_mc_bogged_overlay.png",
+			"mobs_mc_bogged.png",
+		},
+	},
+	drops = table.insert (table.copy (skeleton.drops), {
+		name = "mcl_potions:poison_arrow",
+		chance = 2,
+		min = 1,
+		max = 1,
+		looting = "rare",
+		looting_chance_function = function(lvl)
+			local chance = 0.5
+			for _ = 1, lvl do
+				if chance > 1 then
+					return 1
+				end
+				chance = chance + (1 - chance) / 2
+			end
+			return chance
+		end,
+	}),
+	conversion_step = nil,
+})
+
+function bogged:shoot_arrow (pos, dir)
+	local wielditem = self:get_wielditem ()
+	mcl_bows.shoot_arrow ("mcl_potions:poison_arrow", pos, dir,
+			self:get_yaw (), self.object, 0.5333333, nil,
+			false, wielditem)
+end
+
+mcl_mobs.register_mob ("mobs_mc:bogged", bogged)
+
+------------------------------------------------------------------------
+-- Parched.
+------------------------------------------------------------------------
+
+local parched = table.merge (skeleton, {
+	description = S("Parched"),
+	mesh = "mobs_mc_skeleton.b3d",
+	hp_min = 16,
+	hp_max = 16,
+	shoot_interval = 1.5,
+	_mcl_freeze_damage = 2,
+	ignited_by_sunlight = false,
+	avoids_sunlight = false,
+	textures = {
+		{
+			"mobs_mc_empty.png", -- armor
+			"mobs_mc_parched_overlay.png",
+			"mobs_mc_parched.png",
+		},
+	},
+	drops = table.insert (table.copy (skeleton.drops), {
+		name = "mcl_potions:weakness_arrow",
+		chance = 2,
+		min = 1,
+		max = 1,
+		looting = "rare",
+		looting_chance_function = function(lvl)
+			local chance = 0.5
+			for _ = 1, lvl do
+				if chance > 1 then
+					return 1
+				end
+				chance = chance + (1 - chance) / 2
+			end
+			return chance
+		end,
+	}),
+	conversion_step = nil,
+})
+
+function parched:shoot_arrow (pos, dir)
+	local wielditem = self:get_wielditem ()
+	mcl_bows.shoot_arrow ("mcl_potions:weakness_arrow", pos, dir,
+			self:get_yaw (), self.object, 0.5333333, nil,
+			false, wielditem)
+end
+
+mcl_mobs.register_mob ("mobs_mc:parched", parched)
+
+------------------------------------------------------------------------
 -- Skeleton & Stray spawning.
 ------------------------------------------------------------------------
 
 mcl_mobs.register_egg ("mobs_mc:skeleton", S("Skeleton"), "#c1c1c1", "#494949", 0)
 mcl_mobs.register_egg ("mobs_mc:stray", S("Stray"), "#5f7476", "#dae8e7", 0)
+mcl_mobs.register_egg ("mobs_mc:bogged", S("Bogged"), "#5FE476", "#444444", 0)
+mcl_mobs.register_egg ("mobs_mc:parched", S("Parched"), "#5FE476", "#444444", 0)
 
 ------------------------------------------------------------------------
 -- Modern Skeleton + Stray spawning.
@@ -412,13 +510,25 @@ local cold_biomes = {
 	"SnowySlopes",
 }
 
+local boggy_biomes = {
+	"MangroveSwamp",
+	"Swamp"
+}
+
+local desert_biomes = {
+	"Desert"
+}
+
 for _, biome in pairs (mobs_mc.monster_biomes) do
-	if table.indexof (cold_biomes, biome) == -1 then
+	if table.indexof (cold_biomes, biome) == -1 and table.indexof(boggy_biomes, biome) == -1 and table.indexof(desert_biomes, biome) == -1 then
 		table.insert (skeleton_biomes, biome)
 	end
 end
 
-local skeleton_spawner = table.merge (mobs_mc.monster_spawner, {
+
+local monster_spawner = mobs_mc.monster_spawner
+
+local skeleton_spawner = table.merge (monster_spawner, {
 	name = "mobs_mc:skeleton",
 	weight = 100,
 	pack_max = 4,
@@ -426,7 +536,7 @@ local skeleton_spawner = table.merge (mobs_mc.monster_spawner, {
 	biomes = skeleton_biomes,
 })
 
-local skeleton_spawner_soul_sand_valley = table.merge (mobs_mc.monster_spawner, {
+local skeleton_spawner_soul_sand_valley = table.merge (monster_spawner, {
 	name = "mobs_mc:skeleton",
 	weight = 20,
 	pack_max = 5,
@@ -438,7 +548,7 @@ local skeleton_spawner_soul_sand_valley = table.merge (mobs_mc.monster_spawner, 
 	max_artificial_light = 7,
 })
 
-local skeleton_spawner_cold = table.merge (mobs_mc.monster_spawner, {
+local skeleton_spawner_cold = table.merge (monster_spawner, {
 	name = "mobs_mc:skeleton",
 	weight = 20,
 	pack_max = 4,
@@ -446,7 +556,23 @@ local skeleton_spawner_cold = table.merge (mobs_mc.monster_spawner, {
 	biomes = cold_biomes,
 })
 
-local skeleton_spawner_nether_fortress = table.merge (mobs_mc.monster_spawner, {
+local skeleton_spawner_bogged = table.merge (monster_spawner, {
+	name = "mobs_mc:skeleton",
+	weight = 70,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = boggy_biomes,
+})
+
+local skeleton_spawner_desert = table.merge (monster_spawner, {
+	name = "mobs_mc:skeleton",
+	weight = 50,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = desert_biomes,
+})
+
+local skeleton_spawner_nether_fortress = table.merge (monster_spawner, {
 	name = "mobs_mc:skeleton",
 	weight = 2,
 	pack_max = 5,
@@ -459,7 +585,7 @@ local skeleton_spawner_nether_fortress = table.merge (mobs_mc.monster_spawner, {
 	max_artificial_light = 7,
 })
 
-local stray_spawner = table.merge (mobs_mc.monster_spawner, {
+local stray_spawner = table.merge (monster_spawner, {
 	name = "mobs_mc:stray",
 	weight = 80,
 	pack_max = 4,
@@ -467,9 +593,23 @@ local stray_spawner = table.merge (mobs_mc.monster_spawner, {
 	biomes = cold_biomes,
 })
 
-local monster_spawner = mobs_mc.monster_spawner
+local bogged_spawner = table.merge (monster_spawner, {
+	name = "mobs_mc:bogged",
+	weight = 30,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = cold_biomes,
+})
 
-function stray_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+local parched_spawner = table.merge (monster_spawner, {
+	name = "mobs_mc:parched",
+	weight = 50,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = desert_biomes,
+})
+
+local outdoor_test_spawn_condition = function (self, spawn_pos, node_pos, sdata, node_cache,
 					    spawn_flag)
 	return mcl_weather.is_outdoor (node_pos)
 		and monster_spawner.test_spawn_position (self, spawn_pos,
@@ -478,13 +618,23 @@ function stray_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cac
 							 spawn_flag)
 end
 
-function stray_spawner:describe_additional_spawning_criteria ()
+local outdoor_additional_spawning_criteria = function(self)
 	return monster_spawner.describe_additional_spawning_criteria (self)
 		.. "  " .. S ("Moreover, the block where the mob is to spawn must be exposed to sky.")
 end
 
+stray_spawner.test_spawn_position = outdoor_test_spawn_condition
+stray_spawner.describe_additional_spawning_criteria = outdoor_additional_spawning_criteria
+
+parched_spawner.test_spawn_position = outdoor_test_spawn_condition
+parched_spawner.describe_additional_spawning_criteria = outdoor_additional_spawning_criteria
+
 mcl_mobs.register_spawner (skeleton_spawner)
 mcl_mobs.register_spawner (skeleton_spawner_soul_sand_valley)
 mcl_mobs.register_spawner (skeleton_spawner_cold)
+mcl_mobs.register_spawner (skeleton_spawner_bogged)
+mcl_mobs.register_spawner (skeleton_spawner_desert)
 mcl_mobs.register_spawner (skeleton_spawner_nether_fortress)
 mcl_mobs.register_spawner (stray_spawner)
+mcl_mobs.register_spawner (bogged_spawner)
+mcl_mobs.register_spawner (parched_spawner)
