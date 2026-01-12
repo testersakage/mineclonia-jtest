@@ -250,7 +250,7 @@ awards.register_achievement("mcl:onARail", {
 	group = "Adventure",
 })
 
--- Triggered in mobs_mc/skeleton+stray.lua
+-- Triggered in mobs_mc/skeleton+variants.lua
 awards.register_achievement("mcl:snipeSkeleton", {
 	title = S("Sniper Duel"),
 	-- TODO: The range should be 50, not 20. Nerfed because of reduced bow range

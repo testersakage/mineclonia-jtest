@@ -48,7 +48,7 @@ local files = {
 	"sheep.lua",
 	"shulker.lua",
 	"silverfish.lua",
-	"skeleton+stray.lua",
+	"skeleton+variants.lua",
 	"skeleton_wither.lua",
 	"slime+magma_cube.lua",
 	"snowman.lua",
