@@ -180,6 +180,12 @@ function horse:on_spawn ()
 	self:set_textures (tex)
 end
 
+function horse:actionable_on_rightclick (clicker)
+	local wielditem = clicker:get_wielded_item ()
+	local wield_food = self._food_items[wielditem:get_name ()] ~= nil
+	return self.tamed or wield_food
+end
+
 ------------------------------------------------------------------------
 -- Horse AI.
 ------------------------------------------------------------------------
@@ -1147,9 +1153,9 @@ local function check_skeleton_trap (self, self_pos, dtime)
 			if skelly then
 				local entity = skelly:get_luaentity ()
 				entity:jock_to_existing (horse, "", {
-								 x = 0,
-								 y = 1.6,
-								 z = 0,
+					x = 0,
+					y = 1.6,
+					z = 0,
 				}, vector.zero ())
 				-- Equip it with an enchanted iron
 				-- helmet and bow (or whatever it

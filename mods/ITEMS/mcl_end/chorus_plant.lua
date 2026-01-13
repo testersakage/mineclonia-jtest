@@ -546,30 +546,18 @@ local function random_teleport(player)
 	return false
 end
 
--- Randomly teleport player and update hunger
-local eat_chorus_fruit = function(itemstack, player, pointed_thing)
-	local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
-	if rc then return rc end
-
-	local count = itemstack:get_count()
-	local new_itemstack = core.do_item_eat(4, nil, itemstack, player, pointed_thing)
-	local new_count = new_itemstack:get_count()
-	if count ~= new_count or new_itemstack:get_name() ~= "mcl_end:chorus_fruit" or (core.is_creative_enabled(player:get_player_name()) == true) then
-		random_teleport(player)
-	end
-	return new_itemstack
-end
-
 core.register_craftitem("mcl_end:chorus_fruit", {
 	description = S("Chorus Fruit"),
 	_tt_help = S("Randomly teleports you when eaten"),
 	_doc_items_longdesc = S("A chorus fruit is an edible fruit from the chorus plant which is home to the End. Eating it teleports you to the top of a random solid block nearby, provided you won't end up inside a liquid, solid or harmful blocks. Teleportation might fail if there are very few or no places to teleport to."),
 	wield_image = "mcl_end_chorus_fruit.png",
 	inventory_image = "mcl_end_chorus_fruit.png",
-	on_place = eat_chorus_fruit,
-	on_secondary_use = eat_chorus_fruit,
 	groups = { food = 2, transport = 1, eatable = 4, can_eat_when_full = 1 },
 	_mcl_saturation = 2.4,
+	_mcl_eat_effect = function (_, player)
+		-- Randomly teleport player and update hunger
+		random_teleport(player)
+	end,
 	_mcl_cooking_output = "mcl_end:chorus_fruit_popped"
 })
 

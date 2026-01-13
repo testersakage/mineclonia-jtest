@@ -87,8 +87,10 @@ function pig:on_breed (parent1, parent2)
 	end
 end
 
-function pig:actionable_on_rightclick (player)
-	return self.saddle == "yes"
+function pig:actionable_on_rightclick (clicker)
+	local wielditem = clicker:get_wielded_item ()
+	local wield_follow = table.indexof(self.follow, wielditem:get_name()) ~= -1
+	return self.saddle == "yes" or wield_follow
 end
 
 ------------------------------------------------------------------------

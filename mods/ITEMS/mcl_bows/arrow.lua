@@ -731,17 +731,13 @@ end)
 
 core.register_entity("mcl_bows:arrow_entity", ARROW_ENTITY)
 
-if core.get_modpath("mcl_core") and core.get_modpath("mcl_mobitems") then
-	core.register_craft({
-		output = "mcl_bows:arrow 4",
-		recipe = {
-			{"mcl_core:flint"},
-			{"mcl_core:stick"},
-			{"mcl_mobitems:feather"}
-		}
-	})
-end
+core.register_craft({
+	output = "mcl_bows:arrow 4",
+	recipe = {
+		{"mcl_core:flint"},
+		{"mcl_core:stick"},
+		{"mcl_mobitems:feather"}
+	}
+})
 
-if core.get_modpath("doc_identifier") then
-	doc.sub.identifier.register_object("mcl_bows:arrow_entity", "craftitems", "mcl_bows:arrow")
-end
+doc.sub.identifier.register_object("mcl_bows:arrow_entity", "craftitems", "mcl_bows:arrow")

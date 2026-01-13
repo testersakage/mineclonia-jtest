@@ -39,10 +39,7 @@ end
 
 local TNT_RANGE = 3
 
-local sounds
-if core.get_modpath("mcl_sounds") then
-	sounds = mcl_sounds.node_sound_wood_defaults()
-end
+local sounds = mcl_sounds.node_sound_wood_defaults()
 
 local longdesc
 if explosions_griefing then
@@ -258,17 +255,14 @@ end
 
 core.register_entity("mcl_tnt:tnt", TNT)
 
-if core.get_modpath("mcl_mobitems") then
-	core.register_craft({
-		output = "mcl_tnt:tnt",
-		recipe = {
-			{ "mcl_mobitems:gunpowder", "group:sand", "mcl_mobitems:gunpowder" },
-			{ "group:sand", "mcl_mobitems:gunpowder", "group:sand" },
-			{ "mcl_mobitems:gunpowder", "group:sand", "mcl_mobitems:gunpowder" }
-		},
-	})
-end
 
-if core.get_modpath("doc_identifier") then
-	doc.sub.identifier.register_object("mcl_tnt:tnt", "nodes", "mcl_tnt:tnt")
-end
+core.register_craft({
+	output = "mcl_tnt:tnt",
+	recipe = {
+		{ "mcl_mobitems:gunpowder", "group:sand", "mcl_mobitems:gunpowder" },
+		{ "group:sand", "mcl_mobitems:gunpowder", "group:sand" },
+		{ "mcl_mobitems:gunpowder", "group:sand", "mcl_mobitems:gunpowder" }
+	},
+})
+
+doc.sub.identifier.register_object("mcl_tnt:tnt", "nodes", "mcl_tnt:tnt")

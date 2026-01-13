@@ -176,7 +176,7 @@ core.register_craftitem("mcl_potions:water", {
 	stack_max = 1,
 	inventory_image = potion_image("#8091ff"),
 	wield_image = potion_image("#8091ff"),
-	groups = {brewitem=1, food=3, can_eat_when_full=1, water_bottle=1},
+	groups = {brewitem=1, food=3, eatable=0, can_eat_when_full=1, water_bottle=1},
 	on_place = water_bottle_on_place,
 	_on_dispense = dispense_water_bottle,
 	_placement_def = {
@@ -190,7 +190,7 @@ core.register_craftitem("mcl_potions:water", {
 	},
 	_dispense_into_walkable = true,
 	_mcl_cauldrons_liquid = "water",
-	on_secondary_use = core.item_eat(0, "mcl_potions:glass_bottle"),
+	_mcl_eat_replace_with = "mcl_potions:glass_bottle"
 })
 
 
@@ -203,13 +203,12 @@ core.register_craftitem("mcl_potions:river_water", {
 	stack_max = 1,
 	inventory_image = potion_image("#80a3ff"),
 	wield_image = potion_image("#80a3ff"),
-	groups = {brewitem=1, food=3, can_eat_when_full=1, water_bottle=1},
+	groups = {brewitem=1, food=3, eatable=0, can_eat_when_full=1, water_bottle=1},
 	on_place = water_bottle_on_place,
 	_on_dispense = dispense_water_bottle,
 	_dispense_into_walkable = true,
 	_mcl_cauldrons_liquid = "river_water",
-	on_secondary_use = core.item_eat(0, "mcl_potions:glass_bottle"),
-
+	_mcl_eat_replace_with = "mcl_potions:glass_bottle"
 })
 
 mcl_potions.register_splash("water", S("Splash Water Bottle"), "#8091ff", {

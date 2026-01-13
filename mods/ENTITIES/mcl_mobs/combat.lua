@@ -1,6 +1,10 @@
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
+------------------------------------------------------------------------
+-- Generic combat routines.
+------------------------------------------------------------------------
+
 local SIGHT_PERSISTENCE = 3.0
 
 function mob_class:do_attack(obj, persistence)
@@ -79,11 +83,14 @@ function mob_class:projectile_knockback (factor, dir)
 	end)
 end
 
-function mob_class:retaliate_against (source)
+function mob_class:retaliate_against (source, sight_persistence)
 	if self.attack ~= source then
-		self:do_attack (source, 15)
+		self:do_attack (source, sight_persistence)
 	else
-		self.sight_persistence = 15
+		local target = sight_persistence or SIGHT_PERSISTENCE
+		if self._sight_persistence < target then
+			self._sight_persistence = target
+		end
 	end
 end
 
@@ -134,7 +141,7 @@ function mob_class:receive_damage (mcl_reason, damage)
 		and source ~= self.object then
 		if not self.passive_towards_players
 			or not source:is_player () then
-			self:retaliate_against (source)
+			self:retaliate_against (source, 15)
 		end
 	end
 
@@ -298,10 +305,12 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			kb = kb * 1.5
 		end
 
-
 		local wielditem = hitter
 			and mcl_util.get_wielditem (hitter)
 			or ItemStack ()
+		if hitter then
+			kb = kb + mcl_util.get_additional_knockback (hitter)
+		end
 		kb = kb + mcl_enchanting.get_enchantment (wielditem, "knockback")
 		self.frame_speed_multiplier=2.3
 		if self.animation.run_end then
@@ -327,17 +336,18 @@ function mob_class:do_runaway ()
 end
 
 function mob_class:call_group_attack (hitter)
-	for obj in core.objects_inside_radius(hitter:get_pos(), self.view_range) do
-		if obj ~= hitter then
-			local ent = obj:get_luaentity()
+	local pos = hitter:get_pos ()
+	for obj in core.objects_inside_radius (pos, self.view_range) do
+		if obj ~= hitter and obj ~= self.object then
+			local ent = obj:get_luaentity ()
 			if ent then
 				-- only alert members of same mob or friends
 				if ent.group_attack then
 					if ent.name == self.name then
-						ent:do_attack(hitter)
+						ent:retaliate_against (hitter, nil)
 					elseif type(ent.group_attack) == "table" then
 						if table.indexof (ent.group_attack, self.name) ~= -1 then
-							ent:do_attack (hitter)
+							ent:retaliate_against (hitter, nil)
 						end
 					end
 				end
@@ -403,6 +413,22 @@ end
 -- Combat mechanics.
 ------------------------------------------------------------------------
 
+function mob_class:get_eye_height ()
+	if not self.jockey_vehicle then
+		return self.head_eye_height
+	else
+		return self.head_eye_height + self._jockey_eye_offset
+	end
+end
+
+function mob_class:get_shoot_offset ()
+	if not self.jockey_vehicle then
+		return self.shoot_offset
+	else
+		return self.shoot_offset + self._jockey_eye_offset
+	end
+end
+
 function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 	if not self.attacking then
 		-- Initialize parameters consulted during the attack.
@@ -417,7 +443,7 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 	local dist = vector.distance (self_pos, target_pos)
 	local shoot_pos = {
 		x = self_pos.x,
-		y = self_pos.y + self.shoot_offset,
+		y = self_pos.y + self:get_shoot_offset (),
 		z = self_pos.z,
 	}
 	local target_bb = self.attack:get_properties ()
@@ -506,7 +532,7 @@ function mob_class:attack_bowshoot (self_pos, dtime, target_pos, line_of_sight)
 				vec.y = vec.y + 0.12 * vector.length (vec)
 
 				if self.shoot_arrow then
-					local offset = self.shoot_offset
+					local offset = self:get_shoot_offset ()
 					local origin = vector.offset (self_pos, 0, offset, 0)
 					vec = vector.normalize (vec)
 					self:shoot_arrow (origin, vec)
@@ -667,9 +693,8 @@ end
 
 function mob_class:discharge_ranged (self_pos, target_pos)
 	local p = target_pos
-	local shoot_offset
-		= (self.collisionbox[2] + self.collisionbox[5]) / 2
-			+ self.shoot_offset
+	local cb_center = (self.collisionbox[2] + self.collisionbox[5]) / 2
+	local shoot_offset = cb_center + self:get_shoot_offset ()
 	local s = vector.offset (self_pos, 0, shoot_offset, 0)
 	local vec = vector.subtract (p, s)
 
@@ -1450,4 +1475,11 @@ end
 
 function mob_class:get_offhand_item ()
 	return ItemStack (self._offhand_item)
+end
+
+------------------------------------------------------------------------
+-- Callbacks.
+------------------------------------------------------------------------
+
+function mob_class:shield_impact (object, mcl_reason)
 end

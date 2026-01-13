@@ -195,6 +195,12 @@ end
 -- Zombie Villager interaction.
 ------------------------------------------------------------------------
 
+function zombie_villager:actionable_on_rightclick (clicker)
+	local wielditem = clicker:get_wielded_item()
+	return wielditem:get_name () == "mcl_core:apple_gold"
+		and mcl_potions.has_effect (self.object, "weakness")
+end
+
 function zombie_villager:on_rightclick (clicker)
 	if not self._curing and clicker and clicker:is_player() then
 		local wielditem = clicker:get_wielded_item()

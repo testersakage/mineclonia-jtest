@@ -101,23 +101,31 @@ function mcl_util.get_wielditem(object)
 	return ItemStack()
 end
 
-function mcl_util.target_eye_height(attack)
-	local luaentity = attack:get_luaentity()
+function mcl_util.get_additional_knockback (object)
+	local entity = object:get_luaentity ()
+	return entity
+		and entity.is_mob
+		and entity._attack_knockback
+		or 0
+end
 
-	if luaentity and luaentity.head_eye_height then
-		return luaentity.head_eye_height
-	elseif attack:is_player() then
-		return attack:get_properties().eye_height
+function mcl_util.target_eye_height (attack)
+	local luaentity = attack:get_luaentity ()
+
+	if luaentity and luaentity.is_mob then
+		return luaentity:get_eye_height ()
+	elseif attack:is_player () then
+		return attack:get_properties ().eye_height
 	end
 	return 0
 end
 
-function mcl_util.target_eye_pos(attack)
-	local luaentity = attack:get_luaentity()
-	local pos = attack:get_pos()
+function mcl_util.target_eye_pos (attack)
+	local luaentity = attack:get_luaentity ()
+	local pos = attack:get_pos ()
 
-	if luaentity and luaentity.head_eye_height then
-		pos.y = pos.y + luaentity.head_eye_height
+	if luaentity and luaentity.is_mob then
+		pos.y = pos.y + luaentity:get_eye_height ()
 	elseif attack:is_player() then
 		pos.y = pos.y + attack:get_properties ().eye_height
 	end

@@ -43,6 +43,7 @@ local files = {
 	"polar_bear.lua",
 	"pufferfish.lua",
 	"rabbit.lua",
+	"ravager.lua",
 	"salmon.lua",
 	"sheep.lua",
 	"shulker.lua",

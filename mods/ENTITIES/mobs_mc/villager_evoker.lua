@@ -5,6 +5,7 @@
 
 local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
+local posing_humanoid = mcl_mobs.posing_humanoid
 local illager = mobs_mc.illager
 local mob_griefing = core.settings:get_bool ("mobs_griefing", true)
 local is_valid = mcl_util.is_valid_objectref
@@ -15,7 +16,7 @@ local is_valid = mcl_util.is_valid_objectref
 
 local pr = PcgRandom (os.time () * 666)
 
-local evoker = table.merge (illager, {
+local evoker = table.merge (illager, table.merge (posing_humanoid, {
 	description = S("Evoker"),
 	type = "monster",
 	_spawn_category = "monster",
@@ -38,13 +39,7 @@ local evoker = table.merge (illager, {
 	},
 	makes_footstep_sound = true,
 	movement_speed = 10,
-	group_attack = {
-		"mobs_mc:evoker",
-		"mobs_mc:vindicator",
-		"mobs_mc:pillager",
-		"mobs_mc:illusioner",
-		"mobs_mc:witch",
-	},
+	group_attack = true,
 	runaway_from = {
 		"player",
 	},
@@ -86,7 +81,8 @@ local evoker = table.merge (illager, {
 	_banner_bone_position = vector.new (0, 0, -2.556729),
 	tracking_distance = 12.0,
 	view_range = 12.0,
-})
+	_humanoid_superclass = illager,
+}))
 
 ------------------------------------------------------------------------
 -- Evoker visuals.
@@ -102,6 +98,9 @@ local Y_AXIS = vector.new (0, 1, 0)
 
 function evoker:add_particlespawner (min_pos, max_pos)
 	local self_pos = self.object:get_pos ()
+	if self.jockey_vehicle then
+		self_pos.y = self_pos.y + self._jockey_eye_offset
+	end
 	local yaw = self:get_yaw ()
 	local min_pos = vector.rotate_around_axis (min_pos, Y_AXIS, yaw)
 	local max_pos = vector.rotate_around_axis (max_pos, Y_AXIS, yaw)
@@ -125,6 +124,8 @@ function evoker:add_particlespawner (min_pos, max_pos)
 end
 
 function evoker:do_custom (dtime)
+	posing_humanoid.do_custom (self, dtime)
+
 	if self._casting_spell and self._cast_particle then
 		if self:check_timer ("evoker_particles", 0.2) then
 			self:add_particlespawner (MIN_POS_1, MAX_POS_1)
@@ -141,6 +142,35 @@ function evoker:who_are_you_looking_at ()
 		self._locked_object = self._wololo_sheep
 	else
 		mob_class.who_are_you_looking_at (self)
+	end
+end
+
+local evoker_poses = {
+	["default"] = {
+		["leg.left"] = {},
+		["leg.right"] = {},
+	},
+	["jockey"] = {
+		["leg.left"] = {
+			vector.zero (),
+			vector.new (90, -30, 0),
+			nil,
+		},
+		["leg.right"] = {
+			vector.zero (),
+			vector.new (90, 30, 0),
+			nil,
+		},
+	},
+}
+
+evoker._arm_poses = evoker_poses
+
+function evoker:select_arm_pose ()
+	if not self.jockey_vehicle then
+		return "default"
+	else
+		return "jockey"
 	end
 end
 
@@ -594,7 +624,9 @@ function evoker_fangs:deal_fang_damage ()
 		if not recently_damaged[object] then
 			local entity = object:get_luaentity ()
 			if object:is_player ()
-				or (entity and entity.is_mob and not entity._is_illager) then
+				or (entity and entity.is_mob
+				    and not entity._is_illager
+				    and entity.name ~= "mobs_mc:ravager") then
 				local cbox = object:get_properties ().collisionbox
 				local pos = object:get_pos ()
 				cbox[1] = cbox[1] + pos.x

@@ -329,7 +329,7 @@ local function looking_at_candle(pointer, pointed_thing)
 end
 
 local tpl_cake = {
-	_food_particles = false,
+	_mcl_spawn_food_particles = false,
 	_mcl_baseitem = get_candle_item,
 	on_destruct = drop_candles,
 	collision_box = cake_box,

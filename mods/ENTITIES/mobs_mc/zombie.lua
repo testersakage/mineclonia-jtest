@@ -585,7 +585,7 @@ end
 ------------------------------------------------------------------------
 
 function zombie:step_conversion (dtime)
-	if self._immersion_depth > self.head_eye_height then
+	if self._immersion_depth > self:get_eye_height () then
 		self._time_submerged = self._time_submerged + dtime
 		if self._time_submerged > 30 then
 			self.shaking = true

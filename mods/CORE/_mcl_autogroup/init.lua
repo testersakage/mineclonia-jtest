@@ -459,6 +459,13 @@ local function overwrite()
 			})
 		end
 
+		if tdef.groups.eatable and tdef.groups.eatable > 0 then
+			core.override_item(tname, {
+				touch_interaction = "short_dig_long_place",
+			})
+		end
+
+
 		if tdef._mcl_burntime and tdef._mcl_burntime > 0 then
 			core.register_craft({
 				type = "fuel",

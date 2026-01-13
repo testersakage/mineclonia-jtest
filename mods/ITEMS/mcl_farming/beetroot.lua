@@ -159,8 +159,6 @@ core.register_craftitem("mcl_farming:beetroot_item", {
 	_doc_items_usagehelp = S("Hold it in your hand and right-click to eat it. Rightclick an animal to feed it."),
 	inventory_image = "mcl_farming_beetroot.png",
 	wield_image = "mcl_farming_beetroot.png",
-	on_place = core.item_eat(1),
-	on_secondary_use = core.item_eat(1),
 	groups = {food = 2, eatable = 1, compostability = 65},
 	_mcl_saturation = 1.2,
 	_mcl_crafting_output = {single = {output = "mcl_dyes:red"}}
@@ -172,9 +170,8 @@ core.register_craftitem("mcl_farming:beetroot_soup", {
 	stack_max = 1,
 	inventory_image = "mcl_farming_beetroot_soup.png",
 	wield_image = "mcl_farming_beetroot_soup.png",
-	on_place = core.item_eat(6, "mcl_core:bowl"),
-	on_secondary_use = core.item_eat(6, "mcl_core:bowl"),
-	groups = { food = 3, eatable = 6 },
+	groups = { food = 2, eatable = 6 },
+	_mcl_eat_replace_with = "mcl_core:bowl",
 	_mcl_saturation = 7.2,
 })
 
@@ -189,10 +186,8 @@ core.register_craft({
 
 mcl_farming:add_plant("plant_beetroot", "mcl_farming:beetroot", {"mcl_farming:beetroot_0", "mcl_farming:beetroot_1", "mcl_farming:beetroot_2"}, 68, 3)
 
-if core.get_modpath("doc") then
-	for i = 1, 2 do
-		doc.add_entry_alias("nodes", "mcl_farming:beetroot_0", "nodes", "mcl_farming:beetroot_" .. i)
-	end
+for i = 1, 2 do
+	doc.add_entry_alias("nodes", "mcl_farming:beetroot_0", "nodes", "mcl_farming:beetroot_" .. i)
 end
 
 core.register_alias("beetroot_seeds", "mcl_farming:beetroot_seeds")

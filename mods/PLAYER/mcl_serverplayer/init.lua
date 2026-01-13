@@ -95,7 +95,7 @@ end)
 -- Modchannel message definitions.
 -----------------------------------------------------------------------
 
-local MAX_PROTO_VERSION = 9
+local MAX_PROTO_VERSION = 10
 
 -- Serverbound messages.
 local SERVERBOUND_HELLO = 'aa'
@@ -200,6 +200,11 @@ function mcl_serverplayer.send_posectrl (player, override)
 end
 
 function mcl_serverplayer.send_shieldctrl (player, active_shield)
+	-- On protocol version 0, ACTIVE_SHIELD is an integer
+	-- specifying whether a shield is active.
+	--
+	-- On protocol version >= 10, ACTIVE_SHIELD is the number of
+	-- seconds for which shields are to be disabled.
 	modchannels[player]:send_all (table.concat ({
 		CLIENTBOUND_SHIELDCTRL, active_shield,
 	}))
@@ -704,13 +709,8 @@ local function receive_modchannel_message_1 (player, message)
 				-- Guarantee that the stack's contents
 				-- haven't changed in the interim.
 				if inv:get_stack ("main", index):equals (stack) then
-					stack = def.on_place (stack, player, {
-						type = "nothing",
-						_csm_eating = true,
-					})
-					if stack then
-						inv:set_stack ("main", index, stack)
-					end
+					core.do_item_eat(def.groups.eatable, def._mcl_eat_replace_with, stack, player)
+					player:set_wielded_item(stack)
 				end
 			else
 				error ("Attempting to consume non-edible item")

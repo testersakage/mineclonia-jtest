@@ -378,7 +378,7 @@ if not mcl_levelgen.is_levelgen_environment then
 					weight = 3,
 				},
 				{
-					itemstring = "mcl_mobitems:obsidian",
+					itemstring = "mcl_core:obsidian",
 					weight = 2,
 				},
 			},

@@ -27,6 +27,13 @@ satiation. This is different from the hunger mod by BlockMen.
 You gain health at 5.5 symbols or more, as 5.5 symbols correspond to 16 satiation points.
 You *may* lose health at exactly 0.5 symbols, as 0.5 symbols correspond to 1-2 satiation points.
 
+## Eat animation
+Holding right-click (or the use button) with food plays a short eating animation.
+The item moves toward your face, chewing sounds and particles appear, and your movement slows.
+Most foods take about 1.6 seconds to finish if you keep holding.
+When the animation completes, one item is consumed, hunger and saturation are restored, and any effects are applied.
+Releasing early will cancels it.
+
 ### Examples
 
 * Eating an apple (from Minetest Game) increases your satiation by 2;

@@ -56,6 +56,15 @@ to `mcl_levelgen.notify_generated', or a list thereof if
 
 This function must be invoked at top level during mod initialization.
 
+Function: mcl_levelgen.register_on_scripts_loaded (FN)
+
+Arrange (during the execution of one such script) that the callback FN
+should be executed after all level generator scripts registered with
+`registered_levelgen_script' have been executed.  This function is
+analogous to `core.register_on_mods_loaded'; FN is invoked with no
+arguments, and callbacks registered by these means are executed in the
+sequence in which their registration is completed.
+
 Variable: mcl_levelgen.is_levelgen_environment
 
 Value is true if this environment is one in which a registered script

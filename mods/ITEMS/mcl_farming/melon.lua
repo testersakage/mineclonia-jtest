@@ -138,8 +138,6 @@ core.register_craftitem("mcl_farming:melon_item", {
 	description = S("Melon Slice"),
 	_doc_items_longdesc = S("This is a food item which can be eaten."),
 	inventory_image = "farming_melon.png",
-	on_place = core.item_eat(2),
-	on_secondary_use = core.item_eat(2),
 	groups = {food = 2, eatable = 2, compostability = 50},
 	_mcl_saturation = 1.2,
 	_mcl_crafting_output = {
@@ -148,8 +146,6 @@ core.register_craftitem("mcl_farming:melon_item", {
 	}
 })
 
-if core.get_modpath("doc") then
-	for i=2,8 do
-		doc.add_entry_alias("nodes", "mcl_farming:melontige_1", "nodes", "mcl_farming:melontige_"..i)
-	end
+for i=2,8 do
+	doc.add_entry_alias("nodes", "mcl_farming:melontige_1", "nodes", "mcl_farming:melontige_"..i)
 end

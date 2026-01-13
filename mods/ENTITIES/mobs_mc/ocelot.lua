@@ -908,6 +908,12 @@ local cat_food = {
 	"mcl_fishing:salmon_raw",
 }
 
+function cat:actionable_on_rightclick (clicker)
+	local wielditem = clicker:get_wielded_item ()
+	local wield_food = table.indexof(cat_food, wielditem:get_name()) ~= -1
+	return self.tamed or wield_food
+end
+
 function cat:on_rightclick (clicker)
 	if not clicker or not clicker:is_player () then
 		return

@@ -2,10 +2,7 @@ local modpath = core.get_modpath(core.get_current_modname())
 
 mcl_weather = {}
 
--- If not located then embeded skycolor mod version will be loaded.
-if core.get_modpath("skycolor") == nil then
-	dofile(modpath.."/skycolor.lua")
-end
+dofile(modpath.."/skycolor.lua")
 
 dofile(modpath.."/weather_core.lua")
 dofile(modpath.."/snow.lua")

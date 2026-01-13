@@ -366,9 +366,7 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 			_mcl_hardness = 0,
 		})
 
-		if core.get_modpath("doc") then
-			doc.add_entry_alias("nodes", full_unconnected_stem, "nodes", connected_stem_names[i])
-		end
+		doc.add_entry_alias("nodes", full_unconnected_stem, "nodes", connected_stem_names[i])
 	end
 
 	core.register_abm({
@@ -465,13 +463,13 @@ end
 
 Used for on_place callbacks for craft items which are seeds that can also be consumed.
 ]]
-function mcl_farming:get_seed_or_eat_callback(plantname, hp_change)
+function mcl_farming:get_seed_or_eat_callback(plantname, hunger_points)
 	return function(itemstack, placer, pointed_thing)
 		local new = mcl_farming:place_seed(itemstack, placer, pointed_thing, plantname)
 		if new then
 			return new
 		else
-			return core.do_item_eat(hp_change, nil, itemstack, placer, pointed_thing)
+			return core.do_item_eat(hunger_points, nil, itemstack, placer, pointed_thing)
 		end
 	end
 end

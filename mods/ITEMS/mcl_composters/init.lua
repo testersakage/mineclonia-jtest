@@ -286,10 +286,7 @@ local function register_filled_composter(level)
 		_mcl_baseitem = "mcl_composters:composter",
 	})
 
-	-- Add entry aliases for the Help
-	if core.get_modpath("doc") then
-		doc.add_entry_alias("nodes", "mcl_composters:composter", "nodes", id)
-	end
+	doc.add_entry_alias("nodes", "mcl_composters:composter", "nodes", id)
 end
 
 --- Register filled composters (7 levels).
@@ -340,8 +337,4 @@ core.register_node("mcl_composters:composter_ready", {
 	_mcl_baseitem = "mcl_composters:composter",
 })
 
--- Add entry aliases for the Help
-if core.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_composters:composter",
-		"nodes", "mcl_composters:composter_ready" )
-end
+doc.add_entry_alias("nodes", "mcl_composters:composter", "nodes", "mcl_composters:composter_ready" )

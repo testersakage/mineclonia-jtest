@@ -156,32 +156,9 @@ core.register_craftitem("mcl_core:apple", {
 	_doc_items_longdesc = S("Apples are food items which can be eaten."),
 	wield_image = "default_apple.png",
 	inventory_image = "default_apple.png",
-	on_place = core.item_eat(4),
-	on_secondary_use = core.item_eat(4),
 	groups = { food = 2, eatable = 4, compostability = 65 },
 	_mcl_saturation = 2.4,
 })
-
-local gapple_hunger_restore = core.item_eat(4)
-
-local function eat_gapple(itemstack, placer, pointed_thing)
-	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-	if rc then return rc end
-
-	if pointed_thing.type == "object" then
-		return itemstack
-	end
-
-	local regen_duration, absorption = 5, 1
-	if itemstack:get_name() == "mcl_core:apple_gold_enchanted" then
-		regen_duration, absorption = 20, 4
-		mcl_potions.give_effect("fire_resistance", placer, 1, 300)
-		mcl_potions.give_effect_by_level("resistance", placer, 1, 300)
-	end
-	mcl_potions.give_effect_by_level("absorption", placer, absorption, 120)
-	mcl_potions.give_effect_by_level("regeneration", placer, 2, regen_duration)
-	return gapple_hunger_restore(itemstack, placer, pointed_thing)
-end
 
 core.register_craftitem("mcl_core:apple_gold", {
 	-- TODO: Add special highlight color
@@ -189,10 +166,12 @@ core.register_craftitem("mcl_core:apple_gold", {
 	_doc_items_longdesc = S("Golden apples are precious food items which can be eaten."),
 	wield_image = "mcl_core_apple_golden.png",
 	inventory_image = "mcl_core_apple_golden.png",
-	on_place = eat_gapple,
-	on_secondary_use = eat_gapple,
 	groups = { food = 2, eatable = 4, can_eat_when_full = 1 },
 	_mcl_saturation = 9.6,
+	_mcl_eat_effect = function (_, placer)
+		mcl_potions.give_effect_by_level("absorption", placer, 1, 120)
+		mcl_potions.give_effect_by_level("regeneration", placer, 2, 5)
+	end,
 	_placement_def = {
 		["mobs_mc:villager_zombie"] = "default",
 		inherit = "magic_victuals",
@@ -204,8 +183,12 @@ core.register_craftitem("mcl_core:apple_gold_enchanted", {
 	_doc_items_longdesc = S("Golden apples are precious food items which can be eaten."),
 	wield_image = "mcl_core_apple_golden.png" .. mcl_enchanting.overlay,
 	inventory_image = "mcl_core_apple_golden.png" .. mcl_enchanting.overlay,
-	on_place = eat_gapple,
-	on_secondary_use = eat_gapple,
 	groups = { food = 2, eatable = 4, can_eat_when_full = 1, rarity = 2 },
 	_mcl_saturation = 9.6,
+	_mcl_eat_effect = function (_, placer)
+		mcl_potions.give_effect("fire_resistance", placer, 1, 300)
+		mcl_potions.give_effect_by_level("resistance", placer, 1, 300)
+		mcl_potions.give_effect_by_level("absorption", placer, 4, 120)
+		mcl_potions.give_effect_by_level("regeneration", placer, 2, 20)
+	end
 })

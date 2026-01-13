@@ -177,9 +177,9 @@ dofile (prefix .. "/surface_system.lua")
 dofile (prefix .. "/surface_presets.lua")
 dofile (prefix .. "/carvers.lua")
 dofile (prefix .. "/schematics.lua")
+dofile (prefix .. "/scripting.lua")
 dofile (prefix .. "/features.lua")
 dofile (prefix .. "/structures.lua")
-dofile (prefix .. "/scripting.lua")
 
 -- Is this file being loaded into Luanti?
 if core and core.get_current_modname then

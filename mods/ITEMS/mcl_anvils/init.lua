@@ -405,6 +405,7 @@ local anvildef = {
 	_mcl_hardness = 5,
 	_mcl_after_falling = damage_anvil_by_falling,
 
+	on_rotate = screwdriver.rotate_simple,
 	after_dig_node = drop_contents,
 	allow_metadata_inventory_take = function(pos, listname, _, stack, player)
 		local name = player:get_player_name()
@@ -577,9 +578,6 @@ local anvildef = {
 	end,
 }
 
-if core.get_modpath("screwdriver") then
-	anvildef.on_rotate = screwdriver.rotate_simple
-end
 
 core.register_node("mcl_anvils:anvil", table.merge(anvildef, {
 	description = S("Anvil"),
@@ -610,21 +608,18 @@ core.register_node("mcl_anvils:anvil_damage_2", table.merge(anvildef1, {
 	tiles = { "mcl_anvils_anvil_top_damaged_2.png^[transformR90", "mcl_anvils_anvil_base.png", "mcl_anvils_anvil_side.png" }
 }))
 
-if core.get_modpath("mcl_core") then
-	core.register_craft({
-		output = "mcl_anvils:anvil",
-		recipe = {
-			{ "mcl_core:ironblock", "mcl_core:ironblock", "mcl_core:ironblock" },
-			{ "", "mcl_core:iron_ingot", "" },
-			{ "mcl_core:iron_ingot", "mcl_core:iron_ingot", "mcl_core:iron_ingot" },
-		},
-	})
-end
 
-if core.get_modpath("doc") then
-	doc.add_entry_alias("nodes", "mcl_anvils:anvil", "nodes", "mcl_anvils:anvil_damage_1")
-	doc.add_entry_alias("nodes", "mcl_anvils:anvil", "nodes", "mcl_anvils:anvil_damage_2")
-end
+core.register_craft({
+	output = "mcl_anvils:anvil",
+	recipe = {
+		{ "mcl_core:ironblock", "mcl_core:ironblock", "mcl_core:ironblock" },
+		{ "", "mcl_core:iron_ingot", "" },
+		{ "mcl_core:iron_ingot", "mcl_core:iron_ingot", "mcl_core:iron_ingot" },
+	},
+})
+
+doc.add_entry_alias("nodes", "mcl_anvils:anvil", "nodes", "mcl_anvils:anvil_damage_1")
+doc.add_entry_alias("nodes", "mcl_anvils:anvil", "nodes", "mcl_anvils:anvil_damage_2")
 
 -- Legacy
 core.register_lbm({

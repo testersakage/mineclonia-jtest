@@ -201,7 +201,7 @@ function llama:discharge_ranged (self_pos, target_pos)
 	local attack = self.attack
 	local eye_height = mcl_util.target_eye_height (attack)
 	local p = vector.offset (target_pos, 0, eye_height, 0)
-	local s = vector.offset (self_pos, 0, self.shoot_offset, 0)
+	local s = vector.offset (self_pos, 0, self:get_shoot_offset (), 0)
 	local vec = vector.subtract (p, s)
 
 	self:mob_sound ("shoot_attack")
@@ -393,8 +393,8 @@ function llama:should_attack (object)
 		and entity:valid_enemy ()
 end
 
-function llama:retaliate_against (source)
-	mob_class.retaliate_against (self, source)
+function llama:retaliate_against (source, persistence)
+	mob_class.retaliate_against (self, source, persistence)
 	self._is_retaliating = true
 end
 

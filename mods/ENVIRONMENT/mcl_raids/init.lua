@@ -646,10 +646,9 @@ local mobs_and_spawn_count_by_wave = {
 	["mobs_mc:witch"] = {
 		0, 0, 0, 3, 0, 0, 1,
 	},
-	-- WARNING: not yet available.
-	-- ["mobs_mc:ravager"] = {
-	--         0, 0, 1, 0, 1, 0, 2,
-	-- },
+	["mobs_mc:ravager"] = {
+	        0, 0, 1, 0, 1, 0, 2,
+	},
 }
 
 local function num_ordinary_spawns (self, mobtype, wave)
@@ -657,7 +656,7 @@ local function num_ordinary_spawns (self, mobtype, wave)
 	return tbl and tbl[math.min (wave, self.num_ordinary_waves)] or 0
 end
 
-local function num_special_spawns (self, mobtype, wave)
+local function num_special_spawns (self, mobtype, wave, is_bonus_wave)
 	local max_special_spawns = 0
 
 	if mobtype == "mobs_mc:vindicator"
@@ -678,6 +677,10 @@ local function num_special_spawns (self, mobtype, wave)
 			and wave ~= 4 then
 			max_special_spawns = 1
 		end
+	elseif mobtype == "mobs_mc:ravager" then
+		if mcl_vars.difficulty > 1 and is_bonus_wave then
+			max_special_spawns = 1
+		end
 	end
 	return pr:next (0, max_special_spawns)
 end
@@ -686,6 +689,9 @@ local PERSISTENT_MOB_STATICDATA = core.serialize ({
 	persistent = true,
 	_raid_spawn = true,
 })
+
+local RAVAGER_ATTACHMENT_POS = vector.new (0, 16.5, -3.0)
+local RAVAGER_ATTACHMENT_ROT = vector.zero ()
 
 local function spawn_group (self, pos)
 	local wave = self.waves_spawned + 1
@@ -701,22 +707,51 @@ local function spawn_group (self, pos)
 	end
 	local max_hp = 0
 
+	local is_bonus_wave = self.bad_omen_level > 1
+		and wave > self.num_ordinary_waves
 	for mob, _ in pairs (mobs_and_spawn_count_by_wave) do
 		local count = num_ordinary_spawns (self, mob, wave)
-		count = count + num_special_spawns (self, mob, wave, pos)
+		count = count + num_special_spawns (self, mob, wave, is_bonus_wave)
 
-		for _ = 1, count do
+		for i = 1, count do
 			local staticdata = PERSISTENT_MOB_STATICDATA
-			local mob = core.add_entity (floor, mob, staticdata)
+			local obj = core.add_entity (floor, mob, staticdata)
 
-			if mob then
-				local luaentity = mob:get_luaentity ()
+			if obj then
+				local luaentity = obj:get_luaentity ()
 				if not captain and luaentity._can_serve_as_captain then
-					captain = mob
+					captain = obj
 				end
 				max_hp = max_hp + luaentity.initial_properties.hp_max
+
+				-- Spawn jockeys if necessary.
+				if mob == "mobs_mc:ravager" then
+					local jockey_type = nil
+					if wave == 5 then
+						jockey_type = "mobs_mc:pillager"
+					elseif wave >= 7 then
+						if i == 1 then
+							jockey_type = "mobs_mc:evoker"
+						else
+							jockey_type = "mobs_mc:vindicator"
+						end
+					end
+
+					if jockey_type then
+						local rider
+							= core.add_entity (floor, jockey_type, staticdata)
+						if rider then
+							local entity = rider:get_luaentity ()
+							local pos = RAVAGER_ATTACHMENT_POS
+							local rot = RAVAGER_ATTACHMENT_ROT
+							entity:jock_to_existing (obj, "", pos, rot, true)
+							max_hp = max_hp + entity.initial_properties.hp_max
+							table.insert (raiders_spawned, rider)
+						end
+					end
+				end
 			end
-			table.insert (raiders_spawned, mob)
+			table.insert (raiders_spawned, obj)
 		end
 	end
 
@@ -951,7 +986,7 @@ local function tick_raid (self, dtime)
 	self.update_timer = t - dtime
 
 	if t <= 0 then
-		update_raiders (self, dtime)
+		update_raiders (self, 1.0 - t)
 		update_players (self)
 		update_bossbar (self)
 		self.update_timer = 1.0

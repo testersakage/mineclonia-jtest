@@ -212,9 +212,7 @@ local function reset_bow_state(player, also_reset_bows)
 	playerphysics.remove_physics_factor(player, "fov", "mcl_bows:bow_zoom")
 	bow_load[player:get_player_name()] = nil
 	bow_index[player:get_player_name()] = nil
-	if core.get_modpath("playerphysics") then
-		playerphysics.remove_physics_factor(player, "speed", "mcl_bows:use_bow")
-	end
+	playerphysics.remove_physics_factor(player, "speed", "mcl_bows:use_bow")
 	if also_reset_bows then
 		reset_bows(player)
 	end
@@ -331,10 +329,8 @@ controls.register_on_hold(function(player, key)
 			wielditem:set_name("mcl_bows:bow_0")
 		end
 		player:set_wielded_item(wielditem)
-		if core.get_modpath("playerphysics") then
-			-- Slow player down when using bow
-			playerphysics.add_physics_factor(player, "speed", "mcl_bows:use_bow", PLAYER_USE_BOW_SPEED)
-		end
+		-- Slow player down when using bow
+		playerphysics.add_physics_factor(player, "speed", "mcl_bows:use_bow", PLAYER_USE_BOW_SPEED)
 		bow_load[name] = core.get_us_time()
 		bow_index[name] = player:get_wield_index()
 
@@ -385,28 +381,24 @@ core.register_on_leaveplayer(function(player)
 	reset_bow_state(player, true)
 end)
 
-if core.get_modpath("mcl_core") and core.get_modpath("mcl_mobitems") then
-	core.register_craft({
-		output = "mcl_bows:bow",
-		recipe = {
-			{"", "mcl_core:stick", "mcl_mobitems:string"},
-			{"mcl_core:stick", "", "mcl_mobitems:string"},
-			{"", "mcl_core:stick", "mcl_mobitems:string"},
-		}
-	})
-	core.register_craft({
-		output = "mcl_bows:bow",
-		recipe = {
-			{"mcl_mobitems:string", "mcl_core:stick", ""},
-			{"mcl_mobitems:string", "", "mcl_core:stick"},
-			{"mcl_mobitems:string", "mcl_core:stick", ""},
-		}
-	})
-end
+core.register_craft({
+	output = "mcl_bows:bow",
+	recipe = {
+		{"", "mcl_core:stick", "mcl_mobitems:string"},
+		{"mcl_core:stick", "", "mcl_mobitems:string"},
+		{"", "mcl_core:stick", "mcl_mobitems:string"},
+	}
+})
 
--- Add entry aliases for the Help
-if core.get_modpath("doc") then
-	doc.add_entry_alias("tools", "mcl_bows:bow", "tools", "mcl_bows:bow_0")
-	doc.add_entry_alias("tools", "mcl_bows:bow", "tools", "mcl_bows:bow_1")
-	doc.add_entry_alias("tools", "mcl_bows:bow", "tools", "mcl_bows:bow_2")
-end
+core.register_craft({
+	output = "mcl_bows:bow",
+	recipe = {
+		{"mcl_mobitems:string", "mcl_core:stick", ""},
+		{"mcl_mobitems:string", "", "mcl_core:stick"},
+		{"mcl_mobitems:string", "mcl_core:stick", ""},
+	}
+})
+
+doc.add_entry_alias("tools", "mcl_bows:bow", "tools", "mcl_bows:bow_0")
+doc.add_entry_alias("tools", "mcl_bows:bow", "tools", "mcl_bows:bow_1")
+doc.add_entry_alias("tools", "mcl_bows:bow", "tools", "mcl_bows:bow_2")

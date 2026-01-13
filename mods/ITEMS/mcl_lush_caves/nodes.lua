@@ -271,7 +271,6 @@ core.register_craftitem("mcl_lush_caves:glow_berry", {
 	_doc_items_longdesc = S("This is a food item which can be eaten."),
 	_doc_items_hidden = false,
 	inventory_image = "mcl_lush_caves_glow_berries.png",
-	on_secondary_use = core.item_eat(2),
 	groups = {food = 2, eatable = 2, compostability = 50},
 	_mcl_saturation = 1.2,
 	on_place = function(itemstack, placer, pointed_thing)

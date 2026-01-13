@@ -63,15 +63,19 @@ core.register_node("mcl_cake:cake", {
 			core.record_protection_violation(pos, name)
 			return
 		end
+		if mcl_hunger.is_player_full (clicker) then
+			return
+		end
 		-- Check if we were allowed to eat
 		if node.name == "mcl_cake:cake" or core.is_creative_enabled(clicker:get_player_name()) then
+			mcl_hunger.prevent_eating (clicker)
 			mcl_redstone.swap_node(pos, {name = "mcl_cake:cake_6", param2 = 0})
 			core.do_item_eat(2, ItemStack(), ItemStack("mcl_cake:cake"), clicker, {type="nothing"})
 		end
 	end,
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 
-	_food_particles = false,
+	_mcl_spawn_food_particles = false,
 	_mcl_saturation = 0.4,
 	_mcl_hardness = 0.5,
 })
@@ -87,6 +91,9 @@ local register_slice = function(level, nodebox, desc)
 				core.record_protection_violation(pos, name)
 				return
 			end
+			if mcl_hunger.is_player_full (clicker) then
+				return
+			end
 			-- Check if we were allowed to eat
 			if node.name == this or core.is_creative_enabled(clicker:get_player_name()) then
 				mcl_redstone.swap_node(pos, {name = after_eat, param2 = 0})
@@ -99,6 +106,9 @@ local register_slice = function(level, nodebox, desc)
 			local name = clicker:get_player_name()
 			if core.is_protected(pos, name) then
 				core.record_protection_violation(pos, name)
+				return
+			end
+			if mcl_hunger.is_player_full (clicker) then
 				return
 			end
 			-- Check if we were allowed to eat
@@ -135,7 +145,7 @@ local register_slice = function(level, nodebox, desc)
 		on_rightclick = on_rightclick,
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 
-		_food_particles = false,
+		_mcl_spawn_food_particles = false,
 		_mcl_saturation = 0.4,
 		_mcl_hardness = 0.5,
 	})

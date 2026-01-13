@@ -670,3 +670,4 @@ for _, script in ipairs (core.ipc_get ("mcl_levelgen:levelgen_scripts")) do
 		dofile (script.script)
 	end
 end
+mcl_levelgen.run_on_scripts_loaded ()

@@ -2,11 +2,23 @@ mcl_boats = {}
 local S = core.get_translator(core.get_current_modname())
 
 local boat_visual_size = {x = 1, y = 1, z = 1}
-local paddling_speed = 22
+local boat_anim = {x=1, y=456}
+local paddling_speed = (boat_anim.y - boat_anim.x) / 1 -- 1 second
 local boat_y_offset = 0.35
 local boat_y_offset_ground = boat_y_offset + 0.6
 local boat_side_offset = 1.001
 local boat_max_hp = 4
+local variant = {
+	BOAT = 0,
+	RAFT = 1,
+}
+mcl_boats.variant = variant
+local raft_specific_properties = {
+	collisionbox = {-0.25, 0.0, -0.55, 0.25, 0.30, 0.7},
+	selectionbox = {-0.7, 0.0, -0.7, 0.7, 0.30, 0.7},
+	mesh = "mcl_boats_raft.b3d",
+}
+
 
 local function is_group(pos, group)
 	local nn = core.get_node(pos).name
@@ -54,9 +66,47 @@ local function get_visual_size(obj)
 	return obj:is_player() and {x = 1, y = 1, z = 1} or obj:get_luaentity()._old_visual_size or obj:get_properties().visual_size
 end
 
+local function attach_driver(boat)
+	if (boat._variant == variant.RAFT) then
+		boat._driver:set_attach(boat.object, "",
+			{x = 0, y = 2.5, z = 0.5}, {x = 0, y = 0, z = 0})
+	else
+		boat._driver:set_attach(boat.object, "",
+			{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
+	end
+end
+
+
+local function attach_passenger(boat)
+	if not boat._passenger_seat or not boat._passenger_seat:get_luaentity() then
+		local pos = boat.object:get_pos()
+		boat._passenger_seat = core.add_entity(pos, "mcl_boats:seat")
+	end
+
+	if (boat._variant == variant.RAFT) then
+		boat._passenger_seat:set_attach(boat.object, "",
+			{x = 0, y = 2.5, z = -8.2}, {x = 0, y = 0, z = 0})
+	else
+		boat._passenger_seat:set_attach(boat.object, "",
+			{x = 0, y = 1.5, z = -7.2}, {x = 0, y = 0, z = 0})
+	end
+
+	boat._passenger:set_attach(boat._passenger_seat, "",
+		{x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+end
+
+local function attach_non_player_passenger(boat)
+	if (boat._variant == variant.RAFT) then
+		boat._passenger:set_attach(boat.object, "",
+			{x = 0, y = 2.5, z = -4.5}, {x = 0, y = 270, z = 0})
+	else
+		boat._passenger:set_attach(boat.object, "",
+			{x = 0, y = 1.5, z = -4.5}, {x = 0, y = 270, z = 0})
+	end
+end
+
 local function set_attach(boat)
-	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
+	attach_driver(boat)
 end
 
 local function remove_seat(self)
@@ -67,27 +117,16 @@ local function remove_seat(self)
 end
 
 local function set_double_attach(boat)
-	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 0.42, z = 0.8}, {x = 0, y = 0, z = 0})
-
-
+	attach_driver(boat)
 	if boat._passenger:is_player() then
-		if not boat._passenger_seat or not boat._passenger_seat:get_luaentity() then
-			local pos = boat.object:get_pos()
-			boat._passenger_seat = core.add_entity(pos, "mcl_boats:seat")
-		end
-		boat._passenger_seat:set_attach(boat.object, "",
-			{x = 0, y = 0.42, z = -6.2}, {x = 0, y = 0, z = 0})
-		boat._passenger:set_attach(boat._passenger_seat, "",
-			{x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+		attach_passenger(boat)
 	else
-		boat._passenger:set_attach(boat.object, "",
-			{x = 0, y = 0.42, z = -4.5}, {x = 0, y = 270, z = 0})
+		attach_non_player_passenger(boat)
 	end
 end
+
 local function set_choat_attach(boat)
-	boat._driver:set_attach(boat.object, "",
-		{x = 0, y = 1.5, z = 1}, {x = 0, y = 0, z = 0})
+	attach_driver(boat)
 end
 
 local function attach_object(self, obj)
@@ -154,6 +193,7 @@ local boat = {
 		damage_texture_modifier = "^[colorize:white:0",
 	},
 
+	_variant = variant.BOAT,
 	_driver = nil, -- Attached driver (player) or nil if none
 	_passenger = nil,
 	_v = 0, -- Speed
@@ -205,7 +245,7 @@ function boat:on_activate(staticdata)
 		if not data.textures then
 			local tx = { "mcl_boats_texture_oak_boat.png", "blank.png" }
 			if self.name == "mcl_boats:chest_boat" then
-				tx = { "mcl_boats_texture_oak_chest_boat.png", "mcl_chests_normal.png" }
+				tx = { "mcl_boats_texture_oak_boat.png", "mcl_chests_normal.png" }
 			end
 			data.textures = tx
 		end
@@ -223,6 +263,13 @@ function boat:on_activate(staticdata)
 			}
 		end
 
+		if data.variant then
+			self._variant = data.variant
+			if data.variant == variant.RAFT then
+				self.object:set_properties(raft_specific_properties)
+			end
+		end
+
 		self.object:set_properties({textures = data.textures})
 	end
 end
@@ -232,7 +279,8 @@ function boat:get_staticdata()
 	return core.serialize({
 		v = self._v,
 		itemstring = self._itemstring,
-		textures = props and props.textures or nil
+		textures = props and props.textures or nil,
+		variant = self._variant
 	})
 end
 
@@ -354,7 +402,7 @@ function boat:on_step(dtime, moveresult)
 			local v_horiz = math.sqrt (v.x * v.x + v.z * v.z)
 			if v_horiz > 0 then
 				if self._animation == 0 then
-					self.object:set_animation ({x = 0, y = 40}, paddling_speed, 0, true)
+					self.object:set_animation (boat_anim, paddling_speed, 0, true)
 					self._animation = 1
 				end
 			else
@@ -376,7 +424,7 @@ function boat:on_step(dtime, moveresult)
 
 			-- Paddling animation
 			if self._animation ~= 1 then
-				self.object:set_animation({x=0, y=40}, paddling_speed, 0, true)
+				self.object:set_animation(boat_anim, paddling_speed, 0, true)
 				self._animation = 1
 			end
 		elseif ctrl and ctrl.down then
@@ -385,13 +433,13 @@ function boat:on_step(dtime, moveresult)
 
 			-- Paddling animation, reversed
 			if self._animation ~= -1 then
-				self.object:set_animation({x=0, y=40}, -paddling_speed, 0, true)
+				self.object:set_animation(boat_anim, -paddling_speed, 0, true)
 				self._animation = -1
 			end
 		else
 			-- Stop paddling animation if no control pressed
 			if self._animation ~= 0 then
-				self.object:set_animation({x=0, y=40}, 0, 0, true)
+				self.object:set_animation(boat_anim, 0, 0, true)
 				self._animation = 0
 			end
 		end
@@ -411,7 +459,7 @@ function boat:on_step(dtime, moveresult)
 	else
 		-- Stop paddling without driver
 		if self._animation ~= 0 then
-			self.object:set_animation({x=0, y=40}, 0, 0, true)
+			self.object:set_animation(boat_anim, 0, 0, true)
 			self._animation = 0
 		end
 
@@ -550,8 +598,7 @@ core.register_entity("mcl_boats:seat", {
 
 local cboat = table.copy(boat)
 cboat._itemstring = "mcl_boats:chest_boat"
-cboat.initial_properties.textures = { "mcl_boats_texture_oak_chest_boat.png", "mcl_chests_normal.png" }
-cboat.initial_properties.collisionbox = {-0.5, -0.15, -0.5, 0.5, 0.75, 0.5}
+cboat.initial_properties.textures = { "mcl_boats_texture_oak_boat.png", "mcl_chests_normal.png" }
 cboat.initial_properties.selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.75, 0.7}
 
 function cboat:_on_show_entity_inv (player)
@@ -655,7 +702,14 @@ function mcl_boats.register_boat(name,item_def,object_properties,entity_override
 			if boat and boat:get_pos() then
 				local ent = boat:get_luaentity()
 				ent._itemstring = itemstring
-				boat:set_properties(table.merge({ textures = { texture, chest_tex }},object_properties or {}))
+				local custom_properties = {textures = {texture, chest_tex}}
+				if object_properties and object_properties.variant == variant.RAFT then
+					custom_properties = table.merge(raft_specific_properties, custom_properties)
+					ent._variant = variant.RAFT
+				else
+					ent._variant = variant.BOAT
+				end
+				boat:set_properties(table.merge( custom_properties, object_properties or {}))
 				boat:set_yaw(placer:get_look_horizontal())
 				for k,v in pairs(entity_overrides or {}) do
 					ent[k] = v

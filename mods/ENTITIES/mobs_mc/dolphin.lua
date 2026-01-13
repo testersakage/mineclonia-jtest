@@ -79,6 +79,11 @@ local dolphin = {
 -- Dolphin interaction.
 ------------------------------------------------------------------------
 
+function dolphin:actionable_on_rightclick (clicker)
+	local wielditem = clicker:get_wielded_item ()
+	return table.indexof(food_items, wielditem:get_name()) ~= -1
+end
+
 function dolphin:on_rightclick (clicker)
 	local wi = clicker:get_wielded_item()
 	if table.indexof(food_items, wi:get_name()) ~= -1 then

@@ -717,9 +717,7 @@ local function register_minecart(itemstring, entity_id, description, tt_help, lo
 	local entity = register_entity(entity_id, mesh, textures, drop, on_rightclick, on_activate_by_rail)
 	tt_help = (tt_help and tt_help .. "\n" or "") .. S("Sneak-click to remove")
 	register_craftitem(itemstring, entity_id, description, tt_help, longdesc, usagehelp, icon, creative)
-	if core.get_modpath("doc_identifier") then
-		doc.sub.identifier.register_object(entity_id, "craftitems", itemstring)
-	end
+	doc.sub.identifier.register_object(entity_id, "craftitems", itemstring)
 	return entity
 end
 

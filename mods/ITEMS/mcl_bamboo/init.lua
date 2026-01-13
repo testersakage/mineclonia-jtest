@@ -58,17 +58,15 @@ mcl_trees.register_wood("bamboo",{
 			description = S("Bamboo Raft"),
 		},
 		object = {
-			collisionbox = {-0.5, -0.15, -0.5, 0.5, 0.25, 0.5},
-			selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.25, 0.7},
+			variant = mcl_boats.variant.RAFT,
 		},
-	}, --needs different model
+	},
 	chest_boat = {
 		item = {
 			description = S("Chest Bamboo Raft"),
 		},
 		object = {
-			collisionbox = {-0.5, -0.15, -0.5, 0.5, 0.25, 0.5},
-			selectionbox = {-0.7, -0.15, -0.7, 0.7, 0.25, 0.7},
+			variant = mcl_boats.variant.RAFT,
 		},
 	},
 	hanging_sign = true,

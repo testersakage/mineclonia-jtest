@@ -792,10 +792,8 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 		placement_prevented = placement_prevented_inner,
 	})
 
-	if core.get_modpath("doc") then
-		doc.add_entry_alias("nodes", name, "nodes", name.."_inner")
-		doc.add_entry_alias("nodes", name, "nodes", name.."_outer")
-	end
+	doc.add_entry_alias("nodes", name, "nodes", name.."_inner")
+	doc.add_entry_alias("nodes", name, "nodes", name.."_outer")
 end
 
 

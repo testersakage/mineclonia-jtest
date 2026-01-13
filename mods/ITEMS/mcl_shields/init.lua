@@ -26,6 +26,8 @@ interact_priv.give_to_admin = false
 local overlay = mcl_enchanting.overlay
 local hud = "mcl_shield_hud.png"
 
+local shield_disables = {}
+
 core.register_tool("mcl_shields:shield", {
 	description = S("Shield"),
 	_doc_items_longdesc = S("A shield is a tool used for protecting the player against attacks."),
@@ -199,11 +201,21 @@ for _, e in pairs(mcl_shields.enchantments) do
 	mcl_enchanting.enchantments[e].secondary.shield = true
 end
 
+local shield_disable_duration = 5
+function mcl_shields.disable_player_shield(player)
+	shield_disables[player] = shield_disable_duration
+	if mcl_serverplayer.is_csm_at_least (player, 10) then
+		mcl_serverplayer.send_shieldctrl (player, shield_disable_duration)
+	end
+	core.sound_play("default_tool_breaks", {object = player}, true)
+end
+
 -- Check if a player is holding up his/her shield.
 -- Return nil if no shield or shield is not raised.
 -- Otherwise return shield hand (1 = offhand, 2 = mainhand), shield itemstack
 function mcl_shields.is_blocking(obj)
 	if not obj or not obj:is_player() then return end
+	if shield_disables[obj] then return end
 	if mcl_shields.players[obj] then
 		local blocking = mcl_shields.players[obj].blocking
 		if blocking <= 0 then return end
@@ -232,6 +244,8 @@ end
 -- When attack is bloackable, return true, {blocking,itemstack}, is_angle_checked.
 function mcl_shields.can_block (obj, dpos_or_dot, reason)
 	if not obj or not obj:is_player() then return false, "non-player" end
+
+	if shield_disables[obj] then return false, "shield-disabled" end
 
 	local blocking, shieldstack = mcl_shields.is_blocking(obj)
 	if not blocking then return false, "no-shield" end
@@ -310,7 +324,18 @@ end
 mcl_damage.register_modifier(function(obj, damage, reason)
 	local can_block, stack, dpos = mcl_shields.can_block (obj, nil, reason)
 	if can_block and dpos then
+		local wielded_item = mcl_util.get_wielditem(reason.direct)
+		if core.get_item_group(wielded_item:get_name(), "axe") > 0 then
+			mcl_shields.disable_player_shield(obj)
+		end
 		mcl_shields.add_wear(obj, damage, stack)
+		local direct = reason.direct
+		if direct then
+			local entity = direct:get_luaentity ()
+			if entity and entity.is_mob and obj:is_valid () then
+				entity:shield_impact (obj, reason)
+			end
+		end
 		core.sound_play({name = "mcl_block"}, {pos = obj:get_pos(), max_hear_distance = 16})
 		return 0
 	end
@@ -613,8 +638,15 @@ local function update_shield_hud(player, blocking, shieldstack)
 	end
 end
 
-mcl_player.register_globalstep(function(player)
+mcl_player.register_globalstep(function(player, dtime)
 	handle_blocking(player)
+
+	if shield_disables[player] then
+		shield_disables[player] = shield_disables[player] - dtime
+		if shield_disables[player] <= 0 then
+			shield_disables[player] = nil
+		end
+	end
 
 	local blocking, shieldstack = mcl_shields.is_blocking(player)
 

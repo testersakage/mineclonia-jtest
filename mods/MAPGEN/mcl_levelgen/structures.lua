@@ -591,14 +591,80 @@ function mcl_levelgen.register_structure (keyword, def)
 	return def
 end
 
--- Each structure piece should comprise a single function `place',
--- which places its contents strictly within the provided section of
--- the MapChunk being generated, and a field `bbox', holding the
--- bounds of the piece itself.
+------------------------------------------------------------------------
+-- Sorting of structure generation lists.
+------------------------------------------------------------------------
+
+local default_load_order = {
+	"mcl_levelgen",
+	"mcl_end",
+	"mcl_villages",
+}
+
+local function append_structures (dst, src)
+	local k = #dst
+	for i = 1, #src do
+		dst[k + i] = src[i]
+	end
+end
+
+-- Sort a list of structures STRUCTURES by their namespaces, and,
+-- within any single namespace, in order of their definition, but
+-- giving namespaces which appear in `default_load_order' the
+-- precedence they are assigned in that list over the rest.
+
+local function sort_structure_list (in_structures)
+	local new_list = {}
+	local structures = {}
+
+	for _, structure in ipairs (in_structures) do
+		local name = string.split (structure, ':', nil, 2)
+		if #name ~= 2 then
+			local blurb = "Structure name: `"
+				.. name
+				.. "' does not incorporate a namespace"
+			error (blurb)
+		end
+		local namespace = name[1]
+		local namespace_list = structures[namespace] or {}
+		structures[namespace] = namespace_list
+		insert (namespace_list, structure)
+	end
+
+	local namespaces = {}
+	for namespace, _ in pairs (structures) do
+		if indexof (default_load_order, namespace) == -1 then
+			insert (namespaces, namespace)
+		end
+	end
+	for _, namespace in ipairs (default_load_order) do
+		if structures[namespace] then
+			append_structures (new_list, structures[namespace])
+		end
+	end
+	for _, namespace in ipairs (namespaces) do
+		append_structures (new_list, structures[namespace])
+	end
+	return new_list
+end
+
+mcl_levelgen.register_on_scripts_loaded (function ()
+	for i = 1, NUM_GENERATION_STEPS do
+		local structures = registered_structures_by_step[i]
+		local sorted = sort_structure_list (structures)
+		registered_structures_by_step[i] = sorted
+	end
+end)
 
 ------------------------------------------------------------------------
 -- Level-wide structure generator state.
 ------------------------------------------------------------------------
+
+-- Each structure piece should be a table incorporating a single
+-- function `place', which places the piece's contents strictly within
+-- the provided section of the MapChunk being generated, and a field
+-- `bbox', holding the bounds of the piece itself.
+
 local ull = mcl_levelgen.ull
 
 local function set_contains_structure_generating_in_biomes_p (set, biomes)

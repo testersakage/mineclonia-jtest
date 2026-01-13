@@ -37,6 +37,14 @@ Returns the current hunger level of `player` (ObjectRef).
 Sets the hunger level of `player` (ObjectRef) to `hunger` immediately.
 `hunger` ***must*** be between 0 and 20 inclusive.
 
+### `mcl_hunger.is_player_full(player)`
+Check whether the player is full (has 20 or more hunger points)
+
+### `mcl_hunger.prevent_eating(player)`
+Prevents the player from eating until he stops holding rightclick.
+The use case is when you want to do something when the player is rightclicking a node with food.
+You'd need to call this function, otherwise they would just eat the food
+
 ### `mcl_hunger.exhaust(player, exhaust)`
 Increase exhaustion of player by `exhaust`.
 
@@ -52,6 +60,28 @@ Items in group `food` with any other rating will make an eating sound and partic
 based on the inventory image or wield image (whatever is available first).
 
 ## Suppressing food particles
-Normally, all food items considered food (not drinks) make food particles.
+Normally, all food items considered (except drinks) make food particles.
 You can suppress the food particles by adding the field
-`_food_particles=false` to the item definition.
+`_mcl_spawn_food_particles=false` to the item definition.
+
+## Eat animation
+In addition of eating animation there is also new changes on how foods are defined
+
+Food item must have `food` and `eatable` groups, the `eatable` value is treated as
+the hunger change (e.g. `eatable=3` is the same as `core.item_eat(3)`).
+
+You no longer need to add `core.item_eat(n)` explicitly to `on_secondary_use` or `on_place`.
+
+There also few custom property used:
+```lua
+{
+    -- Add status effect or any behavior when item consumed, optional
+    _mcl_eat_effect = function (itemstack, player, pointed_thing) ... end,
+
+    -- Replace consumed item, optional (e.g. _mcl_eat_replace_with = "mcl_core:bowl")
+    _mcl_eat_replace_with = nil,
+
+    -- Custom eat animation duration, optional
+    _mcl_eat_delay = nil,
+}
+```

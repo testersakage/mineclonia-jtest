@@ -104,13 +104,11 @@ core.register_craftitem("mcl_farming:carrot_item", {
 	groups = {food = 2, eatable = 3, compostability = 65},
 	_mcl_saturation = 3.6,
 	_mcl_places_plant = "mcl_farming:carrot_1",
-	on_secondary_use = core.item_eat(3),
 	on_place = function(itemstack, placer, pointed_thing)
 		local new = mcl_farming:place_seed(itemstack, placer, pointed_thing, "mcl_farming:carrot_1")
 		if new then
+			mcl_hunger.prevent_eating (placer)
 			return new
-		else
-			return core.do_item_eat(3, nil, itemstack, placer, pointed_thing)
 		end
 	end,
 })
@@ -119,8 +117,6 @@ core.register_craftitem("mcl_farming:carrot_item_gold", {
 	description = S("Golden Carrot"),
 	_doc_items_longdesc = S("A golden carrot is a precious food item which can be eaten. It is really, really filling!"),
 	inventory_image = "farming_carrot_gold.png",
-	on_place = core.item_eat(6),
-	on_secondary_use = core.item_eat(6),
 	groups = { brewitem = 1, food = 2, eatable = 6 },
 	_mcl_saturation = 14.4,
 })
@@ -136,8 +132,6 @@ core.register_craft({
 
 mcl_farming:add_plant("plant_carrot", "mcl_farming:carrot", {"mcl_farming:carrot_1", "mcl_farming:carrot_2", "mcl_farming:carrot_3", "mcl_farming:carrot_4", "mcl_farming:carrot_5", "mcl_farming:carrot_6", "mcl_farming:carrot_7"}, 25, 20)
 
-if core.get_modpath("doc") then
-	for i=2,7 do
-		doc.add_entry_alias("nodes", "mcl_farming:carrot_1", "nodes", "mcl_farming:carrot_"..i)
-	end
+for i=2,7 do
+	doc.add_entry_alias("nodes", "mcl_farming:carrot_1", "nodes", "mcl_farming:carrot_"..i)
 end
