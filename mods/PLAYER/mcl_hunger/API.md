@@ -48,9 +48,6 @@ You'd need to call this function, otherwise they would just eat the food
 ### `mcl_hunger.exhaust(player, exhaust)`
 Increase exhaustion of player by `exhaust`.
 
-### `mcl_hunger.stop_poison(player)`
-Immediately stops food poisoning for player.
-
 ### More functions ...
 There are more functions (of less importance) available, see `api.lua`.
 

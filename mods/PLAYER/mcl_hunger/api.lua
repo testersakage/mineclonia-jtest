@@ -56,20 +56,13 @@ if mcl_hunger.active then
 		mcl_hunger.set_exhaustion(player, mcl_hunger.get_exhaustion(player) + increase)
 		if mcl_hunger.get_exhaustion(player) >= mcl_hunger.EXHAUST_LVL then
 			mcl_hunger.set_exhaustion(player, 0.0)
-			local h = nil
-			local satuchanged = false
 			local s = mcl_hunger.get_saturation(player)
 			if s > 0 then
 				mcl_hunger.set_saturation(player, math.max(s - 1.5, 0))
-				satuchanged = true
 			elseif s <= 0.0001 then
-				h = mcl_hunger.get_hunger(player)
+				local h = mcl_hunger.get_hunger(player)
 				h = math.max(h-1, 0)
 				mcl_hunger.set_hunger(player, h)
-				satuchanged = true
-			end
-			if satuchanged then
-				if h then h = h end
 			end
 		end
 		return true
