@@ -173,8 +173,8 @@ mcl_paintings.register_painting("mountain tower", {
 	legacy_motive = 2,
 })
 
-mcl_paintings.register_painting("child's first drawing", {
-	texture = "childs_first_drawing.png",
+mcl_paintings.register_painting("volendam costume", {
+	texture = "volendam_painting.png",
 	width = 4,
 	height = 4,
 	legacy_motive = 3,
