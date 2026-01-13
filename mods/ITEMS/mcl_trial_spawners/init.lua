@@ -453,7 +453,7 @@ local tpl = {
 	paramtype2 = "facedir",
 	paramtype = "light",
 	tiles = {"trialspawner_top.png", "trialspawner_bottom.png", "trialspawner_side.png", "trialspawner_side.png", "trialspawner_side.png", "trialspawner_side.png"},
-	groups = {deco_block=1, features_cannot_replace = 1, },
+	groups = {deco_block=1, features_cannot_replace = 1, jigsaw_construct = 1},
 	is_ground_content = false,
 	drop = "",
 	light_source = 4,
