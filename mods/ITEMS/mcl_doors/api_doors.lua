@@ -205,7 +205,7 @@ function mcl_doors:register_door(name, def)
 			if oldmetadata.fields["rotation"] == 1 then
 				oldmetadata.fields["rotation"] = 0
 			else
-				if not core.is_creative_enabled(digger:get_player_name()) then
+				if not digger or (digger and not core.is_creative_enabled(digger:get_player_name())) then
 					core.add_item(pos, name)
 				end
 				core.remove_node(vector.offset(pos, 0, dir, 0))
