@@ -76,7 +76,6 @@ local function attach_driver(boat)
 	end
 end
 
-
 local function attach_passenger(boat)
 	if not boat._passenger_seat or not boat._passenger_seat:get_luaentity() then
 		local pos = boat.object:get_pos()
