@@ -1710,12 +1710,23 @@ end
 local notify_generated = mcl_levelgen.notify_generated
 
 function mcl_levelgen.create_entity (x_block, y_block, z_block, name, staticdata)
+	-- It is possible for mcl_levelgen.create_entity and other
+	-- functions which exercise this facility to be invoked by
+	-- data block processors, and crash when a jigsaw structure
+	-- exercising such processors is generated from a jigsaw
+	-- block.
+	if not mcl_levelgen.is_levelgen_environment then
+		return
+	end
 	notify_generated ("mcl_levelgen:create_entity_1", x_block, y_block, z_block, {
 		x_block, y_block, z_block, name, staticdata,
 	})
 end
 
 function mcl_levelgen.set_loot_table (x_block, y_block, z_block, rng, name)
+	if not mcl_levelgen.is_levelgen_environment then
+		return
+	end
 	notify_generated ("mcl_levelgen:set_loot_table_1", x_block, y_block, z_block, {
 		x_block, y_block, z_block, name, mathabs (rng:next_integer ()),
 	})
