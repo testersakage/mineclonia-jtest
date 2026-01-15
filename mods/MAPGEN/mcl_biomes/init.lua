@@ -5877,7 +5877,8 @@ local function register_decorations()
 		deco_type = "simple",
 		place_on = {"mcl_core:dirt_with_grass"},
 		fill_ratio = 0.02,
-		spawn_by = "group:water",
+		spawn_by = "mcl_core:water_source",
+		num_spawn_by = 1,
 		biomes = {
 			"Forest", "Taiga", "MegaTaiga", "MegaSpruceTaiga", "Plains", "SunflowerPlains", "FlowerForest", "BirchForest",
 			"BirchForestM", "RoofedForest", "Jungle", "JungleM", "JungleEdge", "JungleEdgeM", "BambooJungle", "Savanna",
