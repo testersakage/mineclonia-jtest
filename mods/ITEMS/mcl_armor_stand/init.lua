@@ -40,10 +40,10 @@ local function drop_inventory(pos)
 	local list = inv:get_list("armor")
 	if list then
 		for _, stack in pairs(list) do
-			if not stack:is_empty() then
-				local p = {x=pos.x+math.random(0, 10)/10-0.5, y=pos.y, z=pos.z+math.random(0, 10)/10-0.5}
-				core.add_item(p, stack)
-			end
+			mcl_util.drop_item_stack(
+				vector.offset(pos, mcl_util.float_random(-0.5, 0.5), 0, mcl_util.float_random(-0.5, 0.5)),
+				stack
+			)
 		end
 	end
 end
