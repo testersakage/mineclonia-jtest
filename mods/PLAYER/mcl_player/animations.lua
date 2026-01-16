@@ -259,10 +259,24 @@ function mcl_player.position_wielditem (wielded_itemname, wielded_def, player)
 end
 
 mcl_player.register_globalstep(function(player)
+	local tbl = mcl_player.players[player]
 	local cx, cz = player_collision (player)
+	local self_pos = player:get_pos ()
+
+	if tbl._has_impulse
+		and not vector.equals (self_pos, tbl._has_impulse) then
+		tbl._has_impulse = nil
+	end
 
 	if mcl_serverplayer.is_csm_capable (player) then
-		player:add_velocity (vector.new (cx, 0, cz))
+		local mag = math.sqrt (cx * cx + cz * cz)
+		if not tbl._has_impulse and mag > 0.01 then
+			player:add_velocity (vector.new (cx, 0, cz))
+			-- Don't apply velocity adjustments unless the
+			-- client has already responded to the
+			-- previous one by moving.
+			tbl._has_impulse = self_pos
+		end
 		return
 	end
 
@@ -270,11 +284,14 @@ mcl_player.register_globalstep(function(player)
 	-- aggressive damping.
 	local mag = math.sqrt (cx * cx + cz * cz)
 	if mag > 0.01 then
-		local d1 = 1.5 * mag
-		player:add_velocity (vector.new (cx * d1, 0, cz * d1))
+		if not tbl._has_impulse then
+			local d1 = 1.5 * mag
+			player:add_velocity (vector.new (cx * d1, 0, cz * d1))
+			tbl._has_impulse = self_pos
+		end
 	end
 	local name = player:get_player_name()
-	local model_name = mcl_player.players[player].model
+	local model_name = tbl.model
 	local model = model_name and mcl_player.registered_player_models[model_name]
 	local control = player:get_player_control()
 	local parent = player:get_attach()
@@ -282,7 +299,7 @@ mcl_player.register_globalstep(function(player)
 	local wielded_def = wielded:get_definition()
 	local wielded_itemname = player:get_wielded_item():get_name()
 	local player_velocity = player:get_velocity()
-	local elytra = mcl_player.players[player].elytra and mcl_player.players[player].elytra.active
+	local elytra = tbl.elytra and tbl.elytra.active
 
 	if player_velocity.x + player_velocity.y < .5 then
 		player_velocity = player:get_velocity()
@@ -294,12 +311,12 @@ mcl_player.register_globalstep(function(player)
 
 	local player_vel_yaw = math.deg(core.dir_to_yaw(player_velocity))
 	if player_vel_yaw == 0 then
-		player_vel_yaw = mcl_player.players[player].vel_yaw or yaw
+		player_vel_yaw = tbl.vel_yaw or yaw
 	end
 	player_vel_yaw = limit_vel_yaw(player_vel_yaw, yaw)
-	mcl_player.players[player].vel_yaw = player_vel_yaw
+	tbl.vel_yaw = player_vel_yaw
 
-	if not elytra and (parent or mcl_player.players[player].attached) then
+	if not elytra and (parent or tbl.attached) then
 		if mcl_tridents.obj_attached_to_riptide_trident_p (player) then
 			mcl_player.player_set_animation (player, "spin_attack")
 			set_bone_pos (player, "Body_Control", nil, vector.new (90, 0, 0))
@@ -332,7 +349,7 @@ mcl_player.register_globalstep(function(player)
 		end
 
 		-- ask if player is swiming
-		local head_in_water = core.get_item_group(mcl_player.players[player].nodes.head, "water") ~= 0
+		local head_in_water = core.get_item_group(tbl.nodes.head, "water") ~= 0
 		-- ask if player is sprinting
 		local is_sprinting = mcl_sprint.is_sprinting(name)
 
@@ -367,21 +384,21 @@ mcl_player.register_globalstep(function(player)
 				core.get_item_group(wielded_itemname, "crossbow") > 0 or
 				mcl_shields.wielding_shield(player, 1) or
 				mcl_shields.wielding_shield(player, 2)
-			if mcl_player.players[player].sneak ~= control.sneak then
-				mcl_player.players[player].animation = nil
-				mcl_player.players[player].sneak = control.sneak
+			if tbl.sneak ~= control.sneak then
+				tbl.animation = nil
+				tbl.sneak = control.sneak
 			end
 			if not control.sneak and head_in_water and is_sprinting then --swimming
-				mcl_player.players[player].is_swimming = true
+				tbl.is_swimming = true
 				if get_mouse_button(player) then
 					set_swimming(player, "swim_walk_mine", animation_speed_mod)
 				else
 					set_swimming(player, "swim_walk", animation_speed_mod)
 				end
-			elseif mcl_player.players[player].is_swimming
-			and core.get_item_group(mcl_player.players[player].nodes.head, "solid") == 0
-			and core.get_item_group(mcl_player.players[player].nodes.head_top, "solid") == 0 then --not swimming anymore
-				mcl_player.players[player].is_swimming = false
+			elseif tbl.is_swimming
+			and core.get_item_group(tbl.nodes.head, "solid") == 0
+			and core.get_item_group(tbl.nodes.head_top, "solid") == 0 then --not swimming anymore
+				tbl.is_swimming = false
 				mcl_player.player_set_animation(player, "stand")
 				mcl_util.set_properties(player, player_props_normal)
 				set_bone_pos(player,"Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, 0))
@@ -409,10 +426,10 @@ mcl_player.register_globalstep(function(player)
 			else
 				set_swimming(player, "swim_stand")
 			end
-		elseif mcl_player.players[player].is_swimming
-		and core.get_item_group(mcl_player.players[player].nodes.head, "solid") == 0
-		and core.get_item_group(mcl_player.players[player].nodes.head_top, "solid") == 0 then --not swimming anymore
-			mcl_player.players[player].is_swimming = false
+		elseif tbl.is_swimming
+		and core.get_item_group(tbl.nodes.head, "solid") == 0
+		and core.get_item_group(tbl.nodes.head_top, "solid") == 0 then --not swimming anymore
+			tbl.is_swimming = false
 			mcl_player.player_set_animation(player, "stand")
 			mcl_util.set_properties(player, player_props_normal)
 			set_bone_pos(player,"Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, 0))
@@ -434,7 +451,7 @@ mcl_player.register_globalstep(function(player)
 			set_bone_pos(player, "Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
 			mcl_util.set_properties(player, player_props_sneaking)
 			mcl_player.player_set_animation(player, "sneak_stand", animation_speed_mod)
-		elseif not mcl_player.players[player].attached then
+		elseif not tbl.attached then
 			mcl_util.set_properties(player, player_props_normal)
 			set_bone_pos(player,"Head_Control", nil, vector.new(pitch, player_vel_yaw - yaw, 0))
 			set_bone_pos(player,"Body_Control", nil, vector.new(0, -player_vel_yaw + yaw, 0))
