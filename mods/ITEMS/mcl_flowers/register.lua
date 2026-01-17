@@ -101,6 +101,7 @@ mcl_flowers.register_ground_flower("wildflowers", {
 })
 mcl_flowers.register_ground_flower("leaf_litter", {
 	desc = S("Leaf Litter"),
+	paramtype2 = "color4dir",
 	mesh_prefix = "mcl_flowers_leaf_litter_",
 	image = "mcl_flowers_leaf_litter.png^[multiply:#A37546",
 	tiles = {"mcl_flowers_leaf_litter.png^[multiply:#A37546"},

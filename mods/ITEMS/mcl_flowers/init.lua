@@ -278,7 +278,7 @@ function mcl_flowers.register_ground_flower(name, def, add_def)
 			tiles = def.tiles,
 			use_texture_alpha = "clip",
 			paramtype = "light",
-			paramtype2 = "facedir",
+			paramtype2 = def.paramtype2 or "facedir",
 			sunlight_propagates = true,
 			walkable = false,
 			selection_box = {type = "fixed", fixed = {-1/2, -1/2, -1/2, 1/2, -5/16, 1/2}},
