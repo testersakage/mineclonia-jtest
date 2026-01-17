@@ -13,7 +13,7 @@ end
 
 mobs_mc.water_level = tonumber(core.settings:get("water_level")) or 0
 mobs_mc.is_mob_griefing_enabled = function(mob_name)
-	for _, mob in pairs((core.settings:get("mobs_griefing_disable") or ""):split(",")) do
+	for _, mob in pairs((core.settings:get("mobs_griefing_disable_individual") or ""):split(",")) do
 		mob = mob:trim()
 		if mob == mob_name then
 			return false

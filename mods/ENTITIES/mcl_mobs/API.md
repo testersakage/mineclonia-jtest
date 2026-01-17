@@ -886,4 +886,4 @@ Custom projectiles for mobs can be registered using
  * 'mobs_spawn'			 if false then mobs no longer spawn without spawner or spawn egg.
  * 'mobs_drop_items'		when false mobs no longer drop items when they die.
  * 'mobs_griefing'			when false mobs cannot break blocks when using either pathfinding level 2, replace functions or mobs:boom
- * 'mobs_griefing_disable' Comma-separated list to disable mob griefing for individual mobs. Allowed values: creeper,ender_dragon,enderman,evoker,ghast,rabbit,sheep,silverfish,snowman,villager,vindicator,wither
+ * 'mobs_griefing_disable_individual' Comma-separated list to disable mob griefing for individual mobs. Allowed values: creeper,ender_dragon,enderman,evoker,ghast,rabbit,sheep,silverfish,snowman,villager,vindicator,wither
