@@ -67,8 +67,8 @@ end
 core.register_craftitem("mcl_experience:bottle", {
 	description = S("Bottle o' Enchanting"),
 	groups = {rarity = 1},
-	inventory_image = "mcl_experience_bottle.png^[colorize:purple:50",
-	wield_image = "mcl_experience_bottle.png^[colorize:purple:50",
+	inventory_image = mcl_util.apply_enchantment_glint("mcl_experience_bottle.png"),
+	wield_image = mcl_util.apply_enchantment_glint("mcl_experience_bottle.png"),
 	on_place = on_use,
 	on_secondary_use = on_use,
 	_on_dispense = function(_, pos, _, _, dir)

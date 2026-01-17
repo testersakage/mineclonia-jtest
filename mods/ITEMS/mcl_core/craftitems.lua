@@ -181,8 +181,8 @@ core.register_craftitem("mcl_core:apple_gold", {
 core.register_craftitem("mcl_core:apple_gold_enchanted", {
 	description = S("Enchanted Golden Apple"),
 	_doc_items_longdesc = S("Golden apples are precious food items which can be eaten."),
-	wield_image = "mcl_core_apple_golden.png" .. mcl_enchanting.overlay,
-	inventory_image = "mcl_core_apple_golden.png" .. mcl_enchanting.overlay,
+	wield_image = mcl_util.apply_enchantment_glint("mcl_core_apple_golden.png"),
+	inventory_image = mcl_util.apply_enchantment_glint("mcl_core_apple_golden.png"),
 	groups = { food = 2, eatable = 4, can_eat_when_full = 1, rarity = 2 },
 	_mcl_saturation = 9.6,
 	_mcl_eat_effect = function (_, placer)

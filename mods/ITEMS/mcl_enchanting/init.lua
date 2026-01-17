@@ -140,7 +140,7 @@ core.register_chatcommand("forceenchant", {
 
 core.register_craftitem("mcl_enchanting:book_enchanted", {
 	description = S("Enchanted Book"),
-	inventory_image = "mcl_enchanting_book_enchanted.png" .. mcl_enchanting.overlay,
+	inventory_image = mcl_util.apply_enchantment_glint("mcl_enchanting_book_enchanted.png"),
 	groups = {enchanted = 1, not_in_creative_inventory = 1, enchantability = 1, rarity = 1},
 	_mcl_enchanting_enchanted_tool = "mcl_enchanting:book_enchanted",
 	stack_max = 1,

@@ -326,9 +326,9 @@ function mcl_enchanting.initialize()
 			local new_name = itemname .. "_enchanted"
 			core.override_item(itemname, { _mcl_enchanting_enchanted_tool = new_name })
 			local new_def = table.copy(itemdef)
-			new_def.inventory_image = itemdef.inventory_image .. mcl_enchanting.overlay
+			new_def.inventory_image = mcl_util.apply_enchantment_glint(itemdef.inventory_image)
 			if new_def.wield_image then
-				new_def.wield_image = new_def.wield_image .. mcl_enchanting.overlay
+				new_def.wield_image = mcl_util.apply_enchantment_glint(new_def.wield_image)
 			end
 			new_def.groups.not_in_creative_inventory = 1
 			new_def.groups.not_in_craft_guide = 1
