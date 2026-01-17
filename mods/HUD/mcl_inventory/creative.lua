@@ -13,7 +13,6 @@ mcl_player.register_player_setting("mcl_inventory:scroll_on_creative_inventory",
 		{ name = "true", description = S("Scrollbar") },
 		{ name = "false", description = S("Pagination buttons") },
 	},
-	min_protocol_version = SCROLLBAR_MIN_CLIENT_VERSION,
 	section = "Inventory",
 	short_desc = S("Creative inventory scrolling"),
 	ui_default = "true",
@@ -520,10 +519,10 @@ function mcl_inventory.set_creative_formspec(player)
 			"listring[current_player;offhand]"..
 			"listring[current_player;main]"
 	else
-		local scroll_setting = mcl_player.get_player_setting(player, "mcl_inventory:scroll_on_creative_inventory")
 		local protocol_version = core.get_player_information(playername).protocol_version
+		local default_scroll = protocol_version >= SCROLLBAR_MIN_CLIENT_VERSION
+		local scroll = mcl_player.get_player_setting(player, "mcl_inventory:scroll_on_creative_inventory") or default_scroll
 
-		local scroll = protocol_version >= SCROLLBAR_MIN_CLIENT_VERSION and scroll_setting == "true"
 		if scroll then
 			local nb_lines = math.ceil(inv_size / 9)
 			main_list = table.concat({
