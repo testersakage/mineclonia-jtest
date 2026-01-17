@@ -31,9 +31,6 @@ local function is_player_trying_to_eat(player, keypress)
 
 	if pinfo and pinfo.touch_controls and keypress == "LMB" then
 		-- Trigger rightclick/formspec on touch controls
-		--
-		-- Why is this being done here???
-		-- - rstcxk
 		if pointed_thing and pointed_thing.type == "node" then
 			local node = core.get_node (pointed_thing.under)
 			local meta = core.get_meta (pointed_thing.under)
