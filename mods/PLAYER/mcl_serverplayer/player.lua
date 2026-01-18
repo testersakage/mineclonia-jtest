@@ -1121,7 +1121,8 @@ function mcl_serverplayer.player_movement_speed (player, state)
 					 DEFAULT_MOVEMENT_SPEED)
 	local can_sprint = state.can_sprint
 
-	if state.soul_speed_level > 0
+	if state.proto >= 8
+		and state.soul_speed_level > 0
 		and core.get_item_group (node_below.name, "soul_block") > 0 then
 		local level = 0.03 * (1.0 + state.soul_speed_level * 0.35) * 20.0
 		base_movement_speed = base_movement_speed + level
