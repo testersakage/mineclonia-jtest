@@ -5731,7 +5731,7 @@ function villager:ring_bell (self_pos, dtime)
 		-- 3.0 in Minecraft...
 		if distance < 6.0 then
 			local node = core.get_node (self._bell)
-			if node.name == "mcl_bells:bell" then
+			if core.get_item_group (node.name, "bell") >= 1 then
 				mcl_bells.ring_once (self._bell)
 			end
 		end
