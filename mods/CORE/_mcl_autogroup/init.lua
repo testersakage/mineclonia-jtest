@@ -434,6 +434,12 @@ local function overwrite()
 			override.on_flood = mcl_core.basic_flood
 		end
 
+		if ndef.tiles and #ndef.tiles == 3 and table.count(ndef.tiles) == 3
+			and ndef.tiles[1] == ndef.tiles[2] and ndef.tiles[1] ~= ndef.tiles[3] then
+			core.log(nname)
+			override.tiles = { ndef.tiles[1], ndef.tiles[1] .. "^[transformFY", ndef.tiles[3] }
+		end
+
 		if table.count(override) > 0 then
 			core.override_item(nname, override)
 		end
