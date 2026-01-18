@@ -408,7 +408,6 @@ mcl_player.register_globalstep(function (player)
 
 	local elytra = mcl_player.players[player].elytra
 
-	mcl_player.players[player].is_pressing_jump = player:get_player_control().jump
 	if elytra.active then
 		return
 	end
@@ -434,6 +433,8 @@ mcl_player.register_globalstep(function (player)
 		and not player:get_attach()
 		and ((jump_counters[player] and jump_counters[player].count) or 0) >= 2
 		and ((not fly_node_walkable) or fly_node == "ignore")
+
+	mcl_player.players[player].is_pressing_jump = player:get_player_control().jump
 
 	if can_fly then
 		attach_elytra (player, itemstack, self_pos)
