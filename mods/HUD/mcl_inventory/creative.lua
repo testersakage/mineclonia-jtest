@@ -520,8 +520,8 @@ function mcl_inventory.set_creative_formspec(player)
 			"listring[current_player;main]"
 	else
 		local protocol_version = core.get_player_information(playername).protocol_version
-		local default_scroll = protocol_version >= SCROLLBAR_MIN_CLIENT_VERSION
-		local scroll = mcl_player.get_player_setting(player, "mcl_inventory:scroll_on_creative_inventory") or default_scroll
+		local default_scroll = tostring(protocol_version >= SCROLLBAR_MIN_CLIENT_VERSION)
+		local scroll = (mcl_player.get_player_setting(player, "mcl_inventory:scroll_on_creative_inventory") or default_scroll) == "true"
 
 		if scroll then
 			local nb_lines = math.ceil(inv_size / 9)
