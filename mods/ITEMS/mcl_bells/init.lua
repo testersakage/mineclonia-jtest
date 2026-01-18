@@ -266,6 +266,15 @@ core.register_entity("mcl_bells:bell_ent", {
 })
 
 core.register_lbm ({
+	label = "Fix lighting for old bell nodes",
+	name = "mcl_bells:fix_old_bell_lighting",
+	nodenames = { "mcl_bells:bell" },
+	action = function (pos, node, _)
+		core.fix_light (pos:subtract(1), pos:add(1))
+	end,
+})
+
+core.register_lbm ({
 	label = "Spawn Bell Entity",
 	name = "mcl_bells:spawn_bell_entity",
 	nodenames = { "group:bell" },
