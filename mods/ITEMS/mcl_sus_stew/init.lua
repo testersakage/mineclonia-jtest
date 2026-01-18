@@ -59,7 +59,7 @@ local effects = {
 	end,
 
 	["nausea"] = function(itemstack, placer, pointed_thing)
-		mcl_potions.give_effect("nausea", placer, 1, 7)
+		mcl_potions.give_effect("nausea", placer, 1, 8)
 	end,
 }
 
