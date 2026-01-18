@@ -13,7 +13,8 @@ mcl_trees.register_wood("pale_oak",{
 	bark = { tiles = {"mcl_pale_oak_log.png"}},
 	leaves = {
 		tiles = { "mcl_pale_oak_leaves.png" },
-		paramtype2 = "none"
+		paramtype2 = "none",
+		palette = ""
 	},
 	wood = { tiles = {"mcl_pale_oak_planks.png"}},
 	stripped = {
