@@ -105,6 +105,7 @@ mcl_flowers.register_ground_flower("leaf_litter", {
 	mesh_prefix = "mcl_flowers_leaf_litter_",
 	image = "mcl_flowers_leaf_litter.png^[multiply:#A37546",
 	tiles = {"mcl_flowers_leaf_litter.png^[multiply:#A37546"},
+	placeable_on_anything = true
 }, {
 	_mcl_burntime = 5,
 })

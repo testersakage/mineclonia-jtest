@@ -206,7 +206,7 @@ core.register_node("mcl_pale_oak:pale_moss", {
 	_doc_items_hidden = false,
 	tiles = {"mcl_pale_oak_moss.png"},
 	groups = {
-		handy=1, hoey=2, dirt=1, soil=1, soil_bamboo=1, soil_sapling=2, soil_sugarcane=1, soil_fungus=1,
+		handy=1, hoey=2, dirt=1, soil=1, soil_flower=1, soil_generic_plant=1, soil_bamboo=1, soil_sapling=2, soil_sugarcane=1, soil_fungus=1,
 		enderman_takable=1, building_block=1, grass_block_no_snow=1, compostability=65, dig_by_piston=1,
 		fire_encouragement = 5, fire_flammability = 100
 	},

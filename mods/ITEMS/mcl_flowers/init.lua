@@ -40,12 +40,6 @@ function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 			return true
 		end
 	elseif n.name == "mcl_flowers:bush" then
-		local allowed_blocks = {
-			"mcl_core:dirt_with_grass", "mcl_core:dirt", "mcl_core:coarse_dirt",
-			"mcl_lush_caves:rooted_dirt", "mcl_mud:mud", "mcl_lush_caves:moss",
-			"mcl_core:mycelium", "mcl_core:podzol", "mcl_mangrove:mangrove_mud_roots",
-			"mcl_farming:soil", "mcl_farming:soil_wet"
-		}
 		local neighbours = {
 			vector.offset(pos, -1, -1, 0),
 			vector.offset(pos, 1, -1, 0),
@@ -57,19 +51,12 @@ function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 			local under_neighbor = core.get_node(neighbours[i]).name
 			local new_pos = vector.offset(neighbours[i], 0, 1, 0)
 			local neighbor = core.get_node(new_pos).name
-			if table.indexof(allowed_blocks, under_neighbor) ~= -1 and neighbor == "air" then
+			if core.get_item_group(under_neighbor, "soil_generic_plant") > 0 and neighbor == "air" then
 				core.add_node(new_pos, {name = "mcl_flowers:bush", param2 = mcl_util.get_pos_p2(pos)})
 				return true
 			end
 		end
 	elseif n.name == "mcl_flowers:tall_dry_grass" then
-		local allowed_blocks = {
-			"mcl_core:dirt_with_grass", "mcl_core:dirt", "mcl_core:coarse_dirt",
-			"mcl_lush_caves:rooted_dirt", "mcl_mud:mud", "mcl_lush_caves:moss",
-			"mcl_core:mycelium", "mcl_core:podzol", "mcl_mangrove:mangrove_mud_roots",
-			"mcl_farming:soil", "mcl_farming:soil_wet", "mcl_core:sand", "mcl_core:redsand",
-			"mcl_colorblocks:hardened_clay", "mcl_sus_nodes:sand"
-		}
 		local neighbours = {
 			vector.offset(pos, -1, -1, 0),
 			vector.offset(pos, 1, -1, 0),
@@ -81,7 +68,12 @@ function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 			local under_neighbor = core.get_node(neighbours[i]).name
 			local new_pos = vector.offset(neighbours[i], 0, 1, 0)
 			local neighbor = core.get_node(new_pos).name
-			if table.indexof(allowed_blocks, under_neighbor) ~= -1 and neighbor == "air" then
+			if neighbor == "air"
+					and (
+						core.get_item_group(under_neighbor, "soil_generic_plant") > 0
+						or core.get_item_group(under_neighbor, "hardened_clay") > 0
+						or core.get_item_group(under_neighbor, "sand") > 0
+					) then
 				core.add_node(new_pos, {name = "mcl_flowers:tall_dry_grass"})
 				return true
 			end
@@ -146,11 +138,15 @@ mcl_flowers.on_place_flower = mcl_util.generate_on_place_plant_function(function
 	if (light_night and light_night >= 8) or (light_day and light_day >= core.LIGHT_MAX) then
 		light_ok = true
 	end
-	if itemstack:get_name() == "mcl_flowers:wither_rose" and (  core.get_item_group(soil_node.name, "grass_block") > 0 or soil_node.name == "mcl_core:dirt" or soil_node.name == "mcl_core:coarse_dirt" or soil_node.name == "mcl_mud:mud" or soil_node.name == "mcl_lush_caves:moss" or soil_node.name == "mcl_pale_oak:pale_moss" or soil_node.name == "mcl_nether:netherrack" or core.get_item_group(soil_node.name, "soul_block") > 0  ) then
+	if itemstack:get_name() == "mcl_flowers:wither_rose"
+		and (
+			core.get_item_group(soil_node.name, "soil_generic_plant") > 0
+			or soil_node.name == "mcl_nether:netherrack"
+			or core.get_item_group(soil_node.name, "soul_block") > 0
+		) then
 		return true,colorize
 	end
-	local is_flower = core.get_item_group(itemstack:get_name(), "flower") == 1
-	local ok = (soil_node.name == "mcl_core:dirt" or core.get_item_group(soil_node.name, "grass_block") == 1 or soil_node.name == "mcl_lush_caves:moss" or soil_node.name == "mcl_pale_oak:pale_moss" or (not is_flower and (soil_node.name == "mcl_core:coarse_dirt" or soil_node.name == "mcl_core:podzol" or soil_node.name == "mcl_core:podzol_snow"))) and light_ok
+	local ok = core.get_item_group(soil_node.name, "soil_flower") > 0 and light_ok
 	return ok, colorize
 end)
 
@@ -249,14 +245,9 @@ function mcl_flowers.register_ground_flower(name, def, add_def)
 			else
 				local max_cycle = wildflower_group > 0 and wildflower_group < 5
 				-- If not already part of the cycle, place _1 above
-				if above_node.name == "air" and not max_cycle then
-					-- Only placeable on soil node
-					if core.get_item_group(node.name, "soil") == 0 then
-						return itemstack
-					else
-						if not creative then itemstack:take_item(1) end
-						core.set_node(above_pos, {name = newname.."_1"})
-					end
+				if above_node.name == "air" and not max_cycle and (core.get_item_group(node.name, "soil_generic_plant") > 0 or def.placeable_on_anything) then
+					if not creative then itemstack:take_item(1) end
+					core.set_node(above_pos, {name = newname.."_1"})
 				end
 			end
 
@@ -357,14 +348,13 @@ local tpl_large_plant_bottom = table.merge(tpl_large_plant_top, {
 		if (light_night and light_night >= 8) or (light_day and light_day >= core.LIGHT_MAX) then
 			light_ok = true
 		end
-		local is_flower = core.get_item_group(floor.name, "flower") > 0
 
 		-- Placement rules:
 		-- * Allowed on dirt, grass or moss block
 		-- * If not a flower, also allowed on podzol and coarse dirt
 		-- * Only with light level >= 8
 		-- * Only if two enough space
-		if (floor.name == "mcl_core:dirt" or core.get_item_group(floor.name, "grass_block") == 1 or floor.name == "mcl_lush_caves:moss" or (not is_flower and (floor.name == "mcl_core:coarse_dirt" or floor.name == "mcl_core:podzol" or floor.name == "mcl_core:podzol_snow"))) and bottom_buildable and top_buildable and light_ok then
+		if core.get_item_group(floor.name, "soil_flower") > 0 and bottom_buildable and top_buildable and light_ok then
 			local param2
 			local def = core.registered_nodes[floor.name]
 			if def and def.paramtype2 == "color" then
@@ -479,9 +469,7 @@ core.register_abm({
 			return
 		end
 		-- Pop out flower if not on dirt, or grass block.
-		if (below.name ~= "mcl_core:dirt"
-		    and core.get_item_group(below.name, "grass_block") ~= 1
-		    and below.name ~= "mcl_lush_caves:moss") then
+		if core.get_item_group(below.name, "soil_flower") == 0 then
 			core.dig_node(pos)
 			return
 		end
