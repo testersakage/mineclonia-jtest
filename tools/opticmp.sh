@@ -1,7 +1,7 @@
 #!/bin/sh
 cutoff=50
 tmp=$(mktemp -d)
-find ../mods/ -name "*.png"| while read f; do
+find "$(dirname $0)/../mods/" -name "*.png"| while read f; do
 	of=$(basename $f)
 	cp $f $tmp/$of
 	optipng -quiet -strip all -o7 $tmp/$of
