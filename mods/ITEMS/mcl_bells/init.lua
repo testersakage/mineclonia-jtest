@@ -174,7 +174,7 @@ core.register_node("mcl_bells:bell", table.merge(bell_def, {
 	paramtype2 = "facedir",
 	drop = "mcl_bells:bell",
 	groups = table.merge(bell_def.groups, {
-		not_in_creative_inventory = 1,
+		not_in_creative_inventory = 0,
 		attached_node = 1
 	}),
 }))
