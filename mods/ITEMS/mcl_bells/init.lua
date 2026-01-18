@@ -94,10 +94,11 @@ local bell_def = {
 	paramtype = "light",
 	paramtype2 = "wallmounted",
 	inventory_image = "mcl_bells_bell.png",
-	drawtype = "airlike",
+	drawtype = "mesh",
 	walkable = true,
 	pointable = true,
-	tiles = {"mcl_bells_bell_uv.png"},
+	tiles = {"mcl_bells_bell_uv_frame.png"},
+	use_texture_alpha = "clip",
 	wield_image = "mcl_bells_bell.png",
 	selection_box = {
 		type = "fixed",
@@ -172,6 +173,7 @@ core.register_alias ("mcl_bells:bell_floor", "mcl_bells:bell")
 
 core.register_node("mcl_bells:bell", table.merge(bell_def, {
 	paramtype2 = "facedir",
+	mesh = "mcl_bells_bell_floor.b3d", 
 	drop = "mcl_bells:bell",
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 0,
@@ -179,7 +181,7 @@ core.register_node("mcl_bells:bell", table.merge(bell_def, {
 	}),
 }))
 core.register_node("mcl_bells:bell_ceiling", table.merge(bell_def, {
-	tiles = {"mcl_bells_bell_uv.png^[colorize:#000000:15"},
+	mesh = "mcl_bells_bell_ceiling.b3d", 
 	drop = "mcl_bells:bell",
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 1,
@@ -187,6 +189,7 @@ core.register_node("mcl_bells:bell_ceiling", table.merge(bell_def, {
 	}),
 }))
 core.register_node("mcl_bells:bell_wall", table.merge(bell_def, {
+	mesh = "mcl_bells_bell_wall.b3d", 
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 1,
 		supported_node_wallmounted = 1,
@@ -226,7 +229,7 @@ core.register_entity("mcl_bells:bell_ent", {
 	initial_properties = {
 		visual = "mesh",
 		mesh = "mcl_bells_bell_floor.b3d",
-		textures = {"mcl_bells_bell_uv.png"},
+		textures = {"mcl_bells_bell_uv_bell.png"},
 		physical = false,
 		collisionbox = {
 			0, 0, 0, 0, 0, 0,
