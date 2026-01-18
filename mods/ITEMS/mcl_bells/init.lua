@@ -54,7 +54,7 @@ local function create_entity (pos, node)
 	local rot = {x = 0, y = bell_rotations[param2 + 1], z = 0}
 	local mesh
 
-	if node.name == "mcl_bells:bell_floor" then
+	if node.name == "mcl_bells:bell" then
 		mesh = "mcl_bells_bell_floor.b3d"
 		rot.y = bell_rotations[param2 + 2]
 	elseif node.name == "mcl_bells:bell_ceiling" then
@@ -137,7 +137,7 @@ local bell_def = {
 		if wdir == 0 then
 			fakestack:set_name("mcl_bells:bell_ceiling")
 		elseif wdir == 1 then
-			fakestack:set_name("mcl_bells:bell_floor")
+			fakestack:set_name("mcl_bells:bell")
 			local d = placer:get_look_dir()
 			wdir = (math.abs(d.x) > math.abs(d.z)) and 0 or 1
 		else
@@ -168,10 +168,11 @@ local bell_def = {
 	},
 }
 
-core.register_alias ("mcl_bells:bell", "mcl_bells:bell_ceiling")
+core.register_alias ("mcl_bells:bell_floor", "mcl_bells:bell")
 
-core.register_node("mcl_bells:bell_floor", table.merge(bell_def, {
+core.register_node("mcl_bells:bell", table.merge(bell_def, {
 	paramtype2 = "facedir",
+	drop = "mcl_bells:bell",
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 1,
 		attached_node = 1
@@ -179,6 +180,7 @@ core.register_node("mcl_bells:bell_floor", table.merge(bell_def, {
 }))
 core.register_node("mcl_bells:bell_ceiling", table.merge(bell_def, {
 	tiles = {"mcl_bells_bell_uv.png^[colorize:#000000:15"},
+	drop = "mcl_bells:bell",
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 1,
 		supported_node_wallmounted = 1,
@@ -189,6 +191,7 @@ core.register_node("mcl_bells:bell_wall", table.merge(bell_def, {
 		not_in_creative_inventory = 1,
 		supported_node_wallmounted = 1,
 	}),
+	drop = "mcl_bells:bell",
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -213,7 +216,7 @@ local function unhash (hash)
 end
 
 local cid_bell_floor
-	= core.get_content_id ("mcl_bells:bell_floor")
+	= core.get_content_id ("mcl_bells:bell")
 local cid_bell_wall
 	= core.get_content_id ("mcl_bells:bell_wall")
 local cid_bell_ceiling
