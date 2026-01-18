@@ -16,7 +16,7 @@ local function grow_hanging_moss(pos)
 end
 
 local hanging_moss_tpl = {
-	description = S("Pale hanging moss"),
+	description = S("Pale Hanging Moss"),
 	groups = {
 		dig_immediate = 3, shearsy = 1, dig_by_water = 1, destroy_by_lava_flow = 1, dig_by_piston = 1, deco_block = 1,
 		compostability= 30, pale_hanging_moss = 1, attached_node = 4, fire_encouragement = 5, fire_flammability = 100
@@ -71,7 +71,7 @@ core.register_node("mcl_pale_oak:hanging_moss_tip", table.merge(hanging_moss_tpl
 local eyeblossom_selection_box = { -5/16, -0.5, -5/16, 5/16, 7/16, 5/16 }
 
 mcl_flowers.register_simple_flower("eyeblossom", {
-	desc = S("Eyeblossom"),
+	desc = S("Closed Eyeblossom"),
 	image = "mcl_pale_oak_eyeblossom.png",
 	selection_box = eyeblossom_selection_box,
 	potted = true,
@@ -79,7 +79,7 @@ mcl_flowers.register_simple_flower("eyeblossom", {
 })
 
 mcl_flowers.register_simple_flower("eyeblossom_open", {
-	desc = S("Eyeblossom (open)"),
+	desc = S("Open Eyeblossom"),
 	image = "mcl_pale_oak_eyeblossom_open.png",
 	selection_box = eyeblossom_selection_box,
 	potted = true,

@@ -1,7 +1,7 @@
 local S = core.get_translator("mcl_pale_oak")
 
 core.register_craftitem("mcl_pale_oak:resin_clump", {
-	description = S("Resin clump"),
+	description = S("Resin Clump"),
 	inventory_image = "mcl_pale_oak_resin_clump.png",
 	groups = { craftitem = 1 },
 	_mcl_crafting_output = {
@@ -11,7 +11,7 @@ core.register_craftitem("mcl_pale_oak:resin_clump", {
 })
 
 core.register_craftitem("mcl_pale_oak:resin_brick", {
-	description = S("Resin brick"),
+	description = S("Resin Brick"),
 	inventory_image = "mcl_pale_oak_resin_brick.png",
 	groups = { craftitem = 1 },
 	_mcl_crafting_output = {
@@ -22,7 +22,7 @@ core.register_craftitem("mcl_pale_oak:resin_brick", {
 })
 
 core.register_node("mcl_pale_oak:block_of_resin", {
-	description = S("Block of resin"),
+	description = S("Block of Resin"),
 	tiles = {"mcl_pale_oak_resin_block.png"},
 	_mcl_hardness = 0,
 	groups = { dig_immediate = 3 },
