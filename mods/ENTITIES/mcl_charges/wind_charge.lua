@@ -19,7 +19,7 @@ mcl_charges.register_charge("wind_charge", S("Wind Charge"), {
 		}))
 		core.sound_play("tnt_explode", { pos = pos, gain = 0.4, max_hear_distance = 30, pitch = 2.5 }, true)
 
-		if node.name == "mcl_bells:bell" then
+		if core.get_item_group (node.name, "bell") >= 1 then
 			mcl_bells.ring_once(pos)
 		end
 		if node.name == "mcl_end:chorus_flower" then
