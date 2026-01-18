@@ -173,7 +173,7 @@ core.register_alias ("mcl_bells:bell_floor", "mcl_bells:bell")
 
 core.register_node("mcl_bells:bell", table.merge(bell_def, {
 	paramtype2 = "facedir",
-	mesh = "mcl_bells_bell_floor.b3d", 
+	mesh = "mcl_bells_bell_floor.b3d",
 	drop = "mcl_bells:bell",
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 0,
@@ -181,7 +181,7 @@ core.register_node("mcl_bells:bell", table.merge(bell_def, {
 	}),
 }))
 core.register_node("mcl_bells:bell_ceiling", table.merge(bell_def, {
-	mesh = "mcl_bells_bell_ceiling.b3d", 
+	mesh = "mcl_bells_bell_ceiling.b3d",
 	drop = "mcl_bells:bell",
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 1,
@@ -189,7 +189,7 @@ core.register_node("mcl_bells:bell_ceiling", table.merge(bell_def, {
 	}),
 }))
 core.register_node("mcl_bells:bell_wall", table.merge(bell_def, {
-	mesh = "mcl_bells_bell_wall.b3d", 
+	mesh = "mcl_bells_bell_wall.b3d",
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 1,
 		supported_node_wallmounted = 1,
