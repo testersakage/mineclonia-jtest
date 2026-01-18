@@ -80,7 +80,7 @@ core.register_node("mcl_lush_caves:moss", {
 	_doc_items_entry_name = S("Moss"),
 	_doc_items_hidden = false,
 	tiles = {"mcl_lush_caves_moss_block.png"},
-	groups = {handy=1, hoey=2, dirt=1, soil=1, soil_bamboo=1, soil_sapling=2, soil_sugarcane=1, soil_fungus=1, enderman_takable=1, building_block=1, grass_block_no_snow=1, compostability=65, dig_by_piston=1},
+	groups = {handy=1, hoey=2, dirt=1, soil=1, soil_flower=1, soil_generic_plant=1, soil_bamboo=1, soil_sapling=2, soil_sugarcane=1, soil_fungus=1, enderman_takable=1, building_block=1, grass_block_no_snow=1, compostability=65, dig_by_piston=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_mcl_hardness = 0.1,
 	_on_bone_meal = mcl_lush_caves.bone_meal_moss,
@@ -238,7 +238,7 @@ core.register_node("mcl_lush_caves:rooted_dirt", {
 	_doc_items_longdesc = S("Rooted dirt is type of dirt found in lush caves."),
 	_doc_items_hidden = false,
 	tiles = {"mcl_lush_caves_rooted_dirt.png"},
-	groups = {handy=1, shovely=1, dirt=1, soil_fungus=1, building_block=1, path_creation_possible=1, converts_to_moss=1, cultivatable=1, converts_to_mud=1},
+	groups = {handy=1, shovely=1, dirt=1, soil_flower=1, soil_generic_plant=1, soil_fungus=1, building_block=1, path_creation_possible=1, converts_to_moss=1, cultivatable=1, converts_to_mud=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_mcl_hardness = 0.5,
 	_on_bottle_place = mcl_core.bottle_dirt,
@@ -408,7 +408,7 @@ local tpl_azalea = {
 	on_place = mcl_util.generate_on_place_plant_function(function(pos)
 			local floor_name = core.get_node_or_nil(vector.offset(pos, 0, -1, 0)).name
 			if not floor_name then return false end
-			if core.get_item_group(floor_name, "soil_sapling") > 0 or floor_name == "mcl_lush_caves:rooted_dirt" or floor_name == "mcl_mangrove:mangrove_mud_roots" or floor_name == "mcl_mud:mud" or floor_name == "mcl_core:clay" then
+			if core.get_item_group(floor_name, "soil_flower") > 0 then
 				return true
 			end
 	end),

@@ -51,19 +51,6 @@ mcl_trees.register_wood("mangrove",{
 	hanging_sign = true,
 })
 
-local propagule_allowed_nodes = {
-	"mcl_core:dirt",
-	"mcl_core:coarse_dirt",
-	"mcl_core:dirt_with_grass",
-	"mcl_core:podzol",
-	"mcl_core:mycelium",
-	"mcl_lush_caves:rooted_dirt",
-	"mcl_lush_caves:moss",
-	"mcl_farming:soil",
-	"mcl_farming:soil_wet",
-	"mcl_core:clay",
-	"mcl_mud:mud",
-}
 local propagule_water_nodes = {"mcl_mud:mud","mcl_core:dirt","mcl_core:coarse_dirt","mcl_core:clay"}
  --"mcl_lush_caves:moss","mcl_lush_caves:rooted_dirt
 
@@ -186,7 +173,7 @@ core.register_node("mcl_mangrove:propagule", {
 		local under = vector.offset(place_pos,0,-1,0)
 		local snn = core.get_node_or_nil(under).name
 		if not snn then return false end
-		if table.indexof(propagule_allowed_nodes,snn) ~= -1 then
+		if core.get_item_group(snn, "soil_flower") > 0 then
 			local n = core.get_node(place_pos)
 			if core.get_item_group(n.name,"water") > 0 and table.indexof(propagule_water_nodes,snn) ~= -1 then
 					core.set_node(under,{name="mcl_mangrove:propagule_"..snn:split(":")[2]})
@@ -383,7 +370,7 @@ core.register_node("mcl_mangrove:mangrove_mud_roots", {
 		"mcl_mud.png^mcl_mangrove_roots_side.png",
 		"mcl_mud.png^mcl_mangrove_roots_side.png",
 	},
-	groups = {handy=1, shovely=1, axey=1, soil_fungus=1, building_block=1, overworld_carvable=1},
+	groups = {handy=1, shovely=1, axey=1, soil_flower=1, soil_generic_plant=1, soil_fungus=1, building_block=1, overworld_carvable=1},
 	sounds = mcl_sounds.node_sound_sand_defaults(),
 	_mcl_hardness = 0.7,
 })
