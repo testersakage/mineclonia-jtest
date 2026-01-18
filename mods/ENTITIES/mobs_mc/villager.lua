@@ -2620,7 +2620,7 @@ local bed_search_cache
 local poi_search_cache
 	= mcl_util.make_node_search_cache ("limit_size", jobsite_groups)
 local bell_search_cache
-	= mcl_util.make_node_search_cache ("limit_size", {"mcl_bells:bell",})
+	= mcl_util.make_node_search_cache ("limit_size", {"group:bell",})
 
 function mobs_mc.notify_bed_placed (pos)
 	bed_search_cache:notify_placed (pos)
@@ -2909,16 +2909,18 @@ local function sense_free_beds (self, self_pos)
 	return sites
 end
 
-local cid_bell
+local cid_bells
 
 core.register_on_mods_loaded (function ()
-	cid_bell = core.get_content_id ("mcl_bells:bell")
+	cid_bells = mcl_levelgen.construct_cid_list ({
+		"group:bell",
+	})
 end)
 
 local function sense_nearby_bells (self, self_pos)
 	local aa = vector.offset (self_pos, -48, -32, -48)
 	local bb = vector.offset (self_pos, 48, 32, 48)
-	local result = bell_search_cache:find_nodes_in_area (aa, bb, {cid_bell,})
+	local result = bell_search_cache:find_nodes_in_area (aa, bb, cid_bells)
 	local persist = 2.0 + pr:next (0, 20) / 20
 	return result, persist
 end
@@ -6620,7 +6622,7 @@ local function search_upward_for_bell (bell_pos)
 
 	for i = 0, 8 do
 		local node = vector.offset (bell_pos, 0, i, 0)
-		if core.get_node (node).name == "mcl_bells:bell" then
+		if core.get_item_group (core.get_node (node).name, "bell") > 0 then
 			return node
 		end
 	end

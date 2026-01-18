@@ -2,11 +2,16 @@ local S = core.get_translator(core.get_current_modname())
 
 mcl_bells = {}
 
-function mcl_bells.ring_once(pos)
+local SOUND_PARMS = {
+	gain = 1.5,
+	max_hear_distance = 150,
+}
+
+function mcl_bells.ring_internal (pos)
 	local alarm_time = core.get_gametime ()
 
-	core.sound_play( "mcl_bells_bell_stroke", {
-		pos = pos, gain = 1.5, max_hear_distance = 150,})
+	SOUND_PARMS.pos = pos
+	core.sound_play ("mcl_bells_bell_stroke", SOUND_PARMS)
 	for o in core.objects_inside_radius(pos, 32) do
 		local entity = o:get_luaentity()
 		if entity and entity.name == "mobs_mc:villager" then
@@ -22,6 +27,17 @@ function mcl_bells.ring_once(pos)
 	end
 end
 
+local find_or_create_entity
+
+function mcl_bells.ring_once (pos, node)
+	local node = node or core.get_node (pos)
+	local entity = find_or_create_entity (pos, node)
+	mcl_bells.ring_internal (pos)
+	if entity then
+		entity:ring ()
+	end
+end
+
 local bell_rotations = {
 	0,          -- ceiling
 	0,          -- floor
@@ -31,31 +47,46 @@ local bell_rotations = {
 	math.pi,    -- z-
 }
 
-local function create_entity(pos, node)
+local bell_entities = {}
+
+local function create_entity (pos, node)
 	local param2 = node.param2
 	local rot = {x = 0, y = bell_rotations[param2 + 1], z = 0}
+	local mesh
 
-	local static_data = {_node = node}
 	if node.name == "mcl_bells:bell_floor" then
-		static_data._mesh = "mcl_bells_bell_floor.b3d"
+		mesh = "mcl_bells_bell_floor.b3d"
 		rot.y = bell_rotations[param2 + 2]
 	elseif node.name == "mcl_bells:bell_ceiling" then
-		static_data._mesh = "mcl_bells_bell_ceiling.b3d"
+		mesh = "mcl_bells_bell_ceiling.b3d"
 		rot.z = math.pi
 	else
-		static_data._mesh = "mcl_bells_bell_wall.b3d"
+		mesh = "mcl_bells_bell_wall.b3d"
 		rot.x = math.pi/2
 	end
 
-	local obj = core.add_entity(pos, "mcl_bells:bell_ent",
-														core.serialize(static_data))
-	if obj and obj:get_pos() then
-		obj:set_rotation(rot)
-		return obj:get_luaentity()
+	local obj = core.add_entity (pos, "mcl_bells:bell_ent")
+	if obj then
+		obj:set_rotation (rot)
+		obj:set_properties ({
+			mesh = mesh,
+		})
+		obj:set_animation ({ x = 195, y = 195, })
+		local entity = obj:get_luaentity()
+		local hash = core.hash_node_position (pos)
+		entity._node_pos = hash
+		bell_entities[hash] = entity
+		return entity
 	else
-		core.log("warning", "[mcl_bells] Failed to create entity at "
-								.. (pos and core.pos_to_string(pos, 1) or "nil"))
+		core.log("warning", ("[mcl_bells] Failed to create entity at "
+				     .. (pos and core.pos_to_string(pos, 1) or "nil")))
 	end
+	return nil
+end
+
+function find_or_create_entity (pos, node)
+	local hash = core.hash_node_position (pos)
+	return bell_entities[hash] or create_entity (pos, node)
 end
 
 local bell_def = {
@@ -63,23 +94,23 @@ local bell_def = {
 	paramtype = "light",
 	paramtype2 = "wallmounted",
 	inventory_image = "mcl_bells_bell.png",
-	drawtype = "mesh",
+	drawtype = "airlike",
 	walkable = true,
 	pointable = true,
 	tiles = {"mcl_bells_bell_uv.png"},
 	wield_image = "mcl_bells_bell.png",
 	selection_box = {
-    type = "fixed",
-    fixed = {
-      {-0.3125, -0.5, -0.3125, 0.3125, 0.5, 0.3125},
-    },
-  },
+		type = "fixed",
+		fixed = {
+			{-0.3125, -0.5, -0.3125, 0.3125, 0.5, 0.3125},
+		},
+	},
 	collision_box = {
-    type = "fixed",
-    fixed = {
-      {-0.3125, -0.5, -0.3125, 0.3125, 0.5, 0.3125},
-    },
-  },
+		type = "fixed",
+		fixed = {
+			{-0.3125, -0.5, -0.3125, 0.3125, 0.5, 0.3125},
+		},
+	},
 	is_ground_content = true,
 	groups = {
 		bell = 1,
@@ -92,8 +123,7 @@ local bell_def = {
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_hardness = 5,
 	on_rightclick = function (pos, node)
-		local ent = create_entity(pos, node)
-		if ent then ent:ring() end
+		mcl_bells.ring_once (pos, node)
 	end,
 	on_place = function (itemstack, placer, pointed_thing)
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
@@ -120,39 +150,34 @@ local bell_def = {
 
 		return itemstack
 	end,
+	on_construct = function (pos)
+		local node = core.get_node (pos)
+		find_or_create_entity (pos, node)
+	end,
 	_on_arrow_hit = function (pos)
-		local node = core.get_node(pos)
-		local ent = create_entity(pos, node)
-		if ent then ent:ring() end
+		mcl_bells.ring_once (pos, nil)
 	end,
 	_mcl_redstone = {
 		connects_to = function(node, dir)
 			return true
 		end,
 		update = function(pos, node)
-			local oldpowered = math.floor(node.param2 / 32) ~= 0
-			local powered = mcl_redstone.get_power(pos) ~= 0
-			if powered and not oldpowered then
-				local ent = create_entity(pos, node)
-				if ent then ent:ring() end
-			end
+			mcl_bells.ring_once (pos, node)
 		end,
 		init = function() end,
 	},
 }
 
-core.register_node("mcl_bells:bell", bell_def)
+core.register_alias ("mcl_bells:bell", "mcl_bells:bell_ceiling")
 
 core.register_node("mcl_bells:bell_floor", table.merge(bell_def, {
 	paramtype2 = "facedir",
-	mesh = "mcl_bells_bell_floor.b3d",
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 1,
 		attached_node = 1
 	}),
 }))
 core.register_node("mcl_bells:bell_ceiling", table.merge(bell_def, {
-	mesh = "mcl_bells_bell_ceiling.b3d",
 	tiles = {"mcl_bells_bell_uv.png^[colorize:#000000:15"},
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 1,
@@ -160,78 +185,86 @@ core.register_node("mcl_bells:bell_ceiling", table.merge(bell_def, {
 	}),
 }))
 core.register_node("mcl_bells:bell_wall", table.merge(bell_def, {
-	mesh = "mcl_bells_bell_wall.b3d",
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 1,
 		supported_node_wallmounted = 1,
 	}),
 	selection_box = {
-    type = "fixed",
-    fixed = {
-      {-0.3125, -0.3125, -0.5, 0.3125, 0.3125, 0.5},
-    },
-  },
+		type = "fixed",
+		fixed = {
+			{-0.3125, -0.3125, -0.5, 0.3125, 0.3125, 0.5},
+		},
+	},
 	collision_box = {
-    type = "fixed",
-    fixed = {
-      {-0.3125, -0.3125, -0.5, 0.3125, 0.3125, 0.5},
-    },
-  },
+		type = "fixed",
+		fixed = {
+			{-0.3125, -0.3125, -0.5, 0.3125, 0.3125, 0.5},
+		},
+	},
 }))
+
+local function unhash (hash)
+	local x = (hash % 65536) - 32768
+	hash  = math.floor (hash / 65536)
+	local y = (hash % 65536) - 32768
+	hash  = math.floor (hash / 65536)
+	local z = (hash % 65536) - 32768
+	return x, y, z
+end
+
+local cid_bell_floor
+	= core.get_content_id ("mcl_bells:bell_floor")
+local cid_bell_wall
+	= core.get_content_id ("mcl_bells:bell_wall")
+local cid_bell_ceiling
+	= core.get_content_id ("mcl_bells:bell_ceiling")
 
 core.register_entity("mcl_bells:bell_ent", {
 	initial_properties = {
 		visual = "mesh",
 		mesh = "mcl_bells_bell_floor.b3d",
 		textures = {"mcl_bells_bell_uv.png"},
-		physical = true,
-		collisionbox = {-0.3125, -0.5, -0.3125, 0.3125, 0.5, 0.3125},
-		collide_with_objects = true,
-		static_save = false
+		physical = false,
+		collisionbox = {
+			0, 0, 0, 0, 0, 0,
+		},
+		selectionbox = {
+			0, 0, 0, 0, 0, 0,
+		},
+		static_save = false,
 	},
-	on_activate = function(self, staticdata)
-		self._generation = 0
-		if staticdata and staticdata ~= "" then
-			local data = core.deserialize(staticdata)
-			if data then
-				self._node = data._node
-				self._mesh = data._mesh
-			end
-		end
-		self.object:set_properties({ mesh = self._mesh })
-		self.object:set_armor_groups({ immortal = 1 })
-	end,
 	on_deactivate = function (self)
-		local pos = self.object:get_pos()
-		if self._node then
-			core.add_node(pos, self._node)
+		local hash = self._node_pos
+		if bell_entities[hash] == self then
+			bell_entities[hash] = nil
 		end
-	end,
-	on_rightclick = function (self)
-		self:ring()
 	end,
 	ring = function (self)
-		-- Allow entity to be rightclicked repetitively
-		-- by only remove latest version of generation
-		self._generation = (self._generation or 0) + 1
-		local gen = self._generation
-
 		local anim = {x = 1, y = 195}
 		local duration = 0.8
 		local fps = (anim.y - anim.x) / duration
-		self.object:set_animation(anim, fps, 0.0, false)
+		self.object:set_animation (anim, fps, 0.0, false)
+	end,
+	on_step = function (self, _)
+		if self._node_pos then
+			local x, y, z = unhash (self._node_pos)
+			local cid, _, _ = core.get_node_raw (x, y, z)
+			if cid ~= cid_bell_floor
+				and cid ~= cid_bell_ceiling
+				and cid ~= cid_bell_wall then
+				self.object:remove ()
+				return
+			end
+		end
+	end,
+})
 
-		local pos = self.object:get_pos()
-		mcl_bells.ring_once(pos)
-
-		core.remove_node(pos)
-		core.after(duration, function ()
-			if not self.object then return end
-			if (self._generation or 0) ~= gen then return end
-			core.add_node(pos, self._node)
-			core.after(0, function ()
-				self.object:remove()
-			end)
-		end)
+core.register_lbm ({
+	label = "Spawn Bell Entity",
+	name = "mcl_bells:spawn_bell_entity",
+	nodenames = { "group:bell" },
+	run_at_every_load = true,
+	action = function (pos, node, _)
+		find_or_create_entity (pos, node)
 	end,
 })
