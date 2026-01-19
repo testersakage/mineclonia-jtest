@@ -2,10 +2,9 @@ local block_type = { "", "_cut", "_chiseled", "_grate" }
 local block_exposure_level = { "", "_exposed", "_weathered", "_oxidized" }
 local waxed = { "", "_preserved" }
 
-for _, x in ipairs(block_exposure_level) do
+for _, x in pairs(block_exposure_level) do
 
-	-- {{{ waxed
-	for _, w in ipairs(waxed) do
+	for _, w in pairs(waxed) do
 		core.register_craft({
 			output = "mcl_copper:block"..x.."_cut"..w.." 4",
 			recipe = {
@@ -41,9 +40,7 @@ for _, x in ipairs(block_exposure_level) do
 		})
 	end
 
-	-- }}}
-
-	for _, t in ipairs(block_type) do
+	for _, t in pairs(block_type) do
 		core.register_craft({
 			output = "mcl_copper:block"..x..t.."_preserved",
 			recipe = {
