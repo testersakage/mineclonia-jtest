@@ -175,8 +175,7 @@ local function attempt_spawning_trial_mob(pos, meta, is_ominous)
 
 		if is_in_eyesight_of_spawner(pos, spawn_attempt_pos) then
 			local mob_name = meta:get_string("mob")
-			-- local spawned_mob = core.add_entity(spawn_attempt_pos, mob_name)
-			local spawned_mob = mcl_mobs.spawn_abnormally(spawn_attempt_pos, mob_name, "", "trial_spawner")
+			local spawned_mob = mcl_mobs.spawn_abnormally(spawn_attempt_pos, mob_name, nil, "trial_spawner")
 
 			if spawned_mob then
 				local l = spawned_mob:get_luaentity()
@@ -224,8 +223,6 @@ local function attempt_spawning_trial_mob(pos, meta, is_ominous)
 
 		frustration = frustration + 1
 	end
-
-	core.debug("frustrated as shit")
 end
 
 -- not optimized as it could be, but should be fine since these tables are so short
