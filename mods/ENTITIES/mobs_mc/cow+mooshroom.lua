@@ -186,6 +186,10 @@ function mooshroom:on_rightclick (clicker)
 			end
 		-- Use a small flower to give a effect to a brown mooshroom
 		elseif core.get_item_group(item_name, "small_flower") == 1 and is_brown_mooshroom then
+			if type(self._effect_holder) == "string" then
+				return
+			end
+
 			local effect = mcl_sus_stew.flower_effect[item_name]
 
 			if type(effect) == "string" then

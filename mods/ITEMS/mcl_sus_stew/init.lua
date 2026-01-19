@@ -74,7 +74,7 @@ end
 
 core.register_on_craft(function(itemstack, _, old_craft_grid, _)
 	if itemstack:get_name() ~= "mcl_sus_stew:stew" then return end
-	for f,e in pairs(flower_effect) do
+	for f,e in pairs(mcl_sus_stew.flower_effect) do
 		for _,it in pairs(old_craft_grid) do
 			if it:get_name() == f then
 				itemstack:get_meta():set_string("effect",e)
