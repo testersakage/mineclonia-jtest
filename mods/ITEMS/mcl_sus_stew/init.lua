@@ -17,8 +17,8 @@ local flower_effect = {
 	[ "mcl_flowers:tulip_pink" ] = "weakness",
 	[ "mcl_flowers:tulip_red" ] = "weakness",
 	[ "mcl_flowers:tulip_white" ] = "weakness",
-	[ "mcl_pale_oak:eyeblossom" ] = "nausea",
-	[ "mcl_pale_oak:eyeblossom_open" ] = "blindness",
+	[ "mcl_flowers:eyeblossom" ] = "nausea",
+	[ "mcl_flowers:eyeblossom_open" ] = "blindness",
 }
 
 local effects = {
@@ -157,11 +157,11 @@ core.register_craft({
 core.register_craft({
 	type = "shapeless",
 	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_pale_oak:eyeblossom"},
+	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:eyeblossom"},
 })
 
 core.register_craft({
 	type = "shapeless",
 	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_pale_oak:eyeblossom_open"},
+	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:eyeblossom_open"},
 })
