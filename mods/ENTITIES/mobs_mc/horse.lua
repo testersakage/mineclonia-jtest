@@ -2,8 +2,6 @@ local S = core.get_translator("mobs_mc")
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
-local extended_pet_control = core.settings:get_bool("mcl_extended_pet_control",false)
-
 local function attach_driver(self, clicker)
 	mcl_title.set(clicker, "actionbar", {
 		text=S("Sneak to dismount"),
@@ -14,9 +12,6 @@ end
 
 local function detach_driver(self)
 	if self.driver then
-		if extended_pet_control and self.order ~= "sit" then
-			self:toggle_sit (self.driver)
-		end
 		self:detach (self.driver, {x=0, y=0, z=0})
 	end
 
