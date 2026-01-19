@@ -221,23 +221,6 @@ mcl_damage_particles (Damage particles) bool true
 # Form: Image height / Image width
 fire_animation_frames (Fire animation frames) int 8
 
-[Villages]
-# Minimum number of job sites which are placed during village generation
-mcl_villages_min_jobs (Minimum number of jobs in village) int 1
-
-# Maximum number of job sites which are placed during village generation
-mcl_villages_max_jobs (Maximum number of jobs in village) int 12
-
-# 1 in X chance a village will spawn in a valid chunk.
-# Set to 0 to disable village generation.
-mcl_villages_village_chance (Village chance) int 100
-
-# This controls how job sites and houses are placed during village generation
-# random: shuffles the buildings so they get placed in any order
-# jobs: places the job sites first so they tend to be closer to the bell
-# houses: places the houses first so the tend to be closer to the bell
-mcl_villages_placement_priority (Buildings closest to the bell) enum random random,jobs,houses
-
 [Redstone]
 
 # Redstone update interval in seconds.
