@@ -171,7 +171,7 @@ function mooshroom:on_rightclick (clicker)
 			inv:remove_item("main", item_name)
 			core.sound_play("mobs_mc_cow_mushroom_stew", {pos = obj_pos, gain = 0.6})
 
-			if is_brown_mooshroom and type(effect) == "string" then
+			if is_brown_mooshroom and effect then
 				stack = ItemStack("mcl_sus_stew:stew")
 				stack:get_meta():set_string("effect", effect)
 				self._effect_holder = nil
@@ -186,13 +186,13 @@ function mooshroom:on_rightclick (clicker)
 			end
 		-- Use a small flower to give a effect to a brown mooshroom
 		elseif core.get_item_group(item_name, "small_flower") == 1 and is_brown_mooshroom then
-			if type(self._effect_holder) == "string" then
+			if self._effect_holder then
 				return
 			end
 
 			local effect = mcl_sus_stew.flower_effect[item_name]
 
-			if type(effect) == "string" then
+			if effect then
 				self._effect_holder = effect
 
 				inv:remove_item("main", item_name)
