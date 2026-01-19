@@ -1,9 +1,10 @@
+mcl_sus_stew = {}
 local S = core.get_translator(core.get_current_modname())
 
 --                                          ____________________________
 --_________________________________________/    Variables & Functions    \_________
 
-local flower_effect = {
+mcl_sus_stew.flower_effect = {
 	[ "mcl_flowers:allium" ] = "fire_resistance",
 	[ "mcl_flowers:azure_bluet" ] = "blindness",
 	[ "mcl_flowers:lily_of_the_valley" ] = "poison",

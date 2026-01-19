@@ -123,50 +123,76 @@ function mooshroom:on_rightclick (clicker)
 	if self:follow_holding(clicker) and self:feed_tame(clicker, 4, true, false) then return end
 	if self.child then return end
 
+	local object = self.object
+	local obj_pos = object:get_pos()
 	local item = clicker:get_wielded_item()
 	local item_name = item:get_name()
-	-- Use shears to get mushrooms and turn mooshroom into cow
-	if core.get_item_group(item_name, "shears") > 0 then
-		local pos = self.object:get_pos()
-		core.sound_play("mcl_tools_shears_cut", {pos = pos}, true)
+	local inv = clicker:get_inventory()
+	local is_brown_mooshroom = self.base_texture[1] == "mobs_mc_mooshroom_brown.png"
 
-		if self.base_texture[1] == "mobs_mc_mooshroom_brown.png" then
-			core.add_item({x=pos.x, y=pos.y+1.4, z=pos.z}, "mcl_mushrooms:mushroom_brown 5")
-		else
-			core.add_item({x=pos.x, y=pos.y+1.4, z=pos.z}, "mcl_mushrooms:mushroom_red 5")
-		end
-		mcl_util.replace_mob(self.object, "mobs_mc:cow")
+	if inv then
+		-- Use shears to get mushrooms and turn mooshroom into cow
+		if mcl_util.is_item_or_in_group(item_name, "group:shears") then
+			local stack
+			local item_pos = vector.offset(obj_pos, 0, 1.4, 0)
 
-		if not core.is_creative_enabled(clicker:get_player_name()) then
-			local wear = mcl_autogroup.get_wear(item_name, "shearsy")
-			item:add_wear(wear)
-			clicker:get_inventory():set_stack("main", clicker:get_wield_index(), item)
-		end
-		-- Use bucket to milk
-	elseif item_name == "mcl_buckets:bucket_empty" and clicker:get_inventory() then
-		local inv = clicker:get_inventory()
-		inv:remove_item("main", "mcl_buckets:bucket_empty")
-		core.sound_play("mobs_mc_cow_milk", {pos=self.object:get_pos(), gain=0.6})
-		-- If room, add milk to inventory, otherwise drop as item
-		if inv:room_for_item("main", {name="mcl_mobitems:milk_bucket"}) then
-			clicker:get_inventory():add_item("main", "mcl_mobitems:milk_bucket")
-		else
-			local pos = self.object:get_pos()
-			pos.y = pos.y + 0.5
-			core.add_item(pos, {name = "mcl_mobitems:milk_bucket"})
-		end
-		-- Use bowl to get mushroom stew
-	elseif item_name == "mcl_core:bowl" and clicker:get_inventory() then
-		local inv = clicker:get_inventory()
-		inv:remove_item("main", "mcl_core:bowl")
-		core.sound_play("mobs_mc_cow_mushroom_stew", {pos=self.object:get_pos(), gain=0.6})
-		-- If room, add mushroom stew to inventory, otherwise drop as item
-		if inv:room_for_item("main", {name="mcl_mushrooms:mushroom_stew"}) then
-			clicker:get_inventory():add_item("main", "mcl_mushrooms:mushroom_stew")
-		else
-			local pos = self.object:get_pos()
-			pos.y = pos.y + 0.5
-			core.add_item(pos, {name = "mcl_mushrooms:mushroom_stew"})
+			if is_brown_mooshroom then
+				stack = ItemStack("mcl_mushrooms:mushroom_brown 5")
+			else
+				stack = ItemStack("mcl_mushrooms:mushroom_red 5")
+			end
+
+			core.add_item(item_pos, stack)
+			mcl_util.replace_mob(object, "mobs_mc:cow")
+
+			if not core.is_creative_enabled(clicker:get_player_name()) then
+				local wear = mcl_autogroup.get_wear(item_name, "shearsy")
+
+				item:add_wear(wear)
+				inv:set_stack("main", clicker:get_wield_index(), item)
+			end
+		-- Use a empty bucket to milk a cow
+		elseif item_name == "mcl_buckets:bucket_empty" then
+			local stack = ItemStack("mcl_mobitems:milk_bucket")
+
+			inv:remove_item("main", item_name)
+			core.sound_play("mobs_mc_cow_milk", {pos = obj_pos, gain = 0.6})
+
+			if inv:room_for_item("main", stack) then
+				inv:add_item("main", stack)
+			else
+				core.add_item(vector.offset(obj_pos, 0, 0.5, 0), stack)
+			end
+		-- Use a bowl to get mushroom stew or suspicious stew
+		elseif item_name == "mcl_core:bowl" then
+			local stack
+			local effect = self._effect_holder
+
+			inv:remove_item("main", item_name)
+			core.sound_play("mobs_mc_cow_mushroom_stew", {pos = obj_pos, gain = 0.6})
+
+			if is_brown_mooshroom and type(effect) == "string" then
+				stack = ItemStack("mcl_sus_stew:stew")
+				stack:get_meta():set_string("effect", effect)
+				self._effect_holder = nil
+			else
+				stack = ItemStack("mcl_mushrooms:mushroom_stew")
+			end
+
+			if inv:room_for_item("main", stack) then
+				inv:add_item("main", stack)
+			else
+				core.add_item(vector.offset(obj_pos, 0, 0.5, 0), stack)
+			end
+		-- Use a small flower to give a effect to a brown mooshroom
+		elseif core.get_item_group(item_name, "small_flower") == 1 and is_brown_mooshroom then
+			local effect = mcl_sus_stew.flower_effect[item_name]
+
+			if type(effect) == "string" then
+				self._effect_holder = effect
+
+				inv:remove_item("main", item_name)
+			end
 		end
 	end
 end
