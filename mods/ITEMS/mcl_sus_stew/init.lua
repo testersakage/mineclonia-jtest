@@ -108,49 +108,10 @@ core.register_alias("mcl_sus_stew:jump_boost_stew", "mcl_sus_stew:stew")
 core.register_alias("mcl_sus_stew:regneration_stew", "mcl_sus_stew:stew")
 core.register_alias("mcl_sus_stew:night_vision_stew", "mcl_sus_stew:stew")
 
---										 ______________
---_________________________________________/	Crafts	\________________________________
-
 core.register_craft({
 	type = "shapeless",
 	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:allium"},
-})
-
-core.register_craft({
-	type = "shapeless",
-	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:lily_of_the_valley"},
-})
-
-core.register_craft({
-	type = "shapeless",
-	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:blue_orchid"},
-})
-
-core.register_craft({
-	type = "shapeless",
-	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:dandelion"} ,
-})
-
-core.register_craft({
-	type = "shapeless",
-	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:cornflower"},
-})
-
-core.register_craft({
-	type = "shapeless",
-	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:oxeye_daisy"},
-})
-
-core.register_craft({
-	type = "shapeless",
-	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:poppy"},
+	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "group:small_flower"},
 })
 
 core.register_craft({
