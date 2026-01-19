@@ -45,7 +45,7 @@ local sus_node_loot = {
 				weight = 2,
 			},
 			{
-				itemstring = "mcl_farming:wheat",
+				itemstring = "mcl_farming:wheat_item",
 				weight = 2,
 			},
 			{
