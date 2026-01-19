@@ -241,11 +241,7 @@ function mcl_lanterns.register_lantern(name, def)
 	})
 end
 
-core.register_node("mcl_lanterns:chain", {
-	description = S("Chain"),
-	_doc_items_longdesc = S("Chains are metallic decoration blocks."),
-	inventory_image = "mcl_lanterns_chain_inv.png",
-	tiles = {"mcl_lanterns_chain.png"},
+local chain_tpl = {
 	drawtype = "mesh",
 	paramtype = "light",
 	paramtype2 = "facedir",
@@ -305,15 +301,13 @@ core.register_node("mcl_lanterns:chain", {
 	end,
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 5,
-})
+}
 
-core.register_craft({
-	output = "mcl_lanterns:chain",
-	recipe = {
-		{"mcl_core:iron_nugget"},
-		{"mcl_core:iron_ingot"},
-		{"mcl_core:iron_nugget"},
-	},
-})
+
+function mcl_lanterns.register_chain(name, def)
+	core.register_node(":mcl_lanterns:"..name, table.merge(chain_tpl, def))
+end
+
+
 
 dofile(modpath.."/register.lua")

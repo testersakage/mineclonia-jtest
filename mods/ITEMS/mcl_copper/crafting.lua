@@ -117,9 +117,9 @@ for _, x in pairs(block_exposure_level) do
 	})
 
 	core.register_craft({
-		output = "mcl_copper:chain"..x.."_preserved",
+		output = "mcl_lanterns:copper_chain"..x.."_preserved",
 		recipe = {
-			{ "mcl_copper:chain"..x, "mcl_honey:honeycomb" }
+			{ "mcl_lanterns:copper_chain"..x, "mcl_honey:honeycomb" }
 		}
 	})
 
@@ -167,7 +167,7 @@ core.register_craft({
 })
 
 core.register_craft({
-	output = "mcl_copper:chain",
+	output = "mcl_lanterns:copper_chain",
 	recipe = {
 		{ "mcl_copper:copper_nugget" },
 		{ "mcl_copper:copper_ingot" },
