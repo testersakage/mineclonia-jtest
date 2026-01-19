@@ -551,10 +551,12 @@ function wolf:on_rightclick (clicker)
 			return
 		end
 
-		if self.order == "sit" then
-			self.order = ""
-		else
-			self.order = "sit"
+		if self.owner and self.owner == playername then
+			if self.order == "sit" then
+				self.order = ""
+			else
+				self.order = "sit"
+			end
 		end
 	elseif name == "mcl_mobitems:bone" and not self.attack then
 		local r = pr:next (1, 3)
