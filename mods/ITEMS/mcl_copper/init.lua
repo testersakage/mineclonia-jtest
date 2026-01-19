@@ -139,10 +139,10 @@ mcl_copper.register_decaychain("chain",{
 	unpreserve_callback = "_on_axe_place",
 	undecay_callback = "_on_axe_place",
 	nodes = {
-		"mcl_copper:chain",
-		"mcl_copper:chain_exposed",
-		"mcl_copper:chain_weathered",
-		"mcl_copper:chain_oxidized",
+		"mcl_lanterns:copper_chain",
+		"mcl_lanterns:copper_chain_exposed",
+		"mcl_lanterns:copper_chain_weathered",
+		"mcl_lanterns:copper_chain_oxidized",
 	},
 })
 

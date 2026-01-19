@@ -36,3 +36,19 @@ core.register_craft({
 		{"mcl_core:iron_nugget", "mcl_core:iron_nugget"      , "mcl_core:iron_nugget"},
 	},
 })
+
+mcl_lanterns.register_chain("chain", {
+	description = S("Chain"),
+	_doc_items_longdesc = S("Chains are metallic decoration blocks."),
+	inventory_image = "mcl_lanterns_chain_inv.png",
+	tiles = {"mcl_lanterns_chain.png"},
+})
+
+core.register_craft({
+	output = "mcl_lanterns:chain",
+	recipe = {
+		{"mcl_core:iron_nugget"},
+		{"mcl_core:iron_ingot"},
+		{"mcl_core:iron_nugget"},
+	},
+})
