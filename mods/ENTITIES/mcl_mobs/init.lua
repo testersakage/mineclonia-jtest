@@ -39,7 +39,6 @@ local path = core.get_modpath(modname)
 local S = core.get_translator(modname)
 
 local old_spawn_icons = core.settings:get_bool("mcl_old_spawn_icons",false)
-local extended_pet_control = core.settings:get_bool("mcl_extended_pet_control",false)
 
 local object_properties = { "hp_max", "breath_max", "zoom_fov", "eye_height", "physical", "collide_with_objects", "collisionbox", "selectionbox", "pointable", "visual", "visual_size", "mesh", "textures", "colors", "use_texture_alpha", "spritediv", "initial_sprite_basepos", "is_visible", "makes_footstep_sound", "automatic_rotate", "stepheight", "automatic_face_movement_dir", "automatic_face_movement_max_rotation_per_sec", "backface_culling", "glow", "nametag", "nametag_color", "nametag_bgcolor", "infotext", "static_save", "damage_texture_modifier", "shaded", "show_on_minimap", }
 
@@ -328,9 +327,6 @@ local on_rightclick_prefix = function(self, clicker)
 		doc.mark_entry_as_revealed(playername, "mobs", self.name)
 	end
 	local item = clicker:get_wielded_item()
-	if extended_pet_control and self.tamed and self.owner == playername then
-		self:toggle_sit(clicker)
-	end
 
 	local item_name = item:get_name()
 	item_name = core.registered_aliases[item_name] or item_name

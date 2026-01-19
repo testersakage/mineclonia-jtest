@@ -182,11 +182,6 @@ mobs_griefing (Mob griefing) bool true
 # Enabling this setting adds an inventory to bookshelves
 mcl_bookshelf_inventories (Bookshelf inventories) bool true
 
-# All tameable mobs listen to the "sit" right-click like dogs
-# For some mobs the Sneak button must be pressed:
-# Eg. horses or other mobs with a right-click function
-mcl_extended_pet_control (Extended pet control) bool false
-
 # Enable nodes not in Minecraft.
 # Includes extra stairs and slabs, Red Nether Brick Fence,
 # nether brick fence gates, and Bamboo Bark.
