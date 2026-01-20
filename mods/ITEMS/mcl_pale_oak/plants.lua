@@ -75,6 +75,7 @@ mcl_flowers.register_simple_flower("eyeblossom", {
 	image = "mcl_pale_oak_eyeblossom.png",
 	selection_box = eyeblossom_selection_box,
 	potted = true,
+	sus_stew = {effect = "nausea", duration = 8},
 	_mcl_crafting_output = {single = {output = "mcl_dyes:grey"}}
 })
 
@@ -83,6 +84,7 @@ mcl_flowers.register_simple_flower("eyeblossom_open", {
 	image = "mcl_pale_oak_eyeblossom_open.png",
 	selection_box = eyeblossom_selection_box,
 	potted = true,
+	sus_stew = {effect = "blindness", duration = 8},
 	_mcl_crafting_output = {single = {output = "mcl_dyes:orange"}}
 })
 

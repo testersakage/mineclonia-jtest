@@ -2,10 +2,18 @@
 
 Register your own sus stews!
 
-```
-mcl_sus_stew.register_stew(name,item,effect_function)
+# Functions
 
-```
+## mcl_sus_stew.register_sus_stew(ingredient, effect, duration)
 
-* item will be used as 4th recipe ingredient
-* effect_function will be run when the stew is eaten.
+Registers a suspicious stew.
+
+* ingredient: will be used as 4th recipe ingredient.
+* effect: must be an effect registered with mcl_potions.
+* duration: the length of time the effect lasts.
+
+## mcl_sus_stew.get_sus_stew(ingredient)
+
+Returns an itemstack containing a suspicious stew.
+
+* ingredient: determines the effect of the stew.

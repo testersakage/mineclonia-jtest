@@ -152,6 +152,16 @@ end)
 
 function mcl_flowers.register_simple_flower(name, def)
 	local newname = "mcl_flowers:"..name
+	local groups = {
+		attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
+		dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
+		plant = 1, flower = 1, place_flowerlike = 1, non_mycelium_plant = 1,
+		flammable = 2, fire_encouragement = 60, fire_flammability = 100,
+		compostability = 65, unsticky = 1,
+	}
+	if def.sus_stew then
+		groups.sus_stew_ingredient = 1
+	end
 	if not def._mcl_silk_touch_drop then def._mcl_silk_touch_drop = nil end
 	if not def.drop then def.drop = newname end
 	mcl_flowers.registered_simple_flowers[newname] = {
@@ -173,13 +183,7 @@ function mcl_flowers.register_simple_flower(name, def)
 		paramtype = "light",
 		walkable = false,
 		drop = def.drop,
-		groups = {
-			attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
-			dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
-			plant = 1, flower = 1, place_flowerlike = 1, non_mycelium_plant = 1,
-			flammable = 2, fire_encouragement = 60, fire_flammability = 100,
-			compostability = 65, unsticky = 1, small_flower = 1
-		},
+		groups = groups,
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		node_placement_prediction = "",
 		on_place = mcl_flowers.on_place_flower,
@@ -197,6 +201,9 @@ function mcl_flowers.register_simple_flower(name, def)
 			desc = def.desc,
 			image = def.image,
 		})
+	end
+	if def.sus_stew then
+		mcl_sus_stew.register_sus_stew(newname, def.sus_stew.effect, def.sus_stew.duration)
 	end
 end
 
