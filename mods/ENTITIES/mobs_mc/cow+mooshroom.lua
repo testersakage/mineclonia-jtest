@@ -117,6 +117,9 @@ local mooshroom = table.merge(cow_def, {
 		{"mobs_mc_mooshroom.png", "mobs_mc_mushroom_red.png"},
 		{"mobs_mc_mooshroom_brown.png", "mobs_mc_mushroom_brown.png" },
 	},
+	-- can have the item name of a small flower when used on a mooshroom. It determines
+	-- the type of suspicious stew that is given after a bowl is used on the mooshroom.
+	_sus_ingredient_held = nil,
 })
 
 function mooshroom:on_rightclick (clicker)
@@ -131,8 +134,8 @@ function mooshroom:on_rightclick (clicker)
 	local is_brown_mooshroom = self.base_texture[1] == "mobs_mc_mooshroom_brown.png"
 
 	if inv then
-		-- Use shears to get mushrooms and turn mooshroom into cow
-		if mcl_util.is_item_or_in_group(item_name, "group:shears") then
+		-- Use shears to convert mooshroom into cow while harvesting mushrooms
+		if item_name == "mcl_tools:shears" then
 			local stack
 			local item_pos = vector.offset(obj_pos, 0, 1.4, 0)
 
@@ -151,7 +154,7 @@ function mooshroom:on_rightclick (clicker)
 				item:add_wear(wear)
 				inv:set_stack("main", clicker:get_wield_index(), item)
 			end
-		-- Use a empty bucket to milk a cow
+		-- Use an empty bucket to milk a cow
 		elseif item_name == "mcl_buckets:bucket_empty" then
 			local stack = ItemStack("mcl_mobitems:milk_bucket")
 
@@ -163,18 +166,15 @@ function mooshroom:on_rightclick (clicker)
 			else
 				core.add_item(vector.offset(obj_pos, 0, 0.5, 0), stack)
 			end
-		-- Use a bowl to get mushroom stew or suspicious stew
+		-- Use a bowl to get a mushroom stew, or a suspicious stew if the mooshroom holds an effect
 		elseif item_name == "mcl_core:bowl" then
-			local stack
-			local effect = self._effect_holder
-
 			inv:remove_item("main", item_name)
 			core.sound_play("mobs_mc_cow_mushroom_stew", {pos = obj_pos, gain = 0.6})
 
-			if is_brown_mooshroom and effect then
-				stack = ItemStack("mcl_sus_stew:stew")
-				stack:get_meta():set_string("effect", effect)
-				self._effect_holder = nil
+			local stack
+			if is_brown_mooshroom and self._sus_ingredient_held then
+				stack = mcl_sus_stew.get_sus_stew(self._sus_ingredient_held)
+				self._sus_ingredient_held = nil
 			else
 				stack = ItemStack("mcl_mushrooms:mushroom_stew")
 			end
@@ -184,19 +184,13 @@ function mooshroom:on_rightclick (clicker)
 			else
 				core.add_item(vector.offset(obj_pos, 0, 0.5, 0), stack)
 			end
-		-- Use a small flower to give a effect to a brown mooshroom
-		elseif core.get_item_group(item_name, "small_flower") == 1 and is_brown_mooshroom then
-			if self._effect_holder then
+		-- Use a small flower to give an effect to a brown mooshroom
+		elseif core.get_item_group(item_name, "sus_stew_ingredient") == 1 and is_brown_mooshroom then
+			if self._sus_ingredient_held then
 				return
 			end
-
-			local effect = mcl_sus_stew.flower_effect[item_name]
-
-			if effect then
-				self._effect_holder = effect
-
-				inv:remove_item("main", item_name)
-			end
+			self._sus_ingredient_held = item_name
+			inv:remove_item("main", item_name)
 		end
 	end
 end
@@ -212,7 +206,7 @@ function mooshroom:_on_lightning_strike ()
 end
 
 function mooshroom:_on_dispense (dropitem, pos, droppos, dropnode, dropdir)
-	if core.get_item_group(dropitem:get_name(), "shears") > 0 then
+	if dropitem:get_name() == "mcl_tools:shears" then
 		local droppos = vector.offset(pos, 0, 1.4, 0)
 		if self.base_texture[1] == "mobs_mc_mooshroom_brown.png" then
 			core.add_item(droppos, "mcl_mushrooms:mushroom_brown 5")

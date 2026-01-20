@@ -1,88 +1,26 @@
 mcl_sus_stew = {}
 local S = core.get_translator(core.get_current_modname())
 
---                                          ____________________________
---_________________________________________/    Variables & Functions    \_________
+local flower_effects = {}
+local effect_durations = {}
 
-mcl_sus_stew.flower_effect = {
-	[ "mcl_flowers:allium" ] = "fire_resistance",
-	[ "mcl_flowers:azure_bluet" ] = "blindness",
-	[ "mcl_flowers:lily_of_the_valley" ] = "poison",
-	[ "mcl_flowers:blue_orchid" ] = "saturation",
-	[ "mcl_flowers:dandelion" ] = "saturation",
-	[ "mcl_flowers:cornflower" ] = "jump",
-	[ "mcl_flowers:oxeye_daisy" ] = "regeneration",
-	[ "mcl_flowers:poppy" ] = "night_vision",
-	[ "mcl_flowers:wither_rose" ] = "withering",
-	[ "mcl_flowers:tulip_orange" ] = "weakness",
-	[ "mcl_flowers:tulip_pink" ] = "weakness",
-	[ "mcl_flowers:tulip_red" ] = "weakness",
-	[ "mcl_flowers:tulip_white" ] = "weakness",
-	[ "mcl_flowers:eyeblossom" ] = "nausea",
-	[ "mcl_flowers:eyeblossom_open" ] = "blindness",
-}
-
-local effects = {
-	[ "fire_resistance" ] = function(itemstack, placer, pointed_thing)
-		mcl_potions.give_effect("fire_resistance", placer, 1, 4)
-	end,
-
-	[ "blindness" ] = function(itemstack, placer, pointed_thing)
-		mcl_potions.give_effect("blindness", placer, 1, 8)
-	end,
-
-	[ "poison" ] = function(itemstack, placer, pointed_thing)
-		mcl_potions.give_effect_by_level("poison", placer, 1, 12)
-	end,
-
-	[ "saturation" ] = function(itemstack, placer, pointed_thing, player)
-		mcl_potions.give_effect_by_level("saturation", placer, 1, 0.5)
-	end,
-
-	["jump"] = function(itemstack, placer, pointed_thing)
-		mcl_potions.give_effect_by_level("leaping", placer, 1, 6)
-	end,
-
-	["regeneration"] = function(itemstack, placer, pointed_thing)
-		mcl_potions.give_effect_by_level("regeneration", placer, 1, 8)
-	end,
-
-	["withering"] = function(itemstack, placer, pointed_thing)
-		mcl_potions.give_effect_by_level("withering", placer, 1, 8)
-	end,
-
-	["weakness"] = function(itemstack, placer, pointed_thing)
-		mcl_potions.give_effect_by_level("weakness", placer, 1, 9)
-	end,
-
-	["night_vision"] = function(itemstack, placer, pointed_thing)
-		mcl_potions.give_effect("night_vision", placer, 1, 5)
-	end,
-
-	["nausea"] = function(itemstack, placer, pointed_thing)
-		mcl_potions.give_effect("nausea", placer, 1, 8)
-	end,
-}
-
-local function get_random_effect()
-	local keys = {}
-	for k, _ in pairs(effects) do
-		table.insert(keys, k)
+function mcl_sus_stew.register_sus_stew(ingredient, effect, duration)
+	if not mcl_potions.registered_effects[effect] then
+		error("Unknown potion effect.")
 	end
-	return effects[keys[math.random(#keys)]]
+	flower_effects[ingredient] = effect
+	effect_durations[effect] = duration
 end
 
-core.register_on_craft(function(itemstack, _, old_craft_grid, _)
-	if itemstack:get_name() ~= "mcl_sus_stew:stew" then return end
-	for f,e in pairs(mcl_sus_stew.flower_effect) do
-		for _,it in pairs(old_craft_grid) do
-			if it:get_name() == f then
-				itemstack:get_meta():set_string("effect",e)
-				return itemstack
-			end
-		end
+function mcl_sus_stew.get_sus_stew(ingredient)
+	local effect = flower_effects[ingredient]
+	if not effect then
+		error("Invalid suspicious stew ingredient.")
 	end
-end)
+	local itemstack = ItemStack("mcl_sus_stew:stew")
+	itemstack:get_meta():set_string("effect", effect)
+	return itemstack
+end
 
 core.register_craftitem("mcl_sus_stew:stew",{
 	description = S("Suspicious Stew"),
@@ -92,14 +30,32 @@ core.register_craftitem("mcl_sus_stew:stew",{
 	_mcl_saturation = 7.2,
 	_mcl_eat_replace_with = "mcl_core:bowl",
 	_mcl_eat_effect = function (itemstack, placer, pointed_thing)
-		local e = itemstack:get_meta():get_string("effect")
-		local f = effects[e]
-		if not f then
-			f = get_random_effect()
+		local effect = itemstack:get_meta():get_string("effect")
+		if effect == "jump" then
+			-- some old sus stew items may still have a legacy effect name.
+			effect = "leaping"
 		end
-		f(itemstack, placer, pointed_thing)
+		if mcl_potions.registered_effects[effect] then
+			mcl_potions.give_effect(effect, placer, 1, effect_durations[effect])
+		end
 	end,
 })
+
+core.register_craft({
+	type = "shapeless",
+	output = "mcl_sus_stew:stew",
+	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "group:sus_stew_ingredient"},
+})
+
+core.register_on_craft(function(itemstack, _, old_craft_grid, _)
+	if itemstack:get_name() ~= "mcl_sus_stew:stew" then return end
+	for _, item in pairs(old_craft_grid) do
+		local name = item:get_name()
+		if core.get_item_group(name, "sus_stew_ingredient") == 1 then
+			return mcl_sus_stew.get_sus_stew(name)
+		end
+	end
+end)
 
 --compat with old (mcl5) sus_stew
 core.register_alias("mcl_sus_stew:poison_stew", "mcl_sus_stew:stew")
@@ -107,21 +63,3 @@ core.register_alias("mcl_sus_stew:hunger_stew", "mcl_sus_stew:stew")
 core.register_alias("mcl_sus_stew:jump_boost_stew", "mcl_sus_stew:stew")
 core.register_alias("mcl_sus_stew:regneration_stew", "mcl_sus_stew:stew")
 core.register_alias("mcl_sus_stew:night_vision_stew", "mcl_sus_stew:stew")
-
-core.register_craft({
-	type = "shapeless",
-	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "group:small_flower"},
-})
-
-core.register_craft({
-	type = "shapeless",
-	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:eyeblossom"},
-})
-
-core.register_craft({
-	type = "shapeless",
-	output = "mcl_sus_stew:stew",
-	recipe = {"mcl_mushrooms:mushroom_red", "mcl_mushrooms:mushroom_brown", "mcl_core:bowl", "mcl_flowers:eyeblossom_open"},
-})
