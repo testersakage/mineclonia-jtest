@@ -2,9 +2,9 @@ local mod_name = core.get_current_modname()
 local S = core.get_translator(mod_name)
 -- todo:
 -- [x] basic immortality utils
--- [ ] hide health bar if immortal.
+-- [x] hide health bar if immortal.
 -- [ ] add buttons in UI to change immortality for self.
--- [ ] fix doubled messages on grant/revoke.
+-- [x] fix doubled messages on grant/revoke.
 
 mcl_immortality = {}
 
@@ -33,8 +33,20 @@ function mcl_immortality.set_immortal(player, flag)
     pmeta:set_int("immortal", flag and 1 or 0)
 
     if flag then
+        for _, hudbar_name in ipairs({ "hunger", "health", "breath", "armor" }) do
+            print(dump(player))
+            print(hudbar_name)
+            hb.hide_hudbar(player, hudbar_name)
+        end
+
         core.chat_send_player(player:get_player_name(), S("You are now immortal."))
     else
+        for _, hudbar_name in ipairs({ "hunger", "health", "breath", "armor" }) do
+            print(dump(player))
+            print(hudbar_name)
+            hb.unhide_hudbar(player, hudbar_name)
+        end
+
         core.chat_send_player(player:get_player_name(), S("You are now mortal."))
     end
 end

@@ -83,7 +83,9 @@ local function update_hud(player)
 			hb.hide_hudbar(player, "armor")
 		else
 			hb.change_hudbar(player, "armor", arm_printable(arm))
-			hb.unhide_hudbar(player, "armor")
+			if not mcl_immortality.is_immortal(player) then
+				hb.unhide_hudbar(player, "armor")
+			end
 		end
 	else
 		hb.change_hudbar(player, "armor", arm_printable(arm))

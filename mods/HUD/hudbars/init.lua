@@ -515,7 +515,7 @@ end
 local function update_hud(player)
 	if not player_exists(player) then return end
 	if core.settings:get_bool("enable_damage") then
-		if hb.settings.forceload_default_hudbars then
+		if hb.settings.forceload_default_hudbars and not mcl_immortality.is_immortal(player) then
 			hb.unhide_hudbar(player, "health")
 		end
 		--air
