@@ -364,38 +364,52 @@ local trading_players = {}
 function villager_base:on_transaction (trade, player)
 end
 
-function villager_base:validate_transaction (inv, player, trade_id, input1, input2)
+function villager_base:validate_transaction (inv, player, trade_id)
 	local trade = self._trades[trade_id]
 	assert (trade)
 
 	local wanted1 = trade:get_wanted1 ()
 	local wanted2 = trade:get_wanted2 ()
-	local backup1 = inv:get_stack ("input", 1)
-	local backup2 = inv:get_stack ("input", 2)
-	local input1 = inv:remove_item ("input", wanted1)
-	local input2 = inv:remove_item ("input", wanted2)
 
-	if input1:get_count () < wanted1:get_count ()
-		or input2:get_count () < wanted2:get_count () then
-		inv:set_stack ("input", 1, backup1)
-		inv:set_stack ("input", 2, backup2)
+	if not inv:contains_item ("input", wanted1)
+		and not inv:contains_item ("input", wanted2) then
 		return 0
 	end
 
+	local stacktype = inv:get_stack ("output", 1)
+	local desired = trade:get_offered ()
+	if stacktype == desired and desired:get_count () > 0 then
+		return desired:get_count ()
+	else
+		return 0
+	end
+end
+
+function villager_base:complete_transaction (inv, player, trade_id)
+	local trade = self._trades[trade_id]
+	assert (trade)
+	local wanted1 = trade:get_wanted1 ()
+	local wanted2 = trade:get_wanted2 ()
+
+	-- It's pointless to enforce purchase costs at this juncture,
+	-- as by the call to on_take it is already too late to alter
+	-- the outcome of the inventory operation.  They are instead
+	-- enforced by validate_transaction.
+	inv:remove_item ("input", wanted1)
+	inv:remove_item ("input", wanted2)
 	trade.uses = trade.uses + 1
 	if trade.reward_xp then
 		local xp = 3 + math.random (3)
 		mcl_experience.throw_xp (self.object:get_pos (), xp)
 	end
 	self:on_transaction (trade, player)
+	awards.unlock (player:get_player_name (), "mcl:whatAdeal")
 
-	local stacktype = inv:get_stack ("output", 1)
-	local desired = trade:get_offered ()
-	if stacktype == desired and desired:get_count () > 0 then
-		awards.unlock (player:get_player_name (), "mcl:whatAdeal")
-		return desired:get_count ()
-	else
-		return 0
+	-- If any output items remain, drop them at the player.
+	local output = inv:get_stack ("output", 1)
+	if output:get_count () >= 0 then
+		local player_pos = player:get_pos ()
+		mcl_util.drop_item_stack (player_pos, output)
 	end
 end
 
@@ -424,9 +438,7 @@ function inv_class:allow_take (listname, index, stack, player)
 			return 0
 		end
 
-		local input1 = self:get_stack ("input", 1)
-		local input2 = self:get_stack ("input", 2)
-		return entity:validate_transaction (self, player, trade_id, input1, input2)
+		return entity:validate_transaction (self, player, trade_id)
 	else
 		return 0
 	end
@@ -480,14 +492,16 @@ function inv_class:on_take (listname, index, stack, player)
 		if not trade_id or not entity._trades[trade_id] then
 			return
 		end
-		entity:update_offer (self, player, trade_id, false)
 		if listname == "output" then
-			entity:show_trade_formspec (player, trade_id)
 			core.sound_play ("mobs_mc_villager_accept", {
 				to_player = player:get_player_name (),
 				object = self.object,
 			}, true)
+			entity:complete_transaction (self, player, trade_id)
+			entity:update_offer (self, player, trade_id, false)
+			entity:show_trade_formspec (player, trade_id)
 		else
+			entity:update_offer (self, player, trade_id, false)
 			core.sound_play ("mobs_mc_villager_deny", {
 				to_player = player:get_player_name (),
 				object = self.object,
