@@ -4,9 +4,6 @@ mcl_player = {
 	players = {},
 }
 
-local MAX_MELEE_RANGE = tonumber(core.settings:get("mcl_melee_range")) or 3
-local MAX_CREATIVE_MELEE_RANGE = tonumber(core.settings:get("mcl_melee_range_creative")) or 5
-
 local tpl_playerinfo = {
 	textures = { "character.png", "blank.png", "blank.png" },
 	model = "",
@@ -234,58 +231,6 @@ function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, da
 		end
 	end
 end
-
--- this should only be called inside of an `on_punched/on_rightclicked` callback.
--- the function assumes the `player` (puncher/rightclicker) is pointing at the target.
-function mcl_player.interaction_reaches_punched_object(player)
-	if not player:is_player() then return true end
-	local wielded = player:get_wielded_item():get_definition()
-	local range = MAX_MELEE_RANGE
-	if wielded and wielded.range then range = wielded.range end
-	if mcl_gamemode.get_gamemode(player) == "creative" then range = MAX_CREATIVE_MELEE_RANGE end
-	local eye_p = mcl_util.target_eye_pos(player)
-	local ray_end = player:get_look_dir ()
-		ray_end.x = ray_end.x * range + eye_p.x
-		ray_end.y = ray_end.y * range + eye_p.y
-		ray_end.z = ray_end.z * range + eye_p.z
-	local raycast = core.raycast(
-		eye_p,
-		ray_end,
-		true, true
-	)
-
-	for thing in raycast do
-		if thing.type == "object"
-				and thing.ref
-				and vector.distance(eye_p, thing.intersection_point) <= range
-				and not thing.ref:is_player()
-				or thing.ref and thing.ref:is_player() and thing.ref ~= player then
-			return true
-		end
-	end
-	return false
-end
-
-local original_function = core.register_on_punchplayer
-
-function core.register_on_punchplayer(func)
-	original_function(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
-		if not mcl_player.interaction_reaches_punched_object(hitter) then return true end
-		func(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
-	end)
-end
-
--- punchplayer call for mcl_damage
-core.register_on_punchplayer (function (player, hitter, _, _, _, damage)
-	  -- Inflict the Minetest-computed damage by means of
-	  -- mcl_damage.damage_player.
-	if damage > 0 then
-		local mcl_reason = { type = "generic", }
-		mcl_damage.from_punch (mcl_reason, hitter)
-		mcl_damage.damage_player (player, damage, mcl_reason)
-		return true
-	end
-end)
 
 core.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	-- This section borrowed from Minetest.
