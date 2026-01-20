@@ -49,11 +49,16 @@ core.register_privilege("immortality", {
     description = S("Grants an ability to make self (im)mortal"),
     give_to_singleplayer = false,
     give_to_admin = true,
-    on_grant = function(name)
+    on_grant = function(name, granter)
+        if not granter then return end
+
         core.chat_send_player(name,
             S("You have received a privilege for granting immortality for self."))
+        return nil
     end,
-    on_revoke = function(name)
+    on_revoke = function(name, revoker)
+        if not revoker then return end
+
         local player = core.get_player_by_name(name)
         local privs = core.get_player_privs(name)
         -- Revoke "others" permission variation.
@@ -67,6 +72,7 @@ core.register_privilege("immortality", {
         mcl_immortality.set_immortal(player, false)
 
         core.chat_send_player(name, S("Your privilege for immortality was revoked. You are now mortal."))
+        return nil
     end
 })
 
@@ -74,7 +80,8 @@ core.register_privilege("immortality_others", {
     description = S("Grants an ability to make self and others (im)mortal"),
     give_to_singleplayer = false,
     give_to_admin = true,
-    on_grant = function(name)
+    on_grant = function(name, granter)
+        if not granter then return end
         local privs = core.get_player_privs(name)
         if not privs["immortality"] then
             core.change_player_privs(name, {
@@ -84,7 +91,8 @@ core.register_privilege("immortality_others", {
         core.chat_send_player(name,
             S("You have received a privilege for granting immortality for others and self."))
     end,
-    on_revoke = function(name)
+    on_revoke = function(name, revoker)
+        if not revoker then return end
         core.chat_send_player(name,
             S("Your privilege for others immortality was revoked. You cannot change immortality of others now."))
     end
