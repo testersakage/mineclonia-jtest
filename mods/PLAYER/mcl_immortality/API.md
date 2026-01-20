@@ -6,9 +6,11 @@ Adds utils to control players immortality.
 
 Check whether `player` is immortal. Return bool on success, nil on error.
 
-## ``mcl_immortality.set_immortal(player: ObjectRef, [flag: bool])``
+## ``mcl_immortality.set_immortal(player: ObjectRef, [flag: bool, set_player_setting: bool = true])``
 
 Sets immortality for `player` to `flag`.
+
+Sets `mcl_immortality:immortal` setting if `set_player_setting` is true (which is by default).
 
 `flag` is optional. If absent, flips the setting (`true` -> `false` and `false` -> `true`).
 

@@ -1,10 +1,5 @@
 local mod_name = core.get_current_modname()
 local S = core.get_translator(mod_name)
--- todo:
--- [x] basic immortality utils
--- [x] hide health bar if immortal.
--- [ ] add buttons in UI to change immortality for self.
--- [x] fix doubled messages on grant/revoke.
 
 mcl_immortality = {}
 
@@ -21,10 +16,16 @@ end
 -- Accepts ObjectRef to a player and a flag.
 -- DOES NOT check any privileges.
 -- If the flag is nil, flips the setting.
-function mcl_immortality.set_immortal(player, flag)
+function mcl_immortality.set_immortal(player, flag, set_player_setting)
+    if set_player_setting == nil then
+        set_player_setting = true
+    end
     local pmeta = player:get_meta()
     if flag == nil then
         flag = not mcl_immortality.is_immortal(player)
+    end
+    if set_player_setting then
+        mcl_player.set_player_setting(player, "mcl_immortality:immortal", flag)
     end
 
     local p_armor_groups = player:get_armor_groups()
@@ -32,30 +33,21 @@ function mcl_immortality.set_immortal(player, flag)
     player:set_armor_groups(p_armor_groups)
     pmeta:set_int("immortal", flag and 1 or 0)
 
+
     if flag then
         for _, hudbar_name in ipairs({ "hunger", "health", "breath", "armor" }) do
-            print(dump(player))
-            print(hudbar_name)
             hb.hide_hudbar(player, hudbar_name)
         end
 
         core.chat_send_player(player:get_player_name(), S("You are now immortal."))
     else
         for _, hudbar_name in ipairs({ "hunger", "health", "breath", "armor" }) do
-            print(dump(player))
-            print(hudbar_name)
             hb.unhide_hudbar(player, hudbar_name)
         end
 
         core.chat_send_player(player:get_player_name(), S("You are now mortal."))
     end
 end
-
-core.register_on_joinplayer(function(player)
-    if mcl_immortality.is_immortal(player) then
-        mcl_immortality.set_immortal(player, true)
-    end
-end)
 
 core.register_privilege("immortality", {
     description = S("Grants an ability to make self (im)mortal"),
@@ -129,6 +121,31 @@ core.register_chatcommand("immortal", {
         for _, victim_name in ipairs(names) do
             mcl_immortality.set_immortal(core.get_player_by_name(victim_name))
         end
-        return true, S("Player(s) recieved their (im)mortality")
+        return true, S("Player(s) received their (im)mortality")
     end
+})
+
+core.register_on_joinplayer(function(player)
+    if mcl_immortality.is_immortal(player) then
+        mcl_immortality.set_immortal(player, true)
+    end
+end)
+
+mcl_player.register_player_setting("mcl_immortality:immortal", {
+	type = "boolean",
+	section = "Gameplay",
+	short_desc = S("Enable immortality"),
+	long_desc = S([[Enables immortality. You won't receive any damage. 
+Stays on when you turn off creative mode. Requires 'immortality' or 'immortality_others' privilege.
+On its revoke, immortality turns off automatically.]]),
+	ui_default = function(player)
+        if player == nil then return end
+        return mcl_immortality.is_immortal(player)
+    end,
+	on_change = function(player, _, flag)
+        if player == nil then return end
+        if flag == nil then flag = false end
+        mcl_immortality.set_immortal(player, flag, false)
+    end,
+    settings_ui_default = false
 })
