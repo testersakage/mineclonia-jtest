@@ -1,4 +1,3 @@
-local S = core.get_translator("mcl_lanterns")
 local modpath = core.get_modpath("mcl_lanterns")
 
 mcl_lanterns = {}
