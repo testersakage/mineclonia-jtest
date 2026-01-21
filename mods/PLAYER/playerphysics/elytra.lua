@@ -314,6 +314,7 @@ end
 
 function elytra_entity:check_fall_damage (moveresult)
 	local self_pos = self.object:get_pos ()
+	if not self_pos then return end
 	local fall_y = self._last_fall_y or self_pos.y
 	local d = self._fall_distance + (fall_y - self_pos.y)
 	self._fall_distance = math.max (d, 0)
