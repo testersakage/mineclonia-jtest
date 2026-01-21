@@ -264,6 +264,7 @@ function mcl_shields.can_block (obj, dpos_or_dot, reason)
 					dpos_or_dot = entity._saved_shooter_pos
 				end
 			end
+			damager = damager and damager.is_valid and damager:is_valid() and damager
 			if not dpos_or_dot and damager then
 				dpos_or_dot = damager:get_pos()
 			end
