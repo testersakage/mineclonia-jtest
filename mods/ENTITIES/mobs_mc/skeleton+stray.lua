@@ -472,6 +472,7 @@ local monster_spawner = mobs_mc.monster_spawner
 function stray_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
 					    spawn_flag)
 	return mcl_weather.is_outdoor (node_pos)
+		or spawn_flag == "trial_spawner"
 		and monster_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
 							 node_cache,

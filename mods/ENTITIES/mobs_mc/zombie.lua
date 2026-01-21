@@ -890,6 +890,23 @@ local zombie_spawner_desert = table.merge (zombie_spawner, {
 	},
 })
 
+local baby_zombie_spawner = table.merge (monster_spawner, {
+	name = "mobs_mc:baby_zombie",
+	weight = 95,
+	pack_max = 4,
+	pack_min = 4,
+	biomes = non_desert_biomes,
+})
+
+function baby_zombie_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
+					   spawn_flag)
+	return spawn_flag == "trial_spawner"
+		and monster_spawner.test_spawn_position (self, spawn_pos,
+							 node_pos, sdata,
+							 node_cache,
+							 spawn_flag)
+end
+
 local husk_spawner = table.merge (monster_spawner, {
 	name = "mobs_mc:husk",
 	weight = 80,
@@ -903,6 +920,7 @@ local husk_spawner = table.merge (monster_spawner, {
 function husk_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
 					   spawn_flag)
 	return mcl_weather.is_outdoor (spawn_pos)
+		or spawn_flag == "trial_spawner"
 		and monster_spawner.test_spawn_position (self, spawn_pos,
 							 node_pos, sdata,
 							 node_cache,
@@ -925,4 +943,5 @@ end
 
 mcl_mobs.register_spawner (zombie_spawner)
 mcl_mobs.register_spawner (zombie_spawner_desert)
+mcl_mobs.register_spawner (baby_zombie_spawner)
 mcl_mobs.register_spawner (husk_spawner)
