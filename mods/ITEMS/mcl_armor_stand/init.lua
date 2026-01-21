@@ -88,7 +88,7 @@ on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 		return itemstack
 	end
 
-	-- FIX: potions and other items calls on_rightclick without pointed_thing
+	-- potions and other items calls on_rightclick without pointed_thing
 	if not pointed_thing
 	or pointed_thing.type ~= "node"
 	or not pointed_thing.above then
