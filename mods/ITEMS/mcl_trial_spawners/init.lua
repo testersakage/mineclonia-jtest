@@ -175,6 +175,9 @@ local function attempt_spawning_trial_mob(pos, meta, is_ominous)
 
 		if is_in_eyesight_of_spawner(pos, spawn_attempt_pos) then
 			local mob_name = meta:get_string("mob")
+			if not mob_name or mob_name == "" then
+				core.log ("warning", "[mcl_trial_spawners] Mobs name is invalid")
+			end
 			local spawned_mob = mcl_mobs.spawn_abnormally(spawn_attempt_pos, mob_name, nil, "trial_spawner")
 
 			if spawned_mob then
@@ -450,7 +453,10 @@ local tpl = {
 	paramtype2 = "facedir",
 	paramtype = "light",
 	tiles = {"trialspawner_top.png", "trialspawner_bottom.png", "trialspawner_side.png", "trialspawner_side.png", "trialspawner_side.png", "trialspawner_side.png"},
-	groups = {deco_block=1, features_cannot_replace = 1, jigsaw_construct = 1},
+	groups = {
+		deco_block = 1, features_cannot_replace = 1,
+		jigsaw_construct = 1, jigsaw_preserve_meta = 1
+	},
 	is_ground_content = false,
 	drop = "",
 	light_source = 4,
@@ -459,19 +465,12 @@ local tpl = {
 	on_construct = function(pos)
 		local timer = core.get_node_timer (pos)
 		timer:start (1)
-	end,
-	on_timer = function(pos)
-		trial_spawner_step(pos, core.get_meta(pos))
-		return true
-	end,
-	after_place_node = function(pos)
+
 		local meta = core.get_meta(pos)
 
 		meta:set_int("last_activation", 0)
 		meta:set_int("last_spawn", 0)
 		meta:set_int("last_item_spawner", 0)
-
-		meta:set_string("mob", "mobs_mc:zombie")
 
 		meta:set_int("base_total_mobs", 6)
 		meta:set_float("total_mobs_added_per_player", 2)
@@ -484,6 +483,10 @@ local tpl = {
 		meta:set_int("total_mobs_spawned", 0)
 
 		meta:set_float("spawn_interval", 2)
+	end,
+	on_timer = function(pos)
+		trial_spawner_step(pos, core.get_meta(pos))
+		return true
 	end,
 	on_destruct = function(pos)
 		trial_spawners_spawned_mobs[core.hash_node_position(pos)] = nil
