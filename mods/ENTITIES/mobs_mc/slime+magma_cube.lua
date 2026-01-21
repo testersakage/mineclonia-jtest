@@ -463,7 +463,8 @@ function slime_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cac
 
 	local name = mcl_biome_dispatch.get_biome_name (node_pos)
 	if (swamp_or_mangrove_swamp_p (name) and swamp_spawn (spawn_pos))
-		or spawn_flag == "spawner" then
+		or spawn_flag == "spawner"
+		or spawn_flag == "trial_spawner" then
 		if default_spawner.test_spawn_position (self, spawn_pos,
 							node_pos, sdata,
 							node_cache,
