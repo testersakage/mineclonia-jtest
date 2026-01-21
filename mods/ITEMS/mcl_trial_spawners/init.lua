@@ -339,7 +339,7 @@ local function trial_spawner_step(pos, meta)
 	local is_ominous = core.get_item_group(node.name, "ominous_trial_spawner") > 0
 	local is_active = core.get_item_group(node.name, "active_trial_spawner") > 0
 	local last_spawn = meta:get_int("last_spawn")
-	local players = core.deserialize(meta:get_string("active_players"))
+	local players = core.deserialize(meta:get_string("active_players")) or {}
 	local new_players = {}
 	for obj in core.objects_inside_radius(pos, activation_radius) do
 		if core.is_player(obj)
