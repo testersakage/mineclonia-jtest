@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_beds x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-29 06:21+0000\n"
+"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_beds/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Beds allow you to sleep at night and make the time pass faster."
 msgstr "Camas permitem que você durma durante a noite e faz o tempo passar mais rápido."
@@ -65,10 +66,10 @@ msgid "Abort sleep"
 msgstr "Abortar dormir"
 
 msgid "Chat:"
-msgstr ""
+msgstr "Bate-papo:"
 
 msgid "send!"
-msgstr ""
+msgstr "enviar!"
 
 msgid "Players in bed: @1/@2"
 msgstr "Jogadores na cama: @1/@2"
@@ -89,83 +90,94 @@ msgid "You're in bed."
 msgstr "Você está na cama."
 
 msgid "@1/@2 players currently in bed."
-msgstr ""
+msgstr "@1/@2 jogadores atualmente na cama."
 
 msgid "You exceeded the maximum number of messages per 10 seconds!"
-msgstr ""
+msgstr "Você excedeu o número máximo de mensagens a cada 10 segundos!"
 
 msgid "You are missing the 'shout' privilege! It's required in order to talk in chat..."
 msgstr ""
+"Você não tem a opção de 'gritar'! Ela é necessária para conversar no chat..."
 
 msgid "Sorry, but you have to wait @1 seconds until you may use this button again!"
 msgstr ""
+"Desculpe, mas você terá que esperar @1 segundos antes de poder usar este "
+"botão novamente!"
 
 msgid "Hey! Would you guys mind sleeping?"
-msgstr ""
+msgstr "Ei! Vocês poderiam ir dormir?"
 
 msgid "New respawn position set!"
-msgstr "Nova posição de respawn marcada!"
+msgstr "Nova posição de ressurgimento marcada!"
 
 msgid "Black Bed"
-msgstr ""
+msgstr "Cama Preta"
 
 msgid "Blue Bed"
-msgstr ""
+msgstr "Cama Azul"
 
 msgid "Brown Bed"
-msgstr ""
+msgstr "Cama Marrom"
 
 msgid "Cyan Bed"
-msgstr ""
+msgstr "Cama Ciano"
 
 msgid "Green Bed"
-msgstr ""
+msgstr "Cama Verde"
 
 msgid "Grey Bed"
-msgstr ""
+msgstr "Cama Cinza"
 
 msgid "Light Blue Bed"
-msgstr ""
+msgstr "Cama Azul Claro"
 
 msgid "Light Grey Bed"
-msgstr ""
+msgstr "Cama Cinza Claro"
 
 msgid "Lime Bed"
-msgstr ""
+msgstr "Cama Verde Lima"
 
 msgid "Magenta Bed"
-msgstr ""
+msgstr "Cama Magenta"
 
 msgid "Orange Bed"
-msgstr ""
+msgstr "Cama Laranja"
 
 msgid "Pink Bed"
-msgstr ""
+msgstr "Cama Rosa"
 
 msgid "Purple Bed"
-msgstr ""
+msgstr "Cama Roxa"
 
 msgid "Red Bed"
-msgstr ""
+msgstr "Cama Vermelha"
 
 msgid "White Bed"
-msgstr ""
+msgstr "Cama Branca"
 
 msgid "Yellow Bed"
-msgstr ""
+msgstr "Cama Amarela"
 
 msgid "Respawn Anchor"
-msgstr "Âncora de Respawn"
+msgstr "Âncora de Ressurgimento"
 
 msgid "The respawn anchor is a block that allows the player to set their spawn point in the Nether. It will only work if fueled using glowstone blocks."
 msgstr ""
+"A âncora de ressurgimento é um bloco que permite ao jogador definir seu "
+"ponto de surgimento no Nether. Ela só funciona se for abastecida com blocos "
+"de pedra luminosa."
 
 msgid "Use a glowstone block to add a charge."
-msgstr ""
+msgstr "Use um bloco de pedra luminosa para adicionar uma carga."
 
 msgid "Respawn anchors can be charged up to four times. Rightclick on a charged anchor to set a new spawn point."
 msgstr ""
+"As âncoras de ressurgimento podem ser carregadas até quatro vezes. Clique "
+"com o botão direito em uma âncora carregada para definir um novo ponto de "
+"ressurgimento."
 
 msgid "A respawn anchor only works in the Nether. Attempting to use a charged anchor to set a new spawn point outside the Nether will cause it to explode."
 msgstr ""
-
+"A âncora de ressurgimento só funciona no Nether. Tentar usar uma âncora "
+"carregada para definir um novo ponto de ressurgimento fora do Nether fará "
+"com que ela exploda."

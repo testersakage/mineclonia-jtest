@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-16 22:10+0000\n"
+"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/doc_items/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.14.3\n"
 
 msgid "This is a decorational block."
 msgstr "Esse é um bloco decorativo."
@@ -95,7 +96,7 @@ msgid "• @1: @2 HP"
 msgstr "• @1: @2 HP"
 
 msgid "Full punch interval: @1 s"
-msgstr "Intervalo completo de golpe: @1 s"
+msgstr "Intervalo de golpe completo: @1 s"
 
 msgid "This block can be mined by any mining tool in half a second."
 msgstr "Esse bloco pode ser extraído em meio segundo por qualquer ferramenta de mineração."
@@ -338,25 +339,28 @@ msgid "This block will drop the following when mined: @1."
 msgstr "Esse bloco irá deixar cair o seguinte quando extraído: @1."
 
 msgid "This block will drop the following items when mined: @1."
-msgstr ""
+msgstr "Este bloco soltará os seguintes itens quando minerado: @1."
 
 msgid "This block will randomly drop one of the following when mined: @1."
 msgstr ""
+"Este bloco soltará aleatoriamente um dos seguintes itens quando minerado: @1."
 
 msgid "This block will randomly drop up to @1 drops of the following possible drops when mined: @2."
 msgstr ""
+"Este bloco soltará aleatoriamente até @1 dos seguintes itens possíveis "
+"quando minerado: @2."
 
 msgid " and "
-msgstr " e"
+msgstr " e "
 
 msgid "@1×@2"
-msgstr ""
+msgstr "@1×@2"
 
 msgid "@1 (<0.5%)"
 msgstr "@1 (<0.5%)"
 
 msgid "@1 (ca. @2%)"
-msgstr ""
+msgstr "@1 (aprox. @2%)"
 
 msgid "@1 (@2%)"
 msgstr "@1 (@2%)"
@@ -383,17 +387,16 @@ msgid "Mobs"
 msgstr "Mobs"
 
 msgid "Different Mobs"
-msgstr ""
+msgstr "Diferentes Mobs"
 
 msgid "Drops: "
-msgstr ""
+msgstr "Soltos: "
 
 msgid "Follows player when these items are held:"
-msgstr ""
+msgstr "Segue o jogador quando estes itens estão sendo segurados:"
 
 msgid "A transparent block, basically empty space. It is usually left behind after digging something."
 msgstr "Um bloco transparente, basicamente um vazio. Isso geralmente fica no lugar de um bloco removido."
 
 msgid "Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand."
 msgstr "Sempre que você não estiver empunhando nenhum item, você usa a mão que atua como uma ferramentacom caracteristicas próprias. Quando você está empunhando um item que não é uma ferramenta de mineração ou uma arma, ele se comportará como se fosse a mão."
-

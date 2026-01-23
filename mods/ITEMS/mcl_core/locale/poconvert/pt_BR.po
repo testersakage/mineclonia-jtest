@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-16 22:10+0000\n"
+"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_core/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.14.3\n"
 
 msgid "Stick"
 msgstr "Graveto"
@@ -56,7 +57,7 @@ msgid "Diamonds are precious minerals and useful to create the highest tier of a
 msgstr "Diamantes são minerais preciosos e úteis para criar as armaduras e ferramentas do mais alto nível."
 
 msgid "Diamond Material"
-msgstr ""
+msgstr "Material de Diamante"
 
 msgid "Clay Ball"
 msgstr "Bola de Argila"
@@ -71,7 +72,7 @@ msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr "Ferro fundido. É usado para produzir armaduras, ferramentas e outros."
 
 msgid "Iron Material"
-msgstr ""
+msgstr "Material de Ferro"
 
 msgid "Gold Ingot"
 msgstr "Lingote de Ouro"
@@ -80,7 +81,7 @@ msgid "Molten gold. It is used to craft armor, tools, and whatnot."
 msgstr "Ouro fundido. É usado para produzir armaduras, ferramentas e outros."
 
 msgid "Gold Material"
-msgstr ""
+msgstr "Material de Ouro"
 
 msgid "Emerald"
 msgstr "Esmeralda"
@@ -89,16 +90,17 @@ msgid "Emeralds are used in villager trades as currency."
 msgstr "Esmeraldas são utilizadas nas trocas como aldeões na forme de moeda."
 
 msgid "Emerald Material"
-msgstr ""
+msgstr "Material de Esmeralda"
 
 msgid "Lapis Lazuli"
-msgstr ""
+msgstr "Lápis-lazúli"
 
 msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr ""
+"Lápis-lazúli é necessário para encantar itens em uma mesa de encantamentos."
 
 msgid "Lapis Material"
-msgstr ""
+msgstr "Material de Lápis-lazúli"
 
 msgid "Brick"
 msgstr "Tijolo"
@@ -140,262 +142,262 @@ msgid "Enchanted Golden Apple"
 msgstr "Maçã Dourada Encantada"
 
 msgid "Acacia Bark"
-msgstr ""
+msgstr "Casca de Acácia"
 
 msgid "Acacia Bark Slab"
-msgstr ""
+msgstr "Laje de Casca de Acácia"
 
 msgid "Acacia Bark Stairs"
-msgstr ""
+msgstr "Escadas de Casca de Acácia"
 
 msgid "Acacia Boat"
-msgstr ""
+msgstr "Bote de Acácia"
 
 msgid "Acacia Button"
-msgstr ""
+msgstr "Botão de Acácia"
 
 msgid "Acacia Chest Boat"
-msgstr ""
+msgstr "Bote com Baú de Acácia"
 
 msgid "Acacia Door"
-msgstr ""
+msgstr "Porta de Acácia"
 
 msgid "Acacia Fence"
-msgstr ""
+msgstr "Cerca de Acácia"
 
 msgid "Acacia Fence Gate"
 msgstr "Portinhola de Acácia"
 
 msgid "Acacia Hanging Sign"
-msgstr ""
+msgstr "Placa Suspensa de Acácia"
 
 msgid "Acacia Leaves"
-msgstr ""
+msgstr "Folhas de Acácia"
 
 msgid "Acacia Log"
-msgstr ""
+msgstr "Tronco de Acácia"
 
 msgid "Acacia Planks"
-msgstr ""
+msgstr "Tábuas de Acácia"
 
 msgid "Acacia Pressure Plate"
-msgstr ""
+msgstr "Placa de Pressão de Acácia"
 
 msgid "Acacia Sapling"
-msgstr ""
+msgstr "Muda de Acácia"
 
 msgid "Acacia Sign"
-msgstr ""
+msgstr "Placa de Acácia"
 
 msgid "Acacia Slab"
-msgstr ""
+msgstr "Laje de Acácia"
 
 msgid "Acacia Stairs"
-msgstr ""
+msgstr "Escadas de Acácia"
 
 msgid "Acacia Trapdoor"
-msgstr ""
+msgstr "Alçapão de Acácia"
 
 msgid "Acacia leaves are grown from Acacia trees."
-msgstr ""
+msgstr "As folhas de acácia crescem das árvores acácia."
 
 msgid "Birch Bark"
-msgstr ""
+msgstr "Casca de Bétula"
 
 msgid "Birch Bark Slab"
-msgstr ""
+msgstr "Placa de Casca de Bétula"
 
 msgid "Birch Bark Stairs"
-msgstr ""
+msgstr "Escadas de Casca de Bétula"
 
 msgid "Birch Boat"
-msgstr ""
+msgstr "Bote de Bétula"
 
 msgid "Birch Button"
-msgstr ""
+msgstr "Botão de Bétula"
 
 msgid "Birch Chest Boat"
-msgstr ""
+msgstr "Bote com Baú de Bétula"
 
 msgid "Birch Door"
-msgstr ""
+msgstr "Porta de Bétula"
 
 msgid "Birch Fence"
-msgstr ""
+msgstr "Cerca de Bétula"
 
 msgid "Birch Fence Gate"
 msgstr "Portinhola de Bétula"
 
 msgid "Birch Hanging Sign"
-msgstr ""
+msgstr "Placa Suspensa de Bétula"
 
 msgid "Birch Leaves"
-msgstr ""
+msgstr "Folhas de Bétula"
 
 msgid "Birch Log"
-msgstr ""
+msgstr "Tronco de Bétula"
 
 msgid "Birch Planks"
-msgstr ""
+msgstr "Tábuas de Bétula"
 
 msgid "Birch Pressure Plate"
-msgstr ""
+msgstr "Placa de Pressão de Bétula"
 
 msgid "Birch Sapling"
-msgstr ""
+msgstr "Muda de Bétula"
 
 msgid "Birch Sign"
-msgstr ""
+msgstr "Placa de Bétula"
 
 msgid "Birch Slab"
-msgstr ""
+msgstr "Laje de Bétula"
 
 msgid "Birch Stairs"
-msgstr ""
+msgstr "Escadas de Bétula"
 
 msgid "Birch Trapdoor"
-msgstr ""
+msgstr "Alçapão de Bétula"
 
 msgid "Birch leaves are grown from Birch trees."
-msgstr ""
+msgstr "As folhas de bétula são cultivadas a partir das árvores bétula."
 
 msgid "Black Stained Glass"
-msgstr ""
+msgstr "Vitral Preto"
 
 msgid "Blue Stained Glass"
-msgstr ""
+msgstr "Vitral Azul"
 
 msgid "Brown Stained Glass"
-msgstr ""
+msgstr "Vitral Marrom"
 
 msgid "Cyan Stained Glass"
-msgstr ""
+msgstr "Vitral Ciano"
 
 msgid "Dark Oak Bark"
-msgstr ""
+msgstr "Casca de Carvalho Escuro"
 
 msgid "Dark Oak Bark Slab"
-msgstr ""
+msgstr "Placa de Casca de Carvalho Escuro"
 
 msgid "Dark Oak Bark Stairs"
-msgstr ""
+msgstr "Escadas de Casca de Carvalho Escuro"
 
 msgid "Dark Oak Boat"
-msgstr ""
+msgstr "Bote de Carvalho Escuro"
 
 msgid "Dark Oak Button"
-msgstr ""
+msgstr "Botão de Carvalho Escuro"
 
 msgid "Dark Oak Chest Boat"
-msgstr ""
+msgstr "Bote com Baú de Carvalho Escuro"
 
 msgid "Dark Oak Door"
-msgstr ""
+msgstr "Porta de Carvalho Escuro"
 
 msgid "Dark Oak Fence"
-msgstr ""
+msgstr "Cerca de Carvalho Escuro"
 
 msgid "Dark Oak Fence Gate"
 msgstr "Portinhola de Carvalho Escuro"
 
 msgid "Dark Oak Hanging Sign"
-msgstr ""
+msgstr "Placa Suspensa em Carvalho Escuro"
 
 msgid "Dark Oak Leaves"
-msgstr ""
+msgstr "Folhas de Carvalho Escuro"
 
 msgid "Dark Oak Log"
-msgstr ""
+msgstr "Tronco de Carvalho Escuro"
 
 msgid "Dark Oak Planks"
-msgstr ""
+msgstr "Tábuas de Carvalho Escuro"
 
 msgid "Dark Oak Pressure Plate"
-msgstr ""
+msgstr "Placa de Pressão de Carvalho Escuro"
 
 msgid "Dark Oak Sapling"
-msgstr ""
+msgstr "Muda de Carvalho Escuro"
 
 msgid "Dark Oak Sign"
-msgstr ""
+msgstr "Placa de Carvalho Escuro"
 
 msgid "Dark Oak Slab"
-msgstr ""
+msgstr "Laje de Carvalho Escuro"
 
 msgid "Dark Oak Stairs"
-msgstr ""
+msgstr "Escada de Carvalho Escuro"
 
 msgid "Dark Oak Trapdoor"
-msgstr ""
+msgstr "Alçapão de Carvalho Escuro"
 
 msgid "Dark Oak leaves are grown from Dark Oak trees."
-msgstr ""
+msgstr "As folhas de Carvalho Escuro crescem das árvores Carvalho Escuro."
 
 msgid "Green Stained Glass"
-msgstr ""
+msgstr "Vitral Verde"
 
 msgid "Grey Stained Glass"
-msgstr ""
+msgstr "Vitral Cinza"
 
 msgid "Jungle Bark"
-msgstr ""
+msgstr "Casca de Selva"
 
 msgid "Jungle Bark Slab"
-msgstr ""
+msgstr "Laje de Casca de Selva"
 
 msgid "Jungle Bark Stairs"
-msgstr ""
+msgstr "Escadas de Casca de Selva"
 
 msgid "Jungle Boat"
-msgstr ""
+msgstr "Bote de Selva"
 
 msgid "Jungle Button"
-msgstr ""
+msgstr "Botão de Selva"
 
 msgid "Jungle Chest Boat"
-msgstr ""
+msgstr "Bote com Baú de Selva"
 
 msgid "Jungle Door"
-msgstr ""
+msgstr "Porta de Selva"
 
 msgid "Jungle Fence"
-msgstr ""
+msgstr "Cerca de Selva"
 
 msgid "Jungle Fence Gate"
 msgstr "Portinhola da Selva"
 
 msgid "Jungle Hanging Sign"
-msgstr ""
+msgstr "Placa Suspensa de Selva"
 
 msgid "Jungle Leaves"
-msgstr ""
+msgstr "Folhas de Selva"
 
 msgid "Jungle Log"
-msgstr ""
+msgstr "Tronco de Selva"
 
 msgid "Jungle Planks"
-msgstr ""
+msgstr "Tábuas de Selva"
 
 msgid "Jungle Pressure Plate"
-msgstr ""
+msgstr "Placa de Pressão da Selva"
 
 msgid "Jungle Sapling"
-msgstr ""
+msgstr "Muda de Selva"
 
 msgid "Jungle Sign"
-msgstr ""
+msgstr "Placa de Selva"
 
 msgid "Jungle Slab"
-msgstr ""
+msgstr "Laje de Selva"
 
 msgid "Jungle Stairs"
-msgstr ""
+msgstr "Escadas de Selva"
 
 msgid "Jungle Trapdoor"
-msgstr ""
+msgstr "Alçapão de Selva"
 
 msgid "Jungle leaves are grown from Jungle trees."
-msgstr ""
+msgstr "Folhas de selva crescem a partir das árvores selva."
 
 msgid "Light Blue Stained Glass"
 msgstr ""
@@ -1233,4 +1235,3 @@ msgstr ""
 
 msgid "Mossy Stone Brick Slab"
 msgstr ""
-
