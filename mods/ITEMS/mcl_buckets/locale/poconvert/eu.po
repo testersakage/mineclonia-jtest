@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_buckets x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-01-07 11:21+0000\n"
+"Last-Translator: josuigoa <josuigoa@noreply.codeberg.org>\n"
+"Language-Team: Basque <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_buckets/eu/>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Empty Bucket"
 msgstr "Kubo hutsa"
@@ -32,7 +33,7 @@ msgid "Bucket of Cod"
 msgstr "Bakailaoa duen kuboa"
 
 msgid "Bucket of Pufferfish"
-msgstr ""
+msgstr "Fugu Kuboa"
 
 msgid "Bucket of Salmon"
 msgstr "Izokindun kuboa"
@@ -45,6 +46,8 @@ msgstr "Jarri ontzia husteko eta bakailao bat jartzeko. Lortu ezazu bakailao bat
 
 msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
 msgstr ""
+"Utzi ezazu kubo huts batean eta jarri Fugu bat. Lortu Fugu batean eskuin-"
+"klik eginez urez betetako kubo batekin."
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr "Jarri ontzia husteko eta izokin bat jartzeko. Lortu ezazu ur ontzi batekin izokin baten gainean zuzen klik eginez."
@@ -59,7 +62,7 @@ msgid "Places a water source and a Cod."
 msgstr "Jarri ur-iturri bat eta bakailao bat."
 
 msgid "Places a water source and a Pufferfish."
-msgstr ""
+msgstr "Ur-iturri bat jartzen du Fugu batekin."
 
 msgid "Places a water source and a Salmon."
 msgstr "Jarri ur-iturri bat eta izokin bat."
@@ -74,7 +77,7 @@ msgid "This bucket is filled with water and a Cod."
 msgstr "Kubo hau urez eta bakailaoz beteta dago."
 
 msgid "This bucket is filled with water and a Pufferfish."
-msgstr ""
+msgstr "Kubo hau ura eta Fugu batekin beteta dago."
 
 msgid "This bucket is filled with water and a Salmon."
 msgstr "Ontzi hau urez eta izokinez beteta dago."
@@ -120,4 +123,3 @@ msgstr "Jarri ontzia husteko eta ibaiko ur-iturri bat sortzeko."
 
 msgid "Places a river water source"
 msgstr "Jarri ibaiko ur-iturri bat"
-
