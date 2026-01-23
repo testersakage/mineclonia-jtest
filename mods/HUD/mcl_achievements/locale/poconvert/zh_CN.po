@@ -3,21 +3,22 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-29 12:21+0000\n"
+"Last-Translator: maxchen32 <maxchen32@noreply.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_achievements/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Benchmarking"
-msgstr "始方工作台"
+msgstr "制作工作台"
 
 msgid "Craft a crafting table from 4 wooden planks."
-msgstr "使用4块木板合成一方工作台。"
+msgstr "使用4块木板制作一个工作台。"
 
 msgid "Time to Mine!"
 msgstr "挖矿时间到！"
@@ -26,10 +27,10 @@ msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sti
 msgstr "在工作台上，用木板和木棍制作木镐。"
 
 msgid "Hot Topic"
-msgstr "热度很高"
+msgstr "“热”门话题"
 
 msgid "Use 8 cobblestones to craft a furnace."
-msgstr "用 8 块鹅卵石制作一台熔炉。"
+msgstr "用 8 块鹅卵石制作一个熔炉。"
 
 msgid "Time to Farm!"
 msgstr "播种时间到！"
@@ -44,7 +45,7 @@ msgid "Use wheat to craft a bread."
 msgstr "用小麦制作面包。"
 
 msgid "The Lie"
-msgstr "屋顶上的鸡蛋"
+msgstr "蛋糕是个谎言"
 
 msgid "Craft a cake using wheat, sugar, milk and an egg."
 msgstr "用小麦、糖、牛奶和鸡蛋合成蛋糕。"
@@ -71,13 +72,13 @@ msgid "Isn't It Iron Pick"
 msgstr "这不是铁镐么"
 
 msgid "Craft a iron pickaxe using sticks and iron."
-msgstr "用木棍和铁器制作铁镐。"
+msgstr "用木棍和铁锭制作铁镐。"
 
 msgid "Bullseye"
-msgstr ""
+msgstr "正中靶心"
 
 msgid "Hit the bullseye of a target block from at least 30 blocks away."
-msgstr ""
+msgstr "从至少30米外射中标靶的靶心。"
 
 msgid "DIAMONDS!"
 msgstr "是钻石吔！"
@@ -86,7 +87,7 @@ msgid "Pick up a diamond from the floor."
 msgstr "从地上捡起一颗钻石。"
 
 msgid "Into Fire"
-msgstr "火中取栗"
+msgstr "与火共舞"
 
 msgid "Pick up a blaze rod from the floor."
 msgstr "从地上捡起一根烈焰棒。"
@@ -104,8 +105,9 @@ msgstr "获得木头"
 
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
-msgstr "从地上捡起一个木头物品。\n"
-"提示：一直敲击树干，直到它弹出方块。"
+msgstr ""
+"从地上捡起一个木头。\n"
+"提示：一直击打树干，直到它掉落成物品。"
 
 msgid "Who is Cutting Onions?"
 msgstr "谁在切洋葱？"
@@ -117,15 +119,16 @@ msgid "Hidden in the Depths"
 msgstr "深处所获"
 
 msgid "Pick up an Ancient Debris from the floor."
-msgstr "从地上捡起一个古代碎片。"
+msgstr "从地上捡起一个远古残骸。"
 
 msgid "The Next Generation"
 msgstr "下一代"
 
 msgid "Hold the Dragon Egg.\n"
 "Hint: Pick up the egg from the ground and have it in your inventory."
-msgstr "持有龙蛋。\n"
-"提示：从地上拾起龙蛋，并将其放入库存中。"
+msgstr ""
+"持有龙蛋。\n"
+"提示：从地上拾起龙蛋，并将其放入物品栏中。"
 
 msgid "Sky's the Limit"
 msgstr "九霄天外"
@@ -134,7 +137,7 @@ msgid "Find the elytra and prepare to fly above and beyond!"
 msgstr "找到鞘翅，准备上天揽月！"
 
 msgid "Acquire Hardware"
-msgstr "获取硬件"
+msgstr "来硬的"
 
 msgid "Take an iron ingot from a furnace's output slot.\n"
 "Hint: To smelt an iron ingot, put a fuel (like coal) and iron ore into a furnace."
@@ -146,11 +149,12 @@ msgstr "年年有鱼"
 
 msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
-msgstr "在熔炉、烟熏炉、营火或灵魂营火里烹饪鱼类后取出。\n"
-"提示：使用鱼竿钓鱼，然后在熔炉里煮熟。"
+msgstr ""
+"在熔炉、烟熏炉、营火或灵魂营火里烹饪鱼类后取出。\n"
+"提示：使用鱼竿钓鱼，然后在熔炉里烤熟。"
 
 msgid "On A Rail"
-msgstr "在铁轨上"
+msgstr "在铁路上"
 
 msgid "Travel by minecart for at least 1000 meters from your starting point in a single ride."
 msgstr "乘坐矿车，至少行进1000米。"
@@ -168,7 +172,7 @@ msgid "Kill a monster."
 msgstr "杀死一头怪物。"
 
 msgid "We Need to Go Deeper"
-msgstr "向深处进发"
+msgstr "勇往直下"
 
 msgid "Use obsidian and a fire starter to construct a Nether portal."
 msgstr "使用黑曜石和燧石建造一座下界传送门。"
@@ -202,13 +206,13 @@ msgid "Sleep in a bed to change your respawn point."
 msgstr "睡在床上，改变重生点。"
 
 msgid "Not Quite \"Nine\" Lives"
-msgstr "不只有九条命"
+msgstr "锚没有九条命"
 
 msgid "Charge a Respawn Anchor to the maximum."
 msgstr "将重生锚充能至最大值。"
 
 msgid "What A Deal!"
-msgstr "真是太划算了！"
+msgstr "成交！"
 
 msgid "Successfully trade with a Villager."
 msgstr "成功与村民交易。"
@@ -220,7 +224,7 @@ msgid "Catch a fish... without a fishing rod!"
 msgstr "不用鱼竿，逮一条鱼！"
 
 msgid "The Cutest Predator"
-msgstr "最萌凶物"
+msgstr "最萌捕食者"
 
 msgid "Catch an Axolotl with a bucket!"
 msgstr "用铁桶捕获一只美西螈！"
@@ -238,7 +242,7 @@ msgid "Kill the ender dragon. Good Luck!"
 msgstr "击杀末地龙，保护好自己！"
 
 msgid "Fishy Business"
-msgstr "捕鱼大业"
+msgstr "腥味十足的生意"
 
 msgid "Catch a fish.\n"
 "Hint: Catch a fish, salmon, clownfish, or pufferfish."
@@ -266,7 +270,7 @@ msgstr "酿造一瓶药水。\n"
 "提示：从酿造台中取出一瓶药水或玻璃瓶。"
 
 msgid "Enchanter"
-msgstr "魔法师"
+msgstr "附魔师"
 
 msgid "Enchant an item using an Enchantment Table."
 msgstr "使用附魔台给物品附魔。"
@@ -314,13 +318,13 @@ msgid "Scrape wax off of a copper block."
 msgstr "刮掉铜块上的蜡。"
 
 msgid "Crafting a New Look"
-msgstr "旧貌换新颜"
+msgstr "旧貌锻新颜"
 
 msgid "Craft a trimmed armor at a Smithing Table"
 msgstr "在锻造台上制作一件饰纹盔甲"
 
 msgid "Smithing with Style"
-msgstr "花样锻造"
+msgstr "匠心独具"
 
 msgid "Apply these smithing templates at least once: Spire, Snout, Rib, Ward, Silence, Vex, Tide, Wayfinder"
 msgstr "至少使用以下这些锻造模板各一次：尖塔、鼻口、肋骨、守护、寂静、恼鬼、浪潮、引路人"
@@ -338,7 +342,7 @@ msgid "Eat a cooked porkchop."
 msgstr "吃一块熟猪排。"
 
 msgid "Rabbit Season"
-msgstr "可爱兔兔"
+msgstr "兔子季节"
 
 msgid "Eat a cooked rabbit."
 msgstr "食用一只熟兔子。"
@@ -347,16 +351,16 @@ msgid "Iron Belly"
 msgstr "铁胃"
 
 msgid "Get really desperate and eat rotten flesh."
-msgstr "实在绝望了就吃腐肉。"
+msgstr "在走投无路时，吃下腐肉。"
 
 msgid "Pot Planter"
-msgstr "盆栽癖好"
+msgstr "盆栽者"
 
 msgid "Place a flower pot."
 msgstr "放置一个花盆。"
 
 msgid "The Haggler"
-msgstr "砍价还价"
+msgstr "讨价还价"
 
 msgid "Mine emerald ore."
 msgstr "挖掘绿宝石。"
@@ -368,7 +372,7 @@ msgid "Mine a stone with new pickaxe."
 msgstr "使用新镐挖掘石头。"
 
 msgid "Hot Stuff"
-msgstr "热门产品"
+msgstr "热腾腾的"
 
 msgid "Put lava in a bucket."
 msgstr "把岩浆装进桶里。"
@@ -386,16 +390,16 @@ msgid "Successfully defend a village from a raid"
 msgstr "成功保卫村庄免受袭击"
 
 msgid "Voluntary Exile"
-msgstr "自愿流亡"
+msgstr "自我放逐"
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr "击杀一名劫掠队长。或许可以考虑暂时远离当地的村庄……"
 
 msgid "Return to Sender"
-msgstr ""
+msgstr "见鬼去吧"
 
 msgid "Destroy a Ghast with a Fireball"
-msgstr ""
+msgstr "用一团火球干掉一只恶魂"
 
 msgid "Zombie Doctor"
 msgstr "救活僵尸"
@@ -404,39 +408,40 @@ msgid "Use a golden apple on a zombie villager under the Weakness effect; the ad
 msgstr "对虚弱效果下的僵尸村民使用金苹果；当僵尸村民转变为村民时，会达成该成就。"
 
 msgid "A Terrible Fortress"
-msgstr ""
+msgstr "阴森的要塞"
 
 msgid "Break your way into a Nether Fortress"
-msgstr ""
+msgstr "强行闯入下界要塞"
 
 msgid "Eye Spy"
-msgstr ""
+msgstr "隔墙有眼"
 
 msgid "Follow an Eye of Ender"
-msgstr ""
+msgstr "跟随末影之眼"
 
 msgid "The City at the End of the Game"
-msgstr ""
+msgstr "在游戏尽头的城市"
 
 msgid "Go on in, what could happen?"
-msgstr ""
+msgstr "进去吧，又能发生什么呢？"
 
 msgid "Those Were The Days"
-msgstr ""
+msgstr "光辉岁月"
 
 msgid "Enter a Bastion Remnant"
-msgstr ""
+msgstr "进入堡垒遗迹"
 
 msgid "A Throwaway Joke"
-msgstr ""
+msgstr "抖包袱"
 
 msgid "Very Very Frightening"
-msgstr ""
+msgstr "魔女审判"
 
 msgid "Throw a Trident at something.\n"
 "Note: Throwing away your only weapon is not a good idea."
 msgstr ""
+"往什么东西扔出三叉戟。\n"
+"注：别把你唯一的武器也抖掉了。"
 
 msgid "Strike a Villager with lightning."
-msgstr ""
-
+msgstr "雷击一名村民。"

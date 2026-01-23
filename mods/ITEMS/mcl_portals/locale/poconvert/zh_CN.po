@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_portals x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-23 14:21+0000\n"
-"Last-Translator: bright <bright@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2025-12-31 08:21+0000\n"
+"Last-Translator: maxchen32 <maxchen32@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_portals/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -66,16 +66,19 @@ msgid "Throw an ender pearl into the portal to teleport. Entering an Gateway por
 msgstr "向传送门内扔出一颗末影珍珠即可进行传送。在靠近主世界的地方进入折跃门会将你传送到末地外部，在目的地会生成另一个折跃门，你可以通过它返回。"
 
 msgid "Entering the Nether"
-msgstr ""
+msgstr "正在进入下界"
 
 msgid "Leaving the Nether"
-msgstr ""
+msgstr "正在离开下界"
 
 msgid "Obsidian is also used as the frame of Nether portals."
 msgstr "黑曜石也被用作下界传送门的框架。"
 
 msgid "To open a Nether portal, place an upright frame of obsidian with a width of at least 4 blocks and a height of 5 blocks, leaving only air in the center. After placing this frame, light a fire in the obsidian frame. Nether portals only work in the Overworld and the Nether."
-msgstr "要打开下界传送门，需放置一个直立的黑曜石框架，宽度至少为4块，高度为5块，中间只留空气，放置好框架后，在黑曜石框架内点火，下界传送门仅在主世界和下界起作用。"
+msgstr ""
+"要打开下界传送门，需放置一个直立的黑曜石框架，宽度至少为4块，高度至少为5块，"
+"中间只留空气，放置好框架后，在黑曜石框架内点火，下界传送门仅在主世界和下界起"
+"作用。"
 
 msgid "Nether Portal"
 msgstr "下界传送门"

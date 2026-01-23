@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-29 12:21+0000\n"
+"Last-Translator: maxchen32 <maxchen32@noreply.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_core/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Stick"
 msgstr "木棍"
@@ -167,7 +168,7 @@ msgid "Acacia Fence Gate"
 msgstr "金合欢木栅栏门"
 
 msgid "Acacia Hanging Sign"
-msgstr ""
+msgstr "悬挂式金合欢木告示牌"
 
 msgid "Acacia Leaves"
 msgstr "金合欢树叶"
@@ -227,7 +228,7 @@ msgid "Birch Fence Gate"
 msgstr "白桦木栅栏门"
 
 msgid "Birch Hanging Sign"
-msgstr ""
+msgstr "悬挂式白桦木告示牌"
 
 msgid "Birch Leaves"
 msgstr "白桦树叶"
@@ -299,7 +300,7 @@ msgid "Dark Oak Fence Gate"
 msgstr "深色橡木栅栏门"
 
 msgid "Dark Oak Hanging Sign"
-msgstr ""
+msgstr "悬挂式深色橡木告示牌"
 
 msgid "Dark Oak Leaves"
 msgstr "深色橡树叶"
@@ -365,7 +366,7 @@ msgid "Jungle Fence Gate"
 msgstr "丛林栅栏门"
 
 msgid "Jungle Hanging Sign"
-msgstr ""
+msgstr "悬挂式丛林木告示牌"
 
 msgid "Jungle Leaves"
 msgstr "丛林树叶"
@@ -437,7 +438,7 @@ msgid "Oak Fence Gate"
 msgstr "橡木栅栏门"
 
 msgid "Oak Hanging Sign"
-msgstr ""
+msgstr "悬挂式橡木告示牌"
 
 msgid "Oak Leaves"
 msgstr "橡木树叶"
@@ -509,7 +510,7 @@ msgid "Spruce Fence Gate"
 msgstr "云杉栅栏门"
 
 msgid "Spruce Hanging Sign"
-msgstr ""
+msgstr "悬挂式云杉木告示牌"
 
 msgid "Spruce Leaves"
 msgstr "云杉树叶"
@@ -938,10 +939,10 @@ msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr "浮冰是冰的一种压缩形态。它是不透明且坚固的。"
 
 msgid "Blue Ice"
-msgstr ""
+msgstr "蓝冰"
 
 msgid "Blue Ice is a still more compressed form of ice.  It is opaque and solid."
-msgstr ""
+msgstr "蓝冰是一种压缩程度更高的冰。  它不透明，并且为固体方块。"
 
 msgid "Frosted ice is a short-lived solid block. It melts into a water source within a few seconds."
 msgstr "霜冰是一种存在时间较短的固体方块。它会在几秒内融化成水源。"
@@ -1094,10 +1095,10 @@ msgid "Dead bushes are unremarkable plants often found in dry areas. They can be
 msgstr "枯木丛是一种不起眼的植物，常出现在干旱地区。可以采集它们来获取木棍。"
 
 msgid "Glow Lichen"
-msgstr ""
+msgstr "发光地衣"
 
 msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
-msgstr ""
+msgstr "一种自然生成的非固体方块，会发出微弱的光，并可附着在固体方块的任意表面上。"
 
 msgid "Barrier"
 msgstr "屏障"
@@ -1233,4 +1234,3 @@ msgstr "苔藓石砖楼梯"
 
 msgid "Mossy Stone Brick Slab"
 msgstr "苔藓石砖台阶"
-

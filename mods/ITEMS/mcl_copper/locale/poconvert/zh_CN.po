@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-23 14:21+0000\n"
-"Last-Translator: bright <bright@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2025-12-29 18:21+0000\n"
+"Last-Translator: maxchen32 <maxchen32@noreply.codeberg.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "translate.codeberg.org/projects/mineclonia/mcl_copper/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -42,19 +42,19 @@ msgid "Chiseled Copper is mostly a decorative block."
 msgstr "雕纹铜块主要是一种装饰性方块。"
 
 msgid "Copper Bulb"
-msgstr "铜质灯泡"
+msgstr "铜灯"
 
 msgid "Copper Bulb On"
-msgstr "亮起的铜质灯泡"
+msgstr "亮起的铜灯"
 
 msgid "Copper Bulb Powered Off"
-msgstr ""
+msgstr "未激活的铜灯"
 
 msgid "Copper Bulb Powered On"
-msgstr ""
+msgstr "激活的铜灯"
 
 msgid "Copper Bulb is mostly a decorative block."
-msgstr "铜质灯泡大多是一种装饰性方块。"
+msgstr "铜灯主要是一种装饰性方块。"
 
 msgid "Copper Door"
 msgstr "铜门"
@@ -90,19 +90,19 @@ msgid "Exposed Copper"
 msgstr "外露铜块"
 
 msgid "Exposed Copper Bulb"
-msgstr "外露铜质灯泡"
+msgstr "斑驳的铜灯"
 
 msgid "Exposed Copper Bulb On"
-msgstr "亮起的外露铜质灯泡"
+msgstr "亮起的斑驳铜灯"
 
 msgid "Exposed Copper Bulb Powered Off"
-msgstr ""
+msgstr "未激活的斑驳铜灯"
 
 msgid "Exposed Copper Bulb Powered On"
-msgstr ""
+msgstr "激活的斑驳铜灯"
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
-msgstr "外露铜质灯泡大多是一种装饰性方块。"
+msgstr "斑驳的铜灯主要是一种装饰性方块。"
 
 msgid "Exposed Copper Door"
 msgstr "外露铜门"
@@ -141,19 +141,19 @@ msgid "Oxidized Copper"
 msgstr "氧化铜块"
 
 msgid "Oxidized Copper Bulb"
-msgstr "氧化铜质灯泡"
+msgstr "氧化的铜灯"
 
 msgid "Oxidized Copper Bulb On"
-msgstr "亮起的氧化铜质灯泡"
+msgstr "亮起的氧化铜灯"
 
 msgid "Oxidized Copper Bulb Powered Off"
-msgstr ""
+msgstr "未激活的氧化铜灯"
 
 msgid "Oxidized Copper Bulb Powered On"
-msgstr ""
+msgstr "激活的氧化铜灯"
 
 msgid "Oxidized Copper Bulb is mostly a decorative block."
-msgstr "氧化铜质灯泡大多是一种装饰性方块。"
+msgstr "氧化的铜灯主要是一种装饰性方块。"
 
 msgid "Oxidized Copper Door"
 msgstr "氧化铜门"
@@ -189,16 +189,16 @@ msgid "Waxed Chiseled Copper"
 msgstr "涂蜡雕纹铜块"
 
 msgid "Waxed Copper Bulb"
-msgstr "涂蜡铜质灯泡"
+msgstr "涂蜡的铜灯"
 
 msgid "Waxed Copper Bulb On"
-msgstr "亮起的涂蜡铜质灯泡"
+msgstr "亮起的涂蜡铜灯"
 
 msgid "Waxed Copper Bulb Powered Off"
-msgstr ""
+msgstr "未激活的涂蜡铜灯"
 
 msgid "Waxed Copper Bulb Powered On"
-msgstr ""
+msgstr "激活的涂蜡铜灯"
 
 msgid "Waxed Copper Grate"
 msgstr "涂蜡铜格栅"
@@ -225,16 +225,16 @@ msgid "Waxed Exposed Copper"
 msgstr "涂蜡外露铜块"
 
 msgid "Waxed Exposed Copper Bulb"
-msgstr "涂蜡外露铜质灯泡"
+msgstr "涂蜡的斑驳铜灯"
 
 msgid "Waxed Exposed Copper Bulb On"
-msgstr "亮起的涂蜡外露铜质灯泡"
+msgstr "亮起的涂蜡斑驳铜灯"
 
 msgid "Waxed Exposed Copper Bulb Powered Off"
-msgstr ""
+msgstr "未激活的涂蜡斑驳铜灯"
 
 msgid "Waxed Exposed Copper Bulb Powered On"
-msgstr ""
+msgstr "激活的涂蜡斑驳铜灯"
 
 msgid "Waxed Exposed Copper Grate"
 msgstr "涂蜡外露铜格栅"
@@ -258,16 +258,16 @@ msgid "Waxed Oxidized Copper"
 msgstr "涂蜡氧化铜块"
 
 msgid "Waxed Oxidized Copper Bulb"
-msgstr "涂蜡氧化铜灯泡"
+msgstr "涂蜡的氧化铜灯"
 
 msgid "Waxed Oxidized Copper Bulb On"
-msgstr "亮起的涂蜡氧化铜灯泡"
+msgstr "亮起的涂蜡氧化铜灯"
 
 msgid "Waxed Oxidized Copper Bulb Powered Off"
-msgstr ""
+msgstr "未激活的涂蜡氧化铜灯"
 
 msgid "Waxed Oxidized Copper Bulb Powered On"
-msgstr ""
+msgstr "激活的涂蜡氧化铜灯"
 
 msgid "Waxed Oxidized Copper Grate"
 msgstr "涂蜡氧化铜格栅"
@@ -294,16 +294,16 @@ msgid "Waxed Weathered Copper"
 msgstr "涂蜡风化铜块"
 
 msgid "Waxed Weathered Copper Bulb"
-msgstr "涂蜡风化铜质灯泡"
+msgstr "涂蜡的锈蚀铜灯"
 
 msgid "Waxed Weathered Copper Bulb On"
-msgstr "亮起的涂蜡风化铜质灯泡"
+msgstr "亮起的涂蜡锈蚀铜灯"
 
 msgid "Waxed Weathered Copper Bulb Powered Off"
-msgstr ""
+msgstr "未激活的涂蜡锈蚀铜灯"
 
 msgid "Waxed Weathered Copper Bulb Powered On"
-msgstr ""
+msgstr "激活的涂蜡锈蚀铜灯"
 
 msgid "Waxed Weathered Copper Grate"
 msgstr "涂蜡风化铜格栅"
@@ -330,19 +330,19 @@ msgid "Weathered Copper"
 msgstr "风化铜块"
 
 msgid "Weathered Copper Bulb"
-msgstr "风化铜质灯泡"
+msgstr "锈蚀的铜灯"
 
 msgid "Weathered Copper Bulb On"
-msgstr "亮起的风化铜质灯泡"
+msgstr "亮起的锈蚀铜灯"
 
 msgid "Weathered Copper Bulb Powered Off"
-msgstr ""
+msgstr "未激活的锈蚀铜灯"
 
 msgid "Weathered Copper Bulb Powered On"
-msgstr ""
+msgstr "激活的锈蚀铜灯"
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
-msgstr "风化铜质灯泡大多是一种装饰性方块。"
+msgstr "锈蚀的铜灯主要是一种装饰性方块。"
 
 msgid "Weathered Copper Door"
 msgstr "风化铜门"
