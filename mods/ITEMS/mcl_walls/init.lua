@@ -67,7 +67,7 @@ function mcl_walls.update_wall(pos)
 		sum = 15
 	end]]
 
-	core.add_node(pos, {name = basename..sum})
+	core.set_node(pos, {name = basename..sum})
 end
 
 -- XXX: render this asynchronous and move it into nodeprops.lua.

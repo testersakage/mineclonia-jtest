@@ -117,9 +117,9 @@ local function piston_orientate(pos, placer)
 	local node = core.get_node(pos)
 	local pistonspec = core.registered_nodes[node.name]._piston_spec
 	if pitch > 55 then
-		core.add_node(pos, {name=pistonspec.offname, param2 = core.dir_to_facedir(vector.new(0, -1, 0), true)})
+		core.set_node(pos, {name=pistonspec.offname, param2 = core.dir_to_facedir(vector.new(0, -1, 0), true)})
 	elseif pitch < -55 then
-		core.add_node(pos, {name=pistonspec.offname, param2 = core.dir_to_facedir(vector.new(0, 1, 0), true)})
+		core.set_node(pos, {name=pistonspec.offname, param2 = core.dir_to_facedir(vector.new(0, 1, 0), true)})
 	end
 
 	-- set owner meta after setting node

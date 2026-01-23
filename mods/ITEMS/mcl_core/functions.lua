@@ -375,7 +375,7 @@ core.register_abm({
 		local function spread_down(_, target, _, node)
 			if math.random(1, 2) == 1 then
 				if core.get_node(target).name == "air" then
-					core.add_node(target, {name = "mcl_core:vine", param2 = node.param2})
+					core.set_node(target, {name = "mcl_core:vine", param2 = node.param2})
 				end
 			end
 		end
@@ -393,7 +393,7 @@ core.register_abm({
 
 						-- Check if the block above is supported
 						if mcl_core.supports_vines(backupnodename) then
-							core.add_node(target, {name = "mcl_core:vine", param2 = node.param2})
+							core.set_node(target, {name = "mcl_core:vine", param2 = node.param2})
 						end
 					end
 				end
@@ -412,7 +412,7 @@ core.register_abm({
 						local backup = vector.add(target, backup_dir)
 						local backupnodename = core.get_node(backup).name
 						if mcl_core.supports_vines(backupnodename) then
-							core.add_node(target, {name = "mcl_core:vine", param2 = node.param2})
+							core.set_node(target, {name = "mcl_core:vine", param2 = node.param2})
 						end
 					end
 				end
@@ -786,7 +786,7 @@ function mcl_core.bone_meal_grass(_, _, pointed_thing)
 						-- 90% tall grass, 10% flower
 						if math.random(1,100) <= 90 then
 							local col = n2.param2
-							core.add_node(pos, {name="mcl_flowers:tallgrass", param2=col})
+							core.set_node(pos, {name="mcl_flowers:tallgrass", param2=col})
 						else
 							local flowers_table
 							local biome = core.get_biome_name(core.get_biome_data(pos).biome)
@@ -799,7 +799,7 @@ function mcl_core.bone_meal_grass(_, _, pointed_thing)
 							else
 								flowers_table = flowers_table_simple
 							end
-							core.add_node(pos, {name=flowers_table[math.random(1, #flowers_table)]})
+							core.set_node(pos, {name=flowers_table[math.random(1, #flowers_table)]})
 						end
 					end
 				end

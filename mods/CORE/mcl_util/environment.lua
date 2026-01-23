@@ -684,7 +684,7 @@ function mcl_util.bypass_buildable_to(func)
 			.. def.name .. " at " .. core.pos_to_string(place_to))
 
 		-- Add node and update
-		core.add_node(place_to, newnode)
+		core.set_node(place_to, newnode)
 
 		-- Play sound if it was done by a player
 		if playername ~= "" and def.sounds and def.sounds.place then

@@ -168,7 +168,7 @@ core.register_entity(":__builtin:falling_node", {
 				if not addlevel or addlevel <= 0 then
 					addlevel = bcd.leveled
 				end
-				if core.add_node_level(bcp, addlevel) == 0 then
+				if core.set_node_level(bcp, addlevel) == 0 then
 					if core.registered_nodes[self.node.name]._mcl_after_falling then
 						core.registered_nodes[self.node.name]._mcl_after_falling(bcp, get_falling_depth(self))
 					end
@@ -194,7 +194,7 @@ core.register_entity(":__builtin:falling_node", {
 				end
 				local def = core.registered_nodes[self.node.name]
 				if def then
-					core.add_node(np, self.node)
+					core.set_node(np, self.node)
 					if def._mcl_after_falling then
 						def._mcl_after_falling(np, get_falling_depth(self))
 					end
@@ -233,7 +233,7 @@ core.register_entity(":__builtin:falling_node", {
 				-- of smoothly fall on the fence post.
 				local npos3 = table.copy(npos)
 				npos3.y = npos3.y - 1
-				core.add_node(npos3, self.node)
+				core.set_node(npos3, self.node)
 				local def = core.registered_nodes[self.node.name]
 				if def then
 					if def._mcl_after_falling then

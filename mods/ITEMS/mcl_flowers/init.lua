@@ -52,7 +52,7 @@ function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 			local new_pos = vector.offset(neighbours[i], 0, 1, 0)
 			local neighbor = core.get_node(new_pos).name
 			if core.get_item_group(under_neighbor, "soil_generic_plant") > 0 and neighbor == "air" then
-				core.add_node(new_pos, {name = "mcl_flowers:bush", param2 = mcl_util.get_pos_p2(pos)})
+				core.set_node(new_pos, {name = "mcl_flowers:bush", param2 = mcl_util.get_pos_p2(pos)})
 				return true
 			end
 		end
@@ -74,7 +74,7 @@ function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 						or core.get_item_group(under_neighbor, "hardened_clay") > 0
 						or core.get_item_group(under_neighbor, "sand") > 0
 					) then
-				core.add_node(new_pos, {name = "mcl_flowers:tall_dry_grass"})
+				core.set_node(new_pos, {name = "mcl_flowers:tall_dry_grass"})
 				return true
 			end
 		end
@@ -97,7 +97,7 @@ function mcl_flowers.on_bone_meal_simple(_, _, _, pos, n)
 		if next(nn) ~= nil then
 			table.shuffle(nn)
 			for i = 1, math.random(1, math.min(14, #nn)) do
-				if core.add_node(vector.offset(nn[i], 0, 1, 0), { name = n.name }) then
+				if core.set_node(vector.offset(nn[i], 0, 1, 0), { name = n.name }) then
 					any_placed = true
 				end
 			end

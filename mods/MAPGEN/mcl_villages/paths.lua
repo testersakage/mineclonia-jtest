@@ -209,7 +209,7 @@ local function place_path(path, pr, stair, slab)
 				if i < #path - 1 then -- uglier, but easier to walk up?
 					param2 = core.dir_to_facedir(vector.subtract(pos, path[i + 1]))
 				end
-				core.add_node(pos, { name = stair, param2 = param2 })
+				core.set_node(pos, { name = stair, param2 = param2 })
 				pos.y = pos.y + 1
 			end
 		elseif not is_stair and i < #path-1 and pos.y < path[i + 1].y then
@@ -222,7 +222,7 @@ local function place_path(path, pr, stair, slab)
 				if i > 1 then -- uglier, but easier to walk up?
 					param2 = core.dir_to_facedir(vector.subtract(pos, path[i - 1]))
 				end
-				core.add_node(pos, { name = stair, param2 = param2 })
+				core.set_node(pos, { name = stair, param2 = param2 })
 				pos.y = pos.y + 1
 			end
 		end
@@ -230,7 +230,7 @@ local function place_path(path, pr, stair, slab)
 		-- flat
 		if not done then
 			if core.get_item_group(n.name, "water") ~= 0 then
-				core.add_node(under_pos, { name = slab })
+				core.set_node(under_pos, { name = slab })
 			elseif n.name == "mcl_core:sand" or n.name == "mcl_core:redsand" then
 				core.swap_node(under_pos, { name = "mcl_core:sandstonesmooth2" })
 			elseif core.get_item_group(n.name, "soil") > 0
@@ -263,7 +263,7 @@ local function place_path(path, pr, stair, slab)
 				if node.name ~= "mcl_core:grass_path" and core.get_item_group(node.name, "stair") == 0 then
 					if core.get_item_group(node.name, "wood_slab") ~= 0 then
 						local over_pos = vector.offset(npos, 0, 1, 0)
-						core.add_node(over_pos, { name = "mcl_torches:torch", param2 = 1 })
+						core.set_node(over_pos, { name = "mcl_torches:torch", param2 = 1 })
 					else
 						place_lamp(npos, pr)
 					end
