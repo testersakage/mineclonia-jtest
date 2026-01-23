@@ -156,7 +156,7 @@ function mcl_farming:place_seed(itemstack, placer, pointed_thing, plantname)
 
 	if string.find(farmland.name, "mcl_farming:soil") and string.find(place_s.name, "air") then
 		core.sound_play(core.registered_nodes[plantname].sounds.place, { pos = pos }, true)
-		core.add_node(pos, { name = plantname, param2 = core.registered_nodes[plantname].place_param2 })
+		core.set_node(pos, { name = plantname, param2 = core.registered_nodes[plantname].place_param2 })
 		--local intervals_counter = get_intervals_counter(pos, 1, 1)
 	else
 		return
@@ -236,7 +236,7 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 				local stempos = vector.add(blockpos, offset)
 				local stem = core.get_node(stempos)
 				if stem.name == expected_stem then
-					core.add_node(stempos, { name = full_unconnected_stem })
+					core.set_node(stempos, { name = full_unconnected_stem })
 					try_connect_stem(stempos)
 				end
 			end
@@ -420,9 +420,9 @@ function mcl_farming:add_gourd(full_unconnected_stem, connected_stem_basename, s
 					end
 					-- Place the gourd
 					if gourd_def.paramtype2 == "facedir" then
-						core.add_node(blockpos, { name = gourd_itemstring, param2 = p2 })
+						core.set_node(blockpos, { name = gourd_itemstring, param2 = p2 })
 					else
-						core.add_node(blockpos, { name = gourd_itemstring })
+						core.set_node(blockpos, { name = gourd_itemstring })
 					end
 
 					-- Reset farmland, etc. to dirt when the gourd grows on top

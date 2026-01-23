@@ -152,7 +152,7 @@ core.register_abm({
 	action = function(pos)
 		local absorbed, wet_sponge = absorb(pos)
 		if absorbed then
-			core.add_node(pos, {name = wet_sponge})
+			core.set_node(pos, {name = wet_sponge})
 		end
 	end,
 })
