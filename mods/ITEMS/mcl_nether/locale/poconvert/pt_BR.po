@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_nether x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2026-01-05 18:21+0000\n"
-"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-23 14:21+0000\n"
+"Last-Translator: JuanRubin <juanrubin@noreply.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_nether/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Glowstone"
 msgstr "Pedra luminosa"
@@ -27,7 +27,7 @@ msgid "Nether quartz ore is an ore containing nether quartz. It is commonly foun
 msgstr ""
 
 msgid "Ancient Debris"
-msgstr ""
+msgstr "Detritos Anciãos"
 
 msgid "Ancient debris can be found in the nether and is very very rare."
 msgstr ""
@@ -39,13 +39,13 @@ msgid "Netherite block is very hard and can be made of 9 netherite ingots."
 msgstr ""
 
 msgid "Netherrack"
-msgstr ""
+msgstr "Solo do Nether"
 
 msgid "Netherrack is a stone-like block home to the Nether. Starting a fire on this block will create an eternal fire."
 msgstr ""
 
 msgid "Magma Block"
-msgstr ""
+msgstr "Bloco de Magma"
 
 msgid "Burns your feet"
 msgstr ""
@@ -54,7 +54,7 @@ msgid "Magma blocks are hot solid blocks which hurt anyone standing on it, unles
 msgstr ""
 
 msgid "Soul Sand"
-msgstr ""
+msgstr "Areia de Alma"
 
 msgid "Reduces walking speed"
 msgstr ""
@@ -90,13 +90,13 @@ msgid "Pillar Quartz Block"
 msgstr ""
 
 msgid "Smooth Quartz"
-msgstr ""
+msgstr "Quartzo Liso"
 
 msgid "Quartz Stairs"
-msgstr ""
+msgstr "Escadas de Quartzo"
 
 msgid "Quartz Slab"
-msgstr ""
+msgstr "Laje de Quartzo"
 
 msgid "Smooth Quartz Stairs"
 msgstr ""
@@ -120,13 +120,13 @@ msgid "Nether Brick Fence"
 msgstr ""
 
 msgid "Glowstone Dust"
-msgstr ""
+msgstr "Pó de Lumipedra"
 
 msgid "Glowstone dust is the dust which comes out of broken glowstones. It is mainly used in crafting."
 msgstr "O pó de pedra luminosa é o pó que sai das pedras luminosas quebradas. É usado principalmente na produção."
 
 msgid "Nether Quartz"
-msgstr ""
+msgstr "Quartzo do Nether"
 
 msgid "Nether quartz is a versatile crafting ingredient."
 msgstr "O quartzo do Nether é um ingrediente versátil para produção."
@@ -135,13 +135,13 @@ msgid "Quartz Material"
 msgstr ""
 
 msgid "Netherite Scrap"
-msgstr ""
+msgstr "Sucata de Netherita"
 
 msgid "Netherite scrap is a crafting ingredient for netherite ingots."
 msgstr "A sucata de netherita é um ingrediente usado na produção de lingotes de netherita."
 
 msgid "Netherite Ingot"
-msgstr ""
+msgstr "Barra de Netherita"
 
 msgid "Netherite ingots can be used with a smithing table to upgrade items to netherite."
 msgstr ""
@@ -150,7 +150,7 @@ msgid "Netherite Material"
 msgstr ""
 
 msgid "Nether Brick"
-msgstr ""
+msgstr "Tijolo do Nether"
 
 msgid "Nether bricks are the main crafting ingredient for crafting nether brick blocks and nether fences."
 msgstr "Os tijolos do Nether são o principal ingrediente para a produção de blocos de tijolos do Nether e cercas do Nether."
@@ -162,13 +162,13 @@ msgid "Smithing Template"
 msgstr ""
 
 msgid "Applies to:"
-msgstr ""
+msgstr "Aplica-se a:"
 
 msgid "Diamond Equipment"
 msgstr ""
 
 msgid "Ingredients:"
-msgstr ""
+msgstr "Ingredientes:"
 
 msgid "Nether Lava Source"
 msgstr ""
@@ -195,7 +195,7 @@ msgid "The mature nether wart is a plant from the Nether and reached its full si
 msgstr ""
 
 msgid "Nether Wart"
-msgstr ""
+msgstr "Fungo do Nether"
 
 msgid "Grows on soul sand"
 msgstr ""

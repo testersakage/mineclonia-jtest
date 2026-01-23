@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_ocean x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-01-23 14:21+0000\n"
+"Last-Translator: JuanRubin <juanrubin@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_ocean/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Tube Coral Block"
 msgstr "Bloco de Coral Tubular"
@@ -20,7 +21,7 @@ msgid "Dead Tube Coral Block"
 msgstr "Bloco de Coral Tubular Morto"
 
 msgid "Tube Coral"
-msgstr ""
+msgstr "Coral Tubular"
 
 msgid "Dead Tube Coral"
 msgstr ""
@@ -38,7 +39,7 @@ msgid "Dead Brain Coral Block"
 msgstr ""
 
 msgid "Brain Coral"
-msgstr ""
+msgstr "Coral-Cérebro"
 
 msgid "Dead Brain Coral"
 msgstr ""
@@ -56,7 +57,7 @@ msgid "Dead Bubble Coral Block"
 msgstr ""
 
 msgid "Bubble Coral"
-msgstr ""
+msgstr "Coral-Bolha"
 
 msgid "Dead Bubble Coral"
 msgstr ""
@@ -74,7 +75,7 @@ msgid "Dead Fire Coral Block"
 msgstr ""
 
 msgid "Fire Coral"
-msgstr ""
+msgstr "Coral de Fogo"
 
 msgid "Dead Fire Coral"
 msgstr ""
@@ -92,7 +93,7 @@ msgid "Dead Horn Coral Block"
 msgstr ""
 
 msgid "Horn Coral"
-msgstr ""
+msgstr "Coral-Chifre"
 
 msgid "Dead Horn Coral"
 msgstr ""
@@ -119,13 +120,13 @@ msgid "Grows on coral block of same species"
 msgstr ""
 
 msgid "Kelp"
-msgstr ""
+msgstr "Alga"
 
 msgid "Kelp grows inside water on top of dirt, sand or gravel."
 msgstr ""
 
 msgid "Dried Kelp"
-msgstr ""
+msgstr "Alga Seca"
 
 msgid "Dried kelp is a food item."
 msgstr ""
@@ -140,28 +141,28 @@ msgid "Grows in water on dirt, sand, gravel"
 msgstr ""
 
 msgid "Sea Lantern"
-msgstr ""
+msgstr "Lanterna Marinha"
 
 msgid "Sea lanterns are decorative light sources which look great underwater but can be placed anywhere."
 msgstr ""
 
 msgid "Prismarine"
-msgstr ""
+msgstr "Prismarina"
 
 msgid "Prismarine is used as a building block. It slowly changes its color."
 msgstr ""
 
 msgid "Prismarine Bricks"
-msgstr ""
+msgstr "Tijolos de Prismarina"
 
 msgid "Dark Prismarine"
-msgstr ""
+msgstr "Prismarina Escura"
 
 msgid "Prismarine Stairs"
-msgstr ""
+msgstr "Escadas de Prismarina"
 
 msgid "Prismarine Slab"
-msgstr ""
+msgstr "Laje de Prismarina"
 
 msgid "Prismarine Brick Stairs"
 msgstr ""
@@ -176,13 +177,13 @@ msgid "Dark Prismarine Slab"
 msgstr ""
 
 msgid "Prismarine Crystals"
-msgstr ""
+msgstr "Cristais de Prismarina"
 
 msgid "Prismarine Shard"
-msgstr ""
+msgstr "Lasca de Prismarina"
 
 msgid "Sea Pickle"
-msgstr ""
+msgstr "Pepino-do-mar"
 
 msgid "Sea pickles grow on dead brain coral blocks and provide light when underwater. They come in 4 sizes that vary in brightness."
 msgstr ""
@@ -200,8 +201,7 @@ msgid "Grows on dead brain coral block"
 msgstr ""
 
 msgid "Seagrass"
-msgstr ""
+msgstr "Ervas Marinhas"
 
 msgid "Seagrass grows inside water on top of dirt, sand or gravel."
 msgstr ""
-

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-16 22:10+0000\n"
-"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-23 14:21+0000\n"
+"Last-Translator: JuanRubin <juanrubin@noreply.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_doc/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Water can flow into this block and cause it to drop as an item."
 msgstr "A água pode fluir para dentro deste bloco e fazer com que ele caia como um item."
@@ -21,7 +21,7 @@ msgid "This block can be turned into dirt with a hoe."
 msgstr "Este bloco pode ser transformado em terra com uma enxada."
 
 msgid "This block can be turned into farmland with a hoe."
-msgstr ""
+msgstr "Esse bloco pode ser arado com uma enxada."
 
 msgid "This block can be turned into grass path with a shovel."
 msgstr ""
@@ -114,70 +114,70 @@ msgid "When this block falls deeper than 1 block, it causes damage to any player
 msgstr ""
 
 msgid "Diamond Pickaxe"
-msgstr ""
+msgstr "Picareta de Diamente"
 
 msgid "Iron Pickaxe"
-msgstr ""
+msgstr "Picareta de Ferro"
 
 msgid "Stone Pickaxe"
-msgstr ""
+msgstr "Picareta de Pedra"
 
 msgid "Golden Pickaxe"
-msgstr ""
+msgstr "Picareta de Ouro"
 
 msgid "Wooden Pickaxe"
-msgstr ""
+msgstr "Picareta de Madeira"
 
 msgid "Diamond Axe"
-msgstr ""
+msgstr "Machado de Diamante"
 
 msgid "Iron Axe"
-msgstr ""
+msgstr "Machado de Ferro"
 
 msgid "Stone Axe"
-msgstr ""
+msgstr "Machado de Pedra"
 
 msgid "Golden Axe"
-msgstr ""
+msgstr "Machado de Ouro"
 
 msgid "Wooden Axe"
-msgstr ""
+msgstr "Machado de Madeira"
 
 msgid "Diamond Shovel"
-msgstr ""
+msgstr "Pá de Diamante"
 
 msgid "Iron Shovel"
-msgstr ""
+msgstr "Pá de Ferro"
 
 msgid "Stone Shovel"
-msgstr ""
+msgstr "Pá de Pedra"
 
 msgid "Golden Shovel"
-msgstr ""
+msgstr "Pá de Ouro"
 
 msgid "Wooden Shovel"
-msgstr ""
+msgstr "Pá de Madeira"
 
 msgid "This block can be mined by any tool instantly."
 msgstr ""
 
 msgid "• Shears"
-msgstr ""
+msgstr "• Tosqueadeira"
 
 msgid "• Sword"
-msgstr ""
+msgstr "• Espada"
 
 msgid "• Hand"
-msgstr ""
+msgstr "• Mão"
 
 msgid "This block can be mined by:"
 msgstr ""
 
 msgid "Hardness: ∞"
-msgstr ""
+msgstr "Dureza: ∞"
 
 msgid "Hardness: @1"
-msgstr ""
+msgstr "Dureza: @1"
 
 msgid "Blast Resistance: @1"
 msgstr ""
@@ -198,31 +198,31 @@ msgid ", "
 msgstr ", "
 
 msgid "Painfully slow"
-msgstr ""
+msgstr "Dolorosamente lento"
 
 msgid "Very slow"
-msgstr ""
+msgstr "Muito lento"
 
 msgid "Slow"
-msgstr ""
+msgstr "Devagar"
 
 msgid "Fast"
-msgstr ""
+msgstr "Rápido"
 
 msgid "Very fast"
-msgstr ""
+msgstr "Muito rápido"
 
 msgid "Extremely fast"
-msgstr ""
+msgstr "Extremamente rápido"
 
 msgid "Instantaneous"
-msgstr ""
+msgstr "Instantâneo"
 
 msgid "@1 uses"
-msgstr ""
+msgstr "@1 usa"
 
 msgid "Unlimited uses"
-msgstr ""
+msgstr "Usos ilimitados"
 
 msgid "Mining speed: @1"
 msgstr ""

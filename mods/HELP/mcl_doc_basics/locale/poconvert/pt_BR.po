@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-01-23 14:21+0000\n"
+"Last-Translator: JuanRubin <juanrubin@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_doc_basics/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Advanced usage"
 msgstr "Uso avançado"
@@ -119,7 +120,7 @@ msgid "• [Down]: Go to next entry in history"
 msgstr ""
 
 msgid "Server commands"
-msgstr ""
+msgstr "Comandos do servidor"
 
 msgid "Server commands (also called “chat commands”) are little helpers for advanced users. You don't need to use these commands when playing. But they might come in handy to perform some more technical tasks. Server commands work both in multi-player and single-player mode."
 msgstr ""
@@ -185,7 +186,7 @@ msgid "• For /spawnentity you need an entity name, which is another identifier
 msgstr ""
 
 msgid "Privileges"
-msgstr ""
+msgstr "Privilégios"
 
 msgid "Each player has a set of privileges, which differs from server to server. Your privileges determine what you can and can't do. Privileges can be granted and revoked from other players by any player who has the privilege called “privs”."
 msgstr ""
@@ -224,7 +225,7 @@ msgid "In single-player mode, you can use “/grantme all” to unlock all abili
 msgstr ""
 
 msgid "Movement modes"
-msgstr ""
+msgstr "Modos de movimentação"
 
 msgid "You can enable some special movement modes that change how you move."
 msgstr ""
@@ -242,7 +243,7 @@ msgid "• No privilege required"
 msgstr ""
 
 msgid "Fast mode:"
-msgstr ""
+msgstr "Modo rápido:"
 
 msgid "• Description: Allows you to move much faster. Hold down the the “Use” key [E] to move faster. In the client configuration, you can further customize fast mode."
 msgstr ""
@@ -254,7 +255,7 @@ msgid "• Required privilege: fast"
 msgstr ""
 
 msgid "Fly mode:"
-msgstr ""
+msgstr "Modo aéreo:"
 
 msgid "• Description: Gravity doesn't affect you and you can move freely in all directions. Use the jump key to rise and the sneak key to sink."
 msgstr ""
@@ -266,7 +267,7 @@ msgid "• Required privilege: fly"
 msgstr ""
 
 msgid "Noclip mode:"
-msgstr ""
+msgstr "Modo atravessante:"
 
 msgid "• Description: Allows you to move through walls. Only works when fly mode is enabled, too."
 msgstr ""
@@ -278,7 +279,7 @@ msgid "• Required privilege: noclip"
 msgstr ""
 
 msgid "Coordinates"
-msgstr ""
+msgstr "Coordenadas"
 
 msgid "The world is a large cube. And because of this, a position in the world can be easily expressed with Cartesian coordinates. That is, for each position in the world, there are 3 values X, Y and Z."
 msgstr ""
@@ -317,7 +318,7 @@ msgid "You can view your current position in the debug screen (open with [F5])."
 msgstr ""
 
 msgid "Settings"
-msgstr ""
+msgstr "Opções"
 
 msgid "There is a large variety of settings to configure Luanti. Pretty much every aspect can be changed that way."
 msgstr ""
@@ -338,7 +339,7 @@ msgid "For a full list of all available settings, use the “All Settings” dia
 msgstr ""
 
 msgid "Online help"
-msgstr ""
+msgstr "Ajuda online"
 
 msgid "You may want to check out these online resources related to Luanti:"
 msgstr ""
@@ -368,13 +369,13 @@ msgid "A generic Internet Relay Chat channel for everything related to Luanti wh
 msgstr ""
 
 msgid "Basics"
-msgstr ""
+msgstr "Básico"
 
 msgid "Everything you need to know to get started with playing"
 msgstr ""
 
 msgid "Quick start"
-msgstr ""
+msgstr "Início rápido"
 
 msgid "This is a very brief introduction to the basic gameplay."
 msgstr ""
@@ -416,13 +417,13 @@ msgid "For the default controls, see the next section [Controls]."
 msgstr ""
 
 msgid "Controls"
-msgstr ""
+msgstr "Controles"
 
 msgid "These are the default controls (which can be remapped in the 'Change keys' dialog):"
 msgstr ""
 
 msgid "Basic movement:"
-msgstr ""
+msgstr "Movimento básico:"
 
 msgid "• Moving the mouse around: Look around"
 msgstr ""
@@ -476,7 +477,7 @@ msgid "• E: Walk fast in fast mode"
 msgstr ""
 
 msgid "World interaction:"
-msgstr ""
+msgstr "Interação com o mundo:"
 
 msgid "• Left mouse button: Punch / mine blocks"
 msgstr ""
@@ -503,19 +504,19 @@ msgid "• I: Show/hide inventory menu"
 msgstr ""
 
 msgid "Inventory interaction:"
-msgstr ""
+msgstr "Interação com o inventário:"
 
 msgid "See the entry “Basics > Inventory”."
 msgstr ""
 
 msgid "Camera:"
-msgstr ""
+msgstr "Câmera:"
 
 msgid "• F7: Toggle camera mode"
 msgstr ""
 
 msgid "Interface:"
-msgstr ""
+msgstr "Interface:"
 
 msgid "• Esc: Open menu window (pauses in single-player mode) or close window"
 msgstr ""
@@ -539,7 +540,7 @@ msgid "• F12: Take a screenshot"
 msgstr ""
 
 msgid "Server interaction:"
-msgstr ""
+msgstr "Interação com o servidor:"
 
 msgid "• T: Open chat window (chat requires the “shout” privilege)"
 msgstr ""
@@ -548,7 +549,7 @@ msgid "• /: Start issuing a server command"
 msgstr ""
 
 msgid "Technical:"
-msgstr ""
+msgstr "Técnico:"
 
 msgid "• +: Increase minimal viewing distance"
 msgstr ""
@@ -566,7 +567,7 @@ msgid "• F6: Only useful for developers. Enables/disables profiler"
 msgstr ""
 
 msgid "Pointing"
-msgstr ""
+msgstr "Pontaria"
 
 msgid "“Pointing” means looking at something in range with the crosshair. Pointing is needed for interaction, like mining, punching, using, etc. Pointable things include blocks, players, computer enemies and objects."
 msgstr ""
@@ -578,7 +579,7 @@ msgid "A few things can not be pointed. Most blocks are pointable. A few blocks,
 msgstr ""
 
 msgid "Items"
-msgstr ""
+msgstr "Itens"
 
 msgid "Items are things you can carry along and store in inventories. They can be used for crafting, smelting, building, mining, and more. Types of items include blocks, tools, weapons and items only used for crafting."
 msgstr ""
@@ -614,7 +615,7 @@ msgid "Blocks can also have their own inventory, e.g. chests and furnaces."
 msgstr ""
 
 msgid "Inventory controls:"
-msgstr ""
+msgstr "Controles do inventário:"
 
 msgid "Taking: You can take items from an occupied slot if the cursor holds nothing."
 msgstr ""
@@ -758,7 +759,7 @@ msgid "• Group memberships: Group memberships are used to determine mining pro
 msgstr ""
 
 msgid "Mining"
-msgstr ""
+msgstr "Minerando"
 
 msgid "Mining (or digging) is the process of breaking blocks to remove them. To mine a block, point it and hold down the left mouse button until it breaks."
 msgstr ""
@@ -782,7 +783,7 @@ msgid "• Drops nothing"
 msgstr ""
 
 msgid "Building"
-msgstr ""
+msgstr "Construindo"
 
 msgid "Almost all blocks can be built (or placed). Building is very simple and has no delay."
 msgstr ""
@@ -851,7 +852,7 @@ msgid "Each cookable item requires time to be cooked. This time is specific to t
 msgstr ""
 
 msgid "Hunger"
-msgstr ""
+msgstr "Fome"
 
 msgid "Hunger affects your health and your ability to sprint. Hunger is not in effect when damage is disabled."
 msgstr ""
@@ -884,7 +885,7 @@ msgid "• Poisonous food decreases your health"
 msgstr ""
 
 msgid "Details:"
-msgstr ""
+msgstr "Detalhes:"
 
 msgid "You have 0-20 hunger points, indicated by 20 drumstick half-icons above the hotbar. You also have an invisible attribute: Saturation."
 msgstr ""
@@ -917,22 +918,22 @@ msgid "• Suffering food poisoning"
 msgstr ""
 
 msgid "• Sprint-jumping"
-msgstr ""
+msgstr "• Correr pulando"
 
 msgid "• Sprinting"
-msgstr ""
+msgstr "• Correndo"
 
 msgid "• Attacking"
-msgstr ""
+msgstr "• Atacando"
 
 msgid "• Taking damage"
 msgstr ""
 
 msgid "• Swimming"
-msgstr ""
+msgstr "• Nadando"
 
 msgid "• Jumping"
-msgstr ""
+msgstr "• Pulando"
 
 msgid "• Mining a block"
 msgstr ""
@@ -956,13 +957,13 @@ msgid "Most animals roam the world aimlessly while most hostile mobs hunt player
 msgstr ""
 
 msgid "Animals"
-msgstr ""
+msgstr "Animais"
 
 msgid "Animals are peaceful beings which roam the world aimlessly. You can feed, tame and breed them."
 msgstr ""
 
 msgid "Feeding:"
-msgstr ""
+msgstr "Alimentação:"
 
 msgid "Each animal has its own taste for food and doesn't just accept any food. To feed, hold an item in your hand and rightclick the animal."
 msgstr ""
@@ -977,13 +978,13 @@ msgid "Feeding heals animals instantly, depending on the quality of the food ite
 msgstr ""
 
 msgid "Taming:"
-msgstr ""
+msgstr "Domando:"
 
 msgid "A few animals can be tamed. You can generally do more things with tamed animals and use other items on them. For example, tame horses can be saddled and tame wolves fight on your side."
 msgstr ""
 
 msgid "Breeding:"
-msgstr ""
+msgstr "Cruzando:"
 
 msgid "When you have fed an animal up to its maximum health, then feed it again, you will activate “Love Mode” and many hearts appear around the animal."
 msgstr ""
@@ -992,13 +993,13 @@ msgid "Two animals of the same species will start to breed if they are in Love M
 msgstr ""
 
 msgid "Baby animals:"
-msgstr ""
+msgstr "Bebês Animais:"
 
 msgid "Baby animals are just like their adult couterparts, but they can't be tamed or bred and don't drop anything when they die. They grow to adults after a short time. When fed, they grow to adults faster."
 msgstr ""
 
 msgid "Minimap"
-msgstr ""
+msgstr "Mini-mapa"
 
 msgid "The minimap allows you to get an overhead view of your surroundings, as a HUD that appears in the top right corner."
 msgstr ""
@@ -1025,7 +1026,7 @@ msgid "• Toggle minimap rotation mode: [Shift]+[F9]"
 msgstr ""
 
 msgid "Camera"
-msgstr ""
+msgstr "Câmera"
 
 msgid "There are 3 different views which determine the way you see the world. The modes are:"
 msgstr ""
@@ -1049,7 +1050,7 @@ msgid "• Switch camera mode: [F7]"
 msgstr ""
 
 msgid "Sneaking"
-msgstr ""
+msgstr "Agachando"
 
 msgid "Sneaking makes you walk slower and prevents you from falling off the edge of a block."
 msgstr ""
@@ -1061,7 +1062,7 @@ msgid "Sneaking only works when you stand on solid ground, are not in a liquid a
 msgstr ""
 
 msgid "Players"
-msgstr ""
+msgstr "Jogadores"
 
 msgid "Players are the characters which users control."
 msgstr ""
@@ -1082,7 +1083,7 @@ msgid "• Touching a block which causes direct damage"
 msgstr ""
 
 msgid "• Drowning"
-msgstr ""
+msgstr "• Afogando"
 
 msgid "• Being attacked by another player"
 msgstr ""
@@ -1103,7 +1104,7 @@ msgid "In multiplayer, the name of other players is written above their head."
 msgstr ""
 
 msgid "Liquids"
-msgstr ""
+msgstr "Líquidos"
 
 msgid "Liquids are special dynamic blocks. Liquids like to spread and flow to their surrounding blocks. Players can swim and drown in them."
 msgstr ""
@@ -1169,7 +1170,7 @@ msgid "Liquids are often not pointable. But some special items are able to point
 msgstr ""
 
 msgid "Light"
-msgstr ""
+msgstr "Luz"
 
 msgid "As the world is entirely block-based, so is the light in the world. Each block has its own brightness. The brightness of a block is expressed in a “light level” which ranges from 0 (total darkness) to 15 (as bright as the sun)."
 msgstr ""
@@ -1205,7 +1206,7 @@ msgid "Note that “transparency” here only means that the block is able to ca
 msgstr ""
 
 msgid "Groups"
-msgstr ""
+msgstr "Grupos"
 
 msgid "Items, players and objects (animate and inanimate) can be members of any number of groups. Groups serve multiple purposes:"
 msgstr ""
@@ -1229,13 +1230,13 @@ msgid "In the item help, many important groups are usually mentioned and explain
 msgstr ""
 
 msgid "Glossary"
-msgstr ""
+msgstr "Glossário"
 
 msgid "This is a list of commonly used terms:"
 msgstr ""
 
 msgid "Controls:"
-msgstr ""
+msgstr "Controles:"
 
 msgid "• Wielding: Holding an item in hand"
 msgstr ""
@@ -1256,7 +1257,7 @@ msgid "• Climbing: Moving up or down a climbable block"
 msgstr ""
 
 msgid "Blocks:"
-msgstr ""
+msgstr "Blocos:"
 
 msgid "• Block: Cubes that the worlds are made of"
 msgstr ""
@@ -1274,7 +1275,7 @@ msgid "• Using a block: Right-clicking a block to access its special function"
 msgstr ""
 
 msgid "Items:"
-msgstr ""
+msgstr "Itens:"
 
 msgid "• Item: A single thing that players can possess"
 msgstr ""
@@ -1307,7 +1308,7 @@ msgid "• Craftitem: An item which is (primarily or only) used for crafting"
 msgstr ""
 
 msgid "Gameplay:"
-msgstr ""
+msgstr "Jogatina:"
 
 msgid "• “heart”: A single health symbol, indicates 2 HP"
 msgstr ""
@@ -1343,7 +1344,7 @@ msgid "• noclip: Allows to fly through walls"
 msgstr ""
 
 msgid "Interface"
-msgstr ""
+msgstr "Interface"
 
 msgid "• Hotbar: Inventory slots at the bottom"
 msgstr ""
@@ -1358,7 +1359,7 @@ msgid "• Crosshair: Seen in the middle, used to point at things"
 msgstr ""
 
 msgid "Online multiplayer:"
-msgstr ""
+msgstr "Multi jogador online:"
 
 msgid "• PvP: Player vs Player. If active, players can deal damage to each other"
 msgstr ""
@@ -1370,7 +1371,7 @@ msgid "• Protection: Mechanism to own areas of the world, which only allows th
 msgstr ""
 
 msgid "Technical terms:"
-msgstr ""
+msgstr "Termos técnicos:"
 
 msgid "• Luanti: This game engine"
 msgstr ""
@@ -1391,7 +1392,7 @@ msgid "• Node: Other word for “block”"
 msgstr ""
 
 msgid "Luanti"
-msgstr ""
+msgstr "Luanti"
 
 msgid "Luanti (formely Minetest) is a free software game engine for games based on voxel gameplay, inspired by InfiniMiner, Minecraft, and the like. Luanti was originally created by Perttu Ahola (alias “celeron55”)."
 msgstr "Luanti (anteriormente Minetest) é um motor de jogo de software livre para jogos baseados em jogabilidade voxel, inspirado em InfiniMiner, Minecraft e similares. Luanti foi originalmente criado por Perttu Ahola (também conhecido como “celeron55”)."
@@ -1404,4 +1405,3 @@ msgstr ""
 
 msgid "MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Luanti however, that can be installed from the main menu content browser."
 msgstr ""
-

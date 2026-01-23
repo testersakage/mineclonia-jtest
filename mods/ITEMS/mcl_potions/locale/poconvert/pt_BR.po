@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_potions x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2026-01-05 18:21+0000\n"
-"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-23 14:21+0000\n"
+"Last-Translator: JuanRubin <juanrubin@noreply.codeberg.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
 "mineclonia/mcl_potions/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "<effect>|heal|list|clear|remove <duration|heal-amount|effect>|INF [<level>] [<factor>] [NOPART]"
 msgstr "<efeito>|heal|list|clear|remove <duracao|quanto-cura|efeito>|INF [<nivel>] [<fator>] [NOPART]"
@@ -63,13 +63,13 @@ msgid "@1 effect on level @2 given to player @3 for @4 seconds."
 msgstr ""
 
 msgid "Invisiblity"
-msgstr ""
+msgstr "Invisibilidade"
 
 msgid "body is invisible"
 msgstr ""
 
 msgid "Poison"
-msgstr ""
+msgstr "Veneno"
 
 msgid "-1 HP / @1 s"
 msgstr ""
@@ -87,22 +87,22 @@ msgid "+@1% melee damage"
 msgstr ""
 
 msgid "Weakness"
-msgstr ""
+msgstr "Fraqueza"
 
 msgid "-@1% melee damage"
 msgstr ""
 
 msgid "Water Breathing"
-msgstr ""
+msgstr "Respiração Aquática"
 
 msgid "limitless breathing under water"
 msgstr ""
 
 msgid "Dolphin's Grace"
-msgstr ""
+msgstr "Graça dos Golfinhos"
 
 msgid "swimming gracefully"
-msgstr ""
+msgstr "nadando graciosamente"
 
 msgid "Leaping"
 msgstr "Salto"
@@ -114,16 +114,16 @@ msgid "-@1% jumping power"
 msgstr ""
 
 msgid "Slow Falling"
-msgstr ""
+msgstr "Queda Lenta"
 
 msgid "decreases gravity effects"
 msgstr ""
 
 msgid "Weak"
-msgstr ""
+msgstr "Fraco"
 
 msgid "Strong"
-msgstr ""
+msgstr "Forte"
 
 msgid "Potion FoV effect strength"
 msgstr ""
@@ -138,25 +138,25 @@ msgid "+@1% running speed"
 msgstr ""
 
 msgid "Slowness"
-msgstr ""
+msgstr "Lentidão"
 
 msgid "-@1% running speed"
 msgstr ""
 
 msgid "Levitation"
-msgstr ""
+msgstr "Levitação"
 
 msgid "moves body upwards at @1 nodes/s"
 msgstr ""
 
 msgid "Night Vision"
-msgstr ""
+msgstr "Visão Noturna"
 
 msgid "improved vision during the night"
 msgstr ""
 
 msgid "Darkness"
-msgstr ""
+msgstr "Escuridão"
 
 msgid "surrounded by darkness"
 msgstr ""
@@ -165,25 +165,25 @@ msgid "not seeing anything beyond @1 nodes"
 msgstr ""
 
 msgid "Glowing"
-msgstr ""
+msgstr "Brilhante"
 
 msgid "more visible at all times"
 msgstr ""
 
 msgid "Health Boost"
-msgstr ""
+msgstr "Vida Extra"
 
 msgid "HP increased by @1"
 msgstr ""
 
 msgid "Absorption"
-msgstr ""
+msgstr "Absorção"
 
 msgid "absorbs up to @1 incoming damage"
 msgstr ""
 
 msgid "Fire Resistance"
-msgstr ""
+msgstr "Resistência ao Fogo"
 
 msgid "resistance to fire damage"
 msgstr ""
@@ -195,13 +195,13 @@ msgid "resist @1% of incoming damage"
 msgstr ""
 
 msgid "Luck"
-msgstr ""
+msgstr "Sorte"
 
 msgid "Bad Luck"
-msgstr ""
+msgstr "Má Sorte"
 
 msgid "Bad Omen"
-msgstr ""
+msgstr "Mau Presságio"
 
 msgid "danger is imminent"
 msgstr ""
@@ -210,22 +210,22 @@ msgid "Hero of the Village"
 msgstr "Herói da Vila"
 
 msgid "Withering"
-msgstr ""
+msgstr "Apodrecimento"
 
 msgid "-1 HP / @1 s, can kill"
 msgstr ""
 
 msgid "impaired sight"
-msgstr ""
+msgstr "visão afetada"
 
 msgid "Hunger"
-msgstr ""
+msgstr "Fome"
 
 msgid "exhausts by @1 per second"
 msgstr ""
 
 msgid "Nausea"
-msgstr ""
+msgstr "Náusea"
 
 msgid "not feeling very well..."
 msgstr ""
@@ -234,7 +234,7 @@ msgid "frequency: @1 / 1 s"
 msgstr ""
 
 msgid "Saturation"
-msgstr ""
+msgstr "Saturação"
 
 msgid "saturates by @1 per second"
 msgstr ""
@@ -246,31 +246,31 @@ msgid "+@1% mining and attack speed"
 msgstr ""
 
 msgid "Fatigue"
-msgstr ""
+msgstr "Fadiga"
 
 msgid "-@1% mining and attack speed"
 msgstr ""
 
 msgid "Conduit Power"
-msgstr ""
+msgstr "Força do Conduíte"
 
 msgid "+@1% mining and attack speed in water"
 msgstr ""
 
 msgid "Infested"
-msgstr ""
+msgstr "Infestado"
 
 msgid "Causes 1-3 silverfish to spawn with a 5% chance when damaged"
 msgstr ""
 
 msgid "Oozing"
-msgstr ""
+msgstr "Vazando"
 
 msgid "Causes 2 medium slimes to spawn on death"
 msgstr ""
 
 msgid "Weaving"
-msgstr ""
+msgstr "Aranheza"
 
 msgid "Causes 2-3 cobwebs to appear on death"
 msgstr ""
@@ -288,10 +288,10 @@ msgid "Try different combinations to create potions."
 msgstr ""
 
 msgid "Glass Bottle"
-msgstr ""
+msgstr "Garrafa de Vidro"
 
 msgid "Liquid container"
-msgstr ""
+msgstr "Recipiente de líquido"
 
 msgid "A glass bottle is used as a container for liquids and can be used to collect water directly."
 msgstr ""
@@ -300,7 +300,7 @@ msgid "To collect water, use it on a cauldron with water (which removes a level 
 msgstr ""
 
 msgid "Water Bottle"
-msgstr ""
+msgstr "Garrafa D'água"
 
 msgid "Water bottles can be used to fill cauldrons. Drinking water has no effect."
 msgstr ""
@@ -333,13 +333,13 @@ msgid "A throwable water bottle that will shatter on impact, where it creates a 
 msgstr ""
 
 msgid "Glistering Melon"
-msgstr ""
+msgstr "Melão Incandescente"
 
 msgid "This shiny melon is full of tiny gold nuggets and would be nice in an item frame. It isn't edible and not useful for anything else."
 msgstr ""
 
 msgid "No effect"
-msgstr ""
+msgstr "Sem efeito"
 
 msgid "A throwable potion that will shatter on impact, where it creates a magic cloud that lingers around for a while. Any player or mob inside the cloud will receive the potion's effect or set of effects, possibly repeatedly."
 msgstr ""
@@ -495,19 +495,19 @@ msgid "Drinking a potion gives you a particular effect or set of effects."
 msgstr ""
 
 msgid "Strange Potion"
-msgstr ""
+msgstr "Poção Estranha"
 
 msgid "Splash @1"
-msgstr ""
+msgstr "@1 Arremessável"
 
 msgid "Lingering @1"
-msgstr ""
+msgstr "@1 Duradoura"
 
 msgid "Strange Tipped Arrow"
 msgstr ""
 
 msgid "Dragon's Breath"
-msgstr ""
+msgstr "Bafo do Dragão"
 
 msgid "This item is used in brewing and can be combined with splash potions to create lingering potions."
 msgstr ""
@@ -522,13 +522,13 @@ msgid "Has a bitter taste and is not really useful for brewing potions."
 msgstr ""
 
 msgid "+@1 HP"
-msgstr ""
+msgstr "+@1 PV"
 
 msgid "Instantly heals."
-msgstr ""
+msgstr "Cura instantaneamente."
 
 msgid "-@1 HP"
-msgstr ""
+msgstr "-@1 PV"
 
 msgid "Instantly deals damage."
 msgstr ""
@@ -555,7 +555,7 @@ msgid "Regenerates health over time."
 msgstr ""
 
 msgid "Grants invisibility."
-msgstr ""
+msgstr "Dá invisibilidade."
 
 msgid "Grants limitless breath underwater."
 msgstr ""
@@ -576,13 +576,13 @@ msgid "Decreases damage taken at the cost of speed."
 msgstr ""
 
 msgid "Increases luck."
-msgstr ""
+msgstr "Aumenta sorte."
 
 msgid "Decreases luck."
-msgstr ""
+msgstr "Diminui a sorte."
 
 msgid "Attracts danger."
-msgstr ""
+msgstr "Atrai perigo."
 
 msgid "Causes 1-3 silverfish to spawn with a 5% chance when damaged. It not applies to silverfishes."
 msgstr ""
@@ -597,7 +597,7 @@ msgid "Causes A wind burst on death."
 msgstr ""
 
 msgid "Unknown Potion"
-msgstr ""
+msgstr "Poção Desconhecida"
 
 msgid "Right-click to identify"
 msgstr ""
