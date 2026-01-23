@@ -50,7 +50,7 @@ local bell_rotations = {
 local bell_entities = {}
 
 local function create_entity (pos, node)
-	local param2 = node.param2
+	local param2 = node.param2 % 6
 	local rot = {x = 0, y = bell_rotations[param2 + 1], z = 0}
 
 	if node.name == "mcl_bells:bell" then
@@ -139,7 +139,15 @@ local bell_def = {
 			return true
 		end,
 		update = function(pos, node)
-			mcl_bells.ring_once (pos, node)
+			local powered = mcl_redstone.get_power(pos) ~= 0
+			local old_powered = bit.band(node.param2, 128) ~= 0
+			if powered and not old_powered then
+				mcl_bells.ring_once(pos, node)
+			end
+			return {
+				name = node.name,
+				param2 = powered and bit.bor(node.param2, 128) or bit.band(node.param2, 127),
+			}
 		end,
 		init = function() end,
 	},
