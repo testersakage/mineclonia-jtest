@@ -3,172 +3,172 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_crimson x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-19 13:21+0000\n"
+"Last-Translator: phileas <phileas@noreply.codeberg.org>\n"
+"Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_crimson/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Warped Fungus"
-msgstr ""
+msgstr "Torzított Gomba"
 
 msgid "Warped fungus is a mushroom found in the nether's warped forest."
-msgstr ""
+msgstr "A torzított gomba a Nether torzított erdejében található gomba."
 
 msgid "Twisting Vines"
-msgstr ""
+msgstr "Csavarodó Indák"
 
 msgid "Weeping Vines"
-msgstr ""
+msgstr "Sírva Lógó Indák"
 
 msgid "Nether Sprouts"
-msgstr ""
+msgstr "Nether Csírák"
 
 msgid "Warped Roots"
-msgstr ""
+msgstr "Torzított Gyökerek"
 
 msgid "Warped Wart Block"
-msgstr ""
+msgstr "Torzított Szemölcsblokk"
 
 msgid "Shroomlight"
-msgstr ""
+msgstr "Gombafény"
 
 msgid "Warped Nylium"
-msgstr ""
+msgstr "Torzított Nylium"
 
 msgid "Crimson Fungus"
-msgstr ""
+msgstr "Karmazsin Gomba"
 
 msgid "Crimson fungus is a mushroom found in the nether's crimson forest."
-msgstr ""
+msgstr "A Karmazsin gomba a Nether karmazsin erdejében található gomba."
 
 msgid "Crimson Roots"
-msgstr ""
+msgstr "Karmazsin Gyökerek"
 
 msgid "Crimson Nylium"
-msgstr ""
+msgstr "Karmazsin Nylium"
 
 msgid "Crimson Bark"
-msgstr ""
+msgstr "Karmazsin Kéreg"
 
 msgid "Crimson Bark Slab"
-msgstr ""
+msgstr "Karmazsin Kéreg Lemez"
 
 msgid "Crimson Bark Stairs"
-msgstr ""
+msgstr "Karmazsin Kéreg Lépcső"
 
 msgid "Crimson Button"
-msgstr ""
+msgstr "Karmazsin Gomb"
 
 msgid "Crimson Door"
-msgstr ""
+msgstr "Karmazsin Ajtó"
 
 msgid "Crimson Fence"
-msgstr ""
+msgstr "Karmazsin Keresztléc"
 
 msgid "Crimson Fence Gate"
-msgstr ""
+msgstr "Karmazsin Keresztléc Kapu"
 
 msgid "Crimson Hanging Sign"
-msgstr ""
+msgstr "Karmazsin Függő Tábla"
 
 msgid "Crimson Log"
-msgstr ""
+msgstr "Karmazsin Fatönk"
 
 msgid "Crimson Planks"
-msgstr ""
+msgstr "Karmazsin Deszka"
 
 msgid "Crimson Pressure Plate"
-msgstr ""
+msgstr "Karmazsin Nyomólap"
 
 msgid "Crimson Sign"
-msgstr ""
+msgstr "Karmazsin Tábla"
 
 msgid "Crimson Slab"
-msgstr ""
+msgstr "Karmazsin Lemez"
 
 msgid "Crimson Stairs"
-msgstr ""
+msgstr "Karmazsin Lépcső"
 
 msgid "Crimson Trapdoor"
-msgstr ""
+msgstr "Karmazsin Lábnyílás"
 
 msgid "Stripped Crimson Bark"
-msgstr ""
+msgstr "Hámozott Karmazsin Kéreg"
 
 msgid "Stripped Crimson Log"
-msgstr ""
+msgstr "Hámozott Karmazsin Fatönk"
 
 msgid "Stripped Warped Bark"
-msgstr ""
+msgstr "Hámozott Torzított Kéreg"
 
 msgid "Stripped Warped Log"
-msgstr ""
+msgstr "Hámozott Torzított Fatönk"
 
 msgid "The stripped trunk of an Crimson tree."
-msgstr ""
+msgstr "Egy karmazsin fa hámozott törzse."
 
 msgid "The stripped trunk of an Warped tree."
-msgstr ""
+msgstr "Egy torzított fa hámozott törzse."
 
 msgid "The stripped wood of an Crimson tree."
-msgstr ""
+msgstr "Egy karmazsin fa hámozott fája."
 
 msgid "The stripped wood of an Warped tree."
-msgstr ""
+msgstr "Egy torzított fa hámozott fája."
 
 msgid "The trunk of a Crimson tree."
-msgstr ""
+msgstr "Egy karmazsin fa törzse."
 
 msgid "The trunk of a Warped tree."
-msgstr ""
+msgstr "Egy torzított fa törzse."
 
 msgid "Warped Bark"
-msgstr ""
+msgstr "Torzított Kéreg"
 
 msgid "Warped Bark Slab"
-msgstr ""
+msgstr "Torzított Kéreg Lemez"
 
 msgid "Warped Bark Stairs"
-msgstr ""
+msgstr "Torzított Kéreg Lépcső"
 
 msgid "Warped Button"
-msgstr ""
+msgstr "Torzított Gomb"
 
 msgid "Warped Door"
-msgstr ""
+msgstr "Torzított Ajtó"
 
 msgid "Warped Fence"
-msgstr ""
+msgstr "Torzított Keresztléc"
 
 msgid "Warped Fence Gate"
-msgstr ""
+msgstr "Torzított Keresztléc Kapu"
 
 msgid "Warped Hanging Sign"
-msgstr ""
+msgstr "Torzított Függő Tábla"
 
 msgid "Warped Log"
-msgstr ""
+msgstr "Torzított Fatönk"
 
 msgid "Warped Planks"
-msgstr ""
+msgstr "Torzított Deszka"
 
 msgid "Warped Pressure Plate"
-msgstr ""
+msgstr "Torzított Nyomólap"
 
 msgid "Warped Sign"
-msgstr ""
+msgstr "Torzított Tábla"
 
 msgid "Warped Slab"
-msgstr ""
+msgstr "Torzított Lemez"
 
 msgid "Warped Stairs"
-msgstr ""
+msgstr "Torzított Lépcső"
 
 msgid "Warped Trapdoor"
-msgstr ""
-
+msgstr "Torzított Lábnyílás"

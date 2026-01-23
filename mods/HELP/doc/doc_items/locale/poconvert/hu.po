@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain doc_items x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-19 13:21+0000\n"
+"Last-Translator: phileas <phileas@noreply.codeberg.org>\n"
+"Language-Team: Hungarian <https://translate.codeberg.org/projects/mineclonia/"
+"doc_items/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "This is a decorational block."
 msgstr "Ez egy dekorációs blokk."
@@ -200,166 +201,176 @@ msgid "Collidable: @1"
 msgstr "Tömör: @1"
 
 msgid "Pointable: Yes"
-msgstr ""
+msgstr "Mutatható: Igen"
 
 msgid "Pointable: Only by special items"
-msgstr ""
+msgstr "Mutatható: Csak különleges tárgyakkal"
 
 msgid "Pointable: No"
-msgstr ""
+msgstr "Mutatható: Nem"
 
 msgid "This block is a liquid with these properties:"
-msgstr ""
+msgstr "Ez a blokk folyadék, a következő tulajdonságokkal:"
 
 msgid "• Renewable"
-msgstr ""
+msgstr "• Megújuló"
 
 msgid "• Not renewable"
-msgstr ""
+msgstr "• Nem megújuló"
 
 msgid "• No flowing"
-msgstr ""
+msgstr "• Nem folyik"
 
 msgid "• Flowing range: @1"
-msgstr ""
+msgstr "• Folyási távolság: @1"
 
 msgid "• Viscosity: @1"
-msgstr ""
+msgstr "• Vízszínűség: @1"
 
 msgid "This block causes a damage of @1 hit points per second."
-msgstr ""
+msgstr "Ez a blokk @1 sebzést okoz másodpercenként."
 
 msgid "This block causes a damage of @1 hit point per second."
-msgstr ""
+msgstr "Ez a blokk @1 sebzést okoz másodpercenként."
 
 msgid "This block decreases your breath and causes a drowning damage of @1 hit points every 2 seconds."
 msgstr ""
+"Ez a blokk csökkenti a levegőt, és fulladási sebzést okoz, @1 pont minden 2 "
+"másodpercben."
 
 msgid "This block decreases your breath and causes a drowning damage of @1 hit point every 2 seconds."
 msgstr ""
+"Ez a blokk csökkenti a levegőt, és fulladási sebzést okoz, @1 pont minden 2 "
+"másodpercben."
 
 msgid "The fall damage on this block is increased by @1%."
-msgstr ""
+msgstr "A leesési sebzés ezen a blokkon @1%-kal nő."
 
 msgid "This block negates all fall damage."
-msgstr ""
+msgstr "Ez a blokk semlegesíti az összes leesési sebzést."
 
 msgid "The fall damage on this block is reduced by @1%."
-msgstr ""
+msgstr "A leesési sebzés ezen a blokkon @1%-kal csökken."
 
 msgid "You can not jump while standing on this block."
-msgstr ""
+msgstr "Nem tudsz ugrani, miközben ezen a blokkon állsz."
 
 msgid "This block can be climbed."
 msgstr "Erre a blokkra felmászhatsz."
 
 msgid "This block will make you bounce off with an elasticity of @1%."
-msgstr ""
+msgstr "Ez a blokk @1%-os rugalmassággal pattint el."
 
 msgid "This block is slippery."
 msgstr "Ez egy csúszós blokk."
 
 msgid "This block is completely silent when walked on, mined or built."
-msgstr ""
+msgstr "Ez a blokk teljesen néma, ha rálépnek, kibányásszák vagy építik."
 
 msgid "This block is completely silent when mined or built."
-msgstr ""
+msgstr "Ez a blokk teljesen néma, ha kibányásszák vagy építik."
 
 msgid "Walking on this block is completely silent."
-msgstr ""
+msgstr "A lépés ezen a blokkon teljesen néma."
 
 msgid "Mining this block is completely silent."
-msgstr ""
+msgstr "A blokk kibányászása teljesen néma."
 
 msgid "Building this block is completely silent."
-msgstr ""
+msgstr "A blokk építése teljesen néma."
 
 msgid "This block is affected by gravity and can fall."
-msgstr ""
+msgstr "Ezt a blokkot a gravitáció befolyásolja, és leeshet."
 
 msgid "Building another block at this block will place it inside and replace it."
 msgstr ""
+"Egy másik blokk elhelyezése ezen a blokkon belülre teszi és felülírja azt."
 
 msgid "Falling blocks can go through this block; they destroy it when doing so."
-msgstr ""
+msgstr "A leeső blokkok áthaladhatnak ezen a blokkon; ilyenkor elpusztítják."
 
 msgid "This block will drop as an item when a falling block ends up inside it."
-msgstr ""
+msgstr "Ez a blokk tárgyként esik le, ha egy leeső blokk belé kerül."
 
 msgid "This block is destroyed when a falling block ends up inside it."
-msgstr ""
+msgstr "Ez a blokk elpusztul, ha egy leeső blokk belé kerül."
 
 msgid "This block will drop as an item when it is not attached to a surrounding block."
 msgstr ""
+"Ez a blokk tárgyként esik le, ha nincs környező blokkhoz csatlakoztatva."
 
 msgid "This block will drop as an item when no collidable block is below it."
 msgstr "Ez a blokk felvehető tárgyként hullik le, ha nincs tömör blokk alatta."
 
 msgid "Liquids can flow into this block and destroy it."
-msgstr ""
+msgstr "A folyadékok befolyhatnak ebbe a blokkba, és elpusztítják."
 
 msgid "This block is a light source with a light level of @1."
-msgstr ""
+msgstr "Ez a blokk fényforrás, fényerőssége @1."
 
 msgid "This block glows faintly with a light level of @1."
-msgstr ""
+msgstr "Ez a blokk halványan világít, fényerőssége @1."
 
 msgid "This block allows light to propagate with a small loss of brightness, and sunlight can even go through losslessly."
 msgstr ""
+"Ez a blokk lehetővé teszi a fény áthaladását kis fényveszteséggel, a napfény "
+"pedig veszteség nélkül áthaladhat."
 
 msgid "This block allows light to propagate with a small loss of brightness."
-msgstr ""
+msgstr "Ez a blokk lehetővé teszi a fény áthaladását kis fényveszteséggel."
 
 msgid "This block allows sunlight to propagate without loss in brightness."
-msgstr ""
+msgstr "Ez a blokk lehetővé teszi a napfény áthaladását fényveszteség nélkül."
 
 msgid "Unknown Node"
 msgstr "Ismeretlen elem"
 
 msgid "This block connects to this block: @1."
-msgstr ""
+msgstr "Ez a blokk ehhez a blokhoz csatlakozik: @1."
 
 msgid "This block connects to these blocks: @1."
-msgstr ""
+msgstr "Ez a blokk ezekhez a blokkokhoz csatlakozik: @1."
 
 msgid "This block connects to blocks of the @1 group."
-msgstr ""
+msgstr "Ez a blokk az @1 csoport blokkjaihoz csatlakozik."
 
 msgid "This block connects to blocks of the following groups: @1."
-msgstr ""
+msgstr "Ez a blokk a következő csoportok blokkjaihoz csatlakozik: @1."
 
 msgid "This block won't drop anything when mined."
-msgstr ""
+msgstr "Ez a blokk nem ad semmit, ha kibányásszák."
 
 msgid "This block will drop the following when mined: @1×@2."
-msgstr ""
+msgstr "Ez a blokk a következőt adja kibányászáskor: @1×@2."
 
 msgid "This block will drop the following when mined: @1."
-msgstr ""
+msgstr "Ez a blokk a következőt adja kibányászáskor: @1."
 
 msgid "This block will drop the following items when mined: @1."
-msgstr ""
+msgstr "Ez a blokk a következő tárgyakat adja kibányászáskor: @1."
 
 msgid "This block will randomly drop one of the following when mined: @1."
-msgstr ""
+msgstr "Ez a blokk kibányászáskor véletlenszerűen az alábbiak egyikét adja: @1."
 
 msgid "This block will randomly drop up to @1 drops of the following possible drops when mined: @2."
 msgstr ""
+"Ez a blokk kibányászáskor véletlenszerűen legfeljebb @1 darabot ad a "
+"következő lehetséges tárgyakból: @2."
 
 msgid " and "
 msgstr " és "
 
 msgid "@1×@2"
-msgstr ""
+msgstr "@1×@2"
 
 msgid "@1 (<0.5%)"
-msgstr ""
+msgstr "@1 (<0,5%)"
 
 msgid "@1 (ca. @2%)"
 msgstr "@1 (kb. @2%)"
 
 msgid "@1 (@2%)"
-msgstr ""
+msgstr "@1 (@2%)"
 
 msgid "Tools and weapons"
 msgstr "Szerszámok és fegyverek"
@@ -393,7 +404,11 @@ msgstr "Követi a játékost, ha ezek a tárgyak vannak a kezében:"
 
 msgid "A transparent block, basically empty space. It is usually left behind after digging something."
 msgstr ""
+"Átlátszó blokk, lényegében üres tér. Általában valami kibányászása után "
+"marad hátra."
 
 msgid "Whenever you are not wielding any item, you use the hand which acts as a tool with its own capabilities. When you are wielding an item which is not a mining tool or a weapon it will behave as if it would be the hand."
 msgstr ""
-
+"Ha nincs a kezedben tárgy, a kezedet használod eszközként a saját "
+"képességeivel. Ha olyan tárgy van a kezedben, amely nem bányászati eszköz "
+"vagy fegyver, úgy viselkedik, mintha csak a kezed lenne."
