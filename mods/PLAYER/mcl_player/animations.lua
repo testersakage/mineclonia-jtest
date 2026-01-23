@@ -280,13 +280,12 @@ mcl_player.register_globalstep(function(player)
 		return
 	end
 
-	-- Adjust velocity to match Luanti's player physics' more
-	-- aggressive damping.
 	local mag = math.sqrt (cx * cx + cz * cz)
 	if mag > 0.01 then
+		local mag1 = math.min (mag, 4.0)
+		local f = mag1 / mag
 		if not tbl._has_impulse then
-			local d1 = 1.5 * mag
-			player:add_velocity (vector.new (cx * d1, 0, cz * d1))
+			player:add_velocity (vector.new (cx * f, 0, cz * f))
 			tbl._has_impulse = self_pos
 		end
 	end
