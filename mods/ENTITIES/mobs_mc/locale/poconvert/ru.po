@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-18 03:21+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.15\n"
 
 msgid "Axolotl"
 msgstr "Аксолотль"
@@ -35,7 +37,7 @@ msgid "Cod"
 msgstr "Треска"
 
 msgid "Each mob spawned will form a school with the remainder of the mobs in the group."
-msgstr ""
+msgstr "Каждый заспавненный моб сформирует орду с остальными мобами из группы."
 
 msgid "Cow"
 msgstr "Корова"
@@ -53,13 +55,13 @@ msgid "Dolphin"
 msgstr "Дельфин"
 
 msgid "Drowned"
-msgstr ""
+msgstr "Утопленник"
 
 msgid "Baby Drowned"
-msgstr ""
+msgstr "Утопленник-ребёнок"
 
 msgid "Drowned will spawn more frequently in this biome."
-msgstr ""
+msgstr "В этом биоме утопленники будут спавниться чаще."
 
 msgid "Ender Dragon"
 msgstr "Дракон Края"
@@ -81,6 +83,8 @@ msgstr "Страж"
 
 msgid "Guardians spawn less frequently in regions of the ocean which are exposed to the sky at the surface."
 msgstr ""
+"Стражи будут спавниться реже в тех регионах океана, что открыты небу на "
+"поверхности."
 
 msgid "Elder Guardian"
 msgstr "Древний страж"
@@ -92,10 +96,10 @@ msgid "Baby Hoglin"
 msgstr "Хоглин-ребёнок"
 
 msgid "Hoglins do not spawn above Nether Wart blocks."
-msgstr ""
+msgstr "Хоглины не спавняться на блоках нароста Нижнего мира."
 
 msgid "20% of Hoglins spawn as their baby variants."
-msgstr ""
+msgstr "20% хоглинов спавняться в варианте детёнышей."
 
 msgid "Zoglin"
 msgstr "Зоглин"
@@ -132,12 +136,15 @@ msgstr "Кошка"
 
 msgid "This mob will spawn infrequently on grass or leaves when no obstructions exist within a volume @1 nodes in size around the center of such a node's upper surface."
 msgstr ""
+"Этот моб будет изредка появляться на траве или листьях при условии "
+"отсутствия препятствий в объёме размером @1 блоков вокруг центра верхней "
+"поверхности такого блока."
 
 msgid "Parrot"
 msgstr "Попугай"
 
 msgid "on grass, leaves, or logs"
-msgstr ""
+msgstr "на блоках травы, листьев или брёвнах"
 
 msgid "Pig"
 msgstr "Свинья"
@@ -161,10 +168,10 @@ msgid "Polar Bear"
 msgstr "Полярный медведь"
 
 msgid "on grass or snow blocks"
-msgstr ""
+msgstr "на блоках травы или снега"
 
 msgid "The second polar bear in a group will always be spawned as a cub."
-msgstr ""
+msgstr "Второй полярный медведь в группе всегда появляется детёнышем."
 
 msgid "Pufferfish"
 msgstr "Иглобрюх"
@@ -195,6 +202,8 @@ msgstr "Странник"
 
 msgid "Moreover, the block where the mob is to spawn must be exposed to sky."
 msgstr ""
+"Кроме того, блок, на котором должен заспавниться моб, должен иметь прямой "
+"доступ к небу."
 
 msgid "Wither Skeleton"
 msgstr "Скелет-иссушитель"
@@ -227,25 +236,36 @@ msgid "Snow Golem"
 msgstr "Снежный голем"
 
 msgid "on grass nodes"
-msgstr ""
+msgstr "на блоках травы"
 
 msgid "This mob will spawn infrequently @1 with a surface occupying a full node when no obstructions exist within a volume @2 nodes in size around the center of such a node's upper surface, in light levels of 8 or greater."
 msgstr ""
+"Этот моб будет изредка спавниться @1 с поверхностью, занимающей целый блок, "
+"при условии отсутствия препятствий в объёме размером @2 блоков вокруг центра "
+"верхней поверхности такого блока и при уровне освещённости 8 или выше."
 
 msgid "This mob will spawn between sea level and Y level -12 when the nodes above and below are water and no obstructions exist within a volume @1 nodes in size around the center of the base of the fluid node where spawning is being attempted."
 msgstr ""
+"Этот моб будет спавниться между уровнем моря и уровнем Y -12, если блоки "
+"сверху и снизу являются водой и в объёме размером @1 блоков вокруг центра "
+"основания жидкостного блока, где производится попытка спавна, нет "
+"препятствий."
 
 msgid "Spawning will only succeed in the absence of artificial lighting and if the natural light is @1 or dimmer."
 msgstr ""
+"Спавн произойдёт только при отсутствии искусственного освещения и если "
+"естественный свет имеет уровень @1 или ниже (темнее)."
 
 msgid "Spawning will only succeed between artificial light levels of 0 and @1."
-msgstr ""
+msgstr "Спавн произойдёт только при уровне искусственного освещения от 0 до @1."
 
 msgid "Spawning will only succeed between natural light levels of 0 and @1."
-msgstr ""
+msgstr "Спавн произойдёт только при уровне естественного света от 0 до @1."
 
 msgid "Spawning will only succeed between artificial light levels of 0 and @1, and natural light levels of 0 and @2."
 msgstr ""
+"Спавн произойдёт только при уровне искусственного освещения от 0 до @1 и при "
+"уровне естественного света от 0 до @2."
 
 msgid "Spider"
 msgstr "Паук"
@@ -261,6 +281,7 @@ msgstr "Светящийся спрут"
 
 msgid "Glow Squid only spawn in absolute darkness at Y levels of 33 or below."
 msgstr ""
+"Светящиеся спруты появляются только в полной темноте на уровнях Y 33 и ниже."
 
 msgid "Strider"
 msgstr "Страйдер"
@@ -362,7 +383,7 @@ msgid "Wolf"
 msgstr "Волк"
 
 msgid "on grass, snow blocks, coarse dirt, or podzol"
-msgstr ""
+msgstr "на блоках травы, снега, земли или подзола"
 
 msgid "Zombie"
 msgstr "Зомби"
@@ -377,11 +398,10 @@ msgid "Baby Husk"
 msgstr "Кадавр-ребёнок"
 
 msgid "5% of Zombies will spawn as their baby variants."
-msgstr ""
+msgstr "5% зомби будут спавниться в варианте детей."
 
 msgid "5% of Husks will spawn as their baby variants."
-msgstr ""
+msgstr "5% кадавров будут спавниться в варианте детей."
 
 msgid "Husks will only spawn on nodes that are exposed to sky."
-msgstr ""
-
+msgstr "Кадавры появляются только на блоках, открытых небу."
