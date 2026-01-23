@@ -52,25 +52,14 @@ local bell_entities = {}
 local function create_entity (pos, node)
 	local param2 = node.param2
 	local rot = {x = 0, y = bell_rotations[param2 + 1], z = 0}
-	local mesh
 
 	if node.name == "mcl_bells:bell" then
-		mesh = "mcl_bells_bell_floor.b3d"
 		rot.y = bell_rotations[param2 + 2]
-	elseif node.name == "mcl_bells:bell_ceiling" then
-		mesh = "mcl_bells_bell_ceiling.b3d"
-		rot.z = math.pi
-	else
-		mesh = "mcl_bells_bell_wall.b3d"
-		rot.x = math.pi/2
 	end
 
 	local obj = core.add_entity (pos, "mcl_bells:bell_ent")
 	if obj then
 		obj:set_rotation (rot)
-		obj:set_properties ({
-			mesh = mesh,
-		})
 		obj:set_animation ({ x = 195, y = 195, })
 		local entity = obj:get_luaentity()
 		local hash = core.hash_node_position (pos)
@@ -94,24 +83,11 @@ local bell_def = {
 	paramtype = "light",
 	paramtype2 = "wallmounted",
 	inventory_image = "mcl_bells_bell.png",
-	drawtype = "mesh",
+	drawtype = "nodebox",
 	walkable = true,
 	pointable = true,
-	tiles = {"mcl_bells_bell_uv_frame.png"},
 	use_texture_alpha = "clip",
 	wield_image = "mcl_bells_bell.png",
-	selection_box = {
-		type = "fixed",
-		fixed = {
-			{-0.3125, -0.5, -0.3125, 0.3125, 0.5, 0.3125},
-		},
-	},
-	collision_box = {
-		type = "fixed",
-		fixed = {
-			{-0.3125, -0.5, -0.3125, 0.3125, 0.5, 0.3125},
-		},
-	},
 	is_ground_content = true,
 	groups = {
 		bell = 1,
@@ -172,8 +148,29 @@ local bell_def = {
 core.register_alias ("mcl_bells:bell_floor", "mcl_bells:bell")
 
 core.register_node("mcl_bells:bell", table.merge(bell_def, {
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-2/16, -8/16, 6/16, 2/16, 8/16, 8/16},
+			{-2/16, -8/16, -8/16, 2/16, 8/16, -6/16},
+			{-1/16, 5/16, -6/16, 1/16, 7/16, 6/16},
+		},
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{-4/16, -8/16, -8/16, 4/16, 8/16, 8/16}
+		},
+	},
+	tiles = {
+		"mcl_bells_bell_floor_top.png",
+		"mcl_bells_bell_floor_top.png",
+		"mcl_bells_bell_floor_front.png",
+		"mcl_bells_bell_floor_front.png",
+		"mcl_bells_bell_floor_side.png",
+		"mcl_bells_bell_floor_side.png",
+	},
 	paramtype2 = "facedir",
-	mesh = "mcl_bells_bell_floor.b3d",
 	drop = "mcl_bells:bell",
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 0,
@@ -181,7 +178,19 @@ core.register_node("mcl_bells:bell", table.merge(bell_def, {
 	}),
 }))
 core.register_node("mcl_bells:bell_ceiling", table.merge(bell_def, {
-	mesh = "mcl_bells_bell_ceiling.b3d",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-1/16, -5/16, -1/16, 1/16, -8/16, 1/16},
+		},
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{-5/16, -8/16, -5/16, 5/16, 6/16, 5/16}
+		},
+	},
+	tiles = {"mcl_bells_bell_ceiling.png"},
 	drop = "mcl_bells:bell",
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 1,
@@ -189,24 +198,24 @@ core.register_node("mcl_bells:bell_ceiling", table.merge(bell_def, {
 	}),
 }))
 core.register_node("mcl_bells:bell_wall", table.merge(bell_def, {
-	mesh = "mcl_bells_bell_wall.b3d",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-1/16, -8/16, 5/16, 1/16, 5/16, 7/16},
+		},
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {
+			{-4/16, -8/16, -8/16, 4/16, 8/16, 8/16}
+		},
+	},
+	tiles = {"mcl_bells_bell_wall.png"},
 	groups = table.merge(bell_def.groups, {
 		not_in_creative_inventory = 1,
 		supported_node_wallmounted = 1,
 	}),
 	drop = "mcl_bells:bell",
-	selection_box = {
-		type = "fixed",
-		fixed = {
-			{-0.3125, -0.3125, -0.5, 0.3125, 0.3125, 0.5},
-		},
-	},
-	collision_box = {
-		type = "fixed",
-		fixed = {
-			{-0.3125, -0.3125, -0.5, 0.3125, 0.3125, 0.5},
-		},
-	},
 }))
 
 local function unhash (hash)
@@ -228,7 +237,7 @@ local cid_bell_ceiling
 core.register_entity("mcl_bells:bell_ent", {
 	initial_properties = {
 		visual = "mesh",
-		mesh = "mcl_bells_bell_floor.b3d",
+		mesh = "mcl_bells_bell.b3d",
 		textures = {"mcl_bells_bell_uv_bell.png"},
 		physical = false,
 		collisionbox = {
