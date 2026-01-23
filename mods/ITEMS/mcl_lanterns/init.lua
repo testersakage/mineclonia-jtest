@@ -257,6 +257,9 @@ core.register_node("mcl_lanterns:chain", {
 	groups = {pickaxey = 1, deco_block = 1},
 	sounds = mcl_sounds.node_sound_metal_defaults(),
 	on_place = function(itemstack, placer, pointed_thing)
+		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+		if rc then return rc end
+
 		if pointed_thing.type ~= "node" or not placer or not placer:is_player() then
 			return itemstack
 		end
