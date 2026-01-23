@@ -3,21 +3,22 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_farming x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-01-12 13:21+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
+"Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_farming/eo/>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Beetroot Seeds"
 msgstr "Betaj Semoj"
 
 msgid "Grows into a beetroot plant. Chickens like beetroot seeds."
-msgstr ""
+msgstr "El ĝi kreskas beta plantaĵo. Kokoj ŝatas betajn semojn."
 
 msgid "Place the beetroot seeds on farmland (which can be created with a hoe) to plant a beetroot plant. They grow in sunlight and grow faster on hydrated farmland. Rightclick an animal to feed it beetroot seeds."
 msgstr ""
@@ -29,7 +30,7 @@ msgid "Beetroot plants are plants which grow on farmland under sunlight in 4 sta
 msgstr ""
 
 msgid "Premature Beetroot Plant"
-msgstr ""
+msgstr "Nematura beta plantaĵo"
 
 msgid "Premature Beetroot Plant (Stage 2)"
 msgstr ""
@@ -38,13 +39,13 @@ msgid "Premature Beetroot Plant (Stage 3)"
 msgstr ""
 
 msgid "Mature Beetroot Plant"
-msgstr ""
+msgstr "Matura Beta Plantaĵo"
 
 msgid "A mature beetroot plant is a farming plant which is ready to be harvested for a beetroot and some beetroot seeds. It won't grow any further."
 msgstr ""
 
 msgid "Beetroot"
-msgstr ""
+msgstr "Beto"
 
 msgid "Beetroots are both used as food item and a dye ingredient. Pigs like beetroots, too."
 msgstr ""
@@ -53,16 +54,16 @@ msgid "Hold it in your hand and right-click to eat it. Rightclick an animal to f
 msgstr ""
 
 msgid "Beetroot Soup"
-msgstr ""
+msgstr "Beta Supo"
 
 msgid "Beetroot soup is a food item."
-msgstr ""
+msgstr "Beta supo estas manĝaĵa portaĵo."
 
 msgid "Grows on farmland"
 msgstr ""
 
 msgid "Premature Carrot Plant"
-msgstr ""
+msgstr "Nematura Karota Plantaĵo"
 
 msgid "Carrot plants are plants which grow on farmland under sunlight in 8 stages, but only 4 stages can be visually told apart. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature."
 msgstr ""
@@ -71,22 +72,25 @@ msgid "Premature Carrot Plant (Stage @1)"
 msgstr ""
 
 msgid "Mature Carrot Plant"
-msgstr ""
+msgstr "Matura Karota Plantaĵo"
 
 msgid "Mature carrot plants are ready to be harvested for carrots. They won't grow any further."
 msgstr ""
+"Maturaj karotaj plantaĵoj estas pretaj por rikolti karotojn. Ili ne kreskos "
+"plu."
 
 msgid "Carrot"
-msgstr ""
+msgstr "Karoto"
 
 msgid "Carrots can be eaten and planted. Pigs and rabbits like carrots."
 msgstr ""
+"Karotoj estas manĝeblaj kaj planteblaj. Porkoj kaj kunikloj ŝatas karotojn."
 
 msgid "Hold it in your hand and rightclick to eat it. Place it on top of farmland to plant the carrot. It grows in sunlight and grows faster on hydrated farmland. Rightclick an animal to feed it."
 msgstr ""
 
 msgid "Golden Carrot"
-msgstr ""
+msgstr "Ora Karoto"
 
 msgid "A golden carrot is a precious food item which can be eaten. It is really, really filling!"
 msgstr ""
@@ -101,22 +105,22 @@ msgid "Use the hoe on a cultivatable block (by rightclicking it) to turn it into
 msgstr ""
 
 msgid "Wood Hoe"
-msgstr ""
+msgstr "Ligna Sarkilo"
 
 msgid "Stone Hoe"
-msgstr ""
+msgstr "Ŝtona Sarkilo"
 
 msgid "Iron Hoe"
-msgstr ""
+msgstr "Fera Sarkilo"
 
 msgid "Golden Hoe"
-msgstr ""
+msgstr "Ora Sarkilo"
 
 msgid "Diamond Hoe"
-msgstr ""
+msgstr "Diamanta Sarkilo"
 
 msgid "Netherite Hoe"
-msgstr ""
+msgstr "Inferfera Sarkilo"
 
 msgid "Melon Seeds"
 msgstr ""
@@ -128,13 +132,13 @@ msgid "Place the melon seeds on farmland (which can be created with a hoe) to pl
 msgstr ""
 
 msgid "Melon"
-msgstr ""
+msgstr "Melono"
 
 msgid "A melon is a block which can be grown from melon stems, which in turn are grown from melon seeds. It can be harvested for melon slices."
 msgstr ""
 
 msgid "Premature Melon Stem"
-msgstr ""
+msgstr "Nematura Melona Plantaĵo"
 
 msgid "Melon stems grow on farmland in 8 stages. On hydrated farmland, the growth is a bit quicker. Mature melon stems are able to grow melons."
 msgstr ""
@@ -143,19 +147,19 @@ msgid "Premature Melon Stem (Stage @1)"
 msgstr ""
 
 msgid "Mature Melon Stem"
-msgstr ""
+msgstr "Matura Melona Plantaĵo"
 
 msgid "A mature melon stem attempts to grow a melon at one of its four adjacent blocks. A melon can only grow on top of farmland, dirt, or a grass block. When a melon is next to a melon stem, the melon stem immediately bends and connects to the melon. While connected, a melon stem can't grow another melon. As soon all melons around the stem have been removed, it loses the connection and is ready to grow another melon."
 msgstr ""
 
 msgid "Melon Slice"
-msgstr ""
+msgstr "Melona Tranĉaĵo"
 
 msgid "This is a food item which can be eaten."
-msgstr ""
+msgstr "Tiu ĉi estas manĝaĵa portaĵo kiun oni povas manĝi."
 
 msgid "Premature Potato Plant"
-msgstr ""
+msgstr "Nematura Terpoma Plantaĵo"
 
 msgid "Potato plants are plants which grow on farmland under sunlight in 8 stages, but only 4 stages can be visually told apart. On hydrated farmland, they grow a bit faster. They can be harvested at any time but will only yield a profit when mature."
 msgstr ""
@@ -164,13 +168,13 @@ msgid "Premature Potato Plant (Stage @1)"
 msgstr ""
 
 msgid "Mature Potato Plant"
-msgstr ""
+msgstr "Matura Terpoma Plantaĵo"
 
 msgid "Mature potato plants are ready to be harvested for potatoes. They won't grow any further."
 msgstr ""
 
 msgid "Potato"
-msgstr ""
+msgstr "Terpomo"
 
 msgid "Potatoes are food items which can be eaten, cooked in the furnace and planted. Pigs like potatoes."
 msgstr ""
@@ -179,22 +183,22 @@ msgid "Hold it in your hand and rightclick to eat it. Place it on top of farmlan
 msgstr ""
 
 msgid "Baked Potato"
-msgstr ""
+msgstr "Bakita Terpomo"
 
 msgid "Baked potatoes are food items which are more filling than the unbaked ones."
 msgstr ""
 
 msgid "Poisonous Potato"
-msgstr ""
+msgstr "Venena Terpomo"
 
 msgid "60% chance of poisoning"
-msgstr ""
+msgstr "60% verŝajneco de veneniĝo"
 
 msgid "This potato doesn't look too healthy. You can eat it to restore hunger points, but there's a 60% chance it will poison you briefly."
 msgstr ""
 
 msgid "Pumpkin Seeds"
-msgstr ""
+msgstr "Kukurba Semo"
 
 msgid "Grows into a pumpkin stem which in turn grows pumpkins. Chickens like pumpkin seeds."
 msgstr ""
@@ -203,7 +207,7 @@ msgid "Place the pumpkin seeds on farmland (which can be created with a hoe) to 
 msgstr ""
 
 msgid "Premature Pumpkin Stem"
-msgstr ""
+msgstr "Nematura Kukurba Plantaĵo"
 
 msgid "Pumpkin stems grow on farmland in 8 stages. On hydrated farmland, the growth is a bit quicker. Mature pumpkin stems are able to grow pumpkins."
 msgstr ""
@@ -212,13 +216,13 @@ msgid "Premature Pumpkin Stem (Stage @1)"
 msgstr ""
 
 msgid "Mature Pumpkin Stem"
-msgstr ""
+msgstr "Matura Kukurba Plantaĵo"
 
 msgid "A mature pumpkin stem attempts to grow a pumpkin at one of its four adjacent blocks. A pumpkin can only grow on top of farmland, dirt or a grass block. When a pumpkin is next to a pumpkin stem, the pumpkin stem immediately bends and connects to the pumpkin. A connected pumpkin stem can't grow another pumpkin. As soon all pumpkins around the stem have been removed, it loses the connection and is ready to grow another pumpkin."
 msgstr ""
 
 msgid "Faceless Pumpkin"
-msgstr ""
+msgstr "Senvizaĝa Kukurbo"
 
 msgid "A faceless pumpkin is a decorative block. It can be carved with shears to obtain pumpkin seeds."
 msgstr ""
@@ -227,7 +231,7 @@ msgid "To carve a face into the pumpkin, use the shears on the side you want to 
 msgstr ""
 
 msgid "Pumpkin"
-msgstr ""
+msgstr "Kukurbo"
 
 msgid "A pumpkin can be worn as a helmet. Pumpkins grow from pumpkin stems, which in turn grow from pumpkin seeds."
 msgstr ""
@@ -239,19 +243,19 @@ msgid "A jack o'lantern is a traditional Halloween decoration made from a pumpki
 msgstr ""
 
 msgid "Pumpkin Pie"
-msgstr ""
+msgstr "Kukurba Kuko"
 
 msgid "A pumpkin pie is a tasty food item which can be eaten."
-msgstr ""
+msgstr "Kukurba kuko estas bongusta manĝaĵa portaĵo kion oni povas manĝi."
 
 msgid "Farmland"
-msgstr ""
+msgstr "Terkultiva Kampo"
 
 msgid "Surface for crops"
 msgstr ""
 
 msgid "Can become wet"
-msgstr ""
+msgstr "Povas iĝi malseka"
 
 msgid "Farmland is used for farming, a necessary surface to plant crops. It is created when a hoe is used on dirt or a similar block. Plants are able to grow on farmland, but slowly. Farmland will become hydrated farmland (on which plants grow faster) when it rains or a water source is nearby. This block will turn back to dirt when a solid block appears above it or a piston arm extends above it."
 msgstr ""
@@ -266,37 +270,37 @@ msgid "Sweet Berry Bush (Stage @1)"
 msgstr ""
 
 msgid "Sweet Berry"
-msgstr ""
+msgstr "Dolĉa Bero"
 
 msgid "Wheat Seeds"
-msgstr ""
+msgstr "Tritika Semo"
 
 msgid "Grows into a wheat plant. Chickens like wheat seeds."
-msgstr ""
+msgstr "Kreskas al tritiko. Kokoj ŝatas tritikan semon."
 
 msgid "Premature Wheat Plant"
-msgstr ""
+msgstr "Nematura Tritika Plantaĵo"
 
 msgid "Premature Wheat Plant (Stage @1)"
 msgstr ""
 
 msgid "Mature Wheat Plant"
-msgstr ""
+msgstr "Matura Tritika Plantaĵo"
 
 msgid "Wheat"
-msgstr ""
+msgstr "Tritiko"
 
 msgid "Wheat is used in crafting. Some animals like wheat."
-msgstr ""
+msgstr "Tritiko estas uzata en kunmetado. Kelkaj bestoj ŝatas tritikon."
 
 msgid "Use the “Place” key on an animal to try to feed it wheat."
 msgstr ""
 
 msgid "Cookie"
-msgstr ""
+msgstr "Biskvito"
 
 msgid "Bread"
-msgstr ""
+msgstr "Pano"
 
 msgid "Hay Bale"
 msgstr ""
@@ -321,4 +325,3 @@ msgid "\n"
 "		They won't grow any further.\n"
 "	"
 msgstr ""
-

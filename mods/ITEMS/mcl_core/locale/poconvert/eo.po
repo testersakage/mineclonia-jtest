@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-23 10:21+0000\n"
-"Last-Translator: Notxor <notxor@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-22 20:21+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
 "Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_core/eo/>\n"
 "Language: eo\n"
@@ -12,24 +12,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Stick"
 msgstr "Bastono"
 
 msgid "Sticks are a very versatile crafting material; used in countless crafting recipes."
 msgstr ""
-"Bastonetoj estas tre pluruza metia materialo; uzataj en sennombraj metiartaj "
+"Bastonetoj estas tre pluruzaj materialoj; uzataj en sennombraj kunmet-"
 "receptoj."
 
 msgid "Paper"
-msgstr ""
+msgstr "Papero"
 
 msgid "Paper is used to craft books and maps."
-msgstr ""
+msgstr "Paperon oni uzas por fari librojn kaj mapojn."
 
 msgid "Coal"
-msgstr ""
+msgstr "Karbo"
 
 msgid "“Coal” refers to coal lumps obtained by digging coal ore which can be found underground. Coal is your standard furnace fuel, but it can also be used to make torches, coal blocks and a few other things."
 msgstr ""
@@ -53,7 +53,7 @@ msgid "Gold nuggets are very small pieces of molten gold; the main purpose is to
 msgstr ""
 
 msgid "Diamond"
-msgstr ""
+msgstr "Diamanto"
 
 msgid "Diamonds are precious minerals and useful to create the highest tier of armor and tools."
 msgstr ""
@@ -71,7 +71,7 @@ msgid "Iron Ingot"
 msgstr ""
 
 msgid "Molten iron. It is used to craft armor, tools, and whatnot."
-msgstr ""
+msgstr "Fandita fero. Uzebla por fari armaĵon, ilojn, kaj aliaĵojn."
 
 msgid "Iron Material"
 msgstr ""
@@ -80,13 +80,13 @@ msgid "Gold Ingot"
 msgstr ""
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
-msgstr ""
+msgstr "Fandita oro. Uzebla por fari armaĵon, ilojn, kaj aliaĵojn."
 
 msgid "Gold Material"
 msgstr ""
 
 msgid "Emerald"
-msgstr ""
+msgstr "Smeraldo"
 
 msgid "Emeralds are used in villager trades as currency."
 msgstr ""
@@ -104,7 +104,7 @@ msgid "Lapis Material"
 msgstr ""
 
 msgid "Brick"
-msgstr ""
+msgstr "Briko"
 
 msgid "Bricks are used to craft brick blocks."
 msgstr ""
@@ -116,229 +116,229 @@ msgid "Flint is a raw material."
 msgstr ""
 
 msgid "Sugar"
-msgstr ""
+msgstr "Sukero"
 
 msgid "Sugar comes from sugar canes and is used to make sweet foods."
 msgstr ""
 
 msgid "Bowl"
-msgstr ""
+msgstr "Bovlo"
 
 msgid "Bowls are mainly used to hold tasty soups."
 msgstr ""
 
 msgid "Apple"
-msgstr ""
+msgstr "Pomo"
 
 msgid "Apples are food items which can be eaten."
-msgstr ""
+msgstr "Pomoj estas nutraĵaj portaĵoj kiujn oni povas manĝi."
 
 msgid "Golden Apple"
-msgstr ""
+msgstr "Ora Pomo"
 
 msgid "Golden apples are precious food items which can be eaten."
-msgstr ""
+msgstr "Oraj pomoj estas altvaloraj portaĵoj kiujn oni povas manĝi."
 
 msgid "Enchanted Golden Apple"
-msgstr ""
+msgstr "Sorĉita Ora Pomo"
 
 msgid "Acacia Bark"
-msgstr ""
+msgstr "Akacia Ŝelo"
 
 msgid "Acacia Bark Slab"
-msgstr ""
+msgstr "Akacia Ŝela Plato"
 
 msgid "Acacia Bark Stairs"
-msgstr ""
+msgstr "Akacia Ŝela Ŝtuparo"
 
 msgid "Acacia Boat"
-msgstr ""
+msgstr "Akacia Boato"
 
 msgid "Acacia Button"
-msgstr ""
+msgstr "Akacia Butono"
 
 msgid "Acacia Chest Boat"
 msgstr ""
 
 msgid "Acacia Door"
-msgstr ""
+msgstr "Akacia Pordo"
 
 msgid "Acacia Fence"
-msgstr ""
+msgstr "Akacia Barilo"
 
 msgid "Acacia Fence Gate"
-msgstr ""
+msgstr "Akacia Barila Pordego"
 
 msgid "Acacia Hanging Sign"
-msgstr ""
+msgstr "Akacia Penda Ŝildo"
 
 msgid "Acacia Leaves"
-msgstr ""
+msgstr "Akaciaj Folioj"
 
 msgid "Acacia Log"
-msgstr ""
+msgstr "Akacia Ŝtipo"
 
 msgid "Acacia Planks"
-msgstr ""
+msgstr "Akacia Planko"
 
 msgid "Acacia Pressure Plate"
-msgstr ""
+msgstr "Akacia Premplato"
 
 msgid "Acacia Sapling"
-msgstr ""
+msgstr "Akacia Arbido"
 
 msgid "Acacia Sign"
-msgstr ""
+msgstr "Akacia Ŝildo"
 
 msgid "Acacia Slab"
-msgstr ""
+msgstr "Akacia Plato"
 
 msgid "Acacia Stairs"
-msgstr ""
+msgstr "Akacia Ŝtuparo"
 
 msgid "Acacia Trapdoor"
-msgstr ""
+msgstr "Akacia Klappordo"
 
 msgid "Acacia leaves are grown from Acacia trees."
 msgstr ""
 
 msgid "Birch Bark"
-msgstr ""
+msgstr "Betula Ŝelo"
 
 msgid "Birch Bark Slab"
-msgstr ""
+msgstr "Betula Ŝela Plato"
 
 msgid "Birch Bark Stairs"
-msgstr ""
+msgstr "Betula Ŝela Ŝtuparo"
 
 msgid "Birch Boat"
-msgstr ""
+msgstr "Betula Boato"
 
 msgid "Birch Button"
-msgstr ""
+msgstr "Betula Butono"
 
 msgid "Birch Chest Boat"
 msgstr ""
 
 msgid "Birch Door"
-msgstr ""
+msgstr "Betula Pordo"
 
 msgid "Birch Fence"
-msgstr ""
+msgstr "Betula Barilo"
 
 msgid "Birch Fence Gate"
-msgstr ""
+msgstr "Betula Barila Pordego"
 
 msgid "Birch Hanging Sign"
-msgstr ""
+msgstr "Betula Penda Ŝildo"
 
 msgid "Birch Leaves"
-msgstr ""
+msgstr "Betulaj Folioj"
 
 msgid "Birch Log"
-msgstr ""
+msgstr "Betula Ŝtipo"
 
 msgid "Birch Planks"
-msgstr ""
+msgstr "Betula Planko"
 
 msgid "Birch Pressure Plate"
-msgstr ""
+msgstr "Betula Premplato"
 
 msgid "Birch Sapling"
-msgstr ""
+msgstr "Betula Arbido"
 
 msgid "Birch Sign"
-msgstr ""
+msgstr "Betula Ŝildo"
 
 msgid "Birch Slab"
-msgstr ""
+msgstr "Betula Plato"
 
 msgid "Birch Stairs"
-msgstr ""
+msgstr "Betula Ŝtuparo"
 
 msgid "Birch Trapdoor"
-msgstr ""
+msgstr "Betula Klappordo"
 
 msgid "Birch leaves are grown from Birch trees."
 msgstr ""
 
 msgid "Black Stained Glass"
-msgstr ""
+msgstr "Nigrigita Vitro"
 
 msgid "Blue Stained Glass"
-msgstr ""
+msgstr "Bluigita Vitro"
 
 msgid "Brown Stained Glass"
-msgstr ""
+msgstr "Brunigita Vitro"
 
 msgid "Cyan Stained Glass"
-msgstr ""
+msgstr "Cejanigita Vitro"
 
 msgid "Dark Oak Bark"
-msgstr ""
+msgstr "Malhela Kverka Ŝelo"
 
 msgid "Dark Oak Bark Slab"
-msgstr ""
+msgstr "Malhela Kverka Ŝela Plato"
 
 msgid "Dark Oak Bark Stairs"
-msgstr ""
+msgstr "Malhela Kverka Ŝela Ŝtuparo"
 
 msgid "Dark Oak Boat"
-msgstr ""
+msgstr "Malhela Kverka Boato"
 
 msgid "Dark Oak Button"
-msgstr ""
+msgstr "Malhela Kverka Butono"
 
 msgid "Dark Oak Chest Boat"
 msgstr ""
 
 msgid "Dark Oak Door"
-msgstr ""
+msgstr "Malhela Kverka Pordo"
 
 msgid "Dark Oak Fence"
-msgstr ""
+msgstr "Malhela Kverka Barilo"
 
 msgid "Dark Oak Fence Gate"
-msgstr ""
+msgstr "Malhela Kverka Barila Pordego"
 
 msgid "Dark Oak Hanging Sign"
-msgstr ""
+msgstr "Malhela Kverka Penda Ŝildo"
 
 msgid "Dark Oak Leaves"
-msgstr ""
+msgstr "Malhelaj Kverkaj Folioj"
 
 msgid "Dark Oak Log"
-msgstr ""
+msgstr "Malhela Kverka Ŝtipo"
 
 msgid "Dark Oak Planks"
-msgstr ""
+msgstr "Malhela Kverka Planko"
 
 msgid "Dark Oak Pressure Plate"
-msgstr ""
+msgstr "Malhela Kverka Premplato"
 
 msgid "Dark Oak Sapling"
-msgstr ""
+msgstr "Malhela Kverka Arbido"
 
 msgid "Dark Oak Sign"
-msgstr ""
+msgstr "Malhela Kverka Ŝildo"
 
 msgid "Dark Oak Slab"
-msgstr ""
+msgstr "Malhela Kverka Plato"
 
 msgid "Dark Oak Stairs"
-msgstr ""
+msgstr "Malhela Kverka Ŝtuparo"
 
 msgid "Dark Oak Trapdoor"
-msgstr ""
+msgstr "Malhela Kverka Klappordo"
 
 msgid "Dark Oak leaves are grown from Dark Oak trees."
 msgstr ""
 
 msgid "Green Stained Glass"
-msgstr ""
+msgstr "Verdigita Vitro"
 
 msgid "Grey Stained Glass"
-msgstr ""
+msgstr "Grizigita Vitro"
 
 msgid "Jungle Bark"
 msgstr ""
@@ -401,88 +401,88 @@ msgid "Jungle leaves are grown from Jungle trees."
 msgstr ""
 
 msgid "Light Blue Stained Glass"
-msgstr ""
+msgstr "Helbluigita Vitro"
 
 msgid "Light Grey Stained Glass"
-msgstr ""
+msgstr "Helgrizigita Vitro"
 
 msgid "Lime Stained Glass"
-msgstr ""
+msgstr "Verdcitronigita Vitro"
 
 msgid "Magenta Stained Glass"
-msgstr ""
+msgstr "Fuĥsigita Vitro"
 
 msgid "Oak Bark"
-msgstr ""
+msgstr "Kverka Ŝelo"
 
 msgid "Oak Bark Slab"
-msgstr ""
+msgstr "Kverka Ŝela Plato"
 
 msgid "Oak Bark Stairs"
-msgstr ""
+msgstr "Kverkŝela Ŝtuparo"
 
 msgid "Oak Boat"
-msgstr ""
+msgstr "Kverka Boato"
 
 msgid "Oak Button"
-msgstr ""
+msgstr "Kverka Butono"
 
 msgid "Oak Chest Boat"
-msgstr ""
+msgstr "Kverka Kesta Boato"
 
 msgid "Oak Door"
-msgstr ""
+msgstr "Kverka Pordo"
 
 msgid "Oak Fence"
-msgstr ""
+msgstr "Kverka Barilo"
 
 msgid "Oak Fence Gate"
-msgstr ""
+msgstr "Kverka Barila Pordego"
 
 msgid "Oak Hanging Sign"
-msgstr ""
+msgstr "Kverka Penda Ŝildo"
 
 msgid "Oak Leaves"
-msgstr ""
+msgstr "Kverkaj Folioj"
 
 msgid "Oak Log"
-msgstr ""
+msgstr "Kverka Ŝtipo"
 
 msgid "Oak Planks"
-msgstr ""
+msgstr "Kverka Planko"
 
 msgid "Oak Pressure Plate"
-msgstr ""
+msgstr "Kverka Premplato"
 
 msgid "Oak Sapling"
-msgstr ""
+msgstr "Kverka Arbido"
 
 msgid "Oak Sign"
-msgstr ""
+msgstr "Kverka Ŝildo"
 
 msgid "Oak Slab"
-msgstr ""
+msgstr "Kverka Plato"
 
 msgid "Oak Stairs"
-msgstr ""
+msgstr "Kverka Ŝtuparo"
 
 msgid "Oak Trapdoor"
-msgstr ""
+msgstr "Kverka Klappordo"
 
 msgid "Oak leaves are grown from Oak trees."
 msgstr ""
 
 msgid "Orange Stained Glass"
-msgstr ""
+msgstr "Oranĝigita Vitro"
 
 msgid "Pink Stained Glass"
-msgstr ""
+msgstr "Rozkolorigita Vitro"
 
 msgid "Purple Stained Glass"
-msgstr ""
+msgstr "Violkolorigita Vitro"
 
 msgid "Red Stained Glass"
-msgstr ""
+msgstr "Ruĝigita Vitro"
 
 msgid "Spruce Bark"
 msgstr ""
@@ -635,13 +635,13 @@ msgid "The trunk of a Spruce tree."
 msgstr ""
 
 msgid "White Stained Glass"
-msgstr ""
+msgstr "Blankigita Vitro"
 
 msgid "Yellow Stained Glass"
-msgstr ""
+msgstr "Flavigita Vitro"
 
 msgid "Stone"
-msgstr ""
+msgstr "Ŝtono"
 
 msgid "One of the most common blocks in the world, almost the entire underground consists of stone. It sometimes contains ores. Stone may be created when water meets lava."
 msgstr ""
@@ -707,16 +707,16 @@ msgid "Smooth Stone"
 msgstr ""
 
 msgid "Granite"
-msgstr ""
+msgstr "Grantio"
 
 msgid "Granite is an igneous rock."
 msgstr ""
 
 msgid "Polished Granite"
-msgstr ""
+msgstr "Polurita Granito"
 
 msgid "Polished granite is a decorative building block made from granite."
-msgstr ""
+msgstr "Polurita granito estas ornama konstrua bloko farita el granito."
 
 msgid "Andesite"
 msgstr ""
@@ -794,10 +794,10 @@ msgid "This block consists of a couple of loose stones and can't support itself.
 msgstr ""
 
 msgid "Sand"
-msgstr ""
+msgstr "Sablo"
 
 msgid "Sand is found in large quantities at beaches and deserts."
-msgstr ""
+msgstr "Sablon oni trovas en granda kvanto ĉe bordoj kaj dezertoj."
 
 msgid "Sandstone"
 msgstr ""
@@ -875,10 +875,10 @@ msgid "In the End dimension, starting a fire on this block will create an eterna
 msgstr ""
 
 msgid "Cobblestone"
-msgstr ""
+msgstr "Pavimŝtono"
 
 msgid "Mossy Cobblestone"
-msgstr ""
+msgstr "Muska Pavimŝtono"
 
 msgid "Block of Coal"
 msgstr ""
@@ -968,7 +968,7 @@ msgid "This block can only be placed on full solid blocks and on another top sno
 msgstr ""
 
 msgid "Snow"
-msgstr ""
+msgstr "Neĝo"
 
 msgid "This is a full block of snow. Snow of this thickness is usually found in areas of extreme cold."
 msgstr ""
@@ -1001,7 +1001,7 @@ msgid "Sugar canes can only be placed top of other sugar canes and on top of blo
 msgstr ""
 
 msgid "Ladder"
-msgstr ""
+msgstr "Ŝtupetaro"
 
 msgid "A piece of ladder which allows you to climb vertically. Ladders can only be placed on the side of solid blocks and not on glass, leaves, ice, slabs, glowstone, nor sea lanterns."
 msgstr ""
@@ -1013,7 +1013,7 @@ msgid "Vines are climbable blocks which can be placed on the sides of solid full
 msgstr ""
 
 msgid "Glass"
-msgstr ""
+msgstr "Vitro"
 
 msgid "A decorative and mostly transparent block."
 msgstr ""
@@ -1031,7 +1031,7 @@ msgid "Water Source"
 msgstr ""
 
 msgid "Water"
-msgstr ""
+msgstr "Akvo"
 
 msgid "Water is abundant in oceans and also appears in a few springs in the ground. You can swim easily in water, but you need to catch your breath from time to time."
 msgstr ""
@@ -1044,6 +1044,8 @@ msgstr ""
 
 msgid "• When flowing water touches flowing lava either from above or horizontally, the lava turns into cobblestone."
 msgstr ""
+"• Kiam fluanta akvo tuŝas fluantan lafon aŭ de supre aŭ horizontale, la lafo "
+"fariĝas pavimŝtono."
 
 msgid "• When water is directly below lava, the water turns into stone."
 msgstr ""
@@ -1115,7 +1117,7 @@ msgid "Realm Barrier"
 msgstr ""
 
 msgid "Light"
-msgstr ""
+msgstr "Lumo"
 
 msgid "Lights are invisible blocks. They are used to light up adventure maps and the like."
 msgstr ""
@@ -1142,10 +1144,10 @@ msgid "Andesite Slab"
 msgstr ""
 
 msgid "Granite Stairs"
-msgstr ""
+msgstr "Granita Ŝtuparo"
 
 msgid "Granite Slab"
-msgstr ""
+msgstr "Granita Plato"
 
 msgid "Diorite Stairs"
 msgstr ""
@@ -1154,16 +1156,16 @@ msgid "Diorite Slab"
 msgstr ""
 
 msgid "Cobblestone Stairs"
-msgstr ""
+msgstr "Pavimŝtona Ŝtuparo"
 
 msgid "Cobblestone Slab"
-msgstr ""
+msgstr "Pavimŝtona Plato"
 
 msgid "Mossy Cobblestone Stairs"
-msgstr ""
+msgstr "Muska Pavimŝtona Ŝtuparo"
 
 msgid "Mossy Cobblestone Slab"
-msgstr ""
+msgstr "Muska Pavimŝtona Plato"
 
 msgid "Brick Stairs"
 msgstr ""
@@ -1220,10 +1222,10 @@ msgid "Polished Andesite Slab"
 msgstr ""
 
 msgid "Polished Granite Stairs"
-msgstr ""
+msgstr "Polurita Granita Ŝtuparo"
 
 msgid "Polished Granite Slab"
-msgstr ""
+msgstr "Polurita Granita Plato"
 
 msgid "Polished Diorite Stairs"
 msgstr ""

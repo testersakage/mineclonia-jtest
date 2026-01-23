@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-16 14:11+0000\n"
-"Last-Translator: Notxor <notxor@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-12 13:21+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
 "Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
 "mclx_stairs/eo/>\n"
 "Language: eo\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Lapis Lazuli Stairs"
 msgstr "Ŝtuparo el lazurŝtono"
@@ -21,16 +21,16 @@ msgid "Lapis Lazuli Slab"
 msgstr ""
 
 msgid "Gold Stairs"
-msgstr ""
+msgstr "Ora Ŝtuparo"
 
 msgid "Gold Slab"
-msgstr ""
+msgstr "Ora Plato"
 
 msgid "Iron Stairs"
-msgstr ""
+msgstr "Fera Ŝtuparo"
 
 msgid "Iron Slab"
-msgstr ""
+msgstr "Fera Plato"
 
 msgid "Cracked Stone Brick Stairs"
 msgstr ""
@@ -57,7 +57,7 @@ msgid "End Stone Slab"
 msgstr ""
 
 msgid "Smooth Stone Stairs"
-msgstr ""
+msgstr "Glata Ŝtona Ŝtuparo"
 
 msgid "Terracotta Stairs"
 msgstr ""
@@ -66,22 +66,22 @@ msgid "Terracotta Slab"
 msgstr ""
 
 msgid "Concrete Slab"
-msgstr ""
+msgstr "Betona Plato"
 
 msgid "Double Concrete Slab"
-msgstr ""
+msgstr "Duobla Betona Plato"
 
 msgid "Concrete Stairs"
-msgstr ""
+msgstr "Betona Ŝtuparo"
 
 msgid "Double Terracotta Slab"
 msgstr ""
 
 msgid "Black Concrete Slab"
-msgstr ""
+msgstr "Nigra Betona Plato"
 
 msgid "Black Concrete Stairs"
-msgstr ""
+msgstr "Nigra Betona Ŝtuparo"
 
 msgid "Black Terracotta Slab"
 msgstr ""
@@ -90,10 +90,10 @@ msgid "Black Terracotta Stairs"
 msgstr ""
 
 msgid "Blue Concrete Slab"
-msgstr ""
+msgstr "Blua Betona Plato"
 
 msgid "Blue Concrete Stairs"
-msgstr ""
+msgstr "Blua Betona Ŝtuparo"
 
 msgid "Blue Terracotta Slab"
 msgstr ""
@@ -102,10 +102,10 @@ msgid "Blue Terracotta Stairs"
 msgstr ""
 
 msgid "Brown Concrete Slab"
-msgstr ""
+msgstr "Bruna Betona Plato"
 
 msgid "Brown Concrete Stairs"
-msgstr ""
+msgstr "Bruna Betona Ŝtuparo"
 
 msgid "Brown Terracotta Slab"
 msgstr ""
@@ -114,10 +114,10 @@ msgid "Brown Terracotta Stairs"
 msgstr ""
 
 msgid "Cyan Concrete Slab"
-msgstr ""
+msgstr "Cejana Betona Plato"
 
 msgid "Cyan Concrete Stairs"
-msgstr ""
+msgstr "Cejana Betona Ŝtuparo"
 
 msgid "Cyan Terracotta Slab"
 msgstr ""
@@ -126,10 +126,10 @@ msgid "Cyan Terracotta Stairs"
 msgstr ""
 
 msgid "Green Concrete Slab"
-msgstr ""
+msgstr "Verda Betona Plato"
 
 msgid "Green Concrete Stairs"
-msgstr ""
+msgstr "Verda Betona Ŝtuparo"
 
 msgid "Green Terracotta Slab"
 msgstr ""
@@ -138,10 +138,10 @@ msgid "Green Terracotta Stairs"
 msgstr ""
 
 msgid "Grey Concrete Slab"
-msgstr ""
+msgstr "Griza Betona Plato"
 
 msgid "Grey Concrete Stairs"
-msgstr ""
+msgstr "Griza Betona Ŝtuparo"
 
 msgid "Grey Terracotta Slab"
 msgstr ""
@@ -150,10 +150,10 @@ msgid "Grey Terracotta Stairs"
 msgstr ""
 
 msgid "Light Blue Concrete Slab"
-msgstr ""
+msgstr "Helblua Betona Plato"
 
 msgid "Light Blue Concrete Stairs"
-msgstr ""
+msgstr "Helblua Betona Ŝtuparo"
 
 msgid "Light Blue Terracotta Slab"
 msgstr ""
@@ -162,10 +162,10 @@ msgid "Light Blue Terracotta Stairs"
 msgstr ""
 
 msgid "Light Grey Concrete Slab"
-msgstr ""
+msgstr "Helgriza Betona Plato"
 
 msgid "Light Grey Concrete Stairs"
-msgstr ""
+msgstr "Helgriza Betona Ŝtuparo"
 
 msgid "Light Grey Terracotta Slab"
 msgstr ""
@@ -174,10 +174,10 @@ msgid "Light Grey Terracotta Stairs"
 msgstr ""
 
 msgid "Lime Concrete Slab"
-msgstr ""
+msgstr "Verdcitrona Betona Plato"
 
 msgid "Lime Concrete Stairs"
-msgstr ""
+msgstr "Verdcitrona Betona Ŝtuparo"
 
 msgid "Lime Terracotta Slab"
 msgstr ""
@@ -186,10 +186,10 @@ msgid "Lime Terracotta Stairs"
 msgstr ""
 
 msgid "Magenta Concrete Slab"
-msgstr ""
+msgstr "Fuĥsia Betona Plato"
 
 msgid "Magenta Concrete Stairs"
-msgstr ""
+msgstr "Fuĥsia Betona Ŝtuparo"
 
 msgid "Magenta Terracotta Slab"
 msgstr ""
@@ -198,10 +198,10 @@ msgid "Magenta Terracotta Stairs"
 msgstr ""
 
 msgid "Orange Concrete Slab"
-msgstr ""
+msgstr "Oranĝa Betona Plato"
 
 msgid "Orange Concrete Stairs"
-msgstr ""
+msgstr "Oranĝa Betona Ŝtuparo"
 
 msgid "Orange Terracotta Slab"
 msgstr ""
@@ -210,10 +210,10 @@ msgid "Orange Terracotta Stairs"
 msgstr ""
 
 msgid "Pink Concrete Slab"
-msgstr ""
+msgstr "Rozkolora Betona Plato"
 
 msgid "Pink Concrete Stairs"
-msgstr ""
+msgstr "Rozkolora Betona Ŝtuparo"
 
 msgid "Pink Terracotta Slab"
 msgstr ""
@@ -234,10 +234,10 @@ msgid "Purple Terracotta Stairs"
 msgstr ""
 
 msgid "Red Concrete Slab"
-msgstr ""
+msgstr "Ruĝa Betona Plato"
 
 msgid "Red Concrete Stairs"
-msgstr ""
+msgstr "Ruĝa Betona Ŝtuparo"
 
 msgid "Red Terracotta Slab"
 msgstr ""
@@ -246,10 +246,10 @@ msgid "Red Terracotta Stairs"
 msgstr ""
 
 msgid "White Concrete Slab"
-msgstr ""
+msgstr "Blanka Betona Plato"
 
 msgid "White Concrete Stairs"
-msgstr ""
+msgstr "Blanka Betona Ŝtuparo"
 
 msgid "White Terracotta Slab"
 msgstr ""
@@ -258,10 +258,10 @@ msgid "White Terracotta Stairs"
 msgstr ""
 
 msgid "Yellow Concrete Slab"
-msgstr ""
+msgstr "Flava Betona Plato"
 
 msgid "Yellow Concrete Stairs"
-msgstr ""
+msgstr "Flava Betona Ŝtuparo"
 
 msgid "Yellow Terracotta Slab"
 msgstr ""

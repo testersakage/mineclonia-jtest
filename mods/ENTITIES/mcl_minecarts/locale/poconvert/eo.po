@@ -3,27 +3,28 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_minecarts x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-01-12 13:21+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
+"Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_minecarts/eo/>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Sneak-click to remove"
 msgstr "Kaŝiro+clik por elimini"
 
 msgid "Minecart"
-msgstr ""
+msgstr "Mineja Ĉaro"
 
 msgid "Vehicle for fast travel on rails"
-msgstr ""
+msgstr "Veturilo por rapide vojaĝi sur reloj"
 
 msgid "Minecarts can be used for a quick transportion on rails."
-msgstr ""
+msgstr "Minejajn Ĉarojn oni povas uzi por rapida transporto sur reloj."
 
 msgid "Minecarts only ride on rails and always follow the tracks. At a T-junction with no straight way ahead, they turn left. The speed is affected by the rail type."
 msgstr ""
@@ -41,10 +42,10 @@ msgid "Sneak to dismount"
 msgstr "Kaŝiru por desalti"
 
 msgid "Minecart with Chest"
-msgstr ""
+msgstr "Mineja Ĉaro kun Kesto"
 
 msgid "Minecart with Furnace"
-msgstr ""
+msgstr "Mineja Ĉaro kun Forno"
 
 msgid "A minecart with furnace is a vehicle that travels on rails. It can propel itself with fuel."
 msgstr ""
@@ -80,7 +81,7 @@ msgid "Place them on the ground to build your railway, the rails will automatica
 msgstr ""
 
 msgid "Rail"
-msgstr ""
+msgstr "Relo"
 
 msgid "Track for minecarts"
 msgstr ""
@@ -123,4 +124,3 @@ msgstr ""
 
 msgid "To detect a minecart and provide redstone power, connect it to redstone trails or redstone mechanisms and send any minecart over the rail."
 msgstr ""
-

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_dyes x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2026-01-04 14:21+0000\n"
-"Last-Translator: Notxor <notxor@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-06 21:21+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
 "Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_dyes/eo/>\n"
 "Language: eo\n"
@@ -15,57 +15,56 @@ msgstr ""
 "X-Generator: Weblate 5.15.1\n"
 
 msgid "This item is a dye which is used for dyeing and crafting."
-msgstr "Ĉi tiu aĵo estas tinkturo uzata por tinkturado kaj fabrikado."
+msgstr "Ĉi tiu portaĵo estas farbo uzata por farbado kaj kunmetado."
 
 msgid "Rightclick on a sheep to dye its wool. Other things are dyed by crafting."
 msgstr ""
-"Dekstre alklaku ŝafon por tinti ĝian lanon. Aliaj aĵoj estas tintigitaj "
-"metie."
+"Dekstre alklaku ŝafon por farbi ĝian lanon. Aliajn aĵojn farbu per kunmeto."
 
 msgid "Black Dye"
-msgstr ""
+msgstr "Nigra Farbo"
 
 msgid "Blue Dye"
-msgstr ""
+msgstr "Blua Farbo"
 
 msgid "Brown Dye"
-msgstr ""
+msgstr "Bruna Farbo"
 
 msgid "Cyan Dye"
-msgstr ""
+msgstr "Cejana Farbo"
 
 msgid "Green Dye"
-msgstr ""
+msgstr "Verda Farbo"
 
 msgid "Grey Dye"
-msgstr ""
+msgstr "Griza Farbo"
 
 msgid "Light Blue Dye"
-msgstr ""
+msgstr "Helblua Farbo"
 
 msgid "Light Grey Dye"
-msgstr ""
+msgstr "Helverda Farbo"
 
 msgid "Lime Dye"
-msgstr ""
+msgstr "Verdcitrona Farbo"
 
 msgid "Magenta Dye"
-msgstr ""
+msgstr "Fuĥsia Farbo"
 
 msgid "Orange Dye"
-msgstr ""
+msgstr "Oranĝa Farbo"
 
 msgid "Pink Dye"
-msgstr ""
+msgstr "Roza Farbo"
 
 msgid "Purple Dye"
-msgstr ""
+msgstr "Viola Farbo"
 
 msgid "Red Dye"
-msgstr ""
+msgstr "Ruĝa Farbo"
 
 msgid "White Dye"
-msgstr ""
+msgstr "Blanka Farbo"
 
 msgid "Yellow Dye"
-msgstr ""
+msgstr "Flava Farbo"

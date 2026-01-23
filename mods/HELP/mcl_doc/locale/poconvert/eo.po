@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-23 10:21+0000\n"
-"Last-Translator: Notxor <notxor@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-02 22:21+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
 "Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc/eo/>\n"
 "Language: eo\n"
@@ -18,7 +18,7 @@ msgid "Water can flow into this block and cause it to drop as an item."
 msgstr "Akvo povas eniri ĉi tiun blokon kaj kaŭzi, ke ĝi falos kiel aĵo."
 
 msgid "This block can be turned into dirt with a hoe."
-msgstr "Oni povas terigi ĉi tiun blokon per rastro."
+msgstr "Oni povas terigi ĉi tiun blokon per sarkilo."
 
 msgid "This block can be turned into farmland with a hoe."
 msgstr ""
@@ -99,10 +99,10 @@ msgid "It can be worn on the feet."
 msgstr ""
 
 msgid "Armor points: @1"
-msgstr ""
+msgstr "Armaĵpoentoj: @1"
 
 msgid "Armor durability: @1"
-msgstr ""
+msgstr "Armaĵa daŭremo: @1"
 
 msgid "This item cannot be renamed at an anvil."
 msgstr ""
@@ -114,49 +114,49 @@ msgid "When this block falls deeper than 1 block, it causes damage to any player
 msgstr ""
 
 msgid "Diamond Pickaxe"
-msgstr ""
+msgstr "Diamanta Hakfosilo"
 
 msgid "Iron Pickaxe"
-msgstr ""
+msgstr "Fera Hakfosilo"
 
 msgid "Stone Pickaxe"
-msgstr ""
+msgstr "Ŝtona Hakfosilo"
 
 msgid "Golden Pickaxe"
-msgstr ""
+msgstr "Ora Hakfosilo"
 
 msgid "Wooden Pickaxe"
-msgstr ""
+msgstr "Ligna Hakfosilo"
 
 msgid "Diamond Axe"
-msgstr ""
+msgstr "Diamanta Hakilo"
 
 msgid "Iron Axe"
-msgstr ""
+msgstr "Fera Hakilo"
 
 msgid "Stone Axe"
-msgstr ""
+msgstr "Ŝtona Hakilo"
 
 msgid "Golden Axe"
-msgstr ""
+msgstr "Ora Hakilo"
 
 msgid "Wooden Axe"
-msgstr ""
+msgstr "Ligna Hakilo"
 
 msgid "Diamond Shovel"
-msgstr ""
+msgstr "Diamanta Fosilo"
 
 msgid "Iron Shovel"
-msgstr ""
+msgstr "Fera Fosilo"
 
 msgid "Stone Shovel"
-msgstr ""
+msgstr "Ŝtona Fosilo"
 
 msgid "Golden Shovel"
-msgstr ""
+msgstr "Ora Fosilo"
 
 msgid "Wooden Shovel"
-msgstr ""
+msgstr "Ligna Fosilo"
 
 msgid "This block can be mined by any tool instantly."
 msgstr ""
@@ -165,7 +165,7 @@ msgid "• Shears"
 msgstr ""
 
 msgid "• Sword"
-msgstr ""
+msgstr "• Glavo"
 
 msgid "• Hand"
 msgstr ""

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_cherry_blossom x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-23 10:21+0000\n"
-"Last-Translator: Notxor <notxor@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-12 13:21+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
 "Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_cherry_blossom/eo/>\n"
 "Language: eo\n"
@@ -18,73 +18,73 @@ msgid "Cherry Bark"
 msgstr "Ĉerizŝelo"
 
 msgid "Cherry Bark Slab"
-msgstr "Ĉerizŝela Slabo"
+msgstr "Ĉerizŝela Plato"
 
 msgid "Cherry Bark Stairs"
 msgstr ""
 
 msgid "Cherry Boat"
-msgstr ""
+msgstr "Ĉherizarba Boato"
 
 msgid "Cherry Button"
-msgstr ""
+msgstr "Ĉerizarba Butono"
 
 msgid "Cherry Chest Boat"
-msgstr ""
+msgstr "Ĉerizarba Kesta Boato"
 
 msgid "Cherry Door"
-msgstr ""
+msgstr "Ĉerizarba Pordo"
 
 msgid "Cherry Fence"
-msgstr ""
+msgstr "Ĉerizarba Barilo"
 
 msgid "Cherry Fence Gate"
-msgstr ""
+msgstr "Ĉerizarba Barila Pordego"
 
 msgid "Cherry Hanging Sign"
-msgstr ""
+msgstr "Ĉerizarba Penda Ŝildo"
 
 msgid "Cherry Leaves"
-msgstr ""
+msgstr "Ĉerizaj Folioj"
 
 msgid "Cherry Log"
-msgstr ""
+msgstr "Ĉerizarba Ŝtipo"
 
 msgid "Cherry Planks"
 msgstr ""
 
 msgid "Cherry Pressure Plate"
-msgstr ""
+msgstr "Ĉerizarba Premplato"
 
 msgid "Cherry Sapling"
-msgstr ""
+msgstr "Ĉeriza Arbido"
 
 msgid "Cherry Sign"
-msgstr ""
+msgstr "Ĉerizarba Ŝildo"
 
 msgid "Cherry Slab"
-msgstr ""
+msgstr "Ĉerizarba Plato"
 
 msgid "Cherry Stairs"
-msgstr ""
+msgstr "Ĉerizarba Ŝtuparo"
 
 msgid "Cherry Trapdoor"
-msgstr ""
+msgstr "Ĉerizarba Klappordo"
 
 msgid "Cherry leaves are grown from Cherry trees."
-msgstr ""
+msgstr "Ĉerizaj folioj kreskas sur Ĉerizarboj."
 
 msgid "Stripped Cherry Bark"
 msgstr ""
 
 msgid "Stripped Cherry Log"
-msgstr ""
+msgstr "Senŝeligita Ĉerizarba Ŝtipo"
 
 msgid "The stripped trunk of an Cherry tree."
-msgstr ""
+msgstr "Senŝeligita trunko de Ĉerizarbo."
 
 msgid "The stripped wood of an Cherry tree."
-msgstr ""
+msgstr "Senŝeligita ligno de Ĉerizarbo."
 
 msgid "The trunk of a Cherry tree."
-msgstr ""
+msgstr "Trunko de Ĉerizarbo."

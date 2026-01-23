@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_beds x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-23 10:21+0000\n"
-"Last-Translator: Notxor <notxor@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-22 13:19+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
 "Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_beds/eo/>\n"
 "Language: eo\n"
@@ -12,10 +12,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Beds allow you to sleep at night and make the time pass faster."
-msgstr "Litoj eblas dormi nokte al vi kaj pasigas la tempon pli rapide."
+msgstr "Litoj ebligas al vi dormi nokte kaj pasigi la tempon pli rapide."
 
 msgid "To use a bed, stand close to it and right-click the bed to sleep in it. Sleeping only works when the sun sets, at night or during a thunderstorm. The bed must also be clear of any danger."
 msgstr ""
@@ -36,64 +36,64 @@ msgid "Sleeping allows you to skip the night. The night is skipped when all play
 msgstr ""
 
 msgid "Allows you to sleep"
-msgstr ""
+msgstr "Permesas al vi dormi"
 
 msgid "Bed"
-msgstr ""
+msgstr "Lito"
 
 msgid "You can only sleep at night or during a thunderstorm."
-msgstr ""
+msgstr "Vi povas dormi nur nokte aŭ dum fulmotondro."
 
 msgid "You can't sleep, the bed's too far away!"
-msgstr ""
+msgstr "Vi ne povas dormi, la lito estas tro malproksime!"
 
 msgid "This bed is already occupied!"
-msgstr ""
+msgstr "Tiu ĉi lito jam estas okupita!"
 
 msgid "You have to stop moving before going to bed!"
 msgstr ""
 
 msgid "You can't sleep now, monsters are nearby!"
-msgstr ""
+msgstr "Vi ne povas dormi nun, estas monstroj proksime!"
 
 msgid "You can't sleep, the bed is obstructed!"
 msgstr ""
 
 msgid "It's too dangerous to sleep here!"
-msgstr ""
+msgstr "Estas tro danĝere dormi tie ĉi!"
 
 msgid "Leave bed"
-msgstr ""
+msgstr "Ellitiĝi"
 
 msgid "Abort sleep"
-msgstr ""
+msgstr "Ĉesigi dormon"
 
 msgid "Chat:"
-msgstr ""
+msgstr "Retbabili:"
 
 msgid "send!"
-msgstr ""
+msgstr "sendi!"
 
 msgid "Players in bed: @1/@2"
-msgstr ""
+msgstr "Ludantoj enlitiĝintaj: @1/@2"
 
 msgid "Note: Night skip is disabled."
-msgstr ""
+msgstr "Noto: Preterpaso de nokto estas malebligita."
 
 msgid "You're sleeping."
-msgstr ""
+msgstr "Vi estas dormanta."
 
 msgid "You will fall asleep when all players are in bed."
-msgstr ""
+msgstr "Vi ekdormos kiam ĉiuj ludantoj enlitiĝos."
 
 msgid "You will fall asleep when @1% of all players are in bed."
-msgstr ""
+msgstr "Vi ekdormos kiam @1% de ĉiuj ludantoj enlitiĝos."
 
 msgid "You're in bed."
-msgstr ""
+msgstr "Vi enlitiĝis."
 
 msgid "@1/@2 players currently in bed."
-msgstr ""
+msgstr "@1/@2 ludantoj estas enlitiĝintaj."
 
 msgid "You exceeded the maximum number of messages per 10 seconds!"
 msgstr ""
@@ -108,58 +108,58 @@ msgid "Hey! Would you guys mind sleeping?"
 msgstr ""
 
 msgid "New respawn position set!"
-msgstr ""
+msgstr "Nova renaskiĝa loko estas agordita!"
 
 msgid "Black Bed"
-msgstr ""
+msgstr "Nigra Lito"
 
 msgid "Blue Bed"
-msgstr ""
+msgstr "Blua Lito"
 
 msgid "Brown Bed"
-msgstr ""
+msgstr "Bruna Lito"
 
 msgid "Cyan Bed"
-msgstr ""
+msgstr "Cejana Lito"
 
 msgid "Green Bed"
-msgstr ""
+msgstr "Verda Lito"
 
 msgid "Grey Bed"
-msgstr ""
+msgstr "Griza Lito"
 
 msgid "Light Blue Bed"
-msgstr ""
+msgstr "Malhelblua Lito"
 
 msgid "Light Grey Bed"
-msgstr ""
+msgstr "Malhelgriza Lito"
 
 msgid "Lime Bed"
-msgstr ""
+msgstr "Verdcitrona Lito"
 
 msgid "Magenta Bed"
-msgstr ""
+msgstr "Fuĥsia Lito"
 
 msgid "Orange Bed"
-msgstr ""
+msgstr "Oranĝa Lito"
 
 msgid "Pink Bed"
-msgstr ""
+msgstr "Rozkolora Lito"
 
 msgid "Purple Bed"
-msgstr ""
+msgstr "Viola Lito"
 
 msgid "Red Bed"
-msgstr ""
+msgstr "Ruĝa Lito"
 
 msgid "White Bed"
-msgstr ""
+msgstr "Blanka Lito"
 
 msgid "Yellow Bed"
-msgstr ""
+msgstr "Flava Lito"
 
 msgid "Respawn Anchor"
-msgstr ""
+msgstr "Renaskiĝa Ankro"
 
 msgid "The respawn anchor is a block that allows the player to set their spawn point in the Nether. It will only work if fueled using glowstone blocks."
 msgstr ""

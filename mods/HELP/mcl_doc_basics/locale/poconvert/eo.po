@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-23 10:21+0000\n"
-"Last-Translator: Notxor <notxor@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-22 20:21+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
 "Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_doc_basics/eo/>\n"
 "Language: eo\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Advanced usage"
 msgstr "Altnivela uzado"
@@ -604,7 +604,7 @@ msgid "• May be used for crafting or cooking"
 msgstr ""
 
 msgid "Inventory"
-msgstr "Inventaro"
+msgstr "Portaĵujo"
 
 msgid "Inventories are used to store item stacks. There are other uses, such as crafting. An inventory consists of a rectangular grid of item slots. Each item slot can either be empty or hold one item stack. Item stacks can be moved freely between most slots."
 msgstr ""
@@ -799,7 +799,7 @@ msgid "Normally, blocks are built in front of the pointed side of the pointed bl
 msgstr ""
 
 msgid "Crafting"
-msgstr "Elfarado"
+msgstr "Kunmetado"
 
 msgid "Crafting is the task of combining several items to form a new item."
 msgstr ""
@@ -994,7 +994,7 @@ msgid "Two animals of the same species will start to breed if they are in Love M
 msgstr ""
 
 msgid "Baby animals:"
-msgstr ""
+msgstr "Bestidoj:"
 
 msgid "Baby animals are just like their adult couterparts, but they can't be tamed or bred and don't drop anything when they die. They grow to adults after a short time. When fed, they grow to adults faster."
 msgstr ""
@@ -1171,7 +1171,7 @@ msgid "Liquids are often not pointable. But some special items are able to point
 msgstr ""
 
 msgid "Light"
-msgstr ""
+msgstr "Lumo"
 
 msgid "As the world is entirely block-based, so is the light in the world. Each block has its own brightness. The brightness of a block is expressed in a “light level” which ranges from 0 (total darkness) to 15 (as bright as the sun)."
 msgstr ""
@@ -1336,7 +1336,7 @@ msgid "• Spawning: Appearing in the world"
 msgstr ""
 
 msgid "• Respawning: Appearing again in the world after death"
-msgstr ""
+msgstr "• Renaskiĝo: Apero ree en la mondon post morto"
 
 msgid "• Group: Puts similar things together, often affects gameplay"
 msgstr ""

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-23 10:21+0000\n"
-"Last-Translator: Notxor <notxor@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-06 21:21+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
 "Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_copper/eo/>\n"
 "Language: eo\n"
@@ -15,31 +15,31 @@ msgstr ""
 "X-Generator: Weblate 5.15.1\n"
 
 msgid "Copper Ingot"
-msgstr "Kupringoto"
+msgstr "Kupra fandaĵo"
 
 msgid "Molten Raw Copper. It is used to craft blocks."
-msgstr "Fandita kruda kupro. Ĝi estas uzata por fabriki blokojn."
+msgstr "Fandita kruda kupro. Ĝi estas uzata por fari blokojn."
 
 msgid "Copper Material"
-msgstr ""
+msgstr "Kupra Materialo"
 
 msgid "Raw Copper"
-msgstr ""
+msgstr "Kruda Kupro"
 
 msgid "Raw Copper. Mine a Copper Ore to get it."
-msgstr ""
+msgstr "Kruda Kupro. Minu Kupran Ercon por akiri ĝin."
 
 msgid "Block of Copper"
-msgstr ""
+msgstr "Bloko de Kupro"
 
 msgid "Block of Copper is mostly a decorative block."
-msgstr ""
+msgstr "Bloko de Kupro ĉefe estas ornama bloko."
 
 msgid "Chiseled Copper"
-msgstr ""
+msgstr "Ĉizita Kupro"
 
 msgid "Chiseled Copper is mostly a decorative block."
-msgstr ""
+msgstr "Ĉizita Kupro ĉefe estas ornama bloko."
 
 msgid "Copper Bulb"
 msgstr ""
@@ -57,7 +57,7 @@ msgid "Copper Bulb is mostly a decorative block."
 msgstr ""
 
 msgid "Copper Door"
-msgstr ""
+msgstr "Kupra Pordo"
 
 msgid "Copper Grate"
 msgstr ""
@@ -66,7 +66,7 @@ msgid "Copper Grate is mostly a decorative block."
 msgstr ""
 
 msgid "Copper Trapdoor"
-msgstr ""
+msgstr "Kupra Klappordo"
 
 msgid "Cut Copper"
 msgstr ""
@@ -372,13 +372,13 @@ msgid "Weathered Cut Copper is mostly a decorative block."
 msgstr ""
 
 msgid "Copper Ore"
-msgstr ""
+msgstr "Kupra Erco"
 
 msgid "Some copper contained in stone, it is pretty common and can be found below sea level."
 msgstr ""
 
 msgid "Block of Raw Copper"
-msgstr ""
+msgstr "Bloko de Kruda Kupro"
 
 msgid "A block used for compact raw copper storage."
 msgstr ""

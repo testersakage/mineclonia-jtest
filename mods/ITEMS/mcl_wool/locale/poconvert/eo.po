@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_wool x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-23 10:21+0000\n"
-"Last-Translator: Notxor <notxor@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-12 13:21+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
 "Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_wool/eo/>\n"
 "Language: eo\n"
@@ -18,7 +18,7 @@ msgid "Carpet"
 msgstr "tapiŝo"
 
 msgid "Wool"
-msgstr ""
+msgstr "Lano"
 
 msgid "Wool is a decorative block which comes in many different colors."
 msgstr ""
@@ -27,97 +27,97 @@ msgid "Carpets are thin floor covers which come in many different colors."
 msgstr ""
 
 msgid "Black Carpet"
-msgstr ""
+msgstr "Nigra Tapiŝo"
 
 msgid "Black Wool"
-msgstr ""
+msgstr "Nigra Lano"
 
 msgid "Blue Carpet"
-msgstr ""
+msgstr "Blua Tapiŝo"
 
 msgid "Blue Wool"
-msgstr ""
+msgstr "Blua Lano"
 
 msgid "Brown Carpet"
-msgstr ""
+msgstr "Bruna Tapiŝo"
 
 msgid "Brown Wool"
-msgstr ""
+msgstr "Bruna Lano"
 
 msgid "Cyan Carpet"
-msgstr ""
+msgstr "Cejana Tapiŝo"
 
 msgid "Cyan Wool"
-msgstr ""
+msgstr "Cejana Lano"
 
 msgid "Green Carpet"
-msgstr ""
+msgstr "Verda Tapiŝo"
 
 msgid "Green Wool"
-msgstr ""
+msgstr "Verda Lano"
 
 msgid "Grey Carpet"
-msgstr ""
+msgstr "Griza Tapiŝo"
 
 msgid "Grey Wool"
-msgstr ""
+msgstr "Griza Lano"
 
 msgid "Light Blue Carpet"
-msgstr ""
+msgstr "Helblua Tapiŝo"
 
 msgid "Light Blue Wool"
-msgstr ""
+msgstr "Helblua Lano"
 
 msgid "Light Grey Carpet"
-msgstr ""
+msgstr "Helgriza Tapiŝo"
 
 msgid "Light Grey Wool"
-msgstr ""
+msgstr "Helgriza Lano"
 
 msgid "Lime Carpet"
-msgstr ""
+msgstr "Verdcitrona Tapiŝo"
 
 msgid "Lime Wool"
-msgstr ""
+msgstr "Verdcitrona Lano"
 
 msgid "Magenta Carpet"
-msgstr ""
+msgstr "Fuĥsia Tapiŝo"
 
 msgid "Magenta Wool"
-msgstr ""
+msgstr "Fuĥsia Lano"
 
 msgid "Orange Carpet"
-msgstr ""
+msgstr "Oranĝa Tapiŝo"
 
 msgid "Orange Wool"
-msgstr ""
+msgstr "Oranĝa Lano"
 
 msgid "Pink Carpet"
-msgstr ""
+msgstr "Roza Tapiŝo"
 
 msgid "Pink Wool"
-msgstr ""
+msgstr "Roza Lano"
 
 msgid "Purple Carpet"
-msgstr ""
+msgstr "Viola Tapiŝo"
 
 msgid "Purple Wool"
-msgstr ""
+msgstr "Viola Lano"
 
 msgid "Red Carpet"
-msgstr ""
+msgstr "Ruĝa Tapiŝo"
 
 msgid "Red Wool"
-msgstr ""
+msgstr "Ruĝa Lano"
 
 msgid "White Carpet"
-msgstr ""
+msgstr "Blanka Tapiŝo"
 
 msgid "White Wool"
-msgstr ""
+msgstr "Blanka Lano"
 
 msgid "Yellow Carpet"
-msgstr ""
+msgstr "Flava Tapiŝo"
 
 msgid "Yellow Wool"
-msgstr ""
+msgstr "Flava Lano"
