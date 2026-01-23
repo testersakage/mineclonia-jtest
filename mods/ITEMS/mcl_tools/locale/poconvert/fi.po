@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_tools x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-31 08:21+0000\n"
+"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
+"Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_tools/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "An axe is your tool of choice to cut down trees, wood-based blocks and other blocks. Axes deal a lot of damage as well, but they are rather slow. Axes can be used to strip bark and hyphae from trunks. They can also be used to scrape blocks made of copper, reducing their oxidation stage or removing wax from waxed variants."
 msgstr ""
@@ -53,64 +54,64 @@ msgid "Mace"
 msgstr ""
 
 msgid "Wooden Pickaxe"
-msgstr ""
+msgstr "Puuhakku"
 
 msgid "Wooden Shovel"
-msgstr ""
+msgstr "Puulapio"
 
 msgid "Wooden Sword"
 msgstr ""
 
 msgid "Wooden Axe"
-msgstr ""
+msgstr "Puukirves"
 
 msgid "Stone Pickaxe"
-msgstr ""
+msgstr "Kivihakku"
 
 msgid "Stone Shovel"
-msgstr ""
+msgstr "Kivilapio"
 
 msgid "Stone Sword"
 msgstr ""
 
 msgid "Stone Axe"
-msgstr ""
+msgstr "Kivikirves"
 
 msgid "Iron Pickaxe"
-msgstr ""
+msgstr "Rautahakku"
 
 msgid "Iron Shovel"
-msgstr ""
+msgstr "Rautalapio"
 
 msgid "Iron Sword"
 msgstr ""
 
 msgid "Iron Axe"
-msgstr ""
+msgstr "Rautakirves"
 
 msgid "Golden Pickaxe"
-msgstr ""
+msgstr "Kultahakku"
 
 msgid "Golden Shovel"
-msgstr ""
+msgstr "Kultalapio"
 
 msgid "Golden Sword"
 msgstr ""
 
 msgid "Golden Axe"
-msgstr ""
+msgstr "Kultakirves"
 
 msgid "Diamond Pickaxe"
-msgstr ""
+msgstr "Timanttihakku"
 
 msgid "Diamond Shovel"
-msgstr ""
+msgstr "Timanttilapio"
 
 msgid "Diamond Sword"
 msgstr ""
 
 msgid "Diamond Axe"
-msgstr ""
+msgstr "Timanttikirves"
 
 msgid "Netherite Pickaxe"
 msgstr ""
@@ -123,4 +124,3 @@ msgstr ""
 
 msgid "Netherite Axe"
 msgstr ""
-

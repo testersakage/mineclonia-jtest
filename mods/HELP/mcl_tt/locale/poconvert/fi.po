@@ -3,45 +3,46 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_tt x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-31 08:21+0000\n"
+"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
+"Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_tt/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Unlimited uses"
-msgstr ""
+msgstr "Loputtomasti käyttökertoja"
 
 msgid "Painfully slow"
-msgstr ""
+msgstr "Tuskallisen hidas"
 
 msgid "Very slow"
-msgstr ""
+msgstr "Erittäin hidas"
 
 msgid "Slow"
-msgstr ""
+msgstr "Hidas"
 
 msgid "Fast"
-msgstr ""
+msgstr "Nopea"
 
 msgid "Very fast"
-msgstr ""
+msgstr "Erittäin nopea"
 
 msgid "Extremely fast"
-msgstr ""
+msgstr "Äärimmäisen nopea"
 
 msgid "Instantaneous"
-msgstr ""
+msgstr "Välitön"
 
 msgid "Mining speed: @1"
-msgstr ""
+msgstr "Kaivuunopeus: @1"
 
 msgid "Block breaking strength: @1"
-msgstr ""
+msgstr "Kuutionrikkomisvoimakkuus: @1"
 
 msgid "Damage: @1"
 msgstr ""
@@ -98,10 +99,10 @@ msgid "Luminance: @1"
 msgstr ""
 
 msgid "@1 uses"
-msgstr ""
+msgstr "@1 käyttökertaa"
 
 msgid "Durability: @1"
-msgstr ""
+msgstr "Kestävyys: @1"
 
 msgid "Head armor"
 msgstr ""
@@ -116,10 +117,10 @@ msgid "Feet armor"
 msgstr ""
 
 msgid "Armor points: @1"
-msgstr ""
+msgstr "Suojauspisteet: @1"
 
 msgid "Armor durability: @1"
-msgstr ""
+msgstr "Haarniskan kestävyys: @1"
 
 msgid "Protection: @1%"
 msgstr ""
@@ -150,4 +151,3 @@ msgstr ""
 
 msgid "Creeper view range: -50%"
 msgstr ""
-

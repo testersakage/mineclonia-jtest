@@ -3,336 +3,358 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-01-04 14:21+0000\n"
+"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
+"Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Axolotl"
-msgstr ""
+msgstr "Aksolotli"
 
 msgid "Spawning will only be successful on clay."
-msgstr ""
+msgstr "Syntyminen onnistuu vain savella."
 
 msgid "Bat"
-msgstr ""
+msgstr "Lepakko"
 
 msgid "Spawning will only be successful between light levels of 0 and 3 at most times of the year, or 0 and 6 between 20 October and 3 November."
 msgstr ""
+"Syntyminen onnistuu vain, kun valonmäärä on nollan (0) ja kolmen (3) välillä "
+"useimpina vuoden aikoina tai nollan (0) ja kuuden (6) välillä alkaen 20 "
+"lokakuuta ja päättyen 3 marraskuuta."
 
 msgid "Blaze"
-msgstr ""
+msgstr "Roihu"
 
 msgid "Chicken"
-msgstr ""
+msgstr "Kana"
 
 msgid "Cod"
-msgstr ""
+msgstr "Turska"
 
 msgid "Each mob spawned will form a school with the remainder of the mobs in the group."
 msgstr ""
+"Jokainen syntynyt olento muodostaa muiden ryhmän olentojen kanssa parven."
 
 msgid "Cow"
-msgstr ""
+msgstr "Lehmä"
 
 msgid "Mooshroom"
-msgstr ""
+msgstr "Sienilehmä"
 
 msgid "Creeper"
-msgstr ""
+msgstr "Hiipijä"
 
 msgid "Charged Creeper"
-msgstr ""
+msgstr "Latautunut hiipijä"
 
 msgid "Dolphin"
-msgstr ""
+msgstr "Delfiini"
 
 msgid "Drowned"
-msgstr ""
+msgstr "Hukkunut"
 
 msgid "Baby Drowned"
-msgstr ""
+msgstr "Vauvahukkunut"
 
 msgid "Drowned will spawn more frequently in this biome."
-msgstr ""
+msgstr "Hukkunut syntyy useammin tässä biomissa."
 
 msgid "Ender Dragon"
-msgstr ""
+msgstr "Äärilisko"
 
 msgid "Enderman"
-msgstr ""
+msgstr "Ääreläinen"
 
 msgid "Endermite"
-msgstr ""
+msgstr "Ääripunkki"
 
 msgid "Ghast"
-msgstr ""
+msgstr "Hornanhenki"
 
 msgid "Ghast Fireball"
-msgstr ""
+msgstr "Hornanhengen tulipallo"
 
 msgid "Guardian"
-msgstr ""
+msgstr "Vartija"
 
 msgid "Guardians spawn less frequently in regions of the ocean which are exposed to the sky at the surface."
 msgstr ""
+"Vartijat syntyvät harvemmin valtameren alueilla, joiden pinnalle taivaalta "
+"on esteetön näkymä."
 
 msgid "Elder Guardian"
-msgstr ""
+msgstr "Vartijavanhin"
 
 msgid "Hoglin"
-msgstr ""
+msgstr "Hornapahkasika"
 
 msgid "Baby Hoglin"
-msgstr ""
+msgstr "Hornapahkasikavauva"
 
 msgid "Hoglins do not spawn above Nether Wart blocks."
-msgstr ""
+msgstr "Hornapahkasiat eivät synny hornanpahkakuutioiden päälle."
 
 msgid "20% of Hoglins spawn as their baby variants."
-msgstr ""
+msgstr "20 % hornapahkasioista syntyy vauvoina."
 
 msgid "Zoglin"
-msgstr ""
+msgstr "Hornapahkasikazombi"
 
 msgid "Sneak to dismount"
-msgstr ""
+msgstr "Hiivi noustaksesi kyydistä"
 
 msgid "Horse"
-msgstr ""
+msgstr "Hevonen"
 
 msgid "Skeleton Horse"
-msgstr ""
+msgstr "Luurankohevonen"
 
 msgid "Zombie Horse"
-msgstr ""
+msgstr "Zombihevonen"
 
 msgid "Donkey"
-msgstr ""
+msgstr "Aasi"
 
 msgid "Mule"
-msgstr ""
+msgstr "Muuli"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Rautagolemi"
 
 msgid "Llama"
-msgstr ""
+msgstr "Laama"
 
 msgid "Ocelot"
-msgstr ""
+msgstr "Oselotti"
 
 msgid "Cat"
-msgstr ""
+msgstr "Kissa"
 
 msgid "This mob will spawn infrequently on grass or leaves when no obstructions exist within a volume @1 nodes in size around the center of such a node's upper surface."
 msgstr ""
+"Tämä olento syntyy harvakseltaan ruoholle tai lehville, kun kuution "
+"yläpinnan keskikohdan ympärillä ei ole estettä tilavuudeltaan @1 kuution "
+"kokoisella alueella."
 
 msgid "Parrot"
-msgstr ""
+msgstr "Papukaija"
 
 msgid "on grass, leaves, or logs"
-msgstr ""
+msgstr "ruoholle, lehville tai tukeille"
 
 msgid "Pig"
-msgstr ""
+msgstr "Sika"
 
 msgid "Piglin"
-msgstr ""
+msgstr "Ihmissika"
 
 msgid "Piglin Brute"
-msgstr ""
+msgstr "Ihmissikaraakalainen"
 
 msgid "Zombie Piglin"
-msgstr ""
+msgstr "Ihmissikazombi"
 
 msgid "Zombified Piglin"
-msgstr ""
+msgstr "Zombiksi muuttunut ihmissika"
 
 msgid "Pillager"
-msgstr ""
+msgstr "Ryöväri"
 
 msgid "Polar Bear"
-msgstr ""
+msgstr "Jääkarhu"
 
 msgid "on grass or snow blocks"
-msgstr ""
+msgstr "ruoholle tai lumikuutioille"
 
 msgid "The second polar bear in a group will always be spawned as a cub."
-msgstr ""
+msgstr "Ryhmän toinen jääkarhu syntyy aina pentuna."
 
 msgid "Pufferfish"
-msgstr ""
+msgstr "Pallokala"
 
 msgid "Rabbit"
-msgstr ""
+msgstr "Jänis"
 
 msgid "Killer Bunny"
-msgstr ""
+msgstr "Tappajajänis"
 
 msgid "Salmon"
-msgstr ""
+msgstr "Lohi"
 
 msgid "Sheep"
-msgstr ""
+msgstr "Lammas"
 
 msgid "Shulker"
-msgstr ""
+msgstr "Kuorvaanija"
 
 msgid "Silverfish"
-msgstr ""
+msgstr "Sokeritoukka"
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Luuranko"
 
 msgid "Stray"
-msgstr ""
+msgstr "Eksynyt"
 
 msgid "Moreover, the block where the mob is to spawn must be exposed to sky."
 msgstr ""
+"Lisäksi kuutiolta, jolla olento syntyy, on oltava esteetön näkymä taivaalle."
 
 msgid "Wither Skeleton"
-msgstr ""
+msgstr "Hornaluuranko"
 
 msgid "Slime - big"
-msgstr ""
+msgstr "Elävä limakuutio - iso"
 
 msgid "Slime - small"
-msgstr ""
+msgstr "Elävä limakuutio - pieni"
 
 msgid "Slime - tiny"
-msgstr ""
+msgstr "Elävä limakuutio - pikkuruinen"
 
 msgid "Magma Cube - big"
-msgstr ""
+msgstr "Elävä magmakuutio - iso"
 
 msgid "Magma Cube - small"
-msgstr ""
+msgstr "Elävä magmakuutio - pieni"
 
 msgid "Magma Cube - tiny"
-msgstr ""
+msgstr "Elävä magmakuutio - pikkuruinen"
 
 msgid "Magma Cube"
-msgstr ""
+msgstr "Elävä magmakuutio"
 
 msgid "Slime"
-msgstr ""
+msgstr "Elävä limakuutio"
 
 msgid "Snow Golem"
-msgstr ""
+msgstr "Lumigolemi"
 
 msgid "on grass nodes"
-msgstr ""
+msgstr "ruohokuutioille"
 
 msgid "This mob will spawn infrequently @1 with a surface occupying a full node when no obstructions exist within a volume @2 nodes in size around the center of such a node's upper surface, in light levels of 8 or greater."
 msgstr ""
+"Tämä olento syntyy harvakseltaan @1, joiden pinta on kokonaisen kuution "
+"kokoinen. Syntymäkuution yläpinnan keskikohdan ympärillä ei saa olla estettä "
+"tilavuudeltaan @2 kuution kokoisella alueella, ja valonmäärän tulee olla 8 "
+"tai enemmän."
 
 msgid "This mob will spawn between sea level and Y level -12 when the nodes above and below are water and no obstructions exist within a volume @1 nodes in size around the center of the base of the fluid node where spawning is being attempted."
 msgstr ""
+"Tämä olento syntyy merenpinnan tason ja Y-tason -12 välillä, kun sen ylä- ja "
+"alapuolella olevat kuutiot ovat vettä eikä syntymäkuution pohjan keskikohdan "
+"ympärillä ole estettä tilavuudeltaan @1 kuution kokoisella alueella."
 
 msgid "Spawning will only succeed in the absence of artificial lighting and if the natural light is @1 or dimmer."
 msgstr ""
+"Syntyminen onnistuu vain, kun keinovaloa ei ole ja luonnonvalon määrä on @1 "
+"tai vähemmän."
 
 msgid "Spawning will only succeed between artificial light levels of 0 and @1."
-msgstr ""
+msgstr "Syntyminen onnistuu vain, kun keinovalon määrä on 0 - @1."
 
 msgid "Spawning will only succeed between natural light levels of 0 and @1."
-msgstr ""
+msgstr "Syntyminen onnistuu vain, kun luonnonvalon määrä on 0 - @1."
 
 msgid "Spawning will only succeed between artificial light levels of 0 and @1, and natural light levels of 0 and @2."
 msgstr ""
+"Syntyminen onnistuu vain, kun keinovalon määrä on 0 - @1 ja luonnonvalon "
+"määrä on 0 - @2."
 
 msgid "Spider"
-msgstr ""
+msgstr "Hämähäkki"
 
 msgid "Cave Spider"
-msgstr ""
+msgstr "Luolahämähäkki"
 
 msgid "Squid"
-msgstr ""
+msgstr "Kalmari"
 
 msgid "Glow Squid"
-msgstr ""
+msgstr "Hehkukalmari"
 
 msgid "Glow Squid only spawn in absolute darkness at Y levels of 33 or below."
-msgstr ""
+msgstr "Hehkukalmari syntyy vain täysin pimeässä Y-tasolla 33 tai alempana."
 
 msgid "Strider"
-msgstr ""
+msgstr "Astelija"
 
 msgid "Baby Strider"
-msgstr ""
+msgstr "Astelijavauva"
 
 msgid "Tropical Fish"
-msgstr ""
+msgstr "Trooppinen kala"
 
 msgid "Vex"
-msgstr ""
+msgstr "Kiusanhenki"
 
 msgid "Villager"
-msgstr ""
+msgstr "Kyläläinen"
 
 msgid "Armorer"
-msgstr ""
+msgstr "Haarniskaseppä"
 
 msgid "Butcher"
-msgstr ""
+msgstr "Lihakauppias"
 
 msgid "Cartographer"
-msgstr ""
+msgstr "Kartanpiirtäjä"
 
 msgid "Cleric"
-msgstr ""
+msgstr "Pappi"
 
 msgid "Farmer"
-msgstr ""
+msgstr "Viljelijä"
 
 msgid "Fisherman"
-msgstr ""
+msgstr "Kalastaja"
 
 msgid "Fletcher"
-msgstr ""
+msgstr "Jousiseppä"
 
 msgid "Leatherworker"
-msgstr ""
+msgstr "Nahkatyöläinen"
 
 msgid "Librarian"
-msgstr ""
+msgstr "Kirjastonhoitaja"
 
 msgid "Mason"
-msgstr ""
+msgstr "Muurari"
 
 msgid "Shepherd"
-msgstr ""
+msgstr "Paimen"
 
 msgid "Toolsmith"
-msgstr ""
+msgstr "Työkaluseppä"
 
 msgid "Weaponsmith"
-msgstr ""
+msgstr "Aseseppä"
 
 msgid "Nitwit"
-msgstr ""
+msgstr "Typerys"
 
 msgid "Novice"
-msgstr ""
+msgstr "Aloittelija"
 
 msgid "Apprentice"
-msgstr ""
+msgstr "Harjoittelija"
 
 msgid "Journeyman"
-msgstr ""
+msgstr "Kisälli"
 
 msgid "Expert"
-msgstr ""
+msgstr "Ammattilainen"
 
 msgid "Master"
-msgstr ""
+msgstr "Mestari"
 
 msgid "Evoker"
 msgstr ""
@@ -344,31 +366,31 @@ msgid "Vindicator"
 msgstr ""
 
 msgid "Zombie Villager"
-msgstr ""
+msgstr "Zombikyläläinen"
 
 msgid "Wandering Trader"
-msgstr ""
+msgstr "Vaeltava kauppias"
 
 msgid "Trader Llama"
-msgstr ""
+msgstr "Kauppiaan laama"
 
 msgid "Witch"
-msgstr ""
+msgstr "Noita"
 
 msgid "Wither"
-msgstr ""
+msgstr "Näivettäjä"
 
 msgid "Wolf"
-msgstr ""
+msgstr "Susi"
 
 msgid "on grass, snow blocks, coarse dirt, or podzol"
-msgstr ""
+msgstr "ruoholle, lumikuutioille, karkealle mullalle tai podsolille"
 
 msgid "Zombie"
-msgstr ""
+msgstr "Zombi"
 
 msgid "Baby Zombie"
-msgstr ""
+msgstr "Zombivauva"
 
 msgid "Husk"
 msgstr ""
@@ -384,4 +406,3 @@ msgstr ""
 
 msgid "Husks will only spawn on nodes that are exposed to sky."
 msgstr ""
-

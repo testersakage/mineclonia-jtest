@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-27 09:21+0000\n"
-"Last-Translator: Heketiitus <heketiitus@noreply.codeberg.org>\n"
+"PO-Revision-Date: 2026-01-02 22:21+0000\n"
+"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_achievements/fi/>\n"
 "Language: fi\n"
@@ -18,416 +18,455 @@ msgid "Benchmarking"
 msgstr "Alkupiste"
 
 msgid "Craft a crafting table from 4 wooden planks."
-msgstr ""
+msgstr "Valmista työpöytä neljästä (4) puulankusta."
 
 msgid "Time to Mine!"
-msgstr ""
+msgstr "Nyt kaivamaan!"
 
 msgid "Use a crafting table to craft a wooden pickaxe from wooden planks and sticks."
-msgstr ""
+msgstr "Valmista työpöydällä puuhakku puulankuista ja kepeistä."
 
 msgid "Hot Topic"
-msgstr ""
+msgstr "Polttava aihe"
 
 msgid "Use 8 cobblestones to craft a furnace."
-msgstr ""
+msgstr "Valmista uuni kahdeksasta (8) mukulakivestä."
 
 msgid "Time to Farm!"
-msgstr ""
+msgstr "Nyt viljelemään!"
 
 msgid "Use a crafting table to craft a wooden hoe from wooden planks and sticks."
-msgstr ""
+msgstr "Valmista työpöydällä puukuokka puulankuista ja kepeistä."
 
 msgid "Bake Bread"
-msgstr ""
+msgstr "Leivänleivontaa"
 
 msgid "Use wheat to craft a bread."
-msgstr ""
+msgstr "Valmista leipä vehnästä."
 
 msgid "The Lie"
-msgstr ""
+msgstr "Valhe"
 
 msgid "Craft a cake using wheat, sugar, milk and an egg."
-msgstr ""
+msgstr "Valmista kakku vehnästä, sokerista, maidosta ja kananmunasta."
 
 msgid "Getting an Upgrade"
-msgstr ""
+msgstr "Kehitystä pukkaa"
 
 msgid "Craft a stone pickaxe using sticks and cobblestone."
-msgstr ""
+msgstr "Valmista kivihakku kepeistä ja mukulakivestä."
 
 msgid "Time to Strike!"
-msgstr ""
+msgstr "Hyökkäykseen!"
 
 msgid "Craft a wooden sword using wooden planks and sticks on a crafting table."
-msgstr ""
+msgstr "Valmista työpöydällä puumiekka puulankuista ja kepeistä."
 
 msgid "Librarian"
-msgstr ""
+msgstr "Kirjastonhoitaja"
 
 msgid "Craft a bookshelf."
-msgstr ""
+msgstr "Valmista kirjahylly."
 
 msgid "Isn't It Iron Pick"
-msgstr ""
+msgstr "Rautaista ironiaa"
 
 msgid "Craft a iron pickaxe using sticks and iron."
-msgstr ""
+msgstr "Valmista rautahakku kepeistä ja raudasta."
 
 msgid "Bullseye"
-msgstr ""
+msgstr "Napakymppi"
 
 msgid "Hit the bullseye of a target block from at least 30 blocks away."
-msgstr ""
+msgstr "Osu maalitaulun keskelle vähintään 30 palikan päästä."
 
 msgid "DIAMONDS!"
-msgstr ""
+msgstr "Timantteja!"
 
 msgid "Pick up a diamond from the floor."
-msgstr ""
+msgstr "Nouki maasta timantti."
 
 msgid "Into Fire"
-msgstr ""
+msgstr "Leikitään tulella"
 
 msgid "Pick up a blaze rod from the floor."
-msgstr ""
+msgstr "Nouki maasta roihusauva."
 
 msgid "Cow Tipper"
-msgstr ""
+msgstr "Nahkuri"
 
 msgid "Pick up leather from the floor.\n"
 "Hint: Cows and some other animals have a chance to drop leather, when killed."
 msgstr ""
+"Nouki maasta nahkaa.\n"
+"Vinkki: Lehmät ja jotkut muut eläimet saattavat pudottaa nahkaa kuollessaan."
 
 msgid "Getting Wood"
-msgstr ""
+msgstr "Metsuri"
 
 msgid "Pick up a wood item from the ground.\n"
 "Hint: Punch a tree trunk until it pops out as an item."
 msgstr ""
+"Nouki maasta puuesine.\n"
+"Vinkki: Hakkaa puuta, kunnes se poksahtaa esineeksi."
 
 msgid "Who is Cutting Onions?"
-msgstr ""
+msgstr "Kuka leikkelee sipuleita?"
 
 msgid "Pick up a crying obsidian from the floor."
-msgstr ""
+msgstr "Nouki maasta itkevä obsidiaani."
 
 msgid "Hidden in the Depths"
-msgstr ""
+msgstr "Piilossa syvyyksissä"
 
 msgid "Pick up an Ancient Debris from the floor."
-msgstr ""
+msgstr "Nouki maasta muinainen romu."
 
 msgid "The Next Generation"
-msgstr ""
+msgstr "Seuraava sukupolvi"
 
 msgid "Hold the Dragon Egg.\n"
 "Hint: Pick up the egg from the ground and have it in your inventory."
 msgstr ""
+"Pitele ääriliskon munaa.\n"
+"Vinkki: Nouki muna tavaraluetteloosi."
 
 msgid "Sky's the Limit"
-msgstr ""
+msgstr "Taivas on rajana"
 
 msgid "Find the elytra and prepare to fly above and beyond!"
-msgstr ""
+msgstr "Löydä siivet ja valmistaudu lentämään ylös ja sitäkin ylemmäs!"
 
 msgid "Acquire Hardware"
-msgstr ""
+msgstr "Hanki rautaa"
 
 msgid "Take an iron ingot from a furnace's output slot.\n"
 "Hint: To smelt an iron ingot, put a fuel (like coal) and iron ore into a furnace."
 msgstr ""
+"Ota rautaharkko uunista.\n"
+"Vinkki: Sulattaaksesi rautaharkon laita polttoainetta (kuten hiiltä) ja "
+"rautamalmia uuniin."
 
 msgid "Delicious Fish"
-msgstr ""
+msgstr "Herkullista kalaa"
 
 msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
 msgstr ""
+"Ota mitä tahansa kalaa, kun olet paistanut sen uunissa, savustimessa, "
+"nuotiossa tai sielunuotiossa.\n"
+"Vinkki: Narraa kala ongella ja paista se uunissa."
 
 msgid "On A Rail"
-msgstr ""
+msgstr "Raiteilla"
 
 msgid "Travel by minecart for at least 1000 meters from your starting point in a single ride."
 msgstr ""
+"Matkusta kaivosvaunulla yhteen kyytiin vähintään 1000 metriä "
+"aloituspisteestäsi."
 
 msgid "Sniper Duel"
-msgstr ""
+msgstr "Tarkka-ampujien kaksintaistelu"
 
 msgid "Kill a skeleton, wither skeleton or stray by bow and arrow from a distance of at least 20 meters."
 msgstr ""
+"Tapa luuranko, hornaluuranko tai eksynyt jousella ja nuolella vähintään 20 "
+"metrin etäisyydeltä."
 
 msgid "Monster Hunter"
-msgstr ""
+msgstr "Hirviönmetsästäjä"
 
 msgid "Kill a monster."
-msgstr ""
+msgstr "Tapa hirviö."
 
 msgid "We Need to Go Deeper"
-msgstr ""
+msgstr "Menkäämme syvemmälle"
 
 msgid "Use obsidian and a fire starter to construct a Nether portal."
-msgstr ""
+msgstr "Rakenna hornaportaali obsidiaanin ja sytyttimen avulla."
 
 msgid "The End?"
-msgstr ""
+msgstr "Loppu?"
 
 msgid "Or the beginning?\n"
 "Hint: Enter an end portal."
 msgstr ""
+"Vai sittenkin alku?\n"
+"Vinkki: Astu ääriportaaliin."
 
 msgid "The Nether"
-msgstr ""
+msgstr "Horna"
 
 msgid "Bring summer clothes.\n"
 "Hint: Enter the Nether."
 msgstr ""
+"Pakkaa mukaasi kesävaatetus.\n"
+"Vinkki: Astu Hornaan."
 
 msgid "Postmortal"
-msgstr ""
+msgstr "Kuolemanjälkeinen"
 
 msgid "Use a Totem of Undying to cheat death."
-msgstr ""
+msgstr "Vältä kuolema Kuolemattomuuden toteemilla."
 
 msgid "Sweet Dreams"
-msgstr ""
+msgstr "Kauniita unia"
 
 msgid "Sleep in a bed to change your respawn point."
-msgstr ""
+msgstr "Nuku sängyssä vaihtaaksesi uudelleensyntymispaikkaasi."
 
 msgid "Not Quite \"Nine\" Lives"
-msgstr ""
+msgstr "Ei ihan yhdeksää elämää"
 
 msgid "Charge a Respawn Anchor to the maximum."
-msgstr ""
+msgstr "Lataa uudelleensyntymisankkuri täyteen."
 
 msgid "What A Deal!"
-msgstr ""
+msgstr "Mikä tarjous!"
 
 msgid "Successfully trade with a Villager."
-msgstr ""
+msgstr "Tee vaihtokauppa kyläläisen kanssa."
 
 msgid "Tactical Fishing"
-msgstr ""
+msgstr "Taktinen kalastus"
 
 msgid "Catch a fish... without a fishing rod!"
-msgstr ""
+msgstr "Narraa kala... ilman onkea!"
 
 msgid "The Cutest Predator"
-msgstr ""
+msgstr "Suloisin saalistaja"
 
 msgid "Catch an Axolotl with a bucket!"
-msgstr ""
+msgstr "Nappaa aksolotli ämpärin avulla!"
 
 msgid "Withering Heights"
-msgstr ""
+msgstr "Näivettävä harju"
 
 msgid "Summon the wither from the dead."
-msgstr ""
+msgstr "Herätä näivettäjä kuolleista."
 
 msgid "Free the End"
-msgstr ""
+msgstr "Vapauta Ääri"
 
 msgid "Kill the ender dragon. Good Luck!"
-msgstr ""
+msgstr "Tapa äärilisko. Onnea yritykseen!"
 
 msgid "Fishy Business"
-msgstr ""
+msgstr "Lipevää liiketoimintaa"
 
 msgid "Catch a fish.\n"
 "Hint: Catch a fish, salmon, clownfish, or pufferfish."
 msgstr ""
+"Narraa kala.\n"
+"Vinkki: Nappaa kala, lohi, klovnikala tai pallokala."
 
 msgid "Country Lode, Take Me Home"
-msgstr ""
+msgstr "Vaan kivinen magneetti kotihin vie"
 
 msgid "Use a compass on a Lodestone."
-msgstr ""
+msgstr "Käytä kompassia magneettiin."
 
 msgid "Serious Dedication"
-msgstr ""
+msgstr "Totinen omistautuminen"
 
 msgid "Use a Netherite Ingot to upgrade a hoe, and then completely reevaluate your life choices."
 msgstr ""
+"Päivitä kuokka horniittiharkolla ja arvioi sitten täysin uudelleen "
+"elämänvalintojasi."
 
 msgid "Local Brewery"
-msgstr ""
+msgstr "Paikallinen panimo"
 
 msgid "Brew a Potion.\n"
 "Hint: Take a potion or glass bottle out of the brewing stand."
 msgstr ""
+"Valmista taikajuoma.\n"
+"Vinkki: Ota taikajuoma tai lasipullo haudutustelineestä."
 
 msgid "Enchanter"
-msgstr ""
+msgstr "Lumoaja"
 
 msgid "Enchant an item using an Enchantment Table."
-msgstr ""
+msgstr "Lumoa esine lumouspöydällä."
 
 msgid "Bring Home the Beacon"
-msgstr ""
+msgstr "Majakka pitää ansaitseman"
 
 msgid "Use a beacon."
-msgstr ""
+msgstr "Käytä majakkaa."
 
 msgid "Beaconator"
-msgstr ""
+msgstr "Täyteen loistoon"
 
 msgid "Use a fully powered beacon."
-msgstr ""
+msgstr "Käytä täydessä voimassaan olevaa majakkaa."
 
 msgid "The End... Again..."
-msgstr ""
+msgstr "Loppu... taas..."
 
 msgid "Respawn the Ender Dragon."
-msgstr ""
+msgstr "Luo äärilisko uudelleen."
 
 msgid "Bee Our Guest"
-msgstr ""
+msgstr "Mitä ZZZaisi olla"
 
 msgid "Use a campfire to collect a bottle of honey from a beehive without aggrivating the bees inside."
 msgstr ""
+"Kerää pullollinen hunajaa mehiläispesästä nuotion avulla suututtamatta "
+"sisällä olevia mehiläisiä."
 
 msgid "Total Beelocation"
-msgstr ""
+msgstr "Makea muutto"
 
 msgid "Move a bee nest, with 3 bees inside, using a silk touch enchanted tool."
 msgstr ""
+"Siirrä silkkisellä kosketuksella lumotun työkalun avulla mehiläispesä, jonka "
+"sisällä on kolme (3) mehiläistä."
 
 msgid "Wax On"
-msgstr ""
+msgstr "Vaha päälle"
 
 msgid "Apply honeycomb to a copper block to protect it from the elements."
-msgstr ""
+msgstr "Levitä hunajakenno kuparikuutiolle suojataksesi sen säältä."
 
 msgid "Wax Off"
-msgstr ""
+msgstr "Vaha pois"
 
 msgid "Scrape wax off of a copper block."
-msgstr ""
+msgstr "Kaavi vaha pois kuparikuutiolta."
 
 msgid "Crafting a New Look"
-msgstr ""
+msgstr "Omannäköinen tyyli"
 
 msgid "Craft a trimmed armor at a Smithing Table"
-msgstr ""
+msgstr "Valmista koristeltu haarniska taontapöydällä"
 
 msgid "Smithing with Style"
-msgstr ""
+msgstr "Muotitietoinen haarniskaseppä"
 
 msgid "Apply these smithing templates at least once: Spire, Snout, Rib, Ward, Silence, Vex, Tide, Wayfinder"
 msgstr ""
+"Käytä näitä taontamuotteja vähintään kerran: Tornin huippu, Kärsä, Kylkiluu, "
+"Suojelija, Hiljaisuus, Kiusanhenki, Vuorovesi, Suunnistaja"
 
 msgid "Dispense With This"
-msgstr ""
+msgstr "Anna jakaa"
 
 msgid "Place a dispenser."
-msgstr ""
+msgstr "Sijoita jakelulaite."
 
 msgid "Pork Chop"
-msgstr ""
+msgstr "Porsaankyljys"
 
 msgid "Eat a cooked porkchop."
-msgstr ""
+msgstr "Syö paistettu porsaankyljys."
 
 msgid "Rabbit Season"
-msgstr ""
+msgstr "Jänissesonki"
 
 msgid "Eat a cooked rabbit."
-msgstr ""
+msgstr "Syö paistettu jänis."
 
 msgid "Iron Belly"
-msgstr ""
+msgstr "Rautavatsa"
 
 msgid "Get really desperate and eat rotten flesh."
-msgstr ""
+msgstr "Epätoivoisena syö mädäntynyttä lihaa."
 
 msgid "Pot Planter"
-msgstr ""
+msgstr "Ruukkukasvatusta"
 
 msgid "Place a flower pot."
-msgstr ""
+msgstr "Sijoita kukkaruukku."
 
 msgid "The Haggler"
-msgstr ""
+msgstr "Tinkijä"
 
 msgid "Mine emerald ore."
-msgstr ""
+msgstr "Kaiva smaragdimalmia."
 
 msgid "Stone Age"
-msgstr ""
+msgstr "Kivikausi"
 
 msgid "Mine a stone with new pickaxe."
-msgstr ""
+msgstr "Kaiva kiveä uudella hakulla."
 
 msgid "Hot Stuff"
-msgstr ""
+msgstr "Kuumaa kamaa"
 
 msgid "Put lava in a bucket."
-msgstr ""
+msgstr "Laita laavaa ämpäriin."
 
 msgid "Ice Bucket Challenge"
-msgstr ""
+msgstr "Jäävesihaaste"
 
 msgid "Obtain an obsidian block."
-msgstr ""
+msgstr "Hanki obsidiaani."
 
 msgid "Hero of the Village"
-msgstr ""
+msgstr "Kylän sankari"
 
 msgid "Successfully defend a village from a raid"
-msgstr ""
+msgstr "Pelasta kylä ryöväreiden hyökkäykseltä"
 
 msgid "Voluntary Exile"
-msgstr ""
+msgstr "Vapaaehtoinen maanpako"
 
 msgid "Kill a raid captain. Maybe consider staying away from the local villages for the time being..."
 msgstr ""
+"Tapa ryövärijoukon kapteeni. Kannattanee toistaiseksi pysytellä etäällä "
+"paikallisista kylistä."
 
 msgid "Return to Sender"
-msgstr ""
+msgstr "Paluulähetys"
 
 msgid "Destroy a Ghast with a Fireball"
-msgstr ""
+msgstr "Tuhoa hornanhenki tulipallolla"
 
 msgid "Zombie Doctor"
-msgstr ""
+msgstr "Zombilääkäri"
 
 msgid "Use a golden apple on a zombie villager under the Weakness effect; the advancement is granted when the zombie villager converts into a villager."
 msgstr ""
+"Käytä kultaomenaa zombikyläläiseen, joka on heikkouden taikajuoman "
+"vaikutuksen alainen; edistysaskel myönnetään, kun zombikyläläinen muuttuu "
+"kyläläiseksi."
 
 msgid "A Terrible Fortress"
-msgstr ""
+msgstr "Kammottava linnake"
 
 msgid "Break your way into a Nether Fortress"
-msgstr ""
+msgstr "Murtaudu hornalinnakkeeseen"
 
 msgid "Eye Spy"
-msgstr ""
+msgstr "Silmänkyttääjä"
 
 msgid "Follow an Eye of Ender"
-msgstr ""
+msgstr "Seuraa äärensilmää"
 
 msgid "The City at the End of the Game"
-msgstr ""
+msgstr "Loppupelin kaupunki"
 
 msgid "Go on in, what could happen?"
-msgstr ""
+msgstr "Mene vain. Mitä voisi tapahtua?"
 
 msgid "Those Were The Days"
-msgstr ""
+msgstr "Oi niitä aikoja"
 
 msgid "Enter a Bastion Remnant"
-msgstr ""
+msgstr "Astu Linnanraunioihin"
 
 msgid "A Throwaway Joke"
-msgstr ""
+msgstr "Vitsillä heitetty"
 
 msgid "Very Very Frightening"
-msgstr ""
+msgstr "Pop-tähti"
 
 msgid "Throw a Trident at something.\n"
 "Note: Throwing away your only weapon is not a good idea."
 msgstr ""
+"Heitä atrain jotakuta kohti.\n"
+"Huomautus: Ei kannata heittää pois ainoaa asettasi."
 
 msgid "Strike a Villager with lightning."
-msgstr ""
+msgstr "Iske kyläläistä salamalla."

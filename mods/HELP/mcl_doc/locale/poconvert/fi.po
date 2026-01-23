@@ -3,244 +3,262 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-31 15:27+0000\n"
+"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
+"Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_doc/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Water can flow into this block and cause it to drop as an item."
-msgstr ""
+msgstr "Vesi voi virrata tähän kuutioon ja muuttaa sen esineeksi."
 
 msgid "This block can be turned into dirt with a hoe."
-msgstr ""
+msgstr "Tämän kuution voi muuttaa mullaksi kuokalla."
 
 msgid "This block can be turned into farmland with a hoe."
-msgstr ""
+msgstr "Tämän kuution voi muuttaa viljelysmaaksi kuokalla."
 
 msgid "This block can be turned into grass path with a shovel."
-msgstr ""
+msgstr "Tämän kuution voi muuttaa tallatuksi ruohoksi lapiolla."
 
 msgid "This block acts as a soil for all saplings."
-msgstr ""
+msgstr "Tämä kuutio toimii kaikkien taimien kasvualustana."
 
 msgid "This block acts as a soil for some saplings."
-msgstr ""
+msgstr "Tämä kuutio toimii joidenkin taimien kasvualustana."
 
 msgid "Sugar canes will grow on this block."
-msgstr ""
+msgstr "Sokeriruoko kasvaa tällä kuutiolla."
 
 msgid "Nether wart will grow on this block."
-msgstr ""
+msgstr "Hornanpahka kasvaa tällä kuutiolla."
 
 msgid "This block quickly decays when there is no wood block of any species within a distance of @1. When decaying, it disappears and may drop one of its regular drops. The block does not decay when the block has been placed by a player."
 msgstr ""
+"Tämä kuutio kuihtuu nopeasti, kun minkäänlajista puukuutiota ei ole @1 "
+"kuution etäisyydellä. Kuihtuessaan se katoaa ja saattaa pudottaa yleisen "
+"esineen. Se ei kuihdu, jos sen on sijoittanut pelaaja."
 
 msgid "This block quickly decays and disappears when there is no wood block of any species within a distance of @1. The block does not decay when the block has been placed by a player."
 msgstr ""
+"Tämä kuutio kuihtuu ja katoaa nopeasti, kun minkäänlajista puukuutiota ei "
+"ole @1 kuution etäisyydellä. Se ei kuihdu, jos sen on sijoittanut pelaaja."
 
 msgid "This plant can only grow on grass blocks and dirt. To survive, it needs to have an unobstructed view to the sky above or be exposed to a light level of 8 or higher."
 msgstr ""
+"Tämä kasvi kasvaa vain ruohokuutiolla tai mullalla. Selvitäkseen sillä "
+"täytyy olla esteetön näkymä yllä olevalle taivaalle tai sen tulee altistua "
+"valolle, joka on vahvuudeltaan 8 tai enemmän."
 
 msgid "This plant can grow on grass blocks, podzol, dirt and coarse dirt. To survive, it needs to have an unobstructed view to the sky above or be exposed to a light level of 8 or higher."
 msgstr ""
+"Tämä kasvi kasvaa ruohopalikalla, podsolilla, mullalla ja karkealla "
+"mullalla. Selvitäkseen sillä täytyy olla esteetön näkymä yllä olevalle "
+"taivaalle tai sen tulee altistua valolle, joka on vahvuudeltaan 8 tai "
+"enemmän."
 
 msgid "This block is flammable."
-msgstr ""
+msgstr "Tämä kuutio voi palaa."
 
 msgid "This block destroys any item it touches."
-msgstr ""
+msgstr "Tämä kuutio tuhoaa minkä tahansa esineen, joka koskettaa sitä."
 
 msgid "To eat it, wield it, then rightclick."
-msgstr ""
+msgstr "Syödäksesi sen ota se käteesi ja klikkaa oikeaa hiirennäppäintä."
 
 msgid "You can eat this even when your hunger bar is full."
-msgstr ""
+msgstr "Voit syödä tämän, vaikka nälkäpalkkisi olisi täynnä."
 
 msgid "You cannot eat this when your hunger bar is full."
-msgstr ""
+msgstr "Et voi syödä tätä, kun nälkäpalkkisi on täynnä."
 
 msgid "To drink it, wield it, then rightclick."
-msgstr ""
+msgstr "Juodaksesi sen ota se käteesi ja klikkaa oikeaa hiirennäppäintä."
 
 msgid "You cannot drink this when your hunger bar is full."
-msgstr ""
+msgstr "Et voi juoda tätä, kun nälkäpalkkisi on täynnä."
 
 msgid "To consume it, wield it, then rightclick."
-msgstr ""
+msgstr "Nauttiaksesi sen ota se käteesi ja klikkaa oikeaa hiirennäppäintä."
 
 msgid "You cannot consume this when your hunger bar is full."
-msgstr ""
+msgstr "Et voi nauttia tätä, kun nälkäpalkkisi on täynnä."
 
 msgid "You have to wait for about 2 seconds before you can eat or drink again."
 msgstr ""
+"Sinun täytyy odottaa noin kaksi (2) sekuntia, ennen kuin voit syödä tai "
+"juoda uudelleen."
 
 msgid "Hunger points restored: @1"
-msgstr ""
+msgstr "Antaa nälkäpisteitä: @1"
 
 msgid "Saturation points restored: @1%"
-msgstr ""
+msgstr "Antaa kylläisyyspisteitä: @1 %"
 
 msgid "It can be worn on the head."
-msgstr ""
+msgstr "Voi pukea päähän."
 
 msgid "It can be worn on the torso."
-msgstr ""
+msgstr "Voi pukea keskivartaloon."
 
 msgid "It can be worn on the legs."
-msgstr ""
+msgstr "Voi pukea alavartaloon."
 
 msgid "It can be worn on the feet."
-msgstr ""
+msgstr "Voi pukea jalkoihin."
 
 msgid "Armor points: @1"
-msgstr ""
+msgstr "Suojauspisteet: @1"
 
 msgid "Armor durability: @1"
-msgstr ""
+msgstr "Haarniskan kestävyys: @1"
 
 msgid "This item cannot be renamed at an anvil."
-msgstr ""
+msgstr "Tätä esinettä ei voi uudelleennimetä alasimella."
 
 msgid "This block crushes any block it falls into."
-msgstr ""
+msgstr "Tämä kuutio murskaa minkä tahansa kuution, jonka sisään se putoaa."
 
 msgid "When this block falls deeper than 1 block, it causes damage to any player it hits. The damage dealt is B×2−2 hit points with B = number of blocks fallen. The damage can never be more than 40 HP."
 msgstr ""
+"Kun tämä kuutio putoaa yli yhden (1) kuution matkan, se aiheuttaa vahinkoa "
+"pelaajalle, johon se osuu. Vahingon määrä on B x 2 − 2 terveyspistettä, "
+"missä B on putoamismatka kuutioissa mitattuna. Vahingon määrä ei voi koskaan "
+"olla enemmän kuin 40 terveyspistettä."
 
 msgid "Diamond Pickaxe"
-msgstr ""
+msgstr "Timanttihakku"
 
 msgid "Iron Pickaxe"
-msgstr ""
+msgstr "Rautahakku"
 
 msgid "Stone Pickaxe"
-msgstr ""
+msgstr "Kivihakku"
 
 msgid "Golden Pickaxe"
-msgstr ""
+msgstr "Kultahakku"
 
 msgid "Wooden Pickaxe"
-msgstr ""
+msgstr "Puuhakku"
 
 msgid "Diamond Axe"
-msgstr ""
+msgstr "Timanttikirves"
 
 msgid "Iron Axe"
-msgstr ""
+msgstr "Rautakirves"
 
 msgid "Stone Axe"
-msgstr ""
+msgstr "Kivikirves"
 
 msgid "Golden Axe"
-msgstr ""
+msgstr "Kultakirves"
 
 msgid "Wooden Axe"
-msgstr ""
+msgstr "Puukirves"
 
 msgid "Diamond Shovel"
-msgstr ""
+msgstr "Timanttilapio"
 
 msgid "Iron Shovel"
-msgstr ""
+msgstr "Rautalapio"
 
 msgid "Stone Shovel"
-msgstr ""
+msgstr "Kivilapio"
 
 msgid "Golden Shovel"
-msgstr ""
+msgstr "Kultalapio"
 
 msgid "Wooden Shovel"
-msgstr ""
+msgstr "Puulapio"
 
 msgid "This block can be mined by any tool instantly."
-msgstr ""
+msgstr "Tämän kuution voi kaivaa millä tahansa välineellä hetkessä."
 
 msgid "• Shears"
-msgstr ""
+msgstr "• Keritsimet"
 
 msgid "• Sword"
-msgstr ""
+msgstr "• Miekka"
 
 msgid "• Hand"
-msgstr ""
+msgstr "• Käsi"
 
 msgid "This block can be mined by:"
-msgstr ""
+msgstr "Tämän kuution voi kaivaa seuraavilla työkaluilla:"
 
 msgid "Hardness: ∞"
-msgstr ""
+msgstr "Kovuus: ∞"
 
 msgid "Hardness: @1"
-msgstr ""
+msgstr "Kovuus: @1"
 
 msgid "Blast Resistance: @1"
-msgstr ""
+msgstr "Räjähdyssieto: @1"
 
 msgid "This block will not be destroyed by TNT explosions."
-msgstr ""
+msgstr "Tämä kuutio ei tuhoudu dynamiitin räjähdyksessä."
 
 msgid "This block drops itself when mined by shears."
-msgstr ""
+msgstr "Tämä kuutio muuttuu esineeksi, kun sen kaivaa keritsimillä."
 
 msgid "@1×@2"
-msgstr ""
+msgstr "@1 × @2"
 
 msgid "This blocks drops the following when mined by shears: @1"
-msgstr ""
+msgstr "Tämä kuutio pudottaa seuraavat asiat, kun sen kaivaa keritsimillä: @1"
 
 msgid ", "
-msgstr ""
+msgstr ", "
 
 msgid "Painfully slow"
-msgstr ""
+msgstr "Tuskallisen hidas"
 
 msgid "Very slow"
-msgstr ""
+msgstr "Erittäin hidas"
 
 msgid "Slow"
-msgstr ""
+msgstr "Hidas"
 
 msgid "Fast"
-msgstr ""
+msgstr "Nopea"
 
 msgid "Very fast"
-msgstr ""
+msgstr "Erittäin nopea"
 
 msgid "Extremely fast"
-msgstr ""
+msgstr "Äärimmäisen nopea"
 
 msgid "Instantaneous"
-msgstr ""
+msgstr "Välitön"
 
 msgid "@1 uses"
-msgstr ""
+msgstr "@1 käyttökertaa"
 
 msgid "Unlimited uses"
-msgstr ""
+msgstr "Loputtomasti käyttökertoja"
 
 msgid "Mining speed: @1"
-msgstr ""
+msgstr "Kaivuunopeus: @1"
 
 msgid "Mining durability: @1"
-msgstr ""
+msgstr "Kaivuukestävyys: @1"
 
 msgid "This tool is capable of mining."
-msgstr ""
+msgstr "Tällä työkalulla pystyy kaivamaan."
 
 msgid "Block breaking strength: @1"
-msgstr ""
+msgstr "Kuutionrikkomisvoimakkuus: @1"
 
 msgid "This is a melee weapon which deals damage by punching."
-msgstr ""
+msgstr "Tämä on lähitaisteluase, joka tuottaa vahinkoa lyömällä."
 
 msgid "Maximum damage: @1 HP"
-msgstr ""
+msgstr "Suurin määrä vahinkoa: @1 terveyspiste(ttä)"
 
 msgid "Full punch interval: @1 s"
-msgstr ""
-
+msgstr "Täyden lyönnin väliaika: @1 s"

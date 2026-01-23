@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_inventory x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-31 08:21+0000\n"
+"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
+"Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_inventory/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Auto"
 msgstr ""
@@ -47,13 +48,13 @@ msgid "Foodstuffs"
 msgstr ""
 
 msgid "Tools"
-msgstr ""
+msgstr "Työkalut"
 
 msgid "Combat"
 msgstr ""
 
 msgid "Mobs"
-msgstr ""
+msgstr "Olennot"
 
 msgid "Brewing"
 msgstr ""
@@ -80,10 +81,10 @@ msgid "Very large inventory displays may be slow when scrolling, especially on L
 msgstr ""
 
 msgid "Recipe book"
-msgstr ""
+msgstr "Reseptikirja"
 
 msgid "Help"
-msgstr ""
+msgstr "Opas"
 
 msgid "Advancements"
 msgstr ""
@@ -98,8 +99,7 @@ msgid "Crafting table out of range!"
 msgstr ""
 
 msgid "Crafting"
-msgstr ""
+msgstr "Valmistus"
 
 msgid "Fill Craft Grid"
-msgstr ""
-
+msgstr "Täytä valmistusruudukko"

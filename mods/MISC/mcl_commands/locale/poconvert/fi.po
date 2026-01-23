@@ -3,85 +3,85 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_commands x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-29 06:21+0000\n"
+"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
+"Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_commands/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "List bans"
-msgstr ""
+msgstr "Näytä luettelo porttikielloista"
 
 msgid "Ban list: @1"
-msgstr ""
+msgstr "Porttikiellot: @1"
 
 msgid "Players can't be killed right now, damage has been disabled."
-msgstr ""
+msgstr "Pelaajia ei voi tappaa. Vahingoittuminen on kytketty pois."
 
 msgid "Player @1 does not exist."
-msgstr ""
+msgstr "Pelaajaa @1 ei ole olemassa."
 
 msgid "You are already dead"
-msgstr ""
+msgstr "Olet jo kuollut"
 
 msgid "@1 is already dead"
-msgstr ""
+msgstr "@1 on jo kuollut"
 
 msgid "[<name>]"
-msgstr ""
+msgstr "[<nimi>]"
 
 msgid "Kill player or yourself"
-msgstr ""
+msgstr "Tapa pelaaja tai itsesi"
 
 msgid "Show who is logged on"
-msgstr ""
+msgstr "Näytä luettelo paikallaolijoista"
 
 msgid "Can use /say"
-msgstr ""
+msgstr "Voi käyttää /say"
 
 msgid "<message>"
-msgstr ""
+msgstr "<viesti>"
 
 msgid "Send a message to every player"
-msgstr ""
+msgstr "Lähetä viesti kaikille pelaajille"
 
 msgid "Invalid usage, see /help say."
-msgstr ""
+msgstr "Virheellinen käyttötapa. Katso /help say."
 
 msgid "Displays the world seed"
-msgstr ""
+msgstr "Näyttää maailman siemenen"
 
 msgid "<X>,<Y>,<Z> <NodeString>"
-msgstr ""
+msgstr "<X>,<Y>,<Z> <Kuutionimike>"
 
 msgid "Set node at given position"
-msgstr ""
+msgstr "Aseta kuutio tiettyyn sijaintiin"
 
 msgid "Invalid node"
-msgstr ""
+msgstr "Virheellinen kuutio"
 
 msgid "@1 spawned."
-msgstr ""
+msgstr "@1 synnytetty."
 
 msgid "Invalid parameters (see /help setblock)"
-msgstr ""
+msgstr "Virheelliset muuttujat (katso /help setblock)"
 
 msgid "<sound> <target>"
-msgstr ""
+msgstr "<ääni> <kohde>"
 
 msgid "Play a sound. Arguments: <sound>: name of the sound. <target>: Target."
-msgstr ""
+msgstr "Toista ääni. Muuttujat: <ääni>: äänen nimi. <kohde>: kohde."
 
 msgid "Sound name is invalid!"
-msgstr ""
+msgstr "Äänen nimi on virheellinen!"
 
 msgid "Target is invalid!!"
-msgstr ""
+msgstr "Kohde on virheellinen!"
 
 msgid "Only peaceful mobs allowed!"
-msgstr ""
-
+msgstr "Vain rauhalliset olennot sallittu!"
