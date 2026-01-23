@@ -3,48 +3,49 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_levelgen x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2025-12-23 14:21+0000\n"
+"Last-Translator: bright <bright@noreply.codeberg.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"translate.codeberg.org/projects/mineclonia/mcl_levelgen/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid "Structure Void"
-msgstr ""
+msgstr "结构空位"
 
 msgid "Enables structures not to replace existing level contents"
-msgstr ""
+msgstr "启用结构不替换现有世界内容"
 
 msgid "Structure Block"
-msgstr ""
+msgstr "结构方块"
 
 msgid "Saves, generates, or records structure data"
-msgstr ""
+msgstr "保存、生成或记录结构数据"
 
 msgid "Template name is not specified"
-msgstr ""
+msgstr "未指定模板名称"
 
 msgid "Template `@1' is not available: @2"
-msgstr ""
+msgstr "模板“@1”不可用：@2"
 
 msgid "Invalid dimensions: @1,@2,@3"
-msgstr ""
+msgstr "无效尺寸：@1,@2,@3"
 
 msgid "Metadata storage limit exceeded"
-msgstr ""
+msgstr "元数据存储超限"
 
 msgid "Creating file @1: @2"
-msgstr ""
+msgstr "正在创建文件 @1：@2"
 
 msgid "`server' privileges are required to utilize structure blocks"
-msgstr ""
+msgstr "需要“服务器”权限才能使用结构方块"
 
 msgid "Unable to detect structure size.  Add corners with matching structure names."
-msgstr ""
+msgstr "无法检测结构大小，请添加结构名称一致的角落方块。"
 
 msgid "Jigsaw Block"
 msgstr ""
@@ -95,4 +96,3 @@ msgstr ""
 
 msgid "No level contains the position @1,@2,@3"
 msgstr ""
-
