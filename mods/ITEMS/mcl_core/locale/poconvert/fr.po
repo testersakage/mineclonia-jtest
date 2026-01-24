@@ -985,6 +985,12 @@ msgstr "Il s'agit d'un morceau de cactus que l'on trouve couramment dans les zon
 msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr "Un cactus ne peut être placé que sur un autre cactus ou du sable."
 
+msgid "Cactus Flower"
+msgstr ""
+
+msgid "Grows on cacti"
+msgstr ""
+
 msgid "Sugar Canes"
 msgstr "Canne à sucre"
 
@@ -1020,6 +1026,12 @@ msgstr "Le verre est un bloc décoratif et principalement transparent qui se dé
 
 msgid "Stained Glass"
 msgstr "Verre coloré"
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Flowing Water"
 msgstr "Eau qui coule"
@@ -1092,12 +1104,6 @@ msgstr "Arbuste mort"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "Les buissons morts sont des plantes inhabituelles que l'on trouve souvent dans les zones sèches. Ils peuvent être récoltés avec des bâtons."
-
-msgid "Glow Lichen"
-msgstr ""
-
-msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
-msgstr ""
 
 msgid "Barrier"
 msgstr "Barrière invisible"

@@ -985,6 +985,12 @@ msgstr "これは乾燥した地域、特に砂漠によく見られるサボテ
 msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr "サボテンは、他のサボテンや砂の上にしか置けません。"
 
+msgid "Cactus Flower"
+msgstr ""
+
+msgid "Grows on cacti"
+msgstr ""
+
 msgid "Sugar Canes"
 msgstr "サトウキビ"
 
@@ -1020,6 +1026,12 @@ msgstr "色ガラスは、そのほとんどが透明な装飾ブロックで、
 
 msgid "Stained Glass"
 msgstr "色ガラス"
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Flowing Water"
 msgstr "流れる水"
@@ -1092,12 +1104,6 @@ msgstr "枯れ木"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "枯れ木は、乾燥した場所によく見られる、路傍の植物です。棒として採取できます。"
-
-msgid "Glow Lichen"
-msgstr ""
-
-msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
-msgstr ""
 
 msgid "Barrier"
 msgstr "バリア"

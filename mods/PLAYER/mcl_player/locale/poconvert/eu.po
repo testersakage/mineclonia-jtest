@@ -33,6 +33,9 @@ msgid "May enlarge elements, add additional space, and change elements, e.g. add
 msgstr "Baliteke elementuak handitu, espazio gehiago erabili eta elementuak aldatzea, adibidez Sartu tekla ordezkatzeko botoiak gehitzea.\n"
 "Oharra: hau oraindik gailu mota kopuru txiki batentzat bakarrik dago inplementatuta."
 
+msgid "Setting \"@1\" is not available on your Luanti version"
+msgstr ""
+
 msgid "Revert to default"
 msgstr "Leheneratu"
 

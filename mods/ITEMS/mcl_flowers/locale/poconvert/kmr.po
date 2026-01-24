@@ -64,6 +64,9 @@ msgstr ""
 msgid "Wildflowers"
 msgstr ""
 
+msgid "Leaf Litter"
+msgstr ""
+
 msgid "Pink Petals"
 msgstr ""
 
@@ -116,6 +119,18 @@ msgid "Fern"
 msgstr "Dargez"
 
 msgid "Ferns are small plants which occur naturally in jungles and taigas. They can be harvested for wheat seeds. By using bone meal, a fern can be turned into a large fern which is two blocks high."
+msgstr ""
+
+msgid "Bush"
+msgstr ""
+
+msgid "Firefly Bush"
+msgstr ""
+
+msgid "Short Dry Grass"
+msgstr ""
+
+msgid "Tall Dry Grass"
 msgstr ""
 
 msgid "Lily Pad"

@@ -33,6 +33,9 @@ msgid "May enlarge elements, add additional space, and change elements, e.g. add
 msgstr "Může zvětšit prvky, přidat další prostor a změnit prvky, např. přidat tlačítka, která nahradí chybějící klávesu Enter.\n"
 "Upozorňujeme, že v současné době je tato funkce implementována pouze pro velmi omezený počet formulářových specifikací."
 
+msgid "Setting \"@1\" is not available on your Luanti version"
+msgstr ""
+
 msgid "Revert to default"
 msgstr "Vrátit se k výchozímu nastavení"
 

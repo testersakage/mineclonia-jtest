@@ -175,6 +175,9 @@ msgstr "Coelho"
 msgid "Killer Bunny"
 msgstr "Coelho Assassino"
 
+msgid "Ravager"
+msgstr ""
+
 msgid "Salmon"
 msgstr "Salmão"
 

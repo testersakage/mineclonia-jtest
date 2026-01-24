@@ -13,17 +13,14 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Auto"
-msgstr "Auto"
+msgid "Scrollbar"
+msgstr ""
 
-msgid "Off"
-msgstr "Desligado"
+msgid "Pagination buttons"
+msgstr ""
 
-msgid "On (causes problems on some client versions)"
-msgstr "Ligado (causa problemas em algumas versões do cliente)"
-
-msgid "Enable scrollable creative inventory"
-msgstr "Ativar inventário criativo com rolagem"
+msgid "Creative inventory scrolling"
+msgstr ""
 
 msgid "Building Blocks"
 msgstr "Blocos de construção"
@@ -72,15 +69,6 @@ msgstr "Trocar tamanho do estoque"
 
 msgid "@1 / @2"
 msgstr "@1 / @2"
-
-msgid "Very large inventory displays may be slow when scrolling, especially on Luanti versions before 5.11.\n"
-"Therefore the creative inventory display can be split into pages with prev/next page buttons.\n"
-"Mineclonia defaults to use scrolling unless an older Luanti version is detected.\n"
-"This setting allows you to override that heuristic."
-msgstr "Exibições de inventário muito grandes podem ser lentas ao rolar, especialmente em versões do Luanti anteriores à 5.11.\n"
-"Portanto, a exibição criativa do inventário pode ser dividida em páginas com botões de página anterior/próxima.\n"
-"O Mineclonia usa rolagem por padrão, a menos que uma versão mais antiga do Luanti seja detectada.\n"
-"Esta configuração permite que você substitua essa heurística."
 
 msgid "Recipe book"
 msgstr "Livro de receitas"

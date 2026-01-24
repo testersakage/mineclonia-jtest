@@ -1,6 +1,6 @@
 # textdomain: mcl_books
-Chiseled Bookshelf=
-Chiseled bookshelf holds up to six books.=
+Chiseled Bookshelf=Vyřezávaná knihovna
+Chiseled bookshelf holds up to six books.=Vyřezávaná knihovna pojme až šest knih.
 Book=Kniha
 Books are used to make bookshelves and book and quills.=Knihy se používají k výrobě knihoven a knih k psaní.
 “@1”=“@1”

@@ -1,13 +1,13 @@
 # textdomain: mcl_beacons
-Unavailable=
-Active=
-Beacon=
-Primary Power:=
-Secondary Power:=
-Swiftness=
-Haste=
-Resistance=
-Leaping=
-Strength=
-Regeneration=
-Inventory=
+Unavailable=Ei saatavilla
+Active=Aktiivinen
+Beacon=Majakka
+Primary Power:=Ensisijainen voima:
+Secondary Power:=Toissijainen voima:
+Swiftness=Nopeus
+Haste=Kiire
+Resistance=Kestävyys
+Leaping=Loikkaaminen
+Strength=Voimakkuus
+Regeneration=Elpyminen
+Inventory=Tavaraluettelo

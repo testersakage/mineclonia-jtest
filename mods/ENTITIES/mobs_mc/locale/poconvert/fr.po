@@ -175,6 +175,9 @@ msgstr "Lapin"
 msgid "Killer Bunny"
 msgstr "Lapin tueur"
 
+msgid "Ravager"
+msgstr ""
+
 msgid "Salmon"
 msgstr "Saumon"
 

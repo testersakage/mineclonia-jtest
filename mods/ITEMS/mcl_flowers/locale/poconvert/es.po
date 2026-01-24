@@ -64,6 +64,9 @@ msgstr "Aciano"
 msgid "Wildflowers"
 msgstr "Florecillas silvestres"
 
+msgid "Leaf Litter"
+msgstr ""
+
 msgid "Pink Petals"
 msgstr "Pétalos rosas"
 
@@ -117,6 +120,18 @@ msgstr "Helecho"
 
 msgid "Ferns are small plants which occur naturally in jungles and taigas. They can be harvested for wheat seeds. By using bone meal, a fern can be turned into a large fern which is two blocks high."
 msgstr "Los helechos son plantas pequeñas que se producen naturalmente en las selvas y taigas. Se pueden cosechar para semillas de trigo. Al usar harina de hueso, un helecho se puede convertir en un helecho grande que tiene dos bloques de altura."
+
+msgid "Bush"
+msgstr ""
+
+msgid "Firefly Bush"
+msgstr ""
+
+msgid "Short Dry Grass"
+msgstr ""
+
+msgid "Tall Dry Grass"
+msgstr ""
 
 msgid "Lily Pad"
 msgstr "Nenúfar"

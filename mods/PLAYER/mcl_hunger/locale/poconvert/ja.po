@@ -16,9 +16,3 @@ msgstr ""
 msgid "Food"
 msgstr "食料"
 
-msgid "Saturation"
-msgstr "満腹状態"
-
-msgid "Exhaust."
-msgstr "尽きた。"
-

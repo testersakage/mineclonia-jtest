@@ -175,6 +175,9 @@ msgstr "ウサギ"
 msgid "Killer Bunny"
 msgstr "殺人ウサギ"
 
+msgid "Ravager"
+msgstr ""
+
 msgid "Salmon"
 msgstr "サケ"
 

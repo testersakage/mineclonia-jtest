@@ -175,6 +175,9 @@ msgstr "Králík"
 msgid "Killer Bunny"
 msgstr "Zabijácký králík"
 
+msgid "Ravager"
+msgstr ""
+
 msgid "Salmon"
 msgstr "Losos"
 

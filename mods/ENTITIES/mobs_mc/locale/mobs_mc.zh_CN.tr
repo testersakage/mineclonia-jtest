@@ -1,12 +1,12 @@
 # textdomain: mobs_mc
 Axolotl=美西螈
-Spawning will only be successful on clay.=
+Spawning will only be successful on clay.=仅能在黏土块上成功生成。
 Bat=蝙蝠
-Spawning will only be successful between light levels of 0 and 3 at most times of the year, or 0 and 6 between 20 October and 3 November.=
+Spawning will only be successful between light levels of 0 and 3 at most times of the year, or 0 and 6 between 20 October and 3 November.=仅在光照等级 0–3 时才能成功生成；10 月 20 日至 11 月 3 日期间可放宽至 0–6。
 Blaze=烈焰人
 Chicken=鸡
 Cod=鳕鱼
-Each mob spawned will form a school with the remainder of the mobs in the group.=
+Each mob spawned will form a school with the remainder of the mobs in the group.=每生成一只生物，都会与组内其余个体结成鱼群。
 Cow=牛
 Mooshroom=蘑菇
 Creeper=苦力怕
@@ -53,6 +53,7 @@ The second polar bear in a group will always be spawned as a cub.=
 Pufferfish=
 Rabbit=兔子
 Killer Bunny=杀手兔
+Ravager=
 Salmon=鲑鱼
 Sheep=羊
 Shulker=潜影

@@ -175,6 +175,9 @@ msgstr "Coniglio"
 msgid "Killer Bunny"
 msgstr "Coniglio assassino"
 
+msgid "Ravager"
+msgstr ""
+
 msgid "Salmon"
 msgstr "Salmone"
 

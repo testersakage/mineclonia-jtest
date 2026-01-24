@@ -205,6 +205,9 @@ msgstr "Mal presagio"
 msgid "danger is imminent"
 msgstr "el peligro es inminente"
 
+msgid "Trial omen"
+msgstr ""
+
 msgid "Hero of the Village"
 msgstr "Héroe de la aldea"
 

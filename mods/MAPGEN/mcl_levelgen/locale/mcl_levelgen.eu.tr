@@ -1,10 +1,10 @@
 # textdomain: mcl_levelgen
-Structure Void=
-Enables structures not to replace existing level contents=
-Structure Block=
-Saves, generates, or records structure data=
-Template name is not specified=
-Template `@1' is not available: @2=
+Structure Void=Huts Egitura
+Enables structures not to replace existing level contents=Mailan dauden edukiak egiturekin ez ordezkatzea gaitzen du
+Structure Block=Bloke Egitura
+Saves, generates, or records structure data=Egituren datuak gorde edo sortzen ditu
+Template name is not specified=Txantiloiaren izena falta da
+Template `@1' is not available: @2='@1' txantiloia ez dago eskuragarri: @2
 Invalid dimensions: @1,@2,@3=
 Metadata storage limit exceeded=
 Creating file @1: @2=

@@ -985,6 +985,12 @@ msgstr "這是常見於乾燥地區（尤其是沙漠）的仙人掌的一塊。
 msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr "仙人掌只可以擺放在其他仙人掌或沙子上。"
 
+msgid "Cactus Flower"
+msgstr ""
+
+msgid "Grows on cacti"
+msgstr ""
+
 msgid "Sugar Canes"
 msgstr "甘蔗"
 
@@ -1020,6 +1026,12 @@ msgstr "染色玻璃是一種大致透明的裝飾性方塊，有各種顏色。
 
 msgid "Stained Glass"
 msgstr "染色玻璃"
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Flowing Water"
 msgstr "流動的水"
@@ -1092,12 +1104,6 @@ msgstr "枯灌木"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "枯灌木是一種不起眼的植物，經常在乾旱地區發現。它們可以被收割成木棒。"
-
-msgid "Glow Lichen"
-msgstr ""
-
-msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
-msgstr ""
 
 msgid "Barrier"
 msgstr "屏障"

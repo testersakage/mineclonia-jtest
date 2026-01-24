@@ -33,6 +33,9 @@ msgid "May enlarge elements, add additional space, and change elements, e.g. add
 msgstr "可放大元素、添加额外空间和更改元素，例如添加按钮以替代丢失的回车键。\n"
 "请注意，目前只有非常有限的表单规格可以实现这一点。"
 
+msgid "Setting \"@1\" is not available on your Luanti version"
+msgstr ""
+
 msgid "Revert to default"
 msgstr "恢复到默认值"
 

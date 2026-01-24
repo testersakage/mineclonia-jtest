@@ -46,9 +46,6 @@ msgstr "ベッドが遠くて、寝られません！"
 msgid "This bed is already occupied!"
 msgstr "このベッドは、すでに占有されてます！"
 
-msgid "You have to stop moving before going to bed!"
-msgstr "寝るなら、まず動くのを止めてからです！"
-
 msgid "You can't sleep now, monsters are nearby!"
 msgstr "今は眠れません…モンスターが近くにいます！"
 

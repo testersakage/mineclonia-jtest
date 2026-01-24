@@ -16,9 +16,3 @@ msgstr ""
 msgid "Food"
 msgstr "Nahrung"
 
-msgid "Saturation"
-msgstr "Sättigung"
-
-msgid "Exhaust."
-msgstr "Erschöpf."
-

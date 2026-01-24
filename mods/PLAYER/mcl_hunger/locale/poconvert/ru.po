@@ -16,9 +16,3 @@ msgstr ""
 msgid "Food"
 msgstr "Еда"
 
-msgid "Saturation"
-msgstr "Насыщение"
-
-msgid "Exhaust."
-msgstr "Истощение."
-

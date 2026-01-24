@@ -205,6 +205,9 @@ msgstr ""
 msgid "danger is imminent"
 msgstr ""
 
+msgid "Trial omen"
+msgstr ""
+
 msgid "Hero of the Village"
 msgstr "Byhjälten"
 

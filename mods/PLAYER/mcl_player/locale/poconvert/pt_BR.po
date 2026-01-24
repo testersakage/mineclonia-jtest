@@ -32,6 +32,9 @@ msgid "May enlarge elements, add additional space, and change elements, e.g. add
 "Note that currently this is only implemented for a very limited number of formspecs."
 msgstr ""
 
+msgid "Setting \"@1\" is not available on your Luanti version"
+msgstr ""
+
 msgid "Revert to default"
 msgstr "Voltar ao padrão"
 

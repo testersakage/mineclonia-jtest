@@ -1,6 +1,6 @@
 # textdomain: mcl_commands
 List bans=Listo de malpermesaĵoj
-Ban list: @1=
+Ban list: @1=Malpermeslisto: @1
 Players can't be killed right now, damage has been disabled.=
 Player @1 does not exist.=
 You are already dead=

@@ -46,9 +46,6 @@ msgstr "Vous ne pouvez pas dormir, le lit est trop loin !"
 msgid "This bed is already occupied!"
 msgstr "Ce lit est déjà occupé !"
 
-msgid "You have to stop moving before going to bed!"
-msgstr "Vous devez arrêter de bouger avant de vous coucher !"
-
 msgid "You can't sleep now, monsters are nearby!"
 msgstr "Vous ne pouvez pas dormir maintenant, des monstres sont à proximité !"
 

@@ -1,5 +1,5 @@
 # textdomain: mcl_levelgen
-Structure Void=
+Structure Void=Struktura Malpleno
 Enables structures not to replace existing level contents=
 Structure Block=
 Saves, generates, or records structure data=

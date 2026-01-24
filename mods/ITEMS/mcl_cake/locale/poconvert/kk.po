@@ -16,33 +16,12 @@ msgstr ""
 msgid "Cake"
 msgstr "Торт"
 
-msgid "With 7 tasty slices!"
+msgid "With 7 tasty slices! Hunger points: +@1 per slice"
 msgstr ""
 
-msgid "Hunger points: +@1 per slice"
-msgstr ""
-
-msgid "Cakes can be placed and eaten to restore hunger points. A cake has 7 slices. Each slice restores 2 hunger points and 0.4 saturation points. Cakes will be destroyed when dug or when the block below them is broken."
+msgid "Cakes can be placed and eaten to restore hunger points. A cake has 7 slices. Each slice restores @1 hunger points and @2 saturation points. Cakes will be destroyed when dug or when the block below them is broken."
 msgstr ""
 
 msgid "Place the cake anywhere, then rightclick it to eat a single slice. You can't eat from the cake when your hunger bar is full."
-msgstr ""
-
-msgid "Cake (6 Slices Left)"
-msgstr ""
-
-msgid "Cake (5 Slices Left)"
-msgstr ""
-
-msgid "Cake (4 Slices Left)"
-msgstr ""
-
-msgid "Cake (3 Slices Left)"
-msgstr ""
-
-msgid "Cake (2 Slices Left)"
-msgstr ""
-
-msgid "Cake (1 Slice Left)"
 msgstr ""
 

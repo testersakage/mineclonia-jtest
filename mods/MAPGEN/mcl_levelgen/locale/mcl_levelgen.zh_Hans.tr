@@ -1,15 +1,15 @@
 # textdomain: mcl_levelgen
-Structure Void=
-Enables structures not to replace existing level contents=
-Structure Block=
-Saves, generates, or records structure data=
-Template name is not specified=
-Template `@1' is not available: @2=
-Invalid dimensions: @1,@2,@3=
-Metadata storage limit exceeded=
-Creating file @1: @2=
-`server' privileges are required to utilize structure blocks=
-Unable to detect structure size.  Add corners with matching structure names.=
+Structure Void=结构空位
+Enables structures not to replace existing level contents=启用结构不替换现有世界内容
+Structure Block=结构方块
+Saves, generates, or records structure data=保存、生成或记录结构数据
+Template name is not specified=未指定模板名称
+Template `@1' is not available: @2=模板“@1”不可用：@2
+Invalid dimensions: @1,@2,@3=无效尺寸：@1,@2,@3
+Metadata storage limit exceeded=元数据存储超限
+Creating file @1: @2=正在创建文件 @1：@2
+`server' privileges are required to utilize structure blocks=需要“服务器”权限才能使用结构方块
+Unable to detect structure size.  Add corners with matching structure names.=无法检测结构大小，请添加结构名称一致的角落方块。
 Jigsaw Block=
 Facilitates generation of multiple-piece structures=
 `server' privileges are required to interact with jigsaw blocks=

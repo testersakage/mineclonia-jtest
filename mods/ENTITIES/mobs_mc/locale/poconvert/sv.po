@@ -175,6 +175,9 @@ msgstr ""
 msgid "Killer Bunny"
 msgstr ""
 
+msgid "Ravager"
+msgstr ""
+
 msgid "Salmon"
 msgstr ""
 

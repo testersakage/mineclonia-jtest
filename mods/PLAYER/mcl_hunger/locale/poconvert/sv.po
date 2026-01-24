@@ -16,9 +16,3 @@ msgstr ""
 msgid "Food"
 msgstr "Mat"
 
-msgid "Saturation"
-msgstr "Mättnad"
-
-msgid "Exhaust."
-msgstr "Utmattning."
-

@@ -3,16 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-29 12:21+0000\n"
-"Last-Translator: maxchen32 <maxchen32@noreply.codeberg.org>\n"
-"Language-Team: Chinese (Simplified Han script) <https://"
-"translate.codeberg.org/projects/mineclonia/mcl_core/zh_Hans/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Stick"
 msgstr "木棍"
@@ -986,6 +985,12 @@ msgstr "这是一种常见于干旱地区，尤其是沙漠中的仙人掌。随
 msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr "仙人掌只能放置在另一株仙人掌顶部或者任何沙子之上。"
 
+msgid "Cactus Flower"
+msgstr ""
+
+msgid "Grows on cacti"
+msgstr ""
+
 msgid "Sugar Canes"
 msgstr "甘蔗"
 
@@ -1021,6 +1026,12 @@ msgstr "有色玻璃是一种带有装饰性且基本透明的方块，有着各
 
 msgid "Stained Glass"
 msgstr "有色玻璃"
+
+msgid "Glow Lichen"
+msgstr "发光地衣"
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr "一种自然生成的非固体方块，会发出微弱的光，并可附着在固体方块的任意表面上。"
 
 msgid "Flowing Water"
 msgstr "活水"
@@ -1093,12 +1104,6 @@ msgstr "枯灌木丛"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "枯木丛是一种不起眼的植物，常出现在干旱地区。可以采集它们来获取木棍。"
-
-msgid "Glow Lichen"
-msgstr "发光地衣"
-
-msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
-msgstr "一种自然生成的非固体方块，会发出微弱的光，并可附着在固体方块的任意表面上。"
 
 msgid "Barrier"
 msgstr "屏障"
@@ -1234,3 +1239,4 @@ msgstr "苔藓石砖楼梯"
 
 msgid "Mossy Stone Brick Slab"
 msgstr "苔藓石砖台阶"
+

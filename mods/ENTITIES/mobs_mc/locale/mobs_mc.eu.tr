@@ -1,8 +1,8 @@
 # textdomain: mobs_mc
 Axolotl=Axolotea
-Spawning will only be successful on clay.=
+Spawning will only be successful on clay.=Agertzea arrakastatsua lokatzetan bakarrik gertatuko da.
 Bat=Saguzarra
-Spawning will only be successful between light levels of 0 and 3 at most times of the year, or 0 and 6 between 20 October and 3 November.=
+Spawning will only be successful between light levels of 0 and 3 at most times of the year, or 0 and 6 between 20 October and 3 November.=Agertzea arrakastatsua 0 eta 3 arteko argi mailetan bakarrik izango da ia urte osoan, edo 0 eta 6 bitartean Urriaren 20 eta Azaroaren 3 artean.
 Blaze=Sutzarra
 Chicken=Oilaskoa
 Cod=Bakailaoa
@@ -53,6 +53,7 @@ The second polar bear in a group will always be spawned as a cub.=
 Pufferfish=
 Rabbit=Untxia
 Killer Bunny=Untxi Hiltzailea
+Ravager=
 Salmon=Izokina
 Sheep=Ardia
 Shulker=Shulkerra

@@ -3,16 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_flowers x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-12-25 00:21+0000\n"
-"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
-"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
-"mineclonia/mcl_flowers/pt_BR/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "This is a small flower. Small flowers are mainly used for dye production and can also be potted."
 msgstr "Isso é uma flor pequena. Flores pequenas são majoritariamente usadas para a produção de corantes e também podem ser envasadas."
@@ -64,6 +63,9 @@ msgstr "Centáurea"
 
 msgid "Wildflowers"
 msgstr "Flores silvestres"
+
+msgid "Leaf Litter"
+msgstr ""
 
 msgid "Pink Petals"
 msgstr "Pétalas Rosas"
@@ -119,8 +121,21 @@ msgstr "Samambaia"
 msgid "Ferns are small plants which occur naturally in jungles and taigas. They can be harvested for wheat seeds. By using bone meal, a fern can be turned into a large fern which is two blocks high."
 msgstr "Samambaias são plantas pequenas que ocorrem naturalmente em selvas e taigas. Podem ser colhidas para obter sementes de trigo. Usando farinha de osso, uma samambaia pode ser transformada em uma samambaia grande a qual têm dois blocos de altura."
 
+msgid "Bush"
+msgstr ""
+
+msgid "Firefly Bush"
+msgstr ""
+
+msgid "Short Dry Grass"
+msgstr ""
+
+msgid "Tall Dry Grass"
+msgstr ""
+
 msgid "Lily Pad"
 msgstr "Vitória-Régia"
 
 msgid "A lily pad is a flat plant block which can be walked on. They can be placed on water sources, ice and frosted ice."
 msgstr "Uma vitória-régia é um bloco de planta plano que pode ser pisado. Podem ser posicionadas em fontes de água, gelo e gelo fosco."
+

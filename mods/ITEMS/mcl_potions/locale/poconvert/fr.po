@@ -205,6 +205,9 @@ msgstr "Mauvais présage"
 msgid "danger is imminent"
 msgstr "le danger est imminent"
 
+msgid "Trial omen"
+msgstr ""
+
 msgid "Hero of the Village"
 msgstr "Héros du village"
 

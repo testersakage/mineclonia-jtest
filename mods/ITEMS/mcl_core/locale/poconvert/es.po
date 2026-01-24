@@ -985,6 +985,12 @@ msgstr "Se trata de un cactus que suele encontrarse en zonas secas, especialment
 msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr "Un cactus solo se puede colocar encima de otro cactus o arena."
 
+msgid "Cactus Flower"
+msgstr ""
+
+msgid "Grows on cacti"
+msgstr ""
+
 msgid "Sugar Canes"
 msgstr "Caña de azúcar"
 
@@ -1020,6 +1026,12 @@ msgstr "Los cristales teñidos son bloques decorativos, en su mayoría transpare
 
 msgid "Stained Glass"
 msgstr "Cristal teñido"
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Flowing Water"
 msgstr "Agua que fluye"
@@ -1092,12 +1104,6 @@ msgstr "Arbusto muerto"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "Los arbustos muertos son plantas poco comunes que a menudo se encuentran en áreas secas. Se pueden cosechar para obtener palos."
-
-msgid "Glow Lichen"
-msgstr ""
-
-msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
-msgstr ""
 
 msgid "Barrier"
 msgstr "Barrera"

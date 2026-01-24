@@ -64,6 +64,9 @@ msgstr "Azidoa"
 msgid "Wildflowers"
 msgstr "Basoko loretxoak"
 
+msgid "Leaf Litter"
+msgstr ""
+
 msgid "Pink Petals"
 msgstr "Petalo arrosak"
 
@@ -117,6 +120,18 @@ msgstr "Iratzea"
 
 msgid "Ferns are small plants which occur naturally in jungles and taigas. They can be harvested for wheat seeds. By using bone meal, a fern can be turned into a large fern which is two blocks high."
 msgstr "Iratzeak landare txikiak dira, eta berez sortzen dira oihan eta taigetan. Gari-hazietarako uztak egin daitezke. Hezur-irina erabiltzean, iratze bat garo handi bihur daiteke, bi bloke altu dituena."
+
+msgid "Bush"
+msgstr ""
+
+msgid "Firefly Bush"
+msgstr ""
+
+msgid "Short Dry Grass"
+msgstr ""
+
+msgid "Tall Dry Grass"
+msgstr ""
 
 msgid "Lily Pad"
 msgstr "Nenufarra"

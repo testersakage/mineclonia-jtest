@@ -1,6 +1,6 @@
 # textdomain: mcl_books
 Chiseled Bookshelf=Ĉizita libroŝranko
-Chiseled bookshelf holds up to six books.=
+Chiseled bookshelf holds up to six books.=Elĉizita librobreto eltenas ĝis ses librojn.
 Book=
 Books are used to make bookshelves and book and quills.=
 “@1”=
@@ -27,5 +27,5 @@ Written books contain some text written by someone. They can be read and copied,
 Hold it in your hand, then rightclick to read the book.=
 To copy the text of the written book, place it into the crafting grid together with a book and quill (or multiple of those) and craft. The written book will not be consumed. Copies of copies can not be copied.=
 Bookshelf=
-Inventory=Inventaro
+Inventory=Portaĵujo
 Bookshelves are used for decoration.=

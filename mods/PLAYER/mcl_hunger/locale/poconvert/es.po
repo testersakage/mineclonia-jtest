@@ -16,9 +16,3 @@ msgstr ""
 msgid "Food"
 msgstr "Comida"
 
-msgid "Saturation"
-msgstr "Saturación"
-
-msgid "Exhaust."
-msgstr "Cansado."
-

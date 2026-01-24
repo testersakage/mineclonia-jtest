@@ -985,6 +985,12 @@ msgstr ""
 msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr ""
 
+msgid "Cactus Flower"
+msgstr ""
+
+msgid "Grows on cacti"
+msgstr ""
+
 msgid "Sugar Canes"
 msgstr ""
 
@@ -1019,6 +1025,12 @@ msgid "Stained glass is a decorative and mostly transparent block which comes in
 msgstr ""
 
 msgid "Stained Glass"
+msgstr ""
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
 msgstr ""
 
 msgid "Flowing Water"
@@ -1091,12 +1103,6 @@ msgid "Dead Bush"
 msgstr "Мертвий кущ"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
-msgstr ""
-
-msgid "Glow Lichen"
-msgstr ""
-
-msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
 msgstr ""
 
 msgid "Barrier"

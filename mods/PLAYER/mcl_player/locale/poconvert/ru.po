@@ -33,6 +33,9 @@ msgid "May enlarge elements, add additional space, and change elements, e.g. add
 msgstr "Может увеличить элементы, добавить дополнительное пространство и изменить элементы, например, добавить кнопки вместо отсутствующей клавиши ввода.\n"
 "Но в настоящее время это реализовано только для очень ограниченного числа форм."
 
+msgid "Setting \"@1\" is not available on your Luanti version"
+msgstr ""
+
 msgid "Revert to default"
 msgstr "Вернуть по умолчанию"
 

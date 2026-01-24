@@ -985,6 +985,12 @@ msgstr "To jest kawałek kaktusa często występujący w suchych obszarach, zwł
 msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr "Kaktus może być postawiony tylko na innym kaktusie lub piasku."
 
+msgid "Cactus Flower"
+msgstr ""
+
+msgid "Grows on cacti"
+msgstr ""
+
 msgid "Sugar Canes"
 msgstr "Trzcina cukrowa"
 
@@ -1020,6 +1026,12 @@ msgstr "Kolorowe szkło jest dekoracyjnym, przejrzystym blokiem. Istnieją róż
 
 msgid "Stained Glass"
 msgstr "Kolorowe szkło"
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Flowing Water"
 msgstr "Płynąca woda"
@@ -1092,12 +1104,6 @@ msgstr "Uschnięty krzew"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "Uschnięte krzewy to niewyróżniające się rośliny często występujące w suchych obszarach. Mogą z nich być zebrane patyki."
-
-msgid "Glow Lichen"
-msgstr ""
-
-msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
-msgstr ""
 
 msgid "Barrier"
 msgstr "Bariera"

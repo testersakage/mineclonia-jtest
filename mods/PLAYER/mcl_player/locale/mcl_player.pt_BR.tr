@@ -5,6 +5,7 @@ Inventory=Inventário
 Misc=Outros
 Adapt UI for a better experience on touchscreen devices=Adaptar a Interface de Usuário para uma melhor experiência em dispositivos com toque de tela
 May enlarge elements, add additional space, and change elements, e.g. add buttons to replace the missing enter key.@nNote that currently this is only implemented for a very limited number of formspecs.=
+Setting "@1" is not available on your Luanti version=
 Revert to default=Voltar ao padrão
 (currently selected)=(atualmente selecionado)
 (default)=(padrão)

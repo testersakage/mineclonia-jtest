@@ -64,6 +64,9 @@ msgstr "Kornblume"
 msgid "Wildflowers"
 msgstr "Wildblumen"
 
+msgid "Leaf Litter"
+msgstr ""
+
 msgid "Pink Petals"
 msgstr "Rosa Blütenblätter"
 
@@ -117,6 +120,18 @@ msgstr "Farn"
 
 msgid "Ferns are small plants which occur naturally in jungles and taigas. They can be harvested for wheat seeds. By using bone meal, a fern can be turned into a large fern which is two blocks high."
 msgstr "Farne sind kleine Pflanzen, die oft in Dschungeln und Taigas vorkommen. Sie können für Weizensamen abgeerntet werden. Mit Knochenmehl lässt sich ein Farn zu einem großen Farn, der zwei Blöcke hoch ist, verwandeln."
+
+msgid "Bush"
+msgstr ""
+
+msgid "Firefly Bush"
+msgstr ""
+
+msgid "Short Dry Grass"
+msgstr ""
+
+msgid "Tall Dry Grass"
+msgstr ""
 
 msgid "Lily Pad"
 msgstr "Seerosenblatt"

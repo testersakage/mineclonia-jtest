@@ -985,6 +985,12 @@ msgstr "Dies ist ein Teil eines Kaktus, der für gewöhnlich in trockenen Gebiet
 msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr "Ein Kaktus kann nur auf einem anderen Kaktus oder auf beliebigem Sand platziert werden."
 
+msgid "Cactus Flower"
+msgstr ""
+
+msgid "Grows on cacti"
+msgstr ""
+
 msgid "Sugar Canes"
 msgstr "Zuckerrohr"
 
@@ -1020,6 +1026,12 @@ msgstr "Buntglas ist ein dekorativer und größtenteils durchsichtiger Block, de
 
 msgid "Stained Glass"
 msgstr "Buntglas"
+
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
 
 msgid "Flowing Water"
 msgstr "Fließendes Wasser"
@@ -1092,12 +1104,6 @@ msgstr "Toter Busch"
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
 msgstr "Tote Büsche sind uninteressante Pflanzen, die oft in trockenen Gebieten vorkommen."
-
-msgid "Glow Lichen"
-msgstr ""
-
-msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
-msgstr ""
 
 msgid "Barrier"
 msgstr "Barriere"

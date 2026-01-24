@@ -64,6 +64,9 @@ msgstr "ヤグルマギク"
 msgid "Wildflowers"
 msgstr ""
 
+msgid "Leaf Litter"
+msgstr ""
+
 msgid "Pink Petals"
 msgstr ""
 
@@ -117,6 +120,18 @@ msgstr "シダ"
 
 msgid "Ferns are small plants which occur naturally in jungles and taigas. They can be harvested for wheat seeds. By using bone meal, a fern can be turned into a large fern which is two blocks high."
 msgstr "シダは、ジャングルやタイガに自生する小さな植物です。そこから小麦の種を収穫できることがあります。骨粉を使うことで、高さ2ブロックの、大きなシダに変えられます。"
+
+msgid "Bush"
+msgstr ""
+
+msgid "Firefly Bush"
+msgstr ""
+
+msgid "Short Dry Grass"
+msgstr ""
+
+msgid "Tall Dry Grass"
+msgstr ""
 
 msgid "Lily Pad"
 msgstr "スイレンの葉"

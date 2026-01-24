@@ -1,8 +1,7 @@
 # textdomain: mcl_inventory
-Auto=
-Off=
-On (causes problems on some client versions)=
-Enable scrollable creative inventory=Gaitu korritzea sorkuntza-inbentarioko barran
+Scrollbar=
+Pagination buttons=
+Creative inventory scrolling=
 Building Blocks=Eraikuntza-blokeak
 Decoration Blocks=Dekorazio-blokeak
 Redstone=Redstone
@@ -19,7 +18,6 @@ Survival Inventory=Biziraupenaren inbentarioa
 Not in Creative Inventory=Ez dago sormen-inbentarioan
 Switch stack size=Item kopurua pila bakoitzeko aldatzea
 @1 / @2=@1 / @2
-Very large inventory displays may be slow when scrolling, especially on Luanti versions before 5.11.@nTherefore the creative inventory display can be split into pages with prev/next page buttons.@nMineclonia defaults to use scrolling unless an older Luanti version is detected.@nThis setting allows you to override that heuristic.=Inbentario handien bistaratzea motela izan daiteke korritzean, bereziki Luantiren 5.11 aurreko bertsioetan.@nHortaz, sormen-inbentarioaren bistaratzea orrietan banatu da, aurrekoa/hurrengoa botoiekin.@nMinecloniak defektuz korritzea erabiliko du, 5.11 baino bertsio bat aurkitu ezean.@nEzarpen honekin baieztapen hori aldatu daiteke.
 Recipe book=Errezeta-liburua
 Help=Laguntza
 Advancements=Aurrerapenak

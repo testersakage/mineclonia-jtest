@@ -46,9 +46,6 @@ msgstr "Tidak bisa tidur, kasur terlalu jauh!"
 msgid "This bed is already occupied!"
 msgstr "Kasur sudah ada yang punya!"
 
-msgid "You have to stop moving before going to bed!"
-msgstr "Kamu harus diam saat ingin mulai tidur!"
-
 msgid "You can't sleep now, monsters are nearby!"
 msgstr "Kamu tidak bisa tidur sekarang, banyak monster mendekat!"
 

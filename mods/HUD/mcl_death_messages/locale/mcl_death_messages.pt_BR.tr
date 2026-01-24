@@ -1,7 +1,7 @@
 # textdomain: mcl_death_messages
 @1 went up in flames=@1 foi incendiado
 @1 walked into fire whilst fighting @2=@1 entrou no fogo enquanto lutava contra @2
-@1 was struck by lightning=
+@1 was struck by lightning=@1 foi atingido por um raio
 @1 was struck by lightning whilst fighting @2=
 @1 burned to death=
 @1 was burnt to a crisp whilst fighting @2=
@@ -11,7 +11,7 @@
 @1 walked into danger zone due to @2=
 @1 suffocated in a wall=
 @1 suffocated in a wall whilst fighting @2=
-@1 drowned=
+@1 drowned=@1 afogou
 @1 drowned whilst trying to escape @2=
 @1 starved to death=
 @1 starved to death whilst fighting @2=
@@ -23,7 +23,7 @@
 @1 experienced kinetic energy whilst trying to escape @2=
 @1 fell out of the world=
 @1 didn't want to live in the same world as @2=
-@1 died=
+@1 died=@1 morreu
 @1 died because of @2=
 @1 was killed by magic=
 @1 was killed by magic whilst trying to escape @2=

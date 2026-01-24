@@ -64,6 +64,9 @@ msgstr "矢車菊"
 msgid "Wildflowers"
 msgstr ""
 
+msgid "Leaf Litter"
+msgstr ""
+
 msgid "Pink Petals"
 msgstr ""
 
@@ -117,6 +120,18 @@ msgstr "蕨"
 
 msgid "Ferns are small plants which occur naturally in jungles and taigas. They can be harvested for wheat seeds. By using bone meal, a fern can be turned into a large fern which is two blocks high."
 msgstr "蕨是自然存在於叢林和台地的小型植物。它們可以被收割為小麥種子。通過使用骨粉，可以把蕨變成兩塊高的高蕨。"
+
+msgid "Bush"
+msgstr ""
+
+msgid "Firefly Bush"
+msgstr ""
+
+msgid "Short Dry Grass"
+msgstr ""
+
+msgid "Tall Dry Grass"
+msgstr ""
 
 msgid "Lily Pad"
 msgstr "荷葉"

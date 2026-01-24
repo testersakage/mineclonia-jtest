@@ -1,6 +1,6 @@
 # textdomain: mcl_beacons
 Unavailable=Nedisponebla
-Active=
+Active=Aktiva
 Beacon=
 Primary Power:=
 Secondary Power:=
@@ -10,4 +10,4 @@ Resistance=
 Leaping=
 Strength=
 Regeneration=
-Inventory=Inventaro
+Inventory=Portaĵujo

@@ -46,9 +46,6 @@ msgstr "你無法休息，床離你太遠了！"
 msgid "This bed is already occupied!"
 msgstr "這張床已被佔用！"
 
-msgid "You have to stop moving before going to bed!"
-msgstr "在睡覺前，你必須停下！"
-
 msgid "You can't sleep now, monsters are nearby!"
 msgstr "你無法休息，有怪物在附近遊蕩！"
 

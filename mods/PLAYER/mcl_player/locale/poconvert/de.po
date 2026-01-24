@@ -33,6 +33,9 @@ msgid "May enlarge elements, add additional space, and change elements, e.g. add
 msgstr "Kann Elemente vergrößern, zusätzlichen Freiraum hinzufügen, und Elemente verändern, z.B. Buttons hinzufügen, die die fehlende Entertaste ersetzen.\n"
 "Beachte, dass dies nur für eine sehr geringe Anzahl von Formspecs implementiert ist."
 
+msgid "Setting \"@1\" is not available on your Luanti version"
+msgstr ""
+
 msgid "Revert to default"
 msgstr "Auf Standard zurückstellen"
 

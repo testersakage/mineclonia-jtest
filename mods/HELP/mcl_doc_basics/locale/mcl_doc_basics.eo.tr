@@ -1,6 +1,6 @@
 # textdomain: mcl_doc_basics
 Advanced usage=Altnivela uzado
-Advanced information which may be nice to know, but is not crucial to gameplay=
+Advanced information which may be nice to know, but is not crucial to gameplay=Altnivelaj informoj, kiuj eble sciindas, sed ne estas decidaj por la ludado
 # MCL2 extensions
 Creative Mode=
 Enabling Creative Mode in MineClonia applies the following changes:=
@@ -196,7 +196,7 @@ Items have several properties, including the following:=
 • Pointing range: How close things must be to be pointed while wielding this item=
 • Group memberships: See “Basics > Groups”=
 • May be used for crafting or cooking=
-Inventory=Inventaro
+Inventory=Portaĵujo
 Inventories are used to store item stacks. There are other uses, such as crafting. An inventory consists of a rectangular grid of item slots. Each item slot can either be empty or hold one item stack. Item stacks can be moved freely between most slots.=
 You have your own inventory which is called your “player inventory”, you can open it with the inventory key (default: [I]).=
 Blocks can also have their own inventory, e.g. chests and furnaces.=
@@ -261,7 +261,7 @@ Almost all blocks can be built (or placed). Building is very simple and has no d
 To build your wielded block, point at a block in the world and right-click. If this is not possible because the pointed block has a special right-click action, hold down the sneak key before right-clicking.=
 Blocks can almost always be built at pointable blocks. One exception are blocks attached to the floor; these can only be built on the floor.=
 Normally, blocks are built in front of the pointed side of the pointed block. A few blocks are different: When you try to build at them, they are replaced.=
-Crafting=Elfarado
+Crafting=Kunmetado
 Crafting is the task of combining several items to form a new item.=
 To craft something, you need one or more items, a crafting grid (C) and a crafting recipe. A crafting grid is like a normal inventory which can also be used for crafting. Items need to be put in a certain pattern into the crafting grid. Next to the crafting grid is an output slot (O). Here the result will appear when you placed items correctly. This is just a preview, not the actual item.=
 The crafting grid you have inside your inventory is 2x2, limiting the amount of potential recipes you can craft. To craft recipes that require a 3x3 grid you will need a crafting table.=
@@ -326,7 +326,7 @@ A few animals can be tamed. You can generally do more things with tamed animals 
 Breeding:=
 When you have fed an animal up to its maximum health, then feed it again, you will activate “Love Mode” and many hearts appear around the animal.=
 Two animals of the same species will start to breed if they are in Love Mode and close to each other. Soon a baby animal will pop up.=
-Baby animals:=
+Baby animals:=Bestidoj:
 Baby animals are just like their adult couterparts, but they can't be tamed or bred and don't drop anything when they die. They grow to adults after a short time. When fed, they grow to adults faster.=
 Minimap=
 The minimap allows you to get an overhead view of your surroundings, as a HUD that appears in the top right corner.=
@@ -385,7 +385,7 @@ The physics for swimming and diving in a liquid are:=
 • There is no fall damage for falling into a liquid as such=
 • If you fall into a liquid, you will be slowed down on impact (but don't stop instantly). Your impact depth is determined by your speed and the liquid viscosity. For a safe high drop into a liquid, make sure there is enough liquid above the ground, otherwise you might hit the ground and take fall damage=
 Liquids are often not pointable. But some special items are able to point all liquids.=
-Light=
+Light=Lumo
 As the world is entirely block-based, so is the light in the world. Each block has its own brightness. The brightness of a block is expressed in a “light level” which ranges from 0 (total darkness) to 15 (as bright as the sun).=
 There are two types of light: Sunlight and artificial light.=
 Artificial light is emitted by luminous blocks. Artificial light has a light level from 1-14.=
@@ -440,7 +440,7 @@ Gameplay:=
 • Crafting: Combining multiple items to create new ones=
 • Crafting guide: A helper which shows available crafting recipes=
 • Spawning: Appearing in the world=
-• Respawning: Appearing again in the world after death=
+• Respawning: Appearing again in the world after death=• Renaskiĝo: Apero ree en la mondon post morto
 • Group: Puts similar things together, often affects gameplay=
 • noclip: Allows to fly through walls=
 Interface=

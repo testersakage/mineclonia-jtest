@@ -1,6 +1,6 @@
 # textdomain: mcl_books
-Chiseled Bookshelf=
-Chiseled bookshelf holds up to six books.=
+Chiseled Bookshelf=雕纹书架
+Chiseled bookshelf holds up to six books.=雕纹书架最多可放置六本书。
 Book=书籍
 Books are used to make bookshelves and book and quills.=书可用于制作书架以及书与羽毛笔。
 “@1”=“@1”

@@ -205,6 +205,9 @@ msgstr "Schlechtes Vorzeichen"
 msgid "danger is imminent"
 msgstr "Gefahr droht unmittelbar"
 
+msgid "Trial omen"
+msgstr ""
+
 msgid "Hero of the Village"
 msgstr "Held des Dorfes"
 

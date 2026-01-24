@@ -16,9 +16,3 @@ msgstr ""
 msgid "Food"
 msgstr "Janaria"
 
-msgid "Saturation"
-msgstr "Saturazioa"
-
-msgid "Exhaust."
-msgstr "Nekatuta."
-

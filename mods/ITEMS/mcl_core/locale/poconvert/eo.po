@@ -3,24 +3,21 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2026-01-22 20:21+0000\n"
-"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
-"Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
-"mcl_core/eo/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Stick"
 msgstr "Bastono"
 
 msgid "Sticks are a very versatile crafting material; used in countless crafting recipes."
-msgstr ""
-"Bastonetoj estas tre pluruzaj materialoj; uzataj en sennombraj kunmet-"
-"receptoj."
+msgstr "Bastonetoj estas tre pluruzaj materialoj; uzataj en sennombraj kunmet-receptoj."
 
 msgid "Paper"
 msgstr "Papero"
@@ -988,6 +985,12 @@ msgstr ""
 msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr ""
 
+msgid "Cactus Flower"
+msgstr ""
+
+msgid "Grows on cacti"
+msgstr ""
+
 msgid "Sugar Canes"
 msgstr ""
 
@@ -1024,6 +1027,12 @@ msgstr ""
 msgid "Stained Glass"
 msgstr ""
 
+msgid "Glow Lichen"
+msgstr ""
+
+msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
+msgstr ""
+
 msgid "Flowing Water"
 msgstr ""
 
@@ -1043,9 +1052,7 @@ msgid "• When water is directly above or horizontally next to a lava source, t
 msgstr ""
 
 msgid "• When flowing water touches flowing lava either from above or horizontally, the lava turns into cobblestone."
-msgstr ""
-"• Kiam fluanta akvo tuŝas fluantan lafon aŭ de supre aŭ horizontale, la lafo "
-"fariĝas pavimŝtono."
+msgstr "• Kiam fluanta akvo tuŝas fluantan lafon aŭ de supre aŭ horizontale, la lafo fariĝas pavimŝtono."
 
 msgid "• When water is directly below lava, the water turns into stone."
 msgstr ""
@@ -1096,12 +1103,6 @@ msgid "Dead Bush"
 msgstr ""
 
 msgid "Dead bushes are unremarkable plants often found in dry areas. They can be harvested for sticks."
-msgstr ""
-
-msgid "Glow Lichen"
-msgstr ""
-
-msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
 msgstr ""
 
 msgid "Barrier"
@@ -1238,3 +1239,4 @@ msgstr ""
 
 msgid "Mossy Stone Brick Slab"
 msgstr ""
+

@@ -16,9 +16,3 @@ msgstr ""
 msgid "Food"
 msgstr "Étel"
 
-msgid "Saturation"
-msgstr "Jóllakottság"
-
-msgid "Exhaust."
-msgstr "Kimerültség."
-

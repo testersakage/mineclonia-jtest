@@ -64,6 +64,9 @@ msgstr "Bleuet"
 msgid "Wildflowers"
 msgstr "Fleurs sauvages"
 
+msgid "Leaf Litter"
+msgstr ""
+
 msgid "Pink Petals"
 msgstr "Pétales roses"
 
@@ -117,6 +120,18 @@ msgstr "Fougère"
 
 msgid "Ferns are small plants which occur naturally in jungles and taigas. They can be harvested for wheat seeds. By using bone meal, a fern can be turned into a large fern which is two blocks high."
 msgstr "Les fougères sont de petites plantes qui se produisent naturellement dans les jungles et les taigas. Ils peuvent être récoltés pour les graines de blé. En utilisant de la farine d'os, une fougère peut être transformée en une grande fougère haute de deux blocs."
+
+msgid "Bush"
+msgstr ""
+
+msgid "Firefly Bush"
+msgstr ""
+
+msgid "Short Dry Grass"
+msgstr ""
+
+msgid "Tall Dry Grass"
+msgstr ""
 
 msgid "Lily Pad"
 msgstr "Nénuphar"

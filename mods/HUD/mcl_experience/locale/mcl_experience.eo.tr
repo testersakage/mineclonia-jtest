@@ -1,6 +1,6 @@
 # textdomain: mcl_experience
 Bottle o' Enchanting=Botelo de sperto
-[[<player>] <xp>]=
+[[<player>] <xp>]=[[<ludanto>] <sp>]
 Gives a player some XP=
 Error: Too many parameters!=
 Error: Incorrect value of XP=

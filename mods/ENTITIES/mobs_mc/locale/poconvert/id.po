@@ -175,6 +175,9 @@ msgstr "Kelinci"
 msgid "Killer Bunny"
 msgstr "Kelinci Pembunuh"
 
+msgid "Ravager"
+msgstr ""
+
 msgid "Salmon"
 msgstr ""
 
