@@ -370,15 +370,10 @@ function ocelot:on_rightclick (clicker)
 				2, 4, 2.0, 0.1)
 		end
 	elseif self._trusts_players
-		and table.indexof (food, item:get_name ()) ~= -1 then
-		-- Begin breeding.
-		if self:feed_tame (clicker, 0, true, false, false, nil) then
-			return
-		end
-
-		-- Otherwise, consume this item anyway.
-		item:take_item ()
-		clicker:set_wielded_item (item)
+		and table.indexof (food, item:get_name ()) ~= -1
+	-- Begin breeding.
+		and self:feed_tame (clicker, nil, true, false, false, nil) then
+		return
 	end
 end
 

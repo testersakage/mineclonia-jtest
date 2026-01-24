@@ -58,14 +58,16 @@ function mob_class:feed_tame(clicker, heal, breed, tame, notake, tamechance)
 		end
 	end
 
-	local hp_max = self.object:get_properties ().hp_max
-	if self.health < hp_max and not consume_food then
-		consume_food = true
-		self.health = math.min (self.health + heal, hp_max)
-		if self.htimer < 1 then
-			self.htimer = 5
+	if heal then
+		local hp_max = self.object:get_properties ().hp_max
+		if self.health < hp_max and not consume_food then
+			consume_food = true
+			self.health = math.min (self.health + heal, hp_max)
+			if self.htimer < 1 then
+				self.htimer = 5
+			end
+			self.object:set_hp(self.health)
 		end
-		self.object:set_hp(self.health)
 	end
 
 	if not consume_food and self.child == true then
