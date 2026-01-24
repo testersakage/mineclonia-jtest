@@ -523,7 +523,7 @@ local function handle_blocking(player)
 	if shield_in_hand then
 		if not_blocking then
 			core.after(0.05, function()
-				if (not_blocking or not shield_in_offhand) and shield_in_hand and rmb then
+				if (not_blocking or not shield_in_offhand) and shield_in_hand then
 					if player_shield.blocking ~= 2 then
 						mcl_serverplayer.handle_blocking (player, 2)
 					end
