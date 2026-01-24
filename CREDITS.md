@@ -20,6 +20,11 @@
 * Miguel_PL
 * B. Stack
 * cosinus
+* Codiac
+* xox
+* Marek Jędrzejewski
+* amino
+* epCode
 
 ## Previous Contributors
 * Lizzy Fleckenstein
@@ -59,7 +64,6 @@
 * Code-Sploit
 * Rootyjr
 * codiac
-* goblin_mode
 * kno10
 * Lars Müller
 * the-real-herowl
