@@ -1,5 +1,3 @@
-mcl_hunger.registered_foods = {}
-
 function mcl_hunger.init_player(player)
 	local meta = player:get_meta()
 	if meta:get_string("mcl_hunger:hunger") == "" then
@@ -34,28 +32,21 @@ if mcl_hunger.active then
 		player:get_meta():set_string("mcl_hunger:hunger", tostring(hunger))
 		if update_hudbars ~= false then
 			hb.change_hudbar(player, "hunger", hunger)
-			mcl_hunger.update_saturation_hud(player, nil, hunger)
 		end
 		mcl_serverplayer.update_vitals (player)
 		return true
 	end
 
-	function mcl_hunger.set_saturation(player, saturation, update_hudbar)
+	function mcl_hunger.set_saturation(player, saturation)
 		saturation = math.min(mcl_hunger.get_hunger(player), math.max(0, saturation))
 		player:get_meta():set_string("mcl_hunger:saturation", tostring(saturation))
-		if update_hudbar ~= false then
-			mcl_hunger.update_saturation_hud(player, saturation)
-		end
 		mcl_serverplayer.update_vitals (player)
 		return true
 	end
 
-	function mcl_hunger.set_exhaustion(player, exhaustion, update_hudbar)
+	function mcl_hunger.set_exhaustion(player, exhaustion)
 		exhaustion = math.min(mcl_hunger.EXHAUST_LVL, math.max(0.0, exhaustion))
 		player:get_meta():set_string("mcl_hunger:exhaustion", tostring(exhaustion))
-		if update_hudbar ~= false then
-			mcl_hunger.update_exhaustion_hud(player, exhaustion)
-		end
 		return true
 	end
 
@@ -79,45 +70,16 @@ if mcl_hunger.active then
 			end
 			if satuchanged then
 				if h then h = h end
-				mcl_hunger.update_saturation_hud(player, mcl_hunger.get_saturation(player), h)
 			end
 		end
-		mcl_hunger.update_exhaustion_hud(player, mcl_hunger.get_exhaustion(player))
 		return true
 	end
 
-	function mcl_hunger.saturate(playername, increase, update_hudbar)
+	function mcl_hunger.saturate(playername, increase)
 		local player = core.get_player_by_name(playername)
 		local ok = mcl_hunger.set_saturation(player,
 			math.min(mcl_hunger.get_saturation(player) + increase, mcl_hunger.get_hunger(player)))
-		if update_hudbar ~= false then
-			mcl_hunger.update_saturation_hud(player, mcl_hunger.get_saturation(player), mcl_hunger.get_hunger(player))
-		end
 		return ok
-	end
-
-	function mcl_hunger.register_food(name, hunger_change, replace_with_item, poisontime, poison, exhaust, poisonchance, sound)
-		if not mcl_hunger.active then
-			return
-		end
-		local food = mcl_hunger.registered_foods
-		food[name] = {}
-		food[name].saturation = hunger_change	-- hunger points added
-		food[name].replace = replace_with_item	-- what item is given back after eating
-		food[name].poisontime = poisontime	-- time it is poisoning. If this is set, this item is considered poisonous,
-							-- otherwise the following poison/exhaust fields are ignored
-		food[name].poison = poison		-- poison damage per tick for poisonous food
-		food[name].exhaust = exhaust		-- exhaustion per tick for poisonous food
-		food[name].poisonchance = poisonchance	-- chance percentage that this item poisons the player (default: 100%)
-		food[name].sound = sound		-- special sound that is played when eating
-	end
-
-	function mcl_hunger.stop_poison(player)
-		if not mcl_hunger.active then
-			return
-		end
-		mcl_hunger.poison_hunger[player:get_player_name()] = 0
-		mcl_hunger.reset_bars_poison_hunger(player)
 	end
 
 else
@@ -154,9 +116,4 @@ else
 	function mcl_hunger.saturate()
 		return false
 	end
-
-	function mcl_hunger.register_food() end
-
-	function mcl_hunger.stop_poison() end
-
 end

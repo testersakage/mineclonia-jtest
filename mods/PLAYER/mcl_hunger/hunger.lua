@@ -1,13 +1,20 @@
 local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / tonumber(core.settings:get("movement_speed_walk"))
 
-local eat_anim_enabled = core.settings:get_bool("mcl_eat_anim", true)
+local quick_eat_mode = core.settings:get_bool("mcl_quick_eat", false)
 
-local function can_eat_when_full (itemstack)
-	return (mcl_hunger.active == false)
-		or (core.get_item_group (itemstack:get_name (), "can_eat_when_full") == 1)
+local function should_quick_eat(itemstack)
+	return quick_eat_mode
+		or not mcl_hunger.active
+		or core.get_item_group(itemstack:get_name(), "no_eat_delay") > 0
 end
 
-local function is_eat_anim_possible (player, key)
+local function can_eat_when_full (player, itemstack)
+	return (mcl_hunger.active == false)
+		or (core.get_item_group (itemstack:get_name (), "can_eat_when_full") == 1)
+		or core.is_creative_enabled(player:get_player_name())
+end
+
+local function is_player_trying_to_eat(player, keypress)
 	if mcl_serverplayer.is_csm_at_least (player, 1) then
 		return false
 	end
@@ -21,42 +28,36 @@ local function is_eat_anim_possible (player, key)
 	local pointed_thing = mcl_util.get_pointed_thing (player, true)
 	local pname = player:get_player_name ()
 	local pinfo = core.get_player_window_information (pname)
-	if pinfo and pinfo.touch_controls then
+
+	if pinfo and pinfo.touch_controls and keypress == "LMB" then
 		-- Trigger rightclick/formspec on touch controls
-		if key == "LMB" then
-			if pointed_thing and pointed_thing.type == "node" then
-				local node = core.get_node (pointed_thing.under)
-				local meta = core.get_meta (pointed_thing.under)
-				local fs = meta:get_string ("formspec")
-				if fs ~= "" then
-					local pname = player:get_player_name ()
-					core.show_formspec(pname, node.name, fs)
-				end
+		--
+		-- Why is this being done here???
+		-- - rstcxk
+		if pointed_thing and pointed_thing.type == "node" then
+			local node = core.get_node (pointed_thing.under)
+			local meta = core.get_meta (pointed_thing.under)
+			local fs = meta:get_string ("formspec")
+			if fs ~= "" then
+				local pname = player:get_player_name ()
+				core.show_formspec(pname, node.name, fs)
 			end
-			mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
-			return false
 		end
-		if key ~= "RMB" then
-			return false
-		end
-	else
-		if key ~= "RMB" then
-			return false
-		end
+		mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
+		return false
+	end
+
+	if keypress ~= "RMB" then
+		return false
 	end
 
 	if mcl_hunger.eat_anim_block[player] then
 		return false
 	end
 
-	local def = core.registered_items[itemname]
-	local creative = core.is_creative_enabled (player:get_player_name ())
-	local is_full = mcl_hunger.is_player_full (player)
-	local hunger_points = core.get_item_group(itemname, "eatable")
-	-- Instant eat when eat_anim disabled
-	if not eat_anim_enabled and (creative or not is_full) then
-		core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
-		player:set_wielded_item (itemstack)
+	local rc = mcl_util.call_on_rightclick (itemstack, player, pointed_thing)
+	if rc then
+		player:set_wielded_item(rc)
 		return false
 	end
 
@@ -72,58 +73,49 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 		return rc
 	end
 
-	local item = itemstack:get_name()
-	local def = core.registered_items[item]
-	local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
+	local itemname = itemstack:get_name()
+	local playername = user:get_player_name()
+	local playerpos = user:get_pos()
+	local creative = core.is_creative_enabled(playername)
+	local def = core.registered_items[itemname]
 
-	local is_still_eating = mcl_hunger.eat_duration[user] < eat_delay
-
-	if not eat_anim_enabled
-		or mcl_serverplayer.is_csm_at_least (user, 1) then
-		is_still_eating = (mcl_hunger.eat_cooldown[user] or 0) > 0
-	end
-
-	if core.get_item_group(itemstack:get_name(), "no_eat_delay") > 0 then
-		is_still_eating = false
-	end
-
-	if not can_eat_when_full (itemstack) and is_still_eating then
-		return
-	end
-
-	local def = core.registered_items[itemstack:get_name()]
 	if def and def._mcl_eat_effect then
 		def._mcl_eat_effect(itemstack, user)
 	end
 
-	local foodtype = core.get_item_group(itemstack:get_name(), "food")
-	if foodtype == 3 then
-		core.sound_play("survival_thirst_drink", {
-			max_hear_distance = 12,
-			gain = 0.5,
-			pitch = 1,
-			object = user,
-		}, true)
-	else
-		core.sound_play("mcl_hunger_eat", {
-			max_hear_distance = 12,
-			gain = 0.5,
-			pitch = 1,
-			object = user,
-		}, true)
+	local old_itemstack = itemstack
+
+	mcl_hunger.eat_effects(user, itemname, playerpos, hunger_points, def)
+
+	if mcl_hunger.active and hunger_points then
+		mcl_hunger.saturate(playername, core.registered_items[itemname]._mcl_saturation or 0, false)
+
+		local h = mcl_hunger.get_hunger(user)
+		mcl_hunger.set_hunger(user, h + hunger_points, true)
+
+	elseif not mcl_hunger.active and hunger_points then
+		mcl_damage.heal_player (user, hunger_points)
 	end
 
-	local old_itemstack = itemstack
-	itemstack = mcl_hunger.eat(hunger_points, replace_with_item, itemstack, user, pointed_thing)
+	if not creative then
+		itemstack:take_item()
+		local nstack = ItemStack(replace_with_item)
+		local inv = user:get_inventory()
+		if itemstack:is_empty () then
+			itemstack:add_item(replace_with_item)
+		elseif inv:room_for_item("main",nstack) then
+			inv:add_item("main", nstack)
+		else
+			core.add_item(user:get_pos(), nstack)
+		end
+	end
+
 	for _, callback in pairs(core.registered_on_item_eats) do
 		local result = callback(hunger_points, replace_with_item, itemstack, user, pointed_thing, old_itemstack)
 		if result then
 			return result
 		end
 	end
-
-	mcl_hunger.eat_cooldown[user] = eat_delay
-	mcl_hunger.eat_duration[user] = -math.huge
 
 	return itemstack
 end
@@ -238,62 +230,60 @@ function mcl_hunger.eat_effects(user, itemname, pos, hunger_points, item_def, pi
 		core.sound_play("survival_thirst_drink", {
 			max_hear_distance = 12,
 			gain = 1.0,
-			pitch = pitch or (1 + math.random(-10, 10) * 0.005),
+			pitch = mcl_util.float_random(0.95, 1.05),
 			object = user,
 		}, true)
 		return
 	end
-	-- Assume the item is a food
-	-- Add eat particle effect and sound
+
 	local texture = item_def.inventory_image
-	if not texture or texture == "" then
+	if not texture then
 		texture = item_def.wield_image
 	end
-	-- Special item definition field: _mcl_spawn_food_particles
-	-- If false, force item to not spawn any food partiles when eaten
+
 	if item_def._mcl_spawn_food_particles ~= false and texture and texture ~= "" then
-		-- get velocity once
-		local v = user.get_velocity and user:get_velocity() or user:get_player_velocity() or {x=0, y=0, z=0}
+		local player_velocity = user:get_velocity()
 		local count = math.min(math.max(8, hunger_points * 2), 25)
 		local texture_index = math.random(0, count)
 		core.add_particlespawner({
 			amount = count,
 			time = 0.01,
-			minpos = pos,
-			maxpos = pos,
-			minvel = vector.add(v, { x = -1, y = 1, z = -1 }),
-			maxvel = vector.add(v, { x =  1, y = 2, z =  1 }),
-			minacc = { x = 0, y = -9, z = 0 },
-			maxacc = { x = 0, y = -5, z = 0 },
-			minexptime = 0.5,
-			maxexptime = 0.8,
-			minsize = 1,
-			maxsize = 2,
+			pos = pos,
+			vel = {
+				min = vector.offset(player_velocity, -1, 1, -1),
+				max = vector.offset(player_velocity, 1, 2, 1)
+			},
+			acc = {
+				min = vector.new(0, -9, 0),
+				max = vector.new(0, -5, 0)
+			},
+			exptime = { min = 0.5, max = 0.8 },
+			size    = { min = 1, max   = 2 },
 			collisiondetection = true,
 			vertical = false,
 			texture = "[combine:3x3:" .. -texture_index .. "," .. -texture_index .. "=" .. texture,
 		})
 	end
+
 	core.sound_play("mcl_hunger_bite", {
 		max_hear_distance = 12,
 		gain = 0.1,
-		pitch = pitch or (1 + math.random(-10, 10) * 0.005),
+		pitch = mcl_util.float_random(0.95, 1.05),
 		object = user,
 	}, true)
 end
 
-function mcl_hunger.hud_eat_add(player)
+local function begin_eating_state(player)
 	mcl_hunger.eat_duration[player] = 0
 	player:hud_set_flags({wielditem = false})
+	playerphysics.add_physics_factor(player, "speed", "mcl_hunger:eat_anim", SPEED_WHILE_EAT)
 end
 
-function mcl_hunger.hud_eat_remove(player)
-	mcl_hunger.eat_duration[player] = -math.huge
+local function terminate_eating_state(player)
+	mcl_hunger.eat_duration[player] = nil
 	mcl_hunger.eat_anim_effect[player] = nil
 	player:hud_set_flags({wielditem = true})
-	if core.get_modpath("playerphysics") then
-		playerphysics.remove_physics_factor(player, "speed", "mcl_hunger:eat_anim")
-	end
+	playerphysics.remove_physics_factor(player, "speed", "mcl_hunger:eat_anim")
 end
 
 function mcl_hunger.is_player_full (player)
@@ -302,44 +292,40 @@ end
 
 function mcl_hunger.prevent_eating (player)
 	mcl_hunger.eat_anim_block[player] = true
-	mcl_hunger.hud_eat_remove(player)
+	terminate_eating_state(player)
 end
 
-if mcl_hunger.active then
-	-- player-action based hunger changes
-	core.register_on_dignode(function(_, _, player)
-		-- is_fake_player comes from the pipeworks, we are not interested in those
-		if not player or not player:is_player() or player.is_fake_player == true then
-			return
-		end
-		local name = player:get_player_name()
-		-- dig event
-		mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_DIG)
-	end)
+local function perform_quick_eat(player)
+	local itemstack = player:get_wielded_item ()
+	local itemname = itemstack:get_name()
+	local def = core.registered_items[itemname]
+	local hunger_points = core.get_item_group(itemname, "eatable")
+	local pointed_thing = mcl_util.get_pointed_thing (player, true)
+	itemstack = core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
+	if itemstack then
+		player:set_wielded_item (itemstack)
+	end
+
+	mcl_hunger.eat_cooldown[player] = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
 end
-
-core.register_on_joinplayer (function (player)
-	mcl_hunger.eat_duration[player] = -math.huge
-	player:hud_set_flags({wielditem = true})
-end)
-
-core.register_on_leaveplayer (function (player, _)
-	mcl_hunger.eat_duration[player] = nil
-	mcl_hunger.hud_eat_remove(player)
-end)
-
-core.register_on_dieplayer(function (player)
-	mcl_hunger.prevent_eating(player)
-end)
 
 controls.register_on_press (function (player, key)
-	if not is_eat_anim_possible (player, key) then
-		return
+	local itemstack = player:get_wielded_item ()
+	if is_player_trying_to_eat(player, key)
+			and should_quick_eat(itemstack)
+			and (not mcl_hunger.is_player_full(player) or can_eat_when_full(player, itemstack))
+			and (mcl_hunger.eat_cooldown[player] or 0) <= 0 then
+		perform_quick_eat(player)
+		return false
 	end
 end)
 
 controls.register_on_hold (function (player, key)
-	if not is_eat_anim_possible (player, key) then
+	if not is_player_trying_to_eat (player, key) then
+		-- special case. can happen when the player switches the wielded item while eating
+		if key == "RMB" and mcl_hunger.eat_duration[player] then
+			terminate_eating_state(player)
+		end
 		return
 	end
 
@@ -347,27 +333,28 @@ controls.register_on_hold (function (player, key)
 	local itemname = itemstack:get_name ()
 	local pointed_thing = mcl_util.get_pointed_thing (player, true)
 	local is_full = mcl_hunger.is_player_full (player)
-	local creative = core.is_creative_enabled (player:get_player_name ())
 
-	if core.get_item_group(itemname, "no_eat_delay") > 0
-		or (not can_eat_when_full (itemstack)
-			and (not creative and is_full)) then
+	if is_full and not can_eat_when_full(player, itemstack) then
 		return
+	end
+
+	if should_quick_eat(itemstack) then
+		if (mcl_hunger.eat_cooldown[player] or 0) <= 0 then
+			perform_quick_eat(player)
+		end
+		return
+	end
+
+	-- Prioritize eat over shield block
+	mcl_shields.players[player].blocking = 0
+
+	if not mcl_hunger.eat_duration[player] then
+		begin_eating_state(player)
 	end
 
 	local def = core.registered_items[itemname]
 	local hunger_points = core.get_item_group(itemname, "eatable")
 
-	-- Prioritize eat over shield block
-	mcl_shields.players[player].blocking = 0
-
-	-- Start eating animation
-	if mcl_hunger.eat_duration[player] == -math.huge then
-		mcl_hunger.hud_eat_add(player)
-		if core.get_modpath("playerphysics") then
-			playerphysics.add_physics_factor(player, "speed", "mcl_hunger:eat_anim", SPEED_WHILE_EAT)
-		end
-	end
 	-- Eat animation sound & particle
 	local step = math.floor(mcl_hunger.eat_duration[player] / 0.2)
 	local last_step = mcl_hunger.eat_anim_effect[player] or 0
@@ -375,12 +362,14 @@ controls.register_on_hold (function (player, key)
 		mcl_hunger.eat_anim_effect[player] = step
 		mcl_hunger.eat_effects(player, itemname, player:get_pos(), hunger_points, def)
 	end
-	-- Actual eat
+
 	local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
 	if mcl_hunger.eat_duration[player] >= eat_delay then
-		core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
-		player:set_wielded_item(itemstack)
-		mcl_hunger.hud_eat_remove(player)
+		itemstack = core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
+		if itemstack then
+			player:set_wielded_item(itemstack)
+		end
+		terminate_eating_state(player)
 	end
 end)
 
@@ -400,10 +389,30 @@ controls.register_on_release (function (player, key)
 	if key ~= "RMB" then
 		return
 	end
-	mcl_hunger.hud_eat_remove(player)
+
 	mcl_hunger.prevent_eating (player)
 	-- reset eat animation blocking after a while
 	core.after(0.2, function ()
 		mcl_hunger.eat_anim_block[player] = nil
 	end)
+end)
+
+-- player-action based hunger changes
+core.register_on_dignode(function(_, _, player)
+	-- is_fake_player comes from the pipeworks, we are not interested in those
+	if not player or not player:is_player() or player.is_fake_player == true then
+		return
+	end
+	local name = player:get_player_name()
+	-- dig event
+	mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_DIG)
+end)
+
+core.register_on_leaveplayer (function (player, _)
+	terminate_eating_state(player)
+	mcl_hunger.eat_cooldown[player] = nil
+end)
+
+core.register_on_dieplayer(function (player)
+	mcl_hunger.prevent_eating(player)
 end)

@@ -16,8 +16,6 @@ if core.settings:get_bool("enable_damage") == true and core.settings:get_bool("m
 	mcl_hunger.active = true
 end
 
-mcl_hunger.HUD_TICK = 0.1
-
 mcl_hunger.EAT_DELAY = 1.61
 
 -- Exhaustion increase
@@ -34,29 +32,20 @@ mcl_hunger.EXHAUST_LVL = 4000 -- at what exhaustion player saturation gets lower
 
 mcl_hunger.SATURATION_INIT = 5 -- Initial saturation for new/respawning players
 
--- Debug Mode. If enabled, saturation and exhaustion are shown as well.
--- NOTE: Only updated when settings are loaded.
-mcl_hunger.debug = false
+mcl_hunger.eat_cooldown = {} -- used for quick eat (either special setting or when food has `no_eat_delay` group)
+mcl_hunger.eat_duration = {}
 
-mcl_hunger.eat_cooldown = {} -- is only used when mcl_eat_anim setting is enabled
-mcl_hunger.eat_duration = {} -- is only used when mcl_eat_anim setting is disabled
-
-mcl_hunger.eat_anim_block = {} -- if not nil/false then forbid eat animation
+mcl_hunger.eat_anim_block = {}
 mcl_hunger.eat_anim_effect = {} -- effect timer for precise interval
 
 dofile(modpath.."/api.lua")
 dofile(modpath.."/hunger.lua")
-dofile(modpath.."/register_foods.lua")
 
---[[ IF HUNGER IS ENABLED ]]
-if mcl_hunger.active == true then
-
--- Read debug mode setting
--- The setting should only be read at the beginning, this mod is not
--- prepared to change this setting later.
-mcl_hunger.debug = core.settings:get_bool("mcl_hunger_debug")
-if mcl_hunger.debug == nil then
-	mcl_hunger.debug = false
+if not mcl_hunger.active then
+	core.register_on_joinplayer(function(player)
+		mcl_hunger.init_player(player)
+	end)
+	return
 end
 
 --[[ Data value format notes:
@@ -69,58 +58,20 @@ end
 	This field uses the original Minecraft value.
 ]]
 
--- Count number of poisonings a player has at once
-mcl_hunger.poison_hunger = {} -- food poisoning, increasing hunger
-
--- HUD
-local function init_hud(player)
-	hb.init_hudbar(player, "hunger", mcl_hunger.get_hunger(player))
-	if mcl_hunger.debug then
-		hb.init_hudbar(player, "saturation", mcl_hunger.get_saturation(player), mcl_hunger.get_hunger(player))
-		hb.init_hudbar(player, "exhaustion", mcl_hunger.get_exhaustion(player))
-	end
-end
-
--- HUD updating functions for Debug Mode. No-op if not in Debug Mode
-function mcl_hunger.update_saturation_hud(player, saturation, hunger)
-	if mcl_hunger.debug then
-		hb.change_hudbar(player, "saturation", saturation, hunger)
-	end
-end
-function mcl_hunger.update_exhaustion_hud(player, exhaustion)
-	if mcl_hunger.debug then
-		if not exhaustion then
-			exhaustion =  mcl_hunger.get_exhaustion(player)
-		end
-		hb.change_hudbar(player, "exhaustion", exhaustion)
-	end
-end
-
 -- register saturation hudbar
 hb.register_hudbar("hunger", 0xFFFFFF, S("Food"), { icon = "hbhunger_icon.png", bgicon = "hbhunger_bgicon.png",  bar = "hbhunger_bar.png" }, 20, 20, false, nil, nil, 1)
-if mcl_hunger.debug then
-	hb.register_hudbar("saturation", 0xFFFFFF, S("Saturation"), { icon = "mcl_hunger_icon_saturation.png", bgicon = "mcl_hunger_bgicon_saturation.png", bar = "mcl_hunger_bar_saturation.png" }, mcl_hunger.SATURATION_INIT, 200, false, nil, nil, 1)
-	hb.register_hudbar("exhaustion", 0xFFFFFF, S("Exhaust."), { icon = "mcl_hunger_icon_exhaustion.png", bgicon = "mcl_hunger_bgicon_exhaustion.png", bar = "mcl_hunger_bar_exhaustion.png" }, 0, mcl_hunger.EXHAUST_LVL, false, nil, nil, 1)
-end
 
 core.register_on_joinplayer(function(player)
-	local name = player:get_player_name()
 	mcl_hunger.init_player(player)
-	init_hud(player)
-	mcl_hunger.poison_hunger[name] = 0
+	hb.init_hudbar(player, "hunger", mcl_hunger.get_hunger(player))
 end)
 
 core.register_on_respawnplayer(function(player)
-	-- reset hunger, related values and poison
-	mcl_hunger.stop_poison(player)
-
 	local h, s, e = 20, mcl_hunger.SATURATION_INIT, 0
 	mcl_hunger.set_hunger(player, h, false)
-	mcl_hunger.set_saturation(player, s, false)
-	mcl_hunger.set_exhaustion(player, e, false)
+	mcl_hunger.set_saturation(player, s)
+	mcl_hunger.set_exhaustion(player, e)
 	hb.change_hudbar(player, "hunger", h)
-	mcl_hunger.update_saturation_hud(player, s, h)
-	mcl_hunger.update_exhaustion_hud(player, e)
 end)
 
 -- PvP combat exhaustion
@@ -165,7 +116,7 @@ mcl_player.register_globalstep(function(player, dtime)
 		if (peaceful_nourish_timer[player] or 0.5) >= 0.5 then
 			local hunger = mcl_hunger.get_hunger (player)
 			if hunger < 20 then
-				mcl_hunger.set_hunger (player, hunger + 1)
+				mcl_hunger.set_hunger (player, hunger + 1, true)
 			end
 			peaceful_nourish_timer[player] = 0
 		else
@@ -175,17 +126,10 @@ mcl_player.register_globalstep(function(player, dtime)
 	elseif food_tick_timer > 4.0 then
 		food_tick_timer = 0
 
-		-- let hunger work always
-		if player_health > 0 then
-			--mcl_hunger.exhaust(player_name, mcl_hunger.EXHAUST_HUNGER) -- later for hunger status effect
-			mcl_hunger.update_exhaustion_hud(player)
-		end
-
 		if food_level >= 18 then -- slow regeneration
 			if player_health > 0 and player_health < props.hp_max then
 				mcl_damage.heal_player (player, 1)
 				mcl_hunger.exhaust(player_name, mcl_hunger.EXHAUST_REGEN)
-				mcl_hunger.update_exhaustion_hud(player)
 			end
 		elseif food_level == 0 then -- starvation
 			-- the amount of health at which a player will stop to get
@@ -208,7 +152,6 @@ mcl_player.register_globalstep(function(player, dtime)
 			food_tick_timer = 0
 			mcl_damage.heal_player (player, 1)
 			mcl_hunger.exhaust(player_name, mcl_hunger.EXHAUST_REGEN)
-			mcl_hunger.update_exhaustion_hud(player)
 		end
 	end
 
@@ -217,69 +160,67 @@ end)
 
 -- JUMP EXHAUSTION
 mcl_player.register_globalstep(function(player, dtime)
-if mcl_serverplayer.is_csm_capable (player) then
-	return
-end
-local name = player:get_player_name()
-local node_stand, node_stand_below, node_head, node_feet, node_head_top
-
--- Update jump status immediately since we need this info in real time.
--- WARNING: This section is HACKY as hell since it is all just based on heuristics.
-
-if mcl_player.players[player].jump_cooldown > 0 then
-	mcl_player.players[player].jump_cooldown = mcl_player.players[player].jump_cooldown - dtime
-end
-
-if player:get_player_control().jump and mcl_player.players[player].jump_cooldown <= 0 then
-
-	--pos = player:get_pos()
-
-	node_stand = mcl_player.players[player].nodes.stand
-	node_stand_below = mcl_player.players[player].nodes.stand_below
-	node_head = mcl_player.players[player].nodes.head
-	node_feet = mcl_player.players[player].nodes.feet
-	node_head_top = mcl_player.players[player].nodes.head_top
-	if not node_stand or not node_stand_below or not node_head or not node_feet then
+	if mcl_serverplayer.is_csm_capable (player) then
 		return
 	end
-	if (not core.registered_nodes[node_stand]
-	or not core.registered_nodes[node_stand_below]
-	or not core.registered_nodes[node_head]
-	or not core.registered_nodes[node_feet]
-	or not core.registered_nodes[node_head_top]) then
-		return
+	local name = player:get_player_name()
+	local node_stand, node_stand_below, node_head, node_feet, node_head_top
+
+	-- Update jump status immediately since we need this info in real time.
+	-- WARNING: This section is HACKY as hell since it is all just based on heuristics.
+
+	if mcl_player.players[player].jump_cooldown > 0 then
+		mcl_player.players[player].jump_cooldown = mcl_player.players[player].jump_cooldown - dtime
 	end
 
-	-- Cause buggy exhaustion for jumping
+	if player:get_player_control().jump and mcl_player.players[player].jump_cooldown <= 0 then
+		node_stand = mcl_player.players[player].nodes.stand
+		node_stand_below = mcl_player.players[player].nodes.stand_below
+		node_head = mcl_player.players[player].nodes.head
+		node_feet = mcl_player.players[player].nodes.feet
+		node_head_top = mcl_player.players[player].nodes.head_top
+		if not node_stand or not node_stand_below or not node_head or not node_feet then
+			return
+		end
+		if (not core.registered_nodes[node_stand]
+		or not core.registered_nodes[node_stand_below]
+		or not core.registered_nodes[node_head]
+		or not core.registered_nodes[node_feet]
+		or not core.registered_nodes[node_head_top]) then
+			return
+		end
 
-	--[[ Checklist we check to know the player *actually* jumped:
-		* Not on or in liquid
-		* Not on or at climbable
-		* On walkable
-		* Not on disable_jump
-	FIXME: This code is pretty hacky and it is possible to miss some jumps or detect false
-	jumps because of delays, rounding errors, etc.
-	What this code *really* needs is some kind of jumping “callback” which this engine lacks
-	as of 0.4.15.
-	]]
+		-- Cause buggy exhaustion for jumping
 
-	if core.get_item_group(node_feet, "liquid") == 0 and
-			core.get_item_group(node_stand, "liquid") == 0 and
-			not core.registered_nodes[node_feet].climbable and
-			not core.registered_nodes[node_stand].climbable and
-			(core.registered_nodes[node_stand].walkable or core.registered_nodes[node_stand_below].walkable)
-			and core.get_item_group(node_stand, "disable_jump") == 0
-			and core.get_item_group(node_stand_below, "disable_jump") == 0 then
-	-- Cause exhaustion for jumping
-	if mcl_sprint.is_sprinting(name) then
-		mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_SPRINT_JUMP)
-	else
-		mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_JUMP)
-	end
+		--[[ Checklist we check to know the player *actually* jumped:
+			* Not on or in liquid
+			* Not on or at climbable
+			* On walkable
+			* Not on disable_jump
+		FIXME: This code is pretty hacky and it is possible to miss some jumps or detect false
+		jumps because of delays, rounding errors, etc.
+		What this code *really* needs is some kind of jumping “callback” which this engine lacks
+		as of 0.4.15.
+		]]
 
-	-- Reset cooldown timer
-		mcl_player.players[player].jump_cooldown = 0.45
-	end
+		if core.get_item_group(node_feet, "liquid") == 0 and
+				core.get_item_group(node_stand, "liquid") == 0 and
+				not core.registered_nodes[node_feet].climbable and
+				not core.registered_nodes[node_stand].climbable and
+				(core.registered_nodes[node_stand].walkable or core.registered_nodes[node_stand_below].walkable)
+				and core.get_item_group(node_stand, "disable_jump") == 0
+				and core.get_item_group(node_stand_below, "disable_jump") == 0 then
+
+			-- Cause exhaustion for jumping
+			if mcl_sprint.is_sprinting(name) then
+				mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_SPRINT_JUMP)
+			else
+				mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_JUMP)
+			end
+
+			-- Reset cooldown timer
+			mcl_player.players[player].jump_cooldown = 0.45
+		end
 	end
 end)
 
@@ -305,13 +246,3 @@ mcl_player.register_globalstep_slow(function(player)
 
 	end
 end)
-
-
---[[ IF HUNGER IS NOT ENABLED ]]
-else
-
-core.register_on_joinplayer(function(player)
-	mcl_hunger.init_player(player)
-end)
-
-end

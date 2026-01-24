@@ -970,28 +970,22 @@ mcl_potions.register_effect({
 	end,
 	on_start = function(object)
 		if object:is_player () and mcl_hunger.active then
-		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
-		if mcl_hunger.debug then
-			hb.change_hudbar(object, "exhaustion", nil, nil, nil, nil, "mcl_hunger_bar_foodpoison.png")
-		end
+			hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
 		end
 	end,
 	on_load = function(object) -- TODO refactor and add hunger bar modifier API
 		if object:is_player () and mcl_hunger.active then
-		hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
-		if mcl_hunger.debug then
-			hb.change_hudbar(object, "exhaustion", nil, nil, nil, nil, "mcl_hunger_bar_foodpoison.png")
-		end
+			hb.change_hudbar(object, "hunger", nil, nil, "mcl_hunger_icon_foodpoison.png", nil, "mcl_hunger_bar_foodpoison.png")
 		end
 	end,
 	on_step = function(dtime, object, factor)
 		if object:is_player () and mcl_hunger.active then
-		mcl_hunger.exhaust(object:get_player_name(), dtime*factor)
+			mcl_hunger.exhaust(object:get_player_name(), dtime*factor)
 		end
 	end,
 	on_end = function(object)
 		if object:is_player () and mcl_hunger.active then
-		mcl_hunger.reset_bars_poison_hunger(object)
+			hb.change_hudbar(object, "hunger", nil, nil, "hbhunger_icon.png", nil, "hbhunger_bar.png")
 		end
 	end,
 	particle_color = "#587653",

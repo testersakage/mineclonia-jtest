@@ -50,8 +50,9 @@ core.register_craftitem("mcl_fishing:pufferfish_raw", {
 	groups = { food=2, eatable=1, brewitem = 1 },
 	_mcl_saturation = 0.2,
 	_mcl_eat_effect = function (_, placer)
+		mcl_potions.give_effect_by_level("hunger", placer, 3, 15)
 		mcl_potions.give_effect_by_level("poison", placer, 3, 60)
-		mcl_potions.give_effect_by_level("nausea", placer, 2, 60)
+		mcl_potions.give_effect_by_level("nausea", placer, 2, 15)
 	end
 })
 

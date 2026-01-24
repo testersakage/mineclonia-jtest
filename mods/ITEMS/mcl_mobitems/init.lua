@@ -8,6 +8,11 @@ core.register_craftitem("mcl_mobitems:rotten_flesh", {
 	inventory_image = "mcl_mobitems_rotten_flesh.png",
 	wield_image = "mcl_mobitems_rotten_flesh.png",
 	groups = { food = 2, eatable = 4 },
+	_mcl_eat_effect = function(itemstack, player)
+		if math.random() <= 0.8 then
+			mcl_potions.give_effect_by_level("hunger", player, 1, 30)
+		end
+	end,
 	_mcl_saturation = 0.8,
 })
 
@@ -57,6 +62,11 @@ core.register_craftitem("mcl_mobitems:chicken", {
 	wield_image = "mcl_mobitems_chicken_raw.png",
 	groups = { food = 2, eatable = 2, smoker_cookable = 1, campfire_cookable = 1 },
 	_mcl_saturation = 1.2,
+	_mcl_eat_effect = function(itemstack, player)
+		if math.random() <= 0.3 then
+			mcl_potions.give_effect_by_level("hunger", player, 1, 30)
+		end
+	end,
 	_mcl_cooking_output = "mcl_mobitems:cooked_chicken"
 })
 
@@ -115,10 +125,6 @@ core.register_craftitem("mcl_mobitems:milk_bucket", {
 	inventory_image = "mcl_mobitems_bucket_milk.png",
 	wield_image = "mcl_mobitems_bucket_milk.png",
 	_mcl_eat_effect = function (itemstack, player)
-		-- Check if we were allowed to drink this (eat delay check)
-		if mcl_hunger.active and (itemstack:get_name() ~= "mcl_mobitems:milk_bucket" or core.is_creative_enabled(player:get_player_name())) then
-			mcl_hunger.stop_poison(player)
-		end
 		mcl_potions._reset_effects(player)
 	end,
 	_mcl_eat_replace_with = "mcl_buckets:bucket_empty",

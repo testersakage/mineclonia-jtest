@@ -100,8 +100,6 @@ core.register_craftitem("mcl_sus_stew:stew",{
 	end,
 })
 
-mcl_hunger.register_food("mcl_sus_stew:stew",6, "mcl_core:bowl")
-
 --compat with old (mcl5) sus_stew
 core.register_alias("mcl_sus_stew:poison_stew", "mcl_sus_stew:stew")
 core.register_alias("mcl_sus_stew:hunger_stew", "mcl_sus_stew:stew")
