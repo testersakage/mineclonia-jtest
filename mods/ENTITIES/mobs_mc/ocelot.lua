@@ -92,6 +92,7 @@ local ocelot = {
 	follow = food,
 	runaway_bonus_near = 1.33,
 	runaway_bonus_far = 0.8,
+	_is_ocelot_tamable = false,
 }
 
 ------------------------------------------------------------------------
@@ -108,6 +109,12 @@ function ocelot:mob_activate (staticdata, dtime)
 		self._head_pitch_offset = nil
 	end
 	self._pose = "walk"
+	-- Don't permit ocelots to be tamed, even if they previously
+	-- were by reason of programming errors, though this should be
+	-- possible with cats.
+	if not self._is_ocelot_tamable then
+		rawset (self, "tamed", nil)
+	end
 	return true
 end
 
@@ -343,6 +350,13 @@ function ocelot:breeding_possible ()
 	return self._trusts_players or self.tamed
 end
 
+function ocelot:on_breed (parent1, parent2)
+	local pos = parent1.object:get_pos ()
+	mcl_mobs.spawn_child (pos, parent1.name)
+	-- Sidestep texture assignment or default spawning mechanics.
+	return false
+end
+
 function ocelot:on_rightclick (clicker)
 	if not clicker or not clicker:is_player () then
 		return
@@ -445,6 +459,7 @@ local cat = table.merge (ocelot, {
 		"mobs_mc:rabbit",
 	},
 	_age = 0.0,
+	_is_ocelot_tamable = true,
 })
 
 ------------------------------------------------------------------------
