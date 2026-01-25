@@ -1,2 +1,2 @@
-# textdomain = mcl_game_meta
+# textdomain: mcl_game_meta
 A survival sandbox game. Survive, gather, hunt, build, explore, and do much more.=
