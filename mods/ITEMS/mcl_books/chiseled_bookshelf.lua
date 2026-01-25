@@ -30,17 +30,6 @@ local function get_node_name(bits)
 	return "mcl_books:chiseled_bookshelf" .. (bits == 0 and "" or "_"..bit.tohex(bits, 2))
 end
 
-local function protection_check_move(pos, _, _, _, _, count, player)
-	local name = player:get_player_name()
-	if core.is_protected(pos, name) then
-		core.record_protection_violation(pos, name)
-		return 0
-	else
-		-- a chiseled bookshelf only stores 1 item per slot, period.
-		return math.min(1,count)
-	end
-end
-
 local function protection_check_put_take(pos, _, _, stack, player)
 	local name = player:get_player_name()
 	if core.is_protected(pos, name) then
@@ -274,23 +263,9 @@ local basedef = {
 		inv:set_size("main", 6)
 		meta:set_float("last_slot_used", 0)
 	end,
-	-- these do not trigger, probably because we do not use a formspec
-	-- but keep them in case anything else uses them
-	allow_metadata_inventory_move = protection_check_move,
-	allow_metadata_inventory_take = protection_check_put_take,
-	allow_metadata_inventory_put = protection_check_put_take,
-	on_metadata_inventory_move = function(pos, _, _, _, _, _, player)
-		core.log("action", player:get_player_name() ..
-			" moves stuff in chiseled bookshelf at " .. core.pos_to_string(pos))
-	end,
-	on_metadata_inventory_put = function(pos, _, _, _, player)
-		core.log("action", player:get_player_name() ..
-			" moves stuff to chiseled bookshelf at " .. core.pos_to_string(pos))
-	end,
-	on_metadata_inventory_take = function(pos, _, _, _, player)
-		core.log("action", player:get_player_name() ..
-			" takes stuff from chiseled bookshelf at " .. core.pos_to_string(pos))
-	end,
+	allow_metadata_inventory_move = function() return 0 end,
+	allow_metadata_inventory_take = function() return 0 end,
+	allow_metadata_inventory_put = function() return 0 end,
 	after_dig_node= mcl_util.drop_items_from_meta_container("main"),
 	on_rightclick = on_chiseled_bookshelf_rightclick,
 	_on_hopper_out = on_hopper_out,
