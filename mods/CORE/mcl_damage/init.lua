@@ -174,6 +174,11 @@ end
 --- statistic.
 
 function mcl_damage.damage_player (player, amount, mcl_reason)
+	-- Prevent damage in creative mode
+	if player:is_player() and core.is_creative_enabled(player:get_player_name()) then
+		return
+	end
+
 	if not mcl_reason.flags then
 	  mcl_damage.finish_reason (mcl_reason)
 	end
@@ -255,6 +260,10 @@ end
 
 core.register_on_player_hpchange(function(player, hp_change, mt_reason)
 	if not damage_enabled then return 0 end
+	-- Prevent damage in creative mode
+	if player:is_player() and core.is_creative_enabled(player:get_player_name()) and hp_change < 0 then
+		return 0
+	end
 	-- Take engine damage modifications from mcl_damage at face value.
 	if mt_reason.mcl_damage then
 		return hp_change
@@ -300,6 +309,17 @@ core.register_on_player_hpchange(function(player, hp_change, mt_reason)
 
 	-- Deduct engine damage.
 	mcl_health = math.max (0, mcl_health + hp_change)
+	
+	-- Prevent HP from reaching 0 for creative players (additional safeguard)
+	if player:is_player() and core.is_creative_enabled(player:get_player_name()) and mcl_health <= 0 then
+		local props = player:get_properties()
+		mcl_health = props.hp_max
+		meta:set_float ("mcl_health", mcl_health)
+		player:set_hp(mcl_health, { type = "set_hp", mcl_damage = true })
+		mcl_serverplayer.update_vitals (player)
+		return 0
+	end
+	
 	meta:set_float ("mcl_health", mcl_health)
 	mcl_serverplayer.update_vitals (player)
 
@@ -333,6 +353,20 @@ core.register_on_joinplayer (function (player, _)
 end)
 
 core.register_on_dieplayer(function(player, mt_reason)
+	  -- Prevent death in creative mode - restore health instead
+	  -- Note: This is a last-resort safeguard. HP should never reach 0 for creative players
+	  -- due to checks in register_on_player_hpchange and damage modifiers.
+	  if player:is_player() and core.is_creative_enabled(player:get_player_name()) then
+		local props = player:get_properties()
+		local max_hp = props.hp_max
+		player:set_hp(max_hp, { type = "set_hp", mcl_damage = true })
+		local meta = player:get_meta()
+		meta:set_float("mcl_health", max_hp)
+		mcl_serverplayer.update_vitals(player)
+		-- Return true to indicate we handled the death (though this may not actually cancel it)
+		-- The real prevention happens in register_on_player_hpchange
+		return true
+	  end
 	  -- Clear the internal HP of players who die.
 	  local meta = player:get_meta ()
 	  meta:set_float ("mcl_health", 0)
@@ -348,6 +382,14 @@ local function is_mob (source)
 	local entity = source:get_luaentity ()
 	return entity and entity.is_mob
 end
+
+-- Register a modifier that prevents all damage in creative mode (high priority)
+mcl_damage.register_modifier (function (obj, damage, reason)
+	if obj:is_player () and core.is_creative_enabled(obj:get_player_name()) then
+		return 0
+	end
+	return damage
+end, -2000)
 
 mcl_damage.register_modifier (function (obj, damage, reason)
 	if not obj:is_player () then

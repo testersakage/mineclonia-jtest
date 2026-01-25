@@ -63,7 +63,9 @@ hb.register_hudbar("hunger", 0xFFFFFF, S("Food"), { icon = "hbhunger_icon.png", 
 
 core.register_on_joinplayer(function(player)
 	mcl_hunger.init_player(player)
-	hb.init_hudbar(player, "hunger", mcl_hunger.get_hunger(player))
+	-- Hide hunger bar in creative mode
+	local hide_hunger = core.is_creative_enabled(player:get_player_name())
+	hb.init_hudbar(player, "hunger", mcl_hunger.get_hunger(player), 20, hide_hunger)
 end)
 
 core.register_on_respawnplayer(function(player)
@@ -71,7 +73,12 @@ core.register_on_respawnplayer(function(player)
 	mcl_hunger.set_hunger(player, h, false)
 	mcl_hunger.set_saturation(player, s)
 	mcl_hunger.set_exhaustion(player, e)
-	hb.change_hudbar(player, "hunger", h)
+	-- Hide hunger bar in creative mode
+	if core.is_creative_enabled(player:get_player_name()) then
+		hb.hide_hudbar(player, "hunger")
+	else
+		hb.change_hudbar(player, "hunger", h)
+	end
 end)
 
 -- PvP combat exhaustion
@@ -246,3 +253,17 @@ mcl_player.register_globalstep_slow(function(player)
 
 	end
 end)
+
+-- Update hunger bar visibility when game mode changes
+if mcl_gamemode then
+	mcl_gamemode.register_on_gamemode_change(function(player, old_gm, new_gm)
+		if mcl_hunger.active then
+			if new_gm == "creative" then
+				hb.hide_hudbar(player, "hunger")
+			else
+				hb.unhide_hudbar(player, "hunger")
+				hb.change_hudbar(player, "hunger", mcl_hunger.get_hunger(player))
+			end
+		end
+	end)
+end

@@ -490,7 +490,8 @@ local function custom_hud(player)
 	if core.settings:get_bool("enable_damage") or hb.settings.forceload_default_hudbars then
 		local hide
 		if core.settings:get_bool("enable_damage") then
-			hide = false
+			-- Hide health bar in creative mode
+			hide = core.is_creative_enabled(player:get_player_name())
 		else
 			hide = true
 		end
@@ -515,8 +516,18 @@ end
 local function update_hud(player)
 	if not player_exists(player) then return end
 	if core.settings:get_bool("enable_damage") then
+		-- Hide health bar in creative mode
+		local is_creative = core.is_creative_enabled(player:get_player_name())
 		if hb.settings.forceload_default_hudbars then
-			hb.unhide_hudbar(player, "health")
+			if is_creative then
+				hb.hide_hudbar(player, "health")
+			else
+				hb.unhide_hudbar(player, "health")
+			end
+		else
+			if is_creative then
+				hb.hide_hudbar(player, "health")
+			end
 		end
 		--air
 		local breath_max = player:get_properties().breath_max
@@ -529,7 +540,9 @@ local function update_hud(player)
 			hb.change_hudbar(player, "breath", math.min(breath, breath_max), breath_max)
 		end
 		--health
-		update_health(player)
+		if not is_creative then
+			update_health(player)
+		end
 	elseif hb.settings.forceload_default_hudbars then
 		hb.hide_hudbar(player, "health")
 		hb.hide_hudbar(player, "breath")
@@ -556,6 +569,32 @@ end)
 core.register_on_leaveplayer(function(player)
 	hb.players[player:get_player_name()] = nil
 end)
+
+-- Update HUD bars when game mode changes
+if mcl_gamemode then
+	mcl_gamemode.register_on_gamemode_change(function(player, old_gm, new_gm)
+		if hb.players[player:get_player_name()] ~= nil then
+			-- Update health bar visibility based on game mode
+			if core.settings:get_bool("enable_damage") or hb.settings.forceload_default_hudbars then
+				if new_gm == "creative" then
+					hb.hide_hudbar(player, "health")
+					-- Restore health to full in creative mode
+					local props = player:get_properties()
+					local max_hp = props.hp_max
+					player:set_hp(max_hp, { type = "set_hp", mcl_damage = true })
+					local meta = player:get_meta()
+					meta:set_float("mcl_health", max_hp)
+					if mcl_serverplayer then
+						mcl_serverplayer.update_vitals(player)
+					end
+				else
+					hb.unhide_hudbar(player, "health")
+					update_health(player)
+				end
+			end
+		end
+	end)
+end
 
 local main_timer = 0
 local timer = 0
