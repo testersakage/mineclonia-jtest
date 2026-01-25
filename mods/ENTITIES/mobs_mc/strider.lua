@@ -197,7 +197,7 @@ function strider:on_rightclick (clicker)
 
 	if name == "mcl_crimson:warped_fungus" then
 		self:mob_sound ("eat")
-		if self:feed_tame (clicker, 0, true, false) then
+		if self:feed_tame (clicker, nil, true, false) then
 			return
 		end
 	end
