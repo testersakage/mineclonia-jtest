@@ -871,7 +871,8 @@ local zombie_spawner = table.merge (monster_spawner, {
 })
 
 function zombie_spawner:spawn (spawn_pos, idx, sdata, pack_size)
-	if math.random () < 0.05 then
+	local is_baby = sdata and sdata._is_baby_zombie
+	if is_baby or math.random () < 0.05 then
 		return core.add_entity (spawn_pos, "mobs_mc:baby_zombie")
 	else
 		return core.add_entity (spawn_pos, "mobs_mc:zombie")
@@ -889,23 +890,6 @@ local zombie_spawner_desert = table.merge (zombie_spawner, {
 		"Desert",
 	},
 })
-
-local baby_zombie_spawner = table.merge (monster_spawner, {
-	name = "mobs_mc:baby_zombie",
-	weight = 95,
-	pack_max = 4,
-	pack_min = 4,
-	biomes = non_desert_biomes,
-})
-
-function baby_zombie_spawner:test_spawn_position (spawn_pos, node_pos, sdata, node_cache,
-					   spawn_flag)
-	return spawn_flag == "trial_spawner"
-		and monster_spawner.test_spawn_position (self, spawn_pos,
-							 node_pos, sdata,
-							 node_cache,
-							 spawn_flag)
-end
 
 local husk_spawner = table.merge (monster_spawner, {
 	name = "mobs_mc:husk",
@@ -942,5 +926,4 @@ end
 
 mcl_mobs.register_spawner (zombie_spawner)
 mcl_mobs.register_spawner (zombie_spawner_desert)
-mcl_mobs.register_spawner (baby_zombie_spawner)
 mcl_mobs.register_spawner (husk_spawner)

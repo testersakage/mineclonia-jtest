@@ -178,7 +178,12 @@ local function attempt_spawning_trial_mob(pos, meta, is_ominous)
 			if not mob_name or mob_name == "" then
 				core.log ("warning", "[mcl_trial_spawners] Mobs name is invalid")
 			end
-			local spawned_mob = mcl_mobs.spawn_abnormally(spawn_attempt_pos, mob_name, nil, "trial_spawner")
+			local sdata
+			if mob_name == "mobs_mc:baby_zombie" then
+				mob_name = "mobs_mc:zombie"
+				sdata = {_is_baby_zombie = true}
+			end
+			local spawned_mob = mcl_mobs.spawn_abnormally(spawn_attempt_pos, mob_name, sdata, "trial_spawner")
 
 			if spawned_mob then
 				local l = spawned_mob:get_luaentity()
