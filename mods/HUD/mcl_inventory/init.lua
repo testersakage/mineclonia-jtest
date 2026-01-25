@@ -266,6 +266,17 @@ end
 mcl_player.register_on_visual_change(mcl_inventory.update_inventory_formspec)
 
 mcl_gamemode.register_on_gamemode_change(function(p, old_gm, gm) ---@diagnostic disable-line: unused-local
+	-- Reset crafting grid when switching to survival mode
+	if gm == "survival" then
+		local inv = p:get_inventory()
+		if inv then
+			-- Return items from crafting grid to inventory
+			return_fields(p, "craft")
+			-- Reset crafting grid to 2x2 (4 slots) for survival mode
+			inv:set_width("craft", 2)
+			inv:set_size("craft", 4)
+		end
+	end
 	set_inventory(p)
 end)
 
