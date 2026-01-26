@@ -1,12 +1,10 @@
-Furnaces for MineClone 2.
-Heavily based on Minetest Game (default/furnace.lua).
+# Furnaces for Mineclonia.
 
-License of source code
-----------------------
-LGPLv2.1
-Based on code from Minetest Game.
+Heavily based on Minetest Game (default/furnace.lua).
 Modified by Wuzzy.
 
-License of media
-----------------
-See the main MineClone 2 README.md file.
+## License
+LGPLv2.1
+
+## Media
+See the main Mineclonia README.md file.

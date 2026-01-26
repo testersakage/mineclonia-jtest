@@ -1,13 +1,11 @@
-mcl_cartography_table
--------------------
+# mcl_cartography_table
+
 Cartography Tables, by PrairieWind
 
-Adds Cartography Tables to MineClone 2/5.
+Adds Cartography Tables to Mineclonia.
 
-License of source code
-----------------------
+## License
 LGPLv2.1
 
-License of media
-----------------
-See the main MineClone 2 README.md file.
+## Media
+See the main Mineclonia README.md file.

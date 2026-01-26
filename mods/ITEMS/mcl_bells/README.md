@@ -1,9 +1,9 @@
-mcl_bells
----------
-Village bells for MineClone2, originally imported from mcl5, heavily modified by cora.
+# mcl_bells
 
-License of media files
-----------------------
+Village bells for Mineclonia, originally imported from mcl5, heavily modified by cora.
+
+## License of media files
+
 * sounds/bell_stroke.ogg - cc0 http://creativecommons.org/publicdomain/zero/1.0/
 	* created by edsward
 	* modified by sorcerykid

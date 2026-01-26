@@ -1,6 +1,6 @@
-# MineClone2 Copper
+# Mineclonia Copper
 
-### by NO11
+by NO11
 
 Adds copper ore, blocks and items.
 

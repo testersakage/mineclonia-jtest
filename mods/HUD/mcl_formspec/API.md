@@ -1,4 +1,4 @@
-# MineClone2 Formspec API
+# Mineclonia Formspec API
 
 ## `mcl_formspec.label_color`
 

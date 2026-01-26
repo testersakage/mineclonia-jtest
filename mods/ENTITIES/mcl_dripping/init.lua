@@ -1,9 +1,3 @@
--- Dripping Water Mod
--- by kddekadenz
--- refactored to use particles instead of entities by cora
--- refactored to allow proper definitions by AFCMS
--- License of code, textures & sounds: CC0
-
 mcl_dripping = {}
 
 local ZERO_VECTOR = vector.zero ()

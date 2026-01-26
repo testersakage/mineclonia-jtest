@@ -1,6 +1,6 @@
-# API for MineClone 2 walls
+# API for Mineclonia walls
 
-This API allows you to add more walls (like the cobblestone wall) to MineClone 2.
+This API allows you to add more walls (like the cobblestone wall) to Mineclonia.
 
 ## `mcl_walls.register_wall(nodename, description, craft_material, tiles, invtex, groups, sounds)`
 

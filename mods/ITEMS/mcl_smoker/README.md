@@ -1,13 +1,11 @@
-Smoker for MineClone 2.
-Heavily based on Minetest Game (default/furnace.lua) and the MineClone 2 Furnaces.
+Smoker for Mineclonia.
+Heavily based on Minetest Game (default/furnace.lua) and the Mineclonia Furnaces.
 
-License of source code
-----------------------
+## Credits
+PrairieWind.
+
+## License of source code
 LGPLv2.1
-Based on code from Minetest Game.
-Modified by Wuzzy.
-MCl 2 Furances modified by PrairieWind.
 
-License of media
-----------------
-See the main MineClone 2 README.md file.
+## License of media
+See the main Mineclonia README.md file.
