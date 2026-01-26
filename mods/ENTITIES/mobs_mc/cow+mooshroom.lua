@@ -135,7 +135,7 @@ function mooshroom:on_rightclick (clicker)
 
 	if inv then
 		-- Use shears to convert mooshroom into cow while harvesting mushrooms
-		if item_name == "mcl_tools:shears" then
+		if core.get_item_group(item_name, "shears") > 0 then
 			local stack
 			local item_pos = vector.offset(obj_pos, 0, 1.4, 0)
 
@@ -185,7 +185,7 @@ function mooshroom:on_rightclick (clicker)
 				core.add_item(vector.offset(obj_pos, 0, 0.5, 0), stack)
 			end
 		-- Use a small flower to give an effect to a brown mooshroom
-		elseif core.get_item_group(item_name, "sus_stew_ingredient") == 1 and is_brown_mooshroom then
+		elseif core.get_item_group(item_name, "sus_stew_ingredient") > 0 and is_brown_mooshroom then
 			if self._sus_ingredient_held then
 				return
 			end
@@ -206,7 +206,7 @@ function mooshroom:_on_lightning_strike ()
 end
 
 function mooshroom:_on_dispense (dropitem, pos, droppos, dropnode, dropdir)
-	if dropitem:get_name() == "mcl_tools:shears" then
+	if core.get_item_group(dropitem:get_name(), "shears") > 0 then
 		local droppos = vector.offset(pos, 0, 1.4, 0)
 		if self.base_texture[1] == "mobs_mc_mooshroom_brown.png" then
 			core.add_item(droppos, "mcl_mushrooms:mushroom_brown 5")
