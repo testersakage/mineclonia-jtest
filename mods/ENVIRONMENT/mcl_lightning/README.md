@@ -1,6 +1,4 @@
-
-Lightning mod for minetest
-
+Lightning mod for minetest, adapted for mineclonia
 
 Copyright (C) 2016 - Auke Kok <sofar@foo-projects.org>
 

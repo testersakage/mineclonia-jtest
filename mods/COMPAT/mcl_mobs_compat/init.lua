@@ -1,8 +1,8 @@
--- No-op in MCL2 (capturing mobs is not possible).
+-- No-op in Mineclonia (capturing mobs is not possible).
 -- Provided for compability with Mobs Redo
 function mcl_mobs.capture_mob() return false end
 
--- No-op in MCL2 (protecting mobs is not possible).
+-- No-op in Mineclonia (protecting mobs is not possible).
 function mcl_mobs.protect() return false end
 
 -- this is to make the register_mob and register egg functions commonly used by mods not break

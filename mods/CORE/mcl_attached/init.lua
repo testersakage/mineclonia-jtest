@@ -1,5 +1,5 @@
 -- Overrides the builtin core.check_single_for_falling.
--- We need to do this in order to handle nodes in mineclone specific groups
+-- We need to do this in order to handle nodes in mineclonia specific groups
 -- "supported_node" and "attached_node_facedir".
 --
 -- Nodes in group "supported_node" can be placed on any node that does not

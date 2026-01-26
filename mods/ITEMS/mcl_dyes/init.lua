@@ -5,7 +5,7 @@ local D = mcl_util.get_dynamic_translator()
 
 -- Common color table to be used by other mods. The "mcl2" field if present
 -- represents the name of the color in mcl2 if it is different. This is used
--- in the mcl_dye compat mod to adabt the recipes.
+-- in the mcl_dye compat mod to adapt the recipes.
 mcl_dyes.colors = {
 	["white"] = {
 		readable_name = "White",
