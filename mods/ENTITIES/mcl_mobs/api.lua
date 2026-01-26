@@ -1,12 +1,9 @@
+local S = core.get_translator("mcl_mobs")
+
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
 local only_peaceful_mobs = core.settings:get_bool("only_peaceful_mobs", false)
-
--- API for Mobs Redo: MineClone 2 Edition (MRM)
-
--- Localize
-local S = core.get_translator("mcl_mobs")
 
 -- Invisibility mod check
 mcl_mobs.invis = {}

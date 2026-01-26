@@ -52,7 +52,7 @@ end
 
 -- Takes a Minecraft layer and a “dimension” name
 -- and returns the corresponding Y coordinate for
--- MineClone 2.
+-- Mineclonia.
 -- mc_dimension is one of "overworld", "nether", "end" (default: "overworld").
 function mcl_worlds.layer_to_y(layer, mc_dimension)
 	if mc_dimension == "overworld" or mc_dimension == nil then

@@ -4,10 +4,6 @@ local modpath = core.get_modpath(modname)
 
 mcl_crimson = {}
 
--- Warped and Crimson fungus
--- by debiankaios
--- adapted for mcl2 by cora
-
 -- possible plants for each nylium type
 -- give plants a probablity of being chosen totalling 100%
 local nether_plants = {

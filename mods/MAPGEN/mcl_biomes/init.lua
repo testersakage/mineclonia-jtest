@@ -110,10 +110,10 @@ local function register_biomes()
 	(except height).
 	MC has many “M” and “Hills” variants, most of which only differ in terrain compared to their original
 	counterpart.
-	In MT, any biome can occour in any terrain, so these variants are implied and are therefore
-	not explicitly implmented in MCL2. “M” variants are only included if they have another unique feature,
+	In MT, any biome can occour in any terrain, so these variants are implied and are therefore not
+	explicitly implmented in Mineclonia. “M” variants are only included if they have another unique feature,
 	such as a different land cover.
-	In MCL2, the MC Overworld biomes are split in multiple more parts (stacked by height):
+	In Mineclonia, the MC Overworld biomes are split in multiple more parts (stacked by height):
 	* The main part, this represents the land. It begins at around sea level and usually goes all the way up
 	* _ocean: For the area covered by ocean water. The y_max may vary for various beach effects.
 			  Has sand or dirt as floor.

@@ -115,7 +115,7 @@ local function door_alias(oldmod,oldwood,newwood)
 	core.register_alias(oldmod..":"..oldwood.."_door_b_2", "mcl_doors:door_"..newwood.."_b_2")
 	core.register_alias(oldmod..":"..oldwood.."_door_t_2", "mcl_doors:door_"..newwood.."_t_2")
 
-	--alias mcl2's strange _3 and _4 doors
+	--alias mcl2/voxelibre's strange _3 and _4 doors
 	core.register_alias(oldmod..":"..oldwood.."_door_b_3", "mcl_doors:door_"..newwood.."_b_1")
 	core.register_alias(oldmod..":"..oldwood.."_door_t_3", "mcl_doors:door_"..newwood.."_t_1")
 	core.register_alias(oldmod..":"..oldwood.."_door_b_4", "mcl_doors:door_"..newwood.."_b_2")

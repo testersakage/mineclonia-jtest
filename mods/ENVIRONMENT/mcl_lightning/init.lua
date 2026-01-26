@@ -1,15 +1,3 @@
---[[
-
-Copyright (C) 2016 - Auke Kok <sofar@foo-projects.org>
-Adapted by MineClone2 contributors
-
-"mcl_lightning" is free software; you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation; either version 2.1
-of the license, or (at your option) any later version.
-
---]]
-
 local S = core.get_translator(core.get_current_modname())
 
 mcl_lightning = {

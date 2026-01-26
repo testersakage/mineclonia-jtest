@@ -124,7 +124,6 @@ S("• Pointing range: How close things must be to be pointed while wielding thi
 S("• Group memberships: See “Basics > Groups”").."\n"..
 S("• May be used for crafting or cooking"),
 
--- MCL2: Items cannot be taken by punching
 		images = {{image="doc_basics_inventory_detail.png"}, {image="doc_basics_items_dropped.png"}},
 }})
 
@@ -227,7 +226,6 @@ doc.add_entry("basics", "mine", {
 	name = S("Mining"),
 	data = {
 		text =
--- Text changed for MCL2
 S("Mining (or digging) is the process of breaking blocks to remove them. To mine a block, point it and hold down the left mouse button until it breaks.").."\n\n"..
 
 S("Blocks require a mining tool to be mined. Different blocks are mined by different mining tools, and some blocks can not be mined by any tool. Blocks vary in hardness and tools vary in strength. Mining tools will wear off over time. The mining time and the tool wear depend on the block and the mining tool. The fastest way to find out how efficient your mining tools are is by just trying them out on various blocks. Any items you gather by mining will drop on the ground, ready to be collected.") .. "\n\n"..
@@ -273,7 +271,6 @@ S("There are multiple types of crafting recipes:").."\n"..
 S("• Shaped: Items need to be placed in a particular shape").."\n"..
 S("• Shapeless: Items need to be placed somewhere in input, but shape and order is independent").."\n"..
 S("• Cooking: Explained in “Basics > Cooking”").."\n"..
--- MCL2 change: call out specific repair percentage
 S("• Repairing: Place two damaged tools into the crafting grid anywhere to get a tool which is repaired by 5%").."\n\n"..
 
 S("In some crafting recipes, some input items do not need to be a concrete item, instead they need to be a member of a group (see “Basics > Groups”). These recipes offer a bit more freedom in the input items. For instance, crafting a furnace can be used with a number of different full cobble-like stone blocks.").."\n\n"..
