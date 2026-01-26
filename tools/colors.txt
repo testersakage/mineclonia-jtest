@@ -1,4 +1,4 @@
-## Mcl2 colors.txt file for minetestmapper
+## Mineclonia colors.txt file for minetestmapper
 ## by Ranko Saotome using the tools provided by minetestmapper
 
 # mcl_amethyst

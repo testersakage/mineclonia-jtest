@@ -10,7 +10,7 @@ from collections import Counter
 
 from libtextureconverter.utils import detect_pixel_size, target_dir, colorize, colorize_alpha, handle_default_minecraft_texture, find_all_minecraft_resourcepacks
 from libtextureconverter.convert import convert_textures
-from libtextureconverter.config import SUPPORTED_MINECRAFT_VERSION, working_dir, mineclone2_path, appname, home
+from libtextureconverter.config import SUPPORTED_MINECRAFT_VERSION, working_dir, mineclonia_path, appname, home
 
 
 def convert_resource_packs(
@@ -56,7 +56,7 @@ def convert_resource_packs(
                 tempfile2,
                 output_dir,
                 output_dir_name,
-                mineclone2_path,
+                mineclonia_path,
                 pixel_size)
         finally:
             # Clean up temporary files
