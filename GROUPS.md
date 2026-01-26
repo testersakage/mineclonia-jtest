@@ -121,6 +121,7 @@ Please read <https://minecraft.wiki/w/Breaking> to learn how digging times work 
 * `enchanted=1`: The item is already enchanted, meaning that it can't be enchanted using an enchanting table
 * `cobble=1`: Cobblestone of any kind
 * `soul_block`: Fire burning on these blocks turns to soul fire, can be used to craft soul torch
+* `sus_stew_ingredient`: Item can be used to craft a suspicious stew
 
 ### Material groups
 

@@ -2,6 +2,13 @@
 
 Register your own sus stews!
 
+# Groups
+
+## sus_stew_ingredient
+
+Items that can be used as an ingredient for a suspicious stew must have this
+group set in their item definition.
+
 # Functions
 
 ## mcl_sus_stew.register_sus_stew(ingredient, effect, duration)
