@@ -24,12 +24,12 @@ def convert_map_textures(
         tempfile2,
         output_dir,
         output_dir_name,
-        mineclone2_path,
+        mineclonia_path,
         PXSIZE):
     # Convert map background
     map_background_file = tex_dir + "/map/map_background.png"
     if os.path.isfile(map_background_file):
-        destination_path = target_dir("/mods/ITEMS/mcl_maps/textures", make_texture_pack, output_dir, output_dir_name, mineclone2_path) + "/mcl_maps_map_background.png"
+        destination_path = target_dir("/mods/ITEMS/mcl_maps/textures", make_texture_pack, output_dir, output_dir_name, mineclonia_path) + "/mcl_maps_map_background.png"
 
         with Image(filename=map_background_file) as img:
             # Resize the image with 'point' filter
@@ -51,7 +51,7 @@ def convert_armor_textures(
         tempfile2,
         output_dir,
         output_dir_name,
-        mineclone2_path,
+        mineclonia_path,
         PXSIZE):
     # Convert armor textures (requires ImageMagick)
     armor_files = [[tex_dir + "/models/armor/leather_layer_1.png",
@@ -60,7 +60,7 @@ def convert_armor_textures(
                                make_texture_pack,
                                output_dir,
                                output_dir_name,
-                               mineclone2_path),
+                               mineclonia_path),
                     "mcl_armor_helmet_leather.png",
                     "mcl_armor_chestplate_leather.png",
                     "mcl_armor_leggings_leather.png",
@@ -71,7 +71,7 @@ def convert_armor_textures(
                                make_texture_pack,
                                output_dir,
                                output_dir_name,
-                               mineclone2_path),
+                               mineclonia_path),
                     "mcl_armor_helmet_chain.png",
                     "mcl_armor_chestplate_chain.png",
                     "mcl_armor_leggings_chain.png",
@@ -82,7 +82,7 @@ def convert_armor_textures(
                                make_texture_pack,
                                output_dir,
                                output_dir_name,
-                               mineclone2_path),
+                               mineclonia_path),
                     "mcl_armor_helmet_gold.png",
                     "mcl_armor_chestplate_gold.png",
                     "mcl_armor_leggings_gold.png",
@@ -93,7 +93,7 @@ def convert_armor_textures(
                                make_texture_pack,
                                output_dir,
                                output_dir_name,
-                               mineclone2_path),
+                               mineclonia_path),
                     "mcl_armor_helmet_iron.png",
                     "mcl_armor_chestplate_iron.png",
                     "mcl_armor_leggings_iron.png",
@@ -104,7 +104,7 @@ def convert_armor_textures(
                                make_texture_pack,
                                output_dir,
                                output_dir_name,
-                               mineclone2_path),
+                               mineclonia_path),
                     "mcl_armor_helmet_diamond.png",
                     "mcl_armor_chestplate_diamond.png",
                     "mcl_armor_leggings_diamond.png",
@@ -115,13 +115,13 @@ def convert_armor_textures(
                                make_texture_pack,
                                output_dir,
                                output_dir_name,
-                               mineclone2_path),
+                               mineclonia_path),
                     "mcl_armor_helmet_netherite.png",
                     "mcl_armor_chestplate_netherite.png",
                     "mcl_armor_leggings_netherite.png",
                     "mcl_armor_boots_netherite.png"]]
     for a in armor_files:
-        APXSIZE = 16  # for some reason MineClone2 requires this
+        APXSIZE = 16  # for some reason Mineclonia requires this
         layer_1 = a[0]
         layer_2 = a[1]
         adir = a[2]
@@ -237,7 +237,7 @@ def convert_chest_textures(
         tempfile2,
         output_dir,
         output_dir_name,
-        mineclone2_path,
+        mineclonia_path,
         PXSIZE):
     # Convert chest textures (requires ImageMagick)
     chest_files = [[tex_dir + "/entity/chest/normal.png",
@@ -245,7 +245,7 @@ def convert_chest_textures(
                                make_texture_pack,
                                output_dir,
                                output_dir_name,
-                               mineclone2_path),
+                               mineclonia_path),
                     "default_chest_top.png",
                     "mcl_chests_chest_bottom.png",
                     "default_chest_front.png",
@@ -257,7 +257,7 @@ def convert_chest_textures(
                                make_texture_pack,
                                output_dir,
                                output_dir_name,
-                               mineclone2_path),
+                               mineclonia_path),
                     "mcl_chests_chest_trapped_top.png",
                     "mcl_chests_chest_trapped_bottom.png",
                     "mcl_chests_chest_trapped_front.png",
@@ -269,7 +269,7 @@ def convert_chest_textures(
                                make_texture_pack,
                                output_dir,
                                output_dir_name,
-                               mineclone2_path),
+                               mineclonia_path),
                     "mcl_chests_ender_chest_top.png",
                     "mcl_chests_ender_chest_bottom.png",
                     "mcl_chests_ender_chest_front.png",
@@ -322,7 +322,7 @@ def convert_chest_textures(
                                make_texture_pack,
                                output_dir,
                                output_dir_name,
-                               mineclone2_path),
+                               mineclonia_path),
                     "default_chest_front_big.png",
                     "default_chest_top_big.png",
                     "default_chest_side_big.png"],
@@ -331,7 +331,7 @@ def convert_chest_textures(
                                make_texture_pack,
                                output_dir,
                                output_dir_name,
-                               mineclone2_path),
+                               mineclonia_path),
                     "mcl_chests_chest_trapped_front_big.png",
                     "mcl_chests_chest_trapped_top_big.png",
                     "mcl_chests_chest_trapped_side_big.png"]]
@@ -378,7 +378,7 @@ def convert_rail_textures(
         tempfile2,
         output_dir,
         output_dir_name,
-        mineclone2_path,
+        mineclonia_path,
         PXSIZE):
     # Generate railway crossings and t-junctions. Note: They may look strange.
     # Note: these may be only a temporary solution, as crossings and t-junctions do not occour in MC.
@@ -416,7 +416,7 @@ def convert_rail_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/" +
             r[2]))
         os.system("convert " + shlex.quote(tex_dir + "/block/" +
@@ -434,7 +434,7 @@ def convert_rail_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/" +
             r[3]))
 
@@ -451,7 +451,7 @@ def convert_banner_overlays(
         tempfile2,
         output_dir,
         output_dir_name,
-        mineclone2_path,
+        mineclonia_path,
         PXSIZE):
     # Convert banner overlays
     overlays = [
@@ -505,7 +505,7 @@ def convert_banner_overlays(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) + "/" + "mcl_banners_" + o + ".png"
+                mineclonia_path) + "/" + "mcl_banners_" + o + ".png"
             os.system(
                 "convert " +
                 shlex.quote(orig) +
@@ -525,7 +525,7 @@ def convert_grass_textures(
         tempfile2,
         output_dir,
         output_dir_name,
-        mineclone2_path,
+        mineclonia_path,
         PXSIZE):
     # Convert grass
     grass_file = tex_dir + "/block/grass_block_top.png"
@@ -545,7 +545,7 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/default_leaves.png",
             tempfile2.name)
         colorize_alpha(
@@ -559,7 +559,7 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/mcl_core_leaves_big_oak.png",
             tempfile2.name)
         colorize_alpha(
@@ -573,7 +573,7 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/default_acacia_leaves.png",
             tempfile2.name)
         colorize_alpha(
@@ -587,7 +587,7 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/mcl_core_leaves_spruce.png",
             tempfile2.name)
         colorize_alpha(
@@ -601,7 +601,7 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/mcl_core_leaves_birch.png",
             tempfile2.name)
         colorize_alpha(
@@ -615,7 +615,7 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/default_jungleleaves.png",
             tempfile2.name)
 
@@ -631,7 +631,7 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/flowers_waterlily.png",
             tempfile2.name)
 
@@ -647,7 +647,7 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/mcl_core_vine.png",
             tempfile2.name)
 
@@ -664,7 +664,7 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/mcl_flowers_tallgrass_inv.png",
             tempfile2.name)
         colorize_alpha(
@@ -678,7 +678,7 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/mcl_flowers_fern_inv.png",
             tempfile2.name)
         colorize_alpha(
@@ -692,7 +692,7 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/mcl_flowers_double_plant_fern_inv.png",
             tempfile2.name)
         colorize_alpha(
@@ -706,13 +706,13 @@ def convert_grass_textures(
                 make_texture_pack,
                 output_dir,
                 output_dir_name,
-                mineclone2_path) +
+                mineclonia_path) +
             "/mcl_flowers_double_plant_grass_inv.png",
             tempfile2.name)
 
         # Convert grass palette: https://minecraft.wiki/w/Color
         grass_colors = [
-            # [Coords or #Color, AdditionalTint], # Index - Minecraft biome name (MineClone2 biome names)
+            # [Coords or #Color, AdditionalTint], # Index - Minecraft biome name (Mineclonia biome names)
             # 0 - Plains (flat, Plains, Plains_beach, Plains_ocean, End)
             ["50+173"],
             # 1 - Savanna (Savanna, Savanna_beach, Savanna_ocean)
@@ -773,7 +773,7 @@ def convert_grass_textures(
             make_texture_pack,
             output_dir,
             output_dir_name,
-            mineclone2_path) + "/mcl_core_palette_grass.png"
+            mineclonia_path) + "/mcl_core_palette_grass.png"
         os.system("convert -size 16x16 canvas:transparent " +
                   shlex.quote(grass_palette_file))
 
@@ -782,7 +782,7 @@ def convert_grass_textures(
             make_texture_pack,
             output_dir,
             output_dir_name,
-            mineclone2_path) + "/mcl_dirt_grass_shadow.png"
+            mineclonia_path) + "/mcl_dirt_grass_shadow.png"
         os.system("convert -size 16x16 canvas:transparent " +
                   shlex.quote(dirt_grass_shadow_file))
 

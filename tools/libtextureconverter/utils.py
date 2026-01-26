@@ -33,11 +33,11 @@ def target_dir(
         make_texture_pack,
         output_dir,
         output_dir_name,
-        mineclone2_path):
+        mineclonia_path):
     if make_texture_pack:
         return output_dir + "/" + output_dir_name
     else:
-        return mineclone2_path + directory
+        return mineclonia_path + directory
 
 
 def colorize(colormap, source, colormap_pixel, texture_size, destination, tempfile1_name):

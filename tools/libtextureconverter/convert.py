@@ -20,7 +20,7 @@ def convert_standard_textures(
     tempfile2,
     output_dir,
     output_dir_name,
-    mineclone2_path,
+    mineclonia_path,
      PXSIZE):
 
     failed_conversions = 0
@@ -52,7 +52,7 @@ def convert_standard_textures(
                 continue
 
             if make_texture_pack == False and dst_dir == "":
-                # If destination dir is empty, this texture is not supposed to be used in MCL2
+                # If destination dir is empty, this texture is not supposed to be used in Mineclonia
                 # (but maybe an external mod). It should only be used in texture packs.
                 # Otherwise, it must be ignored.
                 # Example: textures for mcl_supplemental
@@ -61,7 +61,7 @@ def convert_standard_textures(
             src_file = base_dir + src_dir + "/" + src_filename  # source file
             src_file_exists = os.path.isfile(src_file)
             dst_file = target_dir(dst_dir, make_texture_pack, output_dir, output_dir_name,
-                                  mineclone2_path) + "/" + dst_filename  # destination file
+                                  mineclonia_path) + "/" + dst_filename  # destination file
 
             if src_file_exists == False:
                 print("WARNING: Source file does not exist: " + src_file)
@@ -90,43 +90,43 @@ def convert_standard_textures(
     return failed_conversions
 
 
-def convert_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2, output_dir, output_dir_name, mineclone2_path, PXSIZE):
+def convert_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2, output_dir, output_dir_name, mineclonia_path, PXSIZE):
     print("Texture conversion BEGINS NOW!")
 
     # Convert textures listed in the Conversion_Table.csv
     failed_conversions = convert_standard_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir,
-                              tempfile1, tempfile2, output_dir, output_dir_name, mineclone2_path, PXSIZE)
+                              tempfile1, tempfile2, output_dir, output_dir_name, mineclonia_path, PXSIZE)
 
     # Conversion of map backgrounds
     convert_map_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir,
-                         tempfile1, tempfile2, output_dir, output_dir_name, mineclone2_path, PXSIZE)
+                         tempfile1, tempfile2, output_dir, output_dir_name, mineclonia_path, PXSIZE)
 
     # Convert armor textures
-    convert_armor_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2,output_dir, output_dir_name, mineclone2_path, PXSIZE)
+    convert_armor_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2,output_dir, output_dir_name, mineclonia_path, PXSIZE)
 
     # Convert chest textures
-    convert_chest_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2,output_dir, output_dir_name, mineclone2_path, PXSIZE)
+    convert_chest_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2,output_dir, output_dir_name, mineclonia_path, PXSIZE)
 
     # Generate railway crossings and t-junctions
-    convert_rail_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2,output_dir, output_dir_name, mineclone2_path, PXSIZE)
+    convert_rail_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2,output_dir, output_dir_name, mineclonia_path, PXSIZE)
 
     # Convert banner overlays
-    convert_banner_overlays(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2,output_dir, output_dir_name, mineclone2_path, PXSIZE)
+    convert_banner_overlays(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2,output_dir, output_dir_name, mineclonia_path, PXSIZE)
 
     # Convert grass and related textures
-    convert_grass_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2,output_dir, output_dir_name, mineclone2_path, PXSIZE)
+    convert_grass_textures(make_texture_pack, dry_run, verbose, base_dir, tex_dir, tempfile1, tempfile2,output_dir, output_dir_name, mineclonia_path, PXSIZE)
 
     # Metadata
     if make_texture_pack:
         # Create description file
-        description = "Texture pack for MineClone 2. Automatically converted from a Minecraft resource pack by the MineClone 2 Texture Converter. Size: "+str(PXSIZE)+"×"+str(PXSIZE)
-        description_file = open(target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclone2_path) + "/description.txt", "w")
+        description = "Texture pack for MineClonia. Automatically converted from a Minecraft resource pack by the MineClonia Texture Converter. Size: "+str(PXSIZE)+"×"+str(PXSIZE)
+        description_file = open(target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclonia_path) + "/description.txt", "w")
         description_file.write(description)
         description_file.close()
 
         # Create preview image (screenshot.png)
-        os.system("convert -size 300x200 canvas:transparent " + shlex.quote(target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclone2_path) + "/screenshot.png"))
-        os.system("composite " + shlex.quote(base_dir + "/pack.png") + " " + shlex.quote(target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclone2_path) + "/screenshot.png") + " -gravity center " + shlex.quote(target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclone2_path) + "/screenshot.png"))
+        os.system("convert -size 300x200 canvas:transparent " + shlex.quote(target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclonia_path) + "/screenshot.png"))
+        os.system("composite " + shlex.quote(base_dir + "/pack.png") + " " + shlex.quote(target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclonia_path) + "/screenshot.png") + " -gravity center " + shlex.quote(target_dir("/", make_texture_pack, output_dir, output_dir_name, mineclonia_path) + "/screenshot.png"))
 
     print("Textures conversion COMPLETE!")
     if failed_conversions > 0:
