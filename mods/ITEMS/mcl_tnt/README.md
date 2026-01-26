@@ -1,7 +1,8 @@
-=== TNT mod for Minetest ===
-by PilzAdam. HEAVILY modified for MineClone 2.
+# TNT
 
-Introduction:
+Based on TNT mod for Minetest by PilzAdam. HEAVILY modified for Mineclonia.
+
+## Introduction
 This mod adds TNT. TNT is a tool to help the player in mining.
 
 How to use the mod:
@@ -10,9 +11,10 @@ There are different ways to blow up TNT:
 2. Activate it with redstone circuits
 Be aware of the damage radius!
 
-License of mod code and media:
+## License
 MIT License
 
+## Media
 Sound credits:
 
 * tnt_explode.ogg: Jose Ortiz 'MindChamber' (CC0)

@@ -1,4 +1,4 @@
-# Portals mod for MineClone 2
+# Portals mod for Mineclonia
 ## How to create portals
 
 Nether portal: Build a frame of obsidian, with at least 6 blocks inside it, and use a flint and steel inside it.
@@ -11,7 +11,7 @@ End portal: Build an upright frame of red nether brick blocks, 4 blocks wide and
 Created by maikerumine, Wuzzy and ryvnf.
 Code license: MIT License (see `LICENSE`).
 
-Texture license: See README.md in main MineClone 2 directory.
+Texture license: See README.md in main Mineclonia directory.
 
 `mcl_portals_teleport.ogg`
 	* License: [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)

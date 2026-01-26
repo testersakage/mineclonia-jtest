@@ -9,7 +9,7 @@ This table contains all the colors indexed by cannonical color name:
 		groups, -- table of the color groups including legacy "unicolor"
 		rgb, -- hex RGB value of the color
 		unicolor, --the name of the color in the "unicolor" format
-		mcl2, --this field is set in the cases where the colorname mismatches with the correspoinding mcl2 color. This was done to make color names more consistent and predictable.
+		mcl2, --this field is set in the cases where the colorname mismatches with the correspoinding mcl2/voxelibre color. This was done to make color names more consistent and predictable.
 	},
 }
 ```

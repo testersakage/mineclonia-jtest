@@ -1,4 +1,4 @@
-# MineClone 2 HUD bar for `mcl_armor` [`mcl_hbarmor`]
+# Mineclonia HUD bar for `mcl_armor` [`mcl_hbarmor`]
 
 ## Description
 This mod adds a simple HUD bar which displays the player's armor points.
@@ -14,7 +14,7 @@ License: MIT License (see below)
 
 ### Textures
 
-See MineClone 2 license.
+See Mineclonia license.
 
 ### MIT License
 Everything else is under the MIT License:

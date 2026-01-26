@@ -1,5 +1,6 @@
-# MineClone2 Bucket (`mcl_bucket`)
-Originally taken from Minetest Game, adapted for MineClone2.
+# Mineclonia Bucket (`mcl_bucket`)
+
+Originally taken from Minetest Game, adapted for Mineclonia.
 
 This mod add buckets to the game, including an API to register your own (see `API.md`).
 

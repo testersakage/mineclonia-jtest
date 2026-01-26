@@ -1,4 +1,4 @@
-# Sprint Mod for MineClone 2
+# Sprint Mod for Mineclonia
 Forked from [sprint] by GunshipPenguin  
 
 ## Description
@@ -6,7 +6,8 @@ Allows the player to sprint by pressing the “Use” key (default: E).
 By default, sprinting will make the player travel 80% faster and 
 allow him/her to jump 10% higher. 
 
-Licence: CC0 (see COPYING file)
+## License
+CC0 (see COPYING file)
 
 ## Mod developer settings (`init.lua`)
 ### `mcl_sprint.SPEED`

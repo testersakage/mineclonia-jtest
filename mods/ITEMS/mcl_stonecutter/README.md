@@ -8,7 +8,7 @@ Adds the stonecutter block. Used to cut stone like materials into stairs, slabs,
 * For a yield other than 1 (e.g. slabs) add a group mapping to the "recipe_yield" table in the stonecutter mod.
 
 ### License of code
-See the main MineClone 2 README.md file.
+See the main Mineclonia README.md file.
 Authors: PrairieWind, ChrisPHP, cora
 
 ### License of media

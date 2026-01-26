@@ -1,9 +1,8 @@
-mcl_fire: Fire mod for MineClone 2
-Based on fire from Minetest Game
-==================================
+# mcl_fire
 
-License of source code:
------------------------
+Fire mod for Mineclonia based on fire from Minetest Game
+
+## License
 Copyright (C) 2012 Perttu Ahola (celeron55) <celeron55@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
@@ -13,13 +12,12 @@ the Free Software Foundation; either version 2.1 of the License, or
 
 http://www.gnu.org/licenses/lgpl-2.1.html
 
-License of media (sounds)
---------------------------------------
+## Media
 Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)                                 
 http://creativecommons.org/licenses/by-sa/3.0/
 
-Authors of media files
------------------------
+### Authors of media files
+
 Muadtralk (CC BY-SA 3.0)
   fire_basic_flame_animated.png
 

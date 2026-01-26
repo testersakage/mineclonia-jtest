@@ -241,7 +241,7 @@ mcl_armor.update(obj)
 
 Armors can be enchanted in most cases.
 
-The enchanting part of MineClone2 is separated from the armor part, but closely linked.
+The enchanting part of Mineclonia is separated from the armor part, but closely linked.
 
 Existing armor enchantments in Minecraft improve most of the time how the armor protect the entity from damage.
 

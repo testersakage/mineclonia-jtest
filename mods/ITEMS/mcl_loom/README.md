@@ -1,15 +1,16 @@
-mcl_loom
---------
-Looms, by PrairieWind
+# mcl_loom
 
-Adds Looms to MineClone 2/5. Used to add patterns to banners.
+Adds Looms to Mineclonia. Used to add patterns to banners.
 
-License of source code
-----------------------
+## Credit
+
+by PrairieWind
+
+## License
+
 LGPLv2.1
 
-License of media
-----------------
+## Media
 
 loom_bottom.png
 loom_front.png

@@ -1,15 +1,14 @@
-mcl_fletching_table
--------------------
+# mcl_fletching_table
+
 Fletching Tables, by PrairieWind
 
-Adds Fletching Tables to MineClone 2/5.
+Adds Fletching Tables to Mineclonia.
 
-License of source code
-----------------------
+## License
+
 LGPLv2.1
 
-License of media
-----------------
+## Media
 
 fletching_table_bottom.png
 fletching_table_front.png

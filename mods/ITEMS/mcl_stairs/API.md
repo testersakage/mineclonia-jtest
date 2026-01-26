@@ -117,7 +117,7 @@ The itemstrings for the registered nodes will be of the form:
 * `images`: Textures
 * `description`: Stair description/tooltip
 * `sounds`: Sounds table
-* `hardness`: MCL2 block hardness value
+* `hardness`: Mineclonia block hardness value
 * `corner_stair_texture_override`: Optional. Custom textures for corner stairs, see below
 
 `groups`, `images`, `sounds` or `hardness` can be `nil`, in which case the value is inhereted from the `recipeitem`.

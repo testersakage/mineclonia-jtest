@@ -1,5 +1,5 @@
 # mcl_structures
-Structure placement API for MCL2.
+Structure placement API for Mineclonia.
 
 ## mcl_structures.register_structure(name,structure definition,nospawn)
 If nospawn is truthy the structure will not be placed by mapgen and the decoration parameters can be omitted. This is intended for secondary structures the placement of which gets triggered by the placement of other structures. It can also be used to register testing structures so they can be used with /spawnstruct.

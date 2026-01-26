@@ -1,4 +1,4 @@
-# Mineclone Skins
+# Mineclonia Skins
 
 This mod allows advanced skin customization.
 Use the /skin command to open the skin configuration screen.
