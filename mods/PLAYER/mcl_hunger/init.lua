@@ -61,9 +61,23 @@ end
 -- register saturation hudbar
 hb.register_hudbar("hunger", 0xFFFFFF, S("Food"), { icon = "hbhunger_icon.png", bgicon = "hbhunger_bgicon.png",  bar = "hbhunger_bar.png" }, 20, 20, false, nil, nil, 1)
 
+local function should_hide_hunger_hud(player)
+	if not player or not player:is_player() then
+		return false
+	end
+	if not core.settings:get_bool("enable_damage") then
+		return false
+	end
+	if mcl_gamemode then
+		local gm = mcl_gamemode.get_gamemode(player)
+		return gm == "creative"
+	end
+	return core.is_creative_enabled(player:get_player_name())
+end
+
 core.register_on_joinplayer(function(player)
 	mcl_hunger.init_player(player)
-	hb.init_hudbar(player, "hunger", mcl_hunger.get_hunger(player))
+	hb.init_hudbar(player, "hunger", mcl_hunger.get_hunger(player), 20, should_hide_hunger_hud(player))
 end)
 
 core.register_on_respawnplayer(function(player)
@@ -71,7 +85,11 @@ core.register_on_respawnplayer(function(player)
 	mcl_hunger.set_hunger(player, h, false)
 	mcl_hunger.set_saturation(player, s)
 	mcl_hunger.set_exhaustion(player, e)
-	hb.change_hudbar(player, "hunger", h)
+	if should_hide_hunger_hud(player) then
+		hb.hide_hudbar(player, "hunger")
+	else
+		hb.change_hudbar(player, "hunger", h)
+	end
 end)
 
 -- PvP combat exhaustion
@@ -246,3 +264,17 @@ mcl_player.register_globalstep_slow(function(player)
 
 	end
 end)
+
+if mcl_gamemode then
+	mcl_gamemode.register_on_gamemode_change(function(player, old_gm, new_gm)
+		if not mcl_hunger.active then
+			return
+		end
+		if should_hide_hunger_hud(player) then
+			hb.hide_hudbar(player, "hunger")
+		else
+			hb.unhide_hudbar(player, "hunger")
+			hb.change_hudbar(player, "hunger", mcl_hunger.get_hunger(player))
+		end
+	end)
+end

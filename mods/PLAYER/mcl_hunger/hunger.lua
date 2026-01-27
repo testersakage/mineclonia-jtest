@@ -178,7 +178,19 @@ function mcl_hunger.item_eat(hunger_points, replace_with_item, poisontime, poiso
 					mcl_hunger.set_hunger(user, h, false)
 				end
 
-				hb.change_hudbar(user, "hunger", h)
+				local hide = false
+				if mcl_gamemode then
+					local gm = mcl_gamemode.get_gamemode(user)
+					hide = (gm == "creative")
+				else
+					hide = core.is_creative_enabled(user:get_player_name())
+				end
+				if hide then
+					hb.hide_hudbar(user, "hunger")
+				else
+					hb.unhide_hudbar(user, "hunger")
+					hb.change_hudbar(user, "hunger", h)
+				end
 				mcl_hunger.update_saturation_hud(user, mcl_hunger.get_saturation(user), h)
 			elseif not mcl_hunger.active and hunger_points then
 			   -- Is this code still reachable?

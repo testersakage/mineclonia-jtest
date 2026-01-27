@@ -56,6 +56,20 @@ local function player_exists(player)
 	return player ~= nil and player:is_player()
 end
 
+local function should_hide_hud(player)
+	if not player_exists(player) then
+		return false
+	end
+	if not core.settings:get_bool("enable_damage") then
+		return false
+	end
+	if mcl_gamemode then
+		local gm = mcl_gamemode.get_gamemode(player)
+		return gm == "creative"
+	end
+	return core.is_creative_enabled(player:get_player_name())
+end
+
 local function make_label(format_string, format_string_config, label, start_value, max_value)
 	local params = {}
 	local order = format_string_config.order
@@ -488,10 +502,8 @@ end
 
 local function custom_hud(player)
 	if core.settings:get_bool("enable_damage") or hb.settings.forceload_default_hudbars then
-		local hide
-		if core.settings:get_bool("enable_damage") then
-			hide = false
-		else
+		local hide = should_hide_hud(player)
+		if not core.settings:get_bool("enable_damage") then
 			hide = true
 		end
 		local hp = player:get_hp()
@@ -499,9 +511,8 @@ local function custom_hud(player)
 		hb.init_hudbar(player, "health", math.min(hp, hp_max), hp_max, hide)
 		local breath = player:get_breath()
 		local breath_max = player:get_properties().breath_max
-		local hide_breath
-		if breath >= breath_max and hb.settings.autohide_breath == true then hide_breath = true else hide_breath = false end
-		hb.init_hudbar(player, "breath", math.min(breath, breath_max), breath_max, hide_breath or hide)
+		local hide_breath = (breath >= breath_max and hb.settings.autohide_breath == true) or hide
+		hb.init_hudbar(player, "breath", math.min(breath, breath_max), breath_max, hide_breath)
 	end
 end
 
@@ -511,25 +522,32 @@ local function update_health(player)
 	hb.change_hudbar(player, "health", hp, hp_max)
 end
 
--- update built-in HUD bars
 local function update_hud(player)
 	if not player_exists(player) then return end
 	if core.settings:get_bool("enable_damage") then
+		local hide = should_hide_hud(player)
 		if hb.settings.forceload_default_hudbars then
-			hb.unhide_hudbar(player, "health")
+			if hide then
+				hb.hide_hudbar(player, "health")
+			else
+				hb.unhide_hudbar(player, "health")
+			end
+		elseif hide then
+			hb.hide_hudbar(player, "health")
 		end
-		--air
+		
 		local breath_max = player:get_properties().breath_max
 		local breath = player:get_breath()
-
 		if breath >= breath_max and hb.settings.autohide_breath == true then
 			hb.hide_hudbar(player, "breath")
 		else
 			hb.unhide_hudbar(player, "breath")
 			hb.change_hudbar(player, "breath", math.min(breath, breath_max), breath_max)
 		end
-		--health
-		update_health(player)
+		
+		if not hide then
+			update_health(player)
+		end
 	elseif hb.settings.forceload_default_hudbars then
 		hb.hide_hudbar(player, "health")
 		hb.hide_hudbar(player, "breath")
@@ -556,6 +574,35 @@ end)
 core.register_on_leaveplayer(function(player)
 	hb.players[player:get_player_name()] = nil
 end)
+
+if mcl_gamemode then
+	mcl_gamemode.register_on_gamemode_change(function(player, old_gm, new_gm)
+		if hb.players[player:get_player_name()] == nil then
+			return
+		end
+		if not (core.settings:get_bool("enable_damage") or hb.settings.forceload_default_hudbars) then
+			return
+		end
+		
+		local hide = should_hide_hud(player)
+		if hide then
+			hb.hide_hudbar(player, "health")
+			if mcl_damage and mcl_damage.is_player_invulnerable(player) then
+				local props = player:get_properties()
+				local max_hp = props.hp_max
+				player:set_hp(max_hp, { type = "set_hp", mcl_damage = true })
+				local meta = player:get_meta()
+				meta:set_float("mcl_health", max_hp)
+				if mcl_serverplayer then
+					mcl_serverplayer.update_vitals(player)
+				end
+			end
+		else
+			hb.unhide_hudbar(player, "health")
+			update_health(player)
+		end
+	end)
+end
 
 local main_timer = 0
 local timer = 0

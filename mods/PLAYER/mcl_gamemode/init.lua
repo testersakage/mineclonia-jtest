@@ -4,6 +4,7 @@ mcl_gamemode = {
 	gamemodes = {
 		"survival",
 		"creative",
+		"testmode",
 	},
 	registered_on_gamemode_change = {}
 }
@@ -11,8 +12,10 @@ mcl_gamemode = {
 local gamemode_aliases = {
 	["0"] = "survival",
 	["1"] = "creative",
+	["2"] = "testmode",
 	["s"] = "survival",
 	["c"] = "creative",
+	["t"] = "testmode",
 }
 
 function mcl_gamemode.register_on_gamemode_change(func)
@@ -33,7 +36,12 @@ function core.is_creative_enabled(name)
 end
 
 function mcl_gamemode.get_gamemode(p)
-	return core.is_creative_enabled(p:get_player_name()) and "creative" or "survival"
+	local meta = p:get_meta()
+	local gm = meta:get_string("gamemode")
+	if gm == "" or gm == nil then
+		return core.is_creative_enabled(p:get_player_name()) and "creative" or "survival"
+	end
+	return gm
 end
 
 function mcl_gamemode.set_gamemode(p, gm)
@@ -48,7 +56,7 @@ end
 
 core.register_chatcommand("gamemode",{
 	params = S("[<gamemode>] [<player>]"),
-	description = S("Change gamemode (survival/creative/0/1/s/c) for yourself or player"),
+	description = S("Change gamemode (survival/creative/testmode/0/1/2/s/c/t) for yourself or player"),
 	privs = { server = true },
 	func = function(n,param)
 		local p

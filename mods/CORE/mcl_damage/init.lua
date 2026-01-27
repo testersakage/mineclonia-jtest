@@ -39,7 +39,21 @@ mcl_damage = {
 	}
 }
 
-local damage_enabled = core.settings:get_bool("enabled_damage",true)
+local damage_enabled = core.settings:get_bool("enable_damage", true)
+
+function mcl_damage.is_player_invulnerable(player)
+	if not player or not player:is_player() then
+		return false
+	end
+	if not core.settings:get_bool("enable_damage") then
+		return false
+	end
+	if mcl_gamemode then
+		local gm = mcl_gamemode.get_gamemode(player)
+		return gm == "creative"
+	end
+	return core.is_creative_enabled(player:get_player_name())
+end
 
 function mcl_damage.register_modifier(func, priority)
 	table.insert(mcl_damage.modifiers, {func = func, priority = priority or 0})
@@ -174,6 +188,10 @@ end
 --- statistic.
 
 function mcl_damage.damage_player (player, amount, mcl_reason)
+	if mcl_damage.is_player_invulnerable(player) then
+		return
+	end
+
 	if not mcl_reason.flags then
 	  mcl_damage.finish_reason (mcl_reason)
 	end
@@ -255,6 +273,9 @@ end
 
 core.register_on_player_hpchange(function(player, hp_change, mt_reason)
 	if not damage_enabled then return 0 end
+	if mcl_damage.is_player_invulnerable(player) and hp_change < 0 then
+		return 0
+	end
 	-- Take engine damage modifications from mcl_damage at face value.
 	if mt_reason.mcl_damage then
 		return hp_change
@@ -298,8 +319,17 @@ core.register_on_player_hpchange(function(player, hp_change, mt_reason)
 		mcl_health = engine_hp
 	end
 
-	-- Deduct engine damage.
 	mcl_health = math.max (0, mcl_health + hp_change)
+	
+	if mcl_damage.is_player_invulnerable(player) and mcl_health <= 0 then
+		local props = player:get_properties()
+		mcl_health = props.hp_max
+		meta:set_float ("mcl_health", mcl_health)
+		player:set_hp(mcl_health, { type = "set_hp", mcl_damage = true })
+		mcl_serverplayer.update_vitals (player)
+		return 0
+	end
+	
 	meta:set_float ("mcl_health", mcl_health)
 	mcl_serverplayer.update_vitals (player)
 
@@ -333,10 +363,18 @@ core.register_on_joinplayer (function (player, _)
 end)
 
 core.register_on_dieplayer(function(player, mt_reason)
-	  -- Clear the internal HP of players who die.
-	  local meta = player:get_meta ()
-	  meta:set_float ("mcl_health", 0)
-	  mcl_damage.run_death_callbacks(player, mcl_damage.from_mt(mt_reason))
+	if mcl_damage.is_player_invulnerable(player) then
+		local props = player:get_properties()
+		local max_hp = props.hp_max
+		player:set_hp(max_hp, { type = "set_hp", mcl_damage = true })
+		local meta = player:get_meta()
+		meta:set_float("mcl_health", max_hp)
+		mcl_serverplayer.update_vitals(player)
+		return true
+	end
+	local meta = player:get_meta ()
+	meta:set_float ("mcl_health", 0)
+	mcl_damage.run_death_callbacks(player, mcl_damage.from_mt(mt_reason))
 end)
 
 -- Register a modifier that adjusts damage by difficulty.
@@ -348,6 +386,13 @@ local function is_mob (source)
 	local entity = source:get_luaentity ()
 	return entity and entity.is_mob
 end
+
+mcl_damage.register_modifier (function (obj, damage, reason)
+	if mcl_damage.is_player_invulnerable(obj) then
+		return 0
+	end
+	return damage
+end, -2000)
 
 mcl_damage.register_modifier (function (obj, damage, reason)
 	if not obj:is_player () then

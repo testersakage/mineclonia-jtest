@@ -226,7 +226,7 @@ local function init(player)
 			return 0
 		end,
 		allow_take = function(_, _, _, _, player)
-			if core.is_creative_enabled(player:get_player_name()) then
+			if mcl_inventory.should_use_creative_inventory(player) then
 				return -1
 			else
 				return 0
@@ -236,10 +236,9 @@ local function init(player)
 	set_inv_page("all", player)
 end
 
--- Create the trash field
 local trash = core.create_detached_inventory("trash", {
 	allow_put = function(_, _, _, stack, player)
-		if core.is_creative_enabled(player:get_player_name()) then
+		if mcl_inventory.should_use_creative_inventory(player) then
 			return stack:get_count()
 		else
 			return 0
@@ -645,7 +644,7 @@ end
 core.register_on_player_receive_fields(function(player, formname, fields)
 	local page = nil
 
-	if not core.is_creative_enabled(player:get_player_name()) then
+	if not mcl_inventory.should_use_creative_inventory(player) then
 		return
 	end
 	if formname ~= "" or fields.quit == "true" then
@@ -780,8 +779,7 @@ end)
 
 
 core.register_on_placenode(function(_, _, placer, _, itemstack)
-	if placer and core.is_creative_enabled(placer:get_player_name()) then
-		-- Place infinite nodes, except for shulker boxes
+	if placer and mcl_inventory.should_use_creative_inventory(placer) then
 		local group = core.get_item_group(itemstack:get_name(), "shulker_box")
 		return group == 0 or group == nil
 	end
@@ -791,7 +789,7 @@ local old_mt_handle_node_drops = core.handle_node_drops
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function core.handle_node_drops(pos, drops, digger)
-	if digger and core.is_creative_enabled(digger:get_player_name()) then
+	if digger and mcl_inventory.should_use_creative_inventory(digger) then
 		if not digger or not digger:is_player() then
 			for _, item in ipairs(drops) do
 				core.add_item(pos, item)
@@ -827,7 +825,7 @@ core.register_on_joinplayer(function(player)
 end)
 
 core.register_on_player_inventory_action(function(player, action, _, inventory_info)
-	if core.is_creative_enabled(player:get_player_name()) and get_stack_size(player) == 64 and action == "put" and
+	if mcl_inventory.should_use_creative_inventory(player) and get_stack_size(player) == 64 and action == "put" and
 		inventory_info.listname == "main" then
 		local stack = inventory_info.stack
 		stack:set_count(stack:get_stack_max())
@@ -841,7 +839,7 @@ end)
 mcl_player.register_globalstep_slow(function(player)
 	local name = player:get_player_name()
 
-	if core.is_creative_enabled(name) then
+	if mcl_inventory.should_use_creative_inventory(player) then
 		local touch_enabled = is_touch_enabled(name)
 		if touch_enabled ~= players[name].last_touch_enabled then
 			mcl_inventory.set_creative_formspec(player)

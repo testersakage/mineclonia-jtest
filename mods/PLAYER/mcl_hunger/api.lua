@@ -31,7 +31,19 @@ if mcl_hunger.active then
 		hunger = math.min(20, math.max(0, hunger))
 		player:get_meta():set_string("mcl_hunger:hunger", tostring(hunger))
 		if update_hudbars ~= false then
-			hb.change_hudbar(player, "hunger", hunger)
+			local hide = false
+			if mcl_gamemode then
+				local gm = mcl_gamemode.get_gamemode(player)
+				hide = (gm == "creative")
+			else
+				hide = core.is_creative_enabled(player:get_player_name())
+			end
+			if hide then
+				hb.hide_hudbar(player, "hunger")
+			else
+				hb.unhide_hudbar(player, "hunger")
+				hb.change_hudbar(player, "hunger", hunger)
+			end
 		end
 		mcl_serverplayer.update_vitals (player)
 		return true

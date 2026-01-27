@@ -55,8 +55,19 @@ local function return_fields_from_temp_player_inventories(player)
 	return_fields(player, "enchanting_item")
 end
 
+function mcl_inventory.should_use_creative_inventory(player)
+	if not player or not player:is_player() then
+		return false
+	end
+	if mcl_gamemode then
+		local gm = mcl_gamemode.get_gamemode(player)
+		return gm == "creative" or gm == "testmode"
+	end
+	return core.is_creative_enabled(player:get_player_name())
+end
+
 local function set_inventory(player)
-	if core.is_creative_enabled(player:get_player_name()) then
+	if mcl_inventory.should_use_creative_inventory(player) then
 		mcl_inventory.set_creative_formspec(player)
 		return
 	end
@@ -243,20 +254,15 @@ core.register_on_joinplayer(function(player)
 	player:hud_set_hotbar_image("mcl_inventory_hotbar.png")
 	player:hud_set_hotbar_selected_image("mcl_inventory_hotbar_selected.png")
 
-	--build survival inventory formspec (this is handled in creative.lua for creative mode)
-	if not core.is_creative_enabled(player:get_player_name()) then
+	if not mcl_inventory.should_use_creative_inventory(player) then
 		set_inventory(player)
 	end
-
 end)
 
 function mcl_inventory.update_inventory(player)
-	local player_gamemode = player:get_meta():get_string("gamemode")
-	if player_gamemode == "" then player_gamemode = "survival" end
-
-	if player_gamemode == "creative" then
+	if mcl_inventory.should_use_creative_inventory(player) then
 		mcl_inventory.set_creative_formspec(player)
-	elseif player_gamemode == "survival" then
+	else
 		local formspec = mcl_inventory.build_survival_formspec (player)
 		mcl_player.set_inventory_formspec (player, formspec, 0)
 	end
@@ -284,7 +290,7 @@ end)
 
 function mcl_inventory.give_and_take(player, wield_stack, reward_stack, creative_behavior)
 	if not player then return nil end
-	local creative = core.is_creative_enabled(player:get_player_name())
+	local creative = mcl_inventory.should_use_creative_inventory(player)
 	creative_behavior = creative_behavior or "give_new"
 	if creative and creative_behavior == "nothing" then
 		return wield_stack
