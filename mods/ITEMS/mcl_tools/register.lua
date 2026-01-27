@@ -96,7 +96,7 @@ mcl_tools.register_set("copper", {
         level = 3,
         speed = 5,
         max_drop_level = 3,
-        groups = { dig_speed_class = 3, enchantability = 13 }
+        groups = { dig_speed_class = 3, enchantability = 13, blast_furnace_smeltable = 1 }
 }, {
     ["pick"] = {
         description = S("Copper Pickaxe"),
@@ -130,7 +130,7 @@ mcl_tools.register_set("copper", {
             damage_groups = { fleshy = 9 }
         },
     }
-})
+}, {_mcl_cooking_output = "mcl_copper:copper_nugget"})
 
 --Iron set
 mcl_tools.register_set("iron", {
@@ -140,7 +140,7 @@ mcl_tools.register_set("iron", {
     level = 4,
     speed = 6,
     max_drop_level = 4,
-    groups = { dig_speed_class = 4, enchantability = 14 }
+    groups = { dig_speed_class = 4, enchantability = 14, blast_furnace_smeltable = 1 }
 }, {
     ["pick"] = {
         description = S("Iron Pickaxe"),
@@ -184,7 +184,7 @@ mcl_tools.register_set("gold", {
     level = 2,
     speed = 12,
     max_drop_level = 2,
-    groups = { dig_speed_class = 6, enchantability = 22 }
+    groups = { dig_speed_class = 6, enchantability = 22, blast_furnace_smeltable = 1 }
 }, {
     ["pick"] = {
         description = S("Golden Pickaxe"),

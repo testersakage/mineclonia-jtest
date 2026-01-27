@@ -20,9 +20,7 @@ mcl_armor.register_set({
 	cook_material = "mcl_core:gold_nugget",
 	sound_equip = "mcl_armor_equip_iron",
 	sound_unequip = "mcl_armor_unequip_iron",
-	groups = {
-		golden = 1,
-	},
+	groups = {golden = 1, blast_furnace_smeltable = 1},
 })
 
 mcl_armor.register_set({
@@ -33,7 +31,7 @@ mcl_armor.register_set({
 		legs = S("Chainmail Leggings"),
 		feet = S("Chainmail Boots"),
 	},
-	groups = {rarity = 1},
+	groups = {rarity = 1, blast_furnace_smeltable = 1},
 	durability = 240,
 	enchantability = 12,
 	points = {
@@ -65,9 +63,10 @@ mcl_armor.register_set({
                 feet = 1,
         },
         craft_material = "mcl_copper:copper_ingot",
-        cook_material = "mcl_core:copper_nugget",
+        cook_material = "mcl_copper:copper_nugget",
         sound_equip = "mcl_armor_equip_iron",
         sound_unequip = "mcl_armor_unequip_iron",
+		groups = {blast_furnace_smeltable = 1}
 })
 
 mcl_armor.register_set({
@@ -90,6 +89,7 @@ mcl_armor.register_set({
 	cook_material = "mcl_core:iron_nugget",
 	sound_equip = "mcl_armor_equip_iron",
 	sound_unequip = "mcl_armor_unequip_iron",
+	groups = {blast_furnace_smeltable = 1},
 })
 
 mcl_armor.register_set({

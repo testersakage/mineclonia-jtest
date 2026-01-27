@@ -366,7 +366,7 @@ core.register_craftitem("mcl_mobitems:copper_horse_armor", {
 		_mcl_armor_equip = "mcl_armor_equip_iron",
 	},
 	stack_max = 1,
-	groups = { horse_armor = 86 },
+	groups = { horse_armor = 86, blast_furnace_smeltable = 1 },
 	_mcl_cooking_output = "mcl_copper:copper_nugget"
 })
 
@@ -382,7 +382,7 @@ core.register_craftitem("mcl_mobitems:iron_horse_armor", {
 		_mcl_armor_equip = "mcl_armor_equip_iron",
 	},
 	stack_max = 1,
-	groups = { horse_armor = 85 },
+	groups = { horse_armor = 85, blast_furnace_smeltable = 1 },
 	_mcl_cooking_output = "mcl_core:iron_nugget"
 })
 
@@ -397,7 +397,7 @@ core.register_craftitem("mcl_mobitems:gold_horse_armor", {
 		_mcl_armor_equip = "mcl_armor_equip_iron",
 	},
 	stack_max = 1,
-	groups = { horse_armor = 60 },
+	groups = { horse_armor = 60, blast_furnace_smeltable = 1 },
 	_mcl_cooking_output = "mcl_core:gold_nugget"
 })
 
