@@ -272,3 +272,15 @@ function monster_spawner:describe_additional_spawning_criteria ()
 end
 
 mobs_mc.monster_spawner = monster_spawner
+
+-------------------------------------------------------------------------
+-- Default structure spawning configurations.
+-------------------------------------------------------------------------
+
+mcl_mobs.suppress_spawning_in_structure ("mcl_levelgen:trial_chambers", "ambient")
+mcl_mobs.suppress_spawning_in_structure ("mcl_levelgen:trial_chambers", "axolotl")
+mcl_mobs.suppress_spawning_in_structure ("mcl_levelgen:trial_chambers", "creature")
+mcl_mobs.suppress_spawning_in_structure ("mcl_levelgen:trial_chambers", "monster")
+mcl_mobs.suppress_spawning_in_structure ("mcl_levelgen:trial_chambers", "underground_water_creature")
+mcl_mobs.suppress_spawning_in_structure ("mcl_levelgen:trial_chambers", "water_ambient")
+mcl_mobs.suppress_spawning_in_structure ("mcl_levelgen:trial_chambers", "water_creature")

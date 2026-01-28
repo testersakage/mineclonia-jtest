@@ -677,6 +677,18 @@ if mcl_levelgen.levelgen_enabled or mcl_levelgen.enable_ersatz then
 			structure = "mcl_levelgen:bastion_remnant",
 		},
 	})
+
+	awards.register_achievement ("mcl:mcl_trial_edition", {
+		title = S ("Mineclonia: Trial(s) edition"),
+		description = S ("Step foot in a Trial Chamber"),
+		icon = core.inventorycube ("mcl_vaults_vault_bottom.png"),
+		type = "Advancement",
+		group = "Adventure",
+		trigger = {
+			type = "structure",
+			structure = "mcl_levelgen:trial_chambers",
+		},
+	})
 end
 
 awards.register_achievement ("mcl:a_throwaway_joke", {

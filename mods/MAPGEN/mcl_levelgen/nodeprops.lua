@@ -927,6 +927,15 @@ function mcl_levelgen.leaf_air_or_non_walkable_p (cid)
 		or not is_cid_walkable[cid]
 end
 
+function mcl_levelgen.is_leaf (x, y, z)
+	local cid, _ = get_block (x, y, z)
+	return is_cid_leaf[cid]
+end
+
+function mcl_levelgen.leaf_p (cid)
+	return is_cid_leaf[cid]
+end
+
 function mcl_levelgen.is_water_or_air (x, y, z)
 	local cid, _ = get_block (x, y, z)
 	return cid == cid_air
