@@ -116,9 +116,9 @@ end
 
 core.register_lbm({
 	nodenames = {"group:sign"},
-	name = ":mcl_signs:update_old_signs",
+	name = ":mcl_signs_compat:update_old_signs",
 	label = "Update old signs",
-	run_at_every_load = false,
+	run_at_every_load = true,
 	action = upgrade_sign_rot,
 })
 
@@ -128,8 +128,16 @@ for k,_ in pairs(old_standingsigns) do table.insert(old_rotnames, k) end
 
 core.register_lbm({
 	nodenames = old_rotnames,
-	name = ":mcl_signs:update_old_rotated_standing",
+	name = ":mcl_signs_compat:update_old_rotated_standing",
 	label = "Update old standing rotated signs",
 	run_at_every_load = true, -- these nodes are supposed to completely be replaced
 	action = upgrade_sign_rot
+})
+
+core.register_lbm({
+	nodenames = old_rotnames,
+	name = ":mcl_signs_compat:update_sign_meta",
+	label = "Update old standing rotated signs",
+	run_at_every_load = true, -- these nodes are supposed to completely be replaced
+	action = upgrade_sign_meta
 })

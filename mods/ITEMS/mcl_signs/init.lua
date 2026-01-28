@@ -187,7 +187,7 @@ local function set_signmeta(pos, tbl)
 end
 
 -- Text processing
-local function string_to_ustring(str, max_characters)
+function mcl_signs.string_to_ustring(str, max_characters)
 	-- limit saved text to 256 characters by default
 	-- (4 lines x 15 chars = 60 so this should be more than is ever needed)
 	max_characters = max_characters or 256
@@ -207,7 +207,6 @@ local function string_to_ustring(str, max_characters)
 
 	return ustr
 end
-mcl_signs.string_to_ustring = string_to_ustring
 
 local function ustring_to_string(ustr)
 	local str = ""
@@ -216,7 +215,6 @@ local function ustring_to_string(ustr)
 	end
 	return str
 end
-mcl_signs.ustring_to_string = ustring_to_string
 
 -- TODO: make shared code as table.slice()?
 local function subseq(ustr, s, e)
@@ -258,8 +256,6 @@ function ustring_to_line_array(ustr)
 	return lines
 end
 
-mcl_signs.ustring_to_line_array = ustring_to_line_array
-
 local function generate_line(ustr, ypos)
 	local parsed = {}
 	local width = 0
@@ -283,7 +279,6 @@ local function generate_line(ustr, ypos)
 	end
 	return texture
 end
-mcl_signs.generate_line = generate_line
 
 local function generate_texture(data)
 	local lines = ustring_to_line_array(data.text)
@@ -299,10 +294,9 @@ local function generate_texture(data)
 	texture = "(" .. texture .. "^[multiply:" .. letter_color .. ")"
 	return texture
 end
-mcl_signs.generate_texture = generate_texture
 
 -- Text entity handling
-local function get_text_entity(pos, force_remove)
+function mcl_signs.get_text_entity(pos, force_remove)
 	local objects = core.get_objects_inside_radius(pos, 0.5)
 	local text_entity
 	local i = 0
@@ -319,13 +313,12 @@ local function get_text_entity(pos, force_remove)
 	end
 	return text_entity
 end
-mcl_signs.get_text_entity = get_text_entity
 
 -- Update the sign text entity (create if doesn't exist)
-local function update_sign(pos)
+function mcl_signs.update_sign(pos)
 	local data = get_signdata(pos)
 
-	local text_entity = get_text_entity(pos)
+	local text_entity = mcl_signs.get_text_entity(pos)
 	if text_entity and not data then
 		text_entity:remove()
 		return false
@@ -344,14 +337,13 @@ local function update_sign(pos)
 	text_entity:set_armor_groups({immortal = 1})
 	return true
 end
-mcl_signs.update_sign = update_sign
 
 core.register_lbm({
 	name = "mcl_signs:restore_entities",
 	nodenames = {"group:sign"},
 	label = "Restore sign text",
 	run_at_every_load = true,
-	action = update_sign,
+	action = mcl_signs.update_sign,
 })
 
 -- Text entity definition
@@ -364,7 +356,7 @@ core.register_entity("mcl_signs:text", {
 	},
 	on_activate = function(self)
 		local pos = self.object:get_pos()
-		update_sign(pos)
+		mcl_signs.update_sign(pos)
 		local props = self.object:get_properties()
 		local t = props and props.textures
 		if type(t) ~= "table" or #t == 0 then self.object:remove() end
@@ -387,7 +379,6 @@ local function show_formspec(player, pos)
 	}
 	core.show_formspec(player:get_player_name(), "mcl_signs:set_text_"..pos.x.."_"..pos.y.."_"..pos.z, table.concat(fs))
 end
-mcl_signs.show_formspec = show_formspec
 
 core.register_on_player_receive_fields(function(player, formname, fields)
 	if formname:find("mcl_signs:set_text_") == 1 then
@@ -395,9 +386,9 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 		local pos = vector.new(tonumber(x), tonumber(y), tonumber(z))
 		if not fields or not fields.text then return end
 		if not mcl_util.check_position_protection(pos, player) and (signs_editable or core.get_meta(pos):get_string("text") == "") then
-			local utext = string_to_ustring(fields.text)
+			local utext = mcl_signs.string_to_ustring(fields.text)
 			set_signmeta(pos, {text = utext})
-			update_sign(pos)
+			mcl_signs.update_sign(pos)
 		end
 	end
 end)
@@ -504,7 +495,7 @@ function sign_tpl.on_rightclick(pos, _, clicker, itemstack)
 				data.color = "#7e7e7e" -- black doesn't glow in the dark
 			end
 			set_signmeta(pos, {glow = "true", color = data.color})
-			update_sign(pos)
+			mcl_signs.update_sign(pos)
 			if not core.is_creative_enabled(clicker:get_player_name()) then
 				itemstack:take_item()
 			end
@@ -514,14 +505,14 @@ function sign_tpl.on_rightclick(pos, _, clicker, itemstack)
 			glow = "false",
 			color = DEFAULT_COLOR,
 		})
-		update_sign(pos)
+		mcl_signs.update_sign(pos)
 		if not core.is_creative_enabled(clicker:get_player_name()) then
 			itemstack:take_item()
 		end
 	elseif iname:sub(1, 8) == "mcl_dye:" then
 		local dye = iname:sub(9)
 		set_signmeta(pos, {color = DYE_TO_COLOR[dye]})
-		update_sign(pos)
+		mcl_signs.update_sign(pos)
 		if not core.is_creative_enabled(clicker:get_player_name()) then
 			itemstack:take_item()
 		end
@@ -533,7 +524,7 @@ function sign_tpl.on_rightclick(pos, _, clicker, itemstack)
 end
 
 function sign_tpl.on_destruct(pos)
-	get_text_entity(pos, true)
+	mcl_signs.get_text_entity(pos, true)
 end
 
 -- Wall sign definition
