@@ -19,6 +19,8 @@ for line in io.lines(modpath .. DIR_DELIM .. "characters.tsv") do
 	end
 end
 
+local signs_editable = core.settings:get_bool("mcl_signs_editable", false)
+
 local SIGN_WIDTH = 115
 
 local LINE_LENGTH = 15
@@ -403,7 +405,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 		local x, y, z = formname:match("mcl_signs:set_text_(.-)_(.-)_(.*)")
 		local pos = vector.new(tonumber(x), tonumber(y), tonumber(z))
 		if not fields or not fields.text then return end
-		if not mcl_util.check_position_protection(pos, player) then
+		if not mcl_util.check_position_protection(pos, player) and (signs_editable or core.get_meta(pos):get_string("text") == "") then
 			local utext = string_to_ustring(fields.text)
 			set_signmeta(pos, {text = utext})
 			update_sign(pos)
@@ -501,7 +503,7 @@ function sign_tpl.on_place(itemstack, placer, pointed_thing)
 end
 
 function sign_tpl.on_rightclick(pos, _, clicker, itemstack)
-	if core.is_protected(pos, clicker:get_player_name()) then
+	if not signs_editable or core.is_protected(pos, clicker:get_player_name()) then
 		show_formspec(clicker, pos, true)
 		return itemstack
 	end
