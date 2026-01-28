@@ -46,9 +46,9 @@ core.register_node("mcl_copper:stone_with_copper", {
 	drop = {
 		max_items = 1,
 		items = {
-			{items = {"mcl_copper:raw_copper 5"},rarity = 5},
-			{items = {"mcl_copper:raw_copper 4"},rarity = 5},
-			{items = {"mcl_copper:raw_copper 3"},rarity = 5},
+			{items = {"mcl_copper:raw_copper 5"}, rarity = 4},
+			{items = {"mcl_copper:raw_copper 4"}, rarity = 3},
+			{items = {"mcl_copper:raw_copper 3"}, rarity = 2},
 			{items = {"mcl_copper:raw_copper 2"}},
 		}
 	},
