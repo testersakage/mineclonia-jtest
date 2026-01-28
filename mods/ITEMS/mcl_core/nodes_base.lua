@@ -86,15 +86,10 @@ core.register_node("mcl_core:stone_with_redstone", {
 	groups = {pickaxey=4, building_block=1, material_stone=1, xp=7, blast_furnace_smeltable=1},
 	drop = {
 		items = {
-			max_items = 1,
-			{
-				items = {"mcl_redstone:redstone 4"},
-				rarity = 2,
-			},
-			{
-				items = {"mcl_redstone:redstone 5"},
-			},
-		}
+			{items = {"mcl_redstone:redstone 5"}, rarity = 2},
+			{items = {"mcl_redstone:redstone 4"}},
+		},
+		max_items = 1,
 	},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_punch = redstone_ore_activate,
@@ -128,15 +123,10 @@ core.register_node("mcl_core:stone_with_redstone_lit", {
 	groups = {pickaxey=4, not_in_creative_inventory=1, material_stone=1, xp=7, blast_furnace_smeltable=1},
 	drop = {
 		items = {
-			max_items = 1,
-			{
-				items = {"mcl_redstone:redstone 4"},
-				rarity = 2,
-			},
-			{
-				items = {"mcl_redstone:redstone 5"},
-			},
-		}
+			{items = {"mcl_redstone:redstone 5"}, rarity = 2},
+			{items = {"mcl_redstone:redstone 4"}},
+		},
+		max_items = 1,
 	},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	-- Reset timer after re-punching or stepping on
@@ -166,11 +156,11 @@ core.register_node("mcl_core:stone_with_lapis", {
 	drop = {
 		max_items = 1,
 		items = {
-			{items = {"mcl_core:lapis 9"},rarity = 6},
-			{items = {"mcl_core:lapis 8"},rarity = 6},
-			{items = {"mcl_core:lapis 7"},rarity = 6},
-			{items = {"mcl_core:lapis 6"},rarity = 6},
-			{items = {"mcl_core:lapis 5"},rarity = 6},
+			{items = {"mcl_core:lapis 9"}, rarity = 6},
+			{items = {"mcl_core:lapis 8"}, rarity = 5},
+			{items = {"mcl_core:lapis 7"}, rarity = 4},
+			{items = {"mcl_core:lapis 6"}, rarity = 3},
+			{items = {"mcl_core:lapis 5"}, rarity = 2},
 			{items = {"mcl_core:lapis 4"}},
 		}
 	},
