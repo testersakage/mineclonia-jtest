@@ -3,21 +3,6 @@ local modname = core.get_current_modname()
 local S = core.get_translator(modname)
 local D = mcl_util.get_dynamic_translator(modname)
 
-local loot_table = {{
-	stacks_min = 1,
-	stacks_max = 1,
-	items = {
-		{ itemstring = "mcl_core:emerald", weight = 125, amount_min = 1, amount_max = 3 },
-		{ itemstring = "mcl_bows:arrow", weight = 100, amount_min = 2, amount_max = 8 },
-		{ itemstring = "mcl_core:iron_ingot", weight = 100, amount_min = 1, amount_max = 2 },
-		{ itemstring = "mcl_vaults:trial_key", weight = 10 },
-		{ itemstring = "mcl_core:diamond", weight = 5, amount_min = 1, amount_max = 2 },
-		{ itemstring = "mcl_core:emeraldblock", weight = 5 },
-		{ itemstring = "mcl_jukebox:record_mellohi", weight = 5 },
-		{ itemstring = "mcl_core:diamondblock", weight = 1 },
-	}
-}}
-
 mcl_pottery_sherds.defs = {
 	["angler"] = { description = "Angler" },
 	["archer"] = { description = "Archer" },
@@ -169,11 +154,7 @@ local function get_drops_from_node(pos)
 	end
 
 	local loot = meta:get_string ("loot")
-	if loot and loot == "trial_chambers" then
-		local pr = PcgRandom (core.hash_node_position (pos))
-		local loot = mcl_loot.get_multi_loot (loot_table, pr)
-		table.insert(drops, loot[1]:get_name ())
-	end
+	table.insert(drops, loot or {})
 	return drops
 end
 
