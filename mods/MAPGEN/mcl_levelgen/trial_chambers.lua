@@ -1,4 +1,5 @@
 local R = mcl_levelgen.build_random_spread_placement
+local merge = table.merge
 local mathabs = math.abs
 local jigsaw_create_start = mcl_levelgen.jigsaw_create_start
 
@@ -9,13 +10,51 @@ local function uniform_height (min_inclusive, max_inclusive)
 	end
 end
 
+local cid_pottery_sherds
+local cid_bulb_oxidized_on_preserved
+local cid_bulb_weathered_on_preserved
+local cid_bulb_exposed_on_preserved
+local cid_bulb_on_preserved
+
+local function initialize_cids ()
+	cid_pottery_sherds = core.get_content_id ("mcl_pottery_sherds:pot")
+	cid_bulb_oxidized_on_preserved = core.get_content_id ("mcl_copper:bulb_oxidized_on_preserved")
+	cid_bulb_weathered_on_preserved = core.get_content_id ("mcl_copper:bulb_weathered_on_preserved")
+	cid_bulb_exposed_on_preserved = core.get_content_id ("mcl_copper:bulb_exposed_on_preserved")
+	cid_bulb_on_preserved = core.get_content_id ("mcl_copper:bulb_on_preserved")
+end
+
+if core.register_on_mods_loaded then
+	core.register_on_mods_loaded (initialize_cids)
+else
+	initialize_cids ()
+end
+
+local function apply_copper_bulb_degradation (x, y, z, rng, cid_existing, param2_existing,
+					cid, param2)
+	if cid == cid_bulb_on_preserved and rng:next_float () < 0.1 then
+		return cid_bulb_oxidized_on_preserved, param2
+	elseif cid == cid_bulb_on_preserved and rng:next_float () < 0.33333334 then
+		return cid_bulb_weathered_on_preserved, param2
+	elseif cid == cid_bulb_on_preserved and rng:next_float () < 0.5 then
+		return cid_bulb_exposed_on_preserved, param2
+	else
+		return cid, param2
+	end
+end
+
+local copper_bulb_processor = {
+	apply_copper_bulb_degradation
+}
+
 local function L (template, weight, processors)
+	processors = merge (copper_bulb_processor, processors or {})
 	return {
 		projection = "rigid",
 		template = mcl_levelgen.prefix .. "/templates/" .. template .. ".dat",
 		weight = weight,
 		ground_level_delta = 0,
-		processors = processors or {},
+		processors = processors,
 	}
 end
 
@@ -319,18 +358,6 @@ if not mcl_levelgen.is_levelgen_environment
 
 	mcl_levelgen.register_notification_handler ("mcl_levelgen:trial_chambers_decorated_pots_loot_faces",
 						    handle_decorated_pot_loot_and_faces)
-end
-
-local cid_pottery_sherds
-
-local function initialize_cids ()
-	cid_pottery_sherds = core.get_content_id ("mcl_pottery_sherds:pot")
-end
-
-if core.register_on_mods_loaded then
-	core.register_on_mods_loaded (initialize_cids)
-else
-	initialize_cids ()
 end
 
 local notify_generated = mcl_levelgen.notify_generated
