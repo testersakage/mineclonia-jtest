@@ -3,6 +3,21 @@ local modname = core.get_current_modname()
 local S = core.get_translator(modname)
 local D = mcl_util.get_dynamic_translator(modname)
 
+local loot_table = {{
+	stacks_min = 1,
+	stacks_max = 1,
+	items = {
+		{ itemstring = "mcl_core:emerald", weight = 125, amount_min = 1, amount_max = 3 },
+		{ itemstring = "mcl_bows:arrow", weight = 100, amount_min = 2, amount_max = 8 },
+		{ itemstring = "mcl_core:iron_ingot", weight = 100, amount_min = 1, amount_max = 2 },
+		{ itemstring = "mcl_vaults:trial_key", weight = 10 },
+		{ itemstring = "mcl_core:diamond", weight = 5, amount_min = 1, amount_max = 2 },
+		{ itemstring = "mcl_core:emeraldblock", weight = 5 },
+		{ itemstring = "mcl_jukebox:record_mellohi", weight = 5 },
+		{ itemstring = "mcl_core:diamondblock", weight = 1 },
+	}
+}}
+
 mcl_pottery_sherds.defs = {
 	["angler"] = { description = "Angler" },
 	["archer"] = { description = "Archer" },
@@ -153,6 +168,12 @@ local function get_drops_from_node(pos)
 		table.insert(drops, item)
 	end
 
+	local loot = meta:get_string ("loot")
+	if loot and loot == "trial_chambers" then
+		local pr = PcgRandom (core.hash_node_position (pos))
+		local loot = mcl_loot.get_multi_loot (loot_table, pr)
+		table.insert(drops, loot[1]:get_name ())
+	end
 	return drops
 end
 
@@ -174,7 +195,12 @@ core.register_node("mcl_pottery_sherds:pot", {
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
 	is_ground_content = false,
-	groups = { handy = 1, pickaxey = 1, dig_immediate = 3, deco_block = 1, attached_node = 1, dig_by_piston = 1, flower_pot = 1, not_in_creative_inventory = 1, pathfinder_partial = 2, },
+	groups = {
+		handy = 1, pickaxey = 1, dig_immediate = 3, deco_block = 1,
+		attached_node = 1, dig_by_piston = 1, flower_pot = 1,
+		not_in_creative_inventory = 1, pathfinder_partial = 2,
+		jigsaw_construct = 1, jigsaw_preserve_meta = 1
+	},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	drop = "",
 	_mcl_hardness = 0,
@@ -198,6 +224,9 @@ core.register_node("mcl_pottery_sherds:pot", {
 		meta:set_string("inventory_overlay", img)
 		meta:set_string("wield_overlay", img)
 		meta:set_string("description", def.description.. "\n" .. core.colorize(mcl_colors.GREEN,table.concat(facedescs, "\n")))
+	end,
+	on_construct = function (pos)
+		update_entities(pos)
 	end,
 	after_place_node = function(pos, _, itemstack, _)
 		local meta = core.get_meta(pos)
