@@ -1,4 +1,5 @@
 local R = mcl_levelgen.build_random_spread_placement
+local mathabs = math.abs
 local jigsaw_create_start = mcl_levelgen.jigsaw_create_start
 
 local function uniform_height (min_inclusive, max_inclusive)
@@ -277,21 +278,93 @@ mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_decor_bigs", {
 	},
 })
 
+if not mcl_levelgen.is_levelgen_environment
+	and mcl_levelgen.register_notification_handler then
+
+	local v = vector.zero ()
+	local level_to_minetest_position
+		= mcl_levelgen.level_to_minetest_position
+
+	local decorated_pot_loot_table = {{
+		stacks_min = 1,
+		stacks_max = 1,
+		items = {
+			{ itemstring = "mcl_core:emerald", weight = 125, amount_min = 1, amount_max = 3 },
+			{ itemstring = "mcl_bows:arrow", weight = 100, amount_min = 2, amount_max = 8 },
+			{ itemstring = "mcl_core:iron_ingot", weight = 100, amount_min = 1, amount_max = 2 },
+			{ itemstring = "mcl_vaults:trial_key", weight = 10 },
+			{ itemstring = "mcl_core:diamond", weight = 5, amount_min = 1, amount_max = 2 },
+			{ itemstring = "mcl_core:emeraldblock", weight = 5 },
+			{ itemstring = "mcl_jukebox:record_mellohi", weight = 5 },
+			{ itemstring = "mcl_core:diamondblock", weight = 1 },
+		}
+	}}
+	local faces = {"flow", "guster", "scrape"}
+
+	local function handle_decorated_pot_loot_and_faces (_, data)
+		local pr = PcgRandom (data.loot_seed)
+		v.x, v.y, v.z = level_to_minetest_position (data.x, data.y, data.z)
+		mcl_structures.construct_nodes (v, v, {
+			"mcl_pottery_sherds:pot",
+		})
+		local meta = core.get_meta (v)
+		if core.get_node (v).name == "mcl_pottery_sherds:pot" then
+			local items = mcl_loot.get_multi_loot (decorated_pot_loot_table, pr)
+			local face = faces[pr:next (1, 3)]
+			local random_face = core.serialize ({face, face, face, face})
+			meta:set_string ("loot", items[1]:get_name ())
+			meta:set_string ("pot_faces", random_face)
+		end
+	end
+
+	mcl_levelgen.register_notification_handler ("mcl_levelgen:trial_chambers_decorated_pots_loot_faces",
+						    handle_decorated_pot_loot_and_faces)
+end
+
+local cid_pottery_sherds
+
+local function initialize_cids ()
+	cid_pottery_sherds = core.get_content_id ("mcl_pottery_sherds:pot")
+end
+
+if core.register_on_mods_loaded then
+	core.register_on_mods_loaded (initialize_cids)
+else
+	initialize_cids ()
+end
+
+local notify_generated = mcl_levelgen.notify_generated
+
+local function add_loot_and_random_faces (x, y, z, rng, cid_existing,
+			       param2_existing, cid, param2)
+	if cid == cid_pottery_sherds then
+		notify_generated ("mcl_levelgen:trial_chambers_decorated_pots_loot_faces", x, y, z, {
+			loot_seed = mathabs (rng:next_integer ()),
+			x = x,
+			y = y,
+			z = z,
+		})
+	end
+	return cid, param2
+end
+
+local decorated_pot_processor = {
+	add_loot_and_random_faces
+}
+
+-- Decorated pots in hallways
 mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_decor_pots", {
 	elements = {
-		L ("trial_chambers_decor_pots_empty", 24),
-		L ("trial_chambers_decor_pots_flow",   2),
-		L ("trial_chambers_decor_pots_guster", 2),
-		L ("trial_chambers_decor_pots_scrape", 2),
-		L ("trial_chambers_decor_barrel",      1),
-	},
+		L ("trial_chambers_decor_pots_empty",   24),
+		L ("trial_chambers_decor_pots_regular", 2, decorated_pot_processor),
+		L ("trial_chambers_decor_barrel",       1),
+	}
 })
 
+-- Decorated pots in corridor
 mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_decor_pots_2", {
 	elements = {
-		L ("trial_chambers_decor_pots_flow",   1),
-		L ("trial_chambers_decor_pots_guster", 1),
-		L ("trial_chambers_decor_pots_scrape", 1),
+		L ("trial_chambers_decor_pots_regular", 1, decorated_pot_processor),
 	}
 })
 
