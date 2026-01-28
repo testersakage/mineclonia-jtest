@@ -211,7 +211,10 @@ end
 local commdef  = {
 	is_ground_content = false,
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	groups = {pickaxey = 1, container = 2, material_stone = 1},
+	groups = {
+		pickaxey = 1, container = 2, material_stone = 1,
+		jigsaw_construct = 1, jigsaw_preserve_meta = 1
+	},
 	after_dig_node = mcl_util.drop_items_from_meta_container({"main"}),
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local name = player:get_player_name()
@@ -315,11 +318,17 @@ do
 			setup_dispenser(pos)
 			orientate(pos, placer, "dispenser")
 		end,
+		on_construct = function (pos)
+			setup_dispenser(pos)
+		end
 	}))
 
 	core.register_node("mcl_dispensers:dispenser_down", table.merge(dispenserdef, {
 		description = S("Dispenser"),
 		after_place_node = setup_dispenser,
+		on_construct = function (pos)
+			setup_dispenser(pos)
+		end,
 		tiles = {
 			"default_furnace_top.png", "mcl_dispensers_dispenser_front_vertical.png",
 			"default_furnace_side.png", "default_furnace_side.png",
@@ -332,6 +341,9 @@ do
 	core.register_node("mcl_dispensers:dispenser_up", table.merge(dispenserdef, {
 		description = S("Dispenser"),
 		after_place_node = setup_dispenser,
+		on_construct = function (pos)
+			setup_dispenser(pos)
+		end,
 		tiles = {
 			"mcl_dispensers_dispenser_front_vertical.png", "default_furnace_bottom.png",
 			"default_furnace_side.png", "default_furnace_side.png",
