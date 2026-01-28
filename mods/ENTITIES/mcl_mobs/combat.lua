@@ -1322,6 +1322,7 @@ local armor_types = { "head", "torso", "legs", "feet", }
 local armor_table = {
 	head = {
 		"mcl_armor:helmet_leather",
+		"mcl_armor:helmet_copper",
 		"mcl_armor:helmet_gold",
 		"mcl_armor:helmet_chain",
 		"mcl_armor:helmet_iron",
@@ -1329,6 +1330,7 @@ local armor_table = {
 	},
 	torso = {
 		"mcl_armor:chestplate_leather",
+		"mcl_armor:chestplate_copper",
 		"mcl_armor:chestplate_gold",
 		"mcl_armor:chestplate_chain",
 		"mcl_armor:chestplate_iron",
@@ -1336,6 +1338,7 @@ local armor_table = {
 	},
 	legs = {
 		"mcl_armor:leggings_leather",
+		"mcl_armor:leggings_copper",
 		"mcl_armor:leggings_gold",
 		"mcl_armor:leggings_chain",
 		"mcl_armor:leggings_iron",
@@ -1343,6 +1346,7 @@ local armor_table = {
 	},
 	feet = {
 		"mcl_armor:boots_leather",
+		"mcl_armor:boots_copper",
 		"mcl_armor:boots_gold",
 		"mcl_armor:boots_chain",
 		"mcl_armor:boots_iron",
@@ -1378,41 +1382,39 @@ function mob_class:enchant_default_weapon (mob_factor, pr)
 end
 
 function mob_class:generate_default_equipment (mob_factor, do_armor, do_wielditems)
-	if math.random () < mob_factor * 0.15 then
-		if do_armor then
-			-- Decide what armor material this mob will
-			-- wear.
-			local base_level = math.random (2)
-			if math.random () < 0.095 then
-				base_level = base_level + 1
-			end
-			if math.random () < 0.095 then
-				base_level = base_level + 1
-			end
-			if math.random () < 0.095 then
-				base_level = base_level + 1
-			end
-			local armor_generated = false
-			local stop_chance = 4
-			if mcl_vars.difficulty == 3 then
-				stop_chance = 10
-			end
-			for _, slot in ipairs (armor_types) do
-				if not armor_generated and math.random (stop_chance) == 1 then
-					break
-				end
-				local stack = ItemStack (armor_table[slot][base_level])
-				if math.random () < 0.5 * mob_factor then
-					local level = 5.0 + mob_factor * math.random (18)
-					level = math.floor (level)
-					mcl_enchanting.enchant_randomly (stack, level, false, false, true)
-				end
-				self.armor_list[slot] = stack:to_string ()
-				local probability = self.armor_drop_probability[slot]
-				self:set_armor_drop_probability (slot, probability)
-			end
-			self:set_armor_texture ()
+	if do_armor and math.random () < mob_factor * 0.15 then
+		-- Decide what armor material this mob will
+		-- wear.
+		local base_level = math.random (3)
+		if math.random () < 0.095 then
+			base_level = base_level + 1
 		end
+		if math.random () < 0.095 then
+			base_level = base_level + 1
+		end
+		if math.random () < 0.095 then
+			base_level = base_level + 1
+		end
+		local armor_generated = false
+		local stop_chance = 4
+		if mcl_vars.difficulty == 3 then
+			stop_chance = 10
+		end
+		for _, slot in ipairs (armor_types) do
+			if not armor_generated and math.random (stop_chance) == 1 then
+				break
+			end
+			local stack = ItemStack (armor_table[slot][base_level])
+			if math.random () < 0.5 * mob_factor then
+				local level = 5.0 + mob_factor * math.random (18)
+				level = math.floor (level)
+				mcl_enchanting.enchant_randomly (stack, level, false, false, true)
+			end
+			self.armor_list[slot] = stack:to_string ()
+			local probability = self.armor_drop_probability[slot]
+			self:set_armor_drop_probability (slot, probability)
+		end
+		self:set_armor_texture ()
 	end
 	if do_wielditems then
 		local chance = (mcl_vars.difficulty == 3) and 20 or 100
