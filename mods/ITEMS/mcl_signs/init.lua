@@ -372,30 +372,19 @@ core.register_entity("mcl_signs:text", {
 })
 
 -- Formspec
-local function show_formspec(player, pos, guest)
+local function show_formspec(player, pos)
 	if not pos then return end
 	local meta = core.get_meta(pos)
 	local old_text = ustring_to_string(core.deserialize(meta:get_string("utext"), true) or {})
-
-	local fs
-	if guest then
-		fs = {
-			"size[6,2.3]textarea[0.25,0.25;6,1.5;;",
-			F(S("Sign text:")), ";", F(old_text), "]",
-			"button_exit[0,1.7;6,1;submit;", F(S("Close")), "]"
-		}
-	else
-		fs = {
-			"size[6,3]textarea[0.25,0.25;6,1.5;text;",
-			F(S("Enter sign text:")), ";", F(old_text), "]",
-			"label[0,1.5;",
-				F(S("Maximum line length: @1", LINE_LENGTH)), "\n",
-				F(S("Maximum lines: @1", NUMBER_OF_LINES)),
-			"]",
-			"button_exit[0,2.4;6,1;submit;", F(S("Done")), "]"
-		}
-	end
-
+	local fs = {
+		"size[6,3]textarea[0.25,0.25;6,1.5;text;",
+		F(S("Enter sign text:")), ";", F(old_text), "]",
+		"label[0,1.5;",
+			F(S("Maximum line length: @1", LINE_LENGTH)), "\n",
+			F(S("Maximum lines: @1", NUMBER_OF_LINES)),
+		"]",
+		"button_exit[0,2.4;6,1;submit;", F(S("Done")), "]"
+	}
 	core.show_formspec(player:get_player_name(), "mcl_signs:set_text_"..pos.x.."_"..pos.y.."_"..pos.z, table.concat(fs))
 end
 mcl_signs.show_formspec = show_formspec
@@ -504,7 +493,6 @@ end
 
 function sign_tpl.on_rightclick(pos, _, clicker, itemstack)
 	if not signs_editable or core.is_protected(pos, clicker:get_player_name()) then
-		show_formspec(clicker, pos, true)
 		return itemstack
 	end
 
