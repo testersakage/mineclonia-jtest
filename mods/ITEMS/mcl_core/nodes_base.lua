@@ -564,8 +564,7 @@ core.register_node("mcl_core:sandstonesmooth", {
 	is_ground_content = false,
 	groups = {pickaxey=1, sandstone=1, normal_sandstone=1, building_block=1, material_stone=1, stonecuttable=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 6,
-	_mcl_hardness = 2,
+	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_core:sandstone" },
 })
 
