@@ -70,7 +70,11 @@ mcl_stairs.register_stair_and_slab("sandstonesmooth", {
 	baseitem = "mcl_core:sandstonesmooth",
 	description_stair = S("Cut Sandstone Stairs"),
 	description_slab = S("Cut Sandstone Slab"),
-	overrides = {_mcl_stonecutter_recipes = {"mcl_core:sandstone", "mcl_core:sandstonesmooth"}},
+	overrides = {
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 2,
+		_mcl_stonecutter_recipes = {"mcl_core:sandstone", "mcl_core:sandstonesmooth"}
+	},
 })
 
 mcl_stairs.register_stair_and_slab("redsandstone", {
@@ -89,7 +93,11 @@ mcl_stairs.register_stair_and_slab("redsandstonesmooth", {
 	baseitem = "mcl_core:redsandstonesmooth",
 	description_stair = S("Cut Red Sandstone Stairs"),
 	description_slab = S("Cut Red Sandstone Slab"),
-	overrides = {_mcl_stonecutter_recipes = {"mcl_core:redsandstone", "mcl_core:redsandstonesmooth"}},
+	overrides = {
+		_mcl_blast_resistance = 6,
+		_mcl_hardness = 2,
+		_mcl_stonecutter_recipes = {"mcl_core:redsandstone", "mcl_core:redsandstonesmooth"}
+	},
 })
 
 mcl_stairs.register_stair_and_slab("stonebrick", {
