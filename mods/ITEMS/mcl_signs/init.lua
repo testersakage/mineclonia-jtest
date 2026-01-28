@@ -225,86 +225,37 @@ local function subseq(ustr, s, e)
 	return line
 end
 
-local ustring_to_line_array
-local wrap_mode = core.settings:get("mcl_signs_wrap_mode") or "word_wrap"
-if wrap_mode == "word_break" then
-	function ustring_to_line_array(ustr)
-		local lines = {}
-		local line = {}
+function ustring_to_line_array(ustr)
+	local lines = {}
+	local start, stop = 1, 1
 
-		for _, code in ipairs(ustr) do
-			if #lines >= NUMBER_OF_LINES then break end
+	for cursor, code in ipairs(ustr) do
+		if #lines >= NUMBER_OF_LINES then break end
 
-			if NEWLINE[code]
-					or WHITESPACE[code] and #line >= (LINE_LENGTH - 1) then
-				table.insert(lines, line)
-				line = {}
-			elseif #line >= LINE_LENGTH then
+		if WHITESPACE[code] or HYPHEN[code] then
+			stop = cursor
+		elseif NEWLINE[code] then
+			table.insert(lines, subseq(ustr, start, cursor - 1))
+			start, stop = cursor + 1, cursor + 1
+		elseif cursor - start + 1 >= LINE_LENGTH then
+			if stop <= start then -- forced break, no space in word
+				local line = subseq(ustr, start, cursor)
 				table.insert(line, WRAP_CODEPOINT)
 				table.insert(lines, line)
-				line = {code}
-			else
-				table.insert(line, code)
-			end
-		end
-		if #line > 0 and #lines < NUMBER_OF_LINES then table.insert(lines, line) end
-
-		return lines
-	end
-elseif wrap_mode == "word_wrap" then
-	function ustring_to_line_array(ustr)
-		local lines = {}
-		local start, stop = 1, 1
-
-		for cursor, code in ipairs(ustr) do
-			if #lines >= NUMBER_OF_LINES then break end
-
-			if WHITESPACE[code] or HYPHEN[code] then
-				stop = cursor
-			elseif NEWLINE[code] then
-				table.insert(lines, subseq(ustr, start, cursor - 1))
 				start, stop = cursor + 1, cursor + 1
-			elseif cursor - start + 1 >= LINE_LENGTH then
-				if stop <= start then -- forced break, no space in word
-					local line = subseq(ustr, start, cursor)
-					table.insert(line, WRAP_CODEPOINT)
-					table.insert(lines, line)
-					start, stop = cursor + 1, cursor + 1
-				else
-					table.insert(lines, subseq(ustr, start, stop + (HYPHEN[ustr[stop]] and 0 or -1)))
-					start, stop = stop + 1, stop + 1
-				end
+			else
+				table.insert(lines, subseq(ustr, start, stop + (HYPHEN[ustr[stop]] and 0 or -1)))
+				start, stop = stop + 1, stop + 1
 			end
 		end
-		if #lines < NUMBER_OF_LINES and start <= #ustr then
-			table.insert(lines, subseq(ustr, start, #ustr))
-		end
-
-		return lines
 	end
-elseif wrap_mode == "truncate" then
-	WRAP_CODEPOINT = utf8.codepoint("…")
-	function ustring_to_line_array(ustr)
-		local lines = {}
-		local line = {}
-
-		for _, code in ipairs(ustr) do
-			if #lines >= NUMBER_OF_LINES then break end
-
-			if NEWLINE[code] then
-				table.insert(lines, line)
-				line = {}
-			elseif #line == LINE_LENGTH then
-				table.insert(line, WRAP_CODEPOINT)
-			elseif #line < LINE_LENGTH then
-				table.insert(line, code)
-			end
-		end
-		if #line > 0 and #lines < NUMBER_OF_LINES then table.insert(lines, line) end
-
-		return lines
+	if #lines < NUMBER_OF_LINES and start <= #ustr then
+		table.insert(lines, subseq(ustr, start, #ustr))
 	end
+
+	return lines
 end
+
 mcl_signs.ustring_to_line_array = ustring_to_line_array
 
 local function generate_line(ustr, ypos)
