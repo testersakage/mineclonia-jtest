@@ -74,8 +74,7 @@ local tpl = {
 	_tt_help = S("Ejects loot when opened with the key"),
 	_doc_items_longdesc = S("A vault ejects loot when opened with the right key. It can only be opened once by each player."),
 	_doc_items_usagehelp = S("A vault ejects loot when opened with the right key. It can only be opened once by each player."),
-	groups = {pickaxey=1, material_stone=1, deco_block=1, vault = 1, not_in_creative_inventory = 1,
-		  features_cannot_replace = 1, },
+	groups = {pickaxey=1, material_stone=1, deco_block=1, vault = 1, not_in_creative_inventory = 1, unmovable_by_piston = 1, features_cannot_replace = 1, },
 	is_ground_content = false,
 	drop = "",
 	_mcl_hardness = 50,
@@ -91,6 +90,7 @@ core.register_entity("mcl_vaults:item_entity", {
 		pointable = true,
 		static_save = false,
 	},
+	_mcl_pistons_unmovable = true,
 	_deactivate = function(self, node)
 		node.name = self._vault_name
 		core.swap_node(self._pos, node)
