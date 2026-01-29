@@ -99,7 +99,7 @@ mcl_vaults.register_vault("vault", {
 			stacks_min = 1,
 			stacks_max = 1,
 			items = {
-				{ nothing = true, weight = 36 - 2 --[[ slightly improve chance of other loot until trident is available; don't forget to remove the - 2 then ]] },
+				{ nothing = true, weight = 36 },
 				{ itemstring = "mcl_core:apple_gold", weight = 4, amount_min = 1, amount_max = 1 },
 				{ itemstring = "mcl_armor:bolt", weight = 3, amount_min = 1, amount_max = 1 },
 				{ itemstring = "mcl_jukebox:record_8", weight = 2, amount_min = 1, amount_max = 1 },
