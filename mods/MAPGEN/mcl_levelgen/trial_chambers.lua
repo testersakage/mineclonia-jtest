@@ -207,6 +207,13 @@ mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_ends", {
 mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_chambers", {
 	elements = {
 		L ("trial_chambers_corridor_chamber_1", 1),
+		L ("trial_chambers_corridor_chamber_2", 1),
+	},
+})
+
+mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_big_chambers", {
+	elements = {
+		L ("trial_chambers_corridor_chamber_1", 1),
 	},
 })
 
@@ -222,7 +229,7 @@ mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_hallway_1_slic
 		L ("trial_chambers_hallway_1_slice_2", 2),
 		L ("trial_chambers_hallway_1_slice_3", 2),
 		L ("trial_chambers_hallway_1_slice_4", 2),
-		L ("trial_chambers_hallway_1_exit_1", 3),
+		L ("trial_chambers_hallway_1_exit_1",  3),
 	},
 })
 
@@ -240,27 +247,27 @@ mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_branches", {
 
 mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_branch_lefts", {
 	elements = {
-		L ("trial_chambers_branch_left_1", 1),
-		L ("trial_chambers_branch_left_2", 1),
-		L ("trial_chambers_branch_left_3", 1),
-		L ("trial_chambers_branch_left_4", 1),
+		L ("trial_chambers_branch_left_1", 1), -- chamber
+		L ("trial_chambers_branch_left_2", 1), -- empty
+		L ("trial_chambers_branch_left_3", 1), -- chest
+		L ("trial_chambers_branch_left_4", 1), -- upstair
 	},
 })
 
 mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_branch_rights", {
 	elements = {
-		L ("trial_chambers_branch_right_1", 1),
-		L ("trial_chambers_branch_right_2", 1),
-		L ("trial_chambers_branch_right_3", 1),
-		L ("trial_chambers_branch_right_4", 1),
+		L ("trial_chambers_branch_right_1", 1), -- chamber
+		L ("trial_chambers_branch_right_2", 1), -- empty
+		L ("trial_chambers_branch_right_3", 1), -- chest
+		L ("trial_chambers_branch_right_4", 1), -- upstair
 	},
 })
 
-mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_branch_addons", {
+mcl_levelgen.register_template_pool ("mcl_levelgen:trial_chambers_branch_upstair_addons", {
 	elements = {
-		L ("trial_chambers_branch_addon_1", 1), -- with treasure
-		L ("trial_chambers_branch_addon_2", 1),
-		L ("trial_chambers_branch_addon_2", 1),
+		L ("trial_chambers_branch_upstair_addon_1", 1), -- treasure
+		L ("trial_chambers_branch_upstair_addon_2", 1), -- empty
+		L ("trial_chambers_branch_upstair_addon_2", 1), -- chamber
 	},
 })
 
