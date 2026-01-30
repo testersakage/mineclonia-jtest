@@ -210,11 +210,11 @@ function mcl_flowers.register_ground_flower(flowername, def, add_def)
 	end
 
 	core.register_craftitem(":"..itemname, table.merge({
-    description = def.desc,
+	description = def.desc,
 	_doc_items_longdesc = def.longdesc,
-    inventory_image = def.image,
-    wield_image = def.image,
-    groups = {
+	inventory_image = def.image,
+	wield_image = def.image,
+	groups = {
 			craftitem = 1,
 			attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
 			dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
@@ -223,7 +223,7 @@ function mcl_flowers.register_ground_flower(flowername, def, add_def)
 			compostability = 30, unsticky = 1
 		},
 
-    on_place = function(itemstack, placer, pointed_thing)
+	on_place = function(itemstack, placer, pointed_thing)
 			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 			if rc then return rc end
 
@@ -254,7 +254,7 @@ function mcl_flowers.register_ground_flower(flowername, def, add_def)
 			end
 
 			return itemstack
-    end,
+		end,
 	}, add_def))
 
 	local mesh_prefix = "mcl_flowers_wildflower_"
