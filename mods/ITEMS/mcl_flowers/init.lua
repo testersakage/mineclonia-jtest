@@ -150,7 +150,7 @@ mcl_flowers.on_place_flower = mcl_util.generate_on_place_plant_function(function
 	return ok, colorize
 end)
 
-function mcl_flowers.register_simple_flower(flowername, def)
+function mcl_flowers.register_simple_flower(flowername, def, node_defs)
 	local itemname = "mcl_flowers:"..flowername
 	local groups = {
 		attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
@@ -162,15 +162,13 @@ function mcl_flowers.register_simple_flower(flowername, def)
 	if def.sus_stew then
 		groups.sus_stew_ingredient = 1
 	end
-	if not def._mcl_silk_touch_drop then def._mcl_silk_touch_drop = nil end
-	if not def.drop then def.drop = itemname end
 	mcl_flowers.registered_simple_flowers[itemname] = {
 		name=flowername,
 		desc=def.desc,
 		image=def.image,
 		simple_selection_box=def.simple_selection_box,
 	}
-	core.register_node(":"..itemname, {
+	core.register_node(":"..itemname, table.merge({
 		description = def.desc,
 		_doc_items_longdesc = smallflowerlongdesc,
 		_doc_items_usagehelp = mcl_flowers.plant_usage_help,
@@ -182,7 +180,6 @@ function mcl_flowers.register_simple_flower(flowername, def)
 		sunlight_propagates = true,
 		paramtype = "light",
 		walkable = false,
-		drop = def.drop,
 		groups = groups,
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		node_placement_prediction = "",
@@ -191,10 +188,8 @@ function mcl_flowers.register_simple_flower(flowername, def)
 			type = "fixed",
 			fixed = def.selection_box,
 		},
-		_mcl_silk_touch_drop = def._mcl_silk_touch_drop,
 		_on_bone_meal = mcl_flowers.on_bone_meal_simple,
-		_mcl_crafting_output = def._mcl_crafting_output
-	})
+	}, node_defs or {}))
 	if def.potted then
 		mcl_flowerpots.register_potted_flower(itemname, {
 			name = flowername,
