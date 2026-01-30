@@ -150,8 +150,8 @@ mcl_flowers.on_place_flower = mcl_util.generate_on_place_plant_function(function
 	return ok, colorize
 end)
 
-function mcl_flowers.register_simple_flower(name, def)
-	local newname = "mcl_flowers:"..name
+function mcl_flowers.register_simple_flower(flowername, def)
+	local nodename = "mcl_flowers:"..flowername
 	local groups = {
 		attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
 		dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
@@ -163,14 +163,14 @@ function mcl_flowers.register_simple_flower(name, def)
 		groups.sus_stew_ingredient = 1
 	end
 	if not def._mcl_silk_touch_drop then def._mcl_silk_touch_drop = nil end
-	if not def.drop then def.drop = newname end
-	mcl_flowers.registered_simple_flowers[newname] = {
-		name=name,
+	if not def.drop then def.drop = nodename end
+	mcl_flowers.registered_simple_flowers[nodename] = {
+		name=flowername,
 		desc=def.desc,
 		image=def.image,
 		simple_selection_box=def.simple_selection_box,
 	}
-	core.register_node(":"..newname, {
+	core.register_node(":"..nodename, {
 		description = def.desc,
 		_doc_items_longdesc = smallflowerlongdesc,
 		_doc_items_usagehelp = mcl_flowers.plant_usage_help,
@@ -196,30 +196,30 @@ function mcl_flowers.register_simple_flower(name, def)
 		_mcl_crafting_output = def._mcl_crafting_output
 	})
 	if def.potted then
-		mcl_flowerpots.register_potted_flower(newname, {
-			name = name,
+		mcl_flowerpots.register_potted_flower(nodename, {
+			name = flowername,
 			desc = def.desc,
 			image = def.image,
 		})
 	end
 	if def.sus_stew then
-		mcl_sus_stew.register_sus_stew(newname, def.sus_stew.effect, def.sus_stew.duration)
+		mcl_sus_stew.register_sus_stew(nodename, def.sus_stew.effect, def.sus_stew.duration)
 	end
 end
 
-function mcl_flowers.register_ground_flower(name, def, add_def)
-	local newname = "mcl_flowers:"..name
+function mcl_flowers.register_ground_flower(flowername, def, add_def)
+	local nodename = "mcl_flowers:"..flowername
 
 	if not add_def then
 		add_def = {}
 	end
 
-	core.register_craftitem(":"..newname, table.merge({
-    description = def.desc,
+	core.register_craftitem(":"..nodename, table.merge({
+	description = def.desc,
 	_doc_items_longdesc = def.longdesc,
-    inventory_image = def.image,
-    wield_image = def.image,
-    groups = {
+	inventory_image = def.image,
+	wield_image = def.image,
+	groups = {
 			craftitem = 1,
 			attached_node = 1, deco_block = 1, dig_by_piston = 1, dig_immediate = 3,
 			dig_by_water = 1, destroy_by_lava_flow = 1, enderman_takable = 1,
@@ -228,7 +228,7 @@ function mcl_flowers.register_ground_flower(name, def, add_def)
 			compostability = 30, unsticky = 1
 		},
 
-    on_place = function(itemstack, placer, pointed_thing)
+	on_place = function(itemstack, placer, pointed_thing)
 			local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 			if rc then return rc end
 
@@ -241,9 +241,9 @@ function mcl_flowers.register_ground_flower(name, def, add_def)
 
 			-- Swap the node in place if it's part of the progression
 			local swap_map = {
-				[newname.."_1"] = newname.."_2",
-				[newname.."_2"] = newname.."_3",
-				[newname.."_3"] = newname.."_4",
+				[nodename.."_1"] = nodename.."_2",
+				[nodename.."_2"] = nodename.."_3",
+				[nodename.."_3"] = nodename.."_4",
 			}
 
 			if swap_map[node.name] then
@@ -254,12 +254,12 @@ function mcl_flowers.register_ground_flower(name, def, add_def)
 				-- If not already part of the cycle, place _1 above
 				if above_node.name == "air" and not max_cycle and (core.get_item_group(node.name, "soil_generic_plant") > 0 or def.placeable_on_anything) then
 					if not creative then itemstack:take_item(1) end
-					core.set_node(above_pos, {name = newname.."_1"})
+					core.set_node(above_pos, {name = nodename.."_1"})
 				end
 			end
 
 			return itemstack
-    end,
+		end,
 	}, add_def))
 
 	local mesh_prefix = "mcl_flowers_wildflower_"
@@ -268,7 +268,7 @@ function mcl_flowers.register_ground_flower(name, def, add_def)
 	end
 
 	for i = 1,4 do
-		core.register_node(":"..newname.."_"..i, table.merge({
+		core.register_node(":"..nodename.."_"..i, table.merge({
 			description = def.desc,
 			_doc_items_create_entry = false,
 			drawtype = "mesh",
@@ -291,7 +291,7 @@ function mcl_flowers.register_ground_flower(name, def, add_def)
 				not_in_craft_guide = 1
 			},
 			sounds = mcl_sounds.node_sound_leaves_defaults(),
-			drop = newname.." "..i,
+			drop = nodename.." "..i,
 			node_placement_prediction = "",
 			_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 		}, add_def))
@@ -387,7 +387,8 @@ local tpl_large_plant_bottom = table.merge(tpl_large_plant_top, {
 	end,
 })
 
-function mcl_flowers.add_large_plant(name, def)
+function mcl_flowers.add_large_plant(plantname, def)
+	local nodename = "mcl_flowers:"..plantname
 	def.bottom =  def.bottom or {}
 	def.bottom.groups = table.merge(tpl_large_plant_bottom.groups, def.bottom.groups or {})
 	def.top = def.top or {}
@@ -417,14 +418,14 @@ function mcl_flowers.add_large_plant(name, def)
 	local selbox_top_height = def.selbox_top_height or 0.5
 	local inv_img = def.inv_img or def.bottom.inventory_image or (def.tiles_top and def.tiles_top[1]) or (def.top.tiles and def.top.tiles[1])
 	-- Bottom
-	core.register_node(":mcl_flowers:"..name, table.merge(tpl_large_plant_bottom,{
+	core.register_node(":"..nodename, table.merge(tpl_large_plant_bottom,{
 		description = def.desc,
 		_doc_items_longdesc = def.longdesc,
 		tiles = def.tiles_bottom,
 		node_placement_prediction = "",
 		inventory_image = inv_img,
 		wield_image = inv_img,
-		drop = "mcl_flowers:"..name,
+		drop = nodename,
 		selection_box = {
 			type = "fixed",
 			fixed = { -selbox_radius, -0.5, -selbox_radius, selbox_radius, 0.5, selbox_radius },
@@ -432,30 +433,30 @@ function mcl_flowers.add_large_plant(name, def)
 	}, def.bottom or {}))
 
 	-- Top
-	core.register_node(":mcl_flowers:"..name.."_top", table.merge(tpl_large_plant_top, {
-		description = S("@1 (Top Part)", def.desc or def.bottom.description or name),
+	core.register_node(":"..nodename.."_top", table.merge(tpl_large_plant_top, {
+		description = S("@1 (Top Part)", def.desc or def.bottom.description or plantname),
 		_doc_items_create_entry = false,
 		selection_box = {
 			type = "fixed",
 			fixed = { -selbox_radius, -0.5, -selbox_radius, selbox_radius, selbox_top_height, selbox_radius },
 		},
 		tiles = def.tiles_top,
-		drop = def.bottom.drop or ( "mcl_flowers:"..name ),
+		drop = def.bottom.drop or nodename,
 		_mcl_shears_drop = def.bottom._mcl_shears_drop,
 		_mcl_fortune_drop = def.bottom._mcl_fortune_drop,
-		_mcl_baseitem = "mcl_flowers:"..name,
+		_mcl_baseitem = nodename,
 		after_destruct = function(pos, _)
 			-- Remove bottom half of flower (if it exists)
 			local top = pos
 			local bottom = { x = top.x, y = top.y - 1, z = top.z }
-			if core.get_node(top).name ~= "mcl_flowers:"..name.."_top" and core.get_node(bottom).name == "mcl_flowers:"..name then
+			if core.get_node(top).name ~= nodename.."_top" and core.get_node(bottom).name == nodename then
 				core.remove_node(bottom)
 			end
 		end,
 	}, def.top))
 
 	if def.bottom._doc_items_longdesc then
-		doc.add_entry_alias("nodes", "mcl_flowers:"..name, "nodes", "mcl_flowers:"..name.."_top")
+		doc.add_entry_alias("nodes", nodename, "nodes", nodename.."_top")
 		-- If no longdesc, help alias must be added manually
 	end
 
