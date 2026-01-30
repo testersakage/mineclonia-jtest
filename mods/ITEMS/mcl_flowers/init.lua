@@ -74,7 +74,7 @@ function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 						or core.get_item_group(under_neighbor, "hardened_clay") > 0
 						or core.get_item_group(under_neighbor, "sand") > 0
 					) then
-				core.add_node(new_pos, {name = "mcl_flowers:short_dry_grass"})
+				core.set_node(new_pos, {name = "mcl_flowers:short_dry_grass"})
 				return true
 			end
 		end
@@ -91,7 +91,7 @@ function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 			local new_pos = vector.offset(neighbours[i], 0, 1, 0)
 			local neighbor = core.get_node(new_pos).name
 			if core.get_item_group(under_neighbor, "soil_generic_plant") > 0 and neighbor == "air" then
-				core.add_node(new_pos, {name = "mcl_flowers:firefly_bush"})
+				core.set_node(new_pos, {name = "mcl_flowers:firefly_bush"})
 				return true
 			end
 		end
