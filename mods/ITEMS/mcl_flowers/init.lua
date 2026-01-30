@@ -204,11 +204,6 @@ end
 
 function mcl_flowers.register_ground_flower(flowername, def, add_def)
 	local itemname = "mcl_flowers:"..flowername
-
-	if not add_def then
-		add_def = {}
-	end
-
 	core.register_craftitem(":"..itemname, table.merge({
 	description = def.desc,
 	_doc_items_longdesc = def.longdesc,
@@ -255,7 +250,7 @@ function mcl_flowers.register_ground_flower(flowername, def, add_def)
 
 			return itemstack
 		end,
-	}, add_def))
+	}, add_def or {}))
 
 	local mesh_prefix = "mcl_flowers_wildflower_"
 	if def.mesh_prefix then
@@ -289,7 +284,7 @@ function mcl_flowers.register_ground_flower(flowername, def, add_def)
 			drop = itemname.." "..i,
 			node_placement_prediction = "",
 			_on_bone_meal = mcl_flowers.on_bone_meal_simple,
-		}, add_def))
+		}, add_def or {}))
 	end
 end
 
