@@ -393,7 +393,7 @@ local function trial_spawner_step(pos, meta)
 	end
 
 	if is_active then
-		if timestamp - last_spawn >= meta:get_int("spawn_interval") and can_trial_spawner_spawn_mobs(pos, meta, #players) then
+		if timestamp - last_spawn >= meta:get_int("spawn_interval") and can_trial_spawner_spawn_mobs(pos, meta, #players, is_ominous) then
 			attempt_spawning_trial_mob(pos, meta, is_ominous)
 		elseif is_trial_complete(pos, meta, #players, is_ominous) then
 			complete_trial(pos, meta, is_ominous)
