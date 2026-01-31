@@ -334,7 +334,18 @@ core.register_node("mcl_flowers:fern", table.merge(def_tallgrass, {
 mcl_flowerpots.register_potted_flower("mcl_flowers:fern", {
 	name = "fern",
 	desc = S("Fern"),
-	image = "mcl_flowers_fern_inv.png",
+	image = "mcl_flowers_fern.png",
+})
+
+core.register_lbm({
+	label = "Recolorize potted ferns",
+	name = "mcl_flowers:recolorize_ferns",
+	nodenames = {"mcl_flowerpots:flower_pot_fern"},
+	run_at_every_load = false,
+	action = function(pos, node)
+		node.param2 = mcl_util.get_pos_p2(pos)
+		core.swap_node(pos, node)
+	end
 })
 
 core.register_node("mcl_flowers:bush", table.merge(def_tallgrass, {
