@@ -161,7 +161,6 @@ function mcl_flowers.register_simple_flower(flowername, def, node_defs)
 		name=flowername,
 		desc=def.desc,
 		image=def.image,
-		simple_selection_box=def.simple_selection_box,
 	}
 	core.register_node(":"..nodename, table.merge({
 		description = def.desc,
