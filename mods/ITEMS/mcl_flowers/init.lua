@@ -162,7 +162,6 @@ function mcl_flowers.register_simple_flower(flowername, def, node_defs)
 	if def.sus_stew then
 		groups.sus_stew_ingredient = 1
 	end
-	if not def._mcl_silk_touch_drop then def._mcl_silk_touch_drop = nil end
 	if not def.drop then def.drop = nodename end
 	mcl_flowers.registered_simple_flowers[nodename] = {
 		name=flowername,
@@ -191,7 +190,6 @@ function mcl_flowers.register_simple_flower(flowername, def, node_defs)
 			type = "fixed",
 			fixed = def.selection_box,
 		},
-		_mcl_silk_touch_drop = def._mcl_silk_touch_drop,
 		_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 	}, node_defs or {}))
 	if def.potted then
