@@ -395,7 +395,8 @@ core.register_node("mcl_flowers:bush", table.merge(def_tallgrass, {
 		fixed = {-0.4375, -0.5, -0.4375, 0.4375, 0.25, 0.4375}
 	},
 	_mcl_shears_drop = true,
-	_mcl_silk_touch_drop = true
+	_mcl_silk_touch_drop = true,
+	_on_bone_meal = mcl_flowers.on_bone_meal,
 }))
 
 core.register_node("mcl_flowers:firefly_bush", table.merge(def_tallgrass, {
@@ -436,6 +437,7 @@ core.register_node("mcl_flowers:firefly_bush", table.merge(def_tallgrass, {
 			return true, 0
 		end
 	end),
+	_on_bone_meal = mcl_flowers.on_bone_meal,
 }))
 
 core.register_node("mcl_flowers:short_dry_grass", table.merge(def_tallgrass, {
@@ -504,7 +506,8 @@ core.register_node("mcl_flowers:tall_dry_grass", table.merge(def_tallgrass, {
 		if table.indexof(allowed_nodes, soil.name) ~= -1 then
 			return true, 0
 		end
-	end)
+	end),
+	_on_bone_meal = mcl_flowers.on_bone_meal,
 }))
 
 core.register_node("mcl_flowers:waterlily", {
