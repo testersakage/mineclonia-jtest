@@ -20,7 +20,7 @@ Register a simple flower:
 
 ## mcl_flowers.on_bone_meal(itemstack, placer, pointed_thing, pos, n)
 
-## mcl_flowers.on_bone_meal_simple(itemstack, placer, pointed_thing, pos, n)
+## mcl_flowers.bone_meal_simple_flower(itemstack, placer, pointed_thing, pos, n)
 
 ## mcl_flowers.get_palette_color_from_pos(pos)
 
