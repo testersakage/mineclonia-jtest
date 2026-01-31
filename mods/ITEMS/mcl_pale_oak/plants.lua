@@ -77,7 +77,8 @@ mcl_flowers.register_simple_flower("eyeblossom", {
 	potted = true,
 	sus_stew = {effect = "nausea", duration = 8},
 }, {
-	_mcl_crafting_output = {single = {output = "mcl_dyes:grey"}}
+	_mcl_crafting_output = {single = {output = "mcl_dyes:grey"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("eyeblossom_open", {
@@ -87,7 +88,8 @@ mcl_flowers.register_simple_flower("eyeblossom_open", {
 	potted = true,
 	sus_stew = {effect = "blindness", duration = 8},
 }, {
-	_mcl_crafting_output = {single = {output = "mcl_dyes:orange"}}
+	_mcl_crafting_output = {single = {output = "mcl_dyes:orange"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 local function is_night()

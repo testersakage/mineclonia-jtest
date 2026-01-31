@@ -86,25 +86,21 @@ local scan_area = 9
 local spawn_on = { "mcl_core:dirt", "group:grass_block" }
 
 function mcl_flowers.on_bone_meal_simple(_, _, _, pos, n)
-	if n.name ~= "mcl_flowers:wither_rose" then
-		local nn = core.find_nodes_in_area_under_air(
-			vector.offset(pos, -scan_area, -3, -scan_area),
-			vector.offset(pos, scan_area, 3, scan_area),
-			spawn_on
-		)
-
-		local any_placed = false
-		if next(nn) ~= nil then
-			table.shuffle(nn)
-			for i = 1, math.random(1, math.min(14, #nn)) do
-				if core.set_node(vector.offset(nn[i], 0, 1, 0), { name = n.name }) then
-					any_placed = true
-				end
+	local nn = core.find_nodes_in_area_under_air(
+		vector.offset(pos, -scan_area, -3, -scan_area),
+		vector.offset(pos, scan_area, 3, scan_area),
+		spawn_on
+	)
+	local any_placed = false
+	if next(nn) then
+		table.shuffle(nn)
+		for i = 1, math.random(1, math.min(14, #nn)) do
+			if core.set_node(vector.offset(nn[i], 0, 1, 0), {name = n.name}) then
+				any_placed = true
 			end
-			return any_placed
 		end
+		return any_placed
 	end
-
 	return false
 end
 
@@ -188,7 +184,6 @@ function mcl_flowers.register_simple_flower(flowername, def, node_defs)
 			type = "fixed",
 			fixed = def.selection_box,
 		},
-		_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 	}, node_defs or {}))
 	if def.potted then
 		mcl_flowerpots.register_potted_flower(nodename, {
