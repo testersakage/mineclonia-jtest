@@ -78,7 +78,7 @@ Items can have these fields:
 
 #### Item callbacks
 * `_on_set_item_entity` callback that is called when an item is set converted to an item entity: function(itemstack, luaentity).
-	Shall return the changed itemstack and optionally as second return value a table of object properties to be applied to the object when the new item is set.
+	Shall return the changed itemstack and optionally as second return value a table of object properties to be applied to the object when the object/entity is activated.
 
 ### Tool definitions
 #### Special fields
