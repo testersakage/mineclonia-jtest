@@ -66,7 +66,7 @@ local function rotate_dir_90_deg_clockwise(dir)
 	return rotated_dir
 end
 
-local function get_biggest_painting_for_position(pos, dir)
+local function get_biggest_painting_for_position(pos, dir, stack)
 	local dir_perpendicular = rotate_dir_90_deg_clockwise(dir)
 
 	-- Since this is a non trivial algorith i guess i will make a little write up.
@@ -135,6 +135,18 @@ local function get_biggest_painting_for_position(pos, dir)
 
 	local maximum_volume = -1
 	local canditates = {}
+	local meta = stack:get_meta()
+	local painting = meta:get_string("mcl_paintings:placed_painting")
+	local width = meta:get_int("mcl_paintings:width")
+	local height = meta:get_int("mcl_paintings:height")
+
+	if painting ~= "" and width ~= 0 and height ~= 0 then
+		if placement_ranges[height] and width <= placement_ranges[height] then
+			return registered_paintings[painting]
+		else
+			return nil
+		end
+	end
 
 	for _, pdef in pairs(registered_paintings) do
 		if pdef.width <= placement_ranges[pdef.height] then
@@ -168,7 +180,7 @@ core.register_craftitem("mcl_paintings:painting", {
 		local dir = vector.subtract(pointed_thing.above, pointed_thing.under)
 		if dir.y ~= 0 then return itemstack end
 
-		local pdef = get_biggest_painting_for_position(pointed_thing.under, dir)
+		local pdef = get_biggest_painting_for_position(pointed_thing.under, dir, itemstack)
 		if not pdef then return end
 
 		local wallm = core.dir_to_wallmounted(dir)
