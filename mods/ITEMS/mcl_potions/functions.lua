@@ -2127,7 +2127,7 @@ local function target_valid(object, name)
 	if not object or object:get_hp() <= 0 then return false end
 
 	local entity = object:get_luaentity()
-	if entity and entity.is_boss then return false end
+	if entity and (entity.is_boss or entity.is_item) then return false end
 
 	for i=1, #registered_res_predicates do
 		if registered_res_predicates[i](object, name) then return false end
