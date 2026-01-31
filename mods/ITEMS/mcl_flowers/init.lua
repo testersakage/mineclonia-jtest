@@ -430,6 +430,7 @@ function mcl_flowers.add_large_plant(plantname, def)
 			type = "fixed",
 			fixed = { -selbox_radius, -0.5, -selbox_radius, selbox_radius, 0.5, selbox_radius },
 		},
+        _on_bone_meal = def._on_bone_meal,
 	}, def.bottom or {}))
 
 	-- Top
@@ -453,6 +454,7 @@ function mcl_flowers.add_large_plant(plantname, def)
 				core.remove_node(bottom)
 			end
 		end,
+        _on_bone_meal = def.bottom._on_bone_meal,
 	}, def.top))
 
 	if def.bottom._doc_items_longdesc then
