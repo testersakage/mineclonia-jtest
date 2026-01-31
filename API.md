@@ -28,7 +28,8 @@ standalone mod. Some modifications may still have been applied, but the APIs are
 held compatible.
 
 ## Adding items
-### Special fields
+### Item Definitions
+#### Special fields
 Items can have these fields:
 
 * `_mcl_generate_description(itemstack)`: Required for any items which
@@ -75,38 +76,52 @@ Items can have these fields:
   `mcl_farming`, and `mcl_wool`. Some simple recipes are no longer covered by this field due to the
   implementation of their APIs, as in the case of buttons, slabs and iron trapdoors.
 
-Tools can have these fields:
+#### Item callbacks
+* `_on_set_item_entity` callback that is called when an item is set converted to an item entity: function(itemstack, luaentity).
+	Shall return the changed itemstack and optionally as second return value a table of object properties to be applied to the object when the new item is set.
 
+### Tool definitions
+#### Special fields
+Tools can have these fields:
 * `_mcl_diggroups`: Specifies the digging groups that a tool can dig and how
   efficiently. See `_mcl_autogroup` for more information.
 
+### Node definitions
+#### Special fields
 All nodes can have these fields:
-
 * `_mcl_hardness`: Hardness of the block, ranges from 0 to infinity (represented
   by -1). Determines digging times. Default: 0
 * `_mcl_blast_resistance`: How well this block blocks and resists explosions.
   Default: The value of `_mcl_hardness`
 * `_mcl_falling_node_alternative`: If set to an itemstring, the node will turn
   into this node before it starts to fall.
-* `_mcl_after_falling(pos)`: Called after a falling node finished falling and
-  turned into a node.
-* `_on_object_in(entity_pos, node, obj)`: Called every step when an entity
-  is inside the node
+* `_mcl_baseitem` this used to determine the item corresponding to the placed node. Can either be an itemstring or a function(pos) returning an itemstack.
 
-### Tool Callbacks
+#### Node callbacks
+These can be applied to all node registrations.
+* `_mcl_after_falling` called after a falling node finished falling and turned into a node: function(pos)
+* `_on_object_in` called every step when a player, mob or item entity is inside the node: function(entity_pos, node, obj)
+* `_on_object_over` called every step when a player, mob or item entity is on top of the node: function(object_pos, node, object)
+* `_on_arrow_hit` called when node is hit by an arrow: function(pos, arrow_luaentity)
+* `_on_dye_place` called when node is rightclicked with a dye item: function(pos, color_name)
+* `_on_bone_meal` called when node is righclicked with a bone meal item: function(itemstack, placer, pointed_thing, pos, node)
+* `_on_hopper_in` called when an item is about to be pushed to the node from a hopper: function(hopper_pos, node_pos)
+* `_on_hopper_out` called when an item is about to be sucked into a hopper under the node: function(node_pos, hopper_pos)
+* `_after_hopper_in` called when an item is pushed into the node from a hopper: function(node_pos)
+* `_after_hopper_out` called when an item is sucked from the node by a hopper: function(node_pos)
+* `_on_lightning_strike` called when a node is hit by lightning: function(node_pos, lightning_pos1, lightning_pos2)
+
+#### Node tool callbacks
 Nodes can have "tool callbacks" modifying the on_place function of certain tools.
 The first return value should be the itemstack and the second an option bool
-i ndicatingif no wear should be added to the tool e.g. because the mod does it
+indicating if no wear should be added to the tool e.g. because the mod does it
 itsself.
-
-* _on_axe_place(itemstack,placer,pointed_thing)
-* _on_shovel_place(itemstack,placer,pointed_thing)
-* _on_sword_place(itemstack,placer,pointed_thing)
-* _on_pickaxe_place(itemstack,placer,pointed_thing)
-* _on_shears_place(itemstack,placer,pointed_thing)
-* _on_hoe_place(itemstack,placer,pointed_thing)
-
-Use the `mcl_sounds` mod for the sounds.
+* `_on_axe_place`: function(itemstack,placer,pointed_thing)
+* `_on_shovel_place`: function(itemstack,placer,pointed_thing)
+* `_on_sword_place`: function(itemstack,placer,pointed_thing)
+* `_on_pickaxe_place`: function(itemstack,placer,pointed_thing)
+* `_on_shears_place`: function(itemstack,placer,pointed_thing)
+* `_on_hoe_place`: function(itemstack,placer,pointed_thing)
 
 ## APIs
 A lot of things are possible by using one of the APIs in the mods. Note that not
@@ -173,27 +188,11 @@ the original mobs_redo API.
 * Statbars: `HUD/hudbars`
 
 ### Utility APIs
+* Play sounds:  `CORE/mcl_sounds`
 * Change player physics: `PLAYER/playerphysics`
 * Select random treasures: `CORE/mcl_loot`
 * Get flowing direction of liquids: `CORE/flowlib`
-#### Item Definitions
-These can be applied to all item registrations:
-* `_on_set_item_entity` callback that is called when an item is set converted to an item entity: function(itemstack, luaentity).
-	Shall return the changed itemstack and optionally as second return value a table of object properties to be applied to the object when the new item is set.
-
-#### Node Definitions
-These can be applied to all node registrations.
-* `_on_object_over`: called every step when a player, mob or entity is on top of the node: function(object_pos, node, object)
-* `_on_arrow_hit` callback when node is hit by an arrow: function(pos, arrow_luaentity)
-* `_on_dye_place` callback when node is rickclicked with a dye: function(pos, color_name)
-* `_on_hopper_in` callback when an item is about to be pushed to the node from a hopper: function(hopper_pos, node_pos)
-* `_on_hopper_out` callback when an item is about to be sucked into a hopper under the node: function(node_pos, hopper_pos)
-* `_after_hopper_in` callback when an item is pushed into the node from a hopper: function(node_pos)
-* `_after_hopper_out` callback when an item is sucked from the node by a hopper: function(node_pos)
-* `_on_lightning_strike` callback when a node is hit by lightning: function(node_pos, lightning_pos1, lightning_pos2)
-* `_mcl_baseitem` this used to determine the item corresponding to the placed node. Can either be an itemstring or a function(pos) returning an itemstack.
-* Get node names close to player (to reduce constant querying):
-  `PLAYER/mcl_playerinfo`
+* Get node names close to player (to reduce constant querying): `PLAYER/mcl_playerinfo`
 * Colors and dyes API: `ITEMS/mcl_dyes`
 * Explosion API
 * Music discs API
