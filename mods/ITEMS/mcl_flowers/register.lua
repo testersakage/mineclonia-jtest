@@ -390,7 +390,7 @@ core.register_node("mcl_flowers:bush", table.merge(def_tallgrass, {
 
 core.register_node("mcl_flowers:firefly_bush", table.merge(def_tallgrass, {
 	description = S("Firefly Bush"),
-	drop = "",
+	drop = "mcl_flowers:firefly_bush",
 	tiles = {
 		{
 			name = "mcl_flowers_firefly_bush.png",
