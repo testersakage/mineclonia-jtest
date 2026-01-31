@@ -553,19 +553,6 @@ function mcl_potions.get_alchemy(ingr, pot)
 	return false
 end
 
--- give withering to players in a wither rose
-local etime = 0
-core.register_globalstep(function(dtime)
-	etime = dtime + etime
-	if etime < 0.5 then return end
-	etime = 0
-	for pl in mcl_util.connected_players() do
-		local npos = vector.offset(pl:get_pos(), 0, 0.2, 0)
-		local n = core.get_node(npos)
-		if n.name == "mcl_flowers:wither_rose" then mcl_potions.withering_func(pl, 1, 2) end
-	end
-end)
-
 mcl_wip.register_wip_item("mcl_potions:night_vision")
 mcl_wip.register_wip_item("mcl_potions:night_vision_splash")
 mcl_wip.register_wip_item("mcl_potions:night_vision_lingering")

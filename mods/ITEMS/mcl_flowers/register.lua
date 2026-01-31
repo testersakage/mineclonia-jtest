@@ -98,7 +98,10 @@ mcl_flowers.register_simple_flower("wither_rose", {
 	potted = true,
 	sus_stew = {effect = "withering", duration = 8},
 }, {
-	_mcl_crafting_output = {single = {output = "mcl_dyes:black"}}
+	_mcl_crafting_output = {single = {output = "mcl_dyes:black"}},
+	_on_object_in = function(_, _, obj)
+		mcl_potions.give_effect("withering", obj, 1, 2)
+	end,
 })
 mcl_flowers.register_simple_flower("lily_of_the_valley", {
 	desc = S("Lily of the Valley"),
