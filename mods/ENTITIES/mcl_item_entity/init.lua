@@ -338,6 +338,8 @@ core.register_entity(":__builtin:item", {
 		collide_with_objects = false,
 	},
 
+	is_item = true,
+
 	-- Itemstring of dropped item. The empty string is used when the item is not yet initialized yet.
 	-- The itemstring MUST be set immediately to a non-empty string after creating the entity.
 	-- The hand is NOT permitted as dropped item. ;-)
