@@ -200,6 +200,19 @@ core.register_craftitem("mcl_paintings:painting", {
 		end
 		return itemstack
 	end,
+	_get_all_virtual_items = function ()
+		local output = {deco = {}}
+		for name, def in pairs(registered_paintings) do
+			local stack = ItemStack("mcl_paintings:painting")
+			local meta = stack:get_meta()
+			meta:set_string("mcl_paintings:placed_painting", name)
+			meta:set_int("mcl_paintings:width", def.width)
+			meta:set_int("mcl_paintings:height", def.height)
+			tt.reload_itemstack_description(stack)
+			table.insert(output.deco, stack:to_string())
+		end
+		return output
+	end
 })
 
 local function size_to_minmax_entity(size)
@@ -331,22 +344,6 @@ core.register_craft({
 })
 
 dofile(core.get_modpath(modname).."/registrations.lua")
-
-core.override_item("mcl_paintings:painting", {
-	_get_all_virtual_items = function ()
-		local output = {deco = {}}
-		for name, def in pairs(registered_paintings) do
-			local stack = ItemStack("mcl_paintings:painting")
-			local meta = stack:get_meta()
-			meta:set_string("mcl_paintings:placed_painting", name)
-			meta:set_int("mcl_paintings:width", def.width)
-			meta:set_int("mcl_paintings:height", def.height)
-			tt.reload_itemstack_description(stack)
-			table.insert(output.deco, stack:to_string())
-		end
-		return output
-	end
-})
 
 tt.register_snippet(function(itemstring, _, itemstack)
 	local result = ""
