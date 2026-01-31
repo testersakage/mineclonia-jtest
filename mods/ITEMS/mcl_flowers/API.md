@@ -4,22 +4,19 @@ Flower mod for MineClonia
 
 # Functions
 
-## mcl_flowers.register_simple_flower(name, def)
+## mcl_flowers.register_simple_flower(name, def, node_defs)
 
 Register a simple flower:
 
 * name: legacity name eg: "my_super_flower"
 * def: a table with the following fields:
-
-* desc: description eg: "My Super Flower"
-* image: texture
-* selection_box: nodebox of the flower
-* potted: (optional) if "true", a potted variant is also registered
-* sus_stew: (optional) a table with attributes "effect" and "duration", if specified
+  * desc: description eg: "My Super Flower"
+  * image: texture
+  * selection_box: nodebox of the flower
+  * potted: (optional) if "true", a potted variant is also registered
+  * sus_stew: (optional) a table with attributes "effect" and "duration", if specified
     a suspicious stew is registered with this effect and duration
-* drop: (optional) itemstring, this will be dropped upon digging the plant
-* _mcl_silk_touch_drop: (optional) itemstring, this will be dropped if dug with a
-    tool with "silk_touch" enchantment
+* node_defs: additional regular item definition attributes.
 
 ## mcl_flowers.on_bone_meal(itemstack, placer, pointed_thing, pos, n)
 
