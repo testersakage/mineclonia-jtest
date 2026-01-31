@@ -82,26 +82,25 @@ function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 	return false
 end
 
-local scan_area = 9
-local spawn_on = { "mcl_core:dirt", "group:grass_block" }
+local scan_area = 3
+local scan_y = 2
+local spawn_on = {"group:grass_block"}
+local spawn_chance = 20 -- percentile
 
-function mcl_flowers.on_bone_meal_simple(_, _, _, pos, n)
+function mcl_flowers.bone_meal_simple_flower(_, _, _, pos, n)
 	local nn = core.find_nodes_in_area_under_air(
-		vector.offset(pos, -scan_area, -3, -scan_area),
-		vector.offset(pos, scan_area, 3, scan_area),
+		vector.offset(pos, -scan_area, -scan_y, -scan_area),
+		vector.offset(pos, scan_area, scan_y, scan_area),
 		spawn_on
 	)
-	local any_placed = false
-	if next(nn) then
-		table.shuffle(nn)
-		for i = 1, math.random(1, math.min(14, #nn)) do
-			if core.set_node(vector.offset(nn[i], 0, 1, 0), {name = n.name}) then
-				any_placed = true
-			end
+	local flower_placed = false
+	for _, pos in pairs(nn) do
+		if math.random(100) <= spawn_chance then
+			core.set_node(vector.offset(pos, 0, 1, 0), {name = n.name})
+			flower_placed = true
 		end
-		return any_placed
 	end
-	return false
+	return flower_placed
 end
 
 function mcl_flowers.get_palette_color_from_pos(pos)
@@ -278,7 +277,7 @@ function mcl_flowers.register_ground_flower(flowername, def, add_def)
 			sounds = mcl_sounds.node_sound_leaves_defaults(),
 			drop = nodename.." "..i,
 			node_placement_prediction = "",
-			_on_bone_meal = mcl_flowers.on_bone_meal_simple,
+			_on_bone_meal = mcl_flowers.bone_meal_simple_flower,
 		}, add_def or {}))
 	end
 end
