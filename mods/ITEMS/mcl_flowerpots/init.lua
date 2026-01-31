@@ -44,6 +44,16 @@ local function validate_pot(itemstack)
 	return false, nil
 end
 
+local function get_item_palette(itemdefs)
+	local palette = itemdefs.palette
+	local param2 = itemdefs.paramtype2
+	if palette and palette ~= "" then
+		if param2 == "color" then
+			return palette, "color"
+		end
+	end
+end
+
 core.register_node("mcl_flowerpots:flower_pot", table.merge(tpl_pots, {
 	description = S("Flower Pot"),
 	_tt_help = S("Can hold a small flower or plant"),
@@ -61,7 +71,12 @@ core.register_node("mcl_flowerpots:flower_pot", table.merge(tpl_pots, {
 		end
 		local valid_pot, pot = validate_pot(itemstack)
 		if valid_pot then
-			core.swap_node(pos, {name = "mcl_flowerpots:flower_pot_" .. pot})
+			local new_param2
+			local palette, _ = get_item_palette(itemstack:get_definition())
+			if palette then
+				new_param2 = mcl_util.get_pos_p2(pos)
+			end
+			core.swap_node(pos, {name = "mcl_flowerpots:flower_pot_" .. pot, param2 = new_param2})
 			if not core.is_creative_enabled(player_name) then
 				itemstack:take_item()
 			end
@@ -80,12 +95,13 @@ core.register_craft({
 
 function mcl_flowerpots.register_potted_flower(name, def)
 	mcl_flowerpots.registered_pots[name] = def.name
+	local palette, param2 = get_item_palette(core.registered_items[name])
 	core.register_node(":mcl_flowerpots:flower_pot_" .. def.name, table.merge(tpl_pots, {
 		description = def.desc .. " " .. S("Flower Pot"),
 		_doc_items_create_entry = false,
 		mesh = "flower_pot_plant.obj",
 		tiles = {
-			"[combine:32x32:0,0=mcl_flowerpots_flowerpot.png:0,0=" .. def.image,
+			{name = "mcl_flowerpots_flowerpot.png", color = "white"}, def.image
 		},
 		groups = { dig_immediate = 3, attached_node = 1, dig_by_piston = 1, not_in_creative_inventory = 1, flower_pot = 2, unsticky = 1},
 		on_rightclick = function(pos, node, clicker, itemstack)
@@ -119,6 +135,8 @@ function mcl_flowerpots.register_potted_flower(name, def)
 			},
 		},
 		_mcl_baseitem = name,
+		palette = palette,
+		paramtype2 = param2
 	}))
 	-- Add entry alias for the Help
 	if has_doc then
