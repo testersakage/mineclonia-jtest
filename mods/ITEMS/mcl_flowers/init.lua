@@ -162,7 +162,6 @@ function mcl_flowers.register_simple_flower(flowername, def, node_defs)
 	if def.sus_stew then
 		groups.sus_stew_ingredient = 1
 	end
-	if not def.drop then def.drop = nodename end
 	mcl_flowers.registered_simple_flowers[nodename] = {
 		name=flowername,
 		desc=def.desc,
@@ -181,7 +180,6 @@ function mcl_flowers.register_simple_flower(flowername, def, node_defs)
 		sunlight_propagates = true,
 		paramtype = "light",
 		walkable = false,
-		drop = def.drop,
 		groups = groups,
 		sounds = mcl_sounds.node_sound_leaves_defaults(),
 		node_placement_prediction = "",
