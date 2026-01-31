@@ -459,7 +459,7 @@ local tpl = {
 	paramtype = "light",
 	tiles = {"trialspawner_top.png", "trialspawner_bottom.png", "trialspawner_side.png", "trialspawner_side.png", "trialspawner_side.png", "trialspawner_side.png"},
 	groups = {
-		deco_block = 1, features_cannot_replace = 1,
+		deco_block = 1, features_cannot_replace = 1, unmovable_by_piston = 1,
 		jigsaw_construct = 1, jigsaw_preserve_meta = 1
 	},
 	is_ground_content = false,
