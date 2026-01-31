@@ -332,9 +332,18 @@ local def_tallgrass = {
 	node_placement_prediction = "",
 	on_place = mcl_flowers.on_place_flower,
 	_mcl_hardness = 0,
-	_on_bone_meal = mcl_flowers.on_bone_meal,
 }
-core.register_node("mcl_flowers:tallgrass", def_tallgrass)
+core.register_node("mcl_flowers:tallgrass", table.merge(def_tallgrass, {
+	_on_bone_meal = function(_, _, _ , pos, n)
+		local toppos = { x=pos.x, y=pos.y+1, z=pos.z }
+		local topnode = core.get_node(toppos)
+		if core.registered_nodes[topnode.name].buildable_to then
+			core.set_node(pos, { name = "mcl_flowers:double_grass", param2 = n.param2 })
+			core.set_node(toppos, { name = "mcl_flowers:double_grass", param2 = n.param2 })
+			return true
+		end
+	end,
+}))
 
 core.register_node("mcl_flowers:fern", table.merge(def_tallgrass, {
 	description = S("Fern"),
@@ -347,6 +356,15 @@ core.register_node("mcl_flowers:fern", table.merge(def_tallgrass, {
 		fixed = { -6/16, -0.5, -6/16, 6/16, 5/16, 6/16 },
 	},
 	groups = table.merge(def_tallgrass.groups, { compostability = 65 })
+	_on_bone_meal = function(_, _, _ , pos, n)
+		local toppos = { x=pos.x, y=pos.y+1, z=pos.z }
+		local topnode = core.get_node(toppos)
+		if core.registered_nodes[topnode.name].buildable_to then
+			core.set_node(pos, { name = "mcl_flowers:double_fern", param2 = n.param2 })
+			core.set_node(toppos, { name = "mcl_flowers:double_fern_top", param2 = n.param2 })
+			return true
+		end
+	end,
 }))
 
 mcl_flowerpots.register_potted_flower("mcl_flowers:fern", {
