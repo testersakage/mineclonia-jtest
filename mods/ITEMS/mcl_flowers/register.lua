@@ -8,6 +8,7 @@ mcl_flowers.register_simple_flower("poppy", {
 	sus_stew = {effect = "night_vision", duration = 5},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:red"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("dandelion", {
@@ -18,6 +19,7 @@ mcl_flowers.register_simple_flower("dandelion", {
 	sus_stew = {effect = "saturation", duration = 0.5},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:yellow"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("oxeye_daisy", {
@@ -28,6 +30,7 @@ mcl_flowers.register_simple_flower("oxeye_daisy", {
 	sus_stew = {effect = "regeneration", duration = 8},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:silver"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("tulip_orange", {
@@ -38,6 +41,7 @@ mcl_flowers.register_simple_flower("tulip_orange", {
 	sus_stew = {effect = "weakness", duration = 9},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:orange"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("tulip_pink", {
@@ -48,6 +52,7 @@ mcl_flowers.register_simple_flower("tulip_pink", {
 	sus_stew = {effect = "weakness", duration = 9},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:pink"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("tulip_red", {
@@ -58,6 +63,7 @@ mcl_flowers.register_simple_flower("tulip_red", {
 	sus_stew = {effect = "weakness", duration = 9},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:red"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("tulip_white", {
@@ -68,6 +74,7 @@ mcl_flowers.register_simple_flower("tulip_white", {
 	sus_stew = {effect = "weakness", duration = 9},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:silver"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("allium", {
@@ -78,6 +85,7 @@ mcl_flowers.register_simple_flower("allium", {
 	sus_stew = {effect = "fire_resistance", duration = 4},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:magenta"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("azure_bluet", {
@@ -88,6 +96,7 @@ mcl_flowers.register_simple_flower("azure_bluet", {
 	sus_stew = {effect = "blindness", duration = 8},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:silver"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("blue_orchid", {
@@ -98,6 +107,7 @@ mcl_flowers.register_simple_flower("blue_orchid", {
 	sus_stew = {effect = "saturation", duration = 0.5},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:light_blue"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("wither_rose", {
@@ -118,6 +128,7 @@ mcl_flowers.register_simple_flower("lily_of_the_valley", {
 	sus_stew = {effect = "poison", duration = 12},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:white"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_simple_flower("cornflower", {
@@ -128,6 +139,7 @@ mcl_flowers.register_simple_flower("cornflower", {
 	sus_stew = {effect = "leaping", duration = 6},
 }, {
 	_mcl_crafting_output = {single = {output = "mcl_dyes:blue"}},
+	_on_bone_meal = mcl_flowers.on_bone_meal_simple,
 })
 
 mcl_flowers.register_ground_flower("wildflowers", {
