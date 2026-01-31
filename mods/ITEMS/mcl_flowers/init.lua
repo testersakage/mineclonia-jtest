@@ -9,90 +9,35 @@ local smallflowerlongdesc = S("This is a small flower. Small flowers are mainly 
 mcl_flowers.plant_usage_help = S("It can only be placed on a block on which it would also survive.")
 
 function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
-	if n.name == "mcl_flowers:rose_bush" or n.name == "mcl_flowers:rose_bush_top" then
-		core.add_item(pos, "mcl_flowers:rose_bush")
-		return true
-	elseif n.name == "mcl_flowers:peony" or n.name == "mcl_flowers:peony_top" then
-		core.add_item(pos, "mcl_flowers:peony")
-		return true
-	elseif n.name == "mcl_flowers:lilac" or n.name == "mcl_flowers:lilac_top" then
-		core.add_item(pos, "mcl_flowers:lilac")
-		return true
-	elseif n.name == "mcl_flowers:sunflower" or n.name == "mcl_flowers:sunflower_top" then
-		core.add_item(pos, "mcl_flowers:sunflower")
-		return true
-	elseif n.name == "mcl_flowers:tallgrass" then
-		-- Tall Grass: Grow into double tallgrass
-		local toppos = { x=pos.x, y=pos.y+1, z=pos.z }
-		local topnode = core.get_node(toppos)
-		if core.registered_nodes[topnode.name].buildable_to then
-			core.set_node(pos, { name = "mcl_flowers:double_grass", param2 = n.param2 })
-			core.set_node(toppos, { name = "mcl_flowers:double_grass_top", param2 = n.param2 })
-			return true
-		end
-	elseif n.name == "mcl_flowers:fern" then
-		-- Fern: Grow into large fern
-		local toppos = { x=pos.x, y=pos.y+1, z=pos.z }
-		local topnode = core.get_node(toppos)
-		if core.registered_nodes[topnode.name].buildable_to then
-			core.set_node(pos, { name = "mcl_flowers:double_fern", param2 = n.param2 })
-			core.set_node(toppos, { name = "mcl_flowers:double_fern_top", param2 = n.param2 })
-			return true
-		end
-	elseif n.name == "mcl_flowers:bush" then
-		local neighbours = {
-			vector.offset(pos, -1, -1, 0),
-			vector.offset(pos, 1, -1, 0),
-			vector.offset(pos, 0, -1, -1),
-			vector.offset(pos, 0, -1, 1)
-		}
-		table.shuffle(neighbours)
-		for i = 1, #neighbours do
-			local under_neighbor = core.get_node(neighbours[i]).name
-			local new_pos = vector.offset(neighbours[i], 0, 1, 0)
-			local neighbor = core.get_node(new_pos).name
-			if core.get_item_group(under_neighbor, "soil_generic_plant") > 0 and neighbor == "air" then
-				core.set_node(new_pos, {name = "mcl_flowers:bush", param2 = mcl_util.get_pos_p2(pos)})
-				return true
-			end
-		end
-	elseif n.name == "mcl_flowers:tall_dry_grass" then
-		local neighbours = {
-			vector.offset(pos, -1, -1, 0),
-			vector.offset(pos, 1, -1, 0),
-			vector.offset(pos, 0, -1, -1),
-			vector.offset(pos, 0, -1, 1)
-		}
-		table.shuffle(neighbours)
-		for i = 1, #neighbours do
-			local under_neighbor = core.get_node(neighbours[i]).name
-			local new_pos = vector.offset(neighbours[i], 0, 1, 0)
-			local neighbor = core.get_node(new_pos).name
-			if neighbor == "air"
-					and (
-						core.get_item_group(under_neighbor, "soil_generic_plant") > 0
-						or core.get_item_group(under_neighbor, "hardened_clay") > 0
-						or core.get_item_group(under_neighbor, "sand") > 0
-					) then
-				core.set_node(new_pos, {name = "mcl_flowers:short_dry_grass"})
-				return true
-			end
-		end
-	elseif n.name == "mcl_flowers:firefly_bush" then
-		local neighbours = {
-			vector.offset(pos, -1, -1, 0),
-			vector.offset(pos, 1, -1, 0),
-			vector.offset(pos, 0, -1, -1),
-			vector.offset(pos, 0, -1, 1)
-		}
-		table.shuffle(neighbours)
-		for i = 1, #neighbours do
-			local under_neighbor = core.get_node(neighbours[i]).name
-			local new_pos = vector.offset(neighbours[i], 0, 1, 0)
-			local neighbor = core.get_node(new_pos).name
-			if core.get_item_group(under_neighbor, "soil_generic_plant") > 0 and neighbor == "air" then
-				core.set_node(new_pos, {name = "mcl_flowers:firefly_bush"})
-				return true
+	local neighbours = {
+		vector.offset(pos, -1, -1, 0),
+		vector.offset(pos, 1, -1, 0),
+		vector.offset(pos, 0, -1, -1),
+		vector.offset(pos, 0, -1, 1)
+	}
+	table.shuffle(neighbours)
+	for i = 1, #neighbours do
+		local under_neighbor = core.get_node(neighbours[i]).name
+		local new_pos = vector.offset(neighbours[i], 0, 1, 0)
+		local neighbor = core.get_node(new_pos).name
+		if neighbor == "air" then
+			if n.name == "mcl_flowers:bush" then
+				if core.get_item_group(under_neighbor, "soil_generic_plant") > 0 then
+					core.add_node(new_pos, {name = "mcl_flowers:bush", param2 = mcl_util.get_pos_p2(pos)}) 
+					return true
+				end
+			elseif n.name == "mcl_flowers:tall_dry_grass" then
+				if core.get_item_group(under_neighbor, "soil_generic_plant") > 0 
+				or core.get_item_group(under_neighbor, "hardened_clay") > 0
+				or core.get_item_group(under_neighbor, "sand") > 0 then
+					core.add_node(new_pos, {name = "mcl_flowers:short_dry_grass"})
+					return true
+				end
+			elseif n.name == "mcl_flowers:firefly_bush" then
+				if core.get_item_group(under_neighbor, "soil_generic_plant") > 0 then
+					core.add_node(new_pos, {name = "mcl_flowers:firefly_bush"})
+					return true
+				end
 			end
 		end
 	end
