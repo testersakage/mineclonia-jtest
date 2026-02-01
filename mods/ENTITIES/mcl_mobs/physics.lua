@@ -429,9 +429,6 @@ function mob_class:do_env_damage()
 	if self.standing_in == "ignore" then
 		self.object:set_velocity({x = 0, y = 0, z = 0})
 		self.acc_dir = vector.zero ()
-	-- wither rose effect
-	elseif self.standing_in == "mcl_flowers:wither_rose" then
-		mcl_potions.give_effect_by_level("withering", self.object, 2, 2)
 	end
 
 	local nodef = core.registered_nodes[self.standing_in]
