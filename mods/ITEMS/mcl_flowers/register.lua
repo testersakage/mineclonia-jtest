@@ -355,7 +355,7 @@ core.register_node("mcl_flowers:fern", table.merge(def_tallgrass, {
 		type = "fixed",
 		fixed = { -6/16, -0.5, -6/16, 6/16, 5/16, 6/16 },
 	},
-	groups = table.merge(def_tallgrass.groups, { compostability = 65 })
+	groups = table.merge(def_tallgrass.groups, { compostability = 65 }),
 	_on_bone_meal = function(_, _, _ , pos, n)
 		local toppos = { x=pos.x, y=pos.y+1, z=pos.z }
 		local topnode = core.get_node(toppos)
