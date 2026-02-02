@@ -56,10 +56,3 @@ core.register_on_craft(function(itemstack, _, old_craft_grid, _)
 		end
 	end
 end)
-
---compat with old (mcl5) sus_stew
-core.register_alias("mcl_sus_stew:poison_stew", "mcl_sus_stew:stew")
-core.register_alias("mcl_sus_stew:hunger_stew", "mcl_sus_stew:stew")
-core.register_alias("mcl_sus_stew:jump_boost_stew", "mcl_sus_stew:stew")
-core.register_alias("mcl_sus_stew:regneration_stew", "mcl_sus_stew:stew")
-core.register_alias("mcl_sus_stew:night_vision_stew", "mcl_sus_stew:stew")
