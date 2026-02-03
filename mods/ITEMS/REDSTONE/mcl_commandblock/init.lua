@@ -265,7 +265,7 @@ core.register_node("mcl_commandblock:commandblock_on", table.merge(commdef, {
 
 core.register_on_player_receive_fields(function(player, formname, fields)
 	if string.sub(formname, 1, 13) == "commandblock_" then
-		if fields.doc and core.get_modpath("doc") then
+		if fields.doc then
 			doc.show_entry(player:get_player_name(), "nodes", "mcl_commandblock:commandblock_off", true)
 			return
 		end

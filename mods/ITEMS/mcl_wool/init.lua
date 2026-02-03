@@ -1,6 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
 local D = mcl_util.get_dynamic_translator()
-local mod_doc = core.get_modpath("doc")
 
 -- Backwards compatibility with jordach's 16-color wool mod
 core.register_alias("mcl_wool:dark_blue", "wool:blue")
@@ -74,7 +73,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		_mcl_burntime = 3.35
 	})
 
-	if mod_doc and not is_canonical then
+	if not is_canonical then
 		doc.add_entry_alias("nodes", "mcl_wool:"..canonical_color, "nodes", "mcl_wool:"..color)
 		doc.add_entry_alias("nodes", "mcl_wool:"..canonical_color.."_carpet", "nodes", "mcl_wool:"..color.."_carpet")
 	end

@@ -73,7 +73,6 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 
 	-- Each side can either be the cap or the pores texture.
 	-- Cubes have 6 sides, so there's a total of 2^6 = 64 combinations
-	local has_doc = core.get_modpath("doc")
 	local full_block = "mcl_mushrooms:"..color.."_mushroom_block_cap_111111"
 	local block_skin = "mcl_mushrooms_mushroom_block_skin_"..color..".png"
 	-- Cap blocks with pores on at least 1 side. These blocks are used internally.
@@ -96,10 +95,7 @@ local function register_mushroom(color, species_id, template, d_cap, d_stem, d_s
 				block.tiles[t] = "mcl_mushrooms_mushroom_block_inside.png"
 			end
 		end
-
-		if has_doc then
-			doc.add_entry_alias("nodes", full_block, "nodes", block_id)
-		end
+		doc.add_entry_alias("nodes", full_block, "nodes", block_id)
 		register_mushroom_cap(block, block_id, s)
 	end
 

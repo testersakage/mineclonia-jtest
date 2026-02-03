@@ -1,7 +1,6 @@
 -- Glass nodes
 local S = core.get_translator(core.get_current_modname())
 local D = mcl_util.get_dynamic_translator()
-local mod_doc = core.get_modpath("doc")
 
 core.register_node("mcl_core:glass", {
 	description = S("Glass"),
@@ -30,13 +29,11 @@ local canonical_color = "yellow"
 
 for color,colordef in pairs(mcl_dyes.colors) do
 	local longdesc, create_entry, entry_name
-	if mod_doc then
-		if color == canonical_color then
-			longdesc = S("Stained glass is a decorative and mostly transparent block which comes in various different colors.")
-			entry_name = S("Stained Glass")
-		else
-			create_entry = false
-		end
+	if color == canonical_color then
+		longdesc = S("Stained glass is a decorative and mostly transparent block which comes in various different colors.")
+		entry_name = S("Stained Glass")
+	else
+		create_entry = false
 	end
 	local texcol = color
 	if messy_textures[color] then
@@ -71,7 +68,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		}
 	})
 
-	if mod_doc and color ~= canonical_color then
+	if color ~= canonical_color then
 		doc.add_entry_alias("nodes", "mcl_core:glass_"..canonical_color, "nodes", "mcl_core:glass_"..color)
 	end
 end

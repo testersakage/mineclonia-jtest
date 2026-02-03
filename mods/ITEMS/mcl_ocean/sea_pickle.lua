@@ -1,6 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
 
-local mod_doc = core.get_modpath("doc")
 local sea_pickles = {}
 local sea_pickles_off = {}
 
@@ -221,13 +220,11 @@ local function register_sea_pickle (ontop, parent)
 			_mcl_hardness = 0,
 		})
 
-		if mod_doc then
-			if s == 1 then
-				doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_1_off_"..ontop)
-			else
-				doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_"..s.."_off_"..ontop)
-				doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_"..s.."_"..ontop)
-			end
+		if s == 1 then
+			doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_1_off_"..ontop)
+		else
+			doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_"..s.."_off_"..ontop)
+			doc.add_entry_alias("nodes", "mcl_ocean:sea_pickle_1_dead_brain_coral_block", "nodes", "mcl_ocean:sea_pickle_"..s.."_"..ontop)
 		end
 	end
 	sea_pickles[parent] = canonical

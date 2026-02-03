@@ -1,7 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
 
-local mod_doc = core.get_modpath("doc")
-
 -- List of supported surfaces for seagrass
 local surfaces = {
 	{ "dirt", "mcl_core:dirt" },
@@ -147,7 +145,7 @@ for s=1, #surfaces do
 		_mcl_hardness = 0,
 		_mcl_baseitem = "mcl_ocean:seagrass",
 	})
-	if mod_doc and surfaces[s][1] ~= "dirt" then
+	if surfaces[s][1] ~= "dirt" then
 		doc.add_entry_alias("nodes", "mcl_ocean:seagrass_dirt", "nodes", "mcl_ocean:seagrass_"..surfaces[s][1])
 	end
 end
@@ -155,9 +153,7 @@ if core.ipc_set then
 	core.ipc_set ("mcl_ocean:seagrass_surfaces", surfaces)
 end
 
-if mod_doc then
-	doc.add_entry_alias("nodes", "mcl_ocean:seagrass_dirt", "craftitems", "mcl_ocean:seagrass")
-end
+doc.add_entry_alias("nodes", "mcl_ocean:seagrass_dirt", "craftitems", "mcl_ocean:seagrass")
 
 core.register_lbm({
 	label = "Fix incorrect seagrass",
