@@ -1,5 +1,3 @@
-local has_awards = core.get_modpath("awards")
-
 mcl_item_entity = {}
 
 local MULTIPLE_AWARDS_DELAY = 3 --Delay when picking up 1 item prouces multiple awards.
@@ -27,14 +25,10 @@ mcl_item_entity.get_gravity = get_gravity
 local registered_pickup_achievement = {}
 
 function mcl_item_entity.register_pickup_achievement(itemname, award)
-	if not has_awards then
-		core.log("warning", "[mcl_item_entity] Trying to register pickup achievement ["..award.."] for ["..itemname.."] while awards missing")
-	else
-		if not registered_pickup_achievement[itemname] then
-			registered_pickup_achievement[itemname] = {}
-		end
-		table.insert(registered_pickup_achievement[itemname], award)
+	if not registered_pickup_achievement[itemname] then
+		registered_pickup_achievement[itemname] = {}
 	end
+	table.insert(registered_pickup_achievement[itemname], award)
 end
 
 mcl_item_entity.register_pickup_achievement("cobble", "mcl:stoneAge")
