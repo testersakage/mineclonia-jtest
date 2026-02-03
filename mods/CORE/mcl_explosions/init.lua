@@ -12,7 +12,6 @@ under the LGPLv2.1 license.
 
 mcl_explosions = {}
 
-local mod_fire = core.get_modpath("mcl_fire")
 local explosions_griefing = core.settings:get_bool("mcl_explosions_griefing", true)
 
 -- Saved sphere explosion shapes for various radiuses
@@ -345,7 +344,7 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 			end
 		end
 		if remove then
-			if mod_fire and fire and math.random(1, 3) == 1 then
+			if fire and math.random(1, 3) == 1 then
 				table.insert(fires, core.get_position_from_hash(hash))
 			else
 				table.insert(airs, core.get_position_from_hash(hash))
