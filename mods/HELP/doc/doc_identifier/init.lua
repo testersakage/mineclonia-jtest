@@ -1,7 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
 
-local mod_doc_basics = core.get_modpath("doc_basics")
-
 local doc_identifier = {}
 
 doc_identifier.registered_objects = {}
@@ -85,7 +83,7 @@ function doc_identifier.identify(itemstack, user, pointed_thing)
 		local object = pointed_thing.ref
 		local le = object:get_luaentity()
 		if object:is_player() then
-			if mod_doc_basics and doc.entry_exists("basics", "players") then
+			if doc.entry_exists("basics", "players") then
 				doc.show_entry(username, "basics", "players", true)
 			else
 				-- Fallback message
