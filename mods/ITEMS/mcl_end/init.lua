@@ -5,9 +5,7 @@ dofile(basepath.."/chorus_plant.lua")
 dofile(basepath.."/building.lua")
 dofile(basepath.."/eye_of_ender.lua")
 dofile (basepath.."/common.lua")
-if not core.get_modpath("mcl_end_crystal") then
-	dofile(basepath.."/end_crystal.lua")
-end
+dofile(basepath.."/end_crystal.lua")
 
 ------------------------------------------------------------------------
 -- Level generation & callbacks.
