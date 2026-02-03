@@ -1,8 +1,6 @@
 local S = core.get_translator(core.get_current_modname())
 local GRAVITY = tonumber(core.settings:get("movement_gravity"))
 
-local mod_target = core.get_modpath("mcl_target")
-
 local function splash_image(colorstring)
 	return "mcl_potions_splash_overlay.png^[multiply:"..colorstring.."^mcl_potions_splash_bottle.png"
 end
@@ -98,8 +96,8 @@ function mcl_potions.register_splash(name, descr, color, def)
 								velocity)
 
 			if val then
-				if val.target and mod_target then
-				mcl_target.hit (val.target)
+				if val.target then
+					mcl_target.hit (val.target)
 				end
 				core.sound_play("mcl_potions_breaking_glass",
 						{pos = pos, max_hear_distance = 16, gain = 1})

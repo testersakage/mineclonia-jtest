@@ -1,7 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
 
-local mod_target = core.get_modpath("mcl_target")
-
 core.register_entity("mcl_experience:bottle",{
 	initial_properties = {
 		textures = {"mcl_experience_bottle.png^[colorize:purple:50"},
@@ -34,7 +32,7 @@ core.register_entity("mcl_experience:bottle",{
 				vertical = false,
 				texture = "mcl_particles_effect.png^[colorize:blue:127",
 			})
-			if mod_target and n == "mcl_target:target_off" then
+			if n == "mcl_target:target_off" then
 				mcl_target.hit(vector.round(pos))
 			end
 			self.object:remove()
