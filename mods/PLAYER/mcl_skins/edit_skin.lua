@@ -605,7 +605,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 end)
 
 local function init()
-	local f = io.open(core.get_modpath("mcl_skins") .. "/list.json")
+	local f = io.open(core.get_modpath(core.get_current_modname()) .. "/list.json")
 	assert(f, "Can't open the file list.json")
 	local data = f:read("*all")
 	assert(data, "Can't read data from list.json")

@@ -1,5 +1,5 @@
 mcl_farming = {}
-local modpath = core.get_modpath ("mcl_farming")
+local modpath = core.get_modpath(core.get_current_modname())
 
 -- IMPORTANT API AND HELPER FUNCTIONS --
 -- Contain functions for planting seed, addind plant growth and gourds (melon/pumpkin-like)

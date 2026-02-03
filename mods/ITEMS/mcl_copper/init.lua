@@ -1,5 +1,6 @@
 mcl_copper = {}
-local path = core.get_modpath("mcl_copper")
+
+local path = core.get_modpath(core.get_current_modname())
 
 dofile(path .. "/decaychains.lua")
 dofile(path .. "/nodes.lua")

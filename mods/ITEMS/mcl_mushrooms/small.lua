@@ -1,4 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
+local modpath = core.get_modpath(core.get_current_modname())
 
 local on_place = mcl_util.generate_on_place_plant_function(function(place_pos, _)
 	local soil_node = core.get_node_or_nil({x=place_pos.x, y=place_pos.y-1, z=place_pos.z})
@@ -38,11 +39,11 @@ local function on_bone_meal(_, _, _, pos, n)
 	local schematic, stem, wide
 	local schem_height = 5
 	if n.name == "mcl_mushrooms:mushroom_brown" then
-		schematic = core.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_brown.mts"
+		schematic = modpath .. "/schematics/mcl_mushrooms_huge_brown.mts"
     stem = "mcl_mushrooms:brown_mushroom_block_stem"
     wide = 3
 	elseif n.name == "mcl_mushrooms:mushroom_red" then
-		schematic = core.get_modpath("mcl_mushrooms").."/schematics/mcl_mushrooms_huge_red.mts"
+		schematic = modpath .. "/schematics/mcl_mushrooms_huge_red.mts"
     stem = "mcl_mushrooms:red_mushroom_block_stem"
     wide = 2
 	else

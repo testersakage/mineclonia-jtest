@@ -124,7 +124,7 @@ mcl_armor.trims = {
 -- example: mcl_armor.head_entity[player:get_player_name()] = entity
 mcl_armor.head_entity = {}
 
-local modpath = core.get_modpath("mcl_armor")
+local modpath = core.get_modpath(core.get_current_modname())
 
 dofile(modpath .. "/api.lua")
 dofile(modpath .. "/player.lua")
