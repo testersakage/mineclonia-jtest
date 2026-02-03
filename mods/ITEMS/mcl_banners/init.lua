@@ -450,8 +450,6 @@ core.register_node("mcl_banners:hanging_banner", {
 -- Banner items. Comes in 16 base colors, with patterned texture dynamically generated.
 -- Combine the items into only 1 item was opposed by erle as it hinders adding banner to map.
 local function init_banner_registration ()
-	local mod_wool = core.get_modpath("mcl_core") and core.get_modpath("mcl_wool")
-	local mod_doc = core.get_modpath("doc")
 	for uni_key, colortab in pairs(mcl_banners.colors) do
 		local color_id = colortab.color_key
 		local itemstring = "mcl_banners:banner_item_" .. color_id
@@ -585,25 +583,19 @@ local function init_banner_registration ()
 			_mcl_generate_description = mcl_banners.update_description,
 		})
 
-		if mod_wool then
-			local wool = "mcl_wool:" .. color_id
-			core.register_craft({
-				output = itemstring,
-				recipe = {
-					{ wool, wool, wool },
-					{ wool, wool, wool },
-					{ "", "mcl_core:stick", "" },
-				}
-			})
-		end
-		if mod_doc then
-			doc.add_entry_alias("nodes", "mcl_banners:standing_banner", "craftitems", itemstring)
-		end
+		local wool = "mcl_wool:" .. color_id
+		core.register_craft({
+			output = itemstring,
+			recipe = {
+				{ wool, wool, wool },
+				{ wool, wool, wool },
+				{ "", "mcl_core:stick", "" },
+			}
+		})
+		doc.add_entry_alias("nodes", "mcl_banners:standing_banner", "craftitems", itemstring)
 	end
 
-	if mod_doc then
-		doc.add_entry_alias("nodes", "mcl_banners:standing_banner", "nodes", "mcl_banners:hanging_banner")
-	end
+	doc.add_entry_alias("nodes", "mcl_banners:standing_banner", "nodes", "mcl_banners:hanging_banner")
 end
 init_banner_registration()
 
