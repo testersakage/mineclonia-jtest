@@ -1,12 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
 
-local mod_screwdriver = core.get_modpath("screwdriver")
-
-local on_rotate
-if mod_screwdriver then
-	on_rotate = screwdriver.rotate_simple
-end
-
 local function on_bone_meal(itemstack,placer,pointed_thing,pos,node)
 	return mcl_farming.on_bone_meal(itemstack,placer,pointed_thing,pos,node,"plant_pumpkin_stem")
 end
@@ -129,7 +122,7 @@ local pumpkin_base_def = {
 		pumpkin = 1, enderman_takable = 1, compostability = 65, unsticky = 1
 	},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.rotate_simple,
 	_on_shears_place = carve_pumpkin,
 	_mcl_hardness = 1,
 	_mcl_crafting_output = {single = {output = "mcl_farming:pumpkin_seeds 4"}}
@@ -246,7 +239,7 @@ core.register_node("mcl_farming:pumpkin_face_light", {
 		mobs_mc.check_iron_golem_summon(pos, placer)
 		mobs_mc.check_snow_golem_summon(pos, placer)
 	end,
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.rotate_simple,
 	_mcl_hardness = 1,
 	-- No _mcl_armor_element is defined, as jack o'lanterns are
 	-- not supposed to be wearable otherwise than by mobs during

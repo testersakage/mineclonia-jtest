@@ -1,12 +1,6 @@
 local S = core.get_translator(core.get_current_modname())
 local C = core.colorize
 
-local mod_screwdriver = core.get_modpath("screwdriver")
-local on_rotate
-if mod_screwdriver then
-	on_rotate = screwdriver.rotate_3way
-end
-
 core.register_node("mcl_nether:glowstone", {
 	description = S("Glowstone"),
 	_doc_items_longdesc = S("Glowstone is a naturally-glowing block which is home to the Nether."),
@@ -281,7 +275,7 @@ core.register_node("mcl_nether:quartz_pillar", {
 	tiles = {"mcl_nether_quartz_pillar_top.png", "mcl_nether_quartz_pillar_top.png", "mcl_nether_quartz_pillar_side.png"},
 	groups = {pickaxey=1, quartz_block=1,building_block=1, material_stone=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.rotate_3way,
 	_mcl_hardness = 0.8,
 	_mcl_stonecutter_recipes = { "mcl_nether:quartz_block" },
 })
@@ -296,7 +290,6 @@ core.register_node("mcl_nether:quartz_smooth", {
 	_mcl_hardness = 2,
 	_mcl_stonecutter_recipes = { "mcl_nether:quartz_block" },
 })
-
 
 mcl_stairs.register_stair_and_slab("quartzblock", {
 	baseitem = "mcl_nether:quartz_block",
@@ -340,7 +333,6 @@ mcl_fences.register_fence_def("nether_brick_fence", {
 	_mcl_fences_stickreplacer = "mcl_nether:netherbrick",
 	_mcl_fences_output_amount = 6
 })
-
 
 core.register_craftitem("mcl_nether:glowstone_dust", {
 	description = S("Glowstone Dust"),

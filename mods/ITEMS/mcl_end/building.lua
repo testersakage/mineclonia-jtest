@@ -1,13 +1,6 @@
 -- Building blocks and decorative nodes
 local S = core.get_translator(core.get_current_modname())
 
-local mod_screwdriver = core.get_modpath("screwdriver")
-
-local on_rotate
-if mod_screwdriver then
-	on_rotate = screwdriver.rotate_3way
-end
-
 core.register_node("mcl_end:end_stone", {
 	description = S("End Stone"),
 	_doc_items_longdesc = doc.sub.items.temp.build,
@@ -52,7 +45,7 @@ core.register_node("mcl_end:purpur_pillar", {
 	tiles = {"mcl_end_purpur_pillar_top.png", "mcl_end_purpur_pillar_top.png", "mcl_end_purpur_pillar.png"},
 	groups = {pickaxey=1, building_block=1, material_stone=1, purpur_block=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.rotate_3way,
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 1.5,
 	_mcl_stonecutter_recipes = {"mcl_end:purpur_block"}

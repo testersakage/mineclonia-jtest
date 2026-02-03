@@ -151,12 +151,6 @@ core.register_craftitem("mcl_farming:bread", {
 	_mcl_saturation = 6.0,
 })
 
-local mod_screwdriver = core.get_modpath("screwdriver")
-local on_rotate
-if mod_screwdriver then
-	on_rotate = screwdriver.rotate_3way
-end
-
 core.register_node("mcl_farming:hay_block", {
 	description = S("Hay Bale"),
 	_doc_items_longdesc = S("Hay bales are decorative blocks made from wheat."),
@@ -170,7 +164,7 @@ core.register_node("mcl_farming:hay_block", {
 		compostability = 85
 	},
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.rotate_3way,
 	_mcl_hardness = 0.5,
 	_mcl_crafting_output = {single = {output = "mcl_farming:wheat_item 9"}}
 })
