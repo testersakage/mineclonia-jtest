@@ -6,8 +6,6 @@ local modname = core.get_current_modname()
 local modpath = core.get_modpath(modname)
 local S = core.get_translator(modname)
 
-local has_mcl_portals = core.get_modpath("mcl_portals")
-
 local adjacents = {
 	{ x =-1, y = 0, z = 0 },
 	{ x = 1, y = 0, z = 0 },
@@ -97,10 +95,7 @@ core.register_node("mcl_fire:fire", {
 		if under == "mcl_nether:magma" or under == "mcl_nether:netherrack" or (under == "mcl_core:bedrock" and dim == "end") then
 			core.swap_node(pos, {name = "mcl_fire:eternal_fire"})
 		end
-
-		if has_mcl_portals then
-			mcl_portals.light_nether_portal(pos)
-		end
+		mcl_portals.light_nether_portal(pos)
 	end,
 	_pathfinding_class = "DAMAGE_FIRE",
 	_mcl_hardness = 0,
@@ -137,9 +132,7 @@ core.register_node("mcl_fire:eternal_fire", {
 	end,
 	-- Start burning timer and light Nether portal (if possible)
 	on_construct = function(pos)
-		if has_mcl_portals then --Calling directly core.get_modpath consumes 4x more compute time
-			mcl_portals.light_nether_portal(pos)
-		end
+		mcl_portals.light_nether_portal(pos)
 	end,
 	sounds = {},
 	drop = "",
