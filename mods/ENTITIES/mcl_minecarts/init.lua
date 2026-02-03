@@ -1,8 +1,6 @@
 local modname = core.get_current_modname()
 local S = core.get_translator(modname)
 
-local has_mcl_wip = core.get_modpath("mcl_wip")
-
 mcl_minecarts = {}
 mcl_minecarts.modpath = core.get_modpath(modname)
 mcl_minecarts.speed_max = 10
@@ -959,8 +957,6 @@ core.register_craft({
 })
 
 
-if has_mcl_wip then
-	mcl_wip.register_wip_item("mcl_minecarts:chest_minecart")
-	mcl_wip.register_wip_item("mcl_minecarts:furnace_minecart")
-	mcl_wip.register_wip_item("mcl_minecarts:command_block_minecart")
-end
+mcl_wip.register_wip_item("mcl_minecarts:chest_minecart")
+mcl_wip.register_wip_item("mcl_minecarts:furnace_minecart")
+mcl_wip.register_wip_item("mcl_minecarts:command_block_minecart")
