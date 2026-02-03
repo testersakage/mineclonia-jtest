@@ -601,7 +601,7 @@ function mcl_core.register_snowed_node(itemstring_snowed, itemstring_clear, tile
 	-- Register stuff
 	core.register_node(itemstring_snowed, def)
 
-	if create_doc_alias and core.get_modpath("doc") then
+	if create_doc_alias then
 		doc.add_entry_alias("nodes", itemstring_clear, "nodes", itemstring_snowed)
 	end
 end

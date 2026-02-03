@@ -1,6 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
 
-local has_doc = core.get_modpath("doc")
 local mod_storage = core.get_mod_storage ()
 mcl_portals.registered_on_beat_game = {}
 function mcl_portals.register_on_beat_game(func)
@@ -421,9 +420,7 @@ core.register_node("mcl_portals:end_portal_frame_eye", {
 	_mcl_hardness = -1,
 })
 
-if has_doc then
-	doc.add_entry_alias("nodes", "mcl_portals:end_portal_frame", "nodes", "mcl_portals:end_portal_frame_eye")
-end
+doc.add_entry_alias("nodes", "mcl_portals:end_portal_frame", "nodes", "mcl_portals:end_portal_frame_eye")
 
 
 --[[ ITEM OVERRIDES ]]
@@ -445,10 +442,7 @@ core.override_item("mcl_end:ender_eye", {
 				return itemstack
 			end
 			core.set_node(pointed_thing.under, { name = "mcl_portals:end_portal_frame_eye", param2 = node.param2 })
-
-			if has_doc then
-				doc.mark_entry_as_revealed(user:get_player_name(), "nodes", "mcl_portals:end_portal_frame")
-			end
+			doc.mark_entry_as_revealed(user:get_player_name(), "nodes", "mcl_portals:end_portal_frame")
 			core.sound_play(
 				"mcl_portals_place_frame_eye_"..math.random(1,3),
 				{pos = pointed_thing.under, gain = 0.5, max_hear_distance = 16}, true)
@@ -461,9 +455,7 @@ core.override_item("mcl_end:ender_eye", {
 				-- Epic 'portal open' sound effect that can be heard everywhere
 				core.sound_play("mcl_portals_open_end_portal", {gain=0.8}, true)
 				end_portal_area(ppos)
-				if has_doc then
-					doc.mark_entry_as_revealed(user:get_player_name(), "nodes", "mcl_portals:portal_end")
-				end
+				doc.mark_entry_as_revealed(user:get_player_name(), "nodes", "mcl_portals:portal_end")
 			end
 		elseif old_on_place then
 			return old_on_place(itemstack, user, pointed_thing)

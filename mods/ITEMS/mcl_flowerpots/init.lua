@@ -1,5 +1,4 @@
 local S = core.get_translator(core.get_current_modname())
-local has_doc = core.get_modpath("doc")
 
 mcl_flowerpots = {}
 
@@ -120,10 +119,7 @@ function mcl_flowerpots.register_potted_flower(name, def)
 		},
 		_mcl_baseitem = name,
 	}))
-	-- Add entry alias for the Help
-	if has_doc then
-		doc.add_entry_alias("nodes", "mcl_flowerpots:flower_pot", "nodes", "mcl_flowerpots:flower_pot_" .. def.name)
-	end
+	doc.add_entry_alias("nodes", "mcl_flowerpots:flower_pot", "nodes", "mcl_flowerpots:flower_pot_" .. def.name)
 end
 
 function mcl_flowerpots.register_potted_cube(name, def)
@@ -168,8 +164,5 @@ function mcl_flowerpots.register_potted_cube(name, def)
 		},
 		_mcl_baseitem = name,
 	}))
-	-- Add entry alias for the Help
-	if has_doc then
-		doc.add_entry_alias("nodes", "mcl_flowerpots:flower_pot", "nodes", "mcl_flowerpots:flower_pot_" .. def.name)
-	end
+	doc.add_entry_alias("nodes", "mcl_flowerpots:flower_pot", "nodes", "mcl_flowerpots:flower_pot_" .. def.name)
 end

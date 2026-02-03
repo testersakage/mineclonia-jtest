@@ -1,5 +1,4 @@
 local S = core.get_translator(core.get_current_modname())
-local mod_doc = core.get_modpath("doc")
 
 local corals = {
 	{ "tube", S("Tube Coral Block"), S("Dead Tube Coral Block"), S("Tube Coral"), S("Dead Tube Coral"), S("Tube Coral Fan"), S("Dead Tube Coral Fan") },
@@ -234,14 +233,12 @@ for c=1, #corals do
 		_mcl_silk_touch_drop = true,
 	})
 
-	if mod_doc then
-		doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral", "nodes", "mcl_ocean:"..id.."_coral")
-		doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral_fan", "nodes", "mcl_ocean:"..id.."_coral_fan")
-		doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral_block", "nodes", "mcl_ocean:"..id.."_coral_block")
-		doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral", "nodes", "mcl_ocean:dead_"..id.."_coral")
-		doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral_fan", "nodes", "mcl_ocean:dead_"..id.."_coral_fan")
-		doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral_block", "nodes", "mcl_ocean:dead_"..id.."_coral_block")
-	end
+	doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral", "nodes", "mcl_ocean:"..id.."_coral")
+	doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral_fan", "nodes", "mcl_ocean:"..id.."_coral_fan")
+	doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral_block", "nodes", "mcl_ocean:"..id.."_coral_block")
+	doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral", "nodes", "mcl_ocean:dead_"..id.."_coral")
+	doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral_fan", "nodes", "mcl_ocean:dead_"..id.."_coral_fan")
+	doc.add_entry_alias("nodes", "mcl_ocean:"..id.."_coral_block", "nodes", "mcl_ocean:dead_"..id.."_coral_block")
 end
 
 if core.ipc_set then

@@ -1,7 +1,6 @@
 local modname = core.get_current_modname()
 local S = core.get_translator(modname)
 local D = mcl_util.get_dynamic_translator()
-local mod_doc = core.get_modpath("doc")
 
 mcl_panes = {}
 
@@ -191,7 +190,7 @@ function mcl_panes.register_pane(name, def)
 		recipe = def.recipe
 	})
 
-	if mod_doc and def._doc_items_create_entry ~= false then
+	if def._doc_items_create_entry ~= false then
 		doc.add_entry_alias("nodes", node_name_flat, "nodes", node_name)
 	end
 end
@@ -238,7 +237,7 @@ local function register_pane(description, node, suffix, color)
 		_color = color,
 	})
 
-	if mod_doc and not is_canonical then
+	if not is_canonical then
 		doc.add_entry_alias("nodes", "mcl_panes:pane".. canonical_color .. "_flat", "nodes", "mcl_panes:pane"..suffix)
 		doc.add_entry_alias("nodes", "mcl_panes:pane".. canonical_color .. "_flat", "nodes", "mcl_panes:pane"..suffix.."_flat")
 	end

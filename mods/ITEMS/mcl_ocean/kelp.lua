@@ -8,7 +8,6 @@
 -- However, because of the plantlike_rooted hack, we'll just allow it for now.
 
 local S = core.get_translator(core.get_current_modname())
-local mod_doc = core.get_modpath("doc")
 
 -- Kelp API
 --------------------------------------------------------------------------------
@@ -542,7 +541,7 @@ function kelp.register_kelp_surface(surface, surface_deftemplate, surface_docs)
 		if not surface_docs.entry_id_orig then
 			surface_docs.entry_id_orig = nodename
 		end
-	elseif mod_doc then
+	else
 		doc.add_entry_alias("nodes", surface_docs.entry_id_orig, "nodes", surfacename)
 	end
 
@@ -594,9 +593,7 @@ core.register_craftitem("mcl_ocean:kelp", {
 	_mcl_cooking_output = "mcl_ocean:dried_kelp"
 })
 
-if mod_doc then
-	doc.add_entry_alias("nodes", kelp.surface_docs.entry_id_orig, "craftitems", "mcl_ocean:kelp")
-end
+doc.add_entry_alias("nodes", kelp.surface_docs.entry_id_orig, "craftitems", "mcl_ocean:kelp")
 
 -- Dried kelp ------------------------------------------------------------------
 

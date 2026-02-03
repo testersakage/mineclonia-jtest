@@ -1,6 +1,5 @@
 local S = core.get_translator(core.get_current_modname())
 local D = mcl_util.get_dynamic_translator()
-local doc_mod = core.get_modpath("doc")
 
 local hc_desc = S("Terracotta is a basic building material. It comes in many different colors.")
 local gt_desc = S("Glazed terracotta is a decorative block with a complex pattern. It can be rotated by placing it in different directions.")
@@ -110,7 +109,7 @@ for color,colordef in pairs(mcl_dyes.colors) do
 		on_rotate = screwdriver.rotate_simple,
 	})
 
-	if not is_canonical and doc_mod then
+	if not is_canonical then
 		doc.add_entry_alias("nodes", "mcl_colorblocks:hardened_clay_"..canonical_color, "nodes", "mcl_colorblocks:hardened_clay_"..color)
 		doc.add_entry_alias("nodes", "mcl_colorblocks:glazed_terracotta_"..canonical_color, "nodes", "mcl_colorblocks:glazed_terracotta_"..color)
 		doc.add_entry_alias("nodes", "mcl_colorblocks:concrete_"..canonical_color, "nodes", "mcl_colorblocks:concrete_"..color)

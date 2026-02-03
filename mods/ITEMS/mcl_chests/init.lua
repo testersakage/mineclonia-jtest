@@ -6,7 +6,6 @@ local C = core.colorize
 
 local sf = string.format
 
-local mod_doc = core.get_modpath("doc")
 local shulker_num_tt_stacks = 5
 
 local tiles_chest_normal_small = { "mcl_chests_normal.png" }
@@ -969,10 +968,8 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		on_rotate = no_rotate,
 	})
 
-	if mod_doc then
-		doc.add_entry_alias("nodes", small_name, "nodes", "mcl_chests:" .. basename .. "_left")
-		doc.add_entry_alias("nodes", small_name, "nodes", "mcl_chests:" .. basename .. "_right")
-	end
+	doc.add_entry_alias("nodes", small_name, "nodes", "mcl_chests:" .. basename .. "_left")
+	doc.add_entry_alias("nodes", small_name, "nodes", "mcl_chests:" .. basename .. "_right")
 
 	-- END OF register_chest FUNCTION BODY
 end
@@ -1353,16 +1350,14 @@ for color, desc in pairs(boxtypes) do
 	local mob_texture = shulker_mob_textures[color]
 	local is_canonical = color == canonical_shulker_color
 	local longdesc, usagehelp, create_entry, entry_name
-	if mod_doc then
-		if is_canonical then
-			longdesc = S(
-				"A shulker box is a portable container which provides 27 inventory slots for any item except shulker boxes. Shulker boxes keep their inventory when broken, so shulker boxes as well as their contents can be taken as a single item. Shulker boxes come in many different colors.")
-			usagehelp = S(
-				"To access the inventory of a shulker box, place and right-click it. To take a shulker box and its contents with you, just break and collect it, the items will not fall out. Place the shulker box again to be able to retrieve its contents.")
-			entry_name = S("Shulker Box")
-		else
-			create_entry = false
-		end
+	if is_canonical then
+		longdesc = S(
+			"A shulker box is a portable container which provides 27 inventory slots for any item except shulker boxes. Shulker boxes keep their inventory when broken, so shulker boxes as well as their contents can be taken as a single item. Shulker boxes come in many different colors.")
+		usagehelp = S(
+			"To access the inventory of a shulker box, place and right-click it. To take a shulker box and its contents with you, just break and collect it, the items will not fall out. Place the shulker box again to be able to retrieve its contents.")
+		entry_name = S("Shulker Box")
+	else
+		create_entry = false
 	end
 
 	local small_name = "mcl_chests:" .. color .. "_shulker_box_small"
@@ -1584,7 +1579,7 @@ for color, desc in pairs(boxtypes) do
 		_mcl_hardness = 2,
 	})
 
-	if mod_doc and not is_canonical then
+	if not is_canonical then
 		doc.add_entry_alias("nodes", "mcl_chests:" .. canonical_shulker_color .. "_shulker_box", "nodes",
 			"mcl_chests:" .. color .. "_shulker_box")
 		doc.add_entry_alias("nodes", "mcl_chests:" .. canonical_shulker_color .. "_shulker_box_small", "nodes",
