@@ -519,31 +519,6 @@ core.register_abm({
 -- Legacy support
 core.register_alias("mcl_core:tallgrass", "mcl_flowers:tallgrass")
 
--- mcimport support: re-adds missing double_plant tops in mcimported worlds.
-local mg_name = core.get_mapgen_setting("mg_name")
-local mod_mcimport = core.get_modpath("mcimport")
-
-if mod_mcimport and mg_name == "singlenode" then
-	local flowernames = { "peony", "rose_bush", "lilac", "sunflower", "double_fern", "double_grass" }
-
-	core.register_lbm({
-		label = "Add double plant tops.",
-		name = "mcl_flowers:double_plant_topper",
-		run_at_every_load = true,
-		nodenames = { "mcl_flowers:peony", "mcl_flowers:rose_bush", "mcl_flowers:lilac", "mcl_flowers:sunflower", "mcl_flowers:double_fern", "mcl_flowers:double_grass" },
-		action = function(pos, node)
-			for c = 1, 6 do
-				local flowername = flowernames[c]
-				local bottom = pos
-				local top = { x = bottom.x, y = bottom.y + 1, z = bottom.z }
-				if node.name == "mcl_flowers:"..flowername then
-					core.set_node(top, {name = "mcl_flowers:"..flowername.."_top"})
-				end
-			end
-		end,
-	})
-end
-
 dofile(modpath.."/register.lua")
 
 mcl_levelgen.register_levelgen_script (modpath .. "/lg_register.lua")
