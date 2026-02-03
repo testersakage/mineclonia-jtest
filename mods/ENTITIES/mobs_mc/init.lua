@@ -23,7 +23,7 @@ mobs_mc.is_mob_griefing_enabled = function(mob_name)
 end
 
 -- Load mobs in the right order.
-local path = core.get_modpath ("mobs_mc")
+local path = core.get_modpath(core.get_current_modname())
 local files = {
 	"spawning.lua",
 	"axolotl.lua",

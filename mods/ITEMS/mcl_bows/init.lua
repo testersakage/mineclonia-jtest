@@ -1,11 +1,13 @@
 mcl_bows = {}
 
+local modpath = core.get_modpath(core.get_current_modname())
+
 --Bow
-dofile(core.get_modpath("mcl_bows") .. "/arrow.lua")
-dofile(core.get_modpath("mcl_bows") .. "/bow.lua")
+dofile(modpath .. "/arrow.lua")
+dofile(modpath .. "/bow.lua")
 
 --Crossbow
-dofile(core.get_modpath("mcl_bows") .. "/crossbow.lua")
+dofile(modpath .. "/crossbow.lua")
 
 --Compatiblility with older Mineclonia worlds
 core.register_alias("mcl_throwing:bow", "mcl_bows:bow")

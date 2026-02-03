@@ -1,4 +1,5 @@
-local modpath = core.get_modpath ("mcl_mushrooms")
+local modpath = core.get_modpath(core.get_current_modname())
+
 dofile(modpath.."/small.lua")
 dofile(modpath.."/huge.lua")
 

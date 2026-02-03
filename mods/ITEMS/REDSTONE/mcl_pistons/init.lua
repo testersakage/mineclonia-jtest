@@ -1,4 +1,6 @@
 mcl_pistons = {}
 
-dofile(core.get_modpath("mcl_pistons") .. "/api.lua")
-dofile(core.get_modpath("mcl_pistons") .. "/nodes.lua")
+local modpath = core.get_modpath(core.get_current_modname())
+
+dofile(modpath .. "/api.lua")
+dofile(modpath .. "/nodes.lua")

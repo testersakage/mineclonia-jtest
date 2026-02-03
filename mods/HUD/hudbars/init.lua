@@ -44,7 +44,7 @@ function hb.load_setting(sname, stype, defaultval, valid_values)
 end
 
 -- Load default settings
-dofile(core.get_modpath("hudbars").."/default_settings.lua")
+dofile(core.get_modpath(core.get_current_modname()) .. "/default_settings.lua")
 
 if not core.is_creative_enabled("") then
 	-- reserve some space for experience bar:

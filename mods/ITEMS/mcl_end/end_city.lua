@@ -164,6 +164,8 @@ mcl_levelgen.modify_biome_groups (end_city_biomes, {
 	has_end_city = true,
 })
 
+-- This file is also registered as a levelgen script, if name is not hardcoded,
+-- it will give confusing results when called later by mcl_levelgen.
 local modpath = core.get_modpath ("mcl_end")
 
 local function L (template, weight, processors, allow_terrain_adaptation)

@@ -1,4 +1,4 @@
-local modpath = core.get_modpath("mcl_lanterns")
+local modpath = core.get_modpath(core.get_current_modname())
 
 mcl_lanterns = {}
 
