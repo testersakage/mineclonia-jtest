@@ -6,8 +6,6 @@ local huds = {}
 local dtimes = {}
 local dlimit = 3  -- HUD element will be hidden after this many seconds
 
-local hudbars_mod = core.get_modpath("hudbars")
-
 local function set_hud(player)
 	if not player:is_player() then return end
 	local player_name = player:get_player_name()
@@ -18,16 +16,10 @@ local function set_hud(player)
 		-- Manual offset
 		off = {x=0, y=-fixed}
 	else
-		-- Default offset
-		off = {x=0, y=-101}
-
-		if hudbars_mod then
-			-- Tweak offset if hudbars mod was found
-
-			local rows = math.floor((#hb.get_hudbar_identifiers()-1) / 2) + 1
-			local vmargin = tonumber(core.settings:get("hudbars_vmargin")) or 24
-			off.y = -101 - vmargin*rows
-		end
+		-- Offset to hudbars
+		local rows = math.floor((#hb.get_hudbar_identifiers()-1) / 2) + 1
+		local vmargin = tonumber(core.settings:get("hudbars_vmargin")) or 24
+		off = {x=0, y=-101 - vmargin*rows}
 
 		-- Dirty trick to avoid collision with Minetest's status text (e.g. “Volume changed to 0%”)
 		if off.y >= -167 and off.y <= -156 then
