@@ -612,13 +612,6 @@ core.register_craftitem("mcl_ocean:dried_kelp", {
 	_mcl_crafting_output = {square3 = {output = "mcl_ocean:dried_kelp_block"}}
 })
 
-
-local mod_screwdriver = core.get_modpath("screwdriver")
-local on_rotate
-if mod_screwdriver then
-	on_rotate = screwdriver.rotate_3way
-end
-
 core.register_node("mcl_ocean:dried_kelp_block", {
 	description = S("Dried Kelp Block"),
 	_doc_items_longdesc = S("A decorative block that serves as a great furnace fuel."),
@@ -631,7 +624,7 @@ core.register_node("mcl_ocean:dried_kelp_block", {
 	sounds = mcl_sounds.node_sound_leaves_defaults(),
 	paramtype2 = "facedir",
 	on_place = mcl_util.rotate_axis,
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.rotate_3way,
 	_mcl_hardness = 0.5,
 	_mcl_blast_resistance = 2.5,
 	_mcl_burntime = 200,

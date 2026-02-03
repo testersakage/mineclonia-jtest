@@ -406,7 +406,7 @@ local def_hopper_side = table.merge(def_hopper, {
 		},
 	},
 
-	on_rotate = core.get_modpath("screwdriver") and screwdriver.rotate_simple,
+	on_rotate = screwdriver.rotate_simple,
 })
 
 local def_hopper_side_enabled = table.copy(def_hopper_side)

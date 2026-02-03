@@ -1,13 +1,6 @@
 -- Other nodes
 local S = core.get_translator(core.get_current_modname())
 
-local mod_screwdriver = core.get_modpath("screwdriver")
-
-local on_rotate
-if mod_screwdriver then
-	on_rotate = screwdriver.rotate_3way
-end
-
 core.register_node("mcl_core:bone_block", {
 	description = S("Bone Block"),
 	_doc_items_longdesc = S("Bone blocks are decorative blocks and a compact storage of bone meal."),
@@ -17,7 +10,7 @@ core.register_node("mcl_core:bone_block", {
 	on_place = mcl_util.rotate_axis,
 	groups = {pickaxey = 1, building_block = 1, material_stone = 1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
-	on_rotate = on_rotate,
+	on_rotate = screwdriver.rotate_3way,
 	_mcl_hardness = 2,
 	_mcl_crafting_output = {single = {output = "mcl_bone_meal:bone_meal 9"}}
 })
