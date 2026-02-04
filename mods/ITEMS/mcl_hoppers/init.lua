@@ -1,4 +1,5 @@
-local S = core.get_translator(core.get_current_modname())
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 local F = core.formspec_escape
 local C = core.colorize
 
@@ -461,4 +462,4 @@ core.register_lbm({
 	end
 })
 
-dofile(core.get_modpath(core.get_current_modname()).."/compat.lua")
+dofile(core.get_modpath(modname).."/compat.lua")

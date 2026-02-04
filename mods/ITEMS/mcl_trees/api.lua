@@ -1,5 +1,6 @@
 -- Tree nodes: Wood, Wooden Planks, Sapling, Leaves, Stripped Wood
-local S = core.get_translator(core.get_current_modname())
+local tree_modname = core.get_current_modname()
+local S = core.get_translator(tree_modname)
 local D = mcl_util.get_dynamic_translator()
 local bark_stairs = core.settings:get_bool("mcl_extra_nodes",true)
 
@@ -685,7 +686,7 @@ function mcl_trees.register_wood(name, p)
 	end
 end
 
-local modpath = core.get_modpath(core.get_current_modname())
+local modpath = core.get_modpath(tree_modname)
 core.register_on_mods_loaded(function()
 	mcl_structures.register_structure("wood_test", {
 	filenames = {

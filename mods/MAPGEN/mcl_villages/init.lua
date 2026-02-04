@@ -1,5 +1,6 @@
 mcl_villages = {}
-mcl_villages.modpath = core.get_modpath(core.get_current_modname())
+local modname = core.get_current_modname()
+mcl_villages.modpath = core.get_modpath(modname)
 
 local village_chance = tonumber(core.settings:get("mcl_villages_village_chance")) or 100
 local generate_in_singlenode = false
@@ -24,7 +25,7 @@ end
 --
 mcl_villages.grundstellungen()
 
-local S = core.get_translator(core.get_current_modname())
+local S = core.get_translator(modname)
 
 core.register_alias("mcl_villages:stonebrickcarved", "mcl_core:stonebrickcarved")
 core.register_alias("mcl_villages:structblock", "air")

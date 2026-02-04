@@ -1,6 +1,7 @@
 mcl_fishing = {}
 --Fishing Rod, Bobber, and Flying Bobber mechanics and Bobber artwork by Rootyjr.
-local S = core.get_translator(core.get_current_modname())
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 
 mcl_fishing.loot_fish = {
 	{ itemstring = "mcl_fishing:fish_raw", weight = 60 },
@@ -362,4 +363,4 @@ core.register_tool("mcl_fishing:fishing_rod", {
 	_mcl_burntime = 15
 })
 
-dofile(core.get_modpath(core.get_current_modname()).."/items.lua")
+dofile(core.get_modpath(modname).."/items.lua")

@@ -1,4 +1,5 @@
-local S = core.get_translator(core.get_current_modname())
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 local F = core.formspec_escape
 local C = core.colorize
 
@@ -378,4 +379,4 @@ core.register_craft({
 	}
 })
 
-dofile(core.get_modpath(core.get_current_modname()).."/chiseled_bookshelf.lua")
+dofile(core.get_modpath(modname).."/chiseled_bookshelf.lua")

@@ -13,8 +13,8 @@ local DEFAULT_COLOR = "#000000"
 local SIGN_GLOW_INTENSITY = 14
 
 local signs_editable = core.settings:get_bool("mcl_signs_editable", false)
-
-local S = core.get_translator(core.get_current_modname())
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 local F = core.formspec_escape
 
 local sign_tpl = {
@@ -110,7 +110,7 @@ After line 3, another info block may follow. This repeats until the end of the f
 
 All character files must be 5 or 6 pixels wide (5 pixels are preferred)
 ]]
-local modpath = core.get_modpath(core.get_current_modname())
+local modpath = core.get_modpath(modname)
 local chars_file = io.open(modpath .. "/characters.txt", "r")
 -- FIXME: Support more characters (many characters are missing). Currently ASCII and Latin-1 Supplement are supported.
 assert(chars_file,"[mcl_signs] characters.txt not found")

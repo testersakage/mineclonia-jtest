@@ -1,7 +1,8 @@
 -- Copyright (c) 2013-18 rubenwardy. MIT.
 
 -- Internationalization support.
-local S = core.get_translator(core.get_current_modname())
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
 
 -- The global award namespace
 awards = {
@@ -13,7 +14,7 @@ awards = {
 }
 
 -- Load files
-local modpath = core.get_modpath(core.get_current_modname()).."/src"
+local modpath = core.get_modpath(modname).."/src"
 dofile(modpath.."/data.lua")
 dofile(modpath.."/api_awards.lua")
 dofile(modpath.."/api_triggers.lua")

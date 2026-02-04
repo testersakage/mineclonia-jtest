@@ -1,7 +1,8 @@
 mcl_candles = {}
 
-local S = core.get_translator(core.get_current_modname())
-local D = mcl_util.get_dynamic_translator(core.get_current_modname())
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local D = mcl_util.get_dynamic_translator(modname)
 
 local candle_boxes = {
 	{-0.0625, -0.5, -0.0625, 0.0625, -0.125, 0.0625},
