@@ -54,8 +54,8 @@ local group_stereotypes = {
 	purpur_block = "mcl_end:purpur_block",
 	normal_sandstone = "mcl_core:sandstone",
 	red_sandstone = "mcl_core:redsandstone",
-	compass      = mcl_compass.stereotype,
-	clock        = mcl_clock.sterotype,
+	compass      = "mcl_compass:compass",
+	clock        = "mcl_clock:clock",
 }
 
 local group_names = {
