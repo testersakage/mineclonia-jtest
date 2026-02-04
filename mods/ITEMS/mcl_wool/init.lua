@@ -1,5 +1,6 @@
-local S = core.get_translator(core.get_current_modname())
-local D = mcl_util.get_dynamic_translator()
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local D = mcl_util.get_dynamic_translator(modname)
 local mod_doc = core.get_modpath("doc")
 
 -- Backwards compatibility with jordach's 16-color wool mod

@@ -1,5 +1,6 @@
-local S = core.get_translator(core.get_current_modname())
-local D = mcl_util.get_dynamic_translator()
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local D = mcl_util.get_dynamic_translator(modname)
 
 local messy_textures = { --translator table for the bed texture filenames names not adhering to the common color names of mcl_dyes
 	["lightblue"] = "light_blue",

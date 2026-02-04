@@ -1,7 +1,8 @@
 mcl_dyes = {}
 
-local S = core.get_translator(core.get_current_modname())
-local D = mcl_util.get_dynamic_translator()
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local D = mcl_util.get_dynamic_translator(modname)
 
 -- Common color table to be used by other mods. The "mcl2" field if present
 -- represents the name of the color in mcl2 if it is different. This is used

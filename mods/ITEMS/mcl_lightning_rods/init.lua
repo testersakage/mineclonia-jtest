@@ -1,5 +1,6 @@
-local S = core.get_translator("mcl_lightning_rods")
-local D = mcl_util.get_dynamic_translator()
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local D = mcl_util.get_dynamic_translator(modname)
 
 local cbox = {
 	type = "fixed",

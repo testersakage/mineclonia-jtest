@@ -1,5 +1,6 @@
-local S = core.get_translator(core.get_current_modname())
-local D = mcl_util.get_dynamic_translator()
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local D = mcl_util.get_dynamic_translator(modname)
 
 local function on_lightning_strike(pos, _, pos2)
 	local node = core.get_node(pos)

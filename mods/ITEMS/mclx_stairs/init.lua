@@ -1,5 +1,6 @@
-local S = core.get_translator(core.get_current_modname())
-local D = mcl_util.get_dynamic_translator()
+local modname = core.get_current_modname()
+local S = core.get_translator(modname)
+local D = mcl_util.get_dynamic_translator(modname)
 local extra_nodes = core.settings:get_bool("mcl_extra_nodes", true)
 
 mcl_stairs.register_stair("lapisblock", {

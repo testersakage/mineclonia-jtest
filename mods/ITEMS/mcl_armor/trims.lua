@@ -2,7 +2,7 @@ local modname			   = core.get_current_modname()
 local mod_registername	  = modname .. ":"
 local S					 = core.get_translator(modname)
 local C                 = core.colorize
-local D 			   = mcl_util.get_dynamic_translator()
+local D 			   = mcl_util.get_dynamic_translator(modname)
 
 for template_name, template_defs in pairs(mcl_armor.trims.overlays) do
 	core.register_craftitem(mod_registername .. template_name, {

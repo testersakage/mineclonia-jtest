@@ -1,7 +1,7 @@
 -- Tree nodes: Wood, Wooden Planks, Sapling, Leaves, Stripped Wood
 local tree_modname = core.get_current_modname()
 local S = core.get_translator(tree_modname)
-local D = mcl_util.get_dynamic_translator()
+local D = mcl_util.get_dynamic_translator(tree_modname)
 local bark_stairs = core.settings:get_bool("mcl_extra_nodes",true)
 
 local wood_groups = {
