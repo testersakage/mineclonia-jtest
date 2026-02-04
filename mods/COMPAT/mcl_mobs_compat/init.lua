@@ -49,8 +49,8 @@ end
 -- Mineclone.
 ------------------------------------------------------------------------
 
-if core.global_exists ("mobs") then
-	core.register_on_mods_loaded (function ()
+core.register_on_mods_loaded (function ()
+	if core.global_exists ("mobs") then
 		for name, mob in pairs (core.registered_entities) do
 			if mob._cmi_is_mob and mob.is_mob then
 				mob.is_mob = false
@@ -59,5 +59,5 @@ if core.global_exists ("mobs") then
 				core.log ("action", blurb)
 			end
 		end
-	end)
-end
+	end
+end)
