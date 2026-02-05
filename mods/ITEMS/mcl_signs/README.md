@@ -1,26 +1,43 @@
-# mcl_signs
+# `mcl_signs`
 
-* Originally based on reworked signs mod by PilzAdam (https://forum.minetest.net/viewtopic.php?t=3289)
-* Adapted for Mineclone 2 by Wuzzy
-* Later massively extended by Michial
-* Mostly rewritten and simplified for Mineclonia by cora
+* Originally based on reworked signs mod by PilzAdam (<https://forum.luanti.org/viewtopic.php?t=3289>)
+* Adapted for MineClone2 by Wuzzy
+* Later massively extended by Michieal
+* Mostly rewritten for Mineclonia and simplified by cora
+* Reworked for VoxeLibre with UTF-8 support by rudzik8
+* Word wrap algorithm improved by kno10
+
+
+## Characters
+
+All characters are mapped to their textures in `characters.tsv`. See `API.md`
+for technical details.
+
+Currently supported character sets:
+
+* [ASCII](https://en.wikipedia.org/wiki/ASCII)
+* [Latin-1](https://en.wikipedia.org/wiki/ISO/IEC_8859-1) (Western European)
+* [Latin-2](https://en.wikipedia.org/wiki/ISO/IEC_8859-2) (Central/Eastern European)
+* [Latin-3](https://en.wikipedia.org/wiki/ISO/IEC_8859-3) (South European)
+* [Latin-4](https://en.wikipedia.org/wiki/ISO/IEC_8859-4) (North European)
+* [Latin-5/Cyrillic](https://en.wikipedia.org/wiki/ISO/IEC_8859-5)
+  * with additional glyphs and diacritics
+* [Latin-7/Greek](https://en.wikipedia.org/wiki/ISO/IEC_8859-7)
+* Other math-related/miscellaneous characters
+
 
 ## License
-MIT License
 
-## Media
+**Code:** MIT
+* `utf8.lua` is from `modlib`, by Lars Mueller alias LMD or appguru(eu) [(source)](https://github.com/appgurueu/modlib/blob/master/utf8.lua)
+* See `LICENSE` file for details
 
-### Font
-MIT license
+**Font:** CC0
+* Originally by PilzAdam (WTFPL)
+* Modified and massively extended by rudzik8
+* Can be found in the `/textures` sub-directory of game root, prefixed with `_`
+* See <https://creativecommons.org/publicdomain/zero/1.0/> for details
 
-Font source: 04.jp.org, some modifications and additions were made (added support for Latin-1 Supplement)
-Original font license text states: “YOU MAY USE THEM AS YOU LIKE” (in about.gif file distributed with the font)
-
-### Textures
-See README.md in top directory of mineclonia.
-
-### Models
-GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
-
-Models author: 22i.
-Source: https://github.com/22i/amc
+**Models:** GPLv3
+* by 22i: <https://github.com/22i/amc>
+* See <https://www.gnu.org/licenses/gpl-3.0.html> for details
