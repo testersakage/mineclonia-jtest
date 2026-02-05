@@ -715,12 +715,7 @@ function doc.formspec_main(playername)
 			notify_checkbox_x = 3.5
 			notify_checkbox_y = doc.FORMSPEC.HEIGHT-1
 		end
-		local text
-		if core.get_modpath("central_message") then
-			text = F("Notify me when new help is available")
-		else
-			text = F("Play notification sound when new help is available")
-		end
+		local text = F("Play notification sound when new help is available")
 		formstring = formstring .. "checkbox["..notify_checkbox_x..","..notify_checkbox_y..";doc_setting_notify_on_reveal;"..text..";"..
 		tostring(doc.data.players[playername].stored_data.notify_on_reveal == true) .. "]"
 	else
