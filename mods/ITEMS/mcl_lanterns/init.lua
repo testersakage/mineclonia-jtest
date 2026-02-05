@@ -238,6 +238,8 @@ function mcl_lanterns.register_lantern(name, def)
 		on_rotate = false,
 		_mcl_hardness = 3.5,
 	})
+
+	doc.add_entry_alias("nodes", itemstring_floor, "nodes", itemstring_ceiling)
 end
 
 local chain_tpl = {
