@@ -1101,11 +1101,6 @@ function doc.process_form(player,formname,fields)
 			local formspec = doc.formspec_core(3)..doc.formspec_entry(cid, eid, playername)
 			core.show_formspec(playername, "doc:entry", formspec)
 		end
-	else
-		if fields["doc_inventory_plus"] and core.get_modpath("inventory_plus") then
-			doc.show_doc(playername)
-			return
-		end
 	end
 end
 
@@ -1147,11 +1142,6 @@ core.register_on_joinplayer(function(player)
 			playerdata.stored_data.viewed_count[cid] = vc
 			playerdata.stored_data.revealed_count[cid] = rc
 		end
-	end
-
-	-- Add button for Inventory++
-	if core.get_modpath("inventory_plus") ~= nil then
-		inventory_plus.register_button(player, "doc_inventory_plus", S("Help")) ---@diagnostic disable-line: undefined-global
 	end
 end)
 
