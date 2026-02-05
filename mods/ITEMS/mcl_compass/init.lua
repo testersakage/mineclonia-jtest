@@ -5,9 +5,6 @@ mcl_compass = {}
 -- Number of dynamic compass images (and items registered.)
 local compass_frames = 32
 
--- The image/item that is craftable and shown in inventories.
-local stereotype_frame = 18
-
 -- random compass spinning tick in seconds.
 -- Increase if there are performance problems.
 local spin_timer_tick = 0.5
@@ -94,8 +91,6 @@ local function get_compass_frame(pos, dir, itemstack)
 	end
 end
 
--- Export stereotype item for other mods to use
-
 --- Get partial compass itemname.
 -- Returns partial itemname of a compass with needle direction matching compass position.
 -- Legacy compatibility function for mods using older api.
@@ -103,14 +98,12 @@ end
 function mcl_compass.get_compass_image(pos, dir)
 	core.log("warning", "mcl_compass: deprecated function " ..
 		"get_compass_image() called, use get_compass_itemname().")
-	local itemstack = ItemStack(mcl_compass.stereotype)
+	local itemstack = ItemStack("mcl_compass:compass")
 	return get_compass_frame(pos, dir, itemstack)
 end
 
 --compat: compasses used to consist of many different items
 function mcl_compass.get_compass_itemname() return "mcl_compass:compass" end
-mcl_compass.stereotype = "mcl_compass:compass"
-
 
 local function update_compass_img(stack, img)
 	local m = stack:get_meta()
@@ -231,7 +224,7 @@ mcl_compass.register_compass("recovery_compass", {
 })
 
 core.register_craft({
-	output = "mcl_compass:" .. stereotype_frame,
+	output = "mcl_compass:compass",
 	recipe = {
 		{"", "mcl_core:iron_ingot", ""},
 		{"mcl_core:iron_ingot", "mcl_redstone:redstone", "mcl_core:iron_ingot"},
@@ -243,7 +236,7 @@ core.register_craft({
 	output = "mcl_compass:" .. random_frame .. "_recovery",
 	recipe = {
 		{"mcl_sculk:echo_shard","mcl_sculk:echo_shard", "mcl_sculk:echo_shard"},
-		{"mcl_sculk:echo_shard", "mcl_compass:" .. stereotype_frame , "mcl_sculk:echo_shard"},
+		{"mcl_sculk:echo_shard", "mcl_compass:compass", "mcl_sculk:echo_shard"},
 		{"mcl_sculk:echo_shard", "mcl_sculk:echo_shard", "mcl_sculk:echo_shard"}
 	}
 })
