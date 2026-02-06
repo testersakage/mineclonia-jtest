@@ -82,24 +82,6 @@ local CR_CODEPOINT = utf8.codepoint("\r") -- ignored
 local WRAP_CODEPOINT = utf8.codepoint("‐") -- default, ellipsis for "truncate"
 
 local DEFAULT_COLOR = "#000000"
-local DYE_TO_COLOR = {
-	["white"] = "#d0d6d7",
-	["grey"] = "#818177",
-	["dark_grey"] = "#383c40",
-	["black"] = "#080a10",
-	["violet"] = "#6821a0",
-	["blue"] = "#2e3094",
-	["lightblue"] = "#258ec9",
-	["cyan"] = "#167b8c",
-	["dark_green"] = "#4b5e25",
-	["green"] = "#60ac19",
-	["yellow"] = "#f1b216",
-	["brown"] = "#633d20",
-	["orange"] = "#e26501",
-	["red"] = "#912222",
-	["magenta"] = "#ab31a2",
-	["pink"] = "#d56791",
-}
 
 local F = core.formspec_escape
 
@@ -482,49 +464,37 @@ function sign_tpl.on_place(itemstack, placer, pointed_thing)
 	return itemstack
 end
 
-function sign_tpl.on_rightclick(pos, _, clicker, itemstack)
-	if not signs_editable or core.is_protected(pos, clicker:get_player_name()) then
-		return itemstack
-	end
 
-	local iname = itemstack:get_name()
-	if iname == "mcl_mobitems:glow_ink_sac" then
+function sign_tpl.on_rightclick(pos, _, clicker, itemstack, _)
+	if itemstack:get_name() == "mcl_mobitems:glow_ink_sac" then
 		local data = get_signdata(pos)
 		if data then
 			if data.color == "#000000" then
-				data.color = "#7e7e7e" -- black doesn't glow in the dark
+				data.color = "#7e7e7e" --black doesn't glow in the dark
 			end
-			set_signmeta(pos, {glow = "true", color = data.color})
+			set_signmeta(pos,{glow="true",color=data.color})
 			mcl_signs.update_sign(pos)
 			if not core.is_creative_enabled(clicker:get_player_name()) then
 				itemstack:take_item()
 			end
 		end
-	elseif iname == "mcl_bone_meal:bone_meal" then
-		set_signmeta(pos, {
-			glow = "false",
-			color = DEFAULT_COLOR,
-		})
-		mcl_signs.update_sign(pos)
-		if not core.is_creative_enabled(clicker:get_player_name()) then
-			itemstack:take_item()
+	elseif signs_editable then
+		if not mcl_util.check_position_protection(pos, clicker) then
+			mcl_signs.show_formspec(clicker, pos)
 		end
-	elseif iname:sub(1, 8) == "mcl_dye:" then
-		local dye = iname:sub(9)
-		set_signmeta(pos, {color = DYE_TO_COLOR[dye]})
-		mcl_signs.update_sign(pos)
-		if not core.is_creative_enabled(clicker:get_player_name()) then
-			itemstack:take_item()
-		end
-	else
-		show_formspec(clicker, pos)
 	end
-
 	return itemstack
 end
 
 function sign_tpl.on_destruct(pos)
 	mcl_signs.get_text_entity(pos, true)
+end
+
+function sign_tpl._on_dye_place(pos,color)
+	set_signmeta(pos,{
+		color = mcl_dyes.colors[color].rgb
+	})
+	mcl_signs.update_sign(pos)
 end
 
 -- Wall sign definition
