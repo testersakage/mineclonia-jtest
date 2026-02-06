@@ -200,7 +200,7 @@ function mcl_lanterns.register_lantern(name, def)
 
 	core.register_node(":"..itemstring_ceiling, {
 		description = def.description,
-		_doc_items_create_entry = false,
+		_doc_items_longdesc = def.longdesc,
 		drawtype = "mesh",
 		mesh = "mcl_lanterns_lantern_ceiling.obj",
 		tiles = {
@@ -238,8 +238,6 @@ function mcl_lanterns.register_lantern(name, def)
 		on_rotate = false,
 		_mcl_hardness = 3.5,
 	})
-
-	doc.add_entry_alias("nodes", itemstring_floor, "nodes", itemstring_ceiling)
 end
 
 local chain_tpl = {
