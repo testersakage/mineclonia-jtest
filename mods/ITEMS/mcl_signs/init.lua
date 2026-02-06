@@ -39,6 +39,7 @@ local sign_tpl = {
 	stack_max = 16,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	node_placement_prediction = "",
+	on_rotate = false,
 	_mcl_sign_type = "standing"
 }
 
