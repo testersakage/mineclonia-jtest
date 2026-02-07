@@ -290,7 +290,7 @@ core.register_entity("mcl_paintings:painting", {
 		while not registered_paintings[self._painting_name] do
 			if registered_painting_aliases[self._painting_name] then
 				self._painting_name = registered_painting_aliases[self._painting_name]
-			elseif not registered_paintings[self._painting_name] then
+			else
 				core.log("error", "Could not find painting definition for `" .. self._painting_name .. "`")
 				self.object:remove()
 				return
