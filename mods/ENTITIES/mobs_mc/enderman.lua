@@ -643,7 +643,8 @@ local huge = math.huge
 
 local function enderman_player_rule (self, self_pos, dtime, obj, is_current)
 	if is_current then
-		return self:track_current_target (self_pos, dtime, obj, 3.0)
+		local dist = self.tracking_distance * self.tracking_distance
+		return self:track_current_target (self_pos, dtime, obj, dist, 3.0)
 	end
 
 	local eye_pos = tmp
