@@ -21,7 +21,12 @@ For an example of usage you can check the `registrations.lua` file in this direc
 
 If a painting is removed or changed, an alias can be registered.
 
-To register a painting use the function `mcl_paintings.register_painting(alias,
-original_name)`. This will result in paintings with the name `alias` be treated
-as paintings with the name `original_name`, as long as `alias` is not also the
-name of a registered painting.
+To register a painting use the function
+
+```
+mcl_paintings.register_painting(alias, original_name)
+```
+
+It will result in paintings with the name `alias` be treated as paintings with
+the name `original_name`, as long as `alias` is not also the name of a
+registered painting.
