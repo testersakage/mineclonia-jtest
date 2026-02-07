@@ -14,7 +14,6 @@ local mob_class = mcl_mobs.mob_class
 local hoglin = {
 	description = S("Hoglin"),
 	type = "monster",
-	passive = false,
 	_spawn_category = "monster",
 	persist_in_peaceful = true,
 	hp_min = 40,
@@ -44,8 +43,6 @@ local hoglin = {
 	movement_speed = 6.0,
 	knockback_resistance = 0.6,
 	damage = 6,
-	retaliates = true,
-	group_attack = true,
 	avoid_nodes = {
 		"mcl_crimson:warped_fungus",
 		"mcl_flowerpots:flower_pot_warped_fungus",
@@ -250,11 +247,6 @@ local function hoglin_retreat (self, self_pos, dtime)
 	return false
 end
 
-function hoglin:should_attack (hitter)
-	return not self._stay_passive_for
-		and mob_class.should_attack (self, hitter)
-end
-
 function hoglin:beat_a_retreat (hitter)
 	self._retreat_asap = true
 	self._retreat_from = hitter
@@ -277,6 +269,7 @@ function hoglin:call_group_attack (hitter)
 		or is_piglin (hitter)
 			and self._nearby_piglins > self._nearby_hoglins then
 		self:beat_a_retreat (hitter)
+		return false
 	else -- Otherwise call reinforcements.
 		local entity = hitter:get_luaentity ()
 		local pos = hitter:get_pos ()
@@ -295,13 +288,14 @@ function hoglin:call_group_attack (hitter)
 					-- target is closer by four
 					-- nodes.
 					if d2 - d1 < 4.0 then
-						hoglin:do_attack (hitter)
+						hoglin:receive_attack (hitter)
 					end
 				else
-					hoglin:do_attack (hitter)
+					hoglin:receive_attack (hitter)
 				end
 			end
 		end
+		return true
 	end
 end
 
@@ -380,6 +374,44 @@ hoglin.ai_functions = {
 	mob_class.check_avoid,
 	mob_class.follow_herd,
 	mob_class.check_pace,
+}
+
+local function hoglin_check_passivity (self, _)
+	return self._stay_passive_for == nil
+end
+
+local function hoglin_strategize_rule (self, self_pos, dtime, obj, is_current)
+	if is_current then
+		local dist = self.tracking_distance * self.tracking_distance
+		return self:track_current_target (self_pos, dtime, obj, dist, 15.0)
+	end
+
+	local attacker = self:read_last_attacker ()
+	local do_attack = nil
+	if attacker then
+		local obj_pos = attacker:get_pos ()
+		-- If this attacker is a valid target.
+		if self:test_object_and_restriction (attacker, obj_pos)
+		-- ... and reinforcements are in fact summoned.
+			and self:call_group_attack (attacker)
+		-- ... and the target is within range not only of the
+		-- reinforcements but also this mob.
+			and vector.distance (self_pos, obj_pos) < self.view_range then
+			-- .. then retaliate against it.
+			do_attack = attacker
+		end
+	end
+	return do_attack
+end
+
+hoglin._targeting_rules = {
+	mcl_mobs.build_target_rule ({
+		fn = hoglin_strategize_rule,
+		on_complete = nil,
+	}),
+	mcl_mobs.build_nearest_target_rule ("player", nil, hoglin_check_passivity,
+					    nil, false),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 ------------------------------------------------------------------------
@@ -548,26 +580,23 @@ local zoglin = table.merge (hoglin, {
 		mob_class.check_pace,
 	},
 	group_attack = false,
-	avoid_nodes = nil,
 	runaway_from = nil,
 })
 
-function zoglin:should_attack (object)
-	local luaentity = object:get_luaentity ()
-	if luaentity and luaentity.is_mob then
-		return luaentity.name ~= "mobs_mc:creeper"
-			and luaentity.name ~= "mobs_mc:creeper_charged"
-			and luaentity.name ~= "mobs_mc:zoglin"
-			and luaentity.name ~= "mobs_mc:baby_zoglin"
-			and luaentity:valid_enemy ()
-	elseif object:is_player () then
-		return self:attack_player_allowed (object)
-	end
-	return false
+local function zoglin_attack_predicate (self, self_pos, obj, entity)
+	return not entity -- Players.
+		or (entity.name ~= "mobs_mc:creeper"
+		    and entity.name ~= "mobs_mc:creeper_charged"
+		    and entity.name ~= "mobs_mc:zoglin"
+		    and entity.name ~= "mobs_mc:baby_zoglin")
 end
 
+zoglin._targeting_rules = {
+	mcl_mobs.build_nearest_target_rule ("entity", zoglin_attack_predicate,
+					     nil, nil, nil),
+}
+
 zoglin.ai_step = nil
-zoglin.call_group_attack = mob_class.call_group_attack
 zoglin.get_staticdata_table = mob_class.get_staticdata_table
 
 mcl_mobs.register_mob ("mobs_mc:zoglin", zoglin)
@@ -613,14 +642,12 @@ local baby_zoglin = table.merge (hoglin, {
 	},
 	group_attack = false,
 	avoid_nodes = nil,
-	runaway_from = nil,
 })
 
 function baby_zoglin:tick_breeding ()
 	-- Prevent this from ever growing up
 end
 
-baby_zoglin.should_attack = zoglin.should_attack
 baby_zoglin.ai_step = nil
 baby_zoglin.call_group_attack = mob_class.call_group_attack
 baby_zoglin.get_staticdata_table = mob_class.get_staticdata_table

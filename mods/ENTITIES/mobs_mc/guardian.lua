@@ -15,7 +15,6 @@ local guardian = {
 	xp_min = 10,
 	xp_max = 10,
 	breath_max = -1,
-	passive = false,
 	attack_type = "null",
 	view_range = 16.0,
 	tracking_distance = 16.0,
@@ -96,11 +95,6 @@ local guardian = {
 	pace_interval = 1,
 	pace_chance = 80,
 	idle_gravity_in_liquids = true,
-	specific_attack = {
-		"mobs_mc:squid",
-		"mobs_mc:axolotl",
-		"player",
-	},
 	flops = true,
 	_default_laser_delay = 4.0,
 }
@@ -275,30 +269,6 @@ end
 -- Guardian AI.
 ------------------------------------------------------------------------
 
-function guardian:should_attack (object)
-	if self._pace_asap then
-		return false
-	end
-	local should_attack = mob_class.should_attack (self, object)
-	if should_attack then
-		return vector.distance (self.object:get_pos (),
-					object:get_pos ()) > 3
-	end
-	return false
-end
-
-function guardian:should_continue_to_attack (object)
-	if self._pace_asap then
-		return false
-	end
-	local continue = mob_class.should_continue_to_attack (self, object)
-	if continue then
-		return vector.distance (self.object:get_pos (),
-					object:get_pos ()) > 3
-	end
-	return false
-end
-
 function guardian:attack_end ()
 	mob_class.attack_end (self)
 	self._pace_asap = true
@@ -338,9 +308,45 @@ function guardian:attack_null (self_pos, dtime, target_pos, line_of_sight)
 	end
 end
 
+local dist_sqr = mcl_mobs.dist_sqr
+
+function guardian:get_active_target (self_pos)
+	if not self._pace_asap then
+		local target = mob_class.get_active_target (self)
+		local pos = target and target:get_pos ()
+		if pos and dist_sqr (self_pos, pos) > 9.0 then
+			return target
+		end
+	end
+
+	-- Don't attack when the target is too near, but attempt to
+	-- elude it by triggering `attack_end' and pacing.
+	return nil
+end
+
 guardian.ai_functions = {
 	mob_class.check_attack,
 	mob_class.check_pace,
+}
+
+local function guardian_target_attackable_p (self, self_pos, obj, entity)
+	if not self._pace_asap then
+		-- `not entity' indicates that OBJ is a player.
+		if not entity
+			or entity.name == "mobs_mc:squid"
+			or entity.name == "mobs_mc:glow_squid"
+			or entity.name == "mobs_mc:axolotl" then
+			-- Guardians should attempt to evade targets
+			-- within 3 nodes of themselves.
+			return dist_sqr (self_pos, obj:get_pos ()) > 9.0
+		end
+	end
+	return false
+end
+
+guardian._targeting_rules = {
+	mcl_mobs.build_nearest_target_rule ("entity", guardian_target_attackable_p,
+					    nil, nil, false),
 }
 
 ------------------------------------------------------------------------

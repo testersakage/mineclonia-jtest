@@ -6,15 +6,6 @@ function mob_class:target_visible(origin, target)
 	if self._targets_visible[target] then
 		return true
 	end
-	if not origin then
-		return
-	end
-	if not target and self.attack then
-		target = self.attack
-	end
-	if not target then
-		return
-	end
 
 	local target_pos = mcl_util.target_eye_pos (target)
 	local origin_eye_pos = vector.offset (origin, 0, self.head_eye_height, 0)
@@ -1175,7 +1166,7 @@ function mob_class:check_proto_chunk (self_pos, dtime)
 end
 
 function mob_class:is_frightened ()
-	return self.passive and (mcl_burning.is_burning (self.object) or self.runaway_timer > 0)
+	return (mcl_burning.is_burning (self.object) or self.runaway_timer > 0)
 end
 
 function mob_class:ai_step (dtime)
@@ -1353,8 +1344,7 @@ function mob_class:check_avoid_sunlight (pos)
 			self:set_animation ("stand")
 		end
 		return true
-	elseif self.avoids_sunlight
-		and mcl_util.is_daytime ()
+	elseif mcl_util.is_daytime ()
 		and self._direct_sunlight >= 15
 		and mcl_burning.is_burning (self.object) then
 		local tpos = self:target_in_shade (pos, 10, 3)

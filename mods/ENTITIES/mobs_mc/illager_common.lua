@@ -280,7 +280,6 @@ local raid_mob_debug
 
 local raid_mob = table.merge (patrolling_mob, {
 	_can_join_raid = false,
-	_aggressive = nil,
 	_is_raid_mob = true,
 	_locked_target = nil,
 	_locked_target_visible_time = 0,
@@ -309,7 +308,6 @@ end
 
 function raid_mob:attack_end ()
 	mob_class.attack_end (self)
-	self._aggressive = nil
 	self._locked_target = nil
 end
 
@@ -320,29 +318,6 @@ end
 
 function raid_mob:ai_step (dtime)
 	patrolling_mob.ai_step (self, dtime)
-	-- Verify that any target acquired by this patrol should
-	-- continue to be attacked.
-	local target = self._locked_target
-	local d = self.tracking_distance
-	local self_pos = self.object:get_pos ()
-	if target and not is_valid (target) then
-		target = nil
-	elseif target
-		and vector.distance (self_pos, target:get_pos ()) > d then
-		target = nil
-	elseif target and
-		not self:target_visible (self_pos, target)
-		and not self.esp then
-		local t = self._locked_target_visible_time - dtime
-		if t <= 0 then
-			target = nil
-		end
-		self._locked_target_visible_time = t
-	elseif target and not self:should_continue_to_attack (target) then
-		target = nil
-	end
-	self._locked_target = target
-
 	-- Reset `_time_inactive' if attacking a player or iron golem.
 	local attack = self.attack
 	if attack and (attack:is_player () or is_golem (attack)) then
@@ -356,26 +331,48 @@ function raid_mob:ai_step (dtime)
 	end
 end
 
-function raid_mob:retaliate_against (source, persistence)
-	local entity = source:get_luaentity ()
-
-	if not entity or not entity._is_raid_mob then
-		mob_class.retaliate_against (self, source, persistence)
-	end
-end
-
-function raid_mob:attack_default (self_pos, dtime, esp)
-	if self._locked_target
-		and is_valid (self._locked_target) then
-		return self._locked_target
-	end
-
-	return mob_class.attack_default (self, self_pos, dtime, esp)
-end
-
 function raid_mob:lock_target (target)
 	self._locked_target = target
 	self._locked_target_visible_time = 3
+end
+
+function raid_mob:receive_attack (attack)
+	if self._active_target then
+		-- If ATTACK is the locked target, then engage it now.
+		if self._locked_target == attack then
+			self._locked_target = nil
+		end
+		return false
+	end
+	self._alert_receiver_target = attack
+	return true
+end
+
+function raid_mob:step_locked_target (self_pos, dtime)
+	-- Verify that any target acquired by this patrol should
+	-- continue to be attacked.
+	local target = self._locked_target
+	local d = self.tracking_distance
+	if self.raidmob then
+		target = nil
+	elseif target and not is_valid (target) then
+		target = nil
+	elseif target then
+		local target_pos = target:get_pos ()
+		local dist = vector.distance (self_pos, target_pos)
+		if dist > d or dist < 10.0 then
+			target = nil
+		elseif not self:target_visible (self_pos, target) then
+			local t = self._locked_target_visible_time - dtime
+			if t <= 0 then
+				target = nil
+			end
+			self._locked_target_visible_time = t
+		elseif not self:test_object_and_restriction (target, target_pos) then
+			target = nil
+		end
+	end
+	self._locked_target = target
 end
 
 function raid_mob:notify_nearby_patrolmen (self_pos, target)
@@ -388,28 +385,22 @@ function raid_mob:notify_nearby_patrolmen (self_pos, target)
 	end
 end
 
-function raid_mob:target_detected (self_pos, target)
-	if not self._patrolling or self.raidmob then
-		return false
-	end
-
-	-- Remain stationary till the target flees, attacks, or
-	-- approaches within 10 blocks, and notify surrounding raiders
-	-- of this target also.
-	local target_pos = target:get_pos ()
-	if not self._aggressive
-		and vector.distance (target_pos, self_pos) > 10 then
-		if self._aggressive == nil then
-			self._aggressive = false
-			self:notify_nearby_patrolmen (self_pos, target)
+function raid_mob:check_locked_target (self_pos, dtime)
+	if self._suspended_for_locked_target then
+		local target = self._locked_target
+		local pos = target and target:get_pos ()
+		if not pos then
+			self._suspended_for_locked_target = false
+			return false
 		end
 		self:cancel_navigation ()
 		self:halt_in_tracks ()
-		self:look_at (target_pos)
+		self:look_at (pos)
 		return true
+	elseif self._locked_target and not self.raidmob then
+		self._suspended_for_locked_target = true
+		return "_suspended_for_locked_target"
 	end
-	self._aggressive = true
-	return false
 end
 
 local function decode_banner_item (entity)
@@ -721,6 +712,67 @@ end
 
 mobs_mc.raid_mob = raid_mob
 
+local function cancel_lock_target (self)
+	self._locked_target = nil
+end
+
+local dist_sqr = mcl_mobs.dist_sqr
+local huge = math.huge
+
+function mobs_mc.build_raid_player_detection_rule (predicate)
+	if type (predicate) == "table" then
+		predicate = mcl_mobs.build_search_predicate (predicate)
+	elseif not predicate then
+		predicate = function (_, _, _, _)
+			return true
+		end
+	end
+	local persistence = 3.0
+	local fn = function (self, self_pos, dtime, obj, is_current)
+		if is_current then
+			self:step_locked_target (self_pos, dtime)
+			local dist = self.tracking_distance * self.tracking_distance
+			return self:track_current_target (self_pos, dtime, obj, dist,
+							  persistence)
+		end
+
+		if not self:check_timer ("seek_target", 0.5) then
+			return false
+		end
+
+		local d = huge
+		local view_range = self.view_range * self.view_range
+		local target = nil
+		for player, pos1 in mcl_player.iterate_connected_players () do
+			local d1 = dist_sqr (self_pos, pos1)
+			local m = self:detection_multiplier_for_object (player)
+			if d1 <= view_range * m * m and d1 < d
+				and predicate (self, self_pos, player, nil)
+				and self:target_visible (self_pos, player)
+				and self:test_object_and_restriction (player, pos1) then
+				d = d1
+				target = player
+			end
+		end
+
+		if target and self._patrolling and d > 100.0 then
+			-- If a player is acquired while patrolling,
+			-- remain stationary till the player
+			-- approaches within 10 nodes of this mob.
+			-- This is enforced by the
+			-- `check_locked_target' AI function.
+			self:lock_target (target)
+			self:notify_nearby_patrolmen (self_pos, target)
+		end
+
+		return target
+	end
+	return mcl_mobs.build_target_rule ({
+		fn = fn,
+		on_complete = cancel_lock_target,
+	})
+end
+
 ------------------------------------------------------------------------
 -- Illagers.
 ------------------------------------------------------------------------
@@ -729,23 +781,34 @@ local illager = table.merge (raid_mob, {
 	_is_illager = true,
 })
 
-function illager:should_attack (object)
-	local entity = object:get_luaentity ()
-	-- Illagers should never attack other illagers or villager
-	-- children.
-	if entity and (entity.name == "mobs_mc:villager" and entity.child
-				or entity._is_illager) then
-		return false
+function illager:test_object_and_restriction (object, obj_pos)
+	if mob_class.test_object_and_restriction (self, object, obj_pos) then
+		local entity = object:get_luaentity ()
+		return not entity
+			or entity.name ~= "mobs_mc:villager"
+			or not entity.child
 	end
-	return mob_class.should_attack (self, object)
-end
-
-function illager:should_continue_to_attack (object)
-	local entity = object:get_luaentity ()
-	if entity and entity._is_illager then
-		return false
-	end
-	return mob_class.should_continue_to_attack (self, object)
+	return false
 end
 
 mobs_mc.illager = illager
+
+------------------------------------------------------------------------
+-- AI utility functions.
+------------------------------------------------------------------------
+
+function mobs_mc.not_illager_predicate (self, self_pos, obj, entity)
+	return not entity or not entity._is_illager
+end
+
+function mobs_mc.illager_predicate (self, self_pos, obj, entity)
+	return entity and entity._is_illager
+end
+
+function mobs_mc.not_raid_mob_predicate (self, self_pos, obj, entity)
+	return not entity or not entity._is_raid_mob
+end
+
+function mobs_mc.raid_mob_predicate (self, self_pos, obj, entity)
+	return entity and entity._is_raid_mob
+end

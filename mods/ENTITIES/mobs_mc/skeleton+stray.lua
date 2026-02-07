@@ -92,12 +92,8 @@ local skeleton = table.merge (posing_humanoid, {
 		walk_end = 60,
 	},
 	ignited_by_sunlight = true,
-	avoids_sunlight = true,
 	floats = 0,
 	attack_type = "bowshoot",
-	specific_attack = {
-		"mobs_mc:iron_golem",
-	},
 	arrow = "mcl_bows:arrow_entity",
 	shoot_interval = 1,
 	shoot_offset = 1.5,
@@ -341,6 +337,13 @@ skeleton.ai_functions = {
 	mob_class.check_avoid,
 	mob_class.check_attack,
 	mob_class.check_pace,
+}
+
+skeleton._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, false, nil),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:iron_golem", {"mobs_mc:iron_golem",},
+					    nil, nil, nil),
 }
 
 mcl_mobs.register_mob ("mobs_mc:skeleton", skeleton)

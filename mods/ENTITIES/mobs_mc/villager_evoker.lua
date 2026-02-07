@@ -39,11 +39,9 @@ local evoker = table.merge (illager, table.merge (posing_humanoid, {
 	},
 	makes_footstep_sound = true,
 	movement_speed = 10,
-	group_attack = true,
 	runaway_from = {
 		"player",
 	},
-	passive = false,
 	drops = {
 		{
 			name = "mcl_core:emerald",
@@ -66,12 +64,6 @@ local evoker = table.merge (illager, table.merge (posing_humanoid, {
 		spellcast_speed = 20,
 		spellcast_start = 41,
 		spellcast_end = 61,
-	},
-	specific_attack = {
-		"player",
-		"mobs_mc:villager",
-		"mobs_mc:wandering_trader",
-		"mobs_mc:iron_golem",
 	},
 	attack_type = "null",
 	pace_bonus = 0.6,
@@ -177,15 +169,6 @@ end
 ------------------------------------------------------------------------
 -- Evoker combat routines.
 ------------------------------------------------------------------------
-
-function evoker:do_attack (obj, persistence)
-	local entity = obj:get_luaentity ()
-	if obj:is_player ()
-		or (entity and entity.name == "mobs_mc:villager") then
-		persistence = 15
-	end
-	return mob_class.do_attack (self, obj, persistence)
-end
 
 function evoker:ai_step (dtime)
 	illager.ai_step (self, dtime)
@@ -544,6 +527,25 @@ evoker.ai_functions = {
 	illager.check_celebrate,
 	evoker_wololo_spell,
 	mob_class.check_pace,
+}
+
+local evoker_friends = {
+	"mobs_mc:evoker",
+	"mobs_mc:illusioner",
+}
+
+evoker._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (mobs_mc.raid_mob_predicate, true,
+						evoker_friends),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, 15.0),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:villager", {
+		"mobs_mc:villager",
+		"mobs_mc:wandering_trader",
+	}, nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:iron_golem", {
+		"mobs_mc:iron_golem",
+	}, nil, nil, nil),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mobs_mc.evoker = evoker

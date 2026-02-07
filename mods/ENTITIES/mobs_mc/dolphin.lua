@@ -15,7 +15,6 @@ local dolphin = {
 	_spawn_category = "water_creature",
 	can_despawn = true,
 	can_ride_boat = false,
-	passive = true,
 	hp_min = 10,
 	hp_max = 10,
 	xp_min = 1,
@@ -66,8 +65,6 @@ local dolphin = {
 	swims_in = { "mcl_core:water_source", "mclx_core:river_water_source" },
 	idle_gravity_in_liquids = true,
 	movement_speed = 24.0,
-	retaliates = true,
-	group_attack = { "mobs_mc:dolphin" },
 	reach = 2,
 	damage = 2.5,
 	attack_type = "melee",
@@ -626,6 +623,14 @@ dolphin.ai_functions = {
 	dolphin_jump,
 	mob_class.check_pace,
 	dolphin_breathe_air,
+}
+
+dolphin._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule ({
+		"mobs_mc:guardian",
+		"mobs_mc:elder_guardian",
+	}, true, { "mobs_mc:dolphin", }),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mcl_mobs.register_mob ("mobs_mc:dolphin", dolphin)

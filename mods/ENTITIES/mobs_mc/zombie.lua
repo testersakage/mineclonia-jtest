@@ -114,23 +114,11 @@ local zombie = table.merge (posing_humanoid, {
 	movement_speed = 4.6,
 	damage = 3,
 	reach = 2,
-	group_attack = {
-		"mobs_mc:zombie",
-		"mobs_mc:baby_zombie",
-		"mobs_mc:husk",
-		"mobs_mc:baby_husk",
-		"mobs_mc:zombified_piglin",
-		"mobs_mc:villager_zombie",
-		"mobs_mc:drowned",
-	},
 	drops = drops_zombie,
 	animation = {
 		stand_start = 40, stand_end = 49, stand_speed = 2,
 		walk_start = 0, walk_end = 39, speed_normal = 25,
 		punch_start = 50, punch_end = 59, punch_speed = 20,
-	},
-	specific_attack = {
-		"mobs_mc:iron_golem"
 	},
 	ignited_by_sunlight = true,
 	floats = 0,
@@ -665,7 +653,7 @@ function zombie:receive_damage (mcl_reason, damage)
 					entity:add_physics_factor ("_spawn_reinforcements_chance",
 								   "mobs_mc:zombie_reinforcement_callee_attenuation",
 								   -0.05, "add", true)
-					entity:do_attack (self.attack or mcl_reason.source, 15)
+					entity:receive_attack (self.attack)
 				end
 			end
 		end
@@ -757,6 +745,28 @@ zombie.ai_functions = {
 	mob_class.check_attack,
 	zombie_navigate_village,
 	mob_class.check_pace,
+}
+
+zombie._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, true, {
+		"mobs_mc:zombie",
+		"mobs_mc:baby_zombie",
+		"mobs_mc:husk",
+		"mobs_mc:baby_husk",
+		"mobs_mc:zombified_piglin",
+		"mobs_mc:villager_zombie",
+		"mobs_mc:drowned",
+		"mobs_mc:baby_drowned",
+	}),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, false),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:villager", {
+		"mobs_mc:villager",
+		"mobs_mc:wandering_trader",
+	}, nil, nil, false),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:iron_golem", {
+		"mobs_mc:iron_golem",
+	}, nil, nil, false),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mcl_mobs.register_mob ("mobs_mc:zombie", zombie)

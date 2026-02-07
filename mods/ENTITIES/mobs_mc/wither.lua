@@ -369,13 +369,6 @@ function wither_def:do_custom (dtime, moveresult)
 			self.object:set_texture_mod ("")
 			self._spawning = nil
 			self._spw_max = nil
-
-			if self._spawner then
-				local spawner = core.get_player_by_name(self._spawner)
-				if spawner then
-					self:do_attack (spawner)
-				end
-			end
 		else
 			return false
 		end
@@ -414,18 +407,6 @@ function wither_def:do_custom (dtime, moveresult)
 
 	self:set_textures (self.base_texture)
 	mcl_bossbars.update_boss(self.object, "Wither", "dark_purple")
-end
-
-function wither_def:should_attack (object)
-	if object:is_player () and self:attack_player_allowed (object) then
-		return true
-	end
-	local luaentity = object:get_luaentity ()
-	return luaentity
-		and luaentity.is_mob
-		and luaentity:valid_enemy ()
-		and not luaentity.harmed_by_heal
-		and luaentity.name ~= "mobs_mc:ghast"
 end
 
 function spawn_one_skeleton (object, aa, bb, self_pos)
@@ -602,6 +583,7 @@ end
 
 local FOURTY_DEG = math.rad (40)
 local TEN_DEG = math.rad (10)
+local object_targetable_p = mcl_mobs.object_targetable_p
 
 function wither_def:run_ai (dtime, moveresult)
 	local self_pos = self.object:get_pos ()
@@ -742,7 +724,12 @@ function wither_def:run_ai (dtime, moveresult)
 				local other_head = idx == 1 and 2 or 1
 				local other_name = "_wither_target_" .. other_head
 				for object in core.objects_inside_radius (self_pos, 20) do
-					if self:should_attack (object)
+					local pos = object:get_pos ()
+					local entity = object:get_luaentity ()
+					if object_targetable_p (object)
+						and (not entity or not entity.harmed_by_heal)
+						and self:test_object_and_restriction (object, pos)
+						and self:target_visible (self_pos, object)
 						and object ~= self.attack
 						and object ~= self[other_name] then
 						self[name] = object
@@ -830,6 +817,16 @@ function wither_def:run_ai (dtime, moveresult)
 		end
 	end
 end
+
+local function is_not_undead (self, self_pos, obj, entity)
+	return not entity or not entity.harmed_by_heal
+end
+
+wither_def._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("entity", is_not_undead,
+					    nil, nil, nil),
+}
 
 mcl_mobs.register_mob ("mobs_mc:wither", wither_def)
 

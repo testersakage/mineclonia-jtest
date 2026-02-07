@@ -3,8 +3,6 @@
 --made for MC like Survival game
 --License for code WTFPL and otherwise stated in readmes
 
-local is_valid = mcl_util.is_valid_objectref
-
 -- Rootyjr
 -----------------------------
 -- implemented ability to detect when seen / break eye contact and aggressive response
@@ -237,7 +235,6 @@ local enderman = {
 	description = S("Enderman"),
 	type = "monster",
 	_spawn_category = "monster",
-	retaliates = true,
 	hp_min = 40,
 	hp_max = 40,
 	xp_min = 5,
@@ -251,7 +248,6 @@ local enderman = {
 	makes_footstep_sound = true,
 	can_despawn = true,
 	head_eye_height = 2.55,
-	esp = true,
 	sounds = {
 		death = {name="mobs_mc_enderman_death", gain=0.7},
 		damage = {name="mobs_mc_enderman_hurt", gain=0.5},
@@ -633,7 +629,7 @@ function enderman:eye_contact (eye_pos, object, line_of_sight)
 	local direction = vector.direction (player_pos, eye_pos)
 	local distance = vector.distance (eye_pos, player_pos)
 
-	if not line_of_sight then
+	if line_of_sight == nil then
 		line_of_sight = self:line_of_sight (eye_pos, player_pos)
 	end
 
@@ -641,60 +637,78 @@ function enderman:eye_contact (eye_pos, object, line_of_sight)
 	return dot > 1.0 - 0.025 / distance and line_of_sight
 end
 
-function enderman:should_attack (object)
-	local entity = object:get_luaentity ()
-	return entity and entity.name == "mobs_mc:endermite"
-		and entity:valid_enemy ()
-end
+local dist_sqr = mcl_mobs.dist_sqr
+local tmp = vector.new ()
+local huge = math.huge
 
-function enderman:attack_custom (self_pos, dtime)
-	-- Search for players looking at this mob.
-	-- Check to see if people are near by enough to look at us.
-	local self_eye_pos = {
-		x = self_pos.x,
-		y = self_pos.y + self:get_eye_height (),
-		z = self_pos.z,
-	}
+local function enderman_player_rule (self, self_pos, dtime, obj, is_current)
+	if is_current then
+		return self:track_current_target (self_pos, dtime, obj, 3.0)
+	end
+
+	local eye_pos = tmp
+	eye_pos.x = self_pos.x
+	eye_pos.y = self_pos.y + self:get_eye_height ()
+	eye_pos.z = self_pos.z
+
 	if not self._pending_target then
-		local player, best_distance
-		for obj in mcl_util.connected_players (self_pos, self.tracking_distance) do
-			local dist_factor = self:detection_multiplier_for_object (obj)
-			local modified = self.tracking_distance * dist_factor
-			local distance = vector.distance (obj:get_pos (), self_pos)
-			if self:attack_player_allowed (obj)
-				and distance < modified
-				and self:eye_contact (self_eye_pos, obj) then
-				if not player or distance < best_distance then
-					player = obj
-					best_distance = distance
-				end
+		local view_range = self.view_range
+		local d = huge
+		local target = nil
+		for player, pos1 in mcl_player.iterate_connected_players () do
+			local d1 = dist_sqr (self_pos, pos1)
+			local m = self:detection_multiplier_for_object (player)
+			if d1 <= view_range * m * m and d1 < d
+				and self:target_visible (self_pos, player)
+				and self:test_object_and_restriction (player, pos1)
+				and self:eye_contact (eye_pos, player, nil) then
+				d = d1
+				target = player
 			end
 		end
-		if player then
-			self._pending_target = player
+		if target then
+			self._pending_target = target
 			self._targeting_delay = 0.25
 		end
-	elseif not self:eye_contact (self_eye_pos, self._pending_target) then
+		return nil
+	-- A target has been selected; if the targeting delay has also
+	-- elapsed and it continues to maintain eye contact, select
+	-- it, or abandon it otherwise.
+	elseif not self._pending_target:is_valid ()
+		or not self:eye_contact (eye_pos, self._pending_target) then
 		self._pending_target = nil
-	elseif self._targeting_delay == 0 then
-		self:do_attack (self._pending_target)
-		return true
-	end
-	-- Now search for endermites within viewing distance.
-	if not self._pending_target then
-		local target = self:attack_default (self_pos, dtime, false)
-		if target then
-			self:do_attack (target)
-			return true
+		self._targeting_delay = nil
+		return nil
+	else
+		local t = self._targeting_delay
+		if t <= dtime then
+			local target = self._pending_target
+			self._pending_target = nil
+			self._targeting_delay = nil
+			return target
 		end
+		self._targeting_delay = t - dtime
+		return nil
 	end
-	return false
 end
 
-function enderman:do_attack (object, persistence)
-	mob_class.do_attack (self, object, persistence)
-	self._time_since_teleport = 0
+function enderman:switch_targeting_rule (fn_old, fn_new)
+	if not fn_old and fn_new then
+		self._time_since_teleport = 0
+	end
+	mob_class.switch_targeting_rule (self, fn_old, fn_new)
 end
+
+enderman._targeting_rules = {
+	mcl_mobs.build_target_rule ({
+		fn = enderman_player_rule,
+		on_complete = nil,
+	}),
+	mcl_mobs.build_retaliation_target_rule (nil, false, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:endermite", {
+		"mobs_mc:endermite",
+	}, nil, nil, nil)
+}
 
 ------------------------------------------------------------------------
 -- Enderman sundries
@@ -710,18 +724,10 @@ end
 
 function enderman:init_ai ()
 	mob_class.init_ai (self)
-	self._targeting_delay = 0
 end
 
 function enderman:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
-	if self._pending_target then
-		if not is_valid (self._pending_target) then
-			self._pending_target = nil
-		end
-	end
-	self._targeting_delay
-		= math.max (0, self._targeting_delay - dtime)
 	local self_pos = self.object:get_pos ()
 	if mcl_worlds.pos_to_dimension (self_pos) == "overworld"
 		and core.get_timeofday () > 0.25 then

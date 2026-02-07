@@ -22,7 +22,6 @@ local snow_golem = {
 	description = S("Snow Golem"),
 	type = "npc",
 	_spawn_category = "misc",
-	passive = true,
 	hp_min = 4,
 	hp_max = 4,
 	fall_damage = 0,
@@ -31,7 +30,6 @@ local snow_golem = {
 	head_eye_height = 1.7,
 	rain_damage = 4,
 	armor = { fleshy = 100, water_vulnerable = 100, },
-	attacks_monsters = true,
 	collisionbox = {-0.35, -0.01, -0.35, 0.35, 1.89, 0.35},
 	visual = "mesh",
 	mesh = "mobs_mc_snowman.b3d",
@@ -162,6 +160,15 @@ end
 function snow_golem:shoot_arrow (pos, dir)
 	mcl_throwing.throw ("mcl_throwing:snowball", pos, dir, nil, self.object)
 end
+
+snow_golem.ai_functions = {
+	mob_class.check_attack,
+	mob_class.check_pace,
+}
+
+snow_golem._targeting_rules = {
+	mcl_mobs.build_nearest_target_rule ("mob", {"monster",}, nil, nil, nil),
+}
 
 mcl_mobs.register_mob ("mobs_mc:snowman", snow_golem)
 

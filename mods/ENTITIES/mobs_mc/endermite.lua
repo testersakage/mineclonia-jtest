@@ -9,13 +9,11 @@ local endermite = {
 	description = S("Endermite"),
 	type = "monster",
 	_spawn_category = "monster",
-	passive = false,
 	hp_min = 8,
 	hp_max = 8,
 	xp_min = 3,
 	xp_max = 3,
 	armor = {fleshy = 100, arthropod = 100},
-	group_attack = true,
 	collisionbox = {-0.2, -0.01, -0.2, 0.2, 0.29, 0.2},
 	visual = "mesh",
 	mesh = "mobs_mc_endermite.b3d",
@@ -39,7 +37,12 @@ local endermite = {
 	reach = 1,
 	head_eye_height = 0.13,
 	climb_powder_snow = true,
+	attack_type = "melee",
 }
+
+------------------------------------------------------------------------
+-- Endermite AI.
+------------------------------------------------------------------------
 
 endermite.ai_functions = {
 	mob_class.ascend_in_powder_snow,
@@ -47,5 +50,16 @@ endermite.ai_functions = {
 	mob_class.check_pace,
 }
 
-mcl_mobs.register_mob("mobs_mc:endermite", endermite)
-mcl_mobs.register_egg("mobs_mc:endermite", S("Endermite"), "#161616", "#6d6d6d", 0)
+endermite._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, true, { "mobs_mc:endermite", }),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, nil),
+	mcl_mobs.build_alert_receiver_rule (),
+}
+
+mcl_mobs.register_mob ("mobs_mc:endermite", endermite)
+
+------------------------------------------------------------------------
+-- Endermite spawning.
+------------------------------------------------------------------------
+
+mcl_mobs.register_egg ("mobs_mc:endermite", S("Endermite"), "#161616", "#6d6d6d", 0)

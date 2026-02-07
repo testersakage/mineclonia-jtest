@@ -37,18 +37,10 @@ local vindicator = table.merge (illager, table.merge (posing_humanoid, {
 	makes_footstep_sound = true,
 	damage = 12.0,
 	tracking_distance = 12.0,
-	follow_range = 12.0,
 	view_range = 12.0,
 	reach = 2,
 	movement_speed = 7.0,
 	attack_type = "melee",
-	specific_attack = {
-		"mobs_mc:iron_golem",
-		"mobs_mc:villager",
-		"mobs_mc:wandering_trader",
-		"player",
-	},
-	group_attack = true,
 	drops = {
 		{
 			name = "mcl_core:emerald",
@@ -142,7 +134,6 @@ vindicator._arm_poses = vindicator_poses
 function vindicator:select_arm_pose ()
 	local pose
 	if self.attack
-		or self._aggressive
 		or self._current_animation == "punch" then
 		pose = "attack"
 	else
@@ -214,28 +205,6 @@ function vindicator:ai_step (dtime)
 	end
 end
 
-function vindicator:should_continue_to_attack (object)
-	if self._is_johnny then
-		return mob_class.should_continue_to_attack (self, object)
-	else
-		return illager.should_continue_to_attack (self, object)
-	end
-end
-
-function vindicator:should_attack (object)
-	if self._is_johnny then
-		if object:is_player () then
-			return self:attack_player_allowed (object)
-		end
-
-		local entity = object:get_luaentity ()
-		return entity ~= self and entity.is_mob
-			and entity.health > 0 and entity:valid_enemy ()
-	end
-
-	return mob_class.should_attack (self, object)
-end
-
 -- Vindicators do not close doors they have passed.
 
 function vindicator:gwp_close_memorized_doors ()
@@ -274,6 +243,7 @@ function vindicator:gwp_initialize (targets, range, tolerance, penalties)
 end
 
 vindicator.ai_functions = {
+	illager.check_locked_target,
 	illager.check_recover_banner,
 	mob_class.check_attack,
 	illager.check_pathfind_to_raid,
@@ -281,6 +251,26 @@ vindicator.ai_functions = {
 	illager.check_distant_patrol,
 	illager.check_celebrate,
 	mob_class.check_pace,
+}
+
+local function johnny_attack_p (self)
+	return self._is_johnny
+end
+
+vindicator._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (mobs_mc.raid_mob_predicate,
+						true, {"mobs_mc:vindicator",}),
+	mobs_mc.build_raid_player_detection_rule (),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:villager", {
+		"mobs_mc:villager",
+		"mobs_mc:wandering_trader",
+	}, nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:iron_golem", {
+		"mobs_mc:iron_golem",
+	}, nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mob", nil, johnny_attack_p, nil,
+					    nil),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mcl_mobs.register_mob ("mobs_mc:vindicator", vindicator)

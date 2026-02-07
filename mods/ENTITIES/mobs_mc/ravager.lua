@@ -18,7 +18,6 @@ local ipairs = ipairs
 local ravager = table.merge (raid_mob, {
 	description = S ("Ravager"),
 	type = "monster",
-	passive = false,
 	_spawn_category = "monster",
 	hp_min = 100,
 	hp_max = 100,
@@ -46,13 +45,6 @@ local ravager = table.merge (raid_mob, {
 	stepheight = 1.02,
 	can_ride_boat = false,
 	reach = 2.0,
-	retaliates = true,
-	group_attack = true,
-	specific_attack = {
-		"mobs_mc:villager",
-		"mobs_mc:wandering_trader",
-		"mobs_mc:iron_golem",
-	},
 	pace_bonus = 0.4,
 	animation = {
 		stand_start = 0,
@@ -308,19 +300,20 @@ function ravager:ravager_attack ()
 		local entity = object:get_luaentity ()
 		local is_alive = false
 
-		if entity and entity._is_mob then
+		if (entity and entity ~= self and entity.is_mob)
+			or object:is_player () then
 			is_alive = true
-			if not entity._is_illager then
+			if not entity or not entity._is_illager then
 				local mcl_reason = {
 					type = "mob",
 					direct = self.object,
 				}
 				mcl_damage.finish_reason (mcl_reason)
-				mcl_damage.deal_damage (object, 6.0, mcl_reason)
+				mcl_util.deal_damage (object, 6.0, mcl_reason)
 			end
 		end
 
-		if (is_alive or object:is_player ())
+		if is_alive
 		-- The object may have been deleted.
 			and object:is_valid () then
 			self:ravager_knockback (self_pos, object)
@@ -412,6 +405,26 @@ ravager.ai_functions = {
 	raid_mob.check_distant_patrol,
 	raid_mob.check_celebrate,
 	mob_class.check_pace,
+}
+
+local function adult_villager_p (self, self_pos, obj, entity)
+	return entity
+		and (entity.name == "mobs_mc:villager"
+		     or entity.name == "mobs_mc:wandering_trader")
+		and not entity.child
+end
+
+ravager._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (mobs_mc.raid_mob_predicate, true, {
+		"mobs_mc:ravager",
+	}),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:villager", adult_villager_p,
+					    nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:iron_golem", {
+		"mobs_mc:iron_golem",
+	}, nil, nil, nil),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 ------------------------------------------------------------------------

@@ -276,7 +276,7 @@ function wandering_trader:receive_damage (mcl_reason, damage)
 			for _, llama in pairs (self._llamas) do
 				local entity = llama:get_luaentity ()
 				if entity then
-					entity:do_attack (mcl_reason.source)
+					entity:receive_attack (mcl_reason.source)
 				end
 			end
 		end

@@ -17,7 +17,6 @@ local shulker = {
 	_spawn_category = "monster",
 	persist_in_peaceful = true,
 	attack_type = "null",
-	passive = false,
 	hp_min = 30,
 	hp_max = 30,
 	xp_min = 5,
@@ -59,9 +58,6 @@ local shulker = {
 	_mcl_fishing_reelable = false,
 	fire_damage = 0,
 	lava_damage = 0,
-	group_attack = {
-		"mobs_mc:shulker",
-	},
 	sounds = {
 		teleport = "mcl_end_teleport",
 	},
@@ -588,25 +584,6 @@ end
 -- Shulker AI.
 ------------------------------------------------------------------------
 
-function shulker:targets_for_attack_default (self_pos, esp)
-	local aa, bb
-	local dir = shulker_open_direction[self._face]
-
-	-- Shulkers have a reduced detection range on their axis of
-	-- attachment.
-	if dir.x ~= 0 then
-		aa = vector.offset (self_pos, -4, -16, -16)
-		bb = vector.offset (self_pos, 4, 16, 16)
-	elseif dir.y ~= 0 then
-		aa = vector.offset (self_pos, -16, -4, -16)
-		bb = vector.offset (self_pos, 16, 4, 16)
-	else -- if dir.z ~= 0 then
-		aa = vector.offset (self_pos, -16, -16, -4)
-		bb = vector.offset (self_pos, 16, 16, 4)
-	end
-	return core.objects_in_area (aa, bb)
-end
-
 function shulker:attack_null (self_pos, dtime, target_pos, line_of_sight)
 	if not self.attacking then
 		self._attack_cooldown = 1.0
@@ -827,6 +804,46 @@ shulker.ai_functions = {
 	mob_class.check_attack,
 	shulker_peek,
 }
+
+local function player_in_search_area_p (self, self_pos, obj, entity)
+	local pos = obj:get_pos ()
+	local dir = shulker_open_direction[self._face]
+
+	-- Shulkers have a reduced detection range on their axis of
+	-- attachment.
+	if dir.x ~= 0 then
+		return pos.x >= self_pos.x - 4
+			and pos.y >= self_pos.y - 16
+			and pos.z >= self_pos.z - 16
+			and pos.x <= self_pos.x + 4
+			and pos.y <= self_pos.y + 16
+			and pos.z <= self_pos.z + 16
+	elseif dir.y ~= 0 then
+		return pos.x >= self_pos.x - 16
+			and pos.y >= self_pos.y - 4
+			and pos.z >= self_pos.z - 16
+			and pos.x <= self_pos.x + 16
+			and pos.y <= self_pos.y + 4
+			and pos.z <= self_pos.z + 16
+	else -- if dir.z ~= 0 then
+		return pos.x >= self_pos.x - 16
+			and pos.y >= self_pos.y - 16
+			and pos.z >= self_pos.z - 4
+			and pos.x <= self_pos.x + 16
+			and pos.y <= self_pos.y + 16
+			and pos.z <= self_pos.z + 4
+	end
+end
+
+shulker._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, false, nil),
+	mcl_mobs.build_nearest_target_rule ("player", player_in_search_area_p,
+					    nil, nil, nil),
+}
+
+------------------------------------------------------------------------
+-- Shulker spawning.
+------------------------------------------------------------------------
 
 mcl_mobs.register_mob ("mobs_mc:shulker", shulker)
 mcl_mobs.register_egg ("mobs_mc:shulker", S("Shulker"), "#946694", "#4d3852", 0)

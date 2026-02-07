@@ -281,13 +281,12 @@ end
 function witch:ai_step (dtime)
 	raid_mob.ai_step (self, dtime)
 
-	if not self.attack then
-		self.esp = false
-	end
-
-	-- Increment illager cooldown period and ascertain whether it
+	-- Decrement illager cooldown period and ascertain whether it
 	-- has elapsed.  Minecraft's period appears to be 200 ticks
-	-- divided by two, i.e., 5 seconds.
+	-- divided by two, i.e., 5 seconds.  During this interval,
+	-- which begins after a Witch acquires an Illager target,
+	-- Witches will not attempt either to attack players or to
+	-- heal Illagers.
 	if self._raider_cooldown then
 		self._raider_cooldown = self._raider_cooldown - dtime
 		if self._raider_cooldown <= 0 then
@@ -321,50 +320,6 @@ function witch:ai_step (dtime)
 	end
 end
 
--- Witches are meant to be able to detect raiders through walls.
-function witch:do_attack (object, persistence)
-	local entity = object:get_luaentity ()
-	if entity and entity._is_raid_mob then
-		self.esp = true
-	else
-		self.esp = false
-	end
-	return mob_class.do_attack (self, object, persistence)
-end
-
-function witch:attack_end ()
-	self.esp = false
-end
-
-function witch:attack_default (self_pos, dtime, esp)
-	local raid = self:_get_active_raid ()
-	if raid and not self._raider_cooldown
-		and raid.status == "ongoing"
-		and self:check_timer ("raider_target", 5.0) then
-		local nearest, dist = nil, nil
-		-- Locate the nearest illager in need of healing.
-		for object in core.objects_inside_radius (self_pos, self.view_range) do
-			local entity = object:get_luaentity ()
-			if entity and entity._is_raid_mob
-				and entity.name ~= self.name then
-				local pos = object:get_pos ()
-				local distance = vector.distance (self_pos, pos)
-				if not nearest or distance < dist then
-					nearest = object
-					dist = distance
-				end
-			end
-		end
-
-		if nearest then
-			self._raider_cooldown = 2.0
-			return nearest
-		end
-	end
-
-	return raid_mob.attack_default (self, self_pos, dtime, esp)
-end
-
 witch.ai_functions = {
 	raid_mob.check_recover_banner,
 	mob_class.check_attack,
@@ -372,6 +327,71 @@ witch.ai_functions = {
 	raid_mob.check_distant_patrol,
 	mob_class.check_pace,
 	raid_mob.check_celebrate,
+}
+
+local dist_sqr = mcl_mobs.dist_sqr
+local huge = math.huge
+
+local function is_raid_mob (obj)
+	local entity = obj:get_luaentity ()
+	if entity
+		and entity._is_raid_mob
+		and entity.name ~= "mobs_mc:witch" then
+		local raid = entity:_get_active_raid ()
+		return raid and raid.status == "ongoing"
+	end
+	return false
+end
+
+local function witch_heal_raider_rule (self, self_pos, dtime, obj, is_current)
+	if obj and is_current then
+		local dist = self.tracking_distance * self.tracking_distance
+		return self:track_current_target (self_pos, dtime, obj, dist,
+						  3.0)
+	elseif not self._raider_cooldown then
+		local raid = self:_get_active_raid ()
+		if raid	and raid.status == "ongoing"
+			and self:check_timer ("seek_target", 0.5) then
+			local range = self.view_range
+			local objects = self:objects_for_targeting (self_pos, range)
+			local d = huge
+			local target = nil
+			for _, obj in ipairs (objects) do
+				if self.object ~= obj and is_raid_mob (obj) then
+					local obj_pos = obj:get_pos ()
+					if self:test_object_and_restriction (obj, obj_pos)
+						and self:target_visible (self_pos, obj) then
+						local d1 = dist_sqr (self_pos, obj_pos)
+						if d1 <= range * range and d1 < d then
+							d, target = d1, obj
+						end
+					end
+				end
+			end
+			if target then
+				-- Prevent all manner of target
+				-- acquisition for 10 seconds after a
+				-- raider is locked.
+				self._raider_cooldown = 10.0
+			end
+			return target
+		end
+	end
+end
+
+local function witch_attack_player_p (self)
+	return self._raider_cooldown == nil
+end
+
+witch._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (mobs_mc.raid_mob_predicate,
+						nil, nil),
+	mcl_mobs.build_target_rule ({
+		fn = witch_heal_raider_rule,
+		on_complete = nil,
+	}),
+	mcl_mobs.build_nearest_target_rule ("player", nil, witch_attack_player_p,
+					    nil, nil),
 }
 
 mcl_mobs.register_mob ("mobs_mc:witch", witch)

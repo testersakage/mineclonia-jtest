@@ -16,7 +16,6 @@ local strider = {
 	description = S("Strider"),
 	type = "animal",
 	_spawn_category = "creature",
-	passive = true,
 	runaway = true,
 	hp_min = 20,
 	hp_max = 20,

@@ -16,10 +16,6 @@ local blaze = {
 	description = S("Blaze"),
 	type = "monster",
 	_spawn_category = "monster",
-	group_attack = {
-		"mobs_mc:blaze",
-	},
-	retaliates = true,
 	hp_min = 20,
 	hp_max = 20,
 	xp_min = 10,
@@ -71,7 +67,6 @@ local blaze = {
 	gravity_drag = 0.6,
 	attack_type = "null",
 	arrow = "mobs_mc:blaze_fireball",
-	passive = false,
 	makes_footstep_sound = false,
 	glow = 14,
 	fire_damage_resistant = true,
@@ -295,6 +290,12 @@ blaze.gwp_penalties.DAMAGE_FIRE = 0.0
 blaze.ai_functions = {
 	mob_class.check_attack,
 	mob_class.check_pace,
+}
+
+blaze._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, true, {"mobs_mc:blaze",}),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, nil),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mcl_mobs.register_mob ("mobs_mc:blaze", blaze)

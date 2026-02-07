@@ -8,7 +8,6 @@ local cow_def = {
 	type = "animal",
 	_spawn_category = "creature",
 	runaway = true,
-	passive = true,
 	hp_min = 10,
 	hp_max = 10,
 	xp_min = 1,
