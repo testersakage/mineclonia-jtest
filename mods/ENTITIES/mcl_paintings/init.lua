@@ -11,9 +11,14 @@ local wood = "mcl_paintings_frame.png"
 -- texture       - the texture
 -- legacy_motive - the old (and extremely stupid) painting identifier, used for backwards compability
 local registered_paintings = {}
+local registered_painting_aliases = {}
 local maximum_width = 0
 local maximum_height = 0
 local search_distance = 0
+
+function mcl_paintings.register_painting_alias(alias, original_name)
+	registered_painting_aliases[alias] = original_name
+end
 
 function mcl_paintings.register_painting(name, def)
 	def.name = name
@@ -281,10 +286,15 @@ core.register_entity("mcl_paintings:painting", {
 			end
 		end
 
-		if not registered_paintings[self._painting_name] then
-			core.log("error", "Could not find painting definition for `" .. self._painting_name .. "`")
-			self.object:remove()
-			return
+
+		while not registered_paintings[self._painting_name] do
+			if registered_painting_aliases[self._painting_name] then
+				self._painting_name = registered_painting_aliases[self._painting_name]
+			elseif not registered_paintings[self._painting_name] then
+				core.log("error", "Could not find painting definition for `" .. self._painting_name .. "`")
+				self.object:remove()
+				return
+			end
 		end
 
 		set_entity(self.object, registered_paintings[self._painting_name])
