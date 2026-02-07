@@ -1951,10 +1951,8 @@ local function print_node_neighbors (itemstack, user, pointed_thing)
 		local edges_above = entity:gwp_edges (context, pointed_thing.above)
 		edges_above = table.copy (edges_above)
 
-		if core.global_exists ("dbg") then
-			dbg.pp (edges_under)
-			dbg.pp (edges_above)
-		end
+		print (dump (edges_under))
+		print (dump (edges_above))
 	end
 end
 
@@ -2056,9 +2054,7 @@ core.register_tool ("mcl_mobs:pathfinder_dump_stick", {
 		if not (user and user:is_player ()) or pointed_thing.type ~= "object" then
 			return
 		end
-		if core.global_exists ("dbg") then
-			dbg.pp (pointed_thing.ref:get_luaentity ())
-		end
+		print (dump (pointed_thing.ref:get_luaentity ()))
 		mcl_mobs.last_dbg_entity = pointed_thing.ref:get_luaentity ()
 	end,
 })

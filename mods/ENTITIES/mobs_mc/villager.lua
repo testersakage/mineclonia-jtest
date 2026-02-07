@@ -28,7 +28,6 @@ local WIELD_POSITION = vector.copy ({
 local villager_base = {
 	type = "npc",
 	_spawn_category = "misc",
-	passive = true,
 	hp_min = 20,
 	hp_max = 20,
 	head_swivel = "Head_Control",

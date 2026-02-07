@@ -14,8 +14,6 @@ local silverfish = {
 	description = S("Silverfish"),
 	type = "monster",
 	_spawn_category = "monster",
-	passive = false,
-	group_attack = true,
 	reach = 1,
 	hp_min = 8,
 	hp_max = 8,
@@ -142,6 +140,14 @@ silverfish.ai_functions = {
 	mob_class.check_attack,
 	silverfish_return_to_block,
 	mob_class.check_pace,
+}
+
+silverfish._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, true, {
+		"mobs_mc:silverfish",
+	}),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, nil),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mcl_mobs.register_mob ("mobs_mc:silverfish", silverfish)

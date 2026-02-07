@@ -1,30 +1,78 @@
 --License for code WTFPL and otherwise stated in readmes
 
-local S = core.get_translator("mobs_mc")
+local S = core.get_translator ("mobs_mc")
 
 local slime_chunk_spawn_max = -24 -- Y=40 in Minecraft.
 
 local only_peaceful_mobs
 	= core.settings:get_bool ("only_peaceful_mobs", false)
 
-local function in_slime_chunk(pos)
+local function in_slime_chunk (pos)
 	return mcl_biome_dispatch.is_slime_chunk (pos.x, pos.z)
 end
 
--- If the light level is equal to or less than a random integer (from 0 to 7)
--- If the fraction of the moon that is bright is greater than a random number (from 0 to 1)
--- If these conditions are met and the altitude is acceptable, there is a 50% chance of spawning a slime.
--- https://minecraft.wiki/w/Slime#Swamps
+local mob_class = mcl_mobs.mob_class
 
-local function swamp_spawn(pos)
-	local light = (core.get_node_light (pos) or core.LIGHT_MAX)
-	if light > math.random(0,7) then return false end
-	if math.abs(4 - mcl_moon.get_moon_phase()) / 4 < math.random() then return false end --moon phase 4 is new moon in mcl_moon
-	if math.random(2) == 2 then return false end
-	return true
-end
+------------------------------------------------------------------------
+-- Slime.
+------------------------------------------------------------------------
 
--- Returns a function that spawns children in a circle around pos.
+local slime = {
+	description = S ("Slime"),
+	type = "monster",
+	_spawn_category = "monster",
+	hp_min = 16,
+	hp_max = 16,
+	xp_min = 4,
+	xp_max = 4,
+	textures = {{"mobs_mc_slime.png", "mobs_mc_slime.png"}},
+	visual = "mesh",
+	mesh = "mobs_mc_slime.b3d",
+	makes_footstep_sound = true,
+	does_not_prevent_sleep = true,
+	sounds = {
+		jump = "green_slime_jump",
+		death = "green_slime_death",
+		damage = "green_slime_damage",
+		attack = "green_slime_attack",
+		distance = 16,
+	},
+	sound_params = {
+		gain = 1,
+	},
+	damage = 4,
+	reach = 3,
+	armor = 100,
+	drops = {},
+	animation = {
+		jump_start = 1,
+		jump_end = 20,
+		jump_speed = 24,
+		jump_loop = false,
+		stand_speed = 0,
+		walk_speed = 0,
+		stand_start = 1,
+		stand_end = 1,
+		walk_start = 1,
+		walk_end = 1,
+	},
+	fall_damage = 0,
+	use_texture_alpha = true,
+	attack_type = "null",
+	jump_delay_multiplier = 1,
+	_get_slime_particle = function ()
+		return "[combine:" .. math.random (3)
+			.. "x" .. math.random (3) .. ":-"
+			.. math.random (4) .. ",-"
+			.. math.random (4) .. "=mcl_core_slime.png"
+	end
+}
+
+------------------------------------------------------------------------
+-- Slime mechanics.
+------------------------------------------------------------------------
+
+-- Return a function that spawns children in a circle around pos.
 -- To be used as on_die callback.
 -- self: mob reference
 -- pos: position of "mother" mob
@@ -45,8 +93,9 @@ local spawn_children_on_die = function(child_mob, spawn_distance, eject_speed)
 			dir = vector.new(math.cos(angle), 0, math.sin(angle))
 			posadd = vector.normalize(dir) * spawn_distance
 			newpos = pos + posadd
-			-- If child would end up in a wall, use position of the "mother", unless
-			-- the "mother" was stuck as well
+			-- If child would end up in a wall, use
+			-- position of the "mother", unless the
+			-- "mother" was stuck as well
 			if not mother_stuck then
 				local cndef = core.registered_nodes[core.get_node(newpos).name]
 				if cndef and cndef.walkable then
@@ -54,7 +103,9 @@ local spawn_children_on_die = function(child_mob, spawn_distance, eject_speed)
 					eject_speed = eject_speed * 0.5
 				end
 			end
-			local mob = core.add_entity(newpos, child_mob, core.serialize({ persist_in_peaceful = self.persist_in_peaceful }))
+			local mob = core.add_entity (newpos, child_mob, core.serialize({
+				persist_in_peaceful = self.persist_in_peaceful,
+			}))
 			if mob and mob:get_pos() and not mother_stuck then
 				mob:set_velocity(dir * eject_speed)
 			end
@@ -62,9 +113,11 @@ local spawn_children_on_die = function(child_mob, spawn_distance, eject_speed)
 	end
 end
 
+------------------------------------------------------------------------
 -- Slime movement.
+------------------------------------------------------------------------
 
-local function slime_do_go_pos (self, dtime, moveresult)
+function slime:do_go_pos (dtime, moveresult)
 	-- The target position is ignored.
 	local speed = self.movement_velocity
 
@@ -91,6 +144,46 @@ local function slime_do_go_pos (self, dtime, moveresult)
 	end
 	self._next_jump = delay
 end
+
+------------------------------------------------------------------------
+-- Slime visuals.
+------------------------------------------------------------------------
+
+local function slime_check_particle (self, dtime, moveresult)
+	if not self._slime_was_touching_ground
+		and moveresult.touching_ground
+		and self._get_slime_particle then
+		local cbox = self.collisionbox
+		local radius = (cbox[6] - cbox[3]) * 0.75
+		local self_pos = self.object:get_pos ()
+		local v = 1
+		core.add_particlespawner ({
+			amount = math.round (radius * 32),
+			minpos = vector.offset (self_pos, -radius, 0, -radius),
+			maxpos = vector.offset (self_pos, radius, 0, radius),
+			minvel = vector.new (-v, 0, -v),
+			maxvel = vector.new (v, 0, v),
+			minacc = vector.new (0, 0, 0),
+			maxacc = vector.new (0, 0, 0),
+			texture = self._get_slime_particle (),
+			time = 0.1,
+			minexptime = 0.1,
+			maxexptime = 0.6,
+			minsize = 0.5,
+			maxsize = 1.5,
+			glow = self._slime_particle_glow,
+		})
+	end
+	self._slime_was_touching_ground = moveresult.touching_ground
+end
+
+function slime:do_custom (dtime, moveresult)
+	slime_check_particle (self, dtime, moveresult)
+end
+
+------------------------------------------------------------------------
+-- Slime AI.
+------------------------------------------------------------------------
 
 local function slime_turn (self, dtime, self_pos)
 	if not self.attack then
@@ -145,7 +238,7 @@ local function slime_check_attack (self, self_pos, dtime)
 	end
 end
 
-local function slime_run_ai (self, dtime)
+function slime:run_ai (dtime)
 	local self_pos = self.object:get_pos ()
 
 	if self.dead then
@@ -158,283 +251,123 @@ local function slime_run_ai (self, dtime)
 	slime_check_attack (self, self_pos, dtime)
 end
 
-local function slime_check_particle (self, dtime, moveresult)
-	if not self._slime_was_touching_ground
-		and moveresult.touching_ground
-		and self._get_slime_particle then
-		local cbox = self.collisionbox
-		local radius = (cbox[6] - cbox[3]) * 0.75
-		local self_pos = self.object:get_pos ()
-		local v = 1
-		core.add_particlespawner ({
-			amount = math.round (radius * 32),
-			minpos = vector.offset (self_pos, -radius, 0, -radius),
-			maxpos = vector.offset (self_pos, radius, 0, radius),
-			minvel = vector.new (-v, 0, -v),
-			maxvel = vector.new (v, 0, v),
-			minacc = vector.new (0, 0, 0),
-			maxacc = vector.new (0, 0, 0),
-			texture = self._get_slime_particle (),
-			time = 0.1,
-			minexptime = 0.1,
-			maxexptime = 0.6,
-			minsize = 0.5,
-			maxsize = 1.5,
-			glow = self._slime_particle_glow,
-		})
+function slime:switch_targeting_rule (fn_old, fn_new)
+	mob_class.switch_targeting_rule (self, fn_old, fn_new)
+	if fn_new then
+		if self._next_jump then
+			self._next_jump = self._next_jump / 3
+		end
+		self._attack_cooldown = 0.5 -- Minecraft damage immunity.
 	end
-	self._slime_was_touching_ground = moveresult.touching_ground
 end
 
-local function slime_do_attack (self, target)
-	self.attack = target
-	self.target_invisible_time = 3.0
-	self._sight_persistence = 3.0
-	if self._next_jump then
-		self._next_jump = self._next_jump / 3
-	end
-	self._attack_cooldown = 0.5 -- Minecraft damage immunity.
+local mathabs = math.abs
+
+local function slime_player_attackable_p (self, self_pos, obj, _)
+	-- Slimes should not notice players till they are within 4.0
+	-- blocks vertically of themselves.
+	return mathabs (obj:get_pos ().y - self_pos.y) <= 4.0
 end
 
--- Slime
-local slime_big = {
-	description = S("Slime - big"),
-	type = "monster",
-	_spawn_category = "monster",
+slime._targeting_rules = {
+	mcl_mobs.build_nearest_target_rule ("player", slime_player_attackable_p,
+					    nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:iron_golem", {"mobs_mc:iron_golem",},
+					    nil, nil, nil),
+}
+
+------------------------------------------------------------------------
+-- Slime spawning & registration.
+------------------------------------------------------------------------
+
+local slime_big = table.merge (slime, {
 	hp_min = 16,
 	hp_max = 16,
 	xp_min = 4,
 	xp_max = 4,
 	collisionbox = {-1.02, 0.0, -1.02, 1.02, 2.0, 1.02},
 	visual_size = {x=12.5, y=12.5},
-	textures = {{"mobs_mc_slime.png", "mobs_mc_slime.png"}},
-	visual = "mesh",
-	mesh = "mobs_mc_slime.b3d",
-	makes_footstep_sound = true,
 	can_ride_boat = false,
-	does_not_prevent_sleep = true,
-	sounds = {
-		jump = "green_slime_jump",
-		death = "green_slime_death",
-		damage = "green_slime_damage",
-		attack = "green_slime_attack",
-		distance = 16,
-	},
-	sound_params = {
-		gain = 1,
-	},
-	damage = 4,
-	reach = 3,
-	armor = 100,
-	drops = {},
-	animation = {
-		jump_start = 1,
-		jump_end = 20,
-		jump_speed = 24,
-		jump_loop = false,
-		stand_speed = 0,
-		walk_speed = 0,
-		stand_start = 1,
-		stand_end = 1,
-		walk_start = 1,
-		walk_end = 1,
-	},
-	do_go_pos = slime_do_go_pos,
-	run_ai = slime_run_ai,
-	do_attack = slime_do_attack,
-	do_custom = slime_check_particle,
-	jump_delay_multiplier = 1,
-	fall_damage = 0,
-	passive = false,
 	movement_speed = 10, -- (0.2 + 0.1 * size) * 20
 	spawn_small_alternative = "mobs_mc:slime_small",
-	on_die = spawn_children_on_die("mobs_mc:slime_small", 1.0, 1.5),
-	use_texture_alpha = true,
-	specific_attack = {
-		"mobs_mc:iron_golem",
-	},
-	attack_type = "null",
-	_get_slime_particle = function ()
-		return "[combine:" .. math.random (3)
-			.. "x" .. math.random (3) .. ":-"
-			.. math.random (4) .. ",-"
-			.. math.random (4) .. "=mcl_core_slime.png"
-	end
-}
-mcl_mobs.register_mob("mobs_mc:slime_big", slime_big)
+	on_die = spawn_children_on_die ("mobs_mc:slime_small", 1.0, 1.5),
+})
+mcl_mobs.register_mob ("mobs_mc:slime_big", slime_big)
 
-local slime_small = table.copy(slime_big)
-slime_small.description = S("Slime - small")
-slime_small.sounds.base_pitch = 1.15
-slime_small.hp_min = 4
-slime_small.hp_max = 4
-slime_small.xp_min = 2
-slime_small.xp_max = 2
-slime_small.collisionbox = {-0.51, 0.0, -0.51, 0.51, 1.00, 0.51}
-slime_small.visual_size = {x=6.25, y=6.25}
-slime_small.damage = 3
-slime_small.reach = 2.75
-slime_small.movement_speed = 6.0
-slime_small.spawn_small_alternative = "mobs_mc:slime_tiny"
-slime_small.on_die = spawn_children_on_die("mobs_mc:slime_tiny", 0.6, 1.0)
-slime_small.sound_params.gain = slime_big.sound_params.gain / 3
-mcl_mobs.register_mob("mobs_mc:slime_small", slime_small)
+local slime_small = table.merge (slime, {
+	sounds = table.merge (slime.sounds, {
+		base_pitch = 1.15,
+	}),
+	hp_min = 4,
+	hp_max = 4,
+	xp_min = 2,
+	xp_max = 2,
+	collisionbox = {-0.51, 0.0, -0.51, 0.51, 1.00, 0.51},
+	visual_size = {x=6.25, y=6.25},
+	damage = 3,
+	reach = 2.75,
+	movement_speed = 6.0,
+	spawn_small_alternative = "mobs_mc:slime_tiny",
+	on_die = spawn_children_on_die ("mobs_mc:slime_tiny", 0.6, 1.0),
+	sound_params = table.merge (slime.sound_params, {
+		gain = slime.sound_params.gain / 3.0,
+	}),
+})
+mcl_mobs.register_mob ("mobs_mc:slime_small", slime_small)
 
-local slime_tiny = table.copy(slime_big)
-slime_tiny.description = S("Slime - tiny")
-slime_tiny.sounds.base_pitch = 1.3
-slime_tiny.hp_min = 1
-slime_tiny.hp_max = 1
-slime_tiny.xp_min = 1
-slime_tiny.xp_max = 1
-slime_tiny.collisionbox = {-0.2505, 0.0, -0.2505, 0.2505, 0.50, 0.2505}
-slime_tiny.visual_size = {x=3.125, y=3.125}
-slime_tiny.damage = 0
-slime_tiny.reach = 2.5
-slime_tiny.drops = {
-	-- slimeball
-	{name = "mcl_mobitems:slimeball",
-	chance = 1,
-	min = 0,
-	max = 2,},
-}
-slime_tiny.can_ride_boat = true
-slime_tiny.movement_speed = 4.0
-slime_tiny.spawn_small_alternative = nil
-slime_tiny.on_die = nil
-slime_tiny.sound_params.gain = slime_small.sound_params.gain / 3
-
-mcl_mobs.register_mob("mobs_mc:slime_tiny", slime_tiny)
-
--- Magma cube
-local magma_cube_big = {
-	description = S("Magma Cube - big"),
-	type = "monster",
-	_spawn_category = "monster",
-	hp_min = 16,
-	hp_max = 16,
-	xp_min = 4,
-	xp_max = 4,
-	collisionbox = {-1.02, 0.0, -1.02, 1.02, 2.03, 1.02},
-	visual_size = {x=12.5, y=12.5},
-	textures = {{ "mobs_mc_magmacube.png", "mobs_mc_magmacube.png" }},
-	visual = "mesh",
-	mesh = "mobs_mc_magmacube.b3d",
-	makes_footstep_sound = true,
-	can_ride_boat = false,
-	does_not_prevent_sleep = true,
-	sounds = {
-		jump = "mobs_mc_magma_cube_big",
-		death = "mobs_mc_magma_cube_big",
-		attack = "mobs_mc_magma_cube_attack",
-		distance = 16,
-	},
-	sound_params = {
-		gain = 1,
-		max_hear_distance = 16,
-	},
-	movement_speed = 10.0,
-	damage = 6,
-	reach = 3,
-	armor = 53,
+local slime_tiny = table.merge (slime, {
+	sounds = table.merge (slime.sounds, {
+		base_pitch = 1.3,
+	}),
+	hp_min = 1,
+	hp_max = 1,
+	xp_min = 1,
+	xp_max = 1,
+	collisionbox = {-0.2505, 0.0, -0.2505, 0.2505, 0.50, 0.2505},
+	visual_size = {x=3.125, y=3.125},
+	damage = 0,
+	reach = 2.5,
 	drops = {
-		{name = "mcl_mobitems:magma_cream",
-		chance = 4,
-		min = 1,
-		max = 1,},
+		 {
+			 name = "mcl_mobitems:slimeball",
+			 chance = 1,
+			 min = 0,
+			 max = 2,
+		 },
 	},
-	animation = {
-		jump_speed = 40,
-		jump_loop = false,
-		stand_speed = 0,
-		walk_speed = 0,
-		jump_start = 0,
-		jump_end = 50,
-		stand_start = 0,
-		stand_end = 0,
-		walk_start = 0,
-		walk_end = 0,
-	},
-	do_go_pos = slime_do_go_pos,
-	run_ai = slime_run_ai,
-	do_attack = slime_do_attack,
-	do_custom = slime_check_particle,
-	jump_delay_multiplier = 4,
-	water_damage = 0,
-	_mcl_freeze_damage = 5,
-	lava_damage = 0,
-        fire_damage = 0,
-	fall_damage = 0,
-	jump_height = 14.4,
-	passive = false,
-	spawn_small_alternative = "mobs_mc:magma_cube_small",
-	on_die = spawn_children_on_die("mobs_mc:magma_cube_small", 0.8, 1.5),
-	fire_resistant = true,
-	specific_attack = {
-		"mobs_mc:iron_golem",
-	},
-	_get_slime_particle = function ()
-		return "mcl_particles_fire_flame.png"
-	end,
-	attack_type = "null",
-	_slime_particle_glow = 14,
-}
-mcl_mobs.register_mob("mobs_mc:magma_cube_big", magma_cube_big)
+	can_ride_boat = true,
+	movement_speed = 4.0,
+	sound_params = table.merge (slime.sound_params, {
+		gain = slime.sound_params.gain / 9.0,
+	}),
+})
+mcl_mobs.register_mob ("mobs_mc:slime_tiny", slime_tiny)
 
-local magma_cube_small = table.copy(magma_cube_big)
-magma_cube_small.description = S("Magma Cube - small")
-magma_cube_small.sounds.jump = "mobs_mc_magma_cube_small"
-magma_cube_small.sounds.death = "mobs_mc_magma_cube_small"
-magma_cube_small.hp_min = 4
-magma_cube_small.hp_max = 4
-magma_cube_small.xp_min = 2
-magma_cube_small.xp_max = 2
-magma_cube_small.collisionbox = {-0.51, 0.0, -0.51, 0.51, 1.00, 0.51}
-magma_cube_small.visual_size = {x=6.25, y=6.25}
-magma_cube_small.damage = 3
-magma_cube_small.reach = 2.75
-magma_cube_small.movement_speed = 6.0
-magma_cube_small.jump_height = 12.4
-magma_cube_small.damage = 4
-magma_cube_small.reach = 2.75
-magma_cube_small.armor = 66
-magma_cube_small.spawn_small_alternative = "mobs_mc:magma_cube_tiny"
-magma_cube_small.on_die = spawn_children_on_die("mobs_mc:magma_cube_tiny", 0.6, 1.0)
-magma_cube_small.sound_params.gain = 0.7 -- has different sound file from big
-mcl_mobs.register_mob("mobs_mc:magma_cube_small", magma_cube_small)
-
-local magma_cube_tiny = table.copy(magma_cube_big)
-magma_cube_tiny.description = S("Magma Cube - tiny")
-magma_cube_tiny.sounds.jump = "mobs_mc_magma_cube_small"
-magma_cube_tiny.sounds.death = "mobs_mc_magma_cube_small"
-magma_cube_tiny.sounds.base_pitch = 1.25
-magma_cube_tiny.hp_min = 1
-magma_cube_tiny.hp_max = 1
-magma_cube_tiny.xp_min = 1
-magma_cube_tiny.xp_max = 1
-magma_cube_tiny.collisionbox = {-0.2505, 0.0, -0.2505, 0.2505, 0.50, 0.2505}
-magma_cube_tiny.visual_size = {x=3.125, y=3.125}
-magma_cube_tiny.can_ride_boat = true
-magma_cube_tiny.movement_speed = 4.0
-magma_cube_tiny.jump_height = 8.4
-magma_cube_tiny.damage = 3
-magma_cube_tiny.reach = 2.5
-magma_cube_tiny.armor = 50
-magma_cube_tiny.drops = {}
-magma_cube_tiny.spawn_small_alternative = nil
-magma_cube_tiny.on_die = nil
-magma_cube_tiny.sound_params.gain = magma_cube_small.sound_params.gain / 3
-
-mcl_mobs.register_mob("mobs_mc:magma_cube_tiny", magma_cube_tiny)
-
--- spawn eggs
-mcl_mobs.register_egg("mobs_mc:magma_cube_big", S("Magma Cube"), "#350000", "#fcfc00")
-
-mcl_mobs.register_egg("mobs_mc:slime_big", S("Slime"), "#52a03e", "#7ebf6d")
+mcl_mobs.register_egg ("mobs_mc:slime_big", S ("Slime"), "#52a03e", "#7ebf6d")
 
 ------------------------------------------------------------------------
--- Modern Slime & Magma Cube spawning.
+-- Modern Slime spawning.
 ------------------------------------------------------------------------
+
+-- If the light level is equal to or less than a random integer (from 0 to 7)
+-- If the fraction of the moon that is bright is greater than a random number (from 0 to 1)
+-- If these conditions are met and the altitude is acceptable, there is a 50% chance of spawning a slime.
+-- https://minecraft.wiki/w/Slime#Swamps
+
+local function swamp_spawn (pos)
+	local light = (core.get_node_light (pos) or core.LIGHT_MAX)
+	if light > math.random (0,7) then
+		return false
+	end
+	-- Moon phase 4 is the new moon in mcl_moon.
+	if math.abs(4 - mcl_moon.get_moon_phase()) / 4 < math.random() then
+		return false
+	end
+	if math.random(2) == 2 then
+		return false
+	end
+	return true
+end
 
 local default_spawner = mcl_mobs.default_spawner
 local slime_spawner = table.merge (default_spawner, {
@@ -510,6 +443,156 @@ function slime_spawner:describe_criteria (tbl, omit_group_details)
 end
 
 mcl_mobs.register_spawner (slime_spawner)
+
+------------------------------------------------------------------------
+-- Magma Cube.
+------------------------------------------------------------------------
+
+local magma_cube = table.merge (slime, {
+	description = S ("Magma Cube"),
+	type = "monster",
+	_spawn_category = "monster",
+	textures = {{ "mobs_mc_magmacube.png", "mobs_mc_magmacube.png" }},
+	visual = "mesh",
+	mesh = "mobs_mc_magmacube.b3d",
+	sounds = {
+		jump = "mobs_mc_magma_cube_big",
+		death = "mobs_mc_magma_cube_big",
+		attack = "mobs_mc_magma_cube_attack",
+		distance = 16,
+	},
+	sound_params = {
+		gain = 1,
+		max_hear_distance = 16,
+	},
+	damage = 6,
+	reach = 3,
+	armor = 53,
+	drops = {
+		{
+			name = "mcl_mobitems:magma_cream",
+			chance = 4,
+			min = 1,
+			max = 1,
+		},
+	},
+	animation = {
+		jump_speed = 40,
+		jump_loop = false,
+		stand_speed = 0,
+		walk_speed = 0,
+		jump_start = 0,
+		jump_end = 50,
+		stand_start = 0,
+		stand_end = 0,
+		walk_start = 0,
+		walk_end = 0,
+	},
+	jump_delay_multiplier = 4,
+	water_damage = 0,
+	_mcl_freeze_damage = 5,
+	lava_damage = 0,
+        fire_damage = 0,
+	fall_damage = 0,
+	_get_slime_particle = function ()
+		return "mcl_particles_fire_flame.png"
+	end,
+	attack_type = "null",
+	_slime_particle_glow = 14,
+})
+
+-- Magma cube
+local magma_cube_big = table.merge (magma_cube, {
+	hp_min = 16,
+	hp_max = 16,
+	xp_min = 4,
+	xp_max = 4,
+	collisionbox = {-1.02, 0.0, -1.02, 1.02, 2.03, 1.02},
+	visual_size = {x=12.5, y=12.5},
+	can_ride_boat = false,
+	movement_speed = 10.0,
+	damage = 6,
+	reach = 3,
+	armor = 53,
+	jump_height = 14.4,
+	spawn_small_alternative = "mobs_mc:magma_cube_small",
+	on_die = spawn_children_on_die ("mobs_mc:magma_cube_small", 0.8, 1.5),
+	fire_resistant = true,
+	_get_slime_particle = function ()
+		return "mcl_particles_fire_flame.png"
+	end,
+	attack_type = "null",
+	_slime_particle_glow = 14,
+})
+mcl_mobs.register_mob ("mobs_mc:magma_cube_big", magma_cube_big)
+
+local magma_cube_small = table.merge (magma_cube, {
+	sounds = {
+		jump = "mobs_mc_magma_cube_small",
+		death = "mobs_mc_magma_cube_small",
+		attack = "mobs_mc_magma_cube_attack",
+		distance = 16,
+	},
+	hp_min = 4,
+	hp_max = 4,
+	xp_min = 2,
+	xp_max = 2,
+	collisionbox = {-0.51, 0.0, -0.51, 0.51, 1.00, 0.51},
+	visual_size = {x=6.25, y=6.25},
+	movement_speed = 6.0,
+	jump_height = 12.4,
+	damage = 4,
+	reach = 2.75,
+	armor = 66,
+	spawn_small_alternative = "mobs_mc:magma_cube_tiny",
+	on_die = spawn_children_on_die ("mobs_mc:magma_cube_tiny", 0.6, 1.0),
+	sound_params = {
+		gain = 0.7,
+		max_hear_distance = 16,
+	},
+})
+mcl_mobs.register_mob ("mobs_mc:magma_cube_small", magma_cube_small)
+
+local magma_cube_tiny = table.merge (magma_cube, {
+	sounds = {
+		jump = "mobs_mc_magma_cube_small",
+		death = "mobs_mc_magma_cube_small",
+		attack = "mobs_mc_magma_cube_attack",
+		distance = 16,
+		base_pitch = 1.25,
+	},
+	hp_min = 1,
+	hp_max = 1,
+	xp_min = 1,
+	xp_max = 1,
+	collisionbox = {-0.2505, 0.0, -0.2505, 0.2505, 0.50, 0.2505},
+	visual_size = {x=3.125, y=3.125},
+	can_ride_boat = true,
+	movement_speed = 4.0,
+	jump_height = 8.4,
+	damage = 3,
+	reach = 2.5,
+	armor = 50,
+	drops = {},
+	spawn_small_alternative = nil,
+	on_die = nil,
+	sound_params = {
+		gain = 0.25,
+		max_hear_distance = 16,
+	},
+})
+
+mcl_mobs.register_mob ("mobs_mc:magma_cube_tiny", magma_cube_tiny)
+
+------------------------------------------------------------------------
+-- Magma Cube spawning.
+------------------------------------------------------------------------
+
+mcl_mobs.register_egg ("mobs_mc:magma_cube_big", S ("Magma Cube"), "#350000", "#fcfc00")
+
+------------------------------------------------------------------------
+-- Modern Magma Cube spawning.
+------------------------------------------------------------------------
 
 local default_spawner = mcl_mobs.default_spawner
 

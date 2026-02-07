@@ -1,52 +1,402 @@
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
+local ipairs = ipairs
+
+------------------------------------------------------------------------
+-- Target acquisition.
+------------------------------------------------------------------------
+
+function mob_class:is_valid_target (obj)
+	return not self.dead and obj ~= self.object
+end
+
+function mob_class:run_targeting_rules (dtime, self_pos)
+	local active_targeting_rule = self._active_targeting_rule
+	local obj = self._active_target
+	if obj and not obj:is_valid () then
+		self._active_target = nil
+		active_targeting_rule = nil
+		obj = nil
+	end
+
+	self._active_targeting_rule = nil
+	self._active_target = nil
+	self._object_search_lists = {}
+
+	for _, fn in ipairs (self._targeting_rules) do
+		local is_current = active_targeting_rule == fn
+		local value = fn (self, self_pos, dtime, obj, is_current)
+		if value and value:is_valid ()
+			and self:is_valid_target (value) then
+			self._active_targeting_rule = fn
+			self._active_target = value
+			break
+		end
+	end
+
+	-- N.B.: the same targeting rule is liable to be considered to
+	-- have been reactivated if it yields a different object than
+	-- is currently active.
+	if obj ~= self._active_target then
+		-- Run callbacks to adjust state associated with the
+		-- previous targeting rule.
+		self:switch_targeting_rule (active_targeting_rule,
+					    self._active_targeting_rule)
+	end
+end
+
+local targeting_exit_callbacks = {}
+
+function mob_class:switch_targeting_rule (fn_old, fn_new)
+	if fn_new then
+		self.target_invisible_time = nil
+	end
+	local cb_exit = targeting_exit_callbacks[fn_old]
+	if cb_exit then
+		cb_exit (self, fn_old, fn_new)
+	end
+end
+
+local v1, v2 = vector.zero (), vector.zero ()
+
+function mob_class:objects_for_targeting (self_pos, range)
+	if self._object_search_lists[range] then
+		return self._object_search_lists[range]
+	end
+
+	v1.x = self_pos.x + self.collisionbox[1] - range
+	v1.y = self_pos.y + self.collisionbox[2] - range
+	v1.z = self_pos.z + self.collisionbox[3] - range
+	v2.x = self_pos.x + self.collisionbox[4] + range
+	v2.y = self_pos.y + self.collisionbox[5] + range
+	v2.z = self_pos.z + self.collisionbox[6] + range
+	local list = core.get_objects_in_area (v1, v2)
+	self._object_search_lists[range] = list
+	return list
+end
+
+local function objects_equivalent_p (luaentity, mob_name)
+	-- A `luaentity' of nil indicates that this object is a
+	-- player.
+	if mob_name == "player" then
+		return not luaentity
+	elseif mob_name == "monster" then
+		return luaentity and luaentity.type == "monster"
+	elseif luaentity then
+		return mob_name == luaentity.name
+	end
+	return false
+end
+
+local function object_targetable_p (obj)
+	local luaentity = obj:get_luaentity ()
+	return obj:is_valid ()
+		and ((luaentity and luaentity.is_mob) or obj:is_player ())
+end
+
+mcl_mobs.object_targetable_p = object_targetable_p
+
+local function dist_sqr (a, b)
+	local dx = b.x - a.x
+	local dy = b.y - a.y
+	local dz = b.z - a.z
+	return dx * dx + dy * dy + dz * dz
+end
+
+mcl_mobs.dist_sqr = dist_sqr
+
+function mcl_mobs.build_search_predicate (mob_names)
+	return function (self, self_pos, obj, luaentity)
+		for _, name in ipairs (mob_names) do
+			if objects_equivalent_p (luaentity, name) then
+				return true
+			end
+		end
+		return false
+	end
+end
+
+local SIGHT_PERSISTENCE = 3.0
+local huge = math.huge
+
+function mcl_mobs.build_target_rule (tbl)
+	assert (type (tbl.fn) == "function")
+	assert (tbl.on_complete == nil
+		or type (tbl.on_complete) == "function")
+	if targeting_exit_callbacks[tbl.fn]
+		and targeting_exit_callbacks[tbl.fn] ~= tbl.on_complete then
+		error ("Targeting rule redefined with a different `on_complete' callback")
+	end
+	targeting_exit_callbacks[tbl.fn] = tbl.on_complete
+	return tbl.fn
+end
+
+function mob_class:track_current_target (self_pos, dtime, obj, dist, persistence)
+	-- This object is the current target; decide whether or not to
+	-- cease attacking it for having moved out of range...
+	local pos = obj:get_pos ()
+	if dist_sqr (self_pos, pos) > dist
+		or not self:test_object_and_restriction (obj, pos) then
+		return nil
+	end
+	if persistence then
+		-- ... or having been invisible for
+		-- too long.
+		local line_of_sight = self:target_visible (self_pos, obj)
+		if not line_of_sight then
+			local t = (self.target_invisible_time or persistence)
+			self.target_invisible_time = t - dtime
+
+			if t < 0 then
+				return nil
+			end
+		else
+			self.target_invisible_time = persistence
+		end
+	end
+	return obj
+end
+
+function mcl_mobs.build_nearest_target_rule (base_type, predicate, start_predicate, range,
+					     esp_or_persistence)
+	if type (predicate) == "table" then
+		predicate = mcl_mobs.build_search_predicate (predicate)
+	elseif not predicate then
+		predicate = function (_, _, _, _)
+			return true
+		end
+	end
+	local persistence
+	if type (esp_or_persistence) == "number" then
+		persistence = esp_or_persistence
+	else
+		persistence = not esp_or_persistence and SIGHT_PERSISTENCE or nil
+	end
+	local range_fn
+	if type (range) == "number" then
+		range_fn = function (view_range) return view_range end
+	elseif not range then
+		range_fn = function (view_range) return view_range end
+	else
+		assert (type (range) == "function")
+		range_fn = range
+	end
+	local fn = function (self, self_pos, dtime, obj, is_current)
+		if start_predicate
+			and not start_predicate (self, self_pos) then
+			return nil
+		end
+
+		if is_current then
+			local dist = range_fn (self.tracking_distance)
+			return self:track_current_target (self_pos, dtime, obj,
+							  dist * dist, persistence)
+		end
+
+		if not self:check_timer ("seek_target", 0.5) then
+			return false
+		end
+
+		local target = nil
+		local range = range_fn (self.view_range)
+		local view_range = range * range
+		if base_type ~= "player" then
+			local objects = self:objects_for_targeting (self_pos, range)
+			local d = huge
+			for _, obj in ipairs (objects) do
+				if object_targetable_p (obj) and obj ~= self.object then
+					local luaentity = obj:get_luaentity ()
+					if predicate (self, self_pos, obj, luaentity)
+						and self:target_visible (self_pos, obj) then
+						local pos = obj:get_pos ()
+						if self:test_object_and_restriction (obj, pos) then
+							local d1 = dist_sqr (self_pos, pos)
+							local m = self:detection_multiplier_for_object (obj)
+							if d1 <= view_range * m * m and d1 < d then
+								d = d1
+								target = obj
+							end
+						end
+					end
+				end
+			end
+		else
+			local d = huge
+			for player, pos1 in mcl_player.iterate_connected_players () do
+				local d1 = dist_sqr (self_pos, pos1)
+				local m = self:detection_multiplier_for_object (player)
+				if d1 <= view_range * m * m and d1 < d
+					and predicate (self, self_pos, player, nil)
+					and self:target_visible (self_pos, player)
+					and self:test_object_and_restriction (player, pos1) then
+					d = d1
+					target = player
+				end
+			end
+		end
+
+		return target
+	end
+	return mcl_mobs.build_target_rule ({
+		fn = fn,
+		on_complete = nil,
+	})
+end
+
+local RETALIATION_PERSISTENCE = 15
+
+local function run_mob_predicate (self, self_pos, predicate, obj)
+	if obj:is_valid () then
+		local luaentity = obj:get_luaentity ()
+		return (obj:is_player () or luaentity)
+			and predicate (self, self_pos, obj, luaentity)
+	end
+	return false
+end
+
+function mob_class:broadcast_attack (self_pos, target, objects, alert_predicate)
+	for _, object in ipairs (objects) do
+		if object ~= self.object
+			and run_mob_predicate (self, self_pos, alert_predicate,
+					       object) then
+			local entity = object:get_luaentity ()
+			assert (entity)
+			entity:receive_attack (target)
+		end
+	end
+end
+
+function mob_class:read_last_attacker ()
+	local id = self._last_attack_id
+	if self._last_recorded_attack_id ~= id then
+		local obj = self._last_attacker
+		self._last_recorded_attack_id = id
+		if obj then
+			return object_targetable_p (obj) and obj or nil
+		end
+	end
+	return nil
+end
+
+function mcl_mobs.build_retaliation_target_rule (ignore, alert_others, alert_predicate)
+	if type (ignore) == "table" then
+		ignore = mcl_mobs.build_search_predicate (ignore)
+	elseif not ignore then
+		ignore = function (_, _, _, _)
+			return false
+		end
+	end
+	if type (alert_predicate) == "table" then
+		alert_predicate
+			= mcl_mobs.build_search_predicate (alert_predicate)
+	elseif not alert_predicate then
+		alert_predicate = function (_, _, _, _)
+			return false
+		end
+	end
+
+	local fn = function (self, self_pos, dtime, obj, is_current)
+		-- Don't be distracted by other attackers when one is
+		-- already being pursued.
+		if is_current then
+			local dist = self.tracking_distance * self.tracking_distance
+			return self:track_current_target (self_pos, dtime, obj, dist,
+							  RETALIATION_PERSISTENCE)
+		end
+
+		local attacker = self:read_last_attacker ()
+		if attacker then
+			local luaentity = attacker:get_luaentity ()
+			if not ignore (self, self_pos, attacker, luaentity) then
+				local obj_pos = attacker:get_pos ()
+				if self:test_object_and_restriction (attacker, obj_pos)
+					and not self:target_owner_p (attacker) then
+					if alert_others then
+						local range = self.view_range
+						local objects
+							= self:objects_for_targeting (self_pos, range)
+						self:broadcast_attack (self_pos, attacker, objects,
+								       alert_predicate)
+					end
+					local dist = self.tracking_distance
+					if vector.distance (self_pos, obj_pos) < dist then
+						return attacker
+					end
+				end
+			end
+		end
+		return
+	end
+	return mcl_mobs.build_target_rule ({
+		fn = fn,
+		on_complete = nil,
+	})
+end
+
+function mob_class:target_owner_p (target)
+	if self.tamed and self.owner
+		and core.get_player_by_name (self.owner) == target then
+		return true
+	end
+	return false
+end
+
+function mob_class:receive_attack (target)
+	if self:target_owner_p (target) or self._active_target then
+		return false
+	end
+	self._alert_receiver_target = target
+	return true
+end
+
+local function alert_receiver_rule (self, self_pos, dtime, obj, is_current)
+	if is_current then
+		local t = self._alert_receiver_time - dtime
+		self._alert_receiver_time = t
+		if t > 0 then
+			return self:track_current_target (self_pos, dtime, obj, 5184.0,
+							  RETALIATION_PERSISTENCE)
+		else
+			local dist = self.tracking_distance * self.tracking_distance
+			return self:track_current_target (self_pos, dtime, obj, dist,
+							  RETALIATION_PERSISTENCE)
+		end
+	else
+		local target = self._alert_receiver_target
+		if target and object_targetable_p (target) then
+			local target_pos = target:get_pos ()
+			if self:test_object_and_restriction (target, target_pos)
+				and dist_sqr (self_pos, target_pos) < 5184.0 then
+				-- Afford this mob a maximum of 20
+				-- seconds to approach within
+				-- tracking_distance of the object,
+				-- after which the increased distance
+				-- of 72 nodes ceases to apply.
+				self._alert_receiver_time = 20.0
+				self._alert_receiver_target = nil
+				return target
+			end
+		end
+		self._alert_receiver_target = nil
+	end
+	return nil
+end
+
+local function alert_receiver_complete (self)
+	self._alert_receiver_target = nil
+	self._alert_receiver_time = nil
+end
+
+function mcl_mobs.build_alert_receiver_rule ()
+	return mcl_mobs.build_target_rule ({
+		fn = alert_receiver_rule,
+		on_complete = alert_receiver_complete,
+	})
+end
 
 ------------------------------------------------------------------------
 -- Generic combat routines.
 ------------------------------------------------------------------------
-
-local SIGHT_PERSISTENCE = 3.0
-
-function mob_class:do_attack(obj, persistence)
-	if self.dead or obj == self.obj or obj == self.attack then
-		return
-	end
-
-	-- Attack!!!
-	local mover = self:mob_controlling_movement ()
-	self.attack = obj
-	self.attacking = false
-	mover:set_animation ("run")
-	self:replace_activity ("attack")
-
-	-- Abandon after obj disappears for longer than three seconds.
-	self.target_invisible_time = persistence or SIGHT_PERSISTENCE
-	self._sight_persistence = persistence or SIGHT_PERSISTENCE
-end
-
--- blast damage to entities nearby
-local function blast_damage(pos, radius, source)
-	radius = radius * 2
-
-	for obj in core.objects_inside_radius(pos, radius) do
-
-		local obj_pos = obj:get_pos()
-		local dist = vector.distance(pos, obj_pos)
-		if dist < 1 then dist = 1 end
-
-		local damage = math.floor((4 / dist) * radius)
-
-		-- punches work on entities AND players
-		obj:punch(source, 1.0, {
-			full_punch_interval = 1.0,
-			damage_groups = {fleshy = damage},
-		}, vector.direction(pos, obj_pos))
-	end
-end
-
-function mob_class:entity_physics(pos,radius)
-	return blast_damage (pos,radius, self.object)
-end
 
 function mob_class:attack_player_allowed (player)
 	return mcl_vars.difficulty ~= 0
@@ -68,30 +418,7 @@ function mob_class:projectile_knockback (factor, dir)
 		= mcl_util.calculate_knockback (velocity, factor * 0.5,
 						resistance,
 						standing, dir.x, dir.z)
-
-	if self.animation.run_end then
-		self:set_animation ("run")
-	elseif self.animation.walk_end then
-		self:set_animation ("walk")
-	end
-	self.frame_speed_multiplier=2.3
 	self.object:set_velocity (knockback)
-	core.after(0.2, function()
-			       if self and self.object then
-				       self.frame_speed_multiplier=1
-			       end
-	end)
-end
-
-function mob_class:retaliate_against (source, sight_persistence)
-	if self.attack ~= source then
-		self:do_attack (source, sight_persistence)
-	else
-		local target = sight_persistence or SIGHT_PERSISTENCE
-		if self._sight_persistence < target then
-			self._sight_persistence = target
-		end
-	end
 end
 
 local function source_is_player_or_tamed_wolf (mcl_reason)
@@ -108,8 +435,11 @@ local function source_is_player_or_tamed_wolf (mcl_reason)
 	return nil
 end
 
--- Register damage delivered by punches or other means, retaliate, and
--- summon reinforcements.
+-- Register damage delivered by punches or other means, and report the
+-- same to callbacks and targeting rules.
+
+local attack_id = 0
+
 function mob_class:receive_damage (mcl_reason, damage)
 	local source = mcl_reason.source
 	self.health = self.health - damage
@@ -135,29 +465,19 @@ function mob_class:receive_damage (mcl_reason, damage)
 		return true
 	end
 
-	-- Attack puncher if necessary.
-	if (self.passive == false or self.retaliates)
-		and (self.child == false or self.type == "monster")
-		and source ~= self.object then
-		if not self.passive_towards_players
-			or not source:is_player () then
-			self:retaliate_against (source, 15)
-		end
-	end
-
 	if source then
 		self._recent_attacker = source
 		self._recent_attacker_age = 0
 	end
 	self._last_attacker = source
+	self._last_attack_id = attack_id + 1
+	attack_id = attack_id + 1
 
 	-- Alert others to the attack.
 	if source and source:is_valid () and self.health > 0
 	-- But not if the source is this mob itself, as when damage is
 	-- inflicted by a deflected trident.
 		and source ~= self.object then
-		self:call_group_attack (source)
-
 		if self.runaway then
 			self:do_runaway (source)
 		end
@@ -290,10 +610,10 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	if (damage >= 0 or tool_capabilities.damage_groups.snowball_vulnerable
 		or tool_capabilities.damage_groups.egg_vulnerable)
 		and (self.knock_back and tflp >= punch_interval) then
-		-- direction error check
-		dir = dir or {x = 0, y = 0, z = 0}
+		-- Verify that DIR is valid.
+		dir = dir or vector.zero ()
 
-		local v = self.object:get_velocity()
+		local v = self.object:get_velocity ()
 		if not v then return end
 		local r = 1.4 - math.min(punch_interval, 1.4)
 		local kb = r
@@ -312,18 +632,6 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 			kb = kb + mcl_util.get_additional_knockback (hitter)
 		end
 		kb = kb + mcl_enchanting.get_enchantment (wielditem, "knockback")
-		self.frame_speed_multiplier=2.3
-		if self.animation.run_end then
-			self:set_animation ("run")
-		elseif self.animation.walk_end then
-			self:set_animation ("walk")
-		end
-		core.after(0.2, function()
-				       if self and self.object then
-					       self.frame_speed_multiplier=1
-				       end
-		end)
-
 		local standing = self:standing_on_walkable ()
 		v = mcl_util.calculate_knockback (v, kb * 0.5, self.knockback_resistance,
 						standing, dir.x, dir.z)
@@ -335,70 +643,12 @@ function mob_class:do_runaway ()
 	self.runaway_timer = 5
 end
 
-function mob_class:call_group_attack (hitter)
-	local pos = hitter:get_pos ()
-	for obj in core.objects_inside_radius (pos, self.view_range) do
-		if obj ~= hitter and obj ~= self.object then
-			local ent = obj:get_luaentity ()
-			if ent then
-				-- only alert members of same mob or friends
-				if ent.group_attack then
-					if ent.name == self.name then
-						ent:retaliate_against (hitter, nil)
-					elseif type(ent.group_attack) == "table" then
-						if table.indexof (ent.group_attack, self.name) ~= -1 then
-							ent:retaliate_against (hitter, nil)
-						end
-					end
-				end
-			end
-		end
-	end
-end
-
-function mob_class:should_attack (object)
-	local entity = object:get_luaentity ()
-	local specific = self.specific_attack or {}
-	if object == self.object then
+function mob_class:test_object_and_restriction (object, obj_pos)
+	if object:is_player ()
+		and not self:attack_player_allowed (object) then
 		return false
 	elseif self._restriction_center
-		and not self:node_in_restriction (object:get_pos ()) then
-		return false
-	elseif entity and entity.is_mob then
-		if entity.health <= 0 then
-			return false
-		end
-		if not entity:valid_enemy () then
-			return false
-		end
-		if self.attack_animals and entity.passive then
-			return true
-		end
-
-		if self.attack_npcs and entity.type == "npc" then
-			return true
-		end
-
-		if self.attacks_monsters and entity.type == "monster" then
-			return true
-		end
-
-		if table.indexof (specific, entity.name) ~= -1 then
-			return true
-		end
-	elseif object:is_player () and self:attack_player_allowed (object) then
-		return (self.type == "monster" and not self._neutral_to_players)
-			or table.indexof (specific, "player") ~= -1
-	end
-
-	return false
-end
-
-function mob_class:should_continue_to_attack (object)
-	if object:is_player () and not self:attack_player_allowed (object) then
-		return false
-	elseif self._restriction_center
-		and not self:node_in_restriction (object:get_pos ()) then
+		and not self:node_in_restriction (obj_pos) then
 		return false
 	end
 	local entity = object:get_luaentity ()
@@ -407,6 +657,10 @@ function mob_class:should_continue_to_attack (object)
 		return false
 	end
 	return object:get_hp () > 0
+end
+
+function mob_class:should_continue_to_attack (object)
+	return self:test_object_and_restriction (object, object:get_pos ())
 end
 
 ------------------------------------------------------------------------
@@ -629,6 +883,7 @@ function mob_class:pre_melee_attack (distance, delay, line_of_sight)
 end
 
 function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
+	local initial_attack = false
 	if not self.attacking then
 		-- Initialize attack parameters.
 		self._target_pos = nil
@@ -636,6 +891,7 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 		self._attack_delay = 0
 		self.attacking = true
 		self._punch_animation_timeout = 0
+		initial_attack = true
 	end
 
 	if self._punch_animation_timeout then
@@ -654,8 +910,9 @@ function mob_class:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 	local delay = math.max (self._gopath_delay - dtime, 0)
 	local distance = vector.distance (self_pos, target_pos)
 
-	-- If the target is detectable...
-	if (self._melee_esp or line_of_sight)
+	-- If the target is detectable or this attack has just
+	-- commenced...
+	if (self._melee_esp or line_of_sight or initial_attack)
 		-- ...and the navigation timeout has elapsed...
 		and delay == 0
 		-- ..and this mob has yet to arrive at its target, or
@@ -950,37 +1207,12 @@ function mob_class:default_rangecheck (self_pos, object)
 	return distance <= self.view_range * factor
 end
 
-function mob_class:targets_for_attack_default (self_pos, esp)
-	return core.objects_inside_radius (self_pos, self.view_range)
-end
-
-function mob_class:attack_default (self_pos, dtime, esp)
-	local target, max_distance
-	for object in self:targets_for_attack_default (self_pos, esp) do
-		if self:should_attack (object) then
-			local pos = object:get_pos ()
-			local factor = self:detection_multiplier_for_object (object)
-			local distance = vector.distance (self_pos, pos)
-			if distance <= self.view_range * factor
-				and (not max_distance or distance < max_distance)
-				and (esp or self:target_visible (self_pos, object)) then
-				target = object
-				max_distance = distance
-			end
-		end
-	end
-	return target
-end
-
-function mob_class:target_detected (self_pos, target)
-	-- A value of true indicates that movement should be halted
-	-- while target_detected decides whether to initiate the
-	-- attack, while false, or nil, indicates to proceeed with it.
-	return false
-end
-
 function mob_class:attack_end ()
 	self:release_wielditem ()
+end
+
+function mob_class:get_active_target (self_pos)
+	return self._active_target
 end
 
 function mob_class:check_attack (self_pos, dtime)
@@ -988,69 +1220,22 @@ function mob_class:check_attack (self_pos, dtime)
 		return false
 	end
 	if not self.attack then
-		if not self:check_timer ("seek_target", 0.5)
-			and not self._attack_target_detected then
-			return false
-		end
-
-		if self.attack_custom then
-			if self:attack_custom (self_pos, dtime) then
-				return "attack"
-			end
-		else
-			local target = self:attack_default (self_pos, dtime, self.esp)
-			if target then
-				if self:target_detected (self_pos, target) then
-					-- Let self.attack remain nil
-					-- to revaluate whether to
-					-- begin attacking on the next
-					-- step.
-					if not self._attack_target_detected then
-						self._attack_target_detected = true
-						return "_attack_target_detected"
-					end
-					return true
-				end
-				self._attack_target_detected = false
-				self:do_attack (target)
-				return "attack"
-			end
+		local target = self:get_active_target (self_pos)
+		if target then
+			self.attack = target
+			self.attacking = false
+			return "attack"
 		end
 	else
 		local target_pos
-		if not is_valid (self.attack) then
-			self.attack = nil
-			self:attack_end ()
-			return true
-		end
-		-- If it's no longer possible to attack the
-		-- target, abandon it immediately.
-		if not self:should_continue_to_attack (self.attack) then
+		if not is_valid (self.attack)
+			or self:get_active_target (self_pos) ~= self.attack then
 			self.attack = nil
 			self:attack_end ()
 			return true
 		end
 		target_pos = self.attack:get_pos ()
-		local distance = vector.distance (self_pos, target_pos)
-		if distance > self.tracking_distance then
-			self.attack = nil
-			self:attack_end ()
-			return true
-		end
 		local line_of_sight = self:target_visible (self_pos, self.attack)
-		if not self.esp and not line_of_sight then
-			local t = self.target_invisible_time
-			self.target_invisible_time = t - dtime
-
-			if t < 0 then
-				self.attack = nil
-				self:attack_end ()
-				return true
-			end
-		else
-			self.target_invisible_time = self._sight_persistence
-		end
-
 		local attack_type = self.attack_type
 		if attack_type == "null" then
 			if self.attack_null then

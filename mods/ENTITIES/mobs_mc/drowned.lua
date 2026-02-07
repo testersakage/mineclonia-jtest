@@ -137,10 +137,6 @@ local drowned = table.merge (zombie, {
 	_swimming = false,
 	_swim_up = false,
 	_swims_specially = true,
-	specific_attack = {
-		"mobs_mc:iron_golem",
-		"mobs_mc:axolotl",
-	},
 	stepheight = 1.01,
 	ranged_interval_min = 2.0,
 	ranged_interval_max = 2.0,
@@ -509,14 +505,13 @@ local floor = math.floor
 local cid_water_source = core.get_content_id ("mcl_core:water_source")
 local cid_water_flowing = core.get_content_id ("mcl_core:water_flowing")
 
-local function object_submerged_p (object)
+local function object_submerged_p (object, pos)
 	if object:get_attach () then
 		-- Boats and like attachments should exempt players
 		-- from targeting.
 		return false
 	end
 
-	local pos = object:get_pos ()
 	local cid, _, _ = core.get_node_raw (floor (pos.x + 0.5),
 					     floor (pos.y + 0.5),
 					     floor (pos.z + 0.5))
@@ -532,7 +527,7 @@ function drowned:should_swim ()
 	return self._immersion_depth >= 1.0
 		and attack
 		and attack:is_valid ()
-		and object_submerged_p (attack)
+		and object_submerged_p (attack, attack:get_pos ())
 end
 
 function drowned:test_swimming ()
@@ -548,31 +543,11 @@ function drowned:run_ai (dtime, moveresult)
 	mob_class.run_ai (self, dtime, moveresult)
 end
 
-local function object_targetable_p (object)
+local function object_targetable_p (object, pos)
 	if mcl_util.is_daytime () then
-		return object_submerged_p (object)
+		return object_submerged_p (object, pos)
 	end
 	return true
-end
-
-function drowned:should_attack (object)
-	if mob_class.should_attack (self, object) then
-		return self.attack_type ~= "melee"
-			or object_targetable_p (object)
-	end
-	return false
-end
-
-function drowned:should_continue_to_attack (object)
-	if mob_class.should_continue_to_attack (self, object) then
-		return object_targetable_p (object)
-	end
-	return false
-end
-
-function drowned:attack_player_allowed (player)
-	return mob_class.attack_player_allowed (self, player)
-		and object_targetable_p (player)
 end
 
 function drowned:discharge_ranged (self_pos, target_pos)
@@ -733,6 +708,36 @@ drowned.ai_functions = {
 	drowned_find_land,
 	drowned_surface,
 	mob_class.check_pace,
+}
+
+function drowned:test_object_and_restriction (obj, pos)
+	return mob_class.test_object_and_restriction (self, obj, pos)
+		and object_targetable_p (obj, pos)
+end
+
+drowned._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, true, {
+		"mobs_mc:zombie",
+		"mobs_mc:baby_zombie",
+		"mobs_mc:husk",
+		"mobs_mc:baby_husk",
+		"mobs_mc:zombified_piglin",
+		"mobs_mc:villager_zombie",
+		"mobs_mc:drowned",
+		"mobs_mc:baby_drowned",
+	}),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, false),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:villager", {
+		"mobs_mc:villager",
+		"mobs_mc:wandering_trader",
+	}, nil, nil, false),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:iron_golem",
+					    { "mobs_mc:iron_golem", },
+					    nil, nil, false),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:axolotl",
+					    { "mobs_mc:axolotl", },
+					    nil, nil, false),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mcl_mobs.register_mob ("mobs_mc:drowned", drowned)

@@ -78,11 +78,6 @@ local wither_skeleton = table.merge (skeleton, {
 		level = 1,
 		dur = 10,
 	},
-	specific_attack = {
-		"mobs_mc:iron_golem",
-		"mobs_mc:piglin",
-		"mobs_mc:piglin_brute",
-	},
 	_wither_parent = nil,
 })
 
@@ -150,15 +145,21 @@ wither_skeleton.conversion_step = nil
 -- Wither Skeleton AI.
 ------------------------------------------------------------------------
 
-function wither_skeleton:should_attack (object)
+function wither_skeleton:test_object_and_restriction (object, pos)
 	return object ~= self._wither_parent
-		and mob_class.should_attack (self, object)
+		and mob_class.test_object_and_restriction (self, object, pos)
 end
 
-function wither_skeleton:should_continue_to_attack (object)
-	return object ~= self._wither_parent
-		and mob_class.should_continue_to_attack (self, object)
-end
+wither_skeleton._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, false, nil),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:iron_golem", {"mobs_mc:iron_golem",},
+					    nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs", {
+		"mobs_mc:piglin",
+		"mobs_mc:piglin_brute",
+	}, nil, nil, nil),
+}
 
 mcl_mobs.register_mob ("mobs_mc:witherskeleton", wither_skeleton)
 

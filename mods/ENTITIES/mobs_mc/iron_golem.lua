@@ -15,8 +15,6 @@ local golem = {
 	description = S("Iron Golem"),
 	type = "npc",
 	_spawn_category = "misc",
-	passive = true,
-	retaliates = true,
 	hp_min = 100,
 	hp_max = 100,
 	breath_max = -1,
@@ -49,7 +47,6 @@ local golem = {
 	knockback_resistance = 1.0,
 	damage = 15,
 	reach = 3,
-	attacks_monsters = true,
 	attack_type = "melee",
 	drops = {
 		{
@@ -261,21 +258,6 @@ function golem:custom_attack ()
 	end
 end
 
-function golem:attack_player_allowed (player)
-	return not self._creator
-		and mob_class.attack_player_allowed (self, player)
-end
-
-function golem:should_attack (object)
-	if mob_class.should_attack (self, object) then
-		local entity = object:get_luaentity ()
-		return not entity
-			or (entity.name ~= "mobs_mc:creeper"
-				and entity.name ~= "mobs_mc:creeper_charged")
-	end
-	return false
-end
-
 function golem:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
 	if self._nearest_undesirable then
@@ -308,8 +290,8 @@ function golem:locate_undesirable (self_pos)
 	end
 
 	local undesirable, dist = nil, nil
-	for player in mcl_util.connected_players (self_pos, 64) do
-		if self:attack_player_allowed (player) then
+	for player, pos1 in mcl_player.iterate_connected_players (self_pos, 64) do
+		if self:test_object_and_restriction (player, pos1) then
 			local name = player:get_player_name ()
 			local rep = player_rep[name] or 0
 			if rep < -100 then
@@ -323,36 +305,6 @@ function golem:locate_undesirable (self_pos)
 		end
 	end
 	return undesirable
-end
-
-function golem:do_attack (target, persistence)
-	mob_class.do_attack (self, target, persistence)
-	self.esp = target == self._nearest_undesirable
-end
-
-function golem:attack_custom (self_pos, dtime)
-	-- Locate players within a 64-node distance whose reputation
-	-- is below -100 with any villager within 10 nodes, and pursue
-	-- such targets aggressively.
-	local undesirable = self._nearest_undesirable
-	if not undesirable or not is_valid (undesirable) then
-		undesirable = self:locate_undesirable (self_pos)
-		self._nearest_undesirable = undesirable
-	end
-	if undesirable then
-		local pos = undesirable:get_pos ()
-		if vector.distance (self_pos, pos) < self.view_range then
-			self:do_attack (self._nearest_undesirable)
-			return true
-		end
-	end
-
-	local target = mob_class.attack_default (self, self_pos, dtime)
-	if target then
-		self:do_attack (target)
-		return true
-	end
-	return false
 end
 
 function golem:pacing_target_towards_villager (pos)
@@ -448,6 +400,52 @@ golem.ai_functions = {
 	golem_seek_village,
 	mob_class.check_pace,
 	golem_extend_flower,
+}
+
+local function golem_target_undesirables (self, self_pos, dtime, obj, is_current)
+	if self._creator then
+		return nil
+	elseif is_current then
+		local dist = self.tracking_distance * self.tracking_distance
+		return self:track_current_target (self_pos, dtime, obj, dist, nil)
+	end
+
+	if self:check_timer ("find_undesirables", 0.5) then
+		return nil
+	end
+
+	-- Locate players within a 64-node distance whose reputation
+	-- is below -100 with any villager within 10 nodes, and pursue
+	-- such targets aggressively.
+	local undesirable = self._nearest_undesirable
+	if not undesirable or not is_valid (undesirable) then
+		undesirable = self:locate_undesirable (self_pos)
+		self._nearest_undesirable = undesirable
+	end
+	if undesirable then
+		local pos = undesirable:get_pos ()
+		if vector.distance (self_pos, pos) < self.view_range then
+			return undesirable
+		end
+	end
+	return nil
+end
+
+local function attackable_monster_p (self, self_pos, obj, entity)
+	return entity
+		and entity.type == "monster"
+		and entity.name ~= "mobs_mc:creeper"
+		and entity.name ~= "mobs_mc:creeper_charged"
+end
+
+golem._targeting_rules = {
+	mcl_mobs.build_target_rule ({
+		fn = golem_target_undesirables,
+		on_complete = nil,
+	}),
+	mcl_mobs.build_retaliation_target_rule (nil, false, nil),
+	mcl_mobs.build_nearest_target_rule ("mob", attackable_monster_p, nil,
+					    nil, nil),
 }
 
 ------------------------------------------------------------------------

@@ -28,12 +28,6 @@ local pillager = table.merge (illager, table.merge (posing_humanoid, {
 	makes_footstep_sound = true,
 	movement_speed = 7.0,
 	attack_type = "crossbow",
-	specific_attack = {
-		"mobs_mc:iron_golem",
-		"mobs_mc:villager",
-		"mobs_mc:wandering_trader",
-	},
-	group_attack = true,
 	sounds = {
 		random = {name = "mobs_mc_pillager_grunt2", gain=0.5},
 		war_cry = {name = "mobs_mc_pillager_grunt1", gain=0.5},
@@ -284,6 +278,7 @@ end
 ------------------------------------------------------------------------
 
 pillager.ai_functions = {
+	illager.check_locked_target,
 	illager.check_recover_banner,
 	mob_class.check_attack,
 	illager.check_pathfind_to_raid,
@@ -291,6 +286,20 @@ pillager.ai_functions = {
 	illager.check_navigate_village,
 	illager.check_celebrate,
 	mob_class.check_pace,
+}
+
+pillager._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (mobs_mc.raid_mob_predicate,
+						true, {"mobs_mc:pillager",}),
+	mobs_mc.build_raid_player_detection_rule (),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:villager", {
+		"mobs_mc:villager",
+		"mobs_mc:wandering_trader",
+	}, nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:iron_golem", {
+		"mobs_mc:iron_golem",
+	}, nil, nil, nil),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mcl_mobs.register_mob ("mobs_mc:pillager", pillager)
@@ -302,6 +311,7 @@ mcl_mobs.register_egg ("mobs_mc:pillager", S("Pillager"), "#532f36", "#959b9b", 
 
 local mobs_spawn = core.settings:get_bool ("mobs_spawn", true)
 local next_spawn_attempt = (12000 + pr:next (0, 1200)) / 20
+local force_spawn = false
 
 local function spawn_patrolman (nodepos, as_leader)
 	local staticdata = {
@@ -327,18 +337,23 @@ core.register_on_mods_loaded (function ()
 end)
 
 core.register_globalstep (function (dtime)
-	if mcl_vars.difficulty == 0 or not mobs_spawn or only_peaceful_mobs then
+	if (mcl_vars.difficulty == 0 or not mobs_spawn or only_peaceful_mobs)
+		and not force_spawn then
 		return
 	end
 	next_spawn_attempt = next_spawn_attempt - dtime
 	if next_spawn_attempt <= 0 then
 		next_spawn_attempt = (12000 + pr:next (0, 1200)) / 20
 
-		local days = core.get_day_count ()
-		if days < 5 or not mcl_util.is_daytime ()
-			or pr:next (1, 5) ~= 1 then
-			return
+		if not force_spawn then
+			local days = core.get_day_count ()
+			if days < 5 or not mcl_util.is_daytime ()
+				or pr:next (1, 5) ~= 1 then
+				return
+			end
 		end
+		local from_command = force_spawn
+		force_spawn = false
 
 		-- Select a player in the overworld at random.
 		local players_in_overworld = {}
@@ -388,6 +403,11 @@ core.register_globalstep (function (dtime)
 			nodepos.x = nodepos.x + pr:next (0, 4) - pr:next (0, 4)
 			nodepos.y = nodepos.y + pr:next (0, 4) - pr:next (0, 4)
 		end
+
+		if from_command then
+			core.chat_send_all ("Spawned pillager patrol at "
+					    .. vector.to_string (nodepos))
+		end
 	end
 end)
 
@@ -395,6 +415,7 @@ core.register_chatcommand ("spawn_patrol_now", {
 	privs = { server = true, },
 	func = function (playername, param)
 		next_spawn_attempt = 0
+		force_spawn = true
 	end,
 })
 

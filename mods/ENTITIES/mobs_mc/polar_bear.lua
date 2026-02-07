@@ -12,8 +12,6 @@ local polar_bear = {
 	type = "animal",
 	_spawn_category = "creature",
 	runaway = true,
-	passive = false,
-	retaliates = true,
 	hp_min = 30,
 	hp_max = 30,
 	xp_min = 1,
@@ -75,9 +73,6 @@ local polar_bear = {
 	},
 	view_range = 20,
 	tracking_distance = 20,
-	group_attack = {
-		"mobs_mc:polar_bear",
-	},
 	follow_herd_bonus = 1.25,
 	water_friction = 0.98,
 	_standing = false,
@@ -206,29 +201,21 @@ end
 -- Polar bear AI.
 ------------------------------------------------------------------------
 
-function polar_bear:should_attack (object)
-	if self.child then
-		return false
-	end
-	if object:is_player () then
-		if self._child_nearby == nil then
-			local self_pos = self.object:get_pos ()
-			local aa = vector.offset (self_pos, -8, -4, -8)
-			local bb = vector.offset (self_pos, 8, 4, 8)
-			self._child_nearby = false
+local function is_child_nearby (self, self_pos, _, _)
+	if self._child_nearby == nil then
+		local aa = vector.offset (self_pos, -8, -4, -8)
+		local bb = vector.offset (self_pos, 8, 4, 8)
+		self._child_nearby = false
 
-			for object in core.objects_in_area (aa, bb) do
-				local entity = object:get_luaentity ()
-				if entity and entity.name == self.name
-					and entity.child then
-					self._child_nearby = true
-				end
+		for object in core.objects_in_area (aa, bb) do
+			local entity = object:get_luaentity ()
+			if entity and entity.name == self.name
+				and entity.child then
+				self._child_nearby = true
 			end
 		end
-		return self._child_nearby
-			and self:attack_player_allowed (object)
 	end
-	return false
+	return self._child_nearby
 end
 
 function polar_bear:ai_step (dtime)
@@ -258,6 +245,19 @@ polar_bear.ai_functions = {
 	mob_class.check_frightened,
 	mob_class.follow_herd,
 	mob_class.check_pace,
+}
+
+local function child_to_adult_p (self, self_pos, obj, entity)
+	return self.child
+		and entity
+		and entity.name == self.name
+		and not entity.child
+end
+
+polar_bear._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, true, child_to_adult_p),
+	mcl_mobs.build_nearest_target_rule ("player", is_child_nearby, nil, nil, nil),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mcl_mobs.register_mob ("mobs_mc:polar_bear", polar_bear)

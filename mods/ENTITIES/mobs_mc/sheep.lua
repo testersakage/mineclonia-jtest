@@ -58,7 +58,6 @@ local sheep = {
 	description = S("Sheep"),
 	type = "animal",
 	_spawn_category = "creature",
-	passive = true,
 	hp_min = 8,
 	hp_max = 8,
 	xp_min = 1,

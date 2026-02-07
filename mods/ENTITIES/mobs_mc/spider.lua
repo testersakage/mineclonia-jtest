@@ -39,7 +39,6 @@ local spider = {
 	description = S("Spider"),
 	type = "monster",
 	_spawn_category = "monster",
-	passive = false,
 	attack_type = "melee",
 	_melee_esp = true,
 	damage = 2,
@@ -91,10 +90,6 @@ local spider = {
 			end,
 		},
 	},
-	specific_attack = {
-		"player",
-		"mobs_mc:iron_golem",
-	},
 	animation = {
 		stand_speed = 10,
 		walk_speed = 25,
@@ -105,6 +100,7 @@ local spider = {
 	},
 	always_climb = true,
 	pace_bonus = 0.8,
+	_saved_light_value = nil,
 }
 
 ------------------------------------------------------------------------
@@ -219,10 +215,12 @@ function spider:on_spawn ()
 	end
 end
 
+local r = 1.0 / 15.0
+
 local function mc_light_value (self)
 	local brightness, value
 	local pos = self.object:get_pos ()
-	brightness = (core.get_node_light (pos) or 0) / 15.0
+	brightness = (core.get_node_light (pos) or 0) * r
 	value = brightness / (4 - 3 * brightness)
 	return value
 end
@@ -273,17 +271,55 @@ function spider:attack_melee (self_pos, dtime, target_pos, line_of_sight)
 	mob_class.attack_melee (self, self_pos, dtime, target_pos, line_of_sight)
 end
 
-function spider:should_continue_to_attack (target)
-	if math.random (100) == 1 and mc_light_value (self) >= 0.5 then
-		return false
+function spider:track_current_target (self_pos, dtime, obj, dist, persistence)
+	local result = mob_class.track_current_target (self, self_pos, dtime,
+						       obj, dist, persistence)
+	if not result then
+		return nil
 	end
-	return mob_class.should_continue_to_attack (self, target)
+	-- Terminate aggression in daylight with a random probability,
+	-- unless the target has actually provoked this mob.
+	if persistence <= 3.0
+		and math.random (100) == 1
+		and self._saved_light_value >= 0.5 then
+		return nil
+	end
+	return result
 end
 
-function spider:should_attack (target)
-	return mob_class.should_attack (self, target)
-		and mc_light_value (self) < 0.5
+function spider:get_staticdata_table ()
+	local tbl = mob_class.get_staticdata_table (self)
+	if tbl then
+		tbl._saved_light_value = nil
+	end
+	return tbl
 end
+
+function spider:ai_step (dtime)
+	mob_class.ai_step (self, dtime)
+	if not self._saved_light_value
+		or self:check_timer ("seek_target", 0.5) then
+		self._saved_light_value = mc_light_value (self)
+	end
+end
+
+local function spider_not_neutral_p (self)
+	return self._saved_light_value < 0.5
+end
+
+spider.ai_functions = {
+	mob_class.check_attack,
+	mob_class.check_pace,
+}
+
+spider._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (),
+	mcl_mobs.build_nearest_target_rule ("player", nil, spider_not_neutral_p,
+					    nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:iron_golem", {
+		"mobs_mc:iron_golem",
+	}, spider_not_neutral_p, nil, nil),
+}
 
 mcl_mobs.register_mob ("mobs_mc:spider", spider)
 

@@ -90,9 +90,6 @@ mcl_mobs.mob_class = {
 	armor = 100,
 	sounds = {},
 	animation = {},
-	attacks_monsters = false,
-	group_attack = false,
-	passive = false,
 	knock_back = true,
 	shoot_offset = 0,
 	_projectile_gravity = true,
@@ -126,7 +123,6 @@ mcl_mobs.mob_class = {
 	attack_animals = false,
 	attack_npcs = false,
 	_neutral_to_players = false,
-	esp = false,
 	is_mob = true,
 	pushable = true,
 	ignores_nametag = false,
@@ -163,7 +159,6 @@ mcl_mobs.mob_class = {
 	fire_resistant = false,
 	fire_damage_resistant = false,
 	ignited_by_sunlight = false,
-	avoids_sunlight = false,
 	tnt_knockback = true,
 	does_not_prevent_sleep = false,
 	prevents_sleep_when_hostile = false,
@@ -223,6 +218,7 @@ mcl_mobs.mob_class = {
 	_mcl_fishing_reelable = true,
 
 	--internal variables
+	_timers_fired = {},
 	_inactivity_timer = 0,
 	standing_in = "ignore",
 	standing_on = "ignore",
@@ -244,6 +240,9 @@ mcl_mobs.mob_class = {
 	_depth_strider_level = 0,
 	_soul_speed_level = 0,
 	_last_soul_speed_bonus = 0,
+	_active_targeting_rule = nil,
+	_active_target = nil,
+	_object_search_lists = {},
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = core.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"
@@ -292,19 +291,10 @@ dofile(path .. "/mount.lua")
 -- higher priority is activated.  Functions earlier in the list take
 -- priority over those which appear later.
 local mob_class = mcl_mobs.mob_class
-mob_class.ai_functions = {
-	mob_class.return_to_restriction,
-	mob_class.sit_if_ordered,
-	mob_class.check_travel_to_owner,
-	mob_class.check_avoid_sunlight,
-	mob_class.check_avoid,
-	mob_class.check_frightened,
-	mob_class.check_attack,
-	mob_class.check_breeding,
-	mob_class.check_following,
-	mob_class.follow_herd,
-	mob_class.check_pace,
-}
+mob_class.ai_functions = {}
+
+-- Default mob targeting functions.
+mob_class._targeting_rules = {}
 
 function mcl_mobs.mob_class:set_nametag(name)
 	if name ~= "" then

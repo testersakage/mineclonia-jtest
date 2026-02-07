@@ -11,8 +11,6 @@ local axolotl = {
 	type = "animal",
 	_spawn_category = "axolotl",
 	can_despawn = true,
-	passive = false,
-	passive_towards_players = true,
 	hp_min = 14,
 	hp_max = 14,
 	xp_min = 1,
@@ -94,16 +92,6 @@ local axolotl = {
 	damage = 2,
 	reach = 2,
 	attack_type = "melee",
-	specific_attack = {
-		"mobs_mc:dolphin",
-		"mobs_mc:cod",
-		"mobs_mc:salmon",
-		"mobs_mc:tropical_fish",
-		"mobs_mc:guardian",
-		"mobs_mc:elder_guardian",
-		"mobs_mc:squid",
-		"mobs_mc:glow_squid"
-	},
 	runaway = true,
 	movement_speed = 20,
 	stepheight = 1.02,
@@ -219,9 +207,10 @@ function axolotl:receive_damage (mcl_reason, damage)
 	return mob_class.receive_damage (self, mcl_reason, damage)
 end
 
-function axolotl:should_continue_to_attack (object)
-	local result = mob_class.should_continue_to_attack (self, object)
-	local entity = object:get_luaentity ()
+function axolotl:track_current_target (self_pos, dtime, obj, persistence)
+	local result = mob_class.track_current_target (self, self_pos, dtime,
+						       obj, persistence)
+	local entity = obj:get_luaentity ()
 
 	-- If this entity was just slain by a player, grant
 	-- regeneration and remove mining fatigue.
@@ -249,25 +238,6 @@ function axolotl:should_continue_to_attack (object)
 	return result
 end
 
-local axolotl_prey = {
-	"mobs_mc:dolphin",
-	"mobs_mc:cod",
-	"mobs_mc:salmon",
-	"mobs_mc:tropical_fish",
-	"mobs_mc:squid",
-	"mobs_mc:glow_squid",
-}
-
-function axolotl:should_attack (object)
-	local entity = object:get_luaentity ()
-	if entity and table.indexof (axolotl_prey, entity.name) ~= -1
-		and self._hunting_cooldown
-		and self._hunting_cooldown > 0 then
-		return false
-	end
-	return mob_class.should_attack (self, object)
-end
-
 function axolotl:ai_step (dtime)
 	mob_class.ai_step (self, dtime)
 	if self._hunting_cooldown then
@@ -292,6 +262,27 @@ axolotl.ai_functions = {
 	mob_class.follow_herd,
 	axolotl_find_water,
 	mob_class.check_pace,
+}
+
+local axolotl_prey = {
+	"mobs_mc:dolphin",
+	"mobs_mc:cod",
+	"mobs_mc:salmon",
+	"mobs_mc:tropical_fish",
+	"mobs_mc:squid",
+	"mobs_mc:glow_squid",
+}
+
+local axolotl_enemies = {
+	"mobs_mc:guardian",
+	"mobs_mc:elder_guardian",
+}
+
+axolotl._targeting_rules = {
+	mcl_mobs.build_nearest_target_rule ("mob", axolotl_enemies, nil, nil, true),
+	mcl_mobs.build_nearest_target_rule ("mob", axolotl_prey, function (self)
+		return not self._hunting_cooldown or self._hunting_cooldown <= 0
+	end, nil, true),
 }
 
 ------------------------------------------------------------------------

@@ -16,7 +16,6 @@ local guardian_elder = table.merge (mobs_mc.guardian, {
 	xp_min = 10,
 	xp_max = 10,
 	breath_max = -1,
-	passive = false,
 	can_ride_boat = false,
 	damage = 8,
 	movement_speed = 6.0,

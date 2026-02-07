@@ -133,7 +133,6 @@ local horse = {
 			true -- Breed.
 		},
 	},
-	passive = true,
 	hp_min = 30,
 	hp_max = 30,
 	xp_min = 1,

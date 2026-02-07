@@ -17,7 +17,6 @@ local wolf = {
 	hp_max = 8,
 	xp_min = 1,
 	xp_max = 3,
-	passive = false,
 	collisionbox = {-0.3, 0.0, -0.3, 0.3, 0.85, 0.3},
 	visual = "mesh",
 	mesh = "mobs_mc_wolf.b3d",
@@ -70,19 +69,9 @@ local wolf = {
 		shake_speed = 23,
 		shake_loop = false,
 	},
-	specific_attack = {
-		"mobs_mc:sheep",
-		"mobs_mc:rabbit",
-		"mobs_mc:skeleton",
-		"mobs_mc:stray",
-		"mobs_mc:witherskeleton",
-	},
 	runaway_from = {
 		"mobs_mc:llama",
 		"mobs_mc:trader_llama",
-	},
-	group_attack = {
-		"mobs_mc:wolf",
 	},
 	_collar_color = "#FF0000",
 	run_bonus = 1.5,
@@ -196,11 +185,6 @@ function wolf:mob_activate (staticdata, dtime)
 		self.object:set_properties ({
 			hp_max = 40.0,
 		})
-		self.specific_attack = {
-			"mobs_mc:skeleton",
-			"mobs_mc:stray",
-			"mobs_mc:witherskeleton",
-		}
 	end
 	return true
 end
@@ -210,11 +194,6 @@ function wolf:after_tame ()
 		hp_max = 40.0,
 	})
 	self.health = 40
-	self.specific_attack = {
-		"mobs_mc:skeleton",
-		"mobs_mc:stray",
-		"mobs_mc:witherskeleton",
-	}
 end
 
 function wolf:wetness_modifier ()
@@ -701,6 +680,7 @@ end
 function wolf:should_attack_owner_assailant_or_target (object)
 	local entity = object:get_luaentity ()
 	if entity then
+		local obj_pos = object:get_pos ()
 		return entity.is_mob
 			and entity.name ~= "mobs_mc:creeper"
 			and entity.name ~= "mobs_mc:creeper_charged"
@@ -708,10 +688,11 @@ function wolf:should_attack_owner_assailant_or_target (object)
 			and (entity.name ~= "mobs_mc:wolf"
 				or not self.owner or entity.owner ~= self.owner)
 			and not entity.tamed
-			and entity:valid_enemy ()
+			and self:test_object_and_restriction (object, obj_pos)
 	elseif object:is_player () then
+		local obj_pos = object:get_pos ()
 		return object:get_player_name () ~= self.owner
-			and self:attack_player_allowed (object)
+			and self:test_object_and_restriction (object, obj_pos)
 	end
 	return false
 end
@@ -731,66 +712,40 @@ function wolf:get_staticdata_table ()
 	return supertable
 end
 
-function wolf:check_owner_attacked ()
+local function unpack3 (tem)
+	return tem[1], tem[2], tem[3]
+end
+
+function wolf:get_wolf_owner_assailant ()
 	if self.owner then
 		local data = player_damage_sources[self.owner]
-		local source, serial, _ = unpack (data or {})
+		local source, serial, _ = unpack3 (data or {})
 
 		if serial and serial > self._owner_attacked_serial
 			and is_valid (source)
 			and self:should_attack_owner_assailant_or_target (source) then
 			self._owner_attacked_serial = serial
-			self:do_attack (source, 15)
-			return true
+			return source
 		end
 	end
 
-	return false
+	return nil
 end
 
-function wolf:check_owner_attacking ()
+function wolf:get_wolf_owner_target ()
 	if self.owner then
 		local data = mobs_damaged_by_player[self.owner]
-		local target, serial, _ = unpack (data or {})
+		local target, serial, _ = unpack3 (data or {})
 
 		if serial and serial > self._owner_target_serial
 			and is_valid (target)
 			and self:should_attack_owner_assailant_or_target (target) then
 			self._owner_target_serial = serial
-			self:do_attack (target, 15)
-			return true
+			return target
 		end
 	end
 
-	return false
-end
-
-function wolf:attack_animals_and_skeletons (self_pos, dtime)
-	local attack = self:attack_default (self_pos, dtime, self.esp)
-	if attack then
-		self:do_attack (attack)
-		return true
-	end
-	return false
-end
-
-function wolf:attack_custom (self_pos, dtime)
-	if not self:check_owner_attacked ()
-		and not self:check_owner_attacking ()
-		and not self:attack_animals_and_skeletons (self_pos, dtime) then
-		return false
-	end
-	return true
-end
-
-function wolf:do_attack (object, persistence)
-	-- Never attack one's own owner.
-	if self.tamed and self.owner
-		and object:is_player ()
-		and object:get_player_name () == self.owner then
-		return
-	end
-	mob_class.do_attack (self, object, persistence)
+	return nil
 end
 
 function wolf:attack_melee (self_pos, dtime, target_pos, line_of_sight)
@@ -882,6 +837,62 @@ wolf.ai_functions = {
 	mob_class.check_travel_to_owner,
 	mob_class.check_breeding,
 	mob_class.check_pace,
+}
+
+local function wolf_wild_p (self)
+	return not self.tamed
+end
+
+local function wolf_defend_owner_rule (self, self_pos, dtime, obj, is_current)
+	if obj and is_current then
+		local dist = self.tracking_distance * self.tracking_distance
+		return self:track_current_target (self_pos, dtime, obj, dist, nil)
+	end
+
+	local obj1 = self:get_wolf_owner_assailant ()
+	if obj1 and (vector.distance (obj1:get_pos (), self_pos)
+		     <= self.tracking_distance) then
+		return obj1
+	end
+	return nil
+end
+
+local function wolf_support_owner_rule (self, self_pos, dtime, obj, is_current)
+	if obj and is_current then
+		local dist = self.tracking_distance * self.tracking_distance
+		return self:track_current_target (self_pos, dtime, obj, dist, nil)
+	end
+
+	local obj1 = self:get_wolf_owner_target ()
+	if obj1 and (vector.distance (obj1:get_pos (), self_pos)
+		     <= self.tracking_distance) then
+		return obj1
+	end
+	return nil
+end
+
+wolf._targeting_rules = {
+	mcl_mobs.build_target_rule ({
+		fn = wolf_defend_owner_rule,
+		on_complete = nil,
+	}),
+	mcl_mobs.build_target_rule ({
+		fn = wolf_support_owner_rule,
+		on_complete = nil,
+	}),
+	mcl_mobs.build_retaliation_target_rule (nil, true, {
+		"mobs_mc:wolf",
+	}),
+	mcl_mobs.build_nearest_target_rule ("animal", {
+		"mobs_mc:sheep",
+		"mobs_mc:rabbit",
+	}, wolf_wild_p, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:skeleton", {
+		"mobs_mc:skeleton",
+		"mobs_mc:witherskeleton",
+		"mobs_mc:stray",
+	}, nil, nil, nil),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mcl_mobs.register_mob ("mobs_mc:wolf", wolf)

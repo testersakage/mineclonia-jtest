@@ -26,8 +26,6 @@ local ocelot = {
 	type = "animal",
 	_spawn_category = "monster",
 	persist_in_peaceful = false,
-	passive = false,
-	retaliates = false,
 	can_despawn = true,
 	hp_min = 10,
 	hp_max = 10,
@@ -80,9 +78,6 @@ local ocelot = {
 	attack_type = "null",
 	damage = 3,
 	reach = 1,
-	specific_attack = {
-		"mobs_mc:chicken",
-	},
 	breed_bonus = 0.8,
 	follow_bonus = 0.6,
 	_trusts_players = false,
@@ -342,6 +337,12 @@ ocelot.ai_functions = {
 	mob_class.check_pace,
 }
 
+ocelot._targeting_rules = {
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:chicken", {
+		"mobs_mc:chicken",
+	}, nil, nil, false),
+}
+
 ------------------------------------------------------------------------
 -- Ocelot interaction.
 ------------------------------------------------------------------------
@@ -455,9 +456,6 @@ local cat = table.merge (ocelot, {
 	_spawn_category = "creature",
 	_sitting_on_block_timeout = 0,
 	_sitting_on_bed_timeout = 0,
-	specific_attack = {
-		"mobs_mc:rabbit",
-	},
 	_age = 0.0,
 	_is_ocelot_tamable = true,
 })
@@ -767,23 +765,6 @@ local function cat_sit_on_block (self, self_pos, dtime)
 	end
 end
 
-function cat:attack_custom (self_pos, dtime, esp)
-	if self.tamed then
-		return false
-	end
-	local default = self:attack_default (self_pos, dtime, esp)
-	if default then
-		self:do_attack (default)
-		return true
-	end
-	return false
-end
-
-function cat:should_continue_to_attack (object)
-	return not self.tamed
-		and mob_class.should_continue_to_attack (self, object)
-end
-
 function cat:ai_step (dtime)
 	ocelot.ai_step (self, dtime)
 	self._age = self._age + dtime
@@ -801,6 +782,19 @@ cat.ai_functions = {
 	mob_class.check_attack,
 	mob_class.check_breeding,
 	mob_class.check_pace,
+}
+
+local function cat_wild_p (self)
+	if self.tamed then
+		return false
+	end
+	return true
+end
+
+cat._targeting_rules = {
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:rabbit", {
+		"mobs_mc:rabbit",
+	}, cat_wild_p, nil, false),
 }
 
 ------------------------------------------------------------------------

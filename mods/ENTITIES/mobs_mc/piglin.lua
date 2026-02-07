@@ -19,7 +19,6 @@ end
 
 local piglin_base = {
 	type = "monster",
-	passive = false,
 	mesh = "mobs_mc_piglin.b3d",
 	_spawn_category = "monster",
 	persist_in_peaceful = true,
@@ -227,10 +226,6 @@ local piglin = table.merge (piglin_base, table.merge (posing_humanoid, {
 	},
 	movement_speed = 7.0,
 	attack_type = "crossbow",
-	specific_attack = {
-		"player",
-		"mobs_mc:hoglin",
-	},
 	_admire_cooldown = 0,
 	_feed_cooldown = 0,
 	_hunting_cooldown = 0,
@@ -238,8 +233,6 @@ local piglin = table.merge (piglin_base, table.merge (posing_humanoid, {
 	ranged_attack_radius = 7,
 	_crossbow_backoff_threshold = 3.0,
 	shoot_offset = 0.5,
-	-- ESP is handled in `attack_custom' and `should_continue_to_attack'.
-	esp = true,
 	_time_to_ride_start = 0,
 	_dominant_in_jockeys = false,
 	_convert_to = "mobs_mc:zombified_piglin",
@@ -399,6 +392,21 @@ function piglin:ai_step (dtime)
 	self:register_death_of_target ()
 	if self.jockey_vehicle and not self._ride_target then
 		self:dismount_jockey ()
+	end
+	-- If no nearby piglins have recently hunted, and huntable
+	-- hoglins are in the vicinity, initiate a hunt.
+	if self._hunting_cooldown == 0 and self._nearest_prey
+		and is_valid (self._nearest_prey) then
+		for _, object in pairs (self._nearby_adults) do
+			local entity = object:get_luaentity ()
+			if entity
+				and entity.name == "mcl_mobs:piglin"
+				and entity._hunting_cooldown > 0 then
+				return false
+			end
+		end
+
+		self:enrage (self._nearest_prey, true)
 	end
 end
 
@@ -657,21 +665,18 @@ function piglin:step_sensors (self_pos)
 	local n_visible_adult_hoglins = 0
 	local nearest_baby = nil
 	local nearest_baby_hoglin = nil
-	local nearest_player_target = nil
 	local nearest_attractive_player = nil
 	local nearby_adults = {}
 	local furthest_visible_adults = {}
 	local nearest_zombified = nil
 	local nearest_visible_player = nil
 	local nearest_target_item = nil
-	for _, obj in ipairs (all) do
+	local visible_end = #all + 1
+	for i = 1, #all do
+		local obj = all[i]
 		local entity = obj:get_luaentity ()
 		if not self:target_visible (self_pos, obj) then
-			if entity
-				and entity.name == "mobs_mc:piglin"
-				and not entity.child then
-				table.insert (nearby_adults, obj)
-			end
+			visible_end = i
 			break
 		end
 
@@ -688,6 +693,7 @@ function piglin:step_sensors (self_pos)
 			elseif entity.name == "mobs_mc:baby_hoglin" then
 				nearest_baby_hoglin = obj
 			elseif entity.name == "mobs_mc:piglin_brute" then
+				table.insert (nearby_adults, obj)
 				table.insert (furthest_visible_adults, obj)
 			elseif entity.name == "mobs_mc:piglin" then
 				if entity.child then
@@ -707,15 +713,21 @@ function piglin:step_sensors (self_pos)
 				end
 			end
 		elseif is_player then
-			if not mobs_mc.player_wears_gold (obj)
-				and self:attack_player_allowed (obj) then
-				nearest_player_target = obj
-			end
-
 			if piglin_attracted_to_player (obj) then
 				nearest_attractive_player = obj
 			end
 			nearest_visible_player = obj
+		end
+	end
+
+	-- Insert remaining invisible piglins into `nearby_adults'.
+	for i = visible_end, #all do
+		local obj = all[i]
+		local entity = obj:get_luaentity ()
+		if entity
+			and entity.name == "mobs_mc:piglin"
+			and not entity.child then
+			table.insert (nearby_adults, obj)
 		end
 	end
 
@@ -724,7 +736,6 @@ function piglin:step_sensors (self_pos)
 	self._n_visible_adult_hoglins = n_visible_adult_hoglins
 	self._nearest_baby = nearest_baby
 	self._nearest_baby_hoglin = nearest_baby_hoglin
-	self._nearest_player_target = nearest_player_target
 	self._nearest_attractive_player = nearest_attractive_player
 	self._nearby_adults = nearby_adults
 	self._furthest_visible_adults = furthest_visible_adults
@@ -754,7 +765,6 @@ function piglin:get_staticdata_table ()
 		staticdata._n_visible_adult_hoglins = nil
 		staticdata._nearest_baby = nil
 		staticdata._nearest_baby_hoglin = nil
-		staticdata._nearest_player_target = nil
 		staticdata._nearest_attractive_player = nil
 		staticdata._nearby_adults = nil
 		staticdata._furthest_visible_adults = nil
@@ -1001,7 +1011,7 @@ end
 function piglin:enrage (source, broadcast)
 	local self_pos = self.object:get_pos ()
 	if source:is_valid ()
-		and (not source:is_player () or self:attack_player_allowed (source))
+		and self:test_object_and_restriction (source, source:get_pos ())
 		and self:default_rangecheck (self_pos, source) then
 		self._piglin_provoker = source
 		self._piglin_provoker_timeout = 30
@@ -1030,7 +1040,7 @@ end
 
 local RETREAT_ATTEMPTS = 5
 
-function piglin:retaliate_against (source, persistence)
+function piglin:try_retaliate (source)
 	-- Confiscate any item being admired.
 	if self._admiring_item then
 		self._admiring_item = nil
@@ -1074,6 +1084,17 @@ function piglin:retaliate_against (source, persistence)
 	end
 end
 
+function piglin:receive_damage (mcl_reason, damage)
+	if mob_class.receive_damage (self, mcl_reason, damage) then
+		if self.health > 0 and mcl_reason.source
+			and mcl_reason.source:is_valid () then
+			self:try_retaliate (mcl_reason.source)
+		end
+		return true
+	end
+	return false
+end
+
 function piglin:maybe_swap_provoker (source, is_hoglin)
 	if self.child then
 		return
@@ -1089,9 +1110,17 @@ function piglin:maybe_swap_provoker (source, is_hoglin)
 		local self_pos = self.object:get_pos ()
 		local src_pos = source:get_pos ()
 		local current_pos = self._piglin_provoker:get_pos ()
-		local d1 = vector.distance (self_pos, src_pos)
-		local d2 = vector.distance (self_pos, current_pos)
-		if d1 <= d2 then
+		local do_swap = true
+		if current_pos then
+			do_swap = false
+			local d1 = vector.distance (self_pos, src_pos)
+			local d2 = vector.distance (self_pos, current_pos)
+			if d1 <= d2 then
+				do_swap = true
+			end
+		end
+
+		if do_swap then
 			self._piglin_provoker = source
 			self._piglin_provoker_timeout = 30
 
@@ -1100,78 +1129,6 @@ function piglin:maybe_swap_provoker (source, is_hoglin)
 			end
 		end
 	end
-end
-
-function piglin:attack_custom (self_pos, dtime)
-	if self.child then
-		return
-	end
-
-	local zombie = self._nearest_zombified
-	local zombie_pos = zombie and zombie:get_pos () or nil
-	if zombie_pos and vector.distance (zombie_pos, self_pos) < 6 then
-		return false
-	end
-
-	local provoker = self._piglin_provoker
-	if provoker and is_valid (provoker)
-		and self:default_rangecheck (self_pos, provoker) then
-		self:do_attack (provoker, 15)
-		return true
-	elseif self._nearest_witherlike
-		and is_valid (self._nearest_witherlike) then
-		self:do_attack (self._nearest_witherlike)
-		return true
-	else
-		local player = self._nearest_player_target
-		if player and is_valid (player)
-			and self:default_rangecheck (self_pos, player)
-			and self:target_visible (self_pos, player) then
-			self:do_attack (player)
-			return true
-		end
-	end
-
-	-- Otherwise, if no nearby piglins have recently hunted, and
-	-- huntable hoglins are in the vicinity, initiate a hunt.
-	if self._hunting_cooldown == 0 and self._nearest_prey
-		and is_valid (self._nearest_prey) then
-		for _, object in pairs (self._nearby_adults) do
-			local entity = object:get_luaentity ()
-			if entity and entity._hunting_cooldown > 0 then
-				return false
-			end
-		end
-
-		self:enrage (self._nearest_prey, true)
-	end
-
-	return false
-end
-
-function piglin:should_continue_to_attack (object)
-	if self.child then
-		return false
-	end
-	local self_pos = self.object:get_pos ()
-	local provoker = self._piglin_provoker
-	if provoker and is_valid (provoker)
-		and self:default_rangecheck (self_pos, provoker) then
-		return object == provoker
-	elseif self._nearest_witherlike
-		and is_valid (self._nearest_witherlike) then
-		return object == self._nearest_witherlike
-	else
-		local player = self._nearest_player_target
-		if player and is_valid (player)
-			and self:default_rangecheck (self_pos, player)
-			and self:target_visible (self_pos, player) then
-			self:do_attack (player)
-			return object == player
-		end
-	end
-
-	return false
 end
 
 function piglin:gloat (victim)
@@ -1439,7 +1396,7 @@ function piglin:beat_a_retreat (hitter)
 	for _, piglin in ipairs (self._furthest_visible_adults) do
 		if piglin ~= self.object then
 			local entity = piglin:get_luaentity ()
-			if entity then
+			if entity and entity.name == "mobs_mc:piglin" then
 				entity._retreat_asap = RETREAT_ATTEMPTS
 				entity._retreat_time = math.random (5, 20)
 				if entity.attack and entity.attack:is_valid () then
@@ -1496,6 +1453,79 @@ piglin.ai_functions = {
 	piglin_interact_with,
 }
 
+local function piglin_attack_provoker_rule (self, self_pos, dtime, obj, is_current)
+	if self.child then
+		return nil
+	end
+
+	local zombie = self._nearest_zombified
+	local zombie_pos = zombie and zombie:get_pos () or nil
+	if zombie_pos and vector.distance (zombie_pos, self_pos) < 6 then
+		return nil
+	end
+
+	if is_current and obj == self._piglin_provoker then
+		local dist = self.tracking_distance * self.tracking_distance
+		return self:track_current_target (self_pos, dtime, obj, dist, 15.0)
+	end
+
+	local provoker = self._piglin_provoker
+	local pos = provoker and provoker:get_pos ()
+	if pos
+		and self:test_object_and_restriction (provoker, pos)
+		and self:target_visible (self_pos, provoker)
+		and self:default_rangecheck (self_pos, provoker) then
+		return provoker
+	end
+	return nil
+end
+
+local function piglin_attack_witherlike_rule (self, self_pos, dtime, obj, is_current)
+	if self.child then
+		return nil
+	end
+
+	local zombie = self._nearest_zombified
+	local zombie_pos = zombie and zombie:get_pos () or nil
+	if zombie_pos and vector.distance (zombie_pos, self_pos) < 6 then
+		return nil
+	end
+
+	local nearest_witherlike = self._nearest_witherlike
+	local pos = nearest_witherlike and nearest_witherlike:get_pos ()
+
+	-- The sensing callback decides whether to continue targeting
+	-- this object.
+	if pos
+		and self:test_object_and_restriction (nearest_witherlike, pos)
+		and self:target_visible (self_pos, nearest_witherlike)
+		and self:default_rangecheck (self_pos, nearest_witherlike) then
+		return nearest_witherlike
+	end
+	return nil
+end
+
+local function player_not_wearing_gold_p (self, self_pos, obj, _)
+	return not mobs_mc.player_wears_gold (obj)
+end
+
+local function piglin_not_child_p (self)
+	return not self.child
+end
+
+piglin._targeting_rules = {
+	mcl_mobs.build_target_rule ({
+		fn = piglin_attack_provoker_rule,
+		on_complete = nil,
+	}),
+	mcl_mobs.build_target_rule ({
+		fn = piglin_attack_witherlike_rule,
+		on_complete = nil,
+	}),
+	mcl_mobs.build_nearest_target_rule ("player", player_not_wearing_gold_p,
+					    piglin_not_child_p, nil, false),
+}
+
 ------------------------------------------------------------------------
 -- Piglin spawning.
 ------------------------------------------------------------------------
@@ -1542,10 +1572,6 @@ local piglin_brute = table.merge (piglin_base, {
 	},
 	attack_type = "melee",
 	can_despawn = false,
-	specific_attack = {
-		"mobs_mc:witherskeleton",
-		"mobs_mc:wither",
-	},
 	restriction_bonus = 0.6,
 	pace_bonus = 0.6,
 	damage = 7.0,
@@ -1581,34 +1607,13 @@ function piglin_brute:ai_step (dtime)
 	end
 end
 
-function piglin_brute:attack_custom (self_pos, dtime)
-	local provoker = self._piglin_provoker
-	if provoker and is_valid (provoker)
-		and self:default_rangecheck (self_pos, provoker) then
-		self:do_attack (provoker, 15)
+function piglin_brute:receive_damage (mcl_reason, damage)
+	if mob_class.receive_damage (self, mcl_reason, damage) then
+		if self.health > 0 and mcl_reason.source
+			and mcl_reason.source:is_valid () then
+			self:try_retaliate (mcl_reason.source)
+		end
 		return true
-	end
-
-	local attack = self:attack_default (self_pos, dtime, self.esp)
-	if attack then
-		self:do_attack (attack)
-		return attack
-	end
-	return false
-end
-
-function piglin_brute:should_continue_to_attack (object)
-	local provoker = self._piglin_provoker
-	local self_pos = self.object:get_pos ()
-	if provoker and is_valid (provoker)
-		and self:default_rangecheck (self_pos, provoker) then
-		return object == self._piglin_provoker
-	end
-
-	-- XXX: isn't the dtime parameter to attack_default redundant.
-	local attack = self:attack_default (self_pos, 0, self.esp)
-	if attack then
-		return object == attack
 	end
 	return false
 end
@@ -1634,7 +1639,8 @@ end
 
 function piglin_brute:enrage (source, broadcast)
 	local self_pos = self.object:get_pos ()
-	if (not source:is_player () or self:attack_player_allowed (source))
+	if source:is_valid ()
+		and self:test_object_and_restriction (source, source:get_pos ())
 		and self:default_rangecheck (self_pos, source) then
 		self._piglin_provoker = source
 		self._piglin_provoker_timeout = 30
@@ -1648,7 +1654,7 @@ function piglin_brute:enrage (source, broadcast)
 	end
 end
 
-function piglin_brute:retaliate_against (source, persistence)
+function piglin_brute:try_retaliate (source)
 	local entity = source:get_luaentity ()
 	if entity and (entity.name == "mobs_mc:piglin"
 			or entity.name == "mobs_mc:piglin_brute") then
@@ -1665,6 +1671,35 @@ piglin_brute.ai_functions = {
 	mob_class.check_attack,
 	mob_class.return_to_restriction,
 	mob_class.check_pace,
+}
+
+local function piglin_brute_attack_provoker_rule (self, self_pos, dtime, obj, is_current)
+	if is_current and obj == self._piglin_provoker then
+		local dist = self.tracking_distance * self.tracking_distance
+		return self:track_current_target (self_pos, dtime, obj, dist, 15.0)
+	end
+
+	local provoker = self._piglin_provoker
+	local pos = provoker and provoker:get_pos ()
+	if pos
+		and self:test_object_and_restriction (provoker, pos)
+		and self:target_visible (self_pos, provoker)
+		and self:default_rangecheck (self_pos, provoker) then
+		return provoker
+	end
+	return nil
+end
+
+piglin_brute._targeting_rules = {
+	mcl_mobs.build_target_rule ({
+		fn = piglin_brute_attack_provoker_rule,
+		on_complete = nil,
+	}),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, false),
+	mcl_mobs.build_nearest_target_rule ("mob", {
+		"mobs_mc:witherskeleton",
+		"mobs_mc:wither",
+	}, nil, nil, false),
 }
 
 mcl_mobs.register_mob ("mobs_mc:piglin_brute", piglin_brute)
@@ -1687,7 +1722,6 @@ local zombified_piglin = table.merge (zombie, {
 	xp_max = 6,
 	damage = 5.0,
 	reach = 2,
-	specific_attack = {},
 	mesh = "mobs_mc_piglin.b3d",
 	_child_mesh = "mobs_mc_baby_piglin.b3d",
 	textures = {
@@ -1765,9 +1799,6 @@ local zombified_piglin = table.merge (zombie, {
 	_reinforcement_type = "mobs_mc:zombified_piglin",
 	_alert_interval = 0,
 	ignited_by_sunlight = false,
-	group_attack = {
-		"mobs_mc:zombified_piglin",
-	},
 	_convert_to = false,
 })
 
@@ -1861,7 +1892,7 @@ function zombified_piglin:alert_other_piglins ()
 		local entity = object:get_luaentity ()
 		if entity and entity.name == "mobs_mc:zombified_piglin"
 			and not entity.attack and entity ~= self then
-			entity:do_attack (self.attack, 15)
+			entity:receive_attack (self.attack)
 		end
 	end
 end
@@ -1873,6 +1904,7 @@ function zombified_piglin:ai_step (dtime)
 			self:alert_other_piglins ()
 			self._alert_interval = pr:next (4, 6) / 20.0
 		end
+		self._alert_interval = self._alert_interval - dtime
 	end
 
 	if self.child then
@@ -1892,6 +1924,13 @@ end
 zombified_piglin.ai_functions = {
 	mob_class.check_attack,
 	mob_class.check_pace,
+}
+
+zombified_piglin._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, true, {
+		"mobs_mc:zombified_piglin",
+	}),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mcl_mobs.register_mob ("mobs_mc:zombified_piglin", zombified_piglin)

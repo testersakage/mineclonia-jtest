@@ -13,12 +13,10 @@ local llama = table.merge (horse, {
 	description = S("Llama"),
 	type = "animal",
 	_spawn_category = "creature",
-	passive = false,
 	attack_type = "ranged",
 	ranged_interval_min = 4.0,
 	ranged_interval_max = 4.0,
 	ranged_attack_radius = 20.0,
-	retaliates = true,
 	head_swivel = "head.control",
 	bone_eye_height = 11,
 	head_eye_height = 1.7765,
@@ -154,8 +152,10 @@ function llama:mob_activate (staticdata, dtime)
 	if not horse.mob_activate (self, staticdata, dtime) then
 		return false
 	end
+	-- For obsolete mobs.
 	self:remove_physics_factor ("tracking_distance",
 				    "mobs_mc:llama_wolf_attack")
+	self._has_spit = false
 	return true
 end
 
@@ -218,10 +218,7 @@ function llama:discharge_ranged (self_pos, target_pos)
 	end
 
 	-- Call off the attack after firing once.
-	if self._is_retaliating then
-		self.attack = nil
-		self:attack_end ()
-	end
+	self._has_spit = true
 end
 
 function llama:join_caravan (head)
@@ -364,58 +361,6 @@ function llama:follow_caravan (self_pos, dtime)
 	end
 end
 
-function llama:attack_end ()
-	mob_class.attack_end (self)
-	self:remove_physics_factor ("tracking_distance",
-				    "mobs_mc:llama_wolf_attack")
-end
-
-function llama:ai_step (dtime)
-	horse.ai_step (self, dtime)
-	if not self.attack then
-		self:remove_physics_factor ("tracking_distance",
-					    "mobs_mc:llama_wolf_attack")
-	end
-end
-
-function llama:targets_for_attack_default (self_pos, esp)
-	-- The detection range of a llama is reduced with respect to
-	-- wolves, which are the only targets they attack without
-	-- provocation.
-	return core.objects_inside_radius (self_pos, self.view_range * 0.25)
-end
-
-function llama:should_attack (object)
-	local entity = object:get_luaentity ()
-	return entity
-		and entity.name == "mobs_mc:wolf"
-		and not entity.tamed
-		and entity:valid_enemy ()
-end
-
-function llama:retaliate_against (source, persistence)
-	mob_class.retaliate_against (self, source, persistence)
-	self._is_retaliating = true
-end
-
-function llama:do_attack (object, persistence)
-	mob_class.do_attack (self, object, persistence)
-	self._is_retaliating = false
-end
-
-function llama:attack_default (self_pos, dtime, esp)
-	local rc = mob_class.attack_default (self, self_pos, dtime, esp)
-	-- Don't be so dogged in pursuing wolves.
-	if rc then
-		local entity = rc:get_luaentity ()
-		if entity and entity.name == "mobs_mc:wolf" then
-			self:add_physics_factor ("tracking_distance",
-						 "mobs_mc:llama_wolf_attack", 0.25)
-		end
-	end
-	return rc
-end
-
 llama.ai_functions = {
 	horse.check_tame,
 	llama.follow_caravan,
@@ -425,6 +370,50 @@ llama.ai_functions = {
 	mob_class.check_following,
 	mob_class.follow_herd,
 	mob_class.check_pace,
+}
+
+local function untamed_wolf_p (self, self_pos, obj, entity)
+	return entity
+		and entity.name == "mobs_mc:wolf"
+		and not entity.tamed
+end
+
+local function llama_retaliate_rule (self, self_pos, dtime, obj, is_current)
+	if is_current then
+		if self._has_spit then
+			-- Cancel this attack after one shot has been
+			-- discharged.
+			return nil
+		end
+		local dist = self.tracking_distance * self.tracking_distance
+		return self:track_current_target (self_pos, dtime, obj, dist, 15.0)
+	end
+
+	local attacker = self:read_last_attacker ()
+	if attacker then
+		local obj_pos = attacker:get_pos ()
+		if self:test_object_and_restriction (attacker, obj_pos)
+			and vector.distance (obj_pos, self_pos) < self.tracking_distance then
+			self._has_spit = false
+			return attacker
+		end
+	end
+	return nil
+end
+
+local function llama_reset_retaliate (self)
+	self._has_spit = false
+end
+
+llama._targeting_rules = {
+	mcl_mobs.build_target_rule ({
+		fn = llama_retaliate_rule,
+		on_complete = llama_reset_retaliate,
+	}),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:wolf", untamed_wolf_p, nil,
+					    function (r) return r * 0.25 end,
+					    false),
+	mcl_mobs.build_alert_receiver_rule (), -- For Trader Llamas.
 }
 
 ------------------------------------------------------------------------------

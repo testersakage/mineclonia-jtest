@@ -11,7 +11,6 @@ local chicken = {
 	description = S("Chicken"),
 	type = "animal",
 	_spawn_category = "creature",
-	passive = true,
 	hp_min = 4,
 	hp_max = 4,
 	xp_min = 1,

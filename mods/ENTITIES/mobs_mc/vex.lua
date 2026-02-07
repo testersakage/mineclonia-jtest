@@ -15,7 +15,6 @@ local vex = {
 	description = S("Vex"),
 	type = "monster",
 	_spawn_category = "monster",
-	passive = false,
 	attack_type = "null",
 	physical = false,
 	hp_min = 14,
@@ -68,10 +67,6 @@ local vex = {
 		bone = "wield_item",
 		rotate_bone = true,
 	},
-	group_attack = {
-		"mobs_mc:vex",
-	},
-	esp = true,
 	suffocation = false,
 	-- Yes, vexes really ascend in water.
 	floats = 1,
@@ -232,39 +227,6 @@ function vex:ai_step (dtime)
 	end
 end
 
-function vex:distance_check (object)
-	local self_pos = self.object:get_pos ()
-	return vector.distance (object:get_pos (), self_pos) > 2
-end
-
-function vex:attack_default (self_pos, dtime, esp)
-	if self._summoned_by then
-		local summoner = self._summoned_by:get_luaentity ()
-
-		if summoner.attack
-			and self:distance_check (summoner.attack) then
-			return summoner.attack
-		end
-		return nil
-	end
-	return mob_class.attack_default (self, self_pos, dtime, false)
-end
-
-function vex:should_attack (object)
-	return mob_class.should_attack (self, object)
-		and self:distance_check (object)
-end
-
-function vex:should_continue_to_attack (object)
-	if self._summoned_by then
-		local summoner = self._summoned_by:get_luaentity ()
-		return ((not summoner or summoner.attack == nil)
-				and mob_class.should_continue_to_attack (self, object))
-			or object == summoner.attack
-	end
-	return mob_class.should_continue_to_attack (self, object)
-end
-
 local function is_clear (node)
 	local node = core.get_node (node)
 	local def = core.registered_nodes[node.name]
@@ -320,6 +282,35 @@ end
 vex.ai_functions = {
 	mob_class.check_attack,
 	vex_pace,
+}
+
+local function vex_adopt_owner_target (self, self_pos, dtime, obj, is_current)
+	if is_current then
+		local dist = self.tracking_distance * self.tracking_distance
+		return self:track_current_target (self_pos, dtime, obj, dist, nil)
+	elseif self._summoned_by and self._summoned_by:is_valid () then
+		local entity = self._summoned_by:get_luaentity ()
+		local target = entity._active_target
+		local pos = target and target:get_pos ()
+		if pos
+			and self:test_object_and_restriction (target, pos)
+			and vector.distance (self_pos, pos) < self.view_range then
+			return target
+		end
+	end
+
+	return nil
+end
+
+vex._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (mobs_mc.raid_mob_predicate,
+						true, {"mobs_mc:vex",}),
+	mcl_mobs.build_target_rule ({
+		fn = vex_adopt_owner_target,
+		on_complete = nil,
+	}),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, nil),
+	mcl_mobs.build_alert_receiver_rule (),
 }
 
 mcl_mobs.register_mob ("mobs_mc:vex", vex)

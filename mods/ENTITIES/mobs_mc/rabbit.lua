@@ -7,7 +7,6 @@ local rabbit = {
 	description = S("Rabbit"),
 	type = "animal",
 	_spawn_category = "creature",
-	passive = true,
 	reach = 1,
 	hp_min = 3,
 	hp_max = 3,
@@ -424,25 +423,16 @@ mcl_mobs.register_mob ("mobs_mc:rabbit", rabbit)
 -- Killer bunny.
 ------------------------------------------------------------------------
 
--- The killer bunny (Only with spawn egg)
 local killer_bunny = table.merge (rabbit, {
 	description = S("Killer Bunny"),
 	attack_type = "melee",
-	specific_attack = {
-		"player",
-		"mobs_mc:wolf",
-		"mobs_mc:dog",
-	},
 	damage = 8,
-	passive = false,
 	does_not_prevent_sleep = true,
-	retaliates = true,
 	-- 8 armor points
 	armor = 50,
 	textures = {
 		"mobs_mc_rabbit_caerbannog.png",
 	},
-	group_attack = true,
 	runaway = false,
 })
 
@@ -459,6 +449,14 @@ killer_bunny.ai_functions = {
 	mob_class.check_pace,
 }
 
+killer_bunny._targeting_rules = {
+	mcl_mobs.build_retaliation_target_rule (nil, true, {"mobs_mc:killer_bunny",}),
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, nil),
+	mcl_mobs.build_nearest_target_rule ("mobs_mc:wolf", {"mobs_mc:wolf",},
+					    nil, nil, nil),
+	mcl_mobs.build_alert_receiver_rule (),
+}
+
 mcl_mobs.register_mob ("mobs_mc:killer_bunny", killer_bunny)
 
 ------------------------------------------------------------------------
@@ -469,9 +467,6 @@ mcl_mobs.register_mob ("mobs_mc:killer_bunny", killer_bunny)
 
 -- Spawn egg
 mcl_mobs.register_egg("mobs_mc:rabbit", S("Rabbit"), "#995f40", "#734831", 0)
-
--- Note: This spawn egg does not exist in Minecraft
-mcl_mobs.register_egg("mobs_mc:killer_bunny", S("Killer Bunny"), "#f2f2f2", "#ff0000", 0)
 
 ------------------------------------------------------------------------
 -- Modern Rabbit spawning.

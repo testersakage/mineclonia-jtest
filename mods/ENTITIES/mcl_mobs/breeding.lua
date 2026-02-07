@@ -419,7 +419,7 @@ function mob_class:sit_if_ordered (self_pos, dtime)
 	return false
 end
 
-local function teleport_to_owner (self, owner, owner_pos)
+function mob_class:teleport_to_owner (owner, owner_pos)
 	self:cancel_navigation ()
 	self:halt_in_tracks ()
 	-- Search for a walkable platform from among 10 random
@@ -475,7 +475,7 @@ function mob_class:check_travel_to_owner (self_pos, dtime)
 		if self:check_timer ("pathfind_to_owner", 0.5) then
 			-- Teleport if the owner is at a distance.
 			if distance > 12 then
-				if teleport_to_owner (self, owner, owner_pos) then
+				if self:teleport_to_owner (owner, owner_pos) then
 					self.traveling_to_owner = nil
 					return false
 				end
@@ -497,7 +497,7 @@ function mob_class:check_travel_to_owner (self_pos, dtime)
 
 			-- Teleport if the owner is at a distance.
 			if distance > 12 then
-				if teleport_to_owner (self, owner, owner_pos) then
+				if self:teleport_to_owner (owner, owner_pos) then
 					self.traveling_to_owner = nil
 					return false
 				end

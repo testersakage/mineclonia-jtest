@@ -84,13 +84,6 @@ local ghast = {
 -- Ghast AI.
 ------------------------------------------------------------------------
 
--- Ghasts should not notice players till they are within 4.0 blocks
--- vertically.
-function ghast:should_attack (object)
-	return mob_class.should_attack (self, object)
-		and math.abs (object:get_pos ().y - self.object:get_pos ().y) <= 4.0
-end
-
 function ghast:do_go_pos (dtime, moveresult)
 	local target = self.movement_target or vector.zero ()
 	local self_pos = self.object:get_pos ()
@@ -202,12 +195,23 @@ function ghast:run_ai (dtime)
 	end
 end
 
-function ghast:do_attack (target)
-	self.attack = target
-	self.target_invisible_time = 3.0
-	self._sight_persistence = 3.0
-	self._charge_time = 0
+local function ghast_player_attackable_p (self, self_pos, obj, _)
+	-- Ghasts should not notice players till they are within 4.0
+	-- blocks vertically of themselves.
+	return math.abs (obj:get_pos ().y - self_pos.y) <= 4.0
 end
+
+function ghast:switch_targeting_rule (fn_old, fn_new)
+	mob_class.switch_targeting_rule (self, fn_old, fn_new)
+	if fn_new then
+		self._charge_time = 0.0
+	end
+end
+
+ghast._targeting_rules = {
+	mcl_mobs.build_nearest_target_rule ("player", ghast_player_attackable_p,
+					    nil, nil, nil),
+}
 
 ------------------------------------------------------------------------
 -- Ghast visuals.

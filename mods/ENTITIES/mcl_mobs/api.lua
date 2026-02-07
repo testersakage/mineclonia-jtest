@@ -1,5 +1,6 @@
 local S = core.get_translator("mcl_mobs")
 
+local pairs = pairs
 local mob_class = mcl_mobs.mob_class
 local is_valid = mcl_util.is_valid_objectref
 
@@ -104,21 +105,29 @@ function mob_class:update_tag() --update nametag and/or the debug box
 	})
 end
 
-function mob_class:update_timers(dtime)
-	for k, v in pairs(self._timers) do
+function mob_class:update_timers (dtime)
+	for k, v in pairs (self._timers) do
 		self._timers[k] = v - dtime
+		self._timers_fired[k] = nil
 	end
 end
 
-function mob_class:check_timer(timer, interval)
-	if not self._timers[timer] then
-		self._timers[timer] = math.random() * interval --start with a random time to avoid many timers firing simultaneously
+function mob_class:check_timer (timer, interval)
+	local timers = self._timers
+	if not timers[timer] then
+		-- Start with a random time to avoid many timers
+		-- firing simultaneously.
+		timers[timer] = math.random () * interval
 	end
-	if self._timers[timer] <= 0  then
-		self._timers[timer] = interval
+	if timers[timer] <= 0 then
+		timers[timer] = interval
+		-- Permit timers triggered during this globalstep to
+		-- be reported as such by subsequent invocations of
+		-- this function.
+		self._timers_fired[timer] = true
 		return true
 	end
-	return false
+	return self._timers_fired[timer] or false
 end
 
 function mob_class:get_staticdata_table ()
@@ -161,6 +170,15 @@ function mob_class:get_staticdata_table ()
 	tmp._soul_speed_level = nil
 	tmp._last_soul_speed_bonus = nil
 	tmp._depth_strider_level = nil
+	tmp._active_targeting_rule = nil
+	tmp._active_target = nil
+	tmp._object_search_lists = nil
+	tmp._last_attack_id = nil
+	tmp._last_recorded_attack_id = nil
+	tmp._timers_fired = nil
+	tmp._timers = nil
+	tmp._alert_receiver_time = nil
+	tmp._alert_receiver_target = nil
 
 	-- Remove physics factors that are not persistent and revert
 	-- fields that were modified and disapply them.
@@ -320,6 +338,7 @@ function mob_class:post_load_staticdata ()
 
 	-- Erase timers.
 	self._timers = {}
+	self._timers_fired = {}
 	if not self.texture_mods then
 		self.texture_mods = {}
 	end
@@ -548,7 +567,7 @@ function mob_class:on_step (dtime, moveresult)
 		or self:update_mob_caps ()
 		or self:check_proto_chunk (pos, dtime)
 		or is_limbo_pos (pos) then
-		return true
+		return
 	end
 
 	-- Objects which are attached and those which are not physical
@@ -637,8 +656,9 @@ function mob_class:on_step (dtime, moveresult)
 	end
 
 	self:post_motion_step (pos, dtime, moveresult)
-	self:ai_step (dtime)
+
 	self:update_timers (dtime)
+	self:ai_step (dtime)
 
 	if not self.fire_resistant then
 		mcl_burning.tick (self.object, dtime, self)
@@ -685,11 +705,8 @@ function mob_class:on_step (dtime, moveresult)
 	if self:env_damage (pos) then
 		return
 	end
+	self:run_targeting_rules (dtime, pos)
 	self:run_ai (dtime, moveresult)
-
-	if not self.object:get_luaentity() then
-		return false
-	end
 end
 
 core.register_chatcommand("clearmobs",{

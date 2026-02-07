@@ -15,7 +15,6 @@ local squid = {
 	type = "animal",
 	_spawn_category = "water_creature",
 	can_despawn = true,
-	passive = true,
 	hp_min = 10,
 	hp_max = 10,
 	xp_min = 1,

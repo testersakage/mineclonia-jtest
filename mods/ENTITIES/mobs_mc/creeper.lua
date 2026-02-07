@@ -254,6 +254,17 @@ function creeper_defs:custom_attack ()
 	self:halt_in_tracks ()
 end
 
+creeper_defs.ai_functions = {
+	mob_class.check_avoid,
+	mob_class.check_attack,
+	mob_class.check_pace,
+}
+
+creeper_defs._targeting_rules = {
+	mcl_mobs.build_nearest_target_rule ("player", nil, nil, nil, nil),
+	mcl_mobs.build_retaliation_target_rule (nil, nil, nil),
+}
+
 ---------------------------------------------------------------
 -- Creeper registration and spawning.
 ---------------------------------------------------------------
