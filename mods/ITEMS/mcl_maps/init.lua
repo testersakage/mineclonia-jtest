@@ -282,7 +282,7 @@ core.register_craft({
 	output = "mcl_maps:empty_map",
 	recipe = {
 		{ "mcl_core:paper", "mcl_core:paper", "mcl_core:paper" },
-		{ "mcl_core:paper", "group:compass", "mcl_core:paper" },
+		{ "mcl_core:paper", "mcl_compass:compass", "mcl_core:paper" },
 		{ "mcl_core:paper", "mcl_core:paper", "mcl_core:paper" },
 	}
 })
