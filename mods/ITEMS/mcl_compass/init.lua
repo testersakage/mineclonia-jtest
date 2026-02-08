@@ -46,7 +46,7 @@ local function get_compass_angle(pos, target, dir)
 	if angle_north < 0 then angle_north = angle_north + 360 end
 	local angle_dir = -math.deg(dir)
 	local angle_relative = (angle_north - angle_dir + 180) % 360
-	return math.floor((angle_relative/11.25) + 0.5) % compass_frames
+	return math.floor((angle_relative/11.25) + 0.5)
 end
 
 --- Get compass image frame.
@@ -63,7 +63,7 @@ local function get_compass_frame(pos, dir, itemstack)
 		if mcl_worlds.compass_works(pos) then
 			local spawn_pos = core.setting_get_pos("static_spawnpoint")
 				or vector.new(0, 0, 0)
-			return get_compass_angle(pos, spawn_pos, dir)
+			return get_compass_angle(pos, spawn_pos, dir) % compass_frames
 		else
 			return random_frame
 		end
@@ -80,7 +80,7 @@ local function get_compass_frame(pos, dir, itemstack)
 		if l_dim == p_dim then
 			--check if lodestone still exists
 			if get_far_node(lpos, itemstack).name == "mcl_compass:lodestone" then
-				return get_compass_angle(pos, lpos, dir)
+				return get_compass_angle(pos, lpos, dir) % compass_frames
 			else -- lodestone got destroyed
 				return random_frame
 			end
@@ -124,7 +124,6 @@ local function update_recovery_compass(stack, player)
 	local targetpos = core.string_to_pos(posstring)
 	if not targetpos then return stack end
 
-	local def = stack:get_definition()
 	local pos = player:get_pos()
 	local dir = player:get_look_horizontal()
 
@@ -134,7 +133,7 @@ local function update_recovery_compass(stack, player)
 	if p_dim ~= target_dim then
 		img = string.format(def._mcl_compass_img_fmt, random_frame)
 	else
-		img = string.format(def._mcl_compass_img_fmt, get_compass_angle(pos, targetpos, dir))
+		img = string.format(def._mcl_compass_img_fmt, get_compass_angle(pos, targetpos, dir) % compass_frames)
 	end
 	return update_compass_img(stack, img)
 end
