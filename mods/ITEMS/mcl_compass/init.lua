@@ -48,7 +48,6 @@ local function get_compass_angle(pos, target, dir)
 	local angle_relative = (angle_north - angle_dir + 180) % 360
 	return math.floor((angle_relative/11.25) + 0.5) % compass_frames
 end
-mcl_compass.get_compass_angle = get_compass_angle
 
 --- Get compass image frame.
 -- Returns the compass image frame with the needle direction matching the
