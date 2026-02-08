@@ -9,6 +9,7 @@ local compass_frames = 32
 -- Increase if there are performance problems.
 local spin_timer_tick = 0.5
 local spin_timer = 0
+local spin_velocity = 1
 
 -- Initialize random compass frame for spinning compass.  It is updated in
 -- the compass globalstep function.
@@ -17,7 +18,10 @@ local random_frame = math.random(0, compass_frames-1)
 core.register_globalstep(function(dtime)
 	spin_timer = spin_timer + dtime
 	if spin_timer >= spin_timer_tick then
-		random_frame = (random_frame + math.random(-1, 1)) % compass_frames
+		spin_velocity = spin_velocity + math.random(-1, 1)
+		spin_velocity = math.max(spin_velocity, -2)
+		spin_velocity = math.min(spin_velocity, 2)
+		random_frame = (random_frame + spin_velocity) % compass_frames
 		spin_timer = 0
 	end
 end)
