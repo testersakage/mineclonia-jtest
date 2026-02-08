@@ -123,27 +123,52 @@ local function update_compass_img(stack, frame)
 end
 
 local function update_compass(stack, player)
+	local frame = random_frame
 	local pos = player:get_pos()
-	local dir = player:get_look_horizontal()
-	return update_compass_img(stack, get_compass_frame(pos, dir, stack))
+	-- Compasses only work in the overworld
+	if mcl_worlds.compass_works(pos) then
+		local spawn_pos = core.setting_get_pos("static_spawnpoint")
+			or vector.new(0, 0, 0)
+		local dir = player:get_look_horizontal()
+		frame = get_compass_angle(pos, spawn_pos, dir) % compass_frames
+	end
+	return update_compass_img(stack, frame)
+end
+
+local function update_lodestone_compass(stack, player)
+	local frame = random_frame
+	local lpos_str = stack:get_meta():get_string("pointsto")
+	local lpos = core.string_to_pos(lpos_str)
+	if not lpos then
+		stack:get_meta():set_string("pointsto", "")
+	else
+		local _, l_dim = mcl_worlds.y_to_layer(lpos.y)
+		local pos = player:get_pos()
+		local _, p_dim = mcl_worlds.y_to_layer(pos.y)
+		-- compass and lodestone must be in the same dimension
+		if l_dim == p_dim then
+			--check if lodestone still exists
+			if get_far_node(lpos, stack).name == "mcl_compass:lodestone" then
+				local dir = player:get_look_horizontal()
+				frame = get_compass_angle(pos, lpos, dir) % compass_frames
+			end
+		end
+	end
+	return update_compass_img(stack, frame)
 end
 
 local function update_recovery_compass(stack, player)
-	local meta = player:get_meta()
-	local posstring =  meta:get_string("mcl_compass:recovery_pos")
-	local targetpos = core.string_to_pos(posstring)
-	if not targetpos then return stack end
-
-	local pos = player:get_pos()
-	local dir = player:get_look_horizontal()
-
-	local _, target_dim = mcl_worlds.y_to_layer(targetpos.y)
-	local _, p_dim = mcl_worlds.y_to_layer(pos.y)
-	local frame
-	if p_dim ~= target_dim then
-		frame = random_frame
-	else
-		frame = get_compass_angle(pos, targetpos, dir) % compass_frames
+	local frame = random_frame
+	local rpos_str =  player:get_meta():get_string("mcl_compass:recovery_pos")
+	local rpos = core.string_to_pos(rpos_str)
+	if rpos then
+		local _, r_dim = mcl_worlds.y_to_layer(rpos.y)
+		local pos = player:get_pos()
+		local _, p_dim = mcl_worlds.y_to_layer(pos.y)
+		if r_dim == p_dim then
+			local dir = player:get_look_horizontal()
+			frame = get_compass_angle(pos, rpos, dir) % compass_frames
+		end
 	end
 	return update_compass_img(stack, frame)
 end
@@ -203,7 +228,7 @@ mcl_compass.register_compass("lodestone_compass", {
 		inventory_image = "mcl_compass_compass_01.png^[colorize:purple:50",
 		wield_image = "mcl_compass_compass_01.png^[colorize:purple:50",
 		groups = { compass = 2, not_in_creative_inventory = 1 },
-		_mcl_compass_update = update_compass,
+		_mcl_compass_update = update_lodestone_compass,
 		_mcl_compass_img_fmt = "mcl_compass_compass_%02d.png^[colorize:purple:50",
 	}
 })
