@@ -104,7 +104,9 @@ end
 --compat: compasses used to consist of many different items
 function mcl_compass.get_compass_itemname() return "mcl_compass:compass" end
 
-local function update_compass_img(stack, img)
+local function update_compass_img(stack, frame)
+	local def = stack:get_definition()
+	local img = string.format(def._mcl_compass_img_fmt, frame)
 	local m = stack:get_meta()
 	m:set_string("inventory_image", img)
 	m:set_string("wield_image", img)
@@ -114,8 +116,7 @@ end
 local function update_compass(stack, player)
 	local pos = player:get_pos()
 	local dir = player:get_look_horizontal()
-	local def = stack:get_definition()
-	return update_compass_img(stack, string.format(def._mcl_compass_img_fmt, get_compass_frame(pos, dir, stack)))
+	return update_compass_img(stack, get_compass_frame(pos, dir, stack))
 end
 
 local function update_recovery_compass(stack, player)
@@ -129,13 +130,13 @@ local function update_recovery_compass(stack, player)
 
 	local _, target_dim = mcl_worlds.y_to_layer(targetpos.y)
 	local _, p_dim = mcl_worlds.y_to_layer(pos.y)
-	local img
+	local frame
 	if p_dim ~= target_dim then
-		img = string.format(def._mcl_compass_img_fmt, random_frame)
+		frame = random_frame
 	else
-		img = string.format(def._mcl_compass_img_fmt, get_compass_angle(pos, targetpos, dir) % compass_frames)
+		frame = get_compass_angle(pos, targetpos, dir) % compass_frames
 	end
-	return update_compass_img(stack, img)
+	return update_compass_img(stack, frame)
 end
 
 core.register_globalstep(function(dtime)
