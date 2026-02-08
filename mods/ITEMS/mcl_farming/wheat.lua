@@ -123,7 +123,7 @@ core.register_craftitem("mcl_farming:wheat_item", {
 	inventory_image = "farming_wheat_harvested.png",
 	groups = {craftitem = 1, compostability = 65},
 	_mcl_crafting_output = {
-		line_wide3 = {output = "mcl_farming:bread 3"},
+		line_wide3 = {output = "mcl_farming:bread 1"},
 		square3 = {output = "mcl_farming:hay_block"}
 	}
 })
