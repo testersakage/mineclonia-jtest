@@ -268,14 +268,6 @@ core.register_craft({
 
 core.register_node("mcl_compass:lodestone",{
 	description=S("Lodestone"),
-	on_rightclick = function(pos, _, clicker, itemstack)
-		if itemstack:get_name() == "mcl_compass:compass_lodestone" or itemstack:get_name() == "mcl_compass:compass" then
-			itemstack:get_meta():set_string("pointsto", core.pos_to_string(pos))
-			itemstack:set_name("mcl_compass:compass_lodestone")
-			awards.unlock(clicker:get_player_name(), "mcl:countryLode")
-		end
-		return itemstack
-	end,
 	tiles = {
 		"lodestone_top.png",
 		"lodestone_bottom.png",
@@ -286,7 +278,18 @@ core.register_node("mcl_compass:lodestone",{
 	},
 	groups = {pickaxey=1, material_stone=1, deco_block=1, unmovable_by_piston = 1},
 	_mcl_hardness = 3.5,
-	sounds = mcl_sounds.node_sound_stone_defaults()
+	sounds = mcl_sounds.node_sound_stone_defaults(),
+	on_rightclick = function(pos, _, clicker, itemstack)
+		local compass  = core.get_item_group(itemstack:get_name(), "compass")
+		if compass > 0 and compass < 3 then
+			if compass == 1 then
+				itemstack:set_name("mcl_compass:compass_lodestone")
+				awards.unlock(clicker:get_player_name(), "mcl:countryLode")
+			end
+			itemstack:get_meta():set_string("pointsto", core.pos_to_string(pos))
+		end
+		return itemstack
+	end,
 })
 
 core.register_craft({
