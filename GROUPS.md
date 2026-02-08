@@ -247,12 +247,8 @@ These groups are used mostly for informational purposes
 * `features_cannot_replace=1`: Structures and features cannot
   overwrite this node.  (Pertains to mcl_levelgen.)
 
-## Fake item groups
-These groups put similar items together which should all be treated by the gameplay or the GUI as a single item.
-You should not add custom items to these groups for no good reason, this is likely to cause a ton of conflicts.
-
-* `clock`: Clock (rating indicates the “frame”)
-* `compass`: Compass (rating indicates the “frame”)
+* `clock`: Clock (used for backwards compatibility)
+* `compass`: Compass (1 = compass, 2 = lodestone compass, 3 = recovery compass)
 
 This has the following implication: If you want to use a compass or clock in a crafting recipe, you *must*
 use `group:compass` or `group:clock`, respectively.
