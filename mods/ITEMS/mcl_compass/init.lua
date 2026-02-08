@@ -26,6 +26,12 @@ core.register_globalstep(function(dtime)
 	end
 end)
 
+--set recovery meta
+core.register_on_dieplayer(function(player)
+	local meta = player:get_meta();
+	meta:set_string("mcl_compass:recovery_pos",core.pos_to_string(player:get_pos()))
+end)
+
 local lodestones = {}
 
 local function add_lodestone(pos)
@@ -144,9 +150,6 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 	end
 end)
 
---
--- Node and craftitem definitions
---
 function mcl_compass.register_compass(name, def)
 	core.register_craftitem(":mcl_compass:"..(def.name or name), table.merge({}, def.overrides or {}, {
 		groups = table.merge({tool = 1, disable_repair = 1}, def.overrides.groups)
@@ -158,6 +161,9 @@ function mcl_compass.register_compass(name, def)
 	end
 end
 
+--
+-- Node and craftitem definitions
+--
 mcl_compass.register_compass("compass", {
 	name = "compass",
 	name_fmt = "mcl_compass:%d",
@@ -173,6 +179,16 @@ mcl_compass.register_compass("compass", {
 		_mcl_compass_img_fmt = "mcl_compass_compass_%02d.png",
 	}
 })
+
+core.register_craft({
+	output = "mcl_compass:compass",
+	recipe = {
+		{"", "mcl_core:iron_ingot", ""},
+		{"mcl_core:iron_ingot", "mcl_redstone:redstone", "mcl_core:iron_ingot"},
+		{"", "mcl_core:iron_ingot", ""}
+	}
+})
+
 mcl_compass.register_compass("lodestone_compass", {
 	name = "compass_lodestone",
 	name_fmt = "mcl_compass:%d_lodestone",
@@ -188,6 +204,7 @@ mcl_compass.register_compass("lodestone_compass", {
 		_mcl_compass_img_fmt = "mcl_compass_compass_%02d.png^[colorize:purple:50",
 	}
 })
+
 mcl_compass.register_compass("recovery_compass", {
 	name = "compass_recovery",
 	name_fmt = "mcl_compass:%d_recovery",
@@ -201,15 +218,6 @@ mcl_compass.register_compass("recovery_compass", {
 		groups = { compass = 3, rarity = 1 },
 		_mcl_compass_update = update_recovery_compass,
 		_mcl_compass_img_fmt = "mcl_compass_recovery_compass_%02d.png",
-	}
-})
-
-core.register_craft({
-	output = "mcl_compass:compass",
-	recipe = {
-		{"", "mcl_core:iron_ingot", ""},
-		{"mcl_core:iron_ingot", "mcl_redstone:redstone", "mcl_core:iron_ingot"},
-		{"", "mcl_core:iron_ingot", ""}
 	}
 })
 
@@ -258,9 +266,3 @@ core.register_craft({
 		{"mcl_core:stonebrickcarved", "mcl_core:stonebrickcarved", "mcl_core:stonebrickcarved"}
 	}
 })
-
---set recovery meta
-core.register_on_dieplayer(function(player)
-	local meta = player:get_meta();
-	meta:set_string("mcl_compass:recovery_pos",core.pos_to_string(player:get_pos()))
-end)
