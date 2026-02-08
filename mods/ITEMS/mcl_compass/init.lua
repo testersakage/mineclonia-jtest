@@ -49,25 +49,6 @@ local function check_lodestone(pos)
 	end
 end
 
-local function get_far_node(pos, itemstack) --code from minetest dev wiki: https://dev.luanti.org, some edits have been made to add a cooldown for force loads
-	local node = core.get_node(pos)
-	if node.name == "ignore" then
-		local tstamp = tonumber(itemstack:get_meta():get_string("last_forceload"))
-		if tstamp == nil then --this is only relevant for new lodestone compasses, the ones that have never performes a forceload yet
-			itemstack:get_meta():set_string("last_forceload", tostring(os.time(os.date("!*t")))) ---@diagnostic disable-line: param-type-mismatch
-			tstamp = tonumber(os.time(os.date("!*t"))) ---@diagnostic disable-line: param-type-mismatch
-		end
-		if tonumber(os.time(os.date("!*t"))) - tstamp > 180 then ---@diagnostic disable-line: param-type-mismatch
-			itemstack:get_meta():set_string("last_forceload", tostring(os.time(os.date("!*t")))) ---@diagnostic disable-line: param-type-mismatch
-			core.get_voxel_manip():read_from_map(pos, pos)
-			node = core.get_node(pos)
-		else
-			node = {name="mcl_compass:lodestone"} --cooldown not over yet, pretend like there is something...
-		end
-	end
-	return node
-end
-
 --- Get compass needle angle.
 -- Returns the angle that the compass needle should point at expressed in
 -- 360 degrees divided by the number of possible compass image frames..
