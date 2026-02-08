@@ -58,7 +58,8 @@ end
 -- itemstack: the compass including its optional lodestone metadata.
 --
 local function get_compass_frame(pos, dir, itemstack)
-	if not string.find(itemstack:get_name(), "_lodestone") then -- normal compass
+	local ctype = core.get_item_group(itemstack:get_name(), "compass")
+	if ctype == 1 then -- normal compass
 		-- Compasses only work in the overworld
 		if mcl_worlds.compass_works(pos) then
 			local spawn_pos = core.setting_get_pos("static_spawnpoint")
@@ -67,7 +68,7 @@ local function get_compass_frame(pos, dir, itemstack)
 		else
 			return random_frame
 		end
-	else -- lodestone compass
+	elseif ctype == 2 then -- lodestone compass
 		local lpos_str = itemstack:get_meta():get_string("pointsto")
 		local lpos = core.string_to_pos(lpos_str)
 		if not lpos then
