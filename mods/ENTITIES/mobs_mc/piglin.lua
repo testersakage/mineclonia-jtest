@@ -549,7 +549,7 @@ local function piglin_loves_item (itemname)
 		-- or itemname == light_weighted_pressure_plate
 		or itemname == "mcl_core:gold_ingot"
 		or itemname == "mcl_bells:bell"
-		or core.get_item_group (itemname, "clock") > 0
+		or itemname == "mcl_clock:clock"
 		or itemname == "mcl_farming:carrot_item_gold"
 		or itemname == "mcl_potions:speckled_melon"
 		or itemname == "mcl_core:apple_gold"
