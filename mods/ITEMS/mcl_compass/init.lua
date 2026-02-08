@@ -149,7 +149,7 @@ end)
 --
 function mcl_compass.register_compass(name, def)
 	core.register_craftitem(":mcl_compass:"..(def.name or name), table.merge({}, def.overrides or {}, {
-		groups = table.merge({tool = 1, disable_repair = 1, compass = 1}, def.overrides.groups)
+		groups = table.merge({tool = 1, disable_repair = 1}, def.overrides.groups)
 	}))
 	if def.name_fmt then
 		for i = 0, compass_frames - 1 do
