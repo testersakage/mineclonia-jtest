@@ -54,8 +54,6 @@ local group_stereotypes = {
 	purpur_block = "mcl_end:purpur_block",
 	normal_sandstone = "mcl_core:sandstone",
 	red_sandstone = "mcl_core:redsandstone",
-	compass      = "mcl_compass:compass",
-	clock        = "mcl_clock:clock",
 }
 
 local group_names = {
@@ -320,11 +318,7 @@ local function get_tooltip(item, groups, cooktime, burntime, fs_name)
 		if #groups == 1 and not tooltip_append_itemname then
 			local g = group_names[groups[1]]
 			local groupstr
-			-- Treat the groups “compass” and “clock” as fake groups
-			-- and just print the normal item name without special formatting
-			if groups[1] == "compass" or groups[1] == "clock" then
-				groupstr = core.registered_items[item].description
-			elseif g then
+			if g then
 				-- Use the special group name string
 				groupstr = C(gcol, g)
 			else
@@ -432,7 +426,7 @@ local function get_recipe_fs(data, iY, player)
 		end
 
 		local label = ""
-		if groups and (#groups >= 1 and groups[1] ~= "compass" and groups[1] ~= "clock") then
+		if groups and (#groups >= 1) then
 			label = "\nG"
 		end
 
