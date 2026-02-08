@@ -22,6 +22,33 @@ core.register_globalstep(function(dtime)
 	end
 end)
 
+local lodestones = {}
+
+local function add_lodestone(pos)
+	lodestones[core.hash_node_position(pos)] = true
+end
+
+local function remove_lodestone(pos)
+	lodestones[core.hash_node_position(pos)] = nil
+end
+
+local function check_lodestone(pos)
+	if lodestones[core.hash_node_position(pos)] then
+		return true
+	end
+	local node = core.get_node(pos)
+	if node.name == "ignore" then
+		core.get_voxel_manip():read_from_map(pos, pos)
+		node = core.get_node(pos)
+	end
+	if node.name == "mcl_compass:lodestone" then
+		add_lodestone(pos)
+		return true
+	else
+		return false
+	end
+end
+
 local function get_far_node(pos, itemstack) --code from minetest dev wiki: https://dev.luanti.org, some edits have been made to add a cooldown for force loads
 	local node = core.get_node(pos)
 	if node.name == "ignore" then
@@ -88,7 +115,7 @@ local function get_compass_frame(pos, dir, itemstack)
 		-- compass and lodestone must be in the same dimension
 		if l_dim == p_dim then
 			--check if lodestone still exists
-			if get_far_node(lpos, itemstack).name == "mcl_compass:lodestone" then
+			if check_lodestone(lpos) then
 				return get_compass_angle(pos, lpos, dir) % compass_frames
 			else -- lodestone got destroyed
 				return random_frame
@@ -148,9 +175,11 @@ local function update_lodestone_compass(stack, player)
 		-- compass and lodestone must be in the same dimension
 		if l_dim == p_dim then
 			--check if lodestone still exists
-			if get_far_node(lpos, stack).name == "mcl_compass:lodestone" then
+			if check_lodestone(lpos) then
 				local dir = player:get_look_horizontal()
 				frame = get_compass_angle(pos, lpos, dir) % compass_frames
+			else
+				stack:get_meta():set_string("pointsto", "")
 			end
 		end
 	end
@@ -290,6 +319,8 @@ core.register_node("mcl_compass:lodestone",{
 		end
 		return itemstack
 	end,
+	on_construct = add_lodestone,
+	on_destruct = remove_lodestone,
 })
 
 core.register_craft({
