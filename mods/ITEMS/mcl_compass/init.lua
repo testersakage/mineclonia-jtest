@@ -69,62 +69,6 @@ local function get_compass_angle(pos, target, dir)
 	return math.floor((angle_relative/11.25) + 0.5)
 end
 
---- Get compass image frame.
--- Returns the compass image frame with the needle direction matching the
--- compass' current position.
---
--- pos: position of the compass;
--- dir: rotational direction of the compass.
--- itemstack: the compass including its optional lodestone metadata.
---
-local function get_compass_frame(pos, dir, itemstack)
-	local ctype = core.get_item_group(itemstack:get_name(), "compass")
-	if ctype == 1 then -- normal compass
-		-- Compasses only work in the overworld
-		if mcl_worlds.compass_works(pos) then
-			local spawn_pos = core.setting_get_pos("static_spawnpoint")
-				or vector.new(0, 0, 0)
-			return get_compass_angle(pos, spawn_pos, dir) % compass_frames
-		else
-			return random_frame
-		end
-	elseif ctype == 2 then -- lodestone compass
-		local lpos_str = itemstack:get_meta():get_string("pointsto")
-		local lpos = core.string_to_pos(lpos_str)
-		if not lpos then
-			core.log("warning", "mcl_compass: invalid lodestone position!")
-			return random_frame
-		end
-		local _, l_dim = mcl_worlds.y_to_layer(lpos.y)
-		local _, p_dim = mcl_worlds.y_to_layer(pos.y)
-		-- compass and lodestone must be in the same dimension
-		if l_dim == p_dim then
-			--check if lodestone still exists
-			if check_lodestone(lpos) then
-				return get_compass_angle(pos, lpos, dir) % compass_frames
-			else -- lodestone got destroyed
-				return random_frame
-			end
-		else
-			return random_frame
-		end
-	end
-end
-
---- Get partial compass itemname.
--- Returns partial itemname of a compass with needle direction matching compass position.
--- Legacy compatibility function for mods using older api.
---
-function mcl_compass.get_compass_image(pos, dir)
-	core.log("warning", "mcl_compass: deprecated function " ..
-		"get_compass_image() called, use get_compass_itemname().")
-	local itemstack = ItemStack("mcl_compass:compass")
-	return get_compass_frame(pos, dir, itemstack)
-end
-
---compat: compasses used to consist of many different items
-function mcl_compass.get_compass_itemname() return "mcl_compass:compass" end
-
 local function update_compass_img(stack, frame)
 	local def = stack:get_definition()
 	local img = string.format(def._mcl_compass_img_fmt, frame)
