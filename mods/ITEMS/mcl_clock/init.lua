@@ -10,24 +10,28 @@ for i = 0, clock_frames do
 	clock_images[i] = string.format(image_fmt, frame)
 end
 
--- Timer for random clock spinning
-local random_timer = 0.0
-local random_timer_trigger = 1.0 -- random clock spinning tick in seconds. Increase if there are performance problems
+-- random clock spinning tick in seconds.
+-- Increase if there are performance problems
+local spin_timer_tick = 0.5
+local spin_timer = 0
+local spin_velocity = 1
+
 local random_frame = math.random(0, clock_frames)
+local current_frame = 0
 
 -- This timer makes sure the clocks get updated from time to time regardless of time_speed,
 -- just in case some clocks in the world go wrong
 local force_clock_update_timer = 0
-local current_frame = -1
 
 core.register_globalstep(function(dtime)
-	-- This causes the random spinning of the clock
-	random_timer = random_timer + dtime
-	if random_timer >= random_timer_trigger then
-		random_frame = (random_frame + math.random(-4, 4)) % clock_frames
-		random_timer = 0
+	spin_timer = spin_timer + dtime
+	if spin_timer >= spin_timer_tick then
+		spin_velocity = spin_velocity + math.random(-1, 1)
+		spin_velocity = math.max(spin_velocity, -2)
+		spin_velocity = math.min(spin_velocity, 2)
+		random_frame = (random_frame + spin_velocity) % clock_frames
+		spin_timer = 0
 	end
-
 	force_clock_update_timer = force_clock_update_timer + dtime
 	local new_frame = math.round(clock_frames * core.get_timeofday())
 	if current_frame == new_frame and force_clock_update_timer < 1 then
