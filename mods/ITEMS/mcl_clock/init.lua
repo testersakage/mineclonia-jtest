@@ -42,7 +42,7 @@ core.register_craftitem("mcl_clock:clock", {
 	_tt_help = S("Displays the time of day in the Overworld"),
 	_doc_items_longdesc = S("Clocks are tools which shows the current time of day in the Overworld."),
 	_doc_items_usagehelp = S("The clock contains a rotating disc with a sun symbol (yellow disc) and moon symbol and a little “pointer” which shows the current time of day by estimating the real position of the sun and the moon in the sky. Noon is represented by the sun symbol and midnight is represented by the moon symbol."),
-	inventory_image = clock_images[1],
+	inventory_image = clock_images[0],
 	groups = { tool=1, clock = 1, disable_repair=1 },
 	wield_image = "",
 	_on_entity_step = function(self, dtime, itemstring)
