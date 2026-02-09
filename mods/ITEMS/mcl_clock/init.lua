@@ -4,44 +4,16 @@ mcl_clock = {}
 local clock_frames = 64
 local image_fmt = "mcl_clock_clock_%02d.png"
 
--- Timer for random clock spinning
-local random_timer = 0.0
-local random_timer_trigger = 1.0 -- random clock spinning tick in seconds. Increase if there are performance problems
-local random_frame = math.random(0, clock_frames-1)
-
 mcl_clock.images = {}
 for i = 0, clock_frames do
 	local frame = (i + (clock_frames / 2) - 1) % clock_frames
 	mcl_clock.images[i] = string.format(image_fmt, frame)
 end
 
-function mcl_clock.get_clock_frame()
-	return math.round(clock_frames * core.get_timeofday())
-end
-
-core.register_craftitem("mcl_clock:clock", {
-	description = S("Clock"),
-	_tt_help = S("Displays the time of day in the Overworld"),
-	_doc_items_longdesc = S("Clocks are tools which shows the current time of day in the Overworld."),
-	_doc_items_usagehelp = S("The clock contains a rotating disc with a sun symbol (yellow disc) and moon symbol and a little “pointer” which shows the current time of day by estimating the real position of the sun and the moon in the sky. Noon is represented by the sun symbol and midnight is represented by the moon symbol."),
-	inventory_image = mcl_clock.images[1],
-	groups = { tool=1, clock = 1, disable_repair=1 },
-	wield_image = "",
-	_on_entity_step = function(self, dtime, itemstring)
-		self._clock_timer = (self._clock_timer or 0) - dtime
-		if self._clock_timer > 0 then return end
-		self._clock_timer = 5
-		local stack = ItemStack(itemstring)
-		local m = stack:get_meta()
-		local frame = mcl_clock.get_clock_frame()
-		m:set_string("inventory_image", mcl_clock.images[frame])
-		m:set_string("wield_image", mcl_clock.images[frame])
-		self.object:set_properties({
-			wield_item = stack:to_string()
-		})
-	end
-})
-
+-- Timer for random clock spinning
+local random_timer = 0.0
+local random_timer_trigger = 1.0 -- random clock spinning tick in seconds. Increase if there are performance problems
+local random_frame = math.random(0, clock_frames)
 
 -- This timer makes sure the clocks get updated from time to time regardless of time_speed,
 -- just in case some clocks in the world go wrong
@@ -63,32 +35,59 @@ core.register_globalstep(function(dtime)
 	end
 	force_clock_update_timer = 0
 	current_frame = new_frame
+end)
 
-	for player in mcl_util.connected_players() do
-		local inv = player:get_inventory()
-		for s, stack in pairs(inv:get_list("main")) do
-			if core.get_item_group(stack:get_name(), "clock") > 0 then
-				stack:set_name("mcl_clock:clock") -- compat to effectively rename clocks - aliases do not do this.
-				local frame
-				-- Clocks do not work in certain zones
-				if not mcl_worlds.clock_works(player:get_pos()) then
-					frame = random_frame
-				else
-					frame = current_frame
-				end
+function mcl_clock.get_clock_frame()
+	return math.round(clock_frames * core.get_timeofday())
+end
 
-				local m = stack:get_meta()
-				m:set_string("wield_image", mcl_clock.images[frame])
-				m:set_string("inventory_image", mcl_clock.images[frame])
-				inv:set_stack("main", s, stack)
+core.register_craftitem("mcl_clock:clock", {
+	description = S("Clock"),
+	_tt_help = S("Displays the time of day in the Overworld"),
+	_doc_items_longdesc = S("Clocks are tools which shows the current time of day in the Overworld."),
+	_doc_items_usagehelp = S("The clock contains a rotating disc with a sun symbol (yellow disc) and moon symbol and a little “pointer” which shows the current time of day by estimating the real position of the sun and the moon in the sky. Noon is represented by the sun symbol and midnight is represented by the moon symbol."),
+	inventory_image = mcl_clock.images[1],
+	groups = { tool=1, clock = 1, disable_repair=1 },
+	wield_image = "",
+	_on_entity_step = function(self, dtime, itemstring)
+		self._clock_timer = (self._clock_timer or 0) - dtime
+		if self._clock_timer > 0 then return end
+		self._clock_timer = 5
+		local stack = ItemStack(itemstring)
+		local m = stack:get_meta()
+		m:set_string("inventory_image", mcl_clock.images[current_frame])
+		m:set_string("wield_image", mcl_clock.images[current_frame])
+		self.object:set_properties({
+			wield_item = stack:to_string()
+		})
+	end
+})
+
+
+mcl_player.register_globalstep_slow(function(player, dtime)
+	local inv = player:get_inventory()
+	for s, stack in pairs(inv:get_list("main")) do
+		if core.get_item_group(stack:get_name(), "clock") > 0 then
+			stack:set_name("mcl_clock:clock") -- compat to effectively rename clocks - aliases do not do this.
+			local frame
+			-- Clocks do not work in certain zones
+			if not mcl_worlds.clock_works(player:get_pos()) then
+				frame = random_frame
+			else
+				frame = current_frame
 			end
+
+			local m = stack:get_meta()
+			m:set_string("wield_image", mcl_clock.images[frame])
+			m:set_string("inventory_image", mcl_clock.images[frame])
+			inv:set_stack("main", s, stack)
 		end
 	end
 end)
 
 core.register_on_craft(function(itemstack)
 	if itemstack:get_name() == "mcl_clock:clock" then
-		itemstack:get_meta():set_string("inventory_image", mcl_clock.images[mcl_clock.get_clock_frame()])
+		itemstack:get_meta():set_string("inventory_image", mcl_clock.images[current_frame])
 	end
 end)
 
