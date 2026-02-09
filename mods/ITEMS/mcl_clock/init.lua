@@ -72,11 +72,11 @@ core.register_craftitem("mcl_clock:clock", {
 	inventory_image = clock_images[0],
 	groups = { tool=1, clock = 1, disable_repair=1 },
 	wield_image = "",
-	_on_entity_step = function(self, dtime, itemstring)
+	_on_entity_step = function(self, dtime, _)
 		self._clock_timer = (self._clock_timer or 0) - dtime
 		if self._clock_timer > 0 then return end
 		self._clock_timer = 5
-		local stack = ItemStack(itemstring)
+		local stack = ItemStack("mcl_clock:clock")
 		local m = stack:get_meta()
 		m:set_string("inventory_image", clock_images[current_frame])
 		m:set_string("wield_image", clock_images[current_frame])
