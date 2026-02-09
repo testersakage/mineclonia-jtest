@@ -52,7 +52,10 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 	local inv = player:get_inventory()
 	for s, stack in pairs(inv:get_list("main")) do
 		if core.get_item_group(stack:get_name(), "clock") > 0 then
-			stack:set_name("mcl_clock:clock") -- compat to effectively rename clocks - aliases do not do this.
+			if stack:get_name() ~= "mcl_clock:clock" then
+				-- compat to update inventories - aliases do not do this.
+				stack:set_name("mcl_clock:clock")
+			end
 			local m = stack:get_meta()
 			m:set_string("wield_image", clock_images[frame])
 			m:set_string("inventory_image", clock_images[frame])
