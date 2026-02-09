@@ -41,6 +41,26 @@ core.register_globalstep(function(dtime)
 	current_frame = new_frame
 end)
 
+mcl_player.register_globalstep_slow(function(player, dtime)
+	local frame
+	-- Clocks do not work in certain zones
+	if not mcl_worlds.clock_works(player:get_pos()) then
+		frame = random_frame
+	else
+		frame = current_frame
+	end
+	local inv = player:get_inventory()
+	for s, stack in pairs(inv:get_list("main")) do
+		if core.get_item_group(stack:get_name(), "clock") > 0 then
+			stack:set_name("mcl_clock:clock") -- compat to effectively rename clocks - aliases do not do this.
+			local m = stack:get_meta()
+			m:set_string("wield_image", clock_images[frame])
+			m:set_string("inventory_image", clock_images[frame])
+			inv:set_stack("main", s, stack)
+		end
+	end
+end)
+
 core.register_craftitem("mcl_clock:clock", {
 	description = S("Clock"),
 	_tt_help = S("Displays the time of day in the Overworld"),
@@ -63,31 +83,10 @@ core.register_craftitem("mcl_clock:clock", {
 	end
 })
 
-mcl_player.register_globalstep_slow(function(player, dtime)
-	local frame
-	-- Clocks do not work in certain zones
-	if not mcl_worlds.clock_works(player:get_pos()) then
-		frame = random_frame
-	else
-		frame = current_frame
-	end
-	local inv = player:get_inventory()
-	for s, stack in pairs(inv:get_list("main")) do
-		if core.get_item_group(stack:get_name(), "clock") > 0 then
-			stack:set_name("mcl_clock:clock") -- compat to effectively rename clocks - aliases do not do this.
-			local m = stack:get_meta()
-			m:set_string("wield_image", clock_images[frame])
-			m:set_string("inventory_image", clock_images[frame])
-			inv:set_stack("main", s, stack)
-		end
-	end
-end)
-
-core.register_on_craft(function(itemstack)
-	if itemstack:get_name() == "mcl_clock:clock" then
-		itemstack:get_meta():set_string("inventory_image", clock_images[current_frame])
-	end
-end)
+-- Register aliases for old clock items
+for a = 0, clock_frames - 1 do
+	core.register_alias("mcl_clock:clock_"..tostring(a), "mcl_clock:clock")
+end
 
 core.register_craft({
 	output = "mcl_clock:clock",
@@ -98,7 +97,8 @@ core.register_craft({
 	}
 })
 
-for a=0,clock_frames-1,1 do
-	core.register_alias("mcl_clock:clock_"..tostring(a), "mcl_clock:clock")
-end
-
+core.register_on_craft(function(itemstack)
+	if itemstack:get_name() == "mcl_clock:clock" then
+		itemstack:get_meta():set_string("inventory_image", clock_images[current_frame])
+	end
+end)
