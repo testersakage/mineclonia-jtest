@@ -1,9 +1,8 @@
 local S = core.get_translator(core.get_current_modname())
 mcl_clock = {}
 
-mcl_clock.old_time = -1
-
 local clock_frames = 64
+local image_fmt = "mcl_clock_clock_%02d.png"
 
 -- Timer for random clock spinning
 local random_timer = 0.0
@@ -11,19 +10,13 @@ local random_timer_trigger = 1.0 -- random clock spinning tick in seconds. Incre
 local random_frame = math.random(0, clock_frames-1)
 
 mcl_clock.images = {}
-for frame = 0, clock_frames - 1 do
-	table.insert(mcl_clock.images, string.format("mcl_clock_clock_%02d.png", frame))
-end
-
-local function round(num)
-	return math.floor(num + 0.5)
+for i = 0, clock_frames do
+	local frame = (i + (clock_frames / 2) - 1) % clock_frames
+	mcl_clock.images[i] = string.format(image_fmt, frame)
 end
 
 function mcl_clock.get_clock_frame()
-	local t = clock_frames * core.get_timeofday()
-	t = round(t)
-	if t == clock_frames then t = 0 end
-	return tostring((t + (clock_frames / 2)) % clock_frames)
+	return math.round(clock_frames * core.get_timeofday())
 end
 
 core.register_craftitem("mcl_clock:clock", {
@@ -40,36 +33,37 @@ core.register_craftitem("mcl_clock:clock", {
 		self._clock_timer = 5
 		local stack = ItemStack(itemstring)
 		local m = stack:get_meta()
-		m:set_string("inventory_image", mcl_clock.images[mcl_clock.get_clock_frame() + 1])
-		m:set_string("wield_image", mcl_clock.images[mcl_clock.get_clock_frame() + 1])
+		local frame = mcl_clock.get_clock_frame()
+		m:set_string("inventory_image", mcl_clock.images[frame])
+		m:set_string("wield_image", mcl_clock.images[frame])
 		self.object:set_properties({
 			wield_item = stack:to_string()
 		})
 	end
 })
 
+
 -- This timer makes sure the clocks get updated from time to time regardless of time_speed,
 -- just in case some clocks in the world go wrong
 local force_clock_update_timer = 0
+mcl_clock.old_frame = -1
 
 core.register_globalstep(function(dtime)
-	local now = mcl_clock.get_clock_frame()
-	force_clock_update_timer = force_clock_update_timer + dtime
-	random_timer = random_timer + dtime
-
 	-- This causes the random spinning of the clock
+	random_timer = random_timer + dtime
 	if random_timer >= random_timer_trigger then
 		random_frame = (random_frame + math.random(-4, 4)) % clock_frames
 		random_timer = 0
 	end
+	mcl_clock.random_frame = random_frame
 
-	if mcl_clock.old_time == now and force_clock_update_timer < 1 then
+	force_clock_update_timer = force_clock_update_timer + dtime
+	local current_frame = mcl_clock.get_clock_frame()
+	if mcl_clock.old_frame == current_frame and force_clock_update_timer < 1 then
 		return
 	end
 	force_clock_update_timer = 0
-
-	mcl_clock.old_time = now
-	mcl_clock.random_frame = random_frame
+	mcl_clock.old_frame = current_frame
 
 	for player in mcl_util.connected_players() do
 		local inv = player:get_inventory()
@@ -81,12 +75,12 @@ core.register_globalstep(function(dtime)
 				if not mcl_worlds.clock_works(player:get_pos()) then
 					frame = random_frame
 				else
-					frame = now
+					frame = current_frame
 				end
 
 				local m = stack:get_meta()
-				m:set_string("wield_image", mcl_clock.images[frame + 1])
-				m:set_string("inventory_image", mcl_clock.images[frame + 1])
+				m:set_string("wield_image", mcl_clock.images[frame])
+				m:set_string("inventory_image", mcl_clock.images[frame])
 				inv:set_stack("main", s, stack)
 			end
 		end
