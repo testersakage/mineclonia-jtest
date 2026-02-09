@@ -46,7 +46,7 @@ core.register_craftitem("mcl_clock:clock", {
 -- This timer makes sure the clocks get updated from time to time regardless of time_speed,
 -- just in case some clocks in the world go wrong
 local force_clock_update_timer = 0
-mcl_clock.old_frame = -1
+local current_frame = -1
 
 core.register_globalstep(function(dtime)
 	-- This causes the random spinning of the clock
@@ -57,12 +57,12 @@ core.register_globalstep(function(dtime)
 	end
 
 	force_clock_update_timer = force_clock_update_timer + dtime
-	local current_frame = mcl_clock.get_clock_frame()
-	if mcl_clock.old_frame == current_frame and force_clock_update_timer < 1 then
+	local new_frame = mcl_clock.get_clock_frame()
+	if current_frame == new_frame and force_clock_update_timer < 1 then
 		return
 	end
 	force_clock_update_timer = 0
-	mcl_clock.old_frame = current_frame
+	current_frame = new_frame
 
 	for player in mcl_util.connected_players() do
 		local inv = player:get_inventory()
