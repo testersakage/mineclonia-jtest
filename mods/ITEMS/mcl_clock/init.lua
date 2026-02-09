@@ -29,17 +29,13 @@ core.register_globalstep(function(dtime)
 	end
 
 	force_clock_update_timer = force_clock_update_timer + dtime
-	local new_frame = mcl_clock.get_clock_frame()
+	local new_frame = math.round(clock_frames * core.get_timeofday())
 	if current_frame == new_frame and force_clock_update_timer < 1 then
 		return
 	end
 	force_clock_update_timer = 0
 	current_frame = new_frame
 end)
-
-function mcl_clock.get_clock_frame()
-	return math.round(clock_frames * core.get_timeofday())
-end
 
 core.register_craftitem("mcl_clock:clock", {
 	description = S("Clock"),
