@@ -55,7 +55,6 @@ core.register_globalstep(function(dtime)
 		random_frame = (random_frame + math.random(-4, 4)) % clock_frames
 		random_timer = 0
 	end
-	mcl_clock.random_frame = random_frame
 
 	force_clock_update_timer = force_clock_update_timer + dtime
 	local current_frame = mcl_clock.get_clock_frame()
