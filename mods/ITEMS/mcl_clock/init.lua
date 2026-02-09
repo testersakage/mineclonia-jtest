@@ -11,12 +11,8 @@ local random_timer_trigger = 1.0 -- random clock spinning tick in seconds. Incre
 local random_frame = math.random(0, clock_frames-1)
 
 mcl_clock.images = {}
-for frame=0, clock_frames-1 do
-	local sframe = tostring(frame)
-	if string.len(sframe) == 1 then
-		sframe = "0" .. sframe
-	end
-	table.insert(mcl_clock.images, "mcl_clock_clock_"..sframe..".png")
+for frame = 0, clock_frames - 1 do
+	table.insert(mcl_clock.images, string.format("mcl_clock_clock_%02d.png", frame))
 end
 
 local function round(num)
