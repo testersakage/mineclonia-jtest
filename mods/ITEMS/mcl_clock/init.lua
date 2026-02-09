@@ -4,10 +4,10 @@ mcl_clock = {}
 local clock_frames = 64
 local image_fmt = "mcl_clock_clock_%02d.png"
 
-mcl_clock.images = {}
+clock_images = {}
 for i = 0, clock_frames do
 	local frame = (i + (clock_frames / 2) - 1) % clock_frames
-	mcl_clock.images[i] = string.format(image_fmt, frame)
+	clock_images[i] = string.format(image_fmt, frame)
 end
 
 -- Timer for random clock spinning
@@ -46,7 +46,7 @@ core.register_craftitem("mcl_clock:clock", {
 	_tt_help = S("Displays the time of day in the Overworld"),
 	_doc_items_longdesc = S("Clocks are tools which shows the current time of day in the Overworld."),
 	_doc_items_usagehelp = S("The clock contains a rotating disc with a sun symbol (yellow disc) and moon symbol and a little “pointer” which shows the current time of day by estimating the real position of the sun and the moon in the sky. Noon is represented by the sun symbol and midnight is represented by the moon symbol."),
-	inventory_image = mcl_clock.images[1],
+	inventory_image = clock_images[1],
 	groups = { tool=1, clock = 1, disable_repair=1 },
 	wield_image = "",
 	_on_entity_step = function(self, dtime, itemstring)
@@ -55,8 +55,8 @@ core.register_craftitem("mcl_clock:clock", {
 		self._clock_timer = 5
 		local stack = ItemStack(itemstring)
 		local m = stack:get_meta()
-		m:set_string("inventory_image", mcl_clock.images[current_frame])
-		m:set_string("wield_image", mcl_clock.images[current_frame])
+		m:set_string("inventory_image", clock_images[current_frame])
+		m:set_string("wield_image", clock_images[current_frame])
 		self.object:set_properties({
 			wield_item = stack:to_string()
 		})
@@ -76,8 +76,8 @@ mcl_player.register_globalstep_slow(function(player, dtime)
 		if core.get_item_group(stack:get_name(), "clock") > 0 then
 			stack:set_name("mcl_clock:clock") -- compat to effectively rename clocks - aliases do not do this.
 			local m = stack:get_meta()
-			m:set_string("wield_image", mcl_clock.images[frame])
-			m:set_string("inventory_image", mcl_clock.images[frame])
+			m:set_string("wield_image", clock_images[frame])
+			m:set_string("inventory_image", clock_images[frame])
 			inv:set_stack("main", s, stack)
 		end
 	end
@@ -85,7 +85,7 @@ end)
 
 core.register_on_craft(function(itemstack)
 	if itemstack:get_name() == "mcl_clock:clock" then
-		itemstack:get_meta():set_string("inventory_image", mcl_clock.images[current_frame])
+		itemstack:get_meta():set_string("inventory_image", clock_images[current_frame])
 	end
 end)
 
