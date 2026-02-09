@@ -76,13 +76,17 @@ core.register_craftitem("mcl_clock:clock", {
 		self._clock_timer = (self._clock_timer or 0) - dtime
 		if self._clock_timer > 0 then return end
 		self._clock_timer = 5
+		local frame
+		if not mcl_worlds.clock_works(self.object:get_pos()) then
+			frame = random_frame
+		else
+			frame = current_frame
+		end
 		local stack = ItemStack("mcl_clock:clock")
 		local m = stack:get_meta()
-		m:set_string("inventory_image", clock_images[current_frame])
-		m:set_string("wield_image", clock_images[current_frame])
-		self.object:set_properties({
-			wield_item = stack:to_string()
-		})
+		m:set_string("inventory_image", clock_images[frame])
+		m:set_string("wield_image", clock_images[frame])
+		self.object:set_properties({wield_item = stack:to_string()})
 	end
 })
 
