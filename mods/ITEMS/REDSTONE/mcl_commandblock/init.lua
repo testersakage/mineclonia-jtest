@@ -4,301 +4,440 @@ local F = core.formspec_escape
 local command_blocks_activated = core.settings:get_bool("mcl_enable_commandblocks", true)
 local msg_not_activated = S("Command blocks are not enabled on this server")
 
+local axis_counter = 1
+
+-- Use core.vector if available, otherwise fallback to table
+local vector_sub = vector.subtract or function(p1, p2)
+    return {
+        x = p1.x - p2.x,
+        y = p1.y - p2.y,
+        z = p1.z - p2.z
+    }
+end
+
+local vector_add = vector.add or function(p1, p2)
+    return {
+        x = p1.x + p2.x,
+        y = p1.y + p2.y,
+        z = p1.z + p2.z
+    }
+end
+
+-- Helper to safely get redstone power without crashing if internal API fails
+local function safe_get_power(pos)
+    if not mcl_redstone or not mcl_redstone.get_power then
+        return false
+    end
+    -- Wrap in pcall because mcl_redstone:get_power can crash internally on some versions
+    local status, power = pcall(mcl_redstone.get_power, pos)
+    if status then
+        return (power or 0) > 0
+    end
+    return false
+end
+
+-- Helper to get the success state of the block behind
+local function get_success_behind(pos)
+    local node = core.get_node(pos)
+    local dir = core.facedir_to_dir(node.param2)
+    local behind_pos = vector_sub(pos, dir)
+    local meta = core.get_meta(behind_pos)
+    return meta:get_int("success_count") > 0
+end
+
 local function resolve_commands(commands, pos)
-	local players = core.get_connected_players()
+    local players = core.get_connected_players()
+    local meta = core.get_meta(pos)
+    local commander = meta:get_string("commander")
+    local SUBSTITUTE_CHARACTER = "\26"
 
-	local meta = core.get_meta(pos)
-	local commander = meta:get_string("commander")
+    if #players == 0 then
+        commands = commands:gsub("[^\r\n]+", function(line)
+            line = line:gsub("@@", SUBSTITUTE_CHARACTER)
+            if line:find("@n") or line:find("@p") or line:find("@f") or line:find("@r") then
+                return ""
+            end
+            line = line:gsub("@c", commander)
+            line = line:gsub(SUBSTITUTE_CHARACTER, "@")
+            return line
+        end)
+        return commands
+    end
 
-	-- A non-printable character used while replacing “@@”.
-	local SUBSTITUTE_CHARACTER = "\26" -- ASCII SUB
-
-	-- No players online: remove all commands containing
-	-- problematic placeholders.
-	if #players == 0 then
-		commands = commands:gsub("[^\r\n]+", function (line)
-			line = line:gsub("@@", SUBSTITUTE_CHARACTER)
-			if line:find("@n") then return "" end
-			if line:find("@p") then return "" end
-			if line:find("@f") then return "" end
-			if line:find("@r") then return "" end
-			line = line:gsub("@c", commander)
-			line = line:gsub(SUBSTITUTE_CHARACTER, "@")
-			return line
-		end)
-		return commands
-	end
-
-	local nearest, farthest = nil, nil
-	local min_distance, max_distance = math.huge, -1
-	for index, player in pairs(players) do
-		local distance = vector.distance(pos, player:get_pos())
-		if distance < min_distance then
-			min_distance = distance
-			nearest = player:get_player_name()
-		end
-		if distance > max_distance then
-			max_distance = distance
-			farthest = player:get_player_name()
-		end
-	end
-	local random = players[math.random(#players)]:get_player_name()
-	commands = commands:gsub("@@", SUBSTITUTE_CHARACTER)
-	commands = commands:gsub("@p", nearest)
-	commands = commands:gsub("@n", nearest)
-	commands = commands:gsub("@f", farthest)
-	commands = commands:gsub("@r", random)
-	commands = commands:gsub("@c", commander)
-	commands = commands:gsub(SUBSTITUTE_CHARACTER, "@")
-	return commands
+    local nearest, farthest = nil, nil
+    local min_distance, max_distance = math.huge, -1
+    for _, player in pairs(players) do
+        local distance = vector.distance(pos, player:get_pos())
+        if distance < min_distance then
+            min_distance = distance
+            nearest = player:get_player_name()
+        end
+        if distance > max_distance then
+            max_distance = distance
+            farthest = player:get_player_name()
+        end
+    end
+    local random = players[math.random(#players)]:get_player_name()
+    commands = commands:gsub("@@", SUBSTITUTE_CHARACTER)
+    commands = commands:gsub("@p", nearest)
+    commands = commands:gsub("@n", nearest)
+    commands = commands:gsub("@f", farthest)
+    commands = commands:gsub("@r", random)
+    commands = commands:gsub("@c", commander)
+    commands = commands:gsub(SUBSTITUTE_CHARACTER, "@")
+    return commands
 end
 
 local function check_commands(commands, player_name)
-	for _, command in pairs(commands:split("\n")) do
-		local pos = command:find(" ")
-		local cmd = command
-		if pos then
-			cmd = command:sub(1, pos - 1)
-		end
-		local cmddef = core.chatcommands[cmd]
-		if not cmddef then
-			-- Invalid chat command
-			local msg = S("Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands.", cmd)
-			if string.sub(cmd, 1, 1) == "/" then
-				msg = S("Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands. Hint: Try to remove the leading slash.", cmd)
-			end
-			return false, core.colorize(mcl_colors.RED, msg)
-		end
-		if player_name then
-			local player_privs = core.get_player_privs(player_name)
-
-			for cmd_priv, _ in pairs(cmddef.privs) do
-				if player_privs[cmd_priv] ~= true then
-					local msg = S("Error: You have insufficient privileges to use the command “@1” (missing privilege: @2)! The command block has not been changed.", cmd, cmd_priv)
-					return false, core.colorize(mcl_colors.RED, msg)
-				end
-			end
-		end
-	end
-	return true
+    for _, command in pairs(commands:split("\n")) do
+        if command ~= "" then
+            local pos = command:find(" ")
+            local cmd = pos and command:sub(1, pos - 1) or command
+            local cmddef = core.chatcommands[cmd]
+            if not cmddef then
+                local msg = S("Error: The command “@1” does not exist.", cmd)
+                return false, core.colorize("#FF0000", msg)
+            end
+            if player_name then
+                local player_privs = core.get_player_privs(player_name)
+                for cmd_priv, _ in pairs(cmddef.privs or {}) do
+                    if not player_privs[cmd_priv] then
+                        local msg = S("Error: Missing privilege: @1", cmd_priv)
+                        return false, core.colorize("#FF0000", msg)
+                    end
+                end
+            end
+        end
+    end
+    return true
 end
 
-local function commandblock_action_on(pos, node)
-	if node.name ~= "mcl_commandblock:commandblock_off" then
-		return
-	end
+-- =========================================================
+-- Resolve coordenadas relativas (~ ~ ~)
+-- =========================================================
 
-	local meta = core.get_meta(pos)
-	local commander = meta:get_string("commander")
 
-	if not command_blocks_activated then
-		return
-	end
-	core.swap_node(pos, {name = "mcl_commandblock:commandblock_on"})
+local function resolve_relative_coords(param, pos)
 
-	local commands = resolve_commands(meta:get_string("commands"), pos)
-	for _, command in pairs(commands:split("\n")) do
-		local cpos = command:find(" ")
-		local cmd, param = command, ""
-		if cpos then
-			cmd = command:sub(1, cpos - 1)
-			param = command:sub(cpos + 1)
-		end
-		local cmddef = core.chatcommands[cmd]
-		if not cmddef then
-			-- Invalid chat command
-			return
-		end
-		-- Execute command in the name of commander
-		cmddef.func(commander, param)
-	end
+    local axis_cycle = {"x", "y", "z"}
+    local axis_index = 1  -- reinicia para cada comando
+
+    return param:gsub("~([%-]?[%d%.]*)", function(offset)
+
+        local axis = axis_cycle[axis_index]
+        axis_index = axis_index + 1
+        if axis_index > 3 then
+            axis_index = 1
+        end
+
+        local base = pos[axis]
+
+        if offset == "" then
+            return tostring(base)
+        end
+
+        return tostring(base + tonumber(offset))
+    end)
 end
 
-local function commandblock_action_off(pos, node)
-	if node.name == "mcl_commandblock:commandblock_on" then
-		core.swap_node(pos, {name = "mcl_commandblock:commandblock_off"})
-	end
+
+
+
+local function execute_commandblock(pos)
+    if not command_blocks_activated then
+        return
+    end
+
+    local meta = core.get_meta(pos)
+    local node = core.get_node(pos)
+
+    -- Check condition if conditional
+    if meta:get_int("conditional") == 1 then
+        if not get_success_behind(pos) then
+            meta:set_int("success_count", 0)
+            return
+        end
+    end
+
+    local commander = meta:get_string("commander")
+    local commands = resolve_commands(meta:get_string("commands"), pos)
+    local success_count = 0
+
+    for _, command in pairs(commands:split("\n")) do
+        if command ~= "" then
+            local cpos = command:find(" ")
+            local cmd = cpos and command:sub(1, cpos - 1) or command
+            local param = cpos and command:sub(cpos + 1) or ""
+            local cmddef = core.chatcommands[cmd]
+            if cmddef then
+                -- =====================================================
+                -- EXECUTION MODE
+                -- =====================================================
+                local exec_mode = meta:get_int("exec_mode") -- 0 player / 1 server
+
+                if exec_mode == 1 then
+                    -- SERVER MODE → resolver ~ baseado na posição do bloco
+                    param = resolve_relative_coords(param, pos)
+                end
+
+                local success, msg = cmddef.func(commander, param)
+
+                if success ~= false then
+                    success_count = success_count + 1
+                end
+            end
+        end
+    end
+
+    meta:set_int("success_count", success_count)
+
+    -- Trigger chain blocks in front
+    local dir = core.facedir_to_dir(node.param2)
+    local front_pos = vector_add(pos, dir)
+    local front_node = core.get_node(front_pos)
+    if front_node and front_node.name:find("chain") then
+        local front_meta = core.get_meta(front_pos)
+        local front_auto = front_meta:get_int("auto") == 1
+        local front_powered = safe_get_power(front_pos)
+        if front_auto or front_powered then
+            execute_commandblock(front_pos)
+        end
+    end
+
 end
 
-local function show_formspec(pos, player)
-	if not command_blocks_activated then
-		core.chat_send_player(player:get_player_name(), msg_not_activated)
-		return
-	end
-	local can_edit = true
-	-- Only allow write access in Creative Mode
-	if not core.is_creative_enabled(player:get_player_name()) then
-		can_edit = false
-	end
-	local pname = player:get_player_name()
-	if core.is_protected(pos, pname) then
-		can_edit = false
-	end
-	local privs = core.get_player_privs(pname)
-	if not privs.maphack then
-		can_edit = false
-	end
+local function update_commandblock(pos)
+    local meta = core.get_meta(pos)
+    local auto = meta:get_int("auto") == 1
+    local powered = safe_get_power(pos)
+    local node = core.get_node(pos)
 
-	local meta = core.get_meta(pos)
-	local commands = meta:get_string("commands")
-	if not commands then
-		commands = ""
-	end
-	local commander = meta:get_string("commander")
-	local commanderstr
-	if commander == "" or commander == nil then
-		commanderstr = S("Error: No commander! Block must be replaced.")
-	else
-		commanderstr = S("Commander: @1", commander)
-	end
-	local textarea_name, submit, textarea
-	-- If editing is not allowed, only allow read-only access.
-	-- Player can still view the contents of the command block.
-	if can_edit then
-		textarea_name = "commands"
-		submit = "button_exit[3.3,4.4;2,1;submit;"..F(S("Submit")).."]"
-	else
-		textarea_name = ""
-		submit = ""
-	end
-	if not can_edit and commands == "" then
-		textarea = "label[0.5,0.5;"..F(S("No commands.")).."]"
-	else
-		textarea = "textarea[0.5,0.5;8.5,4;"..textarea_name..";"..F(S("Commands:"))..";"..F(commands).."]"
-	end
-	local formspec = "size[9,5;]" ..
-	textarea ..
-	submit ..
-	"image_button[8,4.4;1,1;doc_button_icon_lores.png;doc;]" ..
-	"tooltip[doc;"..F(S("Help")).."]" ..
-	"label[0,4;"..F(commanderstr).."]"
-	core.show_formspec(pname, "commandblock_"..pos.x.."_"..pos.y.."_"..pos.z, formspec)
+    if node.name:find("repeating") then
+        if auto or powered then
+            if not core.get_node_timer(pos):is_started() then
+                core.get_node_timer(pos):start(0.1)
+            end
+        else
+            core.get_node_timer(pos):stop()
+        end
+    elseif node.name:find("chain") then
+        -- Agora Chain blocks também são disparados por si próprios se auto=1
+        if auto or powered then
+            execute_commandblock(pos)
+        end
+    else -- Impulse
+        if (auto or powered) and meta:get_int("was_powered") == 0 then
+            execute_commandblock(pos)
+        end
+        meta:set_int("was_powered", (auto or powered) and 1 or 0)
+    end
+end
+
+local function get_formspec(pos, player)
+    local meta = core.get_meta(pos)
+    local commands = meta:get_string("commands")
+    local mode = meta:get_int("mode") -- 0: Impulse, 1: Chain, 2: Repeat
+    local conditional = meta:get_int("conditional") -- 0: Unconditional, 1: Conditional
+    local auto = meta:get_int("auto") -- 0: Needs Redstone, 1: Always Active
+    local exec_mode = meta:get_int("exec_mode")
+    local exec_text = {S("Executor: Player"), S("Executor: Command Block")}
+
+    local mode_text = {S("Impulse"), S("Chain"), S("Repeat")}
+    local cond_text = {S("Unconditional"), S("Conditional")}
+    local auto_text = {S("Needs Redstone"), S("Always Active")}
+
+    local formspec =
+        "size[9,8]" .. "textarea[0.5,0.5;8.5,4;commands;" .. F(S("Commands:")) .. ";" .. F(commands) .. "]" ..
+
+            "button[0.5,5;2.5,0.8;toggle_mode;" .. F(mode_text[mode + 1]) .. "]" .. "button[3.25,5;2.5,0.8;toggle_cond;" ..
+            F(cond_text[conditional + 1]) .. "]" .. "button[6,5;2.5,0.8;toggle_auto;" .. F(auto_text[auto + 1]) .. "]" ..
+
+            "label[0.5,4.5;" .. F(S("Commander: @1", meta:get_string("commander"))) .. "]" ..
+
+            "button[0.5,6;3,0.8;toggle_exec;" .. F(exec_text[exec_mode + 1]) .. "]" .. "button_exit[3.5,7;2,1;submit;" ..
+            F(S("Done")) .. "]"
+
+    return formspec
 end
 
 local commdef = {
-	description = S("Command Block"),
-	groups = {creative_breakable=1, unmovable_by_piston = 1, command_block = 1},
-	drop = "",
-	is_ground_content = false,
-	on_construct = function(pos)
-		local meta = core.get_meta(pos)
-		meta:set_string("commands", "")
-		meta:set_string("commander", "")
-	end,
-	on_place = function(itemstack, placer, pointed_thing)
-		if pointed_thing.type ~= "node" or not placer or not placer:is_player() then
-			return itemstack
-		end
-		local new_stack = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-		if new_stack then
-			return new_stack
-		end
-		local privs = core.get_player_privs(placer and placer:get_player_name() or "")
-		if not privs.maphack then
-			core.chat_send_player(placer:get_player_name(), S("Placement denied. You need the “maphack” privilege to place command blocks."))
-			return itemstack
-		end
+    groups = {
+        creative_breakable = 1,
+        unmovable_by_piston = 1,
+        command_block = 1
+    },
+    drop = "",
+    is_ground_content = false,
+    paramtype2 = "facedir",
+    on_construct = function(pos)
+        local meta = core.get_meta(pos)
+        meta:set_string("commands", "")
+        meta:set_string("commander", "")
+        meta:set_int("mode", 0)
+        meta:set_int("conditional", 0)
+        meta:set_int("auto", 0)
+        meta:set_int("success_count", 0)
+        meta:set_int("was_powered", 0)
+        meta:set_int("exec_mode", 0)
 
-		return core.item_place_node(itemstack, placer, pointed_thing)
-	end,
-	after_place_node = function(pos, placer)
-		if placer then
-			local meta = core.get_meta(pos)
-			meta:set_string("commander", placer:get_player_name())
-		end
-	end,
-	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
-		show_formspec(pos, player)
-	end,
-	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_redstone = {
-		connects_to = function(node, dir)
-			return true
-		end,
-		update = function(pos, node)
-			local powered = mcl_redstone.get_power(pos) ~= 0
-			local node = core.get_node(pos)
-			if powered then
-				commandblock_action_on(pos, node)
-			else
-				commandblock_action_off(pos, node)
-			end
-		end,
-	},
-	_mcl_blast_resistance = 3600000,
-	_mcl_hardness = -1,
+    end,
+    after_place_node = function(pos, placer)
+        if placer then
+            local meta = core.get_meta(pos)
+            meta:set_string("commander", placer:get_player_name())
+        end
+        update_commandblock(pos)
+    end,
+    on_rightclick = function(pos, node, player)
+        local pname = player:get_player_name()
+        local privs = core.get_player_privs(pname)
+        if core.is_creative_enabled(pname) and privs.maphack then
+            core.show_formspec(pname, "mcl_cb:" .. pos.x .. "," .. pos.y .. "," .. pos.z, get_formspec(pos, player))
+        else
+            core.chat_send_player(pname, S("You need Creative Mode and 'maphack' privilege to edit this."))
+        end
+    end,
+    on_timer = function(pos)
+        execute_commandblock(pos)
+        return true
+    end,
+    _mcl_redstone = {
+        update = function(pos, node)
+            update_commandblock(pos)
+        end
+    }
 }
 
 core.register_node("mcl_commandblock:commandblock_off", table.merge(commdef, {
-	_tt_help = S("Executes server commands when powered by redstone power"),
-	_doc_items_longdesc =
-S("Command blocks are mighty redstone components which are able to alter reality itself. In other words, they cause the server to execute server commands when they are supplied with redstone power."),
-	_doc_items_usagehelp =
-S("Everyone can activate a command block and look at its commands, but not everyone can edit and place them.").."\n\n"..
-
-S("To view the commands in a command block, use it. To activate the command block, just supply it with redstone power. This will execute the commands once. To execute the commands again, turn the redstone power off and on again.")..
-"\n\n"..
-
-S("To be able to place a command block and change the commands, you need to be in Creative Mode and must have the “maphack” privilege. A new command block does not have any commands and does nothing. Use the command block (in Creative Mode!) to edit its commands. Read the help entry “Advanced usage > Server Commands” to understand how commands work. Each line contains a single command. You enter them like you would in the console, but without the leading slash. The commands will be executed from top to bottom.").."\n\n"..
-
-S("All commands will be executed on behalf of the player who placed the command block, as if the player typed in the commands. This player is said to be the “commander” of the block.").."\n\n"..
-
-S("Command blocks support placeholders, insert one of these placeholders and they will be replaced by some other text:").."\n"..
-S("• “@@c”: commander of this command block").."\n"..
-S("• “@@n” or “@@p”: nearest player from the command block").."\n"..
-S("• “@@f” farthest player from the command block").."\n"..
-S("• “@@r”: random player currently in the world").."\n"..
-S("• “@@@@”: literal “@@” sign").."\n\n"..
-
-S("Example 1:\n    time 12000\nSets the game clock to 12:00").."\n\n"..
-
-S("Example 2:\n    give @@n mcl_core:apple 5\nGives the nearest player 5 apples"),
-	tiles = {{name="jeija_commandblock_off.png", animation={type="vertical_frames", aspect_w=32, aspect_h=32, length=2}}},
+    description = S("Impulse Command Block"),
+    tiles = {{
+        name = "jeija_commandblock_off.png",
+        animation = {
+            type = "vertical_frames",
+            aspect_w = 32,
+            aspect_h = 32,
+            length = 2
+        }
+    }}
 }))
 
-core.register_node("mcl_commandblock:commandblock_on", table.merge(commdef, {
-	tiles = {{name="jeija_commandblock_off.png", animation={type="vertical_frames", aspect_w=32, aspect_h=32, length=2}}},
-	groups = table.merge(commdef.groups, {not_in_creative_inventory=1}),
-	_mcl_blast_resistance = 3600000,
-	_mcl_hardness = -1,
+core.register_node("mcl_commandblock:chain_commandblock", table.merge(commdef, {
+    description = S("Chain Command Block"),
+    tiles = {{
+        name = "mcl_commandblock_chain.png",
+        animation = {
+            type = "vertical_frames",
+            aspect_w = 32,
+            aspect_h = 32,
+            length = 2
+        }
+    }},
+    groups = table.merge(commdef.groups, {
+        not_in_creative_inventory = 1
+    })
 }))
 
+core.register_node("mcl_commandblock:repeating_commandblock", table.merge(commdef, {
+    description = S("Repeating Command Block"),
+    tiles = {{
+        name = "mcl_commandblock_repeating.png",
+        animation = {
+            type = "vertical_frames",
+            aspect_w = 32,
+            aspect_h = 32,
+            length = 2
+        }
+    }},
+    groups = table.merge(commdef.groups, {
+        not_in_creative_inventory = 1
+    })
+}))
+
+-- Field receive handler
 core.register_on_player_receive_fields(function(player, formname, fields)
-	if string.sub(formname, 1, 13) == "commandblock_" then
-		if fields.doc and core.get_modpath("doc") then
-			doc.show_entry(player:get_player_name(), "nodes", "mcl_commandblock:commandblock_off", true)
-			return
-		end
-		if (not fields.submit and not fields.key_enter) or (not fields.commands) then
-			return
-		end
+    if formname:sub(1, 7) ~= "mcl_cb:" then
+        return
+    end
 
-		local privs = core.get_player_privs(player:get_player_name())
-		if not privs.maphack then
-			core.chat_send_player(player:get_player_name(), S("Access denied. You need the “maphack” privilege to edit command blocks."))
-			return
-		end
+    local pos_str = formname:sub(8)
+    local x, y, z = pos_str:match("([^,]+),([^,]+),([^,]+)")
+    if not (x and y and z) then
+        return
+    end
+    local pos = {
+        x = tonumber(x),
+        y = tonumber(y),
+        z = tonumber(z)
+    }
+    local meta = core.get_meta(pos)
+    local node = core.get_node(pos)
+    local pname = player:get_player_name()
 
-		local index, _, x, y, z = string.find(formname, "commandblock_(-?%d+)_(-?%d+)_(-?%d+)")
-		if index and x and y and z then
-			local pos = {x = tonumber(x), y = tonumber(y), z = tonumber(z)}
-			local meta = core.get_meta(pos)
-			if not core.is_creative_enabled(player:get_player_name()) then
-				core.chat_send_player(player:get_player_name(), S("Editing the command block has failed! You can only change the command block in Creative Mode!"))
-				return
-			end
-			local check, error_message = check_commands(fields.commands, player:get_player_name())
-			if check == false then
-				-- Command block rejected
-				core.chat_send_player(player:get_player_name(), error_message)
-				return
-			else
-				meta:set_string("commands", fields.commands)
-			end
-		else
-			core.chat_send_player(player:get_player_name(), S("Editing the command block has failed! The command block is gone."))
-		end
-	end
+    if not core.is_creative_enabled(pname) then
+        return
+    end
+
+    local function swap_node_keep_meta(pos, new_node_name)
+        local old_meta = core.get_meta(pos):to_table()
+        local param2 = core.get_node(pos).param2
+        core.swap_node(pos, {
+            name = new_node_name,
+            param2 = param2
+        })
+        core.get_meta(pos):from_table(old_meta)
+    end
+
+    -- Antes de qualquer troca, salvar o conteúdo atual da textarea
+    if fields.commands then
+        meta:set_string("commands", fields.commands)
+    end
+
+    -- Trocar tipo de bloco (modo)
+    if fields.toggle_mode then
+        local mode = (meta:get_int("mode") + 1) % 3
+        meta:set_int("mode", mode)
+
+        local new_node = "mcl_commandblock:commandblock_off"
+        if mode == 1 then
+            new_node = "mcl_commandblock:chain_commandblock"
+        elseif mode == 2 then
+            new_node = "mcl_commandblock:repeating_commandblock"
+        end
+
+        swap_node_keep_meta(pos, new_node)
+        update_commandblock(pos)
+        core.show_formspec(pname, formname, get_formspec(pos, player))
+    end
+
+    -- Trocar condicional
+    if fields.toggle_cond then
+        meta:set_int("conditional", 1 - meta:get_int("conditional"))
+        core.show_formspec(pname, formname, get_formspec(pos, player))
+    end
+
+    -- Trocar modo automático
+    if fields.toggle_auto then
+        meta:set_int("auto", 1 - meta:get_int("auto"))
+        update_commandblock(pos)
+        core.show_formspec(pname, formname, get_formspec(pos, player))
+    end
+
+    -- Trocar modo de execução (Player / Command Block)
+    if fields.toggle_exec then
+        meta:set_int("exec_mode", 1 - meta:get_int("exec_mode"))
+        core.show_formspec(pname, formname, get_formspec(pos, player))
+        return
+    end
+
+    -- Submeter comandos (finalizar)
+    if fields.submit or fields.key_enter then
+        local check, err = check_commands(fields.commands, pname)
+        if check then
+            meta:set_string("commands", fields.commands)
+            update_commandblock(pos)
+        else
+            core.chat_send_player(pname, err)
+        end
+    end
 end)
 
-doc.add_entry_alias("nodes", "mcl_commandblock:commandblock_off", "nodes", "mcl_commandblock:commandblock_on")

@@ -17,7 +17,7 @@ msgid "Command blocks are not enabled on this server"
 msgstr "Komandoblokoj ne estas eblaj en ĉi tiu servilo"
 
 msgid "Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands."
-msgstr "Eraro: La komando \"@1\" ne ekzistas; via komanda bloko ne ŝanĝis. Uzu la babilejan komandon \"help\" por listo de disponeblaj komandoj."
+msgstr ""
 
 msgid "Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands. Hint: Try to remove the leading slash."
 msgstr ""

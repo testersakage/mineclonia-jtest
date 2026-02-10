@@ -17,7 +17,7 @@ msgid "Command blocks are not enabled on this server"
 msgstr "Os blocos de comando não estão habilitados neste servidor"
 
 msgid "Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands."
-msgstr "Erro: O comando “@1” não existe; seu bloco de comandos não foi alterado. Use o comando de chat “help” para obter uma lista dos comandos disponíveis."
+msgstr ""
 
 msgid "Error: The command “@1” does not exist; your command block has not been changed. Use the “help” chat command for a list of available commands. Hint: Try to remove the leading slash."
 msgstr ""
@@ -32,16 +32,16 @@ msgid "Commander: @1"
 msgstr ""
 
 msgid "Submit"
-msgstr "Enviar"
+msgstr ""
 
 msgid "No commands."
 msgstr ""
 
 msgid "Commands:"
-msgstr "Comandos:"
+msgstr ""
 
 msgid "Help"
-msgstr "Ajuda"
+msgstr ""
 
 msgid "Command Block"
 msgstr ""
