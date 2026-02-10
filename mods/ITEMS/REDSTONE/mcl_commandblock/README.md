@@ -1,83 +1,17 @@
-# Advanced Command Blocks for Mineclonia / Minetest
+added chain/repeater command_block for Mineclonia
 
-This mod enhances the default Command Block system for Mineclonia, adding improved execution logic, relative coordinate parsing.
+The mod makes the command block support relative coordinates (~ ~ ~), adds repeater and chain modes, always active and needs redstone like classic "Mincecraft", also includes how commands are executed from the player (as if using the execute at @p command), which is the normal way in Mineclonia, and also a mode from the command block.
 
----
+You can toggle the executor from player/command_block directly from the block GUI.
 
-## ✨ Features
+Testing the mode player/command_block
+if you are in player mode and execute the command setblock ~ ~1 ~ mcl_core:dirt, the block will be placed above the player (head position)
 
-### ✅ Execution Modes
-Command Blocks can execute commands in two different modes:
-
-- **Player Mode** — Commands execute as the stored commander.
-- **Command Block Mode** — Commands execute relative to the block position (server-side execution).
-
-You can toggle the executor directly from the block GUI.
-
----
-
-### ✅ Relative Coordinate Support (`~`)
-Proper support for Minecraft-style relative coordinates:
-
-~ ~ ~
-~1 ~ ~-2
+If you are in command_block mode (server) and execute the command setblock ~ ~1 ~ mcl_core:dirt, the block will be placed on top of the command block (normal Minecraft behavior)
 
 
-When in **Command Block Mode**, coordinates are resolved relative to the block position.
+note:chain command block is under development,feel free to contribute
 
-Axis resolution is handled safely per command to prevent desync issues.
-
-
----
-
-### ✅ Block Types
-
-- **Impulse**
-- **Repeating**
-- **Chain** *(⚠ Currently in development)*
-
-Chain blocks work but are still being refined for edge cases and execution timing.
-
----
-
-## ⚠ Chain Block Status
-
-Chain logic is still under development.
-
-Known considerations:
-- Edge-case execution order
-- Redstone timing synchronization
-- Advanced conditional propagation
-
-Contributions and improvements are welcome.
-
----
-
-## 🔧 Requirements
-
-- Mineclonia
-- mcl_redstone
-- Creative mode + `maphack` privilege to edit blocks
-
----
-
-## 🛠 Technical Overview
-
-- Safe redstone power detection (`pcall` protected)
-- Server-side coordinate parsing
-- Controlled timer execution
----
-
-## 🤝 Contributing
-
-Help is very welcome.
-
-If you want to improve:
-- Chain execution logic
-- Performance
-- Edge case handling
-- Compatibility with additional commands
-- Security improvements
 
 Feel free to open a Pull Request.
 
