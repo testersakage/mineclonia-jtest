@@ -3,7 +3,7 @@ local S = core.get_translator(core.get_current_modname())
 mcl_flowers.register_simple_flower("poppy", {
 	desc = S("Poppy"),
 	image = "mcl_flowers_poppy.png",
-	selection_box = { -5/16, -0.5, -5/16, 5/16, 5/16, 5/16 },
+	selection_box = {-5/16, -0.5, -5/16, 5/16, 5/16, 5/16},
 	potted = true,
 	sus_stew = {effect = "night_vision", duration = 5},
 }, {
@@ -14,7 +14,7 @@ mcl_flowers.register_simple_flower("poppy", {
 mcl_flowers.register_simple_flower("dandelion", {
 	desc = S("Dandelion"),
 	image = "flowers_dandelion_yellow.png",
-	selection_box = { -4/16, -0.5, -4/16, 4/16, 3/16, 4/16 },
+	selection_box = {-4/16, -0.5, -4/16, 4/16, 3/16, 4/16},
 	potted = true,
 	sus_stew = {effect = "saturation", duration = 0.5},
 }, {
@@ -25,7 +25,7 @@ mcl_flowers.register_simple_flower("dandelion", {
 mcl_flowers.register_simple_flower("oxeye_daisy", {
 	desc = S("Oxeye Daisy"),
 	image = "mcl_flowers_oxeye_daisy.png",
-	selection_box = { -4/16, -0.5, -4/16, 4/16, 4/16, 4/16 },
+	selection_box = {-4/16, -0.5, -4/16, 4/16, 4/16, 4/16},
 	potted = true,
 	sus_stew = {effect = "regeneration", duration = 8},
 }, {
@@ -36,7 +36,7 @@ mcl_flowers.register_simple_flower("oxeye_daisy", {
 mcl_flowers.register_simple_flower("tulip_orange", {
 	desc = S("Orange Tulip"),
 	image = "flowers_tulip.png",
-	selection_box = { -3/16, -0.5, -3/16, 3/16, 5/16, 3/16 },
+	selection_box = {-3/16, -0.5, -3/16, 3/16, 5/16, 3/16},
 	potted = true,
 	sus_stew = {effect = "weakness", duration = 9},
 }, {
@@ -47,7 +47,7 @@ mcl_flowers.register_simple_flower("tulip_orange", {
 mcl_flowers.register_simple_flower("tulip_pink", {
 	desc = S("Pink Tulip"),
 	image = "mcl_flowers_tulip_pink.png",
-	selection_box = { -3/16, -0.5, -3/16, 3/16, 5/16, 3/16 },
+	selection_box = {-3/16, -0.5, -3/16, 3/16, 5/16, 3/16},
 	potted = true,
 	sus_stew = {effect = "weakness", duration = 9},
 }, {
@@ -58,7 +58,7 @@ mcl_flowers.register_simple_flower("tulip_pink", {
 mcl_flowers.register_simple_flower("tulip_red", {
 	desc = S("Red Tulip"),
 	image = "mcl_flowers_tulip_red.png",
-	selection_box = { -3/16, -0.5, -3/16, 3/16, 6/16, 3/16 },
+	selection_box = {-3/16, -0.5, -3/16, 3/16, 6/16, 3/16},
 	potted = true,
 	sus_stew = {effect = "weakness", duration = 9},
 }, {
@@ -69,7 +69,7 @@ mcl_flowers.register_simple_flower("tulip_red", {
 mcl_flowers.register_simple_flower("tulip_white", {
 	desc = S("White Tulip"),
 	image = "mcl_flowers_tulip_white.png",
-	selection_box = { -3/16, -0.5, -3/16, 3/16, 4/16, 3/16 },
+	selection_box = {-3/16, -0.5, -3/16, 3/16, 4/16, 3/16},
 	potted = true,
 	sus_stew = {effect = "weakness", duration = 9},
 }, {
@@ -80,7 +80,7 @@ mcl_flowers.register_simple_flower("tulip_white", {
 mcl_flowers.register_simple_flower("allium", {
 	desc = S("Allium"),
 	image = "mcl_flowers_allium.png",
-	selection_box = { -3/16, -0.5, -3/16, 3/16, 6/16, 3/16 },
+	selection_box = {-3/16, -0.5, -3/16, 3/16, 6/16, 3/16},
 	potted = true,
 	sus_stew = {effect = "fire_resistance", duration = 4},
 }, {
@@ -91,7 +91,7 @@ mcl_flowers.register_simple_flower("allium", {
 mcl_flowers.register_simple_flower("azure_bluet", {
 	desc = S("Azure Bluet"),
 	image = "mcl_flowers_azure_bluet.png",
-	selection_box = { -5/16, -0.5, -5/16, 5/16, 3/16, 5/16 },
+	selection_box = {-5/16, -0.5, -5/16, 5/16, 3/16, 5/16},
 	potted = true,
 	sus_stew = {effect = "blindness", duration = 8},
 }, {
@@ -102,7 +102,7 @@ mcl_flowers.register_simple_flower("azure_bluet", {
 mcl_flowers.register_simple_flower("blue_orchid", {
 	desc = S("Blue Orchid"),
 	image = "mcl_flowers_blue_orchid.png",
-	selection_box = { -5/16, -0.5, -5/16, 5/16, 7/16, 5/16 },
+	selection_box = {-5/16, -0.5, -5/16, 5/16, 7/16, 5/16},
 	potted = true,
 	sus_stew = {effect = "saturation", duration = 0.5},
 }, {
@@ -113,7 +113,7 @@ mcl_flowers.register_simple_flower("blue_orchid", {
 mcl_flowers.register_simple_flower("wither_rose", {
 	desc = S("Wither Rose"),
 	image = "mcl_flowers_wither_rose.png",
-	selection_box = { -3/16, -0.5, -3/16, 3/16, 6/16, 3/16 },
+	selection_box = {-3/16, -0.5, -3/16, 3/16, 6/16, 3/16},
 	potted = true,
 	sus_stew = {effect = "withering", duration = 8},
 }, {
@@ -126,7 +126,7 @@ mcl_flowers.register_simple_flower("wither_rose", {
 mcl_flowers.register_simple_flower("lily_of_the_valley", {
 	desc = S("Lily of the Valley"),
 	image = "mcl_flowers_lily_of_the_valley.png",
-	selection_box = { -5/16, -0.5, -5/16, 4/16, 5/16, 5/16 },
+	selection_box = {-5/16, -0.5, -5/16, 4/16, 5/16, 5/16},
 	potted = true,
 	sus_stew = {effect = "poison", duration = 12},
 }, {
@@ -137,7 +137,7 @@ mcl_flowers.register_simple_flower("lily_of_the_valley", {
 mcl_flowers.register_simple_flower("cornflower", {
 	desc = S("Cornflower"),
 	image = "mcl_flowers_cornflower.png",
-	selection_box = { -4/16, -0.5, -4/16, 4/16, 3/16, 4/16 },
+	selection_box = {-4/16, -0.5, -4/16, 4/16, 3/16, 4/16},
 	potted = true,
 	sus_stew = {effect = "leaping", duration = 6},
 }, {
@@ -175,15 +175,15 @@ core.register_alias("mcl_cherry_blossom:pink_petals", "mcl_flowers:pink_petals_4
 mcl_flowers.add_large_plant("peony", {
 	desc = S("Peony"),
 	longdesc = S("A peony is a large plant which occupies two blocks. It is mainly used in dye production."),
-	tiles_bottom = { "mcl_flowers_double_plant_paeonia_bottom.png" },
-	tiles_top = { "mcl_flowers_double_plant_paeonia_top.png" },
+	tiles_bottom = {"mcl_flowers_double_plant_paeonia_bottom.png"},
+	tiles_top = {"mcl_flowers_double_plant_paeonia_top.png"},
 	selbox_radius = 5/16,
 	selbox_top_height = 6/16,
 	is_flower = true,
 	bottom = {
 		_mcl_crafting_output = {single = {output = "mcl_dyes:pink 2"}},
 		_on_bone_meal = function(_, _, _, pos, n) 
-    		core.add_item(pos, "mcl_flowers:peony")
+			core.add_item(pos, "mcl_flowers:peony")
 		end,
 	}
 })
@@ -192,31 +192,31 @@ mcl_flowers.add_large_plant("peony", {
 mcl_flowers.add_large_plant("rose_bush", {
 	desc = S("Rose Bush"),
 	longdesc = S("A rose bush is a large plant which occupies two blocks. It is safe to touch it. Rose bushes are mainly used in dye production."),
-	tiles_bottom = { "mcl_flowers_double_plant_rose_bottom.png" },
-	tiles_top = { "mcl_flowers_double_plant_rose_top.png" },
+	tiles_bottom = {"mcl_flowers_double_plant_rose_bottom.png"},
+	tiles_top = {"mcl_flowers_double_plant_rose_top.png"},
 	selbox_radius = 5/16,
 	selbox_top_height = 1/16,
 	is_flower = true,
 	bottom = {
 		_mcl_crafting_output = {single = {output = "mcl_dyes:red 2"}},
 		_on_bone_meal = function(_, _, _, pos, n) 
-    		core.add_item(pos, "mcl_flowers:rose_bush")
+			core.add_item(pos, "mcl_flowers:rose_bush")
 		end,
-    }
+	}
 })
 
 mcl_flowers.add_large_plant("lilac", {
 	desc = S("Lilac"),
 	longdesc = S("A lilac is a large plant which occupies two blocks. It is mainly used in dye production."),
-	tiles_bottom = { "mcl_flowers_double_plant_syringa_bottom.png" },
-	tiles_top = { "mcl_flowers_double_plant_syringa_top.png" },
+	tiles_bottom = {"mcl_flowers_double_plant_syringa_bottom.png"},
+	tiles_top = {"mcl_flowers_double_plant_syringa_top.png"},
 	selbox_radius = 5/16,
 	selbox_top_height = 6/16,
 	is_flower = true,
 	bottom = {
-    	_mcl_crafting_output = {single = {output = "mcl_dyes:magenta 2"}},
+		_mcl_crafting_output = {single = {output = "mcl_dyes:magenta 2"}},
 		_on_bone_meal = function(_, _, _, pos, n) 
-    		core.add_item(pos, "mcl_flowers:lilac")
+			core.add_item(pos, "mcl_flowers:lilac")
 		end,
 	}
 })
@@ -268,11 +268,11 @@ mcl_flowers.fortune_wheat_seed_drop = {
 mcl_flowers.add_large_plant("double_grass", {
 	desc = S("Double Tallgrass"),
 	longdesc = S("Double tallgrass a variant of tall grass and occupies two blocks. It can be harvested for wheat seeds."),
-	tiles_bottom = { "mcl_flowers_double_plant_grass_bottom.png" },
-	tiles_top = { "mcl_flowers_double_plant_grass_top.png" },
+	tiles_bottom = {"mcl_flowers_double_plant_grass_bottom.png"},
+	tiles_top = {"mcl_flowers_double_plant_grass_top.png"},
 	inv_img = "mcl_flowers_double_plant_grass_inv.png",
 	bottom = {
-		groups = { compostability = 50 },
+		groups = {compostability = 50},
 		drop = mcl_flowers.wheat_seed_drop,
 		_mcl_fortune_drop = mcl_flowers.fortune_wheat_seed_drop,
 		_mcl_shears_drop = {"mcl_flowers:tallgrass 2"},
@@ -285,11 +285,11 @@ mcl_flowers.add_large_plant("double_grass", {
 mcl_flowers.add_large_plant("double_fern", {
 	desc = S("Large Fern"),
 	longdesc = S("Large fern is a variant of fern and occupies two blocks. It can be harvested for wheat seeds."),
-	tiles_bottom = { "mcl_flowers_double_plant_fern_bottom.png" },
-	tiles_top = { "mcl_flowers_double_plant_fern_top.png" },
+	tiles_bottom = {"mcl_flowers_double_plant_fern_bottom.png"},
+	tiles_top = {"mcl_flowers_double_plant_fern_top.png"},
 	inv_img = "mcl_flowers_double_plant_fern_inv.png",
 	bottom = {
-		groups = { compostability = 50 },
+		groups = {compostability = 50},
 		drop = mcl_flowers.wheat_seed_drop,
 		_mcl_fortune_drop = mcl_flowers.fortune_wheat_seed_drop,
 		_mcl_shears_drop = {"mcl_flowers:fern 2"},
@@ -311,7 +311,7 @@ local def_tallgrass = {
 	wield_image = "mcl_flowers_tallgrass_inv.png",
 	selection_box = {
 		type = "fixed",
-		fixed = {{ -6/16, -8/16, -6/16, 6/16, 4/16, 6/16 }},
+		fixed = {{-6/16, -8/16, -6/16, 6/16, 4/16, 6/16}},
 	},
 	paramtype = "light",
 	paramtype2 = "color",
@@ -338,8 +338,8 @@ core.register_node("mcl_flowers:tallgrass", table.merge(def_tallgrass, {
 		local toppos = vector.offset(pos, 0, 1, 0)
 		local topnode = core.get_node(toppos)
 		if core.registered_nodes[topnode.name].buildable_to then
-			core.set_node(pos, { name = "mcl_flowers:double_grass", param2 = n.param2 })
-			core.set_node(toppos, { name = "mcl_flowers:double_grass_top", param2 = n.param2 })
+			core.set_node(pos, {name = "mcl_flowers:double_grass", param2 = n.param2})
+			core.set_node(toppos, {name = "mcl_flowers:double_grass_top", param2 = n.param2})
 			return true
 		end
 	end,
@@ -348,20 +348,20 @@ core.register_node("mcl_flowers:tallgrass", table.merge(def_tallgrass, {
 core.register_node("mcl_flowers:fern", table.merge(def_tallgrass, {
 	description = S("Fern"),
 	longdesc = S("Ferns are small plants which occur naturally in jungles and taigas. They can be harvested for wheat seeds. By using bone meal, a fern can be turned into a large fern which is two blocks high."),
-	tiles = { "mcl_flowers_fern.png" },
+	tiles = {"mcl_flowers_fern.png"},
 	inventory_image = "mcl_flowers_fern_inv.png",
 	wield_image = "mcl_flowers_fern_inv.png",
 	selection_box = {
 		type = "fixed",
-		fixed = { -6/16, -0.5, -6/16, 6/16, 5/16, 6/16 },
+		fixed = {-6/16, -0.5, -6/16, 6/16, 5/16, 6/16},
 	},
-	groups = table.merge(def_tallgrass.groups, { compostability = 65 }),
+	groups = table.merge(def_tallgrass.groups, {compostability = 65}),
 	_on_bone_meal = function(_, _, _ , pos, n)
 		local toppos = vector.offset(pos, 0, 1, 0)
 		local topnode = core.get_node(toppos)
 		if core.registered_nodes[topnode.name].buildable_to then
-			core.set_node(pos, { name = "mcl_flowers:double_fern", param2 = n.param2 })
-			core.set_node(toppos, { name = "mcl_flowers:double_fern_top", param2 = n.param2 })
+			core.set_node(pos, {name = "mcl_flowers:double_fern", param2 = n.param2})
+			core.set_node(toppos, {name = "mcl_flowers:double_fern_top", param2 = n.param2})
 			return true
 		end
 	end,
