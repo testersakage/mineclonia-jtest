@@ -335,7 +335,7 @@ local def_tallgrass = {
 }
 core.register_node("mcl_flowers:tallgrass", table.merge(def_tallgrass, {
 	_on_bone_meal = function(_, _, _ , pos, n)
-		local toppos = { x=pos.x, y=pos.y+1, z=pos.z }
+		local toppos = vector.offset(pos, 0, 1, 0)
 		local topnode = core.get_node(toppos)
 		if core.registered_nodes[topnode.name].buildable_to then
 			core.set_node(pos, { name = "mcl_flowers:double_grass", param2 = n.param2 })
@@ -357,7 +357,7 @@ core.register_node("mcl_flowers:fern", table.merge(def_tallgrass, {
 	},
 	groups = table.merge(def_tallgrass.groups, { compostability = 65 }),
 	_on_bone_meal = function(_, _, _ , pos, n)
-		local toppos = { x=pos.x, y=pos.y+1, z=pos.z }
+		local toppos = vector.offset(pos, 0, 1, 0)
 		local topnode = core.get_node(toppos)
 		if core.registered_nodes[topnode.name].buildable_to then
 			core.set_node(pos, { name = "mcl_flowers:double_fern", param2 = n.param2 })
