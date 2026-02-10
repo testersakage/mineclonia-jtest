@@ -339,7 +339,7 @@ core.register_node("mcl_flowers:tallgrass", table.merge(def_tallgrass, {
 		local topnode = core.get_node(toppos)
 		if core.registered_nodes[topnode.name].buildable_to then
 			core.set_node(pos, { name = "mcl_flowers:double_grass", param2 = n.param2 })
-			core.set_node(toppos, { name = "mcl_flowers:double_grass", param2 = n.param2 })
+			core.set_node(toppos, { name = "mcl_flowers:double_grass_top", param2 = n.param2 })
 			return true
 		end
 	end,
