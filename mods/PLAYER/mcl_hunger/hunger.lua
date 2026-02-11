@@ -1,6 +1,6 @@
 local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / tonumber(core.settings:get("movement_speed_walk"))
 
-local quick_eat_mode = core.settings:get_bool("mcl_quick_eat", false)
+local quick_eat_mode = core.settings:get_bool("mcl_hunger_instant_eat", true)
 
 local function should_quick_eat(itemstack)
 	return quick_eat_mode
