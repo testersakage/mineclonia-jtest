@@ -1364,9 +1364,16 @@ for color, desc in pairs(boxtypes) do
 
 	local function set_inventory_and_meta_from_stack(pos, stack)
 		local stack_meta = stack:get_meta()
+		local inv_meta
+		local compressed = stack_meta:get_string("compressed")
+		if compressed ~= "" then
+			inv_meta = core.decompress(core.decode_base64(compressed), "zstd")
+		else
+			inv_meta = stack_meta:get_string("")
+		end
 		local node_meta = core.get_meta(pos)
 		local inv = node_meta:get_inventory()
-		local main = core.deserialize(stack_meta:get_string("")) or {}
+		local main = core.deserialize(inv_meta) or {}
 		inv:set_size("main", 9 * 3)
 		inv:set_list("main", main)
 		mcl_redstone.update_comparators(pos)
@@ -1456,11 +1463,11 @@ for color, desc in pairs(boxtypes) do
 			local stack = inv:get_stack("main", i)
 			items[i] = stack:to_string()
 		end
-		local data = core.serialize(items)
+		local data = core.encode_base64(core.compress(core.serialize(items), "zstd"))
 		local boxitem = ItemStack("mcl_chests:" .. color .. "_shulker_box")
 		local boxitem_meta = boxitem:get_meta()
 		boxitem_meta:set_string("name", meta:get_string("name"))
-		boxitem_meta:set_string("", data)
+		boxitem_meta:set_string("compressed", data)
 		tt.reload_itemstack_description(boxitem)
 		return boxitem
 	end
