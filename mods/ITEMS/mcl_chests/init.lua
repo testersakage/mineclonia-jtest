@@ -1,5 +1,12 @@
 mcl_chests = {}
 
+-- Temporary safeguard as of version 0.119.0 to avoid player items getting lost
+-- in case someone updates to a version with compression and rollbacks.  Can be
+-- disabled in minetest.conf if one is confident that one will not go back to
+-- an earlier version. This setting should be removed within a couple of months
+-- or so when the likelyhood of that is low.
+local serialize_uncompressed = core.settings:get_bool("mcl_chests_serialize_uncompressed", true)
+
 local S = core.get_translator(core.get_current_modname())
 local F = core.formspec_escape
 local C = core.colorize
@@ -1362,6 +1369,7 @@ for color, desc in pairs(boxtypes) do
 	local function set_inventory_and_meta_from_stack(pos, stack)
 		local stack_meta = stack:get_meta()
 		local inv_meta
+
 		local compressed = stack_meta:get_string("compressed")
 		if compressed ~= "" then
 			inv_meta = core.decompress(core.decode_base64(compressed), "zstd")
@@ -1492,7 +1500,11 @@ for color, desc in pairs(boxtypes) do
 		local boxitem_meta = boxitem:get_meta()
 		boxitem_meta:set_string("name", meta:get_string("name"))
 		boxitem_meta:set_string("compressed", data)
-		boxitem_meta:set_string("", core.serialize(items_for_tt))
+		if serialize_uncompressed then
+			boxitem_meta:set_string("", core.serialize(items))
+		else
+			boxitem_meta:set_string("", core.serialize(items_for_tt))
+		end
 		tt.reload_itemstack_description(boxitem)
 		return boxitem
 	end
