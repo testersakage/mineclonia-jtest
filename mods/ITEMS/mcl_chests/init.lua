@@ -1452,6 +1452,26 @@ for color, desc in pairs(boxtypes) do
 			return stack
 		end,
 	})
+
+	local function get_item_for_tt(stack)
+		local meta = stack:get_meta()
+		local shortdesc = meta:get_string("short_description")
+		local desc = meta:get_string("description")
+
+		local newstack = ItemStack(stack:get_name())
+		local defdesc = newstack:get_short_description()
+		local newmeta = newstack:get_meta()
+
+		if shortdesc == "" and desc ~= "" then
+			shortdesc = string.match(desc, "([^\n]*)")
+		end
+		if shortdesc ~= defdesc then
+			newmeta:set_string("short_description", core.strip_colors(shortdesc))
+		end
+
+		return newstack
+	end
+
 	local function get_shulker_stack(pos)
 		local meta = core.get_meta(pos)
 		local inv = meta:get_inventory()
@@ -1460,11 +1480,19 @@ for color, desc in pairs(boxtypes) do
 			local stack = inv:get_stack("main", i)
 			items[i] = stack:to_string()
 		end
+
+		local items_for_tt = {}
+		for i = 1, math.min(shulker_num_tt_stacks, inv:get_size("main")) do
+			local stack = inv:get_stack("main", i)
+			table.insert(items_for_tt, get_item_for_tt(stack):to_string())
+		end
+
 		local data = core.encode_base64(core.compress(core.serialize(items), "zstd"))
 		local boxitem = ItemStack("mcl_chests:" .. color .. "_shulker_box")
 		local boxitem_meta = boxitem:get_meta()
 		boxitem_meta:set_string("name", meta:get_string("name"))
 		boxitem_meta:set_string("compressed", data)
+		boxitem_meta:set_string("", core.serialize(items_for_tt))
 		tt.reload_itemstack_description(boxitem)
 		return boxitem
 	end
