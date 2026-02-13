@@ -102,6 +102,7 @@ local function get_cbox_for_collision (obj)
 	local entity = obj:get_luaentity ()
 	if entity then
 		return entity.is_mob
+			and entity.pushable
 			and entity.collisionbox or nil
 	elseif obj:is_player () then
 		return obj:get_properties ().collisionbox
