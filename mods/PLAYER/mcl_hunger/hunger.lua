@@ -82,7 +82,7 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 
 	local old_itemstack = itemstack
 
-	mcl_hunger.eat_effects(user, itemname, playerpos, hunger_points, def)
+	mcl_hunger.eat_effects(user, itemname, hunger_points, def)
 
 	if mcl_hunger.active and hunger_points then
 		mcl_hunger.saturate(playername, core.registered_items[itemname]._mcl_saturation or 0, false)
@@ -157,7 +157,7 @@ function mcl_hunger.item_eat(hunger_points, replace_with_item, poisontime, poiso
 			local pos = user:get_pos()
 			local def = core.registered_items[itemname]
 
-			mcl_hunger.eat_effects(user, itemname, pos, hunger_points, def)
+			mcl_hunger.eat_effects(user, itemname, hunger_points, def)
 
 			if mcl_hunger.active and hunger_points then
 				-- Add saturation (must be defined in item table)
@@ -215,12 +215,14 @@ function mcl_hunger.item_eat(hunger_points, replace_with_item, poisontime, poiso
 	end
 end
 
-function mcl_hunger.eat_effects(user, itemname, pos, hunger_points, item_def, pitch)
-	if not (user and itemname and pos and hunger_points and item_def) then
+function mcl_hunger.eat_effects(user, itemname, hunger_points, item_def, pitch)
+	if not (user and itemname and hunger_points and item_def) then
 		return false
 	end
-	-- player height
-	pos.y = pos.y + 1.5
+
+	-- effect pos
+	local pos = user:get_pos():offset(0, 1.5, 0)
+
 	local foodtype = core.get_item_group(itemname, "food")
 	if foodtype == 3 then
 		-- Item is a drink, only play drinking sound (no particle)
@@ -237,6 +239,7 @@ function mcl_hunger.eat_effects(user, itemname, pos, hunger_points, item_def, pi
 	if not texture then
 		texture = item_def.wield_image
 	end
+
 
 	if item_def._mcl_spawn_food_particles ~= false and texture and texture ~= "" then
 		local player_velocity = user:get_velocity()
@@ -346,7 +349,7 @@ local function check_eat(player)
 	local last_step = mcl_hunger.eat_anim_effect[player] or 0
 	if step > last_step then
 		mcl_hunger.eat_anim_effect[player] = step
-		mcl_hunger.eat_effects(player, itemname, player:get_pos(), hunger_points, def)
+		mcl_hunger.eat_effects(player, itemname, hunger_points, def)
 	end
 end
 
