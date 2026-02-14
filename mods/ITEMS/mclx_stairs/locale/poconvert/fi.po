@@ -3,268 +3,268 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mclx_stairs x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-07 16:29+0000\n"
+"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
+"Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
+"mclx_stairs/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Lapis Lazuli Stairs"
-msgstr ""
+msgstr "Lasuriittiportaat"
 
 msgid "Lapis Lazuli Slab"
-msgstr ""
+msgstr "Lasuriittilaatta"
 
 msgid "Gold Stairs"
-msgstr ""
+msgstr "Kultaportaat"
 
 msgid "Gold Slab"
-msgstr ""
+msgstr "Kultalaatta"
 
 msgid "Iron Stairs"
-msgstr ""
+msgstr "Rautaportaat"
 
 msgid "Iron Slab"
-msgstr ""
+msgstr "Rautalaatta"
 
 msgid "Cracked Stone Brick Stairs"
-msgstr ""
+msgstr "Murtuneet kivitiiliportaat"
 
 msgid "Cracked Stone Brick Slab"
-msgstr ""
+msgstr "Murtunut kivitiililaatta"
 
 msgid "Cracked Deepslate Brick Stairs"
-msgstr ""
+msgstr "Murtuneet syväliusketiiliportaat"
 
 msgid "Cracked Deepslate Brick Slab"
-msgstr ""
+msgstr "Murtunut syväliusketiililaatta"
 
 msgid "Cracked Deepslate Tile Stairs"
-msgstr ""
+msgstr "Murtuneet syväliuskekaakeliportaat"
 
 msgid "Cracked Deepslate Tile Slab"
-msgstr ""
+msgstr "Murtunut syväliuskekaakelilaatta"
 
 msgid "End Stone Stairs"
-msgstr ""
+msgstr "Äärikiviportaat"
 
 msgid "End Stone Slab"
-msgstr ""
+msgstr "Äärikivilaatta"
 
 msgid "Smooth Stone Stairs"
-msgstr ""
+msgstr "Sileät kiviportaat"
 
 msgid "Terracotta Stairs"
-msgstr ""
+msgstr "Terrakottaportaat"
 
 msgid "Terracotta Slab"
-msgstr ""
+msgstr "Terrakottalaatta"
 
 msgid "Concrete Slab"
-msgstr ""
+msgstr "Betonilaatta"
 
 msgid "Double Concrete Slab"
-msgstr ""
+msgstr "Kaksinkertainen betonilaatta"
 
 msgid "Concrete Stairs"
-msgstr ""
+msgstr "Betoniportaat"
 
 msgid "Double Terracotta Slab"
-msgstr ""
+msgstr "Kaksinkertainen terrakottalaatta"
 
 msgid "Black Concrete Slab"
-msgstr ""
+msgstr "Musta betonilaatta"
 
 msgid "Black Concrete Stairs"
-msgstr ""
+msgstr "Mustat betoniportaat"
 
 msgid "Black Terracotta Slab"
-msgstr ""
+msgstr "Musta terrakottalaatta"
 
 msgid "Black Terracotta Stairs"
-msgstr ""
+msgstr "Mustat terrakottaportaat"
 
 msgid "Blue Concrete Slab"
-msgstr ""
+msgstr "Sininen betonilaatta"
 
 msgid "Blue Concrete Stairs"
-msgstr ""
+msgstr "Siniset betoniportaat"
 
 msgid "Blue Terracotta Slab"
-msgstr ""
+msgstr "Sininen terrakottalaatta"
 
 msgid "Blue Terracotta Stairs"
-msgstr ""
+msgstr "Siniset terrakottaportaat"
 
 msgid "Brown Concrete Slab"
-msgstr ""
+msgstr "Ruskea betonilaatta"
 
 msgid "Brown Concrete Stairs"
-msgstr ""
+msgstr "Ruskeat betoniportaat"
 
 msgid "Brown Terracotta Slab"
-msgstr ""
+msgstr "Ruskea terrakottalaatta"
 
 msgid "Brown Terracotta Stairs"
-msgstr ""
+msgstr "Ruskeat terrakottaportaat"
 
 msgid "Cyan Concrete Slab"
-msgstr ""
+msgstr "Sinivihreä betonilaatta"
 
 msgid "Cyan Concrete Stairs"
-msgstr ""
+msgstr "Sinivihreät betoniportaat"
 
 msgid "Cyan Terracotta Slab"
-msgstr ""
+msgstr "Sinivihreä terrakottalaatta"
 
 msgid "Cyan Terracotta Stairs"
-msgstr ""
+msgstr "Sinivihreät terrakottaportaat"
 
 msgid "Green Concrete Slab"
-msgstr ""
+msgstr "Vihreä betonilaatta"
 
 msgid "Green Concrete Stairs"
-msgstr ""
+msgstr "Vihreät betoniportaat"
 
 msgid "Green Terracotta Slab"
-msgstr ""
+msgstr "Vihreä terrakottalaatta"
 
 msgid "Green Terracotta Stairs"
-msgstr ""
+msgstr "Vihreät terrakottaportaat"
 
 msgid "Grey Concrete Slab"
-msgstr ""
+msgstr "Harmaa betonilaatta"
 
 msgid "Grey Concrete Stairs"
-msgstr ""
+msgstr "Harmaat betoniportaat"
 
 msgid "Grey Terracotta Slab"
-msgstr ""
+msgstr "Harmaa terrakottalaatta"
 
 msgid "Grey Terracotta Stairs"
-msgstr ""
+msgstr "Harmaat terrakottaportaat"
 
 msgid "Light Blue Concrete Slab"
-msgstr ""
+msgstr "Vaaleansininen betonilaatta"
 
 msgid "Light Blue Concrete Stairs"
-msgstr ""
+msgstr "Vaaleansiniset betoniportaat"
 
 msgid "Light Blue Terracotta Slab"
-msgstr ""
+msgstr "Vaaleansininen terrakottalaatta"
 
 msgid "Light Blue Terracotta Stairs"
-msgstr ""
+msgstr "Vaaleansiniset terrakottaportaat"
 
 msgid "Light Grey Concrete Slab"
-msgstr ""
+msgstr "Vaaleanharmaa betonilaatta"
 
 msgid "Light Grey Concrete Stairs"
-msgstr ""
+msgstr "Vaaleanharmaat betoniportaat"
 
 msgid "Light Grey Terracotta Slab"
-msgstr ""
+msgstr "Vaaleanharmaa terrakottalaatta"
 
 msgid "Light Grey Terracotta Stairs"
-msgstr ""
+msgstr "Vaaleanharmaat terrakottaportaat"
 
 msgid "Lime Concrete Slab"
-msgstr ""
+msgstr "Vaaleanvihreä betonilaatta"
 
 msgid "Lime Concrete Stairs"
-msgstr ""
+msgstr "Vaaleanvihreät betoniportaat"
 
 msgid "Lime Terracotta Slab"
-msgstr ""
+msgstr "Vaaleanvihreä terrakottalaatta"
 
 msgid "Lime Terracotta Stairs"
-msgstr ""
+msgstr "Vaaleanvihreät terrakottaportaat"
 
 msgid "Magenta Concrete Slab"
-msgstr ""
+msgstr "Purppuranpunainen betonilaatta"
 
 msgid "Magenta Concrete Stairs"
-msgstr ""
+msgstr "Purppuranpunaiset betoniportaat"
 
 msgid "Magenta Terracotta Slab"
-msgstr ""
+msgstr "Purppuranpunainen terrakottalaatta"
 
 msgid "Magenta Terracotta Stairs"
-msgstr ""
+msgstr "Purppuranpunaiset terrakottaportaat"
 
 msgid "Orange Concrete Slab"
-msgstr ""
+msgstr "Oranssi betonilaatta"
 
 msgid "Orange Concrete Stairs"
-msgstr ""
+msgstr "Oranssit betoniportaat"
 
 msgid "Orange Terracotta Slab"
-msgstr ""
+msgstr "Oranssi terrakottalaatta"
 
 msgid "Orange Terracotta Stairs"
-msgstr ""
+msgstr "Oranssit terrakottaportaat"
 
 msgid "Pink Concrete Slab"
-msgstr ""
+msgstr "Vaaleanpunainen betonilaatta"
 
 msgid "Pink Concrete Stairs"
-msgstr ""
+msgstr "Vaaleanpunaiset betoniportaat"
 
 msgid "Pink Terracotta Slab"
-msgstr ""
+msgstr "Vaaleanpunainen terrakottalaatta"
 
 msgid "Pink Terracotta Stairs"
-msgstr ""
+msgstr "Vaaleanpunaiset terrakottaportaat"
 
 msgid "Purple Concrete Slab"
-msgstr ""
+msgstr "Violetti betonilaatta"
 
 msgid "Purple Concrete Stairs"
-msgstr ""
+msgstr "Violetit betoniportaat"
 
 msgid "Purple Terracotta Slab"
-msgstr ""
+msgstr "Violetti terrakottalaatta"
 
 msgid "Purple Terracotta Stairs"
-msgstr ""
+msgstr "Violetit terrakottaportaat"
 
 msgid "Red Concrete Slab"
-msgstr ""
+msgstr "Punainen betonilaatta"
 
 msgid "Red Concrete Stairs"
-msgstr ""
+msgstr "Punaiset betoniportaat"
 
 msgid "Red Terracotta Slab"
-msgstr ""
+msgstr "Punainen terrakottalaatta"
 
 msgid "Red Terracotta Stairs"
-msgstr ""
+msgstr "Punaiset terrakottaportaat"
 
 msgid "White Concrete Slab"
-msgstr ""
+msgstr "Valkoinen betonilaatta"
 
 msgid "White Concrete Stairs"
-msgstr ""
+msgstr "Valkoiset betoniportaat"
 
 msgid "White Terracotta Slab"
-msgstr ""
+msgstr "Valkoinen terrakottalaatta"
 
 msgid "White Terracotta Stairs"
-msgstr ""
+msgstr "Valkoiset terrakottaportaat"
 
 msgid "Yellow Concrete Slab"
-msgstr ""
+msgstr "Keltainen betonilaatta"
 
 msgid "Yellow Concrete Stairs"
-msgstr ""
+msgstr "Keltaiset betoniportaat"
 
 msgid "Yellow Terracotta Slab"
-msgstr ""
+msgstr "Keltainen terrakottalaatta"
 
 msgid "Yellow Terracotta Stairs"
-msgstr ""
-
+msgstr "Keltaiset terrakottaportaat"

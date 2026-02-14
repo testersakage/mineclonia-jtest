@@ -3,49 +3,51 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_itemframes x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-01-31 08:29+0000\n"
+"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
+"Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_itemframes/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Item Frame"
-msgstr ""
+msgstr "Kehys"
 
 msgid "Can hold an item"
-msgstr ""
+msgstr "Siihen voi asettaa esineen"
 
 msgid "Item frames are decorative blocks in which items can be placed."
-msgstr ""
+msgstr "Kehys on koristekuutio, johon voi sijoittaa esineen."
 
 msgid "Just place any item on the item frame. Use the item frame again to retrieve the item."
 msgstr ""
+"Sijoita mikä tahansa esine kehykseen. Klikkaa kehystä uudelleen ottaaksesi "
+"esineen takaisin."
 
 msgid "Glow Item Frame"
-msgstr ""
+msgstr "Hehkukehys"
 
 msgid "Can hold an item and glows"
-msgstr ""
+msgstr "Siihen voi asettaa esineen, jolloin se hohtaa"
 
 msgid "Invisible Item Frame"
-msgstr ""
+msgstr "Näkymätön kehys"
 
 msgid "Can hold an item but is invisible"
-msgstr ""
+msgstr "Siihen voi asettaa esineen, mutta se on näkymätön"
 
 msgid "Invisible Glow Item Frame"
-msgstr ""
+msgstr "Näkymätön hehkukehys"
 
 msgid "Can hold an item and glows but is invisible"
-msgstr ""
+msgstr "Siihen voi asettaa esineen. Esine hehkuu, mutta kehys on näkymätön"
 
 msgid "Glow and Behold!"
-msgstr ""
+msgstr "Katso, kuinka se hohtaa!"
 
 msgid "Craft a glow item frame."
-msgstr ""
-
+msgstr "Valmista hehkukehys."

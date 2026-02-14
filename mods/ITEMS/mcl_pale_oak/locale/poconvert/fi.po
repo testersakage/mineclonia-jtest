@@ -3,135 +3,136 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_pale_oak x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-02-07 16:29+0000\n"
+"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
+"Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_pale_oak/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: mtt_convert 0.1.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Pale Oak Bark"
-msgstr ""
+msgstr "Valjutammenkaarna"
 
 msgid "Pale Oak Bark Slab"
-msgstr ""
+msgstr "Valjutammenkaarnalaatta"
 
 msgid "Pale Oak Bark Stairs"
-msgstr ""
+msgstr "Valjutammenkaarnaportaat"
 
 msgid "Pale Oak Boat"
-msgstr ""
+msgstr "Valjutammivene"
 
 msgid "Pale Oak Button"
-msgstr ""
+msgstr "Valjutamminappi"
 
 msgid "Pale Oak Chest Boat"
-msgstr ""
+msgstr "Arkullinen valjutammivene"
 
 msgid "Pale Oak Door"
-msgstr ""
+msgstr "Valjutammiovi"
 
 msgid "Pale Oak Fence"
-msgstr ""
+msgstr "Valjutammiaita"
 
 msgid "Pale Oak Fence Gate"
-msgstr ""
+msgstr "Valjutammiaidanportti"
 
 msgid "Pale Oak Hanging Sign"
-msgstr ""
+msgstr "Riippuva valjutammikyltti"
 
 msgid "Pale Oak Leaves"
-msgstr ""
+msgstr "Valjutammenlehvä"
 
 msgid "Pale Oak Log"
-msgstr ""
+msgstr "Valjutammitukki"
 
 msgid "Pale Oak Planks"
-msgstr ""
+msgstr "Valjutammilankut"
 
 msgid "Pale Oak Pressure Plate"
-msgstr ""
+msgstr "Valjutammipainelaatta"
 
 msgid "Pale Oak Sapling"
-msgstr ""
+msgstr "Valjutammentaimi"
 
 msgid "Pale Oak Sign"
-msgstr ""
+msgstr "Valjutammikyltti"
 
 msgid "Pale Oak Slab"
-msgstr ""
+msgstr "Valjutammilaatta"
 
 msgid "Pale Oak Stairs"
-msgstr ""
+msgstr "Valjutammiportaat"
 
 msgid "Pale Oak Trapdoor"
-msgstr ""
+msgstr "Valjutammilattialuukku"
 
 msgid "Pale Oak leaves are grown from Pale Oak trees."
-msgstr ""
+msgstr "Valjutammilehvät kasvavat valjutammipuissa."
 
 msgid "Stripped Pale Oak Bark"
-msgstr ""
+msgstr "Kuorittu valjutammenkaarna"
 
 msgid "Stripped Pale Oak Log"
-msgstr ""
+msgstr "Kuorittu valjutammitukki"
 
 msgid "The stripped trunk of an Pale Oak tree."
-msgstr ""
+msgstr "Kuorittu pala valjutammen runkoa."
 
 msgid "The stripped wood of an Pale Oak tree."
-msgstr ""
+msgstr "Kuorittu pala valjutammea."
 
 msgid "The trunk of a Pale Oak tree."
-msgstr ""
+msgstr "Pala valjutammen runkoa."
 
 msgid "Pale Hanging Moss"
-msgstr ""
+msgstr "Roikkuva kalpeasammal"
 
 msgid "Closed Eyeblossom"
-msgstr ""
+msgstr "Sulkeutunut silmäkukka"
 
 msgid "Open Eyeblossom"
-msgstr ""
+msgstr "Auennut silmäkukka"
 
 msgid "Eyeblossom activation"
-msgstr ""
+msgstr "Aktivoitunut silmäkukka"
 
 msgid "Eyeblossom in a pot activation"
-msgstr ""
+msgstr "Aktivoitunut ruukutettu silmäkukka"
 
 msgid "Eyeblossom deactivation"
-msgstr ""
+msgstr "Aktivoimaton silmäkukka"
 
 msgid "Eyeblossom in a pot deactivation"
-msgstr ""
+msgstr "Aktivoimaton ruukutettu silmäkukka"
 
 msgid "Pale Moss"
-msgstr ""
+msgstr "Kalpeasammal"
 
 msgid "Moss is a grey block found in pale garden"
-msgstr ""
+msgstr "Kalpeasammal on harmaa kuutio, jota esiintyy valjupuistossa"
 
 msgid "Pale Moss Carpet"
-msgstr ""
+msgstr "Kalpeasammalmatto"
 
 msgid "A pale moss carpet is a flat variant of the pale moss block."
-msgstr ""
+msgstr "Kalpeasammalmatto on kalpeasammalkuution litteä muoto."
 
 msgid "Resin Clump"
-msgstr ""
+msgstr "Pihkakokkare"
 
 msgid "Resin Brick"
-msgstr ""
+msgstr "Pihkatiili"
 
 msgid "Block of Resin"
-msgstr ""
+msgstr "Pihkakuutio"
 
 msgid "Resin Bricks"
-msgstr ""
+msgstr "Pihkatiilikuutio"
 
 msgid "Chiseled Resin Brick"
-msgstr ""
+msgstr "Kaiverrettu pihkatiili"
