@@ -267,6 +267,7 @@ local function perform_quick_eat(player)
 		player:set_wielded_item (itemstack)
 	end
 
+	mcl_hunger.play_eating_sound(player)
 	mcl_hunger.eat_cooldown[player] = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
 end
 
@@ -335,11 +336,7 @@ local function check_eat_term(player)
 		if core.get_item_group(itemname, "food") == 3 then
 			mcl_hunger.play_drinking_sound(player)
 		else
-			core.sound_play("mcl_hunger_eat", {
-				gain = 0.4,
-				max_hear_distance = 6,
-				object = player,
-			}, true)
+			mcl_hunger.play_eating_sound(player)
 		end
 	end
 end

@@ -13,9 +13,17 @@ end
 
 function mcl_hunger.play_drinking_sound(object)
 	core.sound_play("mcl_potions_drinking", {
-		object = object,
+		gain = 0.75,
 		max_hear_distance = 6,
-		gain = 0.75
+		object = object,
+	}, true)
+end
+
+function mcl_hunger.play_eating_sound(object)
+	core.sound_play("mcl_hunger_eat", {
+		gain = 0.4,
+		max_hear_distance = 6,
+		object = object,
 	}, true)
 end
 

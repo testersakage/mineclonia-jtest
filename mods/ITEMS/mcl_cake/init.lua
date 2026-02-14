@@ -16,8 +16,7 @@ local cake_boxes = {
 }
 
 local cake_groups = {
-	handy = 1, attached_node = 1, dig_by_piston = 1, food = 2,
-	no_eat_delay = 1, unsticky = 1
+	handy = 1, attached_node = 1, dig_by_piston = 1, unsticky = 1
 }
 
 local tpl_cake = {
