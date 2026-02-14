@@ -40,6 +40,7 @@ mcl_hunger.eat_anim_effect = {} -- effect timer for precise interval
 
 dofile(modpath.."/api.lua")
 dofile(modpath.."/hunger.lua")
+dofile(modpath.."/compat.lua")
 
 if not mcl_hunger.active then
 	core.register_on_joinplayer(function(player)
