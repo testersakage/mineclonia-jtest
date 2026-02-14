@@ -72,7 +72,6 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 
 	local itemname = itemstack:get_name()
 	local playername = user:get_player_name()
-	local playerpos = user:get_pos()
 	local creative = core.is_creative_enabled(playername)
 	local def = core.registered_items[itemname]
 
@@ -154,7 +153,6 @@ function mcl_hunger.item_eat(hunger_points, replace_with_item, poisontime, poiso
 				itemstack:take_item()
 			end
 			local name = user:get_player_name()
-			local pos = user:get_pos()
 			local def = core.registered_items[itemname]
 
 			mcl_hunger.eat_effects(user, itemname, hunger_points, def)
@@ -220,9 +218,6 @@ function mcl_hunger.eat_effects(user, itemname, hunger_points, item_def, pitch)
 		return false
 	end
 
-	-- effect pos
-	local pos = user:get_pos():offset(0, 1.5, 0)
-
 	local foodtype = core.get_item_group(itemname, "food")
 	if foodtype == 3 then
 		-- Item is a drink, only play drinking sound (no particle)
@@ -234,12 +229,6 @@ function mcl_hunger.eat_effects(user, itemname, hunger_points, item_def, pitch)
 		}, true)
 		return
 	end
-
-	local texture = item_def.inventory_image
-	if not texture then
-		texture = item_def.wield_image
-	end
-
 
 	core.sound_play("mcl_hunger_bite", {
 		max_hear_distance = 6,
@@ -345,11 +334,8 @@ local function check_eat_term(player)
 		end
 		terminate_eating_state(player)
 
-		local foodtype = core.get_item_group(itemname, "food")
-		local pos = player:get_pos()
-
-		if foodtype == 3 then
-			mcl_hunger.play_drinking_sound(user)
+		if core.get_item_group(itemname, "food") == 3 then
+			mcl_hunger.play_drinking_sound(player)
 		else
 			core.sound_play("mcl_hunger_eat", {
 				gain = 0.4,
