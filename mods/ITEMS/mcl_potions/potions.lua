@@ -194,8 +194,6 @@ function mcl_potions.register_potion(def)
 
 			local custom_effect = def.custom_effect
 			if custom_effect then custom_effect(player, potency+1, plus, player) end
-
-			mcl_potions._use_potion (player)
 		end
 		pdef._mcl_eat_replace_with = def.vanishing and "" or "mcl_potions:glass_bottle"
 	end
