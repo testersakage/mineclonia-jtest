@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-01-28 02:21+0000\n"
+"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_core/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Stick"
 msgstr "Graveto"
@@ -398,25 +399,25 @@ msgid "Jungle leaves are grown from Jungle trees."
 msgstr "Folhas de selva crescem a partir das árvores selva."
 
 msgid "Light Blue Stained Glass"
-msgstr ""
+msgstr "Vidro Azul Claro"
 
 msgid "Light Grey Stained Glass"
-msgstr ""
+msgstr "Vidro Cinza Claro"
 
 msgid "Lime Stained Glass"
-msgstr ""
+msgstr "Vidro Verde Lima"
 
 msgid "Magenta Stained Glass"
-msgstr ""
+msgstr "Vidro Magenta"
 
 msgid "Oak Bark"
 msgstr "Tronco de Carvalho"
 
 msgid "Oak Bark Slab"
-msgstr ""
+msgstr "Laje de Casca de Carvalho"
 
 msgid "Oak Bark Stairs"
-msgstr ""
+msgstr "Escadas de Casca de Carvalho"
 
 msgid "Oak Boat"
 msgstr "Barco de Carvalho"
@@ -425,7 +426,7 @@ msgid "Oak Button"
 msgstr "Botão de Carvalho"
 
 msgid "Oak Chest Boat"
-msgstr ""
+msgstr "Bote de Carvalho com Baú"
 
 msgid "Oak Door"
 msgstr "Porta de Carvalho"
@@ -437,7 +438,7 @@ msgid "Oak Fence Gate"
 msgstr "Portinhola de Carvalho"
 
 msgid "Oak Hanging Sign"
-msgstr ""
+msgstr "Placa Suspensa de Carvalho"
 
 msgid "Oak Leaves"
 msgstr "Folhas de Carvalho"
@@ -449,7 +450,7 @@ msgid "Oak Planks"
 msgstr "Tábuas de Carvalho"
 
 msgid "Oak Pressure Plate"
-msgstr ""
+msgstr "Placa de Pressão de Carvalho"
 
 msgid "Oak Sapling"
 msgstr "Muda de Carvalho"
@@ -467,28 +468,28 @@ msgid "Oak Trapdoor"
 msgstr "Alçapão de Carvalho"
 
 msgid "Oak leaves are grown from Oak trees."
-msgstr ""
+msgstr "As folhas de carvalho crescem das Árvores de Carvalho."
 
 msgid "Orange Stained Glass"
-msgstr ""
+msgstr "Vidro Laranja"
 
 msgid "Pink Stained Glass"
-msgstr ""
+msgstr "Vidro Rosa"
 
 msgid "Purple Stained Glass"
-msgstr ""
+msgstr "Vidro Roxo"
 
 msgid "Red Stained Glass"
-msgstr ""
+msgstr "Vidro Vermelho"
 
 msgid "Spruce Bark"
 msgstr "Tronco de Abeto"
 
 msgid "Spruce Bark Slab"
-msgstr ""
+msgstr "Placa de Casca de Pinheiro"
 
 msgid "Spruce Bark Stairs"
-msgstr ""
+msgstr "Escadas de Casca de Pinheiro"
 
 msgid "Spruce Boat"
 msgstr "Barco de Abeto"
@@ -497,7 +498,7 @@ msgid "Spruce Button"
 msgstr "Botão de Abeto"
 
 msgid "Spruce Chest Boat"
-msgstr ""
+msgstr "Bote de Pinheiro com Baú"
 
 msgid "Spruce Door"
 msgstr "Porta de Abeto"
@@ -509,7 +510,7 @@ msgid "Spruce Fence Gate"
 msgstr "Portinhola de Pinheiro"
 
 msgid "Spruce Hanging Sign"
-msgstr ""
+msgstr "Placa Suspensa de Pinheiro"
 
 msgid "Spruce Leaves"
 msgstr "Folhas de Abeto"
@@ -521,7 +522,7 @@ msgid "Spruce Planks"
 msgstr "Tábuas de Abeto"
 
 msgid "Spruce Pressure Plate"
-msgstr ""
+msgstr "Placa de Pressão de Pinheiro"
 
 msgid "Spruce Sapling"
 msgstr "Muda de Abeto"
@@ -539,7 +540,7 @@ msgid "Spruce Trapdoor"
 msgstr "Alçapão de Abeto"
 
 msgid "Spruce leaves are grown from Spruce trees."
-msgstr ""
+msgstr "As folhas de pinheiro crescem das Árvores de Pinheiro."
 
 msgid "Stripped Acacia Bark"
 msgstr ""
@@ -1239,4 +1240,3 @@ msgstr ""
 
 msgid "Mossy Stone Brick Slab"
 msgstr ""
-

@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_buckets x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-01-28 02:21+0000\n"
+"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_buckets/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Empty Bucket"
 msgstr "Balde Vazio"
@@ -26,64 +27,75 @@ msgid "Collects liquids"
 msgstr "Coleta líquidos"
 
 msgid "Bucket of Axolotl"
-msgstr ""
+msgstr "Balde com Axolote"
 
 msgid "Bucket of Cod"
-msgstr ""
+msgstr "Balde com Bacalhau"
 
 msgid "Bucket of Pufferfish"
-msgstr ""
+msgstr "Balde com Baiacu"
 
 msgid "Bucket of Salmon"
-msgstr ""
+msgstr "Balde com Salmão"
 
 msgid "Bucket of Tropical Fish"
-msgstr ""
+msgstr "Balde com Peixe Tropical"
 
 msgid "Place it to empty the bucket and place a Cod. Obtain by right clicking on a Cod with a bucket of water."
 msgstr ""
+"Clique em colocar para esvaziar o balde e para pegar um bacalhau. Obtenha "
+"ele com um balde de água, clicando com o botão direito em um bacalhau."
 
 msgid "Place it to empty the bucket and place a Pufferfish. Obtain by right clicking on a Pufferfish with a bucket of water."
 msgstr ""
+"Clique em colocar para esvaziar o balde e para pegar um baiacu. Obtenha ele "
+"com um balde de água, clicando com o botão direito em um baiacu."
 
 msgid "Place it to empty the bucket and place a Salmon. Obtain by right clicking on a Salmon with a bucket of water."
 msgstr ""
+"Clique em colocar para esvaziar o balde e para pegar um salmão. Obtenha ele "
+"com um balde de água, clicando com o botão direito em um salmão."
 
 msgid "Place it to empty the bucket and place a Tropical Fish. Obtain by right clicking on a Tropical Fish with a bucket of water."
 msgstr ""
+"Clique em colocar para esvaziar o balde e para pegar um peixe tropical. "
+"Obtenha ele com um balde de água, clicando com o botão direito em um peixe "
+"tropical."
 
 msgid "Place it to empty the bucket and place an Axolotl. Obtain by right clicking on an Axolotl with a bucket of water."
 msgstr ""
+"Clique em colocar para esvaziar o balde e para pegar um axolote. Obtenha ele "
+"com um balde de água, clicando com o botão direito em um axolote."
 
 msgid "Places a water source and a Cod."
-msgstr ""
+msgstr "Coloca uma fonte de água e um bacalhau."
 
 msgid "Places a water source and a Pufferfish."
-msgstr ""
+msgstr "Coloca uma fonte de água e um baiacu."
 
 msgid "Places a water source and a Salmon."
-msgstr ""
+msgstr "Coloca uma fonte de água e um salmão."
 
 msgid "Places a water source and a Tropical Fish."
-msgstr ""
+msgstr "Coloca uma fonte de água e um peixe tropical."
 
 msgid "Places a water source and an Axolotl."
-msgstr ""
+msgstr "Coloca uma fonte de água e um axolote."
 
 msgid "This bucket is filled with water and a Cod."
-msgstr ""
+msgstr "Este balde está cheio de água e com um bacalhau."
 
 msgid "This bucket is filled with water and a Pufferfish."
-msgstr ""
+msgstr "Este balde está cheio de água e com um baiacu."
 
 msgid "This bucket is filled with water and a Salmon."
-msgstr ""
+msgstr "Este balde está cheio de água e com um salmão."
 
 msgid "This bucket is filled with water and a Tropical Fish."
-msgstr ""
+msgstr "Este balde está cheio de água e com um peixe tropical."
 
 msgid "This bucket is filled with water and an Axolotl."
-msgstr ""
+msgstr "Este balde está cheio de água e com um axolote."
 
 msgid "Lava Bucket"
 msgstr "Balde com Lava"
@@ -120,4 +132,3 @@ msgstr "Coloque-o para esvaziar o balde e criar uma fonte de água de rio."
 
 msgid "Places a river water source"
 msgstr "Coloca uma fonte de água de rio"
-
