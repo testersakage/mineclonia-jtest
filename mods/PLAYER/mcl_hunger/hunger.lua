@@ -81,8 +81,6 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 
 	local old_itemstack = itemstack
 
-	mcl_hunger.eat_effects(user, itemname, hunger_points, def)
-
 	if mcl_hunger.active and hunger_points then
 		mcl_hunger.saturate(playername, core.registered_items[itemname]._mcl_saturation or 0, false)
 
