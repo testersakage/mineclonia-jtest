@@ -145,13 +145,7 @@ local function witch_consume_potion (self, wielditem)
 	mcl_potions.consume_potion (self.object, potion, 0, 0)
 	self:set_wielditem (ItemStack ())
 	 -- Play a sound.
-	local sound = {
-		max_hear_distance = 12,
-		gain = 1.0,
-		pitch = 1 + math.random (-10, 10) * 0.005,
-		object = self.object,
-	}
-	core.sound_play ("survival_thirst_drink", sound, true)
+	mcl_hunger.play_drinking_sound(self.object)
 end
 
 local witch_potion_items = {

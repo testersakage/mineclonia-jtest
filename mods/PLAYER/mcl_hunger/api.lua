@@ -11,6 +11,14 @@ function mcl_hunger.init_player(player)
 	end
 end
 
+function mcl_hunger.play_drinking_sound(object)
+	core.sound_play("mcl_potions_drinking", {
+		object = object,
+		max_hear_distance = 6,
+		gain = 0.75
+	}, true)
+end
+
 if mcl_hunger.active then
 	function mcl_hunger.get_hunger(player)
 		local hunger = tonumber(player:get_meta():get_string("mcl_hunger:hunger")) or 20

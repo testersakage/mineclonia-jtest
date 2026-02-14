@@ -227,8 +227,8 @@ function mcl_hunger.eat_effects(user, itemname, hunger_points, item_def, pitch)
 	if foodtype == 3 then
 		-- Item is a drink, only play drinking sound (no particle)
 		core.sound_play("survival_thirst_drink", {
-			max_hear_distance = 12,
-			gain = 1.0,
+			max_hear_distance = 6,
+			gain = 0.75,
 			pitch = mcl_util.float_random(0.95, 1.05),
 			object = user,
 		}, true)
@@ -242,8 +242,8 @@ function mcl_hunger.eat_effects(user, itemname, hunger_points, item_def, pitch)
 
 
 	core.sound_play("mcl_hunger_bite", {
-		max_hear_distance = 12,
-		gain = 0.1,
+		max_hear_distance = 6,
+		gain = 0.05,
 		pitch = mcl_util.float_random(0.95, 1.05),
 		object = user,
 	}, true)
@@ -344,6 +344,19 @@ local function check_eat_term(player)
 			player:set_wielded_item(itemstack)
 		end
 		terminate_eating_state(player)
+
+		local foodtype = core.get_item_group(itemname, "food")
+		local pos = player:get_pos()
+
+		if foodtype == 3 then
+			mcl_hunger.play_drinking_sound(user)
+		else
+			core.sound_play("mcl_hunger_eat", {
+				gain = 0.4,
+				max_hear_distance = 6,
+				object = player,
+			}, true)
+		end
 	end
 end
 
