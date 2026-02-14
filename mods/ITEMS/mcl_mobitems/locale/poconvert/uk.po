@@ -3,93 +3,102 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_mobitems x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-01-26 11:21+0000\n"
+"Last-Translator: Fan_of_Minecraft_UA "
+"<fan_of_minecraft_ua@noreply.codeberg.org>\n"
+"Language-Team: Ukrainian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_mobitems/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Rotten Flesh"
-msgstr ""
+msgstr "Гнила плоть"
 
 msgid "80% chance of food poisoning"
-msgstr ""
+msgstr "80% шанс отримати ефект голоду"
 
 msgid "Yuck! This piece of flesh clearly has seen better days. If you're really desperate, you can eat it to restore a few hunger points, but there's a 80% chance it causes food poisoning, which increases your hunger for a while."
 msgstr ""
 
 msgid "Raw Mutton"
-msgstr ""
+msgstr "Сира баранина"
 
 msgid "Raw mutton is the flesh from a sheep and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr "Сира баранина - це м’ясо вівці, яке можна безпечно їсти. Приготування її значно збільшить її харчову цінність."
 
 msgid "Cooked Mutton"
-msgstr ""
+msgstr "Приготована баранина"
 
 msgid "Cooked mutton is the cooked flesh from a sheep and is used as food."
-msgstr "Приготована баранина - це варене м'ясо вівці, яке можна їсти."
+msgstr "Приготована баранина - це приготоване м'ясо вівці, яке можна їсти."
 
 msgid "Raw Beef"
-msgstr ""
+msgstr "Сира яловичина"
 
 msgid "Raw beef is the flesh from cows and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr ""
+"Сира яловичина - це м’ясо корови, яке можна безпечно їсти. Приготування її "
+"значно збільшить її харчову цінність."
 
 msgid "Steak"
-msgstr ""
+msgstr "Приготована яловичина"
 
 msgid "Steak is cooked beef from cows and can be eaten."
-msgstr ""
+msgstr "Приготована яловичина - це приготоване м'ясо корови, яке можна їсти."
 
 msgid "Raw Chicken"
-msgstr ""
+msgstr "Сира курка"
 
 msgid "30% chance of food poisoning"
-msgstr ""
+msgstr "30% шанс отримати ефект голоду"
 
 msgid "Raw chicken is a food item which is not safe to consume. You can eat it to restore a few hunger points, but there's a 30% chance to suffer from food poisoning, which increases your hunger rate for a while. Cooking raw chicken will make it safe to eat and increases its nutritional value."
 msgstr ""
 
 msgid "Cooked Chicken"
-msgstr ""
+msgstr "Приготована курка"
 
 msgid "A cooked chicken is a healthy food item which can be eaten."
-msgstr ""
+msgstr "Приготована курка – це здоровий продукт, який можна їсти."
 
 msgid "Raw Porkchop"
-msgstr ""
+msgstr "Сира свинина"
 
 msgid "A raw porkchop is the flesh from a pig and can be eaten safely. Cooking it will greatly increase its nutritional value."
 msgstr ""
+"Сира свинина - це м’ясо свині, яке можна безпечно їсти. Приготування її "
+"значно збільшить її харчову цінність."
 
 msgid "Cooked Porkchop"
-msgstr ""
+msgstr "Приготована свинина"
 
 msgid "Cooked porkchop is the cooked flesh of a pig and is used as food."
-msgstr ""
+msgstr "Приготована свинина - це варене м'ясо свині, яке можна їсти."
 
 msgid "Raw Rabbit"
-msgstr ""
+msgstr "Сирий кролик"
 
 msgid "Raw rabbit is a food item from a dead rabbit. It can be eaten safely. Cooking it will increase its nutritional value."
 msgstr ""
+"Сирий кролик – це продукт, отриманий з мертвого кролика. Його безпечно їсти. "
+"Приготування збільшить його харчову цінність."
 
 msgid "Cooked Rabbit"
-msgstr ""
+msgstr "Приготований кролик"
 
 msgid "This is a food item which can be eaten."
-msgstr ""
+msgstr "Це їстівний продукт."
 
 msgid "Milk"
-msgstr ""
+msgstr "Молоко"
 
 msgid "Removes all status effects"
-msgstr ""
+msgstr "Знімає всі ефекти"
 
 msgid "Milk is very refreshing and can be obtained by using a bucket on a cow. Drinking it will remove all status effects, but restores no hunger points."
 msgstr ""
@@ -98,10 +107,10 @@ msgid "Use the placement key to drink the milk."
 msgstr ""
 
 msgid "Spider Eye"
-msgstr ""
+msgstr "Око павука"
 
 msgid "Poisonous"
-msgstr ""
+msgstr "Отруйне"
 
 msgid "Spider eyes are used mainly in crafting. If you're really desperate, you can eat a spider eye, but it will poison you briefly."
 msgstr ""
@@ -116,16 +125,19 @@ msgid "Wield the bone near wolves to attract them. Use the “Place” key on th
 msgstr ""
 
 msgid "Squid Ink Sac"
-msgstr ""
+msgstr "Чорнильний мішечок"
 
 msgid "This item is dropped by dead squids. Squid ink can be used to as an ingredient to craft book and quill or black dye."
 msgstr ""
+"Цей предмет випадає з мертвих кальмарів. Чорнило кальмара можна "
+"використовувати як інгредієнт для виготовлення книги та пера або чорного "
+"барвника."
 
 msgid "String"
 msgstr "Нитка"
 
 msgid "Strings are used in crafting."
-msgstr ""
+msgstr "Нитки використовуються в крафтингу."
 
 msgid "Blaze Rod"
 msgstr ""
@@ -164,70 +176,74 @@ msgid "A nether star is dropped when the Wither dies. Place it in an item frame 
 msgstr ""
 
 msgid "Leather"
-msgstr ""
+msgstr "Шкіра"
 
 msgid "Leather is a versatile crafting component."
-msgstr ""
+msgstr "Шкіра – корисний матеріал для крафтингу."
 
 msgid "Feather"
-msgstr ""
+msgstr "Перо"
 
 msgid "Feathers are used in crafting and are dropped from chickens."
-msgstr ""
+msgstr "Пера використовуються в крафтингу та випадають з курей."
 
 msgid "Rabbit Hide"
-msgstr ""
+msgstr "Шкурка кролика"
 
 msgid "Rabbit hide is used to create leather."
-msgstr ""
+msgstr "Шкурка кролика використовується для виготовлення шкіри."
 
 msgid "Rabbit's Foot"
-msgstr ""
+msgstr "Кроляча лапка"
 
 msgid "Must be your lucky day! Place this item in an item frame for decoration."
 msgstr ""
 
 msgid "Saddle"
-msgstr ""
+msgstr "Сідло"
 
 msgid "Can be placed on animals to ride them"
-msgstr ""
+msgstr "Ставиться на тваринах для катання на них"
 
 msgid "Saddles can be put on some animals in order to mount them."
-msgstr ""
+msgstr "На деяких тварин можна одягнути сідла щоб сідати на них."
 
 msgid "Use the placement key with the saddle in your hand to try to put on the saddle. Saddles fit on horses, mules, donkeys and pigs. Horses, mules and donkeys need to be tamed first, otherwise they'll reject the saddle. Saddled animals can be mounted by using the placement key on them again."
 msgstr ""
 
 msgid "Rabbit Stew"
-msgstr ""
+msgstr "Тушкований кролик"
 
 msgid "Rabbit stew is a very nutricious food item."
-msgstr ""
+msgstr "Тушкований кролик – дуже поживна страва."
 
 msgid "Shulker Shell"
-msgstr ""
+msgstr "Панцир шалкера"
 
 msgid "Shulker shells are used in crafting. They are dropped from dead shulkers."
 msgstr ""
+"Панцирі шалкера використовуються в крафтингу. Вони випадають з мертвих "
+"шалкерів."
 
 msgid "Slimeball"
-msgstr ""
+msgstr "Слиз"
 
 msgid "Slimeballs are used in crafting. They are dropped from slimes."
-msgstr ""
+msgstr "Слиз використовується в крафтингу. Він випадає з слизнів."
 
 msgid "Gunpowder"
-msgstr ""
+msgstr "Порох"
 
 msgid "Carrot on a Stick"
-msgstr ""
+msgstr "Морква на паличці"
 
 msgid "Lets you ride a saddled pig"
-msgstr ""
+msgstr "Дозволяє їздити на осідланій свині"
 
 msgid "A carrot on a stick can be used on saddled pigs to ride them."
 msgstr ""
+"Моркву на паличці можна використовувати на осідланих свинях, щоб їздити на "
+"них."
 
 msgid "Place it on a saddled pig to mount it. You can now ride the pig like a horse. Pigs will also walk towards you when you just wield the carrot on a stick."
 msgstr ""
@@ -287,26 +303,29 @@ msgid "Diamond horse armor can be worn by horses to greatly increase their prote
 msgstr ""
 
 msgid "Glow Ink Sac"
-msgstr ""
+msgstr "Сяючий чорнильний мішечок"
 
 msgid "Use it to craft the Glow Item Frame."
-msgstr ""
+msgstr "Використайте його для створення Сяючої рами."
 
 msgid "Use the Glow Ink Sac and the normal Item Frame to craft the Glow Item Frame."
 msgstr ""
+"Використайте Сяючий чорнильний мішечок і звичайну Раму щоб дістати Сяючу "
+"раму."
 
 msgid "Name Tag"
-msgstr ""
+msgstr "Ярлик"
 
 msgid "Give names to mobs"
-msgstr ""
+msgstr "Дає імена мобам"
 
 msgid "Set name at anvil"
-msgstr ""
+msgstr "Встановіть ім'я на ковадлі"
 
 msgid "A name tag is an item to name a mob."
-msgstr ""
+msgstr "Ярлик - це предмет, за допомогою якого можна дати ім'я мобу."
 
 msgid "Before you use the name tag, you need to set a name at an anvil. Then you can use the name tag to name a mob. This uses up the name tag."
 msgstr ""
-
+"Перед тим як використати ярлик, потрібно встановити ім'я на ковадлі. Потім "
+"ви можете використовувати ярлик, щоб назвати моба. Це використає ярлик."
