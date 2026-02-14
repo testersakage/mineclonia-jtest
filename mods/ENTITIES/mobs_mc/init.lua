@@ -37,6 +37,7 @@ local files = {
 	"iron_golem.lua",
 	"llama.lua",
 	"ocelot.lua",
+	"phantom.lua",
 	"parrot.lua",
 	"pig.lua",
 	"pillager.lua",
