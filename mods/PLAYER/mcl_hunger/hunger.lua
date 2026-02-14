@@ -360,7 +360,7 @@ controls.register_on_hold (function (player, key)
 end)
 
 local function get_sprite_pos(time)
-	local offset = math.cos(2 * math.pi / 0.8 * time)
+	local offset = math.sin(2 * math.pi / 0.8 * time)
 	local x = 0.5
 	local y = 1 - 1/16 + offset / 64
 	return {x = x, y = y}
@@ -390,6 +390,9 @@ core.register_globalstep (function (dtime)
 		local wielditem = player:get_wielded_item()
 		local itemstackdef = wielditem:get_definition()
 		local wield_image = itemstackdef.wield_image
+		if not wield_image or wield_image == "" then
+			wield_image = itemstackdef.inventory_image
+		end
 		local pos = get_sprite_pos(time)
 
 		if not mcl_hunger.eat_anim_hud[player] then
