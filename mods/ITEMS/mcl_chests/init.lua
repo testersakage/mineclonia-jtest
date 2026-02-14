@@ -1470,6 +1470,7 @@ for color, desc in pairs(boxtypes) do
 		local desc = meta:get_string("description")
 
 		local newstack = ItemStack(stack:get_name())
+		newstack:set_count(stack:get_count())
 		local defdesc = newstack:get_short_description()
 		local newmeta = newstack:get_meta()
 
