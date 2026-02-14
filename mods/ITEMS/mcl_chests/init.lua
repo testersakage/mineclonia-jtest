@@ -682,6 +682,10 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		end,
 		after_dig_node = drop_items_chest,
 		on_blast = on_chest_blast,
+		_mcl_allow_hopper_in = function(hopper_pos, pos)
+			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "left")
+			return core.get_item_group(core.get_node(other_pos).name, "double_chest") ~= 0
+		end,
 		allow_metadata_inventory_move = protection_check_move,
 		allow_metadata_inventory_take = protection_check_put_take,
 		allow_metadata_inventory_put = function(pos, listname, _, stack, player)
@@ -851,6 +855,10 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 		end,
 		after_dig_node = drop_items_chest,
 		on_blast = on_chest_blast,
+		_mcl_allow_hopper_in = function(_, pos)
+			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "left")
+			return core.get_item_group(core.get_node(other_pos).name, "double_chest") ~= 0
+		end,
 		allow_metadata_inventory_move = protection_check_move,
 		allow_metadata_inventory_take = protection_check_put_take,
 		allow_metadata_inventory_put = function(pos, listname, _, stack, player)

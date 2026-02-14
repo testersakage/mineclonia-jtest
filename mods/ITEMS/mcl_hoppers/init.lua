@@ -78,9 +78,10 @@ local function hopper_push(pos, to_pos)
 	local to_node = core.get_node(to_pos)
 	local to_def = core.registered_nodes[to_node.name]
 	local cgroup = core.get_item_group(to_node.name, "container")
+	local allow_hopper_in = to_def._mcl_allow_hopper_in
 
 	local success = false
-	if to_def then
+	if to_def and (not allow_hopper_in or allow_hopper_in(pos, to_pos)) then
 		local to_empty_hopper = (core.get_item_group(to_node.name, "hopper") ~= 0) and
 			core.get_meta(to_pos):get_inventory():is_empty("main")
 
