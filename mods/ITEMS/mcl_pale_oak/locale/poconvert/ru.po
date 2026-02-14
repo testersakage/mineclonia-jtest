@@ -3,136 +3,137 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_pale_oak x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-02-02 03:29+0000\n"
+"Last-Translator: Nana M <nana_m@noreply.codeberg.org>\n"
+"Language-Team: Russian <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_pale_oak/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: mtt_convert 0.1.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Pale Oak Bark"
-msgstr ""
+msgstr "Кора бледного дуба"
 
 msgid "Pale Oak Bark Slab"
-msgstr ""
+msgstr "Плита из коры бледного дуба"
 
 msgid "Pale Oak Bark Stairs"
-msgstr ""
+msgstr "Ступени из коры бледного дуба"
 
 msgid "Pale Oak Boat"
-msgstr ""
+msgstr "Лодка из бледного дуба"
 
 msgid "Pale Oak Button"
-msgstr ""
+msgstr "Кнопка из бледного дуба"
 
 msgid "Pale Oak Chest Boat"
-msgstr ""
+msgstr "Лодка с сундуком из бледного дуба"
 
 msgid "Pale Oak Door"
-msgstr ""
+msgstr "Дверь из бледного дуба"
 
 msgid "Pale Oak Fence"
-msgstr ""
+msgstr "Забор из бледного дуба"
 
 msgid "Pale Oak Fence Gate"
-msgstr ""
+msgstr "Ворота из бледного дуба"
 
 msgid "Pale Oak Hanging Sign"
-msgstr ""
+msgstr "Подвесная табличка из бледного дуба"
 
 msgid "Pale Oak Leaves"
-msgstr ""
+msgstr "Листва бледного дуба"
 
 msgid "Pale Oak Log"
-msgstr ""
+msgstr "Древесина бледного дуба"
 
 msgid "Pale Oak Planks"
-msgstr ""
+msgstr "Доски из бледного дуба"
 
 msgid "Pale Oak Pressure Plate"
-msgstr ""
+msgstr "Нажимная плита из бледного дуба"
 
 msgid "Pale Oak Sapling"
-msgstr ""
+msgstr "Саженец бледного дуба"
 
 msgid "Pale Oak Sign"
-msgstr ""
+msgstr "Табличка из бледного дуба"
 
 msgid "Pale Oak Slab"
-msgstr ""
+msgstr "Плита из бледного дуба"
 
 msgid "Pale Oak Stairs"
-msgstr ""
+msgstr "Ступени из бледного дуба"
 
 msgid "Pale Oak Trapdoor"
-msgstr ""
+msgstr "Люк из бледного дуба"
 
 msgid "Pale Oak leaves are grown from Pale Oak trees."
-msgstr ""
+msgstr "Листва бледного дуба растёт на бледных дубах."
 
 msgid "Stripped Pale Oak Bark"
-msgstr ""
+msgstr "Обтёсанная кора бледного дуба"
 
 msgid "Stripped Pale Oak Log"
-msgstr ""
+msgstr "Обтёсанная древесина бледного дуба"
 
 msgid "The stripped trunk of an Pale Oak tree."
-msgstr ""
+msgstr "Обтёсанное бревно бледного дуба."
 
 msgid "The stripped wood of an Pale Oak tree."
-msgstr ""
+msgstr "Обтёсанная древесина бледного дуба."
 
 msgid "The trunk of a Pale Oak tree."
-msgstr ""
+msgstr "Бревно бледного дуба."
 
 msgid "Pale Hanging Moss"
-msgstr ""
+msgstr "Свисающий бледный мох"
 
 msgid "Closed Eyeblossom"
-msgstr ""
+msgstr "Закрытый глазоцвет"
 
 msgid "Open Eyeblossom"
-msgstr ""
+msgstr "Открытый глазоцвет"
 
 msgid "Eyeblossom activation"
-msgstr ""
+msgstr "Активация глазоцвета"
 
 msgid "Eyeblossom in a pot activation"
-msgstr ""
+msgstr "Активация глазоцвета в горшке"
 
 msgid "Eyeblossom deactivation"
-msgstr ""
+msgstr "Деактивация глазоцвета"
 
 msgid "Eyeblossom in a pot deactivation"
-msgstr ""
+msgstr "Деактивация глазоцвета в горшке"
 
 msgid "Pale Moss"
-msgstr ""
+msgstr "Бледный мох"
 
 msgid "Moss is a grey block found in pale garden"
-msgstr ""
+msgstr "Серый блок моха, который можно найти в бледном саду"
 
 msgid "Pale Moss Carpet"
-msgstr ""
+msgstr "Бледный мшистый покров"
 
 msgid "A pale moss carpet is a flat variant of the pale moss block."
-msgstr ""
+msgstr "Бледный мшистый покров это плоский вариант блока бледного мха."
 
 msgid "Resin Clump"
-msgstr ""
+msgstr "Сгусток смолы"
 
 msgid "Resin Brick"
-msgstr ""
+msgstr "Смоляной кирпич"
 
 msgid "Block of Resin"
-msgstr ""
+msgstr "Смоляной блок"
 
 msgid "Resin Bricks"
-msgstr ""
+msgstr "Смоляные кирпичи"
 
 msgid "Chiseled Resin Brick"
-msgstr ""
+msgstr "Точёные смоляные кирпичи"
