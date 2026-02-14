@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_books x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-05 20:29+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
+"Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_books/eo/>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Chiseled Bookshelf"
 msgstr "Ĉizita libroŝranko"
@@ -20,10 +21,10 @@ msgid "Chiseled bookshelf holds up to six books."
 msgstr "Elĉizita librobreto eltenas ĝis ses librojn."
 
 msgid "Book"
-msgstr ""
+msgstr "Libro"
 
 msgid "Books are used to make bookshelves and book and quills."
-msgstr ""
+msgstr "Librojn oni uzas por fari librobretarojn kaj librojn kun skribiloj."
 
 msgid "“@1”"
 msgstr ""
@@ -47,7 +48,7 @@ msgid "Done"
 msgstr "Farite"
 
 msgid "Book and Quill"
-msgstr ""
+msgstr "Libro kun Skribilo"
 
 msgid "Write down some notes"
 msgstr ""
@@ -66,7 +67,7 @@ msgid "Text is @1 characters too long for one book.\n"
 msgstr ""
 
 msgid "Enter book title:"
-msgstr ""
+msgstr "Enigu titolon de la libro:"
 
 msgid "Sign and Close"
 msgstr ""
@@ -78,26 +79,27 @@ msgid "Cancel"
 msgstr ""
 
 msgid "Nameless Book"
-msgstr ""
+msgstr "Sennoma Libro"
 
 msgid "Written Book"
-msgstr ""
+msgstr "Skribita Libro"
 
 msgid "Written books contain some text written by someone. They can be read and copied, but not edited."
 msgstr ""
+"Skribitaj libroj enhavas tekstojn skribite de iu. Ilin eblas legi kaj kopii, "
+"sed ne redakti."
 
 msgid "Hold it in your hand, then rightclick to read the book."
-msgstr ""
+msgstr "Tenu ĝin en via mano, tiam dekstre alklaku por legi la libron."
 
 msgid "To copy the text of the written book, place it into the crafting grid together with a book and quill (or multiple of those) and craft. The written book will not be consumed. Copies of copies can not be copied."
 msgstr ""
 
 msgid "Bookshelf"
-msgstr ""
+msgstr "Librobretaro"
 
 msgid "Inventory"
 msgstr "Portaĵujo"
 
 msgid "Bookshelves are used for decoration."
-msgstr ""
-
+msgstr "Librobretaron oni uzas por ornami."

@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_candles x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-08 14:13+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
+"Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_candles/eo/>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "A candle is a block that emits light when lit with a flint and steel. It comes in the sixteen dye colors. Up to four of the same color of candle can be placed in one block space, which affects the amount of light produced."
 msgstr "Kandelo estas bloko, kiu dissendas lumon kiam ĝi estas ekbruligita per siliko kaj ŝtalo. Ĝi haveblas en la dek ses koloraj variantoj. Ĝis kvar kandeloj de la sama koloro povas esti metitaj en unu blokan spacon, kio influas la kvanton de lumo produktata."
@@ -20,56 +21,55 @@ msgid "Candle"
 msgstr "Kandelo"
 
 msgid "Lit Candle"
-msgstr ""
+msgstr "Brulanta Kandelo"
 
 msgid "Cake"
 msgstr "Kuko"
 
 msgid "Black Candle"
-msgstr ""
+msgstr "Nigra Kandelo"
 
 msgid "Blue Candle"
-msgstr ""
+msgstr "Blua Kandelo"
 
 msgid "Brown Candle"
-msgstr ""
+msgstr "Bruna Kandelo"
 
 msgid "Cyan Candle"
-msgstr ""
+msgstr "Cejana Kandelo"
 
 msgid "Green Candle"
-msgstr ""
+msgstr "Verda Kandelo"
 
 msgid "Grey Candle"
-msgstr ""
+msgstr "Griza Kandelo"
 
 msgid "Light Blue Candle"
-msgstr ""
+msgstr "Helblua Kandelo"
 
 msgid "Light Grey Candle"
-msgstr ""
+msgstr "Helgriza Kandelo"
 
 msgid "Lime Candle"
-msgstr ""
+msgstr "Verdcitrona Kandelo"
 
 msgid "Magenta Candle"
-msgstr ""
+msgstr "Fuĥsia Kandelo"
 
 msgid "Orange Candle"
-msgstr ""
+msgstr "Oranĝa Kandelo"
 
 msgid "Pink Candle"
-msgstr ""
+msgstr "Roza Kandelo"
 
 msgid "Purple Candle"
-msgstr ""
+msgstr "Viola Kandelo"
 
 msgid "Red Candle"
-msgstr ""
+msgstr "Ruĝa Kandelo"
 
 msgid "White Candle"
-msgstr ""
+msgstr "Blanka Kandelo"
 
 msgid "Yellow Candle"
-msgstr ""
-
+msgstr "Flava Kandelo"

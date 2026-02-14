@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_banners x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-05 20:29+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
+"Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_banners/eo/>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "And one additional layer"
 msgstr "Kaj aldona tabolo"
@@ -71,7 +72,7 @@ msgid "Black Bordure Indented"
 msgstr ""
 
 msgid "Black Bricks"
-msgstr ""
+msgstr "Nigraj Brikoj"
 
 msgid "Black Chevron"
 msgstr ""
@@ -200,7 +201,7 @@ msgid "Blue Bordure Indented"
 msgstr ""
 
 msgid "Blue Bricks"
-msgstr ""
+msgstr "Bluaj Brikoj"
 
 msgid "Blue Chevron"
 msgstr ""
@@ -332,7 +333,7 @@ msgid "Brown Bordure Indented"
 msgstr ""
 
 msgid "Brown Bricks"
-msgstr ""
+msgstr "Brunaj Brikoj"
 
 msgid "Brown Chevron"
 msgstr ""
@@ -467,7 +468,7 @@ msgid "Cyan Bordure Indented"
 msgstr ""
 
 msgid "Cyan Bricks"
-msgstr ""
+msgstr "Cejanaj Brikoj"
 
 msgid "Cyan Chevron"
 msgstr ""
@@ -605,7 +606,7 @@ msgid "Green Bordure Indented"
 msgstr ""
 
 msgid "Green Bricks"
-msgstr ""
+msgstr "Verdaj Brikoj"
 
 msgid "Green Chevron"
 msgstr ""
@@ -734,7 +735,7 @@ msgid "Grey Bordure Indented"
 msgstr ""
 
 msgid "Grey Bricks"
-msgstr ""
+msgstr "Grizaj Brikoj"
 
 msgid "Grey Chevron"
 msgstr ""
@@ -866,7 +867,7 @@ msgid "Light Blue Bordure Indented"
 msgstr ""
 
 msgid "Light Blue Bricks"
-msgstr ""
+msgstr "Helbluaj Brikoj"
 
 msgid "Light Blue Chevron"
 msgstr ""
@@ -995,7 +996,7 @@ msgid "Light Grey Bordure Indented"
 msgstr ""
 
 msgid "Light Grey Bricks"
-msgstr ""
+msgstr "Helgrizaj Brikoj"
 
 msgid "Light Grey Chevron"
 msgstr ""
@@ -1124,7 +1125,7 @@ msgid "Lime Bordure Indented"
 msgstr ""
 
 msgid "Lime Bricks"
-msgstr ""
+msgstr "Verdcitrojaj Brikoj"
 
 msgid "Lime Chevron"
 msgstr ""
@@ -1253,7 +1254,7 @@ msgid "Magenta Bordure Indented"
 msgstr ""
 
 msgid "Magenta Bricks"
-msgstr ""
+msgstr "Fuĥsiaj Brikoj"
 
 msgid "Magenta Chevron"
 msgstr ""
@@ -1382,7 +1383,7 @@ msgid "Orange Bordure Indented"
 msgstr ""
 
 msgid "Orange Bricks"
-msgstr ""
+msgstr "Oranĝaj Brikoj"
 
 msgid "Orange Chevron"
 msgstr ""
@@ -1514,7 +1515,7 @@ msgid "Pink Bordure Indented"
 msgstr ""
 
 msgid "Pink Bricks"
-msgstr ""
+msgstr "Rozaj Brikoj"
 
 msgid "Pink Chevron"
 msgstr ""
@@ -1643,7 +1644,7 @@ msgid "Purple Bordure Indented"
 msgstr ""
 
 msgid "Purple Bricks"
-msgstr ""
+msgstr "Violaj Brikoj"
 
 msgid "Purple Chevron"
 msgstr ""
@@ -1772,7 +1773,7 @@ msgid "Red Bordure Indented"
 msgstr ""
 
 msgid "Red Bricks"
-msgstr ""
+msgstr "Ruĝaj Brikoj"
 
 msgid "Red Chevron"
 msgstr ""
@@ -1907,7 +1908,7 @@ msgid "White Bordure Indented"
 msgstr ""
 
 msgid "White Bricks"
-msgstr "Blanka Briko"
+msgstr "Blankaj Brikoj"
 
 msgid "White Chevron"
 msgstr ""
@@ -2036,7 +2037,7 @@ msgid "Yellow Bordure Indented"
 msgstr ""
 
 msgid "Yellow Bricks"
-msgstr ""
+msgstr "Flavaj Brikoj"
 
 msgid "Yellow Chevron"
 msgstr ""
@@ -2133,4 +2134,3 @@ msgstr ""
 
 msgid "Yellow Thing Charge"
 msgstr ""
-

@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-05 20:29+0000\n"
+"Last-Translator: Gergej <gergej@noreply.codeberg.org>\n"
+"Language-Team: Esperanto <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/eo/>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Stick"
 msgstr "Bastono"
@@ -689,7 +690,7 @@ msgid "Diamond ore is rare and can be found in clusters near the bottom of the w
 msgstr ""
 
 msgid "Stone Bricks"
-msgstr ""
+msgstr "Ŝtonaj Brikoj"
 
 msgid "Chiseled Stone Bricks"
 msgstr ""
@@ -857,7 +858,7 @@ msgid "Clay is a versatile kind of earth commonly found at beaches underwater."
 msgstr ""
 
 msgid "Brick Block"
-msgstr ""
+msgstr "Brika Bloko"
 
 msgid "Brick blocks are a good building material for building solid houses and can take quite a punch."
 msgstr ""
@@ -1169,10 +1170,10 @@ msgid "Mossy Cobblestone Slab"
 msgstr "Muska Pavimŝtona Plato"
 
 msgid "Brick Stairs"
-msgstr ""
+msgstr "Brika Ŝtuparo"
 
 msgid "Brick Slab"
-msgstr ""
+msgstr "Brika Plato"
 
 msgid "Sandstone Stairs"
 msgstr ""
@@ -1211,10 +1212,10 @@ msgid "Cut Red Sandstone Slab"
 msgstr ""
 
 msgid "Stone Brick Stairs"
-msgstr ""
+msgstr "Ŝtona Brika Ŝtuparo"
 
 msgid "Stone Brick Slab"
-msgstr ""
+msgstr "Ŝtona Brika Plato"
 
 msgid "Polished Andesite Stairs"
 msgstr ""
@@ -1235,8 +1236,7 @@ msgid "Polished Diorite Slab"
 msgstr ""
 
 msgid "Mossy Stone Brick Stairs"
-msgstr ""
+msgstr "Muska Ŝtona Brika Ŝtuparo"
 
 msgid "Mossy Stone Brick Slab"
-msgstr ""
-
+msgstr "Muska Ŝtona Brika Plato"
