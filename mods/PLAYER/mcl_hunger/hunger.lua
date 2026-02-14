@@ -241,30 +241,6 @@ function mcl_hunger.eat_effects(user, itemname, hunger_points, item_def, pitch)
 	end
 
 
-	if item_def._mcl_spawn_food_particles ~= false and texture and texture ~= "" then
-		local player_velocity = user:get_velocity()
-		local count = math.min(math.max(8, hunger_points * 2), 25)
-		local texture_index = math.random(0, count)
-		core.add_particlespawner({
-			amount = count,
-			time = 0.01,
-			pos = pos,
-			vel = {
-				min = vector.offset(player_velocity, -1, 1, -1),
-				max = vector.offset(player_velocity, 1, 2, 1)
-			},
-			acc = {
-				min = vector.new(0, -9, 0),
-				max = vector.new(0, -5, 0)
-			},
-			exptime = { min = 0.5, max = 0.8 },
-			size    = { min = 1, max   = 2 },
-			collisiondetection = true,
-			vertical = false,
-			texture = "[combine:3x3:" .. -texture_index .. "," .. -texture_index .. "=" .. texture,
-		})
-	end
-
 	core.sound_play("mcl_hunger_bite", {
 		max_hear_distance = 12,
 		gain = 0.1,
