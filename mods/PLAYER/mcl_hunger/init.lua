@@ -35,6 +35,7 @@ mcl_hunger.SATURATION_INIT = 5 -- Initial saturation for new/respawning players
 mcl_hunger.eat_cooldown = {} -- used for quick eat (either special setting or when food has `no_eat_delay` group)
 mcl_hunger.eat_duration = {}
 
+mcl_hunger.eat_anim_hud = {}
 mcl_hunger.eat_anim_block = {}
 mcl_hunger.eat_anim_effect = {} -- effect timer for precise interval
 

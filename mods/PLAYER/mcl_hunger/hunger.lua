@@ -272,14 +272,12 @@ end
 
 local function begin_eating_state(player)
 	mcl_hunger.eat_duration[player] = 0
-	player:hud_set_flags({wielditem = false})
 	playerphysics.add_physics_factor(player, "speed", "mcl_hunger:eat_anim", SPEED_WHILE_EAT)
 end
 
 local function terminate_eating_state(player)
 	mcl_hunger.eat_duration[player] = nil
 	mcl_hunger.eat_anim_effect[player] = nil
-	player:hud_set_flags({wielditem = true})
 	playerphysics.remove_physics_factor(player, "speed", "mcl_hunger:eat_anim")
 end
 
@@ -317,18 +315,9 @@ controls.register_on_press (function (player, key)
 	end
 end)
 
-controls.register_on_hold (function (player, key)
-	if not is_player_trying_to_eat (player, key) then
-		-- special case. can happen when the player switches the wielded item while eating
-		if key == "RMB" and mcl_hunger.eat_duration[player] then
-			terminate_eating_state(player)
-		end
-		return
-	end
-
+local function check_eat(player)
 	local itemstack = player:get_wielded_item ()
 	local itemname = itemstack:get_name ()
-	local pointed_thing = mcl_util.get_pointed_thing (player, true)
 	local is_full = mcl_hunger.is_player_full (player)
 
 	if is_full and not can_eat_when_full(player, itemstack) then
@@ -359,22 +348,87 @@ controls.register_on_hold (function (player, key)
 		mcl_hunger.eat_anim_effect[player] = step
 		mcl_hunger.eat_effects(player, itemname, player:get_pos(), hunger_points, def)
 	end
+end
+
+local function check_eat_term(player)
+	local itemstack = player:get_wielded_item ()
+	local itemname = itemstack:get_name ()
+	local pointed_thing = mcl_util.get_pointed_thing (player, true)
+
+	local def = core.registered_items[itemname]
+	local hunger_points = core.get_item_group(itemname, "eatable")
 
 	local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
-	if mcl_hunger.eat_duration[player] >= eat_delay then
+	if mcl_hunger.eat_duration[player] and mcl_hunger.eat_duration[player] >= eat_delay then
 		itemstack = core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
 		if itemstack then
 			player:set_wielded_item(itemstack)
 		end
 		terminate_eating_state(player)
 	end
+end
+
+controls.register_on_hold (function (player, key)
+	if not is_player_trying_to_eat (player, key) then
+		-- special case. can happen when the player switches the wielded item while eating
+		if key == "RMB" and mcl_hunger.eat_duration[player] then
+			terminate_eating_state(player)
+		end
+		return
+	end
+
+	check_eat_term(player)
+	check_eat(player)
 end)
+
+local function get_sprite_pos(time)
+	local offset = math.cos(2 * math.pi / 0.8 * time)
+	local x = 0.5
+	local y = 1 - 1/16 + offset / 64
+	return {x = x, y = y}
+end
+
+local function get_sprite_scale(player)
+	local info = core.get_player_window_information(player:get_player_name())
+	local ar = info and info.size.x / info.size.y or 16 / 9
+	return {
+		x = -25,
+		y = -25 * ar,
+	}
+end
 
 core.register_globalstep (function (dtime)
 	for player, time in pairs (mcl_hunger.eat_cooldown) do
 		mcl_hunger.eat_cooldown[player] = time - dtime
 	end
+	for player, hudid in pairs (mcl_hunger.eat_anim_hud) do
+		if not mcl_hunger.eat_duration[player] then
+			player:hud_set_flags({wielditem = true})
+			player:hud_remove(hudid)
+			mcl_hunger.eat_anim_hud[player] = nil
+		end
+	end
 	for player, time in pairs (mcl_hunger.eat_duration) do
+		local wielditem = player:get_wielded_item()
+		local itemstackdef = wielditem:get_definition()
+		local wield_image = itemstackdef.wield_image
+		local pos = get_sprite_pos(time)
+
+		if not mcl_hunger.eat_anim_hud[player] then
+			mcl_hunger.eat_anim_hud[player] = player:hud_add({
+				hud_elem_type = "image",
+				scale = get_sprite_scale(player),
+				alignment = {x = 0, y = 0},
+				offset = {x = 0, y = -30},
+				text = wield_image,
+				position = pos,
+				z_index = -200,
+			})
+			player:hud_set_flags({wielditem = false})
+		else
+			player:hud_change(mcl_hunger.eat_anim_hud[player], "text", wield_image)
+			player:hud_change(mcl_hunger.eat_anim_hud[player], "position", get_sprite_pos(time))
+		end
 		mcl_hunger.eat_duration[player] = time + dtime
 	end
 end)
