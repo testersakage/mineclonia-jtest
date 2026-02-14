@@ -19,7 +19,7 @@ local spin_timer_tick = 0.5
 local spin_timer = 0
 local spin_velocity = 1
 
-local random_frame = math.random(0, clock_frames)
+local random_frame = math.random(1, clock_frames)
 local current_frame = 0
 
 -- This timer makes sure the clocks get updated from time to time regardless of time_speed,
