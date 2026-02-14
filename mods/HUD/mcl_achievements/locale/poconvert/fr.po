@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_achievements x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-14 15:29+0000\n"
+"Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_achievements/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Benchmarking"
 msgstr "Au travail !"
@@ -74,10 +75,10 @@ msgid "Craft a iron pickaxe using sticks and iron."
 msgstr "Fabriquez une pioche de fer avec des batons et du fer."
 
 msgid "Bullseye"
-msgstr ""
+msgstr "Dans le mille !"
 
 msgid "Hit the bullseye of a target block from at least 30 blocks away."
-msgstr ""
+msgstr "Touchez le centre d'une cible à au moins 30 blocs de distance."
 
 msgid "DIAMONDS!"
 msgstr "DES DIAMANTS !"
@@ -147,6 +148,10 @@ msgstr "Un délicieux poisson"
 msgid "Take any cooked fish after cooking it in a furnace, smoker, campfire or soul campfire.\n"
 "Hint: Use a fishing rod to catch a fish and cook it in a furnace."
 msgstr ""
+"Prenez n'importe quel poisson cuit après l'avoir cuit dans un fourneau, un "
+"fumoir, un feu de camp ou un feu de camp des âmes.\n"
+"Astuce : utilisez une canne à pêche pour attraper un poisson et faites-le "
+"cuire dans un fourneau."
 
 msgid "On A Rail"
 msgstr "Sur la bonne voie"
@@ -391,51 +396,54 @@ msgid "Kill a raid captain. Maybe consider staying away from the local villages 
 msgstr "Tuez un capitaine de pillards. Mieux vaut rester éloigné des villages pour le moment..."
 
 msgid "Return to Sender"
-msgstr ""
+msgstr "Retour à l'envoyeur"
 
 msgid "Destroy a Ghast with a Fireball"
-msgstr ""
+msgstr "Détruisez un Ghast avec une boule de feu"
 
 msgid "Zombie Doctor"
-msgstr ""
+msgstr "Zombiologue"
 
 msgid "Use a golden apple on a zombie villager under the Weakness effect; the advancement is granted when the zombie villager converts into a villager."
 msgstr ""
+"Utilisez une pomme dorée sur un zombie-villageois sous l'effet Faiblesse ; "
+"le progrès est accordé quand le zombie-villageois est converti en villageois."
 
 msgid "A Terrible Fortress"
-msgstr ""
+msgstr "Une terrible forteresse"
 
 msgid "Break your way into a Nether Fortress"
-msgstr ""
+msgstr "Faites votre chemin jusqu'à la forteresse du Nether"
 
 msgid "Eye Spy"
-msgstr ""
+msgstr "À suivre..."
 
 msgid "Follow an Eye of Ender"
-msgstr ""
+msgstr "Suivez un œil de l'Ender"
 
 msgid "The City at the End of the Game"
-msgstr ""
+msgstr "Les mystérieuses cités de l'End"
 
 msgid "Go on in, what could happen?"
-msgstr ""
+msgstr "Allez-y, qu'est-ce qui pourrait bien arriver ?"
 
 msgid "Those Were The Days"
-msgstr ""
+msgstr "Le bon vieux temps"
 
 msgid "Enter a Bastion Remnant"
-msgstr ""
+msgstr "Entrez dans les vestiges d'un bastion"
 
 msgid "A Throwaway Joke"
-msgstr ""
+msgstr "Une blague tombée à l'eau"
 
 msgid "Very Very Frightening"
-msgstr ""
+msgstr "Coup de foudre"
 
 msgid "Throw a Trident at something.\n"
 "Note: Throwing away your only weapon is not a good idea."
 msgstr ""
+"Lancez un trident sur quelque chose.\n"
+"Remarque : lancer votre seule arme n'est pas une bonne idée."
 
 msgid "Strike a Villager with lightning."
-msgstr ""
-
+msgstr "Frappez un villageois avec la foudre."

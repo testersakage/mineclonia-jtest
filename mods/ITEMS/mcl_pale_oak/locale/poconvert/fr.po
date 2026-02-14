@@ -3,84 +3,85 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_pale_oak x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-01-28 13:21+0000\n"
+"Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_pale_oak/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Pale Oak Bark"
-msgstr ""
+msgstr "Écorce de chêne pâle"
 
 msgid "Pale Oak Bark Slab"
-msgstr ""
+msgstr "Dalle en écorce de chêne pâle"
 
 msgid "Pale Oak Bark Stairs"
-msgstr ""
+msgstr "Escalier en écorce de chêne pâle"
 
 msgid "Pale Oak Boat"
-msgstr ""
+msgstr "Bateau en chêne pâle"
 
 msgid "Pale Oak Button"
-msgstr ""
+msgstr "Bouton en chêne pâle"
 
 msgid "Pale Oak Chest Boat"
-msgstr ""
+msgstr "Bateau de stockage en chêne pâle"
 
 msgid "Pale Oak Door"
-msgstr ""
+msgstr "Porte en chêne pâle"
 
 msgid "Pale Oak Fence"
-msgstr ""
+msgstr "Barrière en chêne pâle"
 
 msgid "Pale Oak Fence Gate"
-msgstr ""
+msgstr "Portillon en chêne pâle"
 
 msgid "Pale Oak Hanging Sign"
-msgstr ""
+msgstr "Pancarte suspendue en chêne pâle"
 
 msgid "Pale Oak Leaves"
-msgstr ""
+msgstr "Feuilles de chêne pâle"
 
 msgid "Pale Oak Log"
-msgstr ""
+msgstr "Bûche de chêne pâle"
 
 msgid "Pale Oak Planks"
-msgstr ""
+msgstr "Planches de chêne pâle"
 
 msgid "Pale Oak Pressure Plate"
-msgstr ""
+msgstr "Plaque de pression en chêne pâle"
 
 msgid "Pale Oak Sapling"
-msgstr ""
+msgstr "Pousse de chêne pâle"
 
 msgid "Pale Oak Sign"
-msgstr ""
+msgstr "Pancarte en chêne pâle"
 
 msgid "Pale Oak Slab"
-msgstr ""
+msgstr "Dalle en chêne pâle"
 
 msgid "Pale Oak Stairs"
-msgstr ""
+msgstr "Escalier en chêne pâle"
 
 msgid "Pale Oak Trapdoor"
-msgstr ""
+msgstr "Trappe en chêne pâle"
 
 msgid "Pale Oak leaves are grown from Pale Oak trees."
-msgstr ""
+msgstr "Les feuilles de chêne pâle poussent sur les troncs de chêne pâle."
 
 msgid "Stripped Pale Oak Bark"
-msgstr ""
+msgstr "Écorce de chêne pâle poncée"
 
 msgid "Stripped Pale Oak Log"
-msgstr ""
+msgstr "Bûche de chêne pâle écorcée"
 
 msgid "The stripped trunk of an Pale Oak tree."
-msgstr ""
+msgstr "Le tronc écorcé d'un chêne pâle."
 
 msgid "The stripped wood of an Pale Oak tree."
 msgstr ""
@@ -89,13 +90,13 @@ msgid "The trunk of a Pale Oak tree."
 msgstr ""
 
 msgid "Pale Hanging Moss"
-msgstr ""
+msgstr "Mousse pâle suspendue"
 
 msgid "Closed Eyeblossom"
-msgstr ""
+msgstr "Œilchidée fermé"
 
 msgid "Open Eyeblossom"
-msgstr ""
+msgstr "Œilchidée ouvert"
 
 msgid "Eyeblossom activation"
 msgstr ""
@@ -110,29 +111,28 @@ msgid "Eyeblossom in a pot deactivation"
 msgstr ""
 
 msgid "Pale Moss"
-msgstr ""
+msgstr "Mousse pâle"
 
 msgid "Moss is a grey block found in pale garden"
-msgstr ""
+msgstr "La mousse est un bloc gris que l'on trouve dans les jardins pâles"
 
 msgid "Pale Moss Carpet"
-msgstr ""
+msgstr "Tapis de mousse pâle"
 
 msgid "A pale moss carpet is a flat variant of the pale moss block."
-msgstr ""
+msgstr "Le tapis de mousse pâle est une variante plate du bloc de mousse pâle."
 
 msgid "Resin Clump"
-msgstr ""
+msgstr "Amas de résine"
 
 msgid "Resin Brick"
-msgstr ""
+msgstr "Brique de résine"
 
 msgid "Block of Resin"
-msgstr ""
+msgstr "Bloc de résine"
 
 msgid "Resin Bricks"
-msgstr ""
+msgstr "Briques de résine"
 
 msgid "Chiseled Resin Brick"
-msgstr ""
-
+msgstr "Briques de résine sculptées"

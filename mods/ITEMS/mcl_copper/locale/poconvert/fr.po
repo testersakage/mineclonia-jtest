@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-14 15:29+0000\n"
+"Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_copper/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Copper Ingot"
 msgstr "Lingot de cuivre"
@@ -47,10 +48,10 @@ msgid "Copper Bulb On"
 msgstr "Ampoule allumée en cuivre"
 
 msgid "Copper Bulb Powered Off"
-msgstr ""
+msgstr "Ampoule en cuivre alimentée éteinte"
 
 msgid "Copper Bulb Powered On"
-msgstr ""
+msgstr "Ampoule en cuivre alimentée allumée"
 
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "L'ampoule en cuivre est surtout un bloc décoratif."
@@ -95,10 +96,10 @@ msgid "Exposed Copper Bulb On"
 msgstr "Ampoule allumée en cuivre exposé"
 
 msgid "Exposed Copper Bulb Powered Off"
-msgstr ""
+msgstr "Ampoule en cuivre exposé alimentée éteinte"
 
 msgid "Exposed Copper Bulb Powered On"
-msgstr ""
+msgstr "Ampoule en cuivre exposé alimentée allumée"
 
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "L'ampoule en cuivre exposé est surtout un bloc décoratif."
@@ -146,10 +147,10 @@ msgid "Oxidized Copper Bulb On"
 msgstr "Ampoule en cuivre oxydé allumée"
 
 msgid "Oxidized Copper Bulb Powered Off"
-msgstr ""
+msgstr "Ampoule en cuivre oxydé alimentée éteinte"
 
 msgid "Oxidized Copper Bulb Powered On"
-msgstr ""
+msgstr "Ampoule en cuivre oxydé alimentée allumée"
 
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "L'ampoule en cuivre oxydé est surtout un bloc décoratif."
@@ -194,10 +195,10 @@ msgid "Waxed Copper Bulb On"
 msgstr "Ampoule allumée en cuivre ciré"
 
 msgid "Waxed Copper Bulb Powered Off"
-msgstr ""
+msgstr "Ampoule en cuivre ciré alimentée éteinte"
 
 msgid "Waxed Copper Bulb Powered On"
-msgstr ""
+msgstr "Ampoule en cuivre ciré alimentée allumée"
 
 msgid "Waxed Copper Grate"
 msgstr "Grille en cuivre ciré"
@@ -230,10 +231,10 @@ msgid "Waxed Exposed Copper Bulb On"
 msgstr "Ampoule allumée en cuivre exposé ciré"
 
 msgid "Waxed Exposed Copper Bulb Powered Off"
-msgstr ""
+msgstr "Ampoule en cuivre exposé ciré alimentée éteinte"
 
 msgid "Waxed Exposed Copper Bulb Powered On"
-msgstr ""
+msgstr "Ampoule en cuivre exposé ciré alimentée allumée"
 
 msgid "Waxed Exposed Copper Grate"
 msgstr "Grille en cuivre exposé ciré"
@@ -263,10 +264,10 @@ msgid "Waxed Oxidized Copper Bulb On"
 msgstr "Ampoule allumée en cuivre oxydé ciré"
 
 msgid "Waxed Oxidized Copper Bulb Powered Off"
-msgstr ""
+msgstr "Ampoule en cuivre oxydé ciré alimentée éteinte"
 
 msgid "Waxed Oxidized Copper Bulb Powered On"
-msgstr ""
+msgstr "Ampoule en cuivre oxydé ciré alimentée allumée"
 
 msgid "Waxed Oxidized Copper Grate"
 msgstr "Grille en cuivre oxydé ciré"
@@ -296,13 +297,13 @@ msgid "Waxed Weathered Copper Bulb"
 msgstr "Ampoule en cuivre érodé ciré"
 
 msgid "Waxed Weathered Copper Bulb On"
-msgstr "Ampoule allumée en cuivre érodé ciré"
+msgstr "Ampoule en cuivre érodé ciré allumée"
 
 msgid "Waxed Weathered Copper Bulb Powered Off"
-msgstr ""
+msgstr "Ampoule en cuivre érodé ciré alimentée éteinte"
 
 msgid "Waxed Weathered Copper Bulb Powered On"
-msgstr ""
+msgstr "Ampoule en cuivre érodé ciré alimentée allumée"
 
 msgid "Waxed Weathered Copper Grate"
 msgstr "Grille en cuivre érodé ciré"
@@ -332,13 +333,13 @@ msgid "Weathered Copper Bulb"
 msgstr "Ampoule en cuivre érodé"
 
 msgid "Weathered Copper Bulb On"
-msgstr "Ampoule allumée en cuivre érodé"
+msgstr "Ampoule en cuivre érodé allumée"
 
 msgid "Weathered Copper Bulb Powered Off"
-msgstr ""
+msgstr "Ampoule en cuivre érodé alimentée éteinte"
 
 msgid "Weathered Copper Bulb Powered On"
-msgstr ""
+msgstr "Ampoule en cuivre érodé alimentée allumée"
 
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "L'ampoule en cuivre érodé est surtout un bloc décoratif."
@@ -381,4 +382,3 @@ msgstr "Bloc de cuivre brut"
 
 msgid "A block used for compact raw copper storage."
 msgstr "Un bloc utilisé pour le stockage compact de cuivre brut."
-

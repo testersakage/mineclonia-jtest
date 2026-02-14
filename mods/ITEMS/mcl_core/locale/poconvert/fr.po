@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-14 15:29+0000\n"
+"Last-Translator: Zozosticot <zozosticot@noreply.codeberg.org>\n"
+"Language-Team: French <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_core/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Stick"
 msgstr "Bâton"
@@ -56,7 +57,7 @@ msgid "Diamonds are precious minerals and useful to create the highest tier of a
 msgstr "Les diamants sont des minéraux précieux et utiles pour créer le plus haut niveau d'armure et d'outils."
 
 msgid "Diamond Material"
-msgstr ""
+msgstr "En diamant"
 
 msgid "Clay Ball"
 msgstr "Motte d'argile"
@@ -71,16 +72,18 @@ msgid "Molten iron. It is used to craft armor, tools, and whatnot."
 msgstr "Le fer. Il est utilisé pour fabriquer des armures, des outils et ainsi de suite."
 
 msgid "Iron Material"
-msgstr ""
+msgstr "En fer"
 
 msgid "Gold Ingot"
 msgstr "Lingot d'or"
 
 msgid "Molten gold. It is used to craft armor, tools, and whatnot."
-msgstr "L'Or. Il est utilisé pour fabriquer des armures, des outils et ainsi de suite."
+msgstr ""
+"L'or. Il est utilisé pour fabriquer des armures, des outils et ainsi de "
+"suite."
 
 msgid "Gold Material"
-msgstr ""
+msgstr "En or"
 
 msgid "Emerald"
 msgstr "Émeraude"
@@ -89,7 +92,7 @@ msgid "Emeralds are used in villager trades as currency."
 msgstr "Les émeraudes sont utilisées pour faire des échanges avec les villageois."
 
 msgid "Emerald Material"
-msgstr ""
+msgstr "En émeraude"
 
 msgid "Lapis Lazuli"
 msgstr "Lapis-lazuli"
@@ -98,7 +101,7 @@ msgid "Lapis Lazuli are required for enchanting items on an enchanting table."
 msgstr "Les lapis-lazuli sont nécessaires pour enchanter des objets sur une table d'enchantement."
 
 msgid "Lapis Material"
-msgstr ""
+msgstr "En lapis-lazuli"
 
 msgid "Brick"
 msgstr "Brique"
@@ -134,7 +137,8 @@ msgid "Golden Apple"
 msgstr "Pomme dorée"
 
 msgid "Golden apples are precious food items which can be eaten."
-msgstr "Les pommes dorrées sont des aliments précieux qui peuvent être consommés."
+msgstr ""
+"Les pommes dorées sont des aliments précieux qui peuvent être consommés."
 
 msgid "Enchanted Golden Apple"
 msgstr "Pomme dorée enchantée"
@@ -167,7 +171,7 @@ msgid "Acacia Fence Gate"
 msgstr "Portillon en acacia"
 
 msgid "Acacia Hanging Sign"
-msgstr ""
+msgstr "Pancarte suspendue en acacia"
 
 msgid "Acacia Leaves"
 msgstr "Feuilles d'acacia"
@@ -227,7 +231,7 @@ msgid "Birch Fence Gate"
 msgstr "Portillon en bouleau"
 
 msgid "Birch Hanging Sign"
-msgstr ""
+msgstr "Pancarte suspendue en bouleau"
 
 msgid "Birch Leaves"
 msgstr "Feuilles de bouleau"
@@ -299,7 +303,7 @@ msgid "Dark Oak Fence Gate"
 msgstr "Portillon en chêne noir"
 
 msgid "Dark Oak Hanging Sign"
-msgstr ""
+msgstr "Pancarte suspendue en chêne noir"
 
 msgid "Dark Oak Leaves"
 msgstr "Feuilles de chêne noir"
@@ -365,7 +369,7 @@ msgid "Jungle Fence Gate"
 msgstr "Portillon en acajou"
 
 msgid "Jungle Hanging Sign"
-msgstr ""
+msgstr "Pancarte suspendue en acajou"
 
 msgid "Jungle Leaves"
 msgstr "Feuilles d'acajou"
@@ -422,7 +426,7 @@ msgid "Oak Boat"
 msgstr "Bateau en chêne"
 
 msgid "Oak Button"
-msgstr "Boutton en chêne"
+msgstr "Bouton en chêne"
 
 msgid "Oak Chest Boat"
 msgstr "Bateau de stockage en chêne"
@@ -437,7 +441,7 @@ msgid "Oak Fence Gate"
 msgstr "Portillon en chêne"
 
 msgid "Oak Hanging Sign"
-msgstr ""
+msgstr "Pancarte suspendue en chêne"
 
 msgid "Oak Leaves"
 msgstr "Feuilles de chêne"
@@ -509,7 +513,7 @@ msgid "Spruce Fence Gate"
 msgstr "Portillon en sapin"
 
 msgid "Spruce Hanging Sign"
-msgstr ""
+msgstr "Pancarte suspendue en sapin"
 
 msgid "Spruce Leaves"
 msgstr "Feuilles de sapin"
@@ -551,7 +555,7 @@ msgid "Stripped Birch Bark"
 msgstr "Écorce de bouleau poncée"
 
 msgid "Stripped Birch Log"
-msgstr "Bûche de bouleau écorcé"
+msgstr "Bûche de bouleau écorcée"
 
 msgid "Stripped Dark Oak Bark"
 msgstr "Écorce de chêne noir poncée"
@@ -647,13 +651,18 @@ msgid "Coal Ore"
 msgstr "Minerai de charbon"
 
 msgid "Some coal contained in stone, it is very common and can be found inside stone in medium to large clusters at nearly every height."
-msgstr "Du charbon contenu dans la pierre, il est très commun et peut être trouvé à l'intérieur de la pierre en grappes moyennes à grandes à presque toutes les hauteurs."
+msgstr ""
+"Du charbon contenu dans de la pierre, il est très commun et peut être trouvé "
+"à l'intérieur de la pierre en grappes moyennes à grandes à presque toutes "
+"les hauteurs."
 
 msgid "Iron Ore"
 msgstr "Minerai de fer"
 
 msgid "Some iron contained in stone, it is prety common and can be found below sea level."
-msgstr "Du fer contenu dans la pierre, il est assez courant et se trouve sous le niveau de la mer."
+msgstr ""
+"Du fer contenu dans de la pierre, il est assez courant et se trouve sous le "
+"niveau de la mer."
 
 msgid "Gold Ore"
 msgstr "Minerai d'or"
@@ -665,7 +674,9 @@ msgid "Redstone Ore"
 msgstr "Minerai de redstone"
 
 msgid "Redstone ore is commonly found near the bottom of the world. It glows when it is punched or walked upon."
-msgstr "Le minerai de Redstone se trouve généralement près du bas du monde. Il brille lorsqu'il est frappé ou piétiné."
+msgstr ""
+"Le minerai de redstone se trouve généralement près du bas du monde. Il "
+"brille lorsqu'il est frappé ou piétiné."
 
 msgid "Lit Redstone Ore"
 msgstr "Lit Minerai de redstone"
@@ -938,10 +949,12 @@ msgid "Packed ice is a compressed form of ice. It is opaque and solid."
 msgstr "La glace compactée est une forme de glace comprimée. Elle est opaque et solide."
 
 msgid "Blue Ice"
-msgstr ""
+msgstr "Glace bleue"
 
 msgid "Blue Ice is a still more compressed form of ice.  It is opaque and solid."
 msgstr ""
+"La glace bleue est une forme encore plus compressée de glace.  Elle est "
+"opaque et solide."
 
 msgid "Frosted ice is a short-lived solid block. It melts into a water source within a few seconds."
 msgstr "La glace givrée est un bloc solide de courte durée. Il fond dans une source d'eau en quelques secondes."
@@ -986,10 +999,10 @@ msgid "A cactus can only be placed on top of another cactus or any sand."
 msgstr "Un cactus ne peut être placé que sur un autre cactus ou du sable."
 
 msgid "Cactus Flower"
-msgstr ""
+msgstr "Fleur de cactus"
 
 msgid "Grows on cacti"
-msgstr ""
+msgstr "Pousse sur les cactus"
 
 msgid "Sugar Canes"
 msgstr "Canne à sucre"
@@ -1028,10 +1041,12 @@ msgid "Stained Glass"
 msgstr "Verre coloré"
 
 msgid "Glow Lichen"
-msgstr ""
+msgstr "Lichen lumineux"
 
 msgid "Naturally generating non-solid block that emits a faint light and can attach to any surface of a solid block."
 msgstr ""
+"Bloc non solide généré naturellement qui émet une faible lumière et peut se "
+"fixer à n'importe quelle surface d'un bloc solide."
 
 msgid "Flowing Water"
 msgstr "Eau qui coule"
@@ -1239,4 +1254,3 @@ msgstr "Escalier en pierre taillée moussue"
 
 msgid "Mossy Stone Brick Slab"
 msgstr "Dalle en pierre taillée moussue"
-
