@@ -106,9 +106,3 @@ core.register_craft({
 		{"", "mcl_core:gold_ingot", ""}
 	}
 })
-
-core.register_on_craft(function(itemstack)
-	if itemstack:get_name() == "mcl_clock:clock" then
-		itemstack:get_meta():set_string("inventory_image", clock_images[current_frame])
-	end
-end)
