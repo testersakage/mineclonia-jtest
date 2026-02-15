@@ -25,6 +25,7 @@
 * Marek Jędrzejewski
 * amino
 * epCode
+* hezemisverydumb
 
 ## Previous Contributors
 * Lizzy Fleckenstein

@@ -27,6 +27,7 @@ return {
 		"Marek Jędrzejewski",
 		"amino",
 		"epCode",
+		"hezemisverydumb",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",
