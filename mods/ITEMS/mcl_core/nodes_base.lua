@@ -71,7 +71,7 @@ core.register_node("mcl_core:stone_with_gold", {
 local redstone_timer = 68.28
 local function redstone_ore_activate(pos, node, puncher, pointed_thing)
 	local nodedef = core.registered_nodes[core.get_node(pos).name]
-	core.swap_node(pos, {name=nodedef._mcl_ore_lit})
+	core.set_node(pos, {name=nodedef._mcl_ore_lit})
 	local t = core.get_node_timer(pos)
 	t:start(redstone_timer)
 	if puncher and pointed_thing then
@@ -135,7 +135,7 @@ core.register_node("mcl_core:stone_with_redstone_lit", {
 	-- Turn back to normal node after some time has passed
 	on_timer = function(pos)
 		local nodedef = core.registered_nodes[core.get_node(pos).name]
-		core.swap_node(pos, {name=nodedef._mcl_ore_unlit})
+		core.set_node(pos, {name=nodedef._mcl_ore_unlit})
 	end,
 	_mcl_hardness = 3,
 	_mcl_silk_touch_drop = {"mcl_core:stone_with_redstone"},
@@ -893,7 +893,7 @@ for i=0,3 do
 		local dim = mcl_worlds.pos_to_dimension(pos)
 		if age == nil then return end
 		if age < 3 then
-			core.swap_node(pos, { name = "mcl_core:frosted_ice_"..(age+1) })
+			core.set_node(pos, { name = "mcl_core:frosted_ice_"..(age+1) })
 		else
 			if dim ~= "nether" then
 				core.set_node(pos, { name = "mcl_core:water_source" })
