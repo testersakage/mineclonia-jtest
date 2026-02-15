@@ -1,6 +1,6 @@
 # textdomain: mcl_armor
 #Translations of enchantements
-Upgrade:=
+Upgrade:=Mejora:
 This is a piece of equippable armor which reduces the amount of damage you receive.=Esta es una pieza de armadura equipable que reduce la cantidad de daño que recibes.
 To equip it, put it on the corresponding armor slot in your inventory menu.=Para equiparla, colocala en la ranura de armadura en el menú de tu inventario.
 Leather Cap=Sombrero de cuero
@@ -35,6 +35,10 @@ Chainmail Helmet=Casco de cota de malla
 Chainmail Chestplate=Peto de cota de malla
 Chainmail Leggings=Grebas de cota de malla
 Chainmail Boots=Botas de cota de malla
+Copper Helmet=
+Copper Chestplate=
+Copper Leggings=
+Copper Boots=
 Iron Helmet=Casco de hierro
 Iron Chestplate=Peto de hierro
 Iron Leggings=Grebas de hierro

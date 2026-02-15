@@ -16,11 +16,17 @@ msgstr ""
 msgid "Copper Ingot"
 msgstr "Kupariharkko"
 
-msgid "Molten Raw Copper. It is used to craft blocks."
-msgstr "Sulatettua raakakuparia. Siitä voidaan valmistaa kuutioita."
+msgid "Molten Copper. It is used to craft armor, tools, and blocks."
+msgstr ""
 
 msgid "Copper Material"
 msgstr "Kuparimateriaali"
+
+msgid "Copper Nugget"
+msgstr ""
+
+msgid "Copper nuggets are very small pieces of molten copper; the main purpose is to create copper ingots."
+msgstr ""
 
 msgid "Raw Copper"
 msgstr "Raakakupari"
@@ -40,6 +46,9 @@ msgstr "Kaiverrettu kupari"
 msgid "Chiseled Copper is mostly a decorative block."
 msgstr "Kaiverrettu kupari on lähinnä koristekuutio."
 
+msgid "Copper Bars"
+msgstr ""
+
 msgid "Copper Bulb"
 msgstr "Kuparilamppu"
 
@@ -55,6 +64,12 @@ msgstr "Aktivoitu päällä oleva kuparilamppu"
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "Kuparilamppu on lähinnä koristekuutio."
 
+msgid "Copper Chain"
+msgstr ""
+
+msgid "Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Copper Door"
 msgstr "Kupariovi"
 
@@ -63,6 +78,12 @@ msgstr "Kuparisäleikkö"
 
 msgid "Copper Grate is mostly a decorative block."
 msgstr "Kuparisäleikkö on lähinnä koristekuutio."
+
+msgid "Copper Lantern"
+msgstr ""
+
+msgid "Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Copper Trapdoor"
 msgstr "Kuparilattialuukku"
@@ -88,6 +109,9 @@ msgstr "Haalistunut kaiverrettu kupari on lähinnä koristekuutio."
 msgid "Exposed Copper"
 msgstr "Haalistunut kupari"
 
+msgid "Exposed Copper Bars"
+msgstr ""
+
 msgid "Exposed Copper Bulb"
 msgstr "Haalistunut kuparilamppu"
 
@@ -103,6 +127,12 @@ msgstr "Aktivoitu päällä oleva haalistunut kuparilamppu"
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "Haalistunut kuparilamppu on lähinnä koristekuutio."
 
+msgid "Exposed Copper Chain"
+msgstr ""
+
+msgid "Exposed Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Exposed Copper Door"
 msgstr "Haalistunut kupariovi"
 
@@ -111,6 +141,12 @@ msgstr "Haalistunut kuparisäleikkö"
 
 msgid "Exposed Copper Grate is mostly a decorative block."
 msgstr "Haalistunut kuparisäleikkö on lähinnä koristekuutio."
+
+msgid "Exposed Copper Lantern"
+msgstr ""
+
+msgid "Exposed Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Exposed Copper Trapdoor"
 msgstr "Haalistunut kuparilattialuukku"
@@ -139,6 +175,9 @@ msgstr "Hapettunut kaiverrettu kupari on lähinnä koristekuutio."
 msgid "Oxidized Copper"
 msgstr "Hapettunut kupari"
 
+msgid "Oxidized Copper Bars"
+msgstr ""
+
 msgid "Oxidized Copper Bulb"
 msgstr "Hapettunut kuparilamppu"
 
@@ -154,6 +193,12 @@ msgstr "Aktivoitu päällä oleva hapettunut kuparilamppu"
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "Hapettunut kuparilamppu on lähinnä koristekuutio."
 
+msgid "Oxidized Copper Chain"
+msgstr ""
+
+msgid "Oxidized Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Oxidized Copper Door"
 msgstr "Hapettunut kupariovi"
 
@@ -162,6 +207,12 @@ msgstr "Hapettunut kuparisäleikkö"
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
 msgstr "Hapettunut kuparisäleikkö on lähinnä koristekuutio."
+
+msgid "Oxidized Copper Lantern"
+msgstr ""
+
+msgid "Oxidized Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Oxidized Copper Trapdoor"
 msgstr "Hapettunut kuparilattialuukku"
@@ -187,6 +238,9 @@ msgstr "Vahattu kuparikuutio"
 msgid "Waxed Chiseled Copper"
 msgstr "Vahattu kaiverrettu kupari"
 
+msgid "Waxed Copper Bars"
+msgstr ""
+
 msgid "Waxed Copper Bulb"
 msgstr "Vahattu kuparilamppu"
 
@@ -199,8 +253,17 @@ msgstr "Aktivoitu sammuksissa oleva vahattu kuparilamppu"
 msgid "Waxed Copper Bulb Powered On"
 msgstr "Aktivoitu päällä oleva vahattu kuparilamppu"
 
+msgid "Waxed Copper Chain"
+msgstr ""
+
+msgid "Waxed Copper Door"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "Vahattu kuparisäleikkö"
+
+msgid "Waxed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Copper Trapdoor"
 msgstr "Vahattu kuparilattialuukku"
@@ -223,6 +286,9 @@ msgstr "Vahattu haalistunut kaiverrettu kupari"
 msgid "Waxed Exposed Copper"
 msgstr "Vahattu haalistunut kupari"
 
+msgid "Waxed Exposed Copper Bars"
+msgstr ""
+
 msgid "Waxed Exposed Copper Bulb"
 msgstr "Vahattu haalistunut kuparilamppu"
 
@@ -235,8 +301,17 @@ msgstr "Aktivoitu sammuksissa oleva vahattu haalistunut kuparilamppu"
 msgid "Waxed Exposed Copper Bulb Powered On"
 msgstr "Aktivoitu päällä oleva vahattu haalistunut kuparilamppu"
 
+msgid "Waxed Exposed Copper Chain"
+msgstr ""
+
+msgid "Waxed Exposed Copper Door"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "Vahattu haalistunut kuparisäleikkö"
+
+msgid "Waxed Exposed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Exposed Copper Trapdoor"
 msgstr "Vahattu haalistunut kuparilattialuukku"
@@ -256,6 +331,9 @@ msgstr "Vahattu hapettunut kaiverrettu kupari"
 msgid "Waxed Oxidized Copper"
 msgstr "Vahattu hapettunut kupari"
 
+msgid "Waxed Oxidized Copper Bars"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Bulb"
 msgstr "Vahattu hapettunut kuparilamppu"
 
@@ -268,8 +346,17 @@ msgstr "Aktivoitu sammuksissa oleva vahattu hapettunut kuparilamppu"
 msgid "Waxed Oxidized Copper Bulb Powered On"
 msgstr "Aktivoitu päällä oleva vahattu hapettunut kuparilamppu"
 
+msgid "Waxed Oxidized Copper Chain"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Door"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Grate"
 msgstr "Vahattu hapettunut kuparisäleikkö"
+
+msgid "Waxed Oxidized Copper Lantern"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Trapdoor"
 msgstr "Vahattu hapettunut kuparilattialuukku"
@@ -292,6 +379,9 @@ msgstr "Vahattu tummunut kaiverrettu kupari"
 msgid "Waxed Weathered Copper"
 msgstr "Vahattu tummunut kupari"
 
+msgid "Waxed Weathered Copper Bars"
+msgstr ""
+
 msgid "Waxed Weathered Copper Bulb"
 msgstr "Vahattu tummunut kuparilamppu"
 
@@ -304,8 +394,17 @@ msgstr "Aktivoitu sammuksissa oleva vahattu tummunut kuparilamppu"
 msgid "Waxed Weathered Copper Bulb Powered On"
 msgstr "Aktivoitu päällä oleva vahattu tummunut kuparilamppu"
 
+msgid "Waxed Weathered Copper Chain"
+msgstr ""
+
+msgid "Waxed Weathered Copper Door"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "Vahattu tummunut kuparisäleikkö"
+
+msgid "Waxed Weathered Copper Lantern"
+msgstr ""
 
 msgid "Waxed Weathered Copper Trapdoor"
 msgstr "Vahattu tummunut kuparilattialuukku"
@@ -328,6 +427,9 @@ msgstr "Tummunut kaiverrettu kupari on lähinnä koristekuutio."
 msgid "Weathered Copper"
 msgstr "Tummunut kupari"
 
+msgid "Weathered Copper Bars"
+msgstr ""
+
 msgid "Weathered Copper Bulb"
 msgstr "Tummunut kuparilamppu"
 
@@ -343,6 +445,12 @@ msgstr "Aktivoitu päällä oleva tummunut kuparilamppu"
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "Tummunut kuparilamppu on lähinnä koristekuutio."
 
+msgid "Weathered Copper Chain"
+msgstr ""
+
+msgid "Weathered Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Weathered Copper Door"
 msgstr "Tummunut kupariovi"
 
@@ -351,6 +459,12 @@ msgstr "Tummunut kuparisäleikkö"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
 msgstr "Tummunut kuparisäleikkö on lähinnä koristekuutio."
+
+msgid "Weathered Copper Lantern"
+msgstr ""
+
+msgid "Weathered Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Weathered Copper Trapdoor"
 msgstr "Tummunut kuparilattialuukku"
@@ -381,4 +495,10 @@ msgstr "Raakakuparikuutio"
 
 msgid "A block used for compact raw copper storage."
 msgstr "Kuutio, joka toimii tiiviinä raakakuparivarastona."
+
+msgid "Copper Torch"
+msgstr ""
+
+msgid "Copper Torches are light sources which can be placed at the side or on the top of most blocks."
+msgstr ""
 

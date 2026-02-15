@@ -106,6 +106,9 @@ msgstr "Ligna Sarkilo"
 msgid "Stone Hoe"
 msgstr "Ŝtona Sarkilo"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "Fera Sarkilo"
 

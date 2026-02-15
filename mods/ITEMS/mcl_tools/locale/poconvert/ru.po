@@ -76,6 +76,18 @@ msgstr "Каменный меч"
 msgid "Stone Axe"
 msgstr "Каменный топор"
 
+msgid "Copper Pickaxe"
+msgstr ""
+
+msgid "Copper Shovel"
+msgstr ""
+
+msgid "Copper Sword"
+msgstr ""
+
+msgid "Copper Axe"
+msgstr ""
+
 msgid "Iron Pickaxe"
 msgstr "Железная кирка"
 

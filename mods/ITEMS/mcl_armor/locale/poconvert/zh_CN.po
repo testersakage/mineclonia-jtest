@@ -118,6 +118,18 @@ msgstr "锁链护腿"
 msgid "Chainmail Boots"
 msgstr "锁链靴子"
 
+msgid "Copper Helmet"
+msgstr ""
+
+msgid "Copper Chestplate"
+msgstr ""
+
+msgid "Copper Leggings"
+msgstr ""
+
+msgid "Copper Boots"
+msgstr ""
+
 msgid "Iron Helmet"
 msgstr "铁头盔"
 

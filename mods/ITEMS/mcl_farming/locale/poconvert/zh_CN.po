@@ -106,6 +106,9 @@ msgstr "木锄"
 msgid "Stone Hoe"
 msgstr "石锄"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "铁锄"
 

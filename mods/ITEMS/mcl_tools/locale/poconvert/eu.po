@@ -76,6 +76,18 @@ msgstr "Harrizko Ezpata"
 msgid "Stone Axe"
 msgstr "Harrizko Aizkora"
 
+msgid "Copper Pickaxe"
+msgstr ""
+
+msgid "Copper Shovel"
+msgstr ""
+
+msgid "Copper Sword"
+msgstr ""
+
+msgid "Copper Axe"
+msgstr ""
+
 msgid "Iron Pickaxe"
 msgstr "Burdinazko Pikotxa"
 

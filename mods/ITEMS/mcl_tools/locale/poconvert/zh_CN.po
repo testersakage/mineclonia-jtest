@@ -76,6 +76,18 @@ msgstr "石剑"
 msgid "Stone Axe"
 msgstr "石斧"
 
+msgid "Copper Pickaxe"
+msgstr ""
+
+msgid "Copper Shovel"
+msgstr ""
+
+msgid "Copper Sword"
+msgstr ""
+
+msgid "Copper Axe"
+msgstr ""
+
 msgid "Iron Pickaxe"
 msgstr "铁镐"
 

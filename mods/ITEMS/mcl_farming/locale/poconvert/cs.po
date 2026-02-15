@@ -106,6 +106,9 @@ msgstr ""
 msgid "Stone Hoe"
 msgstr ""
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr ""
 

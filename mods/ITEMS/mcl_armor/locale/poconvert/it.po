@@ -118,6 +118,18 @@ msgstr "Brache di maglia"
 msgid "Chainmail Boots"
 msgstr "Scarpe di maglia"
 
+msgid "Copper Helmet"
+msgstr ""
+
+msgid "Copper Chestplate"
+msgstr ""
+
+msgid "Copper Leggings"
+msgstr ""
+
+msgid "Copper Boots"
+msgstr ""
+
 msgid "Iron Helmet"
 msgstr "Elmo di ferro"
 

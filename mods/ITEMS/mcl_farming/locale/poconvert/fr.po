@@ -106,6 +106,9 @@ msgstr "Houe en bois"
 msgid "Stone Hoe"
 msgstr "Houe en pierre"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "Houe en fer"
 

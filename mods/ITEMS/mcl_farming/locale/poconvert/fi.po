@@ -106,6 +106,9 @@ msgstr "Puukuokka"
 msgid "Stone Hoe"
 msgstr "Kivikuokka"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "Rautakuokka"
 

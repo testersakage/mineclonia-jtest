@@ -13,12 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Chain"
-msgstr "Katea"
-
-msgid "Chains are metallic decoration blocks."
-msgstr "Kateak burdinazko bloke apaingarriak dira."
-
 msgid "Lantern"
 msgstr "Farola"
 
@@ -27,4 +21,10 @@ msgstr "Farolak bloke gehienen goiko edo beheko aldean jar daitezkeen argi-iturr
 
 msgid "Soul Lantern"
 msgstr "Arimen farola"
+
+msgid "Chain"
+msgstr "Katea"
+
+msgid "Chains are metallic decoration blocks."
+msgstr "Kateak burdinazko bloke apaingarriak dira."
 

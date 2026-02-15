@@ -118,6 +118,18 @@ msgstr "Sodronynadrág"
 msgid "Chainmail Boots"
 msgstr "Sodronycsizma"
 
+msgid "Copper Helmet"
+msgstr ""
+
+msgid "Copper Chestplate"
+msgstr ""
+
+msgid "Copper Leggings"
+msgstr ""
+
+msgid "Copper Boots"
+msgstr ""
+
 msgid "Iron Helmet"
 msgstr "Vassisak"
 

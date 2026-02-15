@@ -16,10 +16,16 @@ msgstr ""
 msgid "Copper Ingot"
 msgstr "銅錠"
 
-msgid "Molten Raw Copper. It is used to craft blocks."
-msgstr "熔化的銅原礦。它用於製作方塊。"
+msgid "Molten Copper. It is used to craft armor, tools, and blocks."
+msgstr ""
 
 msgid "Copper Material"
+msgstr ""
+
+msgid "Copper Nugget"
+msgstr ""
+
+msgid "Copper nuggets are very small pieces of molten copper; the main purpose is to create copper ingots."
 msgstr ""
 
 msgid "Raw Copper"
@@ -40,6 +46,9 @@ msgstr "浮雕銅方塊"
 msgid "Chiseled Copper is mostly a decorative block."
 msgstr "浮雕銅方塊大致上是一種裝飾性方塊。"
 
+msgid "Copper Bars"
+msgstr ""
+
 msgid "Copper Bulb"
 msgstr "銅燈"
 
@@ -55,6 +64,12 @@ msgstr ""
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "銅燈大致上是一種裝飾性方塊。"
 
+msgid "Copper Chain"
+msgstr ""
+
+msgid "Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Copper Door"
 msgstr "銅門"
 
@@ -63,6 +78,12 @@ msgstr "銅柵欄門"
 
 msgid "Copper Grate is mostly a decorative block."
 msgstr "銅柵欄門大致上是一種裝飾性方塊。"
+
+msgid "Copper Lantern"
+msgstr ""
+
+msgid "Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Copper Trapdoor"
 msgstr "銅活板門"
@@ -88,6 +109,9 @@ msgstr "浮雕斑駁銅方塊主要是裝飾用的方塊。"
 msgid "Exposed Copper"
 msgstr "斑駁銅方塊"
 
+msgid "Exposed Copper Bars"
+msgstr ""
+
 msgid "Exposed Copper Bulb"
 msgstr "斑駁銅燈"
 
@@ -103,6 +127,12 @@ msgstr ""
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "斑駁銅燈大致上是一種裝飾性方塊。"
 
+msgid "Exposed Copper Chain"
+msgstr ""
+
+msgid "Exposed Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Exposed Copper Door"
 msgstr "斑駁銅門"
 
@@ -111,6 +141,12 @@ msgstr "斑駁銅柵欄門"
 
 msgid "Exposed Copper Grate is mostly a decorative block."
 msgstr "斑駁銅柵欄門大致上是一種裝飾性方塊。"
+
+msgid "Exposed Copper Lantern"
+msgstr ""
+
+msgid "Exposed Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Exposed Copper Trapdoor"
 msgstr "斑駁銅活板門"
@@ -139,6 +175,9 @@ msgstr "浮雕氧化銅方塊大致上是一種裝飾性方塊。"
 msgid "Oxidized Copper"
 msgstr "氧化銅方塊"
 
+msgid "Oxidized Copper Bars"
+msgstr ""
+
 msgid "Oxidized Copper Bulb"
 msgstr "氧化銅燈"
 
@@ -154,6 +193,12 @@ msgstr ""
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "氧化銅燈大致上是一種裝飾性方塊。"
 
+msgid "Oxidized Copper Chain"
+msgstr ""
+
+msgid "Oxidized Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Oxidized Copper Door"
 msgstr "氧化銅門"
 
@@ -162,6 +207,12 @@ msgstr "氧化銅柵欄門"
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
 msgstr "氧化銅柵欄門大致上是一種裝飾性方塊。"
+
+msgid "Oxidized Copper Lantern"
+msgstr ""
+
+msgid "Oxidized Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Oxidized Copper Trapdoor"
 msgstr "氧化銅活板門"
@@ -187,6 +238,9 @@ msgstr "上蠟銅方塊"
 msgid "Waxed Chiseled Copper"
 msgstr "浮雕上蠟銅方塊"
 
+msgid "Waxed Copper Bars"
+msgstr ""
+
 msgid "Waxed Copper Bulb"
 msgstr "上蠟銅燈"
 
@@ -199,8 +253,17 @@ msgstr ""
 msgid "Waxed Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Copper Chain"
+msgstr ""
+
+msgid "Waxed Copper Door"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "上蠟銅柵欄門"
+
+msgid "Waxed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Copper Trapdoor"
 msgstr "上蠟銅活板門"
@@ -223,6 +286,9 @@ msgstr "上蠟浮雕銅方塊"
 msgid "Waxed Exposed Copper"
 msgstr "上蠟斑駁銅方塊"
 
+msgid "Waxed Exposed Copper Bars"
+msgstr ""
+
 msgid "Waxed Exposed Copper Bulb"
 msgstr "上蠟斑駁銅燈"
 
@@ -235,8 +301,17 @@ msgstr ""
 msgid "Waxed Exposed Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Exposed Copper Chain"
+msgstr ""
+
+msgid "Waxed Exposed Copper Door"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "上蠟斑駁銅柵欄門"
+
+msgid "Waxed Exposed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Exposed Copper Trapdoor"
 msgstr "上蠟斑駁銅活板門"
@@ -256,6 +331,9 @@ msgstr "上蠟浮雕氧化銅方塊"
 msgid "Waxed Oxidized Copper"
 msgstr "上蠟氧化銅方塊"
 
+msgid "Waxed Oxidized Copper Bars"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Bulb"
 msgstr "上蠟氧化銅燈"
 
@@ -268,8 +346,17 @@ msgstr ""
 msgid "Waxed Oxidized Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Oxidized Copper Chain"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Door"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Grate"
 msgstr "上蠟氧化銅柵欄門"
+
+msgid "Waxed Oxidized Copper Lantern"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Trapdoor"
 msgstr "上蠟氧化銅活板門"
@@ -292,6 +379,9 @@ msgstr "上蠟浮雕風化銅方塊"
 msgid "Waxed Weathered Copper"
 msgstr "上蠟風化銅方塊"
 
+msgid "Waxed Weathered Copper Bars"
+msgstr ""
+
 msgid "Waxed Weathered Copper Bulb"
 msgstr "上蠟風化銅燈"
 
@@ -304,8 +394,17 @@ msgstr ""
 msgid "Waxed Weathered Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Weathered Copper Chain"
+msgstr ""
+
+msgid "Waxed Weathered Copper Door"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "上蠟風化銅柵欄門"
+
+msgid "Waxed Weathered Copper Lantern"
+msgstr ""
 
 msgid "Waxed Weathered Copper Trapdoor"
 msgstr "上蠟風化銅活板門"
@@ -328,6 +427,9 @@ msgstr "風化浮雕銅方塊大致上是一種裝飾性方塊。"
 msgid "Weathered Copper"
 msgstr "風化銅方塊"
 
+msgid "Weathered Copper Bars"
+msgstr ""
+
 msgid "Weathered Copper Bulb"
 msgstr "風化銅燈"
 
@@ -343,6 +445,12 @@ msgstr ""
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "風化銅燈大致上是一種裝飾性方塊。"
 
+msgid "Weathered Copper Chain"
+msgstr ""
+
+msgid "Weathered Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Weathered Copper Door"
 msgstr "風化銅門"
 
@@ -351,6 +459,12 @@ msgstr "風化銅柵欄門"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
 msgstr "風化銅柵欄門大致上是一種裝飾性方塊。"
+
+msgid "Weathered Copper Lantern"
+msgstr ""
+
+msgid "Weathered Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Weathered Copper Trapdoor"
 msgstr "風化銅活板門"
@@ -381,4 +495,10 @@ msgstr "銅原礦方塊"
 
 msgid "A block used for compact raw copper storage."
 msgstr "銅原礦方塊是壓縮的銅。"
+
+msgid "Copper Torch"
+msgstr ""
+
+msgid "Copper Torches are light sources which can be placed at the side or on the top of most blocks."
+msgstr ""
 

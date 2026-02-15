@@ -3,16 +3,15 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_doc_basics x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2026-02-07 14:15+0000\n"
-"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
-"Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
-"mcl_doc_basics/fi/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Advanced usage"
 msgstr "Edistyneet toiminnot"
@@ -762,18 +761,13 @@ msgid "Mining"
 msgstr "Kaivaminen"
 
 msgid "Mining (or digging) is the process of breaking blocks to remove them. To mine a block, point it and hold down the left mouse button until it breaks."
-msgstr ""
-"Kaivaminen tarkoittaa kuutioiden rikkomista. Kaivaaksesi kuution osoita sitä "
-"ja paina vasenta hiirennäppäintä pohjassa, kunnes se rikkoutuu."
+msgstr "Kaivaminen tarkoittaa kuutioiden rikkomista. Kaivaaksesi kuution osoita sitä ja paina vasenta hiirennäppäintä pohjassa, kunnes se rikkoutuu."
 
 msgid "Blocks require a mining tool to be mined. Different blocks are mined by different mining tools, and some blocks can not be mined by any tool. Blocks vary in hardness and tools vary in strength. Mining tools will wear off over time. The mining time and the tool wear depend on the block and the mining tool. The fastest way to find out how efficient your mining tools are is by just trying them out on various blocks. Any items you gather by mining will drop on the ground, ready to be collected."
 msgstr "Kuutioiden kaivaminen vaatii kaivuutyökalun. Eri kuutioiden kaivaminen vaatii erilaisen kaivuutyökalun, ja joitakin kuutioita ei voi kaivaa millään työkalulla. Kuutioilla on eri kovuus, ja työkaluilla on eri vahvuus. Työkalut kuluvat hiljalleen. Kaivuun kesto ja työkalun kuluma riippuvat kuutiosta ja kaivuutyökalusta. Kaivuutyökalujen tehokkuuden saa nopeiten selville kokeilemalla niitä eri kuutioihin. Kaivamalla hankittu esine putoaa maahan, josta sen voi noukkia."
 
 msgid "After mining, a block may leave a “drop” behind. This is a number of items you get after mining. Most commonly, you will get the block itself. There are other possibilities for a drop which depends on the block type. The following drops are possible:"
-msgstr ""
-"Kaivettu kuutio saattaa pudottaa yhden tai useamman esineen. Useimmiten se "
-"on kuutio itse, mutta se saattaa olla myös jokin muu esine riippuen siitä, "
-"mikä kuutio on kyseessä. Seuraavat tapaukset ovat mahdollisia:"
+msgstr "Kaivettu kuutio saattaa pudottaa yhden tai useamman esineen. Useimmiten se on kuutio itse, mutta se saattaa olla myös jokin muu esine riippuen siitä, mikä kuutio on kyseessä. Seuraavat tapaukset ovat mahdollisia:"
 
 msgid "• Always drops itself (the usual case)"
 msgstr "• Kuutio pudottaa aina itsensä (yleisin tapaus)"
@@ -800,9 +794,7 @@ msgid "Blocks can almost always be built at pointable blocks. One exception are 
 msgstr "Kuution voi lähes aina sijoittaa osoitettavalle kuutiolle. Yksi poikkeus on kuutiot, jotka pitää kiinnittää lattiaan; ne voi sijoittaa ainoastaan lattialle."
 
 msgid "Normally, blocks are built in front of the pointed side of the pointed block. A few blocks are different: When you try to build at them, they are replaced."
-msgstr ""
-"Tavallisesti kuutiot sijoitetaan osoitetun kuution osoitetun sivun eteen. "
-"Jotkut kuutiot poikkeavat tästä: Kun rakennat niille, ne korvautuvat."
+msgstr "Tavallisesti kuutiot sijoitetaan osoitetun kuution osoitetun sivun eteen. Jotkut kuutiot poikkeavat tästä: Kun rakennat niille, ne korvautuvat."
 
 msgid "Crafting"
 msgstr "Valmistus"
@@ -1413,3 +1405,4 @@ msgstr "Luantia voi pelata yksin tai verkon kautta useiden pelaajien kanssa. Ver
 
 msgid "MineClonia is a game that is built on top of the Luanti engine that intends to create a game that is as close to Minecraft as possible. There are many other games for Luanti however, that can be installed from the main menu content browser."
 msgstr "MineClonia on peli, joka on rakennettu Luanti-pelimoottorin päälle ja jonka tavoite on muistuttaa Minecraftia niin läheisesti kuin mahdollista. Luantia käyttävät myös monet muut pelit, joita voi asentaa päävalikon sisältöselaimesta."
+

@@ -419,6 +419,12 @@ msgstr ""
 msgid "Enter a Bastion Remnant"
 msgstr ""
 
+msgid "Mineclonia: Trial(s) edition"
+msgstr ""
+
+msgid "Step foot in a Trial Chamber"
+msgstr ""
+
 msgid "A Throwaway Joke"
 msgstr ""
 

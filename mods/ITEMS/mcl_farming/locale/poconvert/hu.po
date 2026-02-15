@@ -106,6 +106,9 @@ msgstr "Fa Kapa"
 msgid "Stone Hoe"
 msgstr "Kőkapa"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "Vaskapa"
 

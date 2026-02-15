@@ -76,6 +76,18 @@ msgstr "Kőkard"
 msgid "Stone Axe"
 msgstr "Kőfejsze"
 
+msgid "Copper Pickaxe"
+msgstr ""
+
+msgid "Copper Shovel"
+msgstr ""
+
+msgid "Copper Sword"
+msgstr ""
+
+msgid "Copper Axe"
+msgstr ""
+
 msgid "Iron Pickaxe"
 msgstr "Vascsákány"
 

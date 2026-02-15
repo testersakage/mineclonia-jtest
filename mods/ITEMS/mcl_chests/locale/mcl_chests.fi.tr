@@ -7,7 +7,7 @@ Chests are containers which provide 27 inventory slots. Chests can be turned int
 27 inventory slots=27 esineruutua
 Can be combined to a large chest=Voidaan yhdistää suureksi arkuksi
 Trapped Chest=Ansoitettu arkku
-A trapped chest is a container which provides 27 inventory slots. When it is opened, it sends a redstone signal to its adjacent blocks as long it stays open. Trapped chests can be turned into large trapped chests with double the capacity by placing two trapped chests next to each other.=Ansoitettu arkku on säiliö, jossa on 27 esineruutua. Kun sen avaa, se antaa punakivivirtaa viereisiin kuutioihin niin kauan, kun se on auki. Sijoittamalla kaksi ansoitettua arkkua vierekkäin voi luoda suuren ansoitetun arkun, jossa on kaksinkertaisesti tilaa.
+A trapped chest is a container which provides 27 inventory slots. When it is opened, it sends a redstone signal to its adjacent blocks as long it stays open. Trapped chests can be turned into large trapped chests with double the capacity by placing two trapped chests next to each other.=Ansoitettu arkku on säiliö, jossa on 27 esineruutua. Kun sen avaa, se syöttää punakivivirtaa viereisiin kuutioihin niin kauan, kun se on auki. Sijoittamalla kaksi ansoitettua arkkua vierekkäin voi luoda suuren ansoitetun arkun, jossa on kaksinkertaisesti tilaa.
 Emits a redstone signal when opened=Lähettää punakivivirtaa avattaessa
 Ender Chest=Ääriarkku
 27 interdimensional inventory slots=27 ulottuvuuksien jakamaa esineruutua

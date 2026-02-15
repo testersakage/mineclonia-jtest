@@ -76,6 +76,18 @@ msgstr "Épée en pierre"
 msgid "Stone Axe"
 msgstr "Hache en pierre"
 
+msgid "Copper Pickaxe"
+msgstr ""
+
+msgid "Copper Shovel"
+msgstr ""
+
+msgid "Copper Sword"
+msgstr ""
+
+msgid "Copper Axe"
+msgstr ""
+
 msgid "Iron Pickaxe"
 msgstr "Pioche en fer"
 

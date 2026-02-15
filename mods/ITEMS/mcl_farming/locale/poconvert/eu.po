@@ -106,6 +106,9 @@ msgstr "Zurezko aitzurra"
 msgid "Stone Hoe"
 msgstr "Harrizko aitzurra"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "Burdinazko aitzurra"
 

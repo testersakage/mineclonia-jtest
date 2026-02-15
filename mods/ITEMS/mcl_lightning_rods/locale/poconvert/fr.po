@@ -19,3 +19,24 @@ msgstr "Paratonnerre"
 msgid "A block that attracts lightning"
 msgstr "Un bloc qui attire la foudre"
 
+msgid "Exposed Lightning Rod"
+msgstr ""
+
+msgid "Oxidized Lightning Rod"
+msgstr ""
+
+msgid "Waxed Exposed Lightning Rod"
+msgstr ""
+
+msgid "Waxed Lightning Rod"
+msgstr ""
+
+msgid "Waxed Oxidized Lightning Rod"
+msgstr ""
+
+msgid "Waxed Weathered Lightning Rod"
+msgstr ""
+
+msgid "Weathered Lightning Rod"
+msgstr ""
+

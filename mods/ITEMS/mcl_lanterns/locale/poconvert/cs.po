@@ -13,12 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Chain"
-msgstr "Řetěz"
-
-msgid "Chains are metallic decoration blocks."
-msgstr "Řetězy jsou železné dekorativní bloky."
-
 msgid "Lantern"
 msgstr "Lucerna"
 
@@ -27,4 +21,10 @@ msgstr "Lucerny jsou zdroje světla, které lze umístit na horní nebo spodní 
 
 msgid "Soul Lantern"
 msgstr "Lucerna duší"
+
+msgid "Chain"
+msgstr "Řetěz"
+
+msgid "Chains are metallic decoration blocks."
+msgstr "Řetězy jsou železné dekorativní bloky."
 

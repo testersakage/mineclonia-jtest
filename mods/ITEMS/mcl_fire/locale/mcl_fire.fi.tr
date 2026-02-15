@@ -2,7 +2,7 @@
 Fire Charge=Tulipallo
 Dispenser projectile=Jakelulaitteen ammus
 Fire charges are primarily projectiles which can be launched from dispensers, they will fly in a straight line and burst into a fire on impact. Alternatively, they can be used to ignite fires directly.=Tulipallo on ensisijaisesti ammus, jonka voi laukaista jakelulaitteella. Se lentää suorassa linjassa ja sytyttää tulen osumaansa kohteeseen. Vaihtoehtoisesti sillä voi suoraan sytyttää tulen.
-Put the fire charge into a dispenser and supply it with redstone power to launch it. To ignite a fire directly, simply place the fire charge on the ground, which uses it up.=Aseta tulipallo jakelulaitteeseen, ja anna sille punakivivirtaa ampuaksesi sen. Sytyttääksesi tulen suoraan sijoita tulipallo maahan, jolloin se poistuu tavaraluettelosta.
+Put the fire charge into a dispenser and supply it with redstone power to launch it. To ignite a fire directly, simply place the fire charge on the ground, which uses it up.=Aseta tulipallo jakelulaitteeseen, ja syötä siihen punakivivirtaa ampuaksesi sen. Sytyttääksesi tulen suoraan sijoita tulipallo maahan, jolloin se poistuu tavaraluettelosta.
 Starts fires and ignites blocks=Sytyttää kuutioita
 Flint and Steel=Tulukset
 Flint and steel is a tool to start fires and ignite blocks.=Tulukset on työkalu, jolla voi sytyttää tulen.

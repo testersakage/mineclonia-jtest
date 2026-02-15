@@ -427,6 +427,12 @@ msgstr "Aqueles Foram Os Dias"
 msgid "Enter a Bastion Remnant"
 msgstr "Entre em um Bastião Remanescente"
 
+msgid "Mineclonia: Trial(s) edition"
+msgstr ""
+
+msgid "Step foot in a Trial Chamber"
+msgstr ""
+
 msgid "A Throwaway Joke"
 msgstr "Uma Piada Descartável"
 

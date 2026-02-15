@@ -76,6 +76,18 @@ msgstr "Ŝtona Glavo"
 msgid "Stone Axe"
 msgstr "Ŝtona Hakilo"
 
+msgid "Copper Pickaxe"
+msgstr ""
+
+msgid "Copper Shovel"
+msgstr ""
+
+msgid "Copper Sword"
+msgstr ""
+
+msgid "Copper Axe"
+msgstr ""
+
 msgid "Iron Pickaxe"
 msgstr "Fera Hakfosilo"
 

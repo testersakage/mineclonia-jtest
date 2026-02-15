@@ -106,6 +106,9 @@ msgstr "Деревянная мотыга"
 msgid "Stone Hoe"
 msgstr "Каменная мотыга"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "Железная мотыга"
 

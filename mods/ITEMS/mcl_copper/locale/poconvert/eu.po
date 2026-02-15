@@ -16,11 +16,17 @@ msgstr ""
 msgid "Copper Ingot"
 msgstr "Kobrezko lingotea"
 
-msgid "Molten Raw Copper. It is used to craft blocks."
-msgstr "Landu gabeko Kobre urtua. Blokeak fabrikatzeko erabiltzen da."
+msgid "Molten Copper. It is used to craft armor, tools, and blocks."
+msgstr ""
 
 msgid "Copper Material"
 msgstr "Kobre Materiala"
+
+msgid "Copper Nugget"
+msgstr ""
+
+msgid "Copper nuggets are very small pieces of molten copper; the main purpose is to create copper ingots."
+msgstr ""
 
 msgid "Raw Copper"
 msgstr "Landu gabeko Kobre"
@@ -40,6 +46,9 @@ msgstr "Kobre zizelatua"
 msgid "Chiseled Copper is mostly a decorative block."
 msgstr "Kobre zizelatua dekorazio-bloke bat da nagusiki."
 
+msgid "Copper Bars"
+msgstr ""
+
 msgid "Copper Bulb"
 msgstr "Kobrezko lanpara"
 
@@ -55,6 +64,12 @@ msgstr ""
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "Kobrezko lanpara dekorazio-bloke bat da nagusiki."
 
+msgid "Copper Chain"
+msgstr ""
+
+msgid "Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Copper Door"
 msgstr "Kobrezko atea"
 
@@ -63,6 +78,12 @@ msgstr "Kobrezko sareta"
 
 msgid "Copper Grate is mostly a decorative block."
 msgstr "Kobrezko sareta dekorazio-bloke bat da nagusiki."
+
+msgid "Copper Lantern"
+msgstr ""
+
+msgid "Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Copper Trapdoor"
 msgstr "Kobrezko tranpola"
@@ -88,6 +109,9 @@ msgstr "Ikusgai dagoen kobre zizelkatua dekorazio-bloke bat da nagusiki."
 msgid "Exposed Copper"
 msgstr "Ikusgai dagoen kobrea"
 
+msgid "Exposed Copper Bars"
+msgstr ""
+
 msgid "Exposed Copper Bulb"
 msgstr "Esposizioan dagoen kobrezko lanpara"
 
@@ -103,6 +127,12 @@ msgstr ""
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "Ikusgai dagoen kobrezko lanpara dekorazio-bloke bat da nagusiki."
 
+msgid "Exposed Copper Chain"
+msgstr ""
+
+msgid "Exposed Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Exposed Copper Door"
 msgstr "Kobrezko atea ikusgai"
 
@@ -111,6 +141,12 @@ msgstr "Kobrezko sareta ikusgai"
 
 msgid "Exposed Copper Grate is mostly a decorative block."
 msgstr "Ikusgai dagoen kobrezko sareta dekorazio-bloke bat da nagusiki."
+
+msgid "Exposed Copper Lantern"
+msgstr ""
+
+msgid "Exposed Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Exposed Copper Trapdoor"
 msgstr "Ikusgai dagoen kobrezko tranpola"
@@ -139,6 +175,9 @@ msgstr "Kobre zizelkatu oxidatua dekorazio-bloke bat da nagusiki."
 msgid "Oxidized Copper"
 msgstr "Kobre oxidatua"
 
+msgid "Oxidized Copper Bars"
+msgstr ""
+
 msgid "Oxidized Copper Bulb"
 msgstr "Kobre oxidatuzko lanpara"
 
@@ -154,6 +193,12 @@ msgstr ""
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "Kobre oxidatuzko lanpara dekorazio-bloke bat da nagusiki."
 
+msgid "Oxidized Copper Chain"
+msgstr ""
+
+msgid "Oxidized Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Oxidized Copper Door"
 msgstr "Kobre oxidatuzko atea"
 
@@ -162,6 +207,12 @@ msgstr "Kobre herdoilduzko sareta"
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
 msgstr "Kobre herdoilduzko sareta dekorazio-bloke bat da nagusiki."
+
+msgid "Oxidized Copper Lantern"
+msgstr ""
+
+msgid "Oxidized Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Oxidized Copper Trapdoor"
 msgstr "Kobre oxidatuzko tranpola"
@@ -187,6 +238,9 @@ msgstr "Kobrezko bloke argizariduna"
 msgid "Waxed Chiseled Copper"
 msgstr "Kobre zizelatu argizariduna"
 
+msgid "Waxed Copper Bars"
+msgstr ""
+
 msgid "Waxed Copper Bulb"
 msgstr "Kobrezko lanpara argizariduna"
 
@@ -199,8 +253,17 @@ msgstr ""
 msgid "Waxed Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Copper Chain"
+msgstr ""
+
+msgid "Waxed Copper Door"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "Kobrezko ate argizariduna"
+
+msgid "Waxed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Copper Trapdoor"
 msgstr "Kobrezko tranpola argizariduna"
@@ -223,6 +286,9 @@ msgstr "Esposizioko kobre zizelatua, argizaritua"
 msgid "Waxed Exposed Copper"
 msgstr "Esposizioan dagoen kobrea, argizaria emanda"
 
+msgid "Waxed Exposed Copper Bars"
+msgstr ""
+
 msgid "Waxed Exposed Copper Bulb"
 msgstr "Esposizioko kobrezko lanpara argizaritua"
 
@@ -235,8 +301,17 @@ msgstr ""
 msgid "Waxed Exposed Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Exposed Copper Chain"
+msgstr ""
+
+msgid "Waxed Exposed Copper Door"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "Esposizioan dagoen kobrezko sareta argizaritua"
+
+msgid "Waxed Exposed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Exposed Copper Trapdoor"
 msgstr "Esposizioko kobrezko tranpola argizaritua"
@@ -256,6 +331,9 @@ msgstr "Kobre zizelatu oxidatu argizaritua"
 msgid "Waxed Oxidized Copper"
 msgstr "Kobre herdoildu argizaritua"
 
+msgid "Waxed Oxidized Copper Bars"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Bulb"
 msgstr "Kobre oxidatuko lanpara argizaritua"
 
@@ -268,8 +346,17 @@ msgstr ""
 msgid "Waxed Oxidized Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Oxidized Copper Chain"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Door"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Grate"
 msgstr "Kobre herdoildu argizarizko sareta"
+
+msgid "Waxed Oxidized Copper Lantern"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Trapdoor"
 msgstr "Kobre oxidatu argizariduneko tranpola"
@@ -292,6 +379,9 @@ msgstr "Kobre zizelatu degradatu argizaritua"
 msgid "Waxed Weathered Copper"
 msgstr "Kobre degradatu argizariduna"
 
+msgid "Waxed Weathered Copper Bars"
+msgstr ""
+
 msgid "Waxed Weathered Copper Bulb"
 msgstr "Kobre degradatuko lanpara argizaritua"
 
@@ -304,8 +394,17 @@ msgstr ""
 msgid "Waxed Weathered Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Weathered Copper Chain"
+msgstr ""
+
+msgid "Waxed Weathered Copper Door"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "Kobre degradatuzko sareta argizaritua"
+
+msgid "Waxed Weathered Copper Lantern"
+msgstr ""
 
 msgid "Waxed Weathered Copper Trapdoor"
 msgstr "Kobrezko tranpa degradatu argizariduna"
@@ -328,6 +427,9 @@ msgstr "Kobre zizelkatu degradatua dekorazio-bloke bat da nagusiki."
 msgid "Weathered Copper"
 msgstr "Kobre degradatua"
 
+msgid "Weathered Copper Bars"
+msgstr ""
+
 msgid "Weathered Copper Bulb"
 msgstr "Kobrezko lanpara degradatua"
 
@@ -343,6 +445,12 @@ msgstr ""
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "Kobre degradatuzko lanpara dekorazio-bloke bat da nagusiki."
 
+msgid "Weathered Copper Chain"
+msgstr ""
+
+msgid "Weathered Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Weathered Copper Door"
 msgstr "Kobre degradatuzko atea"
 
@@ -351,6 +459,12 @@ msgstr "Kobrezko sareta degradatua"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
 msgstr "Kobre degradatuzko sareta dekorazio-bloke bat da nagusiki."
+
+msgid "Weathered Copper Lantern"
+msgstr ""
+
+msgid "Weathered Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Weathered Copper Trapdoor"
 msgstr "Kobre degradatuzko tranpola"
@@ -381,4 +495,10 @@ msgstr "Landu gabeko Kobre Blokea"
 
 msgid "A block used for compact raw copper storage."
 msgstr "Landu gabeko Kobrea gordetzeko biltegi trinkoa da."
+
+msgid "Copper Torch"
+msgstr ""
+
+msgid "Copper Torches are light sources which can be placed at the side or on the top of most blocks."
+msgstr ""
 

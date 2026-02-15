@@ -118,6 +118,18 @@ msgstr "Кольчужные поножи"
 msgid "Chainmail Boots"
 msgstr "Кольчужные ботинки"
 
+msgid "Copper Helmet"
+msgstr ""
+
+msgid "Copper Chestplate"
+msgstr ""
+
+msgid "Copper Leggings"
+msgstr ""
+
+msgid "Copper Boots"
+msgstr ""
+
 msgid "Iron Helmet"
 msgstr "Железный шлем"
 

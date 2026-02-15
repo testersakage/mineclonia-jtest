@@ -106,6 +106,9 @@ msgstr "木製のクワ"
 msgid "Stone Hoe"
 msgstr "石のクワ"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "鉄のクワ"
 

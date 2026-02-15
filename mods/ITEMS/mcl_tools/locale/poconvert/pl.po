@@ -76,6 +76,18 @@ msgstr "Kamienny miecz"
 msgid "Stone Axe"
 msgstr "Kamienna siekiera"
 
+msgid "Copper Pickaxe"
+msgstr ""
+
+msgid "Copper Shovel"
+msgstr ""
+
+msgid "Copper Sword"
+msgstr ""
+
+msgid "Copper Axe"
+msgstr ""
+
 msgid "Iron Pickaxe"
 msgstr "Żelazny kilof"
 

@@ -1,6 +1,6 @@
 # textdomain: mcl_weather
 Enable dust particles in the nether=Ebligi polverajn partiklojn en la infero
-Gives ability to control weather=
+Gives ability to control weather=Ĝi kapabligas regi la veteron
 Changes the weather to the specified parameter.=
 Error: No weather specified.=
 Error: Invalid parameters.=

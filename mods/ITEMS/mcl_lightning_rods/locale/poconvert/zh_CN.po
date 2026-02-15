@@ -19,3 +19,24 @@ msgstr "避雷针"
 msgid "A block that attracts lightning"
 msgstr "一种能吸引闪电的方块"
 
+msgid "Exposed Lightning Rod"
+msgstr ""
+
+msgid "Oxidized Lightning Rod"
+msgstr ""
+
+msgid "Waxed Exposed Lightning Rod"
+msgstr ""
+
+msgid "Waxed Lightning Rod"
+msgstr ""
+
+msgid "Waxed Oxidized Lightning Rod"
+msgstr ""
+
+msgid "Waxed Weathered Lightning Rod"
+msgstr ""
+
+msgid "Weathered Lightning Rod"
+msgstr ""
+

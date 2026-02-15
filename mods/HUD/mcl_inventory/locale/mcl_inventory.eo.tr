@@ -1,16 +1,16 @@
 # textdomain: mcl_inventory
-Scrollbar=
+Scrollbar=Rulumskalo
 Pagination buttons=
 Creative inventory scrolling=
-Building Blocks=
-Decoration Blocks=
+Building Blocks=Konstruaj Blokoj
+Decoration Blocks=Ornamaj Blokoj
 Redstone=Ruĝŝtono
-Transportation=
-Miscellaneous=
-Search Items=
-Foodstuffs=
-Tools=
-Combat=
+Transportation=Transporto
+Miscellaneous=Ceteraĵoj
+Search Items=Serĉi Portaĵojn
+Foodstuffs=Manĝeblaĵoj
+Tools=Iloj
+Combat=Batalo
 Mobs=
 Brewing=
 Materials=

@@ -16,10 +16,16 @@ msgstr ""
 msgid "Copper Ingot"
 msgstr "Koppartacka"
 
-msgid "Molten Raw Copper. It is used to craft blocks."
+msgid "Molten Copper. It is used to craft armor, tools, and blocks."
 msgstr ""
 
 msgid "Copper Material"
+msgstr ""
+
+msgid "Copper Nugget"
+msgstr ""
+
+msgid "Copper nuggets are very small pieces of molten copper; the main purpose is to create copper ingots."
 msgstr ""
 
 msgid "Raw Copper"
@@ -40,6 +46,9 @@ msgstr ""
 msgid "Chiseled Copper is mostly a decorative block."
 msgstr ""
 
+msgid "Copper Bars"
+msgstr ""
+
 msgid "Copper Bulb"
 msgstr ""
 
@@ -55,6 +64,12 @@ msgstr ""
 msgid "Copper Bulb is mostly a decorative block."
 msgstr ""
 
+msgid "Copper Chain"
+msgstr ""
+
+msgid "Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Copper Door"
 msgstr ""
 
@@ -62,6 +77,12 @@ msgid "Copper Grate"
 msgstr ""
 
 msgid "Copper Grate is mostly a decorative block."
+msgstr ""
+
+msgid "Copper Lantern"
+msgstr ""
+
+msgid "Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
 msgstr ""
 
 msgid "Copper Trapdoor"
@@ -88,6 +109,9 @@ msgstr ""
 msgid "Exposed Copper"
 msgstr ""
 
+msgid "Exposed Copper Bars"
+msgstr ""
+
 msgid "Exposed Copper Bulb"
 msgstr ""
 
@@ -103,6 +127,12 @@ msgstr ""
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr ""
 
+msgid "Exposed Copper Chain"
+msgstr ""
+
+msgid "Exposed Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Exposed Copper Door"
 msgstr ""
 
@@ -110,6 +140,12 @@ msgid "Exposed Copper Grate"
 msgstr ""
 
 msgid "Exposed Copper Grate is mostly a decorative block."
+msgstr ""
+
+msgid "Exposed Copper Lantern"
+msgstr ""
+
+msgid "Exposed Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
 msgstr ""
 
 msgid "Exposed Copper Trapdoor"
@@ -139,6 +175,9 @@ msgstr ""
 msgid "Oxidized Copper"
 msgstr ""
 
+msgid "Oxidized Copper Bars"
+msgstr ""
+
 msgid "Oxidized Copper Bulb"
 msgstr ""
 
@@ -154,6 +193,12 @@ msgstr ""
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr ""
 
+msgid "Oxidized Copper Chain"
+msgstr ""
+
+msgid "Oxidized Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Oxidized Copper Door"
 msgstr ""
 
@@ -161,6 +206,12 @@ msgid "Oxidized Copper Grate"
 msgstr ""
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
+msgstr ""
+
+msgid "Oxidized Copper Lantern"
+msgstr ""
+
+msgid "Oxidized Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
 msgstr ""
 
 msgid "Oxidized Copper Trapdoor"
@@ -187,6 +238,9 @@ msgstr ""
 msgid "Waxed Chiseled Copper"
 msgstr ""
 
+msgid "Waxed Copper Bars"
+msgstr ""
+
 msgid "Waxed Copper Bulb"
 msgstr ""
 
@@ -199,7 +253,16 @@ msgstr ""
 msgid "Waxed Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Copper Chain"
+msgstr ""
+
+msgid "Waxed Copper Door"
+msgstr ""
+
 msgid "Waxed Copper Grate"
+msgstr ""
+
+msgid "Waxed Copper Lantern"
 msgstr ""
 
 msgid "Waxed Copper Trapdoor"
@@ -223,6 +286,9 @@ msgstr ""
 msgid "Waxed Exposed Copper"
 msgstr ""
 
+msgid "Waxed Exposed Copper Bars"
+msgstr ""
+
 msgid "Waxed Exposed Copper Bulb"
 msgstr ""
 
@@ -235,7 +301,16 @@ msgstr ""
 msgid "Waxed Exposed Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Exposed Copper Chain"
+msgstr ""
+
+msgid "Waxed Exposed Copper Door"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
+msgstr ""
+
+msgid "Waxed Exposed Copper Lantern"
 msgstr ""
 
 msgid "Waxed Exposed Copper Trapdoor"
@@ -256,6 +331,9 @@ msgstr ""
 msgid "Waxed Oxidized Copper"
 msgstr ""
 
+msgid "Waxed Oxidized Copper Bars"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Bulb"
 msgstr ""
 
@@ -268,7 +346,16 @@ msgstr ""
 msgid "Waxed Oxidized Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Oxidized Copper Chain"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Door"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Grate"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Lantern"
 msgstr ""
 
 msgid "Waxed Oxidized Copper Trapdoor"
@@ -292,6 +379,9 @@ msgstr ""
 msgid "Waxed Weathered Copper"
 msgstr ""
 
+msgid "Waxed Weathered Copper Bars"
+msgstr ""
+
 msgid "Waxed Weathered Copper Bulb"
 msgstr ""
 
@@ -304,7 +394,16 @@ msgstr ""
 msgid "Waxed Weathered Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Weathered Copper Chain"
+msgstr ""
+
+msgid "Waxed Weathered Copper Door"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
+msgstr ""
+
+msgid "Waxed Weathered Copper Lantern"
 msgstr ""
 
 msgid "Waxed Weathered Copper Trapdoor"
@@ -328,6 +427,9 @@ msgstr ""
 msgid "Weathered Copper"
 msgstr ""
 
+msgid "Weathered Copper Bars"
+msgstr ""
+
 msgid "Weathered Copper Bulb"
 msgstr ""
 
@@ -343,6 +445,12 @@ msgstr ""
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr ""
 
+msgid "Weathered Copper Chain"
+msgstr ""
+
+msgid "Weathered Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Weathered Copper Door"
 msgstr ""
 
@@ -350,6 +458,12 @@ msgid "Weathered Copper Grate"
 msgstr ""
 
 msgid "Weathered Copper Grate is mostly a decorative block."
+msgstr ""
+
+msgid "Weathered Copper Lantern"
+msgstr ""
+
+msgid "Weathered Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
 msgstr ""
 
 msgid "Weathered Copper Trapdoor"
@@ -380,5 +494,11 @@ msgid "Block of Raw Copper"
 msgstr ""
 
 msgid "A block used for compact raw copper storage."
+msgstr ""
+
+msgid "Copper Torch"
+msgstr ""
+
+msgid "Copper Torches are light sources which can be placed at the side or on the top of most blocks."
 msgstr ""
 

@@ -13,12 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Chain"
-msgstr "Corrente"
-
-msgid "Chains are metallic decoration blocks."
-msgstr "Correntes são blocos de decoração metálicos."
-
 msgid "Lantern"
 msgstr "Lanterna"
 
@@ -27,4 +21,10 @@ msgstr "Lanternas são fontes de luz que podem ser colocadas em cima ou baixo do
 
 msgid "Soul Lantern"
 msgstr "Lanterna das Almas"
+
+msgid "Chain"
+msgstr "Corrente"
+
+msgid "Chains are metallic decoration blocks."
+msgstr "Correntes são blocos de decoração metálicos."
 

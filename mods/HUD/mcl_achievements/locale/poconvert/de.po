@@ -427,6 +427,12 @@ msgstr "Das war die Zeit"
 msgid "Enter a Bastion Remnant"
 msgstr "Betrete die Ruinen einer Bastion"
 
+msgid "Mineclonia: Trial(s) edition"
+msgstr ""
+
+msgid "Step foot in a Trial Chamber"
+msgstr ""
+
 msgid "A Throwaway Joke"
 msgstr "Ein beiläufiger Witz"
 

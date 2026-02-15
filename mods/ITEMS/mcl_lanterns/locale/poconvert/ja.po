@@ -13,12 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Chain"
-msgstr "鎖"
-
-msgid "Chains are metallic decoration blocks."
-msgstr "鎖は金属製の装飾ブロックです。"
-
 msgid "Lantern"
 msgstr "ランタン"
 
@@ -27,4 +21,10 @@ msgstr "ランタンは、ほとんどのブロックの上部または下部に
 
 msgid "Soul Lantern"
 msgstr "魂のランタン"
+
+msgid "Chain"
+msgstr "鎖"
+
+msgid "Chains are metallic decoration blocks."
+msgstr "鎖は金属製の装飾ブロックです。"
 

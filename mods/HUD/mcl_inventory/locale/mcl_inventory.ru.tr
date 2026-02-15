@@ -1,7 +1,7 @@
 # textdomain: mcl_inventory
-Scrollbar=
-Pagination buttons=
-Creative inventory scrolling=
+Scrollbar=Полоса прокрутки
+Pagination buttons=Постраничные кнопки
+Creative inventory scrolling=Прокрутка творческого инвентаря
 Building Blocks=Строительные блоки
 Decoration Blocks=Декоративные блоки
 Redstone=Редстоун

@@ -427,6 +427,12 @@ msgstr "Наф-Наф тут больше не живёт"
 msgid "Enter a Bastion Remnant"
 msgstr "Посетите развалины бастиона"
 
+msgid "Mineclonia: Trial(s) edition"
+msgstr ""
+
+msgid "Step foot in a Trial Chamber"
+msgstr ""
+
 msgid "A Throwaway Joke"
 msgstr "Попасть впросак"
 

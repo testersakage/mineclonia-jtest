@@ -1,6 +1,6 @@
 # textdomain: mcl_levelgen
-Structure Void=
-Enables structures not to replace existing level contents=
+Structure Void=Structure vide
+Enables structures not to replace existing level contents=Permet aux structures de ne pas remplacer le contenu existant du niveau
 Structure Block=
 Saves, generates, or records structure data=
 Template name is not specified=

@@ -13,12 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Chain"
-msgstr "鎖鏈"
-
-msgid "Chains are metallic decoration blocks."
-msgstr "鎖鏈 是一種金屬裝飾性方塊。"
-
 msgid "Lantern"
 msgstr "燈籠"
 
@@ -27,4 +21,10 @@ msgstr "燈籠是一種發光方塊，可以放置在大多數方塊的上方或
 
 msgid "Soul Lantern"
 msgstr "靈魂燈籠"
+
+msgid "Chain"
+msgstr "鎖鏈"
+
+msgid "Chains are metallic decoration blocks."
+msgstr "鎖鏈 是一種金屬裝飾性方塊。"
 

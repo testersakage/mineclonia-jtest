@@ -1,7 +1,7 @@
 # textdomain: mcl_inventory
-Scrollbar=
-Pagination buttons=
-Creative inventory scrolling=
+Scrollbar=Barra de rolagem
+Pagination buttons=Botões de paginação
+Creative inventory scrolling=Rolagem do inventário do criativo
 Building Blocks=Blocos de construção
 Decoration Blocks=Blocos de decoração
 Redstone=Redstone

@@ -106,6 +106,9 @@ msgstr "Enxada de Madeira"
 msgid "Stone Hoe"
 msgstr "Enxada de Pedra"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "Enxada de Ferro"
 

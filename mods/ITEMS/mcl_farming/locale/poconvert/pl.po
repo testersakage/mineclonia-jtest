@@ -106,6 +106,9 @@ msgstr "Drewniana motyka"
 msgid "Stone Hoe"
 msgstr "Kamienna motyka"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "Żelazna motyka"
 

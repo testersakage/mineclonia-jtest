@@ -268,6 +268,12 @@ msgstr "Armadura de Couro para Cavalo"
 msgid "Leather horse armor can be worn by horses to increase their protection from harm a little."
 msgstr "Armaduras de couro para cavalos podem ser usadas para aumentar um pouco a proteção contra danos."
 
+msgid "Copper Horse Armor"
+msgstr ""
+
+msgid "Copper horse armor can be worn by horses to increase their protection from harm a bit."
+msgstr ""
+
 msgid "Iron Horse Armor"
 msgstr "Armadura de Ferro para Cavalo"
 

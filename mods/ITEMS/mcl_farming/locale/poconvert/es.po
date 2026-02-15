@@ -106,6 +106,9 @@ msgstr "Azada de madera"
 msgid "Stone Hoe"
 msgstr "Azada de piedra"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "Azada de hierro"
 

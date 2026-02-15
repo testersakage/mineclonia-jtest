@@ -16,10 +16,16 @@ msgstr ""
 msgid "Copper Ingot"
 msgstr "Lingotto di Rame"
 
-msgid "Molten Raw Copper. It is used to craft blocks."
-msgstr "Rame Grezzo Fuso. È utilizzato per assemblare dei blocchi."
+msgid "Molten Copper. It is used to craft armor, tools, and blocks."
+msgstr ""
 
 msgid "Copper Material"
+msgstr ""
+
+msgid "Copper Nugget"
+msgstr ""
+
+msgid "Copper nuggets are very small pieces of molten copper; the main purpose is to create copper ingots."
 msgstr ""
 
 msgid "Raw Copper"
@@ -40,6 +46,9 @@ msgstr "Rame cesellato"
 msgid "Chiseled Copper is mostly a decorative block."
 msgstr "Il rame cesellato è principalmente un blocco decorativo."
 
+msgid "Copper Bars"
+msgstr ""
+
 msgid "Copper Bulb"
 msgstr "Lampada di rame"
 
@@ -55,6 +64,12 @@ msgstr ""
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "La Lampada di rame è un blocco decorativo."
 
+msgid "Copper Chain"
+msgstr ""
+
+msgid "Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Copper Door"
 msgstr "Porta di rame"
 
@@ -63,6 +78,12 @@ msgstr "Grata di rame"
 
 msgid "Copper Grate is mostly a decorative block."
 msgstr "La grata di rame è un blocco decorativo."
+
+msgid "Copper Lantern"
+msgstr ""
+
+msgid "Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Copper Trapdoor"
 msgstr "Botola di rame"
@@ -88,6 +109,9 @@ msgstr "Il Rame cesellato esposto è un blocco decorativo."
 msgid "Exposed Copper"
 msgstr "Rame esposto"
 
+msgid "Exposed Copper Bars"
+msgstr ""
+
 msgid "Exposed Copper Bulb"
 msgstr "Lampada di rame esposto"
 
@@ -103,6 +127,12 @@ msgstr ""
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "La Lampada di rame esposta è un blocco decorativo."
 
+msgid "Exposed Copper Chain"
+msgstr ""
+
+msgid "Exposed Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Exposed Copper Door"
 msgstr "Porta di rame esposto"
 
@@ -111,6 +141,12 @@ msgstr "Grata di rame esposto"
 
 msgid "Exposed Copper Grate is mostly a decorative block."
 msgstr "La grata di rame esposto è un blocco decorativo."
+
+msgid "Exposed Copper Lantern"
+msgstr ""
+
+msgid "Exposed Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Exposed Copper Trapdoor"
 msgstr "Botola di rame esposto"
@@ -139,6 +175,9 @@ msgstr "Il rame cesellato ossidato è un blocco decorativo."
 msgid "Oxidized Copper"
 msgstr "Rame ossidato"
 
+msgid "Oxidized Copper Bars"
+msgstr ""
+
 msgid "Oxidized Copper Bulb"
 msgstr "Lampada di rame ossidato"
 
@@ -154,6 +193,12 @@ msgstr ""
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "La lampada di rame ossidato è un blocco decorativo."
 
+msgid "Oxidized Copper Chain"
+msgstr ""
+
+msgid "Oxidized Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Oxidized Copper Door"
 msgstr "Porta di rame ossidato"
 
@@ -162,6 +207,12 @@ msgstr "Grata di rame ossidato"
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
 msgstr "La grata di rame ossidato è un blocco decorativo."
+
+msgid "Oxidized Copper Lantern"
+msgstr ""
+
+msgid "Oxidized Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Oxidized Copper Trapdoor"
 msgstr "Botola di rame ossidato"
@@ -187,6 +238,9 @@ msgstr "Blocco di rame cerato"
 msgid "Waxed Chiseled Copper"
 msgstr "Rame cesellato cerato"
 
+msgid "Waxed Copper Bars"
+msgstr ""
+
 msgid "Waxed Copper Bulb"
 msgstr "Lampada di rame cerato"
 
@@ -199,8 +253,17 @@ msgstr ""
 msgid "Waxed Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Copper Chain"
+msgstr ""
+
+msgid "Waxed Copper Door"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "Grata di rame cerato"
+
+msgid "Waxed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Copper Trapdoor"
 msgstr "Botala di rame cerato"
@@ -223,6 +286,9 @@ msgstr "Rame cesellato esposto cerato"
 msgid "Waxed Exposed Copper"
 msgstr "Rame esposto cerato"
 
+msgid "Waxed Exposed Copper Bars"
+msgstr ""
+
 msgid "Waxed Exposed Copper Bulb"
 msgstr "Lampada di rame esposto cerato"
 
@@ -235,8 +301,17 @@ msgstr ""
 msgid "Waxed Exposed Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Exposed Copper Chain"
+msgstr ""
+
+msgid "Waxed Exposed Copper Door"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "Grata di rame esposto cerato"
+
+msgid "Waxed Exposed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Exposed Copper Trapdoor"
 msgstr "Botola di rame esposto cerato"
@@ -256,6 +331,9 @@ msgstr "Rame cesellato ossidato cerato"
 msgid "Waxed Oxidized Copper"
 msgstr "Rame ossidato cerato"
 
+msgid "Waxed Oxidized Copper Bars"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Bulb"
 msgstr "Lampada di rame ossidato cerato"
 
@@ -268,8 +346,17 @@ msgstr ""
 msgid "Waxed Oxidized Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Oxidized Copper Chain"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Door"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Grate"
 msgstr "Grata di rame ossidato cerato"
+
+msgid "Waxed Oxidized Copper Lantern"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Trapdoor"
 msgstr "Botola di rame ossidato cerato"
@@ -292,6 +379,9 @@ msgstr "Rame cesellato corroso cerato"
 msgid "Waxed Weathered Copper"
 msgstr "Rame corroso cerato"
 
+msgid "Waxed Weathered Copper Bars"
+msgstr ""
+
 msgid "Waxed Weathered Copper Bulb"
 msgstr "Lampada di rame corroso cerato"
 
@@ -304,8 +394,17 @@ msgstr ""
 msgid "Waxed Weathered Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Weathered Copper Chain"
+msgstr ""
+
+msgid "Waxed Weathered Copper Door"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "Grata di rame corroso cerato"
+
+msgid "Waxed Weathered Copper Lantern"
+msgstr ""
 
 msgid "Waxed Weathered Copper Trapdoor"
 msgstr "Botola di rame corroso cerato"
@@ -328,6 +427,9 @@ msgstr "Il rame cesellato corroso è un blocco decorativo."
 msgid "Weathered Copper"
 msgstr "Rame corroso"
 
+msgid "Weathered Copper Bars"
+msgstr ""
+
 msgid "Weathered Copper Bulb"
 msgstr "Lampada di rame corroso"
 
@@ -343,6 +445,12 @@ msgstr ""
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "La lampada di rame corroso è un blocco decorativo."
 
+msgid "Weathered Copper Chain"
+msgstr ""
+
+msgid "Weathered Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Weathered Copper Door"
 msgstr "Porta di rame corroso"
 
@@ -351,6 +459,12 @@ msgstr "Grata di rame corroso"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
 msgstr "La grata di rame corroso è un blocco decorativo."
+
+msgid "Weathered Copper Lantern"
+msgstr ""
+
+msgid "Weathered Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Weathered Copper Trapdoor"
 msgstr "Botola di rame corroso"
@@ -381,4 +495,10 @@ msgstr "Blocco di rame grezzo"
 
 msgid "A block used for compact raw copper storage."
 msgstr "Un blocco usato per ridurre l'ingombro in inventario del rame grezzo."
+
+msgid "Copper Torch"
+msgstr ""
+
+msgid "Copper Torches are light sources which can be placed at the side or on the top of most blocks."
+msgstr ""
 

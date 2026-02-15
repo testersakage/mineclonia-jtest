@@ -16,10 +16,16 @@ msgstr ""
 msgid "Copper Ingot"
 msgstr "銅インゴット"
 
-msgid "Molten Raw Copper. It is used to craft blocks."
-msgstr "溶けた未処理の銅。ブロックのクラフトに使われます。"
+msgid "Molten Copper. It is used to craft armor, tools, and blocks."
+msgstr ""
 
 msgid "Copper Material"
+msgstr ""
+
+msgid "Copper Nugget"
+msgstr ""
+
+msgid "Copper nuggets are very small pieces of molten copper; the main purpose is to create copper ingots."
 msgstr ""
 
 msgid "Raw Copper"
@@ -40,6 +46,9 @@ msgstr "模様入りの銅"
 msgid "Chiseled Copper is mostly a decorative block."
 msgstr "模様入りの銅は主な装飾ブロックです。"
 
+msgid "Copper Bars"
+msgstr ""
+
 msgid "Copper Bulb"
 msgstr "銅の電球"
 
@@ -55,6 +64,12 @@ msgstr ""
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "銅の電球は主な装飾ブロックです。"
 
+msgid "Copper Chain"
+msgstr ""
+
+msgid "Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Copper Door"
 msgstr "銅のドア"
 
@@ -63,6 +78,12 @@ msgstr "銅の格子"
 
 msgid "Copper Grate is mostly a decorative block."
 msgstr "銅の格子は主な装飾ブロックです。"
+
+msgid "Copper Lantern"
+msgstr ""
+
+msgid "Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Copper Trapdoor"
 msgstr "銅のトラップドア"
@@ -88,6 +109,9 @@ msgstr "風化した模様入りの銅は主な装飾ブロックです。"
 msgid "Exposed Copper"
 msgstr "風化した銅"
 
+msgid "Exposed Copper Bars"
+msgstr ""
+
 msgid "Exposed Copper Bulb"
 msgstr "風化した銅の電球"
 
@@ -103,6 +127,12 @@ msgstr ""
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "風化した銅の電球は主な装飾ブロックです。"
 
+msgid "Exposed Copper Chain"
+msgstr ""
+
+msgid "Exposed Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Exposed Copper Door"
 msgstr "風化した銅のドア"
 
@@ -111,6 +141,12 @@ msgstr "風化した銅の格子"
 
 msgid "Exposed Copper Grate is mostly a decorative block."
 msgstr "風化した銅の格子は主な装飾ブロックです。"
+
+msgid "Exposed Copper Lantern"
+msgstr ""
+
+msgid "Exposed Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Exposed Copper Trapdoor"
 msgstr "風化した銅のトラップドア"
@@ -139,6 +175,9 @@ msgstr "酸化した模様入りの銅は主な装飾ブロックです。"
 msgid "Oxidized Copper"
 msgstr "酸化した銅"
 
+msgid "Oxidized Copper Bars"
+msgstr ""
+
 msgid "Oxidized Copper Bulb"
 msgstr "酸化した銅の電球"
 
@@ -154,6 +193,12 @@ msgstr ""
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "酸化した銅の電球は主な装飾ブロックです。"
 
+msgid "Oxidized Copper Chain"
+msgstr ""
+
+msgid "Oxidized Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Oxidized Copper Door"
 msgstr "酸化した銅のドア"
 
@@ -162,6 +207,12 @@ msgstr "酸化した銅の格子"
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
 msgstr "酸化した銅の格子は主な装飾ブロックです。"
+
+msgid "Oxidized Copper Lantern"
+msgstr ""
+
+msgid "Oxidized Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Oxidized Copper Trapdoor"
 msgstr "酸化した銅のトラップドア"
@@ -187,6 +238,9 @@ msgstr "錆止めされた銅ブロック"
 msgid "Waxed Chiseled Copper"
 msgstr "錆止めされた模様入りの銅"
 
+msgid "Waxed Copper Bars"
+msgstr ""
+
 msgid "Waxed Copper Bulb"
 msgstr "錆止めされた銅の電球"
 
@@ -199,8 +253,17 @@ msgstr ""
 msgid "Waxed Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Copper Chain"
+msgstr ""
+
+msgid "Waxed Copper Door"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "錆止めされた銅の格子"
+
+msgid "Waxed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Copper Trapdoor"
 msgstr "錆止めされた銅のトラップドア"
@@ -223,6 +286,9 @@ msgstr "錆止めされた風化した模様入りの銅"
 msgid "Waxed Exposed Copper"
 msgstr "錆止めされた風化した銅"
 
+msgid "Waxed Exposed Copper Bars"
+msgstr ""
+
 msgid "Waxed Exposed Copper Bulb"
 msgstr "錆止めされた風化した銅の電球"
 
@@ -235,8 +301,17 @@ msgstr ""
 msgid "Waxed Exposed Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Exposed Copper Chain"
+msgstr ""
+
+msgid "Waxed Exposed Copper Door"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "錆止めされた風化した銅の格子"
+
+msgid "Waxed Exposed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Exposed Copper Trapdoor"
 msgstr "錆止めされた風化した銅のトラップドア"
@@ -256,6 +331,9 @@ msgstr "錆止めされた酸化した模様入りの銅"
 msgid "Waxed Oxidized Copper"
 msgstr "錆止めされた酸化した銅"
 
+msgid "Waxed Oxidized Copper Bars"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Bulb"
 msgstr "錆止めされた酸化した銅の電球"
 
@@ -268,8 +346,17 @@ msgstr ""
 msgid "Waxed Oxidized Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Oxidized Copper Chain"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Door"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Grate"
 msgstr "錆止めされた酸化した銅の格子"
+
+msgid "Waxed Oxidized Copper Lantern"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Trapdoor"
 msgstr "錆止めされた酸化した銅のトラップドア"
@@ -292,6 +379,9 @@ msgstr "錆止めされた錆びた模様入りの銅"
 msgid "Waxed Weathered Copper"
 msgstr "錆止めされた錆びた銅"
 
+msgid "Waxed Weathered Copper Bars"
+msgstr ""
+
 msgid "Waxed Weathered Copper Bulb"
 msgstr "錆止めされた錆びた銅の電球"
 
@@ -304,8 +394,17 @@ msgstr ""
 msgid "Waxed Weathered Copper Bulb Powered On"
 msgstr ""
 
+msgid "Waxed Weathered Copper Chain"
+msgstr ""
+
+msgid "Waxed Weathered Copper Door"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "錆止めされた錆びた銅の格子"
+
+msgid "Waxed Weathered Copper Lantern"
+msgstr ""
 
 msgid "Waxed Weathered Copper Trapdoor"
 msgstr "錆止めされた錆びた銅のトラップドア"
@@ -328,6 +427,9 @@ msgstr "錆びた模様入りの銅は主な装飾ブロックです。"
 msgid "Weathered Copper"
 msgstr "錆びた銅"
 
+msgid "Weathered Copper Bars"
+msgstr ""
+
 msgid "Weathered Copper Bulb"
 msgstr "錆びた銅の電球"
 
@@ -343,6 +445,12 @@ msgstr ""
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "錆びた銅の電球は主な装飾ブロックです。"
 
+msgid "Weathered Copper Chain"
+msgstr ""
+
+msgid "Weathered Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Weathered Copper Door"
 msgstr "錆びた銅のドア"
 
@@ -351,6 +459,12 @@ msgstr "錆びた銅の格子"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
 msgstr "錆びた銅の格子は主な装飾ブロックです。"
+
+msgid "Weathered Copper Lantern"
+msgstr ""
+
+msgid "Weathered Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Weathered Copper Trapdoor"
 msgstr "錆びた銅のトラップドア"
@@ -381,4 +495,10 @@ msgstr "銅の粗鉱ブロック"
 
 msgid "A block used for compact raw copper storage."
 msgstr "銅の粗鉱をコンパクトに保管するのに使えるブロックです。"
+
+msgid "Copper Torch"
+msgstr ""
+
+msgid "Copper Torches are light sources which can be placed at the side or on the top of most blocks."
+msgstr ""
 

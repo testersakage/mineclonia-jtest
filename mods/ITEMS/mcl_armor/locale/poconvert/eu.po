@@ -118,6 +118,18 @@ msgstr "Sare-kotako grebak"
 msgid "Chainmail Boots"
 msgstr "Sare-kotako botak"
 
+msgid "Copper Helmet"
+msgstr ""
+
+msgid "Copper Chestplate"
+msgstr ""
+
+msgid "Copper Leggings"
+msgstr ""
+
+msgid "Copper Boots"
+msgstr ""
+
 msgid "Iron Helmet"
 msgstr "Burdinazko kaskoa"
 

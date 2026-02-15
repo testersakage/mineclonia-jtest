@@ -13,12 +13,6 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Chain"
-msgstr "Цепь"
-
-msgid "Chains are metallic decoration blocks."
-msgstr "Цепи — это металлические декоративные блоки."
-
 msgid "Lantern"
 msgstr "Фонарь"
 
@@ -27,4 +21,10 @@ msgstr "Фонари — это источники света которые м�
 
 msgid "Soul Lantern"
 msgstr "Фонарь душ"
+
+msgid "Chain"
+msgstr "Цепь"
+
+msgid "Chains are metallic decoration blocks."
+msgstr "Цепи — это металлические декоративные блоки."
 

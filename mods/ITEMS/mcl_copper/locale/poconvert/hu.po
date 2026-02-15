@@ -16,11 +16,17 @@ msgstr ""
 msgid "Copper Ingot"
 msgstr "Réz úr"
 
-msgid "Molten Raw Copper. It is used to craft blocks."
-msgstr "Olvasztott nyers réz. Blokkok barkácsolásához használható."
+msgid "Molten Copper. It is used to craft armor, tools, and blocks."
+msgstr ""
 
 msgid "Copper Material"
 msgstr "Réz Anyag"
+
+msgid "Copper Nugget"
+msgstr ""
+
+msgid "Copper nuggets are very small pieces of molten copper; the main purpose is to create copper ingots."
+msgstr ""
 
 msgid "Raw Copper"
 msgstr "Nyers Réz"
@@ -40,6 +46,9 @@ msgstr "Vésett Réz"
 msgid "Chiseled Copper is mostly a decorative block."
 msgstr "A vésett réz főként díszítőelem."
 
+msgid "Copper Bars"
+msgstr ""
+
 msgid "Copper Bulb"
 msgstr "Rézizzó"
 
@@ -55,6 +64,12 @@ msgstr "Bekapcsolt Rézizzó"
 msgid "Copper Bulb is mostly a decorative block."
 msgstr "A rézizzó főként díszítőelem."
 
+msgid "Copper Chain"
+msgstr ""
+
+msgid "Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Copper Door"
 msgstr "Rézajtó"
 
@@ -63,6 +78,12 @@ msgstr "Rézrács"
 
 msgid "Copper Grate is mostly a decorative block."
 msgstr "A rézrács főként díszítőelem."
+
+msgid "Copper Lantern"
+msgstr ""
+
+msgid "Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Copper Trapdoor"
 msgstr "Rézfedél"
@@ -88,6 +109,9 @@ msgstr "A kiálló vésett réz főként díszítőelem."
 msgid "Exposed Copper"
 msgstr "Kiálló Réz"
 
+msgid "Exposed Copper Bars"
+msgstr ""
+
 msgid "Exposed Copper Bulb"
 msgstr "Kiálló Rézizzó"
 
@@ -103,6 +127,12 @@ msgstr "Bekapcsolt Kiálló Rézizzó"
 msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "A kiálló rézizzó főként díszítőelem."
 
+msgid "Exposed Copper Chain"
+msgstr ""
+
+msgid "Exposed Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Exposed Copper Door"
 msgstr "Kiálló Rézajtó"
 
@@ -111,6 +141,12 @@ msgstr "Kiálló Rézrács"
 
 msgid "Exposed Copper Grate is mostly a decorative block."
 msgstr "A kiálló rézrács főként díszítőelem."
+
+msgid "Exposed Copper Lantern"
+msgstr ""
+
+msgid "Exposed Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Exposed Copper Trapdoor"
 msgstr "Kiálló Rézfedél"
@@ -139,6 +175,9 @@ msgstr "Az oxidált vésett réz főként díszítőelem."
 msgid "Oxidized Copper"
 msgstr "Oxidált Réz"
 
+msgid "Oxidized Copper Bars"
+msgstr ""
+
 msgid "Oxidized Copper Bulb"
 msgstr "Oxidált Rézizzó"
 
@@ -154,6 +193,12 @@ msgstr "Bekapcsolt Oxidált Rézizzó"
 msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "Az oxidált rézizzó főként díszítőelem."
 
+msgid "Oxidized Copper Chain"
+msgstr ""
+
+msgid "Oxidized Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Oxidized Copper Door"
 msgstr "Oxidált Rézajtó"
 
@@ -162,6 +207,12 @@ msgstr "Oxidált Rézrács"
 
 msgid "Oxidized Copper Grate is mostly a decorative block."
 msgstr "Az oxidált rézrács főként díszítőelem."
+
+msgid "Oxidized Copper Lantern"
+msgstr ""
+
+msgid "Oxidized Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Oxidized Copper Trapdoor"
 msgstr "Oxidált Rézfedél"
@@ -187,6 +238,9 @@ msgstr "Viaszolt Rézblokk"
 msgid "Waxed Chiseled Copper"
 msgstr "Viaszolt Vésett Réz"
 
+msgid "Waxed Copper Bars"
+msgstr ""
+
 msgid "Waxed Copper Bulb"
 msgstr "Viaszolt Rézizzó"
 
@@ -199,8 +253,17 @@ msgstr "Kikapcsolt Viaszolt Rézizzó"
 msgid "Waxed Copper Bulb Powered On"
 msgstr "Bekapcsolt Viaszolt Rézizzó"
 
+msgid "Waxed Copper Chain"
+msgstr ""
+
+msgid "Waxed Copper Door"
+msgstr ""
+
 msgid "Waxed Copper Grate"
 msgstr "Viaszolt Rézrács"
+
+msgid "Waxed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Copper Trapdoor"
 msgstr "Viaszolt Rézfedél"
@@ -223,6 +286,9 @@ msgstr "Viaszolt Kiálló Vésett Réz"
 msgid "Waxed Exposed Copper"
 msgstr "Viaszolt Kiálló Réz"
 
+msgid "Waxed Exposed Copper Bars"
+msgstr ""
+
 msgid "Waxed Exposed Copper Bulb"
 msgstr "Viaszolt Kiálló Rézizzó"
 
@@ -235,8 +301,17 @@ msgstr "Kikapcsolt Viaszolt Kiálló Rézizzó"
 msgid "Waxed Exposed Copper Bulb Powered On"
 msgstr "Bekapcsolt Viaszolt Kiálló Rézizzó"
 
+msgid "Waxed Exposed Copper Chain"
+msgstr ""
+
+msgid "Waxed Exposed Copper Door"
+msgstr ""
+
 msgid "Waxed Exposed Copper Grate"
 msgstr "Viaszolt Kiálló Rézrács"
+
+msgid "Waxed Exposed Copper Lantern"
+msgstr ""
 
 msgid "Waxed Exposed Copper Trapdoor"
 msgstr "Viaszolt Kiálló Rézfedél"
@@ -256,6 +331,9 @@ msgstr "Viaszolt Oxidált Vésett Réz"
 msgid "Waxed Oxidized Copper"
 msgstr "Viaszolt Oxidált Réz"
 
+msgid "Waxed Oxidized Copper Bars"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Bulb"
 msgstr "Viaszolt Oxidált Rézizzó"
 
@@ -268,8 +346,17 @@ msgstr "Kikapcsolt Viaszolt Oxidált Rézizzó"
 msgid "Waxed Oxidized Copper Bulb Powered On"
 msgstr "Bekapcsolt Viaszolt Oxidált Rézizzó"
 
+msgid "Waxed Oxidized Copper Chain"
+msgstr ""
+
+msgid "Waxed Oxidized Copper Door"
+msgstr ""
+
 msgid "Waxed Oxidized Copper Grate"
 msgstr "Viaszolt Oxidált Rézrács"
+
+msgid "Waxed Oxidized Copper Lantern"
+msgstr ""
 
 msgid "Waxed Oxidized Copper Trapdoor"
 msgstr "Viaszolt Oxidált Rézfedél"
@@ -292,6 +379,9 @@ msgstr "Viaszolt Megöregedett Vésett Réz"
 msgid "Waxed Weathered Copper"
 msgstr "Viaszolt Megöregedett Réz"
 
+msgid "Waxed Weathered Copper Bars"
+msgstr ""
+
 msgid "Waxed Weathered Copper Bulb"
 msgstr "Viaszolt Megöregedett Rézizzó"
 
@@ -304,8 +394,17 @@ msgstr "Kikapcsolt Viaszolt Megöregedett Rézizzó"
 msgid "Waxed Weathered Copper Bulb Powered On"
 msgstr "Bekapcsolt Viaszolt Megöregedett Rézizzó"
 
+msgid "Waxed Weathered Copper Chain"
+msgstr ""
+
+msgid "Waxed Weathered Copper Door"
+msgstr ""
+
 msgid "Waxed Weathered Copper Grate"
 msgstr "Viaszolt Megöregedett Rézrács"
+
+msgid "Waxed Weathered Copper Lantern"
+msgstr ""
 
 msgid "Waxed Weathered Copper Trapdoor"
 msgstr "Viaszolt Megöregedett Rézfedél"
@@ -328,6 +427,9 @@ msgstr "A megöregedett vésett réz főként díszítőelem."
 msgid "Weathered Copper"
 msgstr "Megöregedett Réz"
 
+msgid "Weathered Copper Bars"
+msgstr ""
+
 msgid "Weathered Copper Bulb"
 msgstr "Megöregedett Rézizzó"
 
@@ -343,6 +445,12 @@ msgstr "Bekapcsolt Megöregedett Rézizzó"
 msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "A megöregedett rézizzó főként díszítőelem."
 
+msgid "Weathered Copper Chain"
+msgstr ""
+
+msgid "Weathered Copper Chains are metallic decoration blocks."
+msgstr ""
+
 msgid "Weathered Copper Door"
 msgstr "Megöregedett Rézajtó"
 
@@ -351,6 +459,12 @@ msgstr "Megöregedett Rézrács"
 
 msgid "Weathered Copper Grate is mostly a decorative block."
 msgstr "A megöregedett rézrács főként díszítőelem."
+
+msgid "Weathered Copper Lantern"
+msgstr ""
+
+msgid "Weathered Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
+msgstr ""
 
 msgid "Weathered Copper Trapdoor"
 msgstr "Megöregedett Rézfedél"
@@ -381,4 +495,10 @@ msgstr "Rézérc blokk"
 
 msgid "A block used for compact raw copper storage."
 msgstr "Rézérc kompakt tárolására szolgáló blokk."
+
+msgid "Copper Torch"
+msgstr ""
+
+msgid "Copper Torches are light sources which can be placed at the side or on the top of most blocks."
+msgstr ""
 

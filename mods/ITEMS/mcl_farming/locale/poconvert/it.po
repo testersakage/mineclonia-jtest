@@ -106,6 +106,9 @@ msgstr "Zappa di legno"
 msgid "Stone Hoe"
 msgstr "Zappa di pietra"
 
+msgid "Copper Hoe"
+msgstr ""
+
 msgid "Iron Hoe"
 msgstr "Zappa di ferro"
 

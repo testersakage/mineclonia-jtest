@@ -427,6 +427,12 @@ msgstr "光辉岁月"
 msgid "Enter a Bastion Remnant"
 msgstr "进入堡垒遗迹"
 
+msgid "Mineclonia: Trial(s) edition"
+msgstr ""
+
+msgid "Step foot in a Trial Chamber"
+msgstr ""
+
 msgid "A Throwaway Joke"
 msgstr "抖包袱"
 
