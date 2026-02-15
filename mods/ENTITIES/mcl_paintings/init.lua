@@ -218,6 +218,7 @@ core.register_craftitem("mcl_paintings:painting", {
 			local stack = ItemStack("mcl_paintings:painting")
 			local meta = stack:get_meta()
 			meta:set_string("mcl_paintings:placed_painting", name)
+			meta:set_string("mcl_paintings:title", def.title)
 			meta:set_int("mcl_paintings:width", def.width)
 			meta:set_int("mcl_paintings:height", def.height)
 			tt.reload_itemstack_description(stack)
@@ -361,13 +362,13 @@ tt.register_snippet(function(itemstring, _, itemstack)
 	local result = ""
 	if itemstring == "mcl_paintings:painting" and itemstack then
 		local meta = itemstack:get_meta()
-		local name = meta:get_string("mcl_paintings:placed_painting")
+		local title = meta:get_string("mcl_paintings:title")
 		local width = meta:get_int("mcl_paintings:width")
 		local height = meta:get_int("mcl_paintings:height")
-		if name ~= "" then
-			result = C(mcl_colors.YELLOW, name)
+		if title ~= "" then
+			result = C(mcl_colors.YELLOW, title)
 			if width ~= 0 and height ~= 0 then
-				result = result.."\n"..C(mcl_colors.WHITE, width.."X"..height)
+				result = result.."\n"..C(mcl_colors.WHITE, width.." X "..height)
 			end
 		end
 	end
