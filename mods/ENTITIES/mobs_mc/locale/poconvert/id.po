@@ -202,29 +202,11 @@ msgstr ""
 msgid "Wither Skeleton"
 msgstr "Tengkorak Layu"
 
-msgid "Slime - big"
-msgstr "Slime - besar"
-
-msgid "Slime - small"
-msgstr "Slime - kecil"
-
-msgid "Slime - tiny"
-msgstr "Slime - mini"
-
-msgid "Magma Cube - big"
-msgstr "Kubus Magma - besar"
-
-msgid "Magma Cube - small"
-msgstr "Kubus Magma - kecil"
-
-msgid "Magma Cube - tiny"
-msgstr "Kubus Magma - mini"
+msgid "Slime"
+msgstr ""
 
 msgid "Magma Cube"
 msgstr "Kubus Magma"
-
-msgid "Slime"
-msgstr ""
 
 msgid "Snow Golem"
 msgstr "Golem Salju"

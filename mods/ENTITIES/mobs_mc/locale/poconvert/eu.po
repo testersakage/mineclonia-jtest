@@ -202,29 +202,11 @@ msgstr ""
 msgid "Wither Skeleton"
 msgstr "Wither-en Eskeletoa"
 
-msgid "Slime - big"
-msgstr "Likatia - handia"
-
-msgid "Slime - small"
-msgstr "Likatia - ertaina"
-
-msgid "Slime - tiny"
-msgstr "Likatia - txikia"
-
-msgid "Magma Cube - big"
-msgstr "Magma kuboa - handia"
-
-msgid "Magma Cube - small"
-msgstr "Magma kuboa - ertaina"
-
-msgid "Magma Cube - tiny"
-msgstr "Magma kuboa - txikia"
+msgid "Slime"
+msgstr "Likatia"
 
 msgid "Magma Cube"
 msgstr "Magma kuboa"
-
-msgid "Slime"
-msgstr "Likatia"
 
 msgid "Snow Golem"
 msgstr "Elurrezko Panpina"

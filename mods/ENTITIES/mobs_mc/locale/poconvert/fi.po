@@ -202,29 +202,11 @@ msgstr "Lisäksi kuutiolta, jolla olento syntyy, on oltava esteetön näkymä ta
 msgid "Wither Skeleton"
 msgstr "Hornaluuranko"
 
-msgid "Slime - big"
-msgstr "Elävä limakuutio - iso"
-
-msgid "Slime - small"
-msgstr "Elävä limakuutio - pieni"
-
-msgid "Slime - tiny"
-msgstr "Elävä limakuutio - pikkuruinen"
-
-msgid "Magma Cube - big"
-msgstr "Elävä magmakuutio - iso"
-
-msgid "Magma Cube - small"
-msgstr "Elävä magmakuutio - pieni"
-
-msgid "Magma Cube - tiny"
-msgstr "Elävä magmakuutio - pikkuruinen"
+msgid "Slime"
+msgstr "Elävä limakuutio"
 
 msgid "Magma Cube"
 msgstr "Elävä magmakuutio"
-
-msgid "Slime"
-msgstr "Elävä limakuutio"
 
 msgid "Snow Golem"
 msgstr "Lumigolemi"

@@ -202,29 +202,11 @@ msgstr "Кроме того, блок, на котором должен засп
 msgid "Wither Skeleton"
 msgstr "Скелет-иссушитель"
 
-msgid "Slime - big"
-msgstr "Слизень - большой"
-
-msgid "Slime - small"
-msgstr "Слизень - средний"
-
-msgid "Slime - tiny"
-msgstr "Слизень - маленький"
-
-msgid "Magma Cube - big"
-msgstr "Лавовый куб - большой"
-
-msgid "Magma Cube - small"
-msgstr "Лавовый куб - средний"
-
-msgid "Magma Cube - tiny"
-msgstr "Лавовый куб - маленький"
+msgid "Slime"
+msgstr "Слизень"
 
 msgid "Magma Cube"
 msgstr "Лавовый куб"
-
-msgid "Slime"
-msgstr "Слизень"
 
 msgid "Snow Golem"
 msgstr "Снежный голем"

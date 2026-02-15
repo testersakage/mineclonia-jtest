@@ -202,29 +202,11 @@ msgstr ""
 msgid "Wither Skeleton"
 msgstr "ウィザースケルトン"
 
-msgid "Slime - big"
-msgstr "大型のスライム"
-
-msgid "Slime - small"
-msgstr "中型のスライム"
-
-msgid "Slime - tiny"
-msgstr "小型のスライム"
-
-msgid "Magma Cube - big"
-msgstr "大型のマグマキューブ"
-
-msgid "Magma Cube - small"
-msgstr "中型のマグマキューブ"
-
-msgid "Magma Cube - tiny"
-msgstr "小型のマグマキューブ"
+msgid "Slime"
+msgstr "スライム"
 
 msgid "Magma Cube"
 msgstr "マグマキューブ"
-
-msgid "Slime"
-msgstr "スライム"
 
 msgid "Snow Golem"
 msgstr "スノーゴーレム"

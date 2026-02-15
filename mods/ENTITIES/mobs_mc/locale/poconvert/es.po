@@ -202,29 +202,11 @@ msgstr ""
 msgid "Wither Skeleton"
 msgstr "Esqueleto del Wither"
 
-msgid "Slime - big"
-msgstr "Slime - grande"
-
-msgid "Slime - small"
-msgstr "Slime - mediano"
-
-msgid "Slime - tiny"
-msgstr "Slime - pequeño"
-
-msgid "Magma Cube - big"
-msgstr "Cubo de Magma - grande"
-
-msgid "Magma Cube - small"
-msgstr "Cubo de Magma - mediano"
-
-msgid "Magma Cube - tiny"
-msgstr "Cubo de Magma - pequeño"
+msgid "Slime"
+msgstr "Slime"
 
 msgid "Magma Cube"
 msgstr "Cubo de Magma"
-
-msgid "Slime"
-msgstr "Slime"
 
 msgid "Snow Golem"
 msgstr "Golem de nieve"

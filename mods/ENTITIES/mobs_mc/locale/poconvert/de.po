@@ -202,29 +202,11 @@ msgstr ""
 msgid "Wither Skeleton"
 msgstr "Witherskelett"
 
-msgid "Slime - big"
-msgstr ""
-
-msgid "Slime - small"
-msgstr ""
-
-msgid "Slime - tiny"
-msgstr ""
-
-msgid "Magma Cube - big"
-msgstr ""
-
-msgid "Magma Cube - small"
-msgstr ""
-
-msgid "Magma Cube - tiny"
-msgstr ""
+msgid "Slime"
+msgstr "Schleim"
 
 msgid "Magma Cube"
 msgstr "Magmakubus"
-
-msgid "Slime"
-msgstr "Schleim"
 
 msgid "Snow Golem"
 msgstr "Schneegolem"

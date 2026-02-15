@@ -202,29 +202,11 @@ msgstr ""
 msgid "Wither Skeleton"
 msgstr "Wither Kostlivec"
 
-msgid "Slime - big"
-msgstr "Velký slimák"
-
-msgid "Slime - small"
-msgstr "Malý slimák"
-
-msgid "Slime - tiny"
-msgstr "Maličký slimák"
-
-msgid "Magma Cube - big"
-msgstr "Velká magma kostka"
-
-msgid "Magma Cube - small"
-msgstr "Malá magma kostka"
-
-msgid "Magma Cube - tiny"
-msgstr "Maličká magma kostka"
+msgid "Slime"
+msgstr "Slimák"
 
 msgid "Magma Cube"
 msgstr "Magma kostka"
-
-msgid "Slime"
-msgstr "Slimák"
 
 msgid "Snow Golem"
 msgstr "Sněžný golem"

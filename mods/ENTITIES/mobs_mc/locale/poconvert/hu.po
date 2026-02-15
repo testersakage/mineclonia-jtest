@@ -202,29 +202,11 @@ msgstr ""
 msgid "Wither Skeleton"
 msgstr "Sorvasztó Csontváz"
 
-msgid "Slime - big"
-msgstr "Zöld Zsumó"
-
-msgid "Slime - small"
-msgstr "Kis Zöld Zsumó"
-
-msgid "Slime - tiny"
-msgstr "Parányi Zöld Zsumó"
-
-msgid "Magma Cube - big"
-msgstr "Magma Kocka - nagy"
-
-msgid "Magma Cube - small"
-msgstr "Magma Kocka - kicsi"
-
-msgid "Magma Cube - tiny"
-msgstr "Magma Kocka - apró"
+msgid "Slime"
+msgstr "Zselé"
 
 msgid "Magma Cube"
 msgstr "Magma Kocka"
-
-msgid "Slime"
-msgstr "Zselé"
 
 msgid "Snow Golem"
 msgstr "Hógólem"

@@ -202,29 +202,11 @@ msgstr ""
 msgid "Wither Skeleton"
 msgstr "凋灵骷髅"
 
-msgid "Slime - big"
-msgstr "大史莱姆"
-
-msgid "Slime - small"
-msgstr "小史莱姆"
-
-msgid "Slime - tiny"
-msgstr "极小史莱姆"
-
-msgid "Magma Cube - big"
-msgstr "大型岩浆怪"
-
-msgid "Magma Cube - small"
-msgstr "小型岩浆怪"
-
-msgid "Magma Cube - tiny"
-msgstr "微型岩浆怪"
+msgid "Slime"
+msgstr "史莱姆"
 
 msgid "Magma Cube"
 msgstr "岩浆怪"
-
-msgid "Slime"
-msgstr "史莱姆"
 
 msgid "Snow Golem"
 msgstr "雪傀儡"
