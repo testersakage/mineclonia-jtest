@@ -29,10 +29,11 @@ core.register_node("mcl_blackstone:blackstone_gilded", {
 			{items = {"mcl_core:gold_nugget 4"},rarity = 40},
 			{items = {"mcl_core:gold_nugget 5"},rarity = 40},
 			-- 4x 1 in 40 chance adds up to a 10% chance
-			{items = {"mcl_blackstone:blackstone_gilded"}, rarity = 1},
+			{items = {"mcl_blackstone:blackstone_gilded"}},
 		}
 	},
-	_mcl_hardness = 2,
+	_mcl_hardness = 1.5,
+	_mcl_blast_resistance = 6,
 	_mcl_silk_touch_drop = true,
 	_mcl_fortune_drop = {
 		discrete_uniform_distribution = true,
@@ -51,10 +52,10 @@ core.register_node("mcl_blackstone:nether_gold", {
 		max_items = 1,
 		items = {
 			{items = {"mcl_core:gold_nugget 6"},rarity = 5},
-			{items = {"mcl_core:gold_nugget 5"},rarity = 5},
-			{items = {"mcl_core:gold_nugget 4"},rarity = 5},
-			{items = {"mcl_core:gold_nugget 3"},rarity = 5},
-			{items = {"mcl_core:gold_nugget 2"},rarity = 1},
+			{items = {"mcl_core:gold_nugget 5"},rarity = 4},
+			{items = {"mcl_core:gold_nugget 4"},rarity = 3},
+			{items = {"mcl_core:gold_nugget 3"},rarity = 2},
+			{items = {"mcl_core:gold_nugget 2"}},
 		}
 	},
 	_mcl_hardness = 3,
