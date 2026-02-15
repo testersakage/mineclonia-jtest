@@ -134,6 +134,7 @@ local function hopper_and_mc(pos, entity, mc_pos, check_function)
 					dest_inv:add_item("main", stack:take_item())
 					inv:set_stack("main", i, stack)
 					mcl_redstone.update_comparators(pos)
+					mcl_entity_invs.save_inv(entity)
 					-- Take one item and stop until next time
 					return true
 				end
