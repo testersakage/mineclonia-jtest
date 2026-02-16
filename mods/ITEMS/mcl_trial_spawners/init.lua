@@ -349,7 +349,6 @@ local function trial_spawner_step(pos, meta)
 	for obj in core.objects_inside_radius(pos, activation_radius) do
 		if core.is_player(obj)
 				and table.indexof(players, obj:get_player_name()) == -1
-				and not core.is_creative_enabled(obj:get_player_name())
 				and is_in_eyesight_of_spawner(pos, vector.offset(obj:get_pos(), 0, 1.5, 0)) then
 			table.insert(new_players, obj:get_player_name())
 		end
