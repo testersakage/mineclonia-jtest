@@ -387,7 +387,9 @@ local function trial_spawner_step(pos, meta)
 		end
 	end
 
-	if not is_active and timestamp - last_activation < activation_cooldown then
+	if not is_active
+		and last_activation > 0
+		and timestamp - last_activation < activation_cooldown then
 		return
 	end
 
