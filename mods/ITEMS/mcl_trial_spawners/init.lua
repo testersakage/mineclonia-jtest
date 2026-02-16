@@ -147,7 +147,9 @@ local function transform_to_ominous_spawner(pos, meta)
 	if trial_spawners_spawned_mobs[hash] then
 		for _, obj in pairs(trial_spawners_spawned_mobs[hash]) do
 			local l = obj:get_luaentity()
-			l:safe_remove()
+			if l and l.is_mob then
+				l:safe_remove()
+			end
 		end
 	end
 end
@@ -187,45 +189,47 @@ local function attempt_spawning_trial_mob(pos, meta, is_ominous)
 
 			if spawned_mob then
 				local l = spawned_mob:get_luaentity()
-				l.persistent = true
-				l._effective_wielditem_drop_probability = 0
-				mcl_trial_spawners.spawn_spawning_particles(pos, is_ominous)
-				mcl_trial_spawners.spawn_spawning_particles(spawned_mob:get_pos(), is_ominous)
+				if l and l.is_mob then
+					l.persistent = true
+					l._effective_wielditem_drop_probability = 0
+					mcl_trial_spawners.spawn_spawning_particles(pos, is_ominous)
+					mcl_trial_spawners.spawn_spawning_particles(spawned_mob:get_pos(), is_ominous)
 
-				if is_ominous then
-					local mobdef = mcl_mobs.registered_mobs[mob_name]
+					if is_ominous then
+						local mobdef = mcl_mobs.registered_mobs[mob_name]
 
-					if mobdef.wears_armor then
-						if math.random() > 0.5 then
-							l.armor_list.torso = table.random_element(possible_mob_gear.chestplates):get_name()
-						end
-
-						if math.random() > 0.5 then
-							l.armor_list.head = table.random_element(possible_mob_gear.helmets):get_name()
-						end
-
-						if l.can_wield_items then
-							if l.attack_type == "melee" then
-								l:set_wielditem(ItemStack(table.random_element(possible_mob_gear.melee_weapons):get_name()))
-							elseif l.attack_type == "bowshoot" then
-								l:set_wielditem(ItemStack(table.random_element(possible_mob_gear.ranged_weapons):get_name()))
+						if mobdef.wears_armor then
+							if math.random() > 0.5 then
+								l.armor_list.torso = table.random_element(possible_mob_gear.chestplates):get_name()
 							end
+
+							if math.random() > 0.5 then
+								l.armor_list.head = table.random_element(possible_mob_gear.helmets):get_name()
+							end
+
+							if l.can_wield_items then
+								if l.attack_type == "melee" then
+									l:set_wielditem(ItemStack(table.random_element(possible_mob_gear.melee_weapons):get_name()))
+								elseif l.attack_type == "bowshoot" then
+									l:set_wielditem(ItemStack(table.random_element(possible_mob_gear.ranged_weapons):get_name()))
+								end
+							end
+
+							l:set_armor_texture()
 						end
-
-						l:set_armor_texture()
 					end
+
+					if not trial_spawners_spawned_mobs[hash] then
+						trial_spawners_spawned_mobs[hash] = {}
+					end
+
+					table.insert(trial_spawners_spawned_mobs[hash], spawned_mob)
+
+					meta:set_int("total_mobs_spawned", meta:get_int("total_mobs_spawned") + 1)
+					meta:set_int("last_spawn", core.get_gametime())
+
+					return
 				end
-
-				if not trial_spawners_spawned_mobs[hash] then
-					trial_spawners_spawned_mobs[hash] = {}
-				end
-
-				table.insert(trial_spawners_spawned_mobs[hash], spawned_mob)
-
-				meta:set_int("total_mobs_spawned", meta:get_int("total_mobs_spawned") + 1)
-				meta:set_int("last_spawn", core.get_gametime())
-
-				return
 			end
 		end
 
