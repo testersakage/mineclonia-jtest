@@ -134,12 +134,6 @@ local function check_eat_term(player)
 			player:set_wielded_item(itemstack)
 		end
 		terminate_eating_state(player)
-
-		if core.get_item_group(itemname, "food") == 3 then
-			mcl_hunger.play_drinking_sound(player)
-		else
-			mcl_hunger.play_eating_sound(player)
-		end
 	end
 end
 
