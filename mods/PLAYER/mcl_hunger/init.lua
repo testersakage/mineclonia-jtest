@@ -35,7 +35,12 @@ mcl_hunger.SATURATION_INIT = 5 -- Initial saturation for new/respawning players
 dofile(modpath.."/api.lua")
 dofile(modpath.."/hunger.lua")
 dofile(modpath.."/compat.lua")
-dofile(modpath.."/eatanim.lua")
+
+if core.settings:get_bool("instant_eat", false) then
+	dofile(modpath.."/instanteat.lua")
+else
+	dofile(modpath.."/holdeat.lua")
+end
 
 if not mcl_hunger.active then
 	core.register_on_joinplayer(function(player)
