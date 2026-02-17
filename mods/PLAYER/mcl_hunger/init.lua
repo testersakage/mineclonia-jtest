@@ -32,7 +32,6 @@ mcl_hunger.EXHAUST_LVL = 4000 -- at what exhaustion player saturation gets lower
 
 mcl_hunger.SATURATION_INIT = 5 -- Initial saturation for new/respawning players
 
-mcl_hunger.eat_cooldown = {} -- used for quick eat (either special setting or when food has `no_eat_delay` group)
 mcl_hunger.eat_duration = {}
 
 mcl_hunger.eat_anim_hud = {}

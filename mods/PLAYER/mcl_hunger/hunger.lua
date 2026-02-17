@@ -1,12 +1,5 @@
 local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / tonumber(core.settings:get("movement_speed_walk"))
 
-local quick_eat_mode = core.settings:get_bool("mcl_quick_eat", false)
-
-local function should_quick_eat(itemstack)
-	return quick_eat_mode
-		or not mcl_hunger.active
-end
-
 local function can_eat_when_full (player, itemstack)
 	return (mcl_hunger.active == false)
 		or (core.get_item_group (itemstack:get_name (), "can_eat_when_full") == 1)
@@ -255,45 +248,12 @@ function mcl_hunger.prevent_eating (player)
 	terminate_eating_state(player)
 end
 
-local function perform_quick_eat(player)
-	local itemstack = player:get_wielded_item ()
-	local itemname = itemstack:get_name()
-	local def = core.registered_items[itemname]
-	local hunger_points = core.get_item_group(itemname, "eatable")
-	local pointed_thing = mcl_util.get_pointed_thing (player, true)
-	itemstack = core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
-	if itemstack then
-		player:set_wielded_item (itemstack)
-	end
-
-	mcl_hunger.play_eating_sound(player)
-	mcl_hunger.eat_cooldown[player] = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
-end
-
-controls.register_on_press (function (player, key)
-	local itemstack = player:get_wielded_item ()
-	if is_player_trying_to_eat(player, key)
-			and should_quick_eat(itemstack)
-			and (not mcl_hunger.is_player_full(player) or can_eat_when_full(player, itemstack))
-			and (mcl_hunger.eat_cooldown[player] or 0) <= 0 then
-		perform_quick_eat(player)
-		return false
-	end
-end)
-
 local function check_eat(player)
 	local itemstack = player:get_wielded_item ()
 	local itemname = itemstack:get_name ()
 	local is_full = mcl_hunger.is_player_full (player)
 
 	if is_full and not can_eat_when_full(player, itemstack) then
-		return
-	end
-
-	if should_quick_eat(itemstack) then
-		if (mcl_hunger.eat_cooldown[player] or 0) <= 0 then
-			perform_quick_eat(player)
-		end
 		return
 	end
 
@@ -370,9 +330,6 @@ local function get_sprite_scale(player)
 end
 
 core.register_globalstep (function (dtime)
-	for player, time in pairs (mcl_hunger.eat_cooldown) do
-		mcl_hunger.eat_cooldown[player] = time - dtime
-	end
 	for player, hudid in pairs (mcl_hunger.eat_anim_hud) do
 		if not mcl_hunger.eat_duration[player] then
 			player:hud_set_flags({wielditem = true})
@@ -417,8 +374,7 @@ controls.register_on_release (function (player, key)
 	end
 
 	mcl_hunger.prevent_eating (player)
-	-- reset eat animation blocking after a while
-	core.after(0.2, function ()
+	core.after(0, function ()
 		mcl_hunger.eat_anim_block[player] = nil
 	end)
 end)
@@ -436,7 +392,6 @@ end)
 
 core.register_on_leaveplayer (function (player, _)
 	terminate_eating_state(player)
-	mcl_hunger.eat_cooldown[player] = nil
 end)
 
 core.register_on_dieplayer(function (player)
