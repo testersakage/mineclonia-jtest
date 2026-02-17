@@ -36,7 +36,7 @@ dofile(modpath.."/api.lua")
 dofile(modpath.."/hunger.lua")
 dofile(modpath.."/compat.lua")
 
-if core.settings:get_bool("instant_eat", false) then
+if core.settings:get_bool("mcl_hunger_instant_eat", false) then
 	dofile(modpath.."/instanteat.lua")
 else
 	dofile(modpath.."/holdeat.lua")

@@ -108,6 +108,9 @@ mcl_levelgen_enable_ersatz_carvers (Enable new cave generator) bool false
 mcl_difficulty (Difficulty) enum normal peaceful,easy,normal,hard
 
 [Players]
+# If enabled, players eat food and drink potions instantly
+mcl_hunger_instant_eat (Instant eat) bool false
+
 # If enabled, players respawn at the bed they clicked instead of normal spawn.
 # This setting is only read at startup.
 enable_bed_respawn (Respawn at bed) bool true

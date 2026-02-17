@@ -20,6 +20,10 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 	local creative = core.is_creative_enabled(playername)
 	local def = core.registered_items[itemname]
 
+	if def and def._mcl_eat_effect then
+		def._mcl_eat_effect(itemstack, user)
+	end
+
 	local old_itemstack = itemstack
 
 	if mcl_hunger.active and hunger_points then
@@ -43,6 +47,12 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 		else
 			core.add_item(user:get_pos(), nstack)
 		end
+	end
+
+	if core.get_item_group(itemname, "food") == 3 then
+		mcl_hunger.play_drinking_sound(player)
+	else
+		mcl_hunger.play_eating_sound(player)
 	end
 
 	for _, callback in pairs(core.registered_on_item_eats) do
