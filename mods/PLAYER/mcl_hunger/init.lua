@@ -32,15 +32,10 @@ mcl_hunger.EXHAUST_LVL = 4000 -- at what exhaustion player saturation gets lower
 
 mcl_hunger.SATURATION_INIT = 5 -- Initial saturation for new/respawning players
 
-mcl_hunger.eat_duration = {}
-
-mcl_hunger.eat_anim_hud = {}
-mcl_hunger.eat_anim_block = {}
-mcl_hunger.eat_anim_effect = {} -- effect timer for precise interval
-
 dofile(modpath.."/api.lua")
 dofile(modpath.."/hunger.lua")
 dofile(modpath.."/compat.lua")
+dofile(modpath.."/eatanim.lua")
 
 if not mcl_hunger.active then
 	core.register_on_joinplayer(function(player)
