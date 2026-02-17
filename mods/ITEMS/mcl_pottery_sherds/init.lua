@@ -134,18 +134,20 @@ local function get_sherd_desc(face)
 	return D(description.." Pottery Sherd")
 end
 
-local function get_itemstack_from_node(pos)
-	local meta = core.get_meta(pos)
+local function get_itemstack_from_meta(metatable)
 	local it = ItemStack("mcl_pottery_sherds:pot")
 	local im = it:get_meta()
-	im:set_string("pot_faces", meta:get_string("pot_faces"))
+	im:set_string("pot_faces", metatable.fields["pot_faces"] or "")
 	tt.reload_itemstack_description(it)
 	return it
 end
 
-local function get_drops_from_node(pos)
-	local meta = core.get_meta(pos)
-	local faces = core.deserialize(meta:get_string("pot_faces"))
+local function get_itemstack_from_node(pos)
+	return get_itemstack_from_meta(core.get_meta(pos):to_table())
+end
+
+local function get_drops_from_node(metatable)
+	local faces = core.deserialize(metatable.fields["pot_faces"]) or {}
 	local drops = {}
 	for i = 1, 4 do
 		local face = faces[i]
@@ -153,9 +155,16 @@ local function get_drops_from_node(pos)
 		table.insert(drops, item)
 	end
 
-	local loot = meta:get_string ("loot")
+	local loot = metatable.fields["loot"]
 	table.insert(drops, loot or {})
 	return drops
+end
+
+local function drop_items(pos, metatable, silk_touch)
+	local drops = silk_touch and {get_itemstack_from_meta(metatable)} or get_drops_from_node(metatable)
+	for _, itemstack in pairs(drops) do
+		core.add_item(pos, itemstack)
+	end
 end
 
 core.register_node("mcl_pottery_sherds:pot", {
@@ -214,14 +223,17 @@ core.register_node("mcl_pottery_sherds:pot", {
 		meta:set_string("pot_faces",itemstack:get_meta():get_string("pot_faces"))
 		update_entities(pos)
 	end,
-	after_dig_node = function(pos)
-		update_entities(pos,true)
-	end,
 	on_destruct = function(pos)
-		local drops = get_drops_from_node(pos)
-		for _, drop in pairs(drops) do
-			core.add_item(pos, drop)
-		end
+		update_entities(pos, true)
+	end,
+	on_blast = function(pos)
+		drop_items(pos, core.get_meta(pos):to_table(), false)
+		core.remove_node(pos)
+	end,
+	after_dig_node = function(pos, _, oldmeta, digger)
+		local wielded = digger:get_wielded_item()
+		local silk_touch = mcl_enchanting.get_enchantment(wielded, "silk_touch") ~= 0
+		drop_items(pos, oldmeta, silk_touch)
 	end,
 	on_rotate = function(_, _,  _, mode, _)
 		if mode == screwdriver.ROTATE_AXIS then
