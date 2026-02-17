@@ -1,5 +1,3 @@
-local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / tonumber(core.settings:get("movement_speed_walk"))
-
 function mcl_hunger.can_eat_when_full (player, itemstack)
 	return (mcl_hunger.active == false)
 		or (core.get_item_group (itemstack:get_name (), "can_eat_when_full") == 1)
@@ -50,9 +48,9 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 	end
 
 	if core.get_item_group(itemname, "food") == 3 then
-		mcl_hunger.play_drinking_sound(player)
+		mcl_hunger.play_drinking_sound(user)
 	else
-		mcl_hunger.play_eating_sound(player)
+		mcl_hunger.play_eating_sound(user)
 	end
 
 	for _, callback in pairs(core.registered_on_item_eats) do
@@ -73,8 +71,6 @@ function mcl_hunger.reset_bars_poison_hunger(player)
 		hb.change_hudbar(player, "exhaustion", nil, nil, nil, nil, "mcl_hunger_bar_exhaustion.png")
 	end
 end
-
-local poisonrandomizer = PcgRandom(os.time())
 
 function mcl_hunger.is_player_full (player)
 	return mcl_hunger.get_hunger (player) >= 20

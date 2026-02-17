@@ -1,16 +1,19 @@
-mcl_hunger.eat_duration = {}
-mcl_hunger.eat_anim_hud = {}
-mcl_hunger.eat_anim_block = {}
-mcl_hunger.eat_anim_effect = {} -- effect timer for precise interval
+eat_duration = {}
+eat_anim_hud = {}
+eat_anim_block = {}
+last_eat_sound = {} -- effect timer for precise interval
 
-function mcl_hunger.eat_effects(user, itemname, hunger_points, item_def, pitch)
+local SPEED_WHILE_EAT = tonumber(core.settings:get("movement_speed_crouch")) / tonumber(core.settings:get("movement_speed_walk"))
+local EAT_DELAY = 1.61
+
+function play_eat_anim_sound(user, itemname, hunger_points, item_def, pitch)
 	if not (user and itemname and hunger_points and item_def) then
 		return false
 	end
 
 	local foodtype = core.get_item_group(itemname, "food")
 	if foodtype == 3 then
-		-- Item is a drink, only play drinking sound (no particle)
+		-- Item is a drink, play drinking sound
 		core.sound_play("survival_thirst_drink", {
 			max_hear_distance = 6,
 			gain = 0.75,
@@ -62,7 +65,7 @@ local function is_player_trying_to_eat(player, keypress)
 		return false
 	end
 
-	if mcl_hunger.eat_anim_block[player] then
+	if eat_anim_block[player] then
 		return false
 	end
 
@@ -76,18 +79,18 @@ local function is_player_trying_to_eat(player, keypress)
 end
 
 local function begin_eating_state(player)
-	mcl_hunger.eat_duration[player] = 0
+	eat_duration[player] = 0
 	playerphysics.add_physics_factor(player, "speed", "mcl_hunger:eat_anim", SPEED_WHILE_EAT)
 end
 
 local function terminate_eating_state(player)
-	mcl_hunger.eat_duration[player] = nil
-	mcl_hunger.eat_anim_effect[player] = nil
+	eat_duration[player] = nil
+	last_eat_sound[player] = nil
 	playerphysics.remove_physics_factor(player, "speed", "mcl_hunger:eat_anim")
 end
 
 function mcl_hunger.prevent_eating (player)
-	mcl_hunger.eat_anim_block[player] = true
+	eat_anim_block[player] = true
 	terminate_eating_state(player)
 end
 
@@ -103,19 +106,19 @@ local function check_eat(player)
 	-- Prioritize eat over shield block
 	mcl_shields.players[player].blocking = 0
 
-	if not mcl_hunger.eat_duration[player] then
+	if not eat_duration[player] then
 		begin_eating_state(player)
 	end
 
 	local def = core.registered_items[itemname]
 	local hunger_points = core.get_item_group(itemname, "eatable")
 
-	-- Eat animation sound & particle
-	local step = math.floor(mcl_hunger.eat_duration[player] / 0.2)
-	local last_step = mcl_hunger.eat_anim_effect[player] or 0
+	-- Eat animation sound
+	local step = math.floor(eat_duration[player] / 0.2)
+	local last_step = last_eat_sound[player] or 0
 	if step > last_step then
-		mcl_hunger.eat_anim_effect[player] = step
-		mcl_hunger.eat_effects(player, itemname, hunger_points, def)
+		last_eat_sound[player] = step
+		play_eat_anim_sound(player, itemname, hunger_points, def)
 	end
 end
 
@@ -127,8 +130,8 @@ local function check_eat_term(player)
 	local def = core.registered_items[itemname]
 	local hunger_points = core.get_item_group(itemname, "eatable")
 
-	local eat_delay = def._mcl_eat_delay or mcl_hunger.EAT_DELAY
-	if mcl_hunger.eat_duration[player] and mcl_hunger.eat_duration[player] >= eat_delay then
+	local eat_delay = def._mcl_eat_delay or EAT_DELAY
+	if eat_duration[player] and eat_duration[player] >= eat_delay then
 		itemstack = core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
 		if itemstack then
 			player:set_wielded_item(itemstack)
@@ -156,7 +159,7 @@ end
 controls.register_on_hold (function (player, key)
 	if not is_player_trying_to_eat (player, key) then
 		-- special case. can happen when the player switches the wielded item while eating
-		if key == "RMB" and mcl_hunger.eat_duration[player] then
+		if key == "RMB" and eat_duration[player] then
 			terminate_eating_state(player)
 		end
 		return
@@ -167,14 +170,14 @@ controls.register_on_hold (function (player, key)
 end)
 
 core.register_globalstep (function (dtime)
-	for player, hudid in pairs (mcl_hunger.eat_anim_hud) do
-		if not mcl_hunger.eat_duration[player] then
+	for player, hudid in pairs (eat_anim_hud) do
+		if not eat_duration[player] then
 			player:hud_set_flags({wielditem = true})
 			player:hud_remove(hudid)
-			mcl_hunger.eat_anim_hud[player] = nil
+			eat_anim_hud[player] = nil
 		end
 	end
-	for player, time in pairs (mcl_hunger.eat_duration) do
+	for player, time in pairs (eat_duration) do
 		local wielditem = player:get_wielded_item()
 		local itemstackdef = wielditem:get_definition()
 		local wield_image = itemstackdef.wield_image
@@ -183,8 +186,8 @@ core.register_globalstep (function (dtime)
 		end
 		local pos = get_sprite_pos(time)
 
-		if not mcl_hunger.eat_anim_hud[player] then
-			mcl_hunger.eat_anim_hud[player] = player:hud_add({
+		if not eat_anim_hud[player] then
+			eat_anim_hud[player] = player:hud_add({
 				hud_elem_type = "image",
 				scale = get_sprite_scale(player),
 				alignment = {x = 0, y = 0},
@@ -195,10 +198,10 @@ core.register_globalstep (function (dtime)
 			})
 			player:hud_set_flags({wielditem = false})
 		else
-			player:hud_change(mcl_hunger.eat_anim_hud[player], "text", wield_image)
-			player:hud_change(mcl_hunger.eat_anim_hud[player], "position", get_sprite_pos(time))
+			player:hud_change(eat_anim_hud[player], "text", wield_image)
+			player:hud_change(eat_anim_hud[player], "position", get_sprite_pos(time))
 		end
-		mcl_hunger.eat_duration[player] = time + dtime
+		eat_duration[player] = time + dtime
 	end
 end)
 
@@ -212,7 +215,7 @@ controls.register_on_release (function (player, key)
 
 	mcl_hunger.prevent_eating (player)
 	core.after(0, function ()
-		mcl_hunger.eat_anim_block[player] = nil
+		eat_anim_block[player] = nil
 	end)
 end)
 
@@ -222,15 +225,4 @@ end)
 
 core.register_on_dieplayer(function (player)
 	mcl_hunger.prevent_eating(player)
-end)
-
--- player-action based hunger changes
-core.register_on_dignode(function(_, _, player)
-	-- is_fake_player comes from the pipeworks, we are not interested in those
-	if not player or not player:is_player() or player.is_fake_player == true then
-		return
-	end
-	local name = player:get_player_name()
-	-- dig event
-	mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_DIG)
 end)

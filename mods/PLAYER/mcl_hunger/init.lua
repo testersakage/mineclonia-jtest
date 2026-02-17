@@ -16,8 +16,6 @@ if core.settings:get_bool("enable_damage") == true and core.settings:get_bool("m
 	mcl_hunger.active = true
 end
 
-mcl_hunger.EAT_DELAY = 1.61
-
 -- Exhaustion increase
 mcl_hunger.EXHAUST_DIG = 5  -- after digging node
 mcl_hunger.EXHAUST_JUMP = 50 -- jump
@@ -246,4 +244,15 @@ mcl_player.register_globalstep_slow(function(player)
 		end
 
 	end
+end)
+
+-- player-action based hunger changes
+core.register_on_dignode(function(_, _, player)
+	-- is_fake_player comes from the pipeworks, we are not interested in those
+	if not player or not player:is_player() or player.is_fake_player == true then
+		return
+	end
+	local name = player:get_player_name()
+	-- dig event
+	mcl_hunger.exhaust(name, mcl_hunger.EXHAUST_DIG)
 end)
