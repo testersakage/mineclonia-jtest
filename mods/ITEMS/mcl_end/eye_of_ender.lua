@@ -1,6 +1,20 @@
 -- Eye of Ender
 local S = core.get_translator(core.get_current_modname())
 
+-- Trailing particles of a thrown eye of ender
+local traildef = {
+	texpool = {
+		{name = "mcl_end_eoe_particle1.png", scale_tween = {0.5, 3}},
+		{name = "mcl_end_eoe_particle2.png", scale_tween = {0.5, 3}},
+		{name = "mcl_end_eoe_particle3.png", scale_tween = {0.5, 3}},
+	},
+	time = 3,
+	exptime = 2,
+	amount = 90,
+	pos = {min = vector.new(-0.25, -0.25, -0.25), max = vector.new(0.25, 0.25, 0.25)},
+	acc = vector.new(0, -1, 0),
+}
+
 core.register_entity("mcl_end:ender_eye", {
 	initial_properties = {
 		physical = false,
@@ -53,20 +67,6 @@ core.register_entity("mcl_end:ender_eye", {
 				self.object:set_acceleration({x=0, y=-3, z=0})
 				self.object:set_velocity({x=0, y=self.object:get_velocity().y*0.2, z=0})
 			end
-		else
-			-- Fly normally and generate particles
-			local pos = self.object:get_pos()
-			pos.x = pos.x + math.random(-1, 1)*0.5
-			pos.y = pos.y + math.random(-1, 0)*0.5
-			pos.z = pos.z + math.random(-1, 1)*0.5
-			core.add_particle({
-				pos = pos,
-				texture = "mcl_particles_teleport.png",
-				expirationtime = 1,
-				velocity = {x=math.random(-1, 1)*0.1, y=math.random(-30, 0)*0.1, z=math.random(-1, 1)*0.1},
-				acceleration = {x=0, y=0, z=0},
-				size = 2.5,
-			})
 		end
 	end,
 
@@ -134,6 +134,8 @@ local function throw_eye(itemstack, user)
 		obj:set_velocity({x=dir.x*velocity, y=3, z=dir.z*velocity})
 	end
 
+	traildef.attached = obj
+	core.add_particlespawner(traildef)
 
 	if not is_creative then
 		itemstack:take_item()
