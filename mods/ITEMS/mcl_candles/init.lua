@@ -337,7 +337,7 @@ local tpl_cake = {
 	drawtype = "mesh",
 	drop = "",
 	groups = {
-		attached_node = 1, dig_by_piston = 1, food = 2, handy = 1, no_eat_delay = 1,
+		attached_node = 1, dig_by_piston = 1, food = 2, handy = 1,
 		not_in_creative_inventory = 1, unsticky = 1
 	},
 	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
