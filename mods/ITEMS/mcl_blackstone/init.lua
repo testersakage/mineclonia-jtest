@@ -24,10 +24,10 @@ core.register_node("mcl_blackstone:blackstone_gilded", {
 	drop = {
 		max_items = 1,
 		items = {
-			{items = {"mcl_core:gold_nugget 2"},rarity = 40},
-			{items = {"mcl_core:gold_nugget 3"},rarity = 40},
-			{items = {"mcl_core:gold_nugget 4"},rarity = 40},
-			{items = {"mcl_core:gold_nugget 5"},rarity = 40},
+			{items = {"mcl_core:gold_nugget 5"}, rarity = 40},
+			{items = {"mcl_core:gold_nugget 4"}, rarity = 39},
+			{items = {"mcl_core:gold_nugget 3"}, rarity = 38},
+			{items = {"mcl_core:gold_nugget 2"}, rarity = 37},
 			-- 4x 1 in 40 chance adds up to a 10% chance
 			{items = {"mcl_blackstone:blackstone_gilded"}},
 		}
@@ -40,7 +40,10 @@ core.register_node("mcl_blackstone:blackstone_gilded", {
 		items = {"mcl_core:gold_nugget"},
 		min_count = 2,
 		max_count = 5,
-		cap = 5,
+		factor = 0,
+		get_chance = function(level)
+			return ({1/21, 1/6, 1})[math.max(math.min(level, 3), 1)]
+		end
 	},
 })
 core.register_node("mcl_blackstone:nether_gold", {
@@ -51,10 +54,10 @@ core.register_node("mcl_blackstone:nether_gold", {
 	drop = {
 		max_items = 1,
 		items = {
-			{items = {"mcl_core:gold_nugget 6"},rarity = 5},
-			{items = {"mcl_core:gold_nugget 5"},rarity = 4},
-			{items = {"mcl_core:gold_nugget 4"},rarity = 3},
-			{items = {"mcl_core:gold_nugget 3"},rarity = 2},
+			{items = {"mcl_core:gold_nugget 6"}, rarity = 5},
+			{items = {"mcl_core:gold_nugget 5"}, rarity = 4},
+			{items = {"mcl_core:gold_nugget 4"}, rarity = 3},
+			{items = {"mcl_core:gold_nugget 3"}, rarity = 2},
 			{items = {"mcl_core:gold_nugget 2"}},
 		}
 	},
