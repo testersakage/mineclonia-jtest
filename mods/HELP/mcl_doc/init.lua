@@ -122,9 +122,6 @@ doc.sub.items.register_factoid(nil, "use", function(itemstring, def)
 				s = s .. "\n" .. S("You cannot consume this when your hunger bar is full.")
 			end
 		end
-		if core.get_item_group(itemstring, "no_eat_delay") ~= 1 then
-			s = s .. "\n" .. S("You have to wait for about 2 seconds before you can eat or drink again.")
-		end
 	end
 	return s
 end)

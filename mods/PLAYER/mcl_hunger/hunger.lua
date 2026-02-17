@@ -5,7 +5,6 @@ local quick_eat_mode = core.settings:get_bool("mcl_quick_eat", false)
 local function should_quick_eat(itemstack)
 	return quick_eat_mode
 		or not mcl_hunger.active
-		or core.get_item_group(itemstack:get_name(), "no_eat_delay") > 0
 end
 
 local function can_eat_when_full (player, itemstack)
