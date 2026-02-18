@@ -293,6 +293,7 @@ function ARROW_ENTITY:on_hit_player(obj, _, ray_hit)
 	end
 
 	local dot_attack = mcl_shields.find_angle(self:get_last_pos(), obj)
+	if not dot_attack then return false end
 	local can_block, stack = mcl_shields.can_block(obj, dot_attack)
 	if can_block then
 		local vec = self.object:get_velocity()

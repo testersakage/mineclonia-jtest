@@ -236,6 +236,7 @@ end
 -- -1 means the attack is at the center of view.  -0.7 or -cos(45°) means attack is at a frontal 45 degree.
 -- 0 means exactly perpendicular (side/top/bottom). >0 means it come from the rear.
 function mcl_shields.find_angle (attack_pos, obj)
+	if not attack_pos then return end
 	local obj_pos = obj:get_pos()
 	obj_pos.y = obj_pos.y + ( obj:get_properties().eye_height * 2/3 ) -- Loose approximation of shield centre.
 	local attack_direction = vector.normalize(vector.subtract(obj_pos, attack_pos))
