@@ -576,24 +576,16 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 		weapon:add_wear(wear)
 		hitter:set_wielded_item(weapon)
 	end
+	-- Don't access the weapon item stack below, because it may now - after
+	-- the application of wear - be empty.
 
 	if damage >= 0 then
 		if damage > 0 then
-			-- weapon sounds
-			if weapon and weapon:get_definition().sounds ~= nil then
-
-				local s = math.random(0, #weapon:get_definition().sounds)
-
-				core.sound_play(weapon:get_definition().sounds[s], {
-							    object = self.object, --hitter,
-							    max_hear_distance = 8
-										       }, true)
-			else
-				core.sound_play("default_punch", {
-							    object = self.object,
-							    max_hear_distance = 5
-								     }, true)
-			end
+			core.sound_play("default_punch",
+				{
+					object = self.object,
+					max_hear_distance = 5
+				}, true)
 		end
 
 		-- Deal damage and run callbacks, e.g. to retaliate.
