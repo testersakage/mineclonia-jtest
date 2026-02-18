@@ -122,7 +122,7 @@ Please read <https://minecraft.wiki/w/Breaking> to learn how digging times work 
 * `cobble=1`: Cobblestone of any kind
 * `soul_block`: Fire burning on these blocks turns to soul fire, can be used to craft soul torch
 * `sus_stew_ingredient`: Item can be used to craft a suspicious stew
-
+* `metal_nugget`: Used for items that can be used to craft name tags. Generally used with metal nuggets.
 ### Material groups
 
 These groups correspond to the Minecraft materials. They classify the block into a type, indicating what the block is “made off”.

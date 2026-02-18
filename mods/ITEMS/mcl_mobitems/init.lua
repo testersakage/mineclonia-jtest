@@ -520,6 +520,22 @@ core.register_craft({
 	}
 })
 
+core.register_craft({
+	output = "mcl_mobitems:nametag",
+	recipe = {
+		{"", "group:metal_nugget"},
+		{"mcl_core:paper", ""}
+	}
+})
+
+core.register_craft({
+	output = "mcl_mobitems:nametag",
+	recipe = {
+		{"group:metal_nugget", ""},
+		{"", "mcl_core:paper"}
+	}
+})
+
 core.register_on_item_eat(function (_, _, itemstack, user, _)	-- poisoning with spider eye
 	if itemstack:get_name() == "mcl_mobitems:spider_eye" then
 		mcl_potions.give_effect_by_level("poison", user, 1, 4)

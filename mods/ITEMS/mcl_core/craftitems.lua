@@ -40,7 +40,7 @@ core.register_craftitem("mcl_core:iron_nugget", {
 	description = S("Iron Nugget"),
 	_doc_items_longdesc = S("Iron nuggets are very small pieces of molten iron; the main purpose is to create iron ingots."),
 	inventory_image = "mcl_core_iron_nugget.png",
-	groups = { craftitem=1 },
+	groups = {craftitem=1, metal_nugget=1},
 	_mcl_crafting_output = {square3 = {output = "mcl_core:iron_ingot"}}
 })
 
@@ -48,7 +48,7 @@ core.register_craftitem("mcl_core:gold_nugget", {
 	description = S("Gold Nugget"),
 	_doc_items_longdesc = S("Gold nuggets are very small pieces of molten gold; the main purpose is to create gold ingots."),
 	inventory_image = "mcl_core_gold_nugget.png",
-	groups = { craftitem=1 },
+	groups = {craftitem=1, metal_nugget=1},
 	_mcl_crafting_output = {square3 = {output = "mcl_core:gold_ingot"}}
 })
 
