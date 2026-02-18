@@ -1,19 +1,57 @@
 -- Eye of Ender
 local S = core.get_translator(core.get_current_modname())
 
+local texpool = {
+	{name = "mcl_end_eoe_particle1.png", scale_tween = {0.5, 3}},
+	{name = "mcl_end_eoe_particle2.png", scale_tween = {0.5, 3}},
+	{name = "mcl_end_eoe_particle3.png", scale_tween = {0.5, 3}},
+}
+
 -- Trailing particles of a thrown eye of ender
 local traildef = {
-	texpool = {
-		{name = "mcl_end_eoe_particle1.png", scale_tween = {0.5, 3}},
-		{name = "mcl_end_eoe_particle2.png", scale_tween = {0.5, 3}},
-		{name = "mcl_end_eoe_particle3.png", scale_tween = {0.5, 3}},
-	},
-	time = 3,
+	texpool = texpool,
+	time = 4,
 	exptime = 2,
 	amount = 90,
+	attached = nil, -- set when spawning.
 	pos = {min = vector.new(-0.25, -0.25, -0.25), max = vector.new(0.25, 0.25, 0.25)},
 	acc = vector.new(0, -1, 0),
 }
+
+-- Implosion animation when eye of ender breaks.
+local implodef = {
+	texpool = texpool,
+	time = 0.1,
+	exptime = 0.5,
+	amount = 25,
+	attract = {
+		kind = "point",
+		strength = 1,
+		origin = nil, -- set when spawning.
+	},
+	pos = nil, --set when spawning.
+	radius = 1,
+}
+
+-- Explosion animation when eye of ender breaks.
+local explodef = {
+	texpool = texpool,
+	time = 0.1,
+	exptime = 2,
+	amount = 100,
+	attract = {
+		kind = "point",
+		strength = -25,
+		origin = nil, -- set when spawning.
+	},
+	pos = nil, --set when spawning.
+	radius = 0.1,
+	drag = -1,
+}
+
+local GRAVITY = vector.new(0, -10, 0)
+local BOUNCE_VEL = vector.new(0, 6, 0)
+local REBOUNCE_VEL = vector.new(0, 2, 0)
 
 core.register_entity("mcl_end:ender_eye", {
 	initial_properties = {
@@ -24,54 +62,53 @@ core.register_entity("mcl_end:ender_eye", {
 		pointable = false,
 	},
 
-	-- Save and restore age
+	_age = 0, -- age in seconds
+	_phase = 0, -- phase 0: flying. phase 1: idling in mid air, about to drop or shatter
+
 	get_staticdata = function(self)
-		return tostring(self._age)
+		return core.serialize({age = self._age, phase = self._phase})
 	end,
+
 	on_activate = function(self, staticdata)
-		local age = tonumber(staticdata)
-		if type(age) == "number" then
-			self._age = age
-			if self._age >= 2 then
-				self._phase = 1
-			else
-				self._phase = 0
-			end
-		end
+		local data = core.deserialize(staticdata) or {}
+		self._age = tonumber(data.age) or 0
+		self._phase = tonumber(data.phase) or 0
 	end,
 
 	on_step = function(self, dtime)
 		self._age = self._age + dtime
-		if self._age >= 3 then
+		if self._age >= 2 and self._phase == 0 then
+			self._phase = 1
+			-- Stop the eye and bounce it upward.
+			self.object:set_acceleration(GRAVITY)
+			self.object:set_velocity(BOUNCE_VEL)
+		elseif self._age >= 3 and self._phase == 1 then
+			self._phase = 2
+			self.object:set_velocity(REBOUNCE_VEL)
+		elseif self._age >= 3.5 and self._phase == 2 then
+			self._phase = 3
+			self.object:set_velocity(REBOUNCE_VEL)
+		elseif self._age >= 4 then
 			-- End of life
+			local pos = self.object:get_pos()
+			local v = self.object:get_velocity()
+			self.object:remove()
 			local r = math.random(1,5)
 			if r == 1 then
 				-- 20% chance to get destroyed completely.
-				-- 100% if in Creative Mode
-				self.object:remove()
-				return
+				implodef.pos = pos
+				implodef.attract.origin = pos
+				core.add_particlespawner(implodef)
+				explodef.pos = pos
+				explodef.attract.origin = pos
+				core.after(0.5, core.add_particlespawner, explodef)
 			else
 				-- 80% to drop as an item
-				local pos = self.object:get_pos()
-				local v = self.object:get_velocity()
-				self.object:remove()
 				local item = core.add_item(pos, "mcl_end:ender_eye")
 				item:set_velocity(v)
-				return
-			end
-		elseif self._age >= 2 then
-			if self._phase == 0 then
-				self._phase = 1
-				-- Stop the eye and wait for another second.
-				-- The vertical speed changes are just eye candy.
-				self.object:set_acceleration({x=0, y=-3, z=0})
-				self.object:set_velocity({x=0, y=self.object:get_velocity().y*0.2, z=0})
 			end
 		end
 	end,
-
-	_age = 0, -- age in seconds
-	_phase = 0, -- phase 0: flying. phase 1: idling in mid air, about to drop or shatter
 })
 
 -- Throw eye of ender to make it fly to the closest stronghold
@@ -132,6 +169,7 @@ local function throw_eye(itemstack, user)
 		dir = vector.normalize(vector.direction(o, s))
 		obj:set_acceleration({x=dir.x*-3, y=4, z=dir.z*-3})
 		obj:set_velocity({x=dir.x*velocity, y=3, z=dir.z*velocity})
+
 	end
 
 	traildef.attached = obj
