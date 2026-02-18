@@ -167,13 +167,13 @@ core.register_abm({
 		for _, p in pairs(posses) do
 			local ndef = core.registered_nodes[core.get_node(vector.new(pos.x + p[1], pos.y, pos.z + p[2])).name]
 			if ndef and ndef.walkable then
-				local posy = pos.y
-				while core.get_node(vector.new(pos.x, posy, pos.z)).name == "mcl_core:cactus" do
-					local pos = vector.new(pos.x, posy, pos.z)
-					core.remove_node(pos)
-					core.add_item(vector.offset(pos, mcl_util.float_random(-0.5, 0.5), 0, mcl_util.float_random(-0.5, 0.5)), "mcl_core:cactus")
-					posy = posy + 1
+				local pos1 = vector.copy(pos)
+				while core.get_node(pos1).name == "mcl_core:cactus" do
+					core.remove_node(pos1)
+					core.add_item(vector.offset(pos1, mcl_util.float_random(-0.5, 0.5), 0, mcl_util.float_random(-0.5, 0.5)), "mcl_core:cactus")
+					pos1.y = pos1.y + 1
 				end
+				core.check_for_falling(pos1)
 				break
 			end
 		end
