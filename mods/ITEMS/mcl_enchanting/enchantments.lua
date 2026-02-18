@@ -11,7 +11,7 @@ local function increase_damage(damage_group, factor)
 end
 
 -- implemented via on_enchant and additions in mobs_mc; Slowness IV part unimplemented
-mcl_enchanting.enchantments.bane_of_arthropods = {
+mcl_enchanting.register_enchantment("bane_of_arthropods", {
 	name = S("Bane of Arthropods"),
 	max_level = 5,
 	primary = {sword = true},
@@ -29,9 +29,9 @@ mcl_enchanting.enchantments.bane_of_arthropods = {
 	inv_tool_tab = false,
 	anvil_item_factor = 2,
 	anvil_book_factor = 1,
-}
+})
 
-mcl_enchanting.enchantments.channeling = {
+mcl_enchanting.register_enchantment("channeling", {
 	name = S("Channeling"),
 	max_level = 1,
 	primary = {trident = true},
@@ -49,10 +49,10 @@ mcl_enchanting.enchantments.channeling = {
 	inv_tool_tab = false,
 	anvil_item_factor = 8,
 	anvil_book_factor = 4,
-}
+})
 
 -- implemented in mcl_death_drop
-mcl_enchanting.enchantments.curse_of_vanishing = {
+mcl_enchanting.register_enchantment("curse_of_vanishing", {
 	name = S("Curse of Vanishing"),
 	max_level = 1,
 	primary = {},
@@ -70,10 +70,10 @@ mcl_enchanting.enchantments.curse_of_vanishing = {
 	inv_tool_tab = true,
 	anvil_item_factor = 8,
 	anvil_book_factor = 4,
-}
+})
 
 -- implemented below
-mcl_enchanting.enchantments.depth_strider = {
+mcl_enchanting.register_enchantment("depth_strider", {
 	name = S("Depth Strider"),
 	max_level = 3,
 	primary = {},
@@ -91,7 +91,7 @@ mcl_enchanting.enchantments.depth_strider = {
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
 mcl_player.register_globalstep_slow(function(player)
 	if core.get_item_group(mcl_player.players[player].nodes.feet, "liquid") ~= 0 and mcl_enchanting.get_enchantment(player:get_inventory():get_stack("armor", 5), "depth_strider") then
@@ -123,7 +123,7 @@ function mcl_enchanting.mob_physics_enchantment_levels (mob)
 end
 
 -- implemented via on_enchant
-mcl_enchanting.enchantments.efficiency = {
+mcl_enchanting.register_enchantment("efficiency", {
 	name = S("Efficiency"),
 	max_level = 5,
 	primary = {pickaxe = true, shovel = true, axe = true, hoe = true},
@@ -144,10 +144,10 @@ mcl_enchanting.enchantments.efficiency = {
 	inv_tool_tab = true,
 	anvil_item_factor = 1,
 	anvil_book_factor = 1,
-}
+})
 
 -- implemented in mcl_mobs and via register_on_punchplayer callback
-mcl_enchanting.enchantments.fire_aspect = {
+mcl_enchanting.register_enchantment("fire_aspect", {
 	name = S("Fire Aspect"),
 	max_level = 2,
 	primary = {sword = true},
@@ -165,7 +165,7 @@ mcl_enchanting.enchantments.fire_aspect = {
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
 core.register_on_punchplayer(function(player, hitter)
 	local wielditem = hitter and mcl_util.get_wielditem (hitter)
@@ -177,7 +177,7 @@ core.register_on_punchplayer(function(player, hitter)
 	end
 end)
 
-mcl_enchanting.enchantments.flame = {
+mcl_enchanting.register_enchantment("flame", {
 	name = S("Flame"),
 	max_level = 1,
 	primary = {bow = true},
@@ -195,10 +195,10 @@ mcl_enchanting.enchantments.flame = {
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
 -- implemented in mcl_item_entity
-mcl_enchanting.enchantments.fortune = {
+mcl_enchanting.register_enchantment("fortune", {
 	name = S("Fortune"),
 	max_level = 3,
 	primary = {pickaxe = true, shovel = true, axe = true, hoe = true},
@@ -216,10 +216,10 @@ mcl_enchanting.enchantments.fortune = {
 	inv_tool_tab = true,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
 -- implemented via mcl_walkover.register_global
-mcl_enchanting.enchantments.frost_walker = {
+mcl_enchanting.register_enchantment("frost_walker", {
 	name = S("Frost Walker"),
 	max_level = 2,
 	primary = {},
@@ -237,7 +237,7 @@ mcl_enchanting.enchantments.frost_walker = {
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
 mcl_walkover.register_global(function(pos, _, player)
 	local boots = player:get_inventory():get_stack("armor", 5)
@@ -257,7 +257,7 @@ mcl_walkover.register_global(function(pos, _, player)
 end)
 
 -- requires missing Mineclonia feature
-mcl_enchanting.enchantments.impaling = {
+mcl_enchanting.register_enchantment("impaling", {
 	name = S("Impaling"),
 	max_level = 5,
 	primary = {trident = true},
@@ -275,10 +275,10 @@ mcl_enchanting.enchantments.impaling = {
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
 -- implemented in mcl_bows
-mcl_enchanting.enchantments.infinity = {
+mcl_enchanting.register_enchantment("infinity", {
 	name = S("Infinity"),
 	max_level = 1,
 	primary = {bow = true},
@@ -296,10 +296,10 @@ mcl_enchanting.enchantments.infinity = {
 	inv_tool_tab = false,
 	anvil_item_factor = 8,
 	anvil_book_factor = 4,
-}
+})
 
 -- implemented via core.calculate_knockback
-mcl_enchanting.enchantments.knockback = {
+mcl_enchanting.register_enchantment("knockback", {
 	name = S("Knockback"),
 	max_level = 2,
 	primary = {sword = true},
@@ -317,7 +317,7 @@ mcl_enchanting.enchantments.knockback = {
 	inv_tool_tab = false,
 	anvil_item_factor = 2,
 	anvil_book_factor = 1,
-}
+})
 
 function core.calculate_knockback(player, hitter, time_from_last_punch, tool_capabilities, dir, distance, damage)
 	-- Core knockback computation is overridden by mcl_player.
@@ -325,7 +325,7 @@ function core.calculate_knockback(player, hitter, time_from_last_punch, tool_cap
 end
 
 -- implemented in mcl_mobs and mobs_mc
-mcl_enchanting.enchantments.looting = {
+mcl_enchanting.register_enchantment("looting", {
 	name = S("Looting"),
 	max_level = 3,
 	primary = {sword = true},
@@ -343,9 +343,9 @@ mcl_enchanting.enchantments.looting = {
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
-mcl_enchanting.enchantments.loyalty = {
+mcl_enchanting.register_enchantment("loyalty", {
 	name = S("Loyalty"),
 	max_level = 3,
 	primary = {trident = true},
@@ -363,10 +363,10 @@ mcl_enchanting.enchantments.loyalty = {
 	inv_tool_tab = false,
 	anvil_item_factor = 1,
 	anvil_book_factor = 1,
-}
+})
 
 -- implemented in mcl_fishing
-mcl_enchanting.enchantments.luck_of_the_sea = {
+mcl_enchanting.register_enchantment("luck_of_the_sea", {
 	name = S("Luck of the Sea"),
 	max_level = 3,
 	primary = {fishing_rod = true},
@@ -384,10 +384,10 @@ mcl_enchanting.enchantments.luck_of_the_sea = {
 	inv_tool_tab = true,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
 -- implemented in mcl_fishing
-mcl_enchanting.enchantments.lure = {
+mcl_enchanting.register_enchantment("lure", {
 	name = S("Lure"),
 	max_level = 3,
 	primary = {fishing_rod = true},
@@ -405,10 +405,10 @@ mcl_enchanting.enchantments.lure = {
 	inv_tool_tab = true,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
 -- implemented in mcl_experience
-mcl_enchanting.enchantments.mending = {
+mcl_enchanting.register_enchantment("mending", {
 	name = S("Mending"),
 	max_level = 1,
 	primary = {},
@@ -426,7 +426,7 @@ mcl_enchanting.enchantments.mending = {
 	inv_tool_tab = true,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
 mcl_experience.register_on_add_xp(function(player, xp)
 	local inv = player:get_inventory()
@@ -479,7 +479,7 @@ mcl_experience.register_on_add_xp(function(player, xp)
 	return xp
 end, 0)
 
-mcl_enchanting.enchantments.multishot = {
+mcl_enchanting.register_enchantment("multishot", {
 	name = S("Multishot"),
 	max_level = 1,
 	primary = {crossbow = true},
@@ -497,9 +497,9 @@ mcl_enchanting.enchantments.multishot = {
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
-mcl_enchanting.enchantments.piercing = {
+mcl_enchanting.register_enchantment("piercing", {
 	name = S("Piercing"),
 	max_level = 4,
 	primary = {crossbow = true},
@@ -517,10 +517,10 @@ mcl_enchanting.enchantments.piercing = {
 	inv_tool_tab = false,
 	anvil_item_factor = 1,
 	anvil_book_factor = 1,
-}
+})
 
 -- implemented in mcl_bows
-mcl_enchanting.enchantments.power = {
+mcl_enchanting.register_enchantment("power", {
 	name = S("Power"),
 	max_level = 5,
 	primary = {bow = true},
@@ -538,10 +538,10 @@ mcl_enchanting.enchantments.power = {
 	inv_tool_tab = false,
 	anvil_item_factor = 1,
 	anvil_book_factor = 1,
-}
+})
 
 -- implemented via core.calculate_knockback (together with the Knockback enchantment) and mcl_bows
-mcl_enchanting.enchantments.punch = {
+mcl_enchanting.register_enchantment("punch", {
 	name = S("Punch"),
 	max_level = 2,
 	primary = {},
@@ -559,9 +559,9 @@ mcl_enchanting.enchantments.punch = {
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
-mcl_enchanting.enchantments.quick_charge = {
+mcl_enchanting.register_enchantment("quick_charge", {
 	name = S("Quick Charge"),
 	max_level = 3,
 	primary = {crossbow = true},
@@ -579,10 +579,10 @@ mcl_enchanting.enchantments.quick_charge = {
 	inv_tool_tab = false,
 	anvil_item_factor = 2,
 	anvil_book_factor = 1,
-}
+})
 
 -- implemented below
-mcl_enchanting.enchantments.respiration = {
+mcl_enchanting.register_enchantment("respiration", {
 	name = S("Respiration"),
 	max_level = 3,
 	primary = {armor_head = true},
@@ -600,9 +600,9 @@ mcl_enchanting.enchantments.respiration = {
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
-mcl_enchanting.enchantments.riptide = {
+mcl_enchanting.register_enchantment("riptide", {
 	name = S("Riptide"),
 	max_level = 3,
 	primary = {trident = true},
@@ -620,10 +620,10 @@ mcl_enchanting.enchantments.riptide = {
 	inv_tool_tab = false,
 	anvil_item_factor = 4,
 	anvil_book_factor = 2,
-}
+})
 
 -- implemented via on_enchant
-mcl_enchanting.enchantments.sharpness = {
+mcl_enchanting.register_enchantment("sharpness", {
 	name = S("Sharpness"),
 	max_level = 5,
 	primary = {sword = true},
@@ -641,10 +641,10 @@ mcl_enchanting.enchantments.sharpness = {
 	inv_tool_tab = false,
 	anvil_item_factor = 1,
 	anvil_book_factor = 1,
-}
+})
 
 -- implemented in mcl_item_entity
-mcl_enchanting.enchantments.silk_touch = {
+mcl_enchanting.register_enchantment("silk_touch", {
 	name = S("Silk Touch"),
 	max_level = 1,
 	primary = {pickaxe = true, shovel = true, axe = true, hoe = true},
@@ -662,10 +662,10 @@ mcl_enchanting.enchantments.silk_touch = {
 	inv_tool_tab = true,
 	anvil_item_factor = 8,
 	anvil_book_factor = 4,
-}
+})
 
 -- implemented via on_enchant and additions in mobs_mc
-mcl_enchanting.enchantments.smite = {
+mcl_enchanting.register_enchantment("smite", {
 	name = S("Smite"),
 	max_level = 5,
 	primary = {sword = true},
@@ -683,10 +683,10 @@ mcl_enchanting.enchantments.smite = {
 	inv_tool_tab = false,
 	anvil_item_factor = 2,
 	anvil_book_factor = 1,
-}
+})
 
 -- implemented in mcl_playerplus
-mcl_enchanting.enchantments.soul_speed = {
+mcl_enchanting.register_enchantment("soul_speed", {
 	name = S("Soul Speed"),
 	max_level = 3,
 	primary = {},
@@ -704,7 +704,7 @@ mcl_enchanting.enchantments.soul_speed = {
 	inv_tool_tab = false,
 	anvil_item_factor = 8,
 	anvil_book_factor = 4,
-}
+})
 
 -- requires missing Mineclonia feature
 --[[mcl_enchanting.enchantments.sweeping_edge = {
@@ -728,7 +728,7 @@ mcl_enchanting.enchantments.soul_speed = {
 }]]--
 
 -- for tools & weapons implemented via on_enchant; for bows implemented in mcl_bows; for armor implemented in mcl_armor and mcl_tt; for fishing rods implemented in mcl_fishing
-mcl_enchanting.enchantments.unbreaking = {
+mcl_enchanting.register_enchantment("unbreaking", {
 	name = S("Unbreaking"),
 	max_level = 3,
 	primary = {armor_head = true, armor_torso = true, armor_legs = true, armor_feet = true, pickaxe = true, shovel = true, axe = true, hoe = true, sword = true, fishing_rod = true, bow = true, crossbow = true, trident = true, },
@@ -758,10 +758,10 @@ mcl_enchanting.enchantments.unbreaking = {
 	inv_tool_tab = true,
 	anvil_item_factor = 2,
 	anvil_book_factor = 1,
-}
+})
 
 -- implemented in mcl_tools
-mcl_enchanting.enchantments.density = {
+mcl_enchanting.register_enchantment("density", {
 	name = S("Density"),
 	max_level = 5,
 	primary = { mace = true},
@@ -779,10 +779,10 @@ mcl_enchanting.enchantments.density = {
 	inv_tool_tab = false,
 	anvil_item_factor = 8,
 	anvil_book_factor = 4,
-}
+})
 
 -- implemented in mcl_armor
-mcl_enchanting.enchantments.breach = {
+mcl_enchanting.register_enchantment("breach", {
 	name = S("Breach"),
 	max_level = 4,
 	primary = { mace = true},
@@ -800,10 +800,10 @@ mcl_enchanting.enchantments.breach = {
 	inv_tool_tab = false,
 	anvil_item_factor = 8,
 	anvil_book_factor = 4,
-}
+})
 
 -- implemented in mcl_tools
-mcl_enchanting.enchantments.wind_burst = {
+mcl_enchanting.register_enchantment("wind_burst", {
 	name = S("Wind Burst"),
 	max_level = 3,
 	primary = { mace = true},
@@ -821,7 +821,7 @@ mcl_enchanting.enchantments.wind_burst = {
 	inv_tool_tab = false,
 	anvil_item_factor = 8,
 	anvil_book_factor = 4,
-}
+})
 
 -- Respiration breath_max adjustment.
 function mcl_enchanting.update_respiration (player, resp_lv)
