@@ -772,6 +772,12 @@ function mcl_core.bone_meal_grass(_, _, pointed_thing)
 		"mcl_flowers:azure_bluet",
 		"mcl_flowers:allium",
 	}
+	local flowers_table_palegarden_day = {
+		"mcl_flowers:eyeblossom",
+	}
+	local flowers_table_palegarden_night = {
+		"mcl_flowers:eyeblossom_open",
+	}
 
 	for i = -7, 7 do
 		for j = -7, 7 do
@@ -796,6 +802,12 @@ function mcl_core.bone_meal_grass(_, _, pointed_thing)
 								flowers_table = flowers_table_flower_forest
 							elseif biome == "Plains" or biome == "Plains_beach" or biome == "Plains_ocean" or biome == "Plains_deep_ocean" or biome == "Plains_underground" or biome == "SunflowerPlains" or biome == "SunflowerPlains_ocean" or biome == "SunflowerPlains_deep_ocean" or biome == "SunflowerPlains_underground" then
 								flowers_table = flowers_table_plains
+							elseif biome == "PaleGarden" or biome == "PaleGarden_ocean" then
+								if core.get_timeofday() <= 0.2 or core.get_timeofday() >= 0.8 then
+									flowers_table = flowers_table_palegarden_night
+								else
+									flowers_table = flowers_table_palegarden_day
+								end
 							else
 								flowers_table = flowers_table_simple
 							end
