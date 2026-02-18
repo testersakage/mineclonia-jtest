@@ -418,7 +418,6 @@ core.register_node("mcl_flowers:firefly_bush", table.merge(def_tallgrass, {
 		local allowed_nodes = {
 			"mcl_core:dirt_with_grass", "mcl_core:mycelium", "mcl_core:podzol", "mcl_core:dirt",
 			"mcl_core:coarse_dirt", "mcl_lush_caves:rooted_dirt", "mcl_farming:soil", "mcl_farming:soil_wet",
-			"mcl_colorblocks:hardened_clay", "mcl_core:sand", "mcl_core:redsand", "mcl_sus_nodes:sand",
 			"mcl_mud:mud", "mcl_mangrove:mangrove_mud_roots", "mcl_lush_caves:moss"
 		}
 
