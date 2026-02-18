@@ -415,6 +415,8 @@ core.register_node("mcl_flowers:firefly_bush", table.merge(def_tallgrass, {
 	},
 	inventory_image = "mcl_flowers_firefly_bush_inv.png",
 	wield_image = "mcl_flowers_firefly_bush_inv.png",
+	paramtype2 = "",
+	palette = "",
 	light_source = 2,
 	selection_box = {
 		type = "fixed",
