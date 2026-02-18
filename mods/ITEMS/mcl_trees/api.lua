@@ -393,6 +393,9 @@ function mcl_trees.register_wood(name, p)
 			single = {output = "mcl_trees:wood_"..name.." "..wood_amount},
 			square2 = bark_enabled and {output = "mcl_trees:bark_"..name.." 3"} or nil
 		}
+		if def.tiles[1] == def.tiles[2] and type(def.tiles[2] == "string") then
+			def.tiles[2] = def.tiles[2] .. "^[transformFY"
+		end
 		core.register_node(":mcl_trees:".."tree_"..name,def)
 	end
 
