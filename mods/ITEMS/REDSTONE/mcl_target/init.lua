@@ -39,7 +39,9 @@ local function check_achievement(pos, arrow, signal)
 end
 
 function mcl_target.hit(pos, arrow)
+	if not arrow then return end
 	local arrow_pos = arrow.object:get_pos()
+	if not arrow_pos then return end
 	local rel = vector.subtract(arrow_pos, pos)
 	local dx, dy = project_to_face(rel)
 	local dist = calculate_dist(dx, dy)
