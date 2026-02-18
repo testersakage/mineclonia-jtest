@@ -18,7 +18,7 @@ core.register_craftitem("mcl_copper:copper_nugget", {
 	description = S("Copper Nugget"),
 	_doc_items_longdesc = S("Copper nuggets are very small pieces of molten copper; the main purpose is to create copper ingots."),
 	inventory_image = "mcl_copper_nugget.png",
-	groups = { craftitem = 1 },
+	groups = {craftitem = 1, metal_nugget = 1},
 	_mcl_crafting_output = {square3 = {output = "mcl_copper:copper_ingot"}}
 })
 
