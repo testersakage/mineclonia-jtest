@@ -2,6 +2,7 @@ local S = core.get_translator(core.get_current_modname())
 local F = core.formspec_escape
 
 function mcl_enchanting.register_enchantment(name, def)
+	def.tradable = def.tradable ~= false
 	mcl_enchanting.enchantments[name] = def
 end
 
@@ -390,8 +391,9 @@ function mcl_enchanting.get_random_enchantment(itemstack, treasure, weighted, ex
 	for _, enchantment in ipairs (enchantment_ids) do
 		local enchantment_def = mcl_enchanting.enchantments[enchantment]
 		local can_enchant, _, _, primary = mcl_enchanting.can_enchant(itemstack, enchantment, 1)
+		local obtainable_randomly = primary or (treasure and enchantment_def.treasure and enchantment_def.tradable)
 
-		if can_enchant and (primary or treasure) and (not exclude or table.indexof(exclude, enchantment) == -1) then
+		if can_enchant and obtainable_randomly and (not exclude or table.indexof(exclude, enchantment) == -1) then
 			local weight = weighted and enchantment_def.weight or 1
 
 			for _ = 1, weight do
