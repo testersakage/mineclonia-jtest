@@ -199,7 +199,7 @@ end, -200)
 function mcl_player.player_knockback (player, hitter, dir, tool_capabilities, damage)
 	local knockback = 1
 
-	if hitter then
+	if hitter and hitter:is_valid() then
 		local wielditem = mcl_util.get_wielditem (hitter)
 		knockback = knockback
 			+ mcl_enchanting.get_enchantment (wielditem,
@@ -238,7 +238,7 @@ core.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool
 		return -- RIP
 	end
 
-	if hitter then
+	if hitter and hitter:is_valid() then
 		-- Server::handleCommand_Interact() adds eye offset to
 		-- one but not the other so the direction is slightly
 		-- off, calculate it ourselves
