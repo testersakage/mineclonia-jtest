@@ -580,7 +580,7 @@ function mob_class:on_punch(hitter, tflp, tool_capabilities, dir)
 	if damage >= 0 then
 		if damage > 0 then
 			-- weapon sounds
-			if weapon:get_definition().sounds ~= nil then
+			if weapon and weapon:get_definition().sounds ~= nil then
 
 				local s = math.random(0, #weapon:get_definition().sounds)
 
