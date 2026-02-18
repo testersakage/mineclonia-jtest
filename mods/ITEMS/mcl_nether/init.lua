@@ -278,7 +278,7 @@ core.register_node("mcl_nether:quartz_pillar", {
 	paramtype2 = "facedir",
 	is_ground_content = false,
 	on_place = mcl_util.rotate_axis,
-	tiles = {"mcl_nether_quartz_pillar_top.png", "mcl_nether_quartz_pillar_top.png", "mcl_nether_quartz_pillar_side.png"},
+	tiles = {"mcl_nether_quartz_pillar_top.png", "mcl_nether_quartz_pillar_top.png^[transformFY", "mcl_nether_quartz_pillar_side.png"},
 	groups = {pickaxey=1, quartz_block=1,building_block=1, material_stone=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_rotate = on_rotate,

@@ -49,7 +49,7 @@ core.register_node("mcl_end:purpur_pillar", {
 	paramtype2 = "facedir",
 	is_ground_content = false,
 	on_place = mcl_util.rotate_axis,
-	tiles = {"mcl_end_purpur_pillar_top.png", "mcl_end_purpur_pillar_top.png", "mcl_end_purpur_pillar.png"},
+	tiles = {"mcl_end_purpur_pillar_top.png", "mcl_end_purpur_pillar_top.png^[transformFY", "mcl_end_purpur_pillar.png"},
 	groups = {pickaxey=1, building_block=1, material_stone=1, purpur_block=1},
 	sounds = mcl_sounds.node_sound_stone_defaults(),
 	on_rotate = on_rotate,
