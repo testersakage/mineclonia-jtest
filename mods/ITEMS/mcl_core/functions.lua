@@ -742,38 +742,71 @@ end
 
 
 function mcl_core.bone_meal_grass(_, _, pointed_thing)
-	local flowers_table_plains = {
-		"mcl_flowers:dandelion",
-		"mcl_flowers:dandelion",
-		"mcl_flowers:poppy",
+	local flowers = {
+		plains = {
+			"mcl_flowers:dandelion",
+			"mcl_flowers:dandelion",
+			"mcl_flowers:poppy",
 
-		"mcl_flowers:oxeye_daisy",
-		"mcl_flowers:tulip_orange",
-		"mcl_flowers:tulip_red",
-		"mcl_flowers:tulip_white",
-		"mcl_flowers:tulip_pink",
-		"mcl_flowers:azure_bluet",
+			"mcl_flowers:oxeye_daisy",
+			"mcl_flowers:tulip_orange",
+			"mcl_flowers:tulip_red",
+			"mcl_flowers:tulip_white",
+			"mcl_flowers:tulip_pink",
+			"mcl_flowers:azure_bluet",
+		},
+		simple = {
+			"mcl_flowers:dandelion",
+			"mcl_flowers:poppy",
+		},
+		swampland = {
+			"mcl_flowers:blue_orchid",
+		},
+		flower_forest = {
+			"mcl_flowers:dandelion",
+			"mcl_flowers:poppy",
+			"mcl_flowers:oxeye_daisy",
+			"mcl_flowers:tulip_orange",
+			"mcl_flowers:tulip_red",
+			"mcl_flowers:tulip_white",
+			"mcl_flowers:tulip_pink",
+			"mcl_flowers:azure_bluet",
+			"mcl_flowers:allium",
+		},
+		palegarden = {
+			"mcl_flowers:eyeblossom",
+		}
 	}
-	local flowers_table_simple = {
-		"mcl_flowers:dandelion",
-		"mcl_flowers:poppy",
-	}
-	local flowers_table_swampland = {
-		"mcl_flowers:blue_orchid",
-	}
-	local flowers_table_flower_forest = {
-		"mcl_flowers:dandelion",
-		"mcl_flowers:poppy",
-		"mcl_flowers:oxeye_daisy",
-		"mcl_flowers:tulip_orange",
-		"mcl_flowers:tulip_red",
-		"mcl_flowers:tulip_white",
-		"mcl_flowers:tulip_pink",
-		"mcl_flowers:azure_bluet",
-		"mcl_flowers:allium",
-	}
-	local flowers_table_palegarden = {
-		"mcl_flowers:eyeblossom",
+	local flowers_biomes = {
+		plains = {
+			"Plains",
+			"Plains_beach",
+			"Plains_ocean",
+			"Plains_deep_ocean",
+			"Plains_underground",
+			"SunflowerPlains",
+			"SunflowerPlains_ocean",
+			"SunflowerPlains_deep_ocean",
+			"SunflowerPlains_underground"
+		},
+		flower_forest = {
+			"FlowerForest",
+			"FlowerForest_beach",
+			"FlowerForest_ocean",
+			"FlowerForest_deep_ocean",
+			"FlowerForest_underground"
+		},
+		swampland = {
+			"Swampland",
+			"Swampland_shore",
+			"Swampland_ocean",
+			"Swampland_deep_ocean",
+			"Swampland_underground",
+		},
+		palegarden = {
+			"PaleGarden",
+			"PaleGarden_ocean",
+		},
 	}
 
 	for i = -7, 7 do
@@ -791,18 +824,12 @@ function mcl_core.bone_meal_grass(_, _, pointed_thing)
 							local col = n2.param2
 							core.set_node(pos, {name="mcl_flowers:tallgrass", param2=col})
 						else
-							local flowers_table
+							local flowers_table = flowers.simple
 							local biome = core.get_biome_name(core.get_biome_data(pos).biome)
-							if biome == "Swampland" or biome == "Swampland_shore" or biome == "Swampland_ocean" or biome == "Swampland_deep_ocean" or biome == "Swampland_underground" then
-								flowers_table = flowers_table_swampland
-							elseif biome == "FlowerForest" or biome == "FlowerForest_beach" or biome == "FlowerForest_ocean" or biome == "FlowerForest_deep_ocean" or biome == "FlowerForest_underground" then
-								flowers_table = flowers_table_flower_forest
-							elseif biome == "Plains" or biome == "Plains_beach" or biome == "Plains_ocean" or biome == "Plains_deep_ocean" or biome == "Plains_underground" or biome == "SunflowerPlains" or biome == "SunflowerPlains_ocean" or biome == "SunflowerPlains_deep_ocean" or biome == "SunflowerPlains_underground" then
-								flowers_table = flowers_table_plains
-							elseif biome == "PaleGarden" or biome == "PaleGarden_ocean" then
-								flowers_table = flowers_table_palegarden
-							else
-								flowers_table = flowers_table_simple
+							for flowerset, biomes in pairs(flowers_biomes) do
+								if table.indexof(biomes, biome) ~= -1 then
+									flowers_table = flowers[flowerset]
+								end
 							end
 							core.set_node(pos, {name=flowers_table[math.random(1, #flowers_table)]})
 						end
