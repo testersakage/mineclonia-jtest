@@ -35,7 +35,7 @@ core.register_entity("mcl_experience:bottle",{
 				texture = "mcl_particles_effect.png^[colorize:blue:127",
 			})
 			if mod_target and n == "mcl_target:target_off" then
-				mcl_target.hit(vector.round(pos), 0.4) --4 redstone ticks
+				mcl_target.hit(vector.round(pos))
 			end
 			self.object:remove()
 		end

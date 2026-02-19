@@ -99,7 +99,7 @@ function mcl_potions.register_splash(name, descr, color, def)
 
 			if val then
 				if val.target and mod_target then
-				mcl_target.hit (val.target, 0.4) --4 redstone ticks
+				mcl_target.hit (val.target)
 				end
 				core.sound_play("mcl_potions_breaking_glass",
 						{pos = pos, max_hear_distance = 16, gain = 1})

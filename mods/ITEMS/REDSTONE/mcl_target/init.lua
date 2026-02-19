@@ -26,6 +26,7 @@ local function calculate_dist(dx, dy)
 end
 
 local function check_achievement(pos, arrow, signal)
+	if not arrow then return end
 	local shooter = arrow._shooter
 	if signal ~= 15 or not (shooter and shooter:is_player()) then
 		return
@@ -39,9 +40,7 @@ local function check_achievement(pos, arrow, signal)
 end
 
 function mcl_target.hit(pos, arrow)
-	if not arrow then return end
-	local arrow_pos = arrow.object:get_pos()
-	if not arrow_pos then return end
+	local arrow_pos = arrow and arrow.object and arrow.object:get_pos() or pos
 	local rel = vector.subtract(arrow_pos, pos)
 	local dx, dy = project_to_face(rel)
 	local dist = calculate_dist(dx, dy)

@@ -357,7 +357,7 @@ mcl_mobs.register_arrow ("mobs_mc:blaze_fireball", {
 			core.set_node(pos, {name = "mcl_fire:fire"})
 		else
 			if self._shot_from_dispenser and mod_target and node == "mcl_target:target_off" then
-				mcl_target.hit(vector.round(pos), 0.4) --4 redstone ticks
+				mcl_target.hit(vector.round(pos))
 			end
 			local v = vector.normalize(self.object:get_velocity())
 			local crashpos = vector.subtract(pos, v)
