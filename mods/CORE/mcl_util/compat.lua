@@ -1,4 +1,18 @@
--- Compatibility polyfills for legacy minetest
+-- Compatibility functions
+
+-- Write a luanti-style deprecation message to the log.
+function mcl_util.log_deprecated_call(level)
+	local info2 = debug.getinfo(2)
+	local info3 = debug.getinfo(3)
+	local log_msg = string.format("Calling %s() is deprecated (at %s:%s)",
+		info2.name or "unknown",
+		info3.short_src or "unknown",
+		info3.currentline or "unknown"
+	)
+	core.log(level or "warning", log_msg)
+end
+
+-- Polyfills for legacy minetest
 --
 -- polyfill for minetest < 5.9
 if not vector.random_direction then
