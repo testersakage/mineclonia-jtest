@@ -338,7 +338,11 @@ core.register_node("mcl_bamboo:scaffolding_horizontal", {
 			{-0.5, -0.5, -0.5, 0.5, -0.375, 0.5},
 		}
 	},
-	groups = { handy=1, axey=1, flammable=3, building_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, not_in_creative_inventory = 1, falling_node = 1, scaffolding = 1 },
+	is_ground_content = false,
+	walkable = false,
+	climbable = true,
+	physical = true,
+	groups = { handy=1, axey=1, flammable=3, building_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, not_in_creative_inventory = 1, falling_node = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
 	_mcl_after_falling = function(pos)
 		if core.get_node(pos).name == "mcl_bamboo:scaffolding_horizontal" then
 			local above = vector.offset(pos,0,1,0)
