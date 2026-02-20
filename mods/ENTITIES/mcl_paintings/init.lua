@@ -104,7 +104,7 @@ local function get_biggest_painting_for_position(pos, dir, stack)
 
 			start_position.x = fancy_round(start_position.x, painting_dir_perpendicular.x)
 			start_position.z = fancy_round(start_position.z, painting_dir_perpendicular.z)
-			start_position.y = math.round(start_position.y)
+			start_position.y = math.ceil(start_position.y)
 			for y = 0, pdef.height - 1 do
 				for i = 0, pdef.width - 1 do
 					neighbouring_painting_positions[core.hash_node_position(vector.offset(start_position, i * painting_dir_perpendicular.x, y, i * painting_dir_perpendicular.z))] = true
