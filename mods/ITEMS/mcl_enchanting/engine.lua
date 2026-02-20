@@ -1,9 +1,16 @@
 local S = core.get_translator(core.get_current_modname())
 local F = core.formspec_escape
 
+local enchantment_default = {
+	tradable = true,
+}
+
+local enchantment_metatable = {
+	__index = enchantment_default,
+}
+
 function mcl_enchanting.register_enchantment(name, def)
-	def.tradable = def.tradable ~= false
-	mcl_enchanting.enchantments[name] = def
+	mcl_enchanting.enchantments[name] = setmetatable(def, enchantment_metatable)
 end
 
 function mcl_enchanting.is_book(itemname)
