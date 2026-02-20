@@ -2,6 +2,17 @@ local S = core.get_translator(core.get_current_modname())
 local F = core.formspec_escape
 
 local enchantment_default = {
+	max_level = 1,
+	primary = {},
+	secondary = {},
+	disallow = {},
+	incompatible = {},
+	curse = false,
+	on_enchant = function() end,
+	requires_tool = false,
+	treasure = false,
+	inv_combat_tab = false,
+	inv_tool_tab = false,
 	tradable = true,
 }
 
