@@ -15,7 +15,7 @@ end
 
 -- random clock spinning tick in seconds.
 -- Increase if there are performance problems
-local spin_timer_tick = 0.5
+local spin_timer_tick = 0.1
 local spin_timer = 0
 local spin_velocity = 1
 
@@ -29,9 +29,6 @@ local force_clock_update_timer = 0
 core.register_globalstep(function(dtime)
 	spin_timer = spin_timer + dtime
 	if spin_timer >= spin_timer_tick then
-		spin_velocity = spin_velocity + math.random(-1, 1)
-		spin_velocity = math.max(spin_velocity, -2)
-		spin_velocity = math.min(spin_velocity, 2)
 		random_frame = (random_frame + spin_velocity) % clock_frames
 		spin_timer = 0
 	end
