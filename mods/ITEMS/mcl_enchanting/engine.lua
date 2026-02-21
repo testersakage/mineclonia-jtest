@@ -16,12 +16,8 @@ local enchantment_default = {
 	tradable = true,
 }
 
-local enchantment_metatable = {
-	__index = enchantment_default,
-}
-
 function mcl_enchanting.register_enchantment(name, def)
-	mcl_enchanting.enchantments[name] = setmetatable(def, enchantment_metatable)
+	mcl_enchanting.enchantments[name] = setmetatable(def, { __index = enchantment_default })
 end
 
 function mcl_enchanting.is_book(itemname)
