@@ -182,7 +182,7 @@ mcl_flowers.add_large_plant("peony", {
 	is_flower = true,
 	bottom = {
 		_mcl_crafting_output = {single = {output = "mcl_dyes:pink 2"}},
-		_on_bone_meal = function(_, _, _, pos, n) 
+		_on_bone_meal = function(_, _, _, pos, n)
 			core.add_item(pos, "mcl_flowers:peony")
 		end,
 	}
@@ -199,7 +199,7 @@ mcl_flowers.add_large_plant("rose_bush", {
 	is_flower = true,
 	bottom = {
 		_mcl_crafting_output = {single = {output = "mcl_dyes:red 2"}},
-		_on_bone_meal = function(_, _, _, pos, n) 
+		_on_bone_meal = function(_, _, _, pos, n)
 			core.add_item(pos, "mcl_flowers:rose_bush")
 		end,
 	}
@@ -215,7 +215,7 @@ mcl_flowers.add_large_plant("lilac", {
 	is_flower = true,
 	bottom = {
 		_mcl_crafting_output = {single = {output = "mcl_dyes:magenta 2"}},
-		_on_bone_meal = function(_, _, _, pos, n) 
+		_on_bone_meal = function(_, _, _, pos, n)
 			core.add_item(pos, "mcl_flowers:lilac")
 		end,
 	}
@@ -232,7 +232,7 @@ mcl_flowers.add_large_plant("sunflower", {
 		drop = "mcl_flowers:sunflower",
 		use_texture_alpha = "clip",
 		_mcl_crafting_output = {single = {output = "mcl_dyes:yellow 2"}},
-		_on_bone_meal = function(_, _, _, pos, n) 
+		_on_bone_meal = function(_, _, _, pos, n)
 			core.add_item(pos, "mcl_flowers:sunflower")
 		end,
 	},

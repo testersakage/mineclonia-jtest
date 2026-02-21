@@ -23,11 +23,11 @@ function mcl_flowers.on_bone_meal(_, _, _ , pos, n)
 		if neighbor == "air" then
 			if n.name == "mcl_flowers:bush" then
 				if core.get_item_group(under_neighbor, "soil_generic_plant") > 0 then
-					core.set_node(new_pos, {name = "mcl_flowers:bush", param2 = mcl_util.get_pos_p2(pos)}) 
+					core.set_node(new_pos, {name = "mcl_flowers:bush", param2 = mcl_util.get_pos_p2(pos)})
 					return true
 				end
 			elseif n.name == "mcl_flowers:tall_dry_grass" then
-				if core.get_item_group(under_neighbor, "soil_generic_plant") > 0 
+				if core.get_item_group(under_neighbor, "soil_generic_plant") > 0
 				or core.get_item_group(under_neighbor, "hardened_clay") > 0
 				or core.get_item_group(under_neighbor, "sand") > 0 then
 					core.set_node(new_pos, {name = "mcl_flowers:short_dry_grass"})
