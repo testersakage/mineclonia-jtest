@@ -1,6 +1,6 @@
 # textdomain: mcl_repeaters
 Redstone Repeater=Ruĝŝtona Ripetilo
-Redstone Repeater (Delay @1)=
+Redstone Repeater (Delay @1)=Ruĝŝtona Ripetilo (Prokrasto @1)
 Transmits redstone power only in one direction=
 Delays signal=
 Output locks when getting active redstone repeater signal from the side=

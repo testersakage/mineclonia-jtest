@@ -21,6 +21,5 @@ Hidden entries: @1=Verborgene Einträge: @1
 Help > @1 > (No Entry)=Hilfe > @1 > (Kein Eintrag)
 Help > @1 > @2=Hilfe > @1 > @2
 Open a window providing help entries about Minetest and more=Ein Fenster mit Hilfseinträgen über Minetest und mehr öffnen
-Help=Hilfe
 Allows you to reveal all hidden help entries with /help_reveal=Ermöglicht es Ihnen, alle verborgenen Hilfseinträge mit /help_reveal freizuschalten
 Reveal all hidden help entries to you=Alle für Sie verborgenen Hilfseinträge freischalten

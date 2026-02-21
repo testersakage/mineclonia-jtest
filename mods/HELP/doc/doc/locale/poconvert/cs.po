@@ -79,9 +79,6 @@ msgstr "Nápověda > @1 > @2"
 msgid "Open a window providing help entries about Minetest and more"
 msgstr "Otevřete okno s nápovědou o Minetestu a dalšími informacemi"
 
-msgid "Help"
-msgstr "Nápověda"
-
 msgid "Allows you to reveal all hidden help entries with /help_reveal"
 msgstr "Umožňuje odhalit všechny skryté položky nápovědy pomocí /help_reveal"
 

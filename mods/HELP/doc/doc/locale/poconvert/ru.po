@@ -79,9 +79,6 @@ msgstr "Справка > @1 > @2"
 msgid "Open a window providing help entries about Minetest and more"
 msgstr "Открыть окно со справкой о игре Minetest и прочим"
 
-msgid "Help"
-msgstr "Справка"
-
 msgid "Allows you to reveal all hidden help entries with /help_reveal"
 msgstr "Позволяет вам раскрыть все невидимые подсказки через /help_reveal"
 

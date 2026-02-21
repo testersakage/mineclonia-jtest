@@ -21,6 +21,5 @@ Hidden entries: @1=Piilotettuja tekstejä: @1
 Help > @1 > (No Entry)=Opas > @1 > (Ei tekstiä)
 Help > @1 > @2=Opas > @1 > @2
 Open a window providing help entries about Minetest and more=Avaa ikkuna, josta löytyy opastekstejä Minetestiin ja muuhun liittyen
-Help=Opas
 Allows you to reveal all hidden help entries with /help_reveal=Antaa sinun paljastaa kaikki piilotetut opastekstit komennolla /help_reveal
 Reveal all hidden help entries to you=Paljasta kaikki piilotetut opastekstit

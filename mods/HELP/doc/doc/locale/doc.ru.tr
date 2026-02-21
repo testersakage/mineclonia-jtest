@@ -21,6 +21,5 @@ Hidden entries: @1=Скрытые записи: @1
 Help > @1 > (No Entry)=Справка > @1 > (Без записи)
 Help > @1 > @2=Справка > @1 > @2
 Open a window providing help entries about Minetest and more=Открыть окно со справкой о игре Minetest и прочим
-Help=Справка
 Allows you to reveal all hidden help entries with /help_reveal=Позволяет вам раскрыть все невидимые подсказки через /help_reveal
 Reveal all hidden help entries to you=Раскрыть все записи справки для вас

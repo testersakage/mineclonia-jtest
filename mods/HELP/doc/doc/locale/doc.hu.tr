@@ -21,6 +21,5 @@ Hidden entries: @1=Elrejtett bejegyzések: @1
 Help > @1 > (No Entry)=Segítség > @1 > (Nincs bejegyzés)
 Help > @1 > @2=Segítség > @1 > @2
 Open a window providing help entries about Minetest and more=Ablak nyitása a Minetest-tel kapcsolatos segítségekkel és egyebekkel
-Help=Segítség
 Allows you to reveal all hidden help entries with /help_reveal=Elérhetővé teszi minden rejtett segítség felfedését (/help_reveal)
 Reveal all hidden help entries to you=Felfed minden rejtett segítséget

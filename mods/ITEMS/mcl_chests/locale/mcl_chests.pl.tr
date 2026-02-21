@@ -8,7 +8,7 @@ Chests are containers which provide 27 inventory slots. Chests can be turned int
 Can be combined to a large chest=Może być połączona w dużą skrzynię
 Trapped Chest=Skrzynia-pułapka
 A trapped chest is a container which provides 27 inventory slots. When it is opened, it sends a redstone signal to its adjacent blocks as long it stays open. Trapped chests can be turned into large trapped chests with double the capacity by placing two trapped chests next to each other.=Skrzynia pułapka jest pojemnikiem zawierającym 27 miejsc ekwipunku. Gdy jest otwarta wysyła ona zasila czerwienit na sąsiadujących blokach tak długo jak jest otwarta. Skrzynie-pułapki można zmienić w wielkie skrzynie-pułapki z podwojoną pojemnością przez położenie dwóch skrzynek-pułapek jedna obok drugiej.
-Emits a redstone signal when opened=Aktywuje pobliski czerwienit gdy otwarta 
+Emits a redstone signal when opened=Wysyła sygnał czerwienitu gdy otwarta
 Ender Chest=Skrzynia kresu
 27 interdimensional inventory slots=27 międzywymiarowych miejsc ekwipunku
 Put items inside, retrieve them from any ender chest=Włóż do niej przedmioty, miej do nich dostęp z dowolnej skrzyni kresu

@@ -21,6 +21,5 @@ Hidden entries: @1=隐藏条目：@1
 Help > @1 > (No Entry)=帮助 > @1 > (无条目)
 Help > @1 > @2=帮助 > @1 > @2
 Open a window providing help entries about Minetest and more=打开一个窗口，该窗口会提供有关luanti及其他相关内容的帮助条目
-Help=帮助
 Allows you to reveal all hidden help entries with /help_reveal=允许你使用 “/help_reveal” 命令来显示所有隐藏的帮助条目
 Reveal all hidden help entries to you=向你显示所有隐藏的帮助条目

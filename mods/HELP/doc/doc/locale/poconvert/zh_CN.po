@@ -79,9 +79,6 @@ msgstr "帮助 > @1 > @2"
 msgid "Open a window providing help entries about Minetest and more"
 msgstr "打开一个窗口，该窗口会提供有关luanti及其他相关内容的帮助条目"
 
-msgid "Help"
-msgstr "帮助"
-
 msgid "Allows you to reveal all hidden help entries with /help_reveal"
 msgstr "允许你使用 “/help_reveal” 命令来显示所有隐藏的帮助条目"
 

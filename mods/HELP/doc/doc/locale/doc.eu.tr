@@ -21,6 +21,5 @@ Hidden entries: @1=Ezkutuko sarrerak: @1
 Help > @1 > (No Entry)=Laguntza > @1 > (Sarrerarik ez)
 Help > @1 > @2=Laguntza > @1 > @2
 Open a window providing help entries about Minetest and more=Ireki Minetest-i buruzko laguntza sarrerak eta gehiago dituen leiho bat
-Help=Laguntza
 Allows you to reveal all hidden help entries with /help_reveal=/help_reveal bidez ezkutuko laguntza-sarrea guztiak ezagutzeko aukera ematen dizu
 Reveal all hidden help entries to you=Ezkutuko laguntza-sarrera guztiak erakusten dizkio

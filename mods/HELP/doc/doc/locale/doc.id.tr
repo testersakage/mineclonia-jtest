@@ -21,6 +21,5 @@ Hidden entries: @1=Entri tersembunyi : @1
 Help > @1 > (No Entry)=Bantuan > @1 > (Tidak Ada Entri)
 Help > @1 > @2=Bantuan > @1 > @2
 Open a window providing help entries about Minetest and more=Buka jendela yang menyediakan entri bantuan tentang Minetest dan lainnya
-Help=Bantuan
 Allows you to reveal all hidden help entries with /help_reveal=Memperbolehkan Anda untuk mengungkapkan semua entri bantuan tersembunyi dengan '/help_reveal'
 Reveal all hidden help entries to you=Mengungkapkan semua entri bantuan tersembunyi kepada Anda

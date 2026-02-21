@@ -21,6 +21,5 @@ Hidden entries: @1=Skryté položky: @1
 Help > @1 > (No Entry)=Nápověda > @1 > (Žádné položky)
 Help > @1 > @2=Nápověda > @1 > @2
 Open a window providing help entries about Minetest and more=Otevřete okno s nápovědou o Minetestu a dalšími informacemi
-Help=Nápověda
 Allows you to reveal all hidden help entries with /help_reveal=Umožňuje odhalit všechny skryté položky nápovědy pomocí /help_reveal
 Reveal all hidden help entries to you=Odhalí vám všechny skryté položky nápovědy

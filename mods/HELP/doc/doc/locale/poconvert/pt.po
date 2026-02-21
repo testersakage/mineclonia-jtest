@@ -79,9 +79,6 @@ msgstr "Ajuda > @1 > @2"
 msgid "Open a window providing help entries about Minetest and more"
 msgstr "Abra uma janela fornecendo entradas de ajuda sobre o Minetest e mais"
 
-msgid "Help"
-msgstr "Ajuda"
-
 msgid "Allows you to reveal all hidden help entries with /help_reveal"
 msgstr "Permite revelar todas as entradas de ajuda ocultas com /help_reveal"
 

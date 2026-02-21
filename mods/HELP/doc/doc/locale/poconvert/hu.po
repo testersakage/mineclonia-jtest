@@ -79,9 +79,6 @@ msgstr "Segítség > @1 > @2"
 msgid "Open a window providing help entries about Minetest and more"
 msgstr "Ablak nyitása a Minetest-tel kapcsolatos segítségekkel és egyebekkel"
 
-msgid "Help"
-msgstr "Segítség"
-
 msgid "Allows you to reveal all hidden help entries with /help_reveal"
 msgstr "Elérhetővé teszi minden rejtett segítség felfedését (/help_reveal)"
 
