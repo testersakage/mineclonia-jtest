@@ -311,12 +311,44 @@ core.register_node("mcl_bamboo:scaffolding", {
 				if np2 > 6 then
 					core.check_single_for_falling(ppos)
 				end
-			elseif node.name == "mcl_bamboo:scaffolding" then --tower up
-				local bottom = mcl_util.traverse_tower(ptd.under,-1)
-				local top,h = mcl_util.traverse_tower(bottom,1)
-				local ppos = vector.offset(top,0,1,0)
-				if h <= SCAFFOLD_HEIGHT_LIMIT and can_place_on(core.get_node(vector.offset(bottom,0,-1,0))) and core.get_node(ppos).name == "air" then
-					itemstack = mcl_util.safe_place(ppos, node, placer, itemstack) or itemstack
+			else --tower up
+				local function walk_under(bottom)
+					local last_under = bottom
+					local under = vector.offset(bottom, 0, -1, 0)
+					local unode = core.get_node(under)
+					while last_under ~= under and unode.name == "mcl_bamboo:scaffolding_horizontal" do
+						last_under = under
+						for _,v in pairs(adjacents) do
+							local npos = vector.add(under,v)
+							local nnode = core.get_node(npos)
+							if nnode.name == "mcl_bamboo:scaffolding" then
+								under = vector.offset(mcl_util.traverse_tower(npos,-1), 0, -1, 0)
+								unode = core.get_node(under)
+								break
+							elseif nnode.name == "mcl_bamboo:scaffolding_horizontal" and nnode.param2 == unode.param2 -1 then
+								under = npos
+								unode = nnode
+								break
+							end
+						end
+					end
+					return under
+				end
+
+				local h
+				if node.name == "mcl_bamboo:scaffolding" then
+					local bottom = mcl_util.traverse_tower(ptd.under,-1)
+					local top = mcl_util.traverse_tower(bottom,1)
+					ppos = vector.offset(top,0,1,0)
+
+					local under = walk_under(bottom)
+					h = top.y - under.y
+				else
+					local under = walk_under(ppos)
+					h = ppos.y - under.y
+				end
+				if h <= SCAFFOLD_HEIGHT_LIMIT and core.get_node(ppos).name == "air" then
+					itemstack = mcl_util.safe_place(ppos, {name = "mcl_bamboo:scaffolding",param2 = pp2}, placer, itemstack) or itemstack
 				end
 			end
 		elseif can_place_on(node) and core.get_node(ptd.above).name == "air" then
