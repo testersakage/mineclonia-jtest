@@ -274,23 +274,51 @@ core.register_node("mcl_bamboo:scaffolding", {
 		if not ptd then return end
 		local node = core.get_node(ptd.under)
 
-		if core.get_item_group(node.name,"scaffolding") > 0 and ctrl and ctrl.sneak then -- count param2 up when placing to the sides. Fall when > 6
+		if core.get_item_group(node.name,"scaffolding") > 0 then
+			local ppos = ptd.above
+			-- count param2 up when placing to the sides. Fall when > 6
 			local pp2 = node.param2
 			local np2 = pp2 + 1
-			if core.get_node(vector.offset(ptd.above,0,-1,0)).name == "air" and core.get_node(ptd.above).name == "air" then
-				itemstack = mcl_util.safe_place(ptd.above,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
-			end
-			if np2 > 6 then
-				core.check_single_for_falling(ptd.above)
-			end
-		elseif node.name == "mcl_bamboo:scaffolding" then --tower up
-			local bottom = mcl_util.traverse_tower(ptd.under,-1)
-			local top,h = mcl_util.traverse_tower(bottom,1)
-			local ppos = vector.offset(top,0,1,0)
-			if h <= SCAFFOLD_HEIGHT_LIMIT and can_place_on(core.get_node(vector.offset(bottom,0,-1,0))) and core.get_node(ppos).name == "air" then
-				itemstack = mcl_util.safe_place(ppos, node, placer, itemstack) or itemstack
-			end
+			local arc = placer:get_look_vertical() * (180 / math.pi)
+			if ctrl and ctrl.sneak then
+				if core.get_node(vector.offset(ppos,0,-1,0)).name == "air" and core.get_node(ppos).name == "air" then
+					itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
+				end
+				if np2 > 6 then
+					core.check_single_for_falling(ppos)
+				end
+			elseif arc > 45 and arc < 90 then
+				local p2 = core.dir_to_facedir(placer:get_look_dir())
+				local offset_z = p2 % 2 == 0 and 0 - (p2 -1) or 0
+				local offset_x = p2 % 2 ~= 0 and 2 - p2 or 0
 
+				if core.get_node(vector.offset(ppos, offset_x, -1, offset_z)).name == "air"
+					or core.get_node(vector.offset(ppos, offset_x, -1, offset_z)).name == "mcl_bamboo:scaffolding_horizontal"
+					then
+					ppos = vector.offset(ppos, offset_x, -1, offset_z)
+					while np2 <= 6
+						and core.get_node(ppos).name == "mcl_bamboo:scaffolding_horizontal"
+						and ( core.get_node(vector.offset(ppos, offset_x, 0, offset_z)).name == "air"
+						   or core.get_node(vector.offset(ppos, offset_x, 0, offset_z)).name == "mcl_bamboo:scaffolding_horizontal"
+						    )
+						do
+
+						ppos = vector.offset(ppos, offset_x, 0, offset_z)
+						np2 = np2 + 1
+					end
+					itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
+				end
+				if np2 > 6 then
+					core.check_single_for_falling(ppos)
+				end
+			elseif node.name == "mcl_bamboo:scaffolding" then --tower up
+				local bottom = mcl_util.traverse_tower(ptd.under,-1)
+				local top,h = mcl_util.traverse_tower(bottom,1)
+				local ppos = vector.offset(top,0,1,0)
+				if h <= SCAFFOLD_HEIGHT_LIMIT and can_place_on(core.get_node(vector.offset(bottom,0,-1,0))) and core.get_node(ppos).name == "air" then
+					itemstack = mcl_util.safe_place(ppos, node, placer, itemstack) or itemstack
+				end
+			end
 		elseif can_place_on(node) and core.get_node(ptd.above).name == "air" then
 			itemstack = mcl_util.safe_place(ptd.above, {name = "mcl_bamboo:scaffolding"}, placer, itemstack) or itemstack
 			core.check_single_for_falling(ptd.above)
