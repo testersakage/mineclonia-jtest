@@ -3,66 +3,70 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mobs_mc x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-16 23:10+0000\n"
+"Last-Translator: pilkit <pilkit@noreply.codeberg.org>\n"
+"Language-Team: Polish <https://translate.codeberg.org/projects/mineclonia/"
+"mobs_mc/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Axolotl"
-msgstr ""
+msgstr "Aksolotl"
 
 msgid "Spawning will only be successful on clay."
-msgstr ""
+msgstr "Odrodzenie powiedzie się tylko na glinie."
 
 msgid "Bat"
-msgstr ""
+msgstr "Nietoperz"
 
 msgid "Spawning will only be successful between light levels of 0 and 3 at most times of the year, or 0 and 6 between 20 October and 3 November."
 msgstr ""
+"Odrodzenie będzie udane tylko przy poziomach światła od 0 do 3 przez "
+"większości roku lub od 0 do 6 między 20 października, a 3 listopada."
 
 msgid "Blaze"
-msgstr ""
+msgstr "Płomyk"
 
 msgid "Chicken"
-msgstr ""
+msgstr "Kurczak"
 
 msgid "Cod"
-msgstr ""
+msgstr "Dorsz"
 
 msgid "Each mob spawned will form a school with the remainder of the mobs in the group."
 msgstr ""
 
 msgid "Cow"
-msgstr ""
+msgstr "Krowa"
 
 msgid "Mooshroom"
-msgstr ""
+msgstr "Grzyb"
 
 msgid "Creeper"
 msgstr ""
 
 msgid "Charged Creeper"
-msgstr ""
+msgstr "Naładowany Creeper"
 
 msgid "Dolphin"
-msgstr ""
+msgstr "Delfin"
 
 msgid "Drowned"
-msgstr ""
+msgstr "Utopiec"
 
 msgid "Baby Drowned"
-msgstr ""
+msgstr "Utopiec dziecko"
 
 msgid "Drowned will spawn more frequently in this biome."
-msgstr ""
+msgstr "Utopce będą się częściej odradzać w tym biomie."
 
 msgid "Ender Dragon"
-msgstr ""
+msgstr "Smok Kresu"
 
 msgid "Enderman"
 msgstr ""
@@ -77,142 +81,147 @@ msgid "Ghast Fireball"
 msgstr ""
 
 msgid "Guardian"
-msgstr ""
+msgstr "Strażnik"
 
 msgid "Guardians spawn less frequently in regions of the ocean which are exposed to the sky at the surface."
 msgstr ""
 
 msgid "Elder Guardian"
-msgstr ""
+msgstr "Starszy strażnik"
 
 msgid "Hoglin"
 msgstr ""
 
 msgid "Baby Hoglin"
-msgstr ""
+msgstr "Hoglin dziecko"
 
 msgid "Hoglins do not spawn above Nether Wart blocks."
-msgstr ""
+msgstr "Hogliny nie odradzają się nad blokami Netherowej Brodawki."
 
 msgid "20% of Hoglins spawn as their baby variants."
-msgstr ""
+msgstr "20% Hoglinów odradza się w dziecięcej formie."
 
 msgid "Zoglin"
 msgstr ""
 
 msgid "Sneak to dismount"
-msgstr "Skradaj się by opuścić"
+msgstr "Skradaj się by zsiąść"
 
 msgid "Horse"
-msgstr ""
+msgstr "Koń"
 
 msgid "Skeleton Horse"
-msgstr ""
+msgstr "Koń szkielet"
 
 msgid "Zombie Horse"
-msgstr ""
+msgstr "Koń zombie"
 
 msgid "Donkey"
-msgstr ""
+msgstr "Osioł"
 
 msgid "Mule"
-msgstr ""
+msgstr "Muł"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Żelazny golem"
 
 msgid "Llama"
-msgstr ""
+msgstr "Lama"
 
 msgid "Ocelot"
 msgstr ""
 
 msgid "Cat"
-msgstr ""
+msgstr "Kot"
 
 msgid "This mob will spawn infrequently on grass or leaves when no obstructions exist within a volume @1 nodes in size around the center of such a node's upper surface."
 msgstr ""
+"Ten mob będzie pojawiał się rzadko na trawie lub liściach, gdy w przestrzeni "
+"o rozmiarze @1 węzła wokół środka górnej powierzchni takiego węzła nie "
+"będzie żadnych przeszkód."
 
 msgid "Parrot"
-msgstr ""
+msgstr "Papuga"
 
 msgid "on grass, leaves, or logs"
-msgstr ""
+msgstr "na trawie, liściach lub kłodach"
 
 msgid "Pig"
-msgstr ""
+msgstr "Świnia"
 
 msgid "Piglin"
 msgstr ""
 
 msgid "Piglin Brute"
-msgstr ""
+msgstr "Brutalny piglin"
 
 msgid "Zombie Piglin"
-msgstr ""
+msgstr "Piglin zombi"
 
 msgid "Zombified Piglin"
-msgstr ""
+msgstr "Zombifikowany piglin"
 
 msgid "Pillager"
-msgstr ""
+msgstr "Rozbójnik"
 
 msgid "Polar Bear"
-msgstr ""
+msgstr "Niedźwiedź polarny"
 
 msgid "on grass or snow blocks"
-msgstr ""
+msgstr "na trawie lub śnieżnych blokach"
 
 msgid "The second polar bear in a group will always be spawned as a cub."
-msgstr ""
+msgstr "Drugi niedźwiedź polarny w grupie zawsze rodzi się jako młode."
 
 msgid "Pufferfish"
-msgstr ""
+msgstr "Rozdymka"
 
 msgid "Rabbit"
-msgstr ""
+msgstr "Króliczek"
 
 msgid "Killer Bunny"
-msgstr ""
+msgstr "Królik morderca"
 
 msgid "Ravager"
-msgstr ""
+msgstr "Dewastator"
 
 msgid "Salmon"
-msgstr ""
+msgstr "Łosoś"
 
 msgid "Sheep"
-msgstr ""
+msgstr "Owca"
 
 msgid "Shulker"
 msgstr ""
 
 msgid "Silverfish"
-msgstr ""
+msgstr "Rybik cukrowy"
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Szkielet"
 
 msgid "Stray"
-msgstr ""
+msgstr "Zabłąkany"
 
 msgid "Moreover, the block where the mob is to spawn must be exposed to sky."
 msgstr ""
+"Ponadto, blok, na którym ma się pojawić mob, musi być wystawiony na "
+"działanie nieba."
 
 msgid "Wither Skeleton"
-msgstr ""
+msgstr "Witherowy szkielet"
 
 msgid "Slime"
-msgstr ""
+msgstr "Glut"
 
 msgid "Magma Cube"
-msgstr ""
+msgstr "Kostka magmy"
 
 msgid "Snow Golem"
-msgstr ""
+msgstr "Śnieżny golem"
 
 msgid "on grass nodes"
-msgstr ""
+msgstr "na węzłach trawiastych"
 
 msgid "This mob will spawn infrequently @1 with a surface occupying a full node when no obstructions exist within a volume @2 nodes in size around the center of such a node's upper surface, in light levels of 8 or greater."
 msgstr ""
@@ -233,140 +242,141 @@ msgid "Spawning will only succeed between artificial light levels of 0 and @1, a
 msgstr ""
 
 msgid "Spider"
-msgstr ""
+msgstr "Pająk"
 
 msgid "Cave Spider"
-msgstr ""
+msgstr "Pająk jaskiniowy"
 
 msgid "Squid"
-msgstr ""
+msgstr "Kałamarnica"
 
 msgid "Glow Squid"
-msgstr ""
+msgstr "Świecąca kałamarnica"
 
 msgid "Glow Squid only spawn in absolute darkness at Y levels of 33 or below."
 msgstr ""
+"Świecące kałamarnice odradzają się tylko w absolutnej ciemności na poziomie "
+"Y 33 lub niższym."
 
 msgid "Strider"
-msgstr ""
+msgstr "Magmołaz"
 
 msgid "Baby Strider"
-msgstr ""
+msgstr "Dziecko magmołaza"
 
 msgid "Tropical Fish"
-msgstr ""
+msgstr "Ryba tropikalna"
 
 msgid "Vex"
-msgstr ""
+msgstr "Dręczyciel"
 
 msgid "Villager"
-msgstr ""
+msgstr "Osadnik"
 
 msgid "Armorer"
-msgstr ""
+msgstr "Płatnerz"
 
 msgid "Butcher"
-msgstr ""
+msgstr "Rzeźnik"
 
 msgid "Cartographer"
-msgstr ""
+msgstr "Kartograf"
 
 msgid "Cleric"
-msgstr ""
+msgstr "Kapłan"
 
 msgid "Farmer"
-msgstr ""
+msgstr "Rolnik"
 
 msgid "Fisherman"
-msgstr ""
+msgstr "Rybak"
 
 msgid "Fletcher"
-msgstr ""
+msgstr "Rymarz"
 
 msgid "Leatherworker"
-msgstr ""
+msgstr "Garbarz"
 
 msgid "Librarian"
 msgstr "Bibliotekarz"
 
 msgid "Mason"
-msgstr ""
+msgstr "Murarz"
 
 msgid "Shepherd"
-msgstr ""
+msgstr "Pasterz"
 
 msgid "Toolsmith"
-msgstr ""
+msgstr "Inżynier"
 
 msgid "Weaponsmith"
-msgstr ""
+msgstr "Zbrojmistrz"
 
 msgid "Nitwit"
-msgstr ""
+msgstr "Głupek"
 
 msgid "Novice"
-msgstr ""
+msgstr "Nowicjusz"
 
 msgid "Apprentice"
-msgstr ""
+msgstr "Uczeń"
 
 msgid "Journeyman"
-msgstr ""
+msgstr "Czeladnik"
 
 msgid "Expert"
-msgstr ""
+msgstr "Ekspert"
 
 msgid "Master"
-msgstr ""
+msgstr "Mistrz"
 
 msgid "Evoker"
-msgstr ""
+msgstr "Przywoływacz"
 
 msgid "Illusioner"
-msgstr ""
+msgstr "Iluzjonista"
 
 msgid "Vindicator"
-msgstr ""
+msgstr "Obrońca"
 
 msgid "Zombie Villager"
-msgstr ""
+msgstr "Osadnik zombie"
 
 msgid "Wandering Trader"
-msgstr ""
+msgstr "Kupiec wędrowny"
 
 msgid "Trader Llama"
-msgstr ""
+msgstr "Handlarz lam"
 
 msgid "Witch"
-msgstr ""
+msgstr "Wiedźma"
 
 msgid "Wither"
 msgstr ""
 
 msgid "Wolf"
-msgstr ""
+msgstr "Wilk"
 
 msgid "on grass, snow blocks, coarse dirt, or podzol"
-msgstr ""
+msgstr "na trawie, blokach śniegu, twardej ziemi lub bielicy"
 
 msgid "Zombie"
 msgstr ""
 
 msgid "Baby Zombie"
-msgstr ""
+msgstr "Dziecko zombie"
 
 msgid "Husk"
-msgstr ""
+msgstr "Posuch"
 
 msgid "Baby Husk"
-msgstr ""
+msgstr "Dziecko posuch"
 
 msgid "5% of Zombies will spawn as their baby variants."
-msgstr ""
+msgstr "5% zombie odradza się w dziecięcej postaci."
 
 msgid "5% of Husks will spawn as their baby variants."
-msgstr ""
+msgstr "5% posuchów odradza się w dziecięcej postaci."
 
 msgid "Husks will only spawn on nodes that are exposed to sky."
 msgstr ""
-

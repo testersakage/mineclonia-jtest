@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_portals x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-16 23:10+0000\n"
+"Last-Translator: pilkit <pilkit@noreply.codeberg.org>\n"
+"Language-Team: Polish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_portals/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "End Portal"
 msgstr "Portal Kresu"
@@ -47,10 +49,10 @@ msgid "Place an eye of ender into each block. The end portal appears in the midd
 msgstr ""
 
 msgid "Once placed, an eye of ender can not be taken back."
-msgstr "Raz umieszczone oko Kresu nie może być odzyskane"
+msgstr "Raz umieszczone oko Kresu nie może być odzyskane."
 
 msgid "End Portal Frame with Eye of Ender"
-msgstr "Rama portalu Kresu z okiem Kresu."
+msgstr "Rama portalu Kresu z okiem Kresu"
 
 msgid "End Gateway Portal"
 msgstr ""
@@ -83,11 +85,15 @@ msgid "A Nether portal teleports creatures and objects to the hot and dangerous 
 msgstr "Portal Netheru teleportuje osoby i obiekty do gorącego i niebezpiecznego wymiaru Nether (i z powrotem!). Wejdź na własne ryzyko!"
 
 msgid "Stand in the portal for a moment to activate the teleportation. Entering a Nether portal for the first time will also create a new portal in the other dimension. If a Nether portal has been built in the Nether, it will lead to the Overworld. A Nether portal is destroyed if the any of the obsidian which surrounds it is destroyed, or if it was caught in an explosion."
-msgstr "Stań w portalu na krótki moment aby aktywować teleport. Wejście przez portal Netheru po raz pierwszy stworzy również nowy portal w drugim wymiarze. Jeśli portal Netheru został zbudowany w Netherze będzie prowadził z powrotem na Powierzchnię. Portal Netheru przestanie działać jeśli któryś z otaczających go bloków obsydianu zostanie zniszczony lub gdy dosięgnie go wybuch. "
+msgstr ""
+"Stań w portalu na krótki moment aby aktywować teleport. Wejście przez portal "
+"Netheru po raz pierwszy stworzy również nowy portal w drugim wymiarze. Jeśli "
+"portal Netheru został zbudowany w Netherze będzie prowadził z powrotem na "
+"Powierzchnię. Portal Netheru przestanie działać jeśli któryś z otaczających "
+"go bloków obsydianu zostanie zniszczony lub gdy dosięgnie go wybuch."
 
 msgid "Dump coordinates of registered portals"
 msgstr ""
 
 msgid "Invalid dimension argument."
 msgstr ""
-

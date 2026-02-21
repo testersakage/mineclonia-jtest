@@ -3,15 +3,17 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_wool x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-16 23:10+0000\n"
+"Last-Translator: pilkit <pilkit@noreply.codeberg.org>\n"
+"Language-Team: Polish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_wool/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Carpet"
 msgstr "Dywan"
@@ -26,98 +28,97 @@ msgid "Carpets are thin floor covers which come in many different colors."
 msgstr "Dywany są cienkimi pokrywami na podłogi, które mogą mieć wiele różnych kolorów."
 
 msgid "Black Carpet"
-msgstr ""
+msgstr "Czarny dywan"
 
 msgid "Black Wool"
-msgstr ""
+msgstr "Czarna wełna"
 
 msgid "Blue Carpet"
-msgstr ""
+msgstr "Niebieski dywan"
 
 msgid "Blue Wool"
-msgstr ""
+msgstr "Niebieska wełna"
 
 msgid "Brown Carpet"
-msgstr ""
+msgstr "Brązowy dywan"
 
 msgid "Brown Wool"
-msgstr ""
+msgstr "Brązowa wełna"
 
 msgid "Cyan Carpet"
-msgstr ""
+msgstr "Błękitny dywan"
 
 msgid "Cyan Wool"
-msgstr ""
+msgstr "Błękitna wełna"
 
 msgid "Green Carpet"
-msgstr ""
+msgstr "Zielony dywan"
 
 msgid "Green Wool"
-msgstr ""
+msgstr "Zielona wełna"
 
 msgid "Grey Carpet"
-msgstr ""
+msgstr "Szary dywan"
 
 msgid "Grey Wool"
-msgstr ""
+msgstr "Szara wełna"
 
 msgid "Light Blue Carpet"
-msgstr ""
+msgstr "Jasnoniebieski dywan"
 
 msgid "Light Blue Wool"
-msgstr ""
+msgstr "Jasnoniebieska wełna"
 
 msgid "Light Grey Carpet"
-msgstr ""
+msgstr "Jasnoszary dywan"
 
 msgid "Light Grey Wool"
-msgstr ""
+msgstr "Jasnoszara wełna"
 
 msgid "Lime Carpet"
-msgstr ""
+msgstr "Jasnozielony dywan"
 
 msgid "Lime Wool"
-msgstr ""
+msgstr "Jasnozielona wełna"
 
 msgid "Magenta Carpet"
-msgstr ""
+msgstr "Karmazynowy dywan"
 
 msgid "Magenta Wool"
-msgstr ""
+msgstr "Karmazynowa wełna"
 
 msgid "Orange Carpet"
-msgstr ""
+msgstr "Pomarańczowy dywan"
 
 msgid "Orange Wool"
-msgstr ""
+msgstr "Pomarańczowa wełna"
 
 msgid "Pink Carpet"
-msgstr ""
+msgstr "Różowy dywan"
 
 msgid "Pink Wool"
-msgstr ""
+msgstr "Różowa wełna"
 
 msgid "Purple Carpet"
-msgstr ""
+msgstr "Fioletowy dywan"
 
 msgid "Purple Wool"
-msgstr ""
+msgstr "Fioletowa wełna"
 
 msgid "Red Carpet"
-msgstr ""
+msgstr "Czerwony dywan"
 
 msgid "Red Wool"
-msgstr ""
+msgstr "Czerwona wełna"
 
 msgid "White Carpet"
-msgstr ""
+msgstr "Biały dywan"
 
 msgid "White Wool"
-msgstr ""
+msgstr "Biała wełna"
 
 msgid "Yellow Carpet"
-msgstr ""
+msgstr "Żółty dywan"
 
 msgid "Yellow Wool"
-msgstr ""
-
+msgstr "Żółta wełna"

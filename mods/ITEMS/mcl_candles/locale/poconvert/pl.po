@@ -3,73 +3,77 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_candles x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-16 23:10+0000\n"
+"Last-Translator: pilkit <pilkit@noreply.codeberg.org>\n"
+"Language-Team: Polish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_candles/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "A candle is a block that emits light when lit with a flint and steel. It comes in the sixteen dye colors. Up to four of the same color of candle can be placed in one block space, which affects the amount of light produced."
 msgstr ""
+"Świeca to bryła, która emituje światło po zapaleniu krzesiwem. Występuje w "
+"szesnastu kolorach. W jednym bloku można umieścić do czterech świec tego "
+"samego koloru, co wpływa na ilość wytwarzanego światła."
 
 msgid "Candle"
-msgstr ""
+msgstr "Świeczka"
 
 msgid "Lit Candle"
-msgstr ""
+msgstr "Zapalona świeczka"
 
 msgid "Cake"
-msgstr ""
+msgstr "Ciasto"
 
 msgid "Black Candle"
-msgstr ""
+msgstr "Czarna świeczka"
 
 msgid "Blue Candle"
-msgstr ""
+msgstr "Niebieska świeczka"
 
 msgid "Brown Candle"
-msgstr ""
+msgstr "Brązowa świeczka"
 
 msgid "Cyan Candle"
-msgstr ""
+msgstr "Błękitna świeczka"
 
 msgid "Green Candle"
-msgstr ""
+msgstr "Zielona świeczka"
 
 msgid "Grey Candle"
-msgstr ""
+msgstr "Szara świeczka"
 
 msgid "Light Blue Candle"
-msgstr ""
+msgstr "Jasnoniebieska świeczka"
 
 msgid "Light Grey Candle"
-msgstr ""
+msgstr "Jasnoszara świeczka"
 
 msgid "Lime Candle"
-msgstr ""
+msgstr "Jasnozielona świeczka"
 
 msgid "Magenta Candle"
-msgstr ""
+msgstr "Karmazynowa świeczka"
 
 msgid "Orange Candle"
-msgstr ""
+msgstr "Pomarańczowa świeczka"
 
 msgid "Pink Candle"
-msgstr ""
+msgstr "Różowa świeczka"
 
 msgid "Purple Candle"
-msgstr ""
+msgstr "Fioletowa świeczka"
 
 msgid "Red Candle"
-msgstr ""
+msgstr "Czerwona świeczka"
 
 msgid "White Candle"
-msgstr ""
+msgstr "Biała świeczka"
 
 msgid "Yellow Candle"
-msgstr ""
-
+msgstr "Żółta świeczka"
