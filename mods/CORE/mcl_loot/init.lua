@@ -162,3 +162,10 @@ function mcl_loot.fill_inventory(inv, listname, items, pr)
 	end
 	-- If there are still items left, tough luck!
 end
+
+function mcl_loot.in_loot_def(loot_definitions, itemstring)
+	for _, v in pairs(loot_definitions) do
+		if itemstring == v.itemstring then return true end
+	end
+	return false
+end
