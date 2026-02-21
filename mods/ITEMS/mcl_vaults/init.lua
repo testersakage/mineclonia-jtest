@@ -68,6 +68,7 @@ mcl_vaults.register_vault("vault", {
 				{ itemstring = "mcl_shields:shield", weight = 300, amount_min = 1, amount_max = 1, wear_min = 5000, wear_max = 60000 },
 				{ itemstring = "mcl_bows:bow", weight = 300, func = function(stack, pr) mcl_enchanting.enchant_randomly(stack, pr:next(5, 15), true, true, false, pr) end },
 				{ itemstring = "mcl_charges:wind_charge", weight = 23, amount_min = 4, amount_max = 12 },
+				{ itemstring = "mcl_mobitems:breeze_rod", weight = 23, amount_min = 1, amount_max = 3 }, -- TODO remove when breeze are added
 				{ itemstring = "mcl_core:diamond", weight = 23, amount_min = 1, amount_max = 2 },
 				{ itemstring = "mcl_farming:carrot_item_gold", weight = 200, amount_min = 1, amount_max = 2 },
 				{ itemstring = "mcl_books:book", weight = 200, func = function(stack, pr) enchant_random_level(stack, {"mending", "riptide", "loyalty", "channeling", "impaling", }, pr) end },
@@ -92,6 +93,7 @@ mcl_vaults.register_vault("vault", {
 				{ itemstring = "mcl_honey:honey_bottle", weight = 3, amount_min = 1, amount_max = 2 },
 				{ itemstring = "mcl_potions:ominous", weight = 2, amount_min = 1, amount_max = 2, func = function(stack, pr) set_potency(stack, pr:next(0, 1)) end },
 				{ itemstring = "mcl_charges:wind_charge", weight = 1, amount_min = 4, amount_max = 12 },
+				{ itemstring = "mcl_mobitems:breeze_rod", weight = 1, amount_min = 1, amount_max = 3 }, -- TODO remove when breeze are added
 				{ itemstring = "mcl_core:diamond", weight = 1, amount_min = 1, amount_max = 2 },
 			},
 		},
@@ -142,6 +144,7 @@ mcl_vaults.register_vault("ominous_vault", {
 			items = {
 				{ itemstring = "mcl_core:emerald", weight = 145, amount_min = 4, amount_max = 10 },
 				{ itemstring = "mcl_charges:wind_charge", weight = 116, amount_min = 8, amount_max = 12 },
+				{ itemstring = "mcl_mobitems:breeze_rod", weight = 116, amount_min = 2, amount_max = 3 }, -- TODO remove when breeze are added
 				{ itemstring = "mcl_potions:slowness_arrow", weight = 87, amount_min = 4, amount_max = 12, func = function(stack) set_potency(stack, 3) end },
 				{ itemstring = "mcl_core:diamond", weight = 58, amount_min = 2, amount_max = 3 },
 				{ itemstring = "mcl_potions:ominous", weight = 29, amount_min = 1, amount_max = 1, func = function(stack, pr) set_potency(stack, pr:next(2, 4)) end },
@@ -163,6 +166,8 @@ mcl_vaults.register_vault("ominous_vault", {
 			items = {
 				{ itemstring = "mcl_core:emerald", weight = 5, amount_min = 4, amount_max = 10 },
 				{ itemstring = "mcl_charges:wind_charge", weight = 4, amount_min = 8, amount_max = 12 },
+				{ itemstring = "mcl_mobitems:breeze_rod", weight = 4, amount_min = 2, amount_max = 3 }, -- TODO remove when breeze are added
+
 				{ itemstring = "mcl_potions:slowness_arrow", weight = 3, amount_min = 4, amount_max = 12, func = function(stack) set_potency(stack, 3) end },
 				{ itemstring = "mcl_core:diamond", weight = 2, amount_min = 2, amount_max = 3 },
 				{ itemstring = "mcl_potions:ominous", weight = 1, amount_min = 1, amount_max = 1, func = function(stack, pr) set_potency(stack, pr:next(2, 4)) end },
