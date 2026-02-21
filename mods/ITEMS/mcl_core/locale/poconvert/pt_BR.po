@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_core x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-02-18 14:29+0000\n"
+"Last-Translator: JoseDouglas26 <josedouglas26@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_core/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 msgid "Stick"
 msgstr "Graveto"
@@ -542,64 +543,64 @@ msgid "Spruce leaves are grown from Spruce trees."
 msgstr "As folhas de pinheiro crescem das Árvores de Pinheiro."
 
 msgid "Stripped Acacia Bark"
-msgstr ""
+msgstr "Madeira de Acácia Descascada"
 
 msgid "Stripped Acacia Log"
-msgstr ""
+msgstr "Tronco de Acácia Descascado"
 
 msgid "Stripped Birch Bark"
-msgstr ""
+msgstr "Madeira de Bétula Descascada"
 
 msgid "Stripped Birch Log"
-msgstr ""
+msgstr "Tronco de Bétula Descascado"
 
 msgid "Stripped Dark Oak Bark"
-msgstr ""
+msgstr "Madeira de Carvalho Escuro Descascado"
 
 msgid "Stripped Dark Oak Log"
-msgstr ""
+msgstr "Tronco de Carvalho Escuro Descascado"
 
 msgid "Stripped Jungle Bark"
-msgstr ""
+msgstr "Madeira da Selva Descascada"
 
 msgid "Stripped Jungle Log"
-msgstr ""
+msgstr "Tronco da Selva Descascado"
 
 msgid "Stripped Oak Bark"
-msgstr ""
+msgstr "Madeira de Carvalho Descascada"
 
 msgid "Stripped Oak Log"
-msgstr ""
+msgstr "Tronco de Carvalho Descascado"
 
 msgid "Stripped Spruce Bark"
-msgstr ""
+msgstr "Madeira de Abeto Descascada"
 
 msgid "Stripped Spruce Log"
-msgstr ""
+msgstr "Tronco de Abeto Descascado"
 
 msgid "The stripped trunk of an Acacia tree."
-msgstr ""
+msgstr "O tronco descascado de uma árvore de acácia."
 
 msgid "The stripped trunk of an Birch tree."
-msgstr ""
+msgstr "O tronco descascado de uma árvore de bétula."
 
 msgid "The stripped trunk of an Dark Oak tree."
-msgstr ""
+msgstr "O tronco descascado de uma árvore de carvalho escuro."
 
 msgid "The stripped trunk of an Jungle tree."
-msgstr ""
+msgstr "O tronco descascado de uma árvore da selva."
 
 msgid "The stripped trunk of an Oak tree."
-msgstr ""
+msgstr "O tronco descascado de uma árvore de carvalho."
 
 msgid "The stripped trunk of an Spruce tree."
-msgstr ""
+msgstr "O tronco descascado de uma árvore de abeto."
 
 msgid "The stripped wood of an Acacia tree."
-msgstr ""
+msgstr "A madeira descascada de uma árvore de acácia."
 
 msgid "The stripped wood of an Birch tree."
-msgstr ""
+msgstr "A madeira descascada de uma árvore de bétula."
 
 msgid "The stripped wood of an Dark Oak tree."
 msgstr ""
@@ -1239,4 +1240,3 @@ msgstr ""
 
 msgid "Mossy Stone Brick Slab"
 msgstr ""
-
