@@ -394,13 +394,25 @@ function sign_tpl.on_place(itemstack, placer, pointed_thing)
 	if rc then return rc end
 
 	local under = pointed_thing.under
-	local node = core.get_node(under)
-	local ndef = core.registered_nodes[node.name]
-	if ndef and ndef.buildable_to then return itemstack end
-
 	local above = pointed_thing.above
 	local dir = vector.subtract(under, above)
 	local wdir = core.dir_to_wallmounted(dir)
+
+	-- Signs can be attached to walkable nodes and other signs.
+	local node = core.get_node(under)
+	local ndef = core.registered_nodes[node.name]
+
+	-- If pointed at node is buildable_to we instead check node behind
+	-- (which is the node core.item_place_node will attach the sign to).
+	if ndef and ndef.buildable_to then
+		under = vector.add(under, dir)
+		node = core.get_node(under)
+		ndef = core.registered_nodes[node.name]
+	end
+
+	if not ndef or (not ndef.walkable and core.get_item_group(node.name, "sign") == 0) then
+		return itemstack
+	end
 
 	local itemstring = itemstack:get_name()
 	local def = itemstack:get_definition()
@@ -427,7 +439,7 @@ function sign_tpl.on_place(itemstack, placer, pointed_thing)
 				return itemstack
 			end
 
-			local boxes = core.get_node_boxes ("collision_box", pointed_thing.under)
+			local boxes = core.get_node_boxes ("collision_box", under)
 			local shape = mcl_util.decompose_AABBs (boxes)
 			if not shape then
 				return itemstack
