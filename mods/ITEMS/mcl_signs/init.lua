@@ -249,10 +249,6 @@ function sign_tpl.on_place(itemstack, placer, pointed_thing)
 	local ndef = core.registered_nodes[node.name]
 	if not ndef then return itemstack end
 
-	if mcl_util.call_on_rightclick(itemstack, placer, pointed_thing) then
-		return itemstack
-	end
-
 	local above = pointed_thing.above
 	local dir = {x = under.x - above.x, y = under.y - above.y, z = under.z - above.z}
 	local wdir = core.dir_to_wallmounted(dir)
