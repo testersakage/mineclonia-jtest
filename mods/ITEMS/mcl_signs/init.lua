@@ -375,6 +375,18 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
+local unlimited_player_transfer_distance = core.settings:get_bool("unlimited_player_transfer_distance", true)
+local player_transfer_distance = unlimited_player_transfer_distance and 0 or tonumber(core.settings:get("player_transfer_distance")) or 0
+local mcl_hand_range_creative = tonumber(core.settings:get("mcl_hand_range_creative")) or 10
+local max_close_formspec_range = math.min(mcl_hand_range_creative + 1, player_transfer_distance > 0 and player_transfer_distance or math.huge)
+
+function mcl_signs.close_formspec(pos)
+	for player in mcl_util.connected_players(pos, max_close_formspec_range) do
+		core.close_formspec(player:get_player_name(),
+			"mcl_signs:set_text_" .. pos.x .. "_" .. pos.y .. "_" .. pos.z)
+	end
+end
+
 local function project_placer_dir (axis, placer_dir)
 	local axis_1 = vector.normalize (vector.new (axis.z, 0, axis.x))
 	local dot = vector.dot (axis_1, placer_dir)
@@ -498,6 +510,7 @@ end
 
 function sign_tpl.on_destruct(pos)
 	mcl_signs.get_text_entity(pos, true)
+	mcl_signs.close_formspec(pos)
 end
 
 function sign_tpl._on_dye_place(pos,color)
