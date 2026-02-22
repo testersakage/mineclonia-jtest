@@ -390,15 +390,13 @@ local FULL_BLOCK = mcl_util.decompose_AABBs ({
 
 -- Node definition callbacks
 function sign_tpl.on_place(itemstack, placer, pointed_thing)
+	local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
+	if rc then return rc end
+
 	local under = pointed_thing.under
 	local node = core.get_node(under)
 	local ndef = core.registered_nodes[node.name]
 	if ndef and ndef.buildable_to then return itemstack end
-
-	local new_stack = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
-	if new_stack then
-		return new_stack
-	end
 
 	local above = pointed_thing.above
 	local dir = vector.subtract(under, above)
