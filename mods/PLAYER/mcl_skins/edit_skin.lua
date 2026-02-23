@@ -237,7 +237,7 @@ function mcl_skins.show_formspec(player)
 	formspec = formspec ..
 		"model[11,0.3;3,7;player_mesh;" .. mesh .. ";" ..
 		mcl_skins.compile_skin(skin) ..
-		",blank.png,blank.png;0,180;false;true;0,0]"
+		",blank.png,blank.png;-10,200;false;true;0,0]"
 
 	if active_tab == "skin" then
 		local page_start = (page_num - 1) * 8 - 1
@@ -265,9 +265,9 @@ function mcl_skins.show_formspec(player)
 			local y = 0.3 + math.floor((j + 1) / 4) * 3.1
 
 			formspec = formspec ..
-				"model[" .. x .. "," .. y .. ";1.5,3;player_mesh;" .. mesh .. ";" ..
+				"model[" .. (x - 0.04) .. "," .. (y + 0.02) .. ";1.5,3;player_mesh;" .. mesh .. ";" ..
 				skin.texture ..
-				",blank.png,blank.png;0,180;false;true;0,0]"
+				",blank.png,blank.png;-10,200;false;false;0,0]"
 
 			if simple_skins_id == skin.texture then
 				formspec = formspec ..
@@ -284,15 +284,15 @@ function mcl_skins.show_formspec(player)
 		end
 	elseif active_tab == "template" then
 		formspec = formspec ..
-			"model[5,2;2,3;player_mesh;mcl_armor_character.b3d;" ..
+			"model[4.96,2.02;2,3;player_mesh;mcl_armor_character.b3d;" ..
 			mcl_skins.compile_skin(mcl_skins.steve) ..
-			",blank.png,blank.png;0,180;false;true;0,0]" ..
+			",blank.png,blank.png;-10,200;false;true;0,0]" ..
 
 			"button[5,5.2;2,0.8;steve;" .. S("Select") .. "]" ..
 
-			"model[7.5,2;2,3;player_mesh;mcl_armor_character_female.b3d;" ..
+			"model[7.46,2.02;2,3;player_mesh;mcl_armor_character_female.b3d;" ..
 			mcl_skins.compile_skin(mcl_skins.alex) ..
-			",blank.png,blank.png;0,180;false;true;0,0]" ..
+			",blank.png,blank.png;-10,200;false;true;0,0]" ..
 
 			"button[7.5,5.2;2,0.8;alex;" .. S("Select") .. "]"
 
