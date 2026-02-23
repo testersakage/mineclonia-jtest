@@ -33,7 +33,7 @@ local function register_rocket(n, duration, force)
 		description = description,
 		_tt_help = S("Flight Duration: @1s", string.format("%.1f", duration)),
 		inventory_image = "mcl_fireworks_rocket.png",
-		on_use = function(itemstack, user, pointed_thing)
+		on_place = function(itemstack, user, pointed_thing)
 			return use_rocket(itemstack, user, duration)
 		end,
 		on_secondary_use = function(itemstack, user, pointed_thing)
