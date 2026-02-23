@@ -157,7 +157,7 @@ mcl_inventory.register_survival_inventory_tab({
 		if inv:get_stack("offhand", 1):is_empty() then
 			armor_slot_imgs = armor_slot_imgs .. "image[5.375,4.125;1,1;mcl_inventory_empty_armor_slot_shield.png]"
 		end
-		return main_page_static .. armor_slot_imgs .. mcl_player.get_player_formspec_model(player, 1.57, 0.4, 3.62, 4.85, "")
+		return main_page_static .. armor_slot_imgs .. mcl_player.get_player_formspec_model(player, 1.45, 0.5, 3.62, 4.85, "")
 	end,
 	handle = function() end,
 })

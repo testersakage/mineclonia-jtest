@@ -481,7 +481,7 @@ function mcl_inventory.set_creative_formspec(player)
 
 			-- Player preview
 			"image[4.75,0.33;2.25,2.83;mcl_inventory_background9.png;2]",
-			mcl_player.get_player_formspec_model(player, 4.75, 0.45, 2.25, 2.75, ""),
+			mcl_player.get_player_formspec_model(player, 4.68, 0.45, 2.25, 2.75, ""),
 
 			-- Crafting guide button
 			"image_button[11.575,0.825;1.1,1.1;craftguide_book.png;__mcl_craftguide;]",
