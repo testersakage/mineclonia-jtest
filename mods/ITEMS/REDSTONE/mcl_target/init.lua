@@ -28,7 +28,7 @@ end
 local function check_achievement(pos, arrow, signal)
 	if not arrow then return end
 	local shooter = arrow._shooter
-	if signal ~= 15 or not (shooter and shooter:is_player()) then
+	if signal ~= 15 or not (shooter and shooter.is_player and shooter:is_player()) then
 		return
 	end
 	local shooter_pos = shooter:get_pos()
