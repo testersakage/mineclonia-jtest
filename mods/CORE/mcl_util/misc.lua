@@ -244,3 +244,7 @@ end
 function mcl_util.lcg_next (a, c, m, state)
 	return (a * state + c) % m
 end
+
+function mcl_util.is_colorstring(str)
+	return type(str) == "string" and str:match("^#%x%x%x%x%x%x$") ~= nil
+end

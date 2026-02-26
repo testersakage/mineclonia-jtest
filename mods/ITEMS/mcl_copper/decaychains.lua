@@ -79,7 +79,10 @@ function mcl_copper.get_undecayed(nodename, amount)
 	return dc.nodes[ci]
 end
 
-function mcl_copper.spawn_particles(pos, texture)
+function mcl_copper.spawn_particles(pos, color)
+	if not mcl_util.is_colorstring(color) then
+		color = "#DDDDDD"
+	end
 	core.add_particlespawner({
 		amount = 8,
 		time = 0.25,
@@ -95,7 +98,7 @@ function mcl_copper.spawn_particles(pos, texture)
 		maxsize = 4.5,
 		collisiondetection = false,
 		vertical = false,
-		texture = texture or "mcl_copper_anti_oxidation_particle.png^[colorize:#888888:125",
+		texture = "mcl_copper_anti_oxidation_particle.png^[multiply:"..color,
 		glow = 5,
 	})
 end
@@ -140,7 +143,7 @@ local function undecay(itemstack, _, pointed_thing)
 	node.name = mcl_copper.get_undecayed(node.name)
 	core.swap_node(pointed_thing.under,node)
 	swap_door_part(pointed_thing.under,node)
-	mcl_copper.spawn_particles(pointed_thing.under)
+	mcl_copper.spawn_particles(pointed_thing.under, "#1CAC70")
 	return itemstack
 end
 
@@ -153,6 +156,7 @@ local function register_unpreserve(nodename,od,def)
 	nd[def.unpreserve_callback]  = function(itemstack, clicker, pointed_thing)
 		if pointed_thing then
 			awards.unlock(clicker:get_player_name(), "mcl:wax_off")
+			mcl_copper.spawn_particles(pointed_thing.under)
 			return unpreserve(itemstack, clicker, pointed_thing)
 		end
 		return itemstack
@@ -224,7 +228,7 @@ local function register_preserve(nodename,def,chaindef)
 				if core.registered_nodes[node.name] then
 					core.swap_node(pointed_thing.under,node)
 					swap_door_part(pointed_thing.under,node)
-					mcl_copper.spawn_particles(pointed_thing.under, "mcl_copper_anti_oxidation_particle.png^[colorize:#fcbf3c:200")
+					mcl_copper.spawn_particles(pointed_thing.under, "#DAA022")
 					if not core.is_creative_enabled(placer and placer:get_player_name() or "") then
 						itemstack:take_item()
 					end

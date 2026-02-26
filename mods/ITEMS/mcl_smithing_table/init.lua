@@ -96,7 +96,7 @@ end
 
 function mcl_smithing_table.is_smithing_mineral(itemstack)
 	local color = itemstack:get_definition()._mcl_armor_trim_color
-	return type(color) == "string" and color:match("^#%x%x%x%x%x%x$") ~= nil
+	return mcl_util.is_colorstring(color)
 end
 
 local function reset_upgraded_item(pos)
