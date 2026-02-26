@@ -225,6 +225,12 @@ local function register_preserve(nodename,def,chaindef)
 			elseif table.indexof(chaindef.nodes,node.name) <= #chaindef.nodes then
 				if append_door_suffix(node.name) then
 					node.name = append_door_suffix(node.name)
+				elseif core.get_item_group(node.name, "trapdoor") > 0 then
+					if node.name:find("_open") then
+						node.name = node.name:gsub("_open", "_preserved_open")
+					else
+						node.name = node.name.."_preserved"
+					end
 				else
 					node.name = node.name.."_preserved"
 				end
