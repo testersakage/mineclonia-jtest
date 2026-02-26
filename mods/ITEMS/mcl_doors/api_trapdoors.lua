@@ -26,6 +26,28 @@ local function	on_rotate(pos, node, _, mode, _)
 	end
 end
 
+local function close(pos, sound_close)
+	local node = core.get_node(pos)
+	local defs = core.registered_nodes[node.name]
+	local closed = defs._mcl_trapdoor_closed_name
+
+	if closed and core.registered_nodes[closed] then
+		core.sound_play(sound_close, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
+		core.set_node(pos, {name = closed, param1 = node.param1, param2 = node.param2})
+	end
+end
+
+local function open(pos, sound_open)
+	local node = core.get_node(pos)
+	local defs = core.registered_nodes[node.name]
+	local open = defs._mcl_trapdoor_open_name
+
+	if open and core.registered_nodes[open] then
+		core.sound_play(sound_open, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
+		core.set_node(pos, {name = open, param1 = node.param1, param2 = node.param2})
+	end
+end
+
 function mcl_doors:register_trapdoor(name, def)
 	local groups = table.copy(def.groups)
 	if groups == nil then groups = {} end
@@ -33,36 +55,12 @@ function mcl_doors:register_trapdoor(name, def)
 	if not def.sound_open then def.sound_open = "doors_door_open" end
 	if not def.sound_close then def.sound_close = "doors_door_close" end
 
-	local function close(pos)
-		local me = core.get_node(pos)
-		if core.get_item_group(me.name, "trapdoor") > 0 then
-			name = name:gsub("_open", "")
-			if me.name ~= name then
-				core.sound_play(def.sound_close, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
-			end
-			core.set_node(pos, {name=name, param1=me.param1, param2=me.param2})
-		end
-	end
-
-	local function open(pos)
-		local me = core.get_node(pos)
-		if core.get_item_group(me.name, "trapdoor") > 0 then
-			if not name:find("_open") then
-				name = name.."_open"
-			end
-			if me.name ~= name then
-				core.sound_play(def.sound_open, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
-			end
-			core.set_node(pos, {name=name, param1=me.param1, param2=me.param2})
-		end
-	end
-
 	local function punch(pos)
 		local me = core.get_node(pos)
 		if core.get_item_group(me.name, "trapdoor") == 2 then
-			close(pos)
+			close(pos, def.sound_close)
 		else
-			open(pos)
+			open(pos, def.sound_open)
 		end
 	end
 
@@ -73,9 +71,9 @@ function mcl_doors:register_trapdoor(name, def)
 
 		if power ~= previous_power then
 			if power ~= 0 then
-				open(pos)
+				open(pos, def.sound_open)
 			else
-				close(pos)
+				close(pos, def.sound_close)
 			end
 		end
 
@@ -153,6 +151,7 @@ function mcl_doors:register_trapdoor(name, def)
 			init = function() end,
 			update = on_redstone_update,
 		},
+		_mcl_trapdoor_open_name = name.."_open",
 		_tt_help = tt_help,
 		description = def.description,
 		groups = groups_closed,
@@ -208,6 +207,7 @@ function mcl_doors:register_trapdoor(name, def)
 			init = function() end,
 			update = on_redstone_update
 		},
+		_mcl_trapdoor_closed_name = name,
 		-- TODO: Implement Minecraft behaviour: Climbable if directly above
 		-- ladder w/ matching orientation.
 		-- Current behavour: Always climbable
