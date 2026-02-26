@@ -10,6 +10,10 @@ local function use(itemstack, player, pointed_thing)
 	local itemname = itemstack:get_name ()
 	local pointed_thing = mcl_util.get_pointed_thing (player, true)
 
+	if mcl_hunger.is_player_full(player) and not mcl_hunger.can_eat_when_full(player, itemstack) then
+		return
+	end
+
 	local def = core.registered_items[itemname]
 	local hunger_points = core.get_item_group(itemname, "eatable")
 
