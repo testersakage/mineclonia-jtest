@@ -187,8 +187,15 @@ local function register_unpreserve(nodename,od,def)
 	end
 	if append_door_suffix(nodename) then
 		nodename = append_door_suffix(nodename)
-	elseif core.get_item_group(nodename, "trapdoor") > 0 and nodename:find("_open") then
-		nodename = nodename:gsub("_open","_preserved_open")
+	elseif core.get_item_group(nodename, "trapdoor") > 0 then
+		if nodename:find("_open") then
+			local oldname = nodename
+			nodename = nodename:gsub("_open","_preserved_open")
+			nd._mcl_trapdoor_closed_name = oldname:gsub("_open", "").."_preserved"
+		else
+			nodename = nodename.."_preserved"
+			nd._mcl_trapdoor_open_name = nodename.."_open"
+		end
 	else
 		nodename = nodename .. "_preserved"
 	end
