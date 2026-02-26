@@ -95,7 +95,7 @@ mcl_copper.register_decaychain("lantern_ceiling",{
 		"mcl_lanterns:copper_lantern_ceiling",
 		"mcl_lanterns:copper_lantern_exposed_ceiling",
 		"mcl_lanterns:copper_lantern_weathered_ceiling",
-		"mcl_lanterns:copper_lantern_weathered_ceiling",
+		"mcl_lanterns:copper_lantern_oxidized_ceiling",
 	},
 })
 
