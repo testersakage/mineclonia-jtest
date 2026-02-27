@@ -19,9 +19,6 @@ local function load_json_file(name)
 end
 
 local texture_colors = load_json_file("colors")
-local palettes = load_json_file("palettes")
-
-local color_cache = {}
 
 local creating_maps = {}
 local loaded_maps = {}
@@ -54,78 +51,48 @@ function mcl_maps.create_map(pos)
 		local param2data = vm:get_param2_data()
 		local area = VoxelArea:new({ MinEdge = emin, MaxEdge = emax })
 		local pixels = {}
-		local last_heightmap
-		for x = 1, 128 do
-			local map_x = minp.x - 1 + x
-			local heightmap = {}
-			for z = 1, 128 do
-				local map_z = minp.z - 1 + z
-				local color, height
+		for z = 1, 128 do
+			local map_z = minp.z - 1 + z
+			local last_height
+			for x = 1, 128 do
+				local map_x = minp.x - 1 + x
+				local cagg, alpha, height = { 0, 0, 0 }, 0
 				for map_y = maxp.y, minp.y, -1 do
 					local index = area:index(map_x, map_y, map_z)
 					local c_id = data[index]
 					if c_id ~= c_air then
-						color = color_cache[c_id]
-						if color == nil then
-							local nodename = core.get_name_from_content_id(c_id)
-							local def = core.registered_nodes[nodename]
-							if def then
-								local texture
-								if def.palette and def.palette ~= "" and ( def.paramtype2 == "color" or
-									def.paramtype2 == "colorwallmounted" or def.paramtype2 == "colorfacedir" or
-									def.paramtype2 == "color4dir" ) then
-									texture = def.palette
-								elseif def.tiles then
-									texture = def.tiles[1]
-									if type(texture) == "table" then
-										texture = texture.name
-									end
-								end
-								if texture then
-									texture = texture:match("([^=^%^]-([^.]+))$"):split("^")[1]
-								end
-								if def.palette and def.palette ~= "" and ( def.paramtype2 == "color" or
-									def.paramtype2 == "colorwallmounted" or def.paramtype2 == "colorfacedir" or
-									def.paramtype2 == "color4dir" ) then
-									local palette = palettes[texture]
-									color = palette and { palette = palette }
-								elseif texture_colors then
-									color = texture_colors[texture]
-								end
-							end
+						local color = texture_colors[minetest.get_name_from_content_id(c_id)]
+						-- use param2 if available:
+						if color and type(color[1]) == "table" then
+							color = color[param2data[index] + 1] or color[1]
 						end
+						if color then
+							local a = (color[4] or 255) / 255
+							local f = a * (1 - alpha)
+							cagg[1] = cagg[1] + f * color[1]
+							cagg[2] = cagg[2] + f * color[2]
+							cagg[3] = cagg[3] + f * color[3]
+							alpha = alpha + f
 
-						if color and color.palette then
-							color = color.palette[param2data[index] + 1]
-						else
-							color_cache[c_id] = color or false
-						end
-
-						if color and last_heightmap then
-							local last_height = last_heightmap[z]
-							if last_height < map_y then
-								color = {
-									math.min(255, color[1] + 16),
-									math.min(255, color[2] + 16),
-									math.min(255, color[3] + 16),
-								}
-							elseif last_height > map_y then
-								color = {
-									math.max(0, color[1] - 16),
-									math.max(0, color[2] - 16),
-									math.max(0, color[3] - 16),
+							-- ground estimate with transparent blocks
+							if alpha > 0.70 and not height then height = map_y end
+							-- adjust color to give a 3d effect
+							if alpha >= 0.99 and last_height and height then
+								local dheight = math.min(math.max((height - last_height) * 8, -32), 32)
+								cagg = {
+									math.max(0, math.min(255, cagg[1] + dheight)),
+									math.max(0, math.min(255, cagg[2] + dheight)),
+									math.max(0, math.min(255, cagg[3] + dheight)),
 								}
 							end
+							if alpha >= 0.99 then break end
 						end
-						height = map_y
-						break
 					end
 				end
-				heightmap[z] = height or minp.y
-				pixels[z] = pixels[z] or {}
-				pixels[z][x] = color or { 0, 0, 0 }
+			last_height = height
+			pixels[z] = pixels[z] or {}
+			pixels[z][x] = cagg or { 0, 0, 0 }
 			end
-			last_heightmap = heightmap
 		end
 		tga_encoder.image(pixels):save(map_textures_path .. "mcl_maps_map_texture_" .. id .. ".tga", { compression = "RLE", color_format = "A1R5G5B5", })
 		creating_maps[id] = nil
