@@ -268,7 +268,8 @@ local function can_trial_spawner_spawn_mobs(pos, meta, player_count, is_ominous)
 	local total_spawn_limit = (player_count - 1) * math.floor(meta:get_float("total_mobs_added_per_player")) + meta:get_int("base_total_mobs")
 	local total_mobs_spawned = meta:get_int("total_mobs_spawned")
 
-	if is_ominous and not mcl_mobs.registered_mobs[meta:get_string("mob")].wears_armor then
+	if is_ominous and mcl_mobs.registered_mobs[meta:get_string("mob")] and
+			(not mcl_mobs.registered_mobs[meta:get_string("mob")].wears_armor) then
 		total_spawn_limit = total_spawn_limit * 2
 	end
 
