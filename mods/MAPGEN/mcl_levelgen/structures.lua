@@ -642,6 +642,7 @@ local function sort_structure_list (in_structures)
 			append_structures (new_list, structures[namespace])
 		end
 	end
+	table.sort (namespaces)
 	for _, namespace in ipairs (namespaces) do
 		append_structures (new_list, structures[namespace])
 	end
