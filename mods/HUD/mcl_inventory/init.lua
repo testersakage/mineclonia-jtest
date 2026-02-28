@@ -61,6 +61,10 @@ local function set_inventory(player)
 		return
 	end
 
+	local inv = player:get_inventory()
+	inv:set_width("craft", 2)
+	inv:set_size("craft", 4)
+
 	local formspec = mcl_inventory.build_survival_formspec (player)
 	mcl_player.set_inventory_formspec (player, formspec, 0)
 end
