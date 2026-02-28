@@ -1,11 +1,13 @@
-# mcl_cartography_table
+mcl_cartography_table
+-------------------
+Cartography Tables, by PrairieWind, mirqf and AFCM
 
-Cartography Tables, by PrairieWind
+Adds Cartography Tables to VoxeLibre.
 
-Adds Cartography Tables to Mineclonia.
-
-## License
+License of source code
+----------------------
 LGPLv2.1
 
-## Media
-See the main Mineclonia README.md file.
+License of media
+----------------
+See the main VoxeLibre README.md file.
