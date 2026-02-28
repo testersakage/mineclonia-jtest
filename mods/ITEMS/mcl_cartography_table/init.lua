@@ -91,7 +91,7 @@ local function update_cartography_table(player)
 			end
 			map:set_count(2)
 			inv:set_stack("cartography_table_output", 1, map)
-		elseif not map:is_empty() and addon:get_name() == "xpanes:pane_natural_flat" then
+		elseif not map:is_empty() and addon:get_name() == "mcl_panes:pane_natural_flat" then
 			---- Lock a map
 			formspec = formspec .. "image[5.125,0.5;4,4;mcl_maps_map_background.png]"
 			if texture then formspec = formspec .. "image[5.375,0.75;3.5,3.5;" .. texture .. "]" end
@@ -174,7 +174,7 @@ core.register_allow_player_inventory_action(function(player, action, inventory, 
 			if index == 1 and stack:get_name():find("mcl_maps:filled_map") then return 1 end
 			if index == 2 and stack:get_name() == "mcl_core:paper" then return inventory_info.count end
 			if index == 2 and stack:get_name() == "mcl_maps:empty_map" then return inventory_info.count end
-			if index == 2 and stack:get_name() == "xpanes:pane_natural_flat" then return inventory_info.count end
+			if index == 2 and stack:get_name() == "mcl_panes:pane_natural_flat" then return inventory_info.count end
 			return 0
 		end
 		if inventory_info.from_list == "cartography_table_output" and inventory_info.from_index == 1 then
