@@ -3,8 +3,6 @@
 -- TODO: use ephemeral textures or base64 inline textures to eventually allow explorer maps?
 -- TODO: show multiple players on the map
 -- TODO: show banners on map
--- TODO: when the minimum supported Luanti version has core.get_node_raw, use it
--- Check for engine updates that allow improvements
 mcl_maps = {}
 
 mcl_maps.max_zoom = tonumber(core.settings:get("vl_maps_max_zoom")) or 3
@@ -164,7 +162,6 @@ function mcl_maps.convert_legacy_map(itemstack, meta)
 	tt.reload_itemstack_description(itemstack)
 
 	local minp = string_to_pos(meta:get_string("mcl_maps:minp"))
-	local maxp = string_to_pos(meta:get_string("mcl_maps:maxp"))
 	local cx = minp.x + 64
 	local cz = minp.z + 64
 	meta:set_int("mcl_maps:cx", cx)
@@ -185,9 +182,7 @@ local function configure_map(itemstack, cx, dim, cz, zoom, callback)
 
 	-- Legacy conversion
 	if dim == "" then
-		local fields = meta:to_table().fields
 		local minp = string_to_pos(meta:get_string("mcl_maps:minp"))
-		local maxp = string_to_pos(meta:get_string("mcl_maps:maxp"))
 		dim = mcl_worlds.pos_to_dimension(minp)
 		cx = minp.x + halfsize
 		cz = minp.z + halfsize
@@ -342,7 +337,7 @@ core.register_craftitem("mcl_maps:filled_map", filled_def)
 -- Only nodes can have meshes, which means that all player hands are nodes
 -- Thus, to render a map over a player hand, we have to register nodes for this too
 local filled_wield_def = table.copy(filled_def)
-filled_wield_def.use_texture_alpha = core.features.use_texture_alpha_string_modes and "opaque" or false
+filled_wield_def.use_texture_alpha = "opaque"
 filled_wield_def.visual_scale = 1
 filled_wield_def.wield_scale = vector.new(1, 1, 1)
 filled_wield_def.paramtype = "light"

@@ -185,6 +185,18 @@ mcl_inv_nodes_movable (Movable inventory nodes) bool true
 # Allow players to create Minecraft-like maps.
 enable_real_maps (Real maps) bool true
 
+# Make maps in the Nether show not only the bedrock.
+vl_maps_allow_nether (Make maps in the Nether useful) bool true
+
+# Allow maps to overlap 50% per level
+vl_maps_allow_overlap (Allow overlapping maps by 50%) bool true
+
+# Maximum map zoom level permitted (high zoom levels can take very long, do not increase on multiplayer servers)
+vl_maps_max_zoom (Maximum map zoom level) int 3 1 5
+
+# How many times per second should handheld maps be updated
+vl_maps_update_rate (Map updates per second) int 15 1 60
+
 # Place bonus chest near players' initial spawn point
 mcl_bonus_chest (Bonus chest) bool false
 
