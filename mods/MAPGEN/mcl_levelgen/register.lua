@@ -118,6 +118,19 @@ elseif core then
 	dofile (mcl_levelgen.prefix .. "/default_features1.lua")
 	mcl_levelgen.register_levelgen_script (mcl_levelgen.prefix
 					       .. "/default_features1.lua")
+
+	-- Redefine nodes employing the grass palette to refer to a
+	-- palette which is free of certain conflicting entries
+	-- defined for the built-in map generators.
+	core.register_on_mods_loaded (function ()
+		for name, tbl in pairs (core.registered_nodes) do
+			if tbl.palette == "mcl_core_palette_grass.png" then
+				core.override_item (name, {
+					palette = "mcl_core_palette_grass_levelgen.png",
+				})
+			end
+		end
+	end)
 end
 
 if core and not core.get_mod_storage and core.get_gen_notify then
