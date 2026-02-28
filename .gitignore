@@ -10,3 +10,7 @@ prompt.txt
 __pycache__
 *.~*~
 *~
+
+# minetestmapper-generated files
+tools/minetestmapper/colors.json
+tools/minetestmapper/colors.txt
