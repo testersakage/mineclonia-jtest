@@ -513,7 +513,7 @@ core.register_globalstep(function(dtime)
 
 			-- Note the alignment and scale used above
 			local f = 2 * 128 / (maxp.x - minp.x + 1)
-			player:hud_change(hud.marker, "offset", {x = (pos.x - minp.x) * f - 128, y = (maxp.z - pos.z) * f - 256})
+			player:hud_change(hud.marker, "offset", {x = (pos.x - minp.x) * f - 128, y = (maxp.z - pos.z) * f - 264})
 			player:hud_change(hud.marker, "text", marker)
 
 		elseif maps[player] then -- disable map
