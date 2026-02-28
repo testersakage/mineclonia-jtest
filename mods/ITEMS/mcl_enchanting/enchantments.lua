@@ -14,7 +14,7 @@ end
 mcl_enchanting.register_enchantment("bane_of_arthropods", {
 	name = S("Bane of Arthropods"),
 	max_level = 5,
-	primary = {sword = true},
+	primary = {sword = true, mace = true},
 	secondary = {axe = true},
 	incompatible = {smite = true, sharpness = true, density = true, breach = true},
 	weight = 5,
@@ -119,7 +119,7 @@ mcl_enchanting.register_enchantment("efficiency", {
 mcl_enchanting.register_enchantment("fire_aspect", {
 	name = S("Fire Aspect"),
 	max_level = 2,
-	primary = {sword = true},
+	primary = {sword = true, mace = true},
 	weight = 2,
 	description = S("Sets target on fire."),
 	power_range_table = {{10, 61}, {30, 71}},
@@ -483,7 +483,7 @@ mcl_enchanting.register_enchantment("silk_touch", {
 mcl_enchanting.register_enchantment("smite", {
 	name = S("Smite"),
 	max_level = 5,
-	primary = {sword = true},
+	primary = {sword = true, mace = true},
 	secondary = {axe = true},
 	incompatible = {bane_of_arthropods = true, sharpness = true, density = true, breach = true},
 	weight = 5,
@@ -529,7 +529,7 @@ mcl_enchanting.register_enchantment("soul_speed", {
 mcl_enchanting.register_enchantment("unbreaking", {
 	name = S("Unbreaking"),
 	max_level = 3,
-	primary = {armor_head = true, armor_torso = true, armor_legs = true, armor_feet = true, pickaxe = true, shovel = true, axe = true, hoe = true, sword = true, fishing_rod = true, bow = true, crossbow = true, trident = true, },
+	primary = {armor_head = true, armor_torso = true, armor_legs = true, armor_feet = true, pickaxe = true, shovel = true, axe = true, hoe = true, sword = true, fishing_rod = true, bow = true, crossbow = true, trident = true, mace = true},
 	secondary = {tool = true},
 	disallow = {non_combat_armor = true},
 	weight = 5,
