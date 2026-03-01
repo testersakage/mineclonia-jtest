@@ -251,7 +251,6 @@ core.register_abm({
 	nodenames = { "group:coral_plant", "group_coral_fan" },
 	interval = 17,
 	chance = 5,
-	catch_up = false,
 	action = function(pos, node)
 		-- Check if coral's alive
 		local coral_state = core.get_item_group(node.name, "coral")
@@ -278,7 +277,6 @@ core.register_abm({
 	nodenames = { "group:coral_block" },
 	interval = 17,
 	chance = 5,
-	catch_up = false,
 	action = function(pos, node)
 		-- Check if coral's alive
 		local coral_state = core.get_item_group(node.name, "coral")

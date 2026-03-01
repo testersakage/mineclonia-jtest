@@ -232,7 +232,6 @@ core.register_abm({
 	neighbors = {"air", "group:grass_block_no_snow", "mcl_core:mycelium"},
 	interval = 30,
 	chance = 20,
-	catch_up = false,
 	action = function(pos)
 		if pos == nil then
 			return
@@ -286,7 +285,6 @@ core.register_abm({
 	nodenames = {"group:spreading_dirt_type"},
 	interval = 8,
 	chance = 50,
-	catch_up = false,
 	action = function(pos, _)
 		local above = {x = pos.x, y = pos.y + 1, z = pos.z}
 		local name = core.get_node(above).name

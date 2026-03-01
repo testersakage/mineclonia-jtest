@@ -289,6 +289,14 @@ mcl_vars.mg_dungeons = true
 core.nodedef_default.stack_max = 64
 core.craftitemdef_default.stack_max = 64
 
+local old_rabm = core.register_abm
+function core.register_abm(def)
+	if def.catch_up == nil then
+		def.catch_up = false
+	end
+	return old_rabm(def)
+end
+
 -- Set random seed for all other mods (Remember to make sure no other mod calls this function)
 math.randomseed(os.time())
 

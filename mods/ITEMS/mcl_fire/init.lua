@@ -278,7 +278,6 @@ core.register_abm({
 	neighbors = {"group:puts_out_fire"},
 	interval = 3,
 	chance = 1,
-	catch_up = false,
 	action = function(pos)
 		core.remove_node(pos)
 		core.sound_play("fire_extinguish_flame",
@@ -296,7 +295,6 @@ if not fire_enabled then
 		nodenames = {"mcl_fire:fire"},
 		interval = 10,
 		chance = 10,
-		catch_up = false,
 		action = core.remove_node,
 	})
 
@@ -308,7 +306,6 @@ else -- Fire enabled
 		nodenames ={"mcl_fire:fire","mcl_fire:eternal_fire"},
 		interval = 7,
 		chance = 12,
-		catch_up = false,
 		action = function(pos)
 			local p = get_ignitable(pos)
 			if p then
@@ -325,7 +322,6 @@ else -- Fire enabled
 		neighbors = {"group:flammable"},
 		interval = 15,
 		chance = 9,
-		catch_up = false,
 		action = function(pos)
 			local p=get_ignitable_by_lava(pos)
 			if p then
@@ -339,7 +335,6 @@ else -- Fire enabled
 		nodenames = {"mcl_fire:fire"},
 		interval = 7,
 		chance = 3,
-		catch_up = false,
 		action = function(pos)
 			local p=has_flammable(pos)
 			if p then
@@ -360,7 +355,6 @@ else -- Fire enabled
 		neighbors = {"group:flammable"},
 		interval = 5,
 		chance = 18,
-		catch_up = false,
 		action = function(pos)
 			local p = has_flammable(pos)
 			if not p then

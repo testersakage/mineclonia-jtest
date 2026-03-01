@@ -257,7 +257,6 @@ core.register_abm({
 	nodenames = { "group:sea_pickle" },
 	interval = 17,
 	chance = 5,
-	catch_up = false,
 	action = function(pos, node)
 		-- Check if it's lit
 		local state = core.get_item_group(node.name, "sea_pickle")
