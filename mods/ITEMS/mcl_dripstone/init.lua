@@ -169,11 +169,16 @@ local function on_dripstone_place(itemstack, player, pointed_thing)
 		return
 	end
 
-	if not core.is_creative_enabled(player:get_player_name()) then
-		itemstack:take_item()
+	local above = pointed_thing.above
+	local above_node = core.get_node(above)
+	local above_def = core.registered_nodes[above_node.name]
+	if above_def and above_def.buildable_to then
+		if not core.is_creative_enabled(player:get_player_name()) then
+			itemstack:take_item()
+		end
+		core.set_node(above, {name = get_dripstone_node(2, direction)})
+		update_dripstone(pointed_thing.above, direction)
 	end
-	core.set_node(pointed_thing.above, {name = get_dripstone_node(2, direction)})
-	update_dripstone(pointed_thing.above, direction)
 	return itemstack
 end
 
