@@ -283,33 +283,36 @@ core.register_node("mcl_bamboo:scaffolding", {
 			if ctrl and ctrl.sneak then
 				if core.get_node(vector.offset(ppos,0,-1,0)).name == "air" and core.get_node(ppos).name == "air" then
 					itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
-				end
-				if np2 > 6 then
-					core.check_single_for_falling(ppos)
+					if np2 > 6 then
+						core.check_single_for_falling(ppos)
+					end
 				end
 			elseif arc > 45 and arc < 90 then
 				local p2 = core.dir_to_facedir(placer:get_look_dir())
 				local offset_z = p2 % 2 == 0 and 0 - (p2 -1) or 0
 				local offset_x = p2 % 2 ~= 0 and 2 - p2 or 0
 
-				if core.get_node(vector.offset(ppos, offset_x, -1, offset_z)).name == "air"
-					or core.get_node(vector.offset(ppos, offset_x, -1, offset_z)).name == "mcl_bamboo:scaffolding_horizontal"
-					then
-					ppos = vector.offset(ppos, offset_x, -1, offset_z)
+				ppos = vector.offset(ppos, offset_x, -1, offset_z)
+				node = core.get_node(ppos)
+
+				if node.name == "mcl_bamboo:scaffolding_horizontal" then
 					while np2 <= 6
-						and core.get_node(ppos).name == "mcl_bamboo:scaffolding_horizontal"
+						and node.name == "mcl_bamboo:scaffolding_horizontal"
 						and ( core.get_node(vector.offset(ppos, offset_x, 0, offset_z)).name == "air"
 						   or core.get_node(vector.offset(ppos, offset_x, 0, offset_z)).name == "mcl_bamboo:scaffolding_horizontal"
 						    )
 						do
 
 						ppos = vector.offset(ppos, offset_x, 0, offset_z)
+						node = core.get_node(ppos)
 						np2 = np2 + 1
 					end
-					itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
 				end
-				if np2 > 6 then
-					core.check_single_for_falling(ppos)
+				if node.name == "air" then
+					itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
+					if np2 > 6 then
+						core.check_single_for_falling(ppos)
+					end
 				end
 			else --tower up
 				local function walk_under(bottom)
