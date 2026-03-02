@@ -1,15 +1,19 @@
 -- Compatibility functions
 
 -- Write a luanti-style deprecation message to the log.
-function mcl_util.log_deprecated_call(level)
+-- Optionally log an added custom message.
+function mcl_util.log_deprecated_call(level, moreinfo_msg)
 	local info2 = debug.getinfo(2)
 	local info3 = debug.getinfo(3)
-	local log_msg = string.format("Calling %s() is deprecated (at %s:%s)",
+	local deprecated_msg = string.format("Calling %s() is deprecated (at %s:%s)",
 		info2.name or "unknown",
 		info3.short_src or "unknown",
 		info3.currentline or "unknown"
 	)
-	core.log(level or "warning", log_msg)
+	core.log(level or "warning", deprecated_msg)
+	if moreinfo_msg then
+		core.log(level or "warning", moreinfo_msg)
+	end
 end
 
 -- Polyfills for legacy minetest
