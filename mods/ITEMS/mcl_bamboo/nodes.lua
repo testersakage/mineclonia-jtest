@@ -294,19 +294,15 @@ core.register_node("mcl_bamboo:scaffolding", {
 
 				ppos = vector.offset(ppos, offset_x, -1, offset_z)
 				node = core.get_node(ppos)
-
-				if node.name == "mcl_bamboo:scaffolding_horizontal" then
-					while np2 <= 6
-						and node.name == "mcl_bamboo:scaffolding_horizontal"
-						and ( core.get_node(vector.offset(ppos, offset_x, 0, offset_z)).name == "air"
-						   or core.get_node(vector.offset(ppos, offset_x, 0, offset_z)).name == "mcl_bamboo:scaffolding_horizontal"
-						    )
-						do
-
-						ppos = vector.offset(ppos, offset_x, 0, offset_z)
-						node = core.get_node(ppos)
-						np2 = np2 + 1
-					end
+				while np2 <= 6
+					and core.get_item_group(node.name,"scaffolding") > 0
+					and ( core.get_node(vector.offset(ppos, offset_x, 0, offset_z)).name == "air"
+					   or core.get_item_group(core.get_node(vector.offset(ppos, offset_x, 0, offset_z)).name,"scaffolding") > 0
+					    )
+					do
+					np2 = node.param2 + 1
+					ppos = vector.offset(ppos, offset_x, 0, offset_z)
+					node = core.get_node(ppos)
 				end
 				if node.name == "air" then
 					if np2 > 6 then
