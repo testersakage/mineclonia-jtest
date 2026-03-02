@@ -5,7 +5,7 @@
 Table indexed by item name containing record definitions
 
 
-## mcl_jukebox.register_record(record_definition)
+## mcl_jukebox.register_record_definition(record_definition)
 
 record_definition:
 {
