@@ -45,12 +45,14 @@ local function count_mobs_all()
 end
 
 function mcl_mobs.spawn_setup (def)
-	local blurb = "[mcl_mobs]: An obsolete mob spawning definition is being registered for `%s'.  `%s' will not spawn naturally till its spawning configuration is updated to conform to the modern spawning API."
-	core.log ("warning", string.format (blurb, def.name, def.name))
+	mcl_util.log_deprecated_call ("error", string.format (
+		"[mcl_mobs] `%s' will not spawn naturally until its spawning configuration is updated to conform to the modern spawning API.",
+		def.name)
+	)
 end
 
 function mcl_mobs.spawn (pos, id, staticdata)
-	core.log ("warning", "[mcl_mobs]: `mcl_mobs.spawn' is obsolete.  Use `core.add_entity' or `mcl_mobs.spawn_abnormally' instead.")
+	mcl_util.log_deprecated_call ("error", "[mcl_mobs] use `core.add_entity' or `mcl_mobs.spawn_abnormally' instead.")
 	return core.add_entity (pos, id, staticdata)
 end
 

@@ -279,12 +279,12 @@ local function add_group(item, group)
 end
 
 function mcl_beacons.register_beaconblock (itemstring)
-	core.log("warning", "[mcl_beacons] mcl_beacons.register_beaconblock is deprecated. Use the \"beacon_block\" item group instead!")
+	mcl_util.log_deprecated_call("error", "[mcl_beacons] use the \"beacon_block\" item group instead!")
 	add_group(itemstring, "beacon_block")
 end
 
 function mcl_beacons.register_beaconfuel(itemstring)
-	core.log("warning", "[mcl_beacons] mcl_beacons.register_beaconfuel is deprecated. Use the \"beacon_fuel\" item group instead!")
+	mcl_util.log_deprecated_call("error", "[mcl_beacons] use the \"beacon_fuel\" item group instead!")
 	add_group(itemstring, "beacon_fuel")
 end
 

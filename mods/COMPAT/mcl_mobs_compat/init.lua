@@ -1,12 +1,18 @@
 -- No-op in Mineclonia (capturing mobs is not possible).
 -- Provided for compability with Mobs Redo
-function mcl_mobs.capture_mob() return false end
+function mcl_mobs.capture_mob()
+	mcl_util.log_deprecated_call("error")
+	return false
+end
 
 -- No-op in Mineclonia (protecting mobs is not possible).
-function mcl_mobs.protect() return false end
+function mcl_mobs.protect()
+	mcl_util.log_deprecated_call("error")
+	return false
+end
 
--- this is to make the register_mob and register egg functions commonly used by mods not break
--- when they use the weird old : notation AND self as first argument
+-- this is to make the register_mob, register egg and register_arrow functions commonly used
+-- by mods not break when they use the weird old : notation AND self as first argument
 local oldregmob = mcl_mobs.register_mob
 function mcl_mobs.register_mob(self,name,def) ---@diagnostic disable-line: duplicate-set-field
 	if type(self) == "string" then
@@ -15,6 +21,7 @@ function mcl_mobs.register_mob(self,name,def) ---@diagnostic disable-line: dupli
 	end
 	return oldregmob(name,def)
 end
+
 local oldregegg = mcl_mobs.register_egg
 function mcl_mobs.register_egg(self, mob, desc, background_color, overlay_color, addegg, no_creative) ---@diagnostic disable-line: duplicate-set-field
 	if type(self) == "string" then
@@ -37,9 +44,11 @@ function mcl_mobs.register_arrow(self,name,def) ---@diagnostic disable-line: dup
 	return oldregarrow(name,def)
 end
 
-function mcl_mobs.spawn_specific (name, _)
-	local blurb = "[mcl_mobs]: An obsolete mob spawning definition is being registered for `%s'.  `%s' will not spawn naturally till its spawning configuration is updated to conform to the modern spawning API."
-	core.log ("warning", string.format (blurb, name))
+function mcl_mobs.spawn_specific(name, _)
+	mcl_util.log_deprecated_call("error", string.format(
+		"[mcl_mobs]: `%s' will not spawn naturally till its spawning configuration is updated to conform to the modern spawning API.",
+		name)
+	)
 end
 
 ------------------------------------------------------------------------

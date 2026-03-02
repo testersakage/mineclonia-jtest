@@ -37,7 +37,7 @@ function core.register_craft(recipe)
 end
 
 function mcl_dye.register_on_bone_meal_apply(func)
-	core.log("warning", "[mcl_dye] A mod "..(core.get_current_modname() or "").."is using the function mcl_dye.register_on_bone_meal_apply - this is deprecated. Use the node defintion callbacks as documented in mods/mcl_bone_meal/API.md instead!")
+	mcl_util.log_deprecated_call("error", "[mcl_dye] use the node defintion callbacks as documented in mods/mcl_bone_meal/API.md instead!")
 	table.insert(mcl_dye.bone_meal_callbacks, func)
 end
 
