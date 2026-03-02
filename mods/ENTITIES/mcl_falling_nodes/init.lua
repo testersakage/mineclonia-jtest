@@ -160,6 +160,7 @@ core.register_entity(":__builtin:falling_node", {
 		-- Figure out how to improve that (if it is a problem).
 
 		if bcn and (not bcd or bcd.walkable or
+				core.get_item_group(self.node.name,"scaffolding") > 0 or
 				(core.get_item_group(self.node.name, "float") ~= 0 and
 				bcd.liquidtype ~= "none")) then
 			if bcd and bcd.leveled and

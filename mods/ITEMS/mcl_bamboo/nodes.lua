@@ -236,6 +236,124 @@ local function can_place_on(node)
 	return false
 end
 
+-- copy from https://github.com/luanti-org/luanti/blob/5.15.1/builtin/game/falling.lua#L333C1-L352C1
+local function convert_to_falling_node(pos, node)
+	local obj = core.add_entity(pos, "__builtin:falling_node")
+	if not obj then
+		return false
+	end
+	-- remember node level, the entities' set_node() uses this
+	node.level = core.get_node_level(pos)
+	local meta = core.get_meta(pos)
+	local metatable = meta and meta:to_table() or {}
+
+	local def = core.registered_nodes[node.name]
+	if def and def.sounds and def.sounds.fall then
+		core.sound_play(def.sounds.fall, {pos = pos}, true)
+	end
+
+	obj:get_luaentity():set_node(node, metatable)
+	core.remove_node(pos)
+	return true, obj
+end
+
+-- based on https://github.com/luanti-org/luanti/blob/5.15.1/builtin/game/falling.lua#L441 core.check_single_for_falling
+local function check_single_for_falling(p)
+	local n = core.get_node(p)
+	if core.get_item_group(n.name, "scaffolding") ~= 0 then
+		local p_bottom = vector.offset(p, 0, -1, 0)
+		-- Only spawn falling node if node below is loaded
+		local n_bottom = core.get_node_or_nil(p_bottom)
+		local d_bottom = n_bottom and core.registered_nodes[n_bottom.name]
+		if d_bottom then
+			-- Otherwise only if the bottom node is considered "fall through"
+			if core.get_item_group(n_bottom.name, "scaffolding") == 0
+			and (not d_bottom.walkable or d_bottom.buildable_to)
+				then
+				local success, _ = convert_to_falling_node(p, n)
+				return success
+			end
+		end
+	end
+
+	return false
+end
+
+-- copy from https://github.com/luanti-org/luanti/blob/5.15.1/builtin/game/falling.lua#L491
+local check_for_falling_neighbors = {
+	vector.new(-1, -1,  0),
+	vector.new( 1, -1,  0),
+	vector.new( 0, -1, -1),
+	vector.new( 0, -1,  1),
+	vector.new( 0, -1,  0),
+	vector.new(-1,  0,  0),
+	vector.new( 1,  0,  0),
+	vector.new( 0,  0,  1),
+	vector.new( 0,  0, -1),
+	vector.new( 0,  0,  0),
+	vector.new( 0,  1,  0),
+}
+-- copy from https://github.com/luanti-org/luanti/blob/5.15.1/builtin/game/falling.lua#L505
+local function check_for_falling(p)
+	-- Round p to prevent falling entities to get stuck.
+	p = vector.round(p)
+
+	-- We make a stack, and manually maintain size for performance.
+	-- Stored in the stack, we will maintain tables with pos, and
+	-- last neighbor visited. This way, when we get back to each
+	-- node, we know which directions we have already walked, and
+	-- which direction is the next to walk.
+	local s = {}
+	local n = 0
+	-- The neighbor order we will visit from our table.
+	local v = 1
+
+	while true do
+		-- Push current pos onto the stack.
+		n = n + 1
+		s[n] = {p = p, v = v}
+		-- Select next node from neighbor list.
+		p = vector.add(p, check_for_falling_neighbors[v])
+		-- Now we check out the node. If it is in need of an update,
+		-- it will let us know in the return value (true = updated).
+		if not check_single_for_falling(p) then
+			-- If we don't need to "recurse" (walk) to it then pop
+			-- our previous pos off the stack and continue from there,
+			-- with the v value we were at when we last were at that
+			-- node
+			repeat
+				local pop = s[n]
+				p = pop.p
+				v = pop.v
+				s[n] = nil
+				n = n - 1
+				-- If there's nothing left on the stack, and no
+				-- more sides to walk to, we're done and can exit
+				if n == 0 and v == 11 then
+					return
+				end
+			until v < 11
+			-- The next round walk the next neighbor in list.
+			v = v + 1
+		else
+			-- If we did need to walk the neighbor, then
+			-- start walking it from the walk order start (1),
+			-- and not the order we just pushed up the stack.
+			v = 1
+		end
+	end
+end
+
+local function after_dig_scaffolding_horizontal(pos, oldnode, _, digger)
+	for _,v in pairs(adjacents) do
+		local npos = vector.add(pos,v)
+		local nnode = core.get_node(npos)
+		if nnode.name == "mcl_bamboo:scaffolding_horizontal" and nnode.param2 > oldnode.param2 then
+			check_for_falling(npos)
+		end
+	end
+end
+
 core.register_node("mcl_bamboo:scaffolding", {
 	description = S("Scaffolding"),
 	doc_items_longdesc = S("Scaffolding is a temporary structure to easily climb up while building that is easily removed"),
@@ -259,7 +377,7 @@ core.register_node("mcl_bamboo:scaffolding", {
 	climbable = true,
 	physical = true,
 	node_placement_prediction = "",
-	groups = { handy=1, axey=1, flammable=3, deco_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, falling_node = 1, stack_falling = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1},
+	groups = { handy=1, axey=1, flammable=3, deco_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, scaffolding = 1, dig_by_piston = 1, unsticky = 1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_hardness = 0,
 	_mcl_burntime = 2.5,
@@ -284,7 +402,7 @@ core.register_node("mcl_bamboo:scaffolding", {
 				if core.get_node(vector.offset(ppos,0,-1,0)).name == "air" and core.get_node(ppos).name == "air" then
 					itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
 					if np2 > 6 then
-						core.check_single_for_falling(ppos)
+						check_single_for_falling(ppos)
 					end
 				end
 			elseif arc > 45 and arc < 90 then
@@ -307,7 +425,7 @@ core.register_node("mcl_bamboo:scaffolding", {
 				if node.name == "air" then
 					if np2 > 6 then
 						itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding",param2 = 0}, placer, itemstack) or itemstack
-						core.check_single_for_falling(ppos)
+						check_single_for_falling(ppos)
 					else
 						itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
 					end
@@ -354,7 +472,7 @@ core.register_node("mcl_bamboo:scaffolding", {
 			end
 		elseif can_place_on(node) and core.get_node(ptd.above).name == "air" then
 			itemstack = mcl_util.safe_place(ptd.above, {name = "mcl_bamboo:scaffolding"}, placer, itemstack) or itemstack
-			core.check_single_for_falling(ptd.above)
+			check_single_for_falling(ptd.above)
 		end
 		return itemstack
 	end,
@@ -366,9 +484,7 @@ core.register_node("mcl_bamboo:scaffolding", {
 				if not core.is_creative_enabled(digger_name) then
 					core.add_item(pos,"mcl_bamboo:scaffolding")
 				end
-				for _,v in pairs(adjacents) do
-					core.check_for_falling(vector.add(pos,v))
-				end
+				after_dig_scaffolding_horizontal(pos, node, _, digger)
 			end
 		end)
 	end,
@@ -403,7 +519,8 @@ core.register_node("mcl_bamboo:scaffolding_horizontal", {
 	walkable = false,
 	climbable = true,
 	physical = true,
-	groups = { handy=1, axey=1, flammable=3, building_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, not_in_creative_inventory = 1, falling_node = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
+	groups = { handy=1, axey=1, flammable=3, building_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, not_in_creative_inventory = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
+	after_dig_node = after_dig_scaffolding_horizontal,
 	_mcl_after_falling = function(pos)
 		if core.get_node(pos).name == "mcl_bamboo:scaffolding_horizontal" then
 			local above = vector.offset(pos,0,1,0)
