@@ -212,7 +212,7 @@ function mcl_mapgen_models.carpathian_mapgen_model ()
 					end
 					if valley < 0.0 then
 						local tem = water_level - sqrt (-valley) * river_depth
-						y_min = mathmin (y_min, tem)
+						y_min = mathmin (y_min, floor (tem))
 					else
 						-- XXX: fewer assumptions.
 						y_min = mathmin (y_min, -128)
