@@ -279,79 +279,22 @@ local function check_single_for_falling(p)
 	return false
 end
 
--- copy from https://github.com/luanti-org/luanti/blob/5.15.1/builtin/game/falling.lua#L491
-local check_for_falling_neighbors = {
-	vector.new(-1, -1,  0),
-	vector.new( 1, -1,  0),
-	vector.new( 0, -1, -1),
-	vector.new( 0, -1,  1),
-	vector.new( 0, -1,  0),
-	vector.new(-1,  0,  0),
-	vector.new( 1,  0,  0),
-	vector.new( 0,  0,  1),
-	vector.new( 0,  0, -1),
-	vector.new( 0,  0,  0),
-	vector.new( 0,  1,  0),
-}
--- copy from https://github.com/luanti-org/luanti/blob/5.15.1/builtin/game/falling.lua#L505
-local function check_for_falling(p)
-	-- Round p to prevent falling entities to get stuck.
-	p = vector.round(p)
-
-	-- We make a stack, and manually maintain size for performance.
-	-- Stored in the stack, we will maintain tables with pos, and
-	-- last neighbor visited. This way, when we get back to each
-	-- node, we know which directions we have already walked, and
-	-- which direction is the next to walk.
-	local s = {}
-	local n = 0
-	-- The neighbor order we will visit from our table.
-	local v = 1
-
-	while true do
-		-- Push current pos onto the stack.
-		n = n + 1
-		s[n] = {p = p, v = v}
-		-- Select next node from neighbor list.
-		p = vector.add(p, check_for_falling_neighbors[v])
-		-- Now we check out the node. If it is in need of an update,
-		-- it will let us know in the return value (true = updated).
-		if not check_single_for_falling(p) then
-			-- If we don't need to "recurse" (walk) to it then pop
-			-- our previous pos off the stack and continue from there,
-			-- with the v value we were at when we last were at that
-			-- node
-			repeat
-				local pop = s[n]
-				p = pop.p
-				v = pop.v
-				s[n] = nil
-				n = n - 1
-				-- If there's nothing left on the stack, and no
-				-- more sides to walk to, we're done and can exit
-				if n == 0 and v == 11 then
-					return
-				end
-			until v < 11
-			-- The next round walk the next neighbor in list.
-			v = v + 1
-		else
-			-- If we did need to walk the neighbor, then
-			-- start walking it from the walk order start (1),
-			-- and not the order we just pushed up the stack.
-			v = 1
-		end
-	end
-end
-
-local function after_dig_scaffolding_horizontal(pos, oldnode, _, digger)
+local function after_dig_scaffolding(pos, oldnode, _, digger)
 	for _,v in pairs(adjacents) do
 		local npos = vector.add(pos,v)
 		local nnode = core.get_node(npos)
 		if nnode.name == "mcl_bamboo:scaffolding_horizontal" and nnode.param2 > oldnode.param2 then
-			check_for_falling(npos)
+			if check_single_for_falling(npos) then
+				after_dig_scaffolding(npos, nnode, _, digger)
+			end
 		end
 	end
+	mcl_util.traverse_tower(vector.offset(pos,0,1,0),1,function(upos, _, unode)
+		if unode.name ~= "mcl_bamboo:scaffolding" then return true end
+		if check_single_for_falling(upos) then
+			after_dig_scaffolding(upos, unode, _, digger)
+		end
+	end)
 end
 
 core.register_node("mcl_bamboo:scaffolding", {
@@ -398,11 +341,12 @@ core.register_node("mcl_bamboo:scaffolding", {
 			local pp2 = node.param2
 			local np2 = pp2 + 1
 			local arc = placer:get_look_vertical() * (180 / math.pi)
+
 			if ctrl and ctrl.sneak then
 				if core.get_node(vector.offset(ppos,0,-1,0)).name == "air" and core.get_node(ppos).name == "air" then
 					itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
-					if np2 > 6 then
-						check_single_for_falling(ppos)
+					if np2 > 6 and not check_single_for_falling(ppos) then
+						mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding"}, placer)
 					end
 				end
 			elseif arc > 45 and arc < 90 then
@@ -423,11 +367,9 @@ core.register_node("mcl_bamboo:scaffolding", {
 					node = core.get_node(ppos)
 				end
 				if node.name == "air" then
-					if np2 > 6 then
-						itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding",param2 = 0}, placer, itemstack) or itemstack
-						check_single_for_falling(ppos)
-					else
-						itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
+					itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
+					if np2 > 6 and not check_single_for_falling(ppos) then
+						mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding"}, placer)
 					end
 				end
 			else --tower up
@@ -476,22 +418,12 @@ core.register_node("mcl_bamboo:scaffolding", {
 		end
 		return itemstack
 	end,
-	after_dig_node = function(pos, _, _, digger)
-		mcl_util.traverse_tower(vector.offset(pos,0,1,0),1,function(pos, _, node)
-			if node.name ~= "mcl_bamboo:scaffolding" then return true end
-			if mcl_util.safe_place(pos, {name = "air"}, digger) then
-				local digger_name = digger and digger:get_player_name() or ""
-				if not core.is_creative_enabled(digger_name) then
-					core.add_item(pos,"mcl_bamboo:scaffolding")
-				end
-				after_dig_scaffolding_horizontal(pos, node, _, digger)
-			end
-		end)
+	after_dig_node = function(pos, oldnode, _, digger)
+		after_dig_scaffolding(pos, oldnode, _, digger)
 	end,
 	_mcl_after_falling = function(pos, _)
-		if core.get_node(pos).name == "mcl_bamboo:scaffolding" then
-			mcl_util.safe_place(pos,{name = "mcl_bamboo:scaffolding"})
-		end
+		mcl_util.safe_place(pos, {name = "air"})
+		core.add_item(pos,"mcl_bamboo:scaffolding")
 	end,
 })
 
@@ -520,16 +452,14 @@ core.register_node("mcl_bamboo:scaffolding_horizontal", {
 	climbable = true,
 	physical = true,
 	groups = { handy=1, axey=1, flammable=3, building_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, not_in_creative_inventory = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
-	after_dig_node = after_dig_scaffolding_horizontal,
+	after_dig_node = after_dig_scaffolding,
 	_mcl_after_falling = function(pos)
-		if core.get_node(pos).name == "mcl_bamboo:scaffolding_horizontal" then
-			local above = vector.offset(pos,0,1,0)
-			if core.get_node(pos).name ~= "mcl_bamboo:scaffolding" then
-				mcl_util.safe_place(pos, {name = "air"})
-				core.add_item(pos,"mcl_bamboo:scaffolding")
-			elseif core.get_node(above).name == "air" then
-				mcl_util.safe_place(above, {name = "mcl_bamboo:scaffolding"})
-			end
+		local node = core.get_node(pos)
+		if node.name == "mcl_bamboo:scaffolding_horizontal" and node.param2 > 6 then
+			mcl_util.safe_place(pos, {name = "mcl_bamboo:scaffolding"})
+		else
+			mcl_util.safe_place(pos, {name = "air"})
+			core.add_item(pos,"mcl_bamboo:scaffolding")
 		end
 	end
 })
