@@ -309,9 +309,11 @@ core.register_node("mcl_bamboo:scaffolding", {
 					end
 				end
 				if node.name == "air" then
-					itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
 					if np2 > 6 then
+						itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding",param2 = 0}, placer, itemstack) or itemstack
 						core.check_single_for_falling(ppos)
+					else
+						itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
 					end
 				end
 			else --tower up
