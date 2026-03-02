@@ -740,6 +740,29 @@ function mcl_core.get_bottle_place_on_water(bottle)
 	end
 end
 
+local plains_p, flower_forest_p, swamp_p, pale_garden_p
+
+core.register_on_mods_loaded (function ()
+	plains_p = mcl_biome_dispatch.make_biome_test ({
+		"SunflowerPlains",
+		"Plains",
+	})
+	flower_forest_p = mcl_biome_dispatch.make_biome_test ({
+		"FlowerForest",
+	})
+	swamp_p = mcl_biome_dispatch.make_biome_test ({
+		"Swamp",
+	})
+	if not mcl_levelgen.levelgen_enabled then
+		pale_garden_p = mcl_biome_dispatch.make_biome_test ({
+			"PaleGarden",
+		})
+	else
+		pale_garden_p = function (_)
+			return false
+		end
+	end
+end)
 
 function mcl_core.bone_meal_grass(_, _, pointed_thing)
 	local flowers = {
@@ -778,35 +801,10 @@ function mcl_core.bone_meal_grass(_, _, pointed_thing)
 		}
 	}
 	local flowers_biomes = {
-		plains = {
-			"Plains",
-			"Plains_beach",
-			"Plains_ocean",
-			"Plains_deep_ocean",
-			"Plains_underground",
-			"SunflowerPlains",
-			"SunflowerPlains_ocean",
-			"SunflowerPlains_deep_ocean",
-			"SunflowerPlains_underground"
-		},
-		flower_forest = {
-			"FlowerForest",
-			"FlowerForest_beach",
-			"FlowerForest_ocean",
-			"FlowerForest_deep_ocean",
-			"FlowerForest_underground"
-		},
-		swampland = {
-			"Swampland",
-			"Swampland_shore",
-			"Swampland_ocean",
-			"Swampland_deep_ocean",
-			"Swampland_underground",
-		},
-		palegarden = {
-			"PaleGarden",
-			"PaleGarden_ocean",
-		},
+		plains = plains_p,
+		swampland = swamp_p,
+		palegarden = pale_garden_p,
+		flower_forest = flower_forest_p,
 	}
 
 	for i = -7, 7 do
@@ -825,10 +823,12 @@ function mcl_core.bone_meal_grass(_, _, pointed_thing)
 							core.set_node(pos, {name="mcl_flowers:tallgrass", param2=col})
 						else
 							local flowers_table = flowers.simple
-							local biome = core.get_biome_name(core.get_biome_data(pos).biome)
-							for flowerset, biomes in pairs(flowers_biomes) do
-								if table.indexof(biomes, biome) ~= -1 then
+							local biome = mcl_biome_dispatch.get_biome_name (pos)
+							for flowerset, predicate in pairs(flowers_biomes) do
+								if predicate (biome) then
+									print (flowerset)
 									flowers_table = flowers[flowerset]
+									break
 								end
 							end
 							core.set_node(pos, {name=flowers_table[math.random(1, #flowers_table)]})
