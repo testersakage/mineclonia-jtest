@@ -47,6 +47,7 @@ function mcl_jukebox.register_record(title, author, identifier, image, sound, no
 	if type(title) == "table" then
 		return mcl_jukebox.register_record_definition(title)
 	end
+	mcl_util.log_deprecated_call("warning", "[mcl_jukebox] please read mcl_jukebox/API.md for updated calling conventions!")
 	return mcl_jukebox.register_record_definition({
 		title = title,
 		author = author,
