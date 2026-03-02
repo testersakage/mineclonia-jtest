@@ -826,7 +826,6 @@ function mcl_core.bone_meal_grass(_, _, pointed_thing)
 							local biome = mcl_biome_dispatch.get_biome_name (pos)
 							for flowerset, predicate in pairs(flowers_biomes) do
 								if predicate (biome) then
-									print (flowerset)
 									flowers_table = flowers[flowerset]
 									break
 								end
