@@ -301,26 +301,20 @@ end
 -- Otherwise return true.
 function mcl_shields.add_wear (obj, damage, blockstack, n)
 	if not obj or not obj:is_player() then return false, "non-player" end
-	if not core.is_creative_enabled(obj:get_player_name()) then return false, "creative" end
+	if core.is_creative_enabled(obj:get_player_name()) then return false, "creative" end
 
 	if damage and damage < 3 then return false, "threshold" end
 	if n and n <= 0 then return false, "use-count" end
 
 	local blocking, shieldstack
 	if blockstack then
-		blocking, shieldstack = blockstack[0], blockstack[1]
+		blocking, shieldstack = blockstack[1], blockstack[2]
 	else
 		blocking, shieldstack = mcl_shields.is_blocking(obj)
 	end
 	if not blocking then return false, "no-shield" end
 
-	local durability = 336
-	local unbreaking = mcl_enchanting.get_enchantment(shieldstack, mcl_shields.enchantments[2])
-	if unbreaking > 0 then
-		durability = durability * (unbreaking + 1)
-	end
-
-	shieldstack:add_wear(65535 / durability * (n or 1))
+	mcl_util.use_item_durability (shieldstack, math.ceil (damage))
 	if blocking == 2 then
 		obj:set_wielded_item(shieldstack)
 	else
