@@ -73,6 +73,9 @@ function mcl_inventory.get_recipe_groups(player, craft, optional_width, optional
 	return_fields(player, "craft")
 	local pinv = player:get_inventory()
 	local grid_width = optional_width or pinv:get_width("craft")
+	if grid_width == 0 then
+		grid_width = 3
+	end
 	local grid_height = optional_height or math.ceil(pinv:get_size("craft") / grid_width)
 	local craft_size = table.max_index(craft.items)
 	local craft_width = craft.width
@@ -207,6 +210,9 @@ core.register_on_player_receive_fields(function(player, _, fields)
 end)
 
 function mcl_inventory.get_required_craft_grid_size (grid_contents, grid_width)
+	if grid_width == 0 then
+		grid_width = 3
+	end
 	local min_x, min_y = math.huge, math.huge
 	local max_x, max_y = 0, 0
 	local size = #grid_contents
