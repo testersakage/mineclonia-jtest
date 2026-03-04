@@ -50,23 +50,12 @@ function mcl_crafting_table.show_crafting_form(player)
 	if not mcl_crafting_table.has_crafting_table(player) then
 		return
 	end
-	-- temporarily expand crafting grid to 3x3
-	local inv = player:get_inventory()
-	if inv then
-		inv:set_width("craft", 3)
-		inv:set_size("craft", 9)
-	end
-
 	formspec_shown[player] = true
 	core.show_formspec(player:get_player_name(), "main", mcl_crafting_table.formspec)
 end
 
 core.register_on_player_receive_fields(function(player, formname, fields)
 	if fields.quit and formname == "main" then
-		local inv = player:get_inventory()
-		inv:set_width("craft", 2)
-		inv:set_size("craft", 4)
-
 		formspec_shown[player] = nil
 	end
 end)

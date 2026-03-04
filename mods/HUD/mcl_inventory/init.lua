@@ -61,10 +61,6 @@ local function set_inventory(player)
 		return
 	end
 
-	local inv = player:get_inventory()
-	inv:set_width("craft", 2)
-	inv:set_size("craft", 4)
-
 	local formspec = mcl_inventory.build_survival_formspec (player)
 	mcl_player.set_inventory_formspec (player, formspec, 0)
 end
@@ -265,8 +261,8 @@ core.register_on_joinplayer(function(player)
 
 	inv:set_width("main", 9)
 	inv:set_size("main", 36)
-	inv:set_width("craft", 2)
-	inv:set_size("craft", 4)
+	inv:set_width("craft", 3)
+	inv:set_size("craft", 9)
 	inv:set_size("offhand", 1)
 	inv:set_size("sorter", 1)
 	inv:set_stack("sorter", 1, ItemStack(""))
