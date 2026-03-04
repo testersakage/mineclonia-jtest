@@ -43,6 +43,9 @@ function mcl_crafting_table.has_crafting_table(player)
 	return core.is_creative_enabled(player:get_player_name()) or (core.find_node_near(player:get_pos(), range, { "group:crafting_table" }, true) ~= nil)
 end
 
+-- track players that are viewing the crafting table formspec
+local formspec_shown = {}
+
 function mcl_crafting_table.show_crafting_form(player)
 	if not mcl_crafting_table.has_crafting_table(player) then
 		return
@@ -54,6 +57,7 @@ function mcl_crafting_table.show_crafting_form(player)
 		inv:set_size("craft", 9)
 	end
 
+	formspec_shown[player] = true
 	core.show_formspec(player:get_player_name(), "main", mcl_crafting_table.formspec)
 end
 
@@ -62,17 +66,19 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 		local inv = player:get_inventory()
 		inv:set_width("craft", 2)
 		inv:set_size("craft", 4)
+
+		formspec_shown[player] = nil
 	end
 end)
 
 mcl_player.register_globalstep_slow(function(player)
-	local inv = player:get_inventory()
-	if inv:get_size("craft") > 4 and not mcl_crafting_table.has_crafting_table(player) then
+	if formspec_shown[player] and not mcl_crafting_table.has_crafting_table(player) then
 		-- Player managed to get out of range of a crafting table
-		-- without triggering the close formspec handler in
-		-- mcl_inventory. This can happen when using a hacked client,
-		-- but also legitimately when the player is moved by the
-		-- environment, e.g. sinking in water.
+		-- with the crafting formspec still open.
+		--
+		-- This can happen when using a hacked client, but also
+		-- legitimately when the player is moved by the environment,
+		-- e.g. sinking in water.
 		--
 		-- Trigger the actions that would normally be caused by closing
 		-- the formspec.
