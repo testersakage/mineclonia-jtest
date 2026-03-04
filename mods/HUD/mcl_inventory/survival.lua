@@ -79,86 +79,95 @@ local function build_page(_, content, inventory, tabname)
 	})
 end
 
-local main_page_static = table.concat({
-	--Armor slots
-	mcl_formspec.get_itemslot_bg_v4(0.375, 0.375, 1, 4),
-	"list[current_player;armor;0.375,0.375;1,1;1]",
-	"list[current_player;armor;0.375,1.625;1,1;2]",
-	"list[current_player;armor;0.375,2.875;1,1;3]",
-	"list[current_player;armor;0.375,4.125;1,1;4]",
+local function get_inventory_formspec(player)
+	local inv = player:get_inventory()
 
-	--Player model background
-	"image[1.57,0.343;3.62,4.85;mcl_inventory_background9.png;2]",
+	local armor_slots = { "helmet", "chestplate", "leggings", "boots" }
+	local armor_slot_imgs = ""
+	for a = 1, 4 do
+		if inv:get_stack("armor", a + 1):is_empty() then
+			armor_slot_imgs = armor_slot_imgs ..
+				"image[0.375," .. (0.375 + (a - 1) * 1.25) .. ";1,1;mcl_inventory_empty_armor_slot_" .. armor_slots[a] .. ".png]"
+		end
+	end
 
-	--Offhand
-	mcl_formspec.get_itemslot_bg_v4(5.375, 4.125, 1, 1),
-	"list[current_player;offhand;5.375,4.125;1,1]",
+	local offhand_slot_img = ""
+	if inv:get_stack("offhand", 1):is_empty() then
+		offhand_slot_img = "image[5.375,4.125;1,1;mcl_inventory_empty_armor_slot_shield.png]"
+	end
 
-	--Craft grid
-	"label[6.61,0.5;" .. F(core.colorize(mcl_formspec.label_color, S("Crafting"))) .. "]",
+	local craft_width = inv:get_width("craft")
 
-	mcl_formspec.get_itemslot_bg_v4(6.625, 0.875, 2, 2),
-	"list[current_player;craft;6.625,0.875;2,2]",
+	return table.concat({
+		--Armor slots
+		mcl_formspec.get_itemslot_bg_v4(0.375, 0.375, 1, 4),
+		"list[current_player;armor;0.375,0.375;1,1;1]",
+		"list[current_player;armor;0.375,1.625;1,1;2]",
+		"list[current_player;armor;0.375,2.875;1,1;3]",
+		"list[current_player;armor;0.375,4.125;1,1;4]",
+		armor_slot_imgs,
 
-	"image[9.125,1;1,1;crafting_formspec_arrow.png]",
+		--Player model background
+		"image[1.57,0.343;3.62,4.85;mcl_inventory_background9.png;2]",
 
-	mcl_formspec.get_itemslot_bg_v4(10.375, 1, 1, 1),
-	"list[current_player;craftpreview;10.375,1;1,1;]",
+		--Offhand
+		mcl_formspec.get_itemslot_bg_v4(5.375, 4.125, 1, 1),
+		"list[current_player;offhand;5.375,4.125;1,1]",
+		offhand_slot_img,
 
-	"image_button[9.125,2.125;1,1;mcl_crafting_table_inv_fill.png;__mcl_crafting_fillgrid;]",
-	"tooltip[__mcl_crafting_fillgrid;" .. F(S("Fill Craft Grid")) .. "]",
+		--Craft grid
+		"label[6.61,0.5;" .. F(core.colorize(mcl_formspec.label_color, S("Crafting"))) .. "]",
 
-	--Crafting guide button
-	"image_button[6.575,4.075;1.1,1.1;craftguide_book.png;__mcl_craftguide;]",
-	"tooltip[__mcl_craftguide;" .. F(S("Recipe book")) .. "]",
+		mcl_formspec.get_itemslot_bg_v4(6.625, 0.875, 2, 2),
+		"list[current_player;craft;6.625,0.875;2,1]",
+		"list[current_player;craft;6.625,2.125;2,1;", craft_width, "]",
 
-	--Help button
-	"image_button[7.825,4.075;1.1,1.1;doc_button_icon_lores.png;__mcl_doc;]",
-	"tooltip[__mcl_doc;" .. F(S("Help")) .. "]",
+		"image[9.125,1;1,1;crafting_formspec_arrow.png]",
 
-	--Skins button
-	"image_button[9.075,4.075;1.1,1.1;mcl_player_settings.png;__mcl_player_settings;]",
-	"tooltip[__mcl_player_settings;" .. F(S("Player settings")) .. "]",
+		mcl_formspec.get_itemslot_bg_v4(10.375, 1, 1, 1),
+		"list[current_player;craftpreview;10.375,1;1,1;]",
 
-	--Achievements button
-	"image_button[10.325,4.075;1.1,1.1;mcl_achievements_button.png;__mcl_achievements;]",
-	"tooltip[__mcl_achievements;" .. F(S("Advancements")) .. "]",
+		"image_button[9.125,2.125;1,1;mcl_crafting_table_inv_fill.png;__mcl_crafting_fillgrid;]",
+		"tooltip[__mcl_crafting_fillgrid;" .. F(S("Fill Craft Grid")) .. "]",
 
-	--Listring
-	"listring[current_player;main]",
-	"listring[current_player;sorter]",
-	"listring[current_player;main]",
-	"listring[current_player;craft]",
-	"listring[current_player;main]",
-	"listring[current_player;armor]",
-	"listring[current_player;main]",
-	"listring[current_player;offhand]",
-	"listring[current_player;main]",
-})
+		--Crafting guide button
+		"image_button[6.575,4.075;1.1,1.1;craftguide_book.png;__mcl_craftguide;]",
+		"tooltip[__mcl_craftguide;" .. F(S("Recipe book")) .. "]",
+
+		--Help button
+		"image_button[7.825,4.075;1.1,1.1;doc_button_icon_lores.png;__mcl_doc;]",
+		"tooltip[__mcl_doc;" .. F(S("Help")) .. "]",
+
+		--Skins button
+		"image_button[9.075,4.075;1.1,1.1;mcl_player_settings.png;__mcl_player_settings;]",
+		"tooltip[__mcl_player_settings;" .. F(S("Player settings")) .. "]",
+
+		--Achievements button
+		"image_button[10.325,4.075;1.1,1.1;mcl_achievements_button.png;__mcl_achievements;]",
+		"tooltip[__mcl_achievements;" .. F(S("Advancements")) .. "]",
+
+		--Listring
+		"listring[current_player;main]",
+		"listring[current_player;sorter]",
+		"listring[current_player;main]",
+		"listring[current_player;craft]",
+		"listring[current_player;main]",
+		"listring[current_player;armor]",
+		"listring[current_player;main]",
+		"listring[current_player;offhand]",
+		"listring[current_player;main]",
+
+		-- Player model
+		mcl_player.get_player_formspec_model(player, 1.45, 0.5, 3.62, 4.85, ""),
+	})
+end
 
 mcl_inventory.register_survival_inventory_tab({
 	id = "main",
 	description = "Main Inventory",
 	item_icon = "mcl_crafting_table:crafting_table",
 	show_inventory = true,
-	build = function(player)
-		local inv = player:get_inventory()
-
-		local armor_slots = { "helmet", "chestplate", "leggings", "boots" }
-		local armor_slot_imgs = ""
-
-		for a = 1, 4 do
-			if inv:get_stack("armor", a + 1):is_empty() then
-				armor_slot_imgs = armor_slot_imgs ..
-					"image[0.375," .. (0.375 + (a - 1) * 1.25) .. ";1,1;mcl_inventory_empty_armor_slot_" .. armor_slots[a] .. ".png]"
-			end
-		end
-
-		if inv:get_stack("offhand", 1):is_empty() then
-			armor_slot_imgs = armor_slot_imgs .. "image[5.375,4.125;1,1;mcl_inventory_empty_armor_slot_shield.png]"
-		end
-		return main_page_static .. armor_slot_imgs .. mcl_player.get_player_formspec_model(player, 1.45, 0.5, 3.62, 4.85, "")
-	end,
+	build = get_inventory_formspec,
 	handle = function() end,
 })
 
