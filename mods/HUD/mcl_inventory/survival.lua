@@ -97,6 +97,10 @@ local function get_inventory_formspec(player)
 	end
 
 	local craft_width = inv:get_width("craft")
+	if craft_width == 0 then
+		core.log("warning", "[mcl_inventory] craft width for player " .. player:get_player_name() .. " is 0")
+		craft_width = 3
+	end
 
 	return table.concat({
 		--Armor slots
