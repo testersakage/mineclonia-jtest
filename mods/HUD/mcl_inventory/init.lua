@@ -206,9 +206,33 @@ core.register_on_player_receive_fields(function(player, _, fields)
 	end
 end)
 
+function mcl_inventory.get_required_craft_grid_size (grid_contents, grid_width)
+	local min_x, min_y = math.huge, math.huge
+	local max_x, max_y = 0, 0
+	local size = #grid_contents
+	local i = 0
+	local row = 1
+	while i < size do
+		for j = 1, grid_width do
+			if grid_contents[i+j] and not grid_contents[i+j]:is_empty() then
+				min_x, min_y = math.min(min_x, j), math.min(min_y, row)
+				max_x, max_y = math.max(max_x, j), math.max(max_y, row)
+			end
+		end
+		i = i + grid_width
+		row = row + 1
+	end
+	if max_x == 0 then
+		return 0
+	else
+		return math.max(max_x - min_x, max_y - min_y) + 1
+	end
+end
+
 core.register_craft_predict(function(itemstack, player, old_craft_grid, inv) ---@diagnostic disable-line: unused-local
 	if not player or not player:get_pos() then return end -- can apparently be called when player has already left !?
-	if inv and inv:get_size("craft") > 4 and not mcl_crafting_table.has_crafting_table(player) then
+	if inv and mcl_inventory.get_required_craft_grid_size(old_craft_grid, inv:get_width("craft")) > 2
+		and not mcl_crafting_table.has_crafting_table(player) then
 		return_fields(player, "craft")
 		core.chat_send_player(player:get_player_name(), S("Crafting table out of range!"))
 	end
