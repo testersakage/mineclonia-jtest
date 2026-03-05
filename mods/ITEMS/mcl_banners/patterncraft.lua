@@ -299,10 +299,11 @@ end
 local function banner_pattern_craft(itemstack, player, old_craft_grid, craft_inv, craft_predict)
 	local output_name = itemstack:get_name()
 	if output_name == "" or output_name:sub(1,19) ~= "mcl_banners:banner_" then return end
-	local craftsize = player:get_inventory():get_size("craft")
-	if craftsize < 9 then return ItemStack("") end -- Require crafting table.
+	-- Require crafting table.
+	if not mcl_crafting_table.has_crafting_table(player) then return ItemStack("") end
 
 	-- Pattern Matching
+	local craftsize = player:get_inventory():get_size("craft")
 	local banner, banner_index -- banner item and its crafting inventory index
 	local banner2, banner2_index -- second banner item (used when copying) and its index
 	local dye, pattern_obj -- itemstring of the dye and non-dye/banner object
