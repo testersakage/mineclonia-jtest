@@ -147,7 +147,7 @@ local function get_item_killer_message(obj, messages, reason)
 	if messages.item then
 		local wielded = mcl_util.get_wielditem(reason.source)
 		local itemname = wielded:get_meta():get_string("name")
-		if itemname ~= "" then
+		if mcl_util.validate_utf8(itemname) and itemname ~= "" then
 			itemname = "[" .. itemname .. "]"
 			if mcl_enchanting.is_enchanted(wielded:get_name()) then
 				itemname = core.colorize(mcl_colors.AQUA, itemname)
