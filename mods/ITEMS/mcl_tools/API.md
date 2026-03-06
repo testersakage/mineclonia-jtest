@@ -40,7 +40,7 @@ Adds a new tool to existing material sets.
     - `diggroups`: _table_ containing the diggroups for this tool type (e.g hoey, swordy, swordy_cobweb).
     - `craft_shapes`: _table_ containing craft shapes for the tool (see examples in the Examples section).
 
-- `tools`: _table_ that contains values ​​similar to that of `tools` from `register_set` but indexed by material names (see Example section in the tools for add_to_sets subsection).
+- `tools`: _table_ that contains values similar to that of `tools` from `register_set` but indexed by material names (see Example section in the tools for add_to_sets subsection).
 - `overrides` (**optional**): _table_ that can contain the same fields as `overrides` from `register_set`.
 
 ## Examples
@@ -63,7 +63,7 @@ groups = { pickaxe = 1, tool = 1 }
 
 ```lua
 -- If any of these fields are omitted, problems may occur using the tool.
--- Note Note that in register_set the tools field contains definitions for tools of a common material.
+-- Note that in register_set the tools field contains definitions for tools of a common material.
 -- Definitions for Wooden Pickaxe.
 ["pick"] = {
     description = S("Wooden Pickaxe"),
