@@ -41,7 +41,7 @@ Adds a new tool to existing material sets.
     - `craft_shapes`: _table_ containing craft shapes for the tool (see examples in the Examples section).
 
 - `tools`: _table_ that contains values ​​similar to that of `tools` from `register_set` but indexed by material names (see Example section in the tools for add_to_sets subsection).
-- `overrides` (**optional**): _table_ that can contain the same fiels as `overrides` from `register_set`.
+- `overrides` (**optional**): _table_ that can contain the same fields as `overrides` from `register_set`.
 
 ## Examples
 
