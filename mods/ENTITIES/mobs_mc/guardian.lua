@@ -114,6 +114,10 @@ function guardian:do_go_pos (dtime, moveresult)
 		target.z - self_pos.z
 	local vel = self.movement_velocity
 	local magnitude = math.sqrt (dx * dx + dy * dy + dz * dz)
+	if magnitude == 0 then
+		return
+	end
+
 	local y_mag = dy / magnitude
 	local yaw = math.atan2 (dz, dx) - NINETY_DEG
 	local y_rot = clip_rotation (self:get_yaw (), yaw, NINETY_DEG)
