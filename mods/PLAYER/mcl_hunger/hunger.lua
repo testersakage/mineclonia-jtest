@@ -47,12 +47,6 @@ function core.do_item_eat(hunger_points, replace_with_item, itemstack, user, poi
 		end
 	end
 
-	if core.get_item_group(itemname, "food") == 3 then
-		mcl_hunger.play_drinking_sound(user)
-	else
-		mcl_hunger.play_eating_sound(user)
-	end
-
 	for _, callback in pairs(core.registered_on_item_eats) do
 		local result = callback(hunger_points, replace_with_item, itemstack, user, pointed_thing, old_itemstack)
 		if result then

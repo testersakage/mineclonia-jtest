@@ -133,6 +133,12 @@ local function check_eat_term(player)
 	local eat_delay = def._mcl_eat_delay or EAT_DELAY
 	if eat_duration[player] and eat_duration[player] >= eat_delay then
 		itemstack = core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
+		if core.get_item_group(itemname, "food") == 3 then
+			mcl_hunger.play_drinking_sound(player)
+		else
+			mcl_hunger.play_eating_sound(player)
+		end
+
 		if itemstack then
 			player:set_wielded_item(itemstack)
 		end
