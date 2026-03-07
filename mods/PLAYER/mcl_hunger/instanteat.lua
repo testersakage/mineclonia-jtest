@@ -14,6 +14,12 @@ local function use(itemstack, player, pointed_thing)
 	local hunger_points = core.get_item_group(itemname, "eatable")
 
 	itemstack = core.do_item_eat(hunger_points, def._mcl_eat_replace_with, itemstack, player, pointed_thing)
+	if core.get_item_group(itemname, "food") == 3 then
+		mcl_hunger.play_drinking_sound(player)
+	else
+		mcl_hunger.play_eating_sound(player)
+	end
+
 	if itemstack then
 		player:set_wielded_item(itemstack)
 	end
