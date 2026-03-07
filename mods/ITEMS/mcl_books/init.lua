@@ -251,12 +251,6 @@ end)
 -- Bookshelf GUI
 local drop_content = mcl_util.drop_items_from_meta_container("main")
 
-local function on_blast(pos)
-	local node = core.get_node(pos)
-	drop_content(pos, node)
-	core.remove_node(pos)
-end
-
 -- Simple protection checking functions
 local function protection_check_move(pos, _, _, _, _, count, player)
 	local name = player:get_player_name()
@@ -364,7 +358,6 @@ core.register_node("mcl_books:bookshelf", {
 			" takes stuff from bookshelf at " .. core.pos_to_string(pos))
 	end,
 	after_dig_node = drop_content,
-	on_blast = on_blast,
 	on_rightclick = bookshelf_gui,
 	on_destruct = close_forms,
 })

@@ -47,11 +47,6 @@ local function campfire_drops(pos, digger, drops, nodename)
 	end
 end
 
-local function on_blast(pos)
-	drop_items(pos)
-	core.remove_node(pos)
-end
-
 function mcl_campfires.light_campfire(pos)
 	local campfire = core.get_node(pos)
 	local name = campfire.name .. "_lit"
@@ -242,7 +237,6 @@ function mcl_campfires.register_campfire(name, def)
 			fixed = {-.5, -.5, -.5, .5, -.05, .5},
 		},
 		_mcl_hardness = 2,
-		on_blast = on_blast,
 		after_dig_node = function(pos, _, _, digger)
 			drop_items(pos)
 			campfire_drops(pos, digger, def.drops, name.."_lit")

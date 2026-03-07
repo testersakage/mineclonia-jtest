@@ -130,7 +130,6 @@ core.register_node("mcl_core:barrier", {
 	sunlight_propagates = true,
 	is_ground_content = false,
 	groups = {creative_breakable = 1, not_in_creative_inventory = 1, not_solid = 1, unmovable_by_piston = 1, rarity = 3},
-	on_blast = function() end,
 	drop = "",
 	_mcl_blast_resistance = 36000008,
 	_mcl_hardness = -1,
@@ -187,7 +186,6 @@ core.register_node("mcl_core:realm_barrier", {
 	is_ground_content = false,
 	pointable = false,
 	groups = {not_in_creative_inventory = 1, not_solid = 1, unmovable_by_piston = 1, rarity = 3},
-	on_blast = function() end,
 	drop = "",
 	_mcl_blast_resistance = 36000008,
 	_mcl_hardness = -1,
@@ -225,7 +223,6 @@ for i = 0, 14 do --core.LIGHT_MAX
 		sunlight_propagates = true,
 		is_ground_content = false,
 		groups = {creative_breakable = 1, not_solid = 1, light_block = i + 1, rarity = 3},
-		on_blast = function() end,
 		on_use = function(itemstack, user, pointed_thing)
 			-- user:get_player_control() returns {} for non players, so we don't need user:is_player()
 			if pointed_thing.type == "node" and string.match(core.get_node(pointed_thing.under).name, light_block_pattern) and not user:get_player_control().sneak then
@@ -274,7 +271,6 @@ core.register_node("mcl_core:void", {
 	sunlight_propagates = true,
 	is_ground_content = false,
 	groups = {not_in_creative_inventory = 1, unmovable_by_piston = 1},
-	on_blast = function() end,
 	-- Prevent placement to protect player from screwing up the world, because the node is not pointable and hard to get rid of.
 	node_placement_prediction = "",
 	on_place = function(_, placer, _)
@@ -285,5 +281,6 @@ core.register_node("mcl_core:void", {
 	end,
 	drop = "",
 	-- Infinite blast resistance; it should never be destroyed by explosions
+	_mcl_blast_resistance = 36000008,
 	_mcl_hardness = -1,
 })

@@ -21,6 +21,7 @@ local sphere_shapes = {}
 local node_blastres = {}
 local node_on_blast = {}
 local node_walkable = {}
+local node_has_after_dig_node = {}
 
 -- The step length for the rays (Minecraft uses 0.3)
 local STEP_LENGTH = 0.3
@@ -40,6 +41,7 @@ core.register_on_mods_loaded(function()
 			or def._mcl_hardness or 0
 		node_on_blast[id] = def.on_blast
 		node_walkable[id] = def.walkable
+		node_has_after_dig_node[id] = def.after_dig_node
 	end
 end)
 
@@ -324,31 +326,34 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 	-- Remove destroyed blocks and drop items
 	for hash, idx in pairs(destroy) do
 		local do_drop = math.random() <= drop_chance
-		local on_blast = node_on_blast[data[idx]]
+		local cid = data[idx]
+		local on_blast = node_on_blast[cid]
+		local call_dig_node = node_has_after_dig_node[cid]
 		local remove = true
+		local npos = core.get_position_from_hash(hash)
 
-		if do_drop or on_blast then
+		if on_blast then
 			local npos = core.get_position_from_hash(hash)
-			if on_blast then
-				on_blast(npos, 1.0, do_drop)
-				remove = false
-			else
-				local name = core.get_name_from_content_id(data[idx])
-				local drop = core.get_node_drops(name, "")
+			on_blast(npos, 1.0, do_drop)
+			remove = false
+		elseif call_dig_node then
+			core.dig_node(npos)
+		elseif do_drop then
+			local name = core.get_name_from_content_id(cid)
+			local drop = core.get_node_drops(name, "")
 
-				for _, item in ipairs(drop) do
-					if type(item) ~= "string" then
-						item = item:get_name() .. item:get_count()
-					end
-					core.add_item(npos, item)
+			for _, item in ipairs(drop) do
+				if type(item) ~= "string" then
+					item = item:get_name() .. item:get_count()
 				end
+				core.add_item(npos, item)
 			end
 		end
 		if remove then
 			if fire and math.random(1, 3) == 1 then
-				table.insert(fires, core.get_position_from_hash(hash))
+				table.insert(fires, npos)
 			else
-				table.insert(airs, core.get_position_from_hash(hash))
+				table.insert(airs, npos)
 			end
 		end
 	end

@@ -110,11 +110,6 @@ function mcl_end.check_detach_chorus_plant(pos, _, _, digger)
 	mcl_end.detach_chorus_plant(pos, digger)
 end
 
-function mcl_end.check_blast_chorus_plant(pos)
-	core.remove_node(pos)
-	mcl_end.detach_chorus_plant(pos)
-end
-
 core.register_node("mcl_end:chorus_flower", {
 	description = S("Chorus Flower"),
 	_tt_help = S("Grows on end stone"),
@@ -206,7 +201,6 @@ core.register_node("mcl_end:chorus_flower", {
 		end
 	end,
 	after_dig_node = mcl_end.check_detach_chorus_plant,
-	on_blast = mcl_end.check_blast_chorus_plant,
 	_mcl_hardness = 0.4,
 })
 
@@ -241,7 +235,6 @@ core.register_node("mcl_end:chorus_flower_dead", {
 		not_breaking_cactus = 1,
 	},
 	after_dig_node = mcl_end.check_detach_chorus_plant,
-	on_blast = mcl_end.check_blast_chorus_plant,
 	_mcl_blast_resistance = 2,
 	_mcl_hardness = 0.4,
 })
@@ -317,7 +310,6 @@ core.register_node("mcl_end:chorus_plant", {
 		end
 	end,
 	after_dig_node = mcl_end.check_detach_chorus_plant,
-	on_blast = mcl_end.check_blast_chorus_plant,
 	_mcl_blast_resistance = 2,
 	_mcl_hardness = 0.4,
 })

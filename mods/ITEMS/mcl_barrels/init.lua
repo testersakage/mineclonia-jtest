@@ -8,12 +8,6 @@ local open_barrels = {}
 
 local drop_content = mcl_util.drop_items_from_meta_container({"main"})
 
-local function on_blast(pos)
-	local node = core.get_node(pos)
-	drop_content(pos, node)
-	core.remove_node(pos)
-end
-
 -- Simple protection checking functions
 local function protection_check_move(pos, _, _, _, _, count, player)
 	local name = player:get_player_name()
@@ -153,7 +147,6 @@ core.register_node("mcl_barrels:barrel_closed", {
 		mcl_redstone.update_comparators(pos)
 	end,
 	after_dig_node = drop_content,
-	on_blast = on_blast,
 	on_rightclick = barrel_open,
 	on_destruct = close_forms,
 	_mcl_hardness = 2.5,
@@ -201,7 +194,6 @@ core.register_node("mcl_barrels:barrel_open", {
 		mcl_redstone.update_comparators(pos)
 	end,
 	after_dig_node = drop_content,
-	on_blast = on_blast,
 	on_rightclick = barrel_open,
 	on_destruct = close_forms,
 	_mcl_hardness = 2.5,

@@ -226,10 +226,6 @@ core.register_node("mcl_pottery_sherds:pot", {
 	on_destruct = function(pos)
 		update_entities(pos, true)
 	end,
-	on_blast = function(pos)
-		drop_items(pos, core.get_meta(pos):to_table(), false)
-		core.remove_node(pos)
-	end,
 	after_dig_node = function(pos, _, oldmeta, digger)
 		local wielded = digger:get_wielded_item()
 		local silk_touch = mcl_enchanting.get_enchantment(wielded, "silk_touch") ~= 0

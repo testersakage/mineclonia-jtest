@@ -33,12 +33,6 @@ local function register_infested_block(name, description, overrides)
 				core.add_entity(pos, "mobs_mc:silverfish")
 			end
 		end,
-		on_blast = function (pos, _)
-			core.remove_node(pos)
-			if not core.is_creative_enabled("") then
-				core.add_entity(pos, "mobs_mc:silverfish")
-			end
-		end
 	})
 	newdef._mcl_stonecutter_recipes = nil
 	local base = name:gsub("^[_%w]*:", "")

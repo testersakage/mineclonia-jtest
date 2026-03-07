@@ -387,12 +387,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 
 	local drop_items_chest = mcl_util.drop_items_from_meta_container("main")
 
-	local function on_chest_blast(pos)
-		local node = core.get_node(pos)
-		drop_items_chest(pos, node)
-		core.remove_node(pos)
-	end
-
 	local function limit_put_list(stack, list)
 		for _, other in ipairs(list) do
 			stack = other:add_item(stack)
@@ -544,7 +538,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			core.get_meta(pos):set_string("name", itemstack:get_meta():get_string("name"))
 		end,
 		after_dig_node = drop_items_chest,
-		on_blast = on_chest_blast,
 		allow_metadata_inventory_move = protection_check_move,
 		allow_metadata_inventory_take = protection_check_put_take,
 		allow_metadata_inventory_put = protection_check_put_take,
@@ -687,7 +680,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			create_entity(p, small_name, small_textures, param2, false, "default_chest", "mcl_chests_chest", "chest")
 		end,
 		after_dig_node = drop_items_chest,
-		on_blast = on_chest_blast,
 		_mcl_allow_hopper_in = function(hopper_pos, pos)
 			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "left")
 			return core.get_item_group(core.get_node(other_pos).name, "double_chest") ~= 0
@@ -860,7 +852,6 @@ local function register_chest(basename, desc, longdesc, usagehelp, tt_help, tile
 			create_entity(p, small_name, small_textures, param2, false, "default_chest", "mcl_chests_chest", "chest")
 		end,
 		after_dig_node = drop_items_chest,
-		on_blast = on_chest_blast,
 		_mcl_allow_hopper_in = function(_, pos)
 			local other_pos = mcl_util.get_double_container_neighbor_pos(pos, core.get_node(pos).param2, "right")
 			return core.get_item_group(core.get_node(other_pos).name, "double_chest") ~= 0
