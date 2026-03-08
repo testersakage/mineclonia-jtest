@@ -19,10 +19,6 @@ local function use_rocket(itemstack, user, duration)
 			itemstack:take_item()
 		end
 		core.sound_play("mcl_fireworks_rocket", {pos = user:get_pos()})
-	elseif core.get_item_group(user:get_inventory():get_stack("armor", 3):get_name(), "elytra") ~= 0 then
-		mcl_title.set(user, "actionbar", { text = S("Elytra not deployed. Jump while falling down to deploy."), color = "white", stay = 60 })
-	else
-		mcl_title.set(user, "actionbar", { text = S("Elytra not equipped."), color = "white", stay = 60 })
 	end
 	return itemstack
 end
