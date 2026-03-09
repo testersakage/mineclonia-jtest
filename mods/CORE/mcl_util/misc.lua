@@ -245,26 +245,77 @@ function mcl_util.lcg_next (a, c, m, state)
 	return (a * state + c) % m
 end
 
-function mcl_util.validate_utf8(str)
+function mcl_util.scan_utf8(str, find_errors, max_bytes, max_codepoints, max_nonascii)
 	--function adapted from https://github.com/kikito/utf8_validator.lua/blob/master/utf8_validator.lua (Orginally MIT License)
 	-- Numbers taken from table 3-7 in www.unicode.org/versions/Unicode6.2.0/UnicodeStandard-6.2.pdf
 	-- find-based solution inspired by http://notebook.kulchenko.com/programming/fixing-malformed-utf8-in-lua
 	if type(str) == "string" then
-		local i, len = 1, #str
-		while i <= len do
-			if     i == string.find(str, "[%z\1-\127]", i) then i = i + 1
-			elseif i == string.find(str, "[\194-\223][\128-\191]", i) then i = i + 2
+		max_bytes = max_bytes or math.huge
+		max_codepoints = max_codepoints or math.huge
+		max_nonascii = max_nonascii or math.huge
+		local i, len, c, n, e = 1, string.len(str), 0, 0, {}
+		while i <= max_bytes do
+			if c >= max_codepoints then break end
+
+			if     i == string.find(str, "[%z\1-\127]", i) then
+				i = i + 1
+				c = c + 1
+			elseif i == string.find(str, "[\194-\223][\128-\191]", i) then
+				if i > max_bytes - 1 then break end
+				if n == max_nonascii then break end
+				i = i + 2
+				c = c + 1
+				n = n + 1
 			elseif i == string.find(str,        "\224[\160-\191][\128-\191]", i)
 				or i == string.find(str, "[\225-\236][\128-\191][\128-\191]", i)
 				or i == string.find(str,        "\237[\128-\159][\128-\191]", i)
-				or i == string.find(str, "[\238-\239][\128-\191][\128-\191]", i) then i = i + 3
+				or i == string.find(str, "[\238-\239][\128-\191][\128-\191]", i) then
+				if i > max_bytes - 2 then break end
+				if n == max_nonascii then break end
+				i = i + 3
+				c = c + 1
+				n = n + 1
 			elseif i == string.find(str,        "\240[\144-\191][\128-\191][\128-\191]", i)
 				or i == string.find(str, "[\241-\243][\128-\191][\128-\191][\128-\191]", i)
-				or i == string.find(str,        "\244[\128-\143][\128-\191][\128-\191]", i) then i = i + 4
+				or i == string.find(str,        "\244[\128-\143][\128-\191][\128-\191]", i) then
+				if i > max_bytes - 3 then break end
+				if n == max_nonascii then break end
+				i = i + 4
+				c = c + 1
+				n = n + 1
+			elseif find_errors and i <= len then
+				-- error at index i detected
+				e[i] = true
+				i = i + 1
+				c = c + 1
 			else
-			  return false, i
+				break
 			end
 		end
+
+		-- First error, end of string, or length exceeded with code starting at index i.
+		-- Valid portion of string ends at i - 1.
+		i = i - 1
+
+		return i, c, n, find_errors and e or nil
 	end
-	return true
+end
+
+function mcl_util.validate_utf8(str)
+	return string.len(str) == mcl_util.scan_utf8(str)
+end
+
+function mcl_util.truncate_utf8(str, max_bytes, max_codepoints, max_nonascii)
+	local valid_bytes, codepoints, nonascii = mcl_util.scan_utf8(str, nil, max_bytes, max_codepoints, max_nonascii)
+	return string.sub(str, 1, valid_bytes), codepoints, nonascii
+end
+
+function mcl_util.replace_utf8_errors(str, replacement, max_bytes, max_codepoints, max_nonascii)
+	local _, _, _, e = mcl_util.scan_utf8(str, true, nil, max_bytes, max_codepoints, max_nonascii)
+
+	local i = 0
+	return string.gsub(str, ".", function(c)
+		i = i + 1
+		return e[i] and (replacement == nil and ("\\%d"):format(string.byte(c)) or replacement) or nil
+	end)
 end
