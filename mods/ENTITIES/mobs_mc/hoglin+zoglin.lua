@@ -475,7 +475,7 @@ mcl_mobs.register_mob ("mobs_mc:hoglin", hoglin)
 -- Baby Hoglins.
 ------------------------------------------------------------------------
 
-mcl_mobs.register_mob("mobs_mc:baby_hoglin", table.merge (hoglin, {
+mcl_mobs.register_mob ("mobs_mc:baby_hoglin", table.merge (hoglin, {
 	description = S("Baby Hoglin"),
 	collisionbox = {-.3, -0.01, -.3, .3, 0.94, .3},
 	xp_min = 20,
@@ -560,10 +560,9 @@ mcl_mobs.register_spawner (hoglin_spawner)
 
 local zoglin = table.merge (hoglin, {
 	description = S("Zoglin"),
-	fire_resistant = 1,
 	textures = {"extra_mobs_zoglin.png"},
-	lava_damage = 0,
-	fire_damage = 0,
+	fire_resistant = true,
+	_fire_resistant = true,
 	armor = {
 		undead = 90,
 		fleshy = 90,
@@ -605,7 +604,7 @@ mcl_mobs.register_mob ("mobs_mc:zoglin", zoglin)
 -- Baby Zoglins.
 ------------------------------------------------------------------------
 
-local baby_zoglin = table.merge (hoglin, {
+local baby_zoglin = table.merge (zoglin, {
 	collisionbox = {-.3, -0.01, -.3, .3, 0.94, .3},
 	xp_min = 20,
 	xp_max = 20,
@@ -621,10 +620,9 @@ local baby_zoglin = table.merge (hoglin, {
 	melee_interval = 0.75,
 	can_ride_boat = true,
 	description = S("Zoglin"),
-	fire_resistant = 1,
+	fire_resistant = true,
+	_fire_resistant = true,
 	textures = {"extra_mobs_zoglin.png"},
-	lava_damage = 0,
-	fire_damage = 0,
 	armor = {
 		undead = 90,
 		fleshy = 90,
@@ -649,7 +647,6 @@ function baby_zoglin:tick_breeding ()
 end
 
 baby_zoglin.ai_step = nil
-baby_zoglin.call_group_attack = mob_class.call_group_attack
 baby_zoglin.get_staticdata_table = mob_class.get_staticdata_table
 
 mcl_mobs.register_mob ("mobs_mc:baby_zoglin", baby_zoglin)

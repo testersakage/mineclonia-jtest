@@ -14,7 +14,6 @@ local guardian = {
 	hp_max = 30,
 	xp_min = 10,
 	xp_max = 10,
-	breath_max = -1,
 	attack_type = "null",
 	view_range = 16.0,
 	tracking_distance = 16.0,
@@ -98,6 +97,14 @@ local guardian = {
 	flops = true,
 	_default_laser_delay = 4.0,
 }
+
+------------------------------------------------------------------------
+-- Guardian mechanics.
+------------------------------------------------------------------------
+
+function guardian:step_drowning (_)
+	return
+end
 
 ------------------------------------------------------------------------
 -- Guardian movement and physics.

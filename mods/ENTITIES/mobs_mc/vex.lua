@@ -49,7 +49,7 @@ local vex = {
 		stand_start = 0,
 		stand_end = 40,
 	},
-	fly = true,
+	_no_fall_damage = true,
 	makes_footstep_sound = false,
 	can_wield_items = "no_pickup",
 	wielditem_drop_probability = 0.0,
@@ -122,7 +122,7 @@ end
 -- Vexes do not sustain environmental damage from any source, whether
 -- lava, drowning, or suffocation.
 
-function vex:do_env_damage ()
+function vex:apply_environment_damage (_, _, _, _, _)
 	return false
 end
 

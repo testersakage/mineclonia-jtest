@@ -3974,7 +3974,7 @@ function villager:sleep (self_pos, dtime)
 			and vector.distance (self_pos, home) < 2.0 then
 			local position, yaw = get_sleep_position (home)
 			if position then
-				self.object:set_pos (position)
+				self:teleport_safely (position)
 				self:set_yaw (yaw)
 				self:gwp_close_memorized_doors ()
 				self:begin_sleep ()

@@ -24,11 +24,9 @@ local snow_golem = {
 	_spawn_category = "misc",
 	hp_min = 4,
 	hp_max = 4,
-	fall_damage = 0,
-	water_damage = 4,
-	_mcl_freeze_damage = 0,
+	_no_fall_damage = true,
+	_can_freeze = false,
 	head_eye_height = 1.7,
-	rain_damage = 4,
 	armor = { fleshy = 100, water_vulnerable = 100, },
 	collisionbox = {-0.35, -0.01, -0.35, 0.35, 1.89, 0.35},
 	visual = "mesh",
@@ -64,6 +62,7 @@ local snow_golem = {
 		stand_start = 20, stand_end = 40, stand_speed = 25,
 		walk_start = 0, walk_end = 20, walk_speed = 25,
 	},
+	_water_sensitive = true,
 }
 
 ------------------------------------------------------------------------

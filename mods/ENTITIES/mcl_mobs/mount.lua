@@ -284,6 +284,7 @@ function mob_class:complete_attachment (player, state)
 	mcl_serverplayer.update_vehicle (player, {
 		movement_speed = self.movement_speed,
 		jump_height = self.jump_height,
+		safe_fall_distance = self.safe_fall_distance,
 		_EF = self._EF,
 		ef_set = true,
 		_drive_boost_total = self._drive_boost_total,
