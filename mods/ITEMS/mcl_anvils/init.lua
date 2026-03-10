@@ -257,10 +257,10 @@ local function update_anvil_slots(meta, player)
 			local anvilmeta = meta
 			local meta = name_item:get_meta()
 			local old_name = meta:get_string("name")
-			-- Limit name length
-			new_name = string.sub(new_name, 1, MAX_NAME_LENGTH)
+			-- Limit name length to MAX_NAME_LENGTH codepoints
+			new_name = mcl_util.truncate_utf8(new_name, nil, MAX_NAME_LENGTH)
 			-- Don't rename if names are identical
-			if mcl_util.validate_utf8(new_name) and new_name ~= old_name then
+			if new_name ~= old_name then
 				add_cost (anvilmeta, 1)
 				-- Save the raw name internally
 				meta:set_string("name", new_name)
