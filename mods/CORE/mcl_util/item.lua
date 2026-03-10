@@ -54,8 +54,10 @@ function mcl_util.calculate_durability(itemstack)
 end
 
 function mcl_util.use_item_durability(itemstack, n)
-	local uses = mcl_util.calculate_durability(itemstack)
-	itemstack:add_wear_by_uses(uses / n)
+	if n > 0 then
+		local uses = mcl_util.calculate_durability(itemstack)
+		itemstack:add_wear_by_uses (math.floor (uses / n))
+	end
 end
 
 function mcl_util.is_item_or_in_group(itemname, group_or_item)
