@@ -1440,8 +1440,11 @@ function mob_class:replace_activity (activity_name, uninterruptible)
 	self._can_interrupt_activity = not uninterruptible
 end
 
+local mathmax = math.max
+local mathfloor = math.floor
+
 function mcl_mobs.scale_chance (frequency, dtime)
-	return math.max (2, math.round (frequency * (0.05 / dtime)))
+	return mathmax (2, mathfloor (frequency * (0.05 / dtime) + 0.5))
 end
 
 local function run_ai_1 (self, self_pos, dtime, moveresult)

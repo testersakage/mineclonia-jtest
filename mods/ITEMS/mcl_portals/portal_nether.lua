@@ -391,7 +391,7 @@ local function finalize_teleport(obj, pos, old_param2, new_param2)
 	end
 
 	-- Teleport
-	obj:set_pos(vector.offset(pos,0,-0.5,0))
+	mcl_util.teleport_safely (obj, vector.offset (pos,0,-0.5,0))
 
 	if obj:is_player() then
 		core.sound_play("mcl_portals_teleport", {pos = pos, gain = 0.5, max_hear_distance = 1}, true)
@@ -406,6 +406,7 @@ local function finalize_teleport(obj, pos, old_param2, new_param2)
 		local l = obj:get_luaentity()
 		if l and l.is_mob then
 			l._just_portaled = 10 -- wait 10 second before able to teleport again
+			l.reset_fall_damage = true
 		end
 	end
 

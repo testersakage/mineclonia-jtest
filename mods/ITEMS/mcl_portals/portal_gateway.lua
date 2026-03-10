@@ -96,7 +96,7 @@ local function teleport(pos, obj)
 		core.emerge_area(minp, maxp, function(_, _, calls_remaining)
 			if calls_remaining < 1 then
 				if obj and obj:is_player() or obj:get_luaentity() then
-					obj:set_pos(find_destination_pos(minp, maxp) or vector.add(dest_portal, vector.new(0, 3.5, 0)))
+					mcl_util.teleport_safely (obj, find_destination_pos(minp, maxp) or vector.add(dest_portal, vector.new(0, 3.5, 0)))
 				end
 				preparing[pos_str] = false
 			end
@@ -109,8 +109,9 @@ local function teleport(pos, obj)
 		mcl_biome_dispatch.teleport_with_emerge (obj, minp, maxp, nil, function (_, _)
 			spawn_gateway_portal (dest_portal, pos_str)
 			-- If obj is attached, this call will produce no effect.
-			obj:set_pos(find_destination_pos(minp_search, maxp_search)
-				    or vector.add(dest_portal, vector.new(0, 3.5, 0)))
+			local dst = find_destination_pos (minp_search, maxp_search)
+				or vector.add (dest_portal, vector.new (0, 3.5, 0))
+			mcl_util.teleport_safely (obj, dst)
 		end)
 	end
 end

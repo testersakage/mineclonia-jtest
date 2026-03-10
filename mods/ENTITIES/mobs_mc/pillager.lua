@@ -13,7 +13,6 @@ local pillager = table.merge (illager, table.merge (posing_humanoid, {
 	hp_max = 24,
 	xp_min = 6,
 	xp_max = 6,
-	breath_max = -1,
 	eye_height = 1.5,
 	shoot_interval = 3,
 	shoot_offset = 0.5,

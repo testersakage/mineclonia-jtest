@@ -32,8 +32,7 @@ local bat = {
 		hang_end = 60,
 		hang_speed = 1,
 	},
-	fall_damage = 0,
-	fly = true,
+	_no_fall_damage = true,
 	makes_footstep_sound = false,
 	can_ride_cart = false,
 	can_ride_boat = false,
@@ -93,9 +92,9 @@ function bat:motion_step (dtime, moveresult, self_pos)
 		if self._resting then
 			self:set_animation ("hang")
 			self.object:set_pos ({
-					x = self_pos.x,
-					y = abovepos.y - 0.5 - 0.9,
-					z = self_pos.z,
+				x = self_pos.x,
+				y = abovepos.y - 0.5 - 0.9,
+				z = self_pos.z,
 			})
 			self.object:set_velocity (vector.zero ())
 			-- Rotate randomly.

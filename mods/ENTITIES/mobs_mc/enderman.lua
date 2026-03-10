@@ -274,8 +274,7 @@ local enderman = {
 		fleshy = 100,
 		water_vulnerable = 100,
 	},
-	water_damage = 8,
-	rain_damage = 1.0,
+	_water_sensitive = true,
 	view_range = 64,
 	tracking_distance = 64,
 	attack_type = "melee",
@@ -364,8 +363,7 @@ function enderman:do_teleport (target)
 					telesound(self.object:get_pos(), false)
 					self:halt_in_tracks (true)
 					self:cancel_navigation ()
-					self.object:set_pos(telepos)
-					self.reset_fall_damage = 1
+					self:teleport_safely (telepos)
 					telesound(telepos, true)
 				end
 			end
@@ -397,10 +395,9 @@ function enderman:do_teleport (target)
 						if node_ok then
 							telesound(self.object:get_pos(), false)
 							local telepos = {x=nodepos.x, y=nodepos.y+1, z=nodepos.z}
-							self.object:set_pos (telepos)
+							self:teleport_safely (telepos)
 							self:halt_in_tracks (true)
 							self:cancel_navigation ()
-							self.reset_fall_damage = 1
 							telesound(telepos, true)
 							break
 						end

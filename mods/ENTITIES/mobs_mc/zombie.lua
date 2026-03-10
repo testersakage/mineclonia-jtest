@@ -70,8 +70,7 @@ local zombie = table.merge (posing_humanoid, {
 	bone_eye_height = 6.3,
 	head_eye_height = 1.74,
 	curiosity = 7,
-	head_pitch_multiplier=-1,
-	breath_max = -1,
+	head_pitch_multiplier = -1,
 	wears_armor = "no_pickup",
 	_head_armor_bone = "head",
 	_head_armor_position = vector.new (0, 4.25, 0),
@@ -382,6 +381,10 @@ function zombie:mob_activate (staticdata, dtime)
 						0.5, "add_multiplied_base")
 	end
 	return true
+end
+
+function zombie:step_drowning (_)
+	return
 end
 
 ------------------------------------------------------------------------

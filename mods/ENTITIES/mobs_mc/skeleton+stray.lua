@@ -19,7 +19,6 @@ local skeleton = table.merge (posing_humanoid, {
 	hp_max = 20,
 	xp_min = 6,
 	xp_max = 6,
-	breath_max = -1,
 	armor = {undead = 100, fleshy = 100},
 	collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.99, 0.3},
 	head_swivel = "Head_Control",
@@ -115,7 +114,7 @@ local skeleton = table.merge (posing_humanoid, {
 	},
 	wielditem_drop_probability = 0.085,
 	_humanoid_superclass = mob_class,
-	_mcl_freeze_damage = 0,
+	_can_freeze = false,
 	_frozen_time = 0,
 })
 
@@ -256,6 +255,10 @@ function skeleton:on_die (pos, mcl_reason)
 			awards.unlock(source:get_player_name (), "mcl:snipeSkeleton")
 		end
 	end
+end
+
+function skeleton:step_drowning (_)
+	return
 end
 
 ------------------------------------------------------------------------

@@ -56,8 +56,7 @@ local shulker = {
 	_color = "purple",
 	_mcl_fishing_hookable = true,
 	_mcl_fishing_reelable = false,
-	fire_damage = 0,
-	lava_damage = 0,
+	_fire_resistant = true,
 	sounds = {
 		teleport = "mcl_end_teleport",
 	},
@@ -69,6 +68,7 @@ local shulker = {
 	_face = "up",
 	_levitation_immune = true,
 	head_eye_height = 0.5,
+	_no_fall_damage = true,
 }
 
 ------------------------------------------------------------------------
@@ -717,6 +717,7 @@ function shulker:attempt_teleport (node_pos)
 					self:mob_sound ("teleport")
 					self.object:move_to (objpos)
 					self:attach_to_face (face)
+					self.reset_fall_damage = true
 					return true
 				end
 			end

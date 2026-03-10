@@ -49,6 +49,7 @@ local dragon = {
 	ignores_nametag = true,
 	persistent = true,
 	fire_resistant = true,
+	_fire_resistant = true,
 	is_boss = true,
 	can_ride_cart = false,
 	can_ride_boat = false,
@@ -861,12 +862,12 @@ end
 function dragon:check_entity_cramming ()
 end
 
-function dragon:do_env_damage ()
+function dragon:apply_environment_damage (_, _, _, _, _)
 	return false
 end
 
-function dragon:falling (pos)
-	return false
+function dragon:check_fall_damage (_, _, _)
+	return
 end
 
 -- Dragons cannot be punched otherwise than through their hitbox

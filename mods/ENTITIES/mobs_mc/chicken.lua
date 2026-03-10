@@ -44,7 +44,7 @@ local chicken = {
 		 max = 2,
 		 looting = "common",},
 	},
-	fall_damage = 0,
+	_no_fall_damage = true,
 	gravity_drag = 0.6,
 	sounds = {
 		random = {name="mobs_mc_chicken_buck", gain=0.7},

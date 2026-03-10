@@ -132,6 +132,22 @@ local function player_has_leather_armor(player)
 	return false
 end
 
+local freeze_hurts_extra_types = {
+	"mobs_mc:strider",
+	"mobs_mc:blaze",
+	"mobs_mc:magma_cube",
+}
+
+mcl_damage.register_modifier (function (obj, damage, reason)
+	local entity = obj:get_luaentity ()
+	if entity
+		and table.indexof (freeze_hurts_extra_types, entity.name) ~= -1
+		and reason.type == "freeze" then
+		return damage * 5.0
+	end
+	return damage
+end, 200)
+
 mcl_player.register_globalstep_slow(function(player, dtime)
 	local player_pos = player:get_pos()
 	local player_meta = player:get_meta()

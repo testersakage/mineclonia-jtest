@@ -56,7 +56,6 @@ local slime = {
 		walk_start = 1,
 		walk_end = 1,
 	},
-	fall_damage = 0,
 	use_texture_alpha = true,
 	attack_type = "null",
 	jump_delay_multiplier = 1,
@@ -489,11 +488,8 @@ local magma_cube = table.merge (slime, {
 		walk_end = 0,
 	},
 	jump_delay_multiplier = 4,
-	water_damage = 0,
-	_mcl_freeze_damage = 5,
-	lava_damage = 0,
-        fire_damage = 0,
-	fall_damage = 0,
+	_fire_resistant = true,
+	fire_resistant = true,
 	_get_slime_particle = function ()
 		return "mcl_particles_fire_flame.png"
 	end,
@@ -517,7 +513,6 @@ local magma_cube_big = table.merge (magma_cube, {
 	jump_height = 14.4,
 	spawn_small_alternative = "mobs_mc:magma_cube_small",
 	on_die = spawn_children_on_die ("mobs_mc:magma_cube_small", 0.8, 1.5),
-	fire_resistant = true,
 	_get_slime_particle = function ()
 		return "mcl_particles_fire_flame.png"
 	end,

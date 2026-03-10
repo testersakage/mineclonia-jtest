@@ -63,9 +63,6 @@ function mob_class:feed_tame(clicker, heal, breed, tame, notake, tamechance)
 		if self.health < hp_max and not consume_food then
 			consume_food = true
 			self.health = math.min (self.health + heal, hp_max)
-			if self.htimer < 1 then
-				self.htimer = 5
-			end
 			self.object:set_hp(self.health)
 		end
 	end
@@ -441,7 +438,7 @@ function mob_class:teleport_to_owner (owner, owner_pos)
 			if def and (core.get_item_group(node.name, "leaves") == 0 or self.airborne) then
 				pos.y = pos.y + 1
 				self.object:move_to (pos)
-				self.reset_fall_damage = 1
+				self.reset_fall_damage = true
 				self.old_y = nil
 				return true
 			end

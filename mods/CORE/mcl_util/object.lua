@@ -327,3 +327,15 @@ function mcl_util.rotation_to_irrlicht (x, y, z)
 	end
 	return tx, ty, tz
 end
+
+-- Teleport OBJ to POS safely, that is, without incurring fall damage
+-- if OBJ is a mob and POS below its current position.
+
+function mcl_util.teleport_safely (obj, pos)
+	local entity = obj:get_luaentity ()
+	if entity and entity.is_mob then
+		entity:teleport_safely (pos)
+	else
+		obj:set_pos (pos)
+	end
+end

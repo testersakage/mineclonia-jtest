@@ -105,7 +105,7 @@ local axolotl = {
 	swim_speed_factor = 0.1,
 	grounded_speed_factor = 0.5,
 	fixed_grounded_speed = 3.0,
-	breath_max = 300,
+	_max_air_supply = 300,
 }
 
 ------------------------------------------------------------------------

@@ -37,7 +37,7 @@ local wither_def = {
 		distance = 60,
 	},
 	jump_height = 10,
-	fly = true,
+	_no_fall_damage = true,
 	makes_footstep_sound = false,
 	can_ride_cart = false,
 	can_ride_boat = false,
@@ -50,9 +50,9 @@ local wither_def = {
 			max = 1,
 		},
 	},
-	_mcl_freeze_damage = 0,
-	lava_damage = 0,
-	fire_damage = 0,
+	_can_freeze = false,
+	_fire_resistant = true,
+	fire_resistant = true,
 	attack_type = "null",
 	arrow = "mobs_mc:wither_skull",
 	reach = 5,
@@ -71,7 +71,6 @@ local wither_def = {
 	tracking_distance = 64,
 	view_range = 40,
 	gravity_drag = 0.6,
-	fall_damage = 0,
 	slowdown_nodes = {},
 	particlespawners = {
 		{
@@ -409,7 +408,7 @@ function wither_def:do_custom (dtime, moveresult)
 	mcl_bossbars.update_boss(self.object, "Wither", "dark_purple")
 end
 
-function spawn_one_skeleton (object, aa, bb, self_pos)
+local function spawn_one_skeleton (object, aa, bb, self_pos)
 	local nodes = core.find_nodes_in_area_under_air (aa, bb, {"group:solid"})
 	if #nodes > 0 then
 		for i = 1, 10 do
@@ -816,6 +815,10 @@ function wither_def:run_ai (dtime, moveresult)
 			ws.attack_cooldown = 1
 		end
 	end
+end
+
+function wither_def:step_drowning (_)
+	return
 end
 
 local function is_not_undead (self, self_pos, obj, entity)
