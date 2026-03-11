@@ -639,7 +639,6 @@ function mcl_trees.register_wood(name, p)
 	if p.pressure_plate == nil or type(p.pressure_plate) == "table" then
 		p.pressure_plate = p.pressure_plate or {}
 		mcl_pressureplates.register_pressure_plate(name, {
-			"mcl_pressureplates:pressure_plate_"..name,
 			description = p.pressure_plate.description or D(rname .. " Pressure Plate"),
 			texture = p.wood and p.wood.tiles and p.wood.tiles[1] or (modname.."_planks_"..name..".png"),
 			recipeitem = "mcl_trees:wood_"..name,
