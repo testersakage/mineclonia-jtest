@@ -222,7 +222,6 @@ function mob_class:check_for_death (mcl_reason, damage)
 	end
 
 	self.dead = true
-	self.attack = nil
 	self:remove_texture_mod ("^[colorize:#FF000040")
 	self:remove_texture_mod ("^[brighten")
 
