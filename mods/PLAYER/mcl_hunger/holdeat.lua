@@ -188,7 +188,7 @@ core.register_globalstep (function (dtime)
 
 		if not eat_anim_hud[player] then
 			eat_anim_hud[player] = player:hud_add({
-				hud_elem_type = "image",
+				type = "image",
 				scale = get_sprite_scale(player),
 				alignment = {x = 0, y = 0},
 				offset = {x = 0, y = -30},
