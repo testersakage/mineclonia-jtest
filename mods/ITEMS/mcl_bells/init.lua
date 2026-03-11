@@ -51,10 +51,10 @@ local bell_entities = {}
 
 local function create_entity (pos, node)
 	local param2 = node.param2 % 6
-	local rot = {x = 0, y = bell_rotations[param2 + 1], z = 0}
+	local rot = {x = 0, y = bell_rotations[param2 + 1] or 0, z = 0}
 
 	if node.name == "mcl_bells:bell" then
-		rot.y = bell_rotations[param2 + 2]
+		rot.y = bell_rotations[param2 + 2] or 0
 	end
 
 	local obj = core.add_entity (pos, "mcl_bells:bell_ent")
