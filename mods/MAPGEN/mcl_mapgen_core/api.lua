@@ -47,7 +47,7 @@ core.register_on_generated(function(minp, maxp, blockseed)
 				end
 				if ore and type(ore) == "table" then
 					ore_table = ore
-				elseif deco then
+				elseif ore then
 					ore_used = true
 				end
 			end
