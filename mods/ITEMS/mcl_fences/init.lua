@@ -202,8 +202,7 @@ local tpl_fence_gates_open = {
 function mcl_fences.register_fence_def(name, definitions)
     local fence_name = "mcl_fences:"..name
 
-    if not definitions.groups then definitions.groups = {} end
-
+    definitions.groups = definitions.groups and table.copy(definitions.groups) or {}
     definitions.groups.fence = 1
     definitions._pathfinding_class = "FENCE"
     definitions.groups.deco_block = 1
@@ -243,8 +242,7 @@ function mcl_fences.register_fence_gate_def(name, definitions)
     local fence_gate_name = "mcl_fences:"..name.."_gate"
     local fence_gate_name_open = fence_gate_name.."_open"
 
-	if not definitions.groups then definitions.groups = {} end
-
+	definitions.groups = definitions.groups and table.copy(definitions.groups) or {}
 	definitions.groups.fence_gate = 1
 	definitions._pathfinding_class = "FENCE"
 	definitions.groups.deco_block = 1
