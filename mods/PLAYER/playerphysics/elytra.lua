@@ -212,6 +212,7 @@ function elytra_entity:step_fall_flying (dtime)
 
 	if core.get_item_group(armor_name, "elytra") <= 0 then
 		self:detach(player)
+		return
 	end
 
 	-- Limit fall_distance to 1.0 if vertical velocity is
@@ -348,8 +349,11 @@ function elytra_entity:on_step(dtime, moveresult)
 		self:rotate ()
 		self:check_fall_damage (moveresult)
 		self:step_fall_flying (dtime)
-		self:rocket_boost (dtime)
-		self:riptide_boost (dtime)
+		-- `step_fall_flying' is liable to delete this object.
+		if self.object:is_valid () then
+			self:rocket_boost (dtime)
+			self:riptide_boost (dtime)
+		end
 	end
 
 	local attach = self.driver:get_attach()
