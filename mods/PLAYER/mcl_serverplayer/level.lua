@@ -223,7 +223,13 @@ local function get_biome_id (x, y, z)
 	v.x = x
 	v.y = y
 	v.z = z
-	return core.get_biome_data (v).biome or 1
+	local id = core.get_biome_data (v).biome or 1
+	-- Biome IDs less than 1 are not representable in modchannel
+	-- messages.
+	if id <= 0 then
+		return 1
+	end
+	return id
 end
 
 local char = string.char
