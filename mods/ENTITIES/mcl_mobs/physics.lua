@@ -90,6 +90,7 @@ local function get_cbox_for_collision (obj)
 	if entity then
 		return entity.is_mob
 			and entity.pushable
+			and not entity.dead
 			and entity.collisionbox or nil
 	elseif obj:is_player () then
 		return obj:get_properties ().collisionbox
@@ -505,15 +506,15 @@ function mob_class:apply_environment_damage (self_pos, immersion_depth,
 		end
 	end
 
-	if self._collision_count > ENTITY_CRAMMING_MAX
+	if self._collision_count > ENTITY_CRAMMING_MAX - 1
 		and damage < 6.0
 		and math.random (1, 4) == 1 then
 		damage = 6.0
 		damagetype = "cramming"
 	end
 
-	if damage > 0.0
-		and self:check_timer ("environment_damage", 0.5)
+	if self:check_timer ("environment_damage", 0.5)
+		and damage > 0.0
 		and self:damage_mob (damagetype, damage) then
 		return true
 	end
