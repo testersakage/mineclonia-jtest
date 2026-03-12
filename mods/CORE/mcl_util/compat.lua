@@ -99,12 +99,45 @@ if not core.objects_inside_radius then --polyfill for pre minetest 5.9
 	end
 end
 
+-- mcl_util.get_node_raw is defined to a built-in core.get_node_raw,
+-- if it does in fact exist, and should be evaluated to decide whether
+-- to utilize this function for performance.
+
 if not core.get_node_raw then -- polyfill for pre minetest 5.13
-	function core.get_node_raw(x, y, z)
-		local node = core.get_node(vector.new(x, y, z))
-		local cid = core.get_content_id(node.name)
-		return cid, node.param1, node.param2, cid ~= core.CONTENT_IGNORE
+	local env = core.request_insecure_environment ()
+
+	-- If mcl_util is a trusted mod, it may be possible to extract
+	-- the definition of `get_node_raw' from core.get_node and
+	-- avoid garbage collection incurred by table allocation in
+	-- the loop below.
+	local get_node = core.get_node
+	local i = 1
+	while true do
+		local name, upvalue = env.debug.getupvalue (get_node, i)
+		if not name then
+			break
+		end
+
+		if name == "get_node_raw" then
+			core.get_node_raw = upvalue
+			mcl_util.get_node_raw = upvalue
+			break
+		end
+
+		i = i + 1
 	end
+
+	if not core.get_node_raw then
+		local v = vector.new ()
+		function core.get_node_raw(x, y, z)
+			v.x, v.y, v.z = x, y, z
+			local node = get_node (v)
+			local cid = core.get_content_id (node.name)
+			return cid, node.param1, node.param2, cid ~= core.CONTENT_IGNORE
+		end
+	end
+else
+	mcl_util.get_node_raw = core.get_node_raw
 end
 
 if not vector.in_area then
