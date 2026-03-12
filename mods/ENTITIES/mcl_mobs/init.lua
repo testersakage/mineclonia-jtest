@@ -4,30 +4,7 @@ mcl_mobs = {}
 -- Temporary performance hacks.
 ------------------------------------------------------------------------
 
--- If mcl_mobs is a trusted mod, it may be possible to extract the
--- definition of `get_node_raw' from core.get_node and avoid
--- garbage collection incurred by table allocation in the loop below.
-
-mcl_mobs.get_node_raw = core.get_node_raw
-local env = core.request_insecure_environment ()
-
-if env and not mcl_mobs.get_node_raw then
-	local get_node = core.get_node
-	local i = 1
-	while true do
-		local name, upvalue = env.debug.getupvalue (get_node, i)
-		if not name then
-			break
-		end
-
-		if name == "get_node_raw" then
-			mcl_mobs.get_node_raw = upvalue
-			break
-		end
-
-		i = i + 1
-	end
-end
+mcl_mobs.get_node_raw = mcl_util.get_node_raw
 
 ------------------------------------------------------------------------
 -- Mob initialization.
