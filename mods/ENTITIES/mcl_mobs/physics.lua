@@ -734,11 +734,11 @@ function mob_class:post_apply_physics_factor (field, oldvalue, value)
 				jump_height = self.jump_height,
 			})
 		end
-	elseif field == "safe_fall_distance" then
+	elseif field == "_safe_fall_distance" then
 		if self.driver and self._csm_driving
 			and mcl_serverplayer.is_csm_at_least (self.driver, 11) then
 			mcl_serverplayer.update_vehicle (self.driver, {
-				safe_fall_distance = self.safe_fall_distance,
+				safe_fall_distance = self._safe_fall_distance,
 			})
 		end
 	end

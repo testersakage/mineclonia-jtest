@@ -406,7 +406,7 @@ mcl_potions.register_effect({
 		if not object:is_player () then
 			local entity = object:get_luaentity ()
 			if entity and entity.is_mob then
-				entity:add_physics_factor ("safe_fall_distance",
+				entity:add_physics_factor ("_safe_fall_distance",
 							   "mcl_potions:leaping_fall_distance",
 							   2.0 * factor, "add")
 			end
@@ -422,7 +422,7 @@ mcl_potions.register_effect({
 		if not object:is_player () then
 			local entity = object:get_luaentity ()
 			if entity and entity.is_mob then
-				entity:remove_physics_factor ("safe_fall_distance",
+				entity:remove_physics_factor ("_safe_fall_distance",
 							      "mcl_potions:leaping_fall_distance")
 			end
 			return
