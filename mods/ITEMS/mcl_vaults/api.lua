@@ -77,6 +77,7 @@ local tpl = {
 	groups = {pickaxey=1, material_stone=1, deco_block=1, vault = 1, not_in_creative_inventory = 1, unmovable_by_piston = 1, features_cannot_replace = 1, },
 	is_ground_content = false,
 	drop = "",
+	sounds = mcl_sounds.node_sound_metal_defaults(),
 	_mcl_hardness = 50,
 	_mcl_blast_resitance = 50,
 }
