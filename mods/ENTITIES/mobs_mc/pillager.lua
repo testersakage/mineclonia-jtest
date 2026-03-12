@@ -419,7 +419,7 @@ core.register_chatcommand ("spawn_patrol_now", {
 	end,
 })
 
-local pillager_spawner = table.merge ({
+local pillager_spawner = table.merge (mobs_mc.monster_spawner, {
 	name = "mobs_mc:pillager",
 	spawn_category = "monster",
 	pack_min = 1,
