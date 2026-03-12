@@ -152,7 +152,7 @@ local horse = {
 	},
 	jump_height = 14,
 	fall_damage_multiplier = 0.5,
-	safe_fall_distance = 6.0,
+	_safe_fall_distance = 6.0,
 	-- Values of 1.0 precisely trigger engine bugs.
 	stepheight = 1.02,
 	head_eye_height = 1.52,

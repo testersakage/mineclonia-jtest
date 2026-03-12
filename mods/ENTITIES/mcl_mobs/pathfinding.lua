@@ -557,8 +557,6 @@ function mob_class:gwp_initialize (targets, range, tolerance, penalties)
 	return context
 end
 
-local BASE_FALL_DISTANCE = 3
-
 function mob_class:gwp_safe_fall_distance ()
 	local bonus = 0
 	if self.attack then
@@ -572,7 +570,7 @@ function mob_class:gwp_safe_fall_distance ()
 		sacrifice = sacrifice - (3 - mcl_vars.difficulty) * 4
 		bonus = math.max (0, sacrifice)
 	end
-	return BASE_FALL_DISTANCE + bonus
+	return self._safe_fall_distance + bonus
 end
 
 local get_us_time = core.get_us_time
@@ -902,7 +900,7 @@ function mob_class:gwp_essay_drop (context, node)
 			node.class = class
 			return node
 		end
-	until target.y < lim
+	until target.y <= lim
 	return nil
 end
 
@@ -942,7 +940,7 @@ function mob_class:gwp_essay_descend_door (context, object)
 				return node
 			end
 		end
-	until target.y < lim
+	until target.y <= lim
 
 	-- It's doors all the way down.
 	return nil
