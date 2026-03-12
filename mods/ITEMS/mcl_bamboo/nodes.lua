@@ -297,6 +297,16 @@ local function after_dig_scaffolding(pos, oldnode, _, digger)
 	end)
 end
 
+local function after_falling_scaffolding(pos, _)
+	local node = core.get_node(pos)
+	if node.param2 > 6 then
+		mcl_util.safe_place(pos, {name = "mcl_bamboo:scaffolding"})
+	else
+		mcl_util.safe_place(pos, {name = "air"})
+		core.add_item(pos,"mcl_bamboo:scaffolding")
+	end
+end
+
 core.register_node("mcl_bamboo:scaffolding", {
 	description = S("Scaffolding"),
 	doc_items_longdesc = S("Scaffolding is a temporary structure to easily climb up while building that is easily removed"),
@@ -320,7 +330,7 @@ core.register_node("mcl_bamboo:scaffolding", {
 	climbable = true,
 	physical = true,
 	node_placement_prediction = "",
-	groups = { handy=1, axey=1, flammable=3, deco_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, scaffolding = 1, dig_by_piston = 1, unsticky = 1},
+	groups = { handy=1, axey=1, flammable=3, deco_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, falling_node = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1},
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_hardness = 0,
 	_mcl_burntime = 2.5,
@@ -342,7 +352,7 @@ core.register_node("mcl_bamboo:scaffolding", {
 			local np2 = pp2 + 1
 			local arc = placer:get_look_vertical() * (180 / math.pi)
 
-			if ctrl and ctrl.sneak then
+			if ctrl and ctrl.sneak and ptd.under.y == ptd.above.y then
 				if core.get_node(vector.offset(ppos,0,-1,0)).name == "air" and core.get_node(ppos).name == "air" then
 					itemstack = mcl_util.safe_place(ppos,{name = "mcl_bamboo:scaffolding_horizontal",param2 = np2}, placer, itemstack) or itemstack
 					if np2 > 6 and not check_single_for_falling(ppos) then
@@ -410,21 +420,19 @@ core.register_node("mcl_bamboo:scaffolding", {
 				end
 				if h <= SCAFFOLD_HEIGHT_LIMIT and core.get_node(ppos).name == "air" then
 					itemstack = mcl_util.safe_place(ppos, {name = "mcl_bamboo:scaffolding",param2 = pp2}, placer, itemstack) or itemstack
+					check_single_for_falling(ppos)
 				end
 			end
 		elseif can_place_on(node) and core.get_node(ptd.above).name == "air" then
-			itemstack = mcl_util.safe_place(ptd.above, {name = "mcl_bamboo:scaffolding"}, placer, itemstack) or itemstack
-			check_single_for_falling(ptd.above)
+			itemstack = mcl_util.safe_place(ptd.above, {name = "mcl_bamboo:scaffolding", param2 = 7}, placer, itemstack) or itemstack
+			if not check_single_for_falling(ptd.above) then
+				mcl_util.safe_place(ptd.above,{name = "mcl_bamboo:scaffolding"}, placer)
+			end
 		end
 		return itemstack
 	end,
-	after_dig_node = function(pos, oldnode, _, digger)
-		after_dig_scaffolding(pos, oldnode, _, digger)
-	end,
-	_mcl_after_falling = function(pos, _)
-		mcl_util.safe_place(pos, {name = "air"})
-		core.add_item(pos,"mcl_bamboo:scaffolding")
-	end,
+	after_dig_node = after_dig_scaffolding,
+	_mcl_after_falling = after_falling_scaffolding,
 })
 
 core.register_node("mcl_bamboo:scaffolding_horizontal", {
@@ -448,18 +456,10 @@ core.register_node("mcl_bamboo:scaffolding_horizontal", {
 		}
 	},
 	is_ground_content = false,
-	walkable = false,
+	walkable = true,
 	climbable = true,
 	physical = true,
 	groups = { handy=1, axey=1, flammable=3, building_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, not_in_creative_inventory = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
 	after_dig_node = after_dig_scaffolding,
-	_mcl_after_falling = function(pos)
-		local node = core.get_node(pos)
-		if node.name == "mcl_bamboo:scaffolding_horizontal" and node.param2 > 6 then
-			mcl_util.safe_place(pos, {name = "mcl_bamboo:scaffolding"})
-		else
-			mcl_util.safe_place(pos, {name = "air"})
-			core.add_item(pos,"mcl_bamboo:scaffolding")
-		end
-	end
+	_mcl_after_falling = after_falling_scaffolding,
 })
