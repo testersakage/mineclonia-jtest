@@ -228,9 +228,10 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 	-- Trace rays for entity damage
 	for obj in core.objects_inside_radius(pos, punch_radius) do
 		local ent = obj:get_luaentity()
+		local immortal = tonumber(obj:get_armor_groups().immortal) or 0
 
-		-- Ignore items to lower lag
-		if (obj:is_player() or (ent and ent.name ~= "__builtin.item")) and obj:get_hp() > 0
+		-- Ignore immortal entities to lower lag
+		if obj:get_hp() > 0 and ((ent and ent.is_mob) or immortal == 0)
 		-- It doesn't make sense to damage the direct source.
 			and obj ~= direct then
 			local opos = obj:get_pos()
