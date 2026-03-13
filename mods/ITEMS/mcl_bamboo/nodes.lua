@@ -1,5 +1,6 @@
 local S = core.get_translator("mcl_bamboo")
 local SCAFFOLD_HEIGHT_LIMIT = 320
+local SCAFFOLD_BASE_AWAY_LIMIT = 6
 
 function mcl_bamboo.random(pos)
 	local pr = PcgRandom(core.hash_node_position(pos))
@@ -259,7 +260,7 @@ local function update_scaffolding(pos, old_distance)
 	local falling_queue = mcl_util.queue()
 	local function update_distance(ind, distance, pos)
 		param2_data[ind] = distance
-		if distance > 6 then
+		if distance > SCAFFOLD_BASE_AWAY_LIMIT then
 			falling_queue:enqueue({ pos = pos })
 		end
 	end
@@ -282,10 +283,10 @@ local function update_scaffolding(pos, old_distance)
 			local pos2 = pos:add(dir)
 			local ind2 = a:indexp(pos2)
 			local distance2 = get_distance(ind2)
-			if distance2 and distance2 < 7 then
+			if distance2 and distance2 <= SCAFFOLD_BASE_AWAY_LIMIT then
 				if distance2 > distance then
 					if data[ind2] == h_cid then
-						update_distance(ind2, 7, pos2)
+						update_distance(ind2, SCAFFOLD_BASE_AWAY_LIMIT + 1, pos2)
 						clear_queue:enqueue({ pos = pos2, distance = distance + 1 })
 					end
 				else
@@ -343,7 +344,7 @@ local function after_dig_scaffolding(pos, oldnode)
 	while falling_queue:size() > 0 do
 		local entry = falling_queue:dequeue()
 		local node = core.get_node(entry.pos)
-		if  node.param2 > 6 then
+		if  node.param2 > SCAFFOLD_BASE_AWAY_LIMIT then
 			scaffolding_horizontal_falling(entry.pos, node)
 		end
 	end
@@ -352,7 +353,8 @@ end
 local function after_falling_scaffolding(pos, _)
 	local node = core.get_node(pos)
 
-	if node.name == "mcl_bamboo:scaffolding" and node.param2 > 6 then
+	if node.name == "mcl_bamboo:scaffolding" and node.param2 > SCAFFOLD_BASE_AWAY_LIMIT then
+		-- don't drop if fallen after placing
 		mcl_util.safe_place(pos, {name = "mcl_bamboo:scaffolding"})
 	else
 		mcl_util.safe_place(pos, {name = "air"})
@@ -400,16 +402,16 @@ core.register_node("mcl_bamboo:scaffolding", {
 
 		if core.get_item_group(node.name,"scaffolding") > 0 then
 			local ppos = ptd.above
-			-- count param2 up when placing to the sides. Fall when > 6
+			-- count param2 up when placing to the sides. Fall when > 6 (SCAFFOLD_BASE_AWAY_LIMIT)
 			local pp2 = node.param2
 			local np2 = pp2 + 1
 			local arc = placer:get_look_vertical() * (180 / math.pi)
 
 			if ctrl and ctrl.sneak and ptd.under.y == ptd.above.y then
 				if core.get_node(vector.offset(ppos,0,-1,0)).name == "air" and core.get_node(ppos).name == "air" then
-					local name = np2 > 6 and "mcl_bamboo:scaffolding" or "mcl_bamboo:scaffolding_horizontal"
+					local name = np2 > SCAFFOLD_BASE_AWAY_LIMIT and "mcl_bamboo:scaffolding" or "mcl_bamboo:scaffolding_horizontal"
 					itemstack = mcl_util.safe_place(ppos,{name = name,param2 = np2}, placer, itemstack) or itemstack
-					if np2 > 6 and not core.check_single_for_falling(ppos) then
+					if np2 > SCAFFOLD_BASE_AWAY_LIMIT and not core.check_single_for_falling(ppos) then
 						core.swap_node(ppos, { name = "mcl_bamboo:scaffolding" })
 						update_scaffolding(ppos)
 					end
@@ -421,7 +423,7 @@ core.register_node("mcl_bamboo:scaffolding", {
 
 				ppos = vector.offset(ppos, offset_x, -1, offset_z)
 				node = core.get_node(ppos)
-				while np2 <= 6
+				while np2 <= SCAFFOLD_BASE_AWAY_LIMIT
 					and core.get_item_group(node.name,"scaffolding") > 0
 					and ( core.get_node(vector.offset(ppos, offset_x, 0, offset_z)).name == "air"
 					   or core.get_item_group(core.get_node(vector.offset(ppos, offset_x, 0, offset_z)).name,"scaffolding") > 0
@@ -432,9 +434,9 @@ core.register_node("mcl_bamboo:scaffolding", {
 					node = core.get_node(ppos)
 				end
 				if node.name == "air" then
-					local name = np2 > 6 and "mcl_bamboo:scaffolding" or "mcl_bamboo:scaffolding_horizontal"
+					local name = np2 > SCAFFOLD_BASE_AWAY_LIMIT and "mcl_bamboo:scaffolding" or "mcl_bamboo:scaffolding_horizontal"
 					itemstack = mcl_util.safe_place(ppos,{name = name,param2 = np2}, placer, itemstack) or itemstack
-					if np2 > 6 and not core.check_single_for_falling(ppos) then
+					if np2 > SCAFFOLD_BASE_AWAY_LIMIT and not core.check_single_for_falling(ppos) then
 						core.swap_node(ppos, { name = "mcl_bamboo:scaffolding" })
 						update_scaffolding(ppos)
 					end
@@ -483,7 +485,8 @@ core.register_node("mcl_bamboo:scaffolding", {
 				end
 			end
 		elseif can_place_on(node) and core.get_node(ptd.above).name == "air" then
-			itemstack = mcl_util.safe_place(ptd.above, {name = "mcl_bamboo:scaffolding", param2 = 7}, placer, itemstack) or itemstack
+			-- param2 > SCAFFOLD_BASE_AWAY_LIMIT: don't drop if it falls after placing
+			itemstack = mcl_util.safe_place(ptd.above, {name = "mcl_bamboo:scaffolding", param2 = SCAFFOLD_BASE_AWAY_LIMIT + 1 }, placer, itemstack) or itemstack
 			if not core.check_single_for_falling(ptd.above) then
 				core.swap_node(ptd.above, { name = "mcl_bamboo:scaffolding" })
 				update_scaffolding(ptd.above)
