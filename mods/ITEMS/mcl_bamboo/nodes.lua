@@ -238,7 +238,7 @@ local function can_place_on(node)
 end
 
 -- based on update_leaves() in https://codeberg.org/mineclonia/mineclonia/src/tag/0.120.1/mods/ITEMS/mcl_trees/api.lua#L73
-local function update_scaffolding(pos, old_distance)
+local function update_scaffolding_horizontal(pos, old_distance)
 	local vm = core.get_voxel_manip()
 	local emin, emax = vm:read_from_map(pos:offset(-8, -8, -8), pos:offset(8, 8, 8))
 	local a = VoxelArea:new{MinEdge = emin, MaxEdge = emax}
@@ -247,22 +247,17 @@ local function update_scaffolding(pos, old_distance)
 
 	local v_cid = core.get_content_id("mcl_bamboo:scaffolding")
 	local h_cid = core.get_content_id("mcl_bamboo:scaffolding_horizontal")
-
 	local function get_distance(ind)
 		local cid = data[ind]
-		if cid == v_cid then
-			return 0
-		elseif cid == h_cid then
-			return math.max(param2_data[ind], 0)
+		if cid == v_cid or cid == h_cid then
+			return param2_data[ind]
 		end
 	end
 
-	local falling_queue = mcl_util.queue()
+	local updated_data = {}
 	local function update_distance(ind, distance, pos)
 		param2_data[ind] = distance
-		if distance > SCAFFOLD_BASE_AWAY_LIMIT then
-			falling_queue:enqueue({ pos = pos })
-		end
+		updated_data[ind] = { pos = pos, distance = distance }
 	end
 
 	local clear_queue = mcl_util.queue()
@@ -315,7 +310,7 @@ local function update_scaffolding(pos, old_distance)
 	vm:set_param2_data(param2_data)
 	vm:write_to_map(false)
 
-	return falling_queue
+	return updated_data
 end
 
 local function scaffolding_horizontal_falling(pos, node)
@@ -329,23 +324,29 @@ local function scaffolding_horizontal_falling(pos, node)
 		obj:get_luaentity():set_node(node, {})
 	end
 	core.remove_node(pos)
-
 	mcl_util.traverse_tower(vector.offset(pos,0,1,0),1,function(upos, _, unode)
 		if unode.name ~= "mcl_bamboo:scaffolding" then return true end
 		if core.check_single_for_falling(upos) then
-			update_scaffolding(upos, 0)
+			update_scaffolding_horizontal(upos, unode.param2)
+			--update_scaffolding(upos, unode)
 		end
 	end)
 end
 
-local function after_dig_scaffolding(pos, oldnode)
-	local falling_queue = update_scaffolding(pos, oldnode.param2)
-
-	while falling_queue:size() > 0 do
-		local entry = falling_queue:dequeue()
-		local node = core.get_node(entry.pos)
-		if  node.param2 > SCAFFOLD_BASE_AWAY_LIMIT then
-			scaffolding_horizontal_falling(entry.pos, node)
+local function update_scaffolding(pos, oldnode)
+	for _, entry in pairs(update_scaffolding_horizontal(pos, oldnode and oldnode.param2)) do
+		if entry.distance > SCAFFOLD_BASE_AWAY_LIMIT then
+			scaffolding_horizontal_falling(entry.pos, core.get_node(entry.pos))
+		else
+			local upos = vector.offset(entry.pos,0,1,0)
+			local unode = core.get_node(upos)
+			if unode.name == "mcl_bamboo:scaffolding" then
+				mcl_util.traverse_tower(upos,1,function(pos, _, node)
+					if node.name ~= "mcl_bamboo:scaffolding" then return true end
+					core.swap_node(pos, { name = "mcl_bamboo:scaffolding", param2 = entry.distance })
+					update_scaffolding(pos, node)
+				end)
+			end
 		end
 	end
 end
@@ -494,8 +495,8 @@ core.register_node("mcl_bamboo:scaffolding", {
 		end
 		return itemstack
 	end,
-	after_destruct = after_dig_scaffolding,
-	--after_dig_node = after_dig_scaffolding,
+	after_destruct = update_scaffolding,
+	--after_dig_node = update_scaffolding,
 	_mcl_after_falling = after_falling_scaffolding,
 })
 
@@ -524,7 +525,7 @@ core.register_node("mcl_bamboo:scaffolding_horizontal", {
 	climbable = true,
 	physical = true,
 	groups = { handy=1, axey=1, flammable=3, building_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, not_in_creative_inventory = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
-	after_destruct = after_dig_scaffolding,
-	--after_dig_node = after_dig_scaffolding,
+	after_destruct = update_scaffolding,
+	--after_dig_node = update_scaffolding,
 	_mcl_after_falling = after_falling_scaffolding,
 })
