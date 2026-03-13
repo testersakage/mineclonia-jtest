@@ -331,6 +331,7 @@ local function scaffolding_horizontal_falling(pos, node)
 			--update_scaffolding(upos, unode)
 		end
 	end)
+	core.check_single_for_falling(vector.offset(pos,0,1,0))
 end
 
 local function update_scaffolding(pos, oldnode)
@@ -496,7 +497,6 @@ core.register_node("mcl_bamboo:scaffolding", {
 		return itemstack
 	end,
 	after_destruct = update_scaffolding,
-	--after_dig_node = update_scaffolding,
 	_mcl_after_falling = after_falling_scaffolding,
 })
 
@@ -526,6 +526,5 @@ core.register_node("mcl_bamboo:scaffolding_horizontal", {
 	physical = true,
 	groups = { handy=1, axey=1, flammable=3, building_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, not_in_creative_inventory = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
 	after_destruct = update_scaffolding,
-	--after_dig_node = update_scaffolding,
 	_mcl_after_falling = after_falling_scaffolding,
 })
