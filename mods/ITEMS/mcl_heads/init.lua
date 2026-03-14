@@ -28,6 +28,7 @@ mcl_heads.deftemplate = {
 		dig_by_piston = 1,
 		unsticky = 1,
 		pathfinder_partial = 2,
+		not_breaking_cactus = 1,
 	},
 
 	sunlight_propagates = true,
