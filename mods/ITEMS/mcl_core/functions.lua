@@ -167,7 +167,7 @@ core.register_abm({
 		for _, p in pairs(posses) do
 			local node = core.get_node(vector.offset(pos, p[1], 0, p[2]))
 			local ndef = core.registered_nodes[node.name]
-			if ndef and ndef.walkable
+			if ndef and ndef.walkable and core.get_item_group(node.name , "not_breaking_cactus") == 0
 					or core.get_item_group(node.name , "breaking_cactus") ~= 0 then
 				local pos1 = vector.copy(pos)
 				while core.get_node(pos1).name == "mcl_core:cactus" do
