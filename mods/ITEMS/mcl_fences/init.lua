@@ -264,6 +264,7 @@ function mcl_fences.register_fence_gate_def(name, definitions)
 	opendefinitions._pathfinding_class = "OPEN"
 
 	opendefinitions.groups.not_in_creative_inventory = 1
+	opendefinitions.groups.breaking_cactus = 1
 	opendefinitions.mesecon_ignore_opaque_dig = 1
 	opendefinitions.mesecon_effector_on = 1
 
