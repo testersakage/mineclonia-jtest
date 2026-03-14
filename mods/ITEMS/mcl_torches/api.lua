@@ -188,6 +188,7 @@ function mcl_torches.register_torch(def)
 	local groups_wall = table.copy(groups)
 	groups_wall.torch = 2
 	groups_wall.not_in_creative_inventory = 1
+	groups_wall.breaking_cactus = 1
 
 	local walldef = {
 		drawtype = "mesh",
