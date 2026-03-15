@@ -324,15 +324,7 @@ local function scaffolding_horizontal_falling(pos, node)
 		obj:get_luaentity():set_node(node, {})
 	end
 	core.remove_node(pos)
-	local upos = vector.offset(pos,0,1,0)
-	mcl_util.traverse_tower(upos,1,function(upos, _, unode)
-		if unode.name ~= "mcl_bamboo:scaffolding" then return true end
-		if core.check_single_for_falling(upos) then
-			update_scaffolding_horizontal(upos, unode.param2)
-			--update_scaffolding(upos, unode)
-		end
-	end)
-	core.check_single_for_falling(upos)
+	core.check_for_falling(vector.offset(pos,0,1,0))
 end
 
 local function update_scaffolding(pos, oldnode)
