@@ -364,14 +364,31 @@ local function after_falling_scaffolding(pos, _)
 	end
 end
 
-core.register_node("mcl_bamboo:scaffolding", {
-	description = S("Scaffolding"),
-	doc_items_longdesc = S("Scaffolding is a temporary structure to easily climb up while building that is easily removed"),
+local scaffolding_def = {
 	doc_items_hidden = false,
-	tiles = {"mcl_bamboo_scaffolding_top.png","mcl_bamboo_scaffolding_side.png","mcl_bamboo_scaffolding_bottom.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
 	use_texture_alpha = "clip",
+	drop = "mcl_bamboo:scaffolding",
+	collision_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, 0.5, -0.5, 0.5, 0.5, 0.5},
+		}
+	},
+	is_ground_content = false,
+	walkable = true,
+	climbable = true,
+	physical = true,
+	groups = { handy = 1, axey = 1, flammable = 3,  material_wood = 1, fire_encouragement = 5, fire_flammability = 60, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
+	after_destruct = update_scaffolding,
+	_mcl_after_falling = after_falling_scaffolding,
+}
+
+core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , {
+	description = S("Scaffolding"),
+	doc_items_longdesc = S("Scaffolding is a temporary structure to easily climb up while building that is easily removed"),
+	tiles = {"mcl_bamboo_scaffolding_top.png","mcl_bamboo_scaffolding_side.png","mcl_bamboo_scaffolding_bottom.png"},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -382,12 +399,8 @@ core.register_node("mcl_bamboo:scaffolding", {
 			{-0.5, -0.5, 0.375, -0.375, 0.5, 0.5},
 		}
 	},
-	is_ground_content = false,
-	walkable = false,
-	climbable = true,
-	physical = true,
 	node_placement_prediction = "",
-	groups = { handy=1, axey=1, flammable=3, deco_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, falling_node = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1},
+	groups = { deco_block = 1, falling_node = 1 },
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_hardness = 0,
 	_mcl_burntime = 2.5,
@@ -486,19 +499,12 @@ core.register_node("mcl_bamboo:scaffolding", {
 
 		return itemstack
 	end,
-	after_destruct = update_scaffolding,
-	_mcl_after_falling = after_falling_scaffolding,
-})
+}))
 
-core.register_node("mcl_bamboo:scaffolding_horizontal", {
+core.register_node("mcl_bamboo:scaffolding_horizontal", table.merge_deep(scaffolding_def, {
 	description = S("Scaffolding horizontal"),
 	doc_items_longdesc = S("Scaffolding block..."),
-	doc_items_hidden = false,
 	tiles = {"mcl_bamboo_scaffolding_side.png","mcl_bamboo_scaffolding_top.png","mcl_bamboo_scaffolding_bottom.png"},
-	drawtype = "nodebox",
-	paramtype = "light",
-	use_texture_alpha = "clip",
-	drop = "mcl_bamboo:scaffolding",
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -510,11 +516,5 @@ core.register_node("mcl_bamboo:scaffolding_horizontal", {
 			{-0.5, -0.5, -0.5, 0.5, -0.375, 0.5},
 		}
 	},
-	is_ground_content = false,
-	walkable = true,
-	climbable = true,
-	physical = true,
-	groups = { handy=1, axey=1, flammable=3, building_block=1, material_wood=1, fire_encouragement=5, fire_flammability=60, not_in_creative_inventory = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
-	after_destruct = update_scaffolding,
-	_mcl_after_falling = after_falling_scaffolding,
-})
+	groups = { building_block = 1, not_in_creative_inventory = 1 },
+}))
