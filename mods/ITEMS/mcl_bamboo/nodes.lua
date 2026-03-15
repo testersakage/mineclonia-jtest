@@ -324,14 +324,15 @@ local function scaffolding_horizontal_falling(pos, node)
 		obj:get_luaentity():set_node(node, {})
 	end
 	core.remove_node(pos)
-	mcl_util.traverse_tower(vector.offset(pos,0,1,0),1,function(upos, _, unode)
+	local upos = vector.offset(pos,0,1,0)
+	mcl_util.traverse_tower(upos,1,function(upos, _, unode)
 		if unode.name ~= "mcl_bamboo:scaffolding" then return true end
 		if core.check_single_for_falling(upos) then
 			update_scaffolding_horizontal(upos, unode.param2)
 			--update_scaffolding(upos, unode)
 		end
 	end)
-	core.check_single_for_falling(vector.offset(pos,0,1,0))
+	core.check_single_for_falling(upos)
 end
 
 local function update_scaffolding(pos, oldnode)
@@ -409,7 +410,6 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 			return itemstack
 		end
 
-		local ctrl = placer:get_player_control()
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, ptd)
 		if rc then return rc end
 		if not ptd then return end
@@ -432,7 +432,7 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 					count = count + op.y - p.y
 					n = core.get_node(p)
 				elseif n.name == "mcl_bamboo:scaffolding_horizontal" then
-					local d = n.param2 - 1
+					local d = n.param2 - 1 -- expected distance from the neighbor
 					count = count + 1
 					for _,v in pairs(adjacents) do
 						p = vector.add(op, v)
@@ -446,9 +446,11 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 				end
 			end
 
+			local ctrl = placer:get_player_control()
 			local arc = placer:get_look_vertical() * (180 / math.pi)
 
 			if ctrl and ctrl.sneak and ptd.under.y == ptd.above.y then
+				-- place sideways
 				to_place = "mcl_bamboo:scaffolding_horizontal"
 				dist = dist + 1
 			elseif arc > 45 and arc < 90 and ptd.under.y ~= ptd.above.y then
@@ -459,8 +461,9 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 
 				pos = ptd.under
 				dist = dist + 1
+				-- extend scaffolding_horizontal
 				while dist <= SCAFFOLD_BASE_AWAY_LIMIT
-					and core.get_item_group(node.name, "scaffolding") > 0 do
+					and core.get_item_group(node.name, "scaffolding") ~= 0 do
 					local next_pos = vector.offset(pos, offset_x, 0, offset_z)
 					local next_node = core.get_node(next_pos)
 					if next_node.name ~= "air" and core.get_item_group(next_node.name, "scaffolding") == 0 then
@@ -473,6 +476,7 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 				end
 			else
 				to_place = "mcl_bamboo:scaffolding"
+				-- tower up scaffolding (vertical)
 				if node.name == "mcl_bamboo:scaffolding" then
 					local top = mcl_util.traverse_tower(ptd.under,1)
 					count = count + top.y - ptd.under.y
