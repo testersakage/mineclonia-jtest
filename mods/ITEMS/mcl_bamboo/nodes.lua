@@ -381,7 +381,7 @@ local scaffolding_def = {
 	walkable = true,
 	climbable = true,
 	physical = true,
-	groups = { handy = 1, axey = 1, flammable = 3,  material_wood = 1, fire_encouragement = 5, fire_flammability = 60, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
+	groups = { handy = 1, axey = 1, flammable = 3,  material_wood = 1, fire_encouragement = 5, fire_flammability = 60, solid = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
 	after_destruct = update_scaffolding,
 	_mcl_after_falling = after_falling_scaffolding,
 }
