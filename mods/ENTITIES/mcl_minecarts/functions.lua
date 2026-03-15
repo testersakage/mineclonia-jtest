@@ -163,3 +163,33 @@ function mcl_minecarts:set_velocity(obj, dir, factor)
 	obj._old_pos = nil
 	obj._punched = true
 end
+
+function mcl_minecarts:get_slope_sign(pos, dir)
+	-- Return -1,0,1 for down, flat, up relative to movement direction.
+	-- pos: current cart position (can be fractional)
+	-- dir: integer direction vector {x,y,z}
+	if not pos or not dir then return 0 end
+	-- no horizontal direction -> flat
+	if dir.x == 0 and dir.z == 0 then return 0 end
+
+	local node_pos = vector.round(pos)
+	local ahead_up   = vector.add(node_pos, { x = dir.x, y = 1, z = dir.z })
+	local ahead_same = vector.add(node_pos, { x = dir.x, y = 0, z = dir.z })
+	local ahead_down = vector.add(node_pos, { x = dir.x, y = -1, z = dir.z })
+
+	-- Prioritize exact up / down detection.
+	if mcl_minecarts:is_rail(ahead_up) and not mcl_minecarts:is_rail(ahead_same) then
+		return 1
+	end
+	if mcl_minecarts:is_rail(ahead_down) and not mcl_minecarts:is_rail(ahead_same) then
+		return -1
+	end
+
+	-- If only same-level rail present => flat
+	if mcl_minecarts:is_rail(ahead_same) then
+		return 0
+	end
+
+	-- Fallback: no rail detected ahead => flat
+	return 0
+end
