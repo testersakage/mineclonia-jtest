@@ -5505,6 +5505,9 @@ local function register_decorations()
 			"MesaPlateauFM","MesaPlateauFM_sandlevel"},
 		height = 1,
 		height_max = 3,
+		spawn_by = "air",
+		num_spawn_by = 16,
+		check_offset = 1,
 	})
 
 	-- Cacti with flowers
@@ -5534,7 +5537,10 @@ local function register_decorations()
 				{name = "mcl_core:cactus", param1 = 255, param2 = 0},
 				{name = "mcl_core:cactus_flower", param1 = 255, param2 = 0}
 			}
-		}
+		},
+		spawn_by = "air",
+		num_spawn_by = 16,
+		check_offset = 1,
 	})
 
 	-- Sugar canes
