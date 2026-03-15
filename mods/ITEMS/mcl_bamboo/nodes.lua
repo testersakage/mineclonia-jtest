@@ -516,5 +516,5 @@ core.register_node("mcl_bamboo:scaffolding_horizontal", table.merge_deep(scaffol
 			{-0.5, -0.5, -0.5, 0.5, -0.375, 0.5},
 		}
 	},
-	groups = { building_block = 1, not_in_creative_inventory = 1 },
+	groups = { building_block = 1, not_in_creative_inventory = 1, disable_descend = 1 },
 }))
