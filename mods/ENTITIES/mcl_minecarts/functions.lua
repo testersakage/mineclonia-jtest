@@ -164,7 +164,7 @@ function mcl_minecarts:set_velocity(obj, dir, factor)
 	obj._punched = true
 end
 
-function mcl_minecarts:get_slope_sign(pos, dir)
+function mcl_minecarts.get_slope_sign(pos, dir)
 	-- Return -1,0,1 for down, flat, up relative to movement direction.
 	-- pos: current cart position (can be fractional)
 	-- dir: integer direction vector {x,y,z}

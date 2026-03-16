@@ -560,7 +560,7 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			self.object:set_yaw(yaw * math.pi)
 
 			-- Handle tilting on slopes
-  		    local slope_sign = mcl_minecarts:get_slope_sign(pos, dir)  -- -1 (down), 0 (flat), 1 (up)
+  		    local slope_sign = mcl_minecarts.get_slope_sign(pos, dir)  -- -1 (down), 0 (flat), 1 (up)
 
             local target_pitch = 0
             local target_ground_y = pos.y
