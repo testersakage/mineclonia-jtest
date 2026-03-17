@@ -380,7 +380,12 @@ function mob_class:step_drowning (dtime, is_in_water)
 	end
 
 	if is_drowning then
-		-- TODO: respiration enchantment.
+		if self._respiration_level > 0 then
+			local r = math.random (1, self._respiration_level + 1)
+			if r ~= 1 then
+				return
+			end
+		end
 		local t = mathmax (self.breath - dtime, -1.0)
 		if t == -1.0 then
 			self.breath = 0.0

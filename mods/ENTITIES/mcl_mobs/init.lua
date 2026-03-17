@@ -287,6 +287,7 @@ mcl_mobs.mob_class = {
 	_depth_strider_level = 0,
 	_soul_speed_level = 0,
 	_last_soul_speed_bonus = 0,
+	_respiration_level = 0,
 	_active_targeting_rule = nil,
 	_active_target = nil,
 	_object_search_lists = {},
