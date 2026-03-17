@@ -19,13 +19,14 @@ end
 function mob_class:initialize_armor_enchantments ()
 	-- Recompute physics modifiers that are derived from armor
 	-- enchantments.
-	local depth_strider, soul_speed
+	local depth_strider, soul_speed, respiration_level
 		= mcl_enchanting.mob_physics_enchantment_levels (self)
 	self._depth_strider_level = depth_strider
 	if soul_speed ~= self._soul_speed_level then
 		self._soul_speed_level = soul_speed
 		self:reapply_soul_speed_modifiers ()
 	end
+	self._respiration_level = respiration_level
 end
 
 function mob_class:set_armor_texture ()

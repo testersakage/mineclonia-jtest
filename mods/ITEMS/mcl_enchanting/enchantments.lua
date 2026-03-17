@@ -82,19 +82,27 @@ mcl_player.register_globalstep_slow(function(player)
 end)
 
 function mcl_enchanting.mob_physics_enchantment_levels (mob)
-	if not mob.armor_list or mob.armor_list.feet == "" then
+	if not mob.armor_list then
 		return 0
 	end
 
 	local stack = ItemStack (mob.armor_list.feet)
-	if stack:is_empty () then
-		return 0, 0
+	local helmet = ItemStack (mob.armor_list.head)
+	local depth_strider, soul_speed = 0, 0
+
+	if not stack:is_empty () then
+		depth_strider
+			= mcl_enchanting.get_enchantment (stack, "depth_strider")
+		soul_speed
+			= mcl_enchanting.get_enchantment (stack, "soul_speed")
 	end
-	local depth_strider
-		= mcl_enchanting.get_enchantment (stack, "depth_strider")
-	local soul_speed
-		= mcl_enchanting.get_enchantment (stack, "soul_speed")
-	return depth_strider, soul_speed
+
+	local respiration = 0
+	if not helmet:is_empty () then
+		respiration
+			= mcl_enchanting.get_enchantment (helmet, "respiration")
+	end
+	return depth_strider, soul_speed, respiration
 end
 
 -- implemented via on_enchant

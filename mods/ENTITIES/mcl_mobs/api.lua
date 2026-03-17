@@ -170,6 +170,7 @@ function mob_class:get_staticdata_table ()
 	tmp._soul_speed_level = nil
 	tmp._last_soul_speed_bonus = nil
 	tmp._depth_strider_level = nil
+	tmp._respiration_level = nil
 	tmp._active_targeting_rule = nil
 	tmp._active_target = nil
 	tmp._object_search_lists = nil
