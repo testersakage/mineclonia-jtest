@@ -59,7 +59,7 @@ core.register_node("mcl_amethyst:tinted_glass",{
 	drawtype = "glasslike",
 	use_texture_alpha = "blend",
 	sunlight_propagates = false,
-	groups = {handy = 1, building_block = 1, deco_block = 1},
+	groups = {handy = 1, building_block = 1, deco_block = 1, material_glass = 1},
 	sounds = mcl_sounds.node_sound_glass_defaults(),
 	is_ground_content = false,
 })
