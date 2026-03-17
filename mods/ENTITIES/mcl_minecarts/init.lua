@@ -560,31 +560,13 @@ local function register_entity(entity_id, mesh, textures, drop, on_rightclick, o
 			self.object:set_yaw(yaw * math.pi)
 
 			-- Handle tilting on slopes
-  		    local slope_sign = mcl_minecarts.get_slope_sign(pos, dir)  -- -1 (down), 0 (flat), 1 (up)
+			local yaw_rad = yaw * math.pi
+			local target_pitch = 0
+			if dir.y ~= 0 then
+				target_pitch = dir.y * (math.pi / 4)
+			end
 
-            local target_pitch = 0
-            local target_ground_y = pos.y
-
-    		if slope_sign ~= 0 then
-    			target_pitch = slope_sign * (math.pi / 4)
-    			target_ground_y = pos.y + (0.5)
-    		end
-
-            -- Smoothing factor
-            local smoothing_tilt = 1.0
-            local smoothing_y = 0.75
-
-            -- Smooth pitch by lerping from current rotation.x to target_pitch
-            local cur_rot = self.object:get_rotation() or vector.new(0, yaw * math.pi, 0)
-            local cur_pitch = cur_rot.x or 0
-            local new_pitch = cur_pitch + (target_pitch - cur_pitch) * smoothing_tilt
-            self.object:set_rotation(vector.new(new_pitch, yaw * math.pi, 0))
-
-            -- Smooth Y by lerping from actual current world Y to the target ground Y
-            local obj_pos = self.object:get_pos() or pos
-            local new_y = obj_pos.y + (target_ground_y - obj_pos.y) * smoothing_y
-            pos.y = new_y
-
+			self.object:set_rotation(vector.new(target_pitch, yaw_rad, 0))
 		end
 
 		if self._punched then
