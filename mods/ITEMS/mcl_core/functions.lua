@@ -73,8 +73,8 @@ end
 
 function mcl_core.grow_reeds(pos, amount)
 	local amount = tonumber(amount) or 1
-	local top_pos = mcl_util.traverse_tower(pos, 1)
-	local bot_pos, height = mcl_util.traverse_tower(top_pos, -1)
+	local bot_pos = mcl_util.traverse_tower(pos, -1)
+	local top_pos, height = mcl_util.traverse_tower(bot_pos, 1)
 	local ground_pos = vector.offset(bot_pos, 0, -1, 0)
 
 	local name = core.get_node(ground_pos).name
@@ -90,7 +90,7 @@ function mcl_core.grow_reeds(pos, amount)
 		amount = math.min(amount, 3 - height)
 
 		for i = 1, amount do
-			local pos2 = pos:offset(0, i, 0)
+			local pos2 = top_pos:offset(0, i, 0)
 			local node2 = core.get_node(pos2)
 			local ndef = core.registered_nodes[node2.name]
 			if node2.name ~= "air" and not ndef.buildable_to then
