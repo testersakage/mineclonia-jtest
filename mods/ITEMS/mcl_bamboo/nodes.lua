@@ -373,6 +373,7 @@ local scaffolding_def = {
 	climbable = true,
 	physical = true,
 	groups = { handy = 1, axey = 1, flammable = 3,  material_wood = 1, fire_encouragement = 5, fire_flammability = 60, solid = 1, scaffolding = 1, dig_by_piston = 1, unsticky = 1 },
+	sounds = mcl_sounds.node_sound_wood_defaults(),
 	after_destruct = update_scaffolding,
 	_mcl_after_falling = after_falling_scaffolding,
 }
@@ -393,7 +394,6 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 	},
 	node_placement_prediction = "",
 	groups = { deco_block = 1, falling_node = 1 },
-	sounds = mcl_sounds.node_sound_wood_defaults(),
 	_mcl_hardness = 0,
 	_mcl_burntime = 2.5,
 	on_place = function(itemstack, placer, ptd)
@@ -460,6 +460,10 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 			if not core.check_single_for_falling(pos) then
 				if force_vertical then
 					core.swap_node(pos, { name = name })
+				end
+				local def = core.registered_nodes[name]
+				if def and def.sounds and def.sounds.place then
+					core.sound_play(def.sounds.place, {pos = pos}, true)
 				end
 				update_scaffolding(pos)
 			end
