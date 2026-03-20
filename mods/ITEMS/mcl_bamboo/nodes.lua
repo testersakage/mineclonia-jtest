@@ -236,6 +236,8 @@ local function can_place_on(node)
 	return false
 end
 
+local cid_scaffolding_v
+local cid_scaffolding_h
 -- based on update_leaves() in https://codeberg.org/mineclonia/mineclonia/src/tag/0.120.1/mods/ITEMS/mcl_trees/api.lua#L73
 local function update_scaffolding_horizontal(pos, old_distance)
 	local vm = core.get_voxel_manip()
@@ -244,11 +246,9 @@ local function update_scaffolding_horizontal(pos, old_distance)
 	local data = vm:get_data()
 	local param2_data = vm:get_param2_data()
 
-	local v_cid = core.get_content_id("mcl_bamboo:scaffolding")
-	local h_cid = core.get_content_id("mcl_bamboo:scaffolding_horizontal")
 	local function get_distance(ind)
 		local cid = data[ind]
-		if cid == v_cid or cid == h_cid then
+		if cid == cid_scaffolding_v or cid == cid_scaffolding_h then
 			return param2_data[ind]
 		end
 	end
@@ -279,7 +279,7 @@ local function update_scaffolding_horizontal(pos, old_distance)
 			local distance2 = get_distance(ind2)
 			if distance2 and distance2 <= SCAFFOLD_BASE_AWAY_LIMIT then
 				if distance2 > distance then
-					if data[ind2] == h_cid then
+					if data[ind2] == cid_scaffolding_h then
 						update_distance(ind2, SCAFFOLD_BASE_AWAY_LIMIT + 1, pos2)
 						clear_queue:enqueue({ pos = pos2, distance = distance + 1 })
 					end
@@ -298,7 +298,7 @@ local function update_scaffolding_horizontal(pos, old_distance)
 		for _, dir in pairs(adjacents) do
 			local pos2 = pos:add(dir)
 			local ind2 = a:indexp(pos2)
-			if data[ind2] == h_cid and get_distance(ind2) > distance2 then
+			if data[ind2] == cid_scaffolding_h and get_distance(ind2) > distance2 then
 				update_distance(ind2, distance2, pos2)
 				fill_queue:enqueue({ pos = pos2, distance = distance2 })
 			end
@@ -490,3 +490,6 @@ core.register_node("mcl_bamboo:scaffolding_horizontal", table.merge_deep(scaffol
 	},
 	groups = { building_block = 1, not_in_creative_inventory = 1, disable_descend = 1 },
 }))
+
+cid_scaffolding_v = core.get_content_id("mcl_bamboo:scaffolding")
+cid_scaffolding_h = core.get_content_id("mcl_bamboo:scaffolding_horizontal")
