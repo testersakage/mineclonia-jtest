@@ -1,5 +1,4 @@
 local S = core.get_translator("mcl_bamboo")
-local SCAFFOLD_GROUND_AWAY_LIMIT = 320
 local SCAFFOLD_BASE_AWAY_LIMIT = 6
 
 function mcl_bamboo.random(pos)
@@ -407,36 +406,11 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 		if not ptd then return end
 		local node = core.get_node(ptd.under)
 		local pos = ptd.above
-		local count = 0
 		local to_place
 		local dist
 
 		if core.get_item_group(node.name, "scaffolding") ~= 0 then
 			dist = node.param2
-
-			-- count blocks to the ground
-			local p = ptd.under
-			local n = node
-			while count < SCAFFOLD_GROUND_AWAY_LIMIT do
-				local op = p
-				if n.name == "mcl_bamboo:scaffolding" then
-					p = vector.offset(mcl_util.traverse_tower(op,-1), 0, -1, 0)
-					count = count + op.y - p.y
-					n = core.get_node(p)
-				elseif n.name == "mcl_bamboo:scaffolding_horizontal" then
-					local d = n.param2 - 1 -- expected distance from the neighbor
-					count = count + 1
-					for _,v in pairs(adjacents) do
-						p = vector.add(op, v)
-						n = core.get_node(p)
-						if core.get_item_group(n.name, "scaffolding") ~= 0 and n.param2 == d then
-							break
-						end
-					end
-				else
-					break
-				end
-			end
 
 			local ctrl = placer:get_player_control()
 			local arc = placer:get_look_vertical() * (180 / math.pi)
@@ -464,14 +438,12 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 					dist = node.param2 + 1
 					pos = next_pos
 					node = next_node
-					count = count + 1
 				end
 			else
 				to_place = "mcl_bamboo:scaffolding"
 				-- tower up scaffolding (vertical)
 				if node.name == "mcl_bamboo:scaffolding" then
 					local top = mcl_util.traverse_tower(ptd.under,1)
-					count = count + top.y - ptd.under.y
 					pos = vector.offset(top,0,1,0)
 				end
 			end
@@ -481,7 +453,7 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 			dist = SCAFFOLD_BASE_AWAY_LIMIT + 1
 		end
 
-		if to_place and core.get_node(pos).name == "air" and count < SCAFFOLD_GROUND_AWAY_LIMIT then
+		if to_place and core.get_node(pos).name == "air" then
 			local force_vertical = dist > SCAFFOLD_BASE_AWAY_LIMIT
 			local name = force_vertical and "mcl_bamboo:scaffolding" or to_place
 			itemstack = mcl_util.safe_place(pos, {name = name, param2 = dist }, placer, itemstack) or itemstack
