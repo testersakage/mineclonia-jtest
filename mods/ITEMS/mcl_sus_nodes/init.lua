@@ -335,7 +335,7 @@ function mcl_sus_nodes.register_sus_node(name,source,overrides)
 	assert(sdef, "[mcl_sus_nodes] trying to register "..tostring(name).." but source node "..tostring(source).."doesn't exist")
 	local main_itemstring = "mcl_sus_nodes:"..name
 	table.shuffle(sus_drops_default)
-	local def = table.merge(sdef,tpl,{
+	local def = table.merge(sdef, tpl, {
 		description = S("Suspicious "..name),
 		tiles = overlay_tiles(sdef.tiles,"mcl_sus_nodes_suspicious_overlay.png"),
 		drop = source,
@@ -343,7 +343,8 @@ function mcl_sus_nodes.register_sus_node(name,source,overrides)
 		_mcl_sus_nodes_main = main_itemstring,
 		_mcl_sus_nodes_drops = table.copy(sus_drops_default),
 		_mcl_falling_node_alternative = source,
-	},overrides or {})
+	}, overrides or {})
+	def.groups = table.merge(sdef.groups, tpl.groups, overrides and overrides.groups or {})
 	core.register_node(main_itemstring,def)
 	for i=1,3 do
 		core.register_node(main_itemstring.."_"..i,table.merge(def,{
