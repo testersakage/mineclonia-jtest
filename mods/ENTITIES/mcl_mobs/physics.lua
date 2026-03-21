@@ -2,6 +2,12 @@ local mob_class = mcl_mobs.mob_class
 local ipairs = ipairs
 local pairs = pairs
 
+local mathfloor = math.floor
+local mathsqrt = math.sqrt
+local mathmax = math.max
+local mathmin = math.min
+local mathpow = math.pow
+
 local ENTITY_CRAMMING_MAX = 24
 local DEATH_DELAY = 0.5
 
@@ -99,8 +105,6 @@ local function get_cbox_for_collision (obj)
 	end
 end
 
-local mathsqrt = math.sqrt
-
 local function cbox_intersect_p (cbox, x, y, z, cbox1, pos1)
 	return cbox[1] + x <= pos1.x + cbox1[4]
 		and cbox[2] + y <= pos1.y + cbox1[5]
@@ -129,9 +133,11 @@ local function common_collision (cbox, this_object, pos)
 					+ math.random () * 0.10 - 0.05
 				local dz = pos1.z - pos.z
 					+ math.random () * 0.10 - 0.05
-				local d = mathsqrt (w * dx * dx + dz * dz)
+				local bw = mathmax (cbox1[6] - cbox1[3],
+						    cbox1[4] - cbox1[1])
+				local d = mathsqrt (dx * dx + dz * dz) / (bw + w)
 				if d > 0.01 then
-					local v = mathsqrt (1 / d)
+					local v = mathpow (1 / d, 0.333) * 0.75
 					x = x - dx / d * v
 					z = z - dz / d * v
 				end
@@ -303,11 +309,6 @@ end
 function mob_class:reset_breath ()
 	self.breath = self._max_air_supply
 end
-
-local mathfloor = math.floor
-local mathmax = math.max
-local mathmin = math.min
-local mathpow = math.pow
 
 function mob_class:respire (dtime)
 	self.breath = mathmin (self._max_air_supply, self.breath + dtime)
