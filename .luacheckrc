@@ -61,6 +61,7 @@ globals = {
 	"mcl_burning",
 	"mcl_cake",
 	"mcl_campfires",
+	"mcl_candles",
 	"mcl_cartography_table",
 	"mcl_cauldrons",
 	"mcl_charges",
