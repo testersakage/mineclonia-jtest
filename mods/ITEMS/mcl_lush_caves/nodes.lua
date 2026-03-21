@@ -277,8 +277,9 @@ core.register_craftitem("mcl_lush_caves:glow_berry", {
 		local rc = mcl_util.call_on_rightclick(itemstack, placer, pointed_thing)
 		if rc then return rc end
 
-		if not pointed_thing.under
-			or vector.direction (pointed_thing.under, pointed_thing.above).y ~= -1 then
+		if (not pointed_thing.under
+			or vector.direction (pointed_thing.under, pointed_thing.above).y ~= -1) and
+			(not mcl_serverplayer.is_csm_capable(placer)) then
 			return core.do_item_eat(2, nil, itemstack, placer, pointed_thing)
 		end
 
