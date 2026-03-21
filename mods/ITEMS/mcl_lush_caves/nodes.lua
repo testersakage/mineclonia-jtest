@@ -238,7 +238,7 @@ core.register_node("mcl_lush_caves:rooted_dirt", {
 	_doc_items_longdesc = S("Rooted dirt is type of dirt found in lush caves."),
 	_doc_items_hidden = false,
 	tiles = {"mcl_lush_caves_rooted_dirt.png"},
-	groups = {handy=1, shovely=1, dirt=1, soil_flower=1, soil_generic_plant=1, soil_fungus=1, building_block=1, path_creation_possible=1, converts_to_moss=1, cultivatable=1, converts_to_mud=1},
+	groups = {handy=1, shovely=1, dirt=1, soil_flower=1, soil_generic_plant=1, soil_sugarcane=1, soil_fungus=1, building_block=1, path_creation_possible=1, converts_to_moss=1, cultivatable=1, converts_to_mud=1},
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	_mcl_hardness = 0.5,
 	_on_bottle_place = mcl_core.bottle_dirt,
