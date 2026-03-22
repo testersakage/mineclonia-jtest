@@ -142,7 +142,7 @@ core.register_abm({
 	nodenames = {"mcl_core:cactus"},
 	neighbors = {"group:sand"},
 	interval = 25,
-	chance = 10,
+	chance = 40,
 	action = function(pos)
 		mcl_core.grow_cactus(pos)
 	end,
