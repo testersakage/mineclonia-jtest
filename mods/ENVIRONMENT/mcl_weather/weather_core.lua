@@ -204,7 +204,7 @@ function mcl_weather.change_weather(new_weather, explicit_end_time, changer_name
 		else
 			mcl_weather.end_time = mcl_weather.get_rand_end_time(weather_meta.min_duration, weather_meta.max_duration)
 		end
-		mcl_weather.skycolor.update_sky_color()
+		core.after(0,  mcl_weather.skycolor.update_sky_color)
 		save_weather()
 		return true
 	end
