@@ -39,6 +39,18 @@ mcl_fishing.loot_treasure = {
 	{ itemstring = "mcl_mobitems:nautilus_shell", },
 }
 
+local registered_on_catch = {}
+
+function mcl_fishing.register_on_catch(func)
+	table.insert(registered_on_catch, func)
+end
+
+mcl_fishing.register_on_catch(function(_, player, _, item)
+	if mcl_loot.in_loot_def(mcl_fishing.loot_fish, item:get_name()) then
+		awards.unlock(player:get_player_name(), "mcl:fishyBusiness")
+	end
+end)
+
 local bobbers = {}
 
 local bobber_ENTITY={
@@ -119,7 +131,6 @@ local function fish(itemstack, player, pointed_thing)
 			local junk_value = junk_values[index] + fish_value
 			if r <= fish_value then
 				items = mcl_loot.get_loot({ items = mcl_fishing.loot_fish, stacks_min = 1, stacks_max = 1 }, pr)
-				awards.unlock(player:get_player_name(), "mcl:fishyBusiness")
 			elseif r <= junk_value then
 				items = mcl_loot.get_loot({ items = mcl_fishing.loot_junk, stacks_min = 1, stacks_max = 1 }, pr)
 			else
@@ -131,6 +142,12 @@ local function fish(itemstack, player, pointed_thing)
 			else
 				item = ItemStack()
 			end
+
+			for _, func in ipairs(registered_on_catch) do
+				local rt = func(itemstack, player, pointed_thing, item, ent)
+				if rt then item = rt end
+			end
+
 			local inv = player:get_inventory()
 			if inv:room_for_item("main", item) then
 				inv:add_item("main", item)
