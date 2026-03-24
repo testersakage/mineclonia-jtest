@@ -40,9 +40,14 @@ mcl_fishing.loot_treasure = {
 }
 
 local registered_on_catch = {}
+local wait_time_modifiers = {}
 
 function mcl_fishing.register_on_catch(func)
 	table.insert(registered_on_catch, func)
+end
+
+function mcl_fishing.register_wait_time_modifier(func)
+    table.insert(wait_time_modifiers, func)
 end
 
 mcl_fishing.register_on_catch(function(_, player, _, item)
@@ -266,7 +271,21 @@ function bobber_ENTITY:on_step(dtime)
 			local lure_enchantment = mcl_enchanting.get_enchantment(player:get_wielded_item(), "lure") or 0
 			local rain_mod = mcl_weather.rain.raining and mcl_weather.has_rain(self.object:get_pos()) and 0.75 or 1
 			local reduced = lure_enchantment * 5
-			self._waittime = math.random(math.max(0, 5 - reduced), 30 - reduced) * rain_mod
+			local wait_params = {
+				min = math.max(0, 5 - reduced),
+				max = 30 - reduced,
+				multiplier = rain_mod,
+			}
+
+			for _, modifier in ipairs(wait_time_modifiers) do
+				modifier(wait_params, player, self.object:get_pos())
+			end
+
+			wait_params.min = math.max(0, wait_params.min)
+			wait_params.max = math.max(wait_params.min, wait_params.max)
+			wait_params.multiplier = math.max(0.1, wait_params.multiplier)
+
+			self._waittime = math.random(wait_params.min, wait_params.max) * wait_params.multiplier
 		else
 			if self._time < self._waittime then
 				self._time = self._time + dtime
