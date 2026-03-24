@@ -20,7 +20,6 @@ local dolphin = {
 	xp_min = 1,
 	xp_max = 3,
 	armor = 100,
-	breath_max = 240,
 	rotate = 180,
 	pace_chance = 10,
 	pace_interval = 0.5,
@@ -70,6 +69,7 @@ local dolphin = {
 	attack_type = "melee",
 	_moisture = 120,
 	_waiting_for_treasure_position = false,
+	_max_air_supply = 240,
 }
 
 ------------------------------------------------------------------------
@@ -389,7 +389,7 @@ function dolphin:valid_node_in_direction (self_pos, limx, limy, direction, range
 	return nil
 end
 
-function dolphin:respire ()
+function dolphin:respire (_)
 	self.breath = 240
 end
 

@@ -1,24 +1,17 @@
 local mob_class = mcl_mobs.mob_class
+local ipairs = ipairs
+local pairs = pairs
+
+local mathfloor = math.floor
+local mathsqrt = math.sqrt
+local mathmax = math.max
+local mathmin = math.min
+local mathpow = math.pow
 
 local ENTITY_CRAMMING_MAX = 24
-local CRAMMING_DAMAGE = 3
 local DEATH_DELAY = 0.5
 
-local mobs_drop_items = core.settings:get_bool("mobs_drop_items") ~= false
-
--- check if within physical map limits
-local function within_limits(pos, radius)
-	local wmin, wmax = mcl_vars.mapgen_edge_min, mcl_vars.mapgen_edge_max
-	if radius then
-		wmin = wmin - radius
-		wmax = wmax + radius
-	end
-	if not pos then return true end
-	for _,v in pairs(pos) do
-		if v < wmin or v > wmax then return false end
-	end
-	return true
-end
+local mobs_drop_items = core.settings:get_bool ("mobs_drop_items") ~= false
 
 function mob_class:item_drop(cooked, looting_level, mcl_reason)
 	if not mobs_drop_items then return end
@@ -103,6 +96,7 @@ local function get_cbox_for_collision (obj)
 	if entity then
 		return entity.is_mob
 			and entity.pushable
+			and not entity.dead
 			and entity.collisionbox or nil
 	elseif obj:is_player () then
 		return obj:get_properties ().collisionbox
@@ -110,8 +104,6 @@ local function get_cbox_for_collision (obj)
 		return nil
 	end
 end
-
-local mathsqrt = math.sqrt
 
 local function cbox_intersect_p (cbox, x, y, z, cbox1, pos1)
 	return cbox[1] + x <= pos1.x + cbox1[4]
@@ -126,32 +118,41 @@ local function common_collision (cbox, this_object, pos)
 	local w = cbox[4] - cbox[1]
 	local x, z = 0, 0
 	local px, py, pz = pos.x, pos.y, pos.z
+	local count = 0
 	for object in core.objects_inside_radius (pos, w + 1.0) do
 		if object ~= this_object and not object:get_attach () then
 			local pos1 = object:get_pos ()
 			local cbox1 = get_cbox_for_collision (object)
 			if cbox1 and cbox_intersect_p (cbox, px, py, pz, cbox1, pos1) then
+				count = count + 1
+				if count > ENTITY_CRAMMING_MAX then
+					break
+				end
+
 				local dx = pos1.x - pos.x
 					+ math.random () * 0.10 - 0.05
 				local dz = pos1.z - pos.z
 					+ math.random () * 0.10 - 0.05
-				local d = mathsqrt (w * dx * dx + dz * dz)
+				local bw = mathmax (cbox1[6] - cbox1[3],
+						    cbox1[4] - cbox1[1])
+				local d = mathsqrt (dx * dx + dz * dz) / (bw + w)
 				if d > 0.01 then
-					local v = mathsqrt (1 / d)
+					local v = mathpow (1 / d, 0.333) * 0.75
 					x = x - dx / d * v
 					z = z - dz / d * v
 				end
 			end
 		end
 	end
-	return x, z
+	return x, z, count
 end
 
 mcl_mobs.common_collision = common_collision
 
 function mob_class:collision (pos)
-	local x, z = common_collision (self.collisionbox, self.object, pos)
-	return x, z
+	local x, z, count
+		= common_collision (self.collisionbox, self.object, pos)
+	return x, z, count
 end
 
 -- move mob in facing direction
@@ -159,7 +160,7 @@ function mob_class:set_velocity(v)
 	self.acc_speed = v
 	-- Minecraft scales forward acceleration by desired
 	-- velocity in blocks/tick.
-	self.acc_dir.z = v / 20
+	self.acc_dir.z = v * 0.05
 	self.acc_dir.x = 0
 	self.acc_dir.y = 0
 end
@@ -301,30 +302,16 @@ function mob_class:check_for_death (mcl_reason, damage)
 	return true
 end
 
-function mob_class:is_in_node (self_pos, itemstring) --can be group:...
-	local cb = self.collisionbox
-	local pos = self_pos
-	local v1 = vector.offset (pos, cb[1], cb[2], cb[3])
-	local v2 = vector.offset (pos, cb[4], cb[5], cb[6])
-	local nn = core.find_nodes_in_area (v1, v2, {itemstring})
-	if nn and #nn > 0 then return true end
-end
+------------------------------------------------------------------------
+-- Environmental damage.
+------------------------------------------------------------------------
 
 function mob_class:reset_breath ()
-    local max = self.initial_properties.breath_max
-    if max ~= -1 then
-	self.breath = max
-    end
+	self.breath = self._max_air_supply
 end
 
-function mob_class:respire ()
-	-- This ties mobs to the `breath_max' in their initial mob
-	-- definitions, which is acceptable, as no code in the game or
-	-- in mods expects mobs to respect this player-specific
-	-- property at all, and calling `get_properties' is simply too
-	-- expensive.
-	local breath_max = self.initial_properties.breath_max
-	self.breath = math.min (breath_max, self.breath + 1)
+function mob_class:respire (dtime)
+	self.breath = mathmin (self._max_air_supply, self.breath + dtime)
 end
 
 local function get_internal_light_level ()
@@ -353,14 +340,14 @@ function mob_class:endangered_by_sunlight ()
 	return false
 end
 
-function mob_class:get_weather_with_light (self_pos, time_of_day)
+function mob_class:get_weather_with_light (node_pos, time_of_day)
 	-- Don't return natural light till the artificial light at
 	-- this position exceeds the threshold at which natural light
 	-- becomes significant, for natural light tests are expensive.
-	local local_light = core.get_node_light (self_pos) or 0
-	local has_rain = mcl_weather.is_exposed_to_rain (self_pos)
+	local local_light = core.get_node_light (node_pos) or 0
+	local has_rain = self:is_exposed_to_rain (node_pos)
 	if local_light > 10 then
-		local direct_light = core.get_natural_light (self_pos) or 0
+		local direct_light = core.get_natural_light (node_pos) or 0
 
 		-- See: https://minecraft.wiki/w/Light#Internal_light_level
 		local weather = mcl_weather.get_weather ()
@@ -376,258 +363,228 @@ function mob_class:get_weather_with_light (self_pos, time_of_day)
 	end
 end
 
--- environmental damage (water, lava, fire, light etc.)
-function mob_class:do_env_damage()
-	-- feed/tame text timer (so mob 'full' messages dont spam chat)
-	if self.htimer > 0 then
-		self.htimer = self.htimer - 1
+function mob_class:fast_ignite (time)
+	if self.burn_time then
+		local t = self.burn_time
+		self.burn_time = mathmax (t, time)
+	else
+		mcl_burning.set_on_fire (self.object, time)
+	end
+end
+
+function mob_class:step_drowning (dtime, is_in_water)
+	local is_drowning
+	if self.breathes_in_water then
+		is_drowning = not is_in_water
+	else
+		is_drowning = is_in_water
 	end
 
-	local pos = self.object:get_pos()
-	if not pos then return end
+	if is_drowning then
+		if self._respiration_level > 0 then
+			local r = math.random (1, self._respiration_level + 1)
+			if r ~= 1 then
+				return
+			end
+		end
+		local t = mathmax (self.breath - dtime, -1.0)
+		if t == -1.0 then
+			self.breath = 0.0
+			if self:damage_mob ("drowning", 2.0) then
+				return true
+			end
 
-	self.time_of_day = core.get_timeofday()
-	-- remove mob if beyond map limits
-	if not within_limits(pos, 0) then
-		self:safe_remove()
+			local self_pos = self.object:get_pos ()
+			self_pos.y = self_pos.y + self:get_eye_height ()
+			mcl_mobs.effect (self_pos, 8, "bubble.png", nil, nil, 1, nil)
+		else
+			self.breath = t
+		end
+	else
+		self:respire (dtime)
+	end
+end
+
+local SPEED_MODIFIER_POWDER_SNOW = "mcl_mobs:powder_snow_movement"
+local v1 = vector.zero ()
+local scale_chance
+
+core.register_on_mods_loaded (function ()
+	scale_chance = mcl_mobs.scale_chance
+end)
+
+function mob_class:can_freeze ()
+	return self._can_freeze
+end
+
+function mob_class:is_exposed_to_rain (node_pos)
+	local value = self._cached_rain_exposure
+	if not value or self:check_timer ("rain_exposure", 0.5) then
+		value = mcl_weather.is_exposed_to_rain (node_pos)
+	end
+	self._cached_rain_exposure = value
+	return value
+end
+
+function mob_class:apply_environment_damage (self_pos, immersion_depth,
+					     liquidtype, params, dtime)
+	local damage = 0.0
+	local damagetype = nil
+	local fire_resistant = self._fire_resistant
+	local skip_burning = false
+	local node_pos = v1
+
+	node_pos.x = mathfloor (self_pos.x + 0.5)
+	node_pos.y = mathfloor (self_pos.y + 0.5)
+	node_pos.z = mathfloor (self_pos.z + 0.5)
+
+	if params.dps > 0.0
+		and self:check_timer ("environment_damage", 0.5) then
+		self:damage_mob ("environment", params.dps * 0.5)
+	end
+
+	if liquidtype == "water" then
+		if self.burn_time then
+			mcl_burning.extinguish (self.object)
+		end
+		skip_burning = true
+	elseif liquidtype == "lava" and not fire_resistant then
+		damage = 4.0
+		damagetype = "lava"
+		if not self:is_exposed_to_rain (node_pos) then
+			self:fast_ignite (15.0)
+		end
+	elseif params.in_soul_fire_node and not fire_resistant then
+		if damage < 2.0 then
+			damage = 2.0
+			damagetype = "in_fire"
+		end
+		if not self:is_exposed_to_rain (node_pos) then
+			self:fast_ignite (5.0)
+		end
+	elseif params.in_fire_node and not fire_resistant then
+		if damage < 1.0 then
+			damage = 1.0
+			damagetype = "in_fire"
+		end
+		if not self:is_exposed_to_rain (node_pos) then
+			self:fast_ignite (5.0)
+		end
+	end
+	if params.in_solid_node then
+		if damage < 1.0 then
+			damage = 1.0
+			damagetype = "in_wall"
+		end
+	end
+
+	if params.in_powder_snow and self:can_freeze () then
+		local t = mathmin (self._frozen_for + dtime, 7.0)
+		self._frozen_for = t
+		self:add_physics_factor ("movement_speed", SPEED_MODIFIER_POWDER_SNOW,
+					 -1.0 * t / 7.0, "add")
+		if t == 7.0 and damage < 1.0
+			and self:check_timer ("freeze_damage", 2.0) then
+			damage = 1.0
+			damagetype = "freeze"
+		end
+		if self.burn_time then
+			mcl_burning.extinguish (self.object)
+		end
+		skip_burning = true
+	elseif self._frozen_for > 0.0 then
+		local t = mathmax (self._frozen_for - dtime, 0.0)
+		self._frozen_for = t
+		if t == 0.0 then
+			self:remove_physics_factor ("movement_speed",
+						    SPEED_MODIFIER_POWDER_SNOW)
+		else
+			self:add_physics_factor ("movement_speed", SPEED_MODIFIER_POWDER_SNOW,
+						 -1.0 * t / 7.0, "add")
+		end
+	end
+
+	if not fire_resistant
+		and self.standing_on == "mcl_nether:magma" then
+		if damage < 1.0 then
+			damage = 1.0
+			damagetype = "hot_floor"
+		end
+	end
+
+	if self._collision_count > ENTITY_CRAMMING_MAX - 1
+		and damage < 6.0
+		and math.random (1, 4) == 1 then
+		damage = 6.0
+		damagetype = "cramming"
+	end
+
+	if self:check_timer ("environment_damage", 0.5)
+		and damage > 0.0
+		and self:damage_mob (damagetype, damage) then
 		return true
 	end
-	local _, dim = mcl_worlds.y_to_layer(pos.y)
 
-	-- Only ignite when this mob is directly beneath sunlight, as
-	-- measured by the light level at noon.
-	if self.ignited_by_sunlight then
-		local head
-			= vector.offset (pos, 0, self.head_eye_height, 0)
-		local sunlight, direct_sunlight, has_rain
-			= self:get_weather_with_light (head, self.time_of_day)
-		self._direct_sunlight = direct_sunlight
+	local eye_height = self:get_eye_height ()
+	if liquidtype == "water" and immersion_depth > eye_height then
+		if self:step_drowning (dtime, true) then
+			return true
+		end
+	elseif self:step_drowning (dtime, false) then
+		return true
+	end
 
-		if direct_sunlight >= 15 and sunlight >= 12
-			and not has_rain and dim == "overworld" then
-			if self.armor_list then
-				local stack = ItemStack (self.armor_list.head)
-				if stack:is_empty () then
-					mcl_burning.set_on_fire (self.object, 10)
-				else
-					-- Damage armor while on fire.
-					mcl_util.use_item_durability (stack, 5 * math.random ())
+	if (self._water_sensitive or self.burn_time)
+		and self:check_timer ("rain_damage", 0.5) then
+		if liquidtype == "water"
+			or self:is_exposed_to_rain (node_pos) then
+			if self.burn_time then
+				mcl_burning.extinguish (self.object)
+				skip_burning = true
+			end
+			if self._water_sensitive
+				and self:damage_mob ("environment", 1.0) then
+				return true
+			end
+		end
+	end
+
+	if self.ignited_by_sunlight and not skip_burning
+		and math.random (scale_chance (dtime, 30)) == 1 then
+		local _, dim = mcl_worlds.y_to_layer (node_pos.y)
+		if dim == "overworld" then
+			node_pos.y = mathfloor (self_pos.y + eye_height + 0.5)
+
+			local tod = mcl_util.get_current_time_of_day ()
+			local sunlight, direct_sunlight, has_rain
+				= self:get_weather_with_light (node_pos, tod)
+			self._direct_sunlight = direct_sunlight
+			if direct_sunlight >= 15 and sunlight >= 12
+				and not has_rain and dim == "overworld" then
+				if self.armor_list.head == "" then
+					self:fast_ignite (10.0)
+				elseif math.random (2) == 1 then
+					local stack = ItemStack (self.armor_list.head)
+					mcl_util.use_item_durability (stack, 1)
 					-- Apply wear to head armor.
 					self.armor_list.head = stack:to_string ()
 					if stack:is_empty () then
 						self:set_armor_texture ()
 					end
 				end
-			else
-				-- Unconditionally combust if no armor is equipped.
-				mcl_burning.set_on_fire (self.object, 10)
 			end
 		end
-	end
-
-	-- don't fall when on ignore, just stand still
-	if self.standing_in == "ignore" then
-		self.object:set_velocity({x = 0, y = 0, z = 0})
-		self.acc_dir = vector.zero ()
-	end
-
-	local nodef = core.registered_nodes[self.standing_in]
-	local nodef2 = core.registered_nodes[self.standing_on]
-	local head_nodedef = core.registered_nodes[self.head_in]
-
-	-- rain
-	if self.rain_damage > 0 then
-		if mcl_weather.is_exposed_to_rain (pos) then
-			if self:damage_mob ("environment", self.rain_damage) then
-				return true
-			end
-		end
-	end
-
-	local frozen = false
-	-- water damage
-	if self.water_damage > 0 and nodef.groups.water and nodef.groups.water > 0 then
-		local fatal = self:damage_mob ("environment", self.water_damage)
-		pos.y = pos.y + 1
-		mcl_mobs.effect(pos, 5, "mcl_particles_smoke.png", nil, nil, 1, nil)
-		pos.y = pos.y - 1
-		if fatal then
-			return true
-		end
-	-- magma damage
-	elseif self.fire_damage > 0 and nodef2.groups.fire and nodef2.groups.fire > 0 then
-		if self.fire_damage ~= 0 then
-			if self:damage_mob ("hot_floor", self.fire_damage) then
-				return true
-			end
-		end
-	-- lava damage
-	elseif self.lava_damage > 0 and self:is_in_node (pos, "group:lava") then
-		if self.lava_damage ~= 0 then
-			local fatal = self:damage_mob ("lava", self.lava_damage)
-			pos.y = pos.y + 1
-			mcl_mobs.effect(pos, 5, "fire_basic_flame.png", nil, nil, 1, nil)
-			mcl_burning.set_on_fire(self.object, 10)
-			pos.y = pos.y - 1
-
-			if fatal then
-				return true
-			end
-		end
-	-- fire damage
-	elseif self.fire_damage > 0 and self:is_in_node (pos, "group:fire") then
-		if self.fire_damage ~= 0 then
-			local fatal = self:damage_mob ("in_fire", self.fire_damage)
-
-			pos.y = pos.y + 1
-			mcl_mobs.effect(pos, 5, "fire_basic_flame.png", nil, nil, 1, nil)
-			pos.y = pos.y - 1
-			mcl_burning.set_on_fire(self.object, 5)
-
-			if fatal then
-				return true
-			end
-		end
-	elseif self._mcl_freeze_damage > 0 and self:is_in_node (pos, "mcl_powder_snow:powder_snow") then
-		frozen = true
-		self._frozen_for = self._frozen_for + 1
-		if self._frozen_for >= 8 and self._frozen_for % 2 == 0 then
-			local fatal = self:damage_mob("freeze", self._mcl_freeze_damage)
-
-			if fatal then
-				return true
-			end
-		end
-	-- damage_per_second node check
-	elseif nodef.damage_per_second ~= 0 and ( not nodef.groups.lava or nodef.groups.lava == 0 ) and ( not nodef.groups.fire or nodef.groups.fire == 0 ) then
-		local fatal = self:damage_mob ("environment", nodef.damage_per_second)
-		pos.y = pos.y + 1
-		mcl_mobs.effect(pos, 5, "mcl_particles_smoke.png")
-		pos.y = pos.y - 1
-		if fatal then
-			return true
-		end
-	end
-	-- Drowning damage
-	if self.initial_properties.breath_max ~= -1 then
-		local drowning = false
-		if self.breathes_in_water then
-			if core.get_item_group(self.standing_in, "water") == 0 then
-				drowning = true
-			end
-		elseif head_nodedef.drowning > 0 then
-			if self._immersion_depth > self.head_eye_height then
-				drowning = true
-			end
-		end
-		if drowning then
-			self.breath = math.max(0, self.breath - 1)
-			-- Only show bubbles if getting close to drowning
-			-- Mainly because of dolphins
-			if self.breath <= 20 then
-				pos.y = pos.y + 1
-				mcl_mobs.effect(pos, 2, "bubble.png", nil, nil, 1, nil)
-				pos.y = pos.y - 1
-			end
-
-			if self.breath <= 0 then
-				local dmg
-				if head_nodedef.drowning > 0 then
-					dmg = head_nodedef.drowning
-				else
-					dmg = 4
-				end
-				self:damage_effect(dmg)
-				if self:damage_mob ("drown", dmg) then
-					return true
-				end
-			end
-		else
-			self:respire ()
-		end
-	end
-	if not frozen and self._frozen_for > 0 then
-		-- Mobs thaw twice as quickly as they freeze.
-		self._frozen_for
-			= math.max (0, math.min (self._frozen_for, 7) - 2)
-	end
-	--- suffocation inside solid node
-	if (self.suffocation == true)
-	and (head_nodedef.walkable == nil or head_nodedef.walkable == true)
-	and (head_nodedef.collision_box == nil or head_nodedef.collision_box.type == "regular")
-	and (head_nodedef.node_box == nil or head_nodedef.node_box.type == "regular")
-	and (head_nodedef.groups.disable_suffocation ~= 1)
-	and (head_nodedef.groups.opaque == 1) then
-		-- Short grace period before starting to take suffocation damage.
-		-- This is different from players, who take damage instantly.
-		-- This has been done because mobs might briefly be inside solid nodes
-		-- when e.g. climbing up stairs.
-		-- This is a bit hacky because it assumes that do_env_damage
-		-- is called roughly every second only.
-		if self:check_timer("suffocation", 1) then
-			-- 2 damage per second
-			-- TODO: Deal this damage once every 1/2 second
-
-			if self:damage_mob ("in_wall", 2) then
-				return true
-			end
-		end
-	else
-		self._timers["suffocation"] = 1
-	end
-	return false
-end
-
-function mob_class:env_damage (pos)
-	-- environmental damage timer (every 1 second)
-	if not self:check_timer("env_damage", 1) then return end
-	self:check_entity_cramming()
-	-- check for environmental damage (water, fire, lava etc.)
-	if self:do_env_damage() then
-		return true
 	end
 end
 
-function mob_class:damage_mob(reason, damage)
-	if not self.health then return end
-	damage = math.floor(damage)
+function mob_class:damage_mob (reason, damage)
+	local damage = mathfloor (damage)
 	if damage > 0 then
 		local mcl_reason = { type = reason }
-		mcl_damage.finish_reason(mcl_reason)
-		mcl_util.deal_damage(self.object, damage, mcl_reason)
-		mcl_mobs.effect(self.object:get_pos(), 5, "mcl_particles_smoke.png", 1, 2, 2, nil)
+		mcl_damage.finish_reason (mcl_reason)
+		mcl_util.deal_damage (self.object, damage, mcl_reason)
 	end
 	return self.dead
-end
-
-function mob_class:check_entity_cramming()
-	local p = self.object:get_pos()
-	if not p then return end
-	local mobs = {}
-	for o in core.objects_inside_radius(p, 0.5) do
-		local l = o:get_luaentity()
-		if l and l.is_mob and l.health > 0 then table.insert(mobs,l) end
-	end
-	local clear = #mobs < ENTITY_CRAMMING_MAX
-	local ncram = {}
-	for _,l in pairs(mobs) do
-		if l then
-			if clear then
-				l.cram = nil
-			elseif l.cram == nil and not self.child then
-				table.insert(ncram,l)
-			elseif l.cram then
-				l:damage_mob("cramming",CRAMMING_DAMAGE)
-			end
-		end
-	end
-	for i,l in pairs(ncram) do
-		if i > ENTITY_CRAMMING_MAX then
-			l.cram = true
-		else
-			l.cram = nil
-		end
-	end
 end
 
 local floor = math.floor
@@ -646,59 +603,80 @@ local function node_name_with_fallback (pos, fallback)
 end
 mcl_mobs.node_name_with_fallback = node_name_with_fallback
 
--- falling and fall damage
--- returns true if mob died
-function mob_class:falling(pos)
-	if (self.fly or self.swims) and self.dead then
+------------------------------------------------------------------------
+-- Fall damage.
+------------------------------------------------------------------------
+
+function mob_class:check_fall_damage (dtime, self_pos, moveresult)
+	if self._no_fall_damage or self.dead then
+		return
+	elseif self._csm_driving then
+		self._last_fall_y = nil
+		self._fall_distance = 0
 		return
 	end
 
-	-- Fall damage is reported by the client when the CSM is in
-	-- use, as only the client can account for such obstacles as
-	-- ladders and the like.
-	if self.driver and self._csm_driving then
-		self.reset_fall_damage = 1
-		self.old_y = pos.y
-		return
+	-- Integrate fall damage.
+	local fall_y = self._last_fall_y or self_pos.y
+	local d = self._fall_distance + (fall_y - self_pos.y)
+	self._fall_distance = mathmax (d, 0)
+	self._last_fall_y = self_pos.y
+
+	if self.reset_fall_damage then
+		self._fall_distance = 0
 	end
 
-	if self._just_portaled then
-		self.reset_fall_damage = 1
-		return -- mob has teleported through portal - it's 99% not falling
+	if self._liquidtype == "water" or self._stuck_in then
+		self.last_fall_y = nil
+		self._fall_distance = 0
+	elseif self.liquidtype == "lava" then
+		local d = mathpow (0.5, dtime / 0.05)
+		self._fall_distance = self._fall_distance * d
 	end
 
-	local node = node_name_with_fallback (pos, "air")
-	if node.name == "mcl_powder_snow:powder_snow" then
-		self.reset_fall_damage = 1
-	elseif core.registered_nodes[node].groups.water
-		and core.registered_nodes[node].groups.water > 0 then
-		-- Reset fall damage when falling into water first.
-		self.reset_fall_damage = 1
-	else
-		-- fall damage onto solid ground
-		if self.fall_damage == 1
-			and self.object:get_velocity ().y == 0 then
-			-- init old_y to current height if not set.
-			local node = node_name_with_fallback (vector.offset (pos, 0, -1.0, 0),
-							      "air")
-			local self_pos = self.object:get_pos ()
-			local d = (self.old_y or self_pos.y) - self_pos.y
+	if moveresult.touching_ground
+	-- Be certain that the area beneath this mob is actually
+	-- loaded.
+		and self.standing_on ~= "ignore" then
+		local distance = self._fall_distance
+		if distance > self._safe_fall_distance then
+			local amt = (distance - self._safe_fall_distance)
+				* self.fall_damage_multiplier
+			-- Apply `fall_damage_add_percent' node
+			-- definitions.
+			local greatest = 0.0
+			for _, collision in pairs (moveresult.collisions) do
+				if collision.type == "node"
+					and collision.axis == "y"
+				-- Gravity-induced collision.
+					and collision.new_velocity.y > collision.old_velocity.y then
+					local node, _ = node_name_with_fallback (collision.node_pos,
+										 "ignore")
+					local this = core.get_item_group (node, "fall_damage_add_percent")
 
-			if d > 5 and node ~= "air" and node ~= "ignore"
-				and self.reset_fall_damage ~= 1 then
-				local add = core.get_item_group(self.standing_on, "fall_damage_add_percent")
-				local damage = d - 5
-				if add ~= 0 then
-					damage = damage + damage * (add/100)
+					if this < 0.0 then
+						greatest = this
+					else
+						greatest = mathmax (greatest, this)
+					end
 				end
-				self:damage_mob ("fall", damage * self.fall_damage_multiplier)
-				self.reset_fall_damage = 0
 			end
-			self.old_y = self_pos.y
+			self:damage_mob ("fall", amt + amt * (greatest / 100.0))
 		end
-		self.reset_fall_damage = 0
+		self._fall_distance = 0
 	end
+	self.reset_fall_damage = false
+	return
 end
+
+function mob_class:teleport_safely (pos)
+	self.object:set_pos (pos)
+	self.reset_fall_damage = true
+end
+
+------------------------------------------------------------------------
+-- Miscellaneous functions.
+------------------------------------------------------------------------
 
 function mob_class:check_water_flow (self_pos)
 	return self._water_current
@@ -724,7 +702,9 @@ mcl_mobs.persistent_physics_factors = {}
 
 function mob_class:validate_attribute (field, value)
 	if value == "knockback_resistance" then
-		return math.max (0.0, math.min (1.0, value))
+		return mathmax (0.0, mathmin (1.0, value))
+	elseif value == "movement_speed" then
+		return mathmax (field, 0.001)
 	end
 	return value
 end
@@ -758,6 +738,13 @@ function mob_class:post_apply_physics_factor (field, oldvalue, value)
 		if self.driver and self._csm_driving then
 			mcl_serverplayer.update_vehicle (self.driver, {
 				jump_height = self.jump_height,
+			})
+		end
+	elseif field == "_safe_fall_distance" then
+		if self.driver and self._csm_driving
+			and mcl_serverplayer.is_csm_at_least (self.driver, 11) then
+			mcl_serverplayer.update_vehicle (self.driver, {
+				safe_fall_distance = self._safe_fall_distance,
 			})
 		end
 	end
@@ -916,7 +903,7 @@ end
 --- are adjusted so as to reflect the global step time.
 
 local function pow_by_step (value, dtime)
-	return math.pow (value, dtime / 0.05)
+	return mathpow (value, dtime / 0.05)
 end
 mcl_mobs.pow_by_step = pow_by_step
 
@@ -1041,9 +1028,10 @@ end
 function mob_class:check_collision (self_pos, v, h_scale)
 	-- can mob be pushed, if so calculate direction
 	if self.pushable and not self.object:get_attach () then
-		local c_x, c_z = self:collision (self_pos)
+		local c_x, c_z, count = self:collision (self_pos)
 		v.x = v.x + c_x * h_scale
 		v.z = v.z + c_z * h_scale
+		self._collision_count = count
 	end
 end
 
@@ -1083,24 +1071,25 @@ local function will_breach_water_1 (node, cbox)
 end
 
 local will_breach_water_scratch = vector.zero ()
+local scratch_cbox = {}
 
 function mob_class:will_breach_water (self_pos, dx, dy, dz)
-	local cbox = table.copy (self.collisionbox)
-	cbox[1] = cbox[1] + self_pos.x + dx
-	cbox[2] = cbox[2] + self_pos.y + dy
-	cbox[3] = cbox[3] + self_pos.z + dz
-	cbox[4] = cbox[4] + self_pos.x + dx
-	cbox[5] = cbox[5] + self_pos.y + dy
-	cbox[6] = cbox[6] + self_pos.z + dz
+	local cbox = self.collisionbox
+	scratch_cbox[1] = cbox[1] + self_pos.x + dx
+	scratch_cbox[2] = cbox[2] + self_pos.y + dy
+	scratch_cbox[3] = cbox[3] + self_pos.z + dz
+	scratch_cbox[4] = cbox[4] + self_pos.x + dx
+	scratch_cbox[5] = cbox[5] + self_pos.y + dy
+	scratch_cbox[6] = cbox[6] + self_pos.z + dz
 
 	-- Crude collision detection that does not take movement into
 	-- account.
-	local xmin = math.floor (cbox[1] + 0.5)
-	local ymin = math.floor (cbox[2] + 0.5) - 1
-	local zmin = math.floor (cbox[3] + 0.5)
-	local xmax = math.floor (cbox[4] + 0.5)
-	local ymax = math.floor (cbox[5] + 0.5) + 1
-	local zmax = math.floor (cbox[6] + 0.5)
+	local xmin = math.floor (scratch_cbox[1] + 0.5)
+	local ymin = math.floor (scratch_cbox[2] + 0.5) - 1
+	local zmin = math.floor (scratch_cbox[3] + 0.5)
+	local xmax = math.floor (scratch_cbox[4] + 0.5)
+	local ymax = math.floor (scratch_cbox[5] + 0.5) + 1
+	local zmax = math.floor (scratch_cbox[6] + 0.5)
 	local v = will_breach_water_scratch
 
 	for z = zmin, zmax do
@@ -1109,7 +1098,7 @@ function mob_class:will_breach_water (self_pos, dx, dy, dz)
 				v.x = x
 				v.y = y
 				v.z = z
-				if will_breach_water_1 (v, cbox) then
+				if will_breach_water_1 (v, scratch_cbox) then
 					return false
 				end
 			end
@@ -1189,7 +1178,7 @@ function mob_class:motion_step (dtime, moveresult, self_pos)
 			self._jump = false
 		end
 		climbing = true
-		self.reset_fall_damage = 1
+		self.reset_fall_damage = true
 	end
 
 	-- In Minecraft, gravity is applied after being attenuated by
@@ -1664,15 +1653,22 @@ function mob_class:check_one_immersion_depth (node, param2, base_y, pos, current
 end
 
 local check_standin_scratch = vector.zero ()
+local params = {}
 
-function mob_class:check_standin (pos)
+local function check_node_group (def, group)
+	-- N.B. that in fact this is equivalent to:
+	-- ((def && def->groups[group]) ? def->groups[group] : 0)
+	return (def and def.groups[group] or 0) > 0
+end
+
+function mob_class:check_standin (dtime, pos)
 	local cbox = self.collisionbox
-	local x0 = math.floor (cbox[1] + pos.x + 0.5)
-	local x1 = math.floor (cbox[4] + pos.x + 0.5)
-	local y0 = math.floor (cbox[2] + pos.y + 0.5)
-	local y1 = math.floor (cbox[5] + pos.y + 0.5)
-	local z0 = math.floor (cbox[3] + pos.z + 0.5)
-	local z1 = math.floor (cbox[6] + pos.z + 0.5)
+	local x0 = mathfloor (cbox[1] + pos.x + 0.5 + 0.01)
+	local x1 = mathfloor (cbox[4] + pos.x + 0.5 - 0.01)
+	local y0 = mathfloor (cbox[2] + pos.y + 0.5 + 0.01)
+	local y1 = mathfloor (cbox[5] + pos.y + 0.5 - 0.01)
+	local z0 = mathfloor (cbox[3] + pos.z + 0.5 + 0.01)
+	local z1 = mathfloor (cbox[6] + pos.z + 0.5 - 0.01)
 	local immersion_depth = 0.0
 	local worst_type = nil
 	local v = check_standin_scratch
@@ -1683,7 +1679,17 @@ function mob_class:check_standin (pos)
 	local n_fluids = 0
 	local dimension = mcl_worlds.pos_to_dimension (pos)
 
+	params.in_powder_snow = false
+	params.in_fire_node = false
+	params.in_soul_fire_node = false
+	params.in_solid_node = false
+	params.dps = 0
+
+	local eye_height = self:get_eye_height () + pos.y
+
 	for y = y0, y1 do
+		local in_eyeline = y - 0.5 <= eye_height
+			and y + 0.5 >= eye_height
 		for x = x0, x1 do
 			for z = z0, z1 do
 				v.x = x
@@ -1692,8 +1698,8 @@ function mob_class:check_standin (pos)
 				local node, param2 = get_node (v)
 				local depth, liquidtype
 					= self:check_one_immersion_depth (node, param2, pos.y,
-									v, current, dimension)
-				immersion_depth = math.max (depth, immersion_depth)
+									  v, current, dimension)
+				immersion_depth = mathmax (depth, immersion_depth)
 				if liquidtype then
 					n_fluids = n_fluids + 1
 
@@ -1705,6 +1711,25 @@ function mob_class:check_standin (pos)
 				if factors then
 					self._stuck_in = factors
 				end
+				local def = core.registered_nodes[node]
+				if node == "mcl_powder_snow:powder_snow" then
+					params.in_powder_snow = true
+				elseif node == "mcl_blackstone:soul_fire" then
+					params.in_soul_fire_node = true
+				elseif check_node_group (def, "fire") then
+					params.in_fire_node = true
+				elseif not check_node_group (def, "lava") then
+					if in_eyeline
+						and node ~= "air"
+						and check_node_group (def, "opaque")
+						and check_node_group (def, "solid") then
+						if not check_node_group (def, "disable_suffocation") then
+							params.in_solid_node = true
+						end
+					end
+					local dps = def and def.damage_per_second or 0
+					params.dps = mathmax (params.dps, dps)
+				end
 			end
 		end
 	end
@@ -1713,6 +1738,7 @@ function mob_class:check_standin (pos)
 		current.y = current.y / n_fluids
 		current.z = current.z / n_fluids
 	end
+	self:apply_environment_damage (pos, immersion_depth, worst_type, params, dtime)
 	return immersion_depth, worst_type
 end
 
@@ -1792,11 +1818,13 @@ function mob_class:post_motion_step (self_pos, dtime, moveresult)
 		end
 	end
 
-	if core.registered_nodes[self.standing_in]._on_object_in then
+	local def = core.registered_nodes[self.standing_in]
+	if def._on_object_in then
 		-- This is a workaround to prevent excess table allocations
 		local saved_y_pos = self_pos.y
-		self_pos.y = math.floor(self_pos.y + self.collisionbox[2] + 0.5 + 1.0e-2)
-		core.registered_nodes[self.standing_in]._on_object_in(self_pos, mcl_mobs.node_ok(self_pos, "air"), self.object)
+		self_pos.y = math.floor (self_pos.y + self.collisionbox[2] + 0.5 + 1.0e-2)
+		local def = core.registered_nodes[self.standing_in]
+		def._on_object_in (self_pos, mcl_mobs.node_ok (self_pos, "air"), self.object)
 		self_pos.y = saved_y_pos
 	end
 end

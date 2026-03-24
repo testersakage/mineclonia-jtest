@@ -404,6 +404,12 @@ mcl_potions.register_effect({
 		add_physics_factor (object, "jump", "jump_height",
 				"mcl_potions:leaping", 1 + factor)
 		if not object:is_player () then
+			local entity = object:get_luaentity ()
+			if entity and entity.is_mob then
+				entity:add_physics_factor ("_safe_fall_distance",
+							   "mcl_potions:leaping_fall_distance",
+							   2.0 * factor, "add")
+			end
 			return
 		end
 		mcl_serverplayer.add_physics_factor (object, "safe_fall_distance",
@@ -414,6 +420,11 @@ mcl_potions.register_effect({
 		remove_physics_factor (object, "jump", "jump_height",
 				   "mcl_potions:leaping")
 		if not object:is_player () then
+			local entity = object:get_luaentity ()
+			if entity and entity.is_mob then
+				entity:remove_physics_factor ("_safe_fall_distance",
+							      "mcl_potions:leaping_fall_distance")
+			end
 			return
 		end
 		mcl_serverplayer.remove_physics_factor (object, "safe_fall_distance",
@@ -426,6 +437,7 @@ mcl_potions.register_effect({
 })
 
 mcl_mobs.make_physics_factor_persistent ("mcl_potions:leaping")
+mcl_mobs.make_physics_factor_persistent ("mcl_potions:leaping_fall_distance")
 
 mcl_potions.register_effect({
 	name = "slow_falling",
@@ -2363,20 +2375,20 @@ function mcl_potions._water_effect(pos, radius)
 		local entity = obj:get_luaentity (obj)
 
 		if mcl_burning.is_burning (obj) then
-		mcl_burning.extinguish (obj)
-		exting = true
+			mcl_burning.extinguish (obj)
+			exting = true
 		end
 
 		if entity and entity.is_mob then
-		if entity.water_damage > 0 then
-			obj:punch (obj, 1.0, { full_punch_interval = 1.0,
-					   damage_groups = {water_vulnerable=1}, },
-				   nil)
-			exting = true
-		elseif entity.name == "mobs_mc:axolotl" then
-			entity:reset_breath ()
-			exting = true
-		end
+			if entity._water_sensitive then
+				obj:punch (obj, 1.0, { full_punch_interval = 1.0,
+						       damage_groups = {water_vulnerable=1}, },
+					   nil)
+				exting = true
+			elseif entity.name == "mobs_mc:axolotl" then
+				entity:reset_breath ()
+				exting = true
+			end
 		end
 	end
 	return exting

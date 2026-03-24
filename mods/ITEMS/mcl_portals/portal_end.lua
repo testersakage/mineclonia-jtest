@@ -193,7 +193,7 @@ local function show_credits(player)
 end
 
 local function teleport_object(obj, target, original_dim)
-	obj:set_pos(target)
+	mcl_util.teleport_safely (obj, target)
 	core.sound_play("mcl_portals_teleport", {pos=target, gain=0.05, max_hear_distance = 16}, true)
 
 	if obj:is_player() then
@@ -301,7 +301,7 @@ local function end_portal_teleport_1 (obj)
 				and mcl_spawn.get_player_spawn_pos (obj)
 				or mcl_spawn.get_world_spawn_pos (obj)
 			if mcl_biome_dispatch.is_limbo_pos (spawn) then
-				obj:set_pos (spawn)
+				mcl_util.teleport_safely (obj, spawn)
 			else
 				local v1 = vector.offset (spawn, -64, -64, -64)
 				local v2 = vector.offset (spawn, 64, 64, 64)

@@ -40,7 +40,41 @@ local S = core.get_translator(modname)
 
 local old_spawn_icons = core.settings:get_bool("mcl_old_spawn_icons",false)
 
-local object_properties = { "hp_max", "breath_max", "zoom_fov", "eye_height", "physical", "collide_with_objects", "collisionbox", "selectionbox", "pointable", "visual", "visual_size", "mesh", "textures", "colors", "use_texture_alpha", "spritediv", "initial_sprite_basepos", "is_visible", "makes_footstep_sound", "automatic_rotate", "stepheight", "automatic_face_movement_dir", "automatic_face_movement_max_rotation_per_sec", "backface_culling", "glow", "nametag", "nametag_color", "nametag_bgcolor", "infotext", "static_save", "damage_texture_modifier", "shaded", "show_on_minimap", }
+local object_properties = {
+	"hp_max",
+	"breath_max",
+	"zoom_fov",
+	"eye_height",
+	"physical",
+	"collide_with_objects",
+	"collisionbox",
+	"selectionbox",
+	"pointable",
+	"visual",
+	"visual_size",
+	"mesh",
+	"textures",
+	"colors",
+	"use_texture_alpha",
+	"spritediv",
+	"initial_sprite_basepos",
+	"is_visible",
+	"makes_footstep_sound",
+	"automatic_rotate",
+	"stepheight",
+	"automatic_face_movement_dir",
+	"automatic_face_movement_max_rotation_per_sec",
+	"backface_culling",
+	"glow",
+	"nametag",
+	"nametag_color",
+	"nametag_bgcolor",
+	"infotext",
+	"static_save",
+	"damage_texture_modifier",
+	"shaded",
+	"show_on_minimap",
+}
 
 --default values
 mcl_mobs.mob_class = {
@@ -50,7 +84,6 @@ mcl_mobs.mob_class = {
 		selectionbox = {-0.25, -0.25, -0.25, 0.25, 0.25, 0.25},
 		visual_size = {x = 1, y = 1},
 		stepheight = 0.6,
-		breath_max = 15,
 		makes_footstep_sound = false,
 		automatic_face_movement_max_rotation_per_sec = 300,
 		hp_max = 20,
@@ -65,10 +98,13 @@ mcl_mobs.mob_class = {
 	curiosity = 1,
 	head_yaw = "y",
 	horizontal_head_height = 0,
-	fly = false,
-	fly_in = {"air", "__airlike"},
 	swims = false,
-	swims_in = { "mcl_core:water_source", "mclx_core:river_water_source", 'mcl_core:water_flowing', 'mclx_core:river_water_flowing' },
+	swims_in = {
+		"mcl_core:water_source",
+		"mclx_core:river_water_source",
+		"mcl_core:water_flowing",
+		"mclx_core:river_water_flowing",
+	},
 	ranged_attack_radius = 20,
 	owner = "",
 	order = "",
@@ -99,7 +135,6 @@ mcl_mobs.mob_class = {
 	-- This is multiplied by water_friction as in Minecraft.
 	water_velocity = 0.4,
 	timer = 0,
-	env_damage_timer = 0,
 	tamed = false,
 	pause_timer = 0,
 	horny = false,
@@ -108,9 +143,7 @@ mcl_mobs.mob_class = {
 	health = 0,
 	frame_speed_multiplier = 1,
 	reach = 3,
-	htimer = 0,
 	texture_list = {},
-	time_of_day = 0.5,
 	runaway_timer = 0,
 	runaway_from = nil,
 	avoid_range = 6.0,
@@ -156,7 +189,6 @@ mcl_mobs.mob_class = {
 	tracking_distance = 16.0,
 	stop_distance = 2,
 	instant_death = false,
-	fire_resistant = false,
 	fire_damage_resistant = false,
 	ignited_by_sunlight = false,
 	tnt_knockback = true,
@@ -210,6 +242,21 @@ mcl_mobs.mob_class = {
 	_old_head_swivel_vector = vector.zero (),
 	_old_head_swivel_pos = vector.zero (),
 	_head_axis_scale = nil,
+	_max_air_supply = 15.0,
+	_water_sensitive = false,
+	_can_freeze = true,
+	_cached_rain_exposure = nil,
+	-- This field is consulted by mcl_burning to decide whether to
+	-- permit fire sprites to be displayed.
+	fire_resistant = false,
+	-- This decides whether fire and lava damage may be sustained
+	-- environmentally.
+	_fire_resistant = false,
+	_last_fall_y = nil,
+	_fall_distance = 0,
+	_safe_fall_distance = 3.0,
+	reset_fall_damage = false,
+	_no_fall_damage = false,
 
 	-- Field consulted by new spawning routines.
 	_spawn_category = "misc",
@@ -240,9 +287,11 @@ mcl_mobs.mob_class = {
 	_depth_strider_level = 0,
 	_soul_speed_level = 0,
 	_last_soul_speed_bonus = 0,
+	_respiration_level = 0,
 	_active_targeting_rule = nil,
 	_active_target = nil,
 	_object_search_lists = {},
+	_collision_count = 0,
 }
 mcl_mobs.mob_class_meta = {__index = mcl_mobs.mob_class}
 mcl_mobs.fallback_node = core.registered_aliases["mapgen_dirt"] or "mcl_core:dirt"
@@ -338,19 +387,6 @@ local create_mob_on_rightclick = function(on_rightclick)
 			on_rightclick(self, clicker)
 		end
 	end
-end
-
--- check if within physical map limits
-local function within_limits(pos, radius)
-	local wmin, wmax = mcl_vars.mapgen_edge_min, mcl_vars.mapgen_edge_max
-	if radius then
-		wmin = wmin - radius
-		wmax = wmax + radius
-	end
-	for _,v in pairs({"x","y","z"}) do
-		if pos[v] < wmin or pos[v] > wmax then return false end
-	end
-	return true
 end
 
 mcl_mobs.spawning_mobs = {}
@@ -515,7 +551,7 @@ function mcl_mobs.register_arrow(name, def)
 
 			local pos = self.object:get_pos()
 
-			if self.switch == 0	or self.timer > self._lifetime or not within_limits(pos, 0) then
+			if self.switch == 0 or self.timer > self._lifetime then
 				mcl_burning.extinguish(self.object)
 				self.object:remove()
 				return
@@ -666,7 +702,6 @@ function mcl_mobs.register_egg(mob, desc, background_color, overlay_color, addeg
 			if rc then return rc end
 
 			if pos
-			and within_limits(pos, 0)
 			and not core.is_protected(pos, placer:get_player_name()) then
 
 				local name = placer:get_player_name()

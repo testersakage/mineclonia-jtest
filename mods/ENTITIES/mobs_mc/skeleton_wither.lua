@@ -69,16 +69,15 @@ local wither_skeleton = table.merge (skeleton, {
 		punch_end = 81,
 		punch_speed = 50,
 	},
-	water_damage = 0,
-	lava_damage = 0,
-	fire_damage = 0,
 	fire_resistant = true,
+	_fire_resistant = true,
 	dealt_effect = {
 		name = "withering",
 		level = 1,
 		dur = 10,
 	},
 	_wither_parent = nil,
+	_can_freeze = true,
 })
 
 ------------------------------------------------------------------------

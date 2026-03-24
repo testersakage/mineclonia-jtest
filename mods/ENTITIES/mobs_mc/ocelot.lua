@@ -46,7 +46,7 @@ local ocelot = {
 	movement_speed = 6.0,
 	floats = 1,
 	runaway = false,
-	fall_damage = 0,
+	_no_fall_damage = true,
 	sounds = {
 		damage = "mobs_mc_ocelot_hurt",
 		death = "mobs_mc_ocelot_hurt",
@@ -529,7 +529,7 @@ function cat:give_wakeup_gift (self_pos)
 			class = self:gwp_classify_for_movement (pos)
 		end
 		if class == "WALKABLE" then
-			self.object:set_pos (pos)
+			self:teleport_safely (pos)
 		end
 		local loot = mcl_loot.get_loot (cat_loot_table, pr)
 		if #loot >= 1 then

@@ -1063,6 +1063,7 @@ function mcl_util.is_christmas ()
 end
 
 local current_day_night_ratio = 1.0
+local current_time_of_day = 0.5
 
 -- This enables frequently invoked callers (such as the surface
 -- freezing ABMs) to avoid invoking Luanti C++ API functions.
@@ -1070,8 +1071,13 @@ function mcl_util.get_current_day_night_ratio ()
 	return current_day_night_ratio
 end
 
+function mcl_util.get_current_time_of_day ()
+	return current_time_of_day
+end
+
 core.register_globalstep (function ()
 	update_calendar_events ()
 	local tod = core.get_timeofday ()
 	current_day_night_ratio = core.time_to_day_night_ratio (tod)
+	current_time_of_day = tod
 end)

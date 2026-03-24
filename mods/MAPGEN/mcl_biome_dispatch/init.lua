@@ -694,7 +694,7 @@ end
 
 local function limbo_cancel (player, limbo, no_teleport)
 	if not no_teleport then
-		player:set_pos (limbo.src_pos)
+		mcl_util.teleport_safely (player, limbo.src_pos)
 	end
 	objects_in_limbo[player] = nil
 	core.close_formspec (player:get_player_name (),
@@ -750,7 +750,7 @@ local function limbo_callback (progress, player, limbo_in)
 end
 
 local function limbo_restore (player, limbo)
-	player:set_pos (LIMBO_POSITION)
+	mcl_util.teleport_safely (player, LIMBO_POSITION)
 	local v1 = limbo.v1
 	local v2 = limbo.v2
 	mcl_levelgen.generate_area (v1.x, v1.y, v1.z, v2.x, v2.y, v2.z,
@@ -815,7 +815,7 @@ function mcl_biome_dispatch.teleport_with_emerge (object, v1, v2, msg, callback,
 	local limbo_pos
 		= mcl_biome_dispatch.emerged_teleport_prepare (object, v1, v2,
 							       msg, callback, data)
-	object:set_pos (limbo_pos)
+	mcl_util.teleport_safely (object, limbo_pos)
 
 	for _, player in ipairs (players) do
 		mcl_biome_dispatch.emerged_teleport_prepare (player, v1, v2, msg,

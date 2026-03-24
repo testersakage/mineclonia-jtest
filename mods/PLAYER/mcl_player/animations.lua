@@ -258,10 +258,31 @@ function mcl_player.position_wielditem (wielded_itemname, wielded_def, player)
 	end
 end
 
-mcl_player.register_globalstep(function(player)
+local ENTITY_CRAMMING_MAX = 24
+
+mcl_player.register_globalstep (function (player, dtime)
 	local tbl = mcl_player.players[player]
-	local cx, cz = player_collision (player)
+	local cx, cz, count = player_collision (player)
 	local self_pos = player:get_pos ()
+
+	if tbl.cram_timer then
+		local t = tbl.cram_timer - dtime
+		tbl.cram_timer = t > 0 and t or nil
+	end
+
+	if count > ENTITY_CRAMMING_MAX
+		and not tbl.cram_timer
+		and math.random (mcl_mobs.scale_chance (4, dtime)) == 1 then
+		tbl.cram_timer = 0.5
+		local reason = {
+			type = "cramming",
+		}
+		mcl_damage.finish_reason (reason)
+		mcl_util.deal_damage (player, 6.0, reason)
+		if player:get_hp () == 0 then
+			return
+		end
+	end
 
 	if tbl._has_impulse
 		and not vector.equals (self_pos, tbl._has_impulse) then

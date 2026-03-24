@@ -152,6 +152,7 @@ local horse = {
 	},
 	jump_height = 14,
 	fall_damage_multiplier = 0.5,
+	_safe_fall_distance = 6.0,
 	-- Values of 1.0 precisely trigger engine bugs.
 	stepheight = 1.02,
 	head_eye_height = 1.52,
@@ -1063,7 +1064,6 @@ mobs_mc.horse = horse
 
 local skeleton_horse = table.merge(horse, {
 	description = S("Skeleton Horse"),
-	breath_max = -1,
 	armor = {undead = 100, fleshy = 100},
 	textures = {{"blank.png", "mobs_mc_horse_skeleton.png", "blank.png"}},
 	drops = {
@@ -1089,6 +1089,10 @@ local skeleton_horse = table.merge(horse, {
 	_eats = false,
 	floats = 0,
 })
+
+function skeleton_horse:step_drowning (_)
+	return
+end
 
 function skeleton_horse:_on_lightning_strike ()
 	-- Immune to lightning.

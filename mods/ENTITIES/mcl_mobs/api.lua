@@ -170,6 +170,7 @@ function mob_class:get_staticdata_table ()
 	tmp._soul_speed_level = nil
 	tmp._last_soul_speed_bonus = nil
 	tmp._depth_strider_level = nil
+	tmp._respiration_level = nil
 	tmp._active_targeting_rule = nil
 	tmp._active_target = nil
 	tmp._object_search_lists = nil
@@ -179,6 +180,9 @@ function mob_class:get_staticdata_table ()
 	tmp._timers = nil
 	tmp._alert_receiver_time = nil
 	tmp._alert_receiver_target = nil
+	tmp._direct_sunlight = nil
+	tmp._cached_rain_exposure = nil
+	tmp._collision_count = nil
 
 	-- Remove physics factors that are not persistent and revert
 	-- fields that were modified and disapply them.
@@ -426,7 +430,7 @@ function mob_class:mob_activate (staticdata, dtime)
 		self.health = math.random (self.hp_min, self.object:get_properties().hp_max)
 	end
 	if self.breath == nil then
-		self.breath = self.object:get_properties().breath_max
+		self.breath = self._max_air_supply
 	end
 
 	-- Armor groups
@@ -537,6 +541,14 @@ local MAX_PHYSICS_DTIME = 0.075
 local is_limbo_pos = mcl_biome_dispatch.is_limbo_pos
 local floor = math.floor
 local node_name_with_fallback = mcl_mobs.node_name_with_fallback
+local v = vector.zero ()
+
+local function vector_copy_into (v, src)
+	v.x = src.x
+	v.y = src.y
+	v.z = src.z
+	return v
+end
 
 function mob_class:on_step (dtime, moveresult)
 	local pos = self.object:get_pos ()
@@ -595,30 +607,33 @@ function mob_class:on_step (dtime, moveresult)
 
 	-- Get nodes early for use in other functions
 	local cbox = self.collisionbox
-	local feet = vector.copy (pos)
+	local feet = vector_copy_into (v, pos)
 	local bbase = pos.y + self.collisionbox[2] + 0.5
 	feet.y = floor (bbase + 1.0e-2)
 	if bbase - feet.y <= 1.0e-2 then
-		local name, _ = node_name_with_fallback (feet, "air")
+		local name, _
+			= node_name_with_fallback (feet, "ignore")
 		self.standing_in = name
 		feet.y = feet.y - 1
-		local name, param2 = node_name_with_fallback (feet, "air")
+		local name, param2
+			= node_name_with_fallback (feet, "ignore")
 		self.standing_on = name
 		self.standing_on_param2 = param2
 	else
-		local name, param2 = node_name_with_fallback (feet, "air")
+		local name, param2
+			= node_name_with_fallback (feet, "ignore")
 		self.standing_in = name
 		self.standing_on = self.standing_in
 		self.standing_on_param2 = param2
 	end
 	local head_y = cbox[2] + (cbox[5] - cbox[2]) * 0.75
 	local pos_head = vector.offset (pos, 0, head_y, 0)
-	self.head_in = node_name_with_fallback (pos_head, "air")
+	self.head_in = node_name_with_fallback (pos_head, "ignore")
 
 	if self:check_jockey_status () then
 		return
 	end
-	self:falling (pos)
+	self:check_fall_damage (dtime, pos, moveresult)
 	self:check_dying (dtime)
 
 	if self.stupefied then
@@ -636,9 +651,16 @@ function mob_class:on_step (dtime, moveresult)
 	end
 
 	-- Compute fluid immersion.
-	local immersion_depth, liquidtype = self:check_standin (pos)
+	local immersion_depth, liquidtype = self:check_standin (dtime, pos)
 	self._immersion_depth = immersion_depth
 	self._liquidtype = liquidtype
+
+	if self.dead then
+		self:pre_motion_step (dtime)
+		self:motion_step (dtime, moveresult, pos)
+		self:rotate_step (dtime)
+		return
+	end
 
 	if not should_drive then
 		local phys_dtime = math.min (dtime, MAX_PHYSICS_DTIME)
@@ -676,7 +698,7 @@ function mob_class:on_step (dtime, moveresult)
 	self:expel_underwater_drivers ()
 
 	if self.do_custom then
-		if self.do_custom(self, dtime, moveresult) == false then
+		if self.do_custom (self, dtime, moveresult) == false then
 			return
 		end
 	end
@@ -689,7 +711,6 @@ function mob_class:on_step (dtime, moveresult)
 	end
 
 	if should_drive then
-		self:env_damage (pos)
 		return
 	end
 
@@ -702,9 +723,6 @@ function mob_class:on_step (dtime, moveresult)
 		self:mob_sound("random", true)
 	end
 
-	if self:env_damage (pos) then
-		return
-	end
 	self:run_targeting_rules (dtime, pos)
 	self:run_ai (dtime, moveresult)
 end

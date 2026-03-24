@@ -17,7 +17,6 @@ local golem = {
 	_spawn_category = "misc",
 	hp_min = 100,
 	hp_max = 100,
-	breath_max = -1,
 	collisionbox = {-0.7, -0.01, -0.7, 0.7, 2.69, 0.7},
 	doll_size_override = { x = 0.9, y = 0.9 },
 	visual = "mesh",
@@ -62,7 +61,7 @@ local golem = {
 			max = 2,
 		},
 	},
-	fall_damage = 0,
+	_no_fall_damage = true,
 	animation = {
 		stand_start = 0, stand_end = 0, stand_speed = 15,
 		walk_start = 40, walk_end = 80, walk_speed = 25,
@@ -74,6 +73,14 @@ local golem = {
 	_poppy_texture = "blank.png",
 	_melee_esp = true,
 }
+
+------------------------------------------------------------------------
+-- Iron Golem mechanics.
+------------------------------------------------------------------------
+
+function golem:step_drowning (_)
+	return nil
+end
 
 ------------------------------------------------------------------------
 -- Iron Golem AI.
