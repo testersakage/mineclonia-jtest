@@ -173,14 +173,7 @@ core.register_abm({
 			local ndef = core.registered_nodes[node.name]
 			if ndef and ndef.walkable and core.get_item_group(node.name , "not_breaking_cactus") == 0
 					or core.get_item_group(node.name , "breaking_cactus") ~= 0 then
-				local pos1 = vector.copy(pos)
-				while core.get_node(pos1).name == "mcl_core:cactus" do
-					core.remove_node(pos1)
-					core.add_item(vector.offset(pos1, mcl_util.float_random(-0.5, 0.5), 0, mcl_util.float_random(-0.5, 0.5)), "mcl_core:cactus")
-					pos1.y = pos1.y + 1
-				end
-				core.check_for_falling(pos1)
-				break
+				core.dig_node(pos)
 			end
 		end
 	end,
