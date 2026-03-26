@@ -28,7 +28,9 @@ end
 
 local function close(pos, sound_close)
 	local node = core.get_node(pos)
+	if not node then return end
 	local defs = core.registered_nodes[node.name]
+	if not defs then return end
 	local closed = defs._mcl_trapdoor_closed_name
 	core.sound_play(sound_close, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
 	core.set_node(pos, {name = closed, param1 = node.param1, param2 = node.param2})
@@ -36,7 +38,9 @@ end
 
 local function open(pos, sound_open)
 	local node = core.get_node(pos)
+	if not node then return end
 	local defs = core.registered_nodes[node.name]
+	if not defs then return end
 	local open = defs._mcl_trapdoor_open_name
 	core.sound_play(sound_open, {pos = pos, gain = 0.3, max_hear_distance = 16}, true)
 	core.set_node(pos, {name = open, param1 = node.param1, param2 = node.param2})
