@@ -502,7 +502,7 @@ function sign_tpl.on_rightclick(pos, _, clicker, itemstack, _)
 		end
 	elseif signs_editable then
 		if not mcl_util.check_position_protection(pos, clicker) then
-			mcl_signs.show_formspec(clicker, pos)
+			show_formspec(clicker, pos)
 		end
 	end
 	return itemstack
