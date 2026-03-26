@@ -208,8 +208,8 @@ These groups are used mostly for informational purposes
 * `plant=1`: Plant or part of a plant
 * `double_plant`: Part of a double-sized plant. 1 = lower part, 2 = upper part
 
-* `breaking_cactus=1`: non walkable node that breaks cactus when placed adjacent
-* `not_breaking_cactus=1`: walkable node that does not break cactus when placed adjacent
+* `breaking_cactus=1`: When cactus is placed adjacent to this node, it breaks (assign only if the node isn't already walkable)
+* `not_breaking_cactus=1`: When cactus is placed adjacent to this node, it stays (assign only if the node is walkable)
 
 * `pickaxe=1`: Pickaxe
 * `shovel=1`: Shovel
