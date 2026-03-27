@@ -27,7 +27,7 @@ local function	on_rotate(pos, node, _, mode, _)
 end
 
 local function close(pos, sound_close)
-	local node = core.get_node(pos)
+	local node = core.get_node_or_nil(pos)
 	if not node then return end
 	local defs = core.registered_nodes[node.name]
 	if not defs then return end
@@ -37,7 +37,7 @@ local function close(pos, sound_close)
 end
 
 local function open(pos, sound_open)
-	local node = core.get_node(pos)
+	local node = core.get_node_or_nil(pos)
 	if not node then return end
 	local defs = core.registered_nodes[node.name]
 	if not defs then return end
