@@ -53,25 +53,6 @@ local UPDATE_OFFSETS = {
 	{x = 1, z = 1},
 }
 
-local function get_stair_param(node)
-	local stair = core.get_item_group(node.name, "stair")
-	if stair == 1 then
-		return node.param2
-	elseif stair == 2 then
-		if node.param2 < 12 then
-			return node.param2 + 4
-		else
-			return node.param2 - 4
-		end
-	elseif stair == 3 then
-		if node.param2 < 12 then
-			return node.param2 + 8
-		else
-			return node.param2 - 8
-		end
-	end
-end
-
 local function get_stair_facing(param2)
 	if param2 < 20 then
 		return param2 % 4
