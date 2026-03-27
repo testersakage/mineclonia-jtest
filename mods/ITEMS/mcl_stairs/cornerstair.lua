@@ -5,6 +5,54 @@
 
 mcl_stairs.cornerstair = {}
 
+local STAIR_DIR = {
+	[0] = {x = 0, z = 1},
+	[1] = {x = 1, z = 0},
+	[2] = {x = 0, z = -1},
+	[3] = {x = -1, z = 0},
+}
+
+local RULES = {
+	{slot = "lead_turn", turn = "left", blocked = "right_blocked", shape = 2, turn_right = false},
+	{slot = "lead_turn", turn = "right", blocked = "left_blocked", shape = 2, turn_right = true},
+	{slot = "trail_turn", turn = "left", blocked = "left_blocked", shape = 3, turn_right = false},
+	{slot = "trail_turn", turn = "right", blocked = "right_blocked", shape = 3, turn_right = true},
+}
+
+local SIDE_ATTACH_BASE = {
+	[0] = {[5] = true},
+	[1] = {[3] = true},
+	[2] = {[4] = true},
+	[3] = {[2] = true},
+	[20] = {[5] = true},
+	[21] = {[2] = true},
+	[22] = {[4] = true},
+	[23] = {[3] = true},
+}
+
+local SIDE_ATTACH_INNER = {
+	[0] = {[2] = true, [5] = true},
+	[1] = {[3] = true, [5] = true},
+	[2] = {[3] = true, [4] = true},
+	[3] = {[2] = true, [4] = true},
+	[20] = {[3] = true, [5] = true},
+	[21] = {[2] = true, [5] = true},
+	[22] = {[2] = true, [4] = true},
+	[23] = {[3] = true, [4] = true},
+}
+
+local UPDATE_OFFSETS = {
+	{x = -1, z = -1},
+	{x = 0, z = -1},
+	{x = 1, z = -1},
+	{x = -1, z = 0},
+	{x = 0, z = 0},
+	{x = 1, z = 0},
+	{x = -1, z = 1},
+	{x = 0, z = 1},
+	{x = 1, z = 1},
+}
+
 local function get_stair_param(node)
 	local stair = core.get_item_group(node.name, "stair")
 	if stair == 1 then
@@ -22,6 +70,19 @@ local function get_stair_param(node)
 			return node.param2 - 8
 		end
 	end
+end
+
+local function get_stair_facing(param2)
+	if param2 < 20 then
+		return param2 % 4
+	end
+	local facing = param2 - 20
+	if facing == 1 then
+		return 3
+	elseif facing == 3 then
+		return 1
+	end
+	return facing
 end
 
 local function get_stair_from_param(param, stairs)
@@ -127,64 +188,181 @@ local function stair_param_to_connect(param, ceiling)
 end
 
 local function stair_connect_to_param(connect, ceiling)
-	local param
 	if not ceiling then
 		if connect[3] and connect[8] then
-			param = 0
+			return 0
 		elseif connect[2] and connect[5] then
-			param = 1
+			return 1
 		elseif connect[4] and connect[7] then
-			param = 2
+			return 2
 		elseif connect[1] and connect[6] then
-			param = 3
+			return 3
 		elseif connect[1] and connect[8] then
-			param = 4
+			return 4
 		elseif connect[2] and connect[3] then
-			param = 5
+			return 5
 		elseif connect[4] and connect[5] then
-			param = 6
+			return 6
 		elseif connect[6] and connect[7] then
-			param = 7
+			return 7
 		elseif connect[3] and connect[6] then
-			param = 8
+			return 8
 		elseif connect[5] and connect[8] then
-			param = 9
+			return 9
 		elseif connect[2] and connect[7] then
-			param = 10
+			return 10
 		elseif connect[1] and connect[4] then
-			param = 11
+			return 11
 		end
-	else
-		if connect[5] and connect[8] then
-			param = 12
-		elseif connect[3] and connect[6] then
-			param = 13
-		elseif connect[1] and connect[4] then
-			param = 14
-		elseif connect[2] and connect[7] then
-			param = 15
-		elseif connect[2] and connect[3] then
-			param = 16
-		elseif connect[1] and connect[8] then
-			param = 17
-		elseif connect[6] and connect[7] then
-			param = 18
-		elseif connect[4] and connect[5] then
-			param = 19
-		elseif connect[3] and connect[8] then
-			param = 20
-		elseif connect[1] and connect[6] then
-			param = 21
-		elseif connect[4] and connect[7] then
-			param = 22
-		elseif connect[2] and connect[5] then
-			param = 23
-		end
+	elseif connect[5] and connect[8] then
+		return 12
+	elseif connect[3] and connect[6] then
+		return 13
+	elseif connect[1] and connect[4] then
+		return 14
+	elseif connect[2] and connect[7] then
+		return 15
+	elseif connect[2] and connect[3] then
+		return 16
+	elseif connect[1] and connect[8] then
+		return 17
+	elseif connect[6] and connect[7] then
+		return 18
+	elseif connect[4] and connect[5] then
+		return 19
+	elseif connect[3] and connect[8] then
+		return 20
+	elseif connect[1] and connect[6] then
+		return 21
+	elseif connect[4] and connect[7] then
+		return 22
+	elseif connect[2] and connect[5] then
+		return 23
 	end
-	return param
 end
 
-local function placement_prevented_inner(params)
+local PARAM_BY_VISUAL = {
+	[false] = {[1] = {}, [2] = {}, [3] = {}},
+	[true] = {[1] = {}, [2] = {}, [3] = {}},
+}
+
+for _, ceiling in ipairs({ false, true }) do
+	local start_param = ceiling and 12 or 0
+	local end_param = ceiling and 23 or 11
+	for param = start_param, end_param do
+		local visual
+		if param < 12 then
+			if param < 4 then
+				visual = 1
+			elseif param < 8 then
+				visual = 2
+			else
+				visual = 3
+			end
+		else
+			if param >= 20 then
+				visual = 1
+			elseif param >= 16 then
+				visual = 2
+			else
+				visual = 3
+			end
+		end
+		local node = get_stair_from_param(param, { "base", "outer", "inner" })
+		PARAM_BY_VISUAL[ceiling][visual][get_stair_facing(node.param2)] = param
+	end
+end
+
+local function relative_turn(center_facing, neighbor_facing)
+	if
+		neighbor_facing == nil
+		or neighbor_facing == center_facing
+		or ((neighbor_facing + 2) % 4) == center_facing
+	then
+		return "none"
+	elseif neighbor_facing == (center_facing + 3) % 4 then
+		return "left"
+	end
+	return "right"
+end
+
+local function mirror_turn(turn)
+	if turn == "left" then
+		return "right"
+	elseif turn == "right" then
+		return "left"
+	end
+	return turn
+end
+
+local function get_neighbor_facing(pos, dir, ceiling)
+	local npos = { x = pos.x + dir.x, y = pos.y, z = pos.z + dir.z }
+	local node = core.get_node(npos)
+	local def = core.registered_nodes[node.name]
+	if not def or not def.stairs then
+		return nil
+	end
+	if (node.param2 >= 20) ~= ceiling then
+		return nil
+	end
+	return get_stair_facing(node.param2)
+end
+
+local function get_shape_result(pos)
+	local node = core.get_node(pos)
+	local def = core.registered_nodes[node.name]
+	if not def or not def.stairs then
+		return nil
+	end
+
+	local upside_down = node.param2 >= 20
+	local facing = get_stair_facing(node.param2)
+	local lead = get_neighbor_facing(pos, STAIR_DIR[facing], upside_down)
+	local trail = get_neighbor_facing(pos, STAIR_DIR[(facing + 2) % 4], upside_down)
+	local left = get_neighbor_facing(pos, STAIR_DIR[(facing + 3) % 4], upside_down)
+	local right = get_neighbor_facing(pos, STAIR_DIR[(facing + 1) % 4], upside_down)
+	local lead_turn = relative_turn(facing, lead)
+	local trail_turn = relative_turn(facing, trail)
+	local left_blocked
+	local right_blocked
+	if upside_down then
+		left_blocked = right == facing
+		right_blocked = left == facing
+	else
+		left_blocked = left == facing
+		right_blocked = right == facing
+	end
+	local observed = {
+		lead_turn = upside_down and mirror_turn(lead_turn) or lead_turn,
+		trail_turn = upside_down and mirror_turn(trail_turn) or trail_turn,
+		left_blocked = left_blocked,
+		right_blocked = right_blocked,
+	}
+
+	local out_shape = 1
+	local out_facing = facing
+	for i = 1, #RULES do
+		local rule = RULES[i]
+		if observed[rule.slot] == rule.turn and not observed[rule.blocked] then
+			out_shape = rule.shape
+			if rule.turn_right then
+				out_facing = upside_down and (facing + 3) % 4 or (facing + 1) % 4
+			end
+			break
+		end
+	end
+
+	local target_param = PARAM_BY_VISUAL[upside_down][out_shape][out_facing]
+	local connect = stair_param_to_connect(target_param, upside_down)
+	local new_node = get_stair_from_param(stair_connect_to_param(connect, upside_down), def.stairs)
+
+	return {
+		node = node,
+		new_node = new_node,
+	}
+end
+
+local function placement_prevented_base(params)
 
 	if params == nil or params.itemstack == nil or params.pointed_thing == nil then
 		return true
@@ -209,31 +387,11 @@ local function placement_prevented_inner(params)
 		return false
 	end
 
-	-- On back of rotated stair, corners have 2 backs
-	if
-		groups.attaches_to_side
-		and (
-			-- upright
-			(node.param2 == 0 and wdir == 2)
-			or (node.param2 == 0 and wdir == 5)
-			or (node.param2 == 1 and wdir == 3)
-			or (node.param2 == 1 and wdir == 5)
-			or (node.param2 == 2 and wdir == 3)
-			or (node.param2 == 2 and wdir == 4)
-			or (node.param2 == 3 and wdir == 2)
-			or (node.param2 == 3 and wdir == 4)
-			-- upside down
-			or (node.param2 == 20 and wdir == 3)
-			or (node.param2 == 20 and wdir == 5)
-			or (node.param2 == 21 and wdir == 2)
-			or (node.param2 == 21 and wdir == 5)
-			or (node.param2 == 22 and wdir == 2)
-			or (node.param2 == 22 and wdir == 4)
-			or (node.param2 == 23 and wdir == 3)
-			or (node.param2 == 23 and wdir == 4)
-		)
-	then
-		return false
+	if groups.attaches_to_side then
+		local allowed = SIDE_ATTACH_BASE[node.param2]
+		if allowed and allowed[wdir] then
+			return false
+		end
 	end
 
 	return true
@@ -267,6 +425,102 @@ local function placement_prevented_outer(params)
 	return true
 end
 
+local function placement_prevented_inner(params)
+	if params == nil or params.itemstack == nil or params.pointed_thing == nil then
+		return true
+	end
+
+	local wield_name = params.itemstack:get_name()
+	local ndef = core.registered_nodes[wield_name]
+	local groups = ndef.groups or {}
+
+	local under = params.pointed_thing.under
+	local node = core.get_node(under)
+	local above = params.pointed_thing.above
+	local wdir = core.dir_to_wallmounted({ x = under.x - above.x, y = under.y - above.y, z = under.z - above.z })
+
+	-- on top of upside down
+	if groups.attaches_to_top and (node.param2 >= 20 and wdir == 1) then
+		return false
+	end
+
+	-- on base of upright stair
+	if groups.attaches_to_base and (node.param2 < 20 and wdir == 0) then
+		return false
+	end
+
+	if groups.attaches_to_side then
+		local allowed = SIDE_ATTACH_INNER[node.param2]
+		if allowed and allowed[wdir] then
+			return false
+		end
+	end
+
+	return true
+end
+
+local function check_sides(pos)
+	local source = core.get_node(pos)
+	local def = core.registered_nodes[source.name]
+	if not def or type(def.placement_prevented) ~= "function" then
+		return
+	end
+
+	local px = pos.x
+	local py = pos.y
+	local pz = pos.z
+
+	for i = 0, 3 do
+		local dir = STAIR_DIR[i]
+		local npos = {
+			x = px + dir.x,
+			y = py,
+			z = pz + dir.z,
+		}
+		local node = core.get_node(npos)
+		local ndef = core.registered_nodes[node.name]
+		local groups = ndef.groups or {}
+
+		if groups.attaches_to_base or groups.attaches_to_side or groups.attaches_to_top then
+			if def.placement_prevented({
+				itemstack = ItemStack(node.name),
+				pointed_thing = {
+					under = pos,
+					above = npos,
+				},
+			}) then
+				mcl_attached.drop_attached_node(npos)
+			end
+		end
+	end
+end
+
+local function update_stair(pos)
+	local result = get_shape_result(pos)
+	if not result then
+		return false
+	end
+
+	if result.node.name == result.new_node.name and result.node.param2 == result.new_node.param2 then
+		return false
+	end
+
+	core.swap_node(pos, result.new_node)
+	check_sides(pos)
+	return true
+end
+
+local function update_stairs_around(pos)
+	for i = 1, #UPDATE_OFFSETS do
+		local offset = UPDATE_OFFSETS[i]
+		update_stair({
+			x = pos.x + offset.x,
+			y = pos.y,
+			z = pos.z + offset.z,
+		})
+	end
+end
+
 --[[
 mcl_stairs.cornerstair.add(name, stairtiles)
 
@@ -286,37 +540,6 @@ Usage:
     * nil: Equivalent to "default"
 ]]
 
-local directions = {
-	{ -1, 0, 0 },
-	{ 1, 0, 0 },
-	{ 0, 0, -1 },
-	{ 0, 0, 1 },
-}
-
-local function check_sides(pos)
-	local source = core.get_node(pos)
-
-	local def = core.registered_nodes[source.name]
-
-	for _, offset in pairs(directions) do
-		local npos = vector.offset(pos, offset[1], offset[2], offset[3])
-		local node = core.get_node(npos)
-		local ndef = core.registered_nodes[node.name]
-		local groups = ndef.groups or {}
-
-		if groups.attaches_to_base or groups.attaches_to_side or groups.attaches_to_top then
-			if
-				def.placement_prevented({
-					itemstack = ItemStack(node.name),
-					pointed_thing = { under = pos, above = npos },
-				})
-			then
-				mcl_attached.drop_attached_node(npos)
-			end
-		end
-	end
-end
-
 function mcl_stairs.cornerstair.add(name, stairtiles)
 	local node_def = core.registered_nodes[name]
 	local outer_tiles
@@ -335,410 +558,32 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 	inner_groups.stair = 3
 	inner_groups.not_in_craft_guide = 1
 	local drop = node_def.drop or name
-	local function after_dig_node(pos, oldnode)
-		local param = get_stair_param(oldnode)
-		local ceiling
-		if param < 12 then
-			ceiling = false
-		else
-			ceiling = true
-		end
-		local connect = stair_param_to_connect(param, ceiling)
-		local t = {
-			{pos = {x = pos.x, y = pos.y, z = pos.z + 2}},
-			{pos = {x = pos.x - 1, y = pos.y, z = pos.z + 1}}, {pos = {x = pos.x, y = pos.y, z = pos.z + 1}}, {pos = {x = pos.x + 1, y = pos.y, z = pos.z + 1}},
-			{pos = {x = pos.x - 2, y = pos.y, z = pos.z}}, {pos = {x = pos.x - 1, y = pos.y, z = pos.z}},
-			{pos = pos, connect = connect},
-			{pos = {x = pos.x + 1, y = pos.y, z = pos.z}}, {pos = {x = pos.x + 2, y = pos.y, z = pos.z}},
-			{pos = {x = pos.x - 1, y = pos.y, z = pos.z - 1}}, {pos = {x = pos.x, y = pos.y, z = pos.z - 1}}, {pos = {x = pos.x + 1, y = pos.y, z = pos.z - 1}},
-			{pos = {x = pos.x, y = pos.y, z = pos.z - 2}}
-		}
-		for i,v in ipairs(t) do
-			if not v.connect then
-				local node = core.get_node(v.pos)
-				local node_def = core.registered_nodes[node.name]
-				if not node_def then
-					return
-				end
-				if node_def.stairs then
-					t[i].stairs = node_def.stairs
-					t[i].connect = stair_param_to_connect(get_stair_param(node), ceiling)
-				else
-					t[i].connect = {false, false, false, false, false, false, false, false}
-				end
-			end
-		end
-		local function swap_stair(index, n1, n2)
-			local connect = {false, false, false, false, false, false, false, false}
-			connect[n1] = true
-			connect[n2] = true
-			local node = get_stair_from_param(stair_connect_to_param(connect, ceiling), t[index].stairs)
-			core.swap_node(t[index].pos, node)
-			check_sides(t[index].pos)
-		end
-		if t[3].stairs then
-			if t[7].connect[1] and t[3].connect[6] then
-				if t[3].connect[1] and t[1].connect[6] then
-					if t[2].connect[3] then
-						swap_stair(3, 1, 8)
-					elseif t[4].connect[7] then
-						swap_stair(3, 1, 4)
-					end
-				elseif t[3].connect[7] then
-					swap_stair(3, 4, 7)
-				elseif t[3].connect[3] then
-					swap_stair(3, 3, 8)
-				end
-			elseif t[7].connect[2] and t[3].connect[5] then
-				if t[3].connect[2] and t[1].connect[5] then
-					if t[4].connect[8] then
-						swap_stair(3, 2, 3)
-					elseif t[2].connect[4] then
-						swap_stair(3, 2, 7)
-					end
-				elseif t[3].connect[4] then
-					swap_stair(3, 4, 7)
-				elseif t[3].connect[8] then
-					swap_stair(3, 3, 8)
-				end
-			end
-		end
-		if t[8].stairs then
-			if t[7].connect[3] and t[8].connect[8] then
-				if t[8].connect[3] and t[9].connect[8] then
-					if t[4].connect[5] then
-						swap_stair(8, 2, 3)
-					elseif t[12].connect[1] then
-						swap_stair(8, 3, 6)
-					end
-				elseif t[8].connect[1] then
-					swap_stair(8, 1, 6)
-				elseif t[8].connect[5] then
-					swap_stair(8, 2, 5)
-				end
-			elseif t[7].connect[4] and t[8].connect[7] then
-				if t[8].connect[4] and t[9].connect[7] then
-					if t[12].connect[2] then
-						swap_stair(8, 4, 5)
-					elseif t[4].connect[6] then
-						swap_stair(8, 1, 4)
-					end
-				elseif t[8].connect[6] then
-					swap_stair(8, 1, 6)
-				elseif t[8].connect[2] then
-					swap_stair(8, 2, 5)
-				end
-			end
-		end
-		if t[11].stairs then
-			if t[7].connect[5] and t[11].connect[2] then
-				if t[11].connect[5] and t[13].connect[2] then
-					if t[12].connect[7] then
-						swap_stair(11, 4, 5)
-					elseif t[10].connect[3] then
-						swap_stair(11, 5, 8)
-					end
-				elseif t[11].connect[3] then
-					swap_stair(11, 3, 8)
-				elseif t[11].connect[7] then
-					swap_stair(11, 4, 7)
-				end
-			elseif t[7].connect[6] and t[11].connect[1] then
-				if t[11].connect[6] and t[13].connect[1] then
-					if t[10].connect[4] then
-						swap_stair(11, 6, 7)
-					elseif t[12].connect[8] then
-						swap_stair(11, 3, 6)
-					end
-				elseif t[11].connect[8] then
-					swap_stair(11, 3, 8)
-				elseif t[11].connect[4] then
-					swap_stair(11, 4, 7)
-				end
-			end
-		end
-		if t[6].stairs then
-			if t[7].connect[7] and t[6].connect[4] then
-				if t[6].connect[7] and t[5].connect[4] then
-					if t[10].connect[1] then
-						swap_stair(6, 6, 7)
-					elseif t[2].connect[5] then
-						swap_stair(6, 2, 7)
-					end
-				elseif t[6].connect[5] then
-					swap_stair(6, 2, 5)
-				elseif t[6].connect[1] then
-					swap_stair(6, 1, 6)
-				end
-			elseif t[7].connect[8] and t[6].connect[3] then
-				if t[6].connect[8] and t[5].connect[3] then
-					if t[2].connect[6] then
-						swap_stair(6, 1, 8)
-					elseif t[10].connect[2] then
-						swap_stair(6, 5, 8)
-					end
-				elseif t[6].connect[2] then
-					swap_stair(6, 2, 5)
-				elseif t[6].connect[6] then
-					swap_stair(6, 1, 6)
-				end
-			end
-		end
-	end
+	local old_after_place_node = node_def.after_place_node
+	local old_after_dig_node = node_def.after_dig_node
+	local old_on_rotate = node_def.on_rotate
 	core.override_item(name, {
 		stairs = {name, name.."_outer", name.."_inner"},
-		after_dig_node = function(pos, oldnode) after_dig_node(pos, oldnode) end,
-		on_place = nil,
-		after_place_node = function(pos, placer, _, _)
-			local node = core.get_node(pos)
-			local ceiling = false
-			if placer and placer:is_player() and placer:get_look_vertical() < 0 then
-				ceiling = true
-				if node.param2 == 0 then node.param2 = 20
-				elseif node.param2 == 1 then node.param2 = 23
-				elseif node.param2 == 2 then node.param2 = 22
-				elseif node.param2 == 3 then node.param2 = 21
-				end
+		placement_prevented = placement_prevented_base,
+		on_neighbor_update = update_stair,
+		after_dig_node = function(pos, oldnode, oldmetadata, digger)
+			if old_after_dig_node then
+				old_after_dig_node(pos, oldnode, oldmetadata, digger)
 			end
-			local connect = stair_param_to_connect(get_stair_param(node), ceiling)
-			local def = core.registered_nodes[node.name]
-			local t = {
-				{pos = {x = pos.x - 1, y = pos.y, z = pos.z + 1}}, {pos = {x = pos.x, y = pos.y, z = pos.z + 1}}, {pos = {x = pos.x + 1, y = pos.y, z = pos.z + 1}},
-				{pos = {x = pos.x - 1, y = pos.y, z = pos.z}}, {pos = pos, stairs = {name, def.stairs[2], def.stairs[3]}, connect = connect}, {pos = {x = pos.x + 1, y = pos.y, z = pos.z}},
-				{pos = {x = pos.x - 1, y = pos.y, z = pos.z - 1}}, {pos = {x = pos.x, y = pos.y, z = pos.z - 1}}, {pos = {x = pos.x + 1, y = pos.y, z = pos.z - 1}},
-			}
-			for i,v in ipairs(t) do
-				if not v.connect then
-					local node = core.get_node(v.pos)
-					local node_def = core.registered_nodes[node.name]
-					if not node_def then
-						return
-					end
-					if node_def.stairs then
-						t[i].stairs = node_def.stairs
-						t[i].connect = stair_param_to_connect(get_stair_param(node), ceiling)
-					else
-						t[i].connect = {false, false, false, false, false, false, false, false}
-					end
-				end
+			update_stairs_around(pos)
+		end,
+		after_place_node = function(pos, placer, itemstack, pointed_thing)
+			if old_after_place_node then
+				old_after_place_node(pos, placer, itemstack, pointed_thing)
 			end
-			local function reset_node(n1, n2)
-				local connect = {false, false, false, false, false, false, false, false}
-				connect[n1] = true
-				connect[n2] = true
-				node = get_stair_from_param(stair_connect_to_param(connect, ceiling), t[5].stairs)
+			update_stairs_around(pos)
+		end,
+		on_rotate = function(pos, node, user, mode, new_param2)
+			if old_on_rotate and old_on_rotate(pos, node, user, mode, new_param2) then
+				update_stairs_around(pos)
+				return true
 			end
-			local function swap_stair(index, n1, n2)
-				local connect = {false, false, false, false, false, false, false, false}
-				connect[n1] = true
-				connect[n2] = true
-				local node = get_stair_from_param(stair_connect_to_param(connect, ceiling), t[index].stairs)
-				t[index].connect = connect
-				core.swap_node(t[index].pos, node)
-			end
-			if connect[3] then
-				if t[4].connect[2] and t[4].connect[5] and t[1].connect[5] and not t[7].connect[2] then
-					swap_stair(4, 2, 3)
-				elseif t[4].connect[1] and t[4].connect[6] and t[7].connect[1] and not t[1].connect[6] then
-					swap_stair(4, 3, 6)
-				end
-				if t[6].connect[1] and t[6].connect[6] and t[3].connect[6] and not t[9].connect[1] then
-					swap_stair(6, 1, 8)
-				elseif t[6].connect[2] and t[6].connect[5] and t[9].connect[2] and not t[3].connect[5] then
-					swap_stair(6, 5, 8)
-				end
-				if t[4].connect[3] ~= t[6].connect[8] then
-					if t[4].connect[3] then
-						if t[2].connect[6] then
-							reset_node(1, 8)
-						elseif t[8].connect[2] then
-							reset_node(5, 8)
-						elseif t[2].connect[4] and t[2].connect[7] and t[1].connect[4] and not t[3].connect[7] then
-							swap_stair(2, 6, 7)
-							reset_node(1, 8)
-						elseif t[2].connect[3] and t[2].connect[8] and t[3].connect[8] and not t[1].connect[3] then
-							swap_stair(2, 3, 6)
-							reset_node(1, 8)
-						elseif t[8].connect[3] and t[8].connect[8] and t[9].connect[8] and not t[7].connect[3] then
-							swap_stair(8, 2, 3)
-							reset_node(5, 8)
-						elseif t[8].connect[4] and t[8].connect[7] and t[7].connect[4] and not t[9].connect[7] then
-							swap_stair(8, 2, 7)
-							reset_node(5, 8)
-						end
-					else
-						if t[2].connect[5] then
-							reset_node(2, 3)
-						elseif t[8].connect[1] then
-							reset_node(3, 6)
-						elseif t[2].connect[4] and t[2].connect[7] and t[3].connect[7] and not t[1].connect[4] then
-							swap_stair(2, 4, 5)
-							reset_node(2, 3)
-						elseif t[2].connect[3] and t[2].connect[8] and t[1].connect[3] and not t[3].connect[8] then
-							swap_stair(2, 5, 8)
-							reset_node(2, 3)
-						elseif t[8].connect[3] and t[8].connect[8] and t[7].connect[3] and not t[9].connect[8] then
-							swap_stair(8, 1, 8)
-							reset_node(3, 6)
-						elseif t[8].connect[4] and t[8].connect[7] and t[9].connect[7] and not t[7].connect[4] then
-							swap_stair(8, 1, 4)
-							reset_node(3, 6)
-						end
-					end
-				end
-			elseif connect[2] then
-				if t[2].connect[4] and t[2].connect[7] and t[3].connect[7] and not t[1].connect[4] then
-					swap_stair(2, 4, 5)
-				elseif t[2].connect[3] and t[2].connect[8] and t[1].connect[3] and not t[3].connect[8] then
-					swap_stair(2, 5, 8)
-				end
-				if t[8].connect[3] and t[8].connect[8] and t[9].connect[8] and not t[7].connect[3] then
-					swap_stair(8, 2, 3)
-				elseif t[8].connect[4] and t[8].connect[7] and t[7].connect[4] and not t[9].connect[7] then
-					swap_stair(8, 2, 7)
-				end
-				if t[2].connect[5] ~= t[8].connect[2] then
-					if t[2].connect[5] then
-						if t[6].connect[8] then
-							reset_node(2, 3)
-						elseif t[4].connect[4] then
-							reset_node(2, 7)
-						elseif t[6].connect[1] and t[6].connect[6] and t[3].connect[6] and not t[9].connect[1] then
-							swap_stair(6, 1, 8)
-							reset_node(2, 3)
-						elseif t[6].connect[2] and t[6].connect[5] and t[9].connect[2] and not t[3].connect[5] then
-							swap_stair(6, 5, 8)
-							reset_node(2, 3)
-						elseif t[4].connect[2] and t[4].connect[5] and t[7].connect[2] and not t[1].connect[5] then
-							swap_stair(4, 4, 5)
-							reset_node(2, 7)
-						elseif t[4].connect[1] and t[4].connect[6] and t[1].connect[6] and not t[7].connect[1] then
-							swap_stair(4, 1, 4)
-							reset_node(2, 7)
-						end
-					else
-						if t[6].connect[7] then
-							reset_node(4, 5)
-						elseif t[4].connect[3] then
-							reset_node(5, 8)
-						elseif t[6].connect[1] and t[6].connect[6] and t[9].connect[1] and not t[3].connect[6] then
-							swap_stair(6, 6, 7)
-							reset_node(4, 5)
-						elseif t[6].connect[2] and t[6].connect[5] and t[3].connect[5] and not t[9].connect[2] then
-							swap_stair(6, 2, 7)
-							reset_node(4, 5)
-						elseif t[4].connect[2] and t[4].connect[5] and t[1].connect[5] and not t[7].connect[2] then
-							swap_stair(4, 2, 3)
-							reset_node(5, 8)
-						elseif t[4].connect[1] and t[4].connect[6] and t[7].connect[1] and not t[1].connect[6] then
-							swap_stair(4, 3, 6)
-							reset_node(5, 8)
-						end
-					end
-				end
-			elseif connect[4] then
-				if t[6].connect[1] and t[6].connect[6] and t[9].connect[1] and not t[3].connect[6] then
-					swap_stair(6, 6, 7)
-				elseif t[6].connect[2] and t[6].connect[5] and t[3].connect[5] and not t[9].connect[2] then
-					swap_stair(6, 2, 7)
-				end
-				if t[4].connect[2] and t[4].connect[5] and t[7].connect[2] and not t[1].connect[5] then
-					swap_stair(4, 4, 5)
-				elseif t[4].connect[1] and t[4].connect[6] and t[1].connect[6] and not t[7].connect[1] then
-					swap_stair(4, 1, 4)
-				end
-				if t[4].connect[4] ~= t[6].connect[7] then
-					if t[4].connect[4] then
-						if t[8].connect[1] then
-							reset_node(6, 7)
-						elseif t[2].connect[5] then
-							reset_node(2, 7)
-						elseif t[8].connect[3] and t[8].connect[8] and t[7].connect[3] and not t[9].connect[8] then
-							swap_stair(8, 1, 8)
-							reset_node(6, 7)
-						elseif t[8].connect[4] and t[8].connect[7] and t[9].connect[7] and not t[7].connect[4] then
-							swap_stair(8, 1, 4)
-							reset_node(6, 7)
-						elseif t[2].connect[4] and t[2].connect[7] and t[3].connect[7] and not t[1].connect[4] then
-							swap_stair(2, 4, 5)
-							reset_node(2, 7)
-						elseif t[2].connect[3] and t[2].connect[8] and t[1].connect[3] and not t[3].connect[8] then
-							swap_stair(2, 5, 8)
-							reset_node(2, 7)
-						end
-					else
-						if t[8].connect[2] then
-							reset_node(4, 5)
-						elseif t[2].connect[6] then
-							reset_node(1, 4)
-						elseif t[8].connect[3] and t[8].connect[8] and t[9].connect[8] and not t[7].connect[3] then
-							swap_stair(8, 2, 3)
-							reset_node(4, 5)
-						elseif t[8].connect[4] and t[8].connect[7] and t[7].connect[4] and not t[9].connect[7] then
-							swap_stair(8, 2, 7)
-							reset_node(4, 5)
-						elseif t[2].connect[4] and t[2].connect[7] and t[1].connect[4] and not t[3].connect[7] then
-							swap_stair(2, 6, 7)
-							reset_node(1, 4)
-						elseif t[2].connect[3] and t[2].connect[8] and t[3].connect[8] and not t[1].connect[3] then
-							swap_stair(2, 3, 6)
-							reset_node(1, 4)
-						end
-					end
-				end
-			elseif connect[1] then
-				if t[8].connect[3] and t[8].connect[8] and t[7].connect[3] and not t[9].connect[8] then
-					swap_stair(8, 1, 8)
-				elseif t[8].connect[4] and t[8].connect[7] and t[9].connect[7] and not t[7].connect[4] then
-					swap_stair(8, 1, 4)
-				end
-				if t[2].connect[4] and t[2].connect[7] and t[1].connect[4] and not t[3].connect[7] then
-					swap_stair(2, 6, 7)
-				elseif t[2].connect[3] and t[2].connect[8] and t[3].connect[8] and not t[1].connect[3] then
-					swap_stair(2, 3, 6)
-				end
-				if t[2].connect[6] ~= t[8].connect[1] then
-					if t[2].connect[6] then
-						if t[4].connect[3] then
-							reset_node(1, 8)
-						elseif t[6].connect[7] then
-							reset_node(1, 4)
-						elseif t[4].connect[2] and t[4].connect[5] and t[1].connect[5] and not t[7].connect[2] then
-							swap_stair(4, 2, 3)
-							reset_node(1, 8)
-						elseif t[4].connect[1] and t[4].connect[6] and t[7].connect[1] and not t[1].connect[6] then
-							swap_stair(4, 3, 6)
-							reset_node(1, 8)
-						elseif t[6].connect[1] and t[6].connect[6] and t[9].connect[1] and not t[3].connect[6] then
-							swap_stair(6, 6, 7)
-							reset_node(1, 4)
-						elseif t[6].connect[2] and t[6].connect[5] and t[3].connect[5] and not t[9].connect[2] then
-							swap_stair(6, 2, 7)
-							reset_node(1, 4)
-						end
-					else
-						if t[4].connect[4] then
-							reset_node(6, 7)
-						elseif t[6].connect[8] then
-							reset_node(3, 6)
-						elseif t[4].connect[2] and t[4].connect[5] and t[7].connect[2] and not t[1].connect[5] then
-							swap_stair(4, 4, 5)
-							reset_node(6, 7)
-						elseif t[4].connect[1] and t[4].connect[6] and t[1].connect[6] and not t[7].connect[1] then
-							swap_stair(4, 1, 4)
-							reset_node(6, 7)
-						elseif t[6].connect[1] and t[6].connect[6] and t[3].connect[6] and not t[9].connect[1] then
-							swap_stair(6, 1, 8)
-							reset_node(3, 6)
-						elseif t[6].connect[2] and t[6].connect[5] and t[9].connect[2] and not t[3].connect[5] then
-							swap_stair(6, 5, 8)
-							reset_node(3, 6)
-						end
-					end
-				end
-			end
-			core.swap_node(pos, node)
-		end
+			return false
+		end,
 	})
 	core.register_node(":"..name.."_outer", {
 		description = node_def.description,
@@ -759,7 +604,10 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 		},
 		drop = drop,
 		stairs = {name, name.."_outer", name.."_inner"},
-		after_dig_node = function(pos, oldnode) after_dig_node(pos, oldnode) end,
+		on_neighbor_update = update_stair,
+		after_dig_node = function(pos, oldnode, oldmetadata, digger)
+			update_stairs_around(pos)
+		end,
 		_mcl_hardness = node_def._mcl_hardness,
 		_mcl_baseitem = name,
 		on_rotate = false,
@@ -785,7 +633,10 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 		},
 		drop = drop,
 		stairs = {name, name.."_outer", name.."_inner"},
-		after_dig_node = function(pos, oldnode) after_dig_node(pos, oldnode) end,
+		on_neighbor_update = update_stair,
+		after_dig_node = function(pos, oldnode, oldmetadata, digger)
+			update_stairs_around(pos)
+		end,
 		_mcl_hardness = node_def._mcl_hardness,
 		_mcl_baseitem = name,
 		on_rotate = false,
