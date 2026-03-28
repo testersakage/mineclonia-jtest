@@ -26,6 +26,10 @@
 * amino
 * epCode
 * hezemisverydumb
+* nixnoxus
+* Saintliy
+* Mikita Wiśniewski
+* cloudCover
 
 ## Previous Contributors
 * Lizzy Fleckenstein
@@ -69,9 +73,7 @@
 * Lars Müller
 * the-real-herowl
 * DragonWrangler1
-* Mikita Wiśniewski
 * nooneatall
-* nixnoxus
 * Ælla Chiana Moskopp
 
 ## Original Mod Authors

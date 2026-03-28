@@ -28,6 +28,10 @@ return {
 		"amino",
 		"epCode",
 		"hezemisverydumb",
+		"nixnoxus",
+		"Saintliy",
+		"Mikita Wiśniewski",
+		"cloudCover",
 	}},
 	{S("Previous Contributors"), 0x52FF00, {
 		"Lizzy Fleckenstein",
@@ -71,9 +75,7 @@ return {
 		"Lars Müller",
 		"the-real-herowl",
 		"DragonWrangler1",
-		"Mikita Wiśniewski",
 		"nooneatall",
-		"nixnoxus",
 		"Ælla Chiana Moskopp",
 	}},
 	{S("Original Mod Authors"), 0xA60014, {
