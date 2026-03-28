@@ -13,25 +13,22 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: mtt_convert 0.1.1\n"
 
-msgid "Sign"
-msgstr "Cartello"
-
 msgid "Can be written"
 msgstr "Ci si può scrivere"
 
 msgid "Signs can be written and come in two variants: Wall sign and sign on a sign post. Signs can be placed on the top and the sides of other blocks, but not below them."
 msgstr ""
 
-msgid "After placing the sign, you can write something on it. You have 4 lines of text with up to 15 characters for each line; anything beyond these limits is lost. Not all characters are supported. The text can not be changed once it has been written; you have to break and place the sign again. Can be colored and made to glow."
+msgid "After placing the sign, you can write something on it. You have @1 lines of text with up to @2 characters for each line; anything beyond these limits is lost. Not all characters are supported. The text can be changed after it's written by rightclicking the sign. Can be colored and made to glow. Use bone meal to remove color and glow."
 msgstr ""
 
 msgid "Enter sign text:"
 msgstr ""
 
-msgid "Maximum line length: 15"
+msgid "Maximum line length: @1"
 msgstr ""
 
-msgid "Maximum lines: 4"
+msgid "Maximum lines: @1"
 msgstr ""
 
 msgid "Done"

@@ -16,12 +16,6 @@ msgstr ""
 msgid "Firework Rocket"
 msgstr "Ilotuliteraketti"
 
-msgid "Elytra not deployed. Jump while falling down to deploy."
-msgstr "Siivet eivät ole käytössä. Ottaaksesi ne käyttöön hyppää pudotessasi."
-
-msgid "Elytra not equipped."
-msgstr "Sinulla ei ole siipiä ylläsi."
-
 msgid "Flight Duration: @1s"
 msgstr "Lennon kesto: @1 s"
 

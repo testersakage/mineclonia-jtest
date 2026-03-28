@@ -76,9 +76,6 @@ msgstr "Чтобы употребить это, возьмите в руки и 
 msgid "You cannot consume this when your hunger bar is full."
 msgstr "Вы не можете употребить это, когда ваша полоска голода заполнена."
 
-msgid "You have to wait for about 2 seconds before you can eat or drink again."
-msgstr "Вам нужно подождать 2 секунды, прежде чем снова пить или есть."
-
 msgid "Hunger points restored: @1"
 msgstr "Восстанавливает очков голода: @1"
 

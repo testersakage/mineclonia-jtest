@@ -38,12 +38,12 @@ Cracked Deepslate Tiles=Repedt Mélypala Csempék
 Chiseled Deepslate=Vésőzett Mélypala
 @1 is a variant of @2 that can generate in deepslate and tuff blobs.=@1 egy @2 változat, amely mélypala és tufa foltokban generálódhat.
 @1 are a cracked variant.=@1 egy repedt változat.
-Tuff=Tufa
-Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y@=16.=A tufa egy díszkő, amely vulkáni hamuból keletkezik, a felszín alatt, Y@=16 alatt fordul elő.
 Chiseled Tuff=Vésőzett Tufa
 Chiseled tuff is a chiseled variant of tuff.=A vésőzett tufa a tufa vésőzett változata.
 Chiseled Tuff Bricks=Vésőzett Tufa Téglák
 Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below.=A vésőzett tufa téglák a tufa téglák egy változata, a blokk közepén egy nagy téglával, geometriai mintázattal fölötte és alatta.
+Tuff=Tufa
+Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y@=16.=A tufa egy díszkő, amely vulkáni hamuból keletkezik, a felszín alatt, Y@=16 alatt fordul elő.
 Tuff Stairs=Tufa Lépcső
 Tuff Slab=Tufa Lemez
 Tuff Wall=Tufa Fal

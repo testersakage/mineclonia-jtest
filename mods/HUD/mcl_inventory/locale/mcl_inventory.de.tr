@@ -1,6 +1,6 @@
 # textdomain: mcl_inventory
-Scrollbar=
-Pagination buttons=
+Scrollbar=Scrollleiste
+Pagination buttons=Nummerierungsknöpfe
 Creative inventory scrolling=
 Building Blocks=Baublöcke
 Decoration Blocks=Dekoblöcke

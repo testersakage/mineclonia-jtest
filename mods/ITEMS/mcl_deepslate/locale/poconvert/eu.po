@@ -130,12 +130,6 @@ msgstr "@1 @2-en aldaera bat da, arbel sakoneko eta tobako orbanetan sor daiteke
 msgid "@1 are a cracked variant."
 msgstr "@1 pitzatutako aldaera bat da."
 
-msgid "Tuff"
-msgstr "Toba"
-
-msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
-msgstr "Toba, errauts bolkanikotik abiatuta sortutako harri apaingarria da, lur azpiko orbanetan dagoena."
-
 msgid "Chiseled Tuff"
 msgstr "Toba zizelatua"
 
@@ -147,6 +141,12 @@ msgstr "Toba zizelatuzko adreiluak"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
 msgstr "Toba zizelatuzko adreiluak tobazko adreiluen aldaera bat dira. Blokearen erdian adreilu handi bat dago, eta diseinu geometrikoa du gora eta behera."
+
+msgid "Tuff"
+msgstr "Toba"
+
+msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
+msgstr "Toba, errauts bolkanikotik abiatuta sortutako harri apaingarria da, lur azpiko orbanetan dagoena."
 
 msgid "Tuff Stairs"
 msgstr "Toba eskailerak"

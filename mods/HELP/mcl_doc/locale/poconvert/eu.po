@@ -76,9 +76,6 @@ msgstr "Kontsumitzeko, eutsi eta egin eskuin-klik."
 msgid "You cannot consume this when your hunger bar is full."
 msgstr "Hau ezin duzu kontsumitu zure gose-barra beteta dagoenean."
 
-msgid "You have to wait for about 2 seconds before you can eat or drink again."
-msgstr "Bi segundo inguru itxaron behar dituzu berriro jan edo edan aurretik."
-
 msgid "Hunger points restored: @1"
 msgstr "Berreskuratutako gose puntuak: @1"
 

@@ -130,12 +130,6 @@ msgstr "@1 è una variante di @2 che viene generata nell'ardesia oscura e nei co
 msgid "@1 are a cracked variant."
 msgstr "@1 è una variante crepata."
 
-msgid "Tuff"
-msgstr "Tufo"
-
-msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
-msgstr "Il tufo è una pietra ornamentale nata dalle ceneri vulcaniche, che si trova in agglomerati ad un altezza inferiore a 16."
-
 msgid "Chiseled Tuff"
 msgstr "Tufo cesellato"
 
@@ -147,6 +141,12 @@ msgstr "Mattoni di tufo cesellati"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
 msgstr "I mattoni di tufo cesellato sono una variante dei mattoni di tufo, con un enorme mattone al centro del blocco, ed un motivo geometrico sopra e sotto di esso."
+
+msgid "Tuff"
+msgstr "Tufo"
+
+msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
+msgstr "Il tufo è una pietra ornamentale nata dalle ceneri vulcaniche, che si trova in agglomerati ad un altezza inferiore a 16."
 
 msgid "Tuff Stairs"
 msgstr "Scalini di tufo"

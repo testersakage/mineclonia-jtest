@@ -16,12 +16,6 @@ msgstr ""
 msgid "Firework Rocket"
 msgstr "Raketa s ohňostrojem"
 
-msgid "Elytra not deployed. Jump while falling down to deploy."
-msgstr "Krovky nebyly aktivovány. Pro aktivaci skočte ve chvíli kdy padáte."
-
-msgid "Elytra not equipped."
-msgstr "Krovky nejsou nasazeny."
-
 msgid "Flight Duration: @1s"
 msgstr "Doba letu: @1s"
 

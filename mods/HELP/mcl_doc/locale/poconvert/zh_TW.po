@@ -76,9 +76,6 @@ msgstr "持用並右按即可服用。"
 msgid "You cannot consume this when your hunger bar is full."
 msgstr "飽肚時不可以服用。"
 
-msgid "You have to wait for about 2 seconds before you can eat or drink again."
-msgstr "每次服用需相隔最少 2 秒。"
-
 msgid "Hunger points restored: @1"
 msgstr "飢餓值：@1 點"
 

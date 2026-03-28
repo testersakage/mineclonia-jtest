@@ -76,9 +76,6 @@ msgstr "Per consumarlo, tienilo in mano e fai clic col destro."
 msgid "You cannot consume this when your hunger bar is full."
 msgstr "Non puoi consumarlo se l'indicatore della fame è al massimo."
 
-msgid "You have to wait for about 2 seconds before you can eat or drink again."
-msgstr "Devi attendere circa 2 secondi prima di poter mangiare o bere nuovamente."
-
 msgid "Hunger points restored: @1"
 msgstr "Punti fame recuperati: @1"
 

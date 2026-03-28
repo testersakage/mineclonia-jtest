@@ -16,12 +16,6 @@ msgstr ""
 msgid "Firework Rocket"
 msgstr "Su artifizialen suziria"
 
-msgid "Elytra not deployed. Jump while falling down to deploy."
-msgstr "Zabaldu gabeko elitroak. Zabaltzkeo egin jauzi erortzen zaren bitartean."
-
-msgid "Elytra not equipped."
-msgstr "Elitroak jantzi gabe."
-
 msgid "Flight Duration: @1s"
 msgstr "Hegaldiaren iraupena: @1s"
 

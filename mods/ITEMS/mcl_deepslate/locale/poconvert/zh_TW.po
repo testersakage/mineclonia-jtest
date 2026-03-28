@@ -130,12 +130,6 @@ msgstr "@1是@2的變體，能在深板岩和凝灰岩中生成。"
 msgid "@1 are a cracked variant."
 msgstr ""
 
-msgid "Tuff"
-msgstr "凝灰岩"
-
-msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
-msgstr ""
-
 msgid "Chiseled Tuff"
 msgstr "浮雕凝灰岩"
 
@@ -147,6 +141,12 @@ msgstr "浮雕凝灰岩磚"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
 msgstr "浮雕凝灰岩磚是凝灰岩的變種，中央一塊大磚，以幾何圖案作外框。"
+
+msgid "Tuff"
+msgstr "凝灰岩"
+
+msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
+msgstr ""
 
 msgid "Tuff Stairs"
 msgstr "凝灰岩階梯"

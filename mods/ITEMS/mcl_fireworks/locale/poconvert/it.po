@@ -16,12 +16,6 @@ msgstr ""
 msgid "Firework Rocket"
 msgstr "Razzo Pirotecnico"
 
-msgid "Elytra not deployed. Jump while falling down to deploy."
-msgstr "Elitra non dispiegata. Salta mentre cadi per aprirla."
-
-msgid "Elytra not equipped."
-msgstr "Elitra non equipaggiata."
-
 msgid "Flight Duration: @1s"
 msgstr ""
 

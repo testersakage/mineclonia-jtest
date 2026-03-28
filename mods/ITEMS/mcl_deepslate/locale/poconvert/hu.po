@@ -130,12 +130,6 @@ msgstr "@1 egy @2 változat, amely mélypala és tufa foltokban generálódhat."
 msgid "@1 are a cracked variant."
 msgstr "@1 egy repedt változat."
 
-msgid "Tuff"
-msgstr "Tufa"
-
-msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
-msgstr "A tufa egy díszkő, amely vulkáni hamuból keletkezik, a felszín alatt, Y=16 alatt fordul elő."
-
 msgid "Chiseled Tuff"
 msgstr "Vésőzett Tufa"
 
@@ -147,6 +141,12 @@ msgstr "Vésőzett Tufa Téglák"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
 msgstr "A vésőzett tufa téglák a tufa téglák egy változata, a blokk közepén egy nagy téglával, geometriai mintázattal fölötte és alatta."
+
+msgid "Tuff"
+msgstr "Tufa"
+
+msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
+msgstr "A tufa egy díszkő, amely vulkáni hamuból keletkezik, a felszín alatt, Y=16 alatt fordul elő."
 
 msgid "Tuff Stairs"
 msgstr "Tufa Lépcső"

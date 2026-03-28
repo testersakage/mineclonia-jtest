@@ -76,9 +76,6 @@ msgstr "Nauttiaksesi sen ota se käteesi ja klikkaa oikeaa hiirennäppäintä."
 msgid "You cannot consume this when your hunger bar is full."
 msgstr "Et voi nauttia tätä, kun nälkäpalkkisi on täynnä."
 
-msgid "You have to wait for about 2 seconds before you can eat or drink again."
-msgstr "Sinun täytyy odottaa noin kaksi (2) sekuntia, ennen kuin voit syödä tai juoda uudelleen."
-
 msgid "Hunger points restored: @1"
 msgstr "Antaa nälkäpisteitä: @1"
 

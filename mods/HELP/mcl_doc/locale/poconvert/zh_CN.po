@@ -76,9 +76,6 @@ msgstr "要使用它，将其拿在手中，然后右键点击。"
 msgid "You cannot consume this when your hunger bar is full."
 msgstr "当你的饥饿值条已满时，你不能使用这个物品。"
 
-msgid "You have to wait for about 2 seconds before you can eat or drink again."
-msgstr "你需要等待大约2秒才能再次进食或饮水。"
-
 msgid "Hunger points restored: @1"
 msgstr "恢复饥饿值点数：@1"
 

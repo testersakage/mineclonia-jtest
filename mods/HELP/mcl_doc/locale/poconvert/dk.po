@@ -76,9 +76,6 @@ msgstr "For at indtage det skal du bære det og højre-klikke."
 msgid "You cannot consume this when your hunger bar is full."
 msgstr "Du kan ikke indtage dette når din sultbjælke er fuld."
 
-msgid "You have to wait for about 2 seconds before you can eat or drink again."
-msgstr "Du er nødt til at vente omkring 2 sekunder før du kan drikke eller spise igen."
-
 msgid "Hunger points restored: @1"
 msgstr "Sultpoint genvundet: @1"
 

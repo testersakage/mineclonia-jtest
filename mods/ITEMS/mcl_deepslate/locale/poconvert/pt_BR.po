@@ -130,12 +130,6 @@ msgstr "@1 é uma variante de @2 que pode gerar em bolhas de ardósia e tufo."
 msgid "@1 are a cracked variant."
 msgstr "@1 é uma variante rachada."
 
-msgid "Tuff"
-msgstr "Tufo"
-
-msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
-msgstr "O tufo é uma rocha ornamental formada a partir de cinzas vulcânicas, que ocorre em aglomerados subterrâneos abaixo de Y=16."
-
 msgid "Chiseled Tuff"
 msgstr "Tufo Entalhado"
 
@@ -147,6 +141,12 @@ msgstr "Tijolos de Tufo Entalhados"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
 msgstr "Os tijolos de tufo entalhados são uma variante dos tijolos de tufo, caracterizados por um tijolo grande no centro do bloco, com um desenho geométrico acima e abaixo."
+
+msgid "Tuff"
+msgstr "Tufo"
+
+msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
+msgstr "O tufo é uma rocha ornamental formada a partir de cinzas vulcânicas, que ocorre em aglomerados subterrâneos abaixo de Y=16."
 
 msgid "Tuff Stairs"
 msgstr "Escadas de Tufo"

@@ -16,12 +16,6 @@ msgstr ""
 msgid "Firework Rocket"
 msgstr "Artfajraĵa Raketo"
 
-msgid "Elytra not deployed. Jump while falling down to deploy."
-msgstr "Elytre ne etenditaj. Saltu dum falado por etendi ilin."
-
-msgid "Elytra not equipped."
-msgstr "Elitroj ne equipataj."
-
 msgid "Flight Duration: @1s"
 msgstr ""
 

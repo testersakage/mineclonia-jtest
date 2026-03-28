@@ -130,12 +130,6 @@ msgstr "@1 ist eine Variante von @2, die in Tiefenschiefer und Tuff generiert we
 msgid "@1 are a cracked variant."
 msgstr ""
 
-msgid "Tuff"
-msgstr "Tuffstein"
-
-msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
-msgstr ""
-
 msgid "Chiseled Tuff"
 msgstr ""
 
@@ -146,6 +140,12 @@ msgid "Chiseled Tuff Bricks"
 msgstr ""
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
+msgstr ""
+
+msgid "Tuff"
+msgstr "Tuffstein"
+
+msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
 msgstr ""
 
 msgid "Tuff Stairs"

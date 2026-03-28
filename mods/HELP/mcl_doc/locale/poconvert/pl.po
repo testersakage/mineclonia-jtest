@@ -76,9 +76,6 @@ msgstr "Aby to skonsumować, weź to, następnie kliknij prawy przycisk myszy."
 msgid "You cannot consume this when your hunger bar is full."
 msgstr "Nie możesz tego skonsumować gdy twój pasek nasycenia jest pełny."
 
-msgid "You have to wait for about 2 seconds before you can eat or drink again."
-msgstr "Musisz poczekać przez 2 sekundy zanim znów będziesz mogła jeść lub pić."
-
 msgid "Hunger points restored: @1"
 msgstr "Przywrócone punkty głodu: @1"
 

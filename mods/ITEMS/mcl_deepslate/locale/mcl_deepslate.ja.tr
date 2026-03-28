@@ -38,12 +38,12 @@ Cracked Deepslate Tiles=ひび割れた深層岩タイル
 Chiseled Deepslate=模様入り深層岩
 @1 is a variant of @2 that can generate in deepslate and tuff blobs.=
 @1 are a cracked variant.=
-Tuff=凝灰岩
-Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y@=16.=
 Chiseled Tuff=模様入りの凝灰岩
 Chiseled tuff is a chiseled variant of tuff.=
 Chiseled Tuff Bricks=模様入りの凝灰岩レンガ
 Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below.=
+Tuff=凝灰岩
+Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y@=16.=
 Tuff Stairs=凝灰岩の階段
 Tuff Slab=凝灰岩のハーフブロック
 Tuff Wall=凝灰岩の塀

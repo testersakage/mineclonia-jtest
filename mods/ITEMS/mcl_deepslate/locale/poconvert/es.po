@@ -130,12 +130,6 @@ msgstr "@1 es una variante de @2 que puede generar en manchas de pizarra profund
 msgid "@1 are a cracked variant."
 msgstr "@1 es una variante agrietada."
 
-msgid "Tuff"
-msgstr "Toba"
-
-msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
-msgstr "La toba es una roca ornamental formada a partir de ceniza volcánica que se encuentra en manchas subterráneas por debajo de Y=16."
-
 msgid "Chiseled Tuff"
 msgstr "Toba cincelada"
 
@@ -147,6 +141,12 @@ msgstr "Ladrillos de toba cincelada"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
 msgstr "Los ladrillos de toba cincelada son una variante de los ladrillos de toba, con un ladrillo grande en el centro del bloque, con un diseño geométrico arriba y abajo."
+
+msgid "Tuff"
+msgstr "Toba"
+
+msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
+msgstr "La toba es una roca ornamental formada a partir de ceniza volcánica que se encuentra en manchas subterráneas por debajo de Y=16."
 
 msgid "Tuff Stairs"
 msgstr "Escaleras de toba"

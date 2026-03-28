@@ -3,24 +3,21 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_deepslate x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2026-03-23 07:29+0000\n"
-"Last-Translator: Saintliy <saintliy@noreply.codeberg.org>\n"
-"Language-Team: Korean <https://translate.codeberg.org/projects/mineclonia/"
-"mcl_deepslate/ko/>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.2\n"
+"Plural-Forms: \n"
+"X-Generator: mtt_convert 0.1.1\n"
 
 msgid "Deepslate"
 msgstr "심층암"
 
 msgid "Deepslate is a stone type found deep underground in the Overworld that functions similar to regular stone but is harder than the stone."
-msgstr ""
-"심층암은 오버월드의 지하 깊은 곳에서 발견되는 돌의 한 유형으로, 일반 돌과 "
-"비슷하게 작동하지만 더 단단합니다."
+msgstr "심층암은 오버월드의 지하 깊은 곳에서 발견되는 돌의 한 유형으로, 일반 돌과 비슷하게 작동하지만 더 단단합니다."
 
 msgid "Infested Deepslate"
 msgstr "벌레 먹은 심층암"
@@ -133,12 +130,6 @@ msgstr ""
 msgid "@1 are a cracked variant."
 msgstr ""
 
-msgid "Tuff"
-msgstr ""
-
-msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
-msgstr ""
-
 msgid "Chiseled Tuff"
 msgstr ""
 
@@ -149,6 +140,12 @@ msgid "Chiseled Tuff Bricks"
 msgstr ""
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
+msgstr ""
+
+msgid "Tuff"
+msgstr ""
+
+msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
 msgstr ""
 
 msgid "Tuff Stairs"
@@ -189,3 +186,4 @@ msgstr ""
 
 msgid "Tuff Bricks Wall"
 msgstr ""
+

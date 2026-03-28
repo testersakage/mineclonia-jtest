@@ -130,12 +130,6 @@ msgstr "@1 on kuution @2 muunnos, joka syntyy syväliuske- ja tuhkakiviesiintymi
 msgid "@1 are a cracked variant."
 msgstr "@1 on murtunut muunnos."
 
-msgid "Tuff"
-msgstr "Tuhkakivi"
-
-msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
-msgstr "Tuhkakivi on koristeellinen kivilaji, joka on muodostunut tulivuoren tuhkasta. Sitä esiintyy laikkuina maan alla tason Y = 16 alapuolella."
-
 msgid "Chiseled Tuff"
 msgstr "Kaiverrettu tuhkakivi"
 
@@ -147,6 +141,12 @@ msgstr "Kaiverrettu tuhkakivitiili"
 
 msgid "Chiseled tuff bricks are a variant of tuff bricks, featuring a large brick in the center of the block, with geometric design above and below."
 msgstr "Kaiverrettu tuhkakivitiili on tuhkakivitiilen muunnos. Sen keskellä on suuri tiili, jonka ympärillä on geometrisia kuvioita."
+
+msgid "Tuff"
+msgstr "Tuhkakivi"
+
+msgid "Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."
+msgstr "Tuhkakivi on koristeellinen kivilaji, joka on muodostunut tulivuoren tuhkasta. Sitä esiintyy laikkuina maan alla tason Y = 16 alapuolella."
 
 msgid "Tuff Stairs"
 msgstr "Tuhkakiviportaat"

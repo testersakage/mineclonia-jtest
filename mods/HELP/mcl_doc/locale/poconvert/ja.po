@@ -76,9 +76,6 @@ msgstr "消費するには、手に持ってから右クリックします。"
 msgid "You cannot consume this when your hunger bar is full."
 msgstr "満腹ゲージが満タンなら、これは消費できません。"
 
-msgid "You have to wait for about 2 seconds before you can eat or drink again."
-msgstr "また飲み食いできるようになるまで、2秒くらい待たねばなりません。"
-
 msgid "Hunger points restored: @1"
 msgstr "満腹度回復：@1"
 
