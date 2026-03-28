@@ -24,10 +24,17 @@ function mcl_deepslate.register_variants(name, defs)
 	assert(defs.basename, "[mcl_deepslate] mcl_deepslate.register_variants needs a basename field to work, refer to API.md in mcl_deepslate.")
 	assert(defs.basetiles, "[mcl_deepslate] mcl_deepslate.register_variants needs a basetiles field to work, refer to API.md in mcl_deepslate.")
 
-	local main_itemstring = "mcl_deepslate:"..defs.basename.."_"..name
+	local tiles = {defs.basetiles..".png"}
+	local main_itemstring = "mcl_deepslate:"..defs.basename
+
+	if name ~= "" then
+		main_itemstring = main_itemstring.."_"..name
+		tiles = {defs.basetiles.."_"..name..".png"}
+	end
+
 	local main_def = table.merge({
 		_doc_items_hidden = false,
-		tiles = { defs.basetiles.."_"..name..".png" },
+		tiles = tiles,
 		is_ground_content = false,
 		groups = { pickaxey = 1, building_block = 1, material_stone = 1 },
 		sounds = mcl_sounds.node_sound_stone_defaults(),
@@ -46,15 +53,19 @@ function mcl_deepslate.register_variants(name, defs)
 			tiles = { defs.basetiles.."_"..name.."_cracked.png" },
 		}, defs.cracked))
 	end
+	local subname = defs.basename
+	if name ~= "" then
+		subname = subname.."_"..name
+	end
 	if defs.node and defs.stair then
-		mcl_stairs.register_stair(defs.basename.."_"..name, {
+		mcl_stairs.register_stair(subname, {
 			description = defs.stair.description,
 			baseitem = main_itemstring,
 			overrides = defs.stair
 		})
 	end
 	if defs.node and defs.slab then
-		mcl_stairs.register_slab(defs.basename.."_"..name, {
+		mcl_stairs.register_slab(subname, {
 			description = defs.slab.description,
 			baseitem = main_itemstring,
 			overrides = defs.slab
