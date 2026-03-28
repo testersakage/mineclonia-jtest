@@ -358,6 +358,7 @@ end
 
 local scaffolding_def = {
 	doc_items_hidden = false,
+	tiles = {"mcl_bamboo_scaffolding_top.png", "mcl_bamboo_scaffolding_top.png", "mcl_bamboo_scaffolding_side.png"},
 	drawtype = "nodebox",
 	paramtype = "light",
 	use_texture_alpha = "clip",
@@ -476,7 +477,12 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 core.register_node("mcl_bamboo:scaffolding_horizontal", table.merge_deep(scaffolding_def, {
 	description = S("Scaffolding horizontal"),
 	doc_items_longdesc = S("Scaffolding block..."),
-	tiles = {"mcl_bamboo_scaffolding_side.png","mcl_bamboo_scaffolding_top.png","mcl_bamboo_scaffolding_bottom.png"},
+	doc_items_hidden = false,
+	tiles = {"mcl_bamboo_scaffolding_top.png","mcl_bamboo_scaffolding_top.png","mcl_bamboo_scaffolding_side.png"},
+	drawtype = "nodebox",
+	paramtype = "light",
+	use_texture_alpha = "clip",
+	drop = "mcl_bamboo:scaffolding",
 	node_box = {
 		type = "fixed",
 		fixed = {
