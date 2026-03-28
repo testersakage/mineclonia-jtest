@@ -495,6 +495,7 @@ local magma_cube = table.merge (slime, {
 	end,
 	attack_type = "null",
 	_slime_particle_glow = 14,
+	_no_fall_damage = true,
 })
 
 -- Magma cube
