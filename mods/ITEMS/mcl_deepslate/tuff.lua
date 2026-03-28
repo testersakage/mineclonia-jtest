@@ -10,17 +10,6 @@ local function register_tuff_variant(name, defs)
 	}, defs))
 end
 
-core.register_node("mcl_deepslate:tuff", {
-	description = S("Tuff"),
-	_doc_items_longdesc = S("Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."),
-	_doc_items_hidden = false,
-	tiles = { "mcl_deepslate_tuff.png" },
-	groups = { pickaxey = 1, building_block = 1, converts_to_moss = 1, stonecuttable = 1, overworld_carvable = 1, deepslate_ore_target = 1, },
-	sounds = mcl_sounds.node_sound_stone_defaults(),
-	_mcl_blast_resistance = 6,
-	_mcl_hardness = 1.5,
-})
-
 core.register_node("mcl_deepslate:tuff_chiseled", {
     description = S("Chiseled Tuff"),
     _doc_items_longdesc = S("Chiseled tuff is a chiseled variant of tuff."),
@@ -46,6 +35,14 @@ core.register_node("mcl_deepslate:tuff_chiseled_bricks", {
 })
 
 register_tuff_variant("", {
+    node = {
+        description = S("Tuff"),
+        _doc_items_longdesc = S("Tuff is an ornamental rock formed from volcanic ash, occurring in underground blobs below Y=16."),
+        _doc_items_hidden = false,
+        groups = { pickaxey = 1, building_block = 1, converts_to_moss = 1, stonecuttable = 1, overworld_carvable = 1, deepslate_ore_target = 1, },
+        sounds = mcl_sounds.node_sound_stone_defaults(),
+        _mcl_blast_resistance = 6,
+    },
     stair = {
         description = S("Tuff Stairs"),
         _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", },
@@ -86,19 +83,19 @@ register_tuff_variant("bricks", {
         description = S("Tuff Bricks"),
         _doc_items_longdesc = S("Tuff bricks are a brick variant of tuff."),
         groups = { stonecuttable = 1 },
-        _mcl_stonecutter_recipes = { "mcl_deepslate:tuff_polished", },
+        _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", "mcl_deepslate:tuff_polished", },
     },
     stair = {
         description = S("Tuff Bricks Stairs"),
-        _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_polished", },
+        _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_bricks", },
     },
     slab = {
         description = S("Tuff Bricks Slab"),
-        _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_polished", },
+        _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_bricks", },
     },
     wall = {
         description = S("Tuff Bricks Wall"),
-        _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_polished", },
+        _mcl_stonecutter_recipes = { "mcl_deepslate:tuff", "mcl_deepslate:tuff_polished", "mcl_deepslate:tuff_bricks", },
     },
 })
 
