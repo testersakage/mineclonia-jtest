@@ -382,7 +382,7 @@ local scaffolding_def = {
 core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , {
 	description = S("Scaffolding"),
 	doc_items_longdesc = S("Scaffolding is a temporary structure to easily climb up while building that is easily removed"),
-	tiles = {"mcl_bamboo_scaffolding_top.png","mcl_bamboo_scaffolding_side.png","mcl_bamboo_scaffolding_bottom.png"},
+	tiles = {"mcl_bamboo_scaffolding_top.png","mcl_bamboo_scaffolding_top.png","mcl_bamboo_scaffolding_side.png"},
 	node_box = {
 		type = "fixed",
 		fixed = {
@@ -475,8 +475,6 @@ core.register_node("mcl_bamboo:scaffolding", table.merge_deep(scaffolding_def , 
 }))
 
 core.register_node("mcl_bamboo:scaffolding_horizontal", table.merge_deep(scaffolding_def, {
-	description = S("Scaffolding horizontal"),
-	doc_items_longdesc = S("Scaffolding block..."),
 	doc_items_hidden = false,
 	tiles = {"mcl_bamboo_scaffolding_top.png","mcl_bamboo_scaffolding_top.png","mcl_bamboo_scaffolding_side.png"},
 	drawtype = "nodebox",
