@@ -2,7 +2,7 @@ local S = core.get_translator(core.get_current_modname())
 local F = core.formspec_escape
 local C = core.colorize
 
-local MAX_NAME_LENGTH = 35
+local MAX_NAME_LENGTH = 50
 local MAX_WEAR = 65535
 local SAME_TOOL_REPAIR_BOOST = math.ceil(MAX_WEAR * 0.12) -- 12%
 local MATERIAL_TOOL_REPAIR_BOOST = {
