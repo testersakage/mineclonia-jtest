@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2026-03-22 12:29+0000\n"
-"Last-Translator: jopaSuomi <jopasuomi@noreply.codeberg.org>\n"
+"Last-Translator: Heketiitus <heketiitus@noreply.codeberg.org>\n"
 "Language-Team: Finnish <https://translate.codeberg.org/projects/mineclonia/"
 "mcl_banners/fi/>\n"
 "Language: fi\n"
@@ -1362,523 +1362,523 @@ msgid "Magenta Thing Charge"
 msgstr "Purppuranpunainen jokumerkki"
 
 msgid "Orange Banner"
-msgstr ""
+msgstr "Oranssi viiri"
 
 msgid "Orange Base"
-msgstr ""
+msgstr "Oranssi tyvi"
 
 msgid "Orange Base Dexter Canton"
-msgstr ""
+msgstr "Oranssi neliö vasemmalla tyvessä"
 
 msgid "Orange Base Gradient"
-msgstr ""
+msgstr "Oranssi liukuväri tyvestä"
 
 msgid "Orange Base Indented"
-msgstr ""
+msgstr "Oranssi hammastettu tyvi"
 
 msgid "Orange Base Sinister Canton"
-msgstr ""
+msgstr "Oranssi neliö oikealla tyvessä"
 
 msgid "Orange Bend"
-msgstr ""
+msgstr "Oranssi palkki"
 
 msgid "Orange Bend Sinister"
-msgstr ""
+msgstr "Oranssi vastapalkki"
 
 msgid "Orange Bordure"
-msgstr ""
+msgstr "Oranssi reunus"
 
 msgid "Orange Bordure Indented"
-msgstr ""
+msgstr "Oranssi hammastettu reunus"
 
 msgid "Orange Bricks"
-msgstr ""
+msgstr "Oranssi tiilikuosi"
 
 msgid "Orange Chevron"
-msgstr ""
+msgstr "Oranssi kolmio"
 
 msgid "Orange Chevron Inverted"
-msgstr ""
+msgstr "Oranssi kaateinen kolmio"
 
 msgid "Orange Chief"
-msgstr ""
+msgstr "Oranssi laki"
 
 msgid "Orange Chief Dexter Canton"
-msgstr ""
+msgstr "Oranssi neliö vasemmalla laessa"
 
 msgid "Orange Chief Indented"
-msgstr ""
+msgstr "Oranssi hammastettu laki"
 
 msgid "Orange Chief Sinister Canton"
-msgstr ""
+msgstr "Oranssi neliö oikealla laessa"
 
 msgid "Orange Creeper Charge"
-msgstr ""
+msgstr "Oranssi hiipijämerkki"
 
 msgid "Orange Cross"
-msgstr ""
+msgstr "Oranssi risti"
 
 msgid "Orange Fess"
-msgstr ""
+msgstr "Oranssi hirsi"
 
 msgid "Orange Flow"
-msgstr ""
+msgstr "Oranssi virta"
 
 msgid "Orange Flower Charge"
-msgstr ""
+msgstr "Oranssi kukkamerkki"
 
 msgid "Orange Globe Charge"
-msgstr ""
+msgstr "Oranssi maapallomerkki"
 
 msgid "Orange Gradient"
-msgstr ""
+msgstr "Oranssi liukuväri"
 
 msgid "Orange Guster"
-msgstr ""
+msgstr "Oranssi puhurinpuhaltaja"
 
 msgid "Orange Lozenge"
-msgstr ""
+msgstr "Oranssi vinoneliö"
 
 msgid "Orange Pale"
-msgstr ""
+msgstr "Oranssi paalu"
 
 msgid "Orange Pale Dexter"
-msgstr ""
+msgstr "Oranssi vasen pieli"
 
 msgid "Orange Pale Sinister"
-msgstr ""
+msgstr "Oranssi oikea pieli"
 
 msgid "Orange Paly"
-msgstr ""
+msgstr "Oranssi paalutus"
 
 msgid "Orange Per Bend"
-msgstr ""
+msgstr "Oranssi lohko"
 
 msgid "Orange Per Bend Inverted"
-msgstr ""
+msgstr "Oranssi kaateinen lohko"
 
 msgid "Orange Per Bend Sinister"
-msgstr ""
+msgstr "Oranssi vastalohko"
 
 msgid "Orange Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Oranssi kaateinen vastalohko"
 
 msgid "Orange Per Fess"
-msgstr ""
+msgstr "Oranssi katkaisu"
 
 msgid "Orange Per Fess Inverted"
-msgstr ""
+msgstr "Oranssi kaateinen katkaisu"
 
 msgid "Orange Per Pale"
-msgstr ""
+msgstr "Oranssi halkaisu"
 
 msgid "Orange Per Pale Inverted"
-msgstr ""
+msgstr "Oranssi kaateinen halkaisu"
 
 msgid "Orange Piglin Charge"
-msgstr ""
+msgstr "Oranssi ihmissikamerkki"
 
 msgid "Orange Roundel"
-msgstr ""
+msgstr "Oranssi ympyrä"
 
 msgid "Orange Saltire"
-msgstr ""
+msgstr "Oranssi vinoristi"
 
 msgid "Orange Skull Charge"
-msgstr ""
+msgstr "Oranssi pääkallomerkki"
 
 msgid "Orange Thing Charge"
-msgstr ""
+msgstr "Oranssi jokumerkki"
 
 msgid "Piglin Banner Pattern"
 msgstr "Ihmissika-viirikuvio"
 
 msgid "Pink Banner"
-msgstr ""
+msgstr "Vaaleanpunainen viiri"
 
 msgid "Pink Base"
-msgstr ""
+msgstr "Vaaleanpunainen tyvi"
 
 msgid "Pink Base Dexter Canton"
-msgstr ""
+msgstr "Vaaleanpunainen neliö vasemmalla tyvessä"
 
 msgid "Pink Base Gradient"
-msgstr ""
+msgstr "Vaaleanpunainen liukuväri tyvestä"
 
 msgid "Pink Base Indented"
-msgstr ""
+msgstr "Vaaleanpunainen hammastettu tyvi"
 
 msgid "Pink Base Sinister Canton"
-msgstr ""
+msgstr "Vaaleanpunainen neliö oikealla tyvessä"
 
 msgid "Pink Bend"
-msgstr ""
+msgstr "Vaaleanpunainen palkki"
 
 msgid "Pink Bend Sinister"
-msgstr ""
+msgstr "Vaaleanpunainen vastapalkki"
 
 msgid "Pink Bordure"
-msgstr ""
+msgstr "Vaaleanpunainen reunus"
 
 msgid "Pink Bordure Indented"
-msgstr ""
+msgstr "Vaaleanpunainen hammastettu reunus"
 
 msgid "Pink Bricks"
-msgstr ""
+msgstr "Vaaleanpunainen tiilikuosi"
 
 msgid "Pink Chevron"
-msgstr ""
+msgstr "Vaaleanpunainen kolmio"
 
 msgid "Pink Chevron Inverted"
-msgstr ""
+msgstr "Vaaleanpunainen kaateinen kolmio"
 
 msgid "Pink Chief"
-msgstr ""
+msgstr "Vaaleanpunainen laki"
 
 msgid "Pink Chief Dexter Canton"
-msgstr ""
+msgstr "Vaaleanpunainen neliö vasemmalla laessa"
 
 msgid "Pink Chief Indented"
-msgstr ""
+msgstr "Vaaleanpunainen hammastettu laki"
 
 msgid "Pink Chief Sinister Canton"
-msgstr ""
+msgstr "Vaaleanpunainen neliö oikealla laessa"
 
 msgid "Pink Creeper Charge"
-msgstr ""
+msgstr "Vaaleanpunainen hiipijämerkki"
 
 msgid "Pink Cross"
-msgstr ""
+msgstr "Vaaleanpunainen risti"
 
 msgid "Pink Fess"
-msgstr ""
+msgstr "Vaaleanpunainen hirsi"
 
 msgid "Pink Flow"
-msgstr ""
+msgstr "Vaaleanpunainen virta"
 
 msgid "Pink Flower Charge"
-msgstr ""
+msgstr "Vaaleanpunainen kukkamerkki"
 
 msgid "Pink Globe Charge"
-msgstr ""
+msgstr "Vaaleanpunainen maapallomerkki"
 
 msgid "Pink Gradient"
-msgstr ""
+msgstr "Vaaleanpunainen liukuväri"
 
 msgid "Pink Guster"
-msgstr ""
+msgstr "Vaaleanpunainen puhurinpuhaltaja"
 
 msgid "Pink Lozenge"
-msgstr ""
+msgstr "Vaaleanpunainen vinoneliö"
 
 msgid "Pink Pale"
-msgstr ""
+msgstr "Vaaleanpunainen paalu"
 
 msgid "Pink Pale Dexter"
-msgstr ""
+msgstr "Vaaleanpunainen vasen pieli"
 
 msgid "Pink Pale Sinister"
-msgstr ""
+msgstr "Vaaleanpunainen oikea pieli"
 
 msgid "Pink Paly"
-msgstr ""
+msgstr "Vaaleanpunainen paalutus"
 
 msgid "Pink Per Bend"
-msgstr ""
+msgstr "Vaaleanpunainen lohko"
 
 msgid "Pink Per Bend Inverted"
-msgstr ""
+msgstr "Vaaleanpunainen kaateinen lohko"
 
 msgid "Pink Per Bend Sinister"
-msgstr ""
+msgstr "Vaaleanpunainen vastalohko"
 
 msgid "Pink Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Vaaleanpunainen kaateinen vastalohko"
 
 msgid "Pink Per Fess"
-msgstr ""
+msgstr "Vaaleanpunainen katkaisu"
 
 msgid "Pink Per Fess Inverted"
-msgstr ""
+msgstr "Vaaleanpunainen kaateinen katkaisu"
 
 msgid "Pink Per Pale"
-msgstr ""
+msgstr "Vaaleanpunainen halkaisu"
 
 msgid "Pink Per Pale Inverted"
-msgstr ""
+msgstr "Vaaleanpunainen kaateinen halkaisu"
 
 msgid "Pink Piglin Charge"
-msgstr ""
+msgstr "Vaaleanpunainen ihmissikamerkki"
 
 msgid "Pink Roundel"
-msgstr ""
+msgstr "Vaaleanpunainen ympyrä"
 
 msgid "Pink Saltire"
-msgstr ""
+msgstr "Vaaleanpunainen vinoristi"
 
 msgid "Pink Skull Charge"
-msgstr ""
+msgstr "Vaaleanpunainen pääkallomerkki"
 
 msgid "Pink Thing Charge"
-msgstr ""
+msgstr "Vaaleanpunainen jokumerkki"
 
 msgid "Purple Banner"
-msgstr ""
+msgstr "Violetti viiri"
 
 msgid "Purple Base"
-msgstr ""
+msgstr "Violetti tyvi"
 
 msgid "Purple Base Dexter Canton"
-msgstr ""
+msgstr "Violetti neliö vasemmalla tyvessä"
 
 msgid "Purple Base Gradient"
-msgstr ""
+msgstr "Violetti liukuväri tyvestä"
 
 msgid "Purple Base Indented"
-msgstr ""
+msgstr "Violetti hammastettu tyvi"
 
 msgid "Purple Base Sinister Canton"
-msgstr ""
+msgstr "Violetti neliö oikealla tyvessä"
 
 msgid "Purple Bend"
-msgstr ""
+msgstr "Violetti palkki"
 
 msgid "Purple Bend Sinister"
-msgstr ""
+msgstr "Violetti vastapalkki"
 
 msgid "Purple Bordure"
-msgstr ""
+msgstr "Violetti reunus"
 
 msgid "Purple Bordure Indented"
-msgstr ""
+msgstr "Violetti hammastettu reunus"
 
 msgid "Purple Bricks"
-msgstr ""
+msgstr "Violetti tiilikuosi"
 
 msgid "Purple Chevron"
-msgstr ""
+msgstr "Violetti kolmio"
 
 msgid "Purple Chevron Inverted"
-msgstr ""
+msgstr "Violetti kaateinen kolmio"
 
 msgid "Purple Chief"
-msgstr ""
+msgstr "Violetti laki"
 
 msgid "Purple Chief Dexter Canton"
-msgstr ""
+msgstr "Violetti neliö vasemmalla laessa"
 
 msgid "Purple Chief Indented"
-msgstr ""
+msgstr "Violetti hammastettu laki"
 
 msgid "Purple Chief Sinister Canton"
-msgstr ""
+msgstr "Violetti neliö oikealla laessa"
 
 msgid "Purple Creeper Charge"
-msgstr ""
+msgstr "Violetti hiipijämerkki"
 
 msgid "Purple Cross"
-msgstr ""
+msgstr "Violetti risti"
 
 msgid "Purple Fess"
-msgstr ""
+msgstr "Violetti hirsi"
 
 msgid "Purple Flow"
-msgstr ""
+msgstr "Violetti virta"
 
 msgid "Purple Flower Charge"
-msgstr ""
+msgstr "Violetti kukkamerkki"
 
 msgid "Purple Globe Charge"
-msgstr ""
+msgstr "Violetti maapallomerkki"
 
 msgid "Purple Gradient"
-msgstr ""
+msgstr "Violetti liukuväri"
 
 msgid "Purple Guster"
-msgstr ""
+msgstr "Violetti puhurinpuhaltaja"
 
 msgid "Purple Lozenge"
-msgstr ""
+msgstr "Violetti vinoneliö"
 
 msgid "Purple Pale"
-msgstr ""
+msgstr "Violetti paalu"
 
 msgid "Purple Pale Dexter"
-msgstr ""
+msgstr "Violetti vasen pieli"
 
 msgid "Purple Pale Sinister"
-msgstr ""
+msgstr "Violetti oikea pieli"
 
 msgid "Purple Paly"
-msgstr ""
+msgstr "Violetti paalutus"
 
 msgid "Purple Per Bend"
-msgstr ""
+msgstr "Violetti lohko"
 
 msgid "Purple Per Bend Inverted"
-msgstr ""
+msgstr "Violetti kaateinen lohko"
 
 msgid "Purple Per Bend Sinister"
-msgstr ""
+msgstr "Violetti vastalohko"
 
 msgid "Purple Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Violetti kaateinen vastalohko"
 
 msgid "Purple Per Fess"
-msgstr ""
+msgstr "Violetti katkaisu"
 
 msgid "Purple Per Fess Inverted"
-msgstr ""
+msgstr "Violetti kaateinen katkaisu"
 
 msgid "Purple Per Pale"
-msgstr ""
+msgstr "Violetti halkaisu"
 
 msgid "Purple Per Pale Inverted"
-msgstr ""
+msgstr "Violetti kaateinen halkaisu"
 
 msgid "Purple Piglin Charge"
-msgstr ""
+msgstr "Violetti ihmissikamerkki"
 
 msgid "Purple Roundel"
-msgstr ""
+msgstr "Violetti ympyrä"
 
 msgid "Purple Saltire"
-msgstr ""
+msgstr "Violetti vinoristi"
 
 msgid "Purple Skull Charge"
-msgstr ""
+msgstr "Violetti pääkallomerkki"
 
 msgid "Purple Thing Charge"
-msgstr ""
+msgstr "Violetti jokumerkki"
 
 msgid "Red Banner"
-msgstr ""
+msgstr "Punainen viiri"
 
 msgid "Red Base"
-msgstr ""
+msgstr "Punainen tyvi"
 
 msgid "Red Base Dexter Canton"
-msgstr ""
+msgstr "Punainen neliö vasemmalla tyvessä"
 
 msgid "Red Base Gradient"
-msgstr ""
+msgstr "Punainen liukuväri tyvestä"
 
 msgid "Red Base Indented"
-msgstr ""
+msgstr "Punainen hammastettu tyvi"
 
 msgid "Red Base Sinister Canton"
-msgstr ""
+msgstr "Punainen neliö oikealla tyvessä"
 
 msgid "Red Bend"
-msgstr ""
+msgstr "Punainen palkki"
 
 msgid "Red Bend Sinister"
-msgstr ""
+msgstr "Punainen vastapalkki"
 
 msgid "Red Bordure"
-msgstr ""
+msgstr "Punainen reunus"
 
 msgid "Red Bordure Indented"
-msgstr ""
+msgstr "Punainen hammastettu reunus"
 
 msgid "Red Bricks"
-msgstr ""
+msgstr "Punainen tiilikuosi"
 
 msgid "Red Chevron"
-msgstr ""
+msgstr "Punainen kolmio"
 
 msgid "Red Chevron Inverted"
-msgstr ""
+msgstr "Punainen kaateinen kolmio"
 
 msgid "Red Chief"
-msgstr ""
+msgstr "Punainen laki"
 
 msgid "Red Chief Dexter Canton"
-msgstr ""
+msgstr "Punainen neliö vasemmalla laessa"
 
 msgid "Red Chief Indented"
-msgstr ""
+msgstr "Punainen hammastettu laki"
 
 msgid "Red Chief Sinister Canton"
-msgstr ""
+msgstr "Punainen neliö oikealla laessa"
 
 msgid "Red Creeper Charge"
-msgstr ""
+msgstr "Punainen hiipijämerkki"
 
 msgid "Red Cross"
-msgstr ""
+msgstr "Punainen risti"
 
 msgid "Red Fess"
-msgstr ""
+msgstr "Punainen hirsi"
 
 msgid "Red Flow"
-msgstr ""
+msgstr "Punainen virta"
 
 msgid "Red Flower Charge"
-msgstr ""
+msgstr "Punainen kukkamerkki"
 
 msgid "Red Globe Charge"
-msgstr ""
+msgstr "Punainen maapallomerkki"
 
 msgid "Red Gradient"
-msgstr ""
+msgstr "Punainen liukuväri"
 
 msgid "Red Guster"
-msgstr ""
+msgstr "Punainen puhurinpuhaltaja"
 
 msgid "Red Lozenge"
-msgstr ""
+msgstr "Punainen vinoneliö"
 
 msgid "Red Pale"
-msgstr ""
+msgstr "Punainen paalu"
 
 msgid "Red Pale Dexter"
-msgstr ""
+msgstr "Punainen vasen pieli"
 
 msgid "Red Pale Sinister"
-msgstr ""
+msgstr "Punainen oikea pieli"
 
 msgid "Red Paly"
-msgstr ""
+msgstr "Punainen paalutus"
 
 msgid "Red Per Bend"
-msgstr ""
+msgstr "Punainen lohko"
 
 msgid "Red Per Bend Inverted"
-msgstr ""
+msgstr "Punainen kaateinen lohko"
 
 msgid "Red Per Bend Sinister"
-msgstr ""
+msgstr "Punainen vastalohko"
 
 msgid "Red Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Punainen kaateinen vastalohko"
 
 msgid "Red Per Fess"
-msgstr ""
+msgstr "Punainen katkaisu"
 
 msgid "Red Per Fess Inverted"
-msgstr ""
+msgstr "Punainen kaateinen katkaisu"
 
 msgid "Red Per Pale"
-msgstr ""
+msgstr "Punainen halkaisu"
 
 msgid "Red Per Pale Inverted"
-msgstr ""
+msgstr "Punainen kaateinen halkaisu"
 
 msgid "Red Piglin Charge"
-msgstr ""
+msgstr "Punainen ihmissikamerkki"
 
 msgid "Red Roundel"
-msgstr ""
+msgstr "Punainen ympyrä"
 
 msgid "Red Saltire"
-msgstr ""
+msgstr "Punainen vinoristi"
 
 msgid "Red Skull Charge"
-msgstr ""
+msgstr "Punainen pääkallomerkki"
 
 msgid "Red Thing Charge"
-msgstr ""
+msgstr "Punainen jokumerkki"
 
 msgid "Skull Banner Pattern"
 msgstr "Pääkallo-viirikuvio"
@@ -1887,259 +1887,259 @@ msgid "Thing Banner Pattern"
 msgstr "Joku-viirikuvio"
 
 msgid "White Banner"
-msgstr ""
+msgstr "Valkoinen viiri"
 
 msgid "White Base"
-msgstr ""
+msgstr "Valkoinen tyvi"
 
 msgid "White Base Dexter Canton"
-msgstr ""
+msgstr "Valkoinen neliö vasemmalla tyvessä"
 
 msgid "White Base Gradient"
-msgstr ""
+msgstr "Valkoinen liukuväri tyvestä"
 
 msgid "White Base Indented"
-msgstr ""
+msgstr "Valkoinen hammastettu tyvi"
 
 msgid "White Base Sinister Canton"
-msgstr ""
+msgstr "Valkoinen neliö oikealla tyvessä"
 
 msgid "White Bend"
-msgstr ""
+msgstr "Valkoinen palkki"
 
 msgid "White Bend Sinister"
-msgstr ""
+msgstr "Valkoinen vastapalkki"
 
 msgid "White Bordure"
-msgstr ""
+msgstr "Valkoinen reunus"
 
 msgid "White Bordure Indented"
-msgstr ""
+msgstr "Valkoinen hammastettu reunus"
 
 msgid "White Bricks"
-msgstr ""
+msgstr "Valkoinen tiilikuosi"
 
 msgid "White Chevron"
-msgstr ""
+msgstr "Valkoinen kolmio"
 
 msgid "White Chevron Inverted"
-msgstr ""
+msgstr "Valkoinen kaateinen kolmio"
 
 msgid "White Chief"
-msgstr ""
+msgstr "Valkoinen laki"
 
 msgid "White Chief Dexter Canton"
-msgstr ""
+msgstr "Valkoinen neliö vasemmalla laessa"
 
 msgid "White Chief Indented"
-msgstr ""
+msgstr "Valkoinen hammastettu laki"
 
 msgid "White Chief Sinister Canton"
-msgstr ""
+msgstr "Valkoinen neliö oikealla laessa"
 
 msgid "White Creeper Charge"
-msgstr ""
+msgstr "Valkoinen hiipijämerkki"
 
 msgid "White Cross"
-msgstr ""
+msgstr "Valkoinen risti"
 
 msgid "White Fess"
-msgstr ""
+msgstr "Valkoinen hirsi"
 
 msgid "White Flow"
-msgstr ""
+msgstr "Valkoinen virta"
 
 msgid "White Flower Charge"
-msgstr ""
+msgstr "Valkoinen kukkamerkki"
 
 msgid "White Globe Charge"
-msgstr ""
+msgstr "Valkoinen maapallomerkki"
 
 msgid "White Gradient"
-msgstr ""
+msgstr "Valkoinen liukuväri"
 
 msgid "White Guster"
-msgstr ""
+msgstr "Valkoinen puhurinpuhaltaja"
 
 msgid "White Lozenge"
-msgstr ""
+msgstr "Valkoinen vinoneliö"
 
 msgid "White Pale"
-msgstr ""
+msgstr "Valkoinen paalu"
 
 msgid "White Pale Dexter"
-msgstr ""
+msgstr "Valkoinen vasen pieli"
 
 msgid "White Pale Sinister"
-msgstr ""
+msgstr "Valkoinen oikea pieli"
 
 msgid "White Paly"
-msgstr ""
+msgstr "Valkoinen paalutus"
 
 msgid "White Per Bend"
-msgstr ""
+msgstr "Valkoinen lohko"
 
 msgid "White Per Bend Inverted"
-msgstr ""
+msgstr "Valkoinen kaateinen lohko"
 
 msgid "White Per Bend Sinister"
-msgstr ""
+msgstr "Valkoinen vastalohko"
 
 msgid "White Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Valkoinen kaateinen vastalohko"
 
 msgid "White Per Fess"
-msgstr ""
+msgstr "Valkoinen katkaisu"
 
 msgid "White Per Fess Inverted"
-msgstr ""
+msgstr "Valkoinen kaateinen katkaisu"
 
 msgid "White Per Pale"
-msgstr ""
+msgstr "Valkoinen halkaisu"
 
 msgid "White Per Pale Inverted"
-msgstr ""
+msgstr "Valkoinen kaateinen halkaisu"
 
 msgid "White Piglin Charge"
-msgstr ""
+msgstr "Valkoinen ihmissikamerkki"
 
 msgid "White Roundel"
-msgstr ""
+msgstr "Valkoinen ympyrä"
 
 msgid "White Saltire"
-msgstr ""
+msgstr "Valkoinen vinoristi"
 
 msgid "White Skull Charge"
-msgstr ""
+msgstr "Valkoinen pääkallomerkki"
 
 msgid "White Thing Charge"
-msgstr ""
+msgstr "Valkoinen jokumerkki"
 
 msgid "Yellow Banner"
-msgstr ""
+msgstr "Keltainen viiri"
 
 msgid "Yellow Base"
-msgstr ""
+msgstr "Keltainen tyvi"
 
 msgid "Yellow Base Dexter Canton"
-msgstr ""
+msgstr "Keltainen neliö vasemmalla tyvessä"
 
 msgid "Yellow Base Gradient"
-msgstr ""
+msgstr "Keltainen liukuväri tyvestä"
 
 msgid "Yellow Base Indented"
-msgstr ""
+msgstr "Keltainen hammastettu tyvi"
 
 msgid "Yellow Base Sinister Canton"
-msgstr ""
+msgstr "Keltainen neliö oikealla tyvessä"
 
 msgid "Yellow Bend"
-msgstr ""
+msgstr "Keltainen palkki"
 
 msgid "Yellow Bend Sinister"
-msgstr ""
+msgstr "Keltainen vastapalkki"
 
 msgid "Yellow Bordure"
-msgstr ""
+msgstr "Keltainen reunus"
 
 msgid "Yellow Bordure Indented"
-msgstr ""
+msgstr "Keltainen hammastettu reunus"
 
 msgid "Yellow Bricks"
-msgstr ""
+msgstr "Keltainen tiilikuosi"
 
 msgid "Yellow Chevron"
-msgstr ""
+msgstr "Keltainen kolmio"
 
 msgid "Yellow Chevron Inverted"
-msgstr ""
+msgstr "Keltainen kaateinen kolmio"
 
 msgid "Yellow Chief"
-msgstr ""
+msgstr "Keltainen laki"
 
 msgid "Yellow Chief Dexter Canton"
-msgstr ""
+msgstr "Keltainen neliö vasemmalla laessa"
 
 msgid "Yellow Chief Indented"
-msgstr ""
+msgstr "Keltainen hammastettu laki"
 
 msgid "Yellow Chief Sinister Canton"
-msgstr ""
+msgstr "Keltainen neliö oikealla laessa"
 
 msgid "Yellow Creeper Charge"
-msgstr ""
+msgstr "Keltainen hiipijämerkki"
 
 msgid "Yellow Cross"
-msgstr ""
+msgstr "Keltainen risti"
 
 msgid "Yellow Fess"
-msgstr ""
+msgstr "Keltainen hirsi"
 
 msgid "Yellow Flow"
-msgstr ""
+msgstr "Keltainen virta"
 
 msgid "Yellow Flower Charge"
-msgstr ""
+msgstr "Keltainen kukkamerkki"
 
 msgid "Yellow Globe Charge"
-msgstr ""
+msgstr "Keltainen maapallomerkki"
 
 msgid "Yellow Gradient"
-msgstr ""
+msgstr "Keltainen liukuväri"
 
 msgid "Yellow Guster"
-msgstr ""
+msgstr "Keltainen puhurinpuhaltaja"
 
 msgid "Yellow Lozenge"
-msgstr ""
+msgstr "Keltainen vinoneliö"
 
 msgid "Yellow Pale"
-msgstr ""
+msgstr "Keltainen paalu"
 
 msgid "Yellow Pale Dexter"
-msgstr ""
+msgstr "Keltainen vasen pieli"
 
 msgid "Yellow Pale Sinister"
-msgstr ""
+msgstr "Keltainen oikea pieli"
 
 msgid "Yellow Paly"
-msgstr ""
+msgstr "Keltainen paalutus"
 
 msgid "Yellow Per Bend"
-msgstr ""
+msgstr "Keltainen lohko"
 
 msgid "Yellow Per Bend Inverted"
-msgstr ""
+msgstr "Keltainen kaateinen lohko"
 
 msgid "Yellow Per Bend Sinister"
-msgstr ""
+msgstr "Keltainen vastalohko"
 
 msgid "Yellow Per Bend Sinister Inverted"
-msgstr ""
+msgstr "Keltainen kaateinen vastalohko"
 
 msgid "Yellow Per Fess"
-msgstr ""
+msgstr "Keltainen katkaisu"
 
 msgid "Yellow Per Fess Inverted"
-msgstr ""
+msgstr "Keltainen kaateinen katkaisu"
 
 msgid "Yellow Per Pale"
-msgstr ""
+msgstr "Keltainen halkaisu"
 
 msgid "Yellow Per Pale Inverted"
-msgstr ""
+msgstr "Keltainen kaateinen halkaisu"
 
 msgid "Yellow Piglin Charge"
-msgstr ""
+msgstr "Keltainen ihmissikamerkki"
 
 msgid "Yellow Roundel"
-msgstr ""
+msgstr "Keltainen ympyrä"
 
 msgid "Yellow Saltire"
-msgstr ""
+msgstr "Keltainen vinoristi"
 
 msgid "Yellow Skull Charge"
-msgstr ""
+msgstr "Keltainen pääkallomerkki"
 
 msgid "Yellow Thing Charge"
-msgstr ""
+msgstr "Keltainen jokumerkki"
