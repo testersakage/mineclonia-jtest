@@ -399,17 +399,21 @@ core.register_node("mcl_lush_caves:spore_blossom", {
 	end)
 })
 
+local azalea_box = {
+	type = "fixed",
+	fixed = {
+		{ -8/16, -4/16, -8/16, 8/16, 8/16, 8/16 },
+		{ -2/16, -8/16, -2/16, 2/16, -4/16, 2/16 },
+	}
+}
+
 local tpl_azalea = {
 	_tt_help = S("Needs soil and bone meal to grow"),
 	_doc_items_hidden = false,
-	drawtype = "nodebox",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{ -8/16, -4/16, -8/16, 8/16, 8/16, 8/16 },
-			{ -2/16, -8/16, -2/16, 2/16, -4/16, 2/16 },
-		}
-	},
+	drawtype = "mesh",
+	mesh = "mcl_lush_caves_azalea.obj",
+	selection_box = azalea_box,
+	collision_box = azalea_box,
 	is_ground_content = false,
 	groups = {
 		handy = 1, shearsy = 1,
@@ -454,14 +458,12 @@ local azalea = table.merge(
 		_doc_items_longdesc = S("Azalea is a small plant which often occurs in lush caves. It can be broken by hand or any tool. By using bone meal, azalea can be turned into an azalea tree."),
 		_doc_items_hidden = false,
 		tiles = {
+			"mcl_lush_caves_azalea_side.png",
 			"mcl_lush_caves_azalea_top.png",
-			"mcl_lush_caves_azalea_bottom.png",
-			"mcl_lush_caves_azalea_side.png",
-			"mcl_lush_caves_azalea_side.png",
-			"mcl_lush_caves_azalea_side.png",
-			"mcl_lush_caves_azalea_side.png",
+			"mcl_lush_caves_azalea_plant.png",
 		},
-})
+	}
+)
 azalea.groups.compostability = 65
 core.register_node("mcl_lush_caves:azalea", azalea)
 
@@ -472,12 +474,9 @@ local azalea_flowering = table.merge(
 		_doc_items_entry_name = S("Flowering Azalea"),
 		_doc_items_hidden = false,
 		tiles = {
+			"mcl_lush_caves_azalea_flowering_side.png",
 			"mcl_lush_caves_azalea_flowering_top.png",
-			"mcl_lush_caves_azalea_flowering_bottom.png",
-			"mcl_lush_caves_azalea_flowering_side.png",
-			"mcl_lush_caves_azalea_flowering_side.png",
-			"mcl_lush_caves_azalea_flowering_side.png",
-			"mcl_lush_caves_azalea_flowering_side.png",
+			"mcl_lush_caves_azalea_plant.png"
 		},
 		groups = table.merge(tpl_azalea.groups, {flower = 1}),
 })
