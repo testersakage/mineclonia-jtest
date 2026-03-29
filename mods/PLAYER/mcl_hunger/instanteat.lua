@@ -1,4 +1,13 @@
-mcl_hunger.prevent_eating = function() end
+eat_block = {}
+function mcl_hunger.prevent_eating(player)
+	eat_block[player:get_player_name()] = true
+end
+
+core.register_globalstep(function()
+	for _, player in pairs(core.get_connected_players()) do
+		eat_block[player:get_player_name()] = nil
+	end
+end)
 
 local function use(itemstack, player, pointed_thing)
 	local rc = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
@@ -32,8 +41,15 @@ end
 core.register_on_mods_loaded(function()
 	for name, def in pairs(core.registered_items) do
 		if core.get_item_group(name, "food") ~= 0 then
+			local old_on_place = def.on_place
 			core.override_item(name, {
-				on_place = use,
+				on_place = function(itemstack, player, pointed_thing)
+					local new_itemstack = old_on_place(itemstack, player, pointed_thing) or itemstack
+					if not eat_block[player:get_player_name()] then
+						return use(new_itemstack, player, pointed_thing)
+					end
+					return new_itemstack
+				end,
 				on_secondary_use = use,
 			})
 		end
