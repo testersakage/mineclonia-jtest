@@ -42,6 +42,10 @@ function mcl_throwing.get_player_throw_function(_, velocity)
 		local rc = mcl_util.call_on_rightclick(item, player, pointed_thing)
 		if rc then return rc end
 
+		if mcl_util.place_was_held(player) then
+			return
+		end
+
 		local playerpos = player:get_pos()
 		local dir = player:get_look_dir()
 		mcl_throwing.throw(item, {x=playerpos.x, y=playerpos.y+1.5, z=playerpos.z}, dir, velocity, player:get_player_name())

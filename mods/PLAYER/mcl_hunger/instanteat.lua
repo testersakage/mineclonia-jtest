@@ -45,7 +45,7 @@ core.register_on_mods_loaded(function()
 			core.override_item(name, {
 				on_place = function(itemstack, player, pointed_thing)
 					local new_itemstack = old_on_place(itemstack, player, pointed_thing) or itemstack
-					if not eat_block[player:get_player_name()] then
+					if not eat_block[player:get_player_name()] and not mcl_util.place_was_held(player) then
 						return use(new_itemstack, player, pointed_thing)
 					end
 					return new_itemstack
