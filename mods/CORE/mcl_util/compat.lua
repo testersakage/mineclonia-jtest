@@ -112,7 +112,7 @@ if not core.get_node_raw then -- polyfill for pre minetest 5.13
 	-- the loop below.
 	local get_node = core.get_node
 	local i = 1
-	while true do
+	while env do
 		local name, upvalue = env.debug.getupvalue (get_node, i)
 		if not name then
 			break
