@@ -512,14 +512,45 @@ local function update_stair(pos)
 end
 
 local function update_stairs_around(pos)
+	update_stair(pos)
 	for i = 1, #UPDATE_OFFSETS do
 		local offset = UPDATE_OFFSETS[i]
-		update_stair({
-			x = pos.x + offset.x,
-			y = pos.y,
-			z = pos.z + offset.z,
-		})
+		if offset.x ~= 0 or offset.z ~= 0 then
+			update_stair({
+				x = pos.x + offset.x,
+				y = pos.y,
+				z = pos.z + offset.z,
+			})
+		end
 	end
+
+	update_stair(pos)
+end
+
+local function rotate_stair_from_base_facing(pos, node, mode)
+	local def = core.registered_nodes[node.name]
+	if not def or not def.stairs then
+		return false
+	end
+
+	local upside_down = node.param2 >= 20
+	local facing = get_base_facing(pos, node)
+	if mode == screwdriver.ROTATE_AXIS then
+		upside_down = not upside_down
+	elseif mode == screwdriver.ROTATE_FACE then
+		facing = (facing + 1) % 4
+	else
+		return false
+	end
+
+	local base_param2 = PARAM_BY_VISUAL[upside_down][1][facing]
+	core.set_node(pos, {
+		name = def.stairs[1],
+		param2 = base_param2,
+	})
+	core.get_meta(pos):set_string("mcl_stairs:facing", tostring(facing))
+	update_stairs_around(pos)
+	return true
 end
 
 --[[
@@ -540,6 +571,10 @@ Usage:
                  { tiles_def_for_outer_stair, tiles_def_for_inner_stair }
     * nil: Equivalent to "default"
 ]]
+
+local function corner_stair_on_rotate(pos, node, _user, mode, _new_param2)
+	return rotate_stair_from_base_facing(pos, node, mode)
+end
 
 function mcl_stairs.cornerstair.add(name, stairtiles)
 	local node_def = core.registered_nodes[name]
@@ -579,9 +614,12 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 			update_stairs_around(pos)
 		end,
 		on_rotate = function(pos, node, user, mode, new_param2)
-			if old_on_rotate and old_on_rotate(pos, node, user, mode, new_param2) then
-				update_stairs_around(pos)
-				return true
+			if mode == screwdriver.ROTATE_AXIS or mode == screwdriver.ROTATE_FACE then
+				return rotate_stair_from_base_facing(pos, node, mode)
+			end
+
+			if old_on_rotate then
+				return old_on_rotate(pos, node, user, mode, new_param2)
 			end
 			return false
 		end,
@@ -611,7 +649,7 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 		end,
 		_mcl_hardness = node_def._mcl_hardness,
 		_mcl_baseitem = name,
-		on_rotate = false,
+		on_rotate = corner_stair_on_rotate,
 		placement_prevented = placement_prevented_outer,
 	})
 	core.register_node(":"..name.."_inner", {
@@ -640,7 +678,7 @@ function mcl_stairs.cornerstair.add(name, stairtiles)
 		end,
 		_mcl_hardness = node_def._mcl_hardness,
 		_mcl_baseitem = name,
-		on_rotate = false,
+		on_rotate = corner_stair_on_rotate,
 		placement_prevented = placement_prevented_inner,
 	})
 
