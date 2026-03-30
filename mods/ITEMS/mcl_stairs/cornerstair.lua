@@ -66,6 +66,15 @@ local function get_stair_facing(param2)
 	return facing
 end
 
+local function get_base_facing(pos, node)
+	local meta = core.get_meta(pos)
+	local orig = meta:get_string("mcl_stairs:facing")
+	if orig ~= "" then
+		return tonumber(orig)
+	end
+	return get_stair_facing(node.param2)
+end
+
 local function get_stair_from_param(param, stairs)
 	if param < 12 then
 		if param < 4 then
@@ -286,7 +295,7 @@ local function get_neighbor_facing(pos, dir, ceiling)
 	if (node.param2 >= 20) ~= ceiling then
 		return nil
 	end
-	return get_stair_facing(node.param2)
+	return get_base_facing(npos, node)
 end
 
 local function get_shape_result(pos)
@@ -297,7 +306,7 @@ local function get_shape_result(pos)
 	end
 
 	local upside_down = node.param2 >= 20
-	local facing = get_stair_facing(node.param2)
+	local facing = get_base_facing(pos, node)
 	local lead = get_neighbor_facing(pos, STAIR_DIR[facing], upside_down)
 	local trail = get_neighbor_facing(pos, STAIR_DIR[(facing + 2) % 4], upside_down)
 	local left = get_neighbor_facing(pos, STAIR_DIR[(facing + 3) % 4], upside_down)
@@ -486,8 +495,19 @@ local function update_stair(pos)
 		return false
 	end
 
+	local meta = core.get_meta(pos)
+	if meta:get_string("mcl_stairs:facing") == "" then
+		meta:set_string("mcl_stairs:facing", tostring(get_stair_facing(result.node.param2)))
+	end
+
 	core.swap_node(pos, result.new_node)
 	check_sides(pos)
+
+	local new_def = core.registered_nodes[result.new_node.name]
+	if new_def and new_def.stairs and result.new_node.name == new_def.stairs[1] then
+		meta:set_string("mcl_stairs:facing", "")
+	end
+
 	return true
 end
 
