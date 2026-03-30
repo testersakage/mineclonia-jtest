@@ -29,10 +29,9 @@ local function spread_nether_plants(pos,node)
 	local apply_to = node.name
 	local targets = core.find_nodes_in_area_under_air( vector.offset(pos,-2,-2,-2),vector.offset(pos,2,2,2),{apply_to} )
 	if #targets == 0 then
-		-- give back the unapplied bonemeal
-		core.add_item(pos, "mcl_bone_meal:bone_meal")
 		core.check_for_falling(pos)
-		return
+		-- give back the unapplied bonemeal
+		return false
 	end
 	table.shuffle(targets)
 	-- find clicked node and move to the beginning of the targets
@@ -62,12 +61,12 @@ local function spread_nether_plants(pos,node)
 			end
 		end
 	end
+	return true
 end
 
 local function on_bone_meal(_, _, pt, _, node)
-	if pt.type ~= "node" then return end
 	if node.name == "mcl_crimson:warped_nylium" or node.name == "mcl_crimson:crimson_nylium" then
-		spread_nether_plants(pt.under,node)
+		return spread_nether_plants(pt.under,node)
 	end
 end
 
