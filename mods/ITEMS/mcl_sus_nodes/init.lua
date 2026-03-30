@@ -268,7 +268,7 @@ function mcl_sus_nodes.get_random_item(pos)
 	end
 end
 
-local function brush_node(_, _, pointed_thing)
+local function brush_node(itemstack, user, pointed_thing)
 	if pointed_thing and pointed_thing.type == "node" then
 		local pos = core.get_pointed_thing_position(pointed_thing)
 		local node = core.get_node(pos)
@@ -310,12 +310,19 @@ local function brush_node(_, _, pointed_thing)
 			item_entities[ph].object:remove()
 			item_entities[ph] = nil
 			core.swap_node(pos,{name = def._mcl_sus_nodes_parent})
+			if not core.is_creative_enabled(user and user:get_player_name()) then
+				local uses = mcl_util.calculate_durability(itemstack)
+
+				itemstack:add_wear(65535/uses)
+			end
 		elseif item_entities[ph]._stage <= 0 then
 			core.swap_node(pos,{name=def._mcl_sus_nodes_main})
 		else
 			core.swap_node(pos,{name=def._mcl_sus_nodes_main.."_"..item_entities[ph]._stage})
 		end
 	end
+
+	return itemstack
 end
 
 local function overlay_tiles(orig,overlay)
@@ -432,7 +439,7 @@ core.register_tool("mcl_sus_nodes:brush", {
 	_doc_items_usagehelp = S("Use the brush on a suspicious node to uncover its secrets"),
 	_doc_items_hidden = false,
 	inventory_image = "mcl_sus_nodes_brush.png",
-	groups = { tool=2, brush = 1, dig_speed_class=0, enchantability=0 },
+	groups = { tool=2, brush = 1, dig_speed_class=0, enchantability=-1},
 	on_use = brush_node,
 	sound = { breaks = "default_tool_breaks" },
 	_mcl_toollike_wield = true,
