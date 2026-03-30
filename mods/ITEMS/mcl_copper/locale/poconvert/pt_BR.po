@@ -3,30 +3,33 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_copper x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-03-30 18:57+0000\n"
+"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_copper/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.16.2\n"
 
 msgid "Copper Ingot"
 msgstr "Lingote de Cobre"
 
 msgid "Molten Copper. It is used to craft armor, tools, and blocks."
-msgstr ""
+msgstr "Cobre Fundido. É usado para fabricar armaduras, ferramentas e blocos."
 
 msgid "Copper Material"
 msgstr "Material de Cobre"
 
 msgid "Copper Nugget"
-msgstr ""
+msgstr "Pepita de Cobre"
 
 msgid "Copper nuggets are very small pieces of molten copper; the main purpose is to create copper ingots."
 msgstr ""
+"Pepitas de cobre são pedaços muito pequenos de cobre fundido; seu principal "
+"objetivo é criar lingotes de cobre."
 
 msgid "Raw Copper"
 msgstr "Cobre Cru"
@@ -47,7 +50,7 @@ msgid "Chiseled Copper is mostly a decorative block."
 msgstr "Cobre entalhado é em grande parte um bloco decorativo."
 
 msgid "Copper Bars"
-msgstr ""
+msgstr "Barras de Cobre"
 
 msgid "Copper Bulb"
 msgstr "Bulbo de Cobre"
@@ -65,10 +68,10 @@ msgid "Copper Bulb is mostly a decorative block."
 msgstr "Bulbo de cobre é majoritariamente um bloco decorativo."
 
 msgid "Copper Chain"
-msgstr ""
+msgstr "Corrente de Cobre"
 
 msgid "Copper Chains are metallic decoration blocks."
-msgstr ""
+msgstr "Correntes de cobre são blocos decorativos metálicos."
 
 msgid "Copper Door"
 msgstr "Porta de Cobre"
@@ -80,10 +83,12 @@ msgid "Copper Grate is mostly a decorative block."
 msgstr "Grade de cobre é majoritariamente um bloco decorativo."
 
 msgid "Copper Lantern"
-msgstr ""
+msgstr "Lampião de Cobre"
 
 msgid "Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
 msgstr ""
+"As Lanternas de Cobre são fontes de luz que podem ser colocadas na parte "
+"superior ou inferior da maioria dos blocos."
 
 msgid "Copper Trapdoor"
 msgstr "Alçapão de Cobre"
@@ -110,7 +115,7 @@ msgid "Exposed Copper"
 msgstr "Cobre Exposto"
 
 msgid "Exposed Copper Bars"
-msgstr ""
+msgstr "Barras de Cobre Expostas"
 
 msgid "Exposed Copper Bulb"
 msgstr "Bulbo de Cobre Exposto"
@@ -128,10 +133,10 @@ msgid "Exposed Copper Bulb is mostly a decorative block."
 msgstr "Bulbo de cobre exposto é majoritariamente um bloco decorativo."
 
 msgid "Exposed Copper Chain"
-msgstr ""
+msgstr "Corrente de Cobre Exposta"
 
 msgid "Exposed Copper Chains are metallic decoration blocks."
-msgstr ""
+msgstr "Correntes de cobre expostas são blocos decorativos metálicos."
 
 msgid "Exposed Copper Door"
 msgstr "Porta de Cobre Exposto"
@@ -143,10 +148,12 @@ msgid "Exposed Copper Grate is mostly a decorative block."
 msgstr "Grade de cobre exposto é majoritariamente um bloco decorativo."
 
 msgid "Exposed Copper Lantern"
-msgstr ""
+msgstr "Lampião de Cobre Exposto"
 
 msgid "Exposed Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
 msgstr ""
+"Os Lampiões de Cobre expostos são fontes de luz que podem ser colocadas na "
+"parte superior ou inferior da maioria dos blocos."
 
 msgid "Exposed Copper Trapdoor"
 msgstr "Alçapão de Cobre Exposto"
@@ -176,7 +183,7 @@ msgid "Oxidized Copper"
 msgstr "Cobre Oxidado"
 
 msgid "Oxidized Copper Bars"
-msgstr ""
+msgstr "Barras de Cobre Oxidadas"
 
 msgid "Oxidized Copper Bulb"
 msgstr "Bulbo de Cobre Oxidado"
@@ -194,10 +201,10 @@ msgid "Oxidized Copper Bulb is mostly a decorative block."
 msgstr "Bulbo de cobre oxidado é majoritariamente um bloco decorativo."
 
 msgid "Oxidized Copper Chain"
-msgstr ""
+msgstr "Corrente de Cobre Oxidada"
 
 msgid "Oxidized Copper Chains are metallic decoration blocks."
-msgstr ""
+msgstr "Correntes de cobre oxidadas são blocos decorativos metálicos."
 
 msgid "Oxidized Copper Door"
 msgstr "Porta de Cobre Oxidado"
@@ -209,10 +216,12 @@ msgid "Oxidized Copper Grate is mostly a decorative block."
 msgstr "Grade de cobre oxidado é majoritariamente um bloco decorativo."
 
 msgid "Oxidized Copper Lantern"
-msgstr ""
+msgstr "Lanterna de Cobre Oxidado"
 
 msgid "Oxidized Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
 msgstr ""
+"Os Lampiões de Cobre Oxidados são fontes de luz que podem ser colocadas na "
+"parte superior ou inferior da maioria dos blocos."
 
 msgid "Oxidized Copper Trapdoor"
 msgstr "Alçapão de Cobre Oxidado"
@@ -239,7 +248,7 @@ msgid "Waxed Chiseled Copper"
 msgstr "Cobre Entalhado Encerado"
 
 msgid "Waxed Copper Bars"
-msgstr ""
+msgstr "Barras de Cobre Enceradas"
 
 msgid "Waxed Copper Bulb"
 msgstr "Bulbo de Cobre Encerado"
@@ -254,16 +263,16 @@ msgid "Waxed Copper Bulb Powered On"
 msgstr "Lâmpada de Cobre Encerada Ligada"
 
 msgid "Waxed Copper Chain"
-msgstr ""
+msgstr "Corrente de Cobre Encerada"
 
 msgid "Waxed Copper Door"
-msgstr ""
+msgstr "Porta de Cobre Encerada"
 
 msgid "Waxed Copper Grate"
 msgstr "Grade de Cobre Encerado"
 
 msgid "Waxed Copper Lantern"
-msgstr ""
+msgstr "Lampião de Cobre Encerado"
 
 msgid "Waxed Copper Trapdoor"
 msgstr "Alçapão de Cobre Encerado"
@@ -287,7 +296,7 @@ msgid "Waxed Exposed Copper"
 msgstr "Cobre Exposto Encerado"
 
 msgid "Waxed Exposed Copper Bars"
-msgstr ""
+msgstr "Barras de Cobre Expostas Enceradas"
 
 msgid "Waxed Exposed Copper Bulb"
 msgstr "Bulbo de Cobre Exposto Encerado"
@@ -302,16 +311,16 @@ msgid "Waxed Exposed Copper Bulb Powered On"
 msgstr "Lâmpada de Cobre Exposta Encerada Ligada"
 
 msgid "Waxed Exposed Copper Chain"
-msgstr ""
+msgstr "Corrente de Cobre Exposta Encerada"
 
 msgid "Waxed Exposed Copper Door"
-msgstr ""
+msgstr "Porta de Cobre Exposta Encerada"
 
 msgid "Waxed Exposed Copper Grate"
 msgstr "Grade de Cobre Exposto Encerado"
 
 msgid "Waxed Exposed Copper Lantern"
-msgstr ""
+msgstr "Lampião de Cobre Exposto Encerado"
 
 msgid "Waxed Exposed Copper Trapdoor"
 msgstr "Alçapão de Cobre Exposto Encerado"
@@ -332,7 +341,7 @@ msgid "Waxed Oxidized Copper"
 msgstr "Cobre Oxidado Encerado"
 
 msgid "Waxed Oxidized Copper Bars"
-msgstr ""
+msgstr "Barras de Cobre Oxidadas Enceradas"
 
 msgid "Waxed Oxidized Copper Bulb"
 msgstr "Bulbo de Cobre Oxidado Encerado"
@@ -347,16 +356,16 @@ msgid "Waxed Oxidized Copper Bulb Powered On"
 msgstr "Lâmpada de Cobre Oxidada Encerada Ligada"
 
 msgid "Waxed Oxidized Copper Chain"
-msgstr ""
+msgstr "Corrente de Cobre Oxidada Encerada"
 
 msgid "Waxed Oxidized Copper Door"
-msgstr ""
+msgstr "Porta de Cobre Oxidada Encerada"
 
 msgid "Waxed Oxidized Copper Grate"
 msgstr "Grade de Cobre Oxidado Encerado"
 
 msgid "Waxed Oxidized Copper Lantern"
-msgstr ""
+msgstr "Lampião de Cobre Oxidado Encerado"
 
 msgid "Waxed Oxidized Copper Trapdoor"
 msgstr "Alçapão de Cobre Oxidado Encerado"
@@ -380,7 +389,7 @@ msgid "Waxed Weathered Copper"
 msgstr "Cobre Desgastado Encerado"
 
 msgid "Waxed Weathered Copper Bars"
-msgstr ""
+msgstr "Barras de Cobre Desgastado Encerado"
 
 msgid "Waxed Weathered Copper Bulb"
 msgstr "Bulbo de Cobre Desgastado Encerado"
@@ -395,16 +404,16 @@ msgid "Waxed Weathered Copper Bulb Powered On"
 msgstr "Lâmpada de Cobre Desgastada Encerada Ligada"
 
 msgid "Waxed Weathered Copper Chain"
-msgstr ""
+msgstr "Corrente de Cobre Desgastada Encerada"
 
 msgid "Waxed Weathered Copper Door"
-msgstr ""
+msgstr "Porta de Cobre Desgastada Encerada"
 
 msgid "Waxed Weathered Copper Grate"
 msgstr "Grade de Cobre Desgastado Encerado"
 
 msgid "Waxed Weathered Copper Lantern"
-msgstr ""
+msgstr "Lampião de Cobre Desgastado Encerado"
 
 msgid "Waxed Weathered Copper Trapdoor"
 msgstr "Alçapão de Cobre Desgastado Encerado"
@@ -428,7 +437,7 @@ msgid "Weathered Copper"
 msgstr "Cobre Desgastado"
 
 msgid "Weathered Copper Bars"
-msgstr ""
+msgstr "Barras de Cobre Desgastadas"
 
 msgid "Weathered Copper Bulb"
 msgstr "Bulbo de Cobre Desgastado"
@@ -446,10 +455,10 @@ msgid "Weathered Copper Bulb is mostly a decorative block."
 msgstr "Bulbo de cobre desgastado é majoritariamente um bloco decorativo."
 
 msgid "Weathered Copper Chain"
-msgstr ""
+msgstr "Corrente de Cobre Desgastada"
 
 msgid "Weathered Copper Chains are metallic decoration blocks."
-msgstr ""
+msgstr "Correntes de Cobre Desgastadas são blocos decorativos metálicos."
 
 msgid "Weathered Copper Door"
 msgstr "Porta de Cobre Desgastado"
@@ -461,10 +470,12 @@ msgid "Weathered Copper Grate is mostly a decorative block."
 msgstr "Grade de cobre desgastado é majoritariamente um bloco decorativo."
 
 msgid "Weathered Copper Lantern"
-msgstr ""
+msgstr "Lampião de Cobre Desgastado"
 
 msgid "Weathered Copper Lanterns are light sources which can be placed on the top or the bottom of most blocks."
 msgstr ""
+"Lampiões de Cobre Desgastados são fontes de luz que podem ser colocadas na "
+"parte superior ou inferior da maioria dos blocos."
 
 msgid "Weathered Copper Trapdoor"
 msgstr "Alçapão de Cobre Desgastado"
@@ -497,8 +508,9 @@ msgid "A block used for compact raw copper storage."
 msgstr "Um bloco usado para armazenar minério de cobre compactado."
 
 msgid "Copper Torch"
-msgstr ""
+msgstr "Tocha de Cobre"
 
 msgid "Copper Torches are light sources which can be placed at the side or on the top of most blocks."
 msgstr ""
-
+"Tochas de Cobre são fontes de luz que podem ser colocadas ao lado ou em cima "
+"da maioria dos blocos."

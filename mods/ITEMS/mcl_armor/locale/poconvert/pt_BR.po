@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_armor x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-03-30 18:57+0000\n"
+"Last-Translator: newrizen <newrizen@noreply.codeberg.org>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.codeberg.org/projects/"
+"mineclonia/mcl_armor/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.16.2\n"
 
 msgid "Upgrade:"
 msgstr "Melhoria:"
@@ -101,7 +102,7 @@ msgid "Golden Chestplate"
 msgstr "Peitoral de Ouro"
 
 msgid "Golden Leggings"
-msgstr "Perneiras de Ouro"
+msgstr "Calça de Ouro"
 
 msgid "Golden Boots"
 msgstr "Botas de Ouro"
@@ -113,22 +114,22 @@ msgid "Chainmail Chestplate"
 msgstr "Peitoral de Cota de Malha"
 
 msgid "Chainmail Leggings"
-msgstr "Perneiras de Cota de Malha"
+msgstr "Calça de Cota de Malha"
 
 msgid "Chainmail Boots"
 msgstr "Botas de Cota de Malha"
 
 msgid "Copper Helmet"
-msgstr ""
+msgstr "Capacete de Cobre"
 
 msgid "Copper Chestplate"
-msgstr ""
+msgstr "Peitoral de Cobre"
 
 msgid "Copper Leggings"
-msgstr ""
+msgstr "Calça de Cobre"
 
 msgid "Copper Boots"
-msgstr ""
+msgstr "Botas de Cobre"
 
 msgid "Iron Helmet"
 msgstr "Capacete de Ferro"
@@ -137,7 +138,7 @@ msgid "Iron Chestplate"
 msgstr "Peitoral de Ferro"
 
 msgid "Iron Leggings"
-msgstr "Perneiras de Ferro"
+msgstr "Calça de Ferro"
 
 msgid "Iron Boots"
 msgstr "Botas de Ferro"
@@ -149,7 +150,7 @@ msgid "Diamond Chestplate"
 msgstr "Peitoral de Diamante"
 
 msgid "Diamond Leggings"
-msgstr "Perneiras de Diamante"
+msgstr "Calça de Diamante"
 
 msgid "Diamond Boots"
 msgstr "Botas de Diamante"
@@ -161,7 +162,7 @@ msgid "Netherite Chestplate"
 msgstr "Peitoral de Netherite"
 
 msgid "Netherite Leggings"
-msgstr "Perneiras de Netherite"
+msgstr "Calça de Netherite"
 
 msgid "Netherite Boots"
 msgstr "Botas de Netherite"
@@ -231,4 +232,3 @@ msgstr "Ingredientes:"
 
 msgid "Ingot & Crystals"
 msgstr "Barras e Cristais"
-
