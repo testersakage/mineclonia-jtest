@@ -3,63 +3,65 @@ msgstr ""
 "Project-Id-Version: Luanti textdomain mcl_bamboo x.x.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2026-03-29 21:23+0000\n"
+"Last-Translator: pilkit <pilkit@noreply.codeberg.org>\n"
+"Language-Team: Polish <https://translate.codeberg.org/projects/mineclonia/"
+"mcl_bamboo/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: mtt_convert 0.1.1\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.16.2\n"
 
 msgid "A Block made of Bamboo stalks. Can be crafted into Bamboo Planks."
-msgstr ""
+msgstr "Blok wykonany z łodyg bambusa. Można z niego zrobić bambusowe deski."
 
 msgid "Block of Bamboo"
-msgstr ""
+msgstr "Blok bambusa"
 
 msgid "Block of Stripped Bamboo"
-msgstr ""
+msgstr "Blok okorowanego bambusa"
 
 msgid "Bamboo Raft"
-msgstr "tratwa bambusowa"
+msgstr "Tratwa z bambusa"
 
 msgid "Chest Bamboo Raft"
-msgstr "tratwa bambusowa ze skrzynią"
+msgstr "Tratwa bambusowa ze skrzynią"
 
 msgid "Bamboo Button"
-msgstr ""
+msgstr "Przycisk z bambusa"
 
 msgid "Bamboo Door"
-msgstr "Bambusowe Drzwi"
+msgstr "Drzwi z bambusa"
 
 msgid "Bamboo Fence"
-msgstr "Bambusowy Płot"
+msgstr "Płot z bambusa"
 
 msgid "Bamboo Fence Gate"
-msgstr ""
+msgstr "Furtka z bambusa"
 
 msgid "Bamboo Hanging Sign"
-msgstr ""
+msgstr "Wiszący znak z bambusa"
 
 msgid "Bamboo Planks"
-msgstr ""
+msgstr "Deski z bambusa"
 
 msgid "Bamboo Pressure Plate"
-msgstr ""
+msgstr "Płyta naciskowa z bambusa"
 
 msgid "Bamboo Sign"
-msgstr ""
+msgstr "Znak z bambusa"
 
 msgid "Bamboo Slab"
-msgstr ""
+msgstr "Płyta z bambusa"
 
 msgid "Bamboo Stairs"
-msgstr "Bambusowe Schody"
+msgstr "Schody z bambusa"
 
 msgid "Bamboo Trapdoor"
-msgstr ""
+msgstr "Zapadnia z bambusa"
 
 msgid "Bamboo"
 msgstr "Bambus"
@@ -68,23 +70,24 @@ msgid "Bamboo Plant"
 msgstr "Pęd bambusa"
 
 msgid "Bamboo Mosaic Plank"
-msgstr "deski bambusowe z mozaiką"
+msgstr "Deski z mozaiką z bambusa"
 
 msgid "Bamboo Mosaic Stairs"
-msgstr ""
+msgstr "Schody z mozaiką z bambusa"
 
 msgid "Bamboo Mosaic Slab"
-msgstr ""
+msgstr "Płyta z mozaiką z bambusa"
 
 msgid "Scaffolding"
-msgstr "rusztowanie"
+msgstr "Rusztowanie"
 
 msgid "Scaffolding is a temporary structure to easily climb up while building that is easily removed"
-msgstr "rusztowanie jest tymczasową konstrukcją umożliwiającą łatwe wspinanie się przy budowie i łatwą rozbiórkę"
+msgstr ""
+"Rusztowanie jest tymczasową konstrukcją, łatwą w demontażu. Umożliwiającą "
+"łatwe wspinanie się podczas budowy"
 
 msgid "Scaffolding horizontal"
-msgstr "rusztowanie poziome"
+msgstr "Rusztowanie poziome"
 
 msgid "Scaffolding block..."
-msgstr ""
-
+msgstr "Blok rusztowań..."
