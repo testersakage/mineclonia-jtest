@@ -2,12 +2,14 @@
     <img src="https://codeberg.org/mineclonia/mineclonia/raw/branch/main/menu/icon.png">
     <h1> Mineclonia </h1>
     <a href="https://content.luanti.org/packages/ryvnf/mineclonia/"><img src="https://content.luanti.org/packages/ryvnf/mineclonia/shields/downloads/" alt="ContentDB"></a>
+    <a href="https://mineclonia.codeberg.page/wiki/"><img src="https://custom-icon-badges.demolab.com/badge/Read_the_Wiki-blue?logo=book&logoColor=white" alt="Read the Wiki"></a>
     <a href="https://translate.codeberg.org/engage/mineclonia/"><img src="https://translate.codeberg.org/widget/mineclonia/svg-badge.svg" alt="Translation status"></a>
 </div>
 
-An unofficial Minecraft-like game for Luanti (formerly Minetest). Fork of VoxeLibre (formerly MineClone2) with focus
-on stability, multiplayer performance and features. For information about
-migrating from VoxeLibre (formerly MineClone2) to Mineclonia, see [MIGRATING.md](../../../src/branch/main/MIGRATING.md).
+An unofficial Minecraft-like game for Luanti (formerly Minetest). Fork of
+VoxeLibre (formerly MineClone2) with focus on stability, multiplayer
+performance and features. For information about migrating from VoxeLibre
+(formerly MineClone2) to Mineclonia, see [VoxeLibre Refugee's Guide](https://mineclonia.codeberg.page/wiki/intros/voxelibre-guide.html).
 
 Version: 0.121.1
 
