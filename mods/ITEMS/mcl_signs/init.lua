@@ -6,7 +6,10 @@ local S = core.get_translator(modname)
 local modpath = core.get_modpath(modname)
 
 -- UTF-8 library from modlib
-local utf8 = dofile(modpath .. DIR_DELIM .. "utf8.lua")
+--local utf8 = dofile(modpath .. DIR_DELIM .. "utf8.lua")
+local utf8 = _G.utf8
+
+core.log("action", "[mcl_signs] UTF8 Native API status: " .. tostring(utf8.eaw_width("あいう")))
 
 -- Character map (see API.md for reference)
 local charmap = {}
@@ -170,23 +173,33 @@ end
 
 -- Text processing
 function mcl_signs.string_to_ustring(str, max_characters)
-	-- limit saved text to 256 characters by default
-	-- (4 lines x 15 chars = 60 so this should be more than is ever needed)
 	max_characters = max_characters or 256
-
 	local ustr = {}
-
-	-- pcall wrapping to protect against invalid UTF-8
 	local iter = utf8.codes(str)
+	
+	local last_next_pos = 0 
 	while true do
-		local success, i, code = pcall(iter)
-		if not success or not i or i >= max_characters
-				or code == CR_CODEPOINT then
-			break
+		-- 【重要】戻り値を 4つ で受ける
+		local success, next_pos, index, code = pcall(iter, str, last_next_pos)
+		
+		-- ログを出して中身をチェック
+		core.log("action", string.format("[Loop Debug] success:%s, next:%s, idx:%s, code:%s", 
+			tostring(success), tostring(next_pos), tostring(index), tostring(code)))
+
+		-- 終了判定: C++版は終了時に nil を返すので、next_pos が nil なら終了
+		if not success or not next_pos then 
+			break 
 		end
-		table.insert(ustr, code)
+
+		last_next_pos = next_pos -- 次回の呼び出しのために位置を更新
+    
+		-- (以下、バリデーションと table.insert はそのまま)
+		if code and code ~= CR_CODEPOINT then
+			table.insert(ustr, code)
+		end
 	end
 
+	core.log("action", "[Debug 1] string_to_ustring final size: " .. #ustr)
 	return ustr
 end
 
@@ -208,6 +221,8 @@ local function subseq(ustr, s, e)
 end
 
 function ustring_to_line_array(ustr)
+	-- function ustring_to_line_array(ustr) の直後に挿入
+	core.log("action", "[Debug 2] ustring_to_line_array input size: " .. tostring(#ustr))
 	local lines = {}
 	local start, stop = 1, 1
 
@@ -234,6 +249,13 @@ function ustring_to_line_array(ustr)
 	if #lines < NUMBER_OF_LINES and start <= #ustr then
 		table.insert(lines, subseq(ustr, start, #ustr))
 	end
+
+-- debug
+	core.log("action", "[Check] NUMBER OF LINES: " .. #lines)
+	for idx, l in ipairs(lines) do
+		core.log("action", "[Check] Line " .. idx .. " count: " .. #l)
+	end
+-- debug
 
 	return lines
 end
@@ -669,3 +691,4 @@ function mcl_signs.register_hanging_sign (name, def)
 		},
 	}, def or {}))
 end
+
