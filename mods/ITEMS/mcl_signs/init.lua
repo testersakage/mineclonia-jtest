@@ -85,6 +85,25 @@ local DEFAULT_COLOR = "#000000"
 
 local F = core.formspec_escape
 
+mcl_signs.dye_to_hex = {
+    white      = "FFFFFF",
+    light_grey = "9D9D97",
+    grey       = "474F52",
+    black      = "1D1D21",
+    red        = "B02E26",
+    orange     = "F9801D",
+    yellow     = "FED83D",
+    lime       = "80C71F",
+    green      = "5E7C16",
+    cyan       = "169C9C",
+    light_blue = "3AB3DA",
+    blue       = "3C44AA",
+    purple     = "8932B8",
+    magenta    = "C74EBD",
+    pink       = "F38BAA",
+    brown      = "835432"
+}
+
 -- Template definition
 local sign_tpl = {
 	_tt_help = S("Can be written"),
@@ -263,18 +282,33 @@ local function generate_line(ustr, ypos)
 end
 
 local function generate_texture(data)
-	local lines = ustring_to_line_array(data.text)
-	local texture = "[combine:" .. SIGN_WIDTH .. "x" .. SIGN_WIDTH
-	local ypos = 0
-	local letter_color = data.color or DEFAULT_COLOR
+    if not data or not data.text then return "" end
 
-	for _, line in ipairs(lines) do
-		texture = texture .. generate_line(line, ypos)
-		ypos = ypos + LINE_HEIGHT
-	end
+    local raw_text = ""
+    if type(data.text) == "table" then
+        local chars = {}
+        for i, v in ipairs(data.text) do
+            chars[i] = (type(v) == "number") and utf8.char(v) or tostring(v)
+        end
+        raw_text = table.concat(chars, "")
+    else
+        raw_text = tostring(data.text)
+    end
 
-	texture = "(" .. texture .. "^[multiply:" .. letter_color .. ")"
-	return texture
+    local color_name = data.color or "white"
+    local hex = (mcl_signs.dye_to_hex and mcl_signs.dye_to_hex[color_name]) or "FFFFFF"
+    -- ★ そもそも「何の色の名前」で、「どのHEX」になったかをログに出す
+    core.log("action", "init.lua> COLOR name=[" .. tostring(color_name) .. "] hex=[" .. tostring(hex) .. "]")
+    -- data.color (#d56791) を @d56791 に変換して C++ に託す
+    local color_val = data.color or "#FFFFFF"
+    local hex = color_val:gsub("#", "")
+
+    local texture = "[utf8combine:115x115:15,2@" .. hex .. "=" .. raw_text
+
+    -- ★これが出ればサーバーログ（黒い画面）に表示されます
+    core.log("action", "init.lua> API command line: " .. texture)
+
+    return texture
 end
 
 -- Text entity handling
