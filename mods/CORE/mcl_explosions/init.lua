@@ -1,3 +1,5 @@
+-- mineclonia/mods/CORE/mcl_explosions/init.lua
+minetest.log("action", "[explosions] 02 C++ API.")
 --[[
 Explosion API mod for Minetest (adapted to Mineclonia)
 
@@ -240,6 +242,20 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 			local collisionbox = obj:get_properties().collisionbox
 
 			if collisionbox then
+
+				-- 👑 【ここへこの3行だけを追記！！！】
+				local g_util = rawget(_G, "mclcapi")
+				if g_util and g_util.native_explosions_calculate_damage then
+					local impact, dist = g_util.native_explosions_calculate_damage(pos, obj:get_pos(), collisionbox, punch_radius)
+					if impact > 0 then
+						local damage = math.floor((impact * impact + impact) * 7 * strength + 1)
+						mclcapi.deal_damage(obj, damage, { type = "explosion", direct = direct, source = source })
+						if obj:is_player() or (ent and ent.tnt_knockback) then
+							obj:add_velocity(vector.multiply(vector.normalize(vector.subtract(obj:get_pos(), pos)), impact * 20))
+						end
+					end
+				else -- 👈 👑 本家オリジナルの処理の手前に、この else を添えて囲ってあげるだけ！
+
 				-- Create rays from random points in the collision box
 				local x1 = collisionbox[1]
 				local y1 = collisionbox[2]
@@ -310,6 +326,7 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 				end
 			end
 		end
+	end
 
 		-- Punch End Crystals to make them explode
 		if ent and ent.name == "mcl_end:crystal" then

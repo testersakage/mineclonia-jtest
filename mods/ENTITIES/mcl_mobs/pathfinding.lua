@@ -1,3 +1,6 @@
+-- mineclonia/mods/ENTITIES/mcl_mobs/pathfinding.lua
+minetest.log("action", "[mobs/pathfinding.lua] 01 C++ API.")
+
 local mob_class = mcl_mobs.mob_class
 local floor = math.floor
 local luajit_present = core.global_exists ("jit")
@@ -576,6 +579,51 @@ end
 local get_us_time = core.get_us_time
 
 function mob_class:gwp_cycle (context, timeout)
+
+-- C++
+	local l_capi = rawget(_G, "mclcapi") or {}
+	if l_capi.native_pathfind then
+		-- C++側が一瞬で迷路を解き明かし、「進路テーブル」「成否」「最速消費時間」の3つのパルスを一網打尽に一本釣り回収！
+		core.log("action", "[MOB DEBUG] Start pos: " .. context.minpos.x + context.range .. ", Target count: " .. #context.targets)
+		local success, dtime = l_capi.native_pathfind(self, context, timeout)
+		-- ─── 👑 【ここからデバッグ項目を限界突破大増設！！！】 ───
+		local total_nodes = 0
+		local referrer_cnt = 0
+		local sample_hash = nil
+		local sample_node = nil
+
+		-- 1. C++から戻ってきた直後の、nodesテーブルの全容をレントゲン走査
+		for hash, node in pairs(context.nodes) do
+			total_nodes = total_nodes + 1
+			if node.referrer then
+				referrer_cnt = referrer_cnt + 1
+				if not sample_hash then
+					sample_hash = hash
+					sample_node = node
+				end
+			end
+		end
+
+		core.log("action", "[MOB X-RAY] Total Nodes inside context: " .. total_nodes .. " | Referrer links verified: " .. referrer_cnt)
+		
+		-- 2. 結線されたサンプルのノードの「中身（型とフィールド）」を生々しく一本釣り露出ダンプ！
+		if sample_node then
+			local ref_type = type(sample_node.referrer)
+			-- 親ノード（referrer）の座標も一緒に露出させて、文字通り血流の横ズレを完全現行犯逮捕！
+			local parent_coord = "nil"
+			if ref_type == "table" then
+				parent_coord = "(" .. tostring(sample_node.referrer.x) .. "," .. tostring(sample_node.referrer.y) .. "," .. tostring(sample_node.referrer.z) .. ")"
+			end
+			core.log("action", "[MOB X-RAY] Sample Node Hash: " .. sample_hash .. " | Coord: (" .. sample_node.x .. "," .. sample_node.y .. "," .. sample_node.z .. ") | Referrer Type: " .. ref_type .. " | Parent Coord: " .. parent_coord)
+		end
+		-- ─── 👑 【大増設ここまで】 ───
+
+		if success ~= nil then
+			return success, dtime
+		end
+	end
+-- C++
+
 	local time = get_us_time ()
 	local set = context.open_set
 	local clock
@@ -1101,9 +1149,16 @@ local function get_partial_type (name, nodedef)
 		-- The assumption is that any node whose cbox
 		-- intersects with a centered half cube obstructs mob
 		-- movement.
+-- c++
+		if mclcapi and mclcapi.native_intersect_p and mclcapi.native_intersect_p (shape, half_cube) then
+			return "BLOCKED"
+		end
+-- c++
+--[[
 		if shape:intersect_p (half_cube) then
 			return "BLOCKED"
 		end
+]]
 	elseif boxes.type == "leveled" or boxes.type == "wallmounted" then
 		return "BLOCKED"
 	end

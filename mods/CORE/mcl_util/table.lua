@@ -1,3 +1,6 @@
+-- mineclonia/mods/CORE/mcl_util/table.lua
+minetest.log("action", "[util/table.lua] start.")
+
 -- Updates all values in t using values from ...
 function table.update(t, ...)
 	for _, to in ipairs{...} do

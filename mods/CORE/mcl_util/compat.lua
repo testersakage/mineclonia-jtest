@@ -1,3 +1,6 @@
+-- mineclonia/mods/CORE/mcl_util/compat.lua
+minetest.log("action", "[util/compat.lua] 03/04 C++ API.")
+
 -- Compatibility functions
 
 -- Write a luanti-style deprecation message to the log.
@@ -355,4 +358,14 @@ if not core.get_node_boxes then
 		end
 		return boxes
 	end
+end
+
+if mcl_util and mclcapi.native_random_direction then
+	vector.random_direction       = mclcapi.native_random_direction
+	mcl_util.connected_players    = mclcapi.native_connected_players
+	core.time_to_day_night_ratio  = mclcapi.native_time_to_ratio
+	
+	-- 🔒 【大勝利確定安全弁】：不条理なバケツリレーバグを起こした get_node_raw のすり替えだけを眠らせる！
+	-- core.get_node_raw          = mclcapi.native_get_node_raw
+	-- mcl_util.get_node_raw      = mclcapi.native_get_node_raw
 end

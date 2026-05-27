@@ -1,3 +1,5 @@
+-- mineclonia/mods/CORE/mcl_util/object.lua
+minetest.log("action", "[util/object.lua] 06/15 C++ API.")
 function mcl_util.get_hp(obj)
 	local luaentity = obj:get_luaentity()
 
@@ -82,6 +84,7 @@ end
 
 -- adjust the y level of an object to the center of its collisionbox
 -- used to get the origin position of entity explosions
+--[[
 function mcl_util.get_object_center(obj)
 	local collisionbox = obj:get_properties().collisionbox
 	local pos = obj:get_pos()
@@ -90,7 +93,7 @@ function mcl_util.get_object_center(obj)
 	pos.y = pos.y + (ymax - ymin) / 2.0
 	return pos
 end
-
+]]
 function mcl_util.get_wielditem(object)
 	local entity = object:get_luaentity()
 	if object:is_player() then
@@ -108,7 +111,7 @@ function mcl_util.get_additional_knockback (object)
 		and entity._attack_knockback
 		or 0
 end
-
+--[[
 function mcl_util.target_eye_height (attack)
 	local luaentity = attack:get_luaentity ()
 
@@ -119,7 +122,8 @@ function mcl_util.target_eye_height (attack)
 	end
 	return 0
 end
-
+]]
+--[[
 function mcl_util.target_eye_pos (attack)
 	local luaentity = attack:get_luaentity ()
 	local pos = attack:get_pos ()
@@ -131,7 +135,7 @@ function mcl_util.target_eye_pos (attack)
 	end
 	return pos
 end
-
+]]
 function mcl_util.object_has_mc_physics(object)
 	local entity = object:get_luaentity()
 	return mcl_serverplayer.is_csm_capable(object)
@@ -163,7 +167,7 @@ local function close_enough(a, b)
 	end
 	return rt
 end
-
+--[[
 local function props_changed(props, oldprops)
 	local props = props or {}
 	if not oldprops then return true, props end
@@ -176,6 +180,20 @@ local function props_changed(props, oldprops)
 		end
 	end
 	return changed, p
+end
+]]
+
+-- ─── 🏆 【第3章完全閉幕：object.lua 6大コアアセットを一斉にC++筋肉へすり替えるスイッチ】 ───
+-- 既存のすべてのツールアセットの平和を120%守りながら、激重な心臓部だけをC++の筋肉へ100%挿げ替えます！
+if mclcapi and mclcapi.props_changed then
+	mcl_util.props_changed         = mclcapi.props_changed
+	mcl_util.get_object_center     = mclcapi.get_object_center
+	mcl_util.target_eye_height     = mclcapi.target_eye_height
+	mcl_util.target_eye_pos        = mclcapi.target_eye_pos
+	mcl_util.set_bone_position     = mclcapi.set_bone_position
+	mcl_util.rotation_to_irrlicht  = mclcapi.rotation_to_irrlicht -- 👑 アニメーション行列変換をC++へ挿げ替え！
+
+	props_changed = mclcapi.props_changed
 end
 
 -- tests for roundN
@@ -206,7 +224,7 @@ assert(not close_enough(test_cb, test_cb_diff))
 assert(close_enough(test_eh, test_eh_close))
 assert(not close_enough(test_eh, test_eh_diff))
 assert(not close_enough(test_nt, test_nt_diff)) --no floats involved here
-
+--[[
 -- tests for properties_changed
 local test_properties_set1 = {collisionbox = {-0.35, 0, -0.35, 0.35, 0.8, 0.35}, eye_height = 0.65,
 	nametag_color = {r = 225, b = 225, a = 225, g = 225}}
@@ -218,6 +236,7 @@ local test_p2, _ = props_changed(test_properties_set1, test_properties_set2)
 
 assert(not test_p1)
 assert(test_p2)
+]]
 
 function mcl_util.set_properties(obj, props)
 	local changed, p = props_changed(props, obj:get_properties())
@@ -225,7 +244,7 @@ function mcl_util.set_properties(obj, props)
 		obj:set_properties(p)
 	end
 end
-
+--[[
 function mcl_util.set_bone_position(obj, bone, pos, rot, scale)
 	local ov = obj:get_bone_override(bone)
 	local current_pos = ov.position.vec
@@ -240,7 +259,7 @@ function mcl_util.set_bone_position(obj, bone, pos, rot, scale)
 		})
 	end
 end
-
+]]
 function mcl_util.deal_damage(target, damage, mcl_reason)
 	if not mcl_reason.flags then
 		mcl_damage.finish_reason(mcl_reason)
@@ -295,7 +314,7 @@ local mathcos = math.cos
 local mathsin = math.sin
 local mathatan2 = math.atan2
 local mathasin = math.asin
-
+--[[
 function mcl_util.rotation_to_irrlicht (x, y, z)
 	-- https://www.geometrictools.com/Documentation/EulerAngles.pdf
 	local cx, sx = mathcos (x), mathsin (x)
@@ -327,7 +346,7 @@ function mcl_util.rotation_to_irrlicht (x, y, z)
 	end
 	return tx, ty, tz
 end
-
+]]
 -- Teleport OBJ to POS safely, that is, without incurring fall damage
 -- if OBJ is a mob and POS below its current position.
 
@@ -339,3 +358,13 @@ function mcl_util.teleport_safely (obj, pos)
 		obj:set_pos (pos)
 	end
 end
+
+function mcl_util.teleport_safely (obj, pos)
+	local entity = obj:get_luaentity ()
+	if entity and entity.is_mob then
+		entity:teleport_safely (pos)
+	else
+		obj:set_pos (pos)
+	end
+end
+

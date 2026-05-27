@@ -1,3 +1,5 @@
+-- mineclonia/mods/CORE/mcl_liquids/compat.lua
+minetest.log("action", "[liquids] 01 C++ API.")
 --[[
 This is a liquid transformation mod that aims to work more similar to the
 liquids seen in Minecraft.
@@ -505,6 +507,14 @@ local function register_liquid(def)
 	-- of 4 nodes.
 	-- If any node was 'ignore' then this function returns nil.
 	local function path_find(x, y, z)
+
+-- C++ direction
+		local g_util = rawget(_G, "mclcapi")
+		if g_util and g_util.native_liquids_find_flow_direction then
+			return g_util.native_liquids_find_flow_direction(x, y, z)
+		end --  これだけで、下の重労働ループ（for i = 1, RANGE_PATH do）を無音で強奪完了！！！
+-- C++ direction
+
 		local id, param2 = get_cached_node(x, y, z)
 		local orig_level = get_liquid_level(id, param2)
 		if orig_level <= 1 then

@@ -1,3 +1,6 @@
+-- mineclonia/mods/CORE/mcl_worlds/init.lua
+--minetest.log("action", "[worlds] 05 C++ API.")
+
 mcl_worlds = {}
 
 -- For a given position, returns a 2-tuple:
@@ -293,3 +296,19 @@ end
 -- 				      time, time * 1000 / 4096))
 -- 	end
 -- end
+
+local g_util = rawget(_G, "mclcapi") -- 私たちの共通筋肉テーブルから引き出す
+if g_util and g_util.native_worlds_is_in_void then
+
+	-- 🏆 5大中枢数理・DISKテロ処理をC++最速筋肉へと丸ごとすげ替え！！！
+	mcl_worlds.is_in_void                    = g_util.native_worlds_is_in_void
+	mcl_worlds.y_to_layer                    = g_util.native_worlds_y_to_layer
+	mcl_worlds.pos_to_dimension              = g_util.native_worlds_pos_to_dimension
+	mcl_worlds.layer_to_y                    = g_util.native_worlds_layer_to_y
+	mcl_worlds.tick_chunk_inhabited_time     = g_util.native_worlds_tick_chunk_inhabited_time
+
+	-- 👑 同期的に働く関数型のエイリアス（時計）も、ここで100%C++へと直撃ミラー上書き
+	mcl_worlds.clock_works                   = mcl_worlds.compass_works
+
+	minetest.log("action", "[worlds] ALL 05 C++ API.")
+end

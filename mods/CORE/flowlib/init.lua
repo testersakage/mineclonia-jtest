@@ -1,3 +1,5 @@
+-- mineclonia/mods/CORE/flowlib/init.lua
+minetest.log("action", "[flowlib] 01 C++ API.")
 flowlib = {}
 
 --sum of direction vectors must match an array index
@@ -118,6 +120,15 @@ local function quick_flow_vertical (node)
 end
 
 local function quick_flow(pos, node)
+
+-- C++
+	-- C++側の流速（native_liquids_quick_flow）が実在するなら、C++へ丸投げバイパス！！！
+	local g_util = rawget(_G, "mclcapi")
+	if g_util and g_util.native_liquids_quick_flow then
+		return g_util.native_liquids_quick_flow(pos, node)
+	end --  下の処理をすべて完全無音化！
+-- C++
+
 	if not node_is_liquid(node)  then
 		return {x = 0, y = 0, z = 0}
 	end

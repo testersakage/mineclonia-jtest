@@ -1,3 +1,6 @@
+-- mineclonia/mods/CORE/mcl_util/shape.lua
+minetest.log("action", "[util/shape.lua] start.")
+
 --- NOTE: if performance should become a consideration it may be
 --- worthwhile to create an FFI wrapper around the C reference
 --- implementation, which is included for reference, as you would
@@ -431,14 +434,68 @@ end
 
 region_class.is_AABB = region_is_AABB
 
+--     AABB型と同じ「is_empty」の能力を強制結合・相乗り創世！！！ [INDEX: 1]
+region_class.is_empty = region_class.is_empty or function(self) return self.x_size == 0 or self.y_size == 0 or self.z_size == 0 end
+
 local function region_evaluate (l, r, op)
+--[[
+-- xxxx
+	-- ─── 👑 【これより AABBs 起動即死の真犯人のレントゲン撮影を執行！！！】 ───
+	core.log("action", "[AABB LUA X-RAY START] -----------------------------------------")
+	
+	-- 1. 投げ込まれた l, r, op の「データ型（type）」を完全露出！！！
+	core.log("action", "[AABB LUA X-RAY] 左辺 l object type: " .. type(l))
+	core.log("action", "[AABB LUA X-RAY] 右辺 r object type: " .. type(r))
+	core.log("action", "[AABB LUA X-RAY] 演算 op object type: " .. type(op))
+	
+	-- 2. 左辺 l の内部フィールドと「遺伝子（メタテーブル）」を強制捜査！
+	if type(l) == "table" then
+		core.log("action", "[AABB LUA X-RAY] 左辺 l table size: x=" .. tostring(l.x_size) .. ", y=" .. tostring(l.y_size) .. ", z=" .. tostring(l.z_size))
+		local mt_l = getmetatable(l)
+		if mt_l then
+			core.log("action", "[AABB LUA X-RAY] 左辺 l にメタテーブルを検出！ メソッド一覧:")
+			for mk, mv in pairs(mt_l) do core.log("action", "[AABB LUA X-RAY]   -> [" .. tostring(mk) .. "] (" .. type(mv) .. ")") end
+		else
+			core.log("action", "[AABB LUA X-RAY] 🚨 CRITICAL: 左辺 l にメタテーブルが実在しません（ただのハダカの空テーブルです）！！！")
+		end
+	end
+
+	-- 3. 右辺 r の内部フィールドと「遺伝子（メタテーブル）」を強制捜査！
+	if type(r) == "table" then
+		core.log("action", "[AABB LUA X-RAY] 右辺 r table size: x=" .. tostring(r.x_size) .. ", y=" .. tostring(r.y_size) .. ", z=" .. tostring(r.z_size))
+		local mt_r = getmetatable(r)
+		if mt_r then
+			core.log("action", "[AABB LUA X-RAY] 右辺 r にメタテーブルを検出！ メソッド一覧:")
+			for mk, mv in pairs(mt_r) do core.log("action", "[AABB LUA X-RAY]   -> [" .. tostring(mk) .. "] (" .. type(mv) .. ")") end
+		else
+			core.log("action", "[AABB LUA X-RAY] 🚨 CRITICAL: 右辺 r にメタテーブルが実在しません（ただのハダカの空テーブルです）！！！")
+		end
+	end
+-- xxxx
+]]
+	-- ─── 👑 【新章第4章・これにてAABBsの悪夢完全絶滅・大調和着陸】 ───
+	-- C++側から返ってきたピカピカのハだかのデータテーブル（l や r）に対して、
+	-- 本家オリジナルの本物の親クラス遺伝子「region_class」を、Lua側のこの玄関口でガチッと完全100%自動結合！！！ [INDEX: 1]
+	if type(l) == "table" and not getmetatable(l) then setmetatable(l, region_class) end
+	if type(r) == "table" and not getmetatable(r) then setmetatable(r, region_class) end
+	-- ─── 👑 【防衛シールドここまで】 ───
+
 	-- Punt if empty.
+
 	if l.x_size == 0 or l.y_size == 0 or l.z_size == 0 then
 		return op (false, not r:is_empty ())
 	elseif r.x_size == 0 or r.y_size == 0 or r.z_size == 0 then
 		return op (not l:is_empty (), false)
 	end
-
+--[[
+	if l.x_size == 0 or l.y_size == 0 or l.z_size == 0 then
+		local r_empty = (type(r) == "table" and r.is_empty and r:is_empty()) or (r.b_size == 0 or rawget(r, "solids") == nil)
+		return op (false, not r_empty)
+	elseif r.x_size == 0 or r.y_size == 0 or r.z_size == 0 then
+		local l_empty = (type(l) == "table" and l.is_empty and l:is_empty()) or (l.b_size == 0 or rawget(l, "solids") == nil)
+		return op (not l_empty, false)
+	end
+]]
 	local lx_max = l.x_size + 1
 	local rx_max = r.x_size + 1
 	local l_b_disp = l.b_disp
@@ -1115,3 +1172,28 @@ local function region_select_face (region, normal_axis, pos)
 end
 
 region_class.select_face = region_select_face
+
+local g_util = rawget(_G, "mclcapi")
+if g_util and g_util.native_decompose_aabbs then
+	-- C++側が内部で生成しているメタテーブル（region_classの器）を逆探知一本釣り
+	local dummy_obj = g_util.native_decompose_aabbs({{0,0,0,0,0,0}})
+	local cpp_mt = dummy_obj and getmetatable(dummy_obj)
+	
+	if cpp_mt and region_class then
+		-- C++側の取扱説明書の裏に、本家Lua製の取扱説明書（intersect_p等）をリダイレクト結線！
+		setmetatable(cpp_mt, { __index = region_class })
+		minetest.log("action", "[util/shape.lua] Global object meta-classes gloriously synchronized.")
+	end
+end
+
+return function()
+	return setmetatable({
+		x_size = 0,
+		y_size = 0,
+		z_size = 0,
+		x_edges = {},
+		y_edges = {},
+		z_edges = {},
+		map = {},
+	}, region_class)
+end

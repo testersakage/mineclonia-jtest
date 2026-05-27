@@ -1,3 +1,21 @@
+-- mineclonia/mods/CORE/mcl_util/environment.lua
+minetest.log("action", "[util/environment.lua] 10/14 C++ API.")
+
+if mclcapi and mclcapi.get_eligible_transfer_item_slot then
+	mcl_util.get_double_container_neighbor_pos = mclcapi.get_double_container_neighbor_pos
+	mcl_util.get_eligible_transfer_item_slot    = mclcapi.get_eligible_transfer_item_slot
+	mcl_util.drop_items_from_meta_container    = mclcapi.drop_items_from_meta_container
+	mcl_util.get_pointed_thing                 = mclcapi.get_pointed_thing
+	mcl_util.traverse_tower                    = mclcapi.traverse_tower
+	mcl_util.traverse_tower_group              = mclcapi.traverse_tower_group
+	mcl_util.replace_node_vm                   = mclcapi.replace_node_vm
+	mcl_util.bulk_set_node_vm                  = mclcapi.bulk_set_node_vm
+	mcl_util.circle_bulk_set_node_vm            = mclcapi.circle_bulk_set_node_vm
+	
+	-- 👑 大トリ：毎フレームの時間更新ループを C++ の最速ステップへ完全挿げ替え大開通！
+	core.register_globalstep (mclcapi.native_environment_globalstep)
+end
+
 -- Based on core.rotate_and_place
 
 --[[

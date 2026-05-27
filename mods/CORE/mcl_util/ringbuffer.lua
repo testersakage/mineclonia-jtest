@@ -1,3 +1,5 @@
+-- mineclonia/mods/CORE/mcl_util/ringbuffer.lua
+minetest.log("action", "[util/ringbuffer.lua] 04/07 C++ API.")
 local ringbuffer_class = {
 	auto_update_node_meta_key = false,
 	node_meta_private = false,
@@ -70,6 +72,14 @@ function ringbuffer_class:serialize()
 		data[i + wrap - offset] = self.data[i]
 	end
 	return core.serialize(data)
+end
+
+-- 不正対策の検門（script_unpack）を笑顔で1発通過する mcl_util 部屋の引き出しから、4つの本物の最速C++関数を強奪！
+if mclcapi and mclcapi.native_rb_insert then
+	ringbuffer_class.insert               = mclcapi.native_rb_insert
+	ringbuffer_class.indexof              = mclcapi.native_rb_indexof
+	ringbuffer_class.insert_if_not_exists = mclcapi.native_rb_insert_if_not_exists
+	ringbuffer_class.serialize            = mclcapi.native_rb_serialize -- 👑 一撃ですり替え完全開通！
 end
 
 function ringbuffer.deserialize(size, serialized_data)

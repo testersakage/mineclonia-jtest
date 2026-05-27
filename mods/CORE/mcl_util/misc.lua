@@ -1,3 +1,6 @@
+-- mineclonia/mods/CORE/mcl_util/misc.lua
+minetest.log("action", "[util/misc.lua] 03/17 C++ API.")
+
 function mcl_util.file_exists(name)
 	if type(name) ~= "string" then return end
 	local f = io.open(name)
@@ -81,11 +84,11 @@ end
 local function round_trunc(x)
 	return math.floor(x + 0.5)
 end
-
+--[[
 function mcl_util.get_nodepos(pos)
 	return vector.apply(pos, round_trunc)
 end
-
+]]
 function mcl_util.norm_radians (x)
 	local x = x % (math.pi * 2)
 	if x >= math.pi then
@@ -96,7 +99,7 @@ function mcl_util.norm_radians (x)
 	end
 	return x
 end
-
+--[[
 function mcl_util.calculate_knockback (velocity, factor, resistance, standing, x, z)
 	local factor = factor * (1.0 - math.min (1.0, resistance))
 	if factor <= 1.0e-5 then
@@ -112,7 +115,7 @@ function mcl_util.calculate_knockback (velocity, factor, resistance, standing, x
 	v.y = standing and (math.min (0.4 * 20, velocity.y / 2.0 + factor * 10)) or velocity.y
 	return v
 end
-
+]]
 function mcl_util.return_itemstack_if_alive(player, itemstack)
 	if player:get_hp() <= 0 then
 		return ItemStack()
@@ -122,7 +125,7 @@ end
 
 -- Attribution: https://gist.github.com/jrus/3197011
 local pr = PcgRandom (os.time ())
-
+--[[
 function mcl_util.generate_uuid ()
     local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
     return string.gsub (template, '[xy]', function (c)
@@ -130,7 +133,7 @@ function mcl_util.generate_uuid ()
         return string.format ('%x', v)
     end)
 end
-
+]]
 ------------------------------------------------------------------------
 -- LCG with guaranteed full period.
 ------------------------------------------------------------------------
@@ -243,4 +246,12 @@ end
 
 function mcl_util.lcg_next (a, c, m, state)
 	return (a * state + c) % m
+end
+
+
+-- API再登録
+if core then
+	mcl_util.generate_uuid       = core.native_generate_uuid      or mclcapi.generate_uuid
+	mcl_util.get_nodepos         = core.native_get_nodepos        or mclcapi.get_nodepos
+	mcl_util.calculate_knockback = core.native_calculate_knockback or mclcapi.calculate_knockback
 end
