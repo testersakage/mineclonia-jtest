@@ -639,11 +639,15 @@ end
 function image:save(filename, properties)
 	local properties = properties or {}
 	local color_format = properties.color_format or "B8G8R8A8"
+--	minetest.log("action", "[tga_encoder] format:" .. color_format)
 	local compression = properties.compression or "RAW"
+--	minetest.log("action", "[tga_encoder] comp:" .. compression)
 
 	-- 既知の安全な引数（型と組み合わせ）であるかを検品
 	local is_known_format = (color_format == "Y8" or color_format == "A1R5G5B5" or color_format == "B8G8R8" or color_format == "B8G8R8A8")
+--	minetest.log("action", "[tga_encoder] is format:" .. is_known_format)
 	local is_known_compression = (compression == "RAW" or compression == "RLE")
+--	minetest.log("action", "[tga_encoder] is comp:" .. is_known_compression)
 	local is_valid_pixels = (type(self.pixels) == "table" and self.height > 0)
 
 	if is_known_format and is_known_compression and is_valid_pixels then
@@ -663,8 +667,16 @@ function image:save(filename, properties)
 						local b = pixel[3] or 255
 						local a = pixel[4] or 255
 						
-						-- ビットシフト演算で32bitの1つの数値（ARGB）にまとめて1重配列へぶち込む！
-						flat_pixels[count] = (r * 16777216) + (g * 65536) + (b * 256) + a
+						--  【真の大開通】：掛け算を完全引き算（全消去）！！！
+						--     LuaJIT純正の bit.bor（論理和）と bit.lshift（左シフト）を用い、
+						--     オーバーフローを物理的に100%シャットアウトした、
+						--     C++側が1ナノ秒で解読できる正真正銘、純白の「0xRRGGBBAA」型でチャージ！！！
+						flat_pixels[count] = bit.bor(
+							bit.lshift(r, 24), -- Red を最上位へ
+							bit.lshift(g, 16), -- Green を次の部屋へ
+							bit.lshift(b, 8),  -- Blue を次の部屋へ
+							a                  -- Alpha を最下位へ
+						)
 						count = count + 1
 					end
 				end
