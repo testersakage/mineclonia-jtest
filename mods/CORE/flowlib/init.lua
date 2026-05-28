@@ -120,15 +120,13 @@ local function quick_flow_vertical (node)
 end
 
 local function quick_flow(pos, node)
-
--- C++
-	-- C++側の流速（native_liquids_quick_flow）が実在するなら、C++へ丸投げバイパス！！！
-	local g_util = rawget(_G, "mclcapi")
-	if g_util and g_util.native_liquids_quick_flow then
-		return g_util.native_liquids_quick_flow(pos, node)
-	end --  下の処理をすべて完全無音化！
--- C++
-
+-- c++
+	-- 【動的内部リレー】：キックされたその瞬間に C++ が実在すれば、C++へ中継
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_quick_flow then
+		return api.native_quick_flow(pos, node)
+	end
+-- c++
 	if not node_is_liquid(node)  then
 		return {x = 0, y = 0, z = 0}
 	end

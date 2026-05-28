@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/mcl_liquids/compat.lua
-minetest.log("action", "[liquids] 01 C++ API.")
+minetest.log("action", "[liquids] 02 C++ API.")
 --[[
 This is a liquid transformation mod that aims to work more similar to the
 liquids seen in Minecraft.
@@ -507,14 +507,6 @@ local function register_liquid(def)
 	-- of 4 nodes.
 	-- If any node was 'ignore' then this function returns nil.
 	local function path_find(x, y, z)
-
--- C++ direction
-		local g_util = rawget(_G, "mclcapi")
-		if g_util and g_util.native_liquids_find_flow_direction then
-			return g_util.native_liquids_find_flow_direction(x, y, z)
-		end --  これだけで、下の重労働ループ（for i = 1, RANGE_PATH do）を無音で強奪完了！！！
--- C++ direction
-
 		local id, param2 = get_cached_node(x, y, z)
 		local orig_level = get_liquid_level(id, param2)
 		if orig_level <= 1 then
@@ -907,7 +899,14 @@ local function register_liquid(def)
 	This function tests if a source liquid needs to be updated.
 	]]
 	local function does_sl_need_update(x, y, z)
-
+-- c++
+		-- 【動的内部リレー】：キックされた瞬間にC++が存在すれば、5方向スキャンをC++筋肉へ放流！
+		local api = rawget(_G, "mclcapi")
+		if api and api.native_does_sl_need_update then
+			-- C++側の第6引数へ、浸食可否キャッシュ（floodable_tab）をそのままパスして検品執行
+			return api.native_does_sl_need_update(x, y, z, C_SOURCE, C_FLOWING, floodable_tab)
+		end
+-- c++
 		--------------------------------------------------
 		-- Check for potential spreading                --
 		--------------------------------------------------
@@ -1014,7 +1013,13 @@ local function register_liquid(def)
 		--------------------------------------------------
 		-- Check for potential spreading                --
 		--------------------------------------------------
-
+-- c++
+		-- 【動的内部リレー】：キックされた瞬間にC++が存在すれば、流動水用5方向スキャンをC++へ放流！
+		local api = rawget(_G, "mclcapi")
+		if api and api.native_does_fl_need_update then
+			return api.native_does_fl_need_update(x, y, z, C_SOURCE, C_FLOWING, floodable_tab)
+		end
+-- c++
 		-- Could spread down
 		local id101, _, p101 = get_node_raw (x, y-1, z)
 		if floodable_tab[id101] then return true end
