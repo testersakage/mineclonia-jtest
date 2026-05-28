@@ -1,8 +1,24 @@
 -- mineclonia/mods/CORE/mcl_util/table.lua
-minetest.log("action", "[util/table.lua] start.")
+--minetest.log("action", "[util/table.lua] 03 C++ API.")
+local current_thread = "[" .. (core.get_current_thread_name and core.get_current_thread_name() or "Main/Emerge") .. "]"
+core.log("action", string.format("[util/table.lua]: %s: 03 C++ API.", current_thread))
 
--- Updates all values in t using values from ...
+-- 【絶対存在保証】：table.update は最初から実名で常駐
 function table.update(t, ...)
+	--  1. 第1引数の厳格な型検品（改札）
+	if type(t) == "table" then
+		-- 実行されたその瞬間に C++ が実在すれば、バイパス
+		local api = rawget(_G, "mclcapi")
+		if api and api.native_table_update then
+			return api.native_table_update(t, ...)
+		end
+	else
+		local info = debug.getinfo(2, "Sl")
+		local caller = info and (info.short_src .. ":" .. info.currentline) or "unknown"
+		core.log("warning", "[TABLE EXCEPTION] INVALID BASE TABLE IN table.update from " .. caller)
+	end
+
+	--  2. C++未検出時、または非同期の0手目は、安全にオリジナルのLuaでゲームの即死をガード
 	for _, to in ipairs{...} do
 		for k, v in pairs(to) do
 			t[k] = v
@@ -23,8 +39,20 @@ function table.update_nil(t, ...)
 	return t
 end
 
--- Recursively updates all values in t using values from ...
+-- table.update_deep 実名常駐
 function table.update_deep(t, ...)
+	if type(t) == "table" then
+		-- 実行時の動的内部リレー
+		local api = rawget(_G, "mclcapi")
+		if api and api.native_table_update_deep then
+			return api.native_table_update_deep(t, ...)
+		end
+	else
+		local info = debug.getinfo(2, "Sl")
+		local caller = info and (info.short_src .. ":" .. info.currentline) or "unknown"
+		core.log("warning", "[TABLE EXCEPTION] INVALID BASE TABLE IN table.update_deep from " .. caller)
+	end
+
 	for _, to in ipairs{...} do
 		for k, v in pairs(to) do
 			if type(t[k]) == "table" and type(v) == "table" then
@@ -78,8 +106,20 @@ function table.count(t, does_it_count)
 	return r
 end
 
--- returns the keyset of a table, optionally filtered by a function
+-- table.keyset 実名常駐
 function table.keyset(t, f)
+	if type(t) == "table" then
+		-- 実行時の動的内部リレー
+		local api = rawget(_G, "mclcapi")
+		if api and api.native_table_keyset then
+			return api.native_table_keyset(t, f)
+		end
+	else
+		local info = debug.getinfo(2, "Sl")
+		local caller = info and (info.short_src .. ":" .. info.currentline) or "unknown"
+		core.log("warning", "[TABLE EXCEPTION] INVALID BASE TABLE IN table.keyset from " .. caller)
+	end
+
 	local ks = {}
 	for k, v in pairs(t) do
 		if not f or f(k, v) then
@@ -98,20 +138,17 @@ end
 
 -- Stable sorting.
 
--- Attribution: https://github.com/1bardesign/batteries/blob/master/sort.lua
+-- Attribution: https://github.com
 
 local function sort_setup (array, less)
 	local n = #array
-	--trivial cases; empty or 1 element
 	local trivial = (n <= 1)
 	if not trivial then
-		--check less
 		if less (array[1], array[1]) then
 			error ("invalid order function for sorting;"
 			       .. " less(v, v) should not be true for any v.")
 		end
 	end
-	--setup complete
 	return trivial, n, less
 end
 
@@ -122,6 +159,9 @@ local function insertion_sort_impl (array, first, last, less)
 		for j = i, first + 1, -1 do
 			if less (v, array[j - 1]) then
 				array[j] = array[j - 1]
+			elseif array[j - 1] == nil then
+				k = j
+				break
 			else
 				k = j
 				break
@@ -132,7 +172,6 @@ local function insertion_sort_impl (array, first, last, less)
 end
 
 local function stable_sort (array, less)
-	--setup
 	local trivial, n
 	trivial, n, less = sort_setup (array, less)
 	if not trivial then

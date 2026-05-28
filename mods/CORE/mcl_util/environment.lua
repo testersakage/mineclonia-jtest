@@ -1,19 +1,22 @@
 -- mineclonia/mods/CORE/mcl_util/environment.lua
-minetest.log("action", "[util/environment.lua] 10/14 C++ API.")
+minetest.log("action", "[util/environment.lua] 10 C++ API.")
+-- 関数の総数 : 18
+-- グローバルに露出している関数 : 14
+-- グローバルに露出している変数 : 02
 
 if mclcapi and mclcapi.get_eligible_transfer_item_slot then
-	mcl_util.get_double_container_neighbor_pos = mclcapi.get_double_container_neighbor_pos
-	mcl_util.get_eligible_transfer_item_slot    = mclcapi.get_eligible_transfer_item_slot
-	mcl_util.drop_items_from_meta_container    = mclcapi.drop_items_from_meta_container
-	mcl_util.get_pointed_thing                 = mclcapi.get_pointed_thing
-	mcl_util.traverse_tower                    = mclcapi.traverse_tower
-	mcl_util.traverse_tower_group              = mclcapi.traverse_tower_group
-	mcl_util.replace_node_vm                   = mclcapi.replace_node_vm
-	mcl_util.bulk_set_node_vm                  = mclcapi.bulk_set_node_vm
-	mcl_util.circle_bulk_set_node_vm            = mclcapi.circle_bulk_set_node_vm
+	mcl_util.get_double_container_neighbor_pos = mclcapi.native_get_double_container_neighbor_pos
+	mcl_util.get_eligible_transfer_item_slot    = mclcapi.native_get_eligible_transfer_item_slot
+	mcl_util.drop_items_from_meta_container    = mclcapi.native_drop_items_from_meta_container
+	mcl_util.get_pointed_thing                 = mclcapi.native_get_pointed_thing
+	mcl_util.traverse_tower                    = mclcapi.native_traverse_tower
+	mcl_util.traverse_tower_group              = mclcapi.native_traverse_tower_group
+--	mcl_util.replace_node_vm                   = mclcapi.native_replace_node_vm
+--	mcl_util.bulk_set_node_vm                  = mclcapi.native_bulk_set_node_vm
+--	mcl_util.circle_bulk_set_node_vm            = mclcapi.native_circle_bulk_set_node_vm
 	
-	-- 👑 大トリ：毎フレームの時間更新ループを C++ の最速ステップへ完全挿げ替え大開通！
-	core.register_globalstep (mclcapi.native_environment_globalstep)
+	-- 変数：毎フレームの時間更新ループを C++ の最速ステップへ完全挿げ替え
+	core.register_globalstep (mclcapi.var_environment_globalstep)
 end
 
 -- Based on core.rotate_and_place
@@ -106,6 +109,7 @@ end
 -- * pos: Position of the node to investigate
 -- * param2: param2 of that node
 -- * side: Which "half" the investigated node is. "left" or "right"
+
 function mcl_util.get_double_container_neighbor_pos(pos, param2, side)
 	if side == "right" then
 		if param2 == 0 then
@@ -140,6 +144,7 @@ end
 --- condition: Function which takes an itemstack and returns true if it matches the desired item condition.
 ---            If set to nil, the slot of the first item stack will be taken unconditionally.
 -- dst_inventory and dst_list can also be nil if condition is nil.
+
 function mcl_util.get_eligible_transfer_item_slot(src_inventory, src_list, dst_inventory, dst_list, condition)
 	local size = src_inventory:get_size(src_list)
 	local stack
@@ -489,6 +494,7 @@ end
 -- This function is essentially a wrapper around core.raycast to get the currently pointed at "pointed_thing"
 -- The last "ignore" argument is either a table of nodename to ignore in the raycast or a func(pointed_thing) that
 -- returns true if that position in the ray shall be discounted.
+
 function mcl_util.get_pointed_thing(player, objects, liquid, ignore)
 	local pos = vector.offset(player:get_pos(), 0, player:get_properties().eye_height, 0)
 	local def = player:get_wielded_item():get_definition()
@@ -508,6 +514,7 @@ function mcl_util.get_pointed_thing(player, objects, liquid, ignore)
 		end
 	end
 end
+
 
 ---Return a function to use in `on_place`.
 ---
@@ -814,46 +821,35 @@ function mcl_util.traverse_tower_group(pos, dir, group, callback)
 end
 
 -- Voxel manip function to replace a node type with another in an area
+
 function mcl_util.replace_node_vm(pos1, pos2, mat_from, mat_to, is_group)
-	local c_to = core.get_content_id(mat_to)
-
-	local group_name
-	local c_from
-
-	if is_group then
-		group_name = string.match(mat_from, "group:(.+)")
-	else
-		c_from = core.get_content_id(mat_from)
+	-- 🎯 実行時の動的内部リレー：C++が存在すれば、空間メタデータを汚さずに3重ループ実務のみをC++へ放流完食！ [INDEX: 5]
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_replace_node_vm then
+		return api.native_replace_node_vm(pos1, pos2, mat_from, mat_to, is_group)
 	end
 
+	-- 保険（生Luaフォールバック） [INDEX: 1]
+	local c_to = core.get_content_id(mat_to)
+	local group_name, c_from
+	if is_group then group_name = string.match(mat_from, "group:(.+)") else c_from = core.get_content_id(mat_from) end
 	local vm = core.get_voxel_manip()
 	local emin, emax = vm:read_from_map(pos1, pos2)
-	local a = VoxelArea:new({
-		MinEdge = emin,
-		MaxEdge = emax,
-	})
+	local a = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
 	local data = vm:get_data()
-
-	-- Modify data
 	for z = pos1.z, pos2.z do
 		for y = pos1.y, pos2.y do
 			for x = pos1.x, pos2.x do
 				local vi = a:index(x, y, z)
 				if is_group then
 					local node_name = core.get_name_from_content_id(data[vi])
-					if core.get_item_group(node_name, group_name) > 0 then
-						data[vi] = c_to
-					end
+					if core.get_item_group(node_name, group_name) > 0 then data[vi] = c_to end
 				else
-					if data[vi] == c_from then
-						data[vi] = c_to
-					end
+					if data[vi] == c_from then data[vi] = c_to end
 				end
 			end
 		end
 	end
-
-	-- Write data
 	vm:set_data(data)
 	vm:write_to_map(true)
 end
@@ -867,77 +863,60 @@ mcl_util.bulk_swap_node = core.bulk_swap_node or function(positions, node)
 end
 
 -- Voxel manip function to change nodes if they don't match in an area.
-function mcl_util.bulk_set_node_vm(pos1, pos2, mat_to)
-	local c_to = core.get_content_id(mat_to)
 
+function mcl_util.bulk_set_node_vm(pos1, pos2, mat_to)
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_bulk_set_node_vm then
+		return api.native_bulk_set_node_vm(pos1, pos2, mat_to)
+	end
+
+	local c_to = core.get_content_id(mat_to)
 	local vm = core.get_voxel_manip()
 	local emin, emax = vm:read_from_map(pos1, pos2)
-	local a = VoxelArea:new({
-		MinEdge = emin,
-		MaxEdge = emax,
-	})
+	local a = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
 	local data = vm:get_data()
-
-	-- Modify data
 	for z = pos1.z, pos2.z do
 		for y = pos1.y, pos2.y do
 			for x = pos1.x, pos2.x do
 				local vi = a:index(x, y, z)
-				if data[vi] ~= c_to then
-					data[vi] = c_to
-				end
+				if data[vi] ~= c_to then data[vi] = c_to end
 			end
 		end
 	end
-
-	-- Write data
 	vm:set_data(data)
 	vm:write_to_map(true)
 end
 
 -- Voxel manip function to change nodes if they don't match in a circle.
 -- Will also set param2 on changed nodes if provided.
+
 function mcl_util.circle_bulk_set_node_vm(radius, pos, y, mat_to, param2)
-	local c_to = core.get_content_id(mat_to)
-
-	-- Using new as y is not relative
-	local pos1 = vector.new(pos.x - radius, y, pos.z - radius)
-	local pos2 = vector.new(pos.x + radius, y, pos.z + radius)
-
-	local vm = core.get_voxel_manip()
-	local emin, emax = vm:read_from_map(pos1, pos2)
-	local a = VoxelArea:new({
-		MinEdge = emin,
-		MaxEdge = emax,
-	})
-	local data = vm:get_data()
-
-	local param2data
-
-	if param2 then
-		param2data = vm:get_param2_data()
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_circle_bulk_set_node_vm then
+		return api.native_circle_bulk_set_node_vm(radius, pos, y, mat_to, param2)
 	end
 
+	local c_to = core.get_content_id(mat_to)
+	local pos1 = vector.new(pos.x - radius, y, pos.z - radius)
+	local pos2 = vector.new(pos.x + radius, y, pos.z + radius)
+	local vm = core.get_voxel_manip()
+	local emin, emax = vm:read_from_map(pos1, pos2)
+	local a = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
+	local data = vm:get_data()
+	local param2data = param2 and vm:get_param2_data() or nil
 	for z = -radius, radius do
 		for x = -radius, radius do
 			if x * x + z * z <= radius * radius + radius * 0.8 then
-				--if x * x + z * z <= radius * radius + radius then
 				local vi = a:index(math.floor(pos.x + x), y, math.floor(pos.z + z))
 				if data[vi] ~= c_to then
 					data[vi] = c_to
-					if param2 then
-						param2data[vi] = param2
-					end
+					if param2 then param2data[vi] = param2 end
 				end
 			end
 		end
 	end
-
-	-- Write data
 	vm:set_data(data)
-	if param2 then
-		vm:set_param2_data(param2data)
-	end
+	if param2 then vm:set_param2_data(param2data) end
 	vm:write_to_map(true)
 end
 
@@ -1095,7 +1074,7 @@ end
 
 core.register_globalstep (function ()
 	update_calendar_events ()
-	local tod = core.get_timeofday ()
-	current_day_night_ratio = core.time_to_day_night_ratio (tod)
+	local tod = core.get_timeofday () -- to c++
+	current_day_night_ratio = core.time_to_day_night_ratio (tod) -- to c++
 	current_time_of_day = tod
 end)

@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/mcl_util/misc.lua
-minetest.log("action", "[util/misc.lua] 03/17 C++ API.")
+minetest.log("action", "[util/misc.lua] 03 C++ API.")
 
 function mcl_util.file_exists(name)
 	if type(name) ~= "string" then return end
@@ -24,22 +24,6 @@ function mcl_util.get_color(colorstr)
 	end
 end
 
--- Create a translator that supports dynamic generation of translatable strings.
---
--- The function returned by `get_dynamic_translator` can be used just like the
--- standard translator created by `core.get_translator`. The recommended
--- name is `D`, but - in contrast to the standard translator - the name used in
--- the source files is not important.
---
--- While the standard translation tools extract string constants from the source
--- files themselves, the extended translation workflow records all values passed
--- to the dynamic translator *during mod load time*.
---
--- The extended workflow includes the standard tooling and both can be used
--- together in the same mod. If a textdomain is not specified when creating the
--- dynamic translator, `core.get_current_modname()` is used as the
--- textdomain for that particular invocation. So API mods using this mechanism
--- can create translatable strings in the textdomain of their calling mods.
 if core.get_modpath("mcla_generate_translation_strings") then
 	mcla_generated_translations = {}
 	function mcl_util.get_dynamic_translator(textdomain)
@@ -57,8 +41,6 @@ else
 				return core.translate(textdomain, s, ...)
 			end
 		else
-			-- current mod is used as textdomain for each invocation
-			-- not supported after mods loaded
 			return function(s, ...)
 				local mod = core.get_current_modname()
 				assert(mod, "Dynamic translator with dynamic textdomain must not be used after mods have been loaded")
@@ -84,11 +66,30 @@ end
 local function round_trunc(x)
 	return math.floor(x + 0.5)
 end
---[[
+
+-- 🏆 【ハイブリッド安全バリケード】：get_nodepos 改札口 [INDEX: 5]
 function mcl_util.get_nodepos(pos)
-	return vector.apply(pos, round_trunc)
+	-- 🛡️ 1. 【厳格な座標検品】：引数が適切なx,y,zを持つテーブル（ベクトル）か検証
+	if type(pos) == "table" and type(pos.x) == "number" and type(pos.y) == "number" and type(pos.z) == "number" then
+		-- 🏆 【安全確定】：C++側の3次元最速ボクセル丸めエンジンへ放流 [INDEX: 5]
+		if mclcapi and mclcapi.native_get_nodepos then
+			return mclcapi.native_get_nodepos(pos)
+		end
+	else
+		-- 🚨 【不審な引数を検知】：C++側を一切汚さず、Lua側でコールスタック付きの警告ログを出力 [INDEX: 1]
+		local info = debug.getinfo(2, "Sl")
+		local caller = info and (info.short_src .. ":" .. info.currentline) or "unknown"
+		core.log("warning", "[MISC EXCEPTION] 🚨 INVALID POS TABLE PASSED TO get_nodepos from " .. caller)
+	end
+	
+	-- 安全なフォールバック（Lua側のピュア幾何学） [INDEX: 1]
+	return vector.new(
+		math.floor((pos and pos.x or 0) + 0.5),
+		math.floor((pos and pos.y or 0) + 0.5),
+		math.floor((pos and pos.z or 0) + 0.5)
+	)
 end
-]]
+
 function mcl_util.norm_radians (x)
 	local x = x % (math.pi * 2)
 	if x >= math.pi then
@@ -99,7 +100,7 @@ function mcl_util.norm_radians (x)
 	end
 	return x
 end
---[[
+
 function mcl_util.calculate_knockback (velocity, factor, resistance, standing, x, z)
 	local factor = factor * (1.0 - math.min (1.0, resistance))
 	if factor <= 1.0e-5 then
@@ -107,15 +108,12 @@ function mcl_util.calculate_knockback (velocity, factor, resistance, standing, x
 	end
 	local v = vector.normalize(vector.new(x, 0, z)) * factor
 
-	-- Counterbalance it with a reduced version of the current
-	-- velocity.
 	v.x = (velocity.x / 2 + (v.x * 20)) * 0.546
 	v.z = (velocity.z / 2 + (v.z * 20)) * 0.546
-	-- Apply vertical force if standing
 	v.y = standing and (math.min (0.4 * 20, velocity.y / 2.0 + factor * 10)) or velocity.y
 	return v
 end
-]]
+
 function mcl_util.return_itemstack_if_alive(player, itemstack)
 	if player:get_hp() <= 0 then
 		return ItemStack()
@@ -123,20 +121,21 @@ function mcl_util.return_itemstack_if_alive(player, itemstack)
 	return itemstack
 end
 
--- Attribution: https://gist.github.com/jrus/3197011
-local pr = PcgRandom (os.time ())
---[[
+-- 🏆 【ハイブリッド安全バリケード】：generate_uuid 改札口 [INDEX: 5]
 function mcl_util.generate_uuid ()
-    local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-    return string.gsub (template, '[xy]', function (c)
-        local v = (c == 'x') and pr:next (0, 0xf) or pr:next (8, 0xb)
-        return string.format ('%x', v)
-    end)
+	-- 🏆 引数がないため100%安全が確定。直接C++側のメルセンヌ・ツイスタ乱数エンジンへ最速パス [INDEX: 5]
+	if mclcapi and mclcapi.native_generate_uuid then
+		return mclcapi.native_generate_uuid() -- C++側から「文字列」と「31」の2つの戻り値が完全 Symmetry 返却
+	end
+
+	-- 安全なフォールバック（Lua側のgsubロジック） [INDEX: 1]
+	local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+	local pr = PcgRandom(os.time())
+	return string.gsub (template, '[xy]', function (c)
+		local v = (c == 'x') and pr:next (0, 0xf) or pr:next (8, 0xb)
+		return string.format ('%x', v)
+	end)
 end
-]]
-------------------------------------------------------------------------
--- LCG with guaranteed full period.
-------------------------------------------------------------------------
 
 local sqrt = math.sqrt
 local floor = math.floor
@@ -180,16 +179,21 @@ local function next_prime (i, sieve)
 	return i
 end
 
--- https://github.com/pcordes/allspr/blob/f83fe5a866d784de947321a0be140e815249a9e5/lcg.c#L117
-
 local K = 0.5 - sqrt (3) / 6.0
 
--- Return a multiplier (A) and an increment (C) guaranteed to yield a
--- linear congruential generator with a full period for the provided
--- modulus M, i.e., one which will yield every number between 0 and (M
--- - 1) before returning to its original value.
-
+-- 🏆 【ハイブリッド安全バリケード】：findlcg 改札口 [INDEX: 5]
 function mcl_util.findlcg (m)
+	-- 🛡️ 1. 【厳格な法（M）の検品】：引数が有効な正の整数であるかをチェック
+	if type(m) == "number" and m > 0 then
+		-- 🏆 【安全確定】：C++側のエラトステネスの篩・素因数分解エンジンへ一直線に放流 [INDEX: 5]
+		if mclcapi and mclcapi.native_findlcg then
+			return mclcapi.native_findlcg(m)
+		end
+	else
+		core.log("warning", "[MISC EXCEPTION] 🚨 INVALID MODULUS PASSED TO findlcg! Value: " .. tostring(m))
+	end
+
+	-- 安全なフォールバック（Lua側のピュア合同数理） [INDEX: 1]
 	local a, b, c
 	if m <= 6 then
 		b = 0
@@ -197,9 +201,6 @@ function mcl_util.findlcg (m)
 	else
 		local sieve = sieve_of_eratosthenes (m + floor (m / 2))
 		local divlimit = m
-		-- b must be a multiple of all of m's prime factors
-		-- (so that b+1 may be a valid multiplier as holden by
-		-- the Hull-Dobel theorem).
 		b = 1
 		if m % 2 == 0 then
 			b = 2
@@ -217,19 +218,16 @@ function mcl_util.findlcg (m)
 			end
 		end
 
-		-- If m is a mult of 4, b must be also.
 		if m % 4 == 0 then
 			while b % 4 ~= 0 do
 				b = b * 2
 			end
 		end
 
-		-- Make sure a isn't too small.
 		while b < sqrt (m) do
 			b = b * 7
 		end
 
-		-- Give up otherwise.
 		if b == m then
 			b = 0
 		end
@@ -246,12 +244,4 @@ end
 
 function mcl_util.lcg_next (a, c, m, state)
 	return (a * state + c) % m
-end
-
-
--- API再登録
-if core then
-	mcl_util.generate_uuid       = core.native_generate_uuid      or mclcapi.generate_uuid
-	mcl_util.get_nodepos         = core.native_get_nodepos        or mclcapi.get_nodepos
-	mcl_util.calculate_knockback = core.native_calculate_knockback or mclcapi.calculate_knockback
 end

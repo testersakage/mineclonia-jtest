@@ -1,5 +1,7 @@
 -- mineclonia/mods/CORE/mcl_util/shape.lua
-minetest.log("action", "[util/shape.lua] start.")
+--minetest.log("action", "[util/shape.lua] 09 C++ API.")
+local current_thread = "[" .. (core.get_current_thread_name and core.get_current_thread_name() or "Main/Emerge") .. "]"
+core.log("action", string.format("[util/shape.lua]: %s: 09 C++ API.", current_thread))
 
 --- NOTE: if performance should become a consideration it may be
 --- worthwhile to create an FFI wrapper around the C reference
@@ -111,6 +113,22 @@ local function is_occupied_p (region, disp, x, y, z)
 end
 
 function mcl_util.decompose_AABBs (aabbs)
+	-- 実行時の動的内部リレー：C++APIが実在すれば、そちらを呼び出す
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_decompose_aabbs then
+		-- C++側が錬金したハだかの成果物テーブルを取得
+		local shape = api.native_decompose_aabbs(aabbs)
+		
+		--  【絶対正義の遺伝子結合】：
+		--     C++側から戻ってきたハだかのテーブル（shape）に対し、
+		--     Lua側の標準関数 setmetatable を使い、このファイル内の region_class をガチッと結合！！！
+		if shape and type(shape) == "table" and not getmetatable(shape) then
+			setmetatable(shape, region_class) -- ➔ これにより、100%安全に無敵の幾何学オブジェクトへ昇格！！！
+		end
+
+		return shape
+	end
+
 	local x_edges, y_edges, z_edges = {}, {}, {}
 	local x_seen, y_seen, z_seen = {}, {}, {}
 
@@ -586,11 +604,22 @@ end
 function region_class:equal_p (r)
 	return self == r or not region_evaluate (self, r, OP_NEQ)
 end
+-- メソッド実名は100%常駐。内部で実行時にC++へ放流。
+function region_class:intersect_p (r)
+	-- キックされた一瞬にC++が存在すれば、最速筋肉へバイパス放流
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_region_intersect_p then
+		return api.native_region_intersect_p(self, r)
+	end
 
+	--  C++未マウント時、および0手目のフライング時は、元のLuaで完走
+	return self == r or region_evaluate (self, r, OP_AND)
+end
+--[[
 function region_class:intersect_p (r)
 	return self == r or region_evaluate (self, r, OP_AND)
 end
-
+]]
 function region_class:contains_p (r)
 	return self == r or not region_evaluate (self, r, OP_BNA)
 end
@@ -1175,25 +1204,19 @@ region_class.select_face = region_select_face
 
 local g_util = rawget(_G, "mclcapi")
 if g_util and g_util.native_decompose_aabbs then
-	-- C++側が内部で生成しているメタテーブル（region_classの器）を逆探知一本釣り
-	local dummy_obj = g_util.native_decompose_aabbs({{0,0,0,0,0,0}})
-	local cpp_mt = dummy_obj and getmetatable(dummy_obj)
-	
-	if cpp_mt and region_class then
-		-- C++側の取扱説明書の裏に、本家Lua製の取扱説明書（intersect_p等）をリダイレクト結線！
-		setmetatable(cpp_mt, { __index = region_class })
-		minetest.log("action", "[util/shape.lua] Global object meta-classes gloriously synchronized.")
-	end
+	mcl_util = rawget(_G, "mcl_util") or {}
+--	minetest.log("action", "[util/shape.lua] 09 C++ API.")
+--	mcl_util.decompose_AABBs    = g_util.native_decompose_aabbs
+	mcl_util.region_op          = g_util.native_region_op
+	mcl_util.region_evaluate    = g_util.native_region_evaluate
+	mcl_util.any_occupied_p     = g_util.native_any_occupied_p
+	mcl_util.region_volume      = g_util.native_region_volume
+	mcl_util.region_equal_p     = g_util.native_region_equal_p
+	mcl_util.region_walk        = g_util.native_region_walk
+	mcl_util.region_simplify    = g_util.native_region_simplify
+	mcl_util.region_select_face = g_util.native_region_select_face
 end
+-- 🧪 shape.lua の正真正銘の最末尾に追記するデバッグスタンプ
 
-return function()
-	return setmetatable({
-		x_size = 0,
-		y_size = 0,
-		z_size = 0,
-		x_edges = {},
-		y_edges = {},
-		z_edges = {},
-		map = {},
-	}, region_class)
-end
+--local current_thread = (core.get_current_modname() or "unknown") .. "[" .. (core.get_current_thread_name and core.get_current_thread_name() or "Main/Emerge") .. "]"
+--core.log("action", string.format("[SHAPE_DEBUG] 👁️ shape.lua LOAD COMPLETE in %s !! intersect_p status: %s", current_thread, tostring(region_class and region_class.intersect_p)))
