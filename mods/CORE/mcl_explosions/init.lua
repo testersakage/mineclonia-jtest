@@ -55,6 +55,15 @@ end)
 -- Should be possible to improve by using a midpoint circle algorithm multiple
 -- times to create the sphere, currently uses more of a brute-force approach.
 local function compute_sphere_rays(radius)
+-- c++
+	-- 【起動後自動ハイジャック】：C++側の最速レイキャスト生成エンジンへ放流
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_compute_sphere_rays then
+		return api.native_compute_sphere_rays(radius)
+	end
+
+	-- 以下、安全な生Luaフォールバック（元の3重ループ処理）
+-- c++
 	local rays = {}
 	local sphere = {}
 
@@ -242,20 +251,6 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 			local collisionbox = obj:get_properties().collisionbox
 
 			if collisionbox then
-
-				-- 👑 【ここへこの3行だけを追記！！！】
-				local g_util = rawget(_G, "mclcapi")
-				if g_util and g_util.native_explosions_calculate_damage then
-					local impact, dist = g_util.native_explosions_calculate_damage(pos, obj:get_pos(), collisionbox, punch_radius)
-					if impact > 0 then
-						local damage = math.floor((impact * impact + impact) * 7 * strength + 1)
-						mclcapi.deal_damage(obj, damage, { type = "explosion", direct = direct, source = source })
-						if obj:is_player() or (ent and ent.tnt_knockback) then
-							obj:add_velocity(vector.multiply(vector.normalize(vector.subtract(obj:get_pos(), pos)), impact * 20))
-						end
-					end
-				else -- 👈 👑 本家オリジナルの処理の手前に、この else を添えて囲ってあげるだけ！
-
 				-- Create rays from random points in the collision box
 				local x1 = collisionbox[1]
 				local y1 = collisionbox[2]
@@ -314,10 +309,28 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 				local punch_vec = vector.subtract(opos, pos)
 				local punch_dir = vector.normalize(punch_vec)
 				local impact = (1 - vector.length(punch_vec) / punch_radius) * exposure
+-- c++
+				-- 【修正】：すでに算出されている vector.length(punch_vec) の数値を
+				--     直接「len」としてローカル変数に退避・ホールドさせ、Symmetryに使い回す！
+				local len = vector.length(punch_vec)
+				local impact = (1 - len / punch_radius) * exposure
+-- c++
 				if impact < 0 then
 					impact = 0
 				end
-				local damage = math.floor((impact * impact + impact) * 7 * strength + 1)
+-- c++
+				local damage, impact_calc
+				local api = rawget(_G, "mclcapi")
+				if api and api.native_calculate_impact then
+					--  【直通】：退避させた生数値 len を第1引数へガチッとハめ込む
+					damage, impact_calc = api.native_calculate_impact(len, punch_radius, exposure, strength)
+					impact = impact_calc -- 後のノックバック速度ベクトルに使うため上書き保持
+				else
+					-- Luaフォールバック
+					damage = math.floor((impact * impact + impact) * 7 * strength + 1)
+				end
+-- c++
+--				local damage = math.floor((impact * impact + impact) * 7 * strength + 1)
 
 				mcl_util.deal_damage(obj, damage, { type = "explosion", direct = direct, source = source })
 
@@ -326,7 +339,6 @@ local function trace_explode(pos, strength, raydirs, radius, info, direct, sourc
 				end
 			end
 		end
-	end
 
 		-- Punch End Crystals to make them explode
 		if ent and ent.name == "mcl_end:crystal" then
