@@ -1,3 +1,5 @@
+-- mineclonia/mods/ENTITIES/mcl_mobs/api.lua
+minetest.log("action", "[ENTITIES/mcl_mobs/api.lua] 2 C++ API.")
 local S = core.get_translator("mcl_mobs")
 
 local pairs = pairs
@@ -104,14 +106,29 @@ function mob_class:update_tag() --update nametag and/or the debug box
 		nametag = self:get_nametag(),
 	})
 end
-
+--[[
 function mob_class:update_timers (dtime)
 	for k, v in pairs (self._timers) do
 		self._timers[k] = v - dtime
 		self._timers_fired[k] = nil
 	end
 end
+]]
+-- c++
+function mob_class:update_timers (dtime)
+	-- 【動的内部リレー】：全個体×全タイマーのpairs走査とFPU引き算をC++筋肉へ一直線に放流！
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_update_mob_timers then
+		return api.native_update_mob_timers(self, dtime)
+	end
 
+	--  以下、安全な生Luaフォールバック（元のタイマー減算処理）
+	for k, v in pairs (self._timers) do
+		self._timers[k] = v - dtime
+		self._timers_fired[k] = nil
+	end
+end
+-- c++
 function mob_class:check_timer (timer, interval)
 	local timers = self._timers
 	if not timers[timer] then
@@ -610,6 +627,7 @@ function mob_class:on_step (dtime, moveresult)
 	local feet = vector_copy_into (v, pos)
 	local bbase = pos.y + self.collisionbox[2] + 0.5
 	feet.y = floor (bbase + 1.0e-2)
+--[[
 	if bbase - feet.y <= 1.0e-2 then
 		local name, _
 			= node_name_with_fallback (feet, "ignore")
@@ -626,10 +644,44 @@ function mob_class:on_step (dtime, moveresult)
 		self.standing_on = self.standing_in
 		self.standing_on_param2 = param2
 	end
+]]
 	local head_y = cbox[2] + (cbox[5] - cbox[2]) * 0.75
 	local pos_head = vector.offset (pos, 0, head_y, 0)
+-- c++
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_mob_environment_scan then
+		-- C++側から3マスの Content ID と param2 を一挙に一発回収
+		local cid_in, p2_in, cid_on, p2_on, cid_head, p2_head = api.native_mob_environment_scan(feet, pos_head)
+		
+		-- Content ID からノード名へと変換マッピング（1文字の狂いもなく完全 Symmetry）
+		self.standing_in = core.get_name_from_content_id(cid_in)
+		self.standing_on = core.get_name_from_content_id(cid_on)
+		self.standing_on_param2 = p2_on
+		self.head_in = core.get_name_from_content_id(cid_head)
+	else
+		--  【鉄壁の保険】：C++未マウント時は、元の生Lua側の3連打スキャンで即死を完全ガード
+		if bbase - feet.y <= 1.0e-2 then
+			local name, _
+				= node_name_with_fallback (feet, "ignore")
+			self.standing_in = name
+			feet.y = feet.y - 1
+			local name, param2
+				= node_name_with_fallback (feet, "ignore")
+			self.standing_on = name
+			self.standing_on_param2 = param2
+		else
+			local name, param2
+				= node_name_with_fallback (feet, "ignore")
+			self.standing_in = name
+			self.standing_on = self.standing_in
+			self.standing_on_param2 = param2
+		end
+		self.head_in = node_name_with_fallback (pos_head, "ignore")
+	end
+-- c++
+--[[
 	self.head_in = node_name_with_fallback (pos_head, "ignore")
-
+]]
 	if self:check_jockey_status () then
 		return
 	end
