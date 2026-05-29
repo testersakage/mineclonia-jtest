@@ -1,5 +1,5 @@
 ------------------------------
-## Luanti C++ Native API Infrastructure Specification (dev4mcl)
+## Luanti C++ Native API Infrastructure Specification (dev4cpp)
 本ディレクトリは、Mineclonia v0.120.0以降（Luanti 5.15.2以降）の中枢演算およびマルチスレッド環境下におけるボトルネックを高速化・安定化するために実装された、ネイティブC++ API群（計40関数）の実体仕様書である。
 ## 1. 共通設計規律 (Core Infrastructure Rules)
 
@@ -25,9 +25,9 @@ mcl/core/damage.cpp# (他、各コアモジュールの.cppをここに集約)
 ## 窓口一括結線 (src/script/lua_api/l_mcl_core_server.cpp)
 bind_multithread_CORE 内で各 namespace の関数ポインタを mclcapi テーブルへフィールド展開する。
 
-## Luanti側の変更
+## Mineclonia側の変更
 こちらのブランチにあります。
 https://github.com/testersakage/luanti-jtest/blob/dev4mcl/src/mcl
-オリジナルとはリネーム等による差し替えだけで使えるようになります。従来のLuaでの処理はフォールバックに回り、c++ APIを優先的に利用するようになります。
 
+Windows 10 Pro + MSYS2 CLANG64 環境で開発しています。
 ------------------------------
