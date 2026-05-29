@@ -1,3 +1,5 @@
+-- mineclonia/mods/ENTITIES/mcl_burning/api.lua
+minetest.log("action", "[ENTITIES/mcl_burning/api.lua] 0 C++ API.")
 local enable_damage = core.settings:get_bool("enable_damage")
 
 local collisionbox_cache = {}
@@ -41,7 +43,7 @@ function mcl_burning.get_collisionbox(obj, smaller, storage)
 		return minp, maxp
 	end
 end
-
+--[[
 function mcl_burning.get_touching_nodes(obj, nodenames, storage)
 	local pos = obj:get_pos()
 	if mobs_mc.is_riding_strider (obj) then
@@ -54,7 +56,26 @@ function mcl_burning.get_touching_nodes(obj, nodenames, storage)
 	local nodes = core.find_nodes_in_area(vector.add(pos, minp), vector.add(pos, maxp), nodenames)
 	return nodes
 end
+]]
+-- c++
+function mcl_burning.get_touching_nodes(obj, nodenames, storage)
+	-- 🎯 【動的内部リレー】：C++側で空間スキャンとグループ検品を一本化して一撃処理するため、
+	--     この関数はC++開通時はスキップ（空振り）させ、互換性維持のため元の空配列だけを安全出荷します。
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_check_burning_environment then
+		return {} -- C++側が直接スキャンを執行するため、Lua側のこの中継配列は空のままで更地化
+	end
 
+	-- 🛡️ 【鉄壁の保険】：C++未マウント時、および0手目のフライング時は、安全にオリジナルの生Luaで空間スキャンを執行
+	local pos = obj:get_pos()
+	if mobs_mc.is_riding_strider (obj) then
+		pos.y = pos.y + 1.5
+	end
+	local minp, maxp = mcl_burning.get_collisionbox(obj, true, storage)
+	local nodes = core.find_nodes_in_area(vector.add(pos, minp), vector.add(pos, maxp), nodenames)
+	return nodes
+end
+-- c++
 -- Manages the fire animation on a burning player's HUD
 --
 -- Parameters:

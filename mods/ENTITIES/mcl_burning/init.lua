@@ -1,3 +1,5 @@
+-- mineclonia/mods/ENTITIES/mcl_burning/init.lua
+minetest.log("action", "[ENTITIES/mcl_burning/init.lua] 01 C++ API.")
 local modpath = core.get_modpath(core.get_current_modname())
 
 mcl_burning = {
@@ -17,7 +19,7 @@ mcl_burning = {
 }
 
 dofile(modpath .. "/api.lua")
-
+--[[
 mcl_player.register_globalstep(function(player, dtime)
 	local storage = mcl_burning.storage[player]
 	if not mcl_burning.tick(player, dtime, storage) and not mcl_burning.is_affected_by_rain(player) then
@@ -42,7 +44,56 @@ mcl_player.register_globalstep(function(player, dtime)
 		end
 	end
 end)
+]]
+-- c++
+mcl_player.register_globalstep(function(player, dtime)
+	local storage = mcl_burning.storage[player]
+	
+	-- 🎯 【メインスレッド最速放流】：C++窓口がマウント済みであれば、
+	--     Lua側の多重 get_node / get_item_group ループを丸ごと引き算（スキップ）し、C++の最速レジスタ内で0ms完食！！！
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_check_burning_environment then
+		if not mcl_burning.tick(player, dtime, storage) and not mcl_burning.is_affected_by_rain(player) then
+			-- 座標ポインタを汚さず、安全な数値テーブル（pos, minp, maxp）だけを一本釣り直撃放流！
+			local pos = player:get_pos()
+			if mobs_mc.is_riding_strider(player) then
+				pos.y = pos.y + 1.5
+			end
+			local minp, maxp = mcl_burning.get_collisionbox(player, true, storage)
+			
+			-- C++側から「消火フラグ」と「最大炎上時間」を一発回収
+			local puts_out_fire, burn_time = api.native_check_burning_environment(pos, minp, maxp)
+			
+			if not puts_out_fire and burn_time > 0 then
+				mcl_burning.set_on_fire(player, burn_time)
+			end
+		end
+	else
+		-- 🛡️ 【鉄壁の保険】：C++未マウント時は、元の生Lua側の3段階総当たりループで即死を完全ガード
+		if not mcl_burning.tick(player, dtime, storage) and not mcl_burning.is_affected_by_rain(player) then
+			local nodes = mcl_burning.get_touching_nodes(player, {"group:puts_out_fire", "group:set_on_fire"}, storage)
+			local burn_time = 0
 
+			for _, pos in pairs(nodes) do
+				local node = core.get_node(pos)
+				if core.get_item_group(node.name, "puts_out_fire") > 0 then
+					burn_time = 0
+					break
+				end
+
+				local value = core.get_item_group(node.name, "set_on_fire")
+				if value > burn_time then
+					burn_time = value
+				end
+			end
+
+			if burn_time > 0 then
+				mcl_burning.set_on_fire(player, burn_time)
+			end
+		end
+	end
+end)
+-- c++
 core.register_on_respawnplayer(function(player)
 	mcl_burning.extinguish(player)
 end)
