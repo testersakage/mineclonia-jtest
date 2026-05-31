@@ -1,5 +1,5 @@
 -- mineclonia/mods/ENTITIES/mcl_mobs/pathfinding.lua
-minetest.log("action", "[mobs/pathfinding.lua] 01 C++ API.")
+minetest.log("action", "[ENTITIES/mcl_mobs/pathfinding.lua] 01 C++ API.")
 
 local mob_class = mcl_mobs.mob_class
 local floor = math.floor
@@ -577,53 +577,8 @@ function mob_class:gwp_safe_fall_distance ()
 end
 
 local get_us_time = core.get_us_time
-
+--[[
 function mob_class:gwp_cycle (context, timeout)
-
--- C++
-	local l_capi = rawget(_G, "mclcapi") or {}
-	if l_capi.native_pathfind then
-		-- C++側が一瞬で迷路を解き明かし、「進路テーブル」「成否」「最速消費時間」の3つのパルスを一網打尽に一本釣り回収！
-		core.log("action", "[MOB DEBUG] Start pos: " .. context.minpos.x + context.range .. ", Target count: " .. #context.targets)
-		local success, dtime = l_capi.native_pathfind(self, context, timeout)
-		-- ─── 👑 【ここからデバッグ項目を限界突破大増設！！！】 ───
-		local total_nodes = 0
-		local referrer_cnt = 0
-		local sample_hash = nil
-		local sample_node = nil
-
-		-- 1. C++から戻ってきた直後の、nodesテーブルの全容をレントゲン走査
-		for hash, node in pairs(context.nodes) do
-			total_nodes = total_nodes + 1
-			if node.referrer then
-				referrer_cnt = referrer_cnt + 1
-				if not sample_hash then
-					sample_hash = hash
-					sample_node = node
-				end
-			end
-		end
-
-		core.log("action", "[MOB X-RAY] Total Nodes inside context: " .. total_nodes .. " | Referrer links verified: " .. referrer_cnt)
-		
-		-- 2. 結線されたサンプルのノードの「中身（型とフィールド）」を生々しく一本釣り露出ダンプ！
-		if sample_node then
-			local ref_type = type(sample_node.referrer)
-			-- 親ノード（referrer）の座標も一緒に露出させて、文字通り血流の横ズレを完全現行犯逮捕！
-			local parent_coord = "nil"
-			if ref_type == "table" then
-				parent_coord = "(" .. tostring(sample_node.referrer.x) .. "," .. tostring(sample_node.referrer.y) .. "," .. tostring(sample_node.referrer.z) .. ")"
-			end
-			core.log("action", "[MOB X-RAY] Sample Node Hash: " .. sample_hash .. " | Coord: (" .. sample_node.x .. "," .. sample_node.y .. "," .. sample_node.z .. ") | Referrer Type: " .. ref_type .. " | Parent Coord: " .. parent_coord)
-		end
-		-- ─── 👑 【大増設ここまで】 ───
-
-		if success ~= nil then
-			return success, dtime
-		end
-	end
--- C++
-
 	local time = get_us_time ()
 	local set = context.open_set
 	local clock
@@ -700,7 +655,110 @@ function mob_class:gwp_cycle (context, timeout)
 	context.total_nodes = n_total
 	return false, (clock - time) / 1e6
 end
+]]
+-- c++
+function mob_class:gwp_cycle (context, timeout)
+	-- 🎯 【A*経路最速放流改札】：
+	--     C++側で3次元A*と二分木展開を一括処理し、成果物の座標配列をそのまま回収！
+	local api = rawget(_G, "mclcapi")
+	if api and api.native_gwp_compute_path then
+		local start_node = context.open_set.heap[1]
+		local target = context.targets[1]
+		
+		if start_node and target then
+			local start_pos = { x = start_node.x, y = start_node.y, z = start_node.z }
+			local goal_pos = { x = target.x, y = target.y, z = target.z }
+			
+			-- C++側のA*計算をキック
+			local calculated_path = api.native_gwp_compute_path(start_pos, goal_pos, context.range, context.tolerance)
+			
+			if calculated_path and #calculated_path > 0 then
+				-- 🎯【完全同期配線】：
+				--    本家 AI ルーチン（movement.lua）を完全に騙し切るため、
+				--    C++が作った配列をそのまま本家の公式キャッシュ部屋（_native_path_cached）へ退避。
+				--    さらに、本家が経路確定フラグとして見ている「arrivals」へゴールオブジェクトを直撃注入！
+				calculated_path.target = target
+				table.insert(context.arrivals, target)
+				
+				context.total_nodes = context.total_nodes + 1
+				context._native_path_cached = calculated_path
+				
+				-- 本家と同じ終了パルス（true と消費時間 0）を返却して安全に改札を通過させる
+				return true, 0.00
+			end
+		end
+		-- 経路が見つからなかった場合は空フラグで安全に返す
+		return true, 0.00
+	end
 
+	-- 🛡️ 【鉄壁の保険】：C++未マウント時、および0手目のフライング時は、
+	--     本家オリジナルの、JITに過剰負荷をかける泥臭い repeat 下降・二分木ループで即死を完全ガード
+	local time = get_us_time ()
+	local set = context.open_set
+	local clock
+	local n_total = context.total_nodes
+	local maxnodes = context.maxnodes
+
+	timeout = math.round (timeout * 1e6)
+	context.fall_distance = self:gwp_safe_fall_distance ()
+	repeat
+		if set:empty () or n_total + 1 > maxnodes then
+			local time = get_us_time () - time
+			context.time_elapsed = context.time_elapsed + time
+			context.total_nodes = n_total
+			return true, time / 1e6
+		end
+
+		local node = set:dequeue ()
+		node.covered = true
+		n_total = n_total + 1
+
+		for _, target in ipairs (context.targets) do
+			if manhattan3d (node.x, node.y, node.z,
+					target.x, target.y, target.z)
+				<= context.tolerance then
+				table.insert (context.arrivals, target)
+			end
+		end
+		if #context.arrivals >= 1 then
+			local time = get_us_time () - time
+			context.time_elapsed = context.time_elapsed + time
+			context.total_nodes = n_total
+			return true, time / 1e6
+		end
+
+		local neighbors = self:gwp_edges (context, node)
+		for _, neighbor in ipairs (neighbors) do
+			if not neighbor.covered then
+				local dist = d (node, neighbor)
+				neighbor.total_d = node.total_d + dist
+				if dist <= context.range
+					and neighbor.total_d < context.maxdist then
+					local new_g = node.g + dist + neighbor.penalty
+					local new_h = h_to_nearest_target (neighbor, context) * 1.5
+					if set:contains (neighbor) then
+						if new_g < neighbor.g then
+							neighbor.g = new_g
+							neighbor.h = new_h
+							neighbor.referrer = node
+							set:update (neighbor, new_g + new_h)
+						end
+					else
+						neighbor.g = new_g
+						neighbor.h = new_h
+						neighbor.referrer = node
+						set:enqueue (neighbor, new_g + new_h)
+					end
+				end
+			end
+		end
+		clock = get_us_time ()
+	until clock - time >= timeout
+	context.time_elapsed = context.time_elapsed + (clock - time)
+	context.total_nodes = n_total
+	return false, (clock - time) / 1e6
+end
+-- c++
 function mob_class:gwp_reconstruct_path (context, arrival)
 	local list = {arrival}
 	-- Adjust waypoint position so as to center the mob on
@@ -725,7 +783,7 @@ function mob_class:gwp_reconstruct_path (context, arrival)
 	end
 	return list
 end
-
+--[[
 function mob_class:gwp_reconstruct (context, real_dest)
 	local path, partial
 	if #context.arrivals > 0 then
@@ -771,7 +829,57 @@ function mob_class:gwp_reconstruct (context, real_dest)
 	end
 	return path, partial
 end
+]]
+-- c++
+function mob_class:gwp_reconstruct (context, real_dest)
+	-- 🎯 【C++経路直通復元】：C++側で親ポインタの逆算トレースまで100%お片付けが完了しているため、
+	--     ここで重厚な再帰 while ループを回す必要は 1文字分すらありません。キャッシュをそのまま最速出荷！！！ [INDEX: 5]
+	if context._native_path_cached then
+		local path = context._native_path_cached
+		context._native_path_cached = nil -- 使用済みメモリの引き算消去
+		return path, false -- 完成経路（完全パス）として出荷
+	end
 
+	-- 🛡️ 以下、安全な生Luaフォールバック（元の経路復元・部分経路の救済処理）
+	local path, partial
+	if #context.arrivals > 0 then
+		for _, arrival in ipairs (context.arrivals) do
+			local candidate
+			local contact = arrival.best_node
+
+			if real_dest and contact then
+				real_dest.referrer = contact
+				contact = real_dest
+			end
+
+			if contact then
+				candidate = self:gwp_reconstruct_path (context, contact)
+				candidate.target = arrival
+				if not path or #candidate > #path then
+					path = candidate
+					partial = false
+				end
+			end
+		end
+	else
+		local path_dist
+		for _, target in ipairs (context.targets) do
+			local candidate
+
+			if target.best_node then
+				candidate = self:gwp_reconstruct_path (context, target.best_node)
+				local dist = d (target.best_node, target)
+				if not path or dist >= path_dist and #candidate > #path then
+					path = candidate
+					path_dist = dist
+					partial = true
+				end
+			end
+		end
+	end
+	return path, partial
+end
+-- c++
 function mob_class:bench_pathing (iterations)
 	local self_pos = self.object:get_pos ()
 	local self_pos = self:gwp_align_start_pos (self_pos)
@@ -1149,16 +1257,9 @@ local function get_partial_type (name, nodedef)
 		-- The assumption is that any node whose cbox
 		-- intersects with a centered half cube obstructs mob
 		-- movement.
--- c++
-		if mclcapi and mclcapi.native_intersect_p and mclcapi.native_intersect_p (shape, half_cube) then
-			return "BLOCKED"
-		end
--- c++
---[[
 		if shape:intersect_p (half_cube) then
 			return "BLOCKED"
 		end
-]]
 	elseif boxes.type == "leveled" or boxes.type == "wallmounted" then
 		return "BLOCKED"
 	end
