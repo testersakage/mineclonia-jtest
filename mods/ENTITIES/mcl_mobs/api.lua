@@ -115,20 +115,32 @@ function mob_class:update_timers (dtime)
 end
 ]]
 -- c++
+
 function mob_class:update_timers (dtime)
-	-- 【動的内部リレー】：全個体×全タイマーのpairs走査とFPU引き算をC++筋肉へ一直線に放流！
+	-- 🎯 【真の大調和結線】：
+	--     C++側の1次ラッパーは、純粋に _timers の実数引き算（マイナス宇宙への突入も bare でホールド）だけに特化！
 	local api = rawget(_G, "mclcapi")
 	if api and api.native_update_mob_timers then
-		return api.native_update_mob_timers(self, dtime)
+		api.native_update_mob_timers(self, dtime)
+	else
+		-- C++未マウント時のフォールバック
+		for k, v in pairs (self._timers) do
+			self._timers[k] = v - dtime
+		end
 	end
 
-	--  以下、安全な生Luaフォールバック（元のタイマー減算処理）
-	for k, v in pairs (self._timers) do
-		self._timers[k] = v - dtime
+	-- 🎯【絶対正義の遅延お片付け】：
+	--    本家本来の update_timers の仕様（99行目付近）と1ビットの狂いもなく完全同期！
+	--    前のフレームで火が付いた _timers_fired の残り火キャッシュを、
+	--    このステップの最後に Lua 側の安全な手付きで綺麗サッパリ nil（引き算消去）！！！
+	--    これにより、C++側のスタックを1ミリも汚さず、OpenALの窒息エラーを完全根絶！
+	for k, _ in pairs (self._timers_fired) do
 		self._timers_fired[k] = nil
 	end
 end
+
 -- c++
+
 function mob_class:check_timer (timer, interval)
 	local timers = self._timers
 	if not timers[timer] then

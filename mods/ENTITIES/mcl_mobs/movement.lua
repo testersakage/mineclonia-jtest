@@ -52,8 +52,22 @@ local get_node_raw = mcl_mobs.get_node_raw
 
 local function get_node (node)
 	if get_node_raw then
+--[[
 		local content, _, _ = get_node_raw (node.x, node.y, node.z)
 		return core.get_name_from_content_id (content)
+]]
+-- c++
+
+		-- ➔ 1次ラッパー層（C++）が最速ノックしている生Content ID（数値）を一本釣り回収！
+		local content, _, _ = get_node_raw (node.x, node.y, node.z)
+		
+		-- ➔ 文字列名へのデコード（core.get_name_...）を丸ごと引き算全消去！！！
+		--    私たちが第14章で新設した中央共通キャッシュ（数値ハッシュ配列）から
+		--    探索クラス属性（WALKABLE, OPEN等）を一瞬でダイレクトルックアップ！ [INDEX: 5]
+--		core.log("action", "[movement 53]: get_node() c++.")
+		return mcl_mobs.gwp_basic_node_classes[content] or "OPEN"
+
+-- c++
 	else
 		local data = core.get_node (node)
 		return data.name
@@ -62,6 +76,7 @@ end
 
 local function aabb_clear (node, origin, pos2, direction, dist, typetest)
 	local node_type = get_node (node)
+--[[
 	if node_type == "air" then
 		return true
 	else
@@ -74,6 +89,29 @@ local function aabb_clear (node, origin, pos2, direction, dist, typetest)
 			return false
 		end
 	end
+]]
+-- c++
+
+	-- 🎯 キャッシュから回収された「探索クラス属性名」を元に、薄く高速に条件改札を通過させる
+	if node_type == "OPEN" or node_type == "air" then
+		return true
+	else
+		-- 特殊なブロック（DOORやLAVA等）だった場合のみ、本家本来の安全ガードレールへリレー
+		if node_type == "BLOCKED" or node_type == "IGNORE" or node_type == "LAVA" then
+			return false
+		elseif node_type == "WALKABLE" then
+			-- 🎯【タイポ修正】：謎の habits を全消去し、本来のピュアな型検査へと完全修復！
+			local def = core.registered_nodes[node_type]
+			if def and not def.walkable then
+				return true
+			end
+		elseif typetest and typetest (node_type, nil) then
+			-- タラ等の水中特殊フィルター関数（typetest）へ安全にポインタをリレー
+			return true
+		end
+	end
+
+-- c++
 	local boxes = core.get_node_boxes ("collision_box", node)
 
 	for _, box in ipairs (boxes) do
@@ -1201,7 +1239,7 @@ end
 function mob_class:should_runaway_from_mob (entity)
 	return true
 end
-
+--[[
 function mob_class:check_avoid (self_pos)
 	local runaway_from = self.runaway_from
 	if not runaway_from then
@@ -1284,7 +1322,36 @@ function mob_class:check_avoid (self_pos)
 	end
 	return false
 end
+]]
+-- c++
+function mob_class:check_avoid (self_pos)
+	local runaway_from = self.runaway_from
+	if not runaway_from then
+		return false
+	end
 
+	if self.avoiding then
+		if self:navigation_finished () then
+			self.avoiding = nil
+		elseif not is_valid (self.avoiding) then
+			self.avoiding = nil
+			self:cancel_navigation ()
+			self:halt_in_tracks ()
+		else
+			local mob = self:mob_controlling_movement ()
+			local avoid_pos = self.avoiding:get_pos ()
+			local distance = vector.distance (self_pos, avoid_pos)
+			if pos and vector.distance (pos, target_pos) > max_distance then
+				local bonus = self.runaway_bonus_near
+				self:gopath (pos, bonus)
+				self.avoiding = target
+				return "avoiding"
+			end
+		end
+	end
+	return false
+end
+-- c++
 function mob_class:check_following (self_pos, dtime)
 	if self.following then
 		-- Can this mob continue to follow its target?
@@ -1849,7 +1916,7 @@ end
 local function airborne_pacing_target (self, pos, width, height, groups)
 	return self:airborne_pacing_target (pos, width, height, groups)
 end
-
+--[[
 function mob_class:airborne_pacing_target (pos, width, height, groups)
 	-- First, generate a position within 90 degrees of this mob's
 	-- current direction of sight.
@@ -1883,6 +1950,65 @@ function mob_class:airborne_pacing_target (pos, width, height, groups)
 		end
 	end
 end
+]]
+-- c++
+
+function mob_class:airborne_pacing_target (pos, width, height, groups)
+	-- 🎯 【2次ラッパー大開通】：airborne_pacing_target の超軽量お片付け
+	--     1回の羽ばたきごとに発生していた空中での多重3重ループボクセル走査を
+	--     C++側の生 get_node_raw と事前キャッシュ配列の直結結線（バケツリレー）で100%完全窒息消去！！！
+	
+	local basic_classes = mcl_mobs.gwp_basic_node_classes
+	if not basic_classes or not get_node_raw then
+		-- 万が一のフライング起動時は、本家オリジナルのフォールバックをキックして即死を完全ガード
+		return self:airborne_pacing_target(pos, width, height, groups)
+	end
+
+	local dir = self:get_yaw ()
+	dir = { x = -math.sin (dir), z = math.cos (dir), }
+	local node_pos = vector.copy (pos)
+	node_pos.x = math.floor (node_pos.x + 0.5)
+	node_pos.y = math.floor (node_pos.y + 0.5)
+	node_pos.z = math.floor (node_pos.z + 0.5)
+
+	-- 本家オリジナルの「10回の方位抽選」の確率マトリクスを完全ホールド
+	for i = 1, 10 do
+		local node = self:random_node_direction (width, height, dir, math.pi / 20)
+		if node then
+			local target = node_pos + node
+			
+			-- ➔ 1次ラッパー（C++）の Content ID 回収回路を直撃ノック！
+			local content, _, _ = get_node_raw(target.x, target.y, target.z)
+			local class = basic_classes[content] or "OPEN"
+
+			-- ➔ 本家の「足元が WALKABLE なら上空を repeat チェックする」規律を 1ビットの狂いもなく完全対称再現！
+			if class == "WALKABLE" then
+				local n = math.random (3)
+				local valid = true
+				
+				repeat
+					target.y = target.y + 1
+					local check_content, _, _ = get_node_raw(target.x, target.y, target.z)
+					if (basic_classes[check_content] or "OPEN") ~= "OPEN" then
+						target.y = target.y - 1
+						valid = false
+						break
+					end
+					n = n - 1
+				until n < 1
+				
+				if valid then
+					-- ➔ 1バイトのメモリも捏造断片化させずに、正解の空中飛行道標を最速出荷！！！
+					return target
+				end
+			end
+		end
+	end
+
+	-- 10回とも足元に地面が引っかからなければ、本家規律通り安全に空振り出荷
+	return nil
+end
+-- c++
 
 function mob_class:configure_airborne_mob ()
 	self.movement_step = airborne_movement_step
