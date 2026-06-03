@@ -1,12 +1,22 @@
 -- mineclonia/mods/CORE/mcl_worlds/init.lua
---minetest.log("action", "[worlds] 05 C++ API.")
+minetest.log("action", "[worlds] 05 C++ API.")
 
 mcl_worlds = {}
+
+-- c++
+-- 1次ラッパー（C++）の直撃電線窓口を一本釣り回収
+local api = rawget(_G, "mclcapi")
+-- c++
 
 -- For a given position, returns a 2-tuple:
 -- 1st return value: true if pos is in void
 -- 2nd return value: true if it is in the deadly part of the void
 function mcl_worlds.is_in_void(pos)
+-- c++
+	if api and api.worlds_is_in_void then
+		return api.worlds_is_in_void(pos)
+	end
+-- c++
 	local void =
 		not ((pos.y < mcl_vars.mg_overworld_max and pos.y > mcl_vars.mg_overworld_min) or
 		(pos.y < mcl_vars.mg_nether_max+128 and pos.y > mcl_vars.mg_nether_min) or
@@ -36,6 +46,11 @@ end
 -- If the Y coordinate is not located in any dimension, it will return:
 --     nil, "void"
 function mcl_worlds.y_to_layer(y)
+-- c++
+	if api and api.worlds_y_to_layer then
+		return api.worlds_y_to_layer(y)
+	end
+-- c++
 	if y >= mcl_vars.mg_overworld_min then
 		return y - mcl_vars.mg_overworld_min_old, "overworld"
 	elseif y >= mcl_vars.mg_nether_min and y <= mcl_vars.mg_nether_max+128 then
@@ -49,6 +64,11 @@ end
 
 -- Takes a pos and returns the dimension it belongs to (same as above)
 function mcl_worlds.pos_to_dimension(pos)
+-- c++
+	if api and api.worlds_pos_to_dimension then
+		return api.worlds_pos_to_dimension(pos)
+	end
+-- c++
 	local _, dim = mcl_worlds.y_to_layer(pos.y)
 	return dim
 end
@@ -58,6 +78,11 @@ end
 -- Mineclonia.
 -- mc_dimension is one of "overworld", "nether", "end" (default: "overworld").
 function mcl_worlds.layer_to_y(layer, mc_dimension)
+-- c++
+	if api and api.worlds_layer_to_y then
+		return api.worlds_layer_to_y(layer, mc_dimension or "overworld")
+	end
+-- c++
 	if mc_dimension == "overworld" or mc_dimension == nil then
 		return layer + mcl_vars.mg_overworld_min_old
 	elseif mc_dimension == "nether" then
@@ -297,18 +322,17 @@ end
 -- 	end
 -- end
 
-local g_util = rawget(_G, "mclcapi") -- 私たちの共通筋肉テーブルから引き出す
-if g_util and g_util.native_worlds_is_in_void then
+-- c++
+local api = rawget(_G, "mclcapi") -- c++ API name space
+if api and api.native_worlds_is_in_void then
 
-	-- 🏆 5大中枢数理・DISKテロ処理をC++最速筋肉へと丸ごとすげ替え！！！
-	mcl_worlds.is_in_void                    = g_util.native_worlds_is_in_void
-	mcl_worlds.y_to_layer                    = g_util.native_worlds_y_to_layer
-	mcl_worlds.pos_to_dimension              = g_util.native_worlds_pos_to_dimension
-	mcl_worlds.layer_to_y                    = g_util.native_worlds_layer_to_y
-	mcl_worlds.tick_chunk_inhabited_time     = g_util.native_worlds_tick_chunk_inhabited_time
+--	mcl_worlds.is_in_void                    = api.native_worlds_is_in_void
+--	mcl_worlds.y_to_layer                    = api.native_worlds_y_to_layer
+--	mcl_worlds.pos_to_dimension              = api.native_worlds_pos_to_dimension
+--	mcl_worlds.layer_to_y                    = api.native_worlds_layer_to_y
+	mcl_worlds.tick_chunk_inhabited_time     = api.native_worlds_tick_chunk_inhabited_time
 
-	-- 👑 同期的に働く関数型のエイリアス（時計）も、ここで100%C++へと直撃ミラー上書き
-	mcl_worlds.clock_works                   = mcl_worlds.compass_works
+--	mcl_worlds.clock_works                   = mcl_worlds.compass_works
 
-	minetest.log("action", "[worlds] ALL 05 C++ API.")
 end
+-- c++

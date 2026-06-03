@@ -580,6 +580,49 @@ local function vector_copy_into (v, src)
 end
 
 function mob_class:on_step (dtime, moveresult)
+-- debug
+--[[
+	-- 🎯 【on_step・隠れた引数の現行犯逮捕デバッグ】：
+	--     ワールド内の全Mobが毎フレーム突入してくる処理周期（dtime）、
+	--     そして、エンジンから渡される物理衝突結果（moveresult）の正体を全量露出！
+	
+	if dtime then
+		-- 💡 ログが爆発してディスクを埋め尽くさないよう、特定のタイミング、
+		--    または 100回に1回（確率1%）の安全なクッションを挟んで間引きスタンプします！
+		if math.random(100) == 1 then
+			core.log("action", "======= [STEP_DEBUG] on_step INVOCATION =======")
+			core.log("action", "1. Mob Name: " .. tostring(self.name))
+			core.log("action", "2. dtime (Pulse Interval): " .. tostring(dtime))
+			core.log("action", "3. moveresult type: " .. type(moveresult))
+			
+			if type(moveresult) == "table" then
+				core.log("action", "   -> touching_ground: " .. tostring(moveresult.touching_ground))
+				core.log("action", "   -> collides: " .. tostring(moveresult.collides))
+				core.log("action", "   -> standing_on_object: " .. tostring(moveresult.standing_on_object))
+				if moveresult.collisions then
+					core.log("action", "   -> collisions array length: " .. tostring(#moveresult.collisions))
+				end
+			end
+			
+			-- 🎯 4大数理に直結するタイマーオブジェクトの胎内サイズを検品
+			if self._timers then
+				local timer_count = 0
+				for k, v in pairs(self._timers) do
+					timer_count = timer_count + 1
+				end
+				core.log("action", "4. Registered Timers Count: " .. tostring(timer_count))
+			end
+			if self._timers_fired then
+				local fired_count = 0
+				for k, v in pairs(self._timers_fired) do
+					fired_count = fired_count + 1
+				end
+				core.log("action", "5. Active Fired Cached Count: " .. tostring(fired_count))
+			end
+		end
+	end
+]]
+-- debug
 	local pos = self.object:get_pos ()
 	if not pos or self.removed then
 		self:safe_remove()
