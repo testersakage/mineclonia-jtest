@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/mcl_damage/init.lua
-minetest.log("action", "[damage] 01 C++ API.")
+minetest.log("action", "[CORE/mcl_damage] 01 C++ API.")
 mcl_damage = {
 	modifiers = {},
 	damage_callbacks = {},

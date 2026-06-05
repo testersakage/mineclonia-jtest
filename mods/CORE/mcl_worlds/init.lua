@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/mcl_worlds/init.lua
-minetest.log("action", "[worlds] 05 C++ API.")
+minetest.log("action", "[CORE/mcl_worlds] 05 C++ API.")
 
 mcl_worlds = {}
 

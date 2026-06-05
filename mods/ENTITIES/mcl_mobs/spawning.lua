@@ -971,14 +971,8 @@ core.register_on_mods_loaded (function ()
 					fixed = {fixed}
 				end
 				local shape = mcl_util.decompose_AABBs (fixed)
--- c++
-				local face = mcl_util.region_select_face (shape, "y", 0.5) -- << 975行
-				up_face_sturdy[node] = mcl_util.region_equal_p (face, cube)
--- c++
---[[
 				local face = shape:select_face ("y", 0.5)
 				up_face_sturdy[node] = face:equal_p (cube)
-]]
 			end
 		else
 			-- Only full cubes can be sturdy once rotation
@@ -998,10 +992,7 @@ core.register_on_mods_loaded (function ()
 					fixed = {fixed}
 				end
 				local shape = mcl_util.decompose_AABBs (fixed)
--- c++
-				if mcl_util.region_equal_p (shape, cube) then
--- c++
---				if shape:equal_p (cube) then  -- <<-- 995行
+				if shape:equal_p (cube) then
 					up_face_sturdy[node] = true
 				end
 			end

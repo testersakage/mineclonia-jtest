@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/mcl_util/environment.lua
-minetest.log("action", "[util/environment.lua] 10 C++ API.")
+minetest.log("action", "[CORE/mcl_util/environment.lua] 10 C++ API.")
 -- 関数の総数 : 18
 -- グローバルに露出している関数 : 14
 -- グローバルに露出している変数 : 02

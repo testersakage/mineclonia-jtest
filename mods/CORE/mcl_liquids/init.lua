@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/mcl_liquids/compat.lua
-minetest.log("action", "[liquids] 02 C++ API.")
+minetest.log("action", "[CORE/mcl_liquids] 02 C++ API.")
 --[[
 This is a liquid transformation mod that aims to work more similar to the
 liquids seen in Minecraft.

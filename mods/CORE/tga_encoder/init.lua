@@ -1,5 +1,5 @@
 -- mineclonia-jtest/mods/CORE/tga_encoder/init.lua
-minetest.log("action", "[tga_encoder] 01 C++ API.")
+minetest.log("action", "[CORE/tga_encoder] 01 C++ API.")
 tga_encoder = {}
 
 local image = setmetatable({}, {

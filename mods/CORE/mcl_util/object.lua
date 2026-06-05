@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/mcl_util/object.lua
-minetest.log("action", "[util/object.lua] 01 C++ API.")
+minetest.log("action", "[CORE/mcl_util/object.lua] 01 C++ API.")
 function mcl_util.get_hp(obj)
 	local luaentity = obj:get_luaentity()
 

@@ -1,7 +1,7 @@
 -- mineclonia/mods/CORE/mcl_util/table.lua
---minetest.log("action", "[util/table.lua] 03 C++ API.")
+--minetest.log("action", "[CORE/mcl_util/table.lua] 03 C++ API.")
 local current_thread = "[" .. (core.get_current_thread_name and core.get_current_thread_name() or "Main/Emerge") .. "]"
-core.log("action", string.format("[util/table.lua]: %s: 03 C++ API.", current_thread))
+core.log("action", string.format("[CORE/mcl_util/table.lua]: %s: 03 C++ API.", current_thread))
 
 -- 【絶対存在保証】：table.update は最初から実名で常駐
 function table.update(t, ...)

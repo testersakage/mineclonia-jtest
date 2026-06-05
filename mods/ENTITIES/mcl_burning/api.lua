@@ -1,5 +1,5 @@
 -- mineclonia/mods/ENTITIES/mcl_burning/api.lua
-minetest.log("action", "[ENTITIES/mcl_burning/api.lua] 0 C++ API.")
+minetest.log("action", "[ENTITIES/mcl_burning/api.lua] 00 C++ API.")
 local enable_damage = core.settings:get_bool("enable_damage")
 
 local collisionbox_cache = {}

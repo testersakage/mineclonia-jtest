@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/mcl_util/misc.lua
-minetest.log("action", "[util/misc.lua] 03 C++ API.")
+minetest.log("action", "[CORE/mcl_util/misc.lua] 03 C++ API.")
 
 function mcl_util.file_exists(name)
 	if type(name) ~= "string" then return end

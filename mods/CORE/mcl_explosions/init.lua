@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/mcl_explosions/init.lua
-minetest.log("action", "[explosions] 02 C++ API.")
+minetest.log("action", "[CORE/mcl_explosions] 02 C++ API.")
 --[[
 Explosion API mod for Minetest (adapted to Mineclonia)
 

@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/mcl_util/item.lua
-minetest.log("action", "[util/item.lua] 02 C++ API.")
+minetest.log("action", "[CORE/mcl_util/item.lua] 02 C++ API.")
 local fuel_cache = {}
 
 -- Returns the burntime of an item

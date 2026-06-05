@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/flowlib/init.lua
-minetest.log("action", "[flowlib] 01 C++ API.")
+minetest.log("action", "[CORE/flowlib] 01 C++ API.")
 flowlib = {}
 
 --sum of direction vectors must match an array index

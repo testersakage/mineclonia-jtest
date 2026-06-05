@@ -1,5 +1,5 @@
 -- mineclonia/mods/CORE/mcl_util/init.lua
-minetest.log("action", "[util/init.lua] init. start.")
+minetest.log("action", "[CORE/mcl_util/init.lua] init. start.")
 
 local modname = core.get_current_modname()
 local modpath = core.get_modpath(modname)
@@ -36,31 +36,36 @@ dofile (modpath .. "/spatialindex.lua")
 dofile (modpath .. "/control.lua")
 
 
--- ─── 【AABBs動的スピードリミッター・チャットコマンド】 ───
---     C++側の処理が速すぎて警告が出る現象に対処するため、
---     動的にミリ秒単位のウェイト（一時停止）をC++へ直接
-
-minetest.register_chatcommand("aabb_weight", {
-	params = "<milliseconds> or 0",
-	description = "AABBsネイティブ分解エンジンの内部ウェイト（ミリ秒）を動的に指定・変更する",
+minetest.register_chatcommand("native_apis", {
+	params = "",
+	description = "現在Luantiにバインドされている 'native' を名前に持つC++ APIの一覧を取得する",
 	privs = {server = true},
-	func = function(name, param)
-		local ms = tonumber(param)
-		if not ms or ms < 0 then
-			minetest.chat_send_player(name, " [AABB LIMITER] 正しい数値を指定してください。 (例: /aabb_weight 5)")
-			return
+	func = function(name)
+		local api_table = rawget(_G, "mclcapi")
+		if not api_table then
+			return false, "[API_CHECK] ❌ C++窓口テーブル 'mclcapi' がこの宇宙に実在しません。"
 		end
+
+		local found_apis = {}
+		local count = 0
+
+		-- mclcapiの胎内を総当たりループ走査
+		for key, val in pairs(api_table) do
+--			if type(key) == "string" and key:find("native") then
+				count = count + 1
+				table.insert(found_apis, string.format("%02d. %s (%s)", count, key, type(val)))
+--			end
+		end
+
+		if count == 0 then
+			return true, "[API_CHECK] ⚠️ 'mclcapi' は存在しますが、'native' を含むAPIは0件です。"
+		end
+
+		-- アルファベット順にお片付け（ソート）して画面へ一斉出荷
+		table.sort(found_apis)
+		local result_text = "\n=== 👑 開通済み C++ Native API 一覧 (" .. count .. "件) ===\n"
+		result_text = result_text .. table.concat(found_apis, "\n")
 		
-		-- 【C++側の変数同期窓口（var_規律）へ、数値をセット！
-		if mclcapi and mclcapi.var_set_aabb_weight then
-			mclcapi.var_set_aabb_weight(ms)
-			if ms == 0 then
-				minetest.chat_send_player(name, " [AABB LIMITER] ウェイトを解除しました。C++ネイティブ状態で処理します。")
-			else
-				minetest.chat_send_player(name, " [AABB LIMITER] C++の AABBs 分解に 『 " .. ms .. " ミリ秒 』 のディレイを注入しました。")
-			end
-		else
-			minetest.chat_send_player(name, " [AABB LIMITER] C++側の var_set_aabb_weight が検出できません。")
-		end
+		return true, result_text
 	end,
 })

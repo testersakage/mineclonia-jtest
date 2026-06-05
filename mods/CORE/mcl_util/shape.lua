@@ -1,7 +1,7 @@
 -- mineclonia/mods/CORE/mcl_util/shape.lua
---minetest.log("action", "[util/shape.lua] 09 C++ API.")
+--minetest.log("action", "[CORE/mcl_util/shape.lua] 09 C++ API.")
 local current_thread = "[" .. (core.get_current_thread_name and core.get_current_thread_name() or "Main/Emerge") .. "]"
-core.log("action", string.format("[util/shape.lua]: %s: 09 C++ API.", current_thread))
+core.log("action", string.format("[CORE/mcl_util/shape.lua]: %s: 09 C++ API.", current_thread))
 
 --- NOTE: if performance should become a consideration it may be
 --- worthwhile to create an FFI wrapper around the C reference

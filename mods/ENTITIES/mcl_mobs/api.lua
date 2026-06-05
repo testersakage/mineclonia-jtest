@@ -1,5 +1,5 @@
 -- mineclonia/mods/ENTITIES/mcl_mobs/api.lua
-minetest.log("action", "[ENTITIES/mcl_mobs/api.lua] 2 C++ API.")
+minetest.log("action", "[ENTITIES/mcl_mobs/api.lua] 02 C++ API.")
 local S = core.get_translator("mcl_mobs")
 
 local pairs = pairs
